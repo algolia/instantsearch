@@ -79,11 +79,10 @@ currentRefinedValues({
 /**
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
- * @property {CurrentRefinedValuesAttributes[]} [includedAttributes = []] Label definitions for the
- * different filters.
+ * @property {CurrentRefinedValuesAttributes[]} [includedAttributes = []] Label definitions for the different filters to include.
+ * @property {CurrentRefinedValuesAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
  * @property {CurrentRefinedValuesTemplates} [templates] Templates to use for the widget.
  * @property {CurrentRefinedValuesCSSClasses} [cssClasses] CSS classes to be added.
- * @property {boolean} [clearsQuery=false] If true, the clear all button also clears the active search query.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 

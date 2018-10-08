@@ -10,42 +10,20 @@ export default () => {
   stories
     .add(
       'default',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.currentRefinedValues({ container })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          },
-        }
-      )
+      wrapWithHits(container => {
+        window.search.configure({
+          disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+          disjunctiveFacets: ['brand'],
+          numericRefinements: { price: { '>=': [100] } },
+        });
+
+        window.search.addWidget(
+          instantsearch.widgets.currentRefinedValues({ container })
+        );
+      })
     )
     .add(
-      'with header',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.currentRefinedValues({
-              container,
-            })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          },
-        }
-      )
-    )
-    .add(
-      'with header but no refinements',
+      'without refinements',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.currentRefinedValues({
@@ -55,48 +33,24 @@ export default () => {
       })
     )
     .add(
-      'with clearsQuery',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.currentRefinedValues({
-              container,
-              clearsQuery: true,
-            })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          },
-        }
-      )
-    )
-    .add(
       'with transformed items',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.currentRefinedValues({
-              container,
-              clearsQuery: true,
-              transformItems: items =>
-                items.map(item => ({
-                  ...item,
-                  name: `${item.name} (transformed)`,
-                })),
-            })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          },
-        }
-      )
+      wrapWithHits(container => {
+        window.search.configure({
+          disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+          disjunctiveFacets: ['brand'],
+          numericRefinements: { price: { '>=': [100] } },
+        });
+
+        window.search.addWidget(
+          instantsearch.widgets.currentRefinedValues({
+            container,
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                name: `${item.name} (transformed)`,
+              })),
+          })
+        );
+      })
     );
 };

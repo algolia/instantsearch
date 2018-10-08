@@ -19,9 +19,6 @@ const usage = `Usage:
 var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {
   // params = {
   //   attributes,
-  //   clearAllClick,
-  //   clearAllPosition,
-  //   clearAllURL,
   //   refine,
   //   createURL,
   //   refinements,
@@ -33,7 +30,6 @@ search.addWidget(
   customCurrentRefinedValues({
     [ attributes = [] ],
     [ onlyListedAttributes = false ],
-    [ clearsQuery = false ],
     [ transformItems ],
   })
 );
@@ -53,9 +49,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
- * @property {Object.<string, object>} attributes Original `CurrentRefinedValuesWidgetOptions.attributes` mapped by keys.
- * @property {function} clearAllClick Clears all the currently refined values.
- * @property {function} clearAllURL Generate a URL which leads to a state where all the refinements have been cleared.
+ * @property {Object.<string, object>} includedAttributes Original `CurrentRefinedValuesWidgetOptions.includedAttributes` mapped by keys.
  * @property {function(item)} refine Clears a single refinement.
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
  * @property {CurrentRefinement[]} refinements All the current refinements.
@@ -70,11 +64,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
- * @property {CurrentRefinedValuesAttributes[]} [attributes = []] Specification for the display of
+ * @property {CurrentRefinedValuesAttributes[]} [includedAttributes = []] Specification for the display of
  * refinements per attribute (default: `[]`). By default, the widget will display all the filters
  * set with no special treatment for the label.
- * @property {boolean} [onlyListedAttributes = false] Limit the displayed refinement to the list specified.
- * @property {boolean} [clearsQuery = false] Clears also the active search query when using clearAll.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -83,9 +75,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * the user the ability to see all the currently applied filters and, remove some or all of
  * them.
  *
- * This provides a `refine(item)` function to remove a selected refinement and a `clearAllClick`
- * function to clear all the filters. Those functions can see their behaviour change based on
- * the widget options used.
+ * This provides a `refine(item)` function to remove a selected refinement.
+ * Those functions can see their behaviour change based on the widget options used.
  * @type {Connector}
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
@@ -109,17 +100,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  *   if (CurrentRefinedValuesRenderingOptions.refinements
  *       && CurrentRefinedValuesRenderingOptions.refinements.length > 0) {
- *     containerNode
- *       .find('#cta-container')
- *       .html('<a href="' + CurrentRefinedValuesRenderingOptions.clearAllURL + '">Clear all </a>');
- *
- *     containerNode
- *       .find('#cta-container > a')
- *       .on('click', function(event) {
- *         event.preventDefault();
- *         CurrentRefinedValuesRenderingOptions.clearAllClick();
- *       });
- *
  *     var list = CurrentRefinedValuesRenderingOptions.refinements.map(function(refinement) {
  *       return '<li><a href="' + CurrentRefinedValuesRenderingOptions.createURL(refinement) + '">'
  *         + refinement.computedLabel + ' ' + refinement.count + '</a></li>';
@@ -155,16 +135,15 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
-      attributes = [],
+      includedAttributes = [],
       onlyListedAttributes = false,
-      clearsQuery = false,
       transformItems = items => items,
     } = widgetParams;
 
     const attributesOK =
-      isArray(attributes) &&
+      isArray(includedAttributes) &&
       reduce(
-        attributes,
+        includedAttributes,
         (res, val) =>
           res &&
           isPlainObject(val) &&
@@ -179,7 +158,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
 
     const showUsage =
       false ||
-      !isArray(attributes) ||
+      !isArray(includedAttributes) ||
       !attributesOK ||
       !isBoolean(onlyListedAttributes);
 
@@ -187,11 +166,11 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
-    const attributeNames = map(attributes, attribute => attribute.name);
+    const attributeNames = map(includedAttributes, attribute => attribute.name);
     const restrictedTo = onlyListedAttributes ? attributeNames : undefined;
 
     const attributesObj = reduce(
-      attributes,
+      includedAttributes,
       (res, attribute) => {
         res[attribute.name] = attribute;
         return res;
@@ -207,28 +186,17 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
               clearRefinements({
                 helper,
                 includedAttributes: restrictedTo,
-                clearsQuery,
               })
             )
             .search();
         };
-
-        this._createClearAllURL = () =>
-          createURL(
-            clearRefinements({
-              helper,
-              includedAttributes: restrictedTo,
-              clearsQuery,
-            })
-          );
 
         const refinements = transformItems(
           getFilteredRefinements(
             {},
             helper.state,
             attributeNames,
-            onlyListedAttributes,
-            clearsQuery
+            onlyListedAttributes
           )
         );
 
@@ -240,8 +208,6 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
         renderFn(
           {
             attributes: attributesObj,
-            clearAllClick: this._clearRefinementsAndSearch,
-            clearAllURL: this._createClearAllURL(),
             refine: _clearRefinement,
             createURL: _createURL,
             refinements,
@@ -258,8 +224,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
             results,
             state,
             attributeNames,
-            onlyListedAttributes,
-            clearsQuery
+            onlyListedAttributes
           )
         );
 
@@ -271,8 +236,6 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
         renderFn(
           {
             attributes: attributesObj,
-            clearAllClick: this._clearRefinementsAndSearch,
-            clearAllURL: this._createClearAllURL(),
             refine: _clearRefinement,
             createURL: _createURL,
             refinements,
@@ -326,10 +289,9 @@ function getFilteredRefinements(
   results,
   state,
   attributeNames,
-  onlyListedAttributes,
-  clearsQuery
+  onlyListedAttributes
 ) {
-  let refinements = getRefinements(results, state, clearsQuery);
+  let refinements = getRefinements(results, state);
   const otherAttributeNames = reduce(
     refinements,
     (res, refinement) => {

@@ -33,7 +33,9 @@ class CurrentRefinedValues extends Component {
             templateKey="item"
             data={templateData}
           />
+
           <button
+            className={this.props.cssClasses.delete}
             onClick={handleClick(this.props.clearRefinementClicks[index])}
           >
             ✕

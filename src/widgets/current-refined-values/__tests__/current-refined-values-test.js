@@ -512,7 +512,7 @@ describe('currentRefinedValues()', () => {
           refinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attribute
+                refinement.attributeName
               ) !== -1
           );
 
@@ -612,13 +612,13 @@ describe('currentRefinedValues()', () => {
           const firstRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attribute
+                refinement.attributeName
               ) !== -1
           );
           const otherRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attribute
+                refinement.attributeName
               ) === -1
           );
           refinements = [].concat(firstRefinements).concat(otherRefinements);
@@ -675,13 +675,13 @@ describe('currentRefinedValues()', () => {
           const firstRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attribute
+                refinement.attributeName
               ) !== -1
           );
           const otherRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attribute
+                refinement.attributeName
               ) === -1
           );
           refinements = [].concat(firstRefinements).concat(otherRefinements);
@@ -801,14 +801,16 @@ describe('currentRefinedValues()', () => {
           exhaustive: true,
         });
         const firstRefinements = refinements.filter(
-          refinement => refinement.attribute === 'disjunctiveFacet'
+          refinement => refinement.attributeName === 'disjunctiveFacet'
         );
         const secondRefinements = refinements.filter(
-          refinement => refinement.attribute === 'facetExclude'
+          refinement => refinement.attributeName === 'facetExclude'
         );
         const otherRefinements = refinements.filter(
           refinement =>
-            !['disjunctiveFacet', 'facetExclude'].includes(refinement.attribute)
+            !['disjunctiveFacet', 'facetExclude'].includes(
+              refinement.attributeName
+            )
         );
 
         refinements = []
