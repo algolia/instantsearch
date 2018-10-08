@@ -15,6 +15,7 @@ exports[`RefinementList rendering with facets 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1200,
               "cssClasses": Object {
                 "checkbox": "checkbox",
@@ -47,6 +48,7 @@ exports[`RefinementList rendering with facets 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1000,
               "cssClasses": Object {
                 "checkbox": "checkbox",
@@ -90,6 +92,7 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1200,
               "cssClasses": Object {
                 "checkbox": "checkbox",
@@ -122,6 +125,7 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1000,
               "cssClasses": Object {
                 "checkbox": "checkbox",
@@ -173,6 +177,7 @@ exports[`RefinementList rendering with facets and show more 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1200,
               "cssClasses": Object {
                 "checkbox": "checkbox",
@@ -205,6 +210,7 @@ exports[`RefinementList rendering with facets and show more 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1000,
               "cssClasses": Object {
                 "checkbox": "checkbox",
@@ -339,6 +345,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1200,
               "cssClasses": Object {
                 "checkbox": "checkbox",
@@ -371,6 +378,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
+              "attribute": "attribute",
               "count": 1000,
               "cssClasses": Object {
                 "checkbox": "checkbox",

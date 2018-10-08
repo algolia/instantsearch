@@ -45,6 +45,7 @@ class RefinementList extends Component {
     const templateData = {
       ...facetValue,
       url,
+      attribute: this.props.attribute,
       cssClasses: this.props.cssClasses,
     };
 
@@ -237,6 +238,7 @@ RefinementList.propTypes = {
   }),
   depth: PropTypes.number,
   facetValues: PropTypes.array,
+  attribute: PropTypes.string,
   templateProps: PropTypes.object.isRequired,
   toggleRefinement: PropTypes.func.isRequired,
   searchFacetValues: PropTypes.func,
