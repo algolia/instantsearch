@@ -62,11 +62,11 @@ const usage = `Usage:
 menu({
   container,
   attribute,
-  [ sortBy = ['name:asc'] ],
+  [ sortBy = ['isRefined', 'name:asc'] ],
   [ limit = 10 ],
   [ showMore = false ],
   [ showMoreLimit = 10 ],
-  [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, link, label, count, noResults, showMore, disabledShowMore} ],
+  [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, link, label, count, showMore, disabledShowMore} ],
   [ templates.{item, showMoreActive, showMoreInactive} ],
   [ transformData.{item} ],
   [ transformItems ]
@@ -76,14 +76,12 @@ menu({
  * @typedef {Object} MenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
  * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element when no refinements.
- * @property {string|string[]} [searchBox] CSS class to add to the search box element.
  * @property {string|string[]} [list] CSS class to add to the list element.
  * @property {string|string[]} [item] CSS class to add to each item element.
  * @property {string|string[]} [selectedItem] CSS class to add to each selected item element.
  * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
  * @property {string|string[]} [label] CSS class to add to each label (when using the default template).
  * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
- * @property {string|string[]} [noResults] CSS class to add to the no results element.
  * @property {string|string[]} [showMore] CSS class to add to the show more button.
  * @property {string|string[]} [disabledShowMore] CSS class to add to the disabled show more button.
  */
@@ -104,7 +102,7 @@ menu({
  * @typedef {Object} MenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attribute Name of the attribute for faceting
- * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {string[]|function} [sortBy=['isRefined', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {MenuTemplates} [templates] Customize the output through templating.
@@ -172,10 +170,6 @@ export default function menu({
       suit({ modifierName: 'noRefinement' }),
       userCssClasses.noRefinementRoot
     ),
-    searchBox: cx(
-      suit({ descendantName: 'searchBox' }),
-      userCssClasses.searchBox
-    ),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
     selectedItem: cx(
@@ -185,10 +179,6 @@ export default function menu({
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
     label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
     count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
-    noResults: cx(
-      suit({ descendantName: 'noResults' }),
-      userCssClasses.noResults
-    ),
     showMore: cx(suit({ descendantName: 'showMore' }), userCssClasses.showMore),
     disabledShowMore: cx(
       suit({ descendantName: 'showMore', modifierName: 'disabled' }),

@@ -113,7 +113,7 @@ export default function connectMenu(renderFn, unmountFn) {
     const {
       attribute,
       limit = 10,
-      sortBy = ['name:asc'],
+      sortBy = ['isRefined', 'name:asc'],
       showMoreLimit = limit,
       transformItems = items => items,
     } = widgetParams;
