@@ -13,7 +13,6 @@ const renderer = ({
   containerNode,
   cssClasses,
   templates,
-  transformData,
   renderState,
   labels,
 }) => (
@@ -22,7 +21,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -62,7 +60,6 @@ ratingMenu({
   [ max = 5 ],
   [ cssClasses.{root, list, item, selectedItem, disabledItem, link, starIcon, fullStarIcon, emptyStarIcon, label, count} ],
   [ templates.{item} ],
-  [ transformData.{item} ],
   [ labels.{andUp} ],
 })`;
 
@@ -93,18 +90,12 @@ ratingMenu({
  */
 
 /**
- * @typedef {Object} RatingMenuWidgetTransforms
- * @property  {function} [item] Function to change the object passed to the `item` template.
- */
-
-/**
  * @typedef {Object} RatingMenuWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute in your records that contains the ratings.
  * @property {number} [max=5] The maximum rating value.
  * @property {RatingMenuWidgetLabels} [labels] Labels used by the default template.
  * @property {RatingMenuWidgetTemplates} [templates] Templates to use for the widget.
- * @property {RatingMenuWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
  * @property {RatingMenuWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
@@ -144,7 +135,6 @@ export default function ratingMenu({
   cssClasses: userCssClasses = {},
   labels = defaultLabels,
   templates = defaultTemplates,
-  transformData,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -187,7 +177,6 @@ export default function ratingMenu({
     cssClasses,
     renderState: {},
     templates,
-    transformData,
     labels,
   });
 
