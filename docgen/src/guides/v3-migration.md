@@ -314,9 +314,6 @@ With the redo button:
 
 ```html
 <div class="ais-HierarchicalMenu">
-  <div class="ais-HierarchicalMenu-searchBox">
-    <!-- SearchBox widget here -->
-  </div>
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
       <a class="ais-HierarchicalMenu-link" href="#">
@@ -353,9 +350,6 @@ With the redo button:
 
 ```html
 <div class="ais-HierarchicalMenu">
-  <div class="ais-HierarchicalMenu-searchBox">
-    <!-- SearchBox widget here -->
-  </div>
   <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
     <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
       <a class="ais-HierarchicalMenu-link" href="#">
