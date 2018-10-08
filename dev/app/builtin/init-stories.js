@@ -11,7 +11,6 @@ import initInstantSearchStories from './stories/instantsearch.stories';
 import initMenuStories from './stories/menu.stories';
 import initMenuSelectStories from './stories/menu-select.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
-import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initRangeInputStories from './stories/range-input.stories.js';
 import initRangeSliderStories from './stories/range-slider.stories';
@@ -38,7 +37,6 @@ export default () => {
   initMenuStories();
   initMenuSelectStories();
   initNumericRefinementListStories();
-  initNumericSelectorStories();
   initPaginationStories();
   initRangeInputStories();
   initRangeSliderStories();
