@@ -23,7 +23,13 @@ If you know that the cache needs to be refreshed conditionally of a specific eve
 
 ```jsx
 import React, { Component } from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
 class App extends Component {
   constructor(props) {
@@ -35,21 +41,17 @@ class App extends Component {
   }
 
   refresh = () => {
-    this.setState({ refresh: true });
-  };
-
-  onSearchStateChange = () => {
-    this.setState({ refresh: false });
+    this.setState({ refresh: true }, () => {
+      this.setState({ refresh: false });
+    });
   };
 
   render() {
     return (
       <InstantSearch
-        appId="yourAppId"
-        apiKey="yourApiKey"
-        indexName="yourIndexName"
+        indexName="instant_search"
+        searchClient={searchClient}
         refresh={this.state.refresh}
-        onSearchStateChange={this.onSearchStateChange}
       >
         <SearchBox />
         <button onClick={this.refresh}>Refresh cache</button>
@@ -70,7 +72,13 @@ You should use this approach if you cannot use a user action as a specific event
 
 ```jsx
 import React, { Component } from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
 class App extends Component {
   constructor(props) {
@@ -82,25 +90,25 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval(() => this.setState({ refresh: true }), 5000);
+    this.interval = setInterval(
+      () =>
+        this.setState({ refresh: true }, () => {
+          this.setState({ refresh: false });
+        }),
+      5000
+    );
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  onSearchStateChange = () => {
-    this.setState({ refresh: false });
-  };
-
   render() {
     return (
       <InstantSearch
-        appId="yourAppId"
-        apiKey="yourApiKey"
-        indexName="yourIndexName"
+        indexName="instant_search"
+        searchClient={searchClient}
         refresh={this.state.refresh}
-        onSearchStateChange={this.onSearchStateChange}
       >
         <SearchBox />
         <Hits />
