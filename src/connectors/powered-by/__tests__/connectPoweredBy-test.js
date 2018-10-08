@@ -52,29 +52,33 @@ describe('connectPoweredBy', () => {
     );
   });
 
-  it('can override the URL at init', () => {
+  it('can override the URL', () => {
     const rendering = jest.fn();
     const makeWidget = connectPoweredBy(rendering);
-    const widget = makeWidget();
+    const widget = makeWidget({
+      url: '#custom-url',
+    });
 
-    widget.init({ url: '#overridden-url' });
+    widget.init({});
 
     expect(rendering).toHaveBeenCalledWith(
-      expect.objectContaining({ url: '#overridden-url' }),
+      expect.objectContaining({ url: '#custom-url' }),
       true
     );
   });
 
-  it('can override the URL at render', () => {
+  it('can override the theme', () => {
     const rendering = jest.fn();
     const makeWidget = connectPoweredBy(rendering);
-    const widget = makeWidget();
+    const widget = makeWidget({
+      theme: 'dark',
+    });
 
-    widget.render({ url: '#overridden-url' });
+    widget.init({});
 
     expect(rendering).toHaveBeenCalledWith(
-      expect.objectContaining({ url: '#overridden-url' }),
-      false
+      expect.objectContaining({ widgetParams: { theme: 'dark' } }),
+      true
     );
   });
 });

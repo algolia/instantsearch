@@ -14,10 +14,21 @@ export default () => {
     })
   );
   stories.add(
-    'with dark theme default',
+    'with dark theme',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.poweredBy({ container, theme: 'dark' })
+      );
+    })
+  );
+  stories.add(
+    'with custom URL',
+    wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.poweredBy({
+          container,
+          url: 'https://algolia.com',
+        })
       );
     })
   );

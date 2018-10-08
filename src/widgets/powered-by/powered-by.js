@@ -27,13 +27,12 @@ const usage = `Usage:
 poweredBy({
   container,
   [ theme = 'light' ],
+  [ url ],
 })`;
 
 /**
  * @typedef {Object} PoweredByWidgetCssClasses
  * @property  {string|string[]} [root] CSS classes added to the root element of the widget.
- * @property {string|string[]} [darkRoot] CSS class to add to the root element of the widget with a dark theme.
- * @property {string|string[]} [lightRoot] CSS class to add to the root element of the widget with a light theme.
  * @property  {string|string[]} [link] CSS class to add to the link.
  * @property  {string|string[]} [logo] CSS class to add to the SVG logo.
  */
@@ -42,6 +41,7 @@ poweredBy({
  * @typedef {Object} PoweredByWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} [theme] The theme of the logo ("light" or "dark").
+ * @property {string} [url] The URL to redirect to.
  * @property {PoweredByWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
@@ -64,6 +64,7 @@ export default function poweredBy({
   container,
   cssClasses: userCssClasses = {},
   theme = 'light',
+  url,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -90,7 +91,7 @@ export default function poweredBy({
     const makeWidget = connectPoweredBy(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ theme });
+    return makeWidget({ url, theme });
   } catch (error) {
     throw new Error(usage);
   }
