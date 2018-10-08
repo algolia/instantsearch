@@ -13,7 +13,6 @@ const renderer = ({
   cssClasses,
   renderState,
   templates,
-  transformData,
   showMore,
 }) => (
   {
@@ -29,7 +28,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -68,7 +66,6 @@ menu({
   [ showMoreLimit = 10 ],
   [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, link, label, count, showMore, disabledShowMore} ],
   [ templates.{item, showMoreActive, showMoreInactive} ],
-  [ transformData.{item} ],
   [ transformItems ]
 })`;
 
@@ -94,11 +91,6 @@ menu({
  */
 
 /**
- * @typedef {Object} MenuTransforms
- * @property {function} [item] Method to change the object passed to the `item` template.
- */
-
-/**
  * @typedef {Object} MenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attribute Name of the attribute for faceting
@@ -109,7 +101,6 @@ menu({
  * @property {number} [limit=10] How many facets values to retrieve.
  * @property {boolean} [showMore=false] Limit the number of results and display a showMore button.
  * @property {number} [showMoreLimit=10] How many facets values to retrieve when showing more.
- * @property {MenuTransforms} [transformData] Set of functions to update the data before passing them to the templates.
  * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -145,7 +136,6 @@ export default function menu({
   showMoreLimit,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  transformData,
   transformItems,
 }) {
   if (!container) {
@@ -191,7 +181,6 @@ export default function menu({
     cssClasses,
     renderState: {},
     templates,
-    transformData,
     showMore,
   });
 
