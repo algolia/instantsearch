@@ -13,9 +13,7 @@ exports[`menu render renders transformed items 1`] = `
       "link": "ais-Menu-link",
       "list": "ais-Menu-list",
       "noRefinementRoot": "ais-Menu--noRefinement",
-      "noResults": "ais-Menu-noResults",
       "root": "ais-Menu",
-      "searchBox": "ais-Menu-searchBox",
       "selectedItem": "ais-Menu-item--selected",
       "showMore": "ais-Menu-showMore",
     }
@@ -43,7 +41,6 @@ exports[`menu render renders transformed items 1`] = `
     Object {
       "templates": Object {
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-        "searchableNoResults": "No results",
         "showMoreActive": "Show less",
         "showMoreInactive": "Show more",
       },
@@ -51,7 +48,6 @@ exports[`menu render renders transformed items 1`] = `
       "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
-        "searchableNoResults": false,
         "showMoreActive": false,
         "showMoreInactive": false,
       },
@@ -75,9 +71,7 @@ exports[`menu render snapshot 1`] = `
       "link": "ais-Menu-link",
       "list": "ais-Menu-list",
       "noRefinementRoot": "ais-Menu--noRefinement",
-      "noResults": "ais-Menu-noResults",
       "root": "ais-Menu",
-      "searchBox": "ais-Menu-searchBox",
       "selectedItem": "ais-Menu-item--selected",
       "showMore": "ais-Menu-showMore",
     }
@@ -103,7 +97,6 @@ exports[`menu render snapshot 1`] = `
     Object {
       "templates": Object {
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-        "searchableNoResults": "No results",
         "showMoreActive": "Show less",
         "showMoreInactive": "Show more",
       },
@@ -111,7 +104,6 @@ exports[`menu render snapshot 1`] = `
       "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
-        "searchableNoResults": false,
         "showMoreActive": false,
         "showMoreInactive": false,
       },
