@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper, {
   SearchResults,
   SearchParameters,
@@ -11,7 +9,7 @@ describe('connectToggleRefinement', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
@@ -25,7 +23,7 @@ describe('connectToggleRefinement', () => {
     });
 
     const helper = jsHelper({}, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -36,12 +34,15 @@ describe('connectToggleRefinement', () => {
 
     {
       // should call the rendering once with isFirstRendering to true
-      expect(rendering.callCount).toBe(1);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(1);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { value, widgetParams } = rendering.lastCall.args[0];
+      const { value, widgetParams } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
       expect(value).toEqual({
         count: null,
         isRefined: false,
@@ -79,12 +80,15 @@ describe('connectToggleRefinement', () => {
 
     {
       // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering.callCount).toBe(2);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(2);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const { value } = rendering.lastCall.args[0];
+      const { value } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
       expect(value).toEqual({
         count: 45,
         isRefined: false,
@@ -101,7 +105,7 @@ describe('connectToggleRefinement', () => {
   });
 
   it('Provides a function to add/remove a facet value', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
@@ -110,7 +114,7 @@ describe('connectToggleRefinement', () => {
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration());
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -124,7 +128,8 @@ describe('connectToggleRefinement', () => {
       expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
         undefined
       );
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
         count: null,
@@ -170,7 +175,8 @@ describe('connectToggleRefinement', () => {
       expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
         undefined
       );
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
         count: 45,
@@ -220,7 +226,8 @@ describe('connectToggleRefinement', () => {
       expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
         count: 85,
@@ -242,7 +249,7 @@ describe('connectToggleRefinement', () => {
   });
 
   it('Provides a function to toggle between two values', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
@@ -253,7 +260,7 @@ describe('connectToggleRefinement', () => {
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration());
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -267,7 +274,8 @@ describe('connectToggleRefinement', () => {
       expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'false',
       ]);
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
 
       expect(value).toEqual({
@@ -322,7 +330,8 @@ describe('connectToggleRefinement', () => {
       expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'false',
       ]);
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
         // the value is the one that is not selected
@@ -373,7 +382,8 @@ describe('connectToggleRefinement', () => {
       expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
         count: 40,
@@ -416,7 +426,9 @@ describe('connectToggleRefinement', () => {
         onHistoryChange: () => {},
       });
 
-      const { refine } = rendering.mock.calls[0][0];
+      const { refine } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
 
       return [widget, helper, refine];
     };
