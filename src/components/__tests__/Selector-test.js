@@ -1,9 +1,9 @@
 import React from 'react';
+import { mount } from 'enzyme';
 import Selector from '../Selector';
-import renderer from 'react-test-renderer';
 
 describe('Selector', () => {
-  it('should render <Selector/> with strings', () => {
+  it('should render <Selector /> with strings', () => {
     const props = {
       currentValue: 'index-a',
       setValue: () => {},
@@ -17,11 +17,12 @@ describe('Selector', () => {
         { value: 'index-b', label: 'Index B' },
       ],
     };
-    const tree = renderer.create(<Selector {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(<Selector {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 
-  it('should render <Selector/> with numbers', () => {
+  it('should render <Selector /> with numbers', () => {
     const props = {
       currentValue: 10,
       setValue: () => {},
@@ -35,7 +36,8 @@ describe('Selector', () => {
         { value: 20, label: '20 results per page' },
       ],
     };
-    const tree = renderer.create(<Selector {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(<Selector {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

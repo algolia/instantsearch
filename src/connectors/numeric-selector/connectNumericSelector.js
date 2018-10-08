@@ -13,7 +13,7 @@ var customNumericSelector = connectNumericSelector(function renderFn(params, isF
 });
 search.addWidget(
   customNumericSelector({
-    attributeName,
+    attribute,
     options,
     [ operator = '=' ],
     [ transformItems ]
@@ -31,7 +31,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomNumericSelectorWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {NumericSelectorOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator = '＝'] The operator to use to refine. Supports following operators: <, <=, =, >, >= and !=.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -86,7 +86,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   customNumericSelector({
  *     containerNode: $('#custom-numeric-selector-container'),
  *     operator: '>=',
- *     attributeName: 'popularity',
+ *     attribute: 'popularity',
  *     options: [
  *       {label: 'Default', value: 0},
  *       {label: 'Top 10', value: 9991},
@@ -101,13 +101,13 @@ export default function connectNumericSelector(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
-      attributeName,
+      attribute,
       options,
       operator = '=',
       transformItems = items => items,
     } = widgetParams;
 
-    if (!attributeName || !options) {
+    if (!attribute || !options) {
       throw new Error(usage);
     }
 
@@ -117,7 +117,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
         if (value) {
           return {
             numericRefinements: {
-              [attributeName]: {
+              [attribute]: {
                 [operator]: [value],
               },
             },
@@ -128,9 +128,9 @@ export default function connectNumericSelector(renderFn, unmountFn) {
 
       init({ helper, instantSearchInstance }) {
         this._refine = value => {
-          helper.clearRefinements(attributeName);
+          helper.clearRefinements(attribute);
           if (value !== undefined && value !== 'undefined') {
-            helper.addNumericRefinement(attributeName, operator, value);
+            helper.addNumericRefinement(attribute, operator, value);
           }
           helper.search();
         };
@@ -164,7 +164,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
 
       dispose({ state }) {
         unmountFn();
-        return state.removeNumericRefinement(attributeName);
+        return state.removeNumericRefinement(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
@@ -172,7 +172,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
         if (
           // Does the current state contain the current refinement?
           (uiState.numericSelector &&
-            currentRefinement === uiState.numericSelector[attributeName]) ||
+            currentRefinement === uiState.numericSelector[attribute]) ||
           // Is the current value the first option / default value?
           currentRefinement === options[0].value
         ) {
@@ -184,7 +184,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
             ...uiState,
             numericSelector: {
               ...uiState.numericSelector,
-              [attributeName]: currentRefinement,
+              [attribute]: currentRefinement,
             },
           };
         return uiState;
@@ -192,21 +192,21 @@ export default function connectNumericSelector(renderFn, unmountFn) {
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const value =
-          uiState.numericSelector && uiState.numericSelector[attributeName];
+          uiState.numericSelector && uiState.numericSelector[attribute];
         const currentlyRefinedValue = this._getRefinedValue(searchParameters);
 
         if (value) {
           if (value === currentlyRefinedValue) return searchParameters;
           return searchParameters
-            .clearRefinements(attributeName)
-            .addNumericRefinement(attributeName, operator, value);
+            .clearRefinements(attribute)
+            .addNumericRefinement(attribute, operator, value);
         }
 
         const firstItemValue = options[0] && options[0].value;
         if (typeof firstItemValue === 'number') {
           return searchParameters
-            .clearRefinements(attributeName)
-            .addNumericRefinement(attributeName, operator, options[0].value);
+            .clearRefinements(attribute)
+            .addNumericRefinement(attribute, operator, options[0].value);
         }
 
         return searchParameters;
@@ -220,10 +220,10 @@ export default function connectNumericSelector(renderFn, unmountFn) {
         // to initialize a true partial state where only the refinements are present
         return state &&
           state.numericRefinements &&
-          state.numericRefinements[attributeName] !== undefined &&
-          state.numericRefinements[attributeName][operator] !== undefined &&
-          state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
-          ? state.numericRefinements[attributeName][operator][0]
+          state.numericRefinements[attribute] !== undefined &&
+          state.numericRefinements[attribute][operator] !== undefined &&
+          state.numericRefinements[attribute][operator][0] !== undefined // could be 0
+          ? state.numericRefinements[attribute][operator][0]
           : options[0].value;
       },
     };

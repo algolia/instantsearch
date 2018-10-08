@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Selector should render <Selector/> with numbers 1`] = `
+exports[`Selector should render <Selector /> with numbers 1`] = `
 <select
   className="custom-select"
   onChange={[Function]}
@@ -8,12 +8,14 @@ exports[`Selector should render <Selector/> with numbers 1`] = `
 >
   <option
     className="custom-option"
+    key="10 results per page10"
     value="10"
   >
     10 results per page
   </option>
   <option
     className="custom-option"
+    key="20 results per page20"
     value="20"
   >
     20 results per page
@@ -21,7 +23,7 @@ exports[`Selector should render <Selector/> with numbers 1`] = `
 </select>
 `;
 
-exports[`Selector should render <Selector/> with strings 1`] = `
+exports[`Selector should render <Selector /> with strings 1`] = `
 <select
   className="custom-select"
   onChange={[Function]}
@@ -29,12 +31,14 @@ exports[`Selector should render <Selector/> with strings 1`] = `
 >
   <option
     className="custom-option"
+    key="Index Aindex-a"
     value="index-a"
   >
     Index A
   </option>
   <option
     className="custom-option"
+    key="Index Bindex-b"
     value="index-b"
   >
     Index B

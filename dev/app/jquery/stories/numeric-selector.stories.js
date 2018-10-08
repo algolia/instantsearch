@@ -12,7 +12,7 @@ export default () => {
         widgets.numericSelector({
           containerNode,
           operator: '>=',
-          attributeName: 'popularity',
+          attribute: 'popularity',
           options: [
             { label: 'Default', value: 0 },
             { label: 'Top 10', value: 9991 },

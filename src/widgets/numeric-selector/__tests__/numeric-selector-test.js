@@ -22,12 +22,12 @@ describe('numericSelector()', () => {
     cssClasses = {
       root: ['custom-root', 'cx'],
       select: 'custom-select',
-      item: 'custom-item',
+      option: 'custom-option',
     };
     widget = numericSelector({
       container,
       options,
-      attributeName: 'aNumAttr',
+      attribute: 'aNumAttr',
       cssClasses,
     });
     expectedProps = {
@@ -35,7 +35,7 @@ describe('numericSelector()', () => {
       cssClasses: {
         root: 'ais-numeric-selector custom-root cx',
         select: 'ais-numeric-selector custom-select',
-        item: 'ais-numeric-selector--item custom-item',
+        option: 'ais-numeric-selector--item custom-option',
       },
       currentValue: 1,
       options: [{ value: 1, label: 'first' }, { value: 2, label: 'second' }],

@@ -17,7 +17,7 @@ describe('connectNumericSelector', () => {
       { name: '30', value: 30 },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
     });
 
@@ -51,7 +51,7 @@ describe('connectNumericSelector', () => {
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.currentRefinement).toBe(listOptions[0].value);
     expect(firstRenderingOptions.widgetParams).toEqual({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
     });
 
@@ -69,7 +69,7 @@ describe('connectNumericSelector', () => {
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.currentRefinement).toBe(listOptions[0].value);
     expect(secondRenderingOptions.widgetParams).toEqual({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
     });
   });
@@ -83,7 +83,7 @@ describe('connectNumericSelector', () => {
       { name: '30', value: 30 },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
       transformItems: items =>
         items.map(item => ({ ...item, label: 'transformed' })),
@@ -134,7 +134,7 @@ describe('connectNumericSelector', () => {
       { name: '30', value: 30 },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
     });
 
@@ -175,7 +175,7 @@ describe('connectNumericSelector', () => {
       { name: '30', value: 30 },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
     });
 
@@ -243,7 +243,7 @@ describe('connectNumericSelector', () => {
       { name: '30', value: 30 },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
     });
 
@@ -293,7 +293,7 @@ describe('connectNumericSelector', () => {
       { name: '30', value: 30 },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
+      attribute: 'numerics',
       options: listOptions,
     });
 
@@ -346,7 +346,7 @@ describe('connectNumericSelector', () => {
         { name: '30', value: 30 },
       ];
       const widget = makeWidget({
-        attributeName: 'numerics',
+        attribute: 'numerics',
         options: listOptions,
       });
 

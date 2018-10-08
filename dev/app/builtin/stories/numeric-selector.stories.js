@@ -14,7 +14,7 @@ export default () => {
         instantsearch.widgets.numericSelector({
           container,
           operator: '>=',
-          attributeName: 'popularity',
+          attribute: 'popularity',
           options: [
             { label: 'Default', value: 0 },
             { label: 'Top 10', value: 21459 },
@@ -32,7 +32,7 @@ export default () => {
         instantsearch.widgets.numericSelector({
           container,
           operator: '=',
-          attributeName: 'rating',
+          attribute: 'rating',
           options: [
             { label: 'No rating selected', value: undefined },
             { label: 'Rating: 5', value: 5 },
@@ -52,7 +52,7 @@ export default () => {
         instantsearch.widgets.numericSelector({
           container,
           operator: '=',
-          attributeName: 'rating',
+          attribute: 'rating',
           options: [
             { label: 'No rating selected', value: undefined },
             { label: 'Rating: 5', value: 5 },
