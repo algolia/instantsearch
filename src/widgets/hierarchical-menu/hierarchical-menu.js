@@ -60,7 +60,7 @@ hierarchicalMenu({
   [ showParentLevel=false ],
   [ limit=10 ],
   [ sortBy=['name:asc'] ],
-  [ cssClasses.{root, noRefinementRoot, searchBox, list, childList, item, selectedItem, parentItem, link, label, count, noResults, showMore, disabledShowMore} ],
+  [ cssClasses.{root, noRefinementRoot, list, childList, item, selectedItem, parentItem, link, label, count, showMore, disabledShowMore} ],
   [ templates.{item, showMoreActive, showMoreInactive} ],
   [ transformItems ]
 })`;
@@ -68,7 +68,6 @@ hierarchicalMenu({
  * @typedef {Object} HierarchicalMenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
  * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element when no refinements.
- * @property {string|string[]} [searchBox] CSS class to add to the search box element.
  * @property {string|string[]} [list] CSS class to add to the list element.
  * @property {string|string[]} [childList] CSS class to add to the child list element.
  * @property {string|string[]} [item] CSS class to add to each item element.
@@ -77,7 +76,6 @@ hierarchicalMenu({
  * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
  * @property {string|string[]} [label] CSS class to add to each label (when using the default template).
  * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
- * @property {string|string[]} [noResults] CSS class to add to the no results element.
  * @property {string|string[]} [showMore] CSS class to add to the show more element.
  * @property {string|string[]} [disabledShowMore] CSS class to add to the disabled show more element.
  */
@@ -203,10 +201,6 @@ export default function hierarchicalMenu({
       suit({ modifierName: 'noRefinement' }),
       userCssClasses.noRefinementRoot
     ),
-    searchBox: cx(
-      suit({ descendantName: 'searchBox' }),
-      userCssClasses.searchBox
-    ),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     childList: cx(
       suit({ descendantName: 'list', modifierName: 'child' }),
@@ -224,10 +218,6 @@ export default function hierarchicalMenu({
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
     label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
     count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
-    noResults: cx(
-      suit({ descendantName: 'noResults' }),
-      userCssClasses.noResults
-    ),
     showMore: cx(suit({ descendantName: 'showMore' }), userCssClasses.showMore),
     disabledShowMore: cx(
       suit({ descendantName: 'showMore', modifierName: 'disabled' }),
