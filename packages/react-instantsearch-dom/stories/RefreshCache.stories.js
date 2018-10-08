@@ -1,36 +1,35 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
-import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
+import algoliasearch from 'algoliasearch/lite';
+import { InstantSearch, SearchBox, Configure } from 'react-instantsearch-dom';
 import { CustomHits } from './util';
 
 const stories = storiesOf('RefreshCache', module);
 
-class AppWithRefresh extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      refresh: false,
-    };
-  }
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
-  refresh = () => {
-    this.setState({ refresh: true });
+class AppWithRefresh extends Component {
+  state = {
+    refresh: false,
   };
 
-  onSearchStateChange = () => {
-    this.setState({ refresh: false });
+  refresh = () => {
+    this.setState({ refresh: true }, () => {
+      this.setState({ refresh: false });
+    });
   };
 
   render() {
-    const displayRefresh = `${this.state.refresh}`;
     return (
       <InstantSearch
-        appId="latency"
-        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="instant_search"
+        searchClient={searchClient}
         refresh={this.state.refresh}
-        onSearchStateChange={this.onSearchStateChange}
       >
+        <Configure hitsPerPage={5} />
         <div>
           <h2
             style={{
@@ -101,26 +100,11 @@ class AppWithRefresh extends Component {
             cursor: 'pointer',
             color: '#fff',
             background: '#3369e7',
+            marginTop: '10px',
           }}
         >
           Refresh cache
         </button>
-        <button
-          style={{
-            borderRadius: '2px',
-            padding: '10px',
-            marginTop: '15px',
-            border: 'none',
-            fontSize: '12px',
-            color: '#999999',
-            background: '#F3F3F3',
-            display: 'block',
-          }}
-          disabled
-        >
-          Refresh is set to: <em>{displayRefresh}</em>
-        </button>
-
         <CustomHits />
       </InstantSearch>
     );
@@ -130,21 +114,25 @@ class AppWithRefresh extends Component {
 stories.add('with a refresh button', () => <AppWithRefresh />);
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      refresh: false,
-      count: 0,
-    };
-  }
+  state = {
+    refresh: false,
+    count: 0,
+  };
 
   componentDidMount() {
     this.interval = setInterval(
       () =>
-        this.setState(prevState => ({
-          refresh: prevState.count === 5,
-          count: prevState.count === 5 ? 0 : prevState.count + 1,
-        })),
+        this.setState(
+          prevState => ({
+            refresh: prevState.count === 5,
+            count: prevState.count === 5 ? 0 : prevState.count + 1,
+          }),
+          () => {
+            this.setState({
+              refresh: false,
+            });
+          }
+        ),
       1000
     );
   }
@@ -156,11 +144,12 @@ class App extends Component {
   render() {
     return (
       <InstantSearch
-        appId="latency"
-        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="instant_search"
+        searchClient={searchClient}
         refresh={this.state.refresh}
       >
+        <Configure hitsPerPage={5} />
+
         <span>{this.state.count} s elapsed since last refresh</span>
 
         <SearchBox
