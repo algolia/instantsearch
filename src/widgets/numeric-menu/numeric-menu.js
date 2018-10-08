@@ -8,19 +8,12 @@ import { component } from '../../lib/suit.js';
 
 const suit = component('NumericMenu');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  transformData,
-  templates,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   { createURL, instantSearchInstance, refine, items },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -47,7 +40,6 @@ numericMenu({
   items,
   [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, label, labelText, radio} ],
   [ templates.{item} ],
-  [ transformData.{item} ],
   [ transformItems ]
 })`;
 
@@ -86,7 +78,6 @@ numericMenu({
  * @property {string} attribute Name of the attribute for filtering.
  * @property {NumericMenuOption[]} items List of all the items.
  * @property {NumericMenuTemplates} [templates] Templates to use for the widget.
- * @property {NumericMenuTransforms} [transformData] Functions to change the data passes to the templates. Only item can be set.
  * @property {NumericMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -126,7 +117,6 @@ export default function numericMenu({
   items,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  transformData,
   transformItems,
 } = {}) {
   if (!container || !attribute || !items) {
@@ -159,7 +149,6 @@ export default function numericMenu({
     containerNode,
     cssClasses,
     renderState: {},
-    transformData,
     templates,
   });
   try {
