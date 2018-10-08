@@ -1,44 +1,17 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-
-import Template from '../Template.js';
-
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer';
-
-import { isSpecialClick } from '../../lib/utils.js';
-import map from 'lodash/map';
+import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
+import Template from '../Template.js';
+import { isSpecialClick } from '../../lib/utils.js';
 
-export class RawCurrentRefinedValues extends Component {
+class CurrentRefinedValues extends Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
 
-  _clearAllElement(position, requestedPosition) {
-    if (requestedPosition !== position) {
-      return undefined;
-    }
-
-    const { refinements, cssClasses } = this.props;
-    return (
-      <a
-        className={
-          refinements && refinements.length > 0
-            ? cssClasses.clearAll
-            : `${cssClasses.clearAll} ${cssClasses.clearAll}-disabled`
-        }
-        href={this.props.clearAllURL}
-        onClick={handleClick(this.props.clearAllClick)}
-      >
-        <Template templateKey="clearAll" {...this.props.templateProps} />
-      </a>
-    );
-  }
-
-  _refinementElement(refinement, i) {
-    const attribute = this.props.attributes[refinement.attributeName] || {};
+  renderItem(refinement, index) {
+    const attribute = this.props.attributes[refinement.attribute] || {};
     const templateData = getTemplateData(
       attribute,
       refinement,
@@ -46,37 +19,38 @@ export class RawCurrentRefinedValues extends Component {
     );
     const customTemplateProps = getCustomTemplateProps(attribute);
     const key =
-      refinement.attributeName +
+      refinement.attribute +
       (refinement.operator ? refinement.operator : ':') +
       (refinement.exclude ? refinement.exclude : '') +
       refinement.name;
+
     return (
-      <div className={this.props.cssClasses.item} key={key}>
-        <a
-          className={this.props.cssClasses.link}
-          href={this.props.clearRefinementURLs[i]}
-          onClick={handleClick(this.props.clearRefinementClicks[i])}
-        >
+      <li className={this.props.cssClasses.item} key={key}>
+        <span className={this.props.cssClasses.label}>
           <Template
-            data={templateData}
-            templateKey="item"
             {...this.props.templateProps}
             {...customTemplateProps}
+            templateKey="item"
+            data={templateData}
           />
-        </a>
-      </div>
+          <button
+            onClick={handleClick(this.props.clearRefinementClicks[index])}
+          >
+            ✕
+          </button>
+        </span>
+      </li>
     );
   }
 
   render() {
-    const refinements = map(this.props.refinements, (r, i) =>
-      this._refinementElement(r, i)
-    );
     return (
-      <div>
-        {this._clearAllElement('before', this.props.clearAllPosition)}
-        <div className={this.props.cssClasses.list}>{refinements}</div>
-        {this._clearAllElement('after', this.props.clearAllPosition)}
+      <div className={this.props.cssClasses.root}>
+        <ul className={this.props.cssClasses.list}>
+          {this.props.refinements.map((refinement, index) =>
+            this.renderItem(refinement, index)
+          )}
+        </ul>
       </div>
     );
   }
@@ -84,6 +58,7 @@ export class RawCurrentRefinedValues extends Component {
 
 function getCustomTemplateProps(attribute) {
   const customTemplateProps = {};
+
   if (attribute.template !== undefined) {
     customTemplateProps.templates = {
       item: attribute.template,
@@ -92,6 +67,7 @@ function getCustomTemplateProps(attribute) {
   if (attribute.transformData !== undefined) {
     customTemplateProps.transformData = attribute.transformData;
   }
+
   return customTemplateProps;
 }
 
@@ -116,33 +92,33 @@ function getTemplateData(attribute, _refinement, cssClasses) {
 }
 
 function handleClick(cb) {
-  return e => {
-    if (isSpecialClick(e)) {
+  return event => {
+    if (isSpecialClick(event)) {
       // do not alter the default browser behavior
       // if one special key is down
       return;
     }
-    e.preventDefault();
+    event.preventDefault();
     cb();
   };
 }
 
-RawCurrentRefinedValues.propTypes = {
+CurrentRefinedValues.propTypes = {
   attributes: PropTypes.object,
-  clearAllClick: PropTypes.func,
-  clearAllPosition: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  clearAllURL: PropTypes.string,
   clearRefinementClicks: PropTypes.arrayOf(PropTypes.func),
   clearRefinementURLs: PropTypes.arrayOf(PropTypes.string),
   cssClasses: PropTypes.shape({
-    clearAll: PropTypes.string,
-    list: PropTypes.string,
-    item: PropTypes.string,
-    link: PropTypes.string,
-    count: PropTypes.string,
+    root: PropTypes.string.isRequired,
+    list: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    categoryLabel: PropTypes.string.isRequired,
+    delete: PropTypes.string.isRequired,
+    reset: PropTypes.string.isRequired,
   }).isRequired,
   refinements: PropTypes.array,
   templateProps: PropTypes.object.isRequired,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawCurrentRefinedValues));
+export default CurrentRefinedValues;

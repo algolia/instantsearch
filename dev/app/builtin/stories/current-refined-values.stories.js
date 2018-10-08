@@ -4,7 +4,7 @@ import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
-const stories = storiesOf('CurrentRefinedValues');
+const stories = storiesOf('CurrentRefinements');
 
 export default () => {
   stories
@@ -32,9 +32,6 @@ export default () => {
           window.search.addWidget(
             instantsearch.widgets.currentRefinedValues({
               container,
-              templates: {
-                header: 'Current refinements',
-              },
             })
           );
         },
@@ -53,10 +50,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.currentRefinedValues({
             container,
-            autoHideContainer: false,
-            templates: {
-              header: 'Current refinements',
-            },
           })
         );
       })

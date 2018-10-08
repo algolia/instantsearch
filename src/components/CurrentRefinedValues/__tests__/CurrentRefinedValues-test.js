@@ -1,6 +1,6 @@
 /* eslint react/no-multi-comp: 0 */
 import React from 'react';
-import { RawCurrentRefinedValues as CurrentRefinedValues } from '../CurrentRefinedValues.js';
+import CurrentRefinedValues from '../CurrentRefinedValues.js';
 import renderer from 'react-test-renderer';
 
 describe('CurrentRefinedValues', () => {

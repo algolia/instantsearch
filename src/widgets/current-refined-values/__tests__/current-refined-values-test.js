@@ -12,14 +12,8 @@ describe('currentRefinedValues()', () => {
     beforeEach(() => {
       parameters = {
         container: document.createElement('div'),
-        attributes: [],
-        onlyListedAttributes: false,
-        clearAll: 'after',
+        includedAttributes: [],
         templates: {},
-        transformData: {
-          item: data => data,
-        },
-        autoHideContainer: false,
         cssClasses: {},
       };
       boundWidget = currentRefinedValues.bind(null, parameters);
@@ -38,31 +32,21 @@ describe('currentRefinedValues()', () => {
         parameters.container = document.createElement('div');
         expect(boundWidget).not.toThrow();
       });
-
-      it('throws usage if not defined', () => {
-        delete parameters.container;
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it('throws usage with another type than string or HTMLElement', () => {
-        parameters.container = true;
-        expect(boundWidget).toThrow(/Usage/);
-      });
     });
 
-    describe('options.attributes', () => {
+    describe('options.includedAttributes', () => {
       it("doesn't throw usage if not defined", () => {
-        delete parameters.attributes;
+        delete parameters.includedAttributes;
         expect(boundWidget).not.toThrow();
       });
 
       it("doesn't throw usage if attributes is an empty array", () => {
-        parameters.attributes = [];
+        parameters.includedAttributes = [];
         expect(boundWidget).not.toThrow();
       });
 
       it("doesn't throw usage with name, label, template and transformData", () => {
-        parameters.attributes = [
+        parameters.includedAttributes = [
           {
             name: 'attr1',
           },
@@ -76,17 +60,13 @@ describe('currentRefinedValues()', () => {
           },
           {
             name: 'attr4',
-            transformData: data => {
-              data.name = 'newname';
-              return data;
-            },
           },
         ];
         expect(boundWidget).not.toThrow();
       });
 
       it("doesn't throw usage with a function template", () => {
-        parameters.attributes = [
+        parameters.includedAttributes = [
           { name: 'attr1' },
           { name: 'attr2', template: () => 'CUSTOM TEMPLATE' },
         ];
@@ -94,86 +74,12 @@ describe('currentRefinedValues()', () => {
       });
 
       it("throws usage if attributes isn't an array", () => {
-        parameters.attributes = 'a string';
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it("throws usage if attributes doesn't contain only objects", () => {
-        parameters.attributes = [{ name: 'test' }, 'string'];
+        parameters.includedAttributes = 'a string';
         expect(boundWidget).toThrow(/Usage/);
       });
 
       it('throws usage if attributes contains an object without name', () => {
-        parameters.attributes = [{ name: 'test' }, { label: '' }];
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it('throws usage if attributes contains an object with a not string name', () => {
-        parameters.attributes = [{ name: 'test' }, { name: true }];
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it('throws usage if attributes contains an object with a not string label', () => {
-        parameters.attributes = [{ name: 'test' }, { label: true }];
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it('throws usage if attributes contains an object with a not string or function template', () => {
-        parameters.attributes = [{ name: 'test' }, { template: true }];
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it('throws usage if attributes contains an object with a not function transformData', () => {
-        parameters.attributes = [{ name: 'test' }, { transformData: true }];
-        expect(boundWidget).toThrow(/Usage/);
-      });
-    });
-
-    describe('options.onlyListedAttributes', () => {
-      it("doesn't throw usage if not defined", () => {
-        delete parameters.onlyListedAttributes;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage if true", () => {
-        parameters.onlyListedAttributes = true;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage if false", () => {
-        parameters.onlyListedAttributes = false;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it('throws usage if not boolean', () => {
-        parameters.onlyListedAttributes = 'truthy value';
-        expect(boundWidget).toThrow(/Usage/);
-      });
-    });
-
-    describe('options.clearAll', () => {
-      it("doesn't throw usage if not defined", () => {
-        delete parameters.clearAll;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage if false", () => {
-        parameters.clearAll = false;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage if 'before'", () => {
-        parameters.clearAll = 'before';
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage if 'after'", () => {
-        parameters.clearAll = 'after';
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("throws usage if not one of [false, 'before', 'after']", () => {
-        parameters.clearAll = 'truthy value';
+        parameters.includedAttributes = [{ name: 'test' }, { label: '' }];
         expect(boundWidget).toThrow(/Usage/);
       });
     });
@@ -202,82 +108,6 @@ describe('currentRefinedValues()', () => {
         };
         expect(boundWidget).not.toThrow();
       });
-
-      it("doesn't throw usage with all keys", () => {
-        parameters.templates = {
-          header: 'HEADER TEMPLATE',
-          item: 'ITEM TEMPLATE',
-          clearAll: 'CLEAR ALL TEMPLATE',
-          footer: 'FOOTER TEMPLATE',
-        };
-        expect(boundWidget).not.toThrow();
-      });
-
-      it('throws usage with template being something else than an object', () => {
-        parameters.templates = true;
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it("throws usage if one of the template keys doesn't exist", () => {
-        parameters.templates = {
-          header: 'HEADER TEMPLATE',
-          notExistingKey: 'NOT EXISTING KEY TEMPLATE',
-        };
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it('throws usage if a template is not a string or a function', () => {
-        parameters.templates = {
-          item: true,
-        };
-        expect(boundWidget).toThrow(/Usage/);
-      });
-    });
-
-    describe('options.transformData', () => {
-      it("doesn't throw usage if not defined", () => {
-        delete parameters.transformData;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage with a function", () => {
-        parameters.transformData = data => data;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage with an object of functions", () => {
-        parameters.transformData = {
-          item: data => data,
-        };
-        expect(boundWidget).not.toThrow();
-      });
-
-      it('throws usage if not a function', () => {
-        parameters.transformData = true;
-        expect(boundWidget).toThrow();
-      });
-    });
-
-    describe('options.autoHideContainer', () => {
-      it("doesn't throw usage if not defined", () => {
-        delete parameters.autoHideContainer;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage with true", () => {
-        parameters.autoHideContainer = true;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage with false", () => {
-        parameters.autoHideContainer = false;
-        expect(boundWidget).not.toThrow();
-      });
-
-      it('throws usage if not boolean', () => {
-        parameters.autoHideContainer = 'truthy value';
-        expect(boundWidget).toThrow(/Usage/);
-      });
     });
 
     describe('options.cssClasses', () => {
@@ -296,40 +126,6 @@ describe('currentRefinedValues()', () => {
           item: 'item-class',
         };
         expect(boundWidget).not.toThrow();
-      });
-
-      it("doesn't throw usage with all keys", () => {
-        parameters.cssClasses = {
-          root: 'root-class',
-          header: 'header-class',
-          body: 'body-class',
-          clearAll: 'clear-all-class',
-          list: 'list-class',
-          item: 'item-class',
-          link: 'link-class',
-          count: 'count-class',
-          footer: 'footer-class',
-        };
-        expect(boundWidget).not.toThrow();
-      });
-
-      it('throws usage with cssClasses being something else than an object', () => {
-        parameters.cssClasses = 'truthy value';
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it("throws usage if one of the cssClasses keys doesn't exist", () => {
-        parameters.cssClasses = {
-          notExistingKey: 'not-existing-class',
-        };
-        expect(boundWidget).toThrow(/Usage/);
-      });
-
-      it('throws usage if one of the cssClasses values is not a string', () => {
-        parameters.cssClasses = {
-          item: true,
-        };
-        expect(boundWidget).toThrow(/Usage/);
       });
     });
   });
@@ -366,7 +162,7 @@ describe('currentRefinedValues()', () => {
 
       parameters = {
         container: document.createElement('div'),
-        attributes: [
+        includedAttributes: [
           { name: 'facet' },
           { name: 'facetExclude' },
           { name: 'disjunctiveFacet' },
@@ -375,25 +171,18 @@ describe('currentRefinedValues()', () => {
           { name: 'numericDisjunctiveFacet' },
           { name: '_tags' },
         ],
-        onlyListedAttributes: true,
-        clearAll: 'after',
         templates: {
-          header: 'HEADER',
           item: 'ITEM',
-          clearAll: 'CLEAR ALL',
-          footer: 'FOOTER',
         },
-        autoHideContainer: false,
         cssClasses: {
-          root: 'root-css-class',
-          header: 'header-css-class',
-          body: 'body-css-class',
-          clearAll: 'clear-all-css-class',
-          list: 'list-css-class',
-          item: 'item-css-class',
-          link: 'link-css-class',
-          count: 'count-css-class',
-          footer: 'footer-css-class',
+          root: 'root',
+          list: 'list',
+          item: 'item',
+          label: 'label',
+          category: 'category',
+          categoryLabel: 'categoryLabel',
+          delete: 'delete',
+          reset: 'reset',
         },
       };
 
@@ -529,7 +318,6 @@ describe('currentRefinedValues()', () => {
           name: 'facetExclude-val2',
           exclude: true,
         },
-        // eslint-disable-next-line max-len
         {
           type: 'disjunctive',
           attributeName: 'disjunctiveFacet',
@@ -537,7 +325,6 @@ describe('currentRefinedValues()', () => {
           count: 3,
           exhaustive: true,
         },
-        // eslint-disable-next-line max-len
         {
           type: 'disjunctive',
           attributeName: 'disjunctiveFacet',
@@ -545,7 +332,6 @@ describe('currentRefinedValues()', () => {
           count: 4,
           exhaustive: true,
         },
-        // eslint-disable-next-line max-len
         {
           type: 'hierarchical',
           attributeName: 'hierarchicalFacet',
@@ -595,30 +381,21 @@ describe('currentRefinedValues()', () => {
           numericDisjunctiveFacet: { name: 'numericDisjunctiveFacet' },
           _tags: { name: '_tags' },
         },
-        clearAllClick: () => {},
-        collapsible: false,
-        clearAllPosition: 'after',
-        clearAllURL: '#cleared',
         cssClasses: {
-          root: 'ais-current-refined-values root-css-class',
-          header: 'ais-current-refined-values--header header-css-class',
-          body: 'ais-current-refined-values--body body-css-class',
-          clearAll: 'ais-current-refined-values--clear-all clear-all-css-class',
-          list: 'ais-current-refined-values--list list-css-class',
-          item: 'ais-current-refined-values--item item-css-class',
-          link: 'ais-current-refined-values--link link-css-class',
-          count: 'ais-current-refined-values--count count-css-class',
-          footer: 'ais-current-refined-values--footer footer-css-class',
+          root: 'root',
+          list: 'list',
+          item: 'item',
+          label: 'label',
+          category: 'category',
+          categoryLabel: 'categoryLabel',
+          delete: 'delete',
+          reset: 'reset',
         },
-        shouldAutoHideContainer: false,
         templateProps: prepareTemplateProps({
           defaultTemplates,
           templatesConfig: { randomAttributeNeverUsed: 'value' },
           templates: {
-            header: 'HEADER',
             item: 'ITEM',
-            clearAll: 'CLEAR ALL',
-            footer: 'FOOTER',
           },
         }),
       };
@@ -668,14 +445,14 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    describe('options.attributes', () => {
+    describe('options.includedAttributes', () => {
       describe('with options.onlyListedAttributes === true', () => {
         beforeEach(() => {
           parameters.onlyListedAttributes = true;
         });
 
         it('should render all attributes with not defined attributes', () => {
-          delete parameters.attributes;
+          delete parameters.includedAttributes;
 
           refinements.splice(0, 0, {
             type: 'facet',
@@ -690,14 +467,14 @@ describe('currentRefinedValues()', () => {
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
-          expectedProps.attributes = {};
+          expectedProps.includedAttributes = {};
 
           expect(ReactDOM.render).toHaveBeenCalledTimes(1);
           expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render all attributes with an empty array', () => {
-          parameters.attributes = [];
+          parameters.includedAttributes = [];
 
           refinements.splice(0, 0, {
             type: 'facet',
@@ -712,14 +489,14 @@ describe('currentRefinedValues()', () => {
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
-          expectedProps.attributes = {};
+          expectedProps.includedAttributes = {};
 
           expect(ReactDOM.render).toHaveBeenCalledTimes(1);
           expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render and pass all attributes defined in each objects', () => {
-          parameters.attributes = [
+          parameters.includedAttributes = [
             {
               name: 'facet',
             },
@@ -729,17 +506,13 @@ describe('currentRefinedValues()', () => {
             },
             {
               name: 'disjunctiveFacet',
-              transformData: data => {
-                data.name = 'newname';
-                return data;
-              },
             },
           ];
 
           refinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
+                refinement.attribute
               ) !== -1
           );
 
@@ -748,7 +521,7 @@ describe('currentRefinedValues()', () => {
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
-          expectedProps.attributes = {
+          expectedProps.includedAttributes = {
             facet: {
               name: 'facet',
             },
@@ -758,10 +531,6 @@ describe('currentRefinedValues()', () => {
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: data => {
-                data.name = 'newname';
-                return data;
-              },
             },
           };
 
@@ -776,7 +545,7 @@ describe('currentRefinedValues()', () => {
         });
 
         it('should render all attributes with not defined attributes', () => {
-          delete parameters.attributes;
+          delete parameters.includedAttributes;
 
           refinements.splice(0, 0, {
             type: 'facet',
@@ -791,14 +560,14 @@ describe('currentRefinedValues()', () => {
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
-          expectedProps.attributes = {};
+          expectedProps.includedAttributes = {};
 
           expect(ReactDOM.render).toHaveBeenCalledTimes(1);
           expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render all attributes with an empty array', () => {
-          parameters.attributes = [];
+          parameters.includedAttributes = [];
 
           refinements.splice(0, 0, {
             type: 'facet',
@@ -813,14 +582,14 @@ describe('currentRefinedValues()', () => {
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
-          expectedProps.attributes = {};
+          expectedProps.includedAttributes = {};
 
           expect(ReactDOM.render).toHaveBeenCalledTimes(1);
           expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render and pass all attributes defined in each objects', () => {
-          parameters.attributes = [
+          parameters.includedAttributes = [
             {
               name: 'facet',
             },
@@ -830,10 +599,6 @@ describe('currentRefinedValues()', () => {
             },
             {
               name: 'disjunctiveFacet',
-              transformData: data => {
-                data.name = 'newname';
-                return data;
-              },
             },
           ];
 
@@ -847,13 +612,13 @@ describe('currentRefinedValues()', () => {
           const firstRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
+                refinement.attribute
               ) !== -1
           );
           const otherRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
+                refinement.attribute
               ) === -1
           );
           refinements = [].concat(firstRefinements).concat(otherRefinements);
@@ -863,7 +628,7 @@ describe('currentRefinedValues()', () => {
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
-          expectedProps.attributes = {
+          expectedProps.includedAttributes = {
             facet: {
               name: 'facet',
             },
@@ -873,10 +638,6 @@ describe('currentRefinedValues()', () => {
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: data => {
-                data.name = 'newname';
-                return data;
-              },
             },
           };
 
@@ -891,7 +652,7 @@ describe('currentRefinedValues()', () => {
         });
 
         it('should default to false', () => {
-          parameters.attributes = [
+          parameters.includedAttributes = [
             {
               name: 'facet',
             },
@@ -901,10 +662,6 @@ describe('currentRefinedValues()', () => {
             },
             {
               name: 'disjunctiveFacet',
-              transformData: data => {
-                data.name = 'newname';
-                return data;
-              },
             },
           ];
 
@@ -918,13 +675,13 @@ describe('currentRefinedValues()', () => {
           const firstRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
+                refinement.attribute
               ) !== -1
           );
           const otherRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
+                refinement.attribute
               ) === -1
           );
           refinements = [].concat(firstRefinements).concat(otherRefinements);
@@ -934,7 +691,7 @@ describe('currentRefinedValues()', () => {
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
-          expectedProps.attributes = {
+          expectedProps.includedAttributes = {
             facet: {
               name: 'facet',
             },
@@ -944,10 +701,6 @@ describe('currentRefinedValues()', () => {
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: data => {
-                data.name = 'newname';
-                return data;
-              },
             },
           };
 
@@ -1003,97 +756,30 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    describe('options.autoHideContainer', () => {
-      describe('without refinements', () => {
-        beforeEach(() => {
-          helper.clearRefinements().clearTags();
-          renderParameters.state = helper.state;
-
-          expectedProps.refinements = [];
-          expectedProps.clearRefinementClicks = [];
-          expectedProps.clearRefinementURLs = [];
-          expectedProps.shouldAutoHideContainer = true;
-        });
-
-        it('shouldAutoHideContainer should be true with autoHideContainer = true', () => {
-          parameters.autoHideContainer = true;
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-
-        it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
-          parameters.autoHideContainer = false;
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters); // eslint-disable-next-line max-len
-
-          widget.render(renderParameters);
-
-          expectedProps.shouldAutoHideContainer = false;
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-      });
-
-      describe('with refinements', () => {
-        it('shouldAutoHideContainer should be false with autoHideContainer = true', () => {
-          parameters.autoHideContainer = true;
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          expectedProps.shouldAutoHideContainer = false;
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-
-        it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
-          parameters.autoHideContainer = false;
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          expectedProps.shouldAutoHideContainer = false;
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-      });
-    });
-
     describe('options.cssClasses', () => {
       it('should be passed in the cssClasses', () => {
-        parameters.cssClasses.body = 'custom-passed-body';
+        parameters.cssClasses.root = 'custom-root';
 
         const widget = currentRefinedValues(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
-        expectedProps.cssClasses.body =
-          'ais-current-refined-values--body custom-passed-body';
+        expectedProps.cssClasses.root =
+          'ais-current-refined-values--root custom-root';
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
 
       it('should work with an array', () => {
-        parameters.cssClasses.body = ['custom-body', 'custom-body-2'];
+        parameters.cssClasses.root = ['custom-root', 'custom-root-2'];
 
         const widget = currentRefinedValues(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
-        expectedProps.cssClasses.body =
-          'ais-current-refined-values--body custom-body custom-body-2';
+        expectedProps.cssClasses.root =
+          'ais-current-refined-values--root custom-root custom-root-2';
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
@@ -1102,11 +788,10 @@ describe('currentRefinedValues()', () => {
 
     describe('with attributes', () => {
       it('should sort the refinements according to their order', () => {
-        parameters.attributes = [
+        parameters.includedAttributes = [
           { name: 'disjunctiveFacet' },
           { name: 'facetExclude' },
         ];
-        parameters.onlyListedAttributes = false;
 
         refinements.splice(0, 0, {
           type: 'facet',
@@ -1116,16 +801,14 @@ describe('currentRefinedValues()', () => {
           exhaustive: true,
         });
         const firstRefinements = refinements.filter(
-          refinement => refinement.attributeName === 'disjunctiveFacet'
+          refinement => refinement.attribute === 'disjunctiveFacet'
         );
         const secondRefinements = refinements.filter(
-          refinement => refinement.attributeName === 'facetExclude'
+          refinement => refinement.attribute === 'facetExclude'
         );
         const otherRefinements = refinements.filter(
           refinement =>
-            !['disjunctiveFacet', 'facetExclude'].includes(
-              refinement.attributeName
-            )
+            !['disjunctiveFacet', 'facetExclude'].includes(refinement.attribute)
         );
 
         refinements = []
@@ -1138,7 +821,7 @@ describe('currentRefinedValues()', () => {
         widget.render(renderParameters);
 
         setRefinementsInExpectedProps();
-        expectedProps.attributes = {
+        expectedProps.includedAttributes = {
           disjunctiveFacet: { name: 'disjunctiveFacet' },
           facetExclude: { name: 'facetExclude' },
         };

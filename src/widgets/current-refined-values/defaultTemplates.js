@@ -1,8 +1,5 @@
 export default {
-  header: '',
   item: itemTemplate,
-  clearAll: 'Clear all',
-  footer: '',
 };
 
 function itemTemplate({
@@ -24,5 +21,6 @@ function itemTemplate({
     ? ''
     : `<span class="${cssClasses.count}">${countValue}</span>`;
   const computedExclude = exclude ? '-' : '';
+
   return `${computedLabel} ${computedExclude} ${name} ${computedCount}`;
 }

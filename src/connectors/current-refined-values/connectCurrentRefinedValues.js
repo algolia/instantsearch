@@ -5,7 +5,6 @@ import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 import isFunction from 'lodash/isFunction';
 import isEmpty from 'lodash/isEmpty';
-
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import filter from 'lodash/filter';

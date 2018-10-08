@@ -2,64 +2,49 @@
 
 exports[`CurrentRefinedValues options.attributes uses label 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
-              "__html": "facet: facet-val1 :COUCOU",
+              "__html": "facet: facet-val1 :",
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
-              "__html": "facet: facet-val2 :COUCOU",
+              "__html": "facet: facet-val2 :",
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -67,16 +52,17 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -84,16 +70,17 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -101,16 +88,17 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -118,16 +106,17 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -135,72 +124,62 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.attributes uses template 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
-              "__html": "CUSTOM TEMPLATE",
+              "__html": "facet: facet-val1 :",
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
-              "__html": "CUSTOM TEMPLATE",
+              "__html": "facet: facet-val2 :",
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -208,16 +187,17 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -225,16 +205,17 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -242,16 +223,17 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -259,16 +241,17 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -276,72 +259,62 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.attributes uses transformData 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
-              "__html": "facet: facet-val1 :YEAH!",
+              "__html": "facet: facet-val1 :",
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
-              "__html": "facet: facet-val2 :YEAH!",
+              "__html": "facet: facet-val2 :",
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -349,16 +322,17 @@ exports[`CurrentRefinedValues options.attributes uses transformData 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -366,16 +340,17 @@ exports[`CurrentRefinedValues options.attributes uses transformData 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -383,16 +358,17 @@ exports[`CurrentRefinedValues options.attributes uses transformData 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -400,16 +376,17 @@ exports[`CurrentRefinedValues options.attributes uses transformData 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -417,25 +394,26 @@ exports[`CurrentRefinedValues options.attributes uses transformData 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
 <div>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -443,16 +421,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -460,16 +439,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -477,16 +457,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -494,16 +475,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -511,16 +493,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -528,16 +511,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -545,51 +529,26 @@ exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -597,16 +556,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -614,16 +574,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -631,16 +592,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -648,16 +610,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -665,16 +628,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -682,16 +646,17 @@ exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -699,25 +664,26 @@ exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
 <div>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -725,16 +691,17 @@ exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -742,16 +709,17 @@ exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -759,16 +727,17 @@ exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -776,16 +745,17 @@ exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -793,16 +763,17 @@ exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -810,16 +781,17 @@ exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -827,38 +799,26 @@ exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll element after 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#custom-clear-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -866,16 +826,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -883,16 +844,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -900,16 +862,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -917,16 +880,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -934,16 +898,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -951,16 +916,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -968,38 +934,26 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll element before 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#custom-clear-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1007,16 +961,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1024,16 +979,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1041,16 +997,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1058,16 +1015,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1075,16 +1033,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1092,16 +1051,17 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1109,38 +1069,26 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item element 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1148,16 +1096,17 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#custom-clear-specific"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1165,16 +1114,17 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1182,16 +1132,17 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1199,16 +1150,17 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1216,16 +1168,17 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1233,16 +1186,17 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1250,38 +1204,26 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a disjunctive facet 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-custom"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1289,38 +1231,26 @@ exports[`CurrentRefinedValues options.refinements can be used with a disjunctive
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a facet 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-custom"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1328,38 +1258,26 @@ exports[`CurrentRefinedValues options.refinements can be used with a facet 1`] =
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a hierarchical facet 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-custom"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1367,38 +1285,26 @@ exports[`CurrentRefinedValues options.refinements can be used with a hierarchica
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a tag 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-custom"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1406,38 +1312,26 @@ exports[`CurrentRefinedValues options.refinements can be used with a tag 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with an exclude 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-custom"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1445,38 +1339,26 @@ exports[`CurrentRefinedValues options.refinements can be used with an exclude 1`
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with numeric filters 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-custom"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1484,15 +1366,17 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1500,15 +1384,17 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1516,38 +1402,26 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues options.templateProps passes a custom template if given 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1555,16 +1429,17 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1572,16 +1447,17 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1589,16 +1465,17 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1606,16 +1483,17 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1623,16 +1501,17 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1640,16 +1519,17 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1657,38 +1537,26 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`CurrentRefinedValues renders 1`] = `
 <div>
-  <a
-    className="clear-all-class"
-    href="#cleared-all"
-    onClick={[Function]}
-  >
-    <div
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "CLEAR ALL",
-        }
-      }
-    />
-  </a>
-  <div
+  <ul
     className="list-class"
   >
-    <div
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1696,16 +1564,17 @@ exports[`CurrentRefinedValues renders 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facet-val2"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1713,16 +1582,17 @@ exports[`CurrentRefinedValues renders 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-facetExclude-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1730,16 +1600,17 @@ exports[`CurrentRefinedValues renders 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-disjunctiveFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1747,16 +1618,17 @@ exports[`CurrentRefinedValues renders 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-hierarchicalFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1764,16 +1636,17 @@ exports[`CurrentRefinedValues renders 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-numericFacet-val1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1781,16 +1654,17 @@ exports[`CurrentRefinedValues renders 1`] = `
             }
           }
         />
-      </a>
-    </div>
-    <div
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+    <li
       className="item-class"
     >
-      <a
-        className="link-class"
-        href="#cleared-tag1"
-        onClick={[Function]}
-      >
+      <span>
         <div
           dangerouslySetInnerHTML={
             Object {
@@ -1798,8 +1672,13 @@ exports[`CurrentRefinedValues renders 1`] = `
             }
           }
         />
-      </a>
-    </div>
-  </div>
+        <button
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
 </div>
 `;
