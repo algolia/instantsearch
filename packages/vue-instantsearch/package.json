@@ -53,8 +53,8 @@
     "vue": "^2.4.0"
   },
   "devDependencies": {
-    "@storybook/addon-knobs": "^3.4.10",
-    "@storybook/addon-options": "^3.4.10",
+    "@storybook/addon-knobs": "3.4.10",
+    "@storybook/addon-options": "3.4.10",
     "@storybook/vue": "3.4.10",
     "@vue/test-utils": "1.0.0-beta.25",
     "babel-eslint": "9.0.0",
@@ -92,7 +92,7 @@
     "vue-loader": "14.2.2",
     "vue-slider-component": "^2.7.7",
     "vue-template-compiler": "2.5.17",
-    "vuetify": "^1.2.4"
+    "vuetify": "1.2.4"
   },
   "jest": {
     "setupFiles": [
