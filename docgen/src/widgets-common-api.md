@@ -94,7 +94,7 @@ search.addWidget(
     transformItems: items =>
       items.map(item => ({
         ...item,
-        title: item.title.toUpperCase(),
+        label: item.label.toUpperCase(),
       })),
   })
 );
