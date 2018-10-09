@@ -42,7 +42,7 @@ export default function connectPoweredBy(renderFn, unmountFn) {
       'https://www.algolia.com/?' +
         'utm_source=instantsearch.js&' +
         'utm_medium=website&' +
-        `utm_content=${location.hostname}&` +
+        `utm_content=${location ? location.hostname : ''}&` +
         'utm_campaign=poweredby';
 
     return {
