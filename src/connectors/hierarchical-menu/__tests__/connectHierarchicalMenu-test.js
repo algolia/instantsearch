@@ -1,7 +1,8 @@
-import jsHelper from 'algoliasearch-helper';
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import connectHierarchicalMenu from '../connectHierarchicalMenu.js';
-
-const { SearchResults, SearchParameters } = jsHelper;
 
 describe('connectHierarchicalMenu', () => {
   describe('getConfiguration', () => {
