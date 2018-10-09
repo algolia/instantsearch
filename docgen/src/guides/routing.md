@@ -59,10 +59,9 @@ const search = instantsearch({
           query: uiState.query,
           // we use the character ~ as it is one that is rarely present in data and renders well in urls
           brands:
-            (uiState.refinementList &&
-              uiState.refinementList.brand &&
-              uiState.refinementList.brand.join('~')) ||
-            'all',
+            uiState.refinementList &&
+            uiState.refinementList.brand &&
+            uiState.refinementList.brand.join('~'),
           page: uiState.page
         };
       },

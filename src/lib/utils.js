@@ -25,6 +25,7 @@ export {
   checkRendering,
   isReactElement,
   deprecate,
+  warn,
   parseAroundLatLngFromString,
 };
 
@@ -406,19 +407,34 @@ function isReactElement(object) {
   );
 }
 
+function log(message) {
+  // eslint-disable-next-line no-console
+  console.warn(`[InstantSearch.js]: ${message.trim()}`);
+}
+
 function deprecate(fn, message) {
-  let hasAlreadyPrint = false;
+  let hasAlreadyPrinted = false;
 
   return function(...args) {
-    if (!hasAlreadyPrint) {
-      hasAlreadyPrint = true;
+    if (!hasAlreadyPrinted) {
+      hasAlreadyPrinted = true;
 
-      // eslint-disable-next-line no-console
-      console.warn(`[InstantSearch.js]: ${message}`);
+      log(message);
     }
 
     return fn(...args);
   };
+}
+
+warn.cache = {};
+function warn(message) {
+  const hasAlreadyPrinted = warn.cache[message];
+
+  if (!hasAlreadyPrinted) {
+    warn.cache[message] = true;
+
+    log(message);
+  }
 }
 
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;

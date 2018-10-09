@@ -1,6 +1,6 @@
 import React from 'react';
 import Breadcrumb from '../Breadcrumb';
-import renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 
 describe('Breadcrumb', () => {
   it('should render <Breadcrumb />', () => {
@@ -12,7 +12,7 @@ describe('Breadcrumb', () => {
       items: [],
       cssClasses: {
         root: 'root',
-        noRefinement: 'no-refinement',
+        noRefinement: 'noRefinement',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -27,9 +27,9 @@ describe('Breadcrumb', () => {
         },
       },
     };
-    const tree = renderer.create(<Breadcrumb {...props} />).toJSON();
+    const wrapper = mount(<Breadcrumb {...props} />);
 
-    expect(tree).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should render <Breadcrumb /> with a single item', () => {
@@ -46,7 +46,7 @@ describe('Breadcrumb', () => {
       ],
       cssClasses: {
         root: 'root',
-        noRefinement: 'no-refinement',
+        noRefinement: 'noRefinement',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -61,9 +61,9 @@ describe('Breadcrumb', () => {
         },
       },
     };
-    const tree = renderer.create(<Breadcrumb {...props} />).toJSON();
+    const wrapper = mount(<Breadcrumb {...props} />);
 
-    expect(tree).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should render <Breadcrumb /> with items', () => {
@@ -84,7 +84,7 @@ describe('Breadcrumb', () => {
       ],
       cssClasses: {
         root: 'root',
-        noRefinement: 'no-refinement',
+        noRefinement: 'noRefinement',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -99,8 +99,8 @@ describe('Breadcrumb', () => {
         },
       },
     };
-    const tree = renderer.create(<Breadcrumb {...props} />).toJSON();
+    const wrapper = mount(<Breadcrumb {...props} />);
 
-    expect(tree).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });
