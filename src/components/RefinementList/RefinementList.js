@@ -102,6 +102,16 @@ class RefinementList extends Component {
       return;
     }
 
+    const isClassDisabled = new RegExp(/^ais-(.*)--disabled$/);
+
+    if (
+      [].slice
+        .call(originalEvent.currentTarget.classList)
+        .some(className => isClassDisabled.test(className))
+    ) {
+      return;
+    }
+
     let parent = originalEvent.target;
 
     while (parent !== originalEvent.currentTarget) {
