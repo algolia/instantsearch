@@ -278,6 +278,81 @@ With the redo button:
   <button class="ais-InfiniteHits-loadMore">Show more results</button>
 ```
 
+### Menu
+
+#### Options
+
+| Before                        | After                        |
+| ----------------------------- | ---------------------------- |
+| `attributeName`               | `attribute`                  |
+| `showMore.limit`              | `showMoreLimit`              |
+| `showMore.templates.active`   | `templates.showMoreActive`   |
+| `showMore.templates.inactive` | `templates.showMoreInactive` |
+
+- `showMore` is now a boolean option (`showMore.templates` are now in `templates`)
+- `sortBy` defaults to `['isRefined', 'name:asc']`
+
+#### CSS classes
+
+| Before                   | After                         |
+| ------------------------ | ----------------------------- |
+| `ais-menu`               | `ais-Menu`                    |
+| `ais-menu--list`         | `ais-Menu-list`               |
+| `ais-menu--item`         | `ais-Menu-item`               |
+| `ais-menu--item__active` | `ais-Menu-item--selected`     |
+| `ais-menu--link`         | `ais-Menu-link`               |
+|                          | `ais-Menu-label`              |
+| `ais-menu--count`        | `ais-Menu-count`              |
+|                          | `ais-Menu-noResults`          |
+|                          | `ais-Menu-showMore`           |
+|                          | `ais-Menu-showMore--disabled` |
+
+#### Markup
+
+##### Default
+
+```html
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item ais-Menu-item--selected">
+      <a class="ais-Menu-link" href="#">
+        <span class="ais-Menu-label">Appliances</span>
+        <span class="ais-Menu-count">4,306</span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link" href="#">
+        <span class="ais-Menu-label">Audio</span>
+        <span class="ais-Menu-count">1,570</span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore">Show more</button>
+</div>
+```
+
+##### Show more disabled
+
+```html
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item ais-Menu-item--selected">
+      <a class="ais-Menu-link" href="#">
+        <span class="ais-Menu-label">Appliances</span>
+        <span class="ais-Menu-count">4,306</span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link" href="#">
+        <span class="ais-Menu-label">Audio</span>
+        <span class="ais-Menu-count">1,570</span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore ais-Menu-showMore--disabled" disabled>Show more</button>
+</div>
+```
+
 ### MenuSelect
 
 #### Options
