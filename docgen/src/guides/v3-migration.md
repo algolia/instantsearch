@@ -499,6 +499,24 @@ Widget removed.
 
 ### RefinementList
 
+#### Options
+
+| Before                                     | After                           |
+| ------------------------------------------ | ------------------------------- |
+| `attributeName`                            | `attribute`                     |
+| `searchForFacetValues`                     | `searchable`                    |
+| `searchForFacetValues.placeholder`         | `searchablePlaceholder`         |
+| `searchForFacetValues.isAlwaysActive`      | `searchableIsAlwaysActive`      |
+| `searchForFacetValues.escapeFacetValues`   | `searchableEscapeFacetValues`   |
+| `searchForFacetValues.templates.noResults` | `templates.searchableNoResults` |
+| `showMore.templates.active`                | `templates.showMoreActive`      |
+| `showMore.templates.inactive`              | `templates.showMoreInactive`    |
+
+- `searchablePlaceholder` defaults to `"Search..."`
+- `searchableEscapeFacetValues` defaults to `true`
+- `searchableIsAlwaysActive` defaults to `true`
+- `showMore` is now a boolean option (`searchForFacetValues.templates` and `showMore.templates` are now in `templates`)
+
 #### CSS classes
 
 | Before                              | After                                   |
@@ -518,20 +536,6 @@ Widget removed.
 | `ais-refinement-list--count`        | `ais-RefinementList-count`              |
 |                                     | `ais-RefinementList-showMore`           |
 |                                     | `ais-RefinementList-showMore--disabled` |
-
-#### Options
-
-| Before                                     | After                           |
-| ------------------------------------------ | ------------------------------- |
-| `attributeName`                            | `attribute`                     |
-| `searchForFacetValues`                     | `searchable`                    |
-| `searchForFacetValues.templates.noResults` | `templates.searchableNoResults` |
-| `showMore.templates.active`                | `templates.showMoreActive`      |
-| `showMore.templates.inactive`              | `templates.showMoreInactive`    |
-
-- `escapeFacetValues` defaults to `true`
-- `isAlwaysActive` defaults to `true`
-- `showMore` is now a boolean option (`searchForFacetValues.templates` and `showMore.templates` are now in `templates`)
 
 #### Markup
 
