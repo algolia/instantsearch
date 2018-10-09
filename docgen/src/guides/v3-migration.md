@@ -4,17 +4,98 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 ## InstantSearch
 
-### URLSync is not supported anymore
+### `appId` and `apiKey` are replaced by `searchClient`
+
+### Previous usage
+
+1.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
+2.  Initialize InstantSearch
+
+```javascript
+const search = instantsearch({
+  indexName: 'indexName',
+  appId: 'appId',
+  apiKey: 'apiKey',
+});
+
+search.start();
+```
+
+### New usage
+
+1.  [Import `algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript)
+2.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
+3.  Initialize InstantSearch with the `searchClient` option
+
+```javascript
+const search = instantsearch({
+  indexName: 'indexName',
+  searchClient: algoliasearch('appId', 'apiKey'),
+});
+
+search.start();
+```
+
+## `transformData` is replaced by `transformItems`
+
+Since InstantSearch.js first public release, we have provided an option to customize the values used in the widgets. This method was letting you map 1-1 the values with other values. With React Instantsearch, we implemented a slightly different API that allows to map over the list of values and to change their content.
+
+### Previous usage
+
+```js
+search.addWidget(
+  instantsearch.widget.refinementList({
+    container: '#facet',
+    attributeName: 'facet',
+    transformData: {
+      item: data => {
+        data.count = 0;
+        return data;
+      }
+    }
+  })
+);
+```
+
+### New usage
+
+```js
+search.addWidget(
+  instantsearch.widget.refinementList({
+    container: '#facet',
+    attributeName: 'facet',
+    transformItems: items =>
+      items.map(item => ({
+        ...item,
+        count: 0,
+      })),
+  })
+);
+```
+
+### `urlSync` is dropped
 
 If you were previously using the `urlSync` option, you should now migrate to the new `routing` feature.
 
 Here are the elements you need to migrate:
 
-* `urlSync: true` becomes `routing: true`
-* `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-* `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
-* `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
-* `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+- `urlSync: true` becomes `routing: true`
+- `threshold` becomes `routing: { router: instantsearch.routers.history({ writeDelay: 400 }) }`
+- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read "[User friendly URLs](routing.html#user-friendly-urls)" to know how to configure it
+- `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+
+### `collapsible` is dropped
+
+`collapsible` will be replaced by the `panel` widget.
+
+### `autoHideContainer` is dropped
+
+`autoHideContainer` will be replaced by the `panel` widget.
+
+### `createAlgoliaClient` is dropped
+
+`createAlgoliaClient` is replaced by `searchClient`.
 
 ## Widgets
 
