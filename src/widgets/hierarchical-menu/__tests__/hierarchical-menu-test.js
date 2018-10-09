@@ -1,7 +1,7 @@
 import hierarchicalMenu from '../hierarchical-menu';
 import jsHelper from 'algoliasearch-helper';
 
-const SearchParameters = jsHelper.SearchParameters;
+const { SearchParameters } = jsHelper;
 
 describe('hierarchicalMenu()', () => {
   let container;
