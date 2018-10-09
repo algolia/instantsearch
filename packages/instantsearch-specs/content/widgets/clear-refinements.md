@@ -24,6 +24,8 @@ classes:
 options:
   - name: excludedAttributes
     description: Attributes not to clear
+  - name: includedAttributes
+    description: Attributes to show exclusively
   - name: clearsQuery
     default: false
     description: Also clears the query
