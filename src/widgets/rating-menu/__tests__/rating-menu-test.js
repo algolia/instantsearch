@@ -1,8 +1,6 @@
-import jsHelper from 'algoliasearch-helper';
+import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import ratingMenu from '../rating-menu.js';
 import defaultLabels from '../../../widgets/rating-menu/defaultLabels.js';
-
-const { SearchResults } = jsHelper;
 
 describe('ratingMenu()', () => {
   const attribute = 'anAttrName';
@@ -12,7 +10,6 @@ describe('ratingMenu()', () => {
   let helper;
   let state;
   let createURL;
-
   let results;
 
   beforeEach(() => {

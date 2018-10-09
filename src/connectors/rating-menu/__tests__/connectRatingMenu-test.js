@@ -2,7 +2,6 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
 import connectRatingMenu from '../connectRatingMenu.js';
 
 describe('connectRatingMenu', () => {
