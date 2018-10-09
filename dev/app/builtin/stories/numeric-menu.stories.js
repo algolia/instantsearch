@@ -15,7 +15,6 @@ export default () => {
           instantsearch.widgets.numericMenu({
             container,
             attribute: 'price',
-            operator: 'or',
             items: [
               { label: 'All' },
               { end: 4, label: 'less than 4' },
@@ -39,7 +38,6 @@ export default () => {
           instantsearch.widgets.numericMenu({
             container,
             attribute: 'price',
-            operator: 'or',
             items: [
               { label: 'All' },
               { end: 4, label: 'less than 4' },
