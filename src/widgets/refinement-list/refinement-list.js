@@ -73,6 +73,7 @@ refinementList({
   [ showMoreLimit = 10 ],
   [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
   [ templates.{item, searchableNoResults, showMoreActive, showMoreInactive} ],
+  [ searchable ],
   [ searchablePlaceholder ],
   [ searchableIsAlwaysActive = true ],
   [ searchableEscapeFacetValues = true ],
@@ -124,8 +125,8 @@ refinementList({
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
- * @property {SearchForFacetOptions|boolean} [searchable=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
- * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button.
+ * @property {boolean} [searchable=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
+ * @property {boolean} [showMore=false] Limit the number of results and display a showMore button.
  * @property {string} [searchablePlaceholder] Value of the search field placeholder.
  * @property {boolean} [searchableIsAlwaysActive=true] When `false` the search field will become disabled if
  * there are less items to display than the `options.limit`, otherwise the search field is always usable.
