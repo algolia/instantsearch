@@ -11,7 +11,6 @@ const suit = component('RefinementList');
 const renderer = ({
   containerNode,
   cssClasses,
-  transformData,
   templates,
   renderState,
   showMore,
@@ -35,7 +34,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -75,7 +73,7 @@ refinementList({
   [ showMoreLimit = 10 ],
   [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
   [ templates.{item, searchableNoResults, showMoreActive, showMoreInactive} ],
-  [ transformData.{item} ],
+  [ searchable ],
   [ searchablePlaceholder ],
   [ searchableIsAlwaysActive = true ],
   [ searchableEscapeFacetValues = true ],
@@ -85,9 +83,9 @@ refinementList({
 /**
  * @typedef {Object} RefinementListTemplates
  * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
- * @property {string} [searchableNoResults] Templates to use for search for facet values.
- * @property {string} [showMoreActive] Template used when showMore was clicked.
- * @property {string} [showMoreInactive] Template used when showMore not clicked.
+ * @property {string|function} [searchableNoResults] Templates to use for search for facet values.
+ * @property {string|function} [showMoreActive] Template used when showMore was clicked.
+ * @property {string|function} [showMoreInactive] Template used when showMore not clicked.
  */
 
 /**
@@ -99,11 +97,6 @@ refinementList({
  * @property {string} highlighted The label highlighted (when using search for facet values). This value is displayed in the default template.
  * @property {string} url The url with this refinement selected.
  * @property {object} cssClasses Object containing all the classes computed for the item.
- */
-
-/**
- * @typedef {Object} RefinementListTransforms
- * @property {function} [item] Function to change the object passed to the `item` template.
  */
 
 /**
@@ -132,15 +125,14 @@ refinementList({
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
- * @property {SearchForFacetOptions|boolean} [searchable=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
- * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button.
+ * @property {boolean} [searchable=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
+ * @property {boolean} [showMore=false] Limit the number of results and display a showMore button.
  * @property {string} [searchablePlaceholder] Value of the search field placeholder.
  * @property {boolean} [searchableIsAlwaysActive=true] When `false` the search field will become disabled if
  * there are less items to display than the `options.limit`, otherwise the search field is always usable.
  * @property {boolean} [searchableEscapeFacetValues=true] When activated, it will escape the facet values that are returned
  * from Algolia. In this case, the surrounding tags will always be `<mark></mark>`.
  * @property {RefinementListTemplates} [templates] Templates to use for the widget.
- * @property {RefinementListTransforms} [transformData] Functions to update the values before applying the templates.
  * @property {RefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  */
 
@@ -192,7 +184,6 @@ export default function refinementList({
   searchableIsAlwaysActive = true,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  transformData,
   transformItems,
 } = {}) {
   if (!container) {
@@ -255,7 +246,6 @@ export default function refinementList({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    transformData,
     templates: allTemplates,
     renderState: {},
     searchable,
