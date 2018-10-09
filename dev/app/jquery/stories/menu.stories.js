@@ -12,7 +12,7 @@ export default () => {
         window.search.addWidget(
           widgets.menu({
             containerNode,
-            attributeName: 'categories',
+            attribute: 'categories',
             limit: 3,
           })
         );
@@ -24,7 +24,7 @@ export default () => {
         window.search.addWidget(
           widgets.showMoreMenu({
             containerNode,
-            attributeName: 'categories',
+            attribute: 'categories',
             limit: 3,
             showMoreLimit: 10,
           })

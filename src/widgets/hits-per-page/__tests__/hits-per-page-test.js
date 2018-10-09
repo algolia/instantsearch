@@ -115,9 +115,8 @@ describe('hitsPerPage()', () => {
     items.push({ label: 'Label without a value' });
     widget.init({ state: helper.state, helper });
     expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
-    expect(consoleWarn.mock.calls[0][0]).toEqual(
-      `[Warning][hitsPerPage] No item in \`items\`
-  with \`value: hitsPerPage\` (hitsPerPage: 20)`
+    expect(consoleWarn.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"[InstantSearch.js]: No items in HitsPerPage \`items\` with \`value: hitsPerPage\` (hitsPerPage: 20)"`
     );
   });
 
@@ -125,9 +124,8 @@ describe('hitsPerPage()', () => {
     helper.state.hitsPerPage = -1;
     widget.init({ state: helper.state, helper });
     expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
-    expect(consoleWarn.mock.calls[0][0]).toEqual(
-      `[Warning][hitsPerPage] No item in \`items\`
-  with \`value: hitsPerPage\` (hitsPerPage: -1)`
+    expect(consoleWarn.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"[InstantSearch.js]: No items in HitsPerPage \`items\` with \`value: hitsPerPage\` (hitsPerPage: -1)"`
     );
   });
 
