@@ -1,4 +1,3 @@
-import expect from 'expect';
 import currentToggle from '../toggleRefinement.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
