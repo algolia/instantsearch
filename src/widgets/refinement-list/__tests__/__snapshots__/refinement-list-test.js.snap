@@ -1,5 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`refinementList() instantiated with wrong parameters throws an exception when showMoreLimit is lower than limit 1`] = `
+"[InstantSearch.js] \`showMoreLimit\` should be a number greater or equal than \`limit\`.
+
+Usage:
+refinementList({
+  container,
+  attribute,
+  operator?: string = 'or',
+  sortBy?: string[]|function = ['isRefined', 'count:desc', 'name:asc'] ],
+  limit?: number = 10,
+  showMore?: boolean = false,
+  showMoreLimit?: number = 10,
+  cssClasses?: { root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore },
+  templates?: { item, searchableNoResults, showMoreActive, showMoreInactive },
+  searchable?: boolean = false,
+  searchablePlaceholder?: string = 'Search...',
+  searchableIsAlwaysActive?: boolean = true,
+  searchableEscapeFacetValues?: boolean = true,
+  transformItems?: function,
+})"
+`;
+
+exports[`refinementList() instantiated with wrong parameters throws an exception when showMoreLimit without showMore option 1`] = `
+"[InstantSearch.js] \`showMoreLimit\` must be used with \`showMore\` set to \`true\`.
+
+Usage:
+refinementList({
+  container,
+  attribute,
+  operator?: string = 'or',
+  sortBy?: string[]|function = ['isRefined', 'count:desc', 'name:asc'] ],
+  limit?: number = 10,
+  showMore?: boolean = false,
+  showMoreLimit?: number = 10,
+  cssClasses?: { root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore },
+  templates?: { item, searchableNoResults, showMoreActive, showMoreInactive },
+  searchable?: boolean = false,
+  searchablePlaceholder?: string = 'Search...',
+  searchableIsAlwaysActive?: boolean = true,
+  searchableEscapeFacetValues?: boolean = true,
+  transformItems?: function,
+})"
+`;
+
 exports[`refinementList() render renders transformed items correctly 1`] = `
 <RefinementList
   canToggleShowMore={false}

@@ -25,7 +25,7 @@ describe('refinementList()', () => {
       expect(() => {
         // When
         refinementList(options);
-      }).toThrow(/^Usage:/);
+      }).toThrow(/Usage:/);
     });
 
     it('throws an exception when showMoreLimit without showMore option', () => {
@@ -35,9 +35,7 @@ describe('refinementList()', () => {
           container,
           showMoreLimit: 10,
         })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"\`showMoreLimit\` must be used with \`showMore\` set to \`true\`."`
-      );
+      ).toThrowErrorMatchingSnapshot();
     });
 
     it('throws an exception when showMoreLimit is lower than limit', () => {
@@ -49,9 +47,7 @@ describe('refinementList()', () => {
           showMore: true,
           showMoreLimit: 10,
         })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"\`showMoreLimit\` should be greater than \`limit\`."`
-      );
+      ).toThrowErrorMatchingSnapshot();
     });
   });
 

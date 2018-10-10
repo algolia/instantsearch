@@ -1,56 +1,40 @@
-import { checkRendering } from '../../lib/utils.js';
-import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
 import isEqual from 'lodash/isEqual';
+import { checkRendering, throwUsage } from '../../lib/utils.js';
+import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
 
 const usage = `Usage:
-var customRefinementList = connectRefinementList(function render(params) {
-  // params = {
-  //   isFromSearch,
-  //   createURL,
-  //   items,
-  //   refine,
-  //   searchForItems,
-  //   instantSearchInstance,
-  //   canRefine,
-  //   toggleShowMore,
-  //   isShowingMore,
-  //   widgetParams,
-  // }
-});
+const customRefinementList = connectRefinementList(
+  ({
+    isFromSearch,
+    createURL,
+    items,
+    refine,
+    searchForItems,
+    instantSearchInstance,
+    canRefine,
+    toggleShowMore,
+    isShowingMore,
+    widgetParams,
+  }) => {
+    // ...
+  }
+);
 
 search.addWidget(
   customRefinementList({
     attribute,
-    [ operator = 'or' ],
-    [ limit ],
-    [ showMoreLimit ],
-    [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-    [ escapeFacetValues = true ],
-    [ transformItems ]
+    operator?: string = 'or',
+    limit?: number,
+    showMore?: boolean,
+    showMoreLimit?: number,
+    sortBy?: string[]|function = ['isRefined', 'count:desc', 'name:asc'],
+    escapeFacetValues?: boolean = true,
+    transformItems?: function,
   })
 );
 
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
 `;
-
-export const checkUsage = ({
-  attribute,
-  operator,
-  showMoreLimit,
-  limit,
-  message,
-}) => {
-  const noAttributeName = attribute === undefined;
-  const invalidOperator = !/^(and|or)$/.test(operator);
-  const invalidShowMoreLimit =
-    showMoreLimit !== undefined
-      ? isNaN(showMoreLimit) || showMoreLimit < limit
-      : false;
-
-  if (noAttributeName || invalidOperator || invalidShowMoreLimit) {
-    throw new Error(message);
-  }
-};
 
 /**
  * @typedef {Object} RefinementListItem
@@ -158,18 +142,27 @@ export default function connectRefinementList(renderFn, unmountFn) {
       attribute,
       operator = 'or',
       limit = 10,
+      showMore,
       showMoreLimit,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
       escapeFacetValues = true,
       transformItems = items => items,
     } = widgetParams;
 
-    checkUsage({
-      message: usage,
-      attribute,
-      operator,
-      showMoreLimit,
-      limit,
+    throwUsage(usage, () => {
+      if (!attribute) {
+        return '`attribute` is missing.';
+      }
+
+      if (!/^(and|or)$/.test(operator)) {
+        return '`operator` should be one of the following: `"or"`, `"and"`.';
+      }
+
+      if (showMore && showMoreLimit < limit) {
+        return '`showMoreLimit` should be a number greater or equal than `limit`';
+      }
+
+      return '';
     });
 
     const formatItems = ({ name: label, ...item }) => ({

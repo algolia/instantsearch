@@ -3,7 +3,11 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
 import defaultTemplates from './defaultTemplates.js';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  throwUsage,
+} from '../../lib/utils.js';
 import { component } from '../../lib/suit';
 
 const suit = component('RefinementList');
@@ -66,18 +70,18 @@ const usage = `Usage:
 refinementList({
   container,
   attribute,
-  [ operator='or' ],
-  [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-  [ limit = 10 ],
-  [ showMore = false],
-  [ showMoreLimit = 10 ],
-  [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
-  [ templates.{item, searchableNoResults, showMoreActive, showMoreInactive} ],
-  [ searchable ],
-  [ searchablePlaceholder ],
-  [ searchableIsAlwaysActive = true ],
-  [ searchableEscapeFacetValues = true ],
-  [ transformItems ],
+  operator?: string = 'or',
+  sortBy?: string[]|function = ['isRefined', 'count:desc', 'name:asc'] ],
+  limit?: number = 10,
+  showMore?: boolean = false,
+  showMoreLimit?: number = 10,
+  cssClasses?: { root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore },
+  templates?: { item, searchableNoResults, showMoreActive, showMoreInactive },
+  searchable?: boolean = false,
+  searchablePlaceholder?: string = 'Search...',
+  searchableIsAlwaysActive?: boolean = true,
+  searchableEscapeFacetValues?: boolean = true,
+  transformItems?: function,
 })`;
 
 /**
@@ -186,19 +190,25 @@ export default function refinementList({
   templates = defaultTemplates,
   transformItems,
 } = {}) {
-  if (!container) {
-    throw new Error(usage);
-  }
+  throwUsage(usage, () => {
+    if (!container) {
+      return '`container` is missing.';
+    }
 
-  if (!showMore && showMoreLimit) {
-    throw new Error(
-      '`showMoreLimit` must be used with `showMore` set to `true`.'
-    );
-  }
+    if (!attribute) {
+      return '`attribute` is missing.';
+    }
 
-  if (showMore && showMoreLimit < limit) {
-    throw new Error('`showMoreLimit` should be greater than `limit`.');
-  }
+    if (!showMore && showMoreLimit) {
+      return '`showMoreLimit` must be used with `showMore` set to `true`.';
+    }
+
+    if (showMore && showMoreLimit < limit) {
+      return '`showMoreLimit` should be a number greater or equal than `limit`.';
+    }
+
+    return '';
+  });
 
   const escapeFacetValues = searchable
     ? Boolean(searchableEscapeFacetValues)
