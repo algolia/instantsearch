@@ -487,6 +487,10 @@ With the redo button:
 </div>
 ```
 
+### NumericSelector
+
+Widget removed.
+
 ### Pagination
 
 #### Options
