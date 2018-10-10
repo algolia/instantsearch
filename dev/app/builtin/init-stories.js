@@ -23,6 +23,7 @@ import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
 import initToggleStories from './stories/toggleRefinement.stories';
 import initConfigureStories from './stories/configure.stories';
+import initPoweredByStories from './stories/powered-by.stories';
 
 export default () => {
   initAnalyticsStories();
@@ -50,4 +51,5 @@ export default () => {
   initStarRatingStories();
   initToggleStories();
   initConfigureStories();
+  initPoweredByStories();
 };

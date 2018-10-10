@@ -48,3 +48,4 @@ export {
 export { default as analytics } from '../widgets/analytics/analytics.js';
 export { default as breadcrumb } from '../widgets/breadcrumb/breadcrumb.js';
 export { default as menuSelect } from '../widgets/menu-select/menu-select.js';
+export { default as poweredBy } from '../widgets/powered-by/powered-by.js';

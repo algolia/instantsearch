@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`poweredBy renders only once at init 1`] = `
+<PoweredBy
+  cssClasses={
+    Object {
+      "link": "ais-PoweredBy link",
+      "logo": "ais-PoweredBy logo",
+      "root": "ais-PoweredBy ais-PoweredBy--light root",
+    }
+  }
+  theme="light"
+  url="https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=&utm_campaign=poweredby"
+/>
+`;
