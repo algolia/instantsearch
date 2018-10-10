@@ -1,6 +1,5 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-
 import { checkRendering, warn } from '../../lib/utils.js';
 
 const usage = `Usage:

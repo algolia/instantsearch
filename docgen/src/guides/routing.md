@@ -234,9 +234,6 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
   numericRefinementList: {
     heightInCm: 40
   },
-  numericSelector: {
-    widthInCm: 30
-  },
   range: {
     ageInYears: '2-10'
   },

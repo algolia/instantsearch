@@ -268,21 +268,4 @@ search.once('render', function() {
   document.querySelector('.search').className = 'row search search--visible';
 });
 
-search.addWidget(
-  instantsearch.widgets.numericSelector({
-    container: '#popularity-selector',
-    operator: '>=',
-    attributeName: 'popularity',
-    options: [
-      { label: 'Default', value: 0 },
-      { label: 'Top 10', value: 9991 },
-      { label: 'Top 100', value: 9901 },
-      { label: 'Top 500', value: 9501 },
-    ],
-    cssClasses: {
-      select: 'form-control',
-    },
-  })
-);
-
 search.start();

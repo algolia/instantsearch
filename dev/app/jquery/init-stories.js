@@ -6,7 +6,6 @@ import initHitsPerPageStories from './stories/hits-per-page.stories';
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
-import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
@@ -25,7 +24,6 @@ export default () => {
   initInfiniteHitsStories();
   initMenuStories();
   initNumericRefinementListStories();
-  initNumericSelectorStories();
   initPaginationStories();
   initRefinementListStories();
   initSearchBoxStories();

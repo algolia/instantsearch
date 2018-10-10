@@ -19,9 +19,6 @@ export {
   default as connectNumericRefinementList,
 } from './numeric-refinement-list/connectNumericRefinementList.js';
 export {
-  default as connectNumericSelector,
-} from './numeric-selector/connectNumericSelector.js';
-export {
   default as connectPagination,
 } from './pagination/connectPagination.js';
 export {
