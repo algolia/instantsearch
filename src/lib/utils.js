@@ -437,6 +437,14 @@ function warn(message) {
   }
 }
 
+export function throwUsage(usageError, getErrorMessage = () => '') {
+  const errorMessage = getErrorMessage();
+
+  if (errorMessage) {
+    throw new Error(`[InstantSearch.js] ${errorMessage}\n\n${usageError}`);
+  }
+}
+
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
 function parseAroundLatLngFromString(value) {
   const pattern = value.match(latLngRegExp);

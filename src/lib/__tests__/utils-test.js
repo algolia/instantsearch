@@ -931,6 +931,26 @@ describe('utils.warn', () => {
   });
 });
 
+describe('utils.throwUsage', () => {
+  it('throws the correct error', () => {
+    expect(() =>
+      utils.throwUsage('Usage: bad usage', () => 'option does not exist')
+    ).toThrowErrorMatchingInlineSnapshot(`
+"[InstantSearch.js] option does not exist
+
+Usage: bad usage"
+`);
+  });
+
+  it('with empty message does not throw', () => {
+    expect(() => utils.throwUsage('Usage: bad usage', () => '')).not.toThrow();
+  });
+
+  it('with no function does not throw', () => {
+    expect(() => utils.throwUsage('Usage: bad usage')).not.toThrow();
+  });
+});
+
 describe('utils.parseAroundLatLngFromString', () => {
   it('expect to return a LatLng object from string', () => {
     const samples = [
