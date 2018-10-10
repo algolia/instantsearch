@@ -23,7 +23,7 @@ search.start();
 
 ### New usage
 
-1.  [Import `algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript)
+1.  [Import `algoliasearch`](https://www.algolia.com/doc/api-client/javascript/getting-started/) (prefer the [lite version](https://github.com/algolia/algoliasearch-client-javascript#search-onlylite-client) for search only)
 2.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
 3.  Initialize InstantSearch with the `searchClient` option
 
@@ -87,11 +87,11 @@ Here are the elements you need to migrate:
 
 ### `collapsible` is dropped
 
-`collapsible` will be replaced by the `panel` widget.
+`collapsible` are replaced by the `panel` widget.
 
 ### `autoHideContainer` is dropped
 
-`autoHideContainer` will be replaced by the `panel` widget.
+`autoHideContainer` are replaced by the `panel` widget.
 
 ### `createAlgoliaClient` is dropped
 

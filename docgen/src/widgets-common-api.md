@@ -71,7 +71,6 @@ search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#hits',
     templates: {
-      header: 'Header',
       item: '{{#isRefined}}👉{{/isRefined}} {{value}} ({{count}})',
       // OR
       item: item =>
