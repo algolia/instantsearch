@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import expect from 'expect';
 import { shallow } from 'enzyme';
 import { createRenderer } from 'react-test-renderer/shallow';
 

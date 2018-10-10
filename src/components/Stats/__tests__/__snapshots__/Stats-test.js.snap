@@ -8,9 +8,7 @@ exports[`Stats should render <Stats /> with custom CSS classes 1`] = `
     className="text"
     dangerouslySetInnerHTML={
       Object {
-        "__html": "
-    1 result
-     found in ms",
+        "__html": "1 result found in ms",
       }
     }
   />

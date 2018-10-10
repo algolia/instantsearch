@@ -27,6 +27,32 @@ describe('refinementList()', () => {
         refinementList(options);
       }).toThrow(/^Usage:/);
     });
+
+    it('throws an exception when showMoreLimit without showMore option', () => {
+      expect(
+        refinementList.bind(null, {
+          attribute: 'attribute',
+          container,
+          showMoreLimit: 10,
+        })
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"\`showMoreLimit\` must be used with \`showMore\` set to \`true\`."`
+      );
+    });
+
+    it('throws an exception when showMoreLimit is lower than limit', () => {
+      expect(
+        refinementList.bind(null, {
+          attribute: 'attribute',
+          container,
+          limit: 20,
+          showMore: true,
+          showMoreLimit: 10,
+        })
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"\`showMoreLimit\` should be greater than \`limit\`."`
+      );
+    });
   });
 
   describe('render', () => {
@@ -137,16 +163,16 @@ describe('refinementList()', () => {
   });
 
   describe('show more', () => {
-    it('should return a configuration with the highest limit value (default value)', () => {
+    it('should return a configuration with the same top-level limit value (default value)', () => {
       const opts = {
         container,
         attribute: 'attribute',
         limit: 1,
-        showMore: {},
+        showMore: true,
       };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
-      expect(partialConfig.maxValuesPerFacet).toBe(100);
+      expect(partialConfig.maxValuesPerFacet).toBe(1);
     });
 
     it('should return a configuration with the highest limit value (custom value)', () => {
@@ -154,11 +180,12 @@ describe('refinementList()', () => {
         container,
         attribute: 'attribute',
         limit: 1,
-        showMore: { limit: 99 },
+        showMore: true,
+        showMoreLimit: 99,
       };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
-      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMore.limit);
+      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMoreLimit);
     });
 
     it('should not accept a show more limit that is < limit', () => {
@@ -166,7 +193,8 @@ describe('refinementList()', () => {
         container,
         attribute: 'attribute',
         limit: 100,
-        showMore: { limit: 1 },
+        showMore: true,
+        showMoreLimit: 1,
       };
       expect(() => refinementList(opts)).toThrow();
     });

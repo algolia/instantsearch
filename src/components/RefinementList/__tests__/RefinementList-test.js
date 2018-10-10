@@ -140,7 +140,7 @@ describe('RefinementList', () => {
       };
 
       const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="show-more-inactive"]');
+      const wrapper = root.find('[templateKey="showMoreInactive"]');
 
       expect(wrapper).toHaveLength(1);
     });
@@ -160,7 +160,7 @@ describe('RefinementList', () => {
       const root = shallowRender(props);
       const wrapper = root
         .find('Template')
-        .filter({ templateKey: 'show-more-inactive' });
+        .filter({ templateKey: 'showMoreInactive' });
 
       expect(wrapper).toHaveLength(0);
     });
@@ -179,7 +179,7 @@ describe('RefinementList', () => {
       };
 
       const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="show-more-active"]');
+      const wrapper = root.find('[templateKey="showMoreActive"]');
 
       expect(wrapper).toHaveLength(1);
     });
@@ -261,6 +261,7 @@ describe('RefinementList', () => {
         attribute: 'attribute',
         facetValues: [],
         cssClasses,
+        className: 'customClassName',
         templateProps: {},
         toggleRefinement: () => {},
       };
@@ -275,13 +276,14 @@ describe('RefinementList', () => {
         attribute: 'attribute',
         facetValues: [],
         cssClasses,
+        className: 'customClassName',
         isFromSearch: true,
         searchPlaceholder: 'Search',
         searchFacetValues: x => x,
         templateProps: {
           templates: {
             item: item => item,
-            noResults: x => x,
+            searchableNoResults: x => x,
           },
         },
         toggleRefinement: () => {},
@@ -308,6 +310,7 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         templateProps: {
           templates: {
             item: item => item,
@@ -338,12 +341,13 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         showMore: true,
         canToggleShowMore: true,
         templateProps: {
           templates: {
             item: item => item,
-            'show-more-inactive': x => x,
+            showMoreInactive: x => x,
           },
         },
         toggleRefinement: () => {},
@@ -371,12 +375,13 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         showMore: true,
         canToggleShowMore: false,
         templateProps: {
           templates: {
             item: item => item,
-            'show-more-inactive': x => x,
+            showMoreInactive: x => x,
           },
         },
         toggleRefinement: () => {},
@@ -404,6 +409,7 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         isFromSearch: true,
         searchPlaceholder: 'Search',
         searchFacetValues: x => x,

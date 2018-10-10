@@ -53,7 +53,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
         className="separator"
         dangerouslySetInnerHTML={
           Object {
-            "__html": " > ",
+            "__html": ">",
           }
         }
       />
@@ -92,7 +92,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
         className="separator"
         dangerouslySetInnerHTML={
           Object {
-            "__html": " > ",
+            "__html": ">",
           }
         }
       />
@@ -112,7 +112,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
         className="separator"
         dangerouslySetInnerHTML={
           Object {
-            "__html": " > ",
+            "__html": ">",
           }
         }
       />

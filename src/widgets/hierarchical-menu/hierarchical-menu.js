@@ -1,25 +1,17 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import RefinementList from '../../components/RefinementList/RefinementList.js';
+import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import defaultTemplates from './defaultTemplates.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-
-const bem = bemHelper('ais-hierarchical-menu');
+const suit = component('HierarchicalMenu');
 
 const renderer = ({
-  autoHideContainer,
-  collapsible,
   cssClasses,
   containerNode,
   showMore,
-  transformData,
   templates,
   renderState,
 }) => (
@@ -36,7 +28,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -44,15 +35,11 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && items.length === 0;
-
   render(
     <RefinementList
-      collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       showMore={showMore}
@@ -73,37 +60,31 @@ hierarchicalMenu({
   [ showParentLevel=false ],
   [ limit=10 ],
   [ sortBy=['name:asc'] ],
-  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
-  [ templates.{header, item, footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
+  [ cssClasses.{root, noRefinementRoot, list, childList, item, selectedItem, parentItem, link, label, count, showMore, disabledShowMore} ],
+  [ templates.{item, showMoreActive, showMoreInactive} ],
   [ transformItems ]
 })`;
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element when no refinements.
  * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [childList] CSS class to add to the child list element.
  * @property {string|string[]} [item] CSS class to add to each item element.
- * @property {string|string[]} [depth] CSS class to add to each item element to denote its depth. The actual level will be appended to the given class name (ie. if `depth` is given, the widget will add `depth0`, `depth1`, ... according to the level of each item).
- * @property {string|string[]} [active] CSS class to add to each active element.
+ * @property {string|string[]} [selectedItem] CSS class to add to each selected item element.
+ * @property {string|string[]} [parentItem] CSS class to add to each parent item element.
  * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
+ * @property {string|string[]} [label] CSS class to add to each label (when using the default template).
  * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
+ * @property {string|string[]} [showMore] CSS class to add to the show more element.
+ * @property {string|string[]} [disabledShowMore] CSS class to add to the disabled show more element.
  */
 
 /**
  * @typedef {Object} HierarchicalMenuTemplates
- * @property {string|function(object):string} [header=''] Header template (root level only).
  * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property {string|function(object):string} [footer=''] Footer template (root level only).
- */
-
-/**
- * @typedef {Object} HierarchicalMenuTransforms
- * @property {function(object):object} [item] Method to change the object passed to the `item`. template
+ * @property {string|function} [showMoreActive] Template used when showMore was clicked.
+ * @property {string|function} [showMoreInactive] Template used when showMore not clicked.
  */
 
 /**
@@ -139,12 +120,7 @@ hierarchicalMenu({
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {HierarchicalMenuTemplates} [templates] Templates to use for the widget.
- * @property {HierarchicalMenuTransforms} [transformData] Set of functions to transform the data passed to the templates.
- * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
  * @property {HierarchicalMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
- * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
- * property is `true`, then the widget is hidden during the first rendering.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -196,9 +172,6 @@ hierarchicalMenu({
  *   instantsearch.widgets.hierarchicalMenu({
  *     container: '#hierarchical-categories',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
- *     templates: {
- *       header: 'Hierarchical categories'
- *     }
  *   })
  * );
  */
@@ -211,12 +184,9 @@ export default function hierarchicalMenu({
   limit = 10,
   sortBy = ['name:asc'],
   cssClasses: userCssClasses = {},
-  autoHideContainer = true,
   templates = defaultTemplates,
-  collapsible = false,
   showMore = false,
   showMoreLimit,
-  transformData,
   transformItems,
 } = {}) {
   if (!container || !attributes || !attributes.length) {
@@ -226,24 +196,38 @@ export default function hierarchicalMenu({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    depth: bem('list', 'lvl'),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count),
+    root: cx(suit(), userCssClasses.root),
+    noRefinementRoot: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinementRoot
+    ),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    childList: cx(
+      suit({ descendantName: 'list', modifierName: 'child' }),
+      userCssClasses.childList
+    ),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    selectedItem: cx(
+      suit({ descendantName: 'item', modifierName: 'selected' }),
+      userCssClasses.selectedItem
+    ),
+    parentItem: cx(
+      suit({ descendantName: 'item', modifierName: 'parent' }),
+      userCssClasses.parentItem
+    ),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+    count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
+    showMore: cx(suit({ descendantName: 'showMore' }), userCssClasses.showMore),
+    disabledShowMore: cx(
+      suit({ descendantName: 'showMore', modifierName: 'disabled' }),
+      userCssClasses.disabledShowMore
+    ),
   };
 
   const specializedRenderer = renderer({
-    autoHideContainer,
-    collapsible,
     cssClasses,
     containerNode,
-    transformData,
     templates,
     showMore,
     renderState: {},
@@ -264,7 +248,7 @@ export default function hierarchicalMenu({
       sortBy,
       transformItems,
     });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

@@ -180,10 +180,16 @@ function renderTemplate({
     data
   );
 
-  return hogan.compile(template, compileOptions).render({
-    ...data,
-    helpers: transformedHelpers,
-  });
+  return hogan
+    .compile(template, compileOptions)
+    .render({
+      ...data,
+      helpers: transformedHelpers,
+    })
+    .replace(/[ \n\r\t\f\xA0]+/g, spaces =>
+      spaces.replace(/(^|\xA0+)[^\xA0]+/g, '$1 ')
+    )
+    .trim();
 }
 
 // We add all our template helper methods to the template as lambdas. Note
