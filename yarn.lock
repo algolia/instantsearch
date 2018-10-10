@@ -16536,10 +16536,10 @@ rollup-pluginutils@^2.3.3:
     estree-walker "^0.5.2"
     micromatch "^2.3.11"
 
-rollup@0.66.5:
-  version "0.66.5"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.66.5.tgz#49b109d3db4772301d84b8ed9617a4481e9a8042"
-  integrity sha512-tFdxC5zOynOS3fUHkJmKk9QjRWVLXxDCUVDmpoZazubxgXZmS/XzrlzhwuOKPelJm92Hd4hmXIqkzVN22Isf+w==
+rollup@0.66.6:
+  version "0.66.6"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.66.6.tgz#ce7d6185beb7acea644ce220c25e71ae03275482"
+  integrity sha512-J7/SWanrcb83vfIHqa8+aVVGzy457GcjA6GVZEnD0x2u4OnOd0Q1pCrEoNe8yLwM6z6LZP02zBT2uW0yh5TqOw==
   dependencies:
     "@types/estree" "0.0.39"
     "@types/node" "*"
