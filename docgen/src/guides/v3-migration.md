@@ -278,6 +278,110 @@ With the redo button:
   <button class="ais-InfiniteHits-loadMore">Show more results</button>
 ```
 
+### Hierarchical Menu
+
+#### Options
+
+| Before | After           |
+| ------ | --------------- |
+|        | `showMore`      |
+|        | `showMoreLimit` |
+
+#### CSS classes
+
+| Before                                | After                                     |
+| ------------------------------------- | ----------------------------------------- |
+| `ais-hierarchical-menu`               | `ais-HierarchicalMenu`                    |
+|                                       | `ais-HierarchicalMenu--noRefinement`      |
+|                                       | `ais-HierarchicalMenu-searchBox`          |
+| `ais-hierarchical-menu--list`         | `ais-HierarchicalMenu-list`               |
+|                                       | `ais-HierarchicalMenu-list--child`        |
+|                                       | `ais-HierarchicalMenu-list--lvl0`         |
+|                                       | `ais-HierarchicalMenu-list--lvl1`         |
+| `ais-hierarchical-menu--item`         | `ais-HierarchicalMenu-item`               |
+| `ais-hierarchical-menu--item__active` | `ais-HierarchicalMenu-item--selected`     |
+| `ais-hierarchical-menu--item__parent` | `ais-HierarchicalMenu-item--parent`       |
+| `ais-hierarchical-menu--link`         | `ais-HierarchicalMenu-link`               |
+| `ais-hierarchical-menu--label`        | `ais-HierarchicalMenu-label`              |
+| `ais-hierarchical-menu--count`        | `ais-HierarchicalMenu-count`              |
+| `ais-hierarchical-menu--noResults`    | `ais-HierarchicalMenu-noResults`          |
+|                                       | `ais-HierarchicalMenu-showMore`           |
+|                                       | `ais-HierarchicalMenu-showMore--disabled` |
+
+#### Markup
+
+##### Default
+
+```html
+<div class="ais-HierarchicalMenu">
+  <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Appliances</span>
+        <span class="ais-HierarchicalMenu-count">4,306</span>
+      </a>
+      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
+        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Dishwashers</span>
+            <span class="ais-HierarchicalMenu-count">181</span>
+          </a>
+        </li>
+        <li class="ais-HierarchicalMenu-item">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Fans</span>
+            <span class="ais-HierarchicalMenu-count">91</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Audio</span>
+        <span class="ais-HierarchicalMenu-count">1,570</span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-HierarchicalMenu-showMore">Show more</button>
+</div>
+```
+
+##### Show more disabled
+
+```html
+<div class="ais-HierarchicalMenu">
+  <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Appliances</span>
+        <span class="ais-HierarchicalMenu-count">4,306</span>
+      </a>
+      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
+        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Dishwashers</span>
+            <span class="ais-HierarchicalMenu-count">181</span>
+          </a>
+        </li>
+        <li class="ais-HierarchicalMenu-item">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Fans</span>
+            <span class="ais-HierarchicalMenu-count">91</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Audio</span>
+        <span class="ais-HierarchicalMenu-count">1,570</span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-HierarchicalMenu-showMore ais-HierarchicalMenu-showMore--disabled" disabled>Show more</button>
+</div>
+```
+
 ### Menu
 
 #### Options
