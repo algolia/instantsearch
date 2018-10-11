@@ -204,53 +204,25 @@ exports[`CurrentRefinements options.attributes uses template 1`] = `
       className="item"
       key="facet:facet-val1"
     >
-      <span
-        className="label"
-      >
-        Facet
-        :
-      </span>
-      <span
-        className="category"
-      >
-        <span
-          className="categoryLabel"
-        >
-          facet-val1
-        </span>
-        <button
-          className="delete"
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "CUSTOM TEMPLATE",
+          }
+        }
+      />
     </li>
     <li
       className="item"
       key="facet:facet-val2"
     >
-      <span
-        className="label"
-      >
-        Facet
-        :
-      </span>
-      <span
-        className="category"
-      >
-        <span
-          className="categoryLabel"
-        >
-          facet-val2
-        </span>
-        <button
-          className="delete"
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "CUSTOM TEMPLATE",
+          }
+        }
+      />
     </li>
     <li
       className="item"

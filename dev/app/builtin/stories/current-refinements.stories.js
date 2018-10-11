@@ -113,5 +113,30 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with item template',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.configure({
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.currentRefinements({
+            container,
+            includedAttributes: [
+              {
+                name: 'brand',
+                template:
+                  '<span class="{{cssClasses.category}} {{cssClasses.categoryLabel}}">{{attributeName}} = {{computedLabel}}</span>',
+              },
+            ],
+          })
+        );
+      })
     );
 };

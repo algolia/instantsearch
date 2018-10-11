@@ -1,9 +1,8 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-// import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 import upperFirst from 'lodash/upperFirst';
-// import Template from '../Template.js';
+import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
 function handleClick(cb) {
@@ -24,33 +23,40 @@ class CurrentRefinements extends Component {
   }
 
   renderItem(refinement, index) {
-    // const attribute = this.props.attributes[refinement.attributeName] || {};
-    // const customTemplateProps = getCustomTemplateProps(attribute);
     const key =
       refinement.attributeName +
       (refinement.operator ? refinement.operator : ':') +
       (refinement.exclude ? refinement.exclude : '') +
       refinement.name;
+    const attribute = this.props.attributes[refinement.attributeName] || {};
+    const attributeTemplates = attribute.template
+      ? {
+          templates: {
+            item: attribute.template,
+          },
+        }
+      : null;
 
-    return (
+    return attribute.template ? (
+      <li className={this.props.cssClasses.item} key={key}>
+        <Template
+          {...this.props.templateProps}
+          {...attributeTemplates}
+          templateKey="item"
+          data={{
+            ...refinement,
+            ...attribute,
+            cssClasses: this.props.cssClasses,
+          }}
+        />
+      </li>
+    ) : (
       <li className={this.props.cssClasses.item} key={key}>
         <span className={this.props.cssClasses.label}>
           {upperFirst(refinement.attributeName)}:
         </span>
 
         <span className={this.props.cssClasses.category}>
-          {/* <Template
-            {...this.props.templateProps}
-            {...customTemplateProps}
-            templateKey="item"
-            rootTagName="span"
-            data={{
-              ...refinement,
-              ...attribute,
-              cssClasses,
-            }}
-          /> */}
-
           <span className={this.props.cssClasses.categoryLabel}>
             {refinement.computedLabel}
           </span>
@@ -78,21 +84,6 @@ class CurrentRefinements extends Component {
     );
   }
 }
-
-// function getCustomTemplateProps(attribute) {
-//   const customTemplateProps = {};
-
-//   if (attribute.template !== undefined) {
-//     customTemplateProps.templates = {
-//       item: attribute.template,
-//     };
-//   }
-//   if (attribute.transformData !== undefined) {
-//     customTemplateProps.transformData = attribute.transformData;
-//   }
-
-//   return customTemplateProps;
-// }
 
 CurrentRefinements.propTypes = {
   attributes: PropTypes.object.isRequired,
