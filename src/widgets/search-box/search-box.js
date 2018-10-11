@@ -81,54 +81,40 @@ const renderer = ({
         input.blur();
       });
     }
+
+    return;
   }
 
-  renderAfterInit({
-    containerNode,
-    query,
-    showLoadingIndicator,
-    showReset,
-    isUserTyping: Boolean(query && query.trim()),
-    isSearchStalled,
-  });
-};
-
-function renderAfterInit({
-  containerNode,
-  query,
-  showLoadingIndicator,
-  showReset,
-  isUserTyping,
-  isSearchStalled,
-}) {
   const input = containerNode.querySelector('input');
   const isFocused = document.activeElement === input;
+
   if (!isFocused && query !== input.value) {
     input.value = query;
   }
 
   if (showLoadingIndicator) {
     const loadingIndicatorElement = containerNode.querySelector(
-      `.${suit({ descendantName: 'loadingIndicator' })}`
+      `.${cssClasses.loadingIndicator}`
     );
-    const resetElement = containerNode.querySelector(
-      `.${suit({ descendantName: 'reset' })}`
-    );
+
     if (isSearchStalled) {
       loadingIndicatorElement.removeAttribute('hidden');
     } else {
       loadingIndicatorElement.setAttribute('hidden', '');
     }
+  }
 
-    if (showReset) {
-      if (isUserTyping && !isSearchStalled) {
-        resetElement.removeAttribute('hidden');
-      } else {
-        resetElement.setAttribute('hidden', '');
-      }
+  if (showReset) {
+    const resetElement = containerNode.querySelector(`.${cssClasses.reset}`);
+    const isUserTyping = Boolean(query && query.trim());
+
+    if (isUserTyping && !isSearchStalled) {
+      resetElement.removeAttribute('hidden');
+    } else {
+      resetElement.setAttribute('hidden', '');
     }
   }
-}
+};
 
 const disposer = containerNode => () => {
   const range = document.createRange(); // IE10+
@@ -325,6 +311,7 @@ function addReset(input, cssClasses, templates, clearFunction) {
 
   const node = document.createElement('button');
   node.className = cssClasses.reset;
+  node.setAttribute('hidden', '');
   node.type = 'reset';
   node.title = 'Clear the search query';
   node.innerHTML = stringNode;
@@ -380,6 +367,7 @@ function addLoadingIndicator(input, cssClasses, templates) {
   });
 
   const node = document.createElement('span');
+  node.setAttribute('hidden', '');
   node.className = cssClasses.loadingIndicator;
   node.innerHTML = stringNode;
 

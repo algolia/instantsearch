@@ -160,7 +160,7 @@ describe('searchBox()', () => {
 
       // Then
       const element = container.querySelector('.ais-SearchBox-reset');
-      expect(element.getAttribute('hidden')).toBe(null);
+      expect(element.getAttribute('hidden')).toBe('');
     });
 
     it('should clear the query', () => {
