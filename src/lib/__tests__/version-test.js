@@ -1,4 +1,3 @@
-import expect from 'expect';
 import version from '../version';
 
 describe('version', () => {

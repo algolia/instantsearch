@@ -2,7 +2,7 @@
 
 exports[`RefinementList rendering with facets 1`] = `
 <div
-  className="root"
+  className="root customClassName"
 >
   <ul
     className="list"
@@ -79,7 +79,7 @@ exports[`RefinementList rendering with facets 1`] = `
 
 exports[`RefinementList rendering with facets and disabled show more 1`] = `
 <div
-  className="root"
+  className="root customClassName"
 >
   <ul
     className="list"
@@ -164,7 +164,7 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
 
 exports[`RefinementList rendering with facets and show more 1`] = `
 <div
-  className="root"
+  className="root customClassName"
 >
   <ul
     className="list"
@@ -249,7 +249,7 @@ exports[`RefinementList rendering with facets and show more 1`] = `
 
 exports[`RefinementList rendering with facets from search 1`] = `
 <div
-  className="root"
+  className="root customClassName"
 >
   <div
     className="searchBox"
@@ -409,13 +409,13 @@ exports[`RefinementList rendering with facets from search 1`] = `
 
 exports[`RefinementList rendering without facets 1`] = `
 <div
-  className="root noRefinementRoot"
+  className="root noRefinementRoot customClassName"
 />
 `;
 
 exports[`RefinementList rendering without facets from search 1`] = `
 <div
-  className="root noRefinementRoot"
+  className="root noRefinementRoot customClassName"
 >
   <div
     className="searchBox"

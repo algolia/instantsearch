@@ -19,9 +19,6 @@ export {
   default as connectNumericMenu,
 } from './numeric-menu/connectNumericMenu';
 export {
-  default as connectNumericSelector,
-} from './numeric-selector/connectNumericSelector.js';
-export {
   default as connectPagination,
 } from './pagination/connectPagination.js';
 export {

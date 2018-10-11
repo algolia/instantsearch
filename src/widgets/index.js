@@ -28,9 +28,6 @@ export {
   default as refinementList,
 } from '../widgets/refinement-list/refinement-list.js';
 export { default as numericMenu } from './numeric-menu/numeric-menu';
-export {
-  default as numericSelector,
-} from '../widgets/numeric-selector/numeric-selector.js';
 export { default as pagination } from '../widgets/pagination/pagination.js';
 export { default as rangeInput } from '../widgets/range-input/range-input.js';
 export { default as searchBox } from '../widgets/search-box/search-box.js';
@@ -46,3 +43,4 @@ export {
 export { default as analytics } from '../widgets/analytics/analytics.js';
 export { default as breadcrumb } from '../widgets/breadcrumb/breadcrumb.js';
 export { default as menuSelect } from '../widgets/menu-select/menu-select.js';
+export { default as poweredBy } from '../widgets/powered-by/powered-by.js';

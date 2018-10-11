@@ -78,9 +78,6 @@ export default () => {
               'hierarchicalCategories.lvl2',
             ],
             rootPath: 'Cameras & Camcorders',
-            templates: {
-              header: 'Hierarchical categories',
-            },
           })
         );
       })

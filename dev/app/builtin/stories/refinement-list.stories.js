@@ -78,12 +78,6 @@ export default () => {
               count: 'facet-count pull-right',
               selectedItem: 'facet-active',
             },
-            transformData(data) {
-              data.label = data.label
-                .replace(/(\d+) - (\d+)/, '$$$1 - $$$2')
-                .replace(/> (\d+)/, '> $$$1');
-              return data;
-            },
           })
         );
       })

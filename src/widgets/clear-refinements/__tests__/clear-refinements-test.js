@@ -1,4 +1,3 @@
-import expect from 'expect';
 import clearRefinements from '../clear-refinements';
 
 describe('clearRefinements()', () => {

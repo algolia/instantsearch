@@ -198,6 +198,18 @@ describe('utils.renderTemplate', () => {
     expect(actual).toBe(expectation);
   });
 
+  it('expect to compress templates', () => {
+    expect(
+      utils.renderTemplate({
+        templateKey: 'message',
+        templates: {
+          message: ` <h1> hello</h1>
+        <p>message</p> `,
+        },
+      })
+    ).toMatchInlineSnapshot(`"<h1> hello</h1> <p>message</p>"`);
+  });
+
   it('expect to throw when the template is not a function or a string', () => {
     const actual0 = () =>
       utils.renderTemplate({

@@ -66,7 +66,7 @@ breadcrumb({
 /**
  * @typedef {Object} BreadcrumbTemplates
  * @property {string|function(object):string} [home='Home'] Label of the breadcrumb's first element.
- * @property {string|function(object):string} [separator=''] Symbol used to separate the elements of the breadcrumb.
+ * @property {string|function(object):string} [separator='>'] Symbol used to separate the elements of the breadcrumb.
  */
 
 /**

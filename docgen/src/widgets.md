@@ -22,9 +22,8 @@ Widgets can be added to the InstantSearch instance using the `addWidget` method.
 
 ```javascript
 const search = instantsearch(/* parameters here */);
-search.addWidget(instantsearch.searchbox(/* searchbox parameters */));
+search.addWidget(instantsearch.widgets.searchbox(/* searchbox parameters */));
 ```
 
-In the next sections we showcase the widgets InstantSearch.js provides. If you want to learn
-more about the API, have a look at the [common widgets API](widgets-common-api.html).
+In the next sections, we showcase the widgets InstantSearch.js provides. If you want to learn more about the API, have a look at the [common widgets API](widgets-common-api.html).
 

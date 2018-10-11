@@ -37,6 +37,7 @@ class RefinementList extends Component {
           depth={this.props.depth + 1}
           facetValues={facetValue.data}
           showMore={false}
+          className={this.props.cssClasses.childList}
         />
       );
     }
@@ -65,6 +66,7 @@ class RefinementList extends Component {
         isRefined={facetValue.isRefined}
         className={cx(this.props.cssClasses.item, {
           [this.props.cssClasses.selectedItem]: facetValue.isRefined,
+          [this.props.cssClasses.parentItem]: hasChildren,
         })}
         key={key}
         subItems={subItems}
@@ -203,10 +205,14 @@ class RefinementList extends Component {
 
     return (
       <div
-        className={cx(this.props.cssClasses.root, {
-          [this.props.cssClasses.noRefinementRoot]:
-            !this.props.facetValues || this.props.facetValues.length === 0,
-        })}
+        className={cx(
+          this.props.cssClasses.root,
+          {
+            [this.props.cssClasses.noRefinementRoot]:
+              !this.props.facetValues || this.props.facetValues.length === 0,
+          },
+          this.props.className
+        )}
       >
         {searchBox}
         {facetValues}
@@ -227,6 +233,8 @@ RefinementList.propTypes = {
     list: PropTypes.string,
     item: PropTypes.string,
     selectedItem: PropTypes.string,
+    parentItem: PropTypes.string,
+    childList: PropTypes.string,
     searchBox: PropTypes.string,
     label: PropTypes.string,
     checkbox: PropTypes.string,
@@ -235,7 +243,7 @@ RefinementList.propTypes = {
     noResults: PropTypes.string,
     showMore: PropTypes.string,
     disabledShowMore: PropTypes.string,
-  }),
+  }).isRequired,
   depth: PropTypes.number,
   facetValues: PropTypes.array,
   attribute: PropTypes.string,
@@ -250,6 +258,7 @@ RefinementList.propTypes = {
   hasExhaustiveItems: PropTypes.bool,
   canToggleShowMore: PropTypes.bool,
   searchIsAlwaysActive: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 RefinementList.defaultProps = {

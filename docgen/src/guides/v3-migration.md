@@ -4,17 +4,98 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 ## InstantSearch
 
-### URLSync is not supported anymore
+### `appId` and `apiKey` are replaced by `searchClient`
+
+### Previous usage
+
+1.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
+2.  Initialize InstantSearch
+
+```javascript
+const search = instantsearch({
+  indexName: 'indexName',
+  appId: 'appId',
+  apiKey: 'apiKey',
+});
+
+search.start();
+```
+
+### New usage
+
+1.  [Import `algoliasearch`](https://www.algolia.com/doc/api-client/javascript/getting-started/) (prefer the [lite version](https://github.com/algolia/algoliasearch-client-javascript#search-onlylite-client) for search only)
+2.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
+3.  Initialize InstantSearch with the `searchClient` option
+
+```javascript
+const search = instantsearch({
+  indexName: 'indexName',
+  searchClient: algoliasearch('appId', 'apiKey'),
+});
+
+search.start();
+```
+
+## `transformData` is replaced by `transformItems`
+
+Since InstantSearch.js first public release, we have provided an option to customize the values used in the widgets. This method was letting you map 1-1 the values with other values. With React Instantsearch, we implemented a slightly different API that allows to map over the list of values and to change their content.
+
+### Previous usage
+
+```js
+search.addWidget(
+  instantsearch.widget.refinementList({
+    container: '#facet',
+    attributeName: 'facet',
+    transformData: {
+      item: data => {
+        data.count = 0;
+        return data;
+      }
+    }
+  })
+);
+```
+
+### New usage
+
+```js
+search.addWidget(
+  instantsearch.widget.refinementList({
+    container: '#facet',
+    attributeName: 'facet',
+    transformItems: items =>
+      items.map(item => ({
+        ...item,
+        count: 0,
+      })),
+  })
+);
+```
+
+### `urlSync` is dropped
 
 If you were previously using the `urlSync` option, you should now migrate to the new `routing` feature.
 
 Here are the elements you need to migrate:
 
 - `urlSync: true` becomes `routing: true`
-- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
+- `threshold` becomes `routing: { router: instantsearch.routers.history({ writeDelay: 400 }) }`
+- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read "[User friendly URLs](routing.html#user-friendly-urls)" to know how to configure it
 - `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
 - `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+
+### `collapsible` is dropped
+
+`collapsible` are replaced by the `panel` widget.
+
+### `autoHideContainer` is dropped
+
+`autoHideContainer` are replaced by the `panel` widget.
+
+### `createAlgoliaClient` is dropped
+
+`createAlgoliaClient` is replaced by `searchClient`.
 
 ## Widgets
 
@@ -278,6 +359,110 @@ With the redo button:
   <button class="ais-InfiniteHits-loadMore">Show more results</button>
 ```
 
+### Hierarchical Menu
+
+#### Options
+
+| Before | After           |
+| ------ | --------------- |
+|        | `showMore`      |
+|        | `showMoreLimit` |
+
+#### CSS classes
+
+| Before                                | After                                     |
+| ------------------------------------- | ----------------------------------------- |
+| `ais-hierarchical-menu`               | `ais-HierarchicalMenu`                    |
+|                                       | `ais-HierarchicalMenu--noRefinement`      |
+|                                       | `ais-HierarchicalMenu-searchBox`          |
+| `ais-hierarchical-menu--list`         | `ais-HierarchicalMenu-list`               |
+|                                       | `ais-HierarchicalMenu-list--child`        |
+|                                       | `ais-HierarchicalMenu-list--lvl0`         |
+|                                       | `ais-HierarchicalMenu-list--lvl1`         |
+| `ais-hierarchical-menu--item`         | `ais-HierarchicalMenu-item`               |
+| `ais-hierarchical-menu--item__active` | `ais-HierarchicalMenu-item--selected`     |
+| `ais-hierarchical-menu--item__parent` | `ais-HierarchicalMenu-item--parent`       |
+| `ais-hierarchical-menu--link`         | `ais-HierarchicalMenu-link`               |
+| `ais-hierarchical-menu--label`        | `ais-HierarchicalMenu-label`              |
+| `ais-hierarchical-menu--count`        | `ais-HierarchicalMenu-count`              |
+| `ais-hierarchical-menu--noResults`    | `ais-HierarchicalMenu-noResults`          |
+|                                       | `ais-HierarchicalMenu-showMore`           |
+|                                       | `ais-HierarchicalMenu-showMore--disabled` |
+
+#### Markup
+
+##### Default
+
+```html
+<div class="ais-HierarchicalMenu">
+  <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Appliances</span>
+        <span class="ais-HierarchicalMenu-count">4,306</span>
+      </a>
+      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
+        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Dishwashers</span>
+            <span class="ais-HierarchicalMenu-count">181</span>
+          </a>
+        </li>
+        <li class="ais-HierarchicalMenu-item">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Fans</span>
+            <span class="ais-HierarchicalMenu-count">91</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Audio</span>
+        <span class="ais-HierarchicalMenu-count">1,570</span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-HierarchicalMenu-showMore">Show more</button>
+</div>
+```
+
+##### Show more disabled
+
+```html
+<div class="ais-HierarchicalMenu">
+  <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Appliances</span>
+        <span class="ais-HierarchicalMenu-count">4,306</span>
+      </a>
+      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
+        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Dishwashers</span>
+            <span class="ais-HierarchicalMenu-count">181</span>
+          </a>
+        </li>
+        <li class="ais-HierarchicalMenu-item">
+          <a class="ais-HierarchicalMenu-link" href="#">
+            <span class="ais-HierarchicalMenu-label">Fans</span>
+            <span class="ais-HierarchicalMenu-count">91</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+      <a class="ais-HierarchicalMenu-link" href="#">
+        <span class="ais-HierarchicalMenu-label">Audio</span>
+        <span class="ais-HierarchicalMenu-count">1,570</span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-HierarchicalMenu-showMore ais-HierarchicalMenu-showMore--disabled" disabled>Show more</button>
+</div>
+```
+
 ### Menu
 
 #### Options
@@ -427,6 +612,10 @@ The item `name` attribute is now named `label`.
   </ul>
 </div>
 ```
+
+### NumericSelector
+
+Widget removed.
 
 ### Pagination
 
