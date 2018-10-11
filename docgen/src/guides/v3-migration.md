@@ -245,8 +245,6 @@ Here are the elements you need to migrate:
 </div>
 ```
 
-#### Markup
-
 ### GeoSearch
 
 #### CSS classes
