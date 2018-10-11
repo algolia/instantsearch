@@ -16,17 +16,11 @@ export {
 } from './infinite-hits/connectInfiniteHits.js';
 export { default as connectMenu } from './menu/connectMenu.js';
 export {
-  default as connectNumericRefinementList,
-} from './numeric-refinement-list/connectNumericRefinementList.js';
-export {
-  default as connectNumericSelector,
-} from './numeric-selector/connectNumericSelector.js';
+  default as connectNumericMenu,
+} from './numeric-menu/connectNumericMenu';
 export {
   default as connectPagination,
 } from './pagination/connectPagination.js';
-export {
-  default as connectPriceRanges,
-} from './price-ranges/connectPriceRanges.js';
 export {
   default as connectRangeSlider,
 } from './range-slider/connectRangeSlider.js';
@@ -36,11 +30,11 @@ export {
 } from './refinement-list/connectRefinementList.js';
 export { default as connectSearchBox } from './search-box/connectSearchBox.js';
 export { default as connectSortBy } from './sort-by/connectSortBy.js';
-export {
-  default as connectStarRating,
-} from './star-rating/connectStarRating.js';
+export { default as connectRatingMenu } from './rating-menu/connectRatingMenu';
 export { default as connectStats } from './stats/connectStats.js';
-export { default as connectToggle } from './toggle/connectToggle.js';
+export {
+  default as connectToggleRefinement,
+} from './toggleRefinement/connectToggleRefinement.js';
 export {
   default as connectBreadcrumb,
 } from './breadcrumb/connectBreadcrumb.js';

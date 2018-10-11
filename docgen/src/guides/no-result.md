@@ -41,18 +41,18 @@ When there are no results, the user will see a paragraph that says: "No results 
 
 To go further, we can also let the user clear the filters and start their search from scratch. This way, we allow the user to make mistake.
 
-To be able to do this part, you need to have the URL sync mechanism activated so that we can easily clear the filters using the URL. You can activate the URL Sync by adding to your InstantSearch instance:
+To be able to do this part, you need to have the routing mechanism activated so that we can easily clear the filters using the URL. You can activate the routing by adding to your InstantSearch instance:
 
 ```javascript
 const search = instantsearch({
   /* your other parameters */
-  urlSync: true
+  routing: true
 });
 ```
 
-This will give you a basic configuration of the url sync. Check out the [reference](instantsearch.html#struct-InstantSearchOptions-urlSync) if you want to learn more about URL sync.
+This will give you a basic configuration of the url sync. Check out the [reference](instantsearch.html#struct-InstantSearchOptions-routing) if you want to learn more about the routing.
 
-URL sync makes your InstantSearch.js app aware of changes in the URL. With this, we can easily influence the parameters of the search. In this case, we want to clear all the filters so we can make a link to this page, without the parameters.
+Routing makes your InstantSearch.js app aware of changes in the URL. With this, we can easily influence the parameters of the search. In this case, we want to clear all the filters so we can make a link to this page, without the parameters.
 
 We do this by customizing again the no-result template and adding it a clear all link:
 

@@ -2,15 +2,13 @@
 
 exports[`Stats should render <Stats /> with custom CSS classes 1`] = `
 <div
-  className="my-root"
+  className="root"
 >
   <span
-    className="my-text"
+    className="text"
     dangerouslySetInnerHTML={
       Object {
-        "__html": "
-    1 result
-     found in ms",
+        "__html": "1 result found in ms",
       }
     }
   />
@@ -18,11 +16,16 @@ exports[`Stats should render <Stats /> with custom CSS classes 1`] = `
 `;
 
 exports[`Stats should render <Template data= /> 1`] = `
-<div>
+<div
+  className="root"
+>
   <Component
     data={
       Object {
-        "cssClasses": Object {},
+        "cssClasses": Object {
+          "root": "root",
+          "text": "text",
+        },
         "hasManyResults": true,
         "hasNoResults": false,
         "hasOneResult": false,
@@ -36,7 +39,7 @@ exports[`Stats should render <Template data= /> 1`] = `
     }
     rootProps={
       Object {
-        "className": undefined,
+        "className": "text",
       }
     }
     rootTagName="span"

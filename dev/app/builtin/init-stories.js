@@ -5,25 +5,24 @@ import initCurrentRefinedValuesStories from './stories/current-refined-values.st
 import initGeoSearch from './stories/geo-search.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
-import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
+import initHitsPerPageStories from './stories/hits-per-page.stories';
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initInstantSearchStories from './stories/instantsearch.stories';
 import initMenuStories from './stories/menu.stories';
 import initMenuSelectStories from './stories/menu-select.stories';
-import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
-import initNumericSelectorStories from './stories/numeric-selector.stories';
+import initNumericMenuStories from './stories/numeric-menu.stories';
 import initPaginationStories from './stories/pagination.stories';
-import initPriceRangesStories from './stories/price-ranges.stories';
 import initRangeInputStories from './stories/range-input.stories.js';
 import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initReloadStories from './stories/reload.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortByStories from './stories/sort-by.stories';
-import initStarRatingStories from './stories/star-rating.stories';
+import initRatingMenuStories from './stories/rating-menu.stories';
 import initStatsStories from './stories/stats.stories';
-import initToggleStories from './stories/toggle.stories';
+import initToggleStories from './stories/toggleRefinement.stories';
 import initConfigureStories from './stories/configure.stories';
+import initPoweredByStories from './stories/powered-by.stories';
 
 export default () => {
   initAnalyticsStories();
@@ -33,15 +32,13 @@ export default () => {
   initGeoSearch();
   initHierarchicalMenu();
   initHitsStories();
-  initHitsPerPageSelectorStories();
+  initHitsPerPageStories();
   initInfiniteHitsStories();
   initInstantSearchStories();
   initMenuStories();
   initMenuSelectStories();
-  initNumericRefinementListStories();
-  initNumericSelectorStories();
+  initNumericMenuStories();
   initPaginationStories();
-  initPriceRangesStories();
   initRangeInputStories();
   initRangeSliderStories();
   initRefinementListStories();
@@ -49,7 +46,8 @@ export default () => {
   initSearchBoxStories();
   initSortByStories();
   initStatsStories();
-  initStarRatingStories();
+  initRatingMenuStories();
   initToggleStories();
   initConfigureStories();
+  initPoweredByStories();
 };

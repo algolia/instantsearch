@@ -198,6 +198,18 @@ describe('utils.renderTemplate', () => {
     expect(actual).toBe(expectation);
   });
 
+  it('expect to compress templates', () => {
+    expect(
+      utils.renderTemplate({
+        templateKey: 'message',
+        templates: {
+          message: ` <h1> hello</h1>
+        <p>message</p> `,
+        },
+      })
+    ).toMatchInlineSnapshot(`"<h1> hello</h1> <p>message</p>"`);
+  });
+
   it('expect to throw when the template is not a function or a string', () => {
     const actual0 = () =>
       utils.renderTemplate({
@@ -876,7 +888,7 @@ describe('utils.deprecate', () => {
     const actual = 6;
 
     expect(actual).toBe(expectation);
-    expect(warn).toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
 
     warn.mockReset();
     warn.mockRestore();
@@ -896,6 +908,38 @@ describe('utils.deprecate', () => {
 
     warn.mockReset();
     warn.mockRestore();
+  });
+});
+
+describe('utils.warn', () => {
+  it('expect to print a warn message', () => {
+    const message = 'message';
+    const warn = jest.spyOn(global.console, 'warn');
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
+
+    warn.mockReset();
+    warn.mockRestore();
+    utils.warn.cache = {};
+  });
+
+  it('expect to print the same message only once', () => {
+    const message = 'message';
+    const warn = jest.spyOn(global.console, 'warn');
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    warn.mockReset();
+    warn.mockRestore();
+    utils.warn.cache = {};
   });
 });
 
@@ -1134,5 +1178,41 @@ describe('utils.clearRefinements', () => {
       expect(finalState.disjunctiveFacetsRefinements).toEqual({});
       expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
     });
+  });
+});
+
+describe('utils.getPropertyByPath', () => {
+  it('should be able to get a property', () => {
+    const object = {
+      name: 'name',
+    };
+
+    expect(utils.getPropertyByPath(object, 'name')).toBe('name');
+  });
+
+  it('should be able to get a nested property', () => {
+    const object = {
+      nested: {
+        name: 'name',
+      },
+    };
+
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe('name');
+  });
+
+  it('returns undefined if does not exist', () => {
+    const object = {};
+
+    expect(utils.getPropertyByPath(object, 'random')).toBe(undefined);
+  });
+
+  it('should stop traversing when property is not an object', () => {
+    const object = {
+      nested: {
+        names: ['name'],
+      },
+    };
+
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe(undefined);
   });
 });

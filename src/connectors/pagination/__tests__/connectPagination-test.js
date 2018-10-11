@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper, {
   SearchResults,
   SearchParameters,
@@ -11,7 +9,7 @@ describe('connectPagination', () => {
   it('connectPagination - Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectPagination(rendering);
     const widget = makeWidget({
       foo: 'bar', // dummy param for `widgetParams` test
@@ -21,7 +19,7 @@ describe('connectPagination', () => {
     expect(widget.getConfiguration).toBe(undefined);
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -32,12 +30,14 @@ describe('connectPagination', () => {
 
     {
       // should call the rendering once with isFirstRendering to true
-      expect(rendering.callCount).toBe(1);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(1);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const firstRenderingOptions = rendering.lastCall.args[0];
+      const firstRenderingOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(firstRenderingOptions.currentRefinement).toBe(0);
       expect(firstRenderingOptions.nbHits).toBe(0);
       expect(firstRenderingOptions.nbPages).toBe(0);
@@ -62,12 +62,14 @@ describe('connectPagination', () => {
 
     {
       // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering.callCount).toBe(2);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(2);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(false);
 
       // should call the rendering with values from the results
-      const secondRenderingOptions = rendering.lastCall.args[0];
+      const secondRenderingOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(secondRenderingOptions.currentRefinement).toBe(0);
       expect(secondRenderingOptions.nbHits).toBe(1);
       expect(secondRenderingOptions.nbPages).toBe(1);
@@ -75,13 +77,13 @@ describe('connectPagination', () => {
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectPagination(rendering);
 
     const widget = makeWidget();
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -92,11 +94,12 @@ describe('connectPagination', () => {
 
     {
       // first rendering
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine(2);
       expect(helper.getPage()).toBe(2);
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
     widget.render({
@@ -108,11 +111,12 @@ describe('connectPagination', () => {
 
     {
       // Second rendering
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine(7);
       expect(helper.getPage()).toBe(7);
-      expect(helper.search.callCount).toBe(2);
+      expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
 

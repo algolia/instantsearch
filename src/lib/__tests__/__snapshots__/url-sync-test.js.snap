@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`urlSync mechanics Generates urls on change 1`] = `"q=query&idx=&p=0"`;
-
-exports[`urlSync mechanics updates the URL during the first rendering if it has change since the initial configuration 1`] = `"q=query&idx=&p=0"`;

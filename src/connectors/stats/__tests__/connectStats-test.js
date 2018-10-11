@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
@@ -9,7 +7,7 @@ describe('connectStats', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectStats(rendering);
 
     const widget = makeWidget({
@@ -19,7 +17,7 @@ describe('connectStats', () => {
     expect(widget.getConfiguration).toEqual(undefined);
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -30,8 +28,9 @@ describe('connectStats', () => {
 
     {
       // should call the rendering once with isFirstRendering to true
-      expect(rendering.callCount).toBe(1);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(1);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
@@ -43,7 +42,7 @@ describe('connectStats', () => {
         processingTimeMS,
         query,
         widgetParams,
-      } = rendering.lastCall.args[0];
+      } = rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(0);
       expect(nbPages).toBe(0);
@@ -72,8 +71,9 @@ describe('connectStats', () => {
 
     {
       // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering.callCount).toBe(2);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(2);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
@@ -84,7 +84,7 @@ describe('connectStats', () => {
         page,
         processingTimeMS,
         query,
-      } = rendering.lastCall.args[0];
+      } = rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(1);
       expect(nbPages).toBe(1);

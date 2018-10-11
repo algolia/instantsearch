@@ -7,12 +7,20 @@ const instantSearchInstance = { templatesConfig: undefined };
 describe('rangeSlider', () => {
   it('throws an exception when no container', () => {
     const attribute = '';
-    expect(() => rangeSlider({ attribute })).toThrow(/^Usage:/);
+    expect(() =>
+      rangeSlider({ attribute, step: 1, cssClasses: { root: '' } })
+    ).toThrow(/^Usage:/);
   });
 
   it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
-    expect(() => rangeSlider({ container })).toThrow(/^Usage:/);
+    expect(() =>
+      rangeSlider({
+        container,
+        step: 1,
+        cssClasses: { root: '' },
+      })
+    ).toThrow(/^Usage:/);
   });
 
   describe('widget usage', () => {
@@ -41,8 +49,6 @@ describe('rangeSlider', () => {
 
     afterEach(() => {
       rangeSlider.__ResetDependency__('render');
-      rangeSlider.__ResetDependency__('autoHideContainerHOC');
-      rangeSlider.__ResetDependency__('headerFooterHOC');
     });
 
     it('should render without results', () => {
@@ -50,6 +56,7 @@ describe('rangeSlider', () => {
         container,
         attribute,
         cssClasses: { root: ['root', 'cx'] },
+        step: 1,
       });
 
       widget.init({ helper, instantSearchInstance });
@@ -59,59 +66,15 @@ describe('rangeSlider', () => {
       expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
-    it('should `shouldAutoHideContainer` when range min === max', () => {
-      const results = {
-        disjunctiveFacets: [
-          {
-            name: attribute,
-            stats: {
-              min: 65,
-              max: 65,
-            },
-          },
-        ],
-      };
-
-      widget = rangeSlider({
-        container,
-        attribute,
-        cssClasses: { root: ['root', 'cx'] },
-      });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
-      ).toEqual(true);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    it('should `collapse` when options is provided', () => {
-      const results = {};
-
-      widget = rangeSlider({
-        container,
-        attribute,
-        collapsible: {
-          collapsed: true,
-        },
-      });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
-      ).toEqual(true);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
     describe('min option', () => {
       it('refines when no previous configuration', () => {
-        widget = rangeSlider({ container, attribute, min: 100 });
+        widget = rangeSlider({
+          container,
+          attribute,
+          min: 100,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         expect(widget.getConfiguration()).toEqual({
           disjunctiveFacets: [attribute],
           numericRefinements: { [attribute]: { '>=': [100] } },
@@ -123,6 +86,8 @@ describe('rangeSlider', () => {
           container,
           attribute: 'aNumAttr',
           min: 100,
+          step: 1,
+          cssClasses: { root: '' },
         });
         expect(
           widget.getConfiguration({
@@ -134,7 +99,14 @@ describe('rangeSlider', () => {
       });
 
       it('works along with max option', () => {
-        widget = rangeSlider({ container, attribute, min: 100, max: 200 });
+        widget = rangeSlider({
+          container,
+          attribute,
+          min: 100,
+          max: 200,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         expect(widget.getConfiguration()).toEqual({
           disjunctiveFacets: [attribute],
           numericRefinements: {
@@ -147,7 +119,14 @@ describe('rangeSlider', () => {
       });
 
       it('sets the right range', () => {
-        widget = rangeSlider({ container, attribute, min: 100, max: 200 });
+        widget = rangeSlider({
+          container,
+          attribute,
+          min: 100,
+          max: 200,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         helper.setState(widget.getConfiguration());
         widget.init({ helper, instantSearchInstance });
         widget.render({ results: {}, helper });
@@ -169,7 +148,13 @@ describe('rangeSlider', () => {
           ],
         };
 
-        widget = rangeSlider({ container, attribute, min: 100 });
+        widget = rangeSlider({
+          container,
+          attribute,
+          min: 100,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         helper.setState(widget.getConfiguration());
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
@@ -182,7 +167,13 @@ describe('rangeSlider', () => {
 
     describe('max option', () => {
       it('refines when no previous configuration', () => {
-        widget = rangeSlider({ container, attribute, max: 100 });
+        widget = rangeSlider({
+          container,
+          attribute,
+          max: 100,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         expect(widget.getConfiguration()).toEqual({
           disjunctiveFacets: [attribute],
           numericRefinements: { [attribute]: { '<=': [100] } },
@@ -190,7 +181,13 @@ describe('rangeSlider', () => {
       });
 
       it('does not refine when previous configuration', () => {
-        widget = rangeSlider({ container, attribute, max: 100 });
+        widget = rangeSlider({
+          container,
+          attribute,
+          max: 100,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         expect(
           widget.getConfiguration({
             numericRefinements: { [attribute]: {} },
@@ -213,7 +210,13 @@ describe('rangeSlider', () => {
           ],
         };
 
-        widget = rangeSlider({ container, attribute, max: 100 });
+        widget = rangeSlider({
+          container,
+          attribute,
+          max: 100,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         helper.setState(widget.getConfiguration());
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
@@ -228,7 +231,12 @@ describe('rangeSlider', () => {
       let results;
 
       beforeEach(() => {
-        widget = rangeSlider({ container, attribute });
+        widget = rangeSlider({
+          container,
+          attribute,
+          step: 1,
+          cssClasses: { root: '' },
+        });
         widget.init({ helper, instantSearchInstance });
 
         results = {
@@ -316,6 +324,8 @@ describe('rangeSlider', () => {
         widget = rangeSlider({
           container,
           attribute,
+          step: 1,
+          cssClasses: { root: '' },
         });
 
         widget.init({ helper, instantSearchInstance });
@@ -332,6 +342,8 @@ describe('rangeSlider', () => {
         widget = rangeSlider({
           container,
           attribute,
+          step: 1,
+          cssClasses: { root: '' },
         });
 
         widget.init({ helper, instantSearchInstance });

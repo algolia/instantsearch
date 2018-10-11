@@ -1,44 +1,22 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import Slider from '../../components/Slider/Slider.js';
 import connectRange from '../../connectors/range/connectRange.js';
+import { getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+const suit = component('RangeSlider');
 
-const defaultTemplates = {
-  header: '',
-  footer: '',
-};
-
-const bem = bemHelper('ais-range-slider');
-
-const renderer = ({
-  containerNode,
-  cssClasses,
-  pips,
-  step,
-  tooltips,
-  autoHideContainer,
-  collapsible,
-  renderState,
-  templates,
-}) => ({ refine, range, start, instantSearchInstance }, isFirstRendering) => {
+const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
+  { refine, range, start },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
+    // There's no information at this point, let's render nothing.
     return;
   }
 
   const { min: minRange, max: maxRange } = range;
-  const shouldAutoHideContainer = autoHideContainer && minRange === maxRange;
 
   const [minStart, maxStart] = start;
   const minFinite = minStart === -Infinity ? minRange : minStart;
@@ -62,9 +40,6 @@ const renderer = ({
       tooltips={tooltips}
       step={step}
       pips={pips}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      collapsible={collapsible}
-      templateProps={renderState.templateProps}
     />,
     containerNode
   );
@@ -79,26 +54,14 @@ rangeSlider({
   [ pips = true ],
   [ step = 1 ],
   [ precision = 0 ],
-  [ tooltips=true ],
-  [ templates.{header, footer} ],
-  [ cssClasses.{root, header, body, footer} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
+  [ tooltips = true ],
+  [ cssClasses.{root} ]
 });
 `;
 
 /**
- * @typedef {Object} RangeSliderTemplates
- * @property  {string|function} [header=""] Header template.
- * @property  {string|function} [footer=""] Footer template.
- */
-
-/**
  * @typedef {Object} RangeSliderCssClasses
  * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [header] CSS class to add to the header element.
- * @property  {string|string[]} [body] CSS class to add to the body element.
- * @property  {string|string[]} [footer] CSS class to add to the footer element.
  */
 
 /**
@@ -109,11 +72,6 @@ rangeSlider({
  */
 
 /**
- * @typedef {Object} RangeSliderCollapsibleOptions
- * @property  {boolean} [collapsed] Initially collapsed state of a collapsible widget.
- */
-
-/**
  * @typedef {Object} RangeSliderWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or DOMElement to insert the widget.
  * @property  {string} attribute Name of the attribute for faceting.
@@ -121,12 +79,9 @@ rangeSlider({
  * The default tooltip will show the raw value.
  * You can also provide an object with a format function as an attribute.
  * So that you can format the tooltip display value as you want
- * @property  {RangeSliderTemplates} [templates] Templates to use for the widget.
- * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available.
  * @property  {RangeSliderCssClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property  {boolean} [pips=true] Show slider pips.
  * @property  {number} [precision = 0] Number of digits after decimal point to use.
- * @property  {boolean|RangeSliderCollapsibleOptions} [collapsible=false] Hide the widget body and footer when clicking on header.
  * @property  {number} [step] Every handle move will jump that number of steps.
  * @property  {number} [min] Minimal slider value, default to automatically computed from the result set.
  * @property  {number} [max] Maximal slider value, defaults to automatically computed from the result set.
@@ -153,9 +108,6 @@ rangeSlider({
  *   instantsearch.widgets.rangeSlider({
  *     container: '#price',
  *     attribute: 'price',
- *     templates: {
- *       header: 'Price'
- *     },
  *     tooltips: {
  *       format: function(rawValue) {
  *         return '$' + Math.round(rawValue).toLocaleString();
@@ -169,14 +121,11 @@ export default function rangeSlider({
   attribute,
   min,
   max,
-  templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   step,
   pips = true,
   precision = 0,
   tooltips = true,
-  autoHideContainer = true,
-  collapsible = false,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -184,10 +133,21 @@ export default function rangeSlider({
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
+    root: cx(suit(), userCssClasses.root),
+    disabledRoot: cx(
+      suit({ modifierName: 'disabled' }),
+      userCssClasses.disabledRoot
+    ),
+    handle: cx(suit({ descendantName: 'handle' }), userCssClasses.handle),
+    lowerHandle: cx(
+      suit({ descendantName: 'handle', modifierName: 'lower' }),
+      userCssClasses.lowerHandle
+    ),
+    upperHandle: cx(
+      suit({ descendantName: 'handle', modifierName: 'upper' }),
+      userCssClasses.upperHandle
+    ),
+    tooltip: cx(suit({ descendantName: 'tooltip' }), userCssClasses.tooltip),
   };
 
   const specializedRenderer = renderer({
@@ -196,9 +156,6 @@ export default function rangeSlider({
     pips,
     tooltips,
     renderState: {},
-    templates,
-    autoHideContainer,
-    collapsible,
     cssClasses,
   });
 
@@ -207,7 +164,7 @@ export default function rangeSlider({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attribute, min, max, precision });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

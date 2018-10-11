@@ -1,8 +1,7 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
-import Hits from '../../components/Hits.js';
 import connectHits from '../../connectors/hits/connectHits.js';
+import Hits from '../../components/Hits/Hits.js';
 import defaultTemplates from './defaultTemplates.js';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit';
@@ -44,15 +43,15 @@ const usage = `Usage:
 hits({
   container,
   [ transformItems ],
-  [ cssClasses.{root,empty,item}={} ],
-  [ templates.{empty,item} ],
-  [ transformData.{empty,item} ],
+  [ cssClasses.{root, emptyRoot, item} ],
+  [ templates.{empty, item} ],
+  [ transformData.{empty, item} ],
 })`;
 
 /**
  * @typedef {Object} HitsCSSClasses
  * @property {string|string[]} [root] CSS class to add to the wrapping element.
- * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [emptyRoot] CSS class to add to the wrapping element when no results.
  * @property {string|string[]} [list] CSS class to add to the list of results.
  * @property {string|string[]} [item] CSS class to add to each result.
  */
@@ -139,7 +138,7 @@ export default function hits({
       unmountComponentAtNode(containerNode)
     );
     return makeHits({ escapeHTML, transformItems });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

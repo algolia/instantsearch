@@ -1,6 +1,9 @@
 import React from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { component } from '../../lib/suit';
+
+const suit = component('RangeSlider');
 
 const Pit = ({ style, children }) => {
   // first, end & middle
@@ -16,15 +19,19 @@ const Pit = ({ style, children }) => {
     <div
       style={{ ...style, marginLeft: positionValue === 100 ? '-2px' : 0 }}
       className={cx(
-        'ais-range-slider--marker ais-range-slider--marker-horizontal',
+        suit({ descendantName: 'marker' }),
+        suit({ descendantName: 'marker', modifierName: 'horizontal' }),
         {
-          'ais-range-slider--marker-large': shouldDisplayValue,
+          [suit({
+            descendantName: 'marker',
+            modifierName: 'large',
+          })]: shouldDisplayValue,
         }
       )}
     >
-      {shouldDisplayValue ? (
-        <div className="ais-range-slider--value">{pitValue}</div>
-      ) : null}
+      {shouldDisplayValue && (
+        <div className={suit({ descendantName: 'value' })}>{pitValue}</div>
+      )}
     </div>
   );
 };

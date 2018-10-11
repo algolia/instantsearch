@@ -1,4 +1,4 @@
 export default {
   home: 'Home',
-  separator: '',
+  separator: '>',
 };

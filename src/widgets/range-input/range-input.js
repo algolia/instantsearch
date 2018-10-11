@@ -2,32 +2,19 @@ import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput.js';
 import connectRange from '../../connectors/range/connectRange.js';
-import defaultTemplates from './defaultTemplates.js';
-
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
-
+import { getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit';
 
 const suit = component('RangeInput');
 
 const renderer = ({
   containerNode,
-  templates,
   cssClasses,
   labels,
   collapsible,
   renderState,
-}) => (
-  { refine, range, start, widgetParams, instantSearchInstance },
-  isFirstRendering
-) => {
+}) => ({ refine, range, start, widgetParams }, isFirstRendering) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
-
     return;
   }
 
@@ -64,8 +51,7 @@ rangeInput({
   [ min ],
   [ max ],
   [ precision = 0 ],
-  [ cssClasses.{root, header, body, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit, footer} ],
-  [ templates.{header, footer} ],
+  [ cssClasses.{root, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit} ],
   [ labels.{separator, submit} ],
   [ collapsible=false ]
 })`;
@@ -73,8 +59,6 @@ rangeInput({
 /**
  * @typedef {Object} RangeInputClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
  * @property {string|string[]} [form] CSS class to add to the form element.
  * @property {string|string[]} [fieldset] CSS class to add to the fieldset element.
  * @property {string|string[]} [labelMin] CSS class to add to the min label element.
@@ -83,13 +67,6 @@ rangeInput({
  * @property {string|string[]} [labelMax] CSS class to add to the max label element.
  * @property {string|string[]} [inputMax] CSS class to add to the max input element.
  * @property {string|string[]} [submit] CSS class to add to the submit button of the form.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
- */
-
-/**
- * @typedef {Object} RangeInputTemplates
- * @property {string|function} [header=""] Header template.
- * @property {string|function} [footer=""] Footer template.
  */
 
 /**
@@ -106,7 +83,6 @@ rangeInput({
  * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set.
  * @property {number} [precision = 0] Number of digits after decimal point to use.
  * @property {RangeInputClasses} [cssClasses] CSS classes to add.
- * @property {RangeInputTemplates} [templates] Templates to use for the widget.
  * @property {RangeInputLabels} [labels] Labels to use for the widget.
  * @property {boolean} [collapsible=false] Hide the widget body and footer when clicking on header.
  */
@@ -134,9 +110,6 @@ rangeInput({
  *       separator: 'to',
  *       submit: 'Go'
  *     },
- *     templates: {
- *       header: 'Price'
- *     }
  *   })
  * );
  */
@@ -147,7 +120,6 @@ export default function rangeInput({
   max,
   precision = 0,
   cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
   labels: userLabels = {},
   collapsible = false,
 } = {}) {
@@ -187,7 +159,6 @@ export default function rangeInput({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    templates,
     labels,
     collapsible,
     renderState: {},
@@ -202,7 +173,7 @@ export default function rangeInput({
       max,
       precision,
     });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

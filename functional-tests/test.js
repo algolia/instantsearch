@@ -1,4 +1,3 @@
-import expect from 'expect';
 import { searchBox, prepareScreenshot } from './utils.js';
 
 describe('searchBox', () => {

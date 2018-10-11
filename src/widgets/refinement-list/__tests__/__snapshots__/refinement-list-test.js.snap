@@ -1,24 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`refinementList() render renders transformed items correctly 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   canToggleShowMore={false}
-  collapsible={false}
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-refinement-list--item__active",
-      "body": "ais-refinement-list--body",
-      "checkbox": "ais-refinement-list--checkbox",
-      "count": "ais-refinement-list--count",
-      "footer": "ais-refinement-list--footer",
-      "header": "ais-refinement-list--header",
-      "item": "ais-refinement-list--item",
-      "label": "ais-refinement-list--label",
-      "list": "ais-refinement-list--list",
-      "root": "ais-refinement-list",
+      "checkbox": "ais-RefinementList-checkbox",
+      "count": "ais-RefinementList-count",
+      "disabledShowMore": "ais-RefinementList-showMore--disabled",
+      "item": "ais-RefinementList-item",
+      "label": "ais-RefinementList-label",
+      "labelText": "ais-RefinementList-labelText",
+      "list": "ais-RefinementList-list",
+      "noRefinementRoot": "ais-RefinementList--noRefinement",
+      "noResults": "ais-RefinementList-noResults",
+      "root": "ais-RefinementList",
+      "searchBox": "ais-RefinementList-searchBox",
+      "selectedItem": "ais-RefinementList-item--selected",
+      "showMore": "ais-RefinementList-showMore",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -36,39 +39,29 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
     ]
   }
   hasExhaustiveItems={true}
-  headerFooterData={
-    Object {
-      "header": Object {
-        "refinedFacetsCount": 0,
-      },
-    }
-  }
   isFromSearch={false}
   isShowingMore={false}
-  searchIsAlwaysActive={false}
-  searchPlaceholder="Search for other..."
-  shouldAutoHideContainer={false}
+  searchIsAlwaysActive={true}
+  searchPlaceholder="Search..."
   showMore={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
         "item": "<label class=\\"{{cssClasses.label}}\\">
   <input type=\\"checkbox\\"
          class=\\"{{cssClasses.checkbox}}\\"
          value=\\"{{value}}\\"
          {{#isRefined}}checked{{/isRefined}} />
-      {{{highlighted}}}
+  <span class=\\"{{cssClasses.labelText}}\\">{{{highlighted}}}</span>
   <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
 </label>",
+        "searchableNoResults": "No results",
       },
       "templatesConfig": Object {},
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
+        "searchableNoResults": false,
       },
     }
   }

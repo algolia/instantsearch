@@ -1,6 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import Selector from '../../components/Selector.js';
 import connectSortBy from '../../connectors/sort-by/connectSortBy.js';
 import { getContainerNode } from '../../lib/utils.js';
@@ -12,10 +11,12 @@ const renderer = ({ containerNode, cssClasses }) => (
   { currentRefinement, options, refine },
   isFirstRendering
 ) => {
-  if (isFirstRendering) return;
+  if (isFirstRendering) {
+    return;
+  }
 
   render(
-    <div className={cx(cssClasses.root)}>
+    <div className={cssClasses.root}>
       <Selector
         cssClasses={cssClasses}
         currentValue={currentRefinement}
@@ -31,8 +32,7 @@ const usage = `Usage:
 sortBy({
   container,
   items,
-  [cssClasses.{root,select,option}={}],
-  [autoHideContainer=false],
+  [cssClasses.{root, select, option}],
   [transformItems]
 })`;
 
@@ -53,7 +53,6 @@ sortBy({
  * @typedef {Object} SortByWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {SortByIndexDefinition[]} items Array of objects defining the different indices to choose from.
- * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -108,7 +107,7 @@ export default function sortBy({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ items, transformItems });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

@@ -18,8 +18,8 @@ export {
 } from '../widgets/hierarchical-menu/hierarchical-menu.js';
 export { default as hits } from '../widgets/hits/hits.js';
 export {
-  default as hitsPerPageSelector,
-} from '../widgets/hits-per-page-selector/hits-per-page-selector.js';
+  default as hitsPerPage,
+} from '../widgets/hits-per-page/hits-per-page.js';
 export {
   default as infiniteHits,
 } from '../widgets/infinite-hits/infinite-hits.js';
@@ -27,25 +27,20 @@ export { default as menu } from '../widgets/menu/menu.js';
 export {
   default as refinementList,
 } from '../widgets/refinement-list/refinement-list.js';
-export {
-  default as numericRefinementList,
-} from '../widgets/numeric-refinement-list/numeric-refinement-list.js';
-export {
-  default as numericSelector,
-} from '../widgets/numeric-selector/numeric-selector.js';
+export { default as numericMenu } from './numeric-menu/numeric-menu';
 export { default as pagination } from '../widgets/pagination/pagination.js';
-export {
-  default as priceRanges,
-} from '../widgets/price-ranges/price-ranges.js';
 export { default as rangeInput } from '../widgets/range-input/range-input.js';
 export { default as searchBox } from '../widgets/search-box/search-box.js';
 export {
   default as rangeSlider,
 } from '../widgets/range-slider/range-slider.js';
 export { default as sortBy } from '../widgets/sort-by/sort-by.js';
-export { default as starRating } from '../widgets/star-rating/star-rating.js';
+export { default as ratingMenu } from './rating-menu/rating-menu';
 export { default as stats } from '../widgets/stats/stats.js';
-export { default as toggle } from '../widgets/toggle/toggle.js';
+export {
+  default as toggleRefinement,
+} from '../widgets/toggleRefinement/toggleRefinement.js';
 export { default as analytics } from '../widgets/analytics/analytics.js';
 export { default as breadcrumb } from '../widgets/breadcrumb/breadcrumb.js';
 export { default as menuSelect } from '../widgets/menu-select/menu-select.js';
+export { default as poweredBy } from '../widgets/powered-by/powered-by.js';

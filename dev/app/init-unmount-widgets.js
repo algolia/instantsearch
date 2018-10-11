@@ -61,10 +61,10 @@ function wrapWithUnmount(getWidget, params) {
 }
 
 export default () => {
-  storiesOf('ClearAll').add(
+  storiesOf('ClearRefinements').add(
     'default',
     wrapWithUnmount(
-      container => instantsearch.widgets.clearAll({ container }),
+      container => instantsearch.widgets.clearRefinements({ container }),
       {
         searchParameters: {
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
@@ -145,7 +145,7 @@ export default () => {
   storiesOf('HitsPerPage').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.hitsPerPageSelector({
+      instantsearch.widgets.hitsPerPage({
         container,
         items: [
           { value: 3, label: '3 per page' },
@@ -179,12 +179,12 @@ export default () => {
     )
   );
 
-  storiesOf('NumericRefinementList').add(
+  storiesOf('NumericMenu').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.numericRefinementList({
+      instantsearch.widgets.numericMenu({
         container,
-        attributeName: 'price',
+        attribute: 'price',
         operator: 'or',
         options: [
           { name: 'All' },
@@ -206,42 +206,12 @@ export default () => {
     )
   );
 
-  storiesOf('NumericSelector').add(
-    'default',
-    wrapWithUnmount(container =>
-      instantsearch.widgets.numericSelector({
-        container,
-        operator: '>=',
-        attributeName: 'popularity',
-        options: [
-          { label: 'Default', value: 0 },
-          { label: 'Top 10', value: 9991 },
-          { label: 'Top 100', value: 9901 },
-          { label: 'Top 500', value: 9501 },
-        ],
-      })
-    )
-  );
-
   storiesOf('Pagination').add(
     'default',
     wrapWithUnmount(container =>
       instantsearch.widgets.pagination({
         container,
         maxPages: 20,
-      })
-    )
-  );
-
-  storiesOf('PriceRanges').add(
-    'default',
-    wrapWithUnmount(container =>
-      instantsearch.widgets.priceRanges({
-        container,
-        attributeName: 'price',
-        templates: {
-          header: 'Price ranges',
-        },
       })
     )
   );
@@ -286,18 +256,15 @@ export default () => {
     )
   );
 
-  storiesOf('StarRating').add(
+  storiesOf('RatingMenu').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.starRating({
+      instantsearch.widgets.ratingMenu({
         container,
-        attributeName: 'rating',
+        attribute: 'rating',
         max: 5,
         labels: {
           andUp: '& Up',
-        },
-        templates: {
-          header: 'Rating',
         },
       })
     )
@@ -308,7 +275,7 @@ export default () => {
     wrapWithUnmount(container => instantsearch.widgets.stats({ container }))
   );
 
-  storiesOf('Toggle').add(
+  storiesOf('ToggleRefinement').add(
     'default',
     wrapWithUnmount(container =>
       instantsearch.widgets.toggle({

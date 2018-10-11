@@ -58,7 +58,10 @@ const search = instantsearch({
         return {
           query: uiState.query,
           // we use the character ~ as it is one that is rarely present in data and renders well in urls
-          brands: uiState.refinementList && uiState.refinementList.brand.join('~'),
+          brands:
+            uiState.refinementList &&
+            uiState.refinementList.brand &&
+            uiState.refinementList.brand.join('~'),
           page: uiState.page
         };
       },
@@ -127,7 +130,11 @@ const search = instantsearch({
       stateToRoute(uiState) {
         return {
           q: uiState.query || '',
-          brands: uiState.refinementList && uiState.refinementList.brand.join('~') || 'all',
+          brands:
+            (uiState.refinementList &&
+              uiState.refinementList.brand &&
+              uiState.refinementList.brand.join('~')) ||
+            'all',
           p: uiState.page || 1
         };
       },
@@ -224,19 +231,13 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
   refinementList: {
     colors: ['white', 'black']
   },
-  numericRefinementList: {
+  numericMenu: {
     heightInCm: 40
-  },
-  numericSelector: {
-    widthInCm: 30
-  },
-  priceRanges: {
-    price: '200-20000'
   },
   range: {
     ageInYears: '2-10'
   },
-  starRating: {
+  ratingMenu: {
     rating: 3
   },
   toggle: {
@@ -247,13 +248,3 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
   hitsPerPage: 20
 }
 ```
-
-## Migrating from `urlSync`
-
-If you were previously using the `urlSync` option, you should migrate to the new `routing` feature since `urlSync` will be removed in a next major version.
-
-- `urlSync: true` becomes `routing: true`
-- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](#user-friendly-urls) to know how to configure it
-- `useHash` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)
-- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)

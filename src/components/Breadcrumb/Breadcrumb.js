@@ -1,14 +1,7 @@
-import React, { PureComponent } from 'preact-compat';
+import React from 'preact-compat';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Template from '../Template.js';
-
-const itemsPropType = PropTypes.arrayOf(
-  PropTypes.shape({
-    name: PropTypes.string,
-    value: PropTypes.string,
-  })
-);
 
 const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
   item,
@@ -22,8 +15,8 @@ const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
     <a
       className={cssClasses.link}
       href={createURL(item.value)}
-      onClick={e => {
-        e.preventDefault();
+      onClick={event => {
+        event.preventDefault();
         refine(item.value);
       }}
     >
@@ -31,74 +24,81 @@ const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
     </a>
   );
 
-  const itemClassnames = cx(cssClasses.item, {
-    [cssClasses.selectedItem]: isLast,
-  });
-
   return (
-    <li key={item.name + idx} className={itemClassnames}>
+    <li
+      key={item.name + idx}
+      className={cx(cssClasses.item, {
+        [cssClasses.selectedItem]: isLast,
+      })}
+    >
       <Template
-        rootTagName="span"
-        rootProps={{ className: cx(cssClasses.separator), ariaHidden: true }}
-        templateKey="separator"
         {...templateProps}
+        templateKey="separator"
+        rootTagName="span"
+        rootProps={{ className: cssClasses.separator, 'aria-hidden': true }}
       />
       {link}
     </li>
   );
 };
 
-class Breadcrumb extends PureComponent {
-  static propTypes = {
-    createURL: PropTypes.func,
-    cssClasses: PropTypes.objectOf(PropTypes.string),
-    items: itemsPropType,
-    refine: PropTypes.func.isRequired,
-    separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-    templateProps: PropTypes.object.isRequired,
-    translate: PropTypes.func,
-  };
-
-  render() {
-    const { createURL, items, refine, cssClasses } = this.props;
-
-    const breadcrumb = items.map(renderLink(this.props));
-
-    const homeClassnames = cx(cssClasses.item, {
-      [cssClasses.selectedItem]: items.length === 0,
-    });
-
-    const rootClassnames = cx(cssClasses.root, {
+const Breadcrumb = ({
+  createURL,
+  items,
+  refine,
+  cssClasses,
+  templateProps,
+}) => (
+  <div
+    className={cx(cssClasses.root, {
       [cssClasses.noRefinement]: items.length > 0,
-    });
+    })}
+  >
+    <ul className={cssClasses.list}>
+      <li
+        className={cx(cssClasses.item, {
+          [cssClasses.selectedItem]: items.length === 0,
+        })}
+      >
+        <Template
+          {...templateProps}
+          templateKey="home"
+          rootTagName="a"
+          rootProps={{
+            className: cssClasses.link,
+            href: createURL(null),
+            onClick: event => {
+              event.preventDefault();
+              refine(null);
+            },
+          }}
+        />
+      </li>
 
-    const homeOnClickHandler = e => {
-      e.preventDefault();
-      refine(null);
-    };
+      {items.map(renderLink({ cssClasses, createURL, refine, templateProps }))}
+    </ul>
+  </div>
+);
 
-    const homeUrl = createURL(null);
-
-    return (
-      <div className={rootClassnames}>
-        <ul className={cx(cssClasses.list)}>
-          <li className={homeClassnames}>
-            <Template
-              templateKey="home"
-              rootTagName="a"
-              rootProps={{
-                className: cx(cssClasses.link),
-                href: homeUrl,
-                onClick: homeOnClickHandler,
-              }}
-              {...this.props.templateProps}
-            />
-          </li>
-          {breadcrumb}
-        </ul>
-      </div>
-    );
-  }
-}
+Breadcrumb.propTypes = {
+  createURL: PropTypes.func.isRequired,
+  cssClasses: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+    noRefinement: PropTypes.string.isRequired,
+    list: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired,
+    selectedItem: PropTypes.string.isRequired,
+    separator: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+  }).isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      value: PropTypes.string,
+    })
+  ).isRequired,
+  refine: PropTypes.func.isRequired,
+  templateProps: PropTypes.object.isRequired,
+};
 
 export default Breadcrumb;

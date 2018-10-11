@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper, {
   SearchResults,
   SearchParameters,
@@ -11,7 +9,7 @@ describe('connectRange', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -25,7 +23,7 @@ describe('connectRange', () => {
     });
 
     const helper = jsHelper({}, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -36,12 +34,15 @@ describe('connectRange', () => {
 
     {
       // should call the rendering once with isFirstRendering to true
-      expect(rendering.callCount).toBe(1);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(1);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { range, start, widgetParams } = rendering.lastCall.args[0];
+      const { range, start, widgetParams } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
       expect(range).toEqual({ min: 0, max: 0 });
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
@@ -76,12 +77,15 @@ describe('connectRange', () => {
 
     {
       // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering.callCount).toBe(2);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(2);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const { range, start, widgetParams } = rendering.lastCall.args[0];
+      const { range, start, widgetParams } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
       expect(range).toEqual({ min: 10, max: 30 });
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
@@ -124,7 +128,7 @@ describe('connectRange', () => {
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -133,7 +137,7 @@ describe('connectRange', () => {
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration());
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -146,12 +150,13 @@ describe('connectRange', () => {
       // first rendering
       expect(helper.getNumericRefinement('price', '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine([10, 30]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
     widget.render({
@@ -183,24 +188,25 @@ describe('connectRange', () => {
       // Second rendering
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine([23, 27]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([23]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([27]);
-      expect(helper.search.callCount).toBe(2);
+      expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
 
   it('should add numeric refinement when refining min boundary without previous configuration', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
     const widget = makeWidget({ attribute, min: 0, max: 500 });
 
     const helper = jsHelper({}, '', widget.getConfiguration());
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -214,13 +220,14 @@ describe('connectRange', () => {
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
 
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine([10, 30]);
 
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
@@ -229,7 +236,7 @@ describe('connectRange', () => {
   });
 
   it('should add numeric refinement when refining min boundary with previous configuration', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
@@ -239,7 +246,7 @@ describe('connectRange', () => {
     });
 
     const helper = jsHelper({}, '', configuration);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -253,13 +260,14 @@ describe('connectRange', () => {
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
 
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine([10, 30]);
 
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
@@ -268,14 +276,14 @@ describe('connectRange', () => {
   });
 
   it('should refine on boundaries when no min/max defined', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectRange(rendering);
 
     const attribute = 'price';
     const widget = makeWidget({ attribute });
 
     const helper = jsHelper({}, '', widget.getConfiguration());
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -288,23 +296,24 @@ describe('connectRange', () => {
       expect(helper.getNumericRefinement('price', '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
 
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
 
       refine([undefined, 100]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
-      expect(helper.search.callCount).toBe(2);
+      expect(helper.search).toHaveBeenCalledTimes(2);
 
       refine([0, 100]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
-      expect(helper.search.callCount).toBe(3);
+      expect(helper.search).toHaveBeenCalledTimes(3);
     }
   });
 

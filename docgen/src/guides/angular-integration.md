@@ -70,10 +70,9 @@ import instantsearch from 'instantsearch.js/es';
 @Injectable()
 export class InstantSearchService {
   search = instantsearch({
-    appId: 'latency',
-    apiKey: '3d9875e51fbd20c7754e65422f7ce5e1',
     indexName: 'bestbuy',
-    urlSync: true
+    searchClient: algoliasearch('latency', '3d9875e51fbd20c7754e65422f7ce5e1'),
+    routing: true
   });
 
   constructor() {}
@@ -82,7 +81,7 @@ export class InstantSearchService {
 
 `appId`, `apiKey` and `indexName` are mandatory. Those values are credentials of your application in Algolia. They can be found in your [Algolia dashboard](https://www.algolia.com/api-keys).
 
-You can see the code example above we are importing the ES6 module build of the InstantSearch.js library. This will reduce the final build size of your application a lotc (this is known as [tree shaking](https://webpack.js.org/guides/tree-shaking/) in the JavaScript world).
+You can see the code example above we are importing the ES6 module build of the InstantSearch.js library. This will reduce the final build size of your application a lot (this is known as [tree shaking](https://webpack.js.org/guides/tree-shaking/) in the JavaScript world).
 
 Don't forget to register your service into the providers of your `src/app.modules.ts` file to be able to inject it into your next components. [(Official Angular documentation)](https://angular.io/tutorial/toh-pt4#inject-the-heroservice).
 
@@ -131,7 +130,7 @@ import { InstantSearchService } from '../../services/instantsearch.service';
 })
 export class HitsComponent implements OnInit {
   // Define how your component state will look like,
-  // and intialize it with an empty hits array
+  // and initialize it with an empty hits array
   state: { hits: {}[] } = { hits: [] };
 
   constructor(private instantSearchService: InstantSearchService) {}
@@ -216,7 +215,7 @@ export class AppComponent implements AfterViewInit {
 }
 ```
 
-And voilà! You should now see in your app the default search results without query provieded!
+And voilà! You should now see in your app the default search results without query provided!
 
 This is pretty cool, but it's not usable without a search box, let's build a search box in a similar way.
 

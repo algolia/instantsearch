@@ -22,11 +22,10 @@ const GeoSearchControls = ({
       <div className={cssClasses.control}>
         {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
           <GeoSearchToggle
-            classNameLabel={cx(
-              cssClasses.toggleLabel,
-              isRefineOnMapMove && cssClasses.toggleLabelActive
-            )}
-            classNameInput={cssClasses.toggleInput}
+            classNameLabel={cx(cssClasses.label, {
+              [cssClasses.selectedLabel]: isRefineOnMapMove,
+            })}
+            classNameInput={cssClasses.input}
             checked={isRefineOnMapMove}
             onToggle={onRefineToggle}
           >
@@ -56,7 +55,9 @@ const GeoSearchControls = ({
       !isRefineOnMapMove && (
         <div className={cssClasses.control}>
           <GeoSearchButton
-            className={cssClasses.redo}
+            className={cx(cssClasses.redo, {
+              [cssClasses.disabledRedo]: !hasMapMoveSinceLastRefine,
+            })}
             disabled={!hasMapMoveSinceLastRefine}
             onClick={onRefineClick}
           >
@@ -71,8 +72,8 @@ const GeoSearchControls = ({
 
     {enableClearMapRefinement &&
       isRefinedWithMap && (
-        <GeoSearchButton className={cssClasses.clear} onClick={onClearClick}>
-          <Template {...templateProps} templateKey="clear" rootTagName="span" />
+        <GeoSearchButton className={cssClasses.reset} onClick={onClearClick}>
+          <Template {...templateProps} templateKey="reset" rootTagName="span" />
         </GeoSearchButton>
       )}
   </div>
@@ -80,11 +81,12 @@ const GeoSearchControls = ({
 
 const CSSClassesPropTypes = PropTypes.shape({
   control: PropTypes.string.isRequired,
-  toggleLabel: PropTypes.string.isRequired,
-  toggleLabelActive: PropTypes.string.isRequired,
-  toggleInput: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  selectedLabel: PropTypes.string.isRequired,
+  input: PropTypes.string.isRequired,
   redo: PropTypes.string.isRequired,
-  clear: PropTypes.string.isRequired,
+  disabledRedo: PropTypes.string.isRequired,
+  reset: PropTypes.string.isRequired,
 });
 
 GeoSearchControls.propTypes = {

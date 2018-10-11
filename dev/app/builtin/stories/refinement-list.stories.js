@@ -14,12 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
-            operator: 'or',
-            limit: 10,
-            templates: {
-              header: 'Brands',
-            },
+            attribute: 'brand',
           })
         );
       })
@@ -30,18 +25,13 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
-            operator: 'or',
+            attribute: 'brand',
             limit: 3,
+            showMore: true,
+            showMoreLimit: 10,
             templates: {
-              header: 'Brands with show more',
-            },
-            showMore: {
-              templates: {
-                active: '<button>Show less</button>',
-                inactive: '<button>Show more</button>',
-              },
-              limit: 10,
+              showMoreActive: 'Show way less',
+              showMoreInactive: 'Show way less',
             },
           })
         );
@@ -53,36 +43,23 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
-            operator: 'or',
-            limit: 10,
-            templates: {
-              header: 'Searchable brands',
-            },
-            searchForFacetValues: {
-              placeholder: 'Find other brands...',
-              templates: {
-                noResults: 'No results',
-              },
-            },
+            attribute: 'brand',
+            searchable: true,
           })
         );
       })
     )
     .add(
-      'with search inside items (using the default noResults template)',
+      'with search inside items (using a custom searchableNoResults template)',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
-            operator: 'or',
-            limit: 10,
+            attribute: 'brand',
+            searchable: true,
+            searchablePlaceholder: 'Find other brands...',
             templates: {
-              header: 'Searchable brands',
-            },
-            searchForFacetValues: {
-              placeholder: 'Find other brands...',
+              searchableNoResults: 'No results found',
             },
           })
         );
@@ -94,23 +71,12 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'price_range',
+            attribute: 'price_range',
             operator: 'and',
-            limit: 10,
             cssClasses: {
-              header: 'facet-title',
               item: 'facet-value checkbox',
               count: 'facet-count pull-right',
-              active: 'facet-active',
-            },
-            templates: {
-              header: 'Price ranges',
-            },
-            transformData(data) {
-              data.label = data.label
-                .replace(/(\d+) - (\d+)/, '$$$1 - $$$2')
-                .replace(/> (\d+)/, '> $$$1');
-              return data;
+              selectedItem: 'facet-active',
             },
           })
         );
@@ -122,12 +88,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
-            operator: 'or',
-            limit: 10,
-            templates: {
-              header: 'Transformed brands',
-            },
+            attribute: 'brand',
             transformItems: items =>
               items.map(item => ({
                 ...item,
@@ -144,18 +105,8 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
-            operator: 'or',
-            limit: 10,
-            templates: {
-              header: 'Transformed searchable brands',
-            },
-            searchForFacetValues: {
-              placeholder: 'Find other brands...',
-              templates: {
-                noResults: 'No results',
-              },
-            },
+            attribute: 'brand',
+            searchable: true,
             transformItems: items =>
               items.map(item => ({
                 ...item,

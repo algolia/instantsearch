@@ -1,5 +1,3 @@
-import expect from 'expect';
-import sinon from 'sinon';
 import stats from '../stats';
 
 const instantSearchInstance = { templatesConfig: undefined };
@@ -17,7 +15,7 @@ describe('stats()', () => {
   let results;
 
   beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     stats.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
@@ -45,19 +43,14 @@ describe('stats()', () => {
   it('calls twice ReactDOM.render(<Stats props />, container)', () => {
     widget.render({ results, instantSearchInstance });
     widget.render({ results, instantSearchInstance });
-    expect(ReactDOM.render.calledTwice).toBe(
-      true,
-      'ReactDOM.render called twice'
-    );
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
   });
 
   afterEach(() => {
     stats.__ResetDependency__('render');
-    stats.__ResetDependency__('autoHideContainerHOC');
-    stats.__ResetDependency__('headerFooterHOC');
   });
 });

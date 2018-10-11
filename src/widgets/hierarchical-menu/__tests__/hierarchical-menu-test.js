@@ -1,3 +1,4 @@
+import { SearchParameters } from 'algoliasearch-helper';
 import hierarchicalMenu from '../hierarchical-menu';
 
 describe('hierarchicalMenu()', () => {
@@ -143,24 +144,28 @@ describe('hierarchicalMenu()', () => {
         toggleRefinement: jest.fn().mockReturnThis(),
         search: jest.fn(),
       };
-      state = {
-        toggleRefinement: jest.fn(),
-      };
+      state = new SearchParameters();
+      state.toggleRefinement = jest.fn();
       options = { container, attributes };
       createURL = () => '#';
     });
 
     it('understand provided cssClasses', () => {
       const userCssClasses = {
-        root: ['root', 'cx'],
-        header: 'header',
-        body: 'body',
-        footer: 'footer',
+        root: 'root',
+        noRefinementRoot: 'noRefinementRoot',
+        searchBox: 'searchBox',
         list: 'list',
+        childList: 'childList',
         item: 'item',
-        active: 'active',
+        selectedItem: 'selectedItem',
+        parentItem: 'parentItem',
         link: 'link',
+        label: 'label',
         count: 'count',
+        noResults: 'noResults',
+        showMore: 'showMore',
+        disabledShowMore: 'disabledShowMore',
       };
 
       widget = hierarchicalMenu({ ...options, cssClasses: userCssClasses });
@@ -201,9 +206,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({
         ...options,
         templates: {
-          header: 'header2',
           item: 'item2',
-          footer: 'footer2',
         },
       });
       widget.init({ helper, createURL, instantSearchInstance: {} });
@@ -297,7 +300,5 @@ describe('hierarchicalMenu()', () => {
 
   afterEach(() => {
     hierarchicalMenu.__ResetDependency__('render');
-    hierarchicalMenu.__ResetDependency__('autoHideContainerHOC');
-    hierarchicalMenu.__ResetDependency__('headerFooterHOC');
   });
 });

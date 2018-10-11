@@ -1,5 +1,3 @@
-import expect from 'expect';
-import sinon from 'sinon';
 import pagination from '../pagination';
 
 describe('pagination call', () => {
@@ -7,6 +5,7 @@ describe('pagination call', () => {
     expect(pagination.bind(null)).toThrow(/^Usage/);
   });
 });
+
 describe('pagination()', () => {
   let ReactDOM;
   let container;
@@ -16,7 +15,7 @@ describe('pagination()', () => {
   let cssClasses;
 
   beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     pagination.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
@@ -40,8 +39,8 @@ describe('pagination()', () => {
       nbPages: 20,
     };
     helper = {
-      setPage: sinon.spy(),
-      search: sinon.spy(),
+      setPage: jest.fn(),
+      search: jest.fn(),
       getPage: () => 0,
     };
     widget.init({ helper });
@@ -53,30 +52,27 @@ describe('pagination()', () => {
 
   it('sets the page', () => {
     widget.refine(helper, 42);
-    expect(helper.setPage.calledOnce).toBe(true);
-    expect(helper.search.calledOnce).toBe(true);
+    expect(helper.setPage).toHaveBeenCalledTimes(1);
+    expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
   it('calls twice ReactDOM.render(<Pagination props />, container)', () => {
     widget.render({ results, helper, state: { page: 0 } });
     widget.render({ results, helper, state: { page: 0 } });
 
-    expect(ReactDOM.render.calledTwice).toBe(
-      true,
-      'ReactDOM.render called twice'
-    );
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
   });
 
   describe('mocking getContainerNode', () => {
     let scrollIntoView;
 
     beforeEach(() => {
-      scrollIntoView = sinon.spy();
-      const getContainerNode = sinon.stub().returns({
+      scrollIntoView = jest.fn();
+      const getContainerNode = jest.fn().mockReturnValue({
         scrollIntoView,
       });
       pagination.__Rewire__('getContainerNode', getContainerNode);
@@ -86,22 +82,18 @@ describe('pagination()', () => {
       widget = pagination({ container, scrollTo: false });
       widget.init({ helper });
       widget.refine(helper, 2);
-      expect(scrollIntoView.calledOnce).toBe(
-        false,
-        'scrollIntoView never called'
-      );
+      expect(scrollIntoView).toHaveBeenCalledTimes(0);
     });
 
     it('should scroll to body', () => {
       widget = pagination({ container });
       widget.init({ helper });
       widget.render({ results, helper, state: { page: 0 } });
-      const { props: { setCurrentPage } } = ReactDOM.render.firstCall.args[0];
+      const {
+        props: { setCurrentPage },
+      } = ReactDOM.render.mock.calls[0][0];
       setCurrentPage(2);
-      expect(scrollIntoView.calledOnce).toBe(
-        true,
-        'scrollIntoView called once'
-      );
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
     });
 
     afterEach(() => {
@@ -111,7 +103,6 @@ describe('pagination()', () => {
 
   afterEach(() => {
     pagination.__ResetDependency__('render');
-    pagination.__ResetDependency__('autoHideContainerHOC');
   });
 });
 
@@ -124,7 +115,7 @@ describe('pagination MaxPage', () => {
   let paginationOptions;
 
   beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     pagination.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');

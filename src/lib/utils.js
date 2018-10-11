@@ -25,6 +25,7 @@ export {
   checkRendering,
   isReactElement,
   deprecate,
+  warn,
   parseAroundLatLngFromString,
 };
 
@@ -179,10 +180,16 @@ function renderTemplate({
     data
   );
 
-  return hogan.compile(template, compileOptions).render({
-    ...data,
-    helpers: transformedHelpers,
-  });
+  return hogan
+    .compile(template, compileOptions)
+    .render({
+      ...data,
+      helpers: transformedHelpers,
+    })
+    .replace(/[ \n\r\t\f\xA0]+/g, spaces =>
+      spaces.replace(/(^|\xA0+)[^\xA0]+/g, '$1 ')
+    )
+    .trim();
 }
 
 // We add all our template helper methods to the template as lambdas. Note
@@ -406,19 +413,34 @@ function isReactElement(object) {
   );
 }
 
+function log(message) {
+  // eslint-disable-next-line no-console
+  console.warn(`[InstantSearch.js]: ${message.trim()}`);
+}
+
 function deprecate(fn, message) {
-  let hasAlreadyPrint = false;
+  let hasAlreadyPrinted = false;
 
   return function(...args) {
-    if (!hasAlreadyPrint) {
-      hasAlreadyPrint = true;
+    if (!hasAlreadyPrinted) {
+      hasAlreadyPrinted = true;
 
-      // eslint-disable-next-line no-console
-      console.warn(`[InstantSearch.js]: ${message}`);
+      log(message);
     }
 
     return fn(...args);
   };
+}
+
+warn.cache = {};
+function warn(message) {
+  const hasAlreadyPrinted = warn.cache[message];
+
+  if (!hasAlreadyPrinted) {
+    warn.cache[message] = true;
+
+    log(message);
+  }
 }
 
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
@@ -435,4 +457,10 @@ function parseAroundLatLngFromString(value) {
     lat: parseFloat(pattern[1]),
     lng: parseFloat(pattern[2]),
   };
+}
+
+export function getPropertyByPath(object, path) {
+  const parts = path.split('.');
+
+  return parts.reduce((current, key) => current && current[key], object);
 }

@@ -4,11 +4,11 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
 <InfiniteHits
   cssClasses={
     Object {
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
-      "loadMoreDisabled": "ais-InfiniteHits-loadMore--disabled",
       "root": "ais-InfiniteHits root cx",
     }
   }
@@ -54,11 +54,11 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
 <InfiniteHits
   cssClasses={
     Object {
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
-      "loadMoreDisabled": "ais-InfiniteHits-loadMore--disabled",
       "root": "ais-InfiniteHits root cx",
     }
   }
@@ -104,11 +104,11 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
 <InfiniteHits
   cssClasses={
     Object {
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
-      "loadMoreDisabled": "ais-InfiniteHits-loadMore--disabled",
       "root": "ais-InfiniteHits root cx",
     }
   }
@@ -156,11 +156,11 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
 <InfiniteHits
   cssClasses={
     Object {
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
-      "loadMoreDisabled": "ais-InfiniteHits-loadMore--disabled",
       "root": "ais-InfiniteHits root cx",
     }
   }
@@ -208,11 +208,11 @@ exports[`infiniteHits() renders transformed items 1`] = `
 <InfiniteHits
   cssClasses={
     Object {
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
-      "loadMoreDisabled": "ais-InfiniteHits-loadMore--disabled",
       "root": "ais-InfiniteHits",
     }
   }

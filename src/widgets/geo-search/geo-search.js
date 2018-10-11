@@ -1,13 +1,14 @@
 import cx from 'classnames';
 import noop from 'lodash/noop';
 import { unmountComponentAtNode } from 'preact-compat';
-import { getContainerNode, bemHelper, renderTemplate } from '../../lib/utils';
+import { getContainerNode, renderTemplate } from '../../lib/utils';
+import { component } from '../../lib/suit';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
 import createHTMLMarker from './createHTMLMarker';
 
-const bem = bemHelper('ais-geo-search');
+const suit = component('GeoSearch');
 
 const usage = `Usage:
 
@@ -17,8 +18,8 @@ geoSearch({
   [ initialZoom = 1 ],
   [ initialPosition = { lat: 0, lng: 0 } ],
   [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],
-  [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],
-  [ templates.{clear,toggle,redo} ],
+  [ cssClasses.{root,map,control,label,selectedLabel,input,redo,disabledRedo,reset} = {} ],
+  [ templates.{reset,toggle,redo} ],
   [ mapOptions ],
   [ builtInMarker ],
   [ customHTMLMarker = false ],
@@ -55,20 +56,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {object} GeoSearchCSSClasses
- * @property {string|Array<string>} [root] CSS class to add to the root element.
- * @property {string|Array<string>} [map] CSS class to add to the map element.
- * @property {string|Array<string>} [controls] CSS class to add to the controls element.
- * @property {string|Array<string>} [clear] CSS class to add to the clear element.
- * @property {string|Array<string>} [control] CSS class to add to the control element.
- * @property {string|Array<string>} [toggleLabel] CSS class to add to the toggle label.
- * @property {string|Array<string>} [toggleLabelActive] CSS class to add to toggle label when it's active.
- * @property {string|Array<string>} [toggleInput] CSS class to add to the toggle input.
- * @property {string|Array<string>} [redo] CSS class to add to the redo element.
+ * @property {string|Array<string>} [root] The root div of the widget.
+ * @property {string|Array<string>} [map] The map container of the widget.
+ * @property {string|Array<string>} [control] The control element of the widget.
+ * @property {string|Array<string>} [label] The label of the control element.
+ * @property {string|Array<string>} [selectedLabel] The selected label of the control element.
+ * @property {string|Array<string>} [input] The input of the control element.
+ * @property {string|Array<string>} [redo] The redo search button.
+ * @property {string|Array<string>} [disabledRedo] The disabled redo search button.
+ * @property {string|Array<string>} [reset] The reset refinement button.
  */
 
 /**
  * @typedef {object} GeoSearchTemplates
- * @property {string|function(object): string} [clear] Template for the clear button.
+ * @property {string|function(object): string} [reset] Template for the reset button.
  * @property {string|function(object): string} [toggle] Template for the toggle label.
  * @property {string|function(object): string} [redo] Template for the redo button.
  */
@@ -181,18 +182,23 @@ const geoSearch = ({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    map: cx(bem('map'), userCssClasses.map),
-    controls: cx(bem('controls'), userCssClasses.controls),
-    clear: cx(bem('clear'), userCssClasses.clear),
-    control: cx(bem('control'), userCssClasses.control),
-    toggleLabel: cx(bem('toggle-label'), userCssClasses.toggleLabel),
-    toggleLabelActive: cx(
-      bem('toggle-label-active'),
-      userCssClasses.toggleLabelActive
+    root: cx(suit(), userCssClasses.root),
+    // Required only to mount / unmount the Preact tree
+    tree: suit({ descendantName: 'tree' }),
+    map: cx(suit({ descendantName: 'map' }), userCssClasses.map),
+    control: cx(suit({ descendantName: 'control' }), userCssClasses.control),
+    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+    selectedLabel: cx(
+      suit({ descendantName: 'label', modifierName: 'selected' }),
+      userCssClasses.selectedLabel
     ),
-    toggleInput: cx(bem('toggle-input'), userCssClasses.toggleInput),
-    redo: cx(bem('redo'), userCssClasses.redo),
+    input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
+    redo: cx(suit({ descendantName: 'redo' }), userCssClasses.redo),
+    disabledRedo: cx(
+      suit({ descendantName: 'redo', modifierName: 'disabled' }),
+      userCssClasses.disabledRedo
+    ),
+    reset: cx(suit({ descendantName: 'reset' }), userCssClasses.reset),
   };
 
   const templates = {
@@ -230,7 +236,7 @@ const geoSearch = ({
       ...rest,
       __id: item.objectID,
       position: item._geoloc,
-      className: cx(bem('marker')),
+      className: cx(suit({ descendantName: 'marker' })),
       template: renderTemplate({
         templateKey: 'template',
         templates: customHTMLMarker,
@@ -250,7 +256,7 @@ const geoSearch = ({
   try {
     const makeGeoSearch = connectGeoSearch(renderer, () => {
       unmountComponentAtNode(
-        containerNode.querySelector(`.${cssClasses.controls}`)
+        containerNode.querySelector(`.${cssClasses.tree}`)
       );
 
       while (containerNode.firstChild) {

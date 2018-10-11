@@ -1,6 +1,5 @@
 import instantsearch from '../main.js';
 import forEach from 'lodash/forEach';
-import expect from 'expect';
 
 describe('instantsearch()', () => {
   // to ensure the global.window is set
@@ -39,5 +38,12 @@ describe('instantsearch()', () => {
         'A connector must be a function'
       );
     });
+  });
+
+  it('includes the highlight helper function', () => {
+    expect(typeof instantsearch.highlight).toEqual(
+      'function',
+      'THe highlight helper must be a function'
+    );
   });
 });

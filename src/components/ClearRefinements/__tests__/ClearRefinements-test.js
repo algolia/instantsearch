@@ -1,6 +1,6 @@
 import React from 'react';
 import ClearRefinements from '../ClearRefinements';
-import renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 
 describe('ClearRefinements', () => {
   const defaultProps = {
@@ -20,16 +20,16 @@ describe('ClearRefinements', () => {
   };
 
   it('should render <ClearRefinements />', () => {
-    const tree = renderer
-      .create(<ClearRefinements {...defaultProps} />)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(<ClearRefinements {...defaultProps} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should render <ClearRefinements /> with a specific class when no refinements', () => {
-    const tree = renderer
-      .create(<ClearRefinements {...defaultProps} hasRefinements={false} />)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(
+      <ClearRefinements {...defaultProps} hasRefinements={false} />
+    );
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

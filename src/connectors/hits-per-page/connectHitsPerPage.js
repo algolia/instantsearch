@@ -1,7 +1,7 @@
 import some from 'lodash/some';
 import find from 'lodash/find';
 
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering, warn } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
@@ -123,7 +123,7 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
     const defaultValues = items.filter(item => item.default);
     if (defaultValues.length > 1) {
       throw new Error(
-        `[Error][hitsPerPageSelector] more than one default value is specified in \`items[]\`
+        `[Error][hitsPerPage] more than one default value is specified in \`items[]\`
 The first one will be picked, you should probably set only one default value`
       );
     }
@@ -145,19 +145,19 @@ The first one will be picked, you should probably set only one default value`
 
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
-            if (window.console) {
-              window.console.warn(
-                `[Warning][hitsPerPageSelector] hitsPerPage not defined.
-  You should probably set the value \`hitsPerPage\`
-  using the searchParameters attribute of the instantsearch constructor.`
-              );
-            }
-          } else if (window.console) {
-            window.console.warn(
-              `[Warning][hitsPerPageSelector] No item in \`items\`
-  with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
+            warn(
+              `\`hitsPerPage\` is not defined.
+The option \`hitsPerPage\` needs to be set using the \`configure\` widget.
+
+Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.html`
             );
           }
+
+          warn(
+            `No items in HitsPerPage \`items\` with \`value: hitsPerPage\` (hitsPerPage: ${
+              state.hitsPerPage
+            })`
+          );
 
           items = [{ value: '', label: '' }, ...items];
         }
