@@ -231,7 +231,7 @@ function getRefinement(state, type, attributeName, name, resultsFacets) {
 }
 
 function getRefinements(results, state, clearsQuery) {
-  let res =
+  const res =
     clearsQuery && state.query && state.query.trim()
       ? [
           {

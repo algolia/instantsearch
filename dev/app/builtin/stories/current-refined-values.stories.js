@@ -73,6 +73,25 @@ export default () => {
       })
     )
     .add(
+      'with query',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.configure({
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.currentRefinedValues({
+            container,
+            includesQuery: true,
+          })
+        );
+      })
+    )
+    .add(
       'with transformed items',
       wrapWithHits(container => {
         window.search.addWidget(

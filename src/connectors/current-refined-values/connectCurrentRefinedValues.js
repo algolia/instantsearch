@@ -1,6 +1,5 @@
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
-
 import {
   getRefinements,
   clearRefinements,
@@ -22,6 +21,7 @@ search.addWidget(
   customCurrentRefinedValues({
     [ includedAttributes ],
     [ excludedAttributes = [] ],
+    [ includesQuery = false ],
     [ transformItems ],
   })
 );
@@ -131,6 +131,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
     const {
       includedAttributes = [],
       excludedAttributes = [],
+      includesQuery = false,
       transformItems = items => items,
     } = widgetParams;
 
@@ -174,18 +175,20 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
               clearRefinements({
                 helper,
                 includedAttributes: attributes,
+                clearsQuery: includesQuery,
               })
             )
             .search();
         };
 
         const refinements = transformItems(
-          getFilteredRefinements(
-            {},
-            helper.state,
+          getFilteredRefinements({
+            results: {},
+            state: helper.state,
             attributeNames,
-            excludedAttributes
-          )
+            excludedAttributes,
+            includesQuery,
+          })
         );
 
         const _createURL = refinement =>
@@ -208,12 +211,13 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
         const refinements = transformItems(
-          getFilteredRefinements(
+          getFilteredRefinements({
             results,
             state,
             attributeNames,
-            excludedAttributes
-          )
+            excludedAttributes,
+            includesQuery,
+          })
         );
 
         const _createURL = refinement =>
@@ -273,13 +277,14 @@ function compareRefinements(attributeNames, otherAttributeNames, a, b) {
   return idxa < idxb ? -1 : 1;
 }
 
-function getFilteredRefinements(
+function getFilteredRefinements({
   results,
   state,
   attributeNames,
-  excludedAttributes
-) {
-  let refinements = getRefinements(results, state)
+  excludedAttributes,
+  includesQuery,
+}) {
+  const refinements = getRefinements(results, state, includesQuery)
     .filter(
       ({ attributeName }) =>
         attributeNames.length === 0 ||
@@ -288,6 +293,7 @@ function getFilteredRefinements(
     .filter(
       ({ attributeName }) => excludedAttributes.indexOf(attributeName) === -1
     );
+
   const otherAttributeNames = refinements.reduce((res, refinement) => {
     if (
       attributeNames.indexOf(refinement.attributeName) === -1 &&
@@ -297,12 +303,12 @@ function getFilteredRefinements(
     }
     return res;
   }, []);
-  refinements = refinements.sort(
-    compareRefinements.bind(null, attributeNames, otherAttributeNames)
-  );
-  refinements = refinements.map(normalizeItem);
 
-  return refinements;
+  const filteredRefinements = refinements
+    .sort(compareRefinements.bind(null, attributeNames, otherAttributeNames))
+    .map(normalizeItem);
+
+  return filteredRefinements;
 }
 
 function clearRefinementFromState(state, refinement) {
@@ -357,12 +363,14 @@ function getOperatorSymbol(operator) {
 }
 
 function normalizeItem(item) {
+  const attributeName = item.type === 'query' ? 'query' : item.attributeName;
   const computedLabel = item.operator
     ? `${getOperatorSymbol(item.operator)} ${item.name}`
     : item.name;
 
   return {
     ...item,
+    attributeName,
     computedLabel,
   };
 }

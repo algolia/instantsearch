@@ -136,4 +136,39 @@ describe('connectCurrentRefinedValues', () => {
     secondRenderingOptions.refine(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
   });
+
+  it('sets query as a refinement', () => {
+    const helper = jsHelper({}, '', {
+      query: 'query',
+    });
+    helper.search = () => {};
+    const rendering = jest.fn();
+    const makeWidget = connectCurrentRefinedValues(rendering);
+    const widget = makeWidget({
+      includesQuery: true,
+    });
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.refinements).toEqual([
+      expect.objectContaining({ attributeName: 'query' }),
+    ]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[0][0];
+    expect(secondRenderingOptions.refinements).toEqual([
+      expect.objectContaining({ attributeName: 'query' }),
+    ]);
+  });
 });

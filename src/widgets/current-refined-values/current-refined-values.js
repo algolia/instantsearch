@@ -1,7 +1,7 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import isArray from 'lodash/isArray';
-import CurrentRefinedValues from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
+import CurrentRefinements from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
 import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
 import defaultTemplates from './defaultTemplates';
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
@@ -30,7 +30,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   );
 
   render(
-    <CurrentRefinedValues
+    <CurrentRefinements
       attributes={attributes}
       clearRefinementClicks={clearRefinementClicks}
       clearRefinementURLs={clearRefinementURLs}
@@ -47,6 +47,7 @@ currentRefinedValues({
   container,
   [ includedAttributes: [{name[, label, template]}] ],
   [ excludedAttributes = [] ],
+  [ includesQuery = false ],
   [ templates.{item} ],
   [ cssClasses.{root, list, item, label, category, categoryLabel, delete, reset} = {} ],
   [ transformItems ]
@@ -81,6 +82,7 @@ currentRefinedValues({
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
  * @property {CurrentRefinedValuesAttributes[]} [includedAttributes] Label definitions for the different filters to include.
  * @property {CurrentRefinedValuesAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
+ * @property {CurrentRefinedValuesAttributes[]} [includesQuery = false] Whether to add the query as a refinement.
  * @property {CurrentRefinedValuesTemplates} [templates] Templates to use for the widget.
  * @property {CurrentRefinedValuesCSSClasses} [cssClasses] CSS classes to be added.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -94,10 +96,10 @@ currentRefinedValues({
  *
  * This widget is usually in the top part of the search UI.
  * @type {WidgetFactory}
- * @devNovel CurrentRefinedValues
+ * @devNovel CurrentRefinements
  * @category clear-filter
- * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinedValues widget options.
- * @returns {Object} A new CurrentRefinedValues widget instance.
+ * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinements widget options.
+ * @returns {Object} A new CurrentRefinements widget instance.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.currentRefinedValues({
@@ -115,6 +117,7 @@ export default function currentRefinedValues({
   container,
   includedAttributes = [],
   excludedAttributes = [],
+  includesQuery,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   transformItems,
@@ -152,6 +155,7 @@ export default function currentRefinedValues({
     return makeWidget({
       includedAttributes,
       excludedAttributes,
+      includesQuery,
       transformItems,
     });
   } catch (error) {
