@@ -81,8 +81,8 @@ currentRefinements({
  * @typedef {Object} CurrentRefinementsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
  * @property {CurrentRefinementsAttributes[]} [includedAttributes] Label definitions for the different filters to include.
- * @property {CurrentRefinementsAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
- * @property {CurrentRefinementsAttributes[]} [includesQuery = false] Whether to add the query as a refinement.
+ * @property {string[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
+ * @property {boolean} [includesQuery = false] Whether to add the query as a refinement.
  * @property {CurrentRefinementsTemplates} [templates] Templates to use for the widget.
  * @property {CurrentRefinementsCSSClasses} [cssClasses] CSS classes to be added.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.

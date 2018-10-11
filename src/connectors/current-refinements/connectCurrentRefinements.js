@@ -60,7 +60,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {CurrentRefinementsAttributes[]} [includedAttributes] Specification for the display of
  * refinements per attribute (default: `[]`). By default, the widget will display all the filters
  * set with no special treatment for the label.
- * @property {CurrentRefinementsAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
+ * @property {string[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
+ * @property {boolean} [includesQuery = false] Whether to add the query as a refinement.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -76,7 +77,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomCurrentRefinementsWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinements** widget.
  * @example
- * // custom `renderFn` to render the custom ClearAll widget
+ * // custom `renderFn` to render the custom ClearRefinements widget
  * function renderFn(CurrentRefinementsRenderingOptions, isFirstRendering) {
  *   var containerNode = CurrentRefinementsRenderingOptions.widgetParams.containerNode;
  *   if (isFirstRendering) {

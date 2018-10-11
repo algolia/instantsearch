@@ -1,7 +1,5 @@
-import jsHelper from 'algoliasearch-helper';
+import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import connectCurrentRefinements from '../connectCurrentRefinements.js';
-
-const { SearchResults } = jsHelper;
 
 describe('connectCurrentRefinements', () => {
   it('Renders during init and render', () => {
