@@ -67,8 +67,11 @@ classes:
   - name: .ais-CurrentRefinements-query
     description: the quote element if query is included
 options:
+  - name: includedAttributes
+    default: all searchable attributes
+    description: The list of attributes to display
   - name: excludedAttributes
-    description: list of attributes not to show
+    description: The list of attributes to filter out included attributes
   - name: includesQuery
     default: false
     description: The list includes the query too
