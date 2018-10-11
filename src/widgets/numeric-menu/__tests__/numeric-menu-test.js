@@ -1,62 +1,56 @@
-import numericRefinementList from '../numeric-refinement-list.js';
+import numericMenu from '../numeric-menu.js';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
 
-describe('numericRefinementList call', () => {
+describe('numericMenu call', () => {
   it('throws an exception when no container', () => {
-    const attributeName = '';
-    const options = [];
-    expect(
-      numericRefinementList.bind(null, { attributeName, options })
-    ).toThrow(/^Usage/);
+    const attribute = '';
+    const items = [];
+    expect(numericMenu.bind(null, { attribute, items })).toThrow(/^Usage/);
   });
 
-  it('throws an exception when no attributeName', () => {
+  it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
-    const options = [];
-    expect(numericRefinementList.bind(null, { container, options })).toThrow(
-      /^Usage/
-    );
+    const items = [];
+    expect(numericMenu.bind(null, { container, items })).toThrow(/^Usage/);
   });
 
-  it('throws an exception when no options', () => {
+  it('throws an exception when no items', () => {
     const container = document.createElement('div');
-    const attributeName = '';
-    expect(
-      numericRefinementList.bind(null, { attributeName, container })
-    ).toThrow(/^Usage/);
+    const attribute = '';
+    expect(numericMenu.bind(null, { attribute, container })).toThrow(/^Usage/);
   });
 });
 
-describe('numericRefinementList()', () => {
+describe('numericMenu()', () => {
   let ReactDOM;
   let container;
   let widget;
   let helper;
 
-  let options;
+  let items;
   let results;
   let createURL;
   let state;
 
   beforeEach(() => {
     ReactDOM = { render: jest.fn() };
-    numericRefinementList.__Rewire__('render', ReactDOM.render);
+    numericMenu.__Rewire__('render', ReactDOM.render);
 
-    options = [
-      { name: 'All' },
-      { end: 4, name: 'less than 4' },
-      { start: 4, end: 4, name: '4' },
-      { start: 5, end: 10, name: 'between 5 and 10' },
-      { start: 10, name: 'more than 10' },
+    items = [
+      { label: 'All' },
+      { end: 4, label: 'less than 4' },
+      { start: 4, end: 4, label: '4' },
+      { start: 5, end: 10, label: 'between 5 and 10' },
+      { start: 10, label: 'more than 10' },
     ];
 
     container = document.createElement('div');
-    widget = numericRefinementList({
+    widget = numericMenu({
       container,
-      attributeName: 'price',
-      options,
+      attribute: 'price',
+      items,
       cssClasses: { root: ['root', 'cx'] },
     });
     helper = {
@@ -94,12 +88,12 @@ describe('numericRefinementList()', () => {
   });
 
   it('renders with transformed items', () => {
-    widget = numericRefinementList({
+    widget = numericMenu({
       container,
-      attributeName: 'price',
-      options,
-      transformItems: items =>
-        items.map(item => ({ ...item, transformed: true })),
+      attribute: 'price',
+      items,
+      transformItems: allItems =>
+        allItems.map(item => ({ ...item, transformed: true })),
     });
 
     widget.init({ helper, instantSearchInstance: {} });
@@ -203,18 +197,18 @@ describe('numericRefinementList()', () => {
     expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
-  it('does not alter the initial options when rendering', () => {
+  it('does not alter the initial items when rendering', () => {
     // Note: https://github.com/algolia/instantsearch.js/issues/1010
     // Make sure we work on a copy of the initial facetValues when rendering,
     // not directly editing it
 
     // Given
-    const initialOptions = [{ start: 0, end: 5, name: '1-5' }];
+    const initialOptions = [{ start: 0, end: 5, label: '1-5' }];
     const initialOptionsClone = [...initialOptions];
-    const testWidget = numericRefinementList({
+    const testWidget = numericMenu({
       container,
-      attributeName: 'price',
-      options: initialOptions,
+      attribute: 'price',
+      items: initialOptions,
     });
 
     // The life cycle impose all the steps
@@ -228,8 +222,6 @@ describe('numericRefinementList()', () => {
   });
 
   afterEach(() => {
-    numericRefinementList.__ResetDependency__('render');
-    numericRefinementList.__ResetDependency__('autoHideContainerHOC');
-    numericRefinementList.__ResetDependency__('headerFooterHOC');
+    numericMenu.__ResetDependency__('render');
   });
 });

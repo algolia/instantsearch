@@ -3,28 +3,28 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectNumericRefinementList from '../connectNumericRefinementList.js';
+import connectNumericMenu from '../connectNumericMenu.js';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
-const mapOptionsToItems = ({ start, end, name: label }) => ({
+const mapOptionsToItems = ({ start, end, label }) => ({
   label,
   value: encodeValue(start, end),
   isRefined: false,
 });
 
-describe('connectNumericRefinementList', () => {
+describe('connectNumericMenu', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
+      attribute: 'numerics',
+      items: [
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
       ],
     });
 
@@ -49,11 +49,11 @@ describe('connectNumericRefinementList', () => {
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         widgetParams: {
-          attributeName: 'numerics',
-          options: [
-            { name: 'below 10', end: 10 },
-            { name: '10 - 20', start: 10, end: 20 },
-            { name: 'more than 20', start: 20 },
+          attribute: 'numerics',
+          items: [
+            { label: 'below 10', end: 10 },
+            { label: '10 - 20', start: 10, end: 20 },
+            { label: 'more than 20', start: 20 },
           ],
         },
       }),
@@ -72,11 +72,11 @@ describe('connectNumericRefinementList', () => {
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         widgetParams: {
-          attributeName: 'numerics',
-          options: [
-            { name: 'below 10', end: 10 },
-            { name: '10 - 20', start: 10, end: 20 },
-            { name: 'more than 20', start: 20 },
+          attribute: 'numerics',
+          items: [
+            { label: 'below 10', end: 10 },
+            { label: '10 - 20', start: 10, end: 20 },
+            { label: 'more than 20', start: 20 },
           ],
         },
       }),
@@ -86,10 +86,10 @@ describe('connectNumericRefinementList', () => {
 
   it('Renders during init and render with transformed items', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [{ name: 'below 10', end: 10 }],
+      attribute: 'numerics',
+      items: [{ label: 'below 10', end: 10 }],
       transformItems: items =>
         items.map(item => ({
           ...item,
@@ -131,15 +131,15 @@ describe('connectNumericRefinementList', () => {
 
   it('Provide a function to update the refinements at each step', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
-        { name: '42', start: 42, end: 42 },
-        { name: 'void' },
+      attribute: 'numerics',
+      items: [
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
+        { label: '42', start: 42, end: 42 },
+        { label: 'void' },
       ],
     });
 
@@ -212,13 +212,13 @@ describe('connectNumericRefinementList', () => {
 
   it('provides the correct facet values', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
+      attribute: 'numerics',
+      items: [
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
       ],
     });
 
@@ -272,17 +272,17 @@ describe('connectNumericRefinementList', () => {
 
   it('provides isRefined for the currently selected value', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
-      { name: 'below 10', end: 10 },
-      { name: '10 - 20', start: 10, end: 20 },
-      { name: 'more than 20', start: 20 },
-      { name: '42', start: 42, end: 42 },
-      { name: 'void' },
+      { label: 'below 10', end: 10 },
+      { label: '10 - 20', start: 10, end: 20 },
+      { label: 'more than 20', start: 20 },
+      { label: '42', start: 42, end: 42 },
+      { label: 'void' },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: listOptions,
+      attribute: 'numerics',
+      items: listOptions,
     });
 
     const helper = jsHelper({});
@@ -325,17 +325,17 @@ describe('connectNumericRefinementList', () => {
 
   it('when the state is cleared, the "no value" value should be refined', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
-      { name: 'below 10', end: 10 },
-      { name: '10 - 20', start: 10, end: 20 },
-      { name: 'more than 20', start: 20 },
-      { name: '42', start: 42, end: 42 },
-      { name: 'void' },
+      { label: 'below 10', end: 10 },
+      { label: '10 - 20', start: 10, end: 20 },
+      { label: 'more than 20', start: 20 },
+      { label: '42', start: 42, end: 42 },
+      { label: 'void' },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: listOptions,
+      attribute: 'numerics',
+      items: listOptions,
     });
 
     const helper = jsHelper({});
@@ -389,17 +389,17 @@ describe('connectNumericRefinementList', () => {
 
   it('should set `isRefined: true` after calling `refine(item)`', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
-      { name: 'below 10', end: 10 },
-      { name: '10 - 20', start: 10, end: 20 },
-      { name: 'more than 20', start: 20 },
-      { name: '42', start: 42, end: 42 },
-      { name: 'void' },
+      { label: 'below 10', end: 10 },
+      { label: '10 - 20', start: 10, end: 20 },
+      { label: 'more than 20', start: 20 },
+      { label: '42', start: 42, end: 42 },
+      { label: 'void' },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: listOptions,
+      attribute: 'numerics',
+      items: listOptions,
     });
 
     const helper = jsHelper({});
@@ -433,16 +433,16 @@ describe('connectNumericRefinementList', () => {
 
   it('should reset page on refine()', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
 
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
-        { name: '42', start: 42, end: 42 },
-        { name: 'void' },
+      attribute: 'numerics',
+      items: [
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
+        { label: '42', start: 42, end: 42 },
+        { label: 'void' },
       ],
     });
 
@@ -470,13 +470,13 @@ describe('connectNumericRefinementList', () => {
   describe('routing', () => {
     const getInitializedWidget = () => {
       const rendering = jest.fn();
-      const makeWidget = connectNumericRefinementList(rendering);
+      const makeWidget = connectNumericMenu(rendering);
       const widget = makeWidget({
-        attributeName: 'numerics',
-        options: [
-          { name: 'below 10', end: 10 },
-          { name: '10 - 20', start: 10, end: 20 },
-          { name: 'more than 20', start: 20 },
+        attribute: 'numerics',
+        items: [
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
         ],
       });
 
@@ -559,7 +559,7 @@ describe('connectNumericRefinementList', () => {
       test('should not override other values in the same namespace', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {
-          numericRefinementList: {
+          numericMenu: {
             'numerics-2': '27:36',
           },
         };
@@ -576,7 +576,7 @@ describe('connectNumericRefinementList', () => {
       test('should give back the object unmodified if refinements are already set', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10:20',
           },
         };
@@ -610,7 +610,7 @@ describe('connectNumericRefinementList', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10:',
           },
         };
@@ -635,7 +635,7 @@ describe('connectNumericRefinementList', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: ':20',
           },
         };
@@ -661,7 +661,7 @@ describe('connectNumericRefinementList', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10:20',
           },
         };
@@ -687,7 +687,7 @@ describe('connectNumericRefinementList', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10',
           },
         };

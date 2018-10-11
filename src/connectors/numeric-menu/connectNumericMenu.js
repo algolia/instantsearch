@@ -3,7 +3,7 @@ import _isFinite from 'lodash/isFinite';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
-var customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {
+var customNumericMenu = connectNumericMenu(function renderFn(params, isFirstRendering) {
   // params = {
   //   createURL,
   //   items,
@@ -15,95 +15,95 @@ var customNumericRefinementList = connectNumericRefinementList(function renderFn
 });
 
 search.addWidget(
-  customNumericRefinementList({
-    attributeName,
-    options,
+  customNumericMenu({
+    attribute,
+    items,
     [ transformItems ],
   })
 );
 
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericMenu.html
 `;
 
 /**
- * @typedef {Object} NumericRefinementListOption
+ * @typedef {Object} NumericMenuOption
  * @property {string} name Name of the option.
  * @property {number} start Lower bound of the option (>=).
  * @property {number} end Higher bound of the option (<=).
  */
 
 /**
- * @typedef {Object} NumericRefinementListItem
+ * @typedef {Object} NumericMenuItem
  * @property {string} label Name of the option.
  * @property {string} value URL encoded of the bounds object with the form `{start, end}`. This value can be used verbatim in the webpage and can be read by `refine` directly. If you want to inspect the value, you can do `JSON.parse(window.decodeURI(value))` to get the object.
  * @property {boolean} isRefined True if the value is selected.
  */
 
 /**
- * @typedef {Object} CustomNumericRefinementListWidgetOptions
- * @property {string} attributeName Name of the attribute for filtering.
- * @property {NumericRefinementListOption[]} options List of all the options.
+ * @typedef {Object} CustomNumericMenuWidgetOptions
+ * @property {string} attribute Name of the attribute for filtering.
+ * @property {NumericMenuOption[]} items List of all the items.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
- * @typedef {Object} NumericRefinementListRenderingOptions
+ * @typedef {Object} NumericMenuRenderingOptions
  * @property {function(item.value): string} createURL Creates URLs for the next state, the string is the name of the selected option.
- * @property {NumericRefinementListItem[]} items The list of available choices.
+ * @property {NumericMenuItem[]} items The list of available choices.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {function(item.value)} refine Sets the selected value and trigger a new search.
- * @property {Object} widgetParams All original `CustomNumericRefinementListWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomNumericMenuWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **NumericRefinementList** connector provides the logic to build a custom widget that will give the user the ability to choose a range on to refine the search results.
+ * **NumericMenu** connector provides the logic to build a custom widget that will give the user the ability to choose a range on to refine the search results.
  *
  * It provides a `refine(item)` function to refine on the selected range.
  *
- * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
- * @function connectNumericRefinementList
+ * **Requirement:** the attribute passed as `attribute` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
+ * @function connectNumericMenu
  * @type {Connector}
- * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericRefinementList** widget.
+ * @param {function(NumericMenuRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomNumericRefinementListWidgetOptions)} Re-usable widget factory for a custom **NumericRefinementList** widget.
+ * @return {function(CustomNumericMenuWidgetOptions)} Re-usable widget factory for a custom **NumericMenu** widget.
  * @example
- * // custom `renderFn` to render the custom NumericRefinementList widget
- * function renderFn(NumericRefinementListRenderingOptions, isFirstRendering) {
+ * // custom `renderFn` to render the custom NumericMenu widget
+ * function renderFn(NumericMenuRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
- *     NumericRefinementListRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
+ *     NumericMenuRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
  *   }
  *
- *   NumericRefinementListRenderingOptions.widgetParams.containerNode
+ *   NumericMenuRenderingOptions.widgetParams.containerNode
  *     .find('li[data-refine-value]')
  *     .each(function() { $(this).off('click'); });
  *
- *   var list = NumericRefinementListRenderingOptions.items.map(function(item) {
+ *   var list = NumericMenuRenderingOptions.items.map(function(item) {
  *     return '<li data-refine-value="' + item.value + '">' +
  *       '<input type="radio"' + (item.isRefined ? ' checked' : '') + '/> ' +
  *       item.label + '</li>';
  *   });
  *
- *   NumericRefinementListRenderingOptions.widgetParams.containerNode.find('ul').html(list);
- *   NumericRefinementListRenderingOptions.widgetParams.containerNode
+ *   NumericMenuRenderingOptions.widgetParams.containerNode.find('ul').html(list);
+ *   NumericMenuRenderingOptions.widgetParams.containerNode
  *     .find('li[data-refine-value]')
  *     .each(function() {
  *       $(this).on('click', function(event) {
  *         event.preventDefault();
  *         event.stopPropagation();
- *         NumericRefinementListRenderingOptions.refine($(this).data('refine-value'));
+ *         NumericMenuRenderingOptions.refine($(this).data('refine-value'));
  *       });
  *     });
  * }
  *
- * // connect `renderFn` to NumericRefinementList logic
- * var customNumericRefinementList = instantsearch.connectors.connectNumericRefinementList(renderFn);
+ * // connect `renderFn` to NumericMenu logic
+ * var customNumericMenu = instantsearch.connectors.connectNumericMenu(renderFn);
  *
  * // mount widget on the page
  * search.addWidget(
- *   customNumericRefinementList({
- *     containerNode: $('#custom-numeric-refinement-container'),
- *     attributeName: 'price',
- *     options: [
+ *   customNumericMenu({
+ *     containerNode: $('#custom-numeric-menu-container'),
+ *     attribute: 'price',
+ *     items: [
  *       {name: 'All'},
  *       {end: 4, name: 'less than 4'},
  *       {start: 4, end: 4, name: '4'},
@@ -113,17 +113,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectNumericRefinementList(renderFn, unmountFn) {
+export default function connectNumericMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {
-      attributeName,
-      options,
-      transformItems = items => items,
-    } = widgetParams;
+    const { attribute, items, transformItems = x => x } = widgetParams;
 
-    if (!attributeName || !options) {
+    if (!attribute || !items) {
       throw new Error(usage);
     }
 
@@ -132,20 +128,20 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
         this._refine = facetValue => {
           const refinedState = refine(
             helper.state,
-            attributeName,
-            options,
+            attribute,
+            items,
             facetValue
           );
           helper.setState(refinedState).search();
         };
 
         this._createURL = state => facetValue =>
-          createURL(refine(state, attributeName, options, facetValue));
+          createURL(refine(state, attribute, items, facetValue));
         this._prepareItems = state =>
-          options.map(({ start, end, name: label }) => ({
+          items.map(({ start, end, label }) => ({
             label,
             value: window.encodeURI(JSON.stringify({ start, end })),
-            isRefined: isRefined(state, attributeName, { start, end }),
+            isRefined: isRefined(state, attribute, { start, end }),
           }));
 
         renderFn(
@@ -177,20 +173,20 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
 
       dispose({ state }) {
         unmountFn();
-        return state.clearRefinements(attributeName);
+        return state.clearRefinements(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
         const currentRefinements = searchParameters.getNumericRefinements(
-          attributeName
+          attribute
         );
         const equal = currentRefinements['='] && currentRefinements['='][0];
         if (equal || equal === 0) {
           return {
             ...uiState,
-            numericRefinementList: {
-              ...uiState.numericRefinementList,
-              [attributeName]: `${currentRefinements['=']}`,
+            numericMenu: {
+              ...uiState.numericMenu,
+              [attribute]: `${currentRefinements['=']}`,
             },
           };
         }
@@ -202,16 +198,15 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
 
         if (lowerBound !== '' || upperBound !== '') {
           if (
-            uiState.numericRefinementList &&
-            uiState.numericRefinementList[attributeName] ===
-              `${lowerBound}:${upperBound}`
+            uiState.numericMenu &&
+            uiState.numericMenu[attribute] === `${lowerBound}:${upperBound}`
           )
             return uiState;
           return {
             ...uiState,
-            numericRefinementList: {
-              ...uiState.numericRefinementList,
-              [attributeName]: `${lowerBound}:${upperBound}`,
+            numericMenu: {
+              ...uiState.numericMenu,
+              [attribute]: `${lowerBound}:${upperBound}`,
             },
           };
         }
@@ -220,10 +215,8 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        let clearedParams = searchParameters.clearRefinements(attributeName);
-        const value =
-          uiState.numericRefinementList &&
-          uiState.numericRefinementList[attributeName];
+        let clearedParams = searchParameters.clearRefinements(attribute);
+        const value = uiState.numericMenu && uiState.numericMenu[attribute];
 
         if (!value) {
           return clearedParams;
@@ -233,7 +226,7 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
 
         if (valueAsEqual) {
           return clearedParams.addNumericRefinement(
-            attributeName,
+            attribute,
             '=',
             valueAsEqual
           );
@@ -243,7 +236,7 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
 
         if (_isFinite(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
-            attributeName,
+            attribute,
             '>=',
             lowerBound
           );
@@ -251,7 +244,7 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
 
         if (_isFinite(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
-            attributeName,
+            attribute,
             '<=',
             upperBound
           );
@@ -263,8 +256,8 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
   };
 }
 
-function isRefined(state, attributeName, option) {
-  const currentRefinements = state.getNumericRefinements(attributeName);
+function isRefined(state, attribute, option) {
+  const currentRefinements = state.getNumericRefinements(attribute);
 
   if (option.start !== undefined && option.end !== undefined) {
     if (option.start === option.end) {
@@ -287,19 +280,19 @@ function isRefined(state, attributeName, option) {
   return undefined;
 }
 
-function refine(state, attributeName, options, facetValue) {
+function refine(state, attribute, items, facetValue) {
   let resolvedState = state;
 
   const refinedOption = JSON.parse(window.decodeURI(facetValue));
 
-  const currentRefinements = resolvedState.getNumericRefinements(attributeName);
+  const currentRefinements = resolvedState.getNumericRefinements(attribute);
 
   if (refinedOption.start === undefined && refinedOption.end === undefined) {
-    return resolvedState.clearRefinements(attributeName);
+    return resolvedState.clearRefinements(attribute);
   }
 
-  if (!isRefined(resolvedState, attributeName, refinedOption)) {
-    resolvedState = resolvedState.clearRefinements(attributeName);
+  if (!isRefined(resolvedState, attribute, refinedOption)) {
+    resolvedState = resolvedState.clearRefinements(attribute);
   }
 
   if (refinedOption.start !== undefined && refinedOption.end !== undefined) {
@@ -310,13 +303,13 @@ function refine(state, attributeName, options, facetValue) {
     if (refinedOption.start === refinedOption.end) {
       if (hasNumericRefinement(currentRefinements, '=', refinedOption.start)) {
         resolvedState = resolvedState.removeNumericRefinement(
-          attributeName,
+          attribute,
           '=',
           refinedOption.start
         );
       } else {
         resolvedState = resolvedState.addNumericRefinement(
-          attributeName,
+          attribute,
           '=',
           refinedOption.start
         );
@@ -328,13 +321,13 @@ function refine(state, attributeName, options, facetValue) {
   if (refinedOption.start !== undefined) {
     if (hasNumericRefinement(currentRefinements, '>=', refinedOption.start)) {
       resolvedState = resolvedState.removeNumericRefinement(
-        attributeName,
+        attribute,
         '>=',
         refinedOption.start
       );
     } else {
       resolvedState = resolvedState.addNumericRefinement(
-        attributeName,
+        attribute,
         '>=',
         refinedOption.start
       );
@@ -344,13 +337,13 @@ function refine(state, attributeName, options, facetValue) {
   if (refinedOption.end !== undefined) {
     if (hasNumericRefinement(currentRefinements, '<=', refinedOption.end)) {
       resolvedState = resolvedState.removeNumericRefinement(
-        attributeName,
+        attribute,
         '<=',
         refinedOption.end
       );
     } else {
       resolvedState = resolvedState.addNumericRefinement(
-        attributeName,
+        attribute,
         '<=',
         refinedOption.end
       );

@@ -16,8 +16,8 @@ export {
 } from './infinite-hits/connectInfiniteHits.js';
 export { default as connectMenu } from './menu/connectMenu.js';
 export {
-  default as connectNumericRefinementList,
-} from './numeric-refinement-list/connectNumericRefinementList.js';
+  default as connectNumericMenu,
+} from './numeric-menu/connectNumericMenu';
 export {
   default as connectPagination,
 } from './pagination/connectPagination.js';
