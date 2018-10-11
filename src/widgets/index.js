@@ -30,7 +30,7 @@ export {
 export { default as numericMenu } from './numeric-menu/numeric-menu';
 export { default as pagination } from '../widgets/pagination/pagination.js';
 export { default as rangeInput } from '../widgets/range-input/range-input.js';
-export { default as searchBox } from '../widgets/search-box/search-box.js';
+export { default as searchBox } from './search-box/search-box.js';
 export {
   default as rangeSlider,
 } from '../widgets/range-slider/range-slider.js';
