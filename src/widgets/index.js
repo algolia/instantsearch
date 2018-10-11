@@ -7,40 +7,34 @@
 
 export {
   default as clearRefinements,
-} from '../widgets/clear-refinements/clear-refinements';
-export { default as configure } from '../widgets/configure/configure.js';
+} from './clear-refinements/clear-refinements';
+export { default as configure } from './configure/configure.js';
 export {
   default as currentRefinedValues,
 } from '../widgets/current-refined-values/current-refined-values.js';
-export { default as geoSearch } from '../widgets/geo-search/geo-search.js';
+export { default as geoSearch } from './geo-search/geo-search.js';
 export {
   default as hierarchicalMenu,
-} from '../widgets/hierarchical-menu/hierarchical-menu.js';
-export { default as hits } from '../widgets/hits/hits.js';
-export {
-  default as hitsPerPage,
-} from '../widgets/hits-per-page/hits-per-page.js';
-export {
-  default as infiniteHits,
-} from '../widgets/infinite-hits/infinite-hits.js';
-export { default as menu } from '../widgets/menu/menu.js';
+} from './hierarchical-menu/hierarchical-menu.js';
+export { default as hits } from './hits/hits.js';
+export { default as hitsPerPage } from './hits-per-page/hits-per-page.js';
+export { default as infiniteHits } from './infinite-hits/infinite-hits.js';
+export { default as menu } from './menu/menu.js';
 export {
   default as refinementList,
-} from '../widgets/refinement-list/refinement-list.js';
+} from './refinement-list/refinement-list.js';
 export { default as numericMenu } from './numeric-menu/numeric-menu';
-export { default as pagination } from '../widgets/pagination/pagination.js';
-export { default as rangeInput } from '../widgets/range-input/range-input.js';
+export { default as pagination } from './pagination/pagination.js';
+export { default as rangeInput } from './range-input/range-input.js';
 export { default as searchBox } from '../widgets/search-box/search-box.js';
-export {
-  default as rangeSlider,
-} from '../widgets/range-slider/range-slider.js';
-export { default as sortBy } from '../widgets/sort-by/sort-by.js';
+export { default as rangeSlider } from './range-slider/range-slider.js';
+export { default as sortBy } from './sort-by/sort-by.js';
 export { default as ratingMenu } from './rating-menu/rating-menu';
-export { default as stats } from '../widgets/stats/stats.js';
+export { default as stats } from './stats/stats.js';
 export {
   default as toggleRefinement,
-} from '../widgets/toggleRefinement/toggleRefinement.js';
-export { default as analytics } from '../widgets/analytics/analytics.js';
-export { default as breadcrumb } from '../widgets/breadcrumb/breadcrumb.js';
-export { default as menuSelect } from '../widgets/menu-select/menu-select.js';
-export { default as poweredBy } from '../widgets/powered-by/powered-by.js';
+} from './toggleRefinement/toggleRefinement.js';
+export { default as analytics } from './analytics/analytics.js';
+export { default as breadcrumb } from './breadcrumb/breadcrumb.js';
+export { default as menuSelect } from './menu-select/menu-select.js';
+export { default as poweredBy } from './powered-by/powered-by.js';
