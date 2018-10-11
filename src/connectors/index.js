@@ -21,9 +21,6 @@ export {
 export {
   default as connectPagination,
 } from './pagination/connectPagination.js';
-export {
-  default as connectRangeSlider,
-} from './range-slider/connectRangeSlider.js';
 export { default as connectRange } from './range/connectRange.js';
 export {
   default as connectRefinementList,
