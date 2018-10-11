@@ -6,7 +6,7 @@ import upperFirst from 'lodash/upperFirst';
 // import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
-class CurrentRefinedValues extends Component {
+class CurrentRefinements extends Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
@@ -103,7 +103,7 @@ function handleClick(cb) {
   };
 }
 
-CurrentRefinedValues.propTypes = {
+CurrentRefinements.propTypes = {
   attributes: PropTypes.object.isRequired,
   clearRefinementClicks: PropTypes.arrayOf(PropTypes.func).isRequired,
   clearRefinementURLs: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -126,4 +126,4 @@ CurrentRefinedValues.propTypes = {
   templateProps: PropTypes.object.isRequired,
 };
 
-export default CurrentRefinedValues;
+export default CurrentRefinements;

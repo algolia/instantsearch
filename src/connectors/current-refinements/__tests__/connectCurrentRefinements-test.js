@@ -1,16 +1,16 @@
 import jsHelper from 'algoliasearch-helper';
-import connectCurrentRefinedValues from '../connectCurrentRefinedValues.js';
+import connectCurrentRefinements from '../connectCurrentRefinements.js';
 
 const { SearchResults } = jsHelper;
 
-describe('connectCurrentRefinedValues', () => {
+describe('connectCurrentRefinements', () => {
   it('Renders during init and render', () => {
     const helper = jsHelper({});
     helper.search = () => {};
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = jest.fn();
-    const makeWidget = connectCurrentRefinedValues(rendering);
+    const makeWidget = connectCurrentRefinements(rendering);
     const widget = makeWidget({
       foo: 'bar', // dummy param to test `widgetParams`
     });
@@ -61,7 +61,7 @@ describe('connectCurrentRefinedValues', () => {
     });
     helper.search = () => {};
     const rendering = jest.fn();
-    const makeWidget = connectCurrentRefinedValues(rendering);
+    const makeWidget = connectCurrentRefinements(rendering);
     const widget = makeWidget({
       transformItems: items =>
         items.map(item => ({ ...item, name: 'transformed' })),
@@ -101,7 +101,7 @@ describe('connectCurrentRefinedValues', () => {
     });
     helper.search = () => {};
     const rendering = jest.fn();
-    const makeWidget = connectCurrentRefinedValues(rendering);
+    const makeWidget = connectCurrentRefinements(rendering);
     const widget = makeWidget();
 
     helper.addFacetRefinement('myFacet', 'value');
@@ -143,7 +143,7 @@ describe('connectCurrentRefinedValues', () => {
     });
     helper.search = () => {};
     const rendering = jest.fn();
-    const makeWidget = connectCurrentRefinedValues(rendering);
+    const makeWidget = connectCurrentRefinements(rendering);
     const widget = makeWidget({
       includesQuery: true,
     });

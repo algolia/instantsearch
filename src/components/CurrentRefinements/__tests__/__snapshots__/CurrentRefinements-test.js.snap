@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CurrentRefinedValues options.attributes uses label 1`] = `
+exports[`CurrentRefinements options.attributes uses label 1`] = `
 <div
   className="root"
 >
@@ -193,7 +193,7 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
 </div>
 `;
 
-exports[`CurrentRefinedValues options.attributes uses template 1`] = `
+exports[`CurrentRefinements options.attributes uses template 1`] = `
 <div
   className="root"
 >
@@ -386,7 +386,7 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
 </div>
 `;
 
-exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item element 1`] = `
+exports[`CurrentRefinements options.clearRefinementURLs is used in an item element 1`] = `
 <div
   className="root"
 >
@@ -579,7 +579,7 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
 </div>
 `;
 
-exports[`CurrentRefinedValues options.refinements can be used with a disjunctive facet 1`] = `
+exports[`CurrentRefinements options.refinements can be used with a disjunctive facet 1`] = `
 <div
   className="root"
 >
@@ -616,7 +616,7 @@ exports[`CurrentRefinedValues options.refinements can be used with a disjunctive
 </div>
 `;
 
-exports[`CurrentRefinedValues options.refinements can be used with a facet 1`] = `
+exports[`CurrentRefinements options.refinements can be used with a facet 1`] = `
 <div
   className="root"
 >
@@ -653,7 +653,7 @@ exports[`CurrentRefinedValues options.refinements can be used with a facet 1`] =
 </div>
 `;
 
-exports[`CurrentRefinedValues options.refinements can be used with a hierarchical facet 1`] = `
+exports[`CurrentRefinements options.refinements can be used with a hierarchical facet 1`] = `
 <div
   className="root"
 >
@@ -690,7 +690,7 @@ exports[`CurrentRefinedValues options.refinements can be used with a hierarchica
 </div>
 `;
 
-exports[`CurrentRefinedValues options.refinements can be used with a tag 1`] = `
+exports[`CurrentRefinements options.refinements can be used with a tag 1`] = `
 <div
   className="root"
 >
@@ -727,7 +727,7 @@ exports[`CurrentRefinedValues options.refinements can be used with a tag 1`] = `
 </div>
 `;
 
-exports[`CurrentRefinedValues options.refinements can be used with an exclude 1`] = `
+exports[`CurrentRefinements options.refinements can be used with an exclude 1`] = `
 <div
   className="root"
 >
@@ -764,7 +764,7 @@ exports[`CurrentRefinedValues options.refinements can be used with an exclude 1`
 </div>
 `;
 
-exports[`CurrentRefinedValues options.refinements can be used with numeric filters 1`] = `
+exports[`CurrentRefinements options.refinements can be used with numeric filters 1`] = `
 <div
   className="root"
 >
@@ -853,7 +853,7 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
 </div>
 `;
 
-exports[`CurrentRefinedValues options.templateProps passes a custom template if given 1`] = `
+exports[`CurrentRefinements options.templateProps passes a custom template if given 1`] = `
 <div
   className="root"
 >
@@ -1046,7 +1046,7 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
 </div>
 `;
 
-exports[`CurrentRefinedValues renders 1`] = `
+exports[`CurrentRefinements renders 1`] = `
 <div
   className="root"
 >

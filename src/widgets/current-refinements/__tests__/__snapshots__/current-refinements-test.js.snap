@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`currentRefinedValues() render() options.container should render with a HTMLElement container 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() options.container should render with a HTMLElement container 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -192,8 +192,8 @@ exports[`currentRefinedValues() render() options.container should render with a 
 />
 `;
 
-exports[`currentRefinedValues() render() options.container should render with a string container 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() options.container should render with a string container 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -384,8 +384,8 @@ exports[`currentRefinedValues() render() options.container should render with a 
 />
 `;
 
-exports[`currentRefinedValues() render() options.cssClasses should be passed in the cssClasses 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() options.cssClasses should be passed in the cssClasses 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -576,8 +576,8 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
 />
 `;
 
-exports[`currentRefinedValues() render() options.cssClasses should work with an array 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() options.cssClasses should work with an array 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -768,8 +768,8 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
 />
 `;
 
-exports[`currentRefinedValues() render() options.includedAttributes should default to false 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() options.includedAttributes should default to false 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "disjunctiveFacet": Object {
@@ -883,8 +883,8 @@ exports[`currentRefinedValues() render() options.includedAttributes should defau
 />
 `;
 
-exports[`currentRefinedValues() render() options.templates should pass it in templateProps 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() options.templates should pass it in templateProps 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -1075,8 +1075,8 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
 />
 `;
 
-exports[`currentRefinedValues() render() options.transformItems should transform passed items 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() options.transformItems should transform passed items 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -1280,8 +1280,8 @@ exports[`currentRefinedValues() render() options.transformItems should transform
 />
 `;
 
-exports[`currentRefinedValues() render() should render twice <CurrentRefinedValues ... /> 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -1472,8 +1472,8 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
 />
 `;
 
-exports[`currentRefinedValues() render() should render twice <CurrentRefinedValues ... /> 2`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 2`] = `
+<CurrentRefinements
   attributes={
     Object {
       "_tags": Object {
@@ -1664,8 +1664,8 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
 />
 `;
 
-exports[`currentRefinedValues() render() with excludedAttributes should ignore excluded attributes 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() with excludedAttributes should ignore excluded attributes 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "disjunctiveFacet": Object {
@@ -1734,8 +1734,8 @@ exports[`currentRefinedValues() render() with excludedAttributes should ignore e
 />
 `;
 
-exports[`currentRefinedValues() render() with included attributes should sort the refinements according to their order 1`] = `
-<CurrentRefinedValues
+exports[`currentRefinements() render() with included attributes should sort the refinements according to their order 1`] = `
+<CurrentRefinements
   attributes={
     Object {
       "disjunctiveFacet": Object {

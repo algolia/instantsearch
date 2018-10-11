@@ -24,27 +24,6 @@ const renderFn = (
   }
 
   if (refinements && refinements.length > 0) {
-    // append clear all link
-    // ---------------------
-    containerNode.find('#custom-crv-clear-all-container').html(`
-        <a
-          href="${clearAllURL}"
-          class="ais-current-refined-values--clear-all"
-        >
-          Clear all
-        </a>
-      `);
-
-    containerNode
-      .find('#custom-crv-clear-all-container > a')
-      .off('click')
-      .on('click', e => {
-        e.preventDefault();
-        clearAllClick();
-      });
-
-    // show current refined values
-    // ---------------------------
     const list = refinements
       .map(value => {
         const { computedLabel, count } = value;
@@ -54,16 +33,16 @@ const renderFn = (
           : '';
 
         switch (true) {
-          case value.attributeName === 'price_range':
+          case value.attribute === 'price_range':
             return `Price range: ${computedLabel.replace(
               /(\d+)/g,
               '$$$1'
             )} ${afterCount}`;
 
-          case value.attributeName === 'price':
+          case value.attribute === 'price':
             return `Price: ${computedLabel.replace(/(\d+)/g, '$$$1')}`;
 
-          case value.attributeName === 'free_shipping':
+          case value.attribute === 'free_shipping':
             return computedLabel === 'true'
               ? `Free shipping ${afterCount}`
               : '';
@@ -103,12 +82,11 @@ const renderFn = (
     // --------------
     containerNode.find('#custom-current-refined-values').show();
   } else {
-    // remove refinements list and clear all button, hide the container
+    // remove refinements list, hide the container
     // ----------------------------------------------------------------
     containerNode.find('ul').html('');
-    containerNode.find('#custom-crv-clear-all-container').html('');
     containerNode.find('#custom-current-refined-values').hide();
   }
 };
 
-export default instantsearch.connectors.connectCurrentRefinedValues(renderFn);
+export default instantsearch.connectors.connectCurrentRefinements(renderFn);

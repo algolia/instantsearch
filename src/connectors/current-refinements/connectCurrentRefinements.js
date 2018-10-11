@@ -7,7 +7,7 @@ import {
 } from '../../lib/utils.js';
 
 const usage = `Usage:
-var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {
+var customCurrentRefinements = connectCurrentRefinements(function renderFn(params, isFirstRendering) {
   // params = {
   //   attributes,
   //   refine,
@@ -18,14 +18,14 @@ var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(p
   // }
 });
 search.addWidget(
-  customCurrentRefinedValues({
+  customCurrentRefinements({
     [ includedAttributes ],
     [ excludedAttributes = [] ],
     [ includesQuery = false ],
     [ transformItems ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinedValues.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinements.html
 `;
 
 /**
@@ -40,45 +40,45 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
- * @typedef {Object} CurrentRefinedValuesRenderingOptions
- * @property {Object.<string, object>} includedAttributes Original `CurrentRefinedValuesWidgetOptions.includedAttributes` mapped by keys.
+ * @typedef {Object} CurrentRefinementsRenderingOptions
+ * @property {Object.<string, object>} includedAttributes Original `CurrentRefinementsWidgetOptions.includedAttributes` mapped by keys.
  * @property {Object.<string, object>} excludedAttributes Label definitions for the different filters to exclude.
  * @property {function(item)} refine Clears a single refinement.
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
  * @property {CurrentRefinement[]} refinements All the current refinements.
- * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomCurrentRefinementsWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * @typedef {Object} CurrentRefinedValuesAttributes
+ * @typedef {Object} CurrentRefinementsAttributes
  * @property {string} name Mandatory field which is the name of the attribute.
  * @property {string} label The label to apply on a refinement per attribute.
  */
 
 /**
- * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
- * @property {CurrentRefinedValuesAttributes[]} [includedAttributes] Specification for the display of
+ * @typedef {Object} CustomCurrentRefinementsWidgetOptions
+ * @property {CurrentRefinementsAttributes[]} [includedAttributes] Specification for the display of
  * refinements per attribute (default: `[]`). By default, the widget will display all the filters
  * set with no special treatment for the label.
- * @property {CurrentRefinedValuesAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
+ * @property {CurrentRefinementsAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
- * **CurrentRefinedValues** connector provides the logic to build a widget that will give
+ * **CurrentRefinements** connector provides the logic to build a widget that will give
  * the user the ability to see all the currently applied filters and, remove some or all of
  * them.
  *
  * This provides a `refine(item)` function to remove a selected refinement.
  * Those functions can see their behaviour change based on the widget options used.
  * @type {Connector}
- * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
+ * @param {function(CurrentRefinementsRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinements** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomCurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
+ * @return {function(CustomCurrentRefinementsWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinements** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
- * function renderFn(CurrentRefinedValuesRenderingOptions, isFirstRendering) {
- *   var containerNode = CurrentRefinedValuesRenderingOptions.widgetParams.containerNode;
+ * function renderFn(CurrentRefinementsRenderingOptions, isFirstRendering) {
+ *   var containerNode = CurrentRefinementsRenderingOptions.widgetParams.containerNode;
  *   if (isFirstRendering) {
  *     containerNode
  *       .html('<ul id="refinements"></ul><div id="cta-container"></div>');
@@ -92,20 +92,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *     .find('li > a')
  *     .each(function() { $(this).off('click') });
  *
- *   if (CurrentRefinedValuesRenderingOptions.refinements
- *       && CurrentRefinedValuesRenderingOptions.refinements.length > 0) {
- *     var list = CurrentRefinedValuesRenderingOptions.refinements.map(function(refinement) {
- *       return '<li><a href="' + CurrentRefinedValuesRenderingOptions.createURL(refinement) + '">'
+ *   if (CurrentRefinementsRenderingOptions.refinements
+ *       && CurrentRefinementsRenderingOptions.refinements.length > 0) {
+ *     var list = CurrentRefinementsRenderingOptions.refinements.map(function(refinement) {
+ *       return '<li><a href="' + CurrentRefinementsRenderingOptions.createURL(refinement) + '">'
  *         + refinement.computedLabel + ' ' + refinement.count + '</a></li>';
  *     });
  *
- *     CurrentRefinedValuesRenderingOptions.find('ul').html(list);
- *     CurrentRefinedValuesRenderingOptions.find('li > a').each(function(index) {
+ *     CurrentRefinementsRenderingOptions.find('ul').html(list);
+ *     CurrentRefinementsRenderingOptions.find('li > a').each(function(index) {
  *       $(this).on('click', function(event) {
  *         event.preventDefault();
  *
- *         var refinement = CurrentRefinedValuesRenderingOptions.refinements[index];
- *         CurrentRefinedValuesRenderingOptions.refine(refinement);
+ *         var refinement = CurrentRefinementsRenderingOptions.refinements[index];
+ *         CurrentRefinementsRenderingOptions.refine(refinement);
  *       });
  *     });
  *   } else {
@@ -114,17 +114,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   }
  * }
  *
- * // connect `renderFn` to CurrentRefinedValues logic
- * var customCurrentRefinedValues = instantsearch.connectors.connectCurrentRefinedValues(renderFn);
+ * // connect `renderFn` to CurrentRefinements logic
+ * var customCurrentRefinements = instantsearch.connectors.connectCurrentRefinements(renderFn);
  *
  * // mount widget on the page
  * search.addWidget(
- *   customCurrentRefinedValues({
+ *   customCurrentRefinements({
  *     containerNode: $('#custom-crv-container'),
  *   })
  * );
  */
-export default function connectCurrentRefinedValues(renderFn, unmountFn) {
+export default function connectCurrentRefinements(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {

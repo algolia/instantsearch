@@ -286,11 +286,11 @@ We now miss two elements in our search interface:
   * the ability to browse beyond the first page of results
   * the ability to reset the filters
 
-Those two features are implemented respectively with the [pagination](widgets/pagination.html), [clearAll](widgets/clearAll.html) and [currentRefinedValues](widgets/currentRefinedValues.html) widgets. Both have nice defaults which means that we can use them directly without further configuration.
+Those two features are implemented respectively with the [pagination](widgets/pagination.html), [clearAll](widgets/clearAll.html) and [currentRefinements](widgets/currentRefinements.html) widgets. Both have nice defaults which means that we can use them directly without further configuration.
 
 ```html
-<div id="current-refined-values">
-  <!-- CurrentRefinedValues widget will appear here -->
+<div id="current-refinements">
+  <!-- CurrentRefinements widget will appear here -->
 </div>
 
 <div id="clear-all">
@@ -306,9 +306,9 @@ Those two features are implemented respectively with the [pagination](widgets/pa
 <script>
   const search = instantsearch(options);
 
-  // initialize currentRefinedValues
+  // initialize currentRefinements
   search.addWidget(
-    instantsearch.widgets.currentRefinedValues({
+    instantsearch.widgets.currentRefinements({
       container: '#current-refined-values',
       // This widget can also contain a clear all link to remove all filters,
       // we disable it in this example since we use `clearAll` widget on its own.

@@ -1,10 +1,10 @@
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { prepareTemplateProps } from '../../../lib/utils';
-import currentRefinedValues from '../current-refined-values';
+import currentRefinements from '../current-refinements';
 import defaultTemplates from '../defaultTemplates';
 
-describe('currentRefinedValues()', () => {
+describe('currentRefinements()', () => {
   describe('types checking', () => {
     let boundWidget;
     let parameters;
@@ -15,7 +15,7 @@ describe('currentRefinedValues()', () => {
         templates: {},
         cssClasses: {},
       };
-      boundWidget = currentRefinedValues.bind(null, parameters);
+      boundWidget = currentRefinements.bind(null, parameters);
     });
 
     describe('options.container', () => {
@@ -131,7 +131,7 @@ describe('currentRefinedValues()', () => {
 
   describe('getConfiguration()', () => {
     it('configures nothing', () => {
-      const widget = currentRefinedValues({
+      const widget = currentRefinements({
         container: document.createElement('div'),
       });
       expect(widget.getConfiguration).toEqual(undefined);
@@ -157,7 +157,7 @@ describe('currentRefinedValues()', () => {
 
     beforeEach(() => {
       ReactDOM = { render: jest.fn() };
-      currentRefinedValues.__Rewire__('render', ReactDOM.render);
+      currentRefinements.__Rewire__('render', ReactDOM.render);
 
       parameters = {
         container: document.createElement('div'),
@@ -401,8 +401,8 @@ describe('currentRefinedValues()', () => {
       setRefinementsInExpectedProps();
     });
 
-    it('should render twice <CurrentRefinedValues ... />', () => {
-      const widget = currentRefinedValues(parameters);
+    it('should render twice <CurrentRefinements ... />', () => {
+      const widget = currentRefinements(parameters);
       widget.init(initParameters);
       widget.render(renderParameters);
       widget.render(renderParameters);
@@ -422,7 +422,7 @@ describe('currentRefinedValues()', () => {
 
         parameters.container = '#testid';
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
@@ -435,7 +435,7 @@ describe('currentRefinedValues()', () => {
 
         parameters.container = element;
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
@@ -480,7 +480,7 @@ describe('currentRefinedValues()', () => {
         );
         refinements = [].concat(firstRefinements).concat(otherRefinements);
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
@@ -507,7 +507,7 @@ describe('currentRefinedValues()', () => {
       it('should pass it in templateProps', () => {
         parameters.templates.item = 'MY CUSTOM TEMPLATE';
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
@@ -520,7 +520,7 @@ describe('currentRefinedValues()', () => {
 
     describe('options.transformItems', () => {
       it('should transform passed items', () => {
-        const widget = currentRefinedValues({
+        const widget = currentRefinements({
           ...parameters,
           transformItems: items =>
             items.map(item => ({ ...item, transformed: true })),
@@ -538,12 +538,12 @@ describe('currentRefinedValues()', () => {
       it('should be passed in the cssClasses', () => {
         parameters.cssClasses.root = 'custom-root';
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.cssClasses.root =
-          'ais-current-refined-values--root custom-root';
+          'ais-CurrentRefinements-root custom-root';
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
@@ -552,12 +552,12 @@ describe('currentRefinedValues()', () => {
       it('should work with an array', () => {
         parameters.cssClasses.root = ['custom-root', 'custom-root-2'];
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.cssClasses.root =
-          'ais-current-refined-values--root custom-root custom-root-2';
+          'ais-CurrentRefinements-root custom-root custom-root-2';
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
@@ -596,7 +596,7 @@ describe('currentRefinedValues()', () => {
           .concat(secondRefinements)
           .concat(otherRefinements);
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
@@ -619,7 +619,7 @@ describe('currentRefinedValues()', () => {
         ];
         parameters.excludedAttributes = ['facetExclude'];
 
-        const widget = currentRefinedValues(parameters);
+        const widget = currentRefinements(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
@@ -641,7 +641,7 @@ describe('currentRefinedValues()', () => {
     });
 
     afterEach(() => {
-      currentRefinedValues.__ResetDependency__('render');
+      currentRefinements.__ResetDependency__('render');
     });
   });
 });

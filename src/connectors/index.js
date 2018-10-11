@@ -2,8 +2,8 @@ export {
   default as connectClearRefinements,
 } from './clear-refinements/connectClearRefinements';
 export {
-  default as connectCurrentRefinedValues,
-} from './current-refined-values/connectCurrentRefinedValues.js';
+  default as connectCurrentRefinements,
+} from './current-refinements/connectCurrentRefinements.js';
 export {
   default as connectHierarchicalMenu,
 } from './hierarchical-menu/connectHierarchicalMenu.js';

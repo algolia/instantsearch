@@ -2,7 +2,7 @@
 
 import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
 const stories = storiesOf('CurrentRefinements');
 
@@ -20,7 +20,7 @@ export default () => {
         );
 
         window.search.addWidget(
-          instantsearch.widgets.currentRefinedValues({ container })
+          instantsearch.widgets.currentRefinements({ container })
         );
       })
     )
@@ -28,7 +28,7 @@ export default () => {
       'without refinements',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.currentRefinedValues({
+          instantsearch.widgets.currentRefinements({
             container,
           })
         );
@@ -46,7 +46,7 @@ export default () => {
         );
 
         window.search.addWidget(
-          instantsearch.widgets.currentRefinedValues({
+          instantsearch.widgets.currentRefinements({
             container,
             includedAttributes: [{ name: 'price' }],
           })
@@ -65,7 +65,7 @@ export default () => {
         );
 
         window.search.addWidget(
-          instantsearch.widgets.currentRefinedValues({
+          instantsearch.widgets.currentRefinements({
             container,
             excludedAttributes: ['price'],
           })
@@ -84,7 +84,7 @@ export default () => {
         );
 
         window.search.addWidget(
-          instantsearch.widgets.currentRefinedValues({
+          instantsearch.widgets.currentRefinements({
             container,
             includesQuery: true,
           })
@@ -103,7 +103,7 @@ export default () => {
         );
 
         window.search.addWidget(
-          instantsearch.widgets.currentRefinedValues({
+          instantsearch.widgets.currentRefinements({
             container,
             transformItems: items =>
               items.map(item => ({

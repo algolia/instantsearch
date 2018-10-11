@@ -1,11 +1,11 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import isArray from 'lodash/isArray';
-import CurrentRefinements from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
-import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
-import defaultTemplates from './defaultTemplates';
+import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements.js';
+import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements.js';
+import defaultTemplates from './defaultTemplates.js';
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
-import { component } from '../../lib/suit';
+import { component } from '../../lib/suit.js';
 
 const suit = component('CurrentRefinements');
 
@@ -43,7 +43,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
 };
 
 const usage = `Usage:
-currentRefinedValues({
+currentRefinements({
   container,
   [ includedAttributes: [{name[, label, template]}] ],
   [ excludedAttributes = [] ],
@@ -54,7 +54,7 @@ currentRefinedValues({
 })`;
 
 /**
- * @typedef {Object} CurrentRefinedValuesCSSClasses
+ * @typedef {Object} CurrentRefinementsCSSClasses
  * @property {string} [root] CSS classes added to the root element.
  * @property {string} [list] CSS classes added to the list element.
  * @property {string} [item] CSS classes added to the item element.
@@ -66,30 +66,30 @@ currentRefinedValues({
  */
 
 /**
- * @typedef {Object} CurrentRefinedValuesAttributes
+ * @typedef {Object} CurrentRefinementsAttributes
  * @property {string} name Required attribute name.
  * @property {string} label Attribute label (passed to the item template).
  * @property {string|function(object):string} template Attribute specific template.
  */
 
 /**
- * @typedef {Object} CurrentRefinedValuesTemplates
+ * @typedef {Object} CurrentRefinementsTemplates
  * @property {string|function(object):string} [item] Item template.
  */
 
 /**
- * @typedef {Object} CurrentRefinedValuesWidgetOptions
+ * @typedef {Object} CurrentRefinementsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
- * @property {CurrentRefinedValuesAttributes[]} [includedAttributes] Label definitions for the different filters to include.
- * @property {CurrentRefinedValuesAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
- * @property {CurrentRefinedValuesAttributes[]} [includesQuery = false] Whether to add the query as a refinement.
- * @property {CurrentRefinedValuesTemplates} [templates] Templates to use for the widget.
- * @property {CurrentRefinedValuesCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {CurrentRefinementsAttributes[]} [includedAttributes] Label definitions for the different filters to include.
+ * @property {CurrentRefinementsAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
+ * @property {CurrentRefinementsAttributes[]} [includesQuery = false] Whether to add the query as a refinement.
+ * @property {CurrentRefinementsTemplates} [templates] Templates to use for the widget.
+ * @property {CurrentRefinementsCSSClasses} [cssClasses] CSS classes to be added.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
- * The current refined values widget has two purposes:
+ * The current refinements widget has two purposes:
  *
  *  - give the user a synthetic view of the current filters.
  *  - give the user the ability to remove a filter.
@@ -98,12 +98,12 @@ currentRefinedValues({
  * @type {WidgetFactory}
  * @devNovel CurrentRefinements
  * @category clear-filter
- * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinements widget options.
+ * @param {CurrentRefinementsWidgetOptions} $0 The CurrentRefinements widget options.
  * @returns {Object} A new CurrentRefinements widget instance.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.currentRefinedValues({
- *     container: '#current-refined-values',
+ *   instantsearch.widgets.currentRefinements({
+ *     container: '#current-refinements',
  *     includedAttributes: [
  *       { name: 'free_shipping', label: 'Free shipping' },
  *       { name: 'price', label: 'Price' },
@@ -113,7 +113,7 @@ currentRefinedValues({
  *   })
  * );
  */
-export default function currentRefinedValues({
+export default function currentRefinements({
   container,
   includedAttributes = [],
   excludedAttributes = [],
@@ -149,7 +149,7 @@ export default function currentRefinedValues({
   });
 
   try {
-    const makeWidget = connectCurrentRefinedValues(specializedRenderer, () =>
+    const makeWidget = connectCurrentRefinements(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({

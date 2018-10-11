@@ -1,8 +1,8 @@
 import React from 'react';
-import CurrentRefinedValues from '../CurrentRefinedValues.js';
+import CurrentRefinements from '../CurrentRefinements.js';
 import { mount } from 'enzyme';
 
-describe('CurrentRefinedValues', () => {
+describe('CurrentRefinements', () => {
   let defaultTemplates;
   let templateProps;
   let refinements;
@@ -138,7 +138,7 @@ describe('CurrentRefinedValues', () => {
   });
 
   it('renders', () => {
-    const tree = mount(<CurrentRefinedValues {...parameters} />);
+    const tree = mount(<CurrentRefinements {...parameters} />);
 
     expect(tree).toMatchSnapshot();
   });
@@ -151,7 +151,7 @@ describe('CurrentRefinedValues', () => {
         label: 'COUCOU',
       };
 
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -163,7 +163,7 @@ describe('CurrentRefinedValues', () => {
         template: 'CUSTOM TEMPLATE',
       };
 
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -172,7 +172,7 @@ describe('CurrentRefinedValues', () => {
   describe('options.clearRefinementURLs', () => {
     it('is used in an item element', () => {
       parameters.clearRefinementURLs[1] = '#custom-clear-specific';
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -195,7 +195,7 @@ describe('CurrentRefinedValues', () => {
           computedLabel: 'val1',
         },
       ];
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -210,7 +210,7 @@ describe('CurrentRefinedValues', () => {
           exclude: true,
         },
       ];
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -224,7 +224,7 @@ describe('CurrentRefinedValues', () => {
           computedLabel: 'val1',
         },
       ];
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -238,7 +238,7 @@ describe('CurrentRefinedValues', () => {
           computedLabel: 'val1',
         },
       ];
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -267,7 +267,7 @@ describe('CurrentRefinedValues', () => {
           computedLabel: 'val3',
         },
       ];
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -281,7 +281,7 @@ describe('CurrentRefinedValues', () => {
           computedLabel: 'tag1',
         },
       ];
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -290,7 +290,7 @@ describe('CurrentRefinedValues', () => {
   describe('options.templateProps', () => {
     it('passes a custom template if given', () => {
       parameters.templateProps.templates.item = 'CUSTOM ITEM TEMPLATE';
-      const tree = mount(<CurrentRefinedValues {...parameters} />);
+      const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();
     });

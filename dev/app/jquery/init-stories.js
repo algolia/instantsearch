@@ -1,5 +1,5 @@
 import initClearRefinementsStories from './stories/clear-refinements.stories';
-import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
+import initCurrentRefinementsStories from './stories/current-refinements.stories';
 import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
 import initHitsPerPageStories from './stories/hits-per-page.stories';
@@ -17,7 +17,7 @@ import initAutcompleteStories from './stories/autocomplete.stories';
 
 export default () => {
   initClearRefinementsStories();
-  initCurrentRefinedValuesStories();
+  initCurrentRefinementsStories();
   initHierarchicalMenuStories();
   initHitsStories();
   initHitsPerPageStories();
