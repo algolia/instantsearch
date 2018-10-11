@@ -1,24 +1,28 @@
-/* eslint react/no-multi-comp: 0 */
 import React from 'react';
 import CurrentRefinedValues from '../CurrentRefinedValues.js';
-import renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 
 describe('CurrentRefinedValues', () => {
   let defaultTemplates;
-
-  let cssClasses;
   let templateProps;
   let refinements;
   let clearRefinementURLs;
-
   let parameters;
+
+  const cssClasses = {
+    root: 'root',
+    list: 'list',
+    item: 'item',
+    label: 'label',
+    category: 'category',
+    categoryLabel: 'categoryLabel',
+    delete: 'delete',
+    reset: 'reset',
+  };
 
   beforeEach(() => {
     defaultTemplates = {
-      header: 'DEFAULT HEADER TEMPLATE',
-      clearAll: 'DEFAULT CLEAR ALL TEMPLATE',
       item: 'DEFAULT ITEM TEMPLATE',
-      footer: 'DEFAULT FOOTER TEMPLATE',
     };
 
     templateProps = {
@@ -29,19 +33,12 @@ describe('CurrentRefinedValues', () => {
       defaultTemplates,
     };
 
-    cssClasses = {
-      clearAll: 'clear-all-class',
-      list: 'list-class',
-      item: 'item-class',
-      link: 'link-class',
-      count: 'count-class',
-    };
-
     refinements = [
       {
         type: 'facet',
         attributeName: 'facet',
         name: 'facet-val1',
+        computedLabel: 'facet-val1',
         count: 1,
         exhaustive: true,
       },
@@ -49,6 +46,7 @@ describe('CurrentRefinedValues', () => {
         type: 'facet',
         attributeName: 'facet',
         name: 'facet-val2',
+        computedLabel: 'facet-val2',
         count: 2,
         exhaustive: true,
       },
@@ -56,25 +54,34 @@ describe('CurrentRefinedValues', () => {
         type: 'exclude',
         attributeName: 'facetExclude',
         name: 'disjunctiveFacet-val1',
+        computedLabel: 'disjunctiveFacet-val1',
         exclude: true,
       },
       {
         type: 'disjunctive',
         attributeName: 'disjunctiveFacet',
         name: 'disjunctiveFacet-val1',
+        computedLabel: 'disjunctiveFacet-val1',
       },
       {
         type: 'hierarchical',
         attributeName: 'hierarchicalFacet',
         name: 'hierarchicalFacet-val1',
+        computedLabel: 'hierarchicalFacet-val1',
       },
       {
         type: 'numeric',
         attributeName: 'numericFacet',
         name: 'numericFacet-val1',
+        computedLabel: 'numericFacet-val1',
         operator: '>=',
       },
-      { type: 'tag', attributeName: '_tags', name: 'tag1' },
+      {
+        type: 'tag',
+        attributeName: '_tags',
+        name: 'tag1',
+        computedLabel: 'tag1',
+      },
     ];
 
     clearRefinementURLs = [
@@ -89,16 +96,31 @@ describe('CurrentRefinedValues', () => {
 
     parameters = {
       attributes: {
-        facet: { name: 'facet' },
-        facetExclude: { name: 'facetExclude' },
-        disjunctiveFacet: { name: 'disjunctiveFacet' },
-        hierarchicalFacet: { name: 'hierarchicalFacet' },
-        numericFacet: { name: 'numericFacet' },
-        _tags: { name: '_tags' },
+        facet: {
+          name: 'facet',
+          computedLabel: 'facet',
+        },
+        facetExclude: {
+          name: 'facetExclude',
+          computedLabel: 'facetExclude',
+        },
+        disjunctiveFacet: {
+          name: 'disjunctiveFacet',
+          computedLabel: 'disjunctiveFacet',
+        },
+        hierarchicalFacet: {
+          name: 'hierarchicalFacet',
+          computedLabel: 'hierarchicalFacet',
+        },
+        numericFacet: {
+          name: 'numericFacet',
+          computedLabel: 'numericFacet',
+        },
+        _tags: {
+          name: '_tags',
+          computedLabel: '_tags',
+        },
       },
-      clearAllClick: () => {},
-      clearAllPosition: 'before',
-      clearAllURL: '#cleared-all',
       clearRefinementClicks: [
         () => {},
         () => {},
@@ -116,85 +138,33 @@ describe('CurrentRefinedValues', () => {
   });
 
   it('renders', () => {
-    const tree = renderer
-      .create(<CurrentRefinedValues {...parameters} />)
-      .toJSON();
+    const tree = mount(<CurrentRefinedValues {...parameters} />);
+
     expect(tree).toMatchSnapshot();
   });
 
   describe('options.attributes', () => {
     it('uses label', () => {
-      parameters.attributes.facet = { name: 'facet', label: 'COUCOU' };
+      parameters.attributes.facet = {
+        name: 'facet',
+        computedLabel: 'facet',
+        label: 'COUCOU',
+      };
 
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
 
     it('uses template', () => {
       parameters.attributes.facet = {
         name: 'facet',
+        computedLabel: 'facet',
         template: 'CUSTOM TEMPLATE',
       };
 
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
-      expect(tree).toMatchSnapshot();
-    });
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
 
-    it('uses transformData', () => {
-      const transformData = data => ({ label: 'YEAH!', ...data });
-      parameters.attributes.facet = { name: 'facet', transformData };
-
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-  });
-
-  describe('options.clearAllPosition', () => {
-    it("'before'", () => {
-      parameters.clearAllPosition = 'before';
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-
-    it("'after'", () => {
-      parameters.clearAllPosition = 'after';
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-
-    it('false', () => {
-      parameters.clearAllPosition = false;
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-  });
-
-  describe('options.clearAllURL', () => {
-    it('is used in the clearAll element before', () => {
-      parameters.clearAllURL = '#custom-clear-all';
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-
-    it('is used in the clearAll element after', () => {
-      parameters.clearAllURL = '#custom-clear-all';
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
       expect(tree).toMatchSnapshot();
     });
   });
@@ -202,9 +172,8 @@ describe('CurrentRefinedValues', () => {
   describe('options.clearRefinementURLs', () => {
     it('is used in an item element', () => {
       parameters.clearRefinementURLs[1] = '#custom-clear-specific';
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
   });
@@ -219,11 +188,15 @@ describe('CurrentRefinedValues', () => {
 
     it('can be used with a facet', () => {
       parameters.refinements = [
-        { type: 'facet', attributeName: 'customFacet', name: 'val1' },
+        {
+          type: 'facet',
+          attributeName: 'customFacet',
+          name: 'val1',
+          computedLabel: 'val1',
+        },
       ];
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
 
@@ -233,12 +206,12 @@ describe('CurrentRefinedValues', () => {
           type: 'exclude',
           attributeName: 'customExcludeFacet',
           name: 'val1',
+          computedLabel: 'val1',
           exclude: true,
         },
       ];
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
 
@@ -248,11 +221,11 @@ describe('CurrentRefinedValues', () => {
           type: 'disjunctive',
           attributeName: 'customDisjunctiveFacet',
           name: 'val1',
+          computedLabel: 'val1',
         },
       ];
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
 
@@ -262,11 +235,11 @@ describe('CurrentRefinedValues', () => {
           type: 'hierarchical',
           attributeName: 'customHierarchicalFacet',
           name: 'val1',
+          computedLabel: 'val1',
         },
       ];
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
 
@@ -277,33 +250,39 @@ describe('CurrentRefinedValues', () => {
           attributeName: 'customNumericFilter',
           operator: '=',
           name: 'val1',
+          computedLabel: 'val1',
         },
         {
           type: 'numeric',
           attributeName: 'customNumericFilter',
           operator: '<=',
           name: 'val2',
+          computedLabel: 'val2',
         },
         {
           type: 'numeric',
           attributeName: 'customNumericFilter',
           operator: '>=',
           name: 'val3',
+          computedLabel: 'val3',
         },
       ];
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
 
     it('can be used with a tag', () => {
       parameters.refinements = [
-        { type: 'tag', attributeName: '_tags', name: 'tag1' },
+        {
+          type: 'tag',
+          attributeName: '_tags',
+          name: 'tag1',
+          computedLabel: 'tag1',
+        },
       ];
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
   });
@@ -311,9 +290,8 @@ describe('CurrentRefinedValues', () => {
   describe('options.templateProps', () => {
     it('passes a custom template if given', () => {
       parameters.templateProps.templates.item = 'CUSTOM ITEM TEMPLATE';
-      const tree = renderer
-        .create(<CurrentRefinedValues {...parameters} />)
-        .toJSON();
+      const tree = mount(<CurrentRefinedValues {...parameters} />);
+
       expect(tree).toMatchSnapshot();
     });
   });

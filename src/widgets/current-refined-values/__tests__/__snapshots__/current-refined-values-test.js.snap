@@ -1,207 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`currentRefinedValues() render() options.clearAll should pass it as clearAllPosition 1`] = `
-<CurrentRefinedValues
-  attributes={
-    Object {
-      "_tags": Object {
-        "name": "_tags",
-      },
-      "disjunctiveFacet": Object {
-        "name": "disjunctiveFacet",
-      },
-      "facet": Object {
-        "name": "facet",
-      },
-      "facetExclude": Object {
-        "name": "facetExclude",
-      },
-      "hierarchicalFacet": Object {
-        "name": "hierarchicalFacet",
-      },
-      "numericDisjunctiveFacet": Object {
-        "name": "numericDisjunctiveFacet",
-      },
-      "numericFacet": Object {
-        "name": "numericFacet",
-      },
-    }
-  }
-  clearRefinementClicks={
-    Array [
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-    ]
-  }
-  clearRefinementURLs={
-    Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-    ]
-  }
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
-      "delete": "ais-CurrentRefinements-delete delete",
-      "item": "ais-CurrentRefinements-item item",
-      "label": "ais-CurrentRefinements-label label",
-      "list": "ais-CurrentRefinements-list list",
-      "reset": "ais-CurrentRefinements-reset reset",
-      "root": "ais-CurrentRefinements root",
-    }
-  }
-  refinements={
-    Array [
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val1",
-        "exclude": true,
-        "name": "facetExclude-val1",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val2",
-        "exclude": true,
-        "name": "facetExclude-val2",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val1",
-        "count": 3,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val1",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val2",
-        "count": 4,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val2",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-    ]
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "ITEM",
-      },
-      "templatesConfig": Object {
-        "randomAttributeNeverUsed": "value",
-      },
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "item": true,
-      },
-    }
-  }
-/>
-`;
-
 exports[`currentRefinedValues() render() options.container should render with a HTMLElement container 1`] = `
 <CurrentRefinedValues
   attributes={
@@ -244,12 +42,10 @@ exports[`currentRefinedValues() render() options.container should render with a 
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -376,14 +172,6 @@ exports[`currentRefinedValues() render() options.container should render with a 
         "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
       },
     ]
   }
@@ -446,12 +234,10 @@ exports[`currentRefinedValues() render() options.container should render with a 
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -579,14 +365,6 @@ exports[`currentRefinedValues() render() options.container should render with a 
         "name": "tag2",
         "type": "tag",
       },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
     ]
   }
   templateProps={
@@ -648,12 +426,10 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -781,14 +557,6 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
         "name": "tag2",
         "type": "tag",
       },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
     ]
   }
   templateProps={
@@ -850,12 +618,10 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -983,14 +749,6 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
         "name": "tag2",
         "type": "tag",
       },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
     ]
   }
   templateProps={
@@ -1010,363 +768,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
 />
 `;
 
-exports[`currentRefinedValues() render() options.includedAttributes with options.onlyListedAttributes === false should render all attributes with an empty array 1`] = `
-<CurrentRefinedValues
-  attributes={Object {}}
-  clearRefinementClicks={
-    Array [
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-    ]
-  }
-  clearRefinementURLs={
-    Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-    ]
-  }
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
-      "delete": "ais-CurrentRefinements-delete delete",
-      "item": "ais-CurrentRefinements-item item",
-      "label": "ais-CurrentRefinements-label label",
-      "list": "ais-CurrentRefinements-list list",
-      "reset": "ais-CurrentRefinements-reset reset",
-      "root": "ais-CurrentRefinements root",
-    }
-  }
-  refinements={
-    Array [
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val1",
-        "exclude": true,
-        "name": "facetExclude-val1",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val2",
-        "exclude": true,
-        "name": "facetExclude-val2",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val1",
-        "count": 3,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val1",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val2",
-        "count": 4,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val2",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
-      },
-    ]
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "ITEM",
-      },
-      "templatesConfig": Object {
-        "randomAttributeNeverUsed": "value",
-      },
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "item": true,
-      },
-    }
-  }
-/>
-`;
-
-exports[`currentRefinedValues() render() options.includedAttributes with options.onlyListedAttributes === false should render all attributes with not defined attributes 1`] = `
-<CurrentRefinedValues
-  attributes={Object {}}
-  clearRefinementClicks={
-    Array [
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-    ]
-  }
-  clearRefinementURLs={
-    Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-    ]
-  }
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
-      "delete": "ais-CurrentRefinements-delete delete",
-      "item": "ais-CurrentRefinements-item item",
-      "label": "ais-CurrentRefinements-label label",
-      "list": "ais-CurrentRefinements-list list",
-      "reset": "ais-CurrentRefinements-reset reset",
-      "root": "ais-CurrentRefinements root",
-    }
-  }
-  refinements={
-    Array [
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val1",
-        "exclude": true,
-        "name": "facetExclude-val1",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val2",
-        "exclude": true,
-        "name": "facetExclude-val2",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val1",
-        "count": 3,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val1",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val2",
-        "count": 4,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val2",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
-      },
-    ]
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "ITEM",
-      },
-      "templatesConfig": Object {
-        "randomAttributeNeverUsed": "value",
-      },
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "item": true,
-      },
-    }
-  }
-/>
-`;
-
-exports[`currentRefinedValues() render() options.includedAttributes with options.onlyListedAttributes === false should render and pass all attributes defined in each objects 1`] = `
+exports[`currentRefinedValues() render() options.includedAttributes should default to false 1`] = `
 <CurrentRefinedValues
   attributes={
     Object {
@@ -1390,26 +792,10 @@ exports[`currentRefinedValues() render() options.includedAttributes with options
       [Function],
       [Function],
       [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -1477,804 +863,6 @@ exports[`currentRefinedValues() render() options.includedAttributes with options
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
         "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
-      },
-    ]
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "ITEM",
-      },
-      "templatesConfig": Object {
-        "randomAttributeNeverUsed": "value",
-      },
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "item": true,
-      },
-    }
-  }
-/>
-`;
-
-exports[`currentRefinedValues() render() options.includedAttributes with options.onlyListedAttributes === true should render all attributes with an empty array 1`] = `
-<CurrentRefinedValues
-  attributes={Object {}}
-  clearRefinementClicks={
-    Array [
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-    ]
-  }
-  clearRefinementURLs={
-    Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-    ]
-  }
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
-      "delete": "ais-CurrentRefinements-delete delete",
-      "item": "ais-CurrentRefinements-item item",
-      "label": "ais-CurrentRefinements-label label",
-      "list": "ais-CurrentRefinements-list list",
-      "reset": "ais-CurrentRefinements-reset reset",
-      "root": "ais-CurrentRefinements root",
-    }
-  }
-  refinements={
-    Array [
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val1",
-        "exclude": true,
-        "name": "facetExclude-val1",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val2",
-        "exclude": true,
-        "name": "facetExclude-val2",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val1",
-        "count": 3,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val1",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val2",
-        "count": 4,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val2",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
-      },
-    ]
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "ITEM",
-      },
-      "templatesConfig": Object {
-        "randomAttributeNeverUsed": "value",
-      },
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "item": true,
-      },
-    }
-  }
-/>
-`;
-
-exports[`currentRefinedValues() render() options.includedAttributes with options.onlyListedAttributes === true should render all attributes with not defined attributes 1`] = `
-<CurrentRefinedValues
-  attributes={Object {}}
-  clearRefinementClicks={
-    Array [
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-    ]
-  }
-  clearRefinementURLs={
-    Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-    ]
-  }
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
-      "delete": "ais-CurrentRefinements-delete delete",
-      "item": "ais-CurrentRefinements-item item",
-      "label": "ais-CurrentRefinements-label label",
-      "list": "ais-CurrentRefinements-list list",
-      "reset": "ais-CurrentRefinements-reset reset",
-      "root": "ais-CurrentRefinements root",
-    }
-  }
-  refinements={
-    Array [
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val1",
-        "exclude": true,
-        "name": "facetExclude-val1",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val2",
-        "exclude": true,
-        "name": "facetExclude-val2",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val1",
-        "count": 3,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val1",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val2",
-        "count": 4,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val2",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
-      },
-    ]
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "ITEM",
-      },
-      "templatesConfig": Object {
-        "randomAttributeNeverUsed": "value",
-      },
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "item": true,
-      },
-    }
-  }
-/>
-`;
-
-exports[`currentRefinedValues() render() options.includedAttributes with options.onlyListedAttributes === true should render and pass all attributes defined in each objects 1`] = `
-<CurrentRefinedValues
-  attributes={
-    Object {
-      "disjunctiveFacet": Object {
-        "name": "disjunctiveFacet",
-      },
-      "facet": Object {
-        "name": "facet",
-      },
-      "facetExclude": Object {
-        "label": "Facet exclude",
-        "name": "facetExclude",
-      },
-    }
-  }
-  clearRefinementClicks={
-    Array [
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-    ]
-  }
-  clearRefinementURLs={
-    Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-    ]
-  }
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
-      "delete": "ais-CurrentRefinements-delete delete",
-      "item": "ais-CurrentRefinements-item item",
-      "label": "ais-CurrentRefinements-label label",
-      "list": "ais-CurrentRefinements-list list",
-      "reset": "ais-CurrentRefinements-reset reset",
-      "root": "ais-CurrentRefinements root",
-    }
-  }
-  refinements={
-    Array [
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val1",
-        "exclude": true,
-        "name": "facetExclude-val1",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val2",
-        "exclude": true,
-        "name": "facetExclude-val2",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val1",
-        "count": 3,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val1",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val2",
-        "count": 4,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val2",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
-      },
-    ]
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "ITEM",
-      },
-      "templatesConfig": Object {
-        "randomAttributeNeverUsed": "value",
-      },
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "item": true,
-      },
-    }
-  }
-/>
-`;
-
-exports[`currentRefinedValues() render() options.includedAttributes with options.onlyListedAttributes not defined should default to false 1`] = `
-<CurrentRefinedValues
-  attributes={
-    Object {
-      "disjunctiveFacet": Object {
-        "name": "disjunctiveFacet",
-      },
-      "facet": Object {
-        "name": "facet",
-      },
-      "facetExclude": Object {
-        "label": "Facet exclude",
-        "name": "facetExclude",
-      },
-    }
-  }
-  clearRefinementClicks={
-    Array [
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-    ]
-  }
-  clearRefinementURLs={
-    Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-    ]
-  }
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
-      "delete": "ais-CurrentRefinements-delete delete",
-      "item": "ais-CurrentRefinements-item item",
-      "label": "ais-CurrentRefinements-label label",
-      "list": "ais-CurrentRefinements-list list",
-      "reset": "ais-CurrentRefinements-reset reset",
-      "root": "ais-CurrentRefinements root",
-    }
-  }
-  refinements={
-    Array [
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val1",
-        "exclude": true,
-        "name": "facetExclude-val1",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "facetExclude",
-        "computedLabel": "facetExclude-val2",
-        "exclude": true,
-        "name": "facetExclude-val2",
-        "type": "exclude",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val1",
-        "count": 3,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val1",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "disjunctiveFacet",
-        "computedLabel": "disjunctiveFacet-val2",
-        "count": 4,
-        "exhaustive": true,
-        "name": "disjunctiveFacet-val2",
-        "type": "disjunctive",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
       },
     ]
   }
@@ -2337,12 +925,10 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -2469,14 +1055,6 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
         "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
       },
     ]
   }
@@ -2539,12 +1117,10 @@ exports[`currentRefinedValues() render() options.transformItems should transform
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -2684,15 +1260,6 @@ exports[`currentRefinedValues() render() options.transformItems should transform
         "name": "tag2",
         "transformed": true,
         "type": "tag",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "transformed": true,
-        "type": "facet",
       },
     ]
   }
@@ -2755,12 +1322,10 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -2887,14 +1452,6 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
         "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
       },
     ]
   }
@@ -2957,12 +1514,10 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       [Function],
       [Function],
       [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -3089,14 +1644,6 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
         "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
       },
     ]
   }
@@ -3117,7 +1664,77 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
 />
 `;
 
-exports[`currentRefinedValues() render() with attributes should sort the refinements according to their order 1`] = `
+exports[`currentRefinedValues() render() with excludedAttributes should ignore excluded attributes 1`] = `
+<CurrentRefinedValues
+  attributes={
+    Object {
+      "disjunctiveFacet": Object {
+        "name": "disjunctiveFacet",
+      },
+    }
+  }
+  clearRefinementClicks={
+    Array [
+      [Function],
+      [Function],
+    ]
+  }
+  clearRefinementURLs={
+    Array [
+      "#cleared",
+      "#cleared",
+    ]
+  }
+  cssClasses={
+    Object {
+      "category": "ais-CurrentRefinements-category category",
+      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
+      "delete": "ais-CurrentRefinements-delete delete",
+      "item": "ais-CurrentRefinements-item item",
+      "label": "ais-CurrentRefinements-label label",
+      "list": "ais-CurrentRefinements-list list",
+      "reset": "ais-CurrentRefinements-reset reset",
+      "root": "ais-CurrentRefinements root",
+    }
+  }
+  refinements={
+    Array [
+      Object {
+        "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
+        "count": 3,
+        "exhaustive": true,
+        "name": "disjunctiveFacet-val1",
+        "type": "disjunctive",
+      },
+      Object {
+        "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
+        "count": 4,
+        "exhaustive": true,
+        "name": "disjunctiveFacet-val2",
+        "type": "disjunctive",
+      },
+    ]
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "item": "ITEM",
+      },
+      "templatesConfig": Object {
+        "randomAttributeNeverUsed": "value",
+      },
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "item": true,
+      },
+    }
+  }
+/>
+`;
+
+exports[`currentRefinedValues() render() with included attributes should sort the refinements according to their order 1`] = `
 <CurrentRefinedValues
   attributes={
     Object {
@@ -3135,30 +1752,10 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       [Function],
       [Function],
       [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
-      [Function],
     ]
   }
   clearRefinementURLs={
     Array [
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
-      "#cleared",
       "#cleared",
       "#cleared",
       "#cleared",
@@ -3208,82 +1805,6 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
-      },
-      Object {
-        "attributeName": "extraFacet",
-        "computedLabel": "extraFacet-val1",
-        "count": 42,
-        "exhaustive": true,
-        "name": "extraFacet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val1",
-        "count": 1,
-        "exhaustive": true,
-        "name": "facet-val1",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "facet",
-        "computedLabel": "facet-val2",
-        "count": 2,
-        "exhaustive": true,
-        "name": "facet-val2",
-        "type": "facet",
-      },
-      Object {
-        "attributeName": "hierarchicalFacet",
-        "computedLabel": "hierarchicalFacet-val2",
-        "count": 6,
-        "exhaustive": true,
-        "name": "hierarchicalFacet-val2",
-        "type": "hierarchical",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≥ 1",
-        "name": "1",
-        "numericValue": 1,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericFacet",
-        "computedLabel": "≤ 2",
-        "name": "2",
-        "numericValue": 2,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≥ 3",
-        "name": "3",
-        "numericValue": 3,
-        "operator": ">=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "numericDisjunctiveFacet",
-        "computedLabel": "≤ 4",
-        "name": "4",
-        "numericValue": 4,
-        "operator": "<=",
-        "type": "numeric",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag1",
-        "name": "tag1",
-        "type": "tag",
-      },
-      Object {
-        "attributeName": "_tags",
-        "computedLabel": "tag2",
-        "name": "tag2",
-        "type": "tag",
       },
     ]
   }

@@ -45,8 +45,8 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
 const usage = `Usage:
 currentRefinedValues({
   container,
-  [ includedAttributes: [{name[, label]}] ],
-  [ excludedAttributes: [{name[, label]}] ],
+  [ includedAttributes: [{name[, label, template]}] ],
+  [ excludedAttributes = [] ],
   [ templates.{item} ],
   [ cssClasses.{root, list, item, label, category, categoryLabel, delete, reset} = {} ],
   [ transformItems ]
@@ -79,7 +79,7 @@ currentRefinedValues({
 /**
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
- * @property {CurrentRefinedValuesAttributes[]} [includedAttributes = []] Label definitions for the different filters to include.
+ * @property {CurrentRefinedValuesAttributes[]} [includedAttributes] Label definitions for the different filters to include.
  * @property {CurrentRefinedValuesAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
  * @property {CurrentRefinedValuesTemplates} [templates] Templates to use for the widget.
  * @property {CurrentRefinedValuesCSSClasses} [cssClasses] CSS classes to be added.
@@ -114,6 +114,7 @@ currentRefinedValues({
 export default function currentRefinedValues({
   container,
   includedAttributes = [],
+  excludedAttributes = [],
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   transformItems,
@@ -150,6 +151,7 @@ export default function currentRefinedValues({
     );
     return makeWidget({
       includedAttributes,
+      excludedAttributes,
       transformItems,
     });
   } catch (error) {

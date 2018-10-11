@@ -1,13 +1,5 @@
-import isUndefined from 'lodash/isUndefined';
-import isBoolean from 'lodash/isBoolean';
-import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
-import isFunction from 'lodash/isFunction';
-import isEmpty from 'lodash/isEmpty';
-import map from 'lodash/map';
-import reduce from 'lodash/reduce';
-import filter from 'lodash/filter';
 
 import {
   getRefinements,
@@ -28,8 +20,8 @@ var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(p
 });
 search.addWidget(
   customCurrentRefinedValues({
-    [ attributes = [] ],
-    [ onlyListedAttributes = false ],
+    [ includedAttributes ],
+    [ excludedAttributes = [] ],
     [ transformItems ],
   })
 );
@@ -50,6 +42,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
  * @property {Object.<string, object>} includedAttributes Original `CurrentRefinedValuesWidgetOptions.includedAttributes` mapped by keys.
+ * @property {Object.<string, object>} excludedAttributes Label definitions for the different filters to exclude.
  * @property {function(item)} refine Clears a single refinement.
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
  * @property {CurrentRefinement[]} refinements All the current refinements.
@@ -64,9 +57,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
- * @property {CurrentRefinedValuesAttributes[]} [includedAttributes = []] Specification for the display of
+ * @property {CurrentRefinedValuesAttributes[]} [includedAttributes] Specification for the display of
  * refinements per attribute (default: `[]`). By default, the widget will display all the filters
  * set with no special treatment for the label.
+ * @property {CurrentRefinedValuesAttributes[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -136,45 +130,39 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const {
       includedAttributes = [],
-      onlyListedAttributes = false,
+      excludedAttributes = [],
       transformItems = items => items,
     } = widgetParams;
 
-    const attributesOK =
+    const isUsageValid =
       isArray(includedAttributes) &&
-      reduce(
-        includedAttributes,
+      isArray(excludedAttributes) &&
+      includedAttributes.reduce(
         (res, val) =>
           res &&
           isPlainObject(val) &&
-          isString(val.name) &&
-          (isUndefined(val.label) || isString(val.label)) &&
-          (isUndefined(val.template) ||
-            isString(val.template) ||
-            isFunction(val.template)) &&
-          (isUndefined(val.transformData) || isFunction(val.transformData)),
+          typeof val.name === 'string' &&
+          (!val.label || typeof val.label === 'string') &&
+          (!val.template ||
+            typeof val.template === 'string' ||
+            typeof val.template === 'function') &&
+          (!val.transformData || typeof val.transformData === 'function'),
         true
       );
 
-    const showUsage =
-      false ||
-      !isArray(includedAttributes) ||
-      !attributesOK ||
-      !isBoolean(onlyListedAttributes);
-
-    if (showUsage) {
+    if (!isUsageValid) {
       throw new Error(usage);
     }
 
-    const attributeNames = map(includedAttributes, attribute => attribute.name);
-    const restrictedTo = onlyListedAttributes ? attributeNames : undefined;
-
-    const attributesObj = reduce(
-      includedAttributes,
-      (res, attribute) => {
-        res[attribute.name] = attribute;
-        return res;
-      },
+    const attributes = includedAttributes.filter(
+      ({ name }) => excludedAttributes.indexOf(name) === -1
+    );
+    const attributeNames = attributes.map(attribute => attribute.name);
+    const attributesObject = attributes.reduce(
+      (res, attribute) => ({
+        ...res,
+        [attribute.name]: attribute,
+      }),
       {}
     );
 
@@ -185,7 +173,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
             .setState(
               clearRefinements({
                 helper,
-                includedAttributes: restrictedTo,
+                includedAttributes: attributes,
               })
             )
             .search();
@@ -196,7 +184,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
             {},
             helper.state,
             attributeNames,
-            onlyListedAttributes
+            excludedAttributes
           )
         );
 
@@ -207,7 +195,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
 
         renderFn(
           {
-            attributes: attributesObj,
+            attributes: attributesObject,
             refine: _clearRefinement,
             createURL: _createURL,
             refinements,
@@ -224,7 +212,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
             results,
             state,
             attributeNames,
-            onlyListedAttributes
+            excludedAttributes
           )
         );
 
@@ -235,7 +223,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
 
         renderFn(
           {
-            attributes: attributesObj,
+            attributes: attributesObject,
             refine: _clearRefinement,
             createURL: _createURL,
             refinements,
@@ -289,32 +277,32 @@ function getFilteredRefinements(
   results,
   state,
   attributeNames,
-  onlyListedAttributes
+  excludedAttributes
 ) {
-  let refinements = getRefinements(results, state);
-  const otherAttributeNames = reduce(
-    refinements,
-    (res, refinement) => {
-      if (
-        attributeNames.indexOf(refinement.attributeName) === -1 &&
-        res.indexOf(refinement.attributeName === -1)
-      ) {
-        res.push(refinement.attributeName);
-      }
-      return res;
-    },
-    []
-  );
+  let refinements = getRefinements(results, state)
+    .filter(
+      ({ attributeName }) =>
+        attributeNames.length === 0 ||
+        attributeNames.indexOf(attributeName) !== -1
+    )
+    .filter(
+      ({ attributeName }) => excludedAttributes.indexOf(attributeName) === -1
+    );
+  const otherAttributeNames = refinements.reduce((res, refinement) => {
+    if (
+      attributeNames.indexOf(refinement.attributeName) === -1 &&
+      res.indexOf(refinement.attributeName === -1)
+    ) {
+      res.push(refinement.attributeName);
+    }
+    return res;
+  }, []);
   refinements = refinements.sort(
     compareRefinements.bind(null, attributeNames, otherAttributeNames)
   );
-  if (onlyListedAttributes && !isEmpty(attributeNames)) {
-    refinements = filter(
-      refinements,
-      refinement => attributeNames.indexOf(refinement.attributeName) !== -1
-    );
-  }
-  return refinements.map(computeLabel);
+  refinements = refinements.map(normalizeItem);
+
+  return refinements;
 }
 
 function clearRefinementFromState(state, refinement) {
@@ -357,16 +345,24 @@ function clearRefinement(helper, refinement) {
   helper.setState(clearRefinementFromState(helper.state, refinement)).search();
 }
 
-function computeLabel(value) {
-  // default to `value.name` if no operators
-  value.computedLabel = value.name;
-
-  if (value.hasOwnProperty('operator') && typeof value.operator === 'string') {
-    let displayedOperator = value.operator;
-    if (value.operator === '>=') displayedOperator = '≥';
-    if (value.operator === '<=') displayedOperator = '≤';
-    value.computedLabel = `${displayedOperator} ${value.name}`;
+function getOperatorSymbol(operator) {
+  switch (operator) {
+    case '>=':
+      return '≥';
+    case '<=':
+      return '≤';
+    default:
+      return '';
   }
+}
 
-  return value;
+function normalizeItem(item) {
+  const computedLabel = item.operator
+    ? `${getOperatorSymbol(item.operator)} ${item.name}`
+    : item.name;
+
+  return {
+    ...item,
+    computedLabel,
+  };
 }

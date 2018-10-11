@@ -1,26 +1,22 @@
 export default {
-  item: itemTemplate,
+  // item: itemTemplate,
+  item: '<span class="{{cssClasses.categoryLabel}}">{{computedLabel}}</span>',
 };
 
-function itemTemplate({
-  label,
-  operator,
-  displayOperator,
-  exclude,
-  name,
-  count,
-  cssClasses,
-  query,
-}) {
-  const computedOperator = operator ? displayOperator : '';
-  const computedLabel = label
-    ? `${label} ${computedOperator || ':'} `
-    : computedOperator;
-  const countValue = count === undefined ? 0 : count;
-  const computedCount = query
-    ? ''
-    : `<span class="${cssClasses.count}">${countValue}</span>`;
-  const computedExclude = exclude ? '-' : '';
+// function itemTemplate({
+//   label,
+//   operator,
+//   displayOperator,
+//   exclude,
+//   name,
+//   cssClasses,
+//   query,
+// }) {
+//   const computedOperator = operator ? displayOperator : '';
+//   const computedLabel = label
+//     ? `${label} ${computedOperator || ':'} `
+//     : computedOperator;
+//   const computedExclude = exclude ? '-' : '';
 
-  return `${computedLabel} ${computedExclude} ${name} ${computedCount}`;
-}
+//   return `${computedLabel} ${computedExclude} ${name}`;
+// }

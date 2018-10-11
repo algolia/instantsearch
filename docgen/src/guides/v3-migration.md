@@ -81,6 +81,91 @@ Here are the elements you need to migrate:
 </div>
 ```
 
+### CurrentRefinements (formerly CurrentRefinedValues)
+
+#### Options
+
+| Before                 | After                             |
+| ---------------------- | --------------------------------- |
+| `attributes`           | `includedAttributes`              |
+| `onlyListedAttributes` | use `includedAttributes`          |
+| `clearAll`             | use the `clearRefinements` widget |
+| `clearsQuery`          | `includesQuery`                   |
+
+#### CSS classes
+
+| Before                                  | After                                  |
+| --------------------------------------- | -------------------------------------- |
+| `ais-current-refined-values`            | `ais-CurrentRefinements`               |
+| `ais-current-refined-values--list`      | `ais-CurrentRefinements-list`          |
+| `ais-current-refined-values--item`      | `ais-CurrentRefinements-item`          |
+| `ais-current-refined-values--link`      | `ais-CurrentRefinements-label`         |
+| `ais-current-refined-values--count`     |                                        |
+|                                         | `ais-CurrentRefinements-category`      |
+|                                         | `ais-CurrentRefinements-categoryLabel` |
+|                                         | `ais-CurrentRefinements-delete`        |
+|                                         | `ais-CurrentRefinements-query`         |
+| `ais-current-refined-values--clear-all` |                                        |
+
+#### Markup
+
+##### Default
+
+```html
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        Category:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">Movies & TV Shows</span>
+        <button class="ais-CurrentRefinements-delete">✕</button>
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">Others</span>
+        <button class="ais-CurrentRefinements-delete">✕</button>
+      </span>
+    </li>
+  </ul>
+</div>
+```
+
+##### With `includesQuery` and a query
+
+```html
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        Category:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">Movies & TV Shows</span>
+        <button class="ais-CurrentRefinements-delete">✕</button>
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">Others</span>
+        <button class="ais-CurrentRefinements-delete">✕</button>
+      </span>
+    </li>
+    <li class="ais-CurrentRefinements-item">
+      <span class="ais-CurrentRefinements-label">
+        Query:
+      </span>
+      <span class="ais-CurrentRefinements-category">
+        <span class="ais-CurrentRefinements-categoryLabel">
+          <q>Bla bla bla</q>
+        </span>
+        <button class="ais-CurrentRefinements-delete">✕</button>
+      </span>
+    </li>
+  </ul>
+</div>
+```
+
+#### Markup
+
 ### GeoSearch
 
 #### CSS classes

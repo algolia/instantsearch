@@ -1,22 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CurrentRefinedValues options.attributes uses label 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -24,17 +34,25 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val2"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val2
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -42,17 +60,25 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facetExclude:truedisjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        FacetExclude
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -60,17 +86,25 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="disjunctiveFacet:disjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        DisjunctiveFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -78,17 +112,25 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="hierarchicalFacet:hierarchicalFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        HierarchicalFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          hierarchicalFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -96,17 +138,25 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="numericFacet>=numericFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        NumericFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          numericFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -114,17 +164,25 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="_tags:tag1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        _tags
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          tag1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -136,22 +194,32 @@ exports[`CurrentRefinedValues options.attributes uses label 1`] = `
 `;
 
 exports[`CurrentRefinedValues options.attributes uses template 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -159,17 +227,25 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val2"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val2
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -177,17 +253,25 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facetExclude:truedisjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        FacetExclude
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -195,17 +279,25 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="disjunctiveFacet:disjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        DisjunctiveFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -213,17 +305,25 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="hierarchicalFacet:hierarchicalFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        HierarchicalFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          hierarchicalFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -231,17 +331,25 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="numericFacet>=numericFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        NumericFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          numericFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -249,827 +357,25 @@ exports[`CurrentRefinedValues options.attributes uses template 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="_tags:tag1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
+      <span
+        className="label"
+      >
+        _tags
+        :
       </span>
-    </li>
-  </ul>
-</div>
-`;
-
-exports[`CurrentRefinedValues options.attributes uses transformData 1`] = `
-<div>
-  <ul
-    className="list-class"
-  >
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
         >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
+          tag1
+        </span>
         <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-  </ul>
-</div>
-`;
-
-exports[`CurrentRefinedValues options.clearAllPosition 'after' 1`] = `
-<div>
-  <ul
-    className="list-class"
-  >
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-  </ul>
-</div>
-`;
-
-exports[`CurrentRefinedValues options.clearAllPosition 'before' 1`] = `
-<div>
-  <ul
-    className="list-class"
-  >
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-  </ul>
-</div>
-`;
-
-exports[`CurrentRefinedValues options.clearAllPosition false 1`] = `
-<div>
-  <ul
-    className="list-class"
-  >
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-  </ul>
-</div>
-`;
-
-exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll element after 1`] = `
-<div>
-  <ul
-    className="list-class"
-  >
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-  </ul>
-</div>
-`;
-
-exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll element before 1`] = `
-<div>
-  <ul
-    className="list-class"
-  >
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
-        <button
-          onClick={[Function]}
-        >
-          ✕
-        </button>
-      </span>
-    </li>
-    <li
-      className="item-class"
-    >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
-        <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1081,22 +387,32 @@ exports[`CurrentRefinedValues options.clearAllURL is used in the clearAll elemen
 `;
 
 exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item element 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1104,17 +420,25 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val2"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val2
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1122,17 +446,25 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facetExclude:truedisjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        FacetExclude
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1140,17 +472,25 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="disjunctiveFacet:disjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        DisjunctiveFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1158,17 +498,25 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="hierarchicalFacet:hierarchicalFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        HierarchicalFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          hierarchicalFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1176,17 +524,25 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="numericFacet>=numericFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        NumericFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          numericFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1194,17 +550,25 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="_tags:tag1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        _tags
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          tag1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1216,22 +580,32 @@ exports[`CurrentRefinedValues options.clearRefinementURLs is used in an item ele
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a disjunctive facet 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="customDisjunctiveFacet:val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "customDisjunctiveFacet: val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        CustomDisjunctiveFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1243,22 +617,32 @@ exports[`CurrentRefinedValues options.refinements can be used with a disjunctive
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a facet 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="customFacet:val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "customFacet: val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        CustomFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1270,22 +654,32 @@ exports[`CurrentRefinedValues options.refinements can be used with a facet 1`] =
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a hierarchical facet 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="customHierarchicalFacet:val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "customHierarchicalFacet: val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        CustomHierarchicalFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1297,22 +691,32 @@ exports[`CurrentRefinedValues options.refinements can be used with a hierarchica
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with a tag 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="_tags:tag1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        _tags
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          tag1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1324,22 +728,32 @@ exports[`CurrentRefinedValues options.refinements can be used with a tag 1`] = `
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with an exclude 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="customExcludeFacet:trueval1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "customExcludeFacet: val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        CustomExcludeFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1351,22 +765,32 @@ exports[`CurrentRefinedValues options.refinements can be used with an exclude 1`
 `;
 
 exports[`CurrentRefinedValues options.refinements can be used with numeric filters 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="customNumericFilter=val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "customNumericFilter: val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        CustomNumericFilter
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1374,17 +798,25 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="customNumericFilter<=val2"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "customNumericFilter: val2 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        CustomNumericFilter
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          val2
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1392,17 +824,25 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="customNumericFilter>=val3"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "customNumericFilter: val3 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        CustomNumericFilter
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          val3
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1414,22 +854,32 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
 `;
 
 exports[`CurrentRefinedValues options.templateProps passes a custom template if given 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "CUSTOM ITEM TEMPLATE",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1437,17 +887,25 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val2"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "CUSTOM ITEM TEMPLATE",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val2
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1455,17 +913,25 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facetExclude:truedisjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "CUSTOM ITEM TEMPLATE",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        FacetExclude
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1473,17 +939,25 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="disjunctiveFacet:disjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "CUSTOM ITEM TEMPLATE",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        DisjunctiveFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1491,17 +965,25 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="hierarchicalFacet:hierarchicalFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "CUSTOM ITEM TEMPLATE",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        HierarchicalFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          hierarchicalFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1509,17 +991,25 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="numericFacet>=numericFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "CUSTOM ITEM TEMPLATE",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        NumericFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          numericFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1527,17 +1017,25 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="_tags:tag1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "CUSTOM ITEM TEMPLATE",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        _tags
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          tag1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1549,22 +1047,32 @@ exports[`CurrentRefinedValues options.templateProps passes a custom template if 
 `;
 
 exports[`CurrentRefinedValues renders 1`] = `
-<div>
+<div
+  className="root"
+>
   <ul
-    className="list-class"
+    className="list"
   >
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1572,17 +1080,25 @@ exports[`CurrentRefinedValues renders 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facet:facet-val2"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facet: facet-val2 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        Facet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          facet-val2
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1590,17 +1106,25 @@ exports[`CurrentRefinedValues renders 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="facetExclude:truedisjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "facetExclude: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        FacetExclude
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1608,17 +1132,25 @@ exports[`CurrentRefinedValues renders 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="disjunctiveFacet:disjunctiveFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "disjunctiveFacet: disjunctiveFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        DisjunctiveFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          disjunctiveFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1626,17 +1158,25 @@ exports[`CurrentRefinedValues renders 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="hierarchicalFacet:hierarchicalFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "hierarchicalFacet: hierarchicalFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        HierarchicalFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          hierarchicalFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1644,17 +1184,25 @@ exports[`CurrentRefinedValues renders 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="numericFacet>=numericFacet-val1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "numericFacet: numericFacet-val1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        NumericFacet
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          numericFacet-val1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕
@@ -1662,17 +1210,25 @@ exports[`CurrentRefinedValues renders 1`] = `
       </span>
     </li>
     <li
-      className="item-class"
+      className="item"
+      key="_tags:tag1"
     >
-      <span>
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "_tags: tag1 :",
-            }
-          }
-        />
+      <span
+        className="label"
+      >
+        _tags
+        :
+      </span>
+      <span
+        className="category"
+      >
+        <span
+          className="categoryLabel"
+        >
+          tag1
+        </span>
         <button
+          className="delete"
           onClick={[Function]}
         >
           ✕

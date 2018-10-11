@@ -1,8 +1,9 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import cloneDeep from 'lodash/cloneDeep';
+// import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
-import Template from '../Template.js';
+import upperFirst from 'lodash/upperFirst';
+// import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
 class CurrentRefinedValues extends Component {
@@ -11,15 +12,15 @@ class CurrentRefinedValues extends Component {
   }
 
   renderItem(refinement, index) {
-    const attribute = this.props.attributes[refinement.attribute] || {};
-    const templateData = getTemplateData(
-      attribute,
-      refinement,
-      this.props.cssClasses
-    );
-    const customTemplateProps = getCustomTemplateProps(attribute);
+    // const attribute = this.props.attributes[refinement.attributeName] || {};
+    // const templateData = getTemplateData(
+    //   attribute,
+    //   refinement,
+    //   this.props.cssClasses
+    // );
+    // const customTemplateProps = getCustomTemplateProps(attribute);
     const key =
-      refinement.attribute +
+      refinement.attributeName +
       (refinement.operator ? refinement.operator : ':') +
       (refinement.exclude ? refinement.exclude : '') +
       refinement.name;
@@ -27,12 +28,21 @@ class CurrentRefinedValues extends Component {
     return (
       <li className={this.props.cssClasses.item} key={key}>
         <span className={this.props.cssClasses.label}>
-          <Template
+          {upperFirst(refinement.attributeName)}:
+        </span>
+
+        <span className={this.props.cssClasses.category}>
+          {/* <Template
             {...this.props.templateProps}
             {...customTemplateProps}
             templateKey="item"
+            rootTagName="span"
             data={templateData}
-          />
+          /> */}
+
+          <span className={this.props.cssClasses.categoryLabel}>
+            {refinement.computedLabel}
+          </span>
 
           <button
             className={this.props.cssClasses.delete}
@@ -58,40 +68,28 @@ class CurrentRefinedValues extends Component {
   }
 }
 
-function getCustomTemplateProps(attribute) {
-  const customTemplateProps = {};
+// function getCustomTemplateProps(attribute) {
+//   const customTemplateProps = {};
 
-  if (attribute.template !== undefined) {
-    customTemplateProps.templates = {
-      item: attribute.template,
-    };
-  }
-  if (attribute.transformData !== undefined) {
-    customTemplateProps.transformData = attribute.transformData;
-  }
+//   if (attribute.template !== undefined) {
+//     customTemplateProps.templates = {
+//       item: attribute.template,
+//     };
+//   }
+//   if (attribute.transformData !== undefined) {
+//     customTemplateProps.transformData = attribute.transformData;
+//   }
 
-  return customTemplateProps;
-}
+//   return customTemplateProps;
+// }
 
-function getTemplateData(attribute, _refinement, cssClasses) {
-  const templateData = cloneDeep(_refinement);
-
-  templateData.cssClasses = cssClasses;
-  if (attribute.label !== undefined) {
-    templateData.label = attribute.label;
-  }
-  if (templateData.operator !== undefined) {
-    templateData.displayOperator = templateData.operator;
-    if (templateData.operator === '>=') {
-      templateData.displayOperator = '&ge;';
-    }
-    if (templateData.operator === '<=') {
-      templateData.displayOperator = '&le;';
-    }
-  }
-
-  return templateData;
-}
+// function getTemplateData(attribute, refinement, cssClasses) {
+//   return {
+//     ...refinement,
+//     ...attribute,
+//     cssClasses,
+//   };
+// }
 
 function handleClick(cb) {
   return event => {
@@ -106,9 +104,9 @@ function handleClick(cb) {
 }
 
 CurrentRefinedValues.propTypes = {
-  attributes: PropTypes.object,
-  clearRefinementClicks: PropTypes.arrayOf(PropTypes.func),
-  clearRefinementURLs: PropTypes.arrayOf(PropTypes.string),
+  attributes: PropTypes.object.isRequired,
+  clearRefinementClicks: PropTypes.arrayOf(PropTypes.func).isRequired,
+  clearRefinementURLs: PropTypes.arrayOf(PropTypes.string).isRequired,
   cssClasses: PropTypes.shape({
     root: PropTypes.string.isRequired,
     list: PropTypes.string.isRequired,
@@ -119,7 +117,12 @@ CurrentRefinedValues.propTypes = {
     delete: PropTypes.string.isRequired,
     reset: PropTypes.string.isRequired,
   }).isRequired,
-  refinements: PropTypes.array,
+  refinements: PropTypes.arrayOf(
+    PropTypes.shape({
+      attributeName: PropTypes.string.isRequired,
+      computedLabel: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   templateProps: PropTypes.object.isRequired,
 };
 

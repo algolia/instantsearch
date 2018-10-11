@@ -12,7 +12,6 @@ describe('currentRefinedValues()', () => {
     beforeEach(() => {
       parameters = {
         container: document.createElement('div'),
-        includedAttributes: [],
         templates: {},
         cssClasses: {},
       };
@@ -40,12 +39,12 @@ describe('currentRefinedValues()', () => {
         expect(boundWidget).not.toThrow();
       });
 
-      it("doesn't throw usage if attributes is an empty array", () => {
+      it("doesn't throw usage if includedAttributes is an empty array", () => {
         parameters.includedAttributes = [];
         expect(boundWidget).not.toThrow();
       });
 
-      it("doesn't throw usage with name, label, template and transformData", () => {
+      it("doesn't throw usage with name, label and template", () => {
         parameters.includedAttributes = [
           {
             name: 'attr1',
@@ -446,279 +445,58 @@ describe('currentRefinedValues()', () => {
     });
 
     describe('options.includedAttributes', () => {
-      describe('with options.onlyListedAttributes === true', () => {
-        beforeEach(() => {
-          parameters.onlyListedAttributes = true;
+      it('should default to false', () => {
+        parameters.includedAttributes = [
+          {
+            name: 'facet',
+          },
+          {
+            name: 'facetExclude',
+            label: 'Facet exclude',
+          },
+          {
+            name: 'disjunctiveFacet',
+          },
+        ];
+
+        refinements.splice(0, 0, {
+          type: 'facet',
+          attributeName: 'extraFacet',
+          name: 'extraFacet-val1',
+          count: 42,
+          exhaustive: true,
         });
-
-        it('should render all attributes with not defined attributes', () => {
-          delete parameters.includedAttributes;
-
-          refinements.splice(0, 0, {
-            type: 'facet',
-            attributeName: 'extraFacet',
-            name: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-          });
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          setRefinementsInExpectedProps();
-          expectedProps.includedAttributes = {};
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-
-        it('should render all attributes with an empty array', () => {
-          parameters.includedAttributes = [];
-
-          refinements.splice(0, 0, {
-            type: 'facet',
-            attributeName: 'extraFacet',
-            name: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-          });
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          setRefinementsInExpectedProps();
-          expectedProps.includedAttributes = {};
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-
-        it('should render and pass all attributes defined in each objects', () => {
-          parameters.includedAttributes = [
-            {
-              name: 'facet',
-            },
-            {
-              name: 'facetExclude',
-              label: 'Facet exclude',
-            },
-            {
-              name: 'disjunctiveFacet',
-            },
-          ];
-
-          refinements = refinements.filter(
-            refinement =>
-              ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
-              ) !== -1
-          );
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          setRefinementsInExpectedProps();
-          expectedProps.includedAttributes = {
-            facet: {
-              name: 'facet',
-            },
-            facetExclude: {
-              name: 'facetExclude',
-              label: 'Facet exclude',
-            },
-            disjunctiveFacet: {
-              name: 'disjunctiveFacet',
-            },
-          };
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-      });
-
-      describe('with options.onlyListedAttributes === false', () => {
-        beforeEach(() => {
-          parameters.onlyListedAttributes = false;
-        });
-
-        it('should render all attributes with not defined attributes', () => {
-          delete parameters.includedAttributes;
-
-          refinements.splice(0, 0, {
-            type: 'facet',
-            attributeName: 'extraFacet',
-            name: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-          });
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          setRefinementsInExpectedProps();
-          expectedProps.includedAttributes = {};
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-
-        it('should render all attributes with an empty array', () => {
-          parameters.includedAttributes = [];
-
-          refinements.splice(0, 0, {
-            type: 'facet',
-            attributeName: 'extraFacet',
-            name: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-          });
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          setRefinementsInExpectedProps();
-          expectedProps.includedAttributes = {};
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-
-        it('should render and pass all attributes defined in each objects', () => {
-          parameters.includedAttributes = [
-            {
-              name: 'facet',
-            },
-            {
-              name: 'facetExclude',
-              label: 'Facet exclude',
-            },
-            {
-              name: 'disjunctiveFacet',
-            },
-          ];
-
-          refinements.splice(0, 0, {
-            type: 'facet',
-            attributeName: 'extraFacet',
-            name: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-          });
-          const firstRefinements = refinements.filter(
-            refinement =>
-              ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
-              ) !== -1
-          );
-          const otherRefinements = refinements.filter(
-            refinement =>
-              ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
-              ) === -1
-          );
-          refinements = [].concat(firstRefinements).concat(otherRefinements);
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          setRefinementsInExpectedProps();
-          expectedProps.includedAttributes = {
-            facet: {
-              name: 'facet',
-            },
-            facetExclude: {
-              name: 'facetExclude',
-              label: 'Facet exclude',
-            },
-            disjunctiveFacet: {
-              name: 'disjunctiveFacet',
-            },
-          };
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-      });
-
-      describe('with options.onlyListedAttributes not defined', () => {
-        beforeEach(() => {
-          delete parameters.onlyListedAttributes;
-        });
-
-        it('should default to false', () => {
-          parameters.includedAttributes = [
-            {
-              name: 'facet',
-            },
-            {
-              name: 'facetExclude',
-              label: 'Facet exclude',
-            },
-            {
-              name: 'disjunctiveFacet',
-            },
-          ];
-
-          refinements.splice(0, 0, {
-            type: 'facet',
-            attributeName: 'extraFacet',
-            name: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-          });
-          const firstRefinements = refinements.filter(
-            refinement =>
-              ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
-              ) !== -1
-          );
-          const otherRefinements = refinements.filter(
-            refinement =>
-              ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-                refinement.attributeName
-              ) === -1
-          );
-          refinements = [].concat(firstRefinements).concat(otherRefinements);
-
-          const widget = currentRefinedValues(parameters);
-          widget.init(initParameters);
-          widget.render(renderParameters);
-
-          setRefinementsInExpectedProps();
-          expectedProps.includedAttributes = {
-            facet: {
-              name: 'facet',
-            },
-            facetExclude: {
-              name: 'facetExclude',
-              label: 'Facet exclude',
-            },
-            disjunctiveFacet: {
-              name: 'disjunctiveFacet',
-            },
-          };
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-      });
-    });
-
-    describe('options.clearAll', () => {
-      it('should pass it as clearAllPosition', () => {
-        parameters.clearAll = 'before';
+        const firstRefinements = refinements.filter(
+          refinement =>
+            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
+              refinement.attributeName
+            ) !== -1
+        );
+        const otherRefinements = refinements.filter(
+          refinement =>
+            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
+              refinement.attributeName
+            ) === -1
+        );
+        refinements = [].concat(firstRefinements).concat(otherRefinements);
 
         const widget = currentRefinedValues(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
 
-        expectedProps.clearAllPosition = 'before';
+        setRefinementsInExpectedProps();
+        expectedProps.includedAttributes = {
+          facet: {
+            name: 'facet',
+          },
+          facetExclude: {
+            name: 'facetExclude',
+            label: 'Facet exclude',
+          },
+          disjunctiveFacet: {
+            name: 'disjunctiveFacet',
+          },
+        };
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
@@ -786,7 +564,7 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    describe('with attributes', () => {
+    describe('with included attributes', () => {
       it('should sort the refinements according to their order', () => {
         parameters.includedAttributes = [
           { name: 'disjunctiveFacet' },
@@ -829,6 +607,35 @@ describe('currentRefinedValues()', () => {
         };
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      });
+    });
+
+    describe('with excludedAttributes', () => {
+      it('should ignore excluded attributes', () => {
+        parameters.includedAttributes = [
+          { name: 'disjunctiveFacet' },
+          { name: 'facetExclude' },
+        ];
+        parameters.excludedAttributes = ['facetExclude'];
+
+        const widget = currentRefinedValues(parameters);
+        widget.init(initParameters);
+        widget.render(renderParameters);
+
+        setRefinementsInExpectedProps();
+        expectedProps.attributes = {
+          disjunctiveFacet: { name: 'disjunctiveFacet' },
+        };
+
+        expect(ReactDOM.render.mock.calls[0][0].props.attributes).toEqual({
+          disjunctiveFacet: { name: 'disjunctiveFacet' },
+        });
+
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0].props.attributes).toEqual({
+          disjunctiveFacet: { name: 'disjunctiveFacet' },
+        });
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
