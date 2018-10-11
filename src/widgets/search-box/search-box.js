@@ -206,7 +206,7 @@ searchBox({
 export default function searchBox({
   container,
   placeholder = '',
-  cssClasses = {},
+  cssClasses: userCssClasses = {},
   autofocus = false,
   searchAsYouType = true,
   showReset = true,
@@ -236,6 +236,26 @@ export default function searchBox({
       'Starting in V3, the `autofocus` parameter only supports boolean values. For more information, have a look at the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).'
     );
   }
+
+  const cssClasses = {
+    root: cx(suit(), userCssClasses.root),
+    form: cx(suit({ descendantName: 'form' }), userCssClasses.form),
+    input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
+    submit: cx(suit({ descendantName: 'submit' }), userCssClasses.submit),
+    submitIcon: cx(
+      suit({ descendantName: 'submitIcon' }),
+      userCssClasses.submitIcon
+    ),
+    reset: cx(suit({ descendantName: 'reset' }), userCssClasses.reset),
+    resetIcon: cx(
+      suit({ descendantName: 'resetIcon' }),
+      userCssClasses.resetIcon
+    ),
+    loadingIndicator: cx(
+      suit({ descendantName: 'loadingIndicator' }),
+      userCssClasses.loadingIndicator
+    ),
+  };
 
   const specializedRenderer = renderer({
     containerNode,
@@ -281,7 +301,7 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   });
 
   // Add classes
-  input.className = cx(suit({ descendantName: 'input' }), cssClasses.input);
+  input.className = cssClasses.input;
 }
 
 /**
@@ -298,10 +318,13 @@ function addReset(input, cssClasses, templates, clearFunction) {
   const stringNode = renderTemplate({
     templateKey: 'reset',
     templates,
+    data: {
+      cssClasses,
+    },
   });
 
   const node = document.createElement('button');
-  node.className = cx(suit({ descendantName: 'reset' }), cssClasses.reset);
+  node.className = cssClasses.reset;
   node.type = 'reset';
   node.title = 'Clear the search query';
   node.innerHTML = stringNode;
@@ -326,10 +349,13 @@ function addSubmit(input, cssClasses, templates) {
   const stringNode = renderTemplate({
     templateKey: 'submit',
     templates,
+    data: {
+      cssClasses,
+    },
   });
 
   const node = document.createElement('button');
-  node.className = cx(suit({ descendantName: 'submit' }), cssClasses.submit);
+  node.className = cssClasses.submit;
   node.type = 'submit';
   node.title = 'Submit the search query';
   node.innerHTML = stringNode;
@@ -348,13 +374,13 @@ function addLoadingIndicator(input, cssClasses, templates) {
   const stringNode = renderTemplate({
     templateKey: 'loadingIndicator',
     templates,
+    data: {
+      cssClasses,
+    },
   });
 
   const node = document.createElement('span');
-  node.className = cx(
-    suit({ descendantName: 'loadingIndicator' }),
-    cssClasses.loadingIndicator
-  );
+  node.className = cssClasses.loadingIndicator;
   node.innerHTML = stringNode;
 
   input.parentNode.appendChild(node);
@@ -362,10 +388,10 @@ function addLoadingIndicator(input, cssClasses, templates) {
 
 function wrapInputFn(input, cssClasses) {
   const wrapper = document.createElement('div');
-  wrapper.className = cx(suit(), cssClasses.root);
+  wrapper.className = cssClasses.root;
 
   const form = document.createElement('form');
-  form.className = cx(suit({ descendantName: 'form' }), cssClasses.form);
+  form.className = cssClasses.form;
   form.noValidate = true;
 
   form.appendChild(input);
