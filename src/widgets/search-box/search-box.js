@@ -211,7 +211,9 @@ export default function searchBox({
     // eslint-disable-next-line
     // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
     throw new Error(
-      `Starting in V3, container can not be an INPUT anymore. If you have more questions, have a look at the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
+      `[InstantSearch.js] Since in version 3, \`container\` can not be an \`input\` anymore.
+
+Learn more in the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
     );
   }
 
@@ -219,7 +221,9 @@ export default function searchBox({
   // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
   if (typeof autofocus !== 'boolean') {
     throw new Error(
-      'Starting in V3, the `autofocus` parameter only supports boolean values. For more information, have a look at the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).'
+      `[InstantSearch.js] Since in version 3, \`autofocus\` only supports boolean values.
+
+Learn more in the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
     );
   }
 
