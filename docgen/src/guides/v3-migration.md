@@ -1111,6 +1111,10 @@ We've moved the `label` into the `templates.labelText` template to make it consi
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
 
+### connectRangeSlider
+
+Connector removed (use `connectRange` instead).
+
 ### connectClearRefinements (formerly connectClearAll)
 
 #### Options
