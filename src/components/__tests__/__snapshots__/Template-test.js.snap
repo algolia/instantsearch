@@ -36,7 +36,7 @@ exports[`Template transform data usage defaults data to an empty {} object 1`] =
 <div
   dangerouslySetInnerHTML={
     Object {
-      "__html": "it supports ",
+      "__html": "it supports",
     }
   }
 />

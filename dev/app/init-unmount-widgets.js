@@ -206,23 +206,6 @@ export default () => {
     )
   );
 
-  storiesOf('NumericSelector').add(
-    'default',
-    wrapWithUnmount(container =>
-      instantsearch.widgets.numericSelector({
-        container,
-        operator: '>=',
-        attributeName: 'popularity',
-        options: [
-          { label: 'Default', value: 0 },
-          { label: 'Top 10', value: 9991 },
-          { label: 'Top 100', value: 9901 },
-          { label: 'Top 500', value: 9501 },
-        ],
-      })
-    )
-  );
-
   storiesOf('Pagination').add(
     'default',
     wrapWithUnmount(container =>
