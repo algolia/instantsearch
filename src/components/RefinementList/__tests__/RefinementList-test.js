@@ -233,8 +233,8 @@ describe('RefinementList', () => {
       const mainItem = root.find(RefinementListItem).at(0);
       const subList = shallow(mainItem.props().subItems);
 
-      expect(root.props().children[1].props.className).toContain('depth-0');
-      expect(subList.props().children[1].props.className).toContain('depth-1');
+      expect(root.props().children[2].props.className).toContain('depth-0');
+      expect(subList.props().children[2].props.className).toContain('depth-1');
     });
   });
 

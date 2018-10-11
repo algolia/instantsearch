@@ -10,7 +10,7 @@ import initPaginationStories from './stories/pagination.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortByStories from './stories/sort-by.stories';
-import initStarRatingStories from './stories/star-rating.stories';
+import initRatingMenuStories from './stories/rating-menu.stories';
 import initStatsStories from './stories/stats.stories';
 import initToggleStories from './stories/toggleRefinement.stories';
 import initAutcompleteStories from './stories/autocomplete.stories';
@@ -28,7 +28,7 @@ export default () => {
   initRefinementListStories();
   initSearchBoxStories();
   initSortByStories();
-  initStarRatingStories();
+  initRatingMenuStories();
   initStatsStories();
   initToggleStories();
   initAutcompleteStories();

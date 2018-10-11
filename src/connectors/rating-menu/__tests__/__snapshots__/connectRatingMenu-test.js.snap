@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectStarRating routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
+exports[`connectRatingMenu routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
 SearchParameters {
   "advancedSyntax": undefined,
   "allowTyposOnNumericTokens": undefined,
@@ -66,9 +66,9 @@ SearchParameters {
 }
 `;
 
-exports[`connectStarRating routing getWidgetState should add an entry equal to the refinement 1`] = `
+exports[`connectRatingMenu routing getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
-  "starRating": Object {
+  "ratingMenu": Object {
     "grade": 3,
   },
 }

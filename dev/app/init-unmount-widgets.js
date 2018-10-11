@@ -256,18 +256,15 @@ export default () => {
     )
   );
 
-  storiesOf('StarRating').add(
+  storiesOf('RatingMenu').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.starRating({
+      instantsearch.widgets.ratingMenu({
         container,
-        attributeName: 'rating',
+        attribute: 'rating',
         max: 5,
         labels: {
           andUp: '& Up',
-        },
-        templates: {
-          header: 'Rating',
         },
       })
     )

@@ -61,17 +61,18 @@ class RefinementList extends Component {
 
     return (
       <RefinementListItem
+        templateKey="item"
+        key={key}
         facetValueToRefine={facetValue.value}
         handleClick={this.handleItemClick}
         isRefined={facetValue.isRefined}
         className={cx(this.props.cssClasses.item, {
           [this.props.cssClasses.selectedItem]: facetValue.isRefined,
+          [this.props.cssClasses.disabledItem]: !facetValue.count,
           [this.props.cssClasses.parentItem]: hasChildren,
         })}
-        key={key}
         subItems={subItems}
         templateData={templateData}
-        templateKey="item"
         templateProps={this.props.templateProps}
       />
     );
@@ -214,6 +215,7 @@ class RefinementList extends Component {
           this.props.className
         )}
       >
+        {this.props.children}
         {searchBox}
         {facetValues}
         {noResults}
@@ -243,6 +245,7 @@ RefinementList.propTypes = {
     noResults: PropTypes.string,
     showMore: PropTypes.string,
     disabledShowMore: PropTypes.string,
+    disabledItem: PropTypes.string,
   }).isRequired,
   depth: PropTypes.number,
   facetValues: PropTypes.array,
@@ -259,6 +262,7 @@ RefinementList.propTypes = {
   canToggleShowMore: PropTypes.bool,
   searchIsAlwaysActive: PropTypes.bool,
   className: PropTypes.string,
+  children: PropTypes.element,
 };
 
 RefinementList.defaultProps = {

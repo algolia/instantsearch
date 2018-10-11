@@ -1,31 +1,28 @@
-import sinon from 'sinon';
-
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
+import connectRatingMenu from '../connectRatingMenu.js';
 
-import connectStarRating from '../connectStarRating.js';
-
-describe('connectStarRating', () => {
+describe('connectRatingMenu', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
-    const makeWidget = connectStarRating(rendering);
+    const rendering = jest.fn();
+    const makeWidget = connectRatingMenu(rendering);
 
-    const attributeName = 'grade';
+    const attribute = 'grade';
     const widget = makeWidget({
-      attributeName,
+      attribute,
     });
 
     const config = widget.getConfiguration({});
     expect(config).toEqual({
-      disjunctiveFacets: [attributeName],
+      disjunctiveFacets: [attribute],
     });
 
     const helper = jsHelper({}, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -36,21 +33,24 @@ describe('connectStarRating', () => {
 
     {
       // should call the rendering once with isFirstRendering to true
-      expect(rendering.callCount).toBe(1);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(1);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const { items, widgetParams } = rendering.lastCall.args[0];
+      const { items, widgetParams } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
       expect(items).toEqual([]);
-      expect(widgetParams).toEqual({ attributeName });
+      expect(widgetParams).toEqual({ attribute });
     }
 
     widget.render({
       results: new SearchResults(helper.state, [
         {
           facets: {
-            [attributeName]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
           },
         },
         {},
@@ -62,12 +62,15 @@ describe('connectStarRating', () => {
 
     {
       // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering.callCount).toBe(2);
-      const isFirstRendering = rendering.lastCall.args[1];
+      expect(rendering).toHaveBeenCalledTimes(2);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const { items } = rendering.lastCall.args[0];
+      const { items } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
       expect(items).toEqual([
         {
           count: 1000,
@@ -102,18 +105,18 @@ describe('connectStarRating', () => {
   });
 
   it('Provides a function to update the index at each step', () => {
-    const rendering = sinon.stub();
-    const makeWidget = connectStarRating(rendering);
+    const rendering = jest.fn();
+    const makeWidget = connectRatingMenu(rendering);
 
-    const attributeName = 'grade';
+    const attribute = 'grade';
     const widget = makeWidget({
-      attributeName,
+      attribute,
     });
 
     const config = widget.getConfiguration({});
 
     const helper = jsHelper({}, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -124,29 +127,30 @@ describe('connectStarRating', () => {
 
     {
       // first rendering
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, items } = renderOptions;
       expect(items).toEqual([]);
-      expect(helper.getRefinements(attributeName)).toEqual([]);
+      expect(helper.getRefinements(attribute)).toEqual([]);
       refine('3');
-      expect(helper.getRefinements(attributeName)).toEqual([
+      expect(helper.getRefinements(attribute)).toEqual([
         { type: 'disjunctive', value: '3' },
         { type: 'disjunctive', value: '4' },
         { type: 'disjunctive', value: '5' },
       ]);
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
     widget.render({
       results: new SearchResults(helper.state, [
         {
           facets: {
-            [attributeName]: { 3: 50, 4: 900, 5: 100 },
+            [attribute]: { 3: 50, 4: 900, 5: 100 },
           },
         },
         {
           facets: {
-            [attributeName]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
           },
         },
       ]),
@@ -157,7 +161,8 @@ describe('connectStarRating', () => {
 
     {
       // Second rendering
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, items } = renderOptions;
       expect(items).toEqual([
         {
@@ -189,28 +194,28 @@ describe('connectStarRating', () => {
           stars: [true, false, false, false, false],
         },
       ]);
-      expect(helper.getRefinements(attributeName)).toEqual([
+      expect(helper.getRefinements(attribute)).toEqual([
         { type: 'disjunctive', value: '3' },
         { type: 'disjunctive', value: '4' },
         { type: 'disjunctive', value: '5' },
       ]);
       refine('4');
-      expect(helper.getRefinements(attributeName)).toEqual([
+      expect(helper.getRefinements(attribute)).toEqual([
         { type: 'disjunctive', value: '4' },
         { type: 'disjunctive', value: '5' },
       ]);
-      expect(helper.search.callCount).toBe(2);
+      expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
 
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
-      const makeWidget = connectStarRating(rendering);
+      const makeWidget = connectRatingMenu(rendering);
 
-      const attributeName = 'grade';
+      const attribute = 'grade';
       const widget = makeWidget({
-        attributeName,
+        attribute,
         ...config,
       });
 
@@ -285,7 +290,7 @@ describe('connectStarRating', () => {
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
         const uiState = {
-          starRating: {
+          ratingMenu: {
             grade: '2',
           },
         };

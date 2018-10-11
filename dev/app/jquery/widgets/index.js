@@ -9,7 +9,7 @@ export { default as refinementList } from './refinementList';
 export { default as numericMenu } from './numericMenu';
 export { default as searchBox } from './searchBox';
 export { default as sortBy } from './sortBy';
-export { default as starRating } from './starRating';
+export { default as ratingMenu } from './ratingMenu';
 export { default as stats } from './stats';
 export { default as toggleRefinement } from './toggleRefinement';
 export { default as infiniteHits } from './infiniteHits';
