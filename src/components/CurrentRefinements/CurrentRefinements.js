@@ -6,6 +6,18 @@ import upperFirst from 'lodash/upperFirst';
 // import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
+function handleClick(cb) {
+  return event => {
+    if (isSpecialClick(event)) {
+      // do not alter the default browser behavior
+      // if one special key is down
+      return;
+    }
+    event.preventDefault();
+    cb();
+  };
+}
+
 class CurrentRefinements extends Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
@@ -13,11 +25,6 @@ class CurrentRefinements extends Component {
 
   renderItem(refinement, index) {
     // const attribute = this.props.attributes[refinement.attributeName] || {};
-    // const templateData = getTemplateData(
-    //   attribute,
-    //   refinement,
-    //   this.props.cssClasses
-    // );
     // const customTemplateProps = getCustomTemplateProps(attribute);
     const key =
       refinement.attributeName +
@@ -37,7 +44,11 @@ class CurrentRefinements extends Component {
             {...customTemplateProps}
             templateKey="item"
             rootTagName="span"
-            data={templateData}
+            data={{
+              ...refinement,
+              ...attribute,
+              cssClasses,
+            }}
           /> */}
 
           <span className={this.props.cssClasses.categoryLabel}>
@@ -82,26 +93,6 @@ class CurrentRefinements extends Component {
 
 //   return customTemplateProps;
 // }
-
-// function getTemplateData(attribute, refinement, cssClasses) {
-//   return {
-//     ...refinement,
-//     ...attribute,
-//     cssClasses,
-//   };
-// }
-
-function handleClick(cb) {
-  return event => {
-    if (isSpecialClick(event)) {
-      // do not alter the default browser behavior
-      // if one special key is down
-      return;
-    }
-    event.preventDefault();
-    cb();
-  };
-}
 
 CurrentRefinements.propTypes = {
   attributes: PropTypes.object.isRequired,
