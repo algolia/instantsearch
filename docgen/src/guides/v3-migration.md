@@ -4,17 +4,98 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 ## InstantSearch
 
-### URLSync is not supported anymore
+### `appId` and `apiKey` are replaced by `searchClient`
+
+### Previous usage
+
+1.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
+2.  Initialize InstantSearch
+
+```javascript
+const search = instantsearch({
+  indexName: 'indexName',
+  appId: 'appId',
+  apiKey: 'apiKey',
+});
+
+search.start();
+```
+
+### New usage
+
+1.  [Import `algoliasearch`](https://www.algolia.com/doc/api-client/javascript/getting-started/) (prefer the [lite version](https://github.com/algolia/algoliasearch-client-javascript#search-onlylite-client) for search only)
+2.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
+3.  Initialize InstantSearch with the `searchClient` option
+
+```javascript
+const search = instantsearch({
+  indexName: 'indexName',
+  searchClient: algoliasearch('appId', 'apiKey'),
+});
+
+search.start();
+```
+
+## `transformData` is replaced by `transformItems`
+
+Since InstantSearch.js first public release, we have provided an option to customize the values used in the widgets. This method was letting you map 1-1 the values with other values. With React Instantsearch, we implemented a slightly different API that allows to map over the list of values and to change their content.
+
+### Previous usage
+
+```js
+search.addWidget(
+  instantsearch.widget.refinementList({
+    container: '#facet',
+    attributeName: 'facet',
+    transformData: {
+      item: data => {
+        data.count = 0;
+        return data;
+      }
+    }
+  })
+);
+```
+
+### New usage
+
+```js
+search.addWidget(
+  instantsearch.widget.refinementList({
+    container: '#facet',
+    attributeName: 'facet',
+    transformItems: items =>
+      items.map(item => ({
+        ...item,
+        count: 0,
+      })),
+  })
+);
+```
+
+### `urlSync` is dropped
 
 If you were previously using the `urlSync` option, you should now migrate to the new `routing` feature.
 
 Here are the elements you need to migrate:
 
 - `urlSync: true` becomes `routing: true`
-- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
+- `threshold` becomes `routing: { router: instantsearch.routers.history({ writeDelay: 400 }) }`
+- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read "[User friendly URLs](routing.html#user-friendly-urls)" to know how to configure it
 - `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
 - `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+
+### `collapsible` is dropped
+
+`collapsible` are replaced by the `panel` widget.
+
+### `autoHideContainer` is dropped
+
+`autoHideContainer` are replaced by the `panel` widget.
+
+### `createAlgoliaClient` is dropped
+
+`createAlgoliaClient` is replaced by `searchClient`.
 
 ## Widgets
 
@@ -315,7 +396,7 @@ With the redo button:
 | ------------ | ------------ |
 | `escapeHits` | `escapeHTML` |
 
-`escapeHTML` becomes `true` by default.
+* `escapeHTML` defaults to `true`
 
 #### CSS classes
 
@@ -572,6 +653,51 @@ With the redo button:
 </div>
 ```
 
+### NumericMenu (formerly NumericRefinementList)
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+| `options`       | `items`     |
+
+The item `name` attribute is now named `label`.
+
+#### CSS classes
+
+| Before                              | After                            |
+| ----------------------------------- | -------------------------------- |
+| `ais-refinement-list`               | `ais-NumericMenu`                |
+|                                     | `ais-NumericMenu--noRefinement`  |
+| `ais-refinement-list--list`         | `ais-NumericMenu-list`           |
+| `ais-refinement-list--item`         | `ais-NumericMenu-item`           |
+| `ais-refinement-list--item__active` | `ais-NumericMenu-item--selected` |
+| `ais-refinement-list--label`        | `ais-NumericMenu-label`          |
+| `ais-refinement-list--radio`        | `ais-NumericMenu-radio`          |
+|                                     | `ais-NumericMenu-labelText`      |
+
+#### Markup
+
+```html
+<div class="ais-NumericMenu">
+  <ul class="ais-NumericMenu-list">
+    <li class="ais-NumericMenu-item ais-NumericMenu-item--selected">
+      <label class="ais-NumericMenu-label">
+        <input class="ais-NumericMenu-radio" type="radio" name="NumericMenu" checked="" />
+        <span class="ais-NumericMenu-labelText">All</span>
+      </label>
+    </li>
+    <li class="ais-NumericMenu-item">
+      <label class="ais-NumericMenu-label">
+        <input class="ais-NumericMenu-radio" type="radio" name="NumericMenu" />
+        <span class="ais-NumericMenu-labelText">Less than 500</span>
+      </label>
+    </li>
+  </ul>
+</div>
+```
+
 ### NumericSelector
 
 Widget removed.
@@ -762,6 +888,75 @@ Widget removed.
       <div class="rheostat-value">5,000</div>
     </div>
   </div>
+</div>
+```
+
+### RatingMenu (formerly StarRating)
+
+### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+### CSS classes
+
+| Before                            | After                            |
+| --------------------------------- | -------------------------------- |
+| `ais-star-rating`                 | `ais-RatingMenu`                 |
+| `ais-star-rating--list`           | `ais-RatingMenu-list`            |
+| `ais-star-rating--item`           | `ais-RatingMenu-item`            |
+| `ais-star-rating--item__active`   | `ais-RatingMenu-item--selected`  |
+| `ais-star-rating--item__disabled` | `ais-RatingMenu-item--disabled`  |
+| `ais-star-rating--link`           | `ais-RatingMenu-link`            |
+| `ais-star-rating--star`           | `ais-RatingMenu-starIcon`        |
+|                                   | `ais-RatingMenu-starIcon--full`  |
+| `ais-star-rating--star__empty`    | `ais-RatingMenu-starIcon--empty` |
+| `ais-star-rating--count`          | `ais-RatingMenu-count`           |
+
+### Markup
+
+```html
+<div class="ais-RatingMenu">
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <symbol id="ais-RatingMenu-starSymbol" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></symbol>
+    <symbol id="ais-RatingMenu-starEmptySymbol" viewBox="0 0 24 24"><path d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"/></symbol>
+  </svg>
+  <ul class="ais-RatingMenu-list">
+    <li class="ais-RatingMenu-item ais-RatingMenu-item--disabled">
+      <div class="ais-RatingMenu-link" aria-label="5 & up" disabled>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
+        <span class="ais-RatingMenu-count">2,300</span>
+      </div>
+    </li>
+    <li class="ais-RatingMenu-item ais-RatingMenu-item--selected">
+      <a class="ais-RatingMenu-link" aria-label="4 & up" href="#">
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+        <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
+        <span class="ais-RatingMenu-count">2,300</span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item">
+      <a class="ais-RatingMenu-link" aria-label="3 & up" href="#">
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+        <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
+        <span class="ais-RatingMenu-count">1,750</span>
+      </a>
+    </li>
+  </ul>
 </div>
 ```
 
@@ -1008,6 +1203,14 @@ We've moved the `label` into the `templates.labelText` template to make it consi
 | Before              | After                |
 | ------------------- | -------------------- |
 | `excludeAttributes` | `excludedAttributes` |
+
+### connectNumericMenu (formerly connectNumericRefinementList)
+
+#### Options
+
+| Before    | After   |
+| --------- | ------- |
+| `options` | `items` |
 
 ### connectRefinementList
 

@@ -231,13 +231,13 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
   refinementList: {
     colors: ['white', 'black']
   },
-  numericRefinementList: {
+  numericMenu: {
     heightInCm: 40
   },
   range: {
     ageInYears: '2-10'
   },
-  starRating: {
+  ratingMenu: {
     rating: 3
   },
   toggle: {

@@ -179,12 +179,12 @@ export default () => {
     )
   );
 
-  storiesOf('NumericRefinementList').add(
+  storiesOf('NumericMenu').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.numericRefinementList({
+      instantsearch.widgets.numericMenu({
         container,
-        attributeName: 'price',
+        attribute: 'price',
         operator: 'or',
         options: [
           { name: 'All' },
@@ -256,18 +256,15 @@ export default () => {
     )
   );
 
-  storiesOf('StarRating').add(
+  storiesOf('RatingMenu').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.starRating({
+      instantsearch.widgets.ratingMenu({
         container,
-        attributeName: 'rating',
+        attribute: 'rating',
         max: 5,
         labels: {
           andUp: '& Up',
-        },
-        templates: {
-          header: 'Rating',
         },
       })
     )

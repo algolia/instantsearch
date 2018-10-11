@@ -77,7 +77,7 @@ search.addWidget(
 );
 ```
 
-We use the function syntax for the `item` template because we want to convert the numeric timestamp from our dataset to a JavaScript date on the fly. Be careful with user-generated data. You can use existing libraries to prevent XSS or use a [template](widgets-common-api.html#templates) and [`transformData`](widgets-common-api.html#transformdata) instead.
+We use the function syntax for the `item` template because we want to convert the numeric timestamp from our dataset to a JavaScript date on the fly. Be careful with user-generated data. You can use existing libraries to prevent XSS or use a [template](widgets-common-api.html#templates) and [`transformItems`](widgets-common-api.html#transformitems) instead.
 
 *Note: we've highlighted the event's name as well as its location because we set them both as searchable in the Algolia dashboard.*
 
