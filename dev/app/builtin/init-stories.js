@@ -10,7 +10,7 @@ import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initInstantSearchStories from './stories/instantsearch.stories';
 import initMenuStories from './stories/menu.stories';
 import initMenuSelectStories from './stories/menu-select.stories';
-import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
+import initNumericMenuStories from './stories/numeric-menu.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initRangeInputStories from './stories/range-input.stories.js';
 import initRangeSliderStories from './stories/range-slider.stories';
@@ -37,7 +37,7 @@ export default () => {
   initInstantSearchStories();
   initMenuStories();
   initMenuSelectStories();
-  initNumericRefinementListStories();
+  initNumericMenuStories();
   initPaginationStories();
   initRangeInputStories();
   initRangeSliderStories();

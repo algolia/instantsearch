@@ -5,11 +5,7 @@ const renderFn = (
   {
     items,
     refine,
-    widgetParams: {
-      containerNode,
-      attributeName,
-      title = 'Numeric refinement list',
-    },
+    widgetParams: { containerNode, attribute, title = 'Numeric menu' },
   },
   isFirstRendering
 ) => {
@@ -38,7 +34,7 @@ const renderFn = (
       >
         <input
           type="radio"
-          name="${attributeName}"
+          name="${attribute}"
           ${item.isRefined ? 'checked' : ''}
         />
         ${item.label}
@@ -59,4 +55,4 @@ const renderFn = (
   });
 };
 
-export default instantsearch.connectors.connectNumericRefinementList(renderFn);
+export default instantsearch.connectors.connectNumericMenu(renderFn);

@@ -179,12 +179,12 @@ export default () => {
     )
   );
 
-  storiesOf('NumericRefinementList').add(
+  storiesOf('NumericMenu').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.numericRefinementList({
+      instantsearch.widgets.numericMenu({
         container,
-        attributeName: 'price',
+        attribute: 'price',
         operator: 'or',
         options: [
           { name: 'All' },
