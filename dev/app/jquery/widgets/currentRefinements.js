@@ -2,14 +2,7 @@
 import instantsearch from '../../../../index.js';
 
 const renderFn = (
-  {
-    clearAllClick,
-    clearAllURL,
-    createURL,
-    refine,
-    refinements,
-    widgetParams: { containerNode },
-  },
+  { createURL, refine, refinements, widgetParams: { containerNode } },
   isFirstRendering
 ) => {
   // append initial markup on first rendering
