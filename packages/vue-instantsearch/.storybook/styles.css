@@ -107,3 +107,10 @@ body {
 .application--wrap {
   min-height: unset !important;
 }
+
+input {
+  border-style: solid !important;
+  border-width: 1px;
+  border-color: #c4c8d8;
+  border-radius: 5px !important;
+}

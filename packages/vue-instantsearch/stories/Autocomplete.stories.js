@@ -74,7 +74,7 @@ storiesOf('ais-autocomplete', module)
           <template slot-scope="{currentRefinement, indices, refine}">
             <vue-autosuggest
               :suggestions="indicesToSuggestions(indices)"
-              :on-selected="onSelect"
+              @selected="onSelect"
               :input-props="{
                 style: 'width: 100%',
                 onInputChange: refine,
