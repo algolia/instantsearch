@@ -152,21 +152,20 @@ searchBox({
 
 /**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS
- * selector or the HTMLElement is an existing input, the widget will use it.
- * @property {string} [placeholder] Input's placeholder.
- * @property {boolean} [autofocus=false] Whether the input should be autofocused.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
+ * @property {string} [placeholder] The placeholder of the input
+ * @property {boolean} [autofocus=false] Whether the input should be autofocused
  * @property {boolean} [searchAsYouType=true] If set, trigger the search
  * once `<Enter>` is pressed only.
- * @property {boolean} [showReset=true] Show/hide the reset button
- * @property {boolean} [showSubmit=true] Show/hide the submit button (acts as submit button)
- * @property {boolean} [showLoadingIndicator=true] Activates the loading indicator. (replaces the submit is
+ * @property {boolean} [showReset=true] Whether to show the reset button
+ * @property {boolean} [showSubmit=true] Whether to show the submit button
+ * @property {boolean} [showLoadingIndicator=true] Whether to show the loading indicator (replaces the submit if
  * the search is stalled)
- * @property {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
+ * @property {SearchBoxCSSClasses} [cssClasses] CSS classes to add
  * @property {SearchBoxTemplates} [templates] Templates used for customizing the rendering of the searchbox
- * @property {function} [queryHook] A function that will be called every time a new search would be done. You
- * will get the query as first parameter and a search(query) function to call as the second parameter.
- * This queryHook can be used to debounce the number of searches done from the searchBox.
+ * @property {function} [queryHook] A function that is called every time a new search is done. You
+ * will get the query as the first parameter and a search (query) function to call as the second parameter.
+ * This `queryHook` can be used to debounce the number of searches done from the search box.
  */
 
 /**
