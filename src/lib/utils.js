@@ -10,6 +10,7 @@ import curry from 'lodash/curry';
 import hogan from 'hogan.js';
 
 export {
+  capitalize,
   getContainerNode,
   bemHelper,
   prepareTemplateProps,
@@ -28,6 +29,15 @@ export {
   warn,
   parseAroundLatLngFromString,
 };
+
+function capitalize(string) {
+  return (
+    string
+      .toString()
+      .charAt(0)
+      .toUpperCase() + string.toString().slice(1)
+  );
+}
 
 /**
  * Return the container. If it's a string, it is considered a

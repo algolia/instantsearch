@@ -131,8 +131,12 @@ export default () => {
             includedAttributes: [
               {
                 name: 'brand',
-                template:
-                  '<span class="{{cssClasses.category}} {{cssClasses.categoryLabel}}">{{attributeName}} = {{computedLabel}}</span>',
+                template: ({ cssClasses, attributeName, computedLabel }) =>
+                  `<span class="${cssClasses.category} ${
+                    cssClasses.categoryLabel
+                  }">${attributeName} = ${computedLabel}</span> <button class="${
+                    cssClasses.delete
+                  }">x</button>`,
               },
             ],
           })

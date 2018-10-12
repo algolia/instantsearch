@@ -1,26 +1,24 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import upperFirst from 'lodash/upperFirst';
 import Template from '../Template.js';
-import { isSpecialClick } from '../../lib/utils.js';
-
-function handleClick(cb) {
-  return event => {
-    if (isSpecialClick(event)) {
-      // do not alter the default browser behavior
-      // if one special key is down
-      return;
-    }
-    event.preventDefault();
-    cb();
-  };
-}
+import { isSpecialClick, capitalize } from '../../lib/utils.js';
 
 class CurrentRefinements extends Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
+
+  handleClick = (event, index) => {
+    if (isSpecialClick(event)) {
+      return;
+    }
+
+    if (event.target.tagName === 'BUTTON') {
+      event.preventDefault();
+      this.props.clearRefinementClicks[index]();
+    }
+  };
 
   renderItem(refinement, index) {
     const key =
@@ -38,7 +36,11 @@ class CurrentRefinements extends Component {
       : null;
 
     return attribute.template ? (
-      <li className={this.props.cssClasses.item} key={key}>
+      <li
+        className={this.props.cssClasses.item}
+        key={key}
+        onClick={event => this.handleClick(event, index)}
+      >
         <Template
           {...this.props.templateProps}
           {...attributeTemplates}
@@ -53,7 +55,7 @@ class CurrentRefinements extends Component {
     ) : (
       <li className={this.props.cssClasses.item} key={key}>
         <span className={this.props.cssClasses.label}>
-          {upperFirst(refinement.attributeName)}:
+          {capitalize(refinement.attributeName)}:
         </span>
 
         <span className={this.props.cssClasses.category}>
@@ -63,7 +65,7 @@ class CurrentRefinements extends Component {
 
           <button
             className={this.props.cssClasses.delete}
-            onClick={handleClick(this.props.clearRefinementClicks[index])}
+            onClick={event => this.handleClick(event, index)}
           >
             ✕
           </button>
