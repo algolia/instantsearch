@@ -1030,7 +1030,7 @@ Widget removed.
 
 With the drop of `wrapInput`, we decided not to accept `input`s as containers anymore. If you want complete control over the rendering, you should use the `connectSearchBox` connector.
 
-The search box does not support `powered-by`. If you're using a community plan, you should now use the `poweredBy` widget to display the Algolia logo.
+The search box does not support `powered-by`. If you're using a community plan, you need to use the `poweredBy` widget to display the Algolia logo.
 
 Configuration options for `reset`, `submit` and `loadingIndicator` have been moved to `templates` and `cssClasses`. For example, in the case of `reset`:
 
