@@ -3,7 +3,7 @@ import buble from 'rollup-plugin-buble';
 import filesize from 'rollup-plugin-filesize';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import uglify from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
 
@@ -41,7 +41,7 @@ export default [
           dangerousForOf: true,
         },
       }),
-      uglify(),
+      terser(),
       filesize(),
     ],
   },
@@ -69,7 +69,7 @@ export default [
       }),
       replace(processEnv({ NODE_ENV: 'production' })),
       commonjs(),
-      uglify(),
+      terser(),
       filesize(),
     ],
   },
