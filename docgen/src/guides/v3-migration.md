@@ -169,6 +169,7 @@ Here are the elements you need to migrate:
 | Before                 | After                             |
 | ---------------------- | --------------------------------- |
 | `attributes`           | `includedAttributes`              |
+|                        | `excludedAttributes`              |
 | `onlyListedAttributes` | use `includedAttributes`          |
 | `clearAll`             | use the `clearRefinements` widget |
 | `clearsQuery`          | `includesQuery`                   |

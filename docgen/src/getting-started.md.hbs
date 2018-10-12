@@ -309,10 +309,7 @@ Those two features are implemented respectively with the [pagination](widgets/pa
   // initialize currentRefinements
   search.addWidget(
     instantsearch.widgets.currentRefinements({
-      container: '#current-refined-values',
-      // This widget can also contain a clear all link to remove all filters,
-      // we disable it in this example since we use `clearAll` widget on its own.
-      clearAll: false
+      container: '#current-refinements',
     })
   );
 
