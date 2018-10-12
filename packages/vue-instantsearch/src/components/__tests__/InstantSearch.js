@@ -6,23 +6,32 @@ import InstantSearch from '../InstantSearch.vue';
 jest.mock('instantsearch.js/es', () => {
   const isPlainObject = require('lodash/isPlainObject');
   const start = jest.fn();
+
+  class RoutingManager {
+    constructor(routing) {
+      this._routing = routing;
+    }
+  }
   const fakeInstantSearch = jest.fn(
     ({
       indexName,
       searchClient,
-      routing, // eslint-disable-line no-unused-vars
-      stalledSearchDelay, // eslint-disable-line no-unused-vars
-      searchFunction, // eslint-disable-line no-unused-vars
+      routing,
+      stalledSearchDelay,
+      searchFunction,
     }) => {
-      if (!searchClient && isPlainObject(searchClient)) {
-        throw new Error('need searchClient to be a fn');
+      if (!searchClient && !isPlainObject(searchClient)) {
+        throw new Error('need searchClient to be a plain object');
       }
       if (!indexName) {
         throw new Error('need indexName to be a string');
       }
       return {
-        start,
+        _stalledSearchDelay: stalledSearchDelay,
+        _searchFunction: searchFunction,
+        routing: new RoutingManager(routing),
         helper: fakeInstantSearch.__helper,
+        start,
       };
     }
   );
@@ -191,26 +200,44 @@ it('Allows a change in `search-client`', () => {
   expect(instantsearch.__helper.search).toHaveBeenCalledTimes(1);
 });
 
-it('Does not allow a change in `search-function`', () => {
-  global.console.error = jest.fn();
+it('Allows a change in `search-function`', () => {
+  const oldValue = () => {};
+  const newValue = () => {};
+
+  const wrapper = mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      indexName: 'bla',
+      searchFunction: oldValue,
+    },
+  });
+
+  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(oldValue);
+
+  wrapper.setProps({
+    searchFunction: newValue,
+  });
+
+  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(newValue);
+});
+
+it('Allows a change in `stalled-search-delay`', () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
       searchFunction: () => {},
+      stalledSearchDelay: 200,
     },
   });
 
+  expect(wrapper.vm.instantSearchInstance._stalledSearchDelay).toEqual(200);
+
   wrapper.setProps({
-    searchFunction: () => {},
+    stalledSearchDelay: 50,
   });
 
-  // Vue catches this error and throws it to the console
-  expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
-[Error: searchFunction configuration can not be changed dynamically at this point.
-
-Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md]
-`);
+  expect(wrapper.vm.instantSearchInstance._stalledSearchDelay).toEqual(50);
 });
 
 it('Does not allow a change in `routing`', () => {

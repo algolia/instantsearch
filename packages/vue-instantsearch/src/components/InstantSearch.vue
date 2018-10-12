@@ -96,12 +96,9 @@ export default {
           'Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md'
       );
     },
-    searchFunction() {
-      throw new Error(
-        'searchFunction configuration can not be changed dynamically at this point.' +
-          '\n\n' +
-          'Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md'
-      );
+    searchFunction(searchFunction) {
+      // private InstantSearch.js API:
+      this.instantSearchInstance._searchFunction = searchFunction;
     },
   },
   created() {
