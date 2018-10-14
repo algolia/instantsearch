@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "6.1.9",
-    "@angular-devkit/build-angular": "0.8.4",
+    "@angular-devkit/build-angular": "0.8.5",
     "@angular/cli": "6.2.4",
     "@angular/language-service": "6.1.9",
     "@types/algoliasearch": "3.27.8",
