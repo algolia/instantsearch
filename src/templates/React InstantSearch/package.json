@@ -16,7 +16,7 @@
     "react-scripts": "1.1.5"
   },
   "devDependencies": {
-    "eslint": "5.6.1",
+    "eslint": "5.7.0",
     "eslint-config-algolia": "13.2.3",
     "eslint-config-prettier": "3.1.0",
     "eslint-plugin-import": "2.14.0",
