@@ -35,6 +35,9 @@ const common = [
     // if it's a build js file, keep it (`build`)
     if (/-build\.js$/.test(fileName)) return false;
 
+    // ignore the template for the docs
+    if (/__Template__\.md$/.test(fileName)) return true;
+
     // if it's an example JavaScript file, keep it
     if (/examples\/(.*)?\.js$/.test(fileName)) return false;
 
