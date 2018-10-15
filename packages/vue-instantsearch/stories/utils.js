@@ -28,8 +28,7 @@ export const previewWrapper = ({
     </ol>
   `,
   filters = `
-    <!-- @TODO: replace with a RefinementList  -->
-    <ais-menu attribute="brand" />
+    <ais-refinement-list attribute="brand" />
   `,
 } = {}) => () => ({
   template: `
