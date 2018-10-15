@@ -8,126 +8,97 @@ navWeight: 3
 editable: true
 githubSource: docs/src/advanced/vue-router-url-sync.md
 ---
-> NOTE: this guide has not yet been updated for v2
 
-In this guide you'll learn how to synchronize your InstantSearch experience with the [official Vue-Router](https://github.com/vuejs/vue-router).
+> NOTE: this guide **has** been updated for v2
 
-There are two things you'll want to setup in order to have the Vue router play nicely with InstantSearch.
+Currently there's three existing ways how to use InstantSearch routing.
 
-1. Extract some parameters from the router and initialize the search store with it. That way, on the initial load of the search experience, it will display results based on the current route.
+The first option is putting `:routing="true"` on `ais-instant-search`. This will use the default serialising that doesn't lose any information, but might be a bit verbose
 
-2. Push the new state of the search to the router as the user interacts with the InstantSearch components.
+The second option is to put an object of configuration. This object can take `stateMapping`, with the functions `stateToRoute` and `routeToState` to serialise differently, but still use the default routing. This allows to rename things to make them easier to read, without touching how the serialising itself happens.
 
-## Example app
+Finally, you can also change the URL to use full URLs, rather than just the query string. You need to change the `router` key inside the `routing` object. You can import the default (history) router from `import {history} from 'instantsearch.js/es/lib/routers'`, and modify, like in InstantSearch JS.
 
-A fully working example of synchronizing the Vue router with Vue InstantSearch can be found here: https://github.com/algolia/vue-instantsearch-examples/tree/master/examples/vue-router
+[![Edit vue-instantsearch-app](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/q8pmz6n7lj?module=%2Fsrc%2FApp.vue)
 
-## Initialize InstantSearch with route parameters
+All docs for InstantSearch routing configuration are [here](https://community.algolia.com/instantsearch.js/v2/guides/routing.html).
 
-In the example app linked above, we register one route that looks like this:
+Finally an option is to use Vue Router. All previous examples will _work_ using Vue Router, as long as they don't conflict, as long as you don't try to do specific Vue Router things which are controlled by InstantSearch, since InstantSearch provided query strings won't be available to Vue Router, as soon as the routing changes from its initial deserialization.
 
-```javascript
-const router = new VueRouter({
-  routes: [
-    {
-      name: 'search',
-      path: '/search',
-      component: Search,
-      props: route => ({ query: route.query.q }),
+## How **do** I use Vue Router?
+
+If you have a Vue Router configuration that requires a synchronized use of the query parameters, or other parameters, as described in the InstantSearch guide, you need to write a custom "router" key for InstantSearch:
+
+```js
+const instantSearchRouting = {
+  router: {
+    read() {
+      return router.currentRoute.query;
     },
+    write(routeState) {
+      router.push({
+        query: routeState,
+      });
+    },
+    createURL(routeState) {
+      return router.resolve({
+        query: routeState,
+      }).href;
+    },
+    onUpdate() {},
+    dispose() {},
+  },
+};
+```
+
+Note that in this example only use the `query` key is used, but other Vue Router keys can also be used. It's advised here to use a `stateMapping` that changes nested objects into flat objects. The reason why you need flat objects, is because by default Vue Router will serialize an object as value for a query string object as `[object Object]`. This can be avoided by either _not_ having deep objects (possibly replaced by arrays, or a flat version with only what you need in your app):
+
+```js
+const stateMapping = {
+  stateToRoute(uiState) {
+    return {
+      query: uiState.query,
+      // we use the character ~ as it is one that is rarely present in data and renders well in urls
+      // do this for every refinement you have
+      brands:
+        (uiState.refinementList &&
+          uiState.refinementList.brand &&
+          uiState.refinementList.brand.join('~')) ||
+        'all',
+      page: uiState.page,
+    };
+  },
+  routeToState(routeState) {
+    return {
+      query: routeState.query,
+      refinementList: {
+        brand: routeState.brands && routeState.brands.split('~'),
+      },
+      page: routeState.page,
+    };
+  },
+};
+```
+
+Or by modifying the Vue Router to allow nested objects in the query string:
+
+```js
+import qs from 'qs';
+
+const router = new Router({
+  routes: [
     // ...
   ],
+  // set custom query resolver
+  parseQuery(query) {
+    return qs.parse(query);
+  },
+  stringifyQuery(query) {
+    var result = qs.stringify(query);
+
+    return result ? '?' + result : '';
+  },
 });
 ```
 
-This route will pass down the `query` parameter as a prop to the `Search` component.
-
-Every time the 'search' named route matches, it will extract the `q` url query parameter and pass it as a property down to the `Search` component.
-
-**Info:** You can read more about how to pass properties to your components in the official [Vue router documentation](https://router.vuejs.org/en/essentials/passing-props.html).
-
-In the `Search.vue` file, we can see that we actually accept this prop coming in from the router:
-
-```javascript
-export default {
-  props: {
-    query: {
-      type: String,
-      default: '',
-    },
-  },
-  // ...
-}
-```
-
-We also make sure the property is initialized to an empty string by providing the `default: ''` option.
-
-Now that the query has been injected by the router into our `Search` component, we need to tell the `InstantSearch` component to bind to it.
-
-```html
-<template>
-  <ais-instant-search :search-client="searchClient">
-    <ais-configure :query="query" />
-    <!-- ... -->
-  </ais-instant-search>
-</template>
-```
-
-Now, every time the route changes, the search store query will be updated with the value coming from the URL `q` query parameter.
-
-## Keep Vue router in sync with Vue router
-
-The previous section made our search state aware of the route. Here we will learn how to push the new state to the router in order to keep URLs in sync with the current search state as users interact with it.
-
-In our `Search.vue` file, we [manually instantiated the search store](/getting-started/search-store.html#how-to-manually-create-a-search-store) and exposed it to our template by adding it to `data`.
-
-```javascript
-import { createFromAlgoliaCredentials } from 'vue-instantsearch';
-const searchStore = createFromAlgoliaCredentials(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
-);
-searchStore.indexName = 'ikea';
-
-export default {
-  // ...
-  data() {
-    return {
-      searchStore,
-    };
-  },
-  // ...
-}
-```
-
-We then bound the search store to the `InstantSearch` component in the template, like so:
-
-```html
-<template>
-  <ais-instant-search :search-store="searchStore" :query="query">
-    <!-- ... -->
-  </ais-instant-search>
-</template>
-```
-
-The search store being bound to the `data` option, we can now observe the changes to reflect them in the router.
-
-Hereafter, we watch the `searchStore.query` value and push the change to the router:
-
-```javascript
-export default {
-  // ...
-  watch: {
-    'searchStore.query'(value) {
-      this.$router.push({
-        name: 'search',
-        query: { q: value },
-      });
-    },
-  },
-  // ...
-}
-```
-
-Now every time the search query is changed, we will push the `q` query parameter to the router which will update the URL instantly.
-
+Note that the `qs` module is already used in InstantSearch, so this will not add to your bundle size, unless you use a different version.
