@@ -9,77 +9,139 @@ editable: true
 githubSource: docs/src/advanced/custom-components.md
 ---
 
-> NOTE: this guide has not yet been updated for v2
+> NOTE: this guide **has** been updated for v2
 
-You can build your own components when the provided ones are not sufficient. Since we try
-as hard as possible to provide an out-of-the-box experience, we would love to hear
-about your custom component use case before you build it.
-
-Let us know about your use case for a custom component via our [issue tracker](https://github.com/algolia/vue-instantsearch/issues).
+You can build your own components when the provided ones are not sufficient. Since we try as hard as possible to provide an out-of-the-box experience, we would love to hear about your custom component use case before you build it. You can open a new post on our [forum](https://discourse.algolia.com/c/show-tell) to show it to the community!
 
 ## What is a custom component
 
-A custom component is a Vue.js component that has access to the [search store](getting-started/search-store.html).
+A custom component is a Vue.js component that has access to the currently refined state, results and has possibility to refine the search further.
 
 It can:
 
-- mutate the state of the search store
-- get the state from the search store
+- get current refined values
+- refine the search more
+- remove refinements
+- get the search results
 
-## How to create a custom component
+## Customizing existing components
 
-We have a `Component` [mixin](https://vuejs.org/v2/guide/mixins.html) for you to use:
+First of all, the recommended way to modify how a component works is by filling in its "default" slot. Each component exposes a [scoped slot](https://vuejs.org/v2/guide/components-slots.html#Scoped-Slots) which provides all information necessary to give a different rendering to this component with the same or similar functionality.
+
+As an example, let's make a custom menu, rendered in a list of buttons. The first step is to have a working default rendering for the menu. This can look like the following: 
 
 ```html
-<!-- CurrentQuery.vue -->
-<template>
-  <div>
-    {{ query }}
-  </div>
-</template>
+<ais-menu attribute="brands"></ais-menu>
+```
 
+The next step is to fill in the rendering. Let's not think about making it work yet, but we can get the possible refined values with the slot's value `items`. 
+
+```html
+<ais-menu attribute="brands">
+  <template slot-scope="{ items }">
+    <ul>
+      <li v-for="item in items" :key="item.value">
+        <button>{{ item.label }}</button>
+      </li>
+    </ul>
+  </template>
+</ais-menu>
+```
+
+Each component also provides a function called `refine`. This function can be called to apply the action of that component. Here it will toggle the refinement of that value. Let's add that to the click event on that button.
+
+```html
+<ais-menu attribute="brands">
+  <template slot-scope="{ items }">
+    <ul>
+      <li v-for="item in items" :key="item.value">
+        <button @click="refine(item.value)">
+          {{ item.label }}
+        </button>
+      </li>
+    </ul>
+  </template>
+</ais-menu>
+```
+
+More examples of this can be found in the [ais-search-state](components/SearchState.html) component.
+
+## Complete custom components
+
+In some cases, you might want to create a component which uses a piece of data not currently provided by any of the widgets. You also might want to make a custom component for having access to the data in different places than the template.
+
+You can do this with the `createWidgetMixin` function exposed by Vue InstantSearch. It works together with the [connectors](https://community.algolia.com/instantsearch.js/v2/guides/customization.html) from InstantSearch.js. To get started, let's choose the `connectMenu` connector for this example. 
+
+```html
 <script>
-import { Component } from 'vue-instantsearch';
+import { createWidgetMixin } from 'vue-instantsearch';
+import { connectMenu } from 'instantsearch.js/es/connectors';
 
 export default {
-  mixins: [Component],
-  computed: {
-    query() {
-      return this.searchStore.query;
-    },
-  },
+  mixins: [
+    createWidgetMixin({ connector: connectMenu })
+  ],
 };
 </script>
 ```
 
-This component will display the current search query.
+Then, all information from that connector will be available to your template as well as your other Vue lifecycle methods (after `created`). All information will be available on `this.state` on your instance, and will be `null` initially (so make sure your code is safe by wrapping usage in the template for example in an `v-if="state"`).
 
-## How it works
+Then we can make use of `state` here to for example filter over the items (note that this is also possible with `transform-items` prop on `ais-menu`):
 
-By using the `Component` mixin, the custom component will automatically be able to access `this.searchStore`.
+```js
+export default {
+  // ...
+  computed: {
+    items() {
+      // no if needed here if we v-if in the template
+      // only labels of three character long allowed
+      return items.state.items.filter(item => item.label.length === 3)
+    }
+  }
+}
+```
 
-This is made possible because the `Component` mixin `injects` the searchStore.
-You can read more about the inject/provide feature on the [Vue.js documentation](https://vuejs.org/v2/api/#provide-inject).
+Then in our template, we can use this as expected:
 
-The search store will be automatically fetched from a parent [InstantSearch component](components/InstantSearch.html) higher in the DOM tree.
+```html
+<template>
+  <ul>
+    <li v-for="item in items" :key="item.value">
+      <button @click="state.refine(item.value)">
+        {{ item.label }}
+      </button>
+    </li>
+  </ul>
+</template>
+```
 
-As a reminder, you can also [provide your custom searchStore to any custom component](getting-started/search-store.html#manually-inject-the-search-store-into-components) as a property.
+Finally, if you want to make your own connector, you can do that using a function with this signature:
 
-## Best practices
+```js
+const connector = (renderFn, unmountFn) => (widgetParams = {}) => ({
+  init({ instantSearchInstance }) {
+    renderFn(
+      {
+        /* anything you put here comes in this.state */
+      },
+      true
+    );
+  },
 
-To ensure consistency and re-usability for custom components, we recommend reviewing the following guidelines.
+  render({ results, instantSearchInstance }) {
+    renderFn(
+      {
+        /* anything you put here comes in this.state */
+      },
+      false
+    );
+  },
 
-### Styles and CSS classes
+  dispose() {
+    unmountFn();
+  },
+});
+```
 
-* Vue InstantSearch uses `ais` as a prefix for CSS classes, we recommend choosing a different prefix to avoid conflicts
-* We do not recommend the use of [`scoped`](https://vue-loader.vuejs.org/en/features/scoped-css.html) styles, it makes it very hard to override them.
-* Use the [BEM notation](http://getbem.com/introduction/) with only one depth level.
-* Think about reusability: ship the bare minimum style for your component to be displayed well, while allowing for easy customization.
-
-### Vue component
-
-* Use the `Component` mixin that we provide. This will make sure your component can resolve the `searchStore` if not provided. It ensures the `searchStore` prop is available in your component at any time.
-* If you need to mutate the `searchStore` multiple times, please use `searchStore.stop()` and `searchStore.start()`, so that other components don't update their rendering on every intermediary state mutation. Do not forget the `searchStore.refresh()` if you want to sync the store afterwards.
-* Make sure that when the component is `mounted`, you catch up with the `searchStore`. You can optionally mutate the state of the `searchStore` at this stage.
-* When a component is `unmounted` or `destroyed`, make sure that you leave the `searchStore` in a state that does not include things you might have added (facets / filters / etc.).
-* Make sure your component gracefully handles any state of the `searchStore`.
+That will give you access to the lowest level of abstraction, including the [Algolia Helper](https://community.algolia.com/algoliasearch-helper-js/reference.html).
