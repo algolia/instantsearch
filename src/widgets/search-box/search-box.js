@@ -129,8 +129,11 @@ searchBox({
   [ cssClasses.{root, input, reset, submit, loadingIndicator} ],
   [ autofocus = false ],
   [ searchAsYouType = true ],
-  [ queryHook ]
-  [ templates.{reset, submit, loadingIndicator} ]
+  [ showReset = true ],
+  [ showSubmit = true ],
+  [ showLoadingIndicator = true ],
+  [ queryHook ],
+  [ templates.{reset, submit, loadingIndicator} ],
 })`;
 
 /**
