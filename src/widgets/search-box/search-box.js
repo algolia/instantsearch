@@ -149,7 +149,9 @@ searchBox({
  * @property {string|string[]} [form] CSS class to add to the form
  * @property {string|string[]} [input] CSS class to add to the input.
  * @property {string|string[]} [reset] CSS classes added to the reset button.
- * @property {string|string[]} [loadingIndicator] CSS classes added to the loading-indicator element.
+ * @property {string|string[]} [resetIcon] CSS classes added to the reset icon.
+ * @property {string|string[]} [loadingIndicator] CSS classes added to the loading indicator element.
+ * @property {string|string[]} [loadingIcon] CSS classes added to the loading indicator icon.
  * @property {string|string[]} [submit] CSS classes added to the submit.
  */
 
@@ -246,6 +248,10 @@ Learn more in the [migration guide](https://community.algolia.com/instantsearch.
     loadingIndicator: cx(
       suit({ descendantName: 'loadingIndicator' }),
       userCssClasses.loadingIndicator
+    ),
+    loadingIcon: cx(
+      suit({ descendantName: 'loadingIcon' }),
+      userCssClasses.loadingIcon
     ),
   };
 

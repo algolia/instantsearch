@@ -76,11 +76,13 @@ describe('searchBox()', () => {
 
     it('supports cssClasses option', () => {
       opts.cssClasses = {
-        root: ['root-class', 'cx'],
+        root: ['root', 'customRoot'],
         form: 'form',
-        input: 'input-class',
+        input: 'input',
         reset: 'reset',
-        loadingIndicator: 'loading',
+        resetIcon: 'resetIcon',
+        loadingIndicator: 'loadingIndicator',
+        loadingIcon: 'loadingIcon',
         submit: 'submit',
       };
 
@@ -88,26 +90,32 @@ describe('searchBox()', () => {
       widget.init({ state, helper, onHistoryChange });
 
       expect(container.querySelector('.ais-SearchBox').classList).toContain(
-        'root-class'
+        'root'
       );
       expect(container.querySelector('.ais-SearchBox').classList).toContain(
-        'cx'
+        'customRoot'
       );
       expect(
         container.querySelector('.ais-SearchBox-form').classList
       ).toContain('form');
       expect(
         container.querySelector('.ais-SearchBox-input').classList
-      ).toContain('input-class');
+      ).toContain('input');
       expect(
         container.querySelector('.ais-SearchBox-reset').classList
       ).toContain('reset');
+      expect(
+        container.querySelector('.ais-SearchBox-resetIcon').classList
+      ).toContain('resetIcon');
       expect(
         container.querySelector('.ais-SearchBox-submit').classList
       ).toContain('submit');
       expect(
         container.querySelector('.ais-SearchBox-loadingIndicator').classList
-      ).toContain('loading');
+      ).toContain('loadingIndicator');
+      expect(
+        container.querySelector('.ais-SearchBox-loadingIcon').classList
+      ).toContain('loadingIcon');
     });
   });
 
@@ -439,7 +447,7 @@ function simulateInputEvent(
   stateQuery,
   widget,
   helper,
-  state,
+  _state,
   container
 ) {
   if (query === undefined) {

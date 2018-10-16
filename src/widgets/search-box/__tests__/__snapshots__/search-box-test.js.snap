@@ -64,7 +64,7 @@ exports[`searchBox() markup renders correctly 1`] = `
       hidden=""
     >
       <svg
-        class=""
+        class="ais-SearchBox-loadingIcon"
         height="16"
         stroke="#444"
         viewBox="0 0 38 38"
