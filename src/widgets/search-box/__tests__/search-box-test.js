@@ -176,6 +176,7 @@ describe('searchBox()', () => {
       // Then
       expect(helper.setQuery).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
+      expect(document.activeElement).toBe(container.querySelector('input'));
     });
 
     it('should let the user define its own string template', () => {

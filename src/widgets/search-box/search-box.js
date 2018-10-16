@@ -321,8 +321,8 @@ function addReset(input, cssClasses, templates, clearFunction) {
 
   input.parentNode.appendChild(node);
 
-  node.addEventListener('click', event => {
-    event.preventDefault();
+  node.addEventListener('click', () => {
+    input.focus();
     clearFunction();
   });
 }
@@ -384,6 +384,7 @@ function wrapInputFn(input, cssClasses) {
   const form = document.createElement('form');
   form.className = cssClasses.form;
   form.noValidate = true;
+  form.action = '';
 
   form.appendChild(input);
   wrapper.appendChild(form);
