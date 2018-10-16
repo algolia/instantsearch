@@ -48,7 +48,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.currentRefinements({
             container,
-            includedAttributes: [{ name: 'price' }],
+            includedAttributes: ['price'],
           })
         );
       })
@@ -67,7 +67,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.currentRefinements({
             container,
-            excludedAttributes: ['price'],
+            excludedAttributes: ['query', 'price'],
           })
         );
       })
@@ -106,41 +106,47 @@ export default () => {
           instantsearch.widgets.currentRefinements({
             container,
             transformItems: items =>
-              items.map(item => ({
-                ...item,
-                computedLabel: item.computedLabel.toUpperCase(),
+              items.map(refinement => ({
+                ...refinement,
+                items: refinement.items.map(item => ({
+                  ...item,
+                  label: item.label.toUpperCase(),
+                })),
               })),
           })
         );
       })
-    )
-    .add(
-      'with item template',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.configure({
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-            disjunctiveFacets: ['brand'],
-            numericRefinements: { price: { '>=': [100] } },
-          })
-        );
-
-        window.search.addWidget(
-          instantsearch.widgets.currentRefinements({
-            container,
-            includedAttributes: [
-              {
-                name: 'brand',
-                template: ({ cssClasses, attributeName, computedLabel }) =>
-                  `<span class="${cssClasses.category} ${
-                    cssClasses.categoryLabel
-                  }">${attributeName} = ${computedLabel}</span> <button class="${
-                    cssClasses.delete
-                  }">x</button>`,
-              },
-            ],
-          })
-        );
-      })
     );
+  // .add(
+  //   'with item template',
+  //   wrapWithHits(container => {
+  //     window.search.addWidget(
+  //       instantsearch.widgets.configure({
+  //         disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+  //         disjunctiveFacets: ['brand'],
+  //         numericRefinements: { price: { '>=': [100] } },
+  //       })
+  //     );
+
+  //     window.search.addWidget(
+  //       instantsearch.widgets.currentRefinements({
+  //         container,
+  //         includedAttributes: [
+  //           {
+  //             name: 'brand',
+  //             template: ({ cssClasses, attributeName, items }) =>
+  //               `<span class="${cssClasses.label}">${attributeName} =</span>
+  //               <span class="${cssClasses.category}">
+  //               ${items.map(
+  //                 item => `<span class="${cssClasses.categoryLabel}">${
+  //                   item.label
+  //                 }</span>
+  //               <button class="${cssClasses.delete}">x</button>`
+  //               )}`,
+  //           },
+  //         ],
+  //       })
+  //     );
+  //   })
+  // )
 };

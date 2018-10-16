@@ -91,7 +91,7 @@ describe('connectCurrentRefinements', () => {
     ]);
   });
 
-  it('Provide a function to clear the refinement', () => {
+  it('Provides functions to clear the refinement', () => {
     // For each refinements we get a function that we can call
     // for removing a single refinement
     const helper = jsHelper({}, '', {
@@ -114,8 +114,8 @@ describe('connectCurrentRefinements', () => {
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const refinements = firstRenderingOptions.refinements;
     expect(typeof firstRenderingOptions.refine).toBe('function');
-    expect(refinements).toHaveLength(1);
-    firstRenderingOptions.refine(refinements[0]);
+    expect(refinements[0].items).toHaveLength(1);
+    firstRenderingOptions.refine(refinements[0].items[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
 
     helper.addFacetRefinement('myFacet', 'value');
@@ -130,8 +130,8 @@ describe('connectCurrentRefinements', () => {
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const otherRefinements = secondRenderingOptions.refinements;
     expect(typeof secondRenderingOptions.refine).toBe('function');
-    expect(otherRefinements).toHaveLength(1);
-    secondRenderingOptions.refine(refinements[0]);
+    expect(otherRefinements[0].items).toHaveLength(1);
+    secondRenderingOptions.refine(otherRefinements[0].items[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
   });
 
@@ -143,7 +143,7 @@ describe('connectCurrentRefinements', () => {
     const rendering = jest.fn();
     const makeWidget = connectCurrentRefinements(rendering);
     const widget = makeWidget({
-      includesQuery: true,
+      excludedAttributes: [],
     });
 
     widget.init({
@@ -154,7 +154,7 @@ describe('connectCurrentRefinements', () => {
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.refinements).toEqual([
-      expect.objectContaining({ attributeName: 'query' }),
+      expect.objectContaining({ attribute: 'query' }),
     ]);
 
     widget.render({
@@ -166,7 +166,7 @@ describe('connectCurrentRefinements', () => {
 
     const secondRenderingOptions = rendering.mock.calls[0][0];
     expect(secondRenderingOptions.refinements).toEqual([
-      expect.objectContaining({ attributeName: 'query' }),
+      expect.objectContaining({ attribute: 'query' }),
     ]);
   });
 });

@@ -1,77 +1,84 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import Template from '../Template.js';
+// import Template from '../Template.js';
 import { isSpecialClick, capitalize } from '../../lib/utils.js';
+
+const createItemKey = ({ attribute, value, type, operator }) =>
+  [attribute, value, type, operator].map(key => key || 'none').join(':');
 
 class CurrentRefinements extends Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
 
-  handleClick = (event, index) => {
+  handleClick = (event, item) => {
     if (isSpecialClick(event)) {
       return;
     }
 
-    if (event.target.tagName === 'BUTTON') {
-      event.preventDefault();
-      this.props.clearRefinementClicks[index]();
-    }
+    item.refine();
   };
 
-  renderItem(refinement, index) {
-    const key =
-      refinement.attributeName +
-      (refinement.operator ? refinement.operator : ':') +
-      (refinement.exclude ? refinement.exclude : '') +
-      refinement.name;
-    const attribute = this.props.attributes[refinement.attributeName] || {};
-    const attributeTemplates = attribute.template
-      ? {
-          templates: {
-            item: attribute.template,
-          },
-        }
-      : null;
+  renderRefinement(refinement, index) {
+    // const attribute = this.props.attributes[refinement.attribute] || {};
+    // const attributeTemplates = attribute.template
+    //   ? {
+    //       templates: {
+    //         item: attribute.template,
+    //       },
+    //     }
+    //   : null;
 
-    return attribute.template ? (
+    // return attribute.template ? (
+    //   <li
+    //     key={`${refinement.attribute}-${index}`}
+    //     className={this.props.cssClasses.item}
+    //     // onClick={event => this.handleClick(event, refinement, _item)}
+    //   >
+    //     <Template
+    //       {...this.props.templateProps}
+    //       // {...attributeTemplates}
+    //       templateKey="item"
+    //       data={{
+    //         ...refinement,
+    //         // ...attribute,
+    //         cssClasses: this.props.cssClasses,
+    //       }}
+    //     />
+    //   </li>
+    // ) : (
+    return (
       <li
+        key={`${refinement.attribute}-${index}`}
         className={this.props.cssClasses.item}
-        key={key}
-        onClick={event => this.handleClick(event, index)}
       >
-        <Template
-          {...this.props.templateProps}
-          {...attributeTemplates}
-          templateKey="item"
-          data={{
-            ...refinement,
-            ...attribute,
-            cssClasses: this.props.cssClasses,
-          }}
-        />
-      </li>
-    ) : (
-      <li className={this.props.cssClasses.item} key={key}>
-        <span className={this.props.cssClasses.label}>
-          {capitalize(refinement.attributeName)}:
-        </span>
-
-        <span className={this.props.cssClasses.category}>
-          <span className={this.props.cssClasses.categoryLabel}>
-            {refinement.computedLabel}
+        <span>
+          <span className={this.props.cssClasses.label}>
+            {capitalize(refinement.attribute)}:
           </span>
 
-          <button
-            className={this.props.cssClasses.delete}
-            onClick={event => this.handleClick(event, index)}
-          >
-            ✕
-          </button>
+          {refinement.items.map(item => (
+            <span
+              key={createItemKey(item)}
+              className={this.props.cssClasses.category}
+            >
+              <span className={this.props.cssClasses.categoryLabel}>
+                {item.label}
+              </span>
+
+              <button
+                className={this.props.cssClasses.delete}
+                onClick={event => this.handleClick(event, item)}
+              >
+                ✕
+              </button>
+            </span>
+          ))}
         </span>
       </li>
     );
+    // );
   }
 
   render() {
@@ -79,7 +86,7 @@ class CurrentRefinements extends Component {
       <div className={this.props.cssClasses.root}>
         <ul className={this.props.cssClasses.list}>
           {this.props.refinements.map((refinement, index) =>
-            this.renderItem(refinement, index)
+            this.renderRefinement(refinement, index)
           )}
         </ul>
       </div>
@@ -88,9 +95,7 @@ class CurrentRefinements extends Component {
 }
 
 CurrentRefinements.propTypes = {
-  attributes: PropTypes.object.isRequired,
-  clearRefinementClicks: PropTypes.arrayOf(PropTypes.func).isRequired,
-  clearRefinementURLs: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // attributes: PropTypes.object.isRequired,
   cssClasses: PropTypes.shape({
     root: PropTypes.string.isRequired,
     list: PropTypes.string.isRequired,
@@ -103,9 +108,16 @@ CurrentRefinements.propTypes = {
   }).isRequired,
   refinements: PropTypes.arrayOf(
     PropTypes.shape({
-      attributeName: PropTypes.string.isRequired,
-      computedLabel: PropTypes.string.isRequired,
-    })
+      attribute: PropTypes.string.isRequired,
+      items: PropTypes.arrayOf(
+        PropTypes.shape({
+          attribute: PropTypes.string.isRequired,
+          label: PropTypes.string.isRequired,
+          value: PropTypes.string.isRequired,
+          // refine: PropTypes.func.isRequired,
+        }).isRequired
+      ).isRequired,
+    }).isRequired
   ).isRequired,
   templateProps: PropTypes.object.isRequired,
 };

@@ -1,6 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import isArray from 'lodash/isArray';
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements.js';
 import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements.js';
 import defaultTemplates from './defaultTemplates.js';
@@ -10,7 +9,7 @@ import { component } from '../../lib/suit.js';
 const suit = component('CurrentRefinements');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
-  { attributes, refine, createURL, refinements, instantSearchInstance },
+  { refinements, instantSearchInstance },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -22,18 +21,8 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
     return;
   }
 
-  const clearRefinementClicks = refinements.map(refinement =>
-    refine.bind(null, refinement)
-  );
-  const clearRefinementURLs = refinements.map(refinement =>
-    createURL(refinement)
-  );
-
   render(
     <CurrentRefinements
-      attributes={attributes}
-      clearRefinementClicks={clearRefinementClicks}
-      clearRefinementURLs={clearRefinementURLs}
       cssClasses={cssClasses}
       refinements={refinements}
       templateProps={renderState.templateProps}
@@ -45,11 +34,10 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
 const usage = `Usage:
 currentRefinements({
   container,
-  [ includedAttributes: [{name[, label, template]}] ],
-  [ excludedAttributes = [] ],
-  [ includesQuery = false ],
+  [ includedAttributes = [] ],
+  [ excludedAttributes = ['query'] ],
   [ templates.{item} ],
-  [ cssClasses.{root, list, item, label, category, categoryLabel, delete, reset} = {} ],
+  [ cssClasses.{root, list, item, label, category, categoryLabel, delete, reset} ],
   [ transformItems ]
 })`;
 
@@ -66,33 +54,23 @@ currentRefinements({
  */
 
 /**
- * @typedef {Object} CurrentRefinementsAttributes
- * @property {string} name Required attribute name.
- * @property {string} label Attribute label (passed to the item template).
- * @property {string|function(object):string} template Attribute specific template.
- */
-
-/**
  * @typedef {Object} CurrentRefinementsTemplates
- * @property {string|function(object):string} [item] Item template.
+ * @property {string|function(object):string} [item] The item template
  */
 
 /**
  * @typedef {Object} CurrentRefinementsWidgetOptions
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
- * @property {CurrentRefinementsAttributes[]} [includedAttributes] Label definitions for the different filters to include.
- * @property {string[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
- * @property {boolean} [includesQuery = false] Whether to add the query as a refinement.
- * @property {CurrentRefinementsTemplates} [templates] Templates to use for the widget.
- * @property {CurrentRefinementsCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {string|HTMLElement} container The CSS Selector or HTMLElement to insert the widget
+ * @property {string[]} [includedAttributes] The attributes to include in the refinements (all by default)
+ * @property {string[]} [excludedAttributes = ['query']] The attributes to exclude from the refinements
+ * @property {CurrentRefinementsTemplates} [templates] The templates to use for the widget
+ * @property {CurrentRefinementsCSSClasses} [cssClasses] The CSS classes to be added
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
- * The current refinements widget has two purposes:
- *
- *  - give the user a synthetic view of the current filters.
- *  - give the user the ability to remove a filter.
+ * The `currentRefinements` widget has two purposes give the user a synthetic view of the current filters
+ * and the ability to remove a filter.
  *
  * This widget is usually in the top part of the search UI.
  * @type {WidgetFactory}
@@ -105,10 +83,10 @@ currentRefinements({
  *   instantsearch.widgets.currentRefinements({
  *     container: '#current-refinements',
  *     includedAttributes: [
- *       { name: 'free_shipping', label: 'Free shipping' },
- *       { name: 'price', label: 'Price' },
- *       { name: 'brand', label: 'Brand' },
- *       { name: 'category', label: 'Category' },
+ *       'free_shipping',
+ *       'price',
+ *       'brand',
+ *       'category',
  *     ],
  *   })
  * );
@@ -116,13 +94,12 @@ currentRefinements({
 export default function currentRefinements({
   container,
   includedAttributes = [],
-  excludedAttributes = [],
-  includesQuery,
+  excludedAttributes,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   transformItems,
 }) {
-  if (!container || !isArray(includedAttributes)) {
+  if (!container) {
     throw new Error(usage);
   }
 
@@ -155,10 +132,10 @@ export default function currentRefinements({
     return makeWidget({
       includedAttributes,
       excludedAttributes,
-      includesQuery,
       transformItems,
     });
   } catch (error) {
-    throw new Error(usage);
+    throw new Error(error);
+    // throw new Error(usage);
   }
 }

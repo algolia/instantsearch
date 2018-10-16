@@ -6,7 +6,6 @@ describe('CurrentRefinements', () => {
   let defaultTemplates;
   let templateProps;
   let refinements;
-  let clearRefinementURLs;
   let parameters;
 
   const cssClasses = {
@@ -28,109 +27,122 @@ describe('CurrentRefinements', () => {
     templateProps = {
       templates: {
         clearAll: 'CLEAR ALL',
-        item: '{{attributeName}}: {{name}} :{{label}}',
+        item: '{{attribute}}: {{label}}',
       },
       defaultTemplates,
     };
 
     refinements = [
       {
-        type: 'facet',
-        attributeName: 'facet',
-        name: 'facet-val1',
-        computedLabel: 'facet-val1',
-        count: 1,
-        exhaustive: true,
+        attribute: 'facet',
+        items: [
+          {
+            type: 'facet',
+            attribute: 'facet',
+            value: 'facet-val1',
+            label: 'facet-val1',
+            refine: () => {},
+          },
+          {
+            type: 'facet',
+            attribute: 'facet',
+            value: 'facet-val2',
+            label: 'facet-val2',
+            refine: () => {},
+          },
+        ],
       },
       {
-        type: 'facet',
-        attributeName: 'facet',
-        name: 'facet-val2',
-        computedLabel: 'facet-val2',
-        count: 2,
-        exhaustive: true,
+        attribute: 'facet',
+        items: [
+          {
+            type: 'exclude',
+            attribute: 'facetExclude',
+            value: 'disjunctiveFacet-val1',
+            label: 'disjunctiveFacet-val1',
+            exclude: true,
+            refine: () => {},
+          },
+        ],
       },
       {
-        type: 'exclude',
-        attributeName: 'facetExclude',
-        name: 'disjunctiveFacet-val1',
-        computedLabel: 'disjunctiveFacet-val1',
-        exclude: true,
+        attribute: 'disjunctive',
+        items: [
+          {
+            type: 'disjunctive',
+            attribute: 'disjunctiveFacet',
+            value: 'disjunctiveFacet-val1',
+            label: 'disjunctiveFacet-val1',
+            refine: () => {},
+          },
+        ],
       },
       {
-        type: 'disjunctive',
-        attributeName: 'disjunctiveFacet',
-        name: 'disjunctiveFacet-val1',
-        computedLabel: 'disjunctiveFacet-val1',
+        attribute: 'hierarchical',
+        items: [
+          {
+            type: 'hierarchical',
+            attribute: 'hierarchicalFacet',
+            value: 'hierarchicalFacet-val1',
+            label: 'hierarchicalFacet-val1',
+            refine: () => {},
+          },
+        ],
       },
       {
-        type: 'hierarchical',
-        attributeName: 'hierarchicalFacet',
-        name: 'hierarchicalFacet-val1',
-        computedLabel: 'hierarchicalFacet-val1',
+        attribute: 'numeric',
+        items: [
+          {
+            type: 'numeric',
+            attribute: 'numericFacet',
+            value: 'numericFacet-val1',
+            label: 'numericFacet-val1',
+            operator: '>=',
+            refine: () => {},
+          },
+        ],
       },
       {
-        type: 'numeric',
-        attributeName: 'numericFacet',
-        name: 'numericFacet-val1',
-        computedLabel: 'numericFacet-val1',
-        operator: '>=',
+        attribute: 'tag',
+        items: [
+          {
+            type: 'tag',
+            attribute: '_tags',
+            value: 'tag1',
+            label: 'tag1',
+            refine: () => {},
+          },
+        ],
       },
-      {
-        type: 'tag',
-        attributeName: '_tags',
-        name: 'tag1',
-        computedLabel: 'tag1',
-      },
-    ];
-
-    clearRefinementURLs = [
-      '#cleared-facet-val1',
-      '#cleared-facet-val2',
-      '#cleared-facetExclude-val1',
-      '#cleared-disjunctiveFacet-val1',
-      '#cleared-hierarchicalFacet-val1',
-      '#cleared-numericFacet-val1',
-      '#cleared-tag1',
     ];
 
     parameters = {
       attributes: {
         facet: {
-          name: 'facet',
-          computedLabel: 'facet',
+          value: 'facet',
+          label: 'facet',
         },
         facetExclude: {
-          name: 'facetExclude',
-          computedLabel: 'facetExclude',
+          value: 'facetExclude',
+          label: 'facetExclude',
         },
         disjunctiveFacet: {
-          name: 'disjunctiveFacet',
-          computedLabel: 'disjunctiveFacet',
+          value: 'disjunctiveFacet',
+          label: 'disjunctiveFacet',
         },
         hierarchicalFacet: {
-          name: 'hierarchicalFacet',
-          computedLabel: 'hierarchicalFacet',
+          value: 'hierarchicalFacet',
+          label: 'hierarchicalFacet',
         },
         numericFacet: {
-          name: 'numericFacet',
-          computedLabel: 'numericFacet',
+          value: 'numericFacet',
+          label: 'numericFacet',
         },
         _tags: {
-          name: '_tags',
-          computedLabel: '_tags',
+          value: '_tags',
+          label: '_tags',
         },
       },
-      clearRefinementClicks: [
-        () => {},
-        () => {},
-        () => {},
-        () => {},
-        () => {},
-        () => {},
-        () => {},
-      ],
-      clearRefinementURLs,
       cssClasses,
       refinements,
       templateProps,
@@ -146,9 +158,8 @@ describe('CurrentRefinements', () => {
   describe('options.attributes', () => {
     it('uses label', () => {
       parameters.attributes.facet = {
-        name: 'facet',
-        computedLabel: 'facet',
-        label: 'COUCOU',
+        value: 'facet',
+        label: 'facet',
       };
 
       const tree = mount(<CurrentRefinements {...parameters} />);
@@ -158,8 +169,8 @@ describe('CurrentRefinements', () => {
 
     it('uses template', () => {
       parameters.attributes.facet = {
-        name: 'facet',
-        computedLabel: 'facet',
+        value: 'facet',
+        label: 'facet',
         template: 'CUSTOM TEMPLATE',
       };
 
@@ -169,30 +180,24 @@ describe('CurrentRefinements', () => {
     });
   });
 
-  describe('options.clearRefinementURLs', () => {
-    it('is used in an item element', () => {
-      parameters.clearRefinementURLs[1] = '#custom-clear-specific';
-      const tree = mount(<CurrentRefinements {...parameters} />);
-
-      expect(tree).toMatchSnapshot();
-    });
-  });
-
   describe('options.refinements', () => {
     beforeEach(() => {
       parameters.attributes = {};
-      parameters.clearRefinementURLs = ['#cleared-custom'];
-      parameters.clearRefinementClicks = [() => {}];
-      clearRefinementURLs = ['#cleared-custom'];
     });
 
     it('can be used with a facet', () => {
       parameters.refinements = [
         {
-          type: 'facet',
-          attributeName: 'customFacet',
-          name: 'val1',
-          computedLabel: 'val1',
+          attribute: 'customFacet',
+          items: [
+            {
+              attribute: 'customFacet',
+              type: 'facet',
+              value: 'val1',
+              label: 'val1',
+              refine: () => {},
+            },
+          ],
         },
       ];
       const tree = mount(<CurrentRefinements {...parameters} />);
@@ -203,11 +208,17 @@ describe('CurrentRefinements', () => {
     it('can be used with an exclude', () => {
       parameters.refinements = [
         {
-          type: 'exclude',
-          attributeName: 'customExcludeFacet',
-          name: 'val1',
-          computedLabel: 'val1',
-          exclude: true,
+          attribute: 'customExcludeFacet',
+          items: [
+            {
+              attribute: 'customExcludeFacet',
+              type: 'exclude',
+              value: 'val1',
+              label: 'val1',
+              exclude: true,
+              refine: () => {},
+            },
+          ],
         },
       ];
       const tree = mount(<CurrentRefinements {...parameters} />);
@@ -218,10 +229,16 @@ describe('CurrentRefinements', () => {
     it('can be used with a disjunctive facet', () => {
       parameters.refinements = [
         {
-          type: 'disjunctive',
-          attributeName: 'customDisjunctiveFacet',
-          name: 'val1',
-          computedLabel: 'val1',
+          attribute: 'customDisjunctiveFacet',
+          items: [
+            {
+              attribute: 'customDisjunctiveFacet',
+              type: 'disjunctive',
+              value: 'val1',
+              label: 'val1',
+              refine: () => {},
+            },
+          ],
         },
       ];
       const tree = mount(<CurrentRefinements {...parameters} />);
@@ -232,10 +249,16 @@ describe('CurrentRefinements', () => {
     it('can be used with a hierarchical facet', () => {
       parameters.refinements = [
         {
-          type: 'hierarchical',
-          attributeName: 'customHierarchicalFacet',
-          name: 'val1',
-          computedLabel: 'val1',
+          attribute: 'customHierarchicalFacet',
+          items: [
+            {
+              attribute: 'customHierarchicalFacet',
+              type: 'hierarchical',
+              value: 'val1',
+              label: 'val1',
+              refine: () => {},
+            },
+          ],
         },
       ];
       const tree = mount(<CurrentRefinements {...parameters} />);
@@ -246,25 +269,43 @@ describe('CurrentRefinements', () => {
     it('can be used with numeric filters', () => {
       parameters.refinements = [
         {
-          type: 'numeric',
-          attributeName: 'customNumericFilter',
-          operator: '=',
-          name: 'val1',
-          computedLabel: 'val1',
+          attribute: 'customNumericFilter',
+          items: [
+            {
+              attribute: 'customNumericFilter',
+              type: 'numeric',
+              operator: '=',
+              value: 'val1',
+              label: 'val1',
+              refine: () => {},
+            },
+          ],
         },
         {
-          type: 'numeric',
-          attributeName: 'customNumericFilter',
-          operator: '<=',
-          name: 'val2',
-          computedLabel: 'val2',
+          attribute: 'customNumericFilter',
+          items: [
+            {
+              attribute: 'customNumericFilter',
+              type: 'numeric',
+              operator: '<=',
+              value: 'val2',
+              label: 'val2',
+              refine: () => {},
+            },
+          ],
         },
         {
-          type: 'numeric',
-          attributeName: 'customNumericFilter',
-          operator: '>=',
-          name: 'val3',
-          computedLabel: 'val3',
+          attribute: 'customNumericFilter',
+          items: [
+            {
+              attribute: 'customNumericFilter',
+              type: 'numeric',
+              operator: '>=',
+              value: 'val3',
+              label: 'val3',
+              refine: () => {},
+            },
+          ],
         },
       ];
       const tree = mount(<CurrentRefinements {...parameters} />);
@@ -275,10 +316,16 @@ describe('CurrentRefinements', () => {
     it('can be used with a tag', () => {
       parameters.refinements = [
         {
-          type: 'tag',
-          attributeName: '_tags',
-          name: 'tag1',
-          computedLabel: 'tag1',
+          attribute: '_tags',
+          items: [
+            {
+              attribute: '_tags',
+              type: 'tag',
+              value: 'tag1',
+              label: 'tag1',
+              refine: () => {},
+            },
+          ],
         },
       ];
       const tree = mount(<CurrentRefinements {...parameters} />);

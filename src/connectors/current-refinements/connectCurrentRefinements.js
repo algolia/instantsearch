@@ -1,4 +1,3 @@
-import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 import {
   getRefinements,
@@ -20,8 +19,7 @@ var customCurrentRefinements = connectCurrentRefinements(function renderFn(param
 search.addWidget(
   customCurrentRefinements({
     [ includedAttributes ],
-    [ excludedAttributes = [] ],
-    [ includesQuery = false ],
+    [ excludedAttributes = ['query'] ],
     [ transformItems ],
   })
 );
@@ -30,20 +28,21 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CurrentRefinement
- * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"|"query"} type Type of refinement
- * @property {string} attributeName Attribute on which the refinement is applied
- * @property {string} name value of the refinement
- * @property {number} [numericValue] value if the attribute is numeric and used with a numeric filter
- * @property {boolean} [exhaustive] `true` if the count is exhaustive, only if applicable
+ * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"|"query"} type The type of the refinement
+ * @property {string} attribute The attribute on which the refinement is applied
+ * @property {string} label The label of the refinement to display
+ * @property {string} value The raw value of the refinement
+ * @property {function} refine The function to remove the refinement
+ * @property {string} [operator] The raw value of the refinement
+ * @property {boolean} [exhaustive] Whether the count is exhaustive, only if applicable
  * @property {number} [count] number of items found, if applicable
- * @property {string} [query] value of the query if the type is query
  */
 
 /**
  * @typedef {Object} CurrentRefinementsRenderingOptions
- * @property {Object.<string, object>} includedAttributes Original `CurrentRefinementsWidgetOptions.includedAttributes` mapped by keys.
- * @property {Object.<string, object>} excludedAttributes Label definitions for the different filters to exclude.
- * @property {function(item)} refine Clears a single refinement.
+ * @property {string[]} [includedAttributes] The attributes to include in the refinements (all by default)
+ * @property {string[]} [excludedAttributes = ["query"]] The attributes to exclude from the refinements
+ * @property {function(item)} refine Clears a single refinement
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
  * @property {CurrentRefinement[]} refinements All the current refinements.
  * @property {Object} widgetParams All original `CustomCurrentRefinementsWidgetOptions` forwarded to the `renderFn`.
@@ -57,11 +56,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomCurrentRefinementsWidgetOptions
- * @property {CurrentRefinementsAttributes[]} [includedAttributes] Specification for the display of
- * refinements per attribute (default: `[]`). By default, the widget will display all the filters
- * set with no special treatment for the label.
- * @property {string[]} [excludedAttributes = []] Label definitions for the different filters to exclude.
- * @property {boolean} [includesQuery = false] Whether to add the query as a refinement.
+ * @property {string[]} [includedAttributes] The attributes to include in the refinements (all by default)
+ * @property {string[]} [excludedAttributes = ["query"]] The attributes to exclude from the refinements
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -97,7 +93,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *       && CurrentRefinementsRenderingOptions.refinements.length > 0) {
  *     var list = CurrentRefinementsRenderingOptions.refinements.map(function(refinement) {
  *       return '<li><a href="' + CurrentRefinementsRenderingOptions.createURL(refinement) + '">'
- *         + refinement.computedLabel + ' ' + refinement.count + '</a></li>';
+ *         + refinement.label + '</a></li>';
  *     });
  *
  *     CurrentRefinementsRenderingOptions.find('ul').html(list);
@@ -131,42 +127,29 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const {
       includedAttributes = [],
-      excludedAttributes = [],
-      includesQuery = false,
+      excludedAttributes = ['query'],
       transformItems = items => items,
     } = widgetParams;
 
     const isUsageValid =
-      isArray(includedAttributes) &&
-      isArray(excludedAttributes) &&
-      includedAttributes.reduce(
-        (res, val) =>
-          res &&
-          isPlainObject(val) &&
-          typeof val.name === 'string' &&
-          (!val.label || typeof val.label === 'string') &&
-          (!val.template ||
-            typeof val.template === 'string' ||
-            typeof val.template === 'function') &&
-          (!val.transformData || typeof val.transformData === 'function'),
-        true
-      );
+      Array.isArray(includedAttributes) && Array.isArray(excludedAttributes);
 
     if (!isUsageValid) {
       throw new Error(usage);
     }
 
-    const attributes = includedAttributes.filter(
-      ({ name }) => excludedAttributes.indexOf(name) === -1
+    // TODO: get all attributes by default
+    const filteredAttributes = includedAttributes.filter(
+      attribute => excludedAttributes.indexOf(attribute) === -1
     );
-    const attributeNames = attributes.map(attribute => attribute.name);
-    const attributesObject = attributes.reduce(
-      (res, attribute) => ({
-        ...res,
-        [attribute.name]: attribute,
-      }),
-      {}
-    );
+    const clearsQuery = excludedAttributes.indexOf('query') !== -1;
+
+    // console.log({
+    //   includedAttributes,
+    //   excludedAttributes,
+    //   attributes,
+    //   clearsQuery,
+    // });
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
@@ -175,33 +158,34 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
             .setState(
               clearRefinements({
                 helper,
-                includedAttributes: attributes,
-                clearsQuery: includesQuery,
+                includedAttributes: filteredAttributes,
+                clearsQuery,
               })
             )
             .search();
         };
 
         const refinements = transformItems(
-          getFilteredRefinements({
-            results: {},
-            state: helper.state,
-            attributeNames,
-            excludedAttributes,
-            includesQuery,
-          })
+          normalizeRefinements(
+            getFilteredRefinements({
+              results: {},
+              state: helper.state,
+              includedAttributes,
+              excludedAttributes,
+              clearsQuery,
+            }),
+            helper
+          )
         );
 
-        const _createURL = refinement =>
-          createURL(clearRefinementFromState(helper.state, refinement));
-        const _clearRefinement = refinement =>
-          clearRefinement(helper, refinement);
+        const attributes = refinements.map(refinement => refinement.attribute);
+        // .filter(attribute => excludedAttributes.indexOf(attribute) === -1);
 
         renderFn(
           {
-            attributes: attributesObject,
-            refine: _clearRefinement,
-            createURL: _createURL,
+            refine: refinement => clearRefinement(helper, refinement),
+            createUrl: refinement =>
+              createURL(clearRefinementFromState(helper.state, refinement)),
             refinements,
             instantSearchInstance,
             widgetParams,
@@ -212,25 +196,23 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
         const refinements = transformItems(
-          getFilteredRefinements({
-            results,
-            state,
-            attributeNames,
-            excludedAttributes,
-            includesQuery,
-          })
+          normalizeRefinements(
+            getFilteredRefinements({
+              results,
+              state,
+              includedAttributes,
+              excludedAttributes,
+              clearsQuery,
+            }),
+            helper
+          )
         );
-
-        const _createURL = refinement =>
-          createURL(clearRefinementFromState(helper.state, refinement));
-        const _clearRefinement = refinement =>
-          clearRefinement(helper, refinement);
 
         renderFn(
           {
-            attributes: attributesObject,
-            refine: _clearRefinement,
-            createURL: _createURL,
+            refine: refinement => clearRefinement(helper, refinement),
+            createURL: refinement =>
+              createURL(clearRefinementFromState(helper.state, refinement)),
             refinements,
             instantSearchInstance,
             widgetParams,
@@ -246,58 +228,58 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
   };
 }
 
-function getRestrictedIndexForSort(
-  attributeNames,
-  otherAttributeNames,
-  attributeName
-) {
-  const idx = attributeNames.indexOf(attributeName);
+function getRestrictedIndexForSort(attributes, otherAttributes, attribute) {
+  const idx = attributes.indexOf(attribute);
+
   if (idx !== -1) {
     return idx;
   }
-  return attributeNames.length + otherAttributeNames.indexOf(attributeName);
+
+  return attributes.length + otherAttributes.indexOf(attribute);
 }
 
-function compareRefinements(attributeNames, otherAttributeNames, a, b) {
+function compareRefinements(attributes, otherAttributes, a, b) {
   const idxa = getRestrictedIndexForSort(
-    attributeNames,
-    otherAttributeNames,
-    a.attributeName
+    attributes,
+    otherAttributes,
+    a.attribute
   );
+
   const idxb = getRestrictedIndexForSort(
-    attributeNames,
-    otherAttributeNames,
-    b.attributeName
+    attributes,
+    otherAttributes,
+    b.attribute
   );
+
   if (idxa === idxb) {
     if (a.name === b.name) {
       return 0;
     }
+
     return a.name < b.name ? -1 : 1;
   }
+
   return idxa < idxb ? -1 : 1;
 }
 
 function getFilteredRefinements({
   results,
   state,
-  attributeNames,
+  includedAttributes,
   excludedAttributes,
-  includesQuery,
+  clearsQuery,
 }) {
-  const refinements = getRefinements(results, state, includesQuery)
+  const refinements = getRefinements(results, state, clearsQuery)
     .filter(
-      ({ attributeName }) =>
-        attributeNames.length === 0 ||
-        attributeNames.indexOf(attributeName) !== -1
+      attribute =>
+        includedAttributes.length === 0 ||
+        includedAttributes.indexOf(attribute) !== -1
     )
-    .filter(
-      ({ attributeName }) => excludedAttributes.indexOf(attributeName) === -1
-    );
+    .filter(attribute => excludedAttributes.indexOf(attribute) === -1);
 
-  const otherAttributeNames = refinements.reduce((res, refinement) => {
+  const otherAttributes = refinements.reduce((res, refinement) => {
     if (
-      attributeNames.indexOf(refinement.attributeName) === -1 &&
+      includedAttributes.indexOf(refinement.attributeName) === -1 &&
       res.indexOf(refinement.attributeName === -1)
     ) {
       res.push(refinement.attributeName);
@@ -306,7 +288,7 @@ function getFilteredRefinements({
   }, []);
 
   const filteredRefinements = refinements
-    .sort(compareRefinements.bind(null, attributeNames, otherAttributeNames))
+    .sort(compareRefinements.bind(null, includedAttributes, otherAttributes))
     .map(normalizeItem);
 
   return filteredRefinements;
@@ -315,25 +297,22 @@ function getFilteredRefinements({
 function clearRefinementFromState(state, refinement) {
   switch (refinement.type) {
     case 'facet':
-      return state.removeFacetRefinement(
-        refinement.attributeName,
-        refinement.name
-      );
+      return state.removeFacetRefinement(refinement.attribute, refinement.name);
     case 'disjunctive':
       return state.removeDisjunctiveFacetRefinement(
-        refinement.attributeName,
+        refinement.attribute,
         refinement.name
       );
     case 'hierarchical':
-      return state.clearRefinements(refinement.attributeName);
+      return state.clearRefinements(refinement.attribute);
     case 'exclude':
       return state.removeExcludeRefinement(
-        refinement.attributeName,
+        refinement.attribute,
         refinement.name
       );
     case 'numeric':
       return state.removeNumericRefinement(
-        refinement.attributeName,
+        refinement.attribute,
         refinement.operator,
         refinement.numericValue
       );
@@ -364,14 +343,36 @@ function getOperatorSymbol(operator) {
 }
 
 function normalizeItem(item) {
-  const attributeName = item.type === 'query' ? 'query' : item.attributeName;
-  const computedLabel = item.operator
+  const attribute = item.type === 'query' ? 'query' : item.attributeName;
+  const label = item.operator
     ? `${getOperatorSymbol(item.operator)} ${item.name}`
     : item.name;
 
   return {
-    ...item,
-    attributeName,
-    computedLabel,
+    attribute,
+    label: item.type === 'query' ? `"${label}"` : label,
+    value: item.name,
+    type: item.type,
+    ...(item.operator && { operator: item.operator }),
+    ...(item.count && { count: item.count }),
+    ...(item.exhaustive && { exhaustive: item.exhaustive }),
   };
+}
+
+function normalizeRefinements(refinements, helper) {
+  return refinements.reduce(
+    (results, currentRefinement) => [
+      {
+        attribute: currentRefinement.attribute,
+        items: refinements.filter(
+          result => result.attribute === currentRefinement.attribute
+        ),
+        refine: refinement => clearRefinement(helper, refinement),
+      },
+      ...results.filter(
+        result => result.attribute !== currentRefinement.attribute
+      ),
+    ],
+    []
+  );
 }
