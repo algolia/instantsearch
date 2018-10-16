@@ -384,7 +384,7 @@ function wrapInputFn(input, cssClasses) {
   const form = document.createElement('form');
   form.className = cssClasses.form;
   form.noValidate = true;
-  form.action = '';
+  form.action = ''; // show search button on iOS keyboard
 
   form.appendChild(input);
   wrapper.appendChild(form);
