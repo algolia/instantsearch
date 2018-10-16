@@ -36,6 +36,7 @@ const common = [
       corePackage('src/components/InstantSearch.js'),
       corePackage('src/components/Index.js'),
       corePackage('src/connectors/*.js'),
+      corePackage('src/widgets/*.js'),
       domPackage('src/widgets/*.js'),
       domPackage('src/core/findResultsState.js'),
     ],
