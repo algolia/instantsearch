@@ -11,7 +11,7 @@ window.addEventListener('load', function() {
     instantsearch.widgets.searchBox({
       container: '#q',
       placeholder: 'Where are you going?',
-      magnifier: false
+      showSubmit: false
     })
   );
 
