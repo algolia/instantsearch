@@ -407,6 +407,19 @@ describe('searchBox()', () => {
       });
     });
   });
+
+  describe('markup', () => {
+    it('renders correctly', () => {
+      container = document.createElement('div');
+      widget = searchBox({ container });
+
+      widget.init({ state, helper, onHistoryChange });
+
+      const wrapper = container.querySelector('.ais-SearchBox');
+
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
 });
 
 function simulateKeyUpEvent(args, widget, helper, state, container) {
