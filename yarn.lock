@@ -1315,10 +1315,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@netlify/open-api@^0.4.1":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@netlify/open-api/-/open-api-0.4.2.tgz#d1921ded65a17a0f78a5b16271520ffe1661f6bb"
-  integrity sha512-57BkQNuExU0knrwnUXKVFdioNBP3oXUetoIlKHO7pp3TlY+9MQDFO+aXXRi105ISTILw9KyQBi7qe06sYbRKCw==
+"@netlify/open-api@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@netlify/open-api/-/open-api-0.5.0.tgz#9b4e4930c66326c73e09d0ec854a98eee75e660d"
+  integrity sha512-9Lm4kM6uU7EN2IeV2LDt9oKReGLfU+Qxk9qbH4oReU21/vZIuEc41B8jWLN0/M8AuKRJtCERaMDboNvAE0kpsg==
 
 "@nodelib/fs.stat@^1.0.1":
   version "1.1.0"
@@ -11607,7 +11607,7 @@ lodash.memoize@^4.1.2:
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
-lodash.merge@^4.6.0:
+lodash.merge@^4.6.0, lodash.merge@^4.6.1:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
   integrity sha512-AOYza4+Hf5z1/0Hztxpm2/xiPZgi/cjMqdnKTUWTBSKchJlxXXuUSxCCl8rJlf4g6yww/j6mA8nC8Hw/EZWxKQ==
@@ -12795,10 +12795,10 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
   integrity sha512-nJmSswG4As/MkRq7QZFuH/sf/yuv8ODdMZrY4Bedjp77a5MK4A6s7YbBB64c9u79EBUOfXUXBvArmvzTD0X+6g==
 
-netlify-cli@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.0.0.tgz#f77601b27587cd02528e1af0539be17ba3ed59d7"
-  integrity sha512-Uc8T14po6rpugxPDW1xGu8WN8AozPdKykRQs05S0p9nfn35guRzaWONUNHA8iUBjQsyhP0ANwSwuwO2u6/dvPw==
+netlify-cli@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.1.1.tgz#3f0c006ad3ac272ff28cbcbb58e732bfcfcd2cd8"
+  integrity sha512-mn3PM8NtRydD3YHEIl5VI6INkY6tBsXqO7JBU5sygbRFnX3QwYcv5S2DTNeA8xbBaah0uPIoy8xmBFGOIMwaVA==
   dependencies:
     "@iarna/toml" "^2.0.0"
     "@oclif/command" "^1"
@@ -12822,11 +12822,12 @@ netlify-cli@2.0.0:
     is-docker "^1.1.0"
     lodash.get "^4.4.2"
     lodash.isempty "^4.4.0"
+    lodash.merge "^4.6.1"
     lodash.mergewith "^4.6.1"
     lodash.snakecase "^4.1.1"
     log-symbols "^2.2.0"
     make-dir "^1.3.0"
-    netlify "2.0.1"
+    netlify "^2.2.0"
     node-fetch "^2.2.0"
     ora "^3.0.0"
     p-wait-for "^2.0.0"
@@ -12837,12 +12838,12 @@ netlify-cli@2.0.0:
     uuid "^3.3.2"
     write-file-atomic "^2.3.0"
 
-netlify@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/netlify/-/netlify-2.0.1.tgz#3782969d90cb1bedb86e6fe5f906bbfcc09505f5"
-  integrity sha512-W7zqY5fibQQS2gcO51PnLqafQEhKfFc4ZO//oNz9kxmB+vKtaMe8leuXUFDOh2vRXjf3EYWByq5nHdZiYGQRyQ==
+netlify@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/netlify/-/netlify-2.2.0.tgz#081e4fc2c6413847c40594bfcbfe25b95b3bba74"
+  integrity sha512-q9ndLiJeta/k3DT/Time6SukDuUJ3qnp1OPw4vZEOldzyKEsZB9uvhCU2eeol0FzhXrImpujruf0mJ/dcZp9eg==
   dependencies:
-    "@netlify/open-api" "^0.4.1"
+    "@netlify/open-api" "^0.5.0"
     archiver "^3.0.0"
     backoff "^2.5.0"
     clean-deep "^3.0.2"
