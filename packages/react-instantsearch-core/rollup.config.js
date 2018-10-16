@@ -38,7 +38,10 @@ const plugins = [
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
   }),
-  filesize(),
+  filesize({
+    showMinifiedSize: false,
+    showGzippedSize: true,
+  }),
 ];
 
 const createConfiguration = ({ name, minify = false } = {}) => ({
