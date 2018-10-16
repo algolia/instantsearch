@@ -30,6 +30,17 @@ export default () => {
       })
     )
     .add(
+      'with autofocus',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container,
+            autofocus: true,
+          })
+        );
+      })
+    )
+    .add(
       'do not display the loading indicator',
       wrapWithHits(container => {
         window.search.addWidget(
