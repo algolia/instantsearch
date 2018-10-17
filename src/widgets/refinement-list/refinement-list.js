@@ -67,7 +67,7 @@ const renderer = ({
       headerFooterData={headerFooterData}
       shouldAutoHideContainer={autoHideContainer && canRefine === false}
       templateProps={renderState.templateProps}
-      toggleRefinement={refine}
+      toggleFacetRefinement={refine}
       searchFacetValues={searchForFacetValues ? searchForItems : undefined}
       searchPlaceholder={
         searchForFacetValues.placeholder || 'Search for other...'

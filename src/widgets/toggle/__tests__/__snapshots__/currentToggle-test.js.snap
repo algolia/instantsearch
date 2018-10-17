@@ -57,7 +57,7 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -118,7 +118,7 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -179,7 +179,7 @@ exports[`currentToggle() good usage render understands cssClasses 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -240,7 +240,7 @@ exports[`currentToggle() good usage render when refined 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -301,7 +301,7 @@ exports[`currentToggle() good usage render when refined 2`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -362,7 +362,7 @@ exports[`currentToggle() good usage render with facet values 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -423,7 +423,7 @@ exports[`currentToggle() good usage render with facet values 2`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -484,7 +484,7 @@ exports[`currentToggle() good usage render without facet values 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -545,6 +545,6 @@ exports[`currentToggle() good usage render without facet values 2`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;

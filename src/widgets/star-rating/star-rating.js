@@ -47,7 +47,7 @@ const renderer = ({
       facetValues={items.map(item => ({ ...item, labels }))}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
-      toggleRefinement={refine}
+      toggleFacetRefinement={refine}
     />,
     containerNode
   );

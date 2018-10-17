@@ -149,7 +149,7 @@ export default function connectMenu(renderFn, unmountFn) {
             attributeName
           );
           helper
-            .toggleRefinement(
+            .toggleFacetRefinement(
               attributeName,
               facetValue ? facetValue : refinedItem
             )
@@ -180,7 +180,9 @@ export default function connectMenu(renderFn, unmountFn) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         this._createURL = facetValue =>
-          createURL(helper.state.toggleRefinement(attributeName, facetValue));
+          createURL(
+            helper.state.toggleFacetRefinement(attributeName, facetValue)
+          );
 
         this._refine = this.refine(helper);
 
@@ -285,7 +287,7 @@ export default function connectMenu(renderFn, unmountFn) {
             uiStateRefinedItem
           );
           if (isAlreadyRefined) return searchParameters;
-          return searchParameters.toggleRefinement(
+          return searchParameters.toggleFacetRefinement(
             attributeName,
             uiStateRefinedItem
           );
@@ -294,7 +296,10 @@ export default function connectMenu(renderFn, unmountFn) {
           const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
             attributeName
           );
-          return searchParameters.toggleRefinement(attributeName, refinedItem);
+          return searchParameters.toggleFacetRefinement(
+            attributeName,
+            refinedItem
+          );
         }
         return searchParameters;
       },

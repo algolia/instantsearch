@@ -185,28 +185,28 @@ describe('connectNumericRefinementList', () => {
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const {
-      refine: renderToggleRefinement,
+      refine: renderToggleFacetRefinement,
       items: renderFacetValues,
     } = secondRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({});
-    renderToggleRefinement(renderFacetValues[0].value);
+    renderToggleFacetRefinement(renderFacetValues[0].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '<=': [10],
     });
-    renderToggleRefinement(renderFacetValues[1].value);
+    renderToggleFacetRefinement(renderFacetValues[1].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '>=': [10],
       '<=': [20],
     });
-    renderToggleRefinement(renderFacetValues[2].value);
+    renderToggleFacetRefinement(renderFacetValues[2].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '>=': [20],
     });
-    renderToggleRefinement(renderFacetValues[3].value);
+    renderToggleFacetRefinement(renderFacetValues[3].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '=': [42],
     });
-    renderToggleRefinement(renderFacetValues[4].value);
+    renderToggleFacetRefinement(renderFacetValues[4].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({});
   });
 

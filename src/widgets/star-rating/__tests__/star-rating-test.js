@@ -36,7 +36,7 @@ describe('starRating()', () => {
     helper.search = sinon.stub();
 
     state = {
-      toggleRefinement: sinon.spy(),
+      toggleFacetRefinement: sinon.spy(),
     };
     results = {
       getFacetValues: sinon.stub().returns([]),
@@ -107,7 +107,7 @@ describe('starRating()', () => {
 
   it('refines the search', () => {
     helper.getRefinements = sinon.stub().returns([]);
-    widget._toggleRefinement('3');
+    widget._toggleFacetRefinement('3');
     expect(helper.clearRefinements.calledOnce).toBe(
       true,
       'clearRefinements called once'
@@ -122,7 +122,7 @@ describe('starRating()', () => {
   it('toggles the refinements', () => {
     helper.addDisjunctiveFacetRefinement(attributeName, 2);
     helper.addDisjunctiveFacetRefinement.reset();
-    widget._toggleRefinement('2');
+    widget._toggleFacetRefinement('2');
     expect(helper.clearRefinements.calledOnce).toBe(
       true,
       'clearRefinements called once'
@@ -136,7 +136,7 @@ describe('starRating()', () => {
 
   it('toggles the refinements with another facet', () => {
     helper.getRefinements = sinon.stub().returns([{ value: '2' }]);
-    widget._toggleRefinement('4');
+    widget._toggleFacetRefinement('4');
     expect(helper.clearRefinements.calledOnce).toBe(
       true,
       'clearRefinements called once'

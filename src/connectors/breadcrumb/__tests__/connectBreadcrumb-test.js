@@ -157,7 +157,7 @@ describe('connectBreadcrumb', () => {
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -214,7 +214,7 @@ describe('connectBreadcrumb', () => {
 
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -258,7 +258,7 @@ describe('connectBreadcrumb', () => {
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -540,7 +540,7 @@ describe('connectBreadcrumb', () => {
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items).toEqual([]);
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.render({
       results: new SearchResults(helper.state, [

@@ -137,13 +137,18 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
       init({ helper, createURL, instantSearchInstance }) {
         this._refine = function(facetValue) {
-          helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+          helper
+            .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+            .search();
         };
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
-            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
+            helper.state.toggleFacetRefinement(
+              hierarchicalFacetName,
+              facetValue
+            )
           );
         }
 
@@ -182,7 +187,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
-            state.toggleRefinement(hierarchicalFacetName, facetValue)
+            state.toggleFacetRefinement(hierarchicalFacetName, facetValue)
           );
         }
 
@@ -248,7 +253,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         ) {
           return searchParameters
             .clearRefinements(hierarchicalFacetName)
-            .toggleRefinement(
+            .toggleFacetRefinement(
               hierarchicalFacetName,
               uiState.hierarchicalMenu[hierarchicalFacetName].join(separator)
             );

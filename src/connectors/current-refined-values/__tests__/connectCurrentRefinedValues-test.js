@@ -147,7 +147,7 @@ describe('connectCurrentRefinedValues', () => {
     const widget = makeWidget({ clearsQuery: true });
 
     helper.setQuery('foobar');
-    helper.toggleRefinement('myFacet', 'value');
+    helper.toggleFacetRefinement('myFacet', 'value');
     expect(helper.state.query).toBe('foobar');
 
     widget.init({

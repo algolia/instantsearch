@@ -91,7 +91,7 @@ describe('currentToggle()', () => {
           collapsible: false,
           templateProps,
           createURL() {},
-          toggleRefinement() {},
+          toggleFacetRefinement() {},
         };
         createURL = () => '#';
         widget.init({ state, helper, createURL, instantSearchInstance });
@@ -260,7 +260,7 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
 
-        widget.toggleRefinement({ isRefined: true });
+        widget.toggleFacetRefinement({ isRefined: true });
 
         expect(
           altHelper.state.isDisjunctiveFacetRefined(attributeName, 5)
@@ -374,9 +374,11 @@ describe('currentToggle()', () => {
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
-        const { toggleRefinement } = ReactDOM.render.firstCall.args[0].props;
-        expect(typeof toggleRefinement).toEqual('function');
-        toggleRefinement();
+        const {
+          toggleFacetRefinement,
+        } = ReactDOM.render.firstCall.args[0].props;
+        expect(typeof toggleFacetRefinement).toEqual('function');
+        toggleFacetRefinement();
         expect(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
         expect(
           helper.addDisjunctiveFacetRefinement.calledWithExactly(
@@ -392,10 +394,10 @@ describe('currentToggle()', () => {
       let helper;
 
       function toggleOn() {
-        widget.toggleRefinement({ isRefined: false });
+        widget.toggleFacetRefinement({ isRefined: false });
       }
       function toggleOff() {
-        widget.toggleRefinement({ isRefined: true });
+        widget.toggleFacetRefinement({ isRefined: true });
       }
 
       beforeEach(() => {

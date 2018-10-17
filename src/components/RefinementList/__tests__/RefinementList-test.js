@@ -7,7 +7,7 @@ import RefinementListItem from '../RefinementListItem';
 
 const defaultProps = {
   templateProps: {},
-  toggleRefinement: () => {},
+  toggleFacetRefinement: () => {},
 };
 
 describe('RefinementList', () => {

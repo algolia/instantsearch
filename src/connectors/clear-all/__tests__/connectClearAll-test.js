@@ -61,7 +61,7 @@ describe('connectClearAll', () => {
     });
     helper.search = () => {};
     helper.setQuery('not empty');
-    helper.toggleRefinement('myFacet', 'myValue');
+    helper.toggleFacetRefinement('myFacet', 'myValue');
 
     const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
@@ -82,7 +82,7 @@ describe('connectClearAll', () => {
     expect(helper.hasRefinements('myFacet')).toBe(false);
     expect(helper.state.query).toBe('not empty');
 
-    helper.toggleRefinement('myFacet', 'someOtherValue');
+    helper.toggleFacetRefinement('myFacet', 'someOtherValue');
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -108,7 +108,7 @@ describe('connectClearAll', () => {
     });
     helper.search = () => {};
     helper.setQuery('a query');
-    helper.toggleRefinement('myFacet', 'myValue');
+    helper.toggleFacetRefinement('myFacet', 'myValue');
 
     const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
@@ -129,7 +129,7 @@ describe('connectClearAll', () => {
     expect(helper.hasRefinements('myFacet')).toBe(false);
     expect(helper.state.query).toBe('');
 
-    helper.toggleRefinement('myFacet', 'someOtherValue');
+    helper.toggleFacetRefinement('myFacet', 'someOtherValue');
     helper.setQuery('another query');
 
     widget.render({
@@ -153,7 +153,7 @@ describe('connectClearAll', () => {
     const helper = jsHelper({}, undefined, {
       facets: ['aFacet'],
     });
-    helper.toggleRefinement('aFacet', 'some value');
+    helper.toggleFacetRefinement('aFacet', 'some value');
     helper.search = () => {};
 
     const rendering = jest.fn();
@@ -289,7 +289,7 @@ describe('connectClearAll', () => {
       excludeAttributes: ['facet'],
     });
 
-    helper.toggleRefinement('facet', 'value');
+    helper.toggleFacetRefinement('facet', 'value');
 
     {
       helper.setQuery('not empty');
@@ -343,7 +343,7 @@ describe('connectClearAll', () => {
       clearsQuery: true,
     });
 
-    helper.toggleRefinement('facet', 'value');
+    helper.toggleFacetRefinement('facet', 'value');
 
     {
       helper.setQuery('not empty');
@@ -397,8 +397,8 @@ describe('connectClearAll', () => {
         clearsQuery: true,
       });
 
-      helper.toggleRefinement('facet', 'value');
-      helper.toggleRefinement('otherFacet', 'value');
+      helper.toggleFacetRefinement('facet', 'value');
+      helper.toggleFacetRefinement('otherFacet', 'value');
 
       {
         helper.setQuery('not empty');

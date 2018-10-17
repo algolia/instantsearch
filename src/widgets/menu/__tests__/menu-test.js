@@ -24,9 +24,9 @@ describe('menu', () => {
 
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
-      state = { toggleRefinement: jest.fn() };
+      state = { toggleFacetRefinement: jest.fn() };
       helper = {
-        toggleRefinement: jest.fn().mockReturnThis(),
+        toggleFacetRefinement: jest.fn().mockReturnThis(),
         search: jest.fn(),
         state,
       };

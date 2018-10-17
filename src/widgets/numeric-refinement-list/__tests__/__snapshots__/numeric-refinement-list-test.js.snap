@@ -65,7 +65,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -134,7 +134,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -208,6 +208,6 @@ exports[`numericRefinementList() renders with transformed items 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;

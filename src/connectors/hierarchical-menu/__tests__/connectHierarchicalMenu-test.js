@@ -133,7 +133,7 @@ describe('connectHierarchicalMenu', () => {
     const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'value');
+    helper.toggleFacetRefinement('category', 'value');
 
     widget.init({
       helper,
@@ -157,10 +157,10 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { refine: renderToggleRefinement } = secondRenderingOptions;
-    renderToggleRefinement('value');
+    const { refine: renderToggleFacetRefinement } = secondRenderingOptions;
+    renderToggleFacetRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
-    renderToggleRefinement('value');
+    renderToggleFacetRefinement('value');
     expect(helper.hasRefinements('category')).toBe(true);
   });
 
@@ -174,7 +174,7 @@ describe('connectHierarchicalMenu', () => {
     const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -274,7 +274,7 @@ describe('connectHierarchicalMenu', () => {
     const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -361,7 +361,7 @@ describe('connectHierarchicalMenu', () => {
 
       test('should add an entry equal to the refinement', () => {
         const [widget, helper] = getInitializedWidget();
-        helper.toggleRefinement('category', 'path');
+        helper.toggleFacetRefinement('category', 'path');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
@@ -378,7 +378,7 @@ describe('connectHierarchicalMenu', () => {
             otherCategory: ['path'],
           },
         };
-        helper.toggleRefinement('category', 'path');
+        helper.toggleFacetRefinement('category', 'path');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
@@ -394,7 +394,7 @@ describe('connectHierarchicalMenu', () => {
             category: ['path'],
           },
         };
-        helper.toggleRefinement('category', 'path');
+        helper.toggleFacetRefinement('category', 'path');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
           helper,

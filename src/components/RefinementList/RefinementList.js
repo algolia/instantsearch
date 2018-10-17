@@ -29,7 +29,7 @@ export class RawRefinementList extends Component {
   }
 
   refine(facetValueToRefine, isRefined) {
-    this.props.toggleRefinement(facetValueToRefine, isRefined);
+    this.props.toggleFacetRefinement(facetValueToRefine, isRefined);
   }
 
   _generateFacetItem(facetValue) {
@@ -140,7 +140,7 @@ export class RawRefinementList extends Component {
     const firstValue = this.props.facetValues[0];
     if (firstValue) {
       const actualValue = firstValue.value;
-      this.props.toggleRefinement(actualValue);
+      this.props.toggleFacetRefinement(actualValue);
     }
   }
 
@@ -209,7 +209,7 @@ RawRefinementList.propTypes = {
   depth: PropTypes.number,
   facetValues: PropTypes.array,
   templateProps: PropTypes.object.isRequired,
-  toggleRefinement: PropTypes.func.isRequired,
+  toggleFacetRefinement: PropTypes.func.isRequired,
   searchFacetValues: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   isFromSearch: PropTypes.bool,

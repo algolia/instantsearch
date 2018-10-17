@@ -72,7 +72,7 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;

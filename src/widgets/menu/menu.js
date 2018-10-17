@@ -62,7 +62,7 @@ const renderer = ({
       shouldAutoHideContainer={shouldAutoHideContainer}
       showMore={showMoreConfig !== null}
       templateProps={renderState.templateProps}
-      toggleRefinement={refine}
+      toggleFacetRefinement={refine}
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
       canToggleShowMore={canToggleShowMore}

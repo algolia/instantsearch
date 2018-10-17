@@ -217,7 +217,7 @@ describe('connectRefinementList', () => {
     const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'value');
+    helper.toggleFacetRefinement('category', 'value');
 
     widget.init({
       helper,
@@ -241,10 +241,10 @@ describe('connectRefinementList', () => {
     });
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { refine: renderToggleRefinement } = secondRenderingOptions;
-    renderToggleRefinement('value');
+    const { refine: renderToggleFacetRefinement } = secondRenderingOptions;
+    renderToggleFacetRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
-    renderToggleRefinement('value');
+    renderToggleFacetRefinement('value');
     expect(helper.hasRefinements('category')).toBe(true);
   });
 

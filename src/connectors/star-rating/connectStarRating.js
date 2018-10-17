@@ -120,16 +120,19 @@ export default function connectStarRating(renderFn, unmountFn) {
       },
 
       init({ helper, createURL, instantSearchInstance }) {
-        this._toggleRefinement = this._toggleRefinement.bind(this, helper);
+        this._toggleFacetRefinement = this._toggleFacetRefinement.bind(
+          this,
+          helper
+        );
         this._createURL = state => facetValue =>
-          createURL(state.toggleRefinement(attributeName, facetValue));
+          createURL(state.toggleFacetRefinement(attributeName, facetValue));
 
         renderFn(
           {
             instantSearchInstance,
             items: [],
             hasNoResults: true,
-            refine: this._toggleRefinement,
+            refine: this._toggleFacetRefinement,
             createURL: this._createURL(helper.state),
             widgetParams,
           },
@@ -178,7 +181,7 @@ export default function connectStarRating(renderFn, unmountFn) {
             instantSearchInstance,
             items: facetValues,
             hasNoResults: results.nbHits === 0,
-            refine: this._toggleRefinement,
+            refine: this._toggleFacetRefinement,
             createURL: this._createURL(state),
             widgetParams,
           },
@@ -237,7 +240,7 @@ export default function connectStarRating(renderFn, unmountFn) {
         return clearedSearchParam;
       },
 
-      _toggleRefinement(helper, facetValue) {
+      _toggleFacetRefinement(helper, facetValue) {
         const isRefined =
           this._getRefinedStar(helper.state) === Number(facetValue);
         helper.clearRefinements(attributeName);

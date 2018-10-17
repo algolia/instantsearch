@@ -410,14 +410,14 @@ describe('currentRefinedValues()', () => {
         ],
       });
       helper
-        .toggleRefinement('facet', 'facet-val1')
-        .toggleRefinement('facet', 'facet-val2')
-        .toggleRefinement('extraFacet', 'extraFacet-val1')
+        .toggleFacetRefinement('facet', 'facet-val1')
+        .toggleFacetRefinement('facet', 'facet-val2')
+        .toggleFacetRefinement('extraFacet', 'extraFacet-val1')
         .toggleFacetExclusion('facetExclude', 'facetExclude-val1')
         .toggleFacetExclusion('facetExclude', 'facetExclude-val2')
-        .toggleRefinement('disjunctiveFacet', 'disjunctiveFacet-val1')
-        .toggleRefinement('disjunctiveFacet', 'disjunctiveFacet-val2')
-        .toggleRefinement(
+        .toggleFacetRefinement('disjunctiveFacet', 'disjunctiveFacet-val1')
+        .toggleFacetRefinement('disjunctiveFacet', 'disjunctiveFacet-val2')
+        .toggleFacetRefinement(
           'hierarchicalFacet',
           'hierarchicalFacet-val1 > hierarchicalFacet-val2'
         )
