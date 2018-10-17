@@ -35,6 +35,46 @@ exports[`currentRefinements() render() options.container should render with a HT
         "refine": [Function],
       },
       Object {
+        "attribute": "numericDisjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≥ 3",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "numericFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
         "attribute": "hierarchicalFacet",
         "items": Array [
           Object {
@@ -44,6 +84,28 @@ exports[`currentRefinements() render() options.container should render with a HT
             "label": "hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val2",
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "disjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
           },
         ],
         "refine": [Function],
@@ -98,68 +160,6 @@ exports[`currentRefinements() render() options.container should render with a HT
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "disjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val1",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val1",
-          },
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val2",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val2",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericDisjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≥ 3",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "3",
-          },
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≤ 4",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "4",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericFacet",
-            "label": "≥ 1",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "1",
-          },
-          Object {
-            "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "2",
           },
         ],
         "refine": [Function],
@@ -218,6 +218,46 @@ exports[`currentRefinements() render() options.container should render with a st
         "refine": [Function],
       },
       Object {
+        "attribute": "numericDisjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≥ 3",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "numericFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
         "attribute": "hierarchicalFacet",
         "items": Array [
           Object {
@@ -227,6 +267,28 @@ exports[`currentRefinements() render() options.container should render with a st
             "label": "hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val2",
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "disjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
           },
         ],
         "refine": [Function],
@@ -281,68 +343,6 @@ exports[`currentRefinements() render() options.container should render with a st
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "disjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val1",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val1",
-          },
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val2",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val2",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericDisjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≥ 3",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "3",
-          },
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≤ 4",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "4",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericFacet",
-            "label": "≥ 1",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "1",
-          },
-          Object {
-            "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "2",
           },
         ],
         "refine": [Function],
@@ -401,6 +401,46 @@ exports[`currentRefinements() render() options.cssClasses should be passed in th
         "refine": [Function],
       },
       Object {
+        "attribute": "numericDisjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≥ 3",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "numericFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
         "attribute": "hierarchicalFacet",
         "items": Array [
           Object {
@@ -410,6 +450,28 @@ exports[`currentRefinements() render() options.cssClasses should be passed in th
             "label": "hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val2",
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "disjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
           },
         ],
         "refine": [Function],
@@ -464,68 +526,6 @@ exports[`currentRefinements() render() options.cssClasses should be passed in th
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "disjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val1",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val1",
-          },
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val2",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val2",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericDisjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≥ 3",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "3",
-          },
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≤ 4",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "4",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericFacet",
-            "label": "≥ 1",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "1",
-          },
-          Object {
-            "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "2",
           },
         ],
         "refine": [Function],
@@ -584,6 +584,46 @@ exports[`currentRefinements() render() options.cssClasses should work with an ar
         "refine": [Function],
       },
       Object {
+        "attribute": "numericDisjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≥ 3",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "numericFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
         "attribute": "hierarchicalFacet",
         "items": Array [
           Object {
@@ -593,6 +633,28 @@ exports[`currentRefinements() render() options.cssClasses should work with an ar
             "label": "hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val2",
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "disjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
           },
         ],
         "refine": [Function],
@@ -647,68 +709,6 @@ exports[`currentRefinements() render() options.cssClasses should work with an ar
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "disjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val1",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val1",
-          },
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val2",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val2",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericDisjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≥ 3",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "3",
-          },
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≤ 4",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "4",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericFacet",
-            "label": "≥ 1",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "1",
-          },
-          Object {
-            "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "2",
           },
         ],
         "refine": [Function],
@@ -1073,6 +1073,48 @@ exports[`currentRefinements() render() options.transformItems should transform p
         "transformed": true,
       },
       Object {
+        "attribute": "numericDisjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≥ 3",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
+          },
+        ],
+        "refine": [Function],
+        "transformed": true,
+      },
+      Object {
+        "attribute": "numericFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
+          },
+        ],
+        "refine": [Function],
+        "transformed": true,
+      },
+      Object {
         "attribute": "hierarchicalFacet",
         "items": Array [
           Object {
@@ -1082,6 +1124,29 @@ exports[`currentRefinements() render() options.transformItems should transform p
             "label": "hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val2",
+          },
+        ],
+        "refine": [Function],
+        "transformed": true,
+      },
+      Object {
+        "attribute": "disjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
           },
         ],
         "refine": [Function],
@@ -1139,71 +1204,6 @@ exports[`currentRefinements() render() options.transformItems should transform p
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
-          },
-        ],
-        "refine": [Function],
-        "transformed": true,
-      },
-      Object {
-        "attribute": "disjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val1",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val1",
-          },
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val2",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val2",
-          },
-        ],
-        "refine": [Function],
-        "transformed": true,
-      },
-      Object {
-        "attribute": "numericDisjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≥ 3",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "3",
-          },
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≤ 4",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "4",
-          },
-        ],
-        "refine": [Function],
-        "transformed": true,
-      },
-      Object {
-        "attribute": "numericFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericFacet",
-            "label": "≥ 1",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "1",
-          },
-          Object {
-            "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "2",
           },
         ],
         "refine": [Function],
@@ -1263,6 +1263,46 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
         "refine": [Function],
       },
       Object {
+        "attribute": "numericDisjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≥ 3",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "numericFacet",
+        "items": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
         "attribute": "hierarchicalFacet",
         "items": Array [
           Object {
@@ -1272,6 +1312,28 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
             "label": "hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val2",
+          },
+        ],
+        "refine": [Function],
+      },
+      Object {
+        "attribute": "disjunctiveFacet",
+        "items": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
           },
         ],
         "refine": [Function],
@@ -1326,68 +1388,6 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "disjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val1",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val1",
-          },
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val2",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val2",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericDisjunctiveFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≥ 3",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "3",
-          },
-          Object {
-            "attribute": "numericDisjunctiveFacet",
-            "label": "≤ 4",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "4",
-          },
-        ],
-        "refine": [Function],
-      },
-      Object {
-        "attribute": "numericFacet",
-        "items": Array [
-          Object {
-            "attribute": "numericFacet",
-            "label": "≥ 1",
-            "operator": ">=",
-            "type": "numeric",
-            "value": "1",
-          },
-          Object {
-            "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": "2",
           },
         ],
         "refine": [Function],

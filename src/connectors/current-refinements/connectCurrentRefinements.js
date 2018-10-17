@@ -1,4 +1,3 @@
-import isPlainObject from 'lodash/isPlainObject';
 import {
   getRefinements,
   clearRefinements,
@@ -138,18 +137,7 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
-    // TODO: get all attributes by default
-    const filteredAttributes = includedAttributes.filter(
-      attribute => excludedAttributes.indexOf(attribute) === -1
-    );
     const clearsQuery = excludedAttributes.indexOf('query') !== -1;
-
-    // console.log({
-    //   includedAttributes,
-    //   excludedAttributes,
-    //   attributes,
-    //   clearsQuery,
-    // });
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
@@ -158,7 +146,8 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
             .setState(
               clearRefinements({
                 helper,
-                includedAttributes: filteredAttributes,
+                includedAttributes, // TODO: is that right?
+                excludedAttributes,
                 clearsQuery,
               })
             )
@@ -166,20 +155,15 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
         };
 
         const refinements = transformItems(
-          normalizeRefinements(
-            getFilteredRefinements({
-              results: {},
-              state: helper.state,
-              includedAttributes,
-              excludedAttributes,
-              clearsQuery,
-            }),
-            helper
-          )
+          getNormalizedRefinements({
+            results: {},
+            state: helper.state,
+            helper,
+            includedAttributes,
+            excludedAttributes,
+            clearsQuery,
+          })
         );
-
-        const attributes = refinements.map(refinement => refinement.attribute);
-        // .filter(attribute => excludedAttributes.indexOf(attribute) === -1);
 
         renderFn(
           {
@@ -196,16 +180,14 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
         const refinements = transformItems(
-          normalizeRefinements(
-            getFilteredRefinements({
-              results,
-              state,
-              includedAttributes,
-              excludedAttributes,
-              clearsQuery,
-            }),
-            helper
-          )
+          getNormalizedRefinements({
+            results,
+            state,
+            helper,
+            includedAttributes,
+            excludedAttributes,
+            clearsQuery,
+          })
         );
 
         renderFn(
@@ -228,27 +210,31 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
   };
 }
 
-function getRestrictedIndexForSort(attributes, otherAttributes, attribute) {
-  const idx = attributes.indexOf(attribute);
+function getRestrictedIndexForSort(
+  includedAttributes,
+  allAttributes,
+  attribute
+) {
+  const idx = includedAttributes.indexOf(attribute);
 
   if (idx !== -1) {
     return idx;
   }
 
-  return attributes.length + otherAttributes.indexOf(attribute);
+  return includedAttributes.length + allAttributes.indexOf(attribute);
 }
 
-function compareRefinements(attributes, otherAttributes, a, b) {
+function compareRefinements(includedAttributes, allAttributes, a, b) {
   const idxa = getRestrictedIndexForSort(
-    attributes,
-    otherAttributes,
-    a.attribute
+    includedAttributes,
+    allAttributes,
+    a.attributeName
   );
 
   const idxb = getRestrictedIndexForSort(
-    attributes,
-    otherAttributes,
-    b.attribute
+    includedAttributes,
+    allAttributes,
+    b.attributeName
   );
 
   if (idxa === idxb) {
@@ -262,22 +248,26 @@ function compareRefinements(attributes, otherAttributes, a, b) {
   return idxa < idxb ? -1 : 1;
 }
 
-function getFilteredRefinements({
+function getAllRefinements({
   results,
   state,
+  clearsQuery,
   includedAttributes,
   excludedAttributes,
-  clearsQuery,
 }) {
-  const refinements = getRefinements(results, state, clearsQuery)
+  return getRefinements(results, state, clearsQuery)
     .filter(
-      attribute =>
+      refinement =>
         includedAttributes.length === 0 ||
-        includedAttributes.indexOf(attribute) !== -1
+        includedAttributes.indexOf(refinement.attributeName) !== -1
     )
-    .filter(attribute => excludedAttributes.indexOf(attribute) === -1);
+    .filter(
+      refinement => excludedAttributes.indexOf(refinement.attributeName) === -1
+    );
+}
 
-  const otherAttributes = refinements.reduce((res, refinement) => {
+function getAllAttributes({ refinements, includedAttributes }) {
+  return refinements.reduce((res, refinement) => {
     if (
       includedAttributes.indexOf(refinement.attributeName) === -1 &&
       res.indexOf(refinement.attributeName === -1)
@@ -286,43 +276,70 @@ function getFilteredRefinements({
     }
     return res;
   }, []);
-
-  const filteredRefinements = refinements
-    .sort(compareRefinements.bind(null, includedAttributes, otherAttributes))
-    .map(normalizeItem);
-
-  return filteredRefinements;
 }
 
-function clearRefinementFromState(state, refinement) {
-  switch (refinement.type) {
+function getNormalizedRefinements({
+  results,
+  state,
+  helper,
+  includedAttributes,
+  excludedAttributes,
+  clearsQuery,
+}) {
+  const refinements = getAllRefinements({
+    results,
+    state,
+    clearsQuery,
+    includedAttributes,
+    excludedAttributes,
+  });
+
+  const allAttributes = getAllAttributes({ refinements, includedAttributes });
+
+  const normalizedRefinements = normalizeRefinements(
+    refinements
+      .sort(compareRefinements.bind(null, includedAttributes, allAttributes))
+      .map(normalizeItem),
+    helper
+  );
+
+  return normalizedRefinements;
+}
+
+function clearRefinementFromState(state, refinementItem) {
+  console.log(refinementItem);
+
+  switch (refinementItem.type) {
     case 'facet':
-      return state.removeFacetRefinement(refinement.attribute, refinement.name);
+      return state.removeFacetRefinement(
+        refinementItem.attribute,
+        refinementItem.value
+      );
     case 'disjunctive':
       return state.removeDisjunctiveFacetRefinement(
-        refinement.attribute,
-        refinement.name
+        refinementItem.attribute,
+        refinementItem.value
       );
     case 'hierarchical':
-      return state.clearRefinements(refinement.attribute);
+      return state.clearRefinements(refinementItem.attribute);
     case 'exclude':
       return state.removeExcludeRefinement(
-        refinement.attribute,
-        refinement.name
+        refinementItem.attribute,
+        refinementItem.value
       );
     case 'numeric':
       return state.removeNumericRefinement(
-        refinement.attribute,
-        refinement.operator,
-        refinement.numericValue
+        refinementItem.attribute,
+        refinementItem.operator,
+        refinementItem.value
       );
     case 'tag':
-      return state.removeTagRefinement(refinement.name);
+      return state.removeTagRefinement(refinementItem.value);
     case 'query':
       return state.setQueryParameter('query', '');
     default:
       throw new Error(
-        `clearRefinement: type ${refinement.type} is not handled`
+        `clearRefinement: type ${refinementItem.type} is not handled`
       );
   }
 }
@@ -347,12 +364,13 @@ function normalizeItem(item) {
   const label = item.operator
     ? `${getOperatorSymbol(item.operator)} ${item.name}`
     : item.name;
+  const value = item.type === 'numeric' ? Number(item.name) : item.name;
 
   return {
     attribute,
-    label: item.type === 'query' ? `"${label}"` : label,
-    value: item.name,
     type: item.type,
+    value,
+    label: item.type === 'query' ? `"${label}"` : label,
     ...(item.operator && { operator: item.operator }),
     ...(item.count && { count: item.count }),
     ...(item.exhaustive && { exhaustive: item.exhaustive }),

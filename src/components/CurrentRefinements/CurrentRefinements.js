@@ -12,12 +12,12 @@ class CurrentRefinements extends Component {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
 
-  handleClick = (event, item) => {
+  handleClick = (event, { refinement, item }) => {
     if (isSpecialClick(event)) {
       return;
     }
 
-    item.refine();
+    refinement.refine(item);
   };
 
   renderRefinement(refinement, index) {
@@ -53,29 +53,27 @@ class CurrentRefinements extends Component {
         key={`${refinement.attribute}-${index}`}
         className={this.props.cssClasses.item}
       >
-        <span>
-          <span className={this.props.cssClasses.label}>
-            {capitalize(refinement.attribute)}:
-          </span>
-
-          {refinement.items.map(item => (
-            <span
-              key={createItemKey(item)}
-              className={this.props.cssClasses.category}
-            >
-              <span className={this.props.cssClasses.categoryLabel}>
-                {item.label}
-              </span>
-
-              <button
-                className={this.props.cssClasses.delete}
-                onClick={event => this.handleClick(event, item)}
-              >
-                ✕
-              </button>
-            </span>
-          ))}
+        <span className={this.props.cssClasses.label}>
+          {capitalize(refinement.attribute)}:
         </span>
+
+        {refinement.items.map(item => (
+          <span
+            key={createItemKey(item)}
+            className={this.props.cssClasses.category}
+          >
+            <span className={this.props.cssClasses.categoryLabel}>
+              {item.label}
+            </span>
+
+            <button
+              className={this.props.cssClasses.delete}
+              onClick={event => this.handleClick(event, { refinement, item })}
+            >
+              ✕
+            </button>
+          </span>
+        ))}
       </li>
     );
     // );
@@ -109,12 +107,12 @@ CurrentRefinements.propTypes = {
   refinements: PropTypes.arrayOf(
     PropTypes.shape({
       attribute: PropTypes.string.isRequired,
+      refine: PropTypes.func.isRequired,
       items: PropTypes.arrayOf(
         PropTypes.shape({
           attribute: PropTypes.string.isRequired,
           label: PropTypes.string.isRequired,
           value: PropTypes.string.isRequired,
-          // refine: PropTypes.func.isRequired,
         }).isRequired
       ).isRequired,
     }).isRequired
