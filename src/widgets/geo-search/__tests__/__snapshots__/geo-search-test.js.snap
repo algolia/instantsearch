@@ -22,8 +22,8 @@ Array [
     enableClearMapRefinement={true}
     enableRefineControl={true}
     hasMapMoveSinceLastRefine={false}
-    isRefineOnMapMove={true}
     isRefinedWithMap={false}
+    isRefineOnMapMove={true}
     onClearClick={[Function]}
     onRefineClick={[Function]}
     onRefineToggle={[Function]}
@@ -72,8 +72,8 @@ Array [
     enableClearMapRefinement={true}
     enableRefineControl={true}
     hasMapMoveSinceLastRefine={false}
-    isRefineOnMapMove={true}
     isRefinedWithMap={false}
+    isRefineOnMapMove={true}
     onClearClick={[Function]}
     onRefineClick={[Function]}
     onRefineToggle={[Function]}

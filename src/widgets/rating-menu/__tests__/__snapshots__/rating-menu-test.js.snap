@@ -106,7 +106,7 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 >
   <svg
     style="display:none;"
@@ -238,7 +238,7 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 >
   <svg
     style="display:none;"

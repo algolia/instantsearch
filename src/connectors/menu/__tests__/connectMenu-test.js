@@ -135,7 +135,7 @@ describe('connectMenu', () => {
     const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'value');
+    helper.toggleFacetRefinement('category', 'value');
 
     widget.init({
       helper,
@@ -174,7 +174,7 @@ describe('connectMenu', () => {
     const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -251,7 +251,7 @@ describe('connectMenu', () => {
     const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
-    helper.toggleRefinement('category', 'Decoration');
+    helper.toggleFacetRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -369,7 +369,7 @@ describe('connectMenu', () => {
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
-      helper.toggleRefinement('category', 'Decoration');
+      helper.toggleFacetRefinement('category', 'Decoration');
 
       widget.init({
         helper,
@@ -433,7 +433,7 @@ describe('connectMenu', () => {
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
-      helper.toggleRefinement('category', 'Decoration');
+      helper.toggleFacetRefinement('category', 'Decoration');
 
       widget.init({
         helper,
@@ -509,7 +509,7 @@ describe('connectMenu', () => {
 
       test('should add an entry equal to the refinement', () => {
         const [widget, helper] = getInitializedWidget();
-        helper.toggleRefinement('category', 'pants');
+        helper.toggleFacetRefinement('category', 'pants');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
@@ -526,7 +526,7 @@ describe('connectMenu', () => {
             othercategory: 'not-pants',
           },
         };
-        helper.toggleRefinement('category', 'pants');
+        helper.toggleFacetRefinement('category', 'pants');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
@@ -542,7 +542,7 @@ describe('connectMenu', () => {
             category: 'pants',
           },
         };
-        helper.toggleRefinement('category', 'pants');
+        helper.toggleFacetRefinement('category', 'pants');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
           helper,

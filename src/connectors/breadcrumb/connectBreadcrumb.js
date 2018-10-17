@@ -110,7 +110,7 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
             );
             if (breadcrumb.length > 0) {
               return createURL(
-                helper.state.toggleRefinement(
+                helper.state.toggleFacetRefinement(
                   hierarchicalFacetName,
                   breadcrumb[0]
                 )
@@ -118,7 +118,10 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
             }
           }
           return createURL(
-            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
+            helper.state.toggleFacetRefinement(
+              hierarchicalFacetName,
+              facetValue
+            )
           );
         };
 
@@ -129,11 +132,13 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
             );
             if (breadcrumb.length > 0) {
               helper
-                .toggleRefinement(hierarchicalFacetName, breadcrumb[0])
+                .toggleFacetRefinement(hierarchicalFacetName, breadcrumb[0])
                 .search();
             }
           } else {
-            helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+            helper
+              .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+              .search();
           }
         };
 

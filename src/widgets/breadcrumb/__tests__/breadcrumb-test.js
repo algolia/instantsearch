@@ -51,11 +51,11 @@ describe('breadcrumb()', () => {
 
       helper = {
         search: jest.fn(),
-        toggleRefinement: jest.fn().mockReturnThis(),
+        toggleFacetRefinement: jest.fn().mockReturnThis(),
       };
 
       state = {
-        toggleRefinement: jest.fn().mockReturnThis(),
+        toggleFacetRefinement: jest.fn().mockReturnThis(),
         hierarchicalFacets: [
           {
             attributes: [

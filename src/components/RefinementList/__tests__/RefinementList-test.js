@@ -5,7 +5,7 @@ import RefinementListItem from '../RefinementListItem';
 
 const defaultProps = {
   templateProps: {},
-  toggleRefinement: () => {},
+  toggleFacetRefinement: () => {},
 };
 
 describe('RefinementList', () => {
@@ -263,7 +263,7 @@ describe('RefinementList', () => {
         cssClasses,
         className: 'customClassName',
         templateProps: {},
-        toggleRefinement: () => {},
+        toggleFacetRefinement: () => {},
       };
       const wrapper = mount(<RefinementList {...props} />);
 
@@ -286,7 +286,7 @@ describe('RefinementList', () => {
             searchableNoResults: x => x,
           },
         },
-        toggleRefinement: () => {},
+        toggleFacetRefinement: () => {},
       };
       const wrapper = mount(<RefinementList {...props} />);
 
@@ -316,7 +316,7 @@ describe('RefinementList', () => {
             item: item => item,
           },
         },
-        toggleRefinement: () => {},
+        toggleFacetRefinement: () => {},
         createURL: () => {},
       };
       const wrapper = mount(<RefinementList {...props} />);
@@ -350,7 +350,7 @@ describe('RefinementList', () => {
             showMoreInactive: x => x,
           },
         },
-        toggleRefinement: () => {},
+        toggleFacetRefinement: () => {},
         createURL: () => {},
       };
       const wrapper = mount(<RefinementList {...props} />);
@@ -384,7 +384,7 @@ describe('RefinementList', () => {
             showMoreInactive: x => x,
           },
         },
-        toggleRefinement: () => {},
+        toggleFacetRefinement: () => {},
         createURL: () => {},
       };
       const wrapper = mount(<RefinementList {...props} />);
@@ -418,7 +418,7 @@ describe('RefinementList', () => {
             item: item => item,
           },
         },
-        toggleRefinement: () => {},
+        toggleFacetRefinement: () => {},
         createURL: () => {},
       };
       const wrapper = mount(<RefinementList {...props} />);

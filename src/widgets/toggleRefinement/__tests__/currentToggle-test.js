@@ -171,7 +171,7 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
 
-        widget.toggleRefinement({ isRefined: true });
+        widget.toggleFacetRefinement({ isRefined: true });
 
         expect(altHelper.state.isDisjunctiveFacetRefined(attribute, 5)).toBe(
           false
@@ -269,10 +269,10 @@ describe('currentToggle()', () => {
       let helper;
 
       function toggleOn() {
-        widget.toggleRefinement({ isRefined: false });
+        widget.toggleFacetRefinement({ isRefined: false });
       }
       function toggleOff() {
-        widget.toggleRefinement({ isRefined: true });
+        widget.toggleFacetRefinement({ isRefined: true });
       }
 
       beforeEach(() => {

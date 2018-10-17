@@ -24,7 +24,7 @@ class RefinementList extends Component {
   }
 
   refine(facetValueToRefine, isRefined) {
-    this.props.toggleRefinement(facetValueToRefine, isRefined);
+    this.props.toggleFacetRefinement(facetValueToRefine, isRefined);
   }
 
   _generateFacetItem(facetValue) {
@@ -138,7 +138,7 @@ class RefinementList extends Component {
     const firstValue = this.props.facetValues[0];
     if (firstValue) {
       const actualValue = firstValue.value;
-      this.props.toggleRefinement(actualValue);
+      this.props.toggleFacetRefinement(actualValue);
     }
   }
 
@@ -251,7 +251,7 @@ RefinementList.propTypes = {
   facetValues: PropTypes.array,
   attribute: PropTypes.string,
   templateProps: PropTypes.object.isRequired,
-  toggleRefinement: PropTypes.func.isRequired,
+  toggleFacetRefinement: PropTypes.func.isRequired,
   searchFacetValues: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   isFromSearch: PropTypes.bool,

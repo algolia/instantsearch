@@ -53,7 +53,7 @@ exports[`menu render renders transformed items 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;
@@ -109,7 +109,7 @@ exports[`menu render snapshot 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;

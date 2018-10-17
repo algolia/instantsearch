@@ -345,7 +345,7 @@ describe('utils.getRefinements', () => {
   });
 
   it('should retrieve one facetRefinement', () => {
-    helper.toggleRefinement('facet1', 'facet1val1');
+    helper.toggleFacetRefinement('facet1', 'facet1val1');
     const expected = [
       { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
     ];
@@ -356,8 +356,8 @@ describe('utils.getRefinements', () => {
 
   it('should retrieve multiple facetsRefinements on one facet', () => {
     helper
-      .toggleRefinement('facet1', 'facet1val1')
-      .toggleRefinement('facet1', 'facet1val2');
+      .toggleFacetRefinement('facet1', 'facet1val1')
+      .toggleFacetRefinement('facet1', 'facet1val2');
     const expected = [
       { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
       { type: 'facet', attributeName: 'facet1', name: 'facet1val2' },
@@ -372,9 +372,9 @@ describe('utils.getRefinements', () => {
 
   it('should retrieve multiple facetsRefinements on multiple facets', () => {
     helper
-      .toggleRefinement('facet1', 'facet1val1')
-      .toggleRefinement('facet1', 'facet1val2')
-      .toggleRefinement('facet2', 'facet2val1');
+      .toggleFacetRefinement('facet1', 'facet1val1')
+      .toggleFacetRefinement('facet1', 'facet1val2')
+      .toggleFacetRefinement('facet2', 'facet2val1');
     const expected = [
       { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
       { type: 'facet', attributeName: 'facet1', name: 'facet1val2' },
@@ -392,7 +392,7 @@ describe('utils.getRefinements', () => {
   });
 
   it('should have a count for a facetRefinement if available', () => {
-    helper.toggleRefinement('facet1', 'facet1val1');
+    helper.toggleFacetRefinement('facet1', 'facet1val1');
     results = {
       facets: [
         {
@@ -412,7 +412,7 @@ describe('utils.getRefinements', () => {
   });
 
   it('should have exhaustive for a facetRefinement if available', () => {
-    helper.toggleRefinement('facet1', 'facet1val1');
+    helper.toggleFacetRefinement('facet1', 'facet1val1');
     results = {
       facets: [
         {
@@ -560,9 +560,9 @@ describe('utils.getRefinements', () => {
 
   it('should retrieve multiple disjunctiveFacetsRefinements on multiple facets', () => {
     helper
-      .toggleRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1')
-      .toggleRefinement('disjunctiveFacet1', 'disjunctiveFacet1val2')
-      .toggleRefinement('disjunctiveFacet2', 'disjunctiveFacet2val1');
+      .toggleFacetRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1')
+      .toggleFacetRefinement('disjunctiveFacet1', 'disjunctiveFacet1val2')
+      .toggleFacetRefinement('disjunctiveFacet2', 'disjunctiveFacet2val1');
     const expected = [
       {
         type: 'disjunctive',
@@ -592,7 +592,7 @@ describe('utils.getRefinements', () => {
   });
 
   it('should have a count for a disjunctiveFacetRefinement if available', () => {
-    helper.toggleRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1');
+    helper.toggleFacetRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1');
     results = {
       disjunctiveFacets: [
         {
@@ -617,7 +617,7 @@ describe('utils.getRefinements', () => {
   });
 
   it('should have exhaustive for a disjunctiveFacetRefinement if available', () => {
-    helper.toggleRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1');
+    helper.toggleFacetRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1');
     results = {
       disjunctiveFacets: [
         {
@@ -640,7 +640,10 @@ describe('utils.getRefinements', () => {
   });
 
   it('should retrieve one hierarchicalFacetRefinement', () => {
-    helper.toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1');
+    helper.toggleFacetRefinement(
+      'hierarchicalFacet1',
+      'hierarchicalFacet1lvl0val1'
+    );
     const expected = [
       {
         type: 'hierarchical',
@@ -655,8 +658,11 @@ describe('utils.getRefinements', () => {
 
   it('should retrieve hierarchicalFacetsRefinements on multiple facets', () => {
     helper
-      .toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1')
-      .toggleRefinement('hierarchicalFacet2', 'hierarchicalFacet2lvl0val1');
+      .toggleFacetRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1')
+      .toggleFacetRefinement(
+        'hierarchicalFacet2',
+        'hierarchicalFacet2lvl0val1'
+      );
     const expected = [
       {
         type: 'hierarchical',
@@ -679,8 +685,8 @@ describe('utils.getRefinements', () => {
 
   it('should retrieve hierarchicalFacetsRefinements on multiple facets and multiple levels', () => {
     helper
-      .toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1')
-      .toggleRefinement(
+      .toggleFacetRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1')
+      .toggleFacetRefinement(
         'hierarchicalFacet2',
         'hierarchicalFacet2lvl0val1 > lvl1val1'
       );
@@ -705,7 +711,10 @@ describe('utils.getRefinements', () => {
   });
 
   it('should have a count for a hierarchicalFacetRefinement if available', () => {
-    helper.toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1val1');
+    helper.toggleFacetRefinement(
+      'hierarchicalFacet1',
+      'hierarchicalFacet1val1'
+    );
     results = {
       hierarchicalFacets: [
         {
@@ -733,7 +742,10 @@ describe('utils.getRefinements', () => {
   });
 
   it('should have exhaustive for a hierarchicalFacetRefinement if available', () => {
-    helper.toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1val1');
+    helper.toggleFacetRefinement(
+      'hierarchicalFacet1',
+      'hierarchicalFacet1val1'
+    );
     results = {
       hierarchicalFacets: [
         {
@@ -973,8 +985,8 @@ describe('utils.clearRefinements', () => {
       disjunctiveFacets: ['disjFacet'],
     });
 
-    helper.toggleRefinement('conjFacet', 'value');
-    helper.toggleRefinement('disjFacet', 'otherValue');
+    helper.toggleFacetRefinement('conjFacet', 'value');
+    helper.toggleFacetRefinement('disjFacet', 'otherValue');
     helper.toggleTag('taG');
 
     helper.setQuery('a query');

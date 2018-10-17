@@ -194,7 +194,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
     }) => {
       // Compute a specific createURL method able to link to any facet value state change
       const _createURL = facetValue =>
-        createURL(state.toggleRefinement(attribute, facetValue));
+        createURL(state.toggleFacetRefinement(attribute, facetValue));
 
       // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
       // function
@@ -237,7 +237,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
       state,
       createURL,
       helperSpecializedSearchFacetValues,
-      toggleRefinement,
+      toggleFacetRefinement,
       instantSearchInstance
     ) => query => {
       if (query === '' && lastResultsFromMainSearch) {
@@ -247,7 +247,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
           state,
           createURL,
           helperSpecializedSearchFacetValues,
-          refine: toggleRefinement,
+          refine: toggleFacetRefinement,
           isFromSearch: false,
           isFirstSearch: false,
           instantSearchInstance,
@@ -283,7 +283,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
               state,
               createURL,
               helperSpecializedSearchFacetValues,
-              refine: toggleRefinement,
+              refine: toggleFacetRefinement,
               isFromSearch: true,
               isFirstSearch: false,
               instantSearchInstance,
@@ -342,7 +342,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         refine = facetValue =>
-          helper.toggleRefinement(attribute, facetValue).search();
+          helper.toggleFacetRefinement(attribute, facetValue).search();
 
         searchForFacetValues = createSearchForFacetValues(helper);
 

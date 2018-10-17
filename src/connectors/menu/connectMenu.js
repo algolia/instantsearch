@@ -149,7 +149,10 @@ export default function connectMenu(renderFn, unmountFn) {
             attribute
           );
           helper
-            .toggleRefinement(attribute, facetValue ? facetValue : refinedItem)
+            .toggleFacetRefinement(
+              attribute,
+              facetValue ? facetValue : refinedItem
+            )
             .search();
         };
       },
@@ -177,7 +180,7 @@ export default function connectMenu(renderFn, unmountFn) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         this._createURL = facetValue =>
-          createURL(helper.state.toggleRefinement(attribute, facetValue));
+          createURL(helper.state.toggleFacetRefinement(attribute, facetValue));
 
         this._refine = this.refine(helper);
 
@@ -282,7 +285,7 @@ export default function connectMenu(renderFn, unmountFn) {
             uiStateRefinedItem
           );
           if (isAlreadyRefined) return searchParameters;
-          return searchParameters.toggleRefinement(
+          return searchParameters.toggleFacetRefinement(
             attribute,
             uiStateRefinedItem
           );
@@ -291,7 +294,7 @@ export default function connectMenu(renderFn, unmountFn) {
           const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
             attribute
           );
-          return searchParameters.toggleRefinement(attribute, refinedItem);
+          return searchParameters.toggleFacetRefinement(attribute, refinedItem);
         }
         return searchParameters;
       },

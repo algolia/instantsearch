@@ -5,10 +5,10 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={
@@ -46,10 +46,10 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={
@@ -87,10 +87,10 @@ exports[`currentToggle() good usage render understands cssClasses 1`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox test-checkbox",
-      "label": "ais-ToggleRefinement-label test-label",
-      "labelText": "ais-ToggleRefinement-labelText test-labelText",
-      "root": "ais-ToggleRefinement test",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox test-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label test-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText test-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement test",
     }
   }
   currentRefinement={
@@ -128,10 +128,10 @@ exports[`currentToggle() good usage render when refined 1`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={
@@ -169,10 +169,10 @@ exports[`currentToggle() good usage render when refined 2`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={
@@ -210,10 +210,10 @@ exports[`currentToggle() good usage render with facet values 1`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={
@@ -251,10 +251,10 @@ exports[`currentToggle() good usage render with facet values 2`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={
@@ -292,10 +292,10 @@ exports[`currentToggle() good usage render without facet values 1`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={
@@ -333,10 +333,10 @@ exports[`currentToggle() good usage render without facet values 2`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
-      "root": "ais-ToggleRefinement",
+      "checkbox": "ais-Toggleconst usage = \`Usage:Refinement-checkbox",
+      "label": "ais-Toggleconst usage = \`Usage:Refinement-label",
+      "labelText": "ais-Toggleconst usage = \`Usage:Refinement-labelText",
+      "root": "ais-Toggleconst usage = \`Usage:Refinement",
     }
   }
   currentRefinement={

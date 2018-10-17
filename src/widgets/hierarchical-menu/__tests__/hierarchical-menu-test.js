@@ -141,11 +141,11 @@ describe('hierarchicalMenu()', () => {
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
       helper = {
-        toggleRefinement: jest.fn().mockReturnThis(),
+        toggleFacetRefinement: jest.fn().mockReturnThis(),
         search: jest.fn(),
       };
       state = new SearchParameters();
-      state.toggleRefinement = jest.fn();
+      state.toggleFacetRefinement = jest.fn();
       options = { container, attributes };
       createURL = () => '#';
     });
@@ -243,15 +243,15 @@ describe('hierarchicalMenu()', () => {
       expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
-    it('has a toggleRefinement method', () => {
+    it('has a toggleFacetRefinement method', () => {
       widget = hierarchicalMenu(options);
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      const elementToggleRefinement =
-        ReactDOM.render.mock.calls[0][0].props.toggleRefinement;
-      elementToggleRefinement('mom');
-      expect(helper.toggleRefinement).toHaveBeenCalledTimes(1);
-      expect(helper.toggleRefinement).toHaveBeenCalledWith('hello', 'mom');
+      const elementToggleFacetRefinement =
+        ReactDOM.render.mock.calls[0][0].props.toggleFacetRefinement;
+      elementToggleFacetRefinement('mom');
+      expect(helper.toggleFacetRefinement).toHaveBeenCalledTimes(1);
+      expect(helper.toggleFacetRefinement).toHaveBeenCalledWith('hello', 'mom');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
 

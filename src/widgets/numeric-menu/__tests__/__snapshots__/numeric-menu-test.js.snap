@@ -61,7 +61,7 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -126,7 +126,7 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;
 
@@ -196,6 +196,6 @@ exports[`numericMenu() renders with transformed items 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
 />
 `;

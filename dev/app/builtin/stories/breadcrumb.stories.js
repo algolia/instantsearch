@@ -29,7 +29,7 @@ export default () => {
         // Custom Widget to toggle refinement
         window.search.addWidget({
           init({ helper }) {
-            helper.toggleRefinement(
+            helper.toggleFacetRefinement(
               'hierarchicalCategories.lvl0',
               'Cameras & Camcorders > Digital Cameras'
             );
@@ -62,7 +62,7 @@ export default () => {
         // Custom Widget to toggle refinement
         window.search.addWidget({
           init({ helper }) {
-            helper.toggleRefinement(
+            helper.toggleFacetRefinement(
               'hierarchicalCategories.lvl0',
               'Cameras & Camcorders > Digital Cameras'
             );
@@ -93,7 +93,7 @@ export default () => {
         // Custom Widget to toggle refinement
         window.search.addWidget({
           init({ helper }) {
-            helper.toggleRefinement(
+            helper.toggleFacetRefinement(
               'hierarchicalCategories.lvl0',
               'Cameras & Camcorders > Digital Cameras'
             );
@@ -196,7 +196,7 @@ export default () => {
         // Custom Widget to toggle refinement
         window.search.addWidget({
           init({ helper }) {
-            helper.toggleRefinement(
+            helper.toggleFacetRefinement(
               'hierarchicalCategories.lvl0',
               'Cameras & Camcorders > Digital Cameras'
             );

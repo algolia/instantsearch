@@ -35,7 +35,7 @@ const renderer = ({
       cssClasses={cssClasses}
       facetValues={items.map(item => ({ ...item, labels }))}
       templateProps={renderState.templateProps}
-      toggleRefinement={refine}
+      toggleFacetRefinement={refine}
     >
       <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
         <symbol id={suit({ descendantName: 'starSymbol' })} viewBox="0 0 24 24">

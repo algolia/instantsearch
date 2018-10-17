@@ -51,7 +51,7 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;
@@ -107,7 +107,7 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;
@@ -165,7 +165,7 @@ exports[`hierarchicalMenu() render has a transformItems options 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;
@@ -210,7 +210,7 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;
@@ -255,7 +255,7 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;
@@ -311,7 +311,7 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
       },
     }
   }
-  toggleRefinement={[Function]}
+  toggleFacetRefinement={[Function]}
   toggleShowMore={[Function]}
 />
 `;

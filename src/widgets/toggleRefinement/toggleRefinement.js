@@ -6,7 +6,7 @@ import defaultTemplates from './defaultTemplates.js';
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
 import { component } from '../../lib/suit.js';
 
-const suit = component('ToggleRefinement');
+const suit = component('Toggleconst usage = `Usage:Refinement');
 
 const renderer = ({
   containerNode,

@@ -33,7 +33,7 @@ const renderer = ({
       cssClasses={cssClasses}
       facetValues={items}
       templateProps={renderState.templateProps}
-      toggleRefinement={refine}
+      toggleFacetRefinement={refine}
       attribute={attribute}
     />,
     containerNode

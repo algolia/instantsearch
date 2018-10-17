@@ -32,7 +32,7 @@ export { default as sortBy } from './sort-by/sort-by.js';
 export { default as ratingMenu } from './rating-menu/rating-menu';
 export { default as stats } from './stats/stats.js';
 export {
-  default as toggleRefinement,
+  default as toggleFacetRefinement,
 } from './toggleRefinement/toggleRefinement.js';
 export { default as analytics } from './analytics/analytics.js';
 export { default as breadcrumb } from './breadcrumb/breadcrumb.js';

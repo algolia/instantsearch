@@ -122,7 +122,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         };
       },
 
-      _toggleRefinement(helper, { isRefined } = {}) {
+      _toggleFacetRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
@@ -154,8 +154,8 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
               )
           );
 
-        this.toggleRefinement = opts => {
-          this._toggleRefinement(helper, opts);
+        this.toggleFacetRefinement = opts => {
+          this._toggleFacetRefinement(helper, opts);
         };
 
         const isRefined = state.isDisjunctiveFacetRefined(attribute, on);
@@ -192,7 +192,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
           {
             value,
             createURL: this._createURL(value.isRefined),
-            refine: this.toggleRefinement,
+            refine: this.toggleFacetRefinement,
             instantSearchInstance,
             widgetParams,
           },
@@ -245,7 +245,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
             value,
             state,
             createURL: this._createURL(value.isRefined),
-            refine: this.toggleRefinement,
+            refine: this.toggleFacetRefinement,
             helper,
             instantSearchInstance,
             widgetParams,
