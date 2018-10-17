@@ -130,7 +130,7 @@ const sortBy = ['name:asc'];
  * @propType {number} [limit=10] -  The maximum number of items displayed.
  * @propType {number} [showMoreLimit=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
- * @propType {string[]} [rootPath=null] - The already selected and hidden path.
+ * @propType {string} [rootPath=null] - The path to use if the first level is not the root level.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
