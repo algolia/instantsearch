@@ -180,6 +180,7 @@ Here are the main files and folders of the project.
   ▸ decorators/       << Preact HoC that factorize some behaviour of the widgets
   ▸ lib/              << The core of the library, instantsearch, url
   ▸ widgets/          << The source of the widgets (UX + UI)
+  ▸ helpers/          << The source of the method helpers
 ```
 
 ### The documentation source
