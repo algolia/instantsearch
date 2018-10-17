@@ -11,7 +11,7 @@ githubSource: docs/src/components/Highlight.md
 
 Displays highlighted attributes of your search results.
 
-This component leverages the [highlighting feature of Algolia](https://www.algolia.com/doc/faq/searching/what-is-the-highlighting/#faq-section) and is designed to work with `escapeHTML` set to true in the surrounding `<ais-hits>`.
+This component leverages the [highlighting feature of Algolia](https://www.algolia.com/doc/faq/searching/what-is-the-highlighting/#faq-section) and is designed to work with `escapeHTML` set to `true` in the surrounding `<ais-hits>`.
 
 ## Usage
 
@@ -23,7 +23,7 @@ This component leverages the [highlighting feature of Algolia](https://www.algol
 
 **Access a nested property:**
 
-Given an record like:
+Given a record like:
 
 ```json
 {
