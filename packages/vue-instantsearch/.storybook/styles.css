@@ -114,3 +114,15 @@ input {
   border-color: #c4c8d8;
   border-radius: 5px !important;
 }
+
+button {
+  border-style: solid !important;
+  border-width: 1px;
+  padding: 0.2em;
+  border-color: black;
+  border-radius: 5px !important;
+}
+
+button:disabled {
+  border-color: #c4c8d8;
+}

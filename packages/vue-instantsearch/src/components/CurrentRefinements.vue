@@ -5,7 +5,6 @@
   >
     <slot
       :refine="state.refine"
-      :clear-all="state.clearAllClick"
       :items="refinements"
     >
       <ul :class="suit('list')">
@@ -19,25 +18,15 @@
             :item="item"
           >
             <span :class="suit('item')">
-              <span :class="suit('label')">{{ item.attributeName | capitalize }}: {{ item.computedLabel }}</span>
+              <span :class="suit('label')">{{ item.attribute | capitalize }}: {{ item.label }}</span>
               <button
                 :class="suit('delete')"
-                @click="state.refine(item)"
+                @click="state.refine(item.value)"
               >✕</button>
             </span>
           </slot>
         </li>
       </ul>
-      <button
-        :class="suit('reset')"
-        @click="state.clearAllClick()"
-        v-if="refinements.length > 0"
-      >
-        <slot
-          name="clearAllLabel"
-          :items="refinements"
-        >Clear all</slot>
-      </button>
     </slot>
   </div>
 </template>
@@ -58,13 +47,13 @@ export default {
     }),
   ],
   props: {
-    clearsQuery: {
-      type: Boolean,
-      default: false,
+    includedAttributes: {
+      type: Array,
+      default: null,
     },
     excludedAttributes: {
       type: Array,
-      default: () => [],
+      default: () => ['query'],
     },
     transformItems: {
       type: Function,
@@ -78,24 +67,31 @@ export default {
       return this.refinements.length === 0;
     },
     refinements() {
-      // excludedAttributes isn't implemented in IS.js
-      return this.state.refinements
-        .filter(
-          ({ attributeName }) =>
-            this.excludedAttributes.indexOf(attributeName) === -1
-        )
-        .map(item => {
-          if (item.type === 'query') {
-            // eslint-disable-next-line no-param-reassign
-            item.attributeName = 'query';
-          }
-          return item;
-        });
+      let refinements = this.state.refinements.map(item => ({
+        type: item.type,
+        attribute: item.type === 'query' ? 'query' : item.attributeName,
+        label: item.computedLabel,
+        value: item,
+      }));
+
+      if (this.includedAttributes) {
+        refinements = refinements.filter(
+          ({ attribute }) => this.includedAttributes.indexOf(attribute) !== -1
+        );
+      } else {
+        refinements = refinements.filter(
+          ({ attribute }) => this.excludedAttributes.indexOf(attribute) === -1
+        );
+      }
+      return this.transformItems(refinements);
     },
     widgetParams() {
       return {
-        transformItems: this.transformItems,
-        clearsQuery: this.clearsQuery,
+        clearsQuery:
+          this.excludedAttributes.indexOf('query') === -1 &&
+          (this.includedAttributes
+            ? this.includedAttributes.indexOf('query') !== -1
+            : true),
       };
     },
   },

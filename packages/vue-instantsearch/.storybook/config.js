@@ -18,6 +18,7 @@ import './styles.css';
 import Vue from 'vue';
 import InstantSearch from '../src/instantsearch';
 
+Vue.config.productionTip = false;
 Vue.use(InstantSearch);
 
 const req = require.context('../stories', true, /\.stories\.js$/);

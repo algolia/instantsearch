@@ -90,7 +90,7 @@ export default {
           this.$emit('input', this.value);
           this.state.refine(this.value);
         }
-        return this.value || this.localValue || this.state.query || '';
+        return this.value || this.state.query || '';
       },
       set(val) {
         this.localValue = val;

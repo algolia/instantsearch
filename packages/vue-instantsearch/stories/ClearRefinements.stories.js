@@ -8,14 +8,33 @@ storiesOf('ais-clear-refinements', module)
       <ais-clear-refinements />
     `,
   }))
-  .add('with clears query', () => ({
+  .add('also clearing query', () => ({
     template: `
       <div>
         <div class="preview-spacer">
-          <ais-clear-refinements :clearsQuery="true" />
+          <ais-clear-refinements :excluded-attributes="[]" />
         </div>
 
         <span>TIP: type something first</span>
+      </div>
+    `,
+  }))
+  .add('not clearing "brand"', () => ({
+    template: `
+      <div>
+        <div class="preview-spacer">
+          <ais-clear-refinements :excluded-attributes="['brand']" />
+          <hr />
+          <ais-hierarchical-menu
+            :attributes="[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]"
+          />
+          <hr />
+          <ais-range-input attribute="price" />
+        </div>
       </div>
     `,
   }))

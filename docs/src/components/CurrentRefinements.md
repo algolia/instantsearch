@@ -16,26 +16,52 @@ Show the currently refined values and allow them to be unset.
 ## Usage
 
 ```html
-<ais-current-refinements :clears-query="true"></ais-current-refinements>
+<template>
+  <ais-current-refinements
+    :excluded-attributes="[]"
+    :transform-items="transformItems"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      transformItems: items =>
+        items.map(item => ({
+          ...label,
+          label: item.label.toLocaleUpperCase()
+        }))
+    };
+  }
+};
+</script>
 ```
 
 ## Props
 
 Name | Type | Default | Description | Required
 ---|---|---|---|---
-transformItems | Function | | Allows you to format and change the attributes | -
-clearsQuery | Boolean | `false` | Should the 'clear all' button also clear the query? | -
-excludedAttributes | Array | `[]` | Attributes not to show or clear | -
+includedAttributes | Array | | Attributes to show or clear | -
+excludedAttributes | Array | `['query']` | Attributes not to show or clear | -
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 classNames | Object | | Override class names | no
+
+Note that you can not use `includedAttributes` and `excludedAttributes` at the same time. Included attributes are exclusive, and thus take precedence over excluded attributes.
 
 ## Slots
 
 name | scope | Description
 ---|---|---
-`default` | `{ items: Item[], refine: Item => void, clearAll: () => void }` | Override how all the items look
+`default` | `{ items: Item[], refine: Item => void }` | Override how all the items look
 `item` | `{ item: Item, refine: Item => void }` | Override how an item looks
-`clearAllLabel` | `{ items: Item[] }` | Override how the "clear all" button looks
+
+All elements in `items` have the keys:
+
+* `type`: which can be "facet", "exclude", "disjunctive", "hierarchical", "numeric" or "query"
+* `attribute`: used as the key
+* `label`: string form of the value
+* `value`: necessary for the refinement to work correctly, no need to be changed
 
 ## CSS classes
 

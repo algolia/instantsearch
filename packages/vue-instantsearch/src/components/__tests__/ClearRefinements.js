@@ -11,21 +11,7 @@ const defaultState = {
   createURL: () => {},
 };
 
-it('accepts an clearsQuery prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(ClearRefinements, {
-    propsData: {
-      clearsQuery: true,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.clearsQuery).toBe(true);
-});
-
-it('accepts an excludeAttributes prop', () => {
+it('accepts an excludedAttributes prop', () => {
   __setState({
     ...defaultState,
   });
@@ -37,6 +23,35 @@ it('accepts an excludeAttributes prop', () => {
   });
 
   expect(wrapper.vm.widgetParams.excludeAttributes).toEqual(['brand']);
+});
+
+it('query in excluded attributes sets clearsQuery', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const wrapper = mount(ClearRefinements, {
+    propsData: {
+      excludedAttributes: ['query', 'brand'],
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.excludeAttributes).toEqual(['brand']);
+  expect(wrapper.vm.widgetParams.clearsQuery).toEqual(false);
+});
+
+it('clears query by empty excluded attributes', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const wrapper = mount(ClearRefinements, {
+    propsData: {
+      excludedAttributes: [],
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.clearsQuery).toEqual(true);
 });
 
 describe('default render', () => {

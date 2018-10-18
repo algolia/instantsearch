@@ -38,21 +38,19 @@ export default {
     createSuitMixin({ name: 'ClearRefinements' }),
   ],
   props: {
-    clearsQuery: {
-      type: Boolean,
-      default: false,
-    },
     excludedAttributes: {
       type: Array,
-      default: () => [],
+      default: () => ['query'],
     },
   },
   computed: {
     widgetParams() {
       return {
-        clearsQuery: this.clearsQuery,
-        excludeAttributes: this.excludedAttributes,
-        transformItems: this.transformItems,
+        clearsQuery: this.excludedAttributes.every(item => item !== 'query'),
+        // note the difference: excludeAttributes vs. excludedAttributes
+        excludeAttributes: this.excludedAttributes.filter(
+          item => item !== 'query'
+        ),
       };
     },
     canRefine() {

@@ -16,15 +16,16 @@ A button that clears the `query`, the `active refinements`, or both when pressed
 ## Usage
 
 ```html
-<ais-clear-refinements />
+<ais-clear-refinements
+  :excluded-attributes="['categories']"
+/>
 ```
 
 ## Props
 
 Name | Type | Default | Description | Required
 ---|---|---|---|---
-clearsQuery | `boolean` | `false` | Also clears the query | no
-excludedAttributes | `string[]` | `[]` | Attributes not to clear | no
+excludedAttributes | `string[]` | `['query']` | Attributes not to clear | no
 classNames | Object | | Override class names | no
 
 ## Slots

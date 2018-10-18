@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
-import { withKnobs, boolean } from '@storybook/addon-knobs/vue';
+import { withKnobs } from '@storybook/addon-knobs/vue';
 
 storiesOf('ais-current-refinements', module)
   .addDecorator(previewWrapper())
@@ -12,13 +12,13 @@ storiesOf('ais-current-refinements', module)
   }))
   .add('with a refinement to clear', () => ({
     template: `
-      <ais-current-refinements :clears-query="true" />
+      <ais-current-refinements :excluded-attributes="[]" />
     `,
   }))
   .add('with multiple refinements to clear', () => ({
     template: `
       <div>
-        <ais-current-refinements :clears-query="true" />
+        <ais-current-refinements :excluded-attributes="[]" />
         <hr />
         <ais-hierarchical-menu
           :attributes="[
@@ -35,10 +35,9 @@ storiesOf('ais-current-refinements', module)
   .add('with excluded attributes', () => ({
     template: `
       <div>
-        excludes: Brand
+        <p><strong>excludes: Brand</strong>
         <ais-current-refinements
           :excluded-attributes="['brand']"
-          :clears-query="true"
         />
         <hr />
         <ais-hierarchical-menu
@@ -61,14 +60,9 @@ storiesOf('ais-current-refinements', module)
       transformItems(items) {
         return items.map(item =>
           Object.assign({}, item, {
-            computedLabel: item.computedLabel.toUpperCase(),
+            label: item.label.toUpperCase(),
           })
         );
       },
     },
-  }))
-  .add('playground', () => ({
-    template: `
-      <ais-current-refinements :clears-query="${boolean('clears-query')}" />
-    `,
   }));
