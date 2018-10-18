@@ -1,67 +1,42 @@
 import forEach from 'lodash/forEach';
 import cx from 'classnames';
-import { bemHelper, getContainerNode, renderTemplate } from '../../lib/utils';
+import { getContainerNode, renderTemplate } from '../../lib/utils';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import defaultTemplates from './defaultTemplates';
+import { component } from '../../lib/suit';
 
-const bem = bemHelper('ais-search-box');
-const KEY_ENTER = 13;
-const KEY_SUPPRESS = 8;
+const suit = component('SearchBox');
 
 const renderer = ({
   containerNode,
   cssClasses,
   placeholder,
-  poweredBy,
   templates,
   autofocus,
-  searchOnEnterKeyPressOnly,
-  wrapInput,
-  reset,
-  magnifier,
-  loadingIndicator,
-  // eslint-disable-next-line complexity
+  searchAsYouType,
+  showReset,
+  showSubmit,
+  showLoadingIndicator,
 }) => (
   { refine, clear, query, onHistoryChange, isSearchStalled },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
-    const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
-    const input = createInput(containerNode);
-    const isInputTargeted = input === containerNode;
-    let queryFromInput = query;
+    const input = document.createElement('input');
+    const wrappedInput = wrapInputFn(input, cssClasses);
+    containerNode.appendChild(wrappedInput);
 
-    if (isInputTargeted) {
-      // To replace the node, we need to create an intermediate node
-      const placeholderNode = document.createElement('div');
-      input.parentNode.insertBefore(placeholderNode, input);
-      const parentNode = input.parentNode;
-      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
-      parentNode.replaceChild(wrappedInput, placeholderNode);
-
-      const initialInputValue = input.value;
-
-      // if the input contains a value, we provide it to the state
-      if (initialInputValue) {
-        queryFromInput = initialInputValue;
-        refine(initialInputValue, false);
-      }
-    } else {
-      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
-      containerNode.appendChild(wrappedInput);
+    if (showSubmit) {
+      addSubmit(input, cssClasses, templates);
+    }
+    if (showReset) {
+      addReset(input, cssClasses, templates, clear);
+    }
+    if (showLoadingIndicator) {
+      addLoadingIndicator(input, cssClasses, templates);
     }
 
-    if (magnifier) addMagnifier(input, magnifier, templates);
-    if (reset) addReset(input, reset, templates, clear);
-    if (loadingIndicator)
-      addLoadingIndicator(input, loadingIndicator, templates);
-
-    addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
-
-    // Optional "powered by Algolia" widget
-    if (poweredBy) {
-      addPoweredBy(input, poweredBy, templates);
-    }
+    addDefaultAttributesToInput(placeholder, input, query, cssClasses);
 
     // When the page is coming from BFCache
     // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
@@ -73,7 +48,7 @@ const renderer = ({
     // - use back button
     // - input query is empty (because <input> autocomplete = off)
     window.addEventListener('pageshow', () => {
-      input.value = queryFromInput;
+      input.value = query;
     });
 
     // Update value when query change outside of the input
@@ -81,76 +56,65 @@ const renderer = ({
       input.value = fullState.query || '';
     });
 
-    if (autofocus === true || (autofocus === 'auto' && queryFromInput === '')) {
+    if (autofocus === true) {
       input.focus();
-      input.setSelectionRange(queryFromInput.length, queryFromInput.length);
+      input.setSelectionRange(query.length, query.length);
     }
 
-    // search on enter
-    if (searchOnEnterKeyPressOnly) {
-      addListener(input, INPUT_EVENT, e => {
-        refine(getValue(e), false);
+    const form = input.parentElement;
+
+    if (searchAsYouType) {
+      input.addEventListener('input', event => {
+        refine(event.currentTarget.value);
       });
-      addListener(input, 'keyup', e => {
-        if (e.keyCode === KEY_ENTER) refine(getValue(e));
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        input.blur();
       });
     } else {
-      addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
-
-      // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
-      // can be removed as soon as we remove support for it
-      if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-        addListener(
-          input,
-          'keyup',
-          ifKey(KEY_SUPPRESS, getInputValueAndCall(refine))
-        );
-      }
+      input.addEventListener('input', event => {
+        refine(event.currentTarget.value, false);
+      });
+      form.addEventListener('submit', event => {
+        refine(input.value);
+        event.preventDefault();
+        input.blur();
+      });
     }
-  } else {
-    renderAfterInit({
-      containerNode,
-      query,
-      loadingIndicator,
-      isSearchStalled,
-    });
+
+    return;
   }
 
-  if (reset) {
-    const resetBtnSelector = `.${cx(bem('reset-wrapper'))}`;
-    // hide reset button when there is no query
-    const resetButton =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode.querySelector(resetBtnSelector)
-        : containerNode.querySelector(resetBtnSelector);
-    resetButton.style.display = query && query.trim() ? 'block' : 'none';
-  }
-};
-
-function renderAfterInit({
-  containerNode,
-  query,
-  loadingIndicator,
-  isSearchStalled,
-}) {
-  const input = getInput(containerNode);
+  const input = containerNode.querySelector('input');
   const isFocused = document.activeElement === input;
+
   if (!isFocused && query !== input.value) {
     input.value = query;
   }
 
-  if (loadingIndicator) {
-    const rootElement =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode
-        : containerNode.firstChild;
+  if (showLoadingIndicator) {
+    const loadingIndicatorElement = containerNode.querySelector(
+      `.${cssClasses.loadingIndicator}`
+    );
+
     if (isSearchStalled) {
-      rootElement.classList.add('ais-stalled-search');
+      loadingIndicatorElement.removeAttribute('hidden');
     } else {
-      rootElement.classList.remove('ais-stalled-search');
+      loadingIndicatorElement.setAttribute('hidden', '');
     }
   }
-}
+
+  if (showReset) {
+    const resetElement = containerNode.querySelector(`.${cssClasses.reset}`);
+    const isUserTyping = Boolean(query && query.trim());
+
+    if (isUserTyping && !isSearchStalled) {
+      resetElement.removeAttribute('hidden');
+    } else {
+      resetElement.setAttribute('hidden', '');
+    }
+  }
+};
 
 const disposer = containerNode => () => {
   const range = document.createRange(); // IE10+
@@ -162,68 +126,51 @@ const usage = `Usage:
 searchBox({
   container,
   [ placeholder ],
-  [ cssClasses.{input,poweredBy} ],
-  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],
-  [ wrapInput ],
-  [ autofocus ],
-  [ searchOnEnterKeyPressOnly ],
-  [ queryHook ]
-  [ reset=true || reset.{template, cssClasses.{root}} ]
+  [ cssClasses.{root, input, reset, submit, loadingIndicator} ],
+  [ autofocus = false ],
+  [ searchAsYouType = true ],
+  [ showReset = true ],
+  [ showSubmit = true ],
+  [ showLoadingIndicator = true ],
+  [ queryHook ],
+  [ templates.{reset, submit, loadingIndicator} ],
 })`;
 
 /**
- * @typedef {Object} SearchBoxPoweredByCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [link] CSS class to add to the link element.
- */
-
-/**
- * @typedef {Object} SearchBoxPoweredByOption
- * @property {function|string} template Template used for displaying the link. Can accept a function or a Hogan string.
- * @property {SearchBoxPoweredByCSSClasses} [cssClasses] CSS classes added to the powered-by badge.
- */
-
-/**
- * @typedef {Object} SearchBoxResetOption
- * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the reset button.
- */
-
-/**
- * @typedef {Object} SearchBoxLoadingIndicatorOption
- * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the loading-indicator element.
+ * @typedef {Ojbect} SearchBoxTemplates
+ * @property {function|string} submit Template used for displaying the submit. Can accept a function or a Hogan string.
+ * @property {function|string} reset Template used for displaying the button. Can accept a function or a Hogan string.
+ * @property {function|string} loadingIndicator Template used for displaying the button. Can accept a function or a Hogan string.
  */
 
 /**
  * @typedef {Object} SearchBoxCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the
- * wrapping `<div>` (if `wrapInput` set to `true`).
- * @property  {string|string[]} [input] CSS class to add to the input.
- */
-
-/**
- * @typedef {Object} SearchBoxMagnifierOption
- * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
+ * @property {string|string[]} [root] CSS class to add to the wrapping `<div>`
+ * @property {string|string[]} [form] CSS class to add to the form
+ * @property {string|string[]} [input] CSS class to add to the input.
+ * @property {string|string[]} [reset] CSS classes added to the reset button.
+ * @property {string|string[]} [resetIcon] CSS classes added to the reset icon.
+ * @property {string|string[]} [loadingIndicator] CSS classes added to the loading indicator element.
+ * @property {string|string[]} [loadingIcon] CSS classes added to the loading indicator icon.
+ * @property {string|string[]} [submit] CSS classes added to the submit.
  */
 
 /**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS selector or the HTMLElement is an existing input, the widget will use it.
- * @property  {string} [placeholder] Input's placeholder.
- * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
- * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
- * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
- * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
- * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
- * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
- * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
+ * @property {string} [placeholder] The placeholder of the input
+ * @property {boolean} [autofocus=false] Whether the input should be autofocused
+ * @property {boolean} [searchAsYouType=true] If set, trigger the search
  * once `<Enter>` is pressed only.
- * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
- * @property  {function} [queryHook] A function that will be called every time a new search would be done. You
- * will get the query as first parameter and a search(query) function to call as the second parameter.
- * This queryHook can be used to debounce the number of searches done from the searchBox.
+ * @property {boolean} [showReset=true] Whether to show the reset button
+ * @property {boolean} [showSubmit=true] Whether to show the submit button
+ * @property {boolean} [showLoadingIndicator=true] Whether to show the loading indicator (replaces the submit if
+ * the search is stalled)
+ * @property {SearchBoxCSSClasses} [cssClasses] CSS classes to add
+ * @property {SearchBoxTemplates} [templates] Templates used for customizing the rendering of the searchbox
+ * @property {function} [queryHook] A function that is called every time a new search is done. You
+ * will get the query as the first parameter and a search (query) function to call as the second parameter.
+ * This `queryHook` can be used to debounce the number of searches done from the search box.
  */
 
 /**
@@ -243,25 +190,20 @@ searchBox({
  *   instantsearch.widgets.searchBox({
  *     container: '#q',
  *     placeholder: 'Search for products',
- *     autofocus: false,
- *     poweredBy: true,
- *     reset: true,
- *     loadingIndicator: false
  *   })
  * );
  */
 export default function searchBox({
   container,
   placeholder = '',
-  cssClasses = {},
-  poweredBy = false,
-  wrapInput = true,
-  autofocus = 'auto',
-  searchOnEnterKeyPressOnly = false,
-  reset = true,
-  magnifier = true,
-  loadingIndicator = false,
+  cssClasses: userCssClasses = {},
+  autofocus = false,
+  searchAsYouType = true,
+  showReset = true,
+  showSubmit = true,
+  showLoadingIndicator = true,
   queryHook,
+  templates,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -269,28 +211,60 @@ export default function searchBox({
 
   const containerNode = getContainerNode(container);
 
-  // Only possible values are 'auto', true and false
-  if (typeof autofocus !== 'boolean') {
-    autofocus = 'auto';
+  if (containerNode.tagName === 'INPUT') {
+    // eslint-disable-next-line
+    // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
+    throw new Error(
+      `[InstantSearch.js] Since in version 3, \`container\` can not be an \`input\` anymore.
+
+Learn more in the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
+    );
   }
 
-  // Convert to object if only set to true
-  if (poweredBy === true) {
-    poweredBy = {};
+  // eslint-disable-next-line
+  // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
+  if (typeof autofocus !== 'boolean') {
+    throw new Error(
+      `[InstantSearch.js] Since in version 3, \`autofocus\` only supports boolean values.
+
+Learn more in the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
+    );
   }
+
+  const cssClasses = {
+    root: cx(suit(), userCssClasses.root),
+    form: cx(suit({ descendantName: 'form' }), userCssClasses.form),
+    input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
+    submit: cx(suit({ descendantName: 'submit' }), userCssClasses.submit),
+    submitIcon: cx(
+      suit({ descendantName: 'submitIcon' }),
+      userCssClasses.submitIcon
+    ),
+    reset: cx(suit({ descendantName: 'reset' }), userCssClasses.reset),
+    resetIcon: cx(
+      suit({ descendantName: 'resetIcon' }),
+      userCssClasses.resetIcon
+    ),
+    loadingIndicator: cx(
+      suit({ descendantName: 'loadingIndicator' }),
+      userCssClasses.loadingIndicator
+    ),
+    loadingIcon: cx(
+      suit({ descendantName: 'loadingIcon' }),
+      userCssClasses.loadingIcon
+    ),
+  };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     placeholder,
-    poweredBy,
-    templates: defaultTemplates,
+    templates: { ...defaultTemplates, ...templates },
     autofocus,
-    searchOnEnterKeyPressOnly,
-    wrapInput,
-    reset,
-    magnifier,
-    loadingIndicator,
+    searchAsYouType,
+    showReset,
+    showSubmit,
+    showLoadingIndicator,
   });
 
   try {
@@ -299,60 +273,9 @@ export default function searchBox({
       disposer(containerNode)
     );
     return makeWidget({ queryHook });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
-}
-
-// the 'input' event is triggered when the input value changes
-// in any case: typing, copy pasting with mouse..
-// 'onpropertychange' is the IE8 alternative until we support IE8
-// but it's flawed: http://help.dottoro.com/ljhxklln.php
-
-function createInput(containerNode) {
-  // Returns reference to targeted input if present, or create a new one
-  if (containerNode.tagName === 'INPUT') {
-    return containerNode;
-  }
-  return document.createElement('input');
-}
-
-function getInput(containerNode) {
-  // Returns reference to targeted input if present, or look for it inside
-  if (containerNode.tagName === 'INPUT') {
-    return containerNode;
-  }
-  return containerNode.querySelector('input');
-}
-
-function wrapInputFn(input, cssClasses) {
-  // Wrap input in a .ais-search-box div
-  const wrapper = document.createElement('div');
-  const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
-  CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
-  wrapper.appendChild(input);
-  return wrapper;
-}
-
-function addListener(el, type, fn) {
-  if (el.addEventListener) {
-    el.addEventListener(type, fn);
-  } else {
-    el.attachEvent(`on${type}`, fn);
-  }
-}
-
-function getValue(e) {
-  return (e.currentTarget ? e.currentTarget : e.srcElement).value;
-}
-
-function ifKey(expectedKeyCode, func) {
-  return actualEvent =>
-    actualEvent.keyCode === expectedKeyCode && func(actualEvent);
-}
-
-function getInputValueAndCall(func) {
-  return actualEvent => func(getValue(actualEvent));
 }
 
 function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
@@ -376,8 +299,7 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   });
 
   // Add classes
-  const CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
-  CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
+  input.className = cssClasses.input;
 }
 
 /**
@@ -385,152 +307,96 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
  * it should reset the query.
  * @private
  * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} reset the user options (cssClasses and template)
- * @param {object} $2 the default templates
+ * @param {object} cssClasses the object containing all the css classes
+ * @param {object} templates the templates object
  * @param {function} clearFunction function called when the element is activated (clicked)
- * @returns {undefined} returns nothing
+ * @returns {undefined} Modifies the input
  */
-function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
-  reset = {
-    cssClasses: {},
-    template: resetTemplate,
-    ...reset,
-  };
-
-  const resetCSSClasses = {
-    root: cx(bem('reset'), reset.cssClasses.root),
-  };
-
+function addReset(input, cssClasses, templates, clearFunction) {
   const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: reset,
+    templateKey: 'reset',
+    templates,
     data: {
-      cssClasses: resetCSSClasses,
+      cssClasses,
     },
   });
 
-  const htmlNode = createNodeFromString(stringNode, cx(bem('reset-wrapper')));
+  const node = document.createElement('button');
+  node.className = cssClasses.reset;
+  node.setAttribute('hidden', '');
+  node.type = 'reset';
+  node.title = 'Clear the search query';
+  node.innerHTML = stringNode;
 
-  input.parentNode.appendChild(htmlNode);
+  input.parentNode.appendChild(node);
 
-  htmlNode.addEventListener('click', event => {
-    event.preventDefault();
+  node.addEventListener('click', () => {
+    input.focus();
     clearFunction();
   });
 }
 
 /**
- * Adds a magnifying glass in the searchbox widget
+ * Adds a button with a magnifying glass in the searchbox widget
  * @private
  * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} magnifier the user options (cssClasses and template)
- * @param {object} $2 the default templates
- * @returns {undefined} returns nothing
+ * @param {object} cssClasses the user options (cssClasses and template)
+ * @param {object} templates the object containing all the templates
+ * @returns {undefined} Modifies the input
  */
-function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
-  magnifier = {
-    cssClasses: {},
-    template: magnifierTemplate,
-    ...magnifier,
-  };
-
-  const magnifierCSSClasses = {
-    root: cx(bem('magnifier'), magnifier.cssClasses.root),
-  };
-
+function addSubmit(input, cssClasses, templates) {
   const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: magnifier,
+    templateKey: 'submit',
+    templates,
     data: {
-      cssClasses: magnifierCSSClasses,
+      cssClasses,
     },
   });
 
-  const htmlNode = createNodeFromString(
-    stringNode,
-    cx(bem('magnifier-wrapper'))
-  );
+  const node = document.createElement('button');
+  node.className = cssClasses.submit;
+  node.type = 'submit';
+  node.title = 'Submit the search query';
+  node.innerHTML = stringNode;
 
-  input.parentNode.appendChild(htmlNode);
-}
-
-function addLoadingIndicator(
-  input,
-  loadingIndicator,
-  { loadingIndicator: loadingIndicatorTemplate }
-) {
-  loadingIndicator = {
-    cssClasses: {},
-    template: loadingIndicatorTemplate,
-    ...loadingIndicator,
-  };
-
-  const loadingIndicatorCSSClasses = {
-    root: cx(bem('loading-indicator'), loadingIndicator.cssClasses.root),
-  };
-
-  const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: loadingIndicator,
-    data: {
-      cssClasses: loadingIndicatorCSSClasses,
-    },
-  });
-
-  const htmlNode = createNodeFromString(
-    stringNode,
-    cx(bem('loading-indicator-wrapper'))
-  );
-
-  input.parentNode.appendChild(htmlNode);
+  input.parentNode.appendChild(node);
 }
 
 /**
- * Adds a powered by in the searchbox widget
- * @private
- * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} poweredBy the user options (cssClasses and template)
- * @param {object} templates the default templates
- * @returns {undefined} returns nothing
+ * Adds a loading indicator (spinner) to the search box
+ * @param {DomElement} input DOM element where to add the loading indicator
+ * @param {Object} cssClasses css classes definition
+ * @param {Object} templates templates of the widget
+ * @returns {undefined} Modifies the input
  */
-function addPoweredBy(input, poweredBy, { poweredBy: poweredbyTemplate }) {
-  // Default values
-  poweredBy = {
-    cssClasses: {},
-    template: poweredbyTemplate,
-    ...poweredBy,
-  };
-
-  const poweredByCSSClasses = {
-    root: cx(bem('powered-by'), poweredBy.cssClasses.root),
-    link: cx(bem('powered-by-link'), poweredBy.cssClasses.link),
-  };
-
-  const url =
-    'https://www.algolia.com/?' +
-    'utm_source=instantsearch.js&' +
-    'utm_medium=website&' +
-    `utm_content=${location.hostname}&` +
-    'utm_campaign=poweredby';
-
+function addLoadingIndicator(input, cssClasses, templates) {
   const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: poweredBy,
+    templateKey: 'loadingIndicator',
+    templates,
     data: {
-      cssClasses: poweredByCSSClasses,
-      url,
+      cssClasses,
     },
   });
 
-  const htmlNode = createNodeFromString(stringNode);
+  const node = document.createElement('span');
+  node.setAttribute('hidden', '');
+  node.className = cssClasses.loadingIndicator;
+  node.innerHTML = stringNode;
 
-  input.parentNode.insertBefore(htmlNode, input.nextSibling);
+  input.parentNode.appendChild(node);
 }
 
-// Cross-browser way to create a DOM node from a string. We wrap in
-// a `span` to make sure we have one and only one node.
-function createNodeFromString(stringNode, rootClassname = '') {
-  const tmpNode = document.createElement('div');
-  tmpNode.innerHTML = `<span class="${rootClassname}">${stringNode.trim()}</span>`;
-  return tmpNode.firstChild;
+function wrapInputFn(input, cssClasses) {
+  const wrapper = document.createElement('div');
+  wrapper.className = cssClasses.root;
+
+  const form = document.createElement('form');
+  form.className = cssClasses.form;
+  form.noValidate = true;
+  form.action = ''; // show search button on iOS keyboard
+
+  form.appendChild(input);
+  wrapper.appendChild(form);
+
+  return wrapper;
 }

@@ -26,7 +26,7 @@ export {
 export { default as numericMenu } from './numeric-menu/numeric-menu';
 export { default as pagination } from './pagination/pagination.js';
 export { default as rangeInput } from './range-input/range-input.js';
-export { default as searchBox } from '../widgets/search-box/search-box.js';
+export { default as searchBox } from './search-box/search-box.js';
 export { default as rangeSlider } from './range-slider/range-slider.js';
 export { default as sortBy } from './sort-by/sort-by.js';
 export { default as ratingMenu } from './rating-menu/rating-menu';
