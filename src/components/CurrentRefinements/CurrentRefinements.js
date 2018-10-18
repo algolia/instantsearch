@@ -6,18 +6,19 @@ import { isSpecialClick, capitalize } from '../../lib/utils.js';
 const createItemKey = ({ attribute, value, type, operator }) =>
   [attribute, value, type, operator].map(key => key || 'none').join(':');
 
+const handleClick = callback => event => {
+  if (isSpecialClick(event)) {
+    return;
+  }
+
+  event.preventDefault();
+  callback();
+};
+
 class CurrentRefinements extends Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
-
-  handleClick = (event, { refinement, item }) => {
-    if (isSpecialClick(event)) {
-      return;
-    }
-
-    refinement.refine(item);
-  };
 
   renderRefinement(refinement, index) {
     return (
@@ -40,7 +41,7 @@ class CurrentRefinements extends Component {
 
             <button
               className={this.props.cssClasses.delete}
-              onClick={event => this.handleClick(event, { refinement, item })}
+              onClick={handleClick(refinement.refine.bind(null, item))}
             >
               ✕
             </button>

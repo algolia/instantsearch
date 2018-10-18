@@ -107,6 +107,7 @@ export default function currentRefinements({
     const makeWidget = connectCurrentRefinements(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
+
     return makeWidget({
       includedAttributes,
       excludedAttributes,
