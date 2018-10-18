@@ -237,7 +237,7 @@ Here are the elements you need to migrate:
       </span>
       <span class="ais-CurrentRefinements-category">
         <span class="ais-CurrentRefinements-categoryLabel">
-          <q>Bla bla bla</q>
+          <q>My query</q>
         </span>
         <button class="ais-CurrentRefinements-delete">✕</button>
       </span>
