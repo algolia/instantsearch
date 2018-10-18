@@ -274,7 +274,6 @@ currentRefinements({
   container,
   [ includedAttributes ],
   [ excludedAttributes = ['query'] ],
-  [ templates.{item} ],
   [ cssClasses.{root, list, item, label, category, categoryLabel, delete} ],
   [ transformItems ]
 })"

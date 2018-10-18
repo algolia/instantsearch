@@ -26,7 +26,6 @@ currentRefinements({
   container,
   [ includedAttributes ],
   [ excludedAttributes = ['query'] ],
-  [ templates.{item} ],
   [ cssClasses.{root, list, item, label, category, categoryLabel, delete} ],
   [ transformItems ]
 })`;
@@ -43,16 +42,10 @@ currentRefinements({
  */
 
 /**
- * @typedef {Object} CurrentRefinementsTemplates
- * @property {string|function(object):string} [item] The item template
- */
-
-/**
  * @typedef {Object} CurrentRefinementsWidgetOptions
  * @property {string|HTMLElement} container The CSS Selector or HTMLElement to insert the widget
  * @property {string[]} [includedAttributes] The attributes to include in the refinements (all by default)
  * @property {string[]} [excludedAttributes = ['query']] The attributes to exclude from the refinements
- * @property {CurrentRefinementsTemplates} [templates] The templates to use for the widget
  * @property {CurrentRefinementsCSSClasses} [cssClasses] The CSS classes to be added
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
