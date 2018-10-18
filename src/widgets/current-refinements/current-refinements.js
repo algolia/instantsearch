@@ -2,31 +2,21 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements.js';
 import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements.js';
-import defaultTemplates from './defaultTemplates.js';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
+import { getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit.js';
 
 const suit = component('CurrentRefinements');
 
-const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
-  { refinements, instantSearchInstance },
+const renderer = ({ containerNode, cssClasses }) => (
+  { refinements },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
-    renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates,
-    });
     return;
   }
 
   render(
-    <CurrentRefinements
-      cssClasses={cssClasses}
-      refinements={refinements}
-      templateProps={renderState.templateProps}
-    />,
+    <CurrentRefinements cssClasses={cssClasses} refinements={refinements} />,
     containerNode
   );
 };
@@ -34,10 +24,10 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
 const usage = `Usage:
 currentRefinements({
   container,
-  [ includedAttributes = [] ],
+  [ includedAttributes ],
   [ excludedAttributes = ['query'] ],
   [ templates.{item} ],
-  [ cssClasses.{root, list, item, label, category, categoryLabel, delete, reset} ],
+  [ cssClasses.{root, list, item, label, category, categoryLabel, delete} ],
   [ transformItems ]
 })`;
 
@@ -50,7 +40,6 @@ currentRefinements({
  * @property {string} [category] CSS classes added to the category element.
  * @property {string} [categoryLabel] CSS classes added to the categoryLabel element.
  * @property {string} [delete] CSS classes added to the delete element.
- * @property {string} [reset] CSS classes added to the reset element.
  */
 
 /**
@@ -93,9 +82,8 @@ currentRefinements({
  */
 export default function currentRefinements({
   container,
-  includedAttributes = [],
+  includedAttributes,
   excludedAttributes,
-  templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   transformItems,
 }) {
@@ -115,14 +103,11 @@ export default function currentRefinements({
       userCssClasses.categoryLabel
     ),
     delete: cx(suit({ descendantName: 'delete' }), userCssClasses.delete),
-    reset: cx(suit({ descendantName: 'reset' }), userCssClasses.reset),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    renderState: {},
-    templates,
   });
 
   try {
@@ -135,7 +120,6 @@ export default function currentRefinements({
       transformItems,
     });
   } catch (error) {
-    throw new Error(error);
-    // throw new Error(usage);
+    throw new Error(usage);
   }
 }

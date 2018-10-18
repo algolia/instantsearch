@@ -3,8 +3,6 @@ import CurrentRefinements from '../CurrentRefinements.js';
 import { mount } from 'enzyme';
 
 describe('CurrentRefinements', () => {
-  let defaultTemplates;
-  let templateProps;
   let refinements;
   let parameters;
 
@@ -20,40 +18,28 @@ describe('CurrentRefinements', () => {
   };
 
   beforeEach(() => {
-    defaultTemplates = {
-      item: 'DEFAULT ITEM TEMPLATE',
-    };
-
-    templateProps = {
-      templates: {
-        clearAll: 'CLEAR ALL',
-        item: '{{attribute}}: {{label}}',
-      },
-      defaultTemplates,
-    };
-
     refinements = [
       {
         attribute: 'facet',
+        refine: () => {},
         items: [
           {
             type: 'facet',
             attribute: 'facet',
             value: 'facet-val1',
             label: 'facet-val1',
-            refine: () => {},
           },
           {
             type: 'facet',
             attribute: 'facet',
             value: 'facet-val2',
             label: 'facet-val2',
-            refine: () => {},
           },
         ],
       },
       {
         attribute: 'facet',
+        refine: () => {},
         items: [
           {
             type: 'exclude',
@@ -61,36 +47,36 @@ describe('CurrentRefinements', () => {
             value: 'disjunctiveFacet-val1',
             label: 'disjunctiveFacet-val1',
             exclude: true,
-            refine: () => {},
           },
         ],
       },
       {
         attribute: 'disjunctive',
+        refine: () => {},
         items: [
           {
             type: 'disjunctive',
             attribute: 'disjunctiveFacet',
             value: 'disjunctiveFacet-val1',
             label: 'disjunctiveFacet-val1',
-            refine: () => {},
           },
         ],
       },
       {
         attribute: 'hierarchical',
+        refine: () => {},
         items: [
           {
             type: 'hierarchical',
             attribute: 'hierarchicalFacet',
             value: 'hierarchicalFacet-val1',
             label: 'hierarchicalFacet-val1',
-            refine: () => {},
           },
         ],
       },
       {
         attribute: 'numeric',
+        refine: () => {},
         items: [
           {
             type: 'numeric',
@@ -98,19 +84,18 @@ describe('CurrentRefinements', () => {
             value: 'numericFacet-val1',
             label: 'numericFacet-val1',
             operator: '>=',
-            refine: () => {},
           },
         ],
       },
       {
         attribute: 'tag',
+        refine: () => {},
         items: [
           {
             type: 'tag',
             attribute: '_tags',
             value: 'tag1',
             label: 'tag1',
-            refine: () => {},
           },
         ],
       },
@@ -145,7 +130,6 @@ describe('CurrentRefinements', () => {
       },
       cssClasses,
       refinements,
-      templateProps,
     };
   });
 
@@ -153,31 +137,6 @@ describe('CurrentRefinements', () => {
     const tree = mount(<CurrentRefinements {...parameters} />);
 
     expect(tree).toMatchSnapshot();
-  });
-
-  describe('options.attributes', () => {
-    it('uses label', () => {
-      parameters.attributes.facet = {
-        value: 'facet',
-        label: 'facet',
-      };
-
-      const tree = mount(<CurrentRefinements {...parameters} />);
-
-      expect(tree).toMatchSnapshot();
-    });
-
-    it('uses template', () => {
-      parameters.attributes.facet = {
-        value: 'facet',
-        label: 'facet',
-        template: 'CUSTOM TEMPLATE',
-      };
-
-      const tree = mount(<CurrentRefinements {...parameters} />);
-
-      expect(tree).toMatchSnapshot();
-    });
   });
 
   describe('options.refinements', () => {
@@ -189,13 +148,13 @@ describe('CurrentRefinements', () => {
       parameters.refinements = [
         {
           attribute: 'customFacet',
+          refine: () => {},
           items: [
             {
               attribute: 'customFacet',
               type: 'facet',
               value: 'val1',
               label: 'val1',
-              refine: () => {},
             },
           ],
         },
@@ -209,6 +168,7 @@ describe('CurrentRefinements', () => {
       parameters.refinements = [
         {
           attribute: 'customExcludeFacet',
+          refine: () => {},
           items: [
             {
               attribute: 'customExcludeFacet',
@@ -216,7 +176,6 @@ describe('CurrentRefinements', () => {
               value: 'val1',
               label: 'val1',
               exclude: true,
-              refine: () => {},
             },
           ],
         },
@@ -230,13 +189,13 @@ describe('CurrentRefinements', () => {
       parameters.refinements = [
         {
           attribute: 'customDisjunctiveFacet',
+          refine: () => {},
           items: [
             {
               attribute: 'customDisjunctiveFacet',
               type: 'disjunctive',
               value: 'val1',
               label: 'val1',
-              refine: () => {},
             },
           ],
         },
@@ -250,13 +209,13 @@ describe('CurrentRefinements', () => {
       parameters.refinements = [
         {
           attribute: 'customHierarchicalFacet',
+          refine: () => {},
           items: [
             {
               attribute: 'customHierarchicalFacet',
               type: 'hierarchical',
               value: 'val1',
               label: 'val1',
-              refine: () => {},
             },
           ],
         },
@@ -270,6 +229,7 @@ describe('CurrentRefinements', () => {
       parameters.refinements = [
         {
           attribute: 'customNumericFilter',
+          refine: () => {},
           items: [
             {
               attribute: 'customNumericFilter',
@@ -277,12 +237,12 @@ describe('CurrentRefinements', () => {
               operator: '=',
               value: 'val1',
               label: 'val1',
-              refine: () => {},
             },
           ],
         },
         {
           attribute: 'customNumericFilter',
+          refine: () => {},
           items: [
             {
               attribute: 'customNumericFilter',
@@ -290,12 +250,12 @@ describe('CurrentRefinements', () => {
               operator: '<=',
               value: 'val2',
               label: 'val2',
-              refine: () => {},
             },
           ],
         },
         {
           attribute: 'customNumericFilter',
+          refine: () => {},
           items: [
             {
               attribute: 'customNumericFilter',
@@ -303,7 +263,6 @@ describe('CurrentRefinements', () => {
               operator: '>=',
               value: 'val3',
               label: 'val3',
-              refine: () => {},
             },
           ],
         },
@@ -317,26 +276,17 @@ describe('CurrentRefinements', () => {
       parameters.refinements = [
         {
           attribute: '_tags',
+          refine: () => {},
           items: [
             {
               attribute: '_tags',
               type: 'tag',
               value: 'tag1',
               label: 'tag1',
-              refine: () => {},
             },
           ],
         },
       ];
-      const tree = mount(<CurrentRefinements {...parameters} />);
-
-      expect(tree).toMatchSnapshot();
-    });
-  });
-
-  describe('options.templateProps', () => {
-    it('passes a custom template if given', () => {
-      parameters.templateProps.templates.item = 'CUSTOM ITEM TEMPLATE';
       const tree = mount(<CurrentRefinements {...parameters} />);
 
       expect(tree).toMatchSnapshot();

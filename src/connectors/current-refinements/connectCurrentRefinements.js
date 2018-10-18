@@ -1,13 +1,8 @@
-import {
-  getRefinements,
-  clearRefinements,
-  checkRendering,
-} from '../../lib/utils.js';
+import { getRefinements, checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customCurrentRefinements = connectCurrentRefinements(function renderFn(params, isFirstRendering) {
   // params = {
-  //   attributes,
   //   refine,
   //   createURL,
   //   refinements,
@@ -39,8 +34,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CurrentRefinementsRenderingOptions
- * @property {string[]} [includedAttributes] The attributes to include in the refinements (all by default)
- * @property {string[]} [excludedAttributes = ["query"]] The attributes to exclude from the refinements
  * @property {function(item)} refine Clears a single refinement
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
  * @property {CurrentRefinement[]} refinements All the current refinements.
@@ -125,35 +118,14 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
-      includedAttributes = [],
+      includedAttributes,
       excludedAttributes = ['query'],
       transformItems = items => items,
     } = widgetParams;
-
-    const isUsageValid =
-      Array.isArray(includedAttributes) && Array.isArray(excludedAttributes);
-
-    if (!isUsageValid) {
-      throw new Error(usage);
-    }
-
     const clearsQuery = excludedAttributes.indexOf('query') !== -1;
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
-        this._clearRefinementsAndSearch = () => {
-          helper
-            .setState(
-              clearRefinements({
-                helper,
-                includedAttributes, // TODO: is that right?
-                excludedAttributes,
-                clearsQuery,
-              })
-            )
-            .search();
-        };
-
         const refinements = transformItems(
           getNormalizedRefinements({
             results: {},
@@ -210,74 +182,6 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
   };
 }
 
-function getRestrictedIndexForSort(
-  includedAttributes,
-  allAttributes,
-  attribute
-) {
-  const idx = includedAttributes.indexOf(attribute);
-
-  if (idx !== -1) {
-    return idx;
-  }
-
-  return includedAttributes.length + allAttributes.indexOf(attribute);
-}
-
-function compareRefinements(includedAttributes, allAttributes, a, b) {
-  const idxa = getRestrictedIndexForSort(
-    includedAttributes,
-    allAttributes,
-    a.attributeName
-  );
-
-  const idxb = getRestrictedIndexForSort(
-    includedAttributes,
-    allAttributes,
-    b.attributeName
-  );
-
-  if (idxa === idxb) {
-    if (a.name === b.name) {
-      return 0;
-    }
-
-    return a.name < b.name ? -1 : 1;
-  }
-
-  return idxa < idxb ? -1 : 1;
-}
-
-function getAllRefinements({
-  results,
-  state,
-  clearsQuery,
-  includedAttributes,
-  excludedAttributes,
-}) {
-  return getRefinements(results, state, clearsQuery)
-    .filter(
-      refinement =>
-        includedAttributes.length === 0 ||
-        includedAttributes.indexOf(refinement.attributeName) !== -1
-    )
-    .filter(
-      refinement => excludedAttributes.indexOf(refinement.attributeName) === -1
-    );
-}
-
-function getAllAttributes({ refinements, includedAttributes }) {
-  return refinements.reduce((res, refinement) => {
-    if (
-      includedAttributes.indexOf(refinement.attributeName) === -1 &&
-      res.indexOf(refinement.attributeName === -1)
-    ) {
-      res.push(refinement.attributeName);
-    }
-    return res;
-  }, []);
-}
-
 function getNormalizedRefinements({
   results,
   state,
@@ -286,29 +190,21 @@ function getNormalizedRefinements({
   excludedAttributes,
   clearsQuery,
 }) {
-  const refinements = getAllRefinements({
-    results,
-    state,
-    clearsQuery,
-    includedAttributes,
-    excludedAttributes,
-  });
+  const refinements = getRefinements(results, state, clearsQuery)
+    .filter(
+      refinement =>
+        !includedAttributes ||
+        includedAttributes.indexOf(refinement.attributeName) !== -1
+    )
+    .filter(
+      refinement => excludedAttributes.indexOf(refinement.attributeName) === -1
+    )
+    .map(normalizeRefinementItem);
 
-  const allAttributes = getAllAttributes({ refinements, includedAttributes });
-
-  const normalizedRefinements = normalizeRefinements(
-    refinements
-      .sort(compareRefinements.bind(null, includedAttributes, allAttributes))
-      .map(normalizeItem),
-    helper
-  );
-
-  return normalizedRefinements;
+  return normalizeRefinements(refinements, helper);
 }
 
 function clearRefinementFromState(state, refinementItem) {
-  console.log(refinementItem);
-
   switch (refinementItem.type) {
     case 'facet':
       return state.removeFacetRefinement(
@@ -359,7 +255,7 @@ function getOperatorSymbol(operator) {
   }
 }
 
-function normalizeItem(item) {
+function normalizeRefinementItem(item) {
   const attribute = item.type === 'query' ? 'query' : item.attributeName;
   const label = item.operator
     ? `${getOperatorSymbol(item.operator)} ${item.name}`
@@ -377,20 +273,33 @@ function normalizeItem(item) {
   };
 }
 
+function compareObjects(a, b, attribute) {
+  if (a[attribute] === b[attribute]) {
+    return 0;
+  }
+
+  if (a[attribute] < b[attribute]) {
+    return -1;
+  }
+
+  return 1;
+}
+
 function normalizeRefinements(refinements, helper) {
   return refinements.reduce(
-    (results, currentRefinement) => [
-      {
-        attribute: currentRefinement.attribute,
-        items: refinements.filter(
-          result => result.attribute === currentRefinement.attribute
+    (results, currentRefinement) =>
+      [
+        {
+          attribute: currentRefinement.attribute,
+          items: refinements
+            .filter(result => result.attribute === currentRefinement.attribute)
+            .sort((a, b) => compareObjects(a, b, 'label')),
+          refine: refinement => clearRefinement(helper, refinement),
+        },
+        ...results.filter(
+          result => result.attribute !== currentRefinement.attribute
         ),
-        refine: refinement => clearRefinement(helper, refinement),
-      },
-      ...results.filter(
-        result => result.attribute !== currentRefinement.attribute
-      ),
-    ],
+      ].sort((a, b) => compareObjects(a, b, 'attribute')),
     []
   );
 }

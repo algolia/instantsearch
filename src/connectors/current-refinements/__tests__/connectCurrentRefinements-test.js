@@ -2,7 +2,7 @@ import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import connectCurrentRefinements from '../connectCurrentRefinements.js';
 
 describe('connectCurrentRefinements', () => {
-  it('Renders during init and render', () => {
+  it('renders during init and render', () => {
     const helper = jsHelper({});
     helper.search = () => {};
     // test that the dummyRendering is called with the isFirstRendering
@@ -53,7 +53,7 @@ describe('connectCurrentRefinements', () => {
     });
   });
 
-  it('Renders transformed items during init and render', () => {
+  it('renders transformed items during init and render', () => {
     const helper = jsHelper({}, '', {
       facets: ['myFacet'],
     });
@@ -91,7 +91,7 @@ describe('connectCurrentRefinements', () => {
     ]);
   });
 
-  it('Provides functions to clear the refinement', () => {
+  it('provides functions to clear refinement items', () => {
     // For each refinements we get a function that we can call
     // for removing a single refinement
     const helper = jsHelper({}, '', {
@@ -133,40 +133,5 @@ describe('connectCurrentRefinements', () => {
     expect(otherRefinements[0].items).toHaveLength(1);
     secondRenderingOptions.refine(otherRefinements[0].items[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
-  });
-
-  it('sets query as a refinement', () => {
-    const helper = jsHelper({}, '', {
-      query: 'query',
-    });
-    helper.search = () => {};
-    const rendering = jest.fn();
-    const makeWidget = connectCurrentRefinements(rendering);
-    const widget = makeWidget({
-      excludedAttributes: [],
-    });
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
-
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.refinements).toEqual([
-      expect.objectContaining({ attribute: 'query' }),
-    ]);
-
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
-
-    const secondRenderingOptions = rendering.mock.calls[0][0];
-    expect(secondRenderingOptions.refinements).toEqual([
-      expect.objectContaining({ attribute: 'query' }),
-    ]);
   });
 });

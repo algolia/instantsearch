@@ -1,23 +1,16 @@
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { prepareTemplateProps } from '../../../lib/utils';
 import currentRefinements from '../current-refinements';
-import defaultTemplates from '../defaultTemplates';
 
 describe('currentRefinements()', () => {
-  const cssClasses = {
-    root: 'root',
-    list: 'list',
-    item: 'item',
-    label: 'label',
-    category: 'category',
-    categoryLabel: 'categoryLabel',
-    delete: 'delete',
-    reset: 'reset',
-  };
-
   beforeEach(() => {
     document.body.innerHTML = '';
+  });
+
+  describe('usage', () => {
+    it('throws usage when no options provided', () => {
+      expect(currentRefinements.bind(null, {})).toThrowErrorMatchingSnapshot();
+    });
   });
 
   describe('types checking', () => {
@@ -52,14 +45,6 @@ describe('currentRefinements()', () => {
           })
         ).not.toThrow();
       });
-
-      // it.skip('does not throw with a function template', () => {
-      //   parameters.includedAttributes = [
-      //     { name: 'attr1' },
-      //     { name: 'attr2', template: () => 'CUSTOM TEMPLATE' },
-      //   ];
-      //   expect(boundWidget).not.toThrow();
-      // });
     });
 
     describe('options.templates', () => {
@@ -100,7 +85,7 @@ describe('currentRefinements()', () => {
         expect(
           currentRefinements.bind(null, {
             container: document.createElement('div'),
-            css: {},
+            cssClasses: {},
           })
         ).not.toThrow();
       });
@@ -109,7 +94,7 @@ describe('currentRefinements()', () => {
         expect(
           currentRefinements.bind(null, {
             container: document.createElement('div'),
-            css: {
+            cssClasses: {
               item: 'itemClass',
             },
           })
@@ -129,47 +114,12 @@ describe('currentRefinements()', () => {
 
   describe('render()', () => {
     let ReactDOM;
-    let parameters;
     let client;
     let helper;
-    let initParameters;
-    let renderParameters;
-    let defaultRefinements;
-    let expectedProps;
-
-    // function setRefinementsInExpectedProps() {
-    //   expectedProps.refinements = refinements;
-    // }
 
     beforeEach(() => {
       ReactDOM = { render: jest.fn() };
       currentRefinements.__Rewire__('render', ReactDOM.render);
-
-      // parameters = {
-      //   container: document.createElement('div'),
-      //   includedAttributes: [
-      //     'facet',
-      //     'facetExclude',
-      //     'disjunctiveFacet',
-      //     'hierarchicalFacet',
-      //     'numericFacet',
-      //     'numericDisjunctiveFacet',
-      //     '_tags',
-      //   ],
-      //   templates: {
-      //     item: 'item',
-      //   },
-      //   cssClasses: {
-      //     root: 'root',
-      //     list: 'list',
-      //     item: 'item',
-      //     label: 'label',
-      //     category: 'category',
-      //     categoryLabel: 'categoryLabel',
-      //     delete: 'delete',
-      //     reset: 'reset',
-      //   },
-      // };
 
       client = algoliasearch('APP_ID', 'API_KEY');
       helper = algoliasearchHelper(client, 'index_name', {
@@ -178,261 +128,56 @@ describe('currentRefinements()', () => {
         hierarchicalFacets: [
           {
             name: 'hierarchicalFacet',
-            attributes: ['hierarchicalFacet.lvl0', 'hierarchicalFacet.lvl1'],
+            attributes: ['hierarchicalFacet-val1', 'hierarchicalFacet-val2'],
             separator: ' > ',
           },
         ],
       });
-      helper
-        .toggleRefinement('facet', 'facet-val1')
-        .toggleRefinement('facet', 'facet-val2')
-        .toggleRefinement('extraFacet', 'extraFacet-val1')
-        .toggleFacetExclusion('facetExclude', 'facetExclude-val1')
-        .toggleFacetExclusion('facetExclude', 'facetExclude-val2')
-        .toggleRefinement('disjunctiveFacet', 'disjunctiveFacet-val1')
-        .toggleRefinement('disjunctiveFacet', 'disjunctiveFacet-val2')
-        .toggleRefinement(
-          'hierarchicalFacet',
-          'hierarchicalFacet-val1 > hierarchicalFacet-val2'
-        )
-        .addNumericRefinement('numericFacet', '>=', 1)
-        .addNumericRefinement('numericFacet', '<=', 2)
-        .addNumericRefinement('numericDisjunctiveFacet', '>=', 3)
-        .addNumericRefinement('numericDisjunctiveFacet', '<=', 4)
-        .toggleTag('tag1')
-        .toggleTag('tag2');
+    });
 
-      const createURL = () => '#cleared';
+    afterEach(() => {
+      currentRefinements.__ResetDependency__('render');
+    });
 
-      initParameters = {
+    it('should render twice <CurrentRefinements ... />', () => {
+      const container = document.createElement('div');
+      const widget = currentRefinements({
+        container,
+      });
+
+      helper.addFacetRefinement('facet', 'facet-val1');
+
+      widget.init({
         helper,
-        createURL,
-        instantSearchInstance: {
-          templatesConfig: { randomAttributeNeverUsed: 'value' },
-        },
-      };
+        createURL: () => '#cleared',
+        instantSearchInstance: {},
+      });
 
-      renderParameters = {
+      const renderParameters = {
         results: {
           facets: [
             {
               name: 'facet',
-              exhaustive: true,
               data: {
                 'facet-val1': 1,
-                'facet-val2': 2,
-                'facet-val3': 42,
               },
-            },
-            {
-              name: 'extraFacet',
-              exhaustive: true,
-              data: {
-                'extraFacet-val1': 42,
-                'extraFacet-val2': 42,
-              },
-            },
-          ],
-          disjunctiveFacets: [
-            {
-              name: 'disjunctiveFacet',
-              exhaustive: true,
-              data: {
-                'disjunctiveFacet-val1': 3,
-                'disjunctiveFacet-val2': 4,
-                'disjunctiveFacet-val3': 42,
-              },
-            },
-          ],
-          hierarchicalFacets: [
-            {
-              name: 'hierarchicalFacet',
-              data: [
-                {
-                  name: 'hierarchicalFacet-val1',
-                  count: 5,
-                  exhaustive: true,
-                  data: [
-                    {
-                      name: 'hierarchicalFacet-val2',
-                      count: 6,
-                      exhaustive: true,
-                    },
-                  ],
-                },
-                {
-                  // Here to confirm we're taking the right nested one
-                  name: 'hierarchicalFacet-val2',
-                  count: 42,
-                  exhaustive: true,
-                },
-              ],
             },
           ],
         },
         helper,
         state: helper.state,
-        templatesConfig: { randomAttributeNeverUsed: 'value' },
+        createURL: () => '#cleared',
+        instantSearchInstance: {},
       };
 
-      defaultRefinements = [
-        {
-          type: 'facet',
-          attribute: 'facet',
-          label: 'facet-val1',
-          value: 'facet-val1',
-          count: 1,
-          exhaustive: true,
-          refine: () => {},
-        },
-        {
-          type: 'facet',
-          attribute: 'facet',
-          label: 'facet-val2',
-          value: 'facet-val2',
-          count: 2,
-          exhaustive: true,
-          refine: () => {},
-        },
-        {
-          type: 'exclude',
-          attribute: 'facetExclude',
-          label: 'facetExclude-val1',
-          value: 'facetExclude-val1',
-          exclude: true,
-          refine: () => {},
-        },
-        {
-          type: 'exclude',
-          attribute: 'facetExclude',
-          label: 'facetExclude-val2',
-          value: 'facetExclude-val2',
-          exclude: true,
-          refine: () => {},
-        },
-        {
-          type: 'disjunctive',
-          attribute: 'disjunctiveFacet',
-          label: 'disjunctiveFacet-val1',
-          value: 'disjunctiveFacet-val1',
-          count: 3,
-          exhaustive: true,
-          refine: () => {},
-        },
-        {
-          type: 'disjunctive',
-          attribute: 'disjunctiveFacet',
-          label: 'disjunctiveFacet-val2',
-          value: 'disjunctiveFacet-val2',
-          count: 4,
-          exhaustive: true,
-          refine: () => {},
-        },
-        {
-          type: 'hierarchical',
-          attribute: 'hierarchicalFacet',
-          label: 'hierarchicalFacet-val2',
-          value: 'hierarchicalFacet-val2',
-          count: 6,
-          exhaustive: true,
-          refine: () => {},
-        },
-        {
-          type: 'numeric',
-          attribute: 'numericFacet',
-          label: '1',
-          value: '1',
-          numericValue: 1,
-          operator: '>=',
-          refine: () => {},
-        },
-        {
-          type: 'numeric',
-          attribute: 'numericFacet',
-          label: '2',
-          value: '2',
-          numericValue: 2,
-          operator: '<=',
-          refine: () => {},
-        },
-        {
-          type: 'numeric',
-          attribute: 'numericDisjunctiveFacet',
-          label: '3',
-          value: '3',
-          numericValue: 3,
-          operator: '>=',
-          refine: () => {},
-        },
-        {
-          type: 'numeric',
-          attribute: 'numericDisjunctiveFacet',
-          label: '4',
-          value: '4',
-          numericValue: 4,
-          operator: '<=',
-          refine: () => {},
-        },
-        {
-          type: 'tag',
-          attribute: '_tags',
-          label: 'tag1',
-          value: 'tag1',
-          refine: () => {},
-        },
-        {
-          type: 'tag',
-          attribute: '_tags',
-          label: 'tag2',
-          value: 'tag2',
-          refine: () => {},
-        },
-      ];
-
-      // expectedProps = {
-      //   attributes: {
-      //     facet: { name: 'facet' },
-      //     facetExclude: { name: 'facetExclude' },
-      //     disjunctiveFacet: { name: 'disjunctiveFacet' },
-      //     hierarchicalFacet: { name: 'hierarchicalFacet' },
-      //     numericFacet: { name: 'numericFacet' },
-      //     numericDisjunctiveFacet: { name: 'numericDisjunctiveFacet' },
-      //     _tags: { name: '_tags' },
-      //   },
-      //   cssClasses: {
-      //     root: 'root',
-      //     list: 'list',
-      //     item: 'item',
-      //     label: 'label',
-      //     category: 'category',
-      //     categoryLabel: 'categoryLabel',
-      //     delete: 'delete',
-      //     reset: 'reset',
-      //   },
-      //   templateProps: prepareTemplateProps({
-      //     defaultTemplates,
-      //     templatesConfig: { randomAttributeNeverUsed: 'value' },
-      //     templates: {
-      //       item: 'ITEM',
-      //     },
-      //   }),
-      // };
-      // setRefinementsInExpectedProps();
-    });
-
-    it('should render twice <CurrentRefinements ... />', () => {
-      const widget = currentRefinements({
-        container: document.createElement('div'),
-      });
-      widget.init(initParameters);
       widget.render(renderParameters);
       widget.render(renderParameters);
 
       expect(ReactDOM.render).toHaveBeenCalledTimes(2);
       expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[0][1]).toBe(parameters.container);
+      expect(ReactDOM.render.mock.calls[0][1]).toBe(container);
       expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[1][1]).toBe(parameters.container);
+      expect(ReactDOM.render.mock.calls[1][1]).toBe(container);
     });
 
     describe('options.container', () => {
@@ -445,8 +190,18 @@ describe('currentRefinements()', () => {
           container: '#container',
         });
 
-        widget.init(initParameters);
-        widget.render(renderParameters);
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {},
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
@@ -455,13 +210,22 @@ describe('currentRefinements()', () => {
 
       it('should render with a HTMLElement container', () => {
         const container = document.createElement('div');
-
         const widget = currentRefinements({
           container,
         });
 
-        widget.init(initParameters);
-        widget.render(renderParameters);
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {},
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
 
         expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
@@ -470,92 +234,217 @@ describe('currentRefinements()', () => {
     });
 
     describe('options.includedAttributes', () => {
-      it('should default to false', () => {
-        const rawRefinements = [
-          ...defaultRefinements,
-          {
-            type: 'facet',
-            attribute: 'extraFacet',
-            label: 'extraFacet-val1',
-            value: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-            refine: () => {},
-          },
-        ];
-
-        const firstRefinements = rawRefinements.filter(
-          refinement =>
-            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-              refinement.attribute
-            ) !== -1
-        );
-        const otherRefinements = rawRefinements.filter(
-          refinement =>
-            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
-              refinement.attribute
-            ) === -1
-        );
-
+      it('should only include the specified attributes', () => {
         const widget = currentRefinements({
           container: document.createElement('div'),
-          includedAttributes: ['facet', 'facetExclude', 'disjunctiveFacet'],
+          includedAttributes: ['disjunctiveFacet'],
         });
 
-        widget.init(initParameters);
-        widget.render(renderParameters);
+        helper
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val1'
+          )
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val2'
+          )
+          // Add some unused refinements to make sure they're ignored
+          .addFacetRefinement('facet', 'facet-val1')
+          .addFacetRefinement('facet', 'facet-val2')
+          .addFacetRefinement('extraFacet', 'extraFacet-val1')
+          .addFacetRefinement('extraFacet', 'extraFacet-val2');
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render).toHaveBeenCalledWith(
-          expect.objectContaining({
-            refinements: [
-              ...firstRefinements,
-              ...rawRefinements,
-              ...otherRefinements,
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {
+            facets: [
+              {
+                name: 'facet',
+                exhaustive: true,
+                data: {
+                  'facet-val1': 1,
+                  'facet-val2': 2,
+                },
+              },
+              {
+                name: 'extraFacet',
+                exhaustive: true,
+                data: {
+                  'extraFacet-val1': 42,
+                  'extraFacet-val2': 42,
+                },
+              },
             ],
-          })
-        );
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-      });
-    });
-
-    describe('options.templates', () => {
-      it('should pass it in templateProps', () => {
-        const widget = currentRefinements({
-          container: document.createElement('div'),
-          templates: {
-            item: 'item',
+            disjunctiveFacets: [
+              {
+                name: 'disjunctiveFacet',
+                exhaustive: true,
+                data: {
+                  'disjunctiveFacet-val1': 3,
+                  'disjunctiveFacet-val2': 4,
+                },
+              },
+            ],
           },
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
         });
 
-        widget.init(initParameters);
-        widget.render(renderParameters);
+        const renderedRefinements =
+          ReactDOM.render.mock.calls[0][0].props.refinements;
+        expect(renderedRefinements).toHaveLength(1);
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render).toHaveBeenCalledWith(
-          expect.objectContaining({
-            template: {
-              item: 'item',
-            },
-          })
-        );
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        const [refinement] = renderedRefinements;
+        expect(refinement.attribute).toBe('disjunctiveFacet');
+        expect(refinement.items).toHaveLength(2);
+      });
+
+      it('should ignore all attributes when empty array', () => {
+        const widget = currentRefinements({
+          container: document.createElement('div'),
+          includedAttributes: [],
+        });
+
+        helper
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val1'
+          )
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val2'
+          )
+          .addFacetRefinement('extraFacet', 'extraFacet-val1')
+          .addFacetRefinement('extraFacet', 'extraFacet-val2');
+
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {
+            facets: [
+              {
+                name: 'extraFacet',
+                exhaustive: true,
+                data: {
+                  'extraFacet-val1': 42,
+                  'extraFacet-val2': 42,
+                },
+              },
+            ],
+            disjunctiveFacets: [
+              {
+                name: 'disjunctiveFacet',
+                exhaustive: true,
+                data: {
+                  'disjunctiveFacet-val1': 3,
+                  'disjunctiveFacet-val2': 4,
+                },
+              },
+            ],
+          },
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+
+        const renderedRefinements =
+          ReactDOM.render.mock.calls[0][0].props.refinements;
+        expect(renderedRefinements).toHaveLength(0);
       });
     });
+
+    describe('options.excludedAttributes', () => {});
 
     describe('options.transformItems', () => {
       it('should transform passed items', () => {
         const widget = currentRefinements({
           container: document.createElement('div'),
           transformItems: items =>
-            items.map(item => ({ ...item, transformed: true })),
+            items.map(refinement => ({
+              ...refinement,
+              items: refinement.items.map(item => ({
+                ...item,
+                transformed: true,
+              })),
+            })),
         });
 
-        widget.init(initParameters);
-        widget.render(renderParameters);
+        helper
+          .addFacetRefinement('facet', 'facet-val1')
+          .addFacetRefinement('facet', 'facet-val2')
+          .addFacetRefinement('extraFacet', 'facet-val1')
+          .addFacetRefinement('extraFacet', 'facet-val2')
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val1'
+          )
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val2'
+          );
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {
+            facets: [
+              {
+                name: 'facet',
+                exhaustive: true,
+                data: {
+                  'facet-val1': 1,
+                  'facet-val2': 2,
+                },
+              },
+              {
+                name: 'extraFacet',
+                exhaustive: true,
+                data: {
+                  'extraFacet-val1': 42,
+                  'extraFacet-val2': 42,
+                },
+              },
+            ],
+            disjunctiveFacets: [
+              {
+                name: 'disjunctiveFacet',
+                exhaustive: true,
+                data: {
+                  'disjunctiveFacet-val1': 3,
+                  'disjunctiveFacet-val2': 4,
+                },
+              },
+            ],
+          },
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+
+        const renderedRefinements =
+          ReactDOM.render.mock.calls[0][0].props.refinements;
+
+        expect(renderedRefinements[0].items[0].transformed).toBe(true);
+        expect(renderedRefinements[0].items[1].transformed).toBe(true);
+        expect(renderedRefinements[1].items[0].transformed).toBe(true);
+        expect(renderedRefinements[1].items[1].transformed).toBe(true);
+        expect(renderedRefinements[2].items[0].transformed).toBe(true);
+        expect(renderedRefinements[2].items[1].transformed).toBe(true);
       });
     });
 
@@ -568,14 +457,22 @@ describe('currentRefinements()', () => {
           },
         });
 
-        widget.init(initParameters);
-        widget.render(renderParameters);
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {},
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(
           ReactDOM.render.mock.calls[0][0].props.cssClasses.root
         ).toContain('customRoot');
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
 
       it('should work with an array', () => {
@@ -586,86 +483,139 @@ describe('currentRefinements()', () => {
           },
         });
 
-        widget.init(initParameters);
-        widget.render(renderParameters);
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {},
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
         expect(
           ReactDOM.render.mock.calls[0][0].props.cssClasses.root
         ).toContain('customRoot1');
         expect(
           ReactDOM.render.mock.calls[0][0].props.cssClasses.root
         ).toContain('customRoot2');
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
 
-    describe('with included attributes', () => {
-      it('should sort the refinements according to their order', () => {
-        const rawRefinements = [
-          {
-            type: 'facet',
-            attribute: 'extraFacet',
-            label: 'extraFacet-val1',
-            value: 'extraFacet-val1',
-            count: 42,
-            exhaustive: true,
-            refine: () => {},
-          },
-          ...defaultRefinements,
-        ];
-
-        const firstRefinements = rawRefinements.filter(
-          refinement => refinement.attribute === 'disjunctiveFacet'
-        );
-        const secondRefinements = rawRefinements.filter(
-          refinement => refinement.attribute === 'facetExclude'
-        );
-        const otherRefinements = rawRefinements.filter(
-          refinement =>
-            !['disjunctiveFacet', 'facetExclude'].includes(refinement.attribute)
-        );
-
+    describe('DOM output', () => {
+      it('renders correctly', () => {
         const widget = currentRefinements({
           container: document.createElement('div'),
-          includedAttributes: ['disjunctiveFacet', 'facetExclude'],
-        });
-
-        widget.init(initParameters);
-        widget.render(renderParameters);
-
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render.mock.calls[0][0].props.refinements).toEqual([
-          ...firstRefinements,
-          ...secondRefinements,
-          ...otherRefinements,
-        ]);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-      });
-    });
-
-    describe('with excludedAttributes', () => {
-      it('should ignore excluded attributes', () => {
-        const widget = currentRefinements({
-          container: document.createElement('div'),
-          includedAttributes: ['disjunctiveFacet', 'facetExclude'],
-          excludedAttributes: ['facetExclude'],
-        });
-
-        widget.init(initParameters);
-        widget.render(renderParameters);
-
-        expect(ReactDOM.render.mock.calls[0][0].props.refinements).toEqual([
-          {
-            attribute: 'disjunctiveFacet',
+          cssClasses: {
+            root: 'root',
+            list: 'list',
+            item: 'item',
+            label: 'label',
+            category: 'category',
+            categoryLabel: 'categoryLabel',
+            delete: 'delete',
+            query: 'query',
           },
-        ]);
+        });
+
+        helper
+          .addFacetRefinement('facet', 'facet-val1')
+          .addFacetRefinement('facet', 'facet-val2')
+          .addFacetRefinement('extraFacet', 'extraFacet-val1')
+          .addFacetExclusion('facetExclude', 'facetExclude-val1')
+          .addFacetExclusion('facetExclude', 'facetExclude-val2')
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val1'
+          )
+          .addDisjunctiveFacetRefinement(
+            'disjunctiveFacet',
+            'disjunctiveFacet-val2'
+          )
+          .toggleFacetRefinement(
+            'hierarchicalFacet',
+            'hierarchicalFacet-val1 > hierarchicalFacet-val2'
+          )
+          .addNumericRefinement('numericFacet', '>=', 1)
+          .addNumericRefinement('numericFacet', '<=', 2)
+          .addNumericRefinement('numericDisjunctiveFacet', '>=', 3)
+          .addNumericRefinement('numericDisjunctiveFacet', '<=', 4)
+          .addTag('tag1')
+          .addTag('tag2');
+
+        widget.init({
+          helper,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+        widget.render({
+          results: {
+            facets: [
+              {
+                name: 'facet',
+                exhaustive: true,
+                data: {
+                  'facet-val1': 1,
+                  'facet-val2': 2,
+                  'facet-val3': 42,
+                },
+              },
+              {
+                name: 'extraFacet',
+                exhaustive: true,
+                data: {
+                  'extraFacet-val1': 42,
+                  'extraFacet-val2': 42,
+                },
+              },
+            ],
+            disjunctiveFacets: [
+              {
+                name: 'disjunctiveFacet',
+                exhaustive: true,
+                data: {
+                  'disjunctiveFacet-val1': 3,
+                  'disjunctiveFacet-val2': 4,
+                  'disjunctiveFacet-val3': 42,
+                },
+              },
+            ],
+            hierarchicalFacets: [
+              {
+                name: 'hierarchicalFacet',
+                data: [
+                  {
+                    name: 'hierarchicalFacet-val1',
+                    count: 5,
+                    exhaustive: true,
+                    data: [
+                      {
+                        name: 'hierarchicalFacet-val2',
+                        count: 6,
+                        exhaustive: true,
+                      },
+                    ],
+                  },
+                  {
+                    name: 'hierarchicalFacet-val2',
+                    count: 42,
+                    exhaustive: true,
+                  },
+                ],
+              },
+            ],
+          },
+          helper,
+          state: helper.state,
+          createURL: () => '#cleared',
+          instantSearchInstance: {},
+        });
+
         expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
-    });
-
-    afterEach(() => {
-      currentRefinements.__ResetDependency__('render');
     });
   });
 });

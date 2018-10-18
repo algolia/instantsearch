@@ -13,7 +13,9 @@ export default () => {
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.configure({
-            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacetsRefinements: {
+              brand: ['Google', 'Apple', 'Samsung'],
+            },
             disjunctiveFacets: ['brand'],
             numericRefinements: { price: { '>=': [100] } },
           })
