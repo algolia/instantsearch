@@ -217,4 +217,58 @@ describe('connectCurrentRefinedValues', () => {
     secondRefine(secondValue);
     expect(helper.state.query).toBe('');
   });
+
+  it('should provide the query as a refinement if clearsQuery is true, onlyListedAttributes is true and `query` is a listed attribute', () => {
+    const helper = jsHelper({}, '', {});
+
+    const rendering = jest.fn();
+    const makeWidget = connectCurrentRefinedValues(rendering);
+    const widget = makeWidget({
+      clearsQuery: true,
+      onlyListedAttributes: true,
+      attributes: [{ name: 'query' }],
+    });
+
+    helper.setQuery('foobar');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const refinements = firstRenderingOptions.refinements;
+    expect(refinements).toHaveLength(1);
+    const value = refinements[0];
+    expect(value.type).toBe('query');
+    expect(value.name).toBe('foobar');
+    expect(value.query).toBe('foobar');
+  });
+
+  it('should not provide the query as a refinement if clearsQuery is true, onlyListedAttributes is true but query is not listed in attributes', () => {
+    const helper = jsHelper({}, '', {});
+
+    const rendering = jest.fn();
+    const makeWidget = connectCurrentRefinedValues(rendering);
+    const widget = makeWidget({
+      clearsQuery: true,
+      onlyListedAttributes: true,
+      attributes: [{ name: 'brand' }],
+    });
+
+    helper.setQuery('foobar');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const refinements = firstRenderingOptions.refinements;
+    expect(refinements).toHaveLength(0);
+  });
 });
