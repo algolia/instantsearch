@@ -119,36 +119,4 @@ export default () => {
         );
       })
     );
-  // .add(
-  //   'with item template',
-  //   wrapWithHits(container => {
-  //     window.search.addWidget(
-  //       instantsearch.widgets.configure({
-  //         disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
-  //         disjunctiveFacets: ['brand'],
-  //         numericRefinements: { price: { '>=': [100] } },
-  //       })
-  //     );
-
-  //     window.search.addWidget(
-  //       instantsearch.widgets.currentRefinements({
-  //         container,
-  //         includedAttributes: [
-  //           {
-  //             name: 'brand',
-  //             template: ({ cssClasses, attributeName, items }) =>
-  //               `<span class="${cssClasses.label}">${attributeName} =</span>
-  //               <span class="${cssClasses.category}">
-  //               ${items.map(
-  //                 item => `<span class="${cssClasses.categoryLabel}">${
-  //                   item.label
-  //                 }</span>
-  //               <button class="${cssClasses.delete}">x</button>`
-  //               )}`,
-  //           },
-  //         ],
-  //       })
-  //     );
-  //   })
-  // )
 };
