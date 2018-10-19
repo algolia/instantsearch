@@ -121,7 +121,7 @@ export default () => {
                   label: 'Brand',
                 },
                 {
-                  name: 'query', // This does not work
+                  name: 'query',
                 },
               ],
             })
