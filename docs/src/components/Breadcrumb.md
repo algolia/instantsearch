@@ -32,7 +32,7 @@ attributes | `string[]` | - | Array of attributes to use to generate the breadcr
 separator | `string` | - | Separator used in the attributes to separate level values (mainly used to sync the options with a hierarchical menu) | -
 rootPath | `string` | - | Prefix path to use if the first level is not the root level (mainly used to sync the options with a hierarchical menu) | -
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
-classNames | Object | | Override class names | no
+class-names | Object | | Override class names | no
 
 ## Slots
 

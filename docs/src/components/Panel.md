@@ -26,7 +26,7 @@ The Panel widget wraps other widgets in a consistent panel design. It also react
 
 Name | Type | | Default | Description | Required
 ---|---|---|---|---
-classNames | Object | | Override class names | no
+class-names | Object | | Override class names | no
 
 ## Slots
 

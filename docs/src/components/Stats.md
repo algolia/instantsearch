@@ -36,7 +36,7 @@ Custom text:
 
 Name | Type | Default | Description | Required
 ---|---|---|---|---
-classNames | Object | | Override class names | no
+class-names | Object | | Override class names | no
 
 ## Slots
 

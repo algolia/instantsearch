@@ -32,7 +32,7 @@ attribute | `string` | - | Attribute to apply the filter to | Yes
 label | `string` | - | Label for the checkbox | Yes
 on | `string | number | boolean` | `true` | Refinement to enable if this widget is checked | -
 off | `string | number | boolean` | - | Refinement to enable if this widget is not checked | -
-classNames | Object | | Override class names | no
+class-names | Object | | Override class names | no
 
 ## Slots
 

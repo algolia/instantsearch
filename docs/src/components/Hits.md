@@ -73,7 +73,7 @@ Name | Type | Default | Description | Required
 ---|---|---|---|---
 escapeHTML | Boolean | true | Escape raw HTML in the hits | no
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
-classNames | Object | | Override class names | no
+class-names | Object | | Override class names | no
 
 ## Slots
 

@@ -45,7 +45,7 @@ Name | Type | Default | Description | Required
 includedAttributes | Array | | Attributes to show or clear | -
 excludedAttributes | Array | `['query']` | Attributes not to show or clear | -
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
-classNames | Object | | Override class names | no
+class-names | Object | | Override class names | no
 
 Note that you can not use `includedAttributes` and `excludedAttributes` at the same time. Included attributes are exclusive, and thus take precedence over excluded attributes.
 
