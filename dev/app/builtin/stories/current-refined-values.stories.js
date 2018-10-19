@@ -105,5 +105,35 @@ export default () => {
           },
         }
       )
+    )
+    .add(
+      'with onlyListedAttributes',
+      wrapWithHits(
+        container => {
+          window.search.addWidget(
+            instantsearch.widgets.currentRefinedValues({
+              container,
+              onlyListedAttributes: true,
+              clearsQuery: true,
+              attributes: [
+                {
+                  name: 'brand',
+                  label: 'Brand',
+                },
+                {
+                  name: 'query', // This does not work
+                },
+              ],
+            })
+          );
+        },
+        {
+          searchParameters: {
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          },
+        }
+      )
     );
 };
