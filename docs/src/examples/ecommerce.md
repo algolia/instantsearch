@@ -9,6 +9,6 @@ editable: true
 githubSource: docs/src/examples/ecommerce.md
 ---
 
-> TODO: make proper content for this
+This example shows how a regular ecommerce website could use Vue InstantSearch.
 
-[link](examples/ecommerce/index.html)
+[online demo](examples/ecommerce/index.html)

@@ -9,6 +9,6 @@ editable: true
 githubSource: docs/src/examples/media.md
 ---
 
-> TODO: make proper content for this
+This example shows how a regular media website could use Vue InstantSearch.
 
-[link](examples/media/index.html)
+[online demo](examples/media/index.html)
