@@ -9,7 +9,7 @@ editable: true
 githubSource: docs/src/components/Breadcrumb.md
 ---
 
-The breadcrumb widget allows you to visualise which level of a hierarchical facet is currently selected.
+The breadcrumb widget allows you to visualize which level of a hierarchical facet is currently selected.
 
 <a class="btn btn-static-theme" href="stories/?selectedKind=Breadcrumb">🕹 try out live</a>
 

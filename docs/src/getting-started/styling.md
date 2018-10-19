@@ -21,8 +21,8 @@ can also inspect the underlying DOM and style accordingly.
 You can style the colors of icons too, for example the `SearchBox` ones:
 
 ```css
-.ais-SearchBox-reset svg,
-.ais-SearchBox-submit svg {
+ais-SearchBox-resetIcon,
+ais-SearchBox-submitIcon {
   fill: red;
 }
 ```
@@ -155,65 +155,3 @@ For example, render results in a `table` instead of in `<div>`s
 ```
 
 It is recommended to not overuse this `inline-template` feature because it makes it hard to know about the current scope. In the previous example, the `results` variable is provided by the `ais-results` component, not the current scope.
-
-As an alternative to using an `inline-template`, you can extend an existing component.
-
-## Extending a component
-
-> TODO: confirm this works in v2
-> TODO: link "custom component" here
-
-By extending a component, you can override its default template. 
-You can also customize the behavior of the component, but that is out of the scope of this section.
-
-Here is how you could implement a `TableResults.vue` component that would display results in a table instead of in `div`s.
-
-
-```vue
-<template>
-  <table>
-    <tbody>
-      <tr v-for="result in results" :key="result.objectID">
-        <td>{{ result.name }}</td>
-        <td>{{ result.description }}</td>
-      </tr>
-    </tbody>
-  </table>
-</template>
-<script>
-import { Results } from 'vue-instantsearch';
-
-export default {
-  extends: Results,
-}
-</script>
-```
-
-You can now use that component in your application:
-
-```vue
-<template>
-  <ais-instant-search :search-client="searchClient" index-name="<index-name>">
-    <table-results></table-results>
-  </ais-instant-search>
-</template>
-<script>
-import algoliasearch from 'algoliasearch/lite';
-import TableResults from './TableResults.vue';
-
-export default {
-  components: [TableResults],
-  data() {
-    return {
-      searchClient: algoliasearch('appId', 'apiKey');
-    };
-  },
-};
-</script>
-```
-
-
-
-
-
-

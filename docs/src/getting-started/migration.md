@@ -162,12 +162,6 @@ Routing is not fully fleshed out yet. It's possible to set the `routing` prop to
 
 If you're using this, and have suggestions, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
 
-3. `ais-state-results`
+4. changing props on `ais-instant-search`
 
-This widget is new, but still waiting for reviews and will be added in a next version of the alpha.
-
-If you have a good, or better naming idea for this, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
-
-4. changing props on `ais-instant-search`. 
-
-In this beta it isn't possible to change props on `ais-instant-search`. The next alpha will have handling will handle all prop changes, except `searchFunction` and `routing`. If you have a need for those to be changed as well, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
+It is possible to change props on `ais-instant-search`, except `routing`. If you have a need for that to be changed as well, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
