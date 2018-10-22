@@ -1,0 +1,34 @@
+$banner-height: 50px
+
+.marketing-banner
+  height: $banner-height
+  width: 100%
+  position: fixed
+  background: linear-gradient(to right, #4DBA87, #2F9088)
+  float: left
+  line-height: $banner-height
+  padding: 0 2em
+  box-sizing: border-box
+  transform: translateY(-#{$banner-height})
+  transition: transform 0.2s ease, background-position 0.2s ease
+  z-index: 999
+  top: 106px
+
+  &:hover
+    background-position: bottom right
+
+  .banner__description
+    color: #FFFFFF
+    text-align: center
+
+    a
+      color: #FFFFFF
+      text-decoration: none
+      display: block
+      width: 100%
+      height: 100%
+
+    p
+      margin: 0
+      padding: 0
+      display: inline-block
