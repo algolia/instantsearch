@@ -5,13 +5,13 @@ storiesOf('ais-menu-select', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `
-      <ais-menu-select attribute="brand" />
+      <ais-menu-select attribute="categories" />
     `,
   }))
   .add('with a limit', () => ({
     template: `
       <ais-menu-select
-        attribute="brand"
+        attribute="categories"
         :limit="5"
       />
     `,
@@ -19,7 +19,7 @@ storiesOf('ais-menu-select', module)
   .add('with a custom sort', () => ({
     template: `
       <ais-menu-select
-        attribute="brand"
+        attribute="categories"
         :sort-by="['name:desc']"
       />
     `,
@@ -27,7 +27,7 @@ storiesOf('ais-menu-select', module)
   .add('with a custom label', () => ({
     template: `
       <ais-menu-select
-        attribute="brand"
+        attribute="categories"
         label="None"
       />
     `,
@@ -35,7 +35,7 @@ storiesOf('ais-menu-select', module)
   .add('with transform items', () => ({
     template: `
       <ais-menu-select
-        attribute="brand"
+        attribute="categories"
         label="SEE ALL"
         :transformItems="transformItems"
       />
@@ -52,7 +52,7 @@ storiesOf('ais-menu-select', module)
   }))
   .add('with a custom rendering', () => ({
     template: `
-      <ais-menu-select attribute="brand">
+      <ais-menu-select attribute="categories">
         <select
           slot-scope="{ items, canRefine, refine }"
           @change="refine($event.currentTarget.value)"
@@ -77,7 +77,7 @@ storiesOf('ais-menu-select', module)
     template: `
       <ais-panel>
         <template slot="header">Menu Select</template>
-        <ais-menu-select attribute="brand" />
+        <ais-menu-select attribute="categories" />
         <template slot="footer">Footer</template>
       </ais-panel>
     `,
