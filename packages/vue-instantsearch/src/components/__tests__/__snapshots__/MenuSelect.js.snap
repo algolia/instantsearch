@@ -33,6 +33,41 @@ exports[`custom default render renders correctly without refinements 1`] = `
 
 `;
 
+exports[`custom item slot renders correctly 1`] = `
+
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option value
+            class="ais-MenuSelect-option"
+    >
+      See all
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Apple"
+    >
+      <span>
+        Apple
+      </span>
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Samsung"
+    >
+      <span>
+        Samsung
+      </span>
+    </option>
+    <option class="ais-MenuSelect-option"
+            value="Sony"
+    >
+      <span>
+        Sony
+      </span>
+    </option>
+  </select>
+</div>
+
+`;
+
 exports[`default render renders correctly 1`] = `
 
 <div class="ais-MenuSelect">

@@ -218,6 +218,41 @@ describe('default render', () => {
   });
 });
 
+describe('custom item slot', () => {
+  // can not be <template>
+  // https://github.com/vuejs/vue-test-utils/pull/507
+  const customItemSlot = `
+    <span slot="item" slot-scope="{ item }">
+      {{ item.label }}
+    </span>
+  `;
+
+  it('renders correctly', () => {
+    __setState({
+      ...defaultState,
+    });
+
+    const props = {
+      ...defaultProps,
+    };
+
+    const wrapper = mount(MenuSelect, {
+      propsData: props,
+      scopedSlots: {
+        item: customItemSlot,
+      },
+    });
+    expect(wrapper.html()).toMatchSnapshot();
+
+    expect(
+      wrapper
+        .findAll('option')
+        .at(1)
+        .html()
+    ).toMatch(/<span>\s+Apple\s+<\/span>/);
+  });
+});
+
 describe('custom default render', () => {
   const defaultScopedSlots = `
     <select

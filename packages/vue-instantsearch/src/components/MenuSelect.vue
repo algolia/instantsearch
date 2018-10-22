@@ -25,7 +25,12 @@
           :value="item.value"
           :selected="item.isRefined"
         >
-          {{ item.label }} ({{ item.count }})
+          <slot
+            name="item"
+            :item="item"
+          >
+            {{ item.label }} ({{ item.count }})
+          </slot>
         </option>
       </select>
     </slot>

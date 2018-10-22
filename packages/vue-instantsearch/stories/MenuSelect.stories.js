@@ -32,6 +32,15 @@ storiesOf('ais-menu-select', module)
       />
     `,
   }))
+  .add('with a custom item slot', () => ({
+    template: `
+      <ais-menu-select attribute="categories">
+        <template slot="item" slot-scope="{ item }">
+          {{ item.label }}
+        </template>
+      </ais-menu-select>
+    `,
+  }))
   .add('with transform items', () => ({
     template: `
       <ais-menu-select
