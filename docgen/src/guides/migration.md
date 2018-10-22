@@ -31,7 +31,7 @@ search.addWidget(instantsearch.widgets.searchbox({
 }));
 ```
 
-You can read more about these options [here](../widgets/searchBox.html).
+You can read more about these options [here](widgets/searchBox.html).
 
 ## No more `hitsPerPage` in `hits` and `infiniteHits`
 
@@ -41,7 +41,7 @@ this option of the engine, there are still three ways:
  - use the [dashboard](https://www.algolia.com/explorer/display/) or
    the [client](https://www.algolia.com/doc/api-client/default/settings/#set-settings),
    to change the setting at the index level.
- - use the [hitsPerPageSelector](../widgets/hitsPerPageSelector.html) widget.
+ - use the [hitsPerPageSelector](widgets/hitsPerPageSelector.html) widget.
  - use the configuration option of `instantsearch`:
 
 ```javascript
@@ -83,8 +83,8 @@ yourSearch.addWidget(
 ```
 
 If you want to learn more about sorting the values, check out the widget API to see what are
-the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-MenuWidgetOptions-sortBy) or
-[refinementList](../widgets/refinementList.html#struct-RefinementListWidgetOptions-sortBy)
+the valid values for the `sortBy` option of [menu](widgets/menu.html#struct-MenuWidgetOptions-sortBy) or
+[refinementList](widgets/refinementList.html#struct-RefinementListWidgetOptions-sortBy)
 
 ## Some variables have been changed
 
