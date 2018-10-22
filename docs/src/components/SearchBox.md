@@ -24,8 +24,8 @@ A search input with a clear and submit button.
 Name | Type | Default | Description | Required
 ---|---|---|---|---
 placeholder | String | `'Search here…'` | The input placeholder | no
-submit-title | String | `'search'` | The submit button text | no
-clear-title | String | `'clear'` | The clear button text | no
+submit-title | String | `'search'` | The submit button's alternative text | no
+reset-title | String | `'clear'` | The clear button's alternative text | no
 autofocus | Boolean | `false` | Whether to automatically focus on the input when rendered | no
 show-loading-indicator | Boolean | `false` | Show a spinner in the search box if a delay is passed and no results are returned yet | no
 class-names | Object | | Override class names | no
@@ -35,6 +35,9 @@ class-names | Object | | Override class names | no
 Name | Scope | Description
 ---|---|---
 default | `{ currentRefinement: String, isSearchStalled: Boolean, refine: String => void }` | Slot to override the DOM output
+loading-indicator | | Slot to override the loading indicator
+reset-icon | | Slot to override the reset icon
+submit-icon | | Slot to override the submit icon
 
 ## CSS classes
 

@@ -7,7 +7,7 @@ storiesOf('ais-search-box', module)
     template: '<ais-search-box></ais-search-box>',
   }))
   .add('with loading indicator', () => ({
-    template: '<ais-search-box showLoadingIndicator></ais-search-box>',
+    template: '<ais-search-box show-loading-indicator></ais-search-box>',
   }))
   .add('with autofocus', () => ({
     template: '<ais-search-box autofocus></ais-search-box>',
@@ -21,6 +21,21 @@ storiesOf('ais-search-box', module)
           :value="currentRefinement"
           @input="refine($event.currentTarget.value)"
         />
+      </ais-search-box>
+    `,
+  }))
+  .add('with custom rendering of icons', () => ({
+    template: `
+      <ais-search-box show-loading-indicator>
+        <template slot="reset-icon">
+          ❌
+        </template>
+        <template slot="submit-icon">
+          🔎
+        </template>
+        <template slot="loading-indicator">
+          🔄
+        </template>
       </ais-search-box>
     `,
   }))

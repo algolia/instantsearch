@@ -14,9 +14,23 @@
         :show-loading-indicator="showLoadingIndicator"
         :should-show-loading-indicator="state.isSearchStalled"
         :submit-title="submitTitle"
-        :clear-title="clearTitle"
+        :reset-title="resetTitle"
+        :class-names="classNames"
         v-model="currentRefinement"
-      />
+      >
+        <slot
+          name="loading-indicator"
+          slot="loading-indicator"
+        />
+        <slot
+          name="submit-icon"
+          slot="submit-icon"
+        />
+        <slot
+          name="reset-icon"
+          slot="reset-icon"
+        />
+      </search-input>
     </slot>
   </div>
 </template>
@@ -53,7 +67,7 @@ export default {
       type: String,
       default: 'Search',
     },
-    clearTitle: {
+    resetTitle: {
       type: String,
       default: 'Clear',
     },

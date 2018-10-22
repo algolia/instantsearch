@@ -51,11 +51,11 @@ test('with submit title', () => {
   );
 });
 
-test('with clear title', () => {
+test('with reset title', () => {
   __setState(defaultState);
   const wrapper = mount(SearchBox, {
     propsData: {
-      clearTitle: 'Clear Title',
+      resetTitle: 'Clear Title',
     },
   });
 
@@ -165,4 +165,64 @@ test('refine on empty string on form reset', () => {
   wrapper.find('.ais-SearchBox-form').trigger('reset');
 
   expect(state.refine).toHaveBeenCalledWith('');
+});
+
+test('overriding slots', () => {
+  __setState({
+    ...defaultState,
+    isSearchStalled: true,
+  });
+  const wrapper = mount(SearchBox, {
+    propsData: {
+      showLoadingIndicator: true,
+    },
+    slots: {
+      'submit-icon': '<span>SUBMIT</span>',
+      'reset-icon': '<span>RESET</span>',
+      'loading-indicator': '<span>LOADING...</span>',
+    },
+  });
+
+  expect(wrapper.find('.ais-SearchBox-submit').html()).toMatch(/SUBMIT/);
+  expect(wrapper.find('.ais-SearchBox-reset').html()).toMatch(/RESET/);
+  expect(wrapper.find('.ais-SearchBox-loadingIndicator').html()).toMatch(
+    /LOADING.../
+  );
+
+  expect(wrapper.find('.ais-SearchBox-submit').html()).toMatchInlineSnapshot(`
+
+<button type="submit"
+        title="Search"
+        hidden="hidden"
+        class="ais-SearchBox-submit"
+>
+  <span>
+    SUBMIT
+  </span>
+</button>
+
+`);
+  expect(wrapper.find('.ais-SearchBox-reset').html()).toMatchInlineSnapshot(`
+
+<button type="reset"
+        title="Clear"
+        hidden="hidden"
+        class="ais-SearchBox-reset"
+>
+  <span>
+    RESET
+  </span>
+</button>
+
+`);
+  expect(wrapper.find('.ais-SearchBox-loadingIndicator').html())
+    .toMatchInlineSnapshot(`
+
+<span class="ais-SearchBox-loadingIndicator">
+  <span>
+    LOADING...
+  </span>
+</span>
+
+`);
 });
