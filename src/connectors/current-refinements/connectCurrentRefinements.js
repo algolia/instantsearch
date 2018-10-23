@@ -41,21 +41,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CurrentRefinementsRenderingOptions
  * @property {function(item)} refine Clears a single refinement
- * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
- * @property {CurrentRefinement[]} refinements All the current refinements.
+ * @property {function(item): string} createURL Creates an individual URL where a single refinement is cleared
+ * @property {CurrentRefinement[]} refinements All the current refinements
  * @property {Object} widgetParams All original `CustomCurrentRefinementsWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * @typedef {Object} CurrentRefinementsAttributes
- * @property {string} name Mandatory field which is the name of the attribute.
- * @property {string} label The label to apply on a refinement per attribute.
- */
-
-/**
  * @typedef {Object} CustomCurrentRefinementsWidgetOptions
- * @property {string[]} [includedAttributes] The attributes to include in the refinements (all by default)
- * @property {string[]} [excludedAttributes = ["query"]] The attributes to exclude from the refinements
+ * @property {string[]} [includedAttributes] The attributes to include in the refinements (all by default). Cannot be used with `excludedAttributes`.
+ * @property {string[]} [excludedAttributes = ["query"]] The attributes to exclude from the refinements. Cannot be used with `includedAttributes`.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -123,30 +117,34 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
+    if (widgetParams.includedAttributes && widgetParams.excludedAttributes) {
+      throw new Error(
+        '`includedAttributes` and `excludedAttributes` cannot be used together.'
+      );
+    }
+
     const {
       includedAttributes,
       excludedAttributes = ['query'],
       transformItems = items => items,
     } = widgetParams;
-    const clearsQuery = excludedAttributes.indexOf('query') !== -1;
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
         const refinements = transformItems(
-          getNormalizedRefinements({
+          getFilteredRefinements({
             results: {},
             state: helper.state,
             helper,
             includedAttributes,
             excludedAttributes,
-            clearsQuery,
           })
         );
 
         renderFn(
           {
             refine: refinement => clearRefinement(helper, refinement),
-            createUrl: refinement =>
+            createURL: refinement =>
               createURL(clearRefinementFromState(helper.state, refinement)),
             refinements,
             instantSearchInstance,
@@ -158,13 +156,12 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
         const refinements = transformItems(
-          getNormalizedRefinements({
+          getFilteredRefinements({
             results,
             state,
             helper,
             includedAttributes,
             excludedAttributes,
-            clearsQuery,
           })
         );
 
@@ -188,23 +185,23 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
   };
 }
 
-function getNormalizedRefinements({
+function getFilteredRefinements({
   results,
   state,
   helper,
   includedAttributes,
   excludedAttributes,
-  clearsQuery,
 }) {
+  const clearsQuery =
+    (includedAttributes || []).indexOf('query') !== -1 ||
+    (excludedAttributes || []).indexOf('query') === -1;
+
+  const filterFunction = includedAttributes
+    ? refinement => includedAttributes.indexOf(refinement.attributeName) !== -1
+    : refinement => excludedAttributes.indexOf(refinement.attributeName) === -1;
+
   const refinements = getRefinements(results, state, clearsQuery)
-    .filter(
-      refinement =>
-        !includedAttributes ||
-        includedAttributes.indexOf(refinement.attributeName) !== -1
-    )
-    .filter(
-      refinement => excludedAttributes.indexOf(refinement.attributeName) === -1
-    )
+    .filter(filterFunction)
     .map(normalizeRefinementItem);
 
   return groupByRefinements(refinements, helper);

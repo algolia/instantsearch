@@ -245,6 +245,7 @@ function getRefinements(results, state, clearsQuery) {
     clearsQuery && state.query && state.query.trim()
       ? [
           {
+            attributeName: 'query',
             type: 'query',
             name: state.query,
             query: state.query,

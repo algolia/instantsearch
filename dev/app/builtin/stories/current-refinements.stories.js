@@ -56,7 +56,7 @@ export default () => {
       })
     )
     .add(
-      'with price excluded',
+      'with price and query excluded',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.configure({
@@ -88,7 +88,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.currentRefinements({
             container,
-            includesQuery: true,
+            excludedAttributes: [],
           })
         );
       })
