@@ -1,3 +1,19 @@
+<a name="2.10.3"></a>
+## [2.10.3](https://github.com/algolia/instantsearch.js/compare/v2.10.2...v2.10.3) (2018-10-23)
+
+
+### Bug Fixes
+
+* **InstantSearch:** avoid useless search on addWidgets ([#3178](https://github.com/algolia/instantsearch.js/issues/3178)) ([961626d](https://github.com/algolia/instantsearch.js/commit/961626d))
+* **numericselector:** default value can be undefined ([#3139](https://github.com/algolia/instantsearch.js/issues/3139)) ([39d22f5](https://github.com/algolia/instantsearch.js/commit/39d22f5))
+
+
+### Features
+
+* **utils:** add warn function ([#3147](https://github.com/algolia/instantsearch.js/issues/3147)) ([9de87bb](https://github.com/algolia/instantsearch.js/commit/9de87bb))
+
+
+
 <a name="2.10.2"></a>
 ## [2.10.2](https://github.com/algolia/instantsearch.js/compare/v2.10.1...v2.10.2) (2018-09-10)
 
