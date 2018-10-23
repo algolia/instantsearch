@@ -102,7 +102,7 @@ export default {
         value
           .toString()
           .charAt(0)
-          .toUpperCase() + value.toString().slice(1)
+          .toLocaleUpperCase() + value.toString().slice(1)
       );
     },
   },
