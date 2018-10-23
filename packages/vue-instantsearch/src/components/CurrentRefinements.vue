@@ -6,6 +6,7 @@
     <slot
       :refine="state.refine"
       :items="refinements"
+      :createURL="state.createURL"
     >
       <ul :class="suit('list')">
         <li
