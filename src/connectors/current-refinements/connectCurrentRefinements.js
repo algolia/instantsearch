@@ -259,14 +259,13 @@ function getOperatorSymbol(operator) {
 }
 
 function normalizeRefinementItem(item) {
-  const attribute = item.type === 'query' ? 'query' : item.attributeName;
+  const value = item.type === 'numeric' ? Number(item.name) : item.name;
   const label = item.operator
     ? `${getOperatorSymbol(item.operator)} ${item.name}`
     : item.name;
-  const value = item.type === 'numeric' ? Number(item.name) : item.name;
 
   return {
-    attribute,
+    attribute: item.attributeName,
     type: item.type,
     value,
     label,
