@@ -1,3 +1,6 @@
 [build]
   command="npm run docs:build:dev"
   publish="docs"
+
+[build.environment]
+  YARN_VERSION = "1.10.1"
