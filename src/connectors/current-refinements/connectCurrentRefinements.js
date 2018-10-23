@@ -21,15 +21,21 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 `;
 
 /**
- * @typedef {Object} CurrentRefinement
+ * @typedef {Object} CurrentRefinementItem
  * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"|"query"} type The type of the refinement
  * @property {string} attribute The attribute on which the refinement is applied
  * @property {string} label The label of the refinement to display
  * @property {string} value The raw value of the refinement
- * @property {function} refine The function to remove the refinement
  * @property {string} [operator] The raw value of the refinement
  * @property {boolean} [exhaustive] Whether the count is exhaustive, only if applicable
  * @property {number} [count] number of items found, if applicable
+ */
+
+/**
+ * @typedef {Object} CurrentRefinement
+ * @property {string} attribute The attribute on which the refinement is applied
+ * @property {function} refine The function to remove the refinement
+ * @property {CurrentRefinementItem[]} items The refinement items
  */
 
 /**
