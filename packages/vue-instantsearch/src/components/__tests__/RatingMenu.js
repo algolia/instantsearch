@@ -11,11 +11,32 @@ const defaultProps = {
 
 it('renders correctly', () => {
   __setState({
+    createURL: () => '#',
     items: [
-      { isRefined: false, count: 20, value: 1 },
-      { isRefined: false, count: 3, value: 2 },
-      { isRefined: false, count: 2000, value: 3 },
-      { isRefined: false, count: 8, value: 4 },
+      {
+        isRefined: false,
+        count: 20,
+        value: '1',
+        stars: [true, false, false, false, false],
+      },
+      {
+        isRefined: false,
+        count: 3,
+        value: '2',
+        stars: [true, true, false, false, false],
+      },
+      {
+        isRefined: false,
+        count: 2000,
+        value: '3',
+        stars: [true, true, true, false, false],
+      },
+      {
+        isRefined: false,
+        count: 8,
+        value: '4',
+        stars: [true, true, true, true, false],
+      },
     ],
   });
 
@@ -28,11 +49,32 @@ it('renders correctly', () => {
 
 it('renders correctly when refined', () => {
   __setState({
+    createURL: () => '#',
     items: [
-      { isRefined: false, count: 20, value: 1 },
-      { isRefined: false, count: 3, value: 2 },
-      { isRefined: false, count: 2000, value: 3 },
-      { isRefined: true, count: 8, value: 4 },
+      {
+        isRefined: false,
+        count: 20,
+        value: '1',
+        stars: [true, false, false, false, false],
+      },
+      {
+        isRefined: false,
+        count: 3,
+        value: '2',
+        stars: [true, true, false, false, false],
+      },
+      {
+        isRefined: false,
+        count: 2000,
+        value: '3',
+        stars: [true, true, true, false, false],
+      },
+      {
+        isRefined: true,
+        count: 8,
+        value: '4',
+        stars: [true, true, true, true, false],
+      },
     ],
   });
 
@@ -45,11 +87,32 @@ it('renders correctly when refined', () => {
 
 it('calls refine when clicked on link', () => {
   __setState({
+    createURL: () => '#',
     items: [
-      { isRefined: false, count: 20, value: 1 },
-      { isRefined: false, count: 3, value: 2 },
-      { isRefined: false, count: 2000, value: 3 },
-      { isRefined: false, count: 8, value: 4 },
+      {
+        isRefined: false,
+        count: 20,
+        value: '1',
+        stars: [true, false, false, false, false],
+      },
+      {
+        isRefined: false,
+        count: 3,
+        value: '2',
+        stars: [true, true, false, false, false],
+      },
+      {
+        isRefined: false,
+        count: 2000,
+        value: '3',
+        stars: [true, true, true, false, false],
+      },
+      {
+        isRefined: false,
+        count: 8,
+        value: '4',
+        stars: [true, true, true, true, false],
+      },
     ],
     refine: jest.fn(),
   });
@@ -60,7 +123,7 @@ it('calls refine when clicked on link', () => {
 
   wrapper.find('.ais-RatingMenu-link').trigger('click');
 
-  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(1);
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith('1');
 });
 
 it('calls the Panel mixin with `hasNoResults`', () => {

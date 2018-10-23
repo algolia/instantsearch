@@ -32,7 +32,15 @@ class-names | Object | | Override class names | no
 
 Name | Scope | Description
 ---|---|---
-default | `{ items: Array<{label: String, value: String, count: Number }>, refine: String => void }` | Slot to override the DOM output
+default | `{ items: Array<Item>, refine: String => void, createURL: Item => String }` | Slot to override the DOM output
+
+an `Item` has the following keys:
+
+- `stars`: An array of booleans, e.g. `[true, true, true, false]` to show which stars should be colored
+- `name`: string version of the "number of stars" to put
+- `value`: string version of the "number of stars" to put
+- `count`: number of hits with this refinement enabled
+- `isRefined`: boolean which will be true if this Item is selected
 
 ## CSS classes
 

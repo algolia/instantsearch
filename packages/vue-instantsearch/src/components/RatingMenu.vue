@@ -6,6 +6,7 @@
     <slot
       :items="state.items"
       :refine="state.refine"
+      :createURL="state.createURL"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -32,14 +33,14 @@
           :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
         >
           <a
-            href="#"
+            :href="state.createURL(item)"
             :aria-label="`${item.value} & Up`"
             :class="suit('link')"
             @click.prevent="state.refine(item.value)"
           >
-            <template v-for="n in max">
+            <template v-for="(full, n) in item.stars">
               <svg
-                v-if="n <= item.value"
+                v-if="full"
                 aria-hidden="true"
                 width="24"
                 height="24"
