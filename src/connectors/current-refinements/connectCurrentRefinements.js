@@ -201,7 +201,7 @@ function getNormalizedRefinements({
     )
     .map(normalizeRefinementItem);
 
-  return normalizeRefinements(refinements, helper);
+  return groupByRefinements(refinements, helper);
 }
 
 function clearRefinementFromState(state, refinementItem) {
@@ -251,7 +251,7 @@ function getOperatorSymbol(operator) {
     case '<=':
       return '≤';
     default:
-      return '';
+      return operator;
   }
 }
 
@@ -285,7 +285,7 @@ function compareObjects(a, b, attribute) {
   return 1;
 }
 
-function normalizeRefinements(refinements, helper) {
+function groupByRefinements(refinements, helper) {
   return refinements.reduce(
     (results, currentRefinement) =>
       [
