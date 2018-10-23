@@ -169,16 +169,19 @@ const questions = [
     type: 'input',
     name: 'appId',
     message: 'Application ID',
+    default: 'latency',
   },
   {
     type: 'input',
     name: 'apiKey',
     message: 'Search API key',
+    default: '6be0576ff61c053d5f9a3225e2a90f76',
   },
   {
     type: 'input',
     name: 'indexName',
     message: 'Index name',
+    default: 'instant_search',
   },
   {
     type: 'checkbox',
