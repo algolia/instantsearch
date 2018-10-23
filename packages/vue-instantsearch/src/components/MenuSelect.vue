@@ -1,12 +1,13 @@
 <template>
   <div
-    :class="[suit(), !canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
     v-if="state"
   >
     <slot
-      :items="items"
-      :can-refine="canRefine"
+      :items="state.items"
+      :can-refine="state.canRefine"
       :refine="refine"
+      :createURL="state.createURL"
     >
       <select
         :class="suit('select')"
@@ -19,7 +20,7 @@
           {{ label }}
         </option>
         <option
-          v-for="item in items"
+          v-for="item in state.items"
           :key="item.value"
           :class="suit('option')"
           :value="item.value"
@@ -86,12 +87,6 @@ export default {
         sortBy: this.sortBy,
         transformItems: this.transformItems,
       };
-    },
-    items() {
-      return this.state.items;
-    },
-    canRefine() {
-      return this.state.canRefine;
     },
   },
   methods: {
