@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import { isSpecialClick, capitalize } from '../../lib/utils.js';
 
-const createItemKey = ({ attribute, value, type, operator }) =>
-  [attribute, value, type, operator].map(key => key || 'none').join(':');
+const createItemKey = ({ attribute, value, type, operator }, index) =>
+  `${[attribute, type, value, operator]
+    .map(key => key)
+    .filter(Boolean)
+    .join(':')}#${index + 1}`;
 
 const handleClick = callback => event => {
   if (isSpecialClick(event)) {
@@ -30,13 +33,13 @@ class CurrentRefinements extends Component {
           {capitalize(refinement.attribute)}:
         </span>
 
-        {refinement.items.map(item => (
+        {refinement.items.map((item, itemIndex) => (
           <span
-            key={createItemKey(item)}
+            key={createItemKey(item, itemIndex)}
             className={this.props.cssClasses.category}
           >
             <span className={this.props.cssClasses.categoryLabel}>
-              {item.label}
+              {item.attribute === 'query' ? <q>{item.label}</q> : item.label}
             </span>
 
             <button
@@ -82,6 +85,7 @@ CurrentRefinements.propTypes = {
         PropTypes.shape({
           attribute: PropTypes.string.isRequired,
           label: PropTypes.string.isRequired,
+          type: PropTypes.string.isRequired,
           value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
             .isRequired,
         }).isRequired

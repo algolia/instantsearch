@@ -19,7 +19,7 @@ exports[`CurrentRefinements options.refinements can be used with a disjunctive f
       </span>
       <span
         className="category"
-        key="customDisjunctiveFacet:val1:disjunctive:none"
+        key="customDisjunctiveFacet:disjunctive:val1#1"
       >
         <span
           className="categoryLabel"
@@ -57,7 +57,7 @@ exports[`CurrentRefinements options.refinements can be used with a facet 1`] = `
       </span>
       <span
         className="category"
-        key="customFacet:val1:facet:none"
+        key="customFacet:facet:val1#1"
       >
         <span
           className="categoryLabel"
@@ -95,12 +95,52 @@ exports[`CurrentRefinements options.refinements can be used with a hierarchical 
       </span>
       <span
         className="category"
-        key="customHierarchicalFacet:val1:hierarchical:none"
+        key="customHierarchicalFacet:hierarchical:val1#1"
       >
         <span
           className="categoryLabel"
         >
           val1
+        </span>
+        <button
+          className="delete"
+          onClick={[Function]}
+        >
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`CurrentRefinements options.refinements can be used with a query 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      key="query-0"
+    >
+      <span
+        className="label"
+      >
+        Query
+        :
+      </span>
+      <span
+        className="category"
+        key="query:query:search1#1"
+      >
+        <span
+          className="categoryLabel"
+        >
+          <q>
+            search1
+          </q>
         </span>
         <button
           className="delete"
@@ -133,7 +173,7 @@ exports[`CurrentRefinements options.refinements can be used with a tag 1`] = `
       </span>
       <span
         className="category"
-        key="_tags:tag1:tag:none"
+        key="_tags:tag:tag1#1"
       >
         <span
           className="categoryLabel"
@@ -171,7 +211,7 @@ exports[`CurrentRefinements options.refinements can be used with an exclude 1`] 
       </span>
       <span
         className="category"
-        key="customExcludeFacet:val1:exclude:none"
+        key="customExcludeFacet:exclude:val1#1"
       >
         <span
           className="categoryLabel"
@@ -209,7 +249,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
       </span>
       <span
         className="category"
-        key="customNumericFilter:val1:numeric:="
+        key="customNumericFilter:numeric:val1:=#1"
       >
         <span
           className="categoryLabel"
@@ -236,7 +276,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
       </span>
       <span
         className="category"
-        key="customNumericFilter:val2:numeric:<="
+        key="customNumericFilter:numeric:val2:<=#1"
       >
         <span
           className="categoryLabel"
@@ -263,7 +303,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
       </span>
       <span
         className="category"
-        key="customNumericFilter:val3:numeric:>="
+        key="customNumericFilter:numeric:val3:>=#1"
       >
         <span
           className="categoryLabel"
@@ -301,7 +341,7 @@ exports[`CurrentRefinements renders 1`] = `
       </span>
       <span
         className="category"
-        key="facet:facet-val1:facet:none"
+        key="facet:facet:facet-val1#1"
       >
         <span
           className="categoryLabel"
@@ -317,7 +357,7 @@ exports[`CurrentRefinements renders 1`] = `
       </span>
       <span
         className="category"
-        key="facet:facet-val2:facet:none"
+        key="facet:facet:facet-val2#2"
       >
         <span
           className="categoryLabel"
@@ -344,7 +384,7 @@ exports[`CurrentRefinements renders 1`] = `
       </span>
       <span
         className="category"
-        key="facetExclude:disjunctiveFacet-val1:exclude:none"
+        key="facetExclude:exclude:disjunctiveFacet-val1#1"
       >
         <span
           className="categoryLabel"
@@ -371,7 +411,7 @@ exports[`CurrentRefinements renders 1`] = `
       </span>
       <span
         className="category"
-        key="disjunctiveFacet:disjunctiveFacet-val1:disjunctive:none"
+        key="disjunctiveFacet:disjunctive:disjunctiveFacet-val1#1"
       >
         <span
           className="categoryLabel"
@@ -398,7 +438,7 @@ exports[`CurrentRefinements renders 1`] = `
       </span>
       <span
         className="category"
-        key="hierarchicalFacet:hierarchicalFacet-val1:hierarchical:none"
+        key="hierarchicalFacet:hierarchical:hierarchicalFacet-val1#1"
       >
         <span
           className="categoryLabel"
@@ -425,7 +465,7 @@ exports[`CurrentRefinements renders 1`] = `
       </span>
       <span
         className="category"
-        key="numericFacet:numericFacet-val1:numeric:>="
+        key="numericFacet:numeric:numericFacet-val1:>=#1"
       >
         <span
           className="categoryLabel"
@@ -452,7 +492,7 @@ exports[`CurrentRefinements renders 1`] = `
       </span>
       <span
         className="category"
-        key="_tags:tag1:tag:none"
+        key="_tags:tag:tag1#1"
       >
         <span
           className="categoryLabel"

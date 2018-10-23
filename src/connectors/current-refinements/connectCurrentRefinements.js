@@ -266,7 +266,7 @@ function normalizeRefinementItem(item) {
     attribute,
     type: item.type,
     value,
-    label: item.type === 'query' ? `"${label}"` : label,
+    label,
     ...(item.operator && { operator: item.operator }),
     ...(item.count && { count: item.count }),
     ...(item.exhaustive && { exhaustive: item.exhaustive }),
