@@ -4,12 +4,12 @@ import { previewWrapper } from './utils';
 storiesOf('ais-refinement-list', module)
   .addDecorator(previewWrapper({ filters: '' }))
   .add('default', () => ({
-    template: `<ais-refinement-list attribute="brand"></ais-refinement-list>`,
+    template: `<ais-refinement-list attribute="categories"></ais-refinement-list>`,
   }))
   .add('with searchbox', () => ({
     template: `
       <ais-refinement-list
-        attribute="brand"
+        attribute="categories"
         searchable
       >
       </ais-refinement-list>`,
@@ -17,7 +17,7 @@ storiesOf('ais-refinement-list', module)
   .add('with show more', () => ({
     template: `
       <ais-refinement-list
-        attribute="brand"
+        attribute="categories"
         show-more
       >
       </ais-refinement-list>`,
@@ -25,7 +25,7 @@ storiesOf('ais-refinement-list', module)
   .add('with transform items', () => ({
     template: `
       <ais-refinement-list
-        attribute="brand"
+        attribute="categories"
         :transform-items="transformItems"
       />
     `,
@@ -41,7 +41,7 @@ storiesOf('ais-refinement-list', module)
   }))
   .add('item custom rendering', () => ({
     template: `
-    <ais-refinement-list attribute="brand">
+    <ais-refinement-list attribute="categories">
       <template slot="item" slot-scope="{item, refine}">
         <button
           @click="refine(item.value)"
@@ -53,7 +53,7 @@ storiesOf('ais-refinement-list', module)
   }))
   .add('full custom rendering', () => ({
     template: `
-    <ais-refinement-list attribute="brand" searchable show-more>
+    <ais-refinement-list attribute="categories" searchable show-more>
       <template slot-scope="{
         items,
         refine,

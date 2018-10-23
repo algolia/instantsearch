@@ -13,17 +13,22 @@ storiesOf('ais-menu', module)
   .addDecorator(withKnobs)
   .add('default', () => ({
     template: `
-      <ais-menu attribute="brand" />
+      <ais-menu attribute="categories" />
     `,
   }))
   .add('with show more', () => ({
     template: `
-      <ais-menu attribute="brand" :limit="2" :showMoreLimit="5" :show-more="true" />
+      <ais-menu
+        attribute="categories"
+        :limit="2"
+        :showMoreLimit="5"
+        :show-more="true"
+      />
     `,
   }))
   .add('with custom label', () => ({
     template: `
-      <ais-menu attribute="brand" :limit="2" :showMoreLimit="5" :show-more="true">
+      <ais-menu attribute="categories" :limit="2" :showMoreLimit="5" :show-more="true">
         <template slot="showMoreLabel" slot-scope="{ isShowingMore }">
           {{isShowingMore ? 'View less' : 'View more'}}
         </template>
@@ -32,12 +37,12 @@ storiesOf('ais-menu', module)
   }))
   .add('with a different sort', () => ({
     template: `
-      <ais-menu attribute="brand" :sort-by="['isRefined:desc', 'name:asc']" />
+      <ais-menu attribute="categories" :sort-by="['isRefined:desc', 'name:asc']" />
     `,
   }))
   .add('with transform items', () => ({
     template: `
-      <ais-menu attribute="brand" :transform-items="transformItems" />
+      <ais-menu attribute="categories" :transform-items="transformItems" />
     `,
     methods: {
       transformItems(items) {
@@ -51,7 +56,7 @@ storiesOf('ais-menu', module)
   }))
   .add('with a custom render', () => ({
     template: `
-      <ais-menu attribute="brand">
+      <ais-menu attribute="categories">
         <ol slot-scope="{ items, createURL, refine }">
           <li
             v-for="item in items"
@@ -73,7 +78,7 @@ storiesOf('ais-menu', module)
     template: `
       <ais-panel>
         <template slot="header">Menu</template>
-        <ais-menu attribute="brand" />
+        <ais-menu attribute="categories" />
         <template slot="footer">Footer</template>
       </ais-panel>
     `,
@@ -90,7 +95,7 @@ storiesOf('ais-menu', module)
     `,
     data() {
       return {
-        attribute: text('attribute', 'brand'),
+        attribute: text('attribute', 'categories'),
         classNames: object('class-names', {}),
         limit: number('limit', 10),
         showMore: boolean('show-More', false),
