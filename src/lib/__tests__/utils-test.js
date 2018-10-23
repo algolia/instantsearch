@@ -1,6 +1,12 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import * as utils from '../utils';
 
+describe('capitalize', () => {
+  it('should capitalize the first character only', () => {
+    expect(utils.capitalize('hello')).toBe('Hello');
+  });
+});
+
 describe('utils.getContainerNode', () => {
   it('should be able to get a node from a node', () => {
     const d = document.body;
