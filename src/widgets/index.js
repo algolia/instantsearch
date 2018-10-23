@@ -12,7 +12,7 @@ export { default as configure } from './configure/configure.js';
 export {
   default as currentRefinements,
 } from './current-refinements/current-refinements.js';
-export { default as geoSearch } from '../widgets/geo-search/geo-search.js';
+export { default as geoSearch } from './geo-search/geo-search.js';
 export {
   default as hierarchicalMenu,
 } from './hierarchical-menu/hierarchical-menu.js';
