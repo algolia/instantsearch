@@ -342,8 +342,7 @@ describe('utils.getRefinements', () => {
     );
   });
 
-  it('should retrieve one facetRefinement and inject query facet if clearQuery === true', () => {
-    helper.toggleRefinement('facet1', 'facet1val1');
+  it('should inject query facet if clearQuery === true', () => {
     helper.setQuery('my query');
     const expected = [
       {
@@ -352,33 +351,20 @@ describe('utils.getRefinements', () => {
         name: 'my query',
         query: 'my query',
       },
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
     ];
     const clearsQuery = true;
-    expect(
-      utils.getRefinements(results, helper.state, clearsQuery)
-    ).toHaveLength(2);
-    expect(
-      utils.getRefinements(results, helper.state, clearsQuery)
-    ).toContainEqual(expected[0]);
-    expect(
-      utils.getRefinements(results, helper.state, clearsQuery)
-    ).toContainEqual(expected[1]);
+    expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
+      expected
+    );
   });
 
   it('should retrieve one facetRefinement and not inject query facet if clearQuery === false', () => {
-    helper.toggleRefinement('facet1', 'facet1val1');
     helper.setQuery('my query');
-    const expected = [
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
-    ];
+    const expected = [];
     const clearsQuery = false;
-    expect(
-      utils.getRefinements(results, helper.state, clearsQuery)
-    ).toHaveLength(1);
-    expect(
-      utils.getRefinements(results, helper.state, clearsQuery)
-    ).toContainEqual(expected[0]);
+    expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
+      expected
+    );
   });
 
   it('should retrieve multiple facetsRefinements on one facet', () => {
