@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`current-refined-values defaultTemplates \`item\` template does not show \`count\` when query refinement 1`] = `"Query :   <q>Samsu</q> "`;
-
-exports[`current-refined-values defaultTemplates \`item\` template has a \`item\` default template 1`] = `"Brand :   Samsung <span class=\\"ais-current-refined-values--count\\">4</span>"`;
-
-exports[`current-refined-values defaultTemplates \`item\` template wraps query refinements with <q> 1`] = `"Query :   <q>Samsu</q> "`;

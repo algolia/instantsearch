@@ -13,7 +13,9 @@ describe('current-refined-values defaultTemplates', () => {
           count: 'ais-current-refined-values--count',
         },
       };
-      expect(defaultTemplates.item(item)).toMatchSnapshot();
+      expect(defaultTemplates.item(item)).toContain(
+        '<span class="ais-current-refined-values--count">4</span>'
+      );
     });
     it('wraps query refinements with <q>', () => {
       const item = {
@@ -21,11 +23,8 @@ describe('current-refined-values defaultTemplates', () => {
         label: 'Query',
         operator: ':',
         name: 'Samsu',
-        cssClasses: {
-          count: 'ais-current-refined-values--count',
-        },
       };
-      expect(defaultTemplates.item(item)).toMatchSnapshot();
+      expect(defaultTemplates.item(item)).toContain('Query :   <q>Samsu</q>');
     });
     it('does not show `count` when query refinement', () => {
       const item = {
@@ -33,12 +32,9 @@ describe('current-refined-values defaultTemplates', () => {
         label: 'Query',
         operator: ':',
         name: 'Samsu',
-        count: 22, // should be ignored
-        cssClasses: {
-          count: 'ais-current-refined-values--count',
-        },
+        count: 22,
       };
-      expect(defaultTemplates.item(item)).toMatchSnapshot();
+      expect(defaultTemplates.item(item)).not.toContain(22);
     });
   });
 });
