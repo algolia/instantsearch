@@ -26,7 +26,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string} attribute The attribute on which the refinement is applied
  * @property {string} label The label of the refinement to display
  * @property {string} value The raw value of the refinement
- * @property {string} [operator] The raw value of the refinement
+ * @property {string} [operator] The value of the operator, only if applicable
  * @property {boolean} [exhaustive] Whether the count is exhaustive, only if applicable
  * @property {number} [count] number of items found, if applicable
  */
@@ -220,7 +220,7 @@ function clearRefinementFromState(state, refinementItem) {
         refinementItem.value
       );
     case 'hierarchical':
-      return state.clearRefinements(refinementItem.attribute);
+      return state.removeHierarchicalFacetRefinement(refinementItem.attribute);
     case 'exclude':
       return state.removeExcludeRefinement(
         refinementItem.attribute,
@@ -269,9 +269,9 @@ function normalizeRefinementItem(item) {
     type: item.type,
     value,
     label,
-    ...(item.operator && { operator: item.operator }),
-    ...(item.count && { count: item.count }),
-    ...(item.exhaustive && { exhaustive: item.exhaustive }),
+    ...(item.operator !== undefined && { operator: item.operator }),
+    ...(item.count !== undefined && { count: item.count }),
+    ...(item.exhaustive !== undefined && { exhaustive: item.exhaustive }),
   };
 }
 

@@ -171,8 +171,10 @@ Here are the elements you need to migrate:
 | `attributes`           | `includedAttributes`              |
 |                        | `excludedAttributes`              |
 | `onlyListedAttributes` | use `includedAttributes`          |
-| `clearsQuery`          | use `includedAttributes`          |
+| `clearsQuery`          | use `excludedAttributes`          |
 | `clearAll`             | use the `clearRefinements` widget |
+
+- `clearsQuery` can replaced by `excludedAtributes: ['query']`.
 
 #### CSS classes
 

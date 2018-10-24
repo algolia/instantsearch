@@ -37,7 +37,7 @@ describe('CurrentRefinements', () => {
           ],
         },
         {
-          attribute: 'facet',
+          attribute: 'facetExclude',
           refine: () => {},
           items: [
             {
