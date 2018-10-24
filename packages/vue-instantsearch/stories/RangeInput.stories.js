@@ -112,11 +112,6 @@ storiesOf('ais-range-input', module)
       </v-container>
     </v-app>
     `,
-    data() {
-      return {
-        price: [5, 20],
-      };
-    },
     methods: {
       toValue([min, max], range) {
         return [
