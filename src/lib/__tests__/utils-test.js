@@ -360,6 +360,31 @@ describe('utils.getRefinements', () => {
     );
   });
 
+  it('should retrieve one query refinement when `clearsQuery` is true', () => {
+    helper.setQuery('a query');
+    const expected = [
+      {
+        type: 'query',
+        attributeName: 'query',
+        name: 'a query',
+        query: 'a query',
+      },
+    ];
+    const clearsQuery = true;
+    expect(
+      utils.getRefinements(results, helper.state, clearsQuery)
+    ).toContainEqual(expected[0]);
+  });
+
+  it('should not retrieve any query refinements if `clearsQuery` if false', () => {
+    helper.setQuery('a query');
+    const expected = [];
+    const clearsQuery = false;
+    expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
+      expected
+    );
+  });
+
   it('should retrieve multiple facetsRefinements on one facet', () => {
     helper
       .toggleRefinement('facet1', 'facet1val1')
