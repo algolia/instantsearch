@@ -174,7 +174,7 @@ Here are the elements you need to migrate:
 | `clearsQuery`          | use `excludedAttributes`          |
 | `clearAll`             | use the `clearRefinements` widget |
 
-- `clearsQuery` can replaced by `excludedAtributes: ['query']`.
+- `clearsQuery` can replaced by `excludedAtributes: []`.
 
 #### CSS classes
 
