@@ -16,6 +16,7 @@ describe('current-refined-values defaultTemplates', () => {
       expect(defaultTemplates.item(item)).toContain(
         '<span class="ais-current-refined-values--count">4</span>'
       );
+      expect(defaultTemplates.item(item)).toMatchSnapshot();
     });
     it('wraps query refinements with <q>', () => {
       const item = {
@@ -25,6 +26,7 @@ describe('current-refined-values defaultTemplates', () => {
         name: 'Samsu',
       };
       expect(defaultTemplates.item(item)).toContain('Query :   <q>Samsu</q>');
+      expect(defaultTemplates.item(item)).toMatchSnapshot();
     });
     it('does not show `count` when query refinement', () => {
       const item = {
@@ -35,6 +37,7 @@ describe('current-refined-values defaultTemplates', () => {
         count: 22,
       };
       expect(defaultTemplates.item(item)).not.toContain(22);
+      expect(defaultTemplates.item(item)).toMatchSnapshot();
     });
   });
 });
