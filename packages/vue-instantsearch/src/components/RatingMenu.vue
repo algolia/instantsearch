@@ -66,7 +66,7 @@
               :class="suit('label')"
               aria-hidden="true"
             >
-              &amp; Up
+              <slot name="andUp">&amp; Up</slot>
             </span>
             <span :class="suit('count')">
               {{ item.count }}

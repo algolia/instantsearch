@@ -33,6 +33,7 @@ class-names | Object | | Override class names | no
 Name | Scope | Description
 ---|---|---
 default | `{ items: Array<Item>, refine: String => void, createURL: Item => String }` | Slot to override the DOM output
+andUp | `{ }` | Slot to override the "& up" text after the star icons.
 
 an `Item` has the following keys:
 
