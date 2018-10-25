@@ -219,24 +219,30 @@ function getRefinement(state, type, attributeName, name, resultsFacets) {
   const res = { type, attributeName, name };
   let facet = find(resultsFacets, { name: attributeName });
   let count;
+
   if (type === 'hierarchical') {
     const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
     const split = name.split(facetDeclaration.separator);
-    res.name = split[split.length - 1];
+
     for (let i = 0; facet !== undefined && i < split.length; ++i) {
       facet = find(facet.data, { name: split[i] });
     }
+
     count = get(facet, 'count');
   } else {
     count = get(facet, `data["${res.name}"]`);
   }
+
   const exhaustive = get(facet, 'exhaustive');
+
   if (count !== undefined) {
     res.count = count;
   }
+
   if (exhaustive !== undefined) {
     res.exhaustive = exhaustive;
   }
+
   return res;
 }
 

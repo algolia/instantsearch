@@ -724,9 +724,10 @@ describe('utils.getRefinements', () => {
       {
         type: 'hierarchical',
         attributeName: 'hierarchicalFacet2',
-        name: 'lvl1val1',
+        name: 'hierarchicalFacet2lvl0val1 > lvl1val1',
       },
     ];
+
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
     );
