@@ -4365,6 +4365,11 @@ bluebird@3.4.6:
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.4.6.tgz#01da8d821d87813d158967e743d5fe6c62cf8c0f"
   integrity sha1-AdqNgh2HgT0ViWfnQ9X+bGLPjA8=
 
+bluebird@^2.9.34:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
+  integrity sha1-U0uQM8AiyVecVro7Plpcqvu2UOE=
+
 bluebird@^3.0.5, bluebird@^3.4.7, bluebird@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
@@ -5702,6 +5707,11 @@ commander@^2.18.0:
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.18.0.tgz#2bf063ddee7c7891176981a2cc798e5754bc6970"
   integrity sha512-6CYPa+JP2ftfRU2qkDK+UTVeQYosOg/2GbcjIcKPHfinyOLPVGXu/ovN86RP49Re5ndJK1N0kuiidFFuepc4ZQ==
+
+commander@^2.8.1:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
+  integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
 
 commander@~2.13.0:
   version "2.13.0"
@@ -8499,7 +8509,7 @@ fstream-ignore@^1.0.5:
     inherits "2"
     minimatch "^3.0.0"
 
-fstream@^1.0.0, fstream@^1.0.10, fstream@^1.0.2:
+fstream@^1.0.0, fstream@^1.0.10, fstream@^1.0.2, fstream@^1.0.8:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/fstream/-/fstream-1.0.11.tgz#5c1fb1f117477114f0632a0eb4b71b3cb0fd3171"
   integrity sha1-XB+x8RdHcRTwYyoOtLcbPLD9MXE=
@@ -8565,15 +8575,15 @@ gaze@^1.0.0:
   dependencies:
     globule "^1.0.0"
 
-geckodriver@^1.9.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-1.11.0.tgz#2853ccd4f420d347c61542daeed782c87a718687"
-  integrity sha1-KFPM1PQg00fGFULa7teCyHpxhoc=
+geckodriver@1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/geckodriver/-/geckodriver-1.9.0.tgz#dcf0025bc46d9a0298576282db23389999f352dc"
+  integrity sha1-3PACW8RtmgKYV2KC2yM4mZnzUtw=
   dependencies:
     adm-zip "0.4.7"
     bluebird "3.4.6"
     got "5.6.0"
-    tar "4.0.2"
+    tar.gz "1.0.5"
 
 generate-function@^2.0.0:
   version "2.0.0"
@@ -9084,14 +9094,14 @@ happo-core@5.0.0, happo-core@^5.0.0:
     parse-data-uri "^0.2.0"
     pngjs "^3.0.0"
 
-happo-target-firefox@5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/happo-target-firefox/-/happo-target-firefox-5.0.2.tgz#47d766a75060b90c6f7f3207368d950f4686e534"
-  integrity sha1-R9dmp1BguQxvfzIHNo2VD0aG5TQ=
+happo-target-firefox@5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/happo-target-firefox/-/happo-target-firefox-5.0.3.tgz#fe22596a814200a726f774b9bb2fbc23b9f325ba"
+  integrity sha512-K/kA+E5MTdgzZbP+Ay73+EXXilvS208/uhe0yOXNMBBQnv04k1NiazWy/ErhnGKOt+glT2i/yV1JDGUHgQfrWw==
   dependencies:
     ejs "^2.5.2"
     express "^4.14.0"
-    geckodriver "^1.9.0"
+    geckodriver "1.9.0"
     happo-core "^5.0.0"
     happo-viewer "^5.0.0"
     mkdirp "^0.5.1"
@@ -9099,6 +9109,7 @@ happo-target-firefox@5.0.2:
     react "^16.0.0"
     react-dom "^16.0.0"
     selenium-webdriver "3.6.0"
+    string.prototype.matchall "^3.0.0"
 
 happo-viewer@^5.0.0:
   version "5.0.0"
@@ -12573,7 +12584,7 @@ minipass@^2.3.3:
     safe-buffer "^5.1.2"
     yallist "^3.0.0"
 
-minizlib@^1.0.4, minizlib@^1.1.0:
+minizlib@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/minizlib/-/minizlib-1.1.0.tgz#11e13658ce46bc3a70a267aac58359d1e0c29ceb"
   integrity sha512-4T6Ur/GctZ27nHfpt9THOdRZNgyJ9FZchYO1ceg5S8Q3DNLCKYy44nCZzgCJgcvx2UM8czmqak5BCxJMrq37lA==
@@ -12657,6 +12668,11 @@ morgan@^1.9.0:
     depd "~1.1.1"
     on-finished "~2.3.0"
     on-headers "~1.0.1"
+
+mout@^0.11.0:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/mout/-/mout-0.11.1.tgz#ba3611df5f0e5b1ffbfd01166b8f02d1f5fa2b99"
+  integrity sha1-ujYR318OWx/7/QEWa48C0fX6K5k=
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -17827,18 +17843,18 @@ tar-stream@^1.5.0:
     to-buffer "^1.1.1"
     xtend "^4.0.0"
 
-tar@4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-4.0.2.tgz#e8e22bf3eec330e5c616d415a698395e294e8fad"
-  integrity sha512-4lWN4uAEWzw8aHyBUx9HWXvH3vIFEhOyvN22HfBzWpE07HaTBXM8ttSeCQpswRo5On4q3nmmYmk7Tomn0uhUaw==
+tar.gz@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tar.gz/-/tar.gz-1.0.5.tgz#e1ada7e45ef2241b4b1ee58123c8f40b5d3c1bc4"
+  integrity sha1-4a2n5F7yJBtLHuWBI8j0C108G8Q=
   dependencies:
-    chownr "^1.0.1"
-    minipass "^2.2.1"
-    minizlib "^1.0.4"
-    mkdirp "^0.5.0"
-    yallist "^3.0.2"
+    bluebird "^2.9.34"
+    commander "^2.8.1"
+    fstream "^1.0.8"
+    mout "^0.11.0"
+    tar "^2.1.1"
 
-tar@^2.0.0, tar@^2.2.1:
+tar@^2.0.0, tar@^2.1.1, tar@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/tar/-/tar-2.2.1.tgz#8e4d2a256c0e2185c6b18ad694aec968b83cb1d1"
   integrity sha1-jk0qJWwOIYXGsYrWlK7JaLg8sdE=
