@@ -669,10 +669,10 @@ autocomplete.js@^0.31.0:
   dependencies:
     immediate "^3.2.3"
 
-autodll-webpack-plugin@0.3.9:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/autodll-webpack-plugin/-/autodll-webpack-plugin-0.3.9.tgz#04e5215a289281d8820cf6def190cafd5e94a41b"
-  integrity sha512-tQPuobLN2DoVlZDU44BEfc3Lqw0o6ZmXJDo9o34i9E9hWDmqviOxwJNCjvqmrbiuFIKAag6F1ojpLd3K7/7iQw==
+autodll-webpack-plugin@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/autodll-webpack-plugin/-/autodll-webpack-plugin-0.4.2.tgz#36e98fbaf30c235d1d5d076330464ac80901415c"
+  integrity sha512-JLrV3ErBNKVkmhi0celM6PJkgYEtztFnXwsNBApjinpVHtIP3g/m2ZZSOvsAe7FoByfJzDhpOXBKFbH3k2UNjw==
   dependencies:
     bluebird "^3.5.0"
     del "^3.0.0"
@@ -681,6 +681,7 @@ autodll-webpack-plugin@0.3.9:
     make-dir "^1.0.0"
     memory-fs "^0.4.1"
     read-pkg "^2.0.0"
+    tapable "^1.0.0"
     webpack-merge "^4.1.0"
     webpack-sources "^1.0.1"
 
@@ -11424,6 +11425,11 @@ tapable@^0.2.7:
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-0.2.8.tgz#99372a5c999bf2df160afc0d74bed4f47948cd22"
   integrity sha1-mTcqXJmb8t8WCvwNdL7U9HlIzSI=
+
+tapable@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/tapable/-/tapable-1.1.0.tgz#0d076a172e3d9ba088fd2272b2668fb8d194b78c"
+  integrity sha512-IlqtmLVaZA2qab8epUXbVWRn3aB1imbDMJtjB3nu4X0NqPkcY/JH9ZtCBWKHWPxs8Svi9tyo8w2dBoi07qZbBA==
 
 tar-fs@^1.13.0:
   version "1.16.0"
