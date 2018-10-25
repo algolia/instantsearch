@@ -88,7 +88,7 @@
     "eslint-config-prettier": "2.9.0",
     "eslint-import-resolver-webpack": "0.8.4",
     "eslint-plugin-import": "2.14.0",
-    "eslint-plugin-jasmine": "2.9.3",
+    "eslint-plugin-jasmine": "2.10.1",
     "eslint-plugin-jest": "21.13.0",
     "eslint-plugin-prettier": "2.6.0",
     "eslint-plugin-react": "7.7.0",
