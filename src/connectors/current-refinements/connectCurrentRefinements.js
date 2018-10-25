@@ -141,10 +141,10 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
 
         renderFn(
           {
+            items,
             refine: refinement => clearRefinement(helper, refinement),
             createURL: refinement =>
               createURL(clearRefinementFromState(helper.state, refinement)),
-            items,
             instantSearchInstance,
             widgetParams,
           },
@@ -165,10 +165,10 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
 
         renderFn(
           {
+            items,
             refine: refinement => clearRefinement(helper, refinement),
             createURL: refinement =>
               createURL(clearRefinementFromState(helper.state, refinement)),
-            items,
             instantSearchInstance,
             widgetParams,
           },
@@ -296,7 +296,9 @@ function groupItemsByRefinements(items, helper) {
           attribute: currentItem.attribute,
           refinements: items
             .filter(result => result.attribute === currentItem.attribute)
-            .sort((a, b) => compareObjects(a, b, 'label')),
+            .sort((a, b) =>
+              compareObjects(a, b, a.type === 'numeric' ? 'value' : 'label')
+            ),
           refine: refinement => clearRefinement(helper, refinement),
         },
         ...results.filter(result => result.attribute !== currentItem.attribute),

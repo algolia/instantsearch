@@ -247,12 +247,21 @@ export default () => {
         container.appendChild(currentRefinementsContainer);
         const refinementListContainer = document.createElement('div');
         container.appendChild(refinementListContainer);
+        const numericMenuContainer = document.createElement('div');
+        container.appendChild(numericMenuContainer);
 
         window.search.addWidget(
           instantsearch.widgets.configure({
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
             numericRefinements: { price: { '>=': [100] } },
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.currentRefinements({
+            container: currentRefinementsContainer,
+            excludedAttributes: ['query', 'price'],
           })
         );
 
@@ -264,9 +273,16 @@ export default () => {
         );
 
         window.search.addWidget(
-          instantsearch.widgets.currentRefinements({
-            container: currentRefinementsContainer,
-            excludedAttributes: ['query', 'price'],
+          instantsearch.widgets.numericMenu({
+            container: numericMenuContainer,
+            attribute: 'price',
+            items: [
+              { label: 'All' },
+              { end: 10, label: '≤ $10' },
+              { start: 10, end: 100, label: '$10–$100' },
+              { start: 100, end: 500, label: '$100–$500' },
+              { start: 500, label: '≥ $500' },
+            ],
           })
         );
       })
@@ -321,6 +337,13 @@ export default () => {
     .add(
       'with transformed items',
       wrapWithHits(container => {
+        const currentRefinementsContainer = document.createElement('div');
+        container.appendChild(currentRefinementsContainer);
+        const refinementListContainer = document.createElement('div');
+        container.appendChild(refinementListContainer);
+        const numericMenuContainer = document.createElement('div');
+        container.appendChild(numericMenuContainer);
+
         window.search.addWidget(
           instantsearch.widgets.configure({
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
@@ -331,7 +354,7 @@ export default () => {
 
         window.search.addWidget(
           instantsearch.widgets.currentRefinements({
-            container,
+            container: currentRefinementsContainer,
             transformItems: items =>
               items.map(refinementItem => ({
                 ...refinementItem,
@@ -340,6 +363,27 @@ export default () => {
                   label: item.label.toUpperCase(),
                 })),
               })),
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container: refinementListContainer,
+            attribute: 'brand',
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.numericMenu({
+            container: numericMenuContainer,
+            attribute: 'price',
+            items: [
+              { label: 'All' },
+              { end: 10, label: '≤ $10' },
+              { start: 10, end: 100, label: '$10–$100' },
+              { start: 100, end: 500, label: '$100–$500' },
+              { start: 500, label: '≥ $500' },
+            ],
           })
         );
       })

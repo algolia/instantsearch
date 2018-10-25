@@ -129,17 +129,17 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "numericDisjunctiveFacet",
-            "label": "≤ 4",
-            "operator": "<=",
-            "type": "numeric",
-            "value": 4,
-          },
-          Object {
-            "attribute": "numericDisjunctiveFacet",
             "label": "≥ 3",
             "operator": ">=",
             "type": "numeric",
             "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
           },
         ],
       },
@@ -149,17 +149,17 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": 2,
-          },
-          Object {
-            "attribute": "numericFacet",
             "label": "≥ 1",
             "operator": ">=",
             "type": "numeric",
             "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
           },
         ],
       },

@@ -296,6 +296,56 @@ describe('connectCurrentRefinements', () => {
         }),
       ]);
     });
+
+    it('sort numeric refinements by numeric value', () => {
+      const rendering = jest.fn();
+      const customCurrentRefinements = connectCurrentRefinements(rendering);
+
+      const widget = customCurrentRefinements({
+        includedAttributes: ['price'],
+      });
+
+      // If sorted alphabetically, "≤ 500" is lower than "≥" so 500 should appear before 100.
+      // However, we want 100 to appear before 500.
+      helper
+        .addNumericRefinement('price', '<=', 500)
+        .addNumericRefinement('price', '>=', 100);
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [{}]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      expect(rendering.mock.calls[0][0].items).toEqual([
+        expect.objectContaining({
+          attribute: 'price',
+          refinements: [
+            {
+              attribute: 'price',
+              label: '≥ 100',
+              operator: '>=',
+              type: 'numeric',
+              value: 100,
+            },
+            {
+              attribute: 'price',
+              label: '≤ 500',
+              operator: '<=',
+              type: 'numeric',
+              value: 500,
+            },
+          ],
+        }),
+      ]);
+    });
   });
 
   describe('Rendering options', () => {
