@@ -5,6 +5,7 @@
   >
     <slot
       :items="items"
+      :results="state.results"
       :is-last-page="state.isLastPage"
       :refine="refine"
     >
@@ -24,13 +25,20 @@
         </li>
       </ol>
 
-      <button
-        :class="[suit('loadMore'), state.isLastPage && suit('loadMore', 'disabled')]"
-        :disabled="state.isLastPage"
-        @click="refine"
+      <slot
+        name="loadMore"
+        :refine="refine"
+        :page="state.results.page"
+        :is-last-page="state.isLastPage"
       >
-        Show more results
-      </button>
+        <button
+          :class="[suit('loadMore'), state.isLastPage && suit('loadMore', 'disabled')]"
+          :disabled="state.isLastPage"
+          @click="refine"
+        >
+          Show more results
+        </button>
+      </slot>
     </slot>
   </div>
 </template>

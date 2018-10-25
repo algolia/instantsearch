@@ -22,6 +22,9 @@ const defaultState = {
       objectID: '00005',
     },
   ],
+  results: {
+    page: 0,
+  },
   isLastPage: false,
   showMore: () => {},
 };

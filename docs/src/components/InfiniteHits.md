@@ -31,8 +31,9 @@ class-names | Object | | Override class names | no
 
 Name | Scope | Description
 ---|---|---
-default | `{ items: Array<Item>, refine: () => void }` | Slot to override the DOM output
+default | `{ items: Array<Item>, results: Object, refine: () => void }` | Slot to override the DOM output
 item | `{ item: Item, index: Number }` | Slot to override the DOM output.
+loadMore | `{ refine: () => void, page: Number, isLastPage: boolean }` | Slot to override the button to load the next page. Note that `page` is 0-based, while most people start counting pages from 1.
 
 Where `Item` is a single hit with all its attribute, and `index` is the absolute position of this hit.
 

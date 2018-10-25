@@ -54,6 +54,20 @@ storiesOf('ais-infinite-hits', module)
       </ais-infinite-hits>
     `,
   }))
+  .add('with a custom show more render', () => ({
+    template: `
+      <ais-infinite-hits>
+        <div slot="loadMore" slot-scope="{ refine, page, isLastPage }">
+          <button
+            :disabled="isLastPage"
+            @click="refine"
+          >
+            Gimme {{ isLastPage ? "nothing anymore" : "page " + (page + 2) }}!
+          </button>
+        </div>
+      </ais-infinite-hits>
+    `,
+  }))
   .add('with a disabled button', () => ({
     template: `
       <div>
