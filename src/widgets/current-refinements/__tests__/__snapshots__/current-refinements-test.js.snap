@@ -13,11 +13,12 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       "root": "ais-CurrentRefinements root",
     }
   }
-  refinements={
+  items={
     Array [
       Object {
         "attribute": "_tags",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "_tags",
             "label": "tag1",
@@ -31,11 +32,11 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": "tag2",
           },
         ],
-        "refine": [Function],
       },
       Object {
         "attribute": "disjunctiveFacet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "disjunctiveFacet",
             "count": 3,
@@ -53,11 +54,11 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": "disjunctiveFacet-val2",
           },
         ],
-        "refine": [Function],
       },
       Object {
         "attribute": "extraFacet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "extraFacet",
             "count": 42,
@@ -67,11 +68,11 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": "extraFacet-val1",
           },
         ],
-        "refine": [Function],
       },
       Object {
         "attribute": "facet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "facet",
             "count": 1,
@@ -89,11 +90,11 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": "facet-val2",
           },
         ],
-        "refine": [Function],
       },
       Object {
         "attribute": "facetExclude",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "facetExclude",
             "label": "facetExclude-val1",
@@ -107,11 +108,11 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": "facetExclude-val2",
           },
         ],
-        "refine": [Function],
       },
       Object {
         "attribute": "hierarchicalFacet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "hierarchicalFacet",
             "count": 6,
@@ -121,11 +122,11 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": "hierarchicalFacet-val2",
           },
         ],
-        "refine": [Function],
       },
       Object {
         "attribute": "numericDisjunctiveFacet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "numericDisjunctiveFacet",
             "label": "≤ 4",
@@ -141,11 +142,11 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": 3,
           },
         ],
-        "refine": [Function],
       },
       Object {
         "attribute": "numericFacet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "numericFacet",
             "label": "≤ 2",
@@ -161,7 +162,6 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "value": 1,
           },
         ],
-        "refine": [Function],
       },
     ]
   }
@@ -181,7 +181,7 @@ exports[`currentRefinements() render() options.container should render with a HT
       "root": "ais-CurrentRefinements",
     }
   }
-  refinements={Array []}
+  items={Array []}
 />
 `;
 
@@ -198,7 +198,7 @@ exports[`currentRefinements() render() options.container should render with a st
       "root": "ais-CurrentRefinements",
     }
   }
-  refinements={Array []}
+  items={Array []}
 />
 `;
 
@@ -215,11 +215,12 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
       "root": "ais-CurrentRefinements",
     }
   }
-  refinements={
+  items={
     Array [
       Object {
         "attribute": "facet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "facet",
             "count": 1,
@@ -228,7 +229,6 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
             "value": "facet-val1",
           },
         ],
-        "refine": [Function],
       },
     ]
   }
@@ -248,11 +248,12 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
       "root": "ais-CurrentRefinements",
     }
   }
-  refinements={
+  items={
     Array [
       Object {
         "attribute": "facet",
-        "items": Array [
+        "refine": [Function],
+        "refinements": Array [
           Object {
             "attribute": "facet",
             "count": 1,
@@ -261,7 +262,6 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
             "value": "facet-val1",
           },
         ],
-        "refine": [Function],
       },
     ]
   }

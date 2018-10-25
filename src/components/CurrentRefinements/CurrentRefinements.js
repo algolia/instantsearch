@@ -17,27 +17,31 @@ const handleClick = callback => event => {
   callback();
 };
 
-const CurrentRefinements = ({ refinements, cssClasses }) => (
+const CurrentRefinements = ({ items, cssClasses }) => (
   <div className={cssClasses.root}>
     <ul className={cssClasses.list}>
-      {refinements.map((refinement, index) => (
-        <li
-          key={`${refinement.attribute}-${index}`}
-          className={cssClasses.item}
-        >
+      {items.map((item, index) => (
+        <li key={`${item.attribute}-${index}`} className={cssClasses.item}>
           <span className={cssClasses.label}>
-            {capitalize(refinement.attribute)}:
+            {capitalize(item.attribute)}:
           </span>
 
-          {refinement.items.map(item => (
-            <span key={createItemKey(item)} className={cssClasses.category}>
+          {item.refinements.map(refinement => (
+            <span
+              key={createItemKey(refinement)}
+              className={cssClasses.category}
+            >
               <span className={cssClasses.categoryLabel}>
-                {item.attribute === 'query' ? <q>{item.label}</q> : item.label}
+                {refinement.attribute === 'query' ? (
+                  <q>{refinement.label}</q>
+                ) : (
+                  refinement.label
+                )}
               </span>
 
               <button
                 className={cssClasses.delete}
-                onClick={handleClick(refinement.refine.bind(null, item))}
+                onClick={handleClick(item.refine.bind(null, refinement))}
               >
                 ✕
               </button>
@@ -49,17 +53,17 @@ const CurrentRefinements = ({ refinements, cssClasses }) => (
   </div>
 );
 
-const RefinementItemPropTypes = PropTypes.shape({
+const RefinementPropTypes = PropTypes.shape({
   attribute: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 });
 
-const RefinementPropTypes = PropTypes.shape({
+const ItemPropTypes = PropTypes.shape({
   attribute: PropTypes.string.isRequired,
   refine: PropTypes.func.isRequired,
-  items: PropTypes.arrayOf(RefinementItemPropTypes).isRequired,
+  refinements: PropTypes.arrayOf(RefinementPropTypes).isRequired,
 });
 
 CurrentRefinements.propTypes = {
@@ -72,7 +76,7 @@ CurrentRefinements.propTypes = {
     categoryLabel: PropTypes.string.isRequired,
     delete: PropTypes.string.isRequired,
   }).isRequired,
-  refinements: PropTypes.arrayOf(RefinementPropTypes).isRequired,
+  items: PropTypes.arrayOf(ItemPropTypes).isRequired,
 };
 
 export default CurrentRefinements;

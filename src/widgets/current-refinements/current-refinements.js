@@ -8,7 +8,7 @@ import { component } from '../../lib/suit.js';
 const suit = component('CurrentRefinements');
 
 const renderer = ({ containerNode, cssClasses }) => (
-  { refinements },
+  { items },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -16,7 +16,7 @@ const renderer = ({ containerNode, cssClasses }) => (
   }
 
   render(
-    <CurrentRefinements cssClasses={cssClasses} refinements={refinements} />,
+    <CurrentRefinements cssClasses={cssClasses} items={items} />,
     containerNode
   );
 };

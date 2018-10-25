@@ -17,11 +17,11 @@ describe('CurrentRefinements', () => {
   it('renders', () => {
     const props = {
       cssClasses,
-      refinements: [
+      items: [
         {
           attribute: 'facet',
           refine: () => {},
-          items: [
+          refinements: [
             {
               type: 'facet',
               attribute: 'facet',
@@ -39,7 +39,7 @@ describe('CurrentRefinements', () => {
         {
           attribute: 'facetExclude',
           refine: () => {},
-          items: [
+          refinements: [
             {
               type: 'exclude',
               attribute: 'facetExclude',
@@ -52,7 +52,7 @@ describe('CurrentRefinements', () => {
         {
           attribute: 'disjunctive',
           refine: () => {},
-          items: [
+          refinements: [
             {
               type: 'disjunctive',
               attribute: 'disjunctiveFacet',
@@ -64,7 +64,7 @@ describe('CurrentRefinements', () => {
         {
           attribute: 'hierarchical',
           refine: () => {},
-          items: [
+          refinements: [
             {
               type: 'hierarchical',
               attribute: 'hierarchicalFacet',
@@ -76,7 +76,7 @@ describe('CurrentRefinements', () => {
         {
           attribute: 'numeric',
           refine: () => {},
-          items: [
+          refinements: [
             {
               type: 'numeric',
               attribute: 'numericFacet',
@@ -89,7 +89,7 @@ describe('CurrentRefinements', () => {
         {
           attribute: 'tag',
           refine: () => {},
-          items: [
+          refinements: [
             {
               type: 'tag',
               attribute: '_tags',
@@ -110,11 +110,11 @@ describe('CurrentRefinements', () => {
     it('can be used with a facet', () => {
       const props = {
         cssClasses,
-        refinements: [
+        items: [
           {
             attribute: 'customFacet',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'customFacet',
                 type: 'facet',
@@ -134,11 +134,11 @@ describe('CurrentRefinements', () => {
     it('can be used with an exclude', () => {
       const props = {
         cssClasses,
-        refinements: [
+        items: [
           {
             attribute: 'customExcludeFacet',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'customExcludeFacet',
                 type: 'exclude',
@@ -159,11 +159,11 @@ describe('CurrentRefinements', () => {
     it('can be used with a disjunctive facet', () => {
       const props = {
         cssClasses,
-        refinements: [
+        items: [
           {
             attribute: 'customDisjunctiveFacet',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'customDisjunctiveFacet',
                 type: 'disjunctive',
@@ -183,11 +183,11 @@ describe('CurrentRefinements', () => {
     it('can be used with a hierarchical facet', () => {
       const props = {
         cssClasses,
-        refinements: [
+        items: [
           {
             attribute: 'customHierarchicalFacet',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'customHierarchicalFacet',
                 type: 'hierarchical',
@@ -207,11 +207,11 @@ describe('CurrentRefinements', () => {
     it('can be used with numeric filters', () => {
       const props = {
         cssClasses,
-        refinements: [
+        items: [
           {
             attribute: 'customNumericFilter',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'customNumericFilter',
                 type: 'numeric',
@@ -224,7 +224,7 @@ describe('CurrentRefinements', () => {
           {
             attribute: 'customNumericFilter',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'customNumericFilter',
                 type: 'numeric',
@@ -237,7 +237,7 @@ describe('CurrentRefinements', () => {
           {
             attribute: 'customNumericFilter',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'customNumericFilter',
                 type: 'numeric',
@@ -258,11 +258,11 @@ describe('CurrentRefinements', () => {
     it('can be used with a tag', () => {
       const props = {
         cssClasses,
-        refinements: [
+        items: [
           {
             attribute: '_tags',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: '_tags',
                 type: 'tag',
@@ -282,11 +282,11 @@ describe('CurrentRefinements', () => {
     it('can be used with a query', () => {
       const props = {
         cssClasses,
-        refinements: [
+        items: [
           {
             attribute: 'query',
             refine: () => {},
-            items: [
+            refinements: [
               {
                 attribute: 'query',
                 type: 'query',

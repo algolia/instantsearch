@@ -3,9 +3,9 @@ import { getRefinements, checkRendering } from '../../lib/utils.js';
 const usage = `Usage:
 var customCurrentRefinements = connectCurrentRefinements(function renderFn(params, isFirstRendering) {
   // params = {
+  //   items,
   //   refine,
   //   createURL,
-  //   refinements,
   //   instantSearchInstance,
   //   widgetParams,
   // }
@@ -21,7 +21,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 `;
 
 /**
- * @typedef {Object} CurrentRefinementItem
+ * @typedef {Object} Refinement
  * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"|"query"} type The type of the refinement
  * @property {string} attribute The attribute on which the refinement is applied
  * @property {string} label The label of the refinement to display
@@ -32,17 +32,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
- * @typedef {Object} CurrentRefinement
+ * @typedef {Object} RefinementItem
  * @property {string} attribute The attribute on which the refinement is applied
  * @property {function} refine The function to remove the refinement
- * @property {CurrentRefinementItem[]} items The refinement items
+ * @property {Refinement[]} refinements The current refinements
  */
 
 /**
  * @typedef {Object} CurrentRefinementsRenderingOptions
  * @property {function(item)} refine Clears a single refinement
  * @property {function(item): string} createURL Creates an individual URL where a single refinement is cleared
- * @property {CurrentRefinement[]} refinements All the current refinements
+ * @property {RefinementItem[]} items All the refinement items
  * @property {Object} widgetParams All original `CustomCurrentRefinementsWidgetOptions` forwarded to the `renderFn`.
  */
 
@@ -66,8 +66,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @return {function(CustomCurrentRefinementsWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinements** widget.
  * @example
  * // custom `renderFn` to render the custom ClearRefinements widget
- * function renderFn(CurrentRefinementsRenderingOptions, isFirstRendering) {
- *   var containerNode = CurrentRefinementsRenderingOptions.widgetParams.containerNode;
+ * function renderFn(currentRefinementsRenderingOptions, isFirstRendering) {
+ *   var containerNode = currentRefinementsRenderingOptions.widgetParams.containerNode;
  *   if (isFirstRendering) {
  *     containerNode
  *       .html('<ul id="refinements"></ul><div id="cta-container"></div>');
@@ -81,22 +81,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *     .find('li > a')
  *     .each(function() { $(this).off('click') });
  *
- *   if (CurrentRefinementsRenderingOptions.refinements
- *       && CurrentRefinementsRenderingOptions.refinements.length > 0) {
- *     var list = CurrentRefinementsRenderingOptions.refinements.map(function(refinement) {
- *       return '<li><a href="' + CurrentRefinementsRenderingOptions.createURL(refinement) + '">'
- *         + refinement.label + '</a></li>';
+ *   if (currentRefinementsRenderingOptions.items
+ *       && currentRefinementsRenderingOptions.items.length > 0) {
+ *     var list = currentRefinementsRenderingOptions.items.map(function(item) {
+ *       return '<li>' + item.attribute +
+ *          '<ul>' +
+ *            item.refinements.map(function (refinement) {
+ *              return <a href="' + currentRefinementsRenderingOptions.createURL(refinement) + '" data-attribute="' + item.attribute + '">'
+ *                + refinement.label + '</a>'
+ *              }).join('') +
+ *            '</ul>'
+ *        '</li>';
  *     });
  *
- *     CurrentRefinementsRenderingOptions.find('ul').html(list);
- *     CurrentRefinementsRenderingOptions.find('li > a').each(function(index) {
- *       $(this).on('click', function(event) {
- *         event.preventDefault();
- *
- *         var refinement = CurrentRefinementsRenderingOptions.refinements[index];
- *         CurrentRefinementsRenderingOptions.refine(refinement);
- *       });
- *     });
+ *     currentRefinementsRenderingOptions.find('ul').html(list);
  *   } else {
  *     containerNode.find('#cta-container').html('');
  *     containerNode.find('ul').html('');
@@ -131,7 +129,7 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
-        const refinements = transformItems(
+        const items = transformItems(
           getFilteredRefinements({
             results: {},
             state: helper.state,
@@ -146,7 +144,7 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
             refine: refinement => clearRefinement(helper, refinement),
             createURL: refinement =>
               createURL(clearRefinementFromState(helper.state, refinement)),
-            refinements,
+            items,
             instantSearchInstance,
             widgetParams,
           },
@@ -155,7 +153,7 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
       },
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
-        const refinements = transformItems(
+        const items = transformItems(
           getFilteredRefinements({
             results,
             state,
@@ -170,7 +168,7 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
             refine: refinement => clearRefinement(helper, refinement),
             createURL: refinement =>
               createURL(clearRefinementFromState(helper.state, refinement)),
-            refinements,
+            items,
             instantSearchInstance,
             widgetParams,
           },
@@ -197,48 +195,48 @@ function getFilteredRefinements({
     (excludedAttributes || []).indexOf('query') === -1;
 
   const filterFunction = includedAttributes
-    ? refinement => includedAttributes.indexOf(refinement.attributeName) !== -1
-    : refinement => excludedAttributes.indexOf(refinement.attributeName) === -1;
+    ? item => includedAttributes.indexOf(item.attributeName) !== -1
+    : item => excludedAttributes.indexOf(item.attributeName) === -1;
 
-  const refinements = getRefinements(results, state, clearsQuery)
+  const items = getRefinements(results, state, clearsQuery)
     .filter(filterFunction)
-    .map(normalizeRefinementItem);
+    .map(normalizeRefinement);
 
-  return groupByRefinements(refinements, helper);
+  return groupItemsByRefinements(items, helper);
 }
 
-function clearRefinementFromState(state, refinementItem) {
-  switch (refinementItem.type) {
+function clearRefinementFromState(state, refinement) {
+  switch (refinement.type) {
     case 'facet':
       return state.removeFacetRefinement(
-        refinementItem.attribute,
-        refinementItem.value
+        refinement.attribute,
+        refinement.value
       );
     case 'disjunctive':
       return state.removeDisjunctiveFacetRefinement(
-        refinementItem.attribute,
-        refinementItem.value
+        refinement.attribute,
+        refinement.value
       );
     case 'hierarchical':
-      return state.removeHierarchicalFacetRefinement(refinementItem.attribute);
+      return state.removeHierarchicalFacetRefinement(refinement.attribute);
     case 'exclude':
       return state.removeExcludeRefinement(
-        refinementItem.attribute,
-        refinementItem.value
+        refinement.attribute,
+        refinement.value
       );
     case 'numeric':
       return state.removeNumericRefinement(
-        refinementItem.attribute,
-        refinementItem.operator,
-        refinementItem.value
+        refinement.attribute,
+        refinement.operator,
+        refinement.value
       );
     case 'tag':
-      return state.removeTagRefinement(refinementItem.value);
+      return state.removeTagRefinement(refinement.value);
     case 'query':
       return state.setQueryParameter('query', '');
     default:
       throw new Error(
-        `clearRefinement: type ${refinementItem.type} is not handled`
+        `clearRefinement: type ${refinement.type} is not handled`
       );
   }
 }
@@ -258,20 +256,23 @@ function getOperatorSymbol(operator) {
   }
 }
 
-function normalizeRefinementItem(item) {
-  const value = item.type === 'numeric' ? Number(item.name) : item.name;
-  const label = item.operator
-    ? `${getOperatorSymbol(item.operator)} ${item.name}`
-    : item.name;
+function normalizeRefinement(refinement) {
+  const value =
+    refinement.type === 'numeric' ? Number(refinement.name) : refinement.name;
+  const label = refinement.operator
+    ? `${getOperatorSymbol(refinement.operator)} ${refinement.name}`
+    : refinement.name;
 
   return {
-    attribute: item.attributeName,
-    type: item.type,
+    attribute: refinement.attributeName,
+    type: refinement.type,
     value,
     label,
-    ...(item.operator !== undefined && { operator: item.operator }),
-    ...(item.count !== undefined && { count: item.count }),
-    ...(item.exhaustive !== undefined && { exhaustive: item.exhaustive }),
+    ...(refinement.operator !== undefined && { operator: refinement.operator }),
+    ...(refinement.count !== undefined && { count: refinement.count }),
+    ...(refinement.exhaustive !== undefined && {
+      exhaustive: refinement.exhaustive,
+    }),
   };
 }
 
@@ -287,20 +288,18 @@ function compareObjects(a, b, attribute) {
   return 1;
 }
 
-function groupByRefinements(refinements, helper) {
-  return refinements.reduce(
-    (results, currentRefinement) =>
+function groupItemsByRefinements(items, helper) {
+  return items.reduce(
+    (results, currentItem) =>
       [
         {
-          attribute: currentRefinement.attribute,
-          items: refinements
-            .filter(result => result.attribute === currentRefinement.attribute)
+          attribute: currentItem.attribute,
+          refinements: items
+            .filter(result => result.attribute === currentItem.attribute)
             .sort((a, b) => compareObjects(a, b, 'label')),
           refine: refinement => clearRefinement(helper, refinement),
         },
-        ...results.filter(
-          result => result.attribute !== currentRefinement.attribute
-        ),
+        ...results.filter(result => result.attribute !== currentItem.attribute),
       ].sort((a, b) => compareObjects(a, b, 'attribute')),
     []
   );

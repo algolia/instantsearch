@@ -297,13 +297,12 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        const renderedRefinements =
-          ReactDOM.render.mock.calls[0][0].props.refinements;
-        expect(renderedRefinements).toHaveLength(1);
+        const renderedItems = ReactDOM.render.mock.calls[0][0].props.items;
+        expect(renderedItems).toHaveLength(1);
 
-        const [refinement] = renderedRefinements;
-        expect(refinement.attribute).toBe('disjunctiveFacet');
-        expect(refinement.items).toHaveLength(2);
+        const [item] = renderedItems;
+        expect(item.attribute).toBe('disjunctiveFacet');
+        expect(item.refinements).toHaveLength(2);
       });
 
       it('should ignore all attributes when empty array', () => {
@@ -358,9 +357,8 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        const renderedRefinements =
-          ReactDOM.render.mock.calls[0][0].props.refinements;
-        expect(renderedRefinements).toHaveLength(0);
+        const renderedItems = ReactDOM.render.mock.calls[0][0].props.items;
+        expect(renderedItems).toHaveLength(0);
       });
     });
 
@@ -371,9 +369,9 @@ describe('currentRefinements()', () => {
         const widget = currentRefinements({
           container: document.createElement('div'),
           transformItems: items =>
-            items.map(refinement => ({
-              ...refinement,
-              items: refinement.items.map(item => ({
+            items.map(refinementItems => ({
+              ...refinementItems,
+              refinements: refinementItems.refinements.map(item => ({
                 ...item,
                 transformed: true,
               })),
@@ -436,15 +434,14 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        const renderedRefinements =
-          ReactDOM.render.mock.calls[0][0].props.refinements;
+        const renderedItems = ReactDOM.render.mock.calls[0][0].props.items;
 
-        expect(renderedRefinements[0].items[0].transformed).toBe(true);
-        expect(renderedRefinements[0].items[1].transformed).toBe(true);
-        expect(renderedRefinements[1].items[0].transformed).toBe(true);
-        expect(renderedRefinements[1].items[1].transformed).toBe(true);
-        expect(renderedRefinements[2].items[0].transformed).toBe(true);
-        expect(renderedRefinements[2].items[1].transformed).toBe(true);
+        expect(renderedItems[0].refinements[0].transformed).toBe(true);
+        expect(renderedItems[0].refinements[1].transformed).toBe(true);
+        expect(renderedItems[1].refinements[0].transformed).toBe(true);
+        expect(renderedItems[1].refinements[1].transformed).toBe(true);
+        expect(renderedItems[2].refinements[0].transformed).toBe(true);
+        expect(renderedItems[2].refinements[1].transformed).toBe(true);
       });
     });
 

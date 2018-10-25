@@ -45,7 +45,7 @@ describe('connectCurrentRefinements', () => {
       expect(rendering.mock.calls[0][1]).toBe(true);
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
-      expect(firstRenderingOptions.refinements).toEqual([]);
+      expect(firstRenderingOptions.items).toEqual([]);
       expect(firstRenderingOptions.widgetParams).toEqual({
         foo: 'bar',
       });
@@ -62,7 +62,7 @@ describe('connectCurrentRefinements', () => {
       expect(rendering.mock.calls[1][1]).toBe(false);
 
       const secondRenderingOptions = rendering.mock.calls[0][0];
-      expect(secondRenderingOptions.refinements).toEqual([]);
+      expect(secondRenderingOptions.items).toEqual([]);
       expect(secondRenderingOptions.widgetParams).toEqual({
         foo: 'bar',
       });
@@ -103,7 +103,7 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].refinements).toEqual([
+      expect(rendering.mock.calls[0][0].items).toEqual([
         expect.objectContaining({
           attribute: 'facet1',
         }),
@@ -141,7 +141,7 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].refinements).toEqual([
+      expect(rendering.mock.calls[0][0].items).toEqual([
         expect.objectContaining({
           attribute: 'facet1',
         }),
@@ -173,7 +173,7 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].refinements).toEqual([]);
+      expect(rendering.mock.calls[0][0].items).toEqual([]);
     });
 
     it('does not include query if whitespaces', () => {
@@ -198,7 +198,7 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].refinements).toEqual([]);
+      expect(rendering.mock.calls[0][0].items).toEqual([]);
     });
 
     it('excludes the `excludedAttributes` (and overrides the default ["query"])', () => {
@@ -226,7 +226,7 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].refinements).toEqual([
+      expect(rendering.mock.calls[0][0].items).toEqual([
         expect.objectContaining({
           attribute: 'facet1',
         }),
@@ -259,7 +259,7 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].refinements).toEqual([
+      expect(rendering.mock.calls[0][0].items).toEqual([
         expect.objectContaining({
           attribute: 'facet1',
           transformed: true,
@@ -281,7 +281,7 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].refinements).toEqual([
+      expect(rendering.mock.calls[0][0].items).toEqual([
         expect.objectContaining({
           attribute: 'facet1',
           transformed: true,
@@ -322,10 +322,10 @@ describe('connectCurrentRefinements', () => {
       });
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
-      const [refinement] = firstRenderingOptions.refinements;
+      const [item] = firstRenderingOptions.items;
       expect(typeof firstRenderingOptions.refine).toBe('function');
 
-      firstRenderingOptions.refine(refinement.items[0]);
+      firstRenderingOptions.refine(item.refinements[0]);
       expect(helper.hasRefinements('facet1')).toBe(false);
 
       helper.addFacetRefinement('facet1', 'facetValue');
@@ -338,10 +338,10 @@ describe('connectCurrentRefinements', () => {
       });
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
-      const [otherRefinement] = secondRenderingOptions.refinements;
+      const [otherItem] = secondRenderingOptions.items;
       expect(typeof secondRenderingOptions.refine).toBe('function');
 
-      secondRenderingOptions.refine(otherRefinement.items[0]);
+      secondRenderingOptions.refine(otherItem.refinements[0]);
       expect(helper.hasRefinements('facet1')).toBe(false);
     });
 
@@ -384,7 +384,7 @@ describe('connectCurrentRefinements', () => {
       });
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
-      expect(firstRenderingOptions.refinements).toEqual([
+      expect(firstRenderingOptions.items).toEqual([
         expect.objectContaining({
           attribute: 'facet1',
         }),
@@ -402,7 +402,7 @@ describe('connectCurrentRefinements', () => {
       });
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
-      expect(secondRenderingOptions.refinements).toEqual([
+      expect(secondRenderingOptions.items).toEqual([
         expect.objectContaining({
           attribute: 'facet1',
         }),
