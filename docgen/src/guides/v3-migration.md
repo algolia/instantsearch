@@ -1103,6 +1103,15 @@ Finally, `autofocus` is now set to `false` by default and does not support the `
 | --------- | ------- |
 | `indices` | `items` |
 
+- A `sortBy` item value is now `value` instead of `name`:
+
+```js
+const sortByItem = {
+  value: string,
+  label: string,
+}
+```
+
 #### CSS classes
 
 | Before                 | After               |

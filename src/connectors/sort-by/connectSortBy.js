@@ -23,8 +23,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} SortByItem
- * @property {string} name Name of the index to target.
- * @property {string} label Label to display for the targeted index.
+ * @property {string} value The name of the index to target.
+ * @property {string} label The label of the index to display.
  */
 
 /**
@@ -91,9 +91,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   customSortBy({
  *     containerNode: $('#custom-sort-by-container'),
  *     items: [
- *       {name: 'instant_search', label: 'Most relevant'},
- *       {name: 'instant_search_price_asc', label: 'Lowest price'},
- *       {name: 'instant_search_price_desc', label: 'Highest price'},
+ *       { value: 'instant_search', label: 'Most relevant' },
+ *       { value: 'instant_search_price_asc', label: 'Lowest price' },
+ *       { value: 'instant_search_price_desc', label: 'Highest price' },
  *     ],
  *   })
  * );
@@ -108,15 +108,10 @@ export default function connectSortBy(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
-    const selectorOptions = items.map(({ label, name }) => ({
-      label,
-      value: name,
-    }));
-
     return {
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.getIndex();
-        const isIndexInList = find(items, ({ name }) => name === currentIndex);
+        const isIndexInList = find(items, item => item.value === currentIndex);
 
         if (!isIndexInList) {
           throw new Error(
@@ -130,7 +125,7 @@ export default function connectSortBy(renderFn, unmountFn) {
         renderFn(
           {
             currentRefinement: currentIndex,
-            options: transformItems(selectorOptions),
+            options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: true,
             widgetParams,
@@ -144,7 +139,7 @@ export default function connectSortBy(renderFn, unmountFn) {
         renderFn(
           {
             currentRefinement: helper.getIndex(),
-            options: transformItems(selectorOptions),
+            options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: results.nbHits === 0,
             widgetParams,

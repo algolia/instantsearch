@@ -15,9 +15,9 @@ export default () => {
           instantsearch.widgets.sortBy({
             container,
             items: [
-              { name: 'instant_search', label: 'Most relevant' },
-              { name: 'instant_search_price_asc', label: 'Lowest price' },
-              { name: 'instant_search_price_desc', label: 'Highest price' },
+              { value: 'instant_search', label: 'Most relevant' },
+              { value: 'instant_search_price_asc', label: 'Lowest price' },
+              { value: 'instant_search_price_desc', label: 'Highest price' },
             ],
           })
         );
@@ -30,14 +30,14 @@ export default () => {
           instantsearch.widgets.sortBy({
             container,
             items: [
-              { name: 'instant_search', label: 'Most relevant' },
-              { name: 'instant_search_price_asc', label: 'Lowest price' },
-              { name: 'instant_search_price_desc', label: 'Highest price' },
+              { value: 'instant_search', label: 'Most relevant' },
+              { value: 'instant_search_price_asc', label: 'Lowest price' },
+              { value: 'instant_search_price_desc', label: 'Highest price' },
             ],
             transformItems: items =>
               items.map(item => ({
                 ...item,
-                label: `${item.label} (transformed)`,
+                label: item.label.toUpperCase(),
               })),
           })
         );
