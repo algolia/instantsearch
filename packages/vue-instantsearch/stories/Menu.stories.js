@@ -56,22 +56,23 @@ storiesOf('ais-menu', module)
   }))
   .add('with a custom render', () => ({
     template: `
-      <ais-menu attribute="categories">
-        <ol slot-scope="{ items, createURL, refine }">
-          <li
-            v-for="item in items"
-            :key="item.value"
-            :style="{ fontWeight: item.isRefined ? 600 : 400 }"
-          >
+    <ais-menu attribute="categories">
+      <ol slot-scope="{ items, createURL, refine }">
+        <li
+          v-for="item in items"
+          :key="item.value"
+        >
+          <component :is="item.isRefined ? 'strong' : 'span'">
             <a
               :href="createURL(item.value)"
               @click.prevent="refine(item.value)"
             >
               {{item.label}} - {{item.count}}
             </a>
-          </li>
-        </ol>
-      </ais-menu>
+          </component>
+        </li>
+      </ol>
+    </ais-menu>
     `,
   }))
   .add('with a Panel', () => ({
