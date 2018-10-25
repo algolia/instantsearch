@@ -58,7 +58,8 @@ export default {
   computed: {
     widgetParams() {
       return {
-        indices: this.items,
+        // TODO: In InstantSearch.js make this mapping unnecessary
+        indices: this.items.map(({ label, value }) => ({ label, name: value })),
         transformItems: this.transformItems,
       };
     },

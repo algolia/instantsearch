@@ -7,9 +7,9 @@ storiesOf('ais-sort-by', module)
     template: `
       <ais-sort-by
         :items="[
-          { name: 'instant_search', label: 'Featured' },
-          { name: 'instant_search_price_asc', label: 'Price asc.' },
-          { name: 'instant_search_price_desc', label: 'Price desc.' },
+          { value: 'instant_search', label: 'Featured' },
+          { value: 'instant_search_price_asc', label: 'Price asc.' },
+          { value: 'instant_search_price_desc', label: 'Price desc.' },
         ]"
       />
     `,
@@ -18,9 +18,9 @@ storiesOf('ais-sort-by', module)
     template: `
       <ais-sort-by
         :items="[
-          { name: 'instant_search', label: 'Featured' },
-          { name: 'instant_search_price_asc', label: 'Price asc.' },
-          { name: 'instant_search_price_desc', label: 'Price desc.' },
+          { value: 'instant_search', label: 'Featured' },
+          { value: 'instant_search_price_asc', label: 'Price asc.' },
+          { value: 'instant_search_price_desc', label: 'Price desc.' },
         ]"
         :transform-items="transformItems"
       />
@@ -39,9 +39,9 @@ storiesOf('ais-sort-by', module)
     template: `
       <ais-sort-by
         :items="[
-          { name: 'instant_search', label: 'Featured' },
-          { name: 'instant_search_price_asc', label: 'Price asc.' },
-          { name: 'instant_search_price_desc', label: 'Price desc.' },
+          { value: 'instant_search', label: 'Featured' },
+          { value: 'instant_search_price_asc', label: 'Price asc.' },
+          { value: 'instant_search_price_desc', label: 'Price desc.' },
         ]"
       >
         <ul slot-scope="{ items, refine, currentRefinement}">
@@ -60,9 +60,9 @@ storiesOf('ais-sort-by', module)
         <template slot="header">Sort By</template>
         <ais-sort-by
           :items="[
-            { name: 'instant_search', label: 'Featured' },
-            { name: 'instant_search_price_asc', label: 'Price asc.' },
-            { name: 'instant_search_price_desc', label: 'Price desc.' },
+            { value: 'instant_search', label: 'Featured' },
+            { value: 'instant_search_price_asc', label: 'Price asc.' },
+            { value: 'instant_search_price_desc', label: 'Price desc.' },
           ]"
         />
         <template slot="footer">Footer</template>

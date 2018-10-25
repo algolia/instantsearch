@@ -20,7 +20,8 @@ To be able to sort results with the Algolia engine, you need to have different i
 Basic usage:
 
 ```html
-<ais-sort-by :items="[
+<ais-sort-by
+  :items="[
     {
       value: 'products',
       label: 'Default'
@@ -36,11 +37,12 @@ Basic usage:
 Customize the rendering:
 
 ```html
-<ais-sort-by :items="[
-      {value: 'products', label: 'Most relevant'},
-      {value: 'products_price_asc', label: 'Lowest price'},
-      {value: 'products_total_sales', label: 'Popularity'}
-    ]"
+<ais-sort-by
+  :items="[
+    {value: 'products', label: 'Most relevant'},
+    {value: 'products_price_asc', label: 'Lowest price'},
+    {value: 'products_total_sales', label: 'Popularity'}
+  ]"
 >
   <select
     slot-scope="{ items, refine, currentRefinement, hasNoResults }"
