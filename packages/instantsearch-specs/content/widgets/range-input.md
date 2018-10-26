@@ -31,7 +31,7 @@ classes:
     description: the maximum input
   - name: .ais-RangeInput-separator
     description: the separator word used between the two inputs
-  - name: .ais-RangeInput-button
+  - name: .ais-RangeInput-submit
     description: the submit button
 options:
   - name: attribute
