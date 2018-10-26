@@ -131,17 +131,17 @@
     "webpack-dev-server": "2.11.2"
   },
   "dependencies": {
-    "algoliasearch-helper": "2.26.0",
-    "classnames": "2.2.5",
-    "events": "1.1.0",
-    "hogan.js": "3.0.2",
-    "lodash": "4.17.5",
-    "preact": "8.2.7",
-    "preact-compat": "3.18.0",
-    "preact-rheostat": "2.1.1",
-    "prop-types": "15.5.10",
-    "qs": "6.5.1",
-    "to-factory": "1.0.0"
+    "algoliasearch-helper": "^2.26.0",
+    "classnames": "^2.2.5",
+    "events": "^1.1.0",
+    "hogan.js": "^3.0.2",
+    "lodash": "^4.17.5",
+    "preact": "^8.2.7",
+    "preact-compat": "^3.18.0",
+    "preact-rheostat": "^2.1.1",
+    "prop-types": "^15.5.10",
+    "qs": "^6.5.1",
+    "to-factory": "^1.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -158,7 +158,7 @@
   "bundlesize": [
     {
       "path": "./dist/instantsearch.min.js",
-      "maxSize": "110 kB"
+      "maxSize": "111 kB"
     }
   ]
 }

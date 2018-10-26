@@ -18,14 +18,14 @@ describe('connectSortBy', () => {
     });
 
     const items = [
-      { label: 'Sort products by relevance', name: 'relevance' },
-      { label: 'Sort products by price', name: 'priceASC' },
+      { label: 'Sort products by relevance', value: 'relevance' },
+      { label: 'Sort products by price', value: 'priceASC' },
     ];
     const widget = makeWidget({ items });
 
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper({}, items[0].name);
+    const helper = jsHelper({}, items[0].value);
     helper.search = jest.fn();
 
     widget.init({
@@ -81,8 +81,8 @@ describe('connectSortBy', () => {
     });
 
     const items = [
-      { label: 'Sort products by relevance', name: 'relevance' },
-      { label: 'Sort products by price', name: 'priceASC' },
+      { label: 'Sort products by relevance', value: 'relevance' },
+      { label: 'Sort products by price', value: 'priceASC' },
     ];
     const widget = makeWidget({
       items,
@@ -90,7 +90,7 @@ describe('connectSortBy', () => {
         allItems.map(item => ({ ...item, label: 'transformed' })),
     });
 
-    const helper = jsHelper({}, items[0].name);
+    const helper = jsHelper({}, items[0].value);
     helper.search = jest.fn();
 
     widget.init({
@@ -136,14 +136,14 @@ describe('connectSortBy', () => {
     });
 
     const items = [
-      { label: 'Sort products by relevance', name: 'relevance' },
-      { label: 'Sort products by price', name: 'priceASC' },
+      { label: 'Sort products by relevance', value: 'relevance' },
+      { label: 'Sort products by price', value: 'priceASC' },
     ];
     const widget = makeWidget({
       items,
     });
 
-    const helper = jsHelper({}, items[0].name);
+    const helper = jsHelper({}, items[0].value);
     helper.search = jest.fn();
 
     widget.init({
@@ -156,7 +156,7 @@ describe('connectSortBy', () => {
 
     {
       // first rendering
-      expect(helper.state.index).toBe(items[0].name);
+      expect(helper.state.index).toBe(items[0].value);
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, currentRefinement } = renderOptions;
@@ -195,9 +195,9 @@ describe('connectSortBy', () => {
         searchClient: { search() {} },
       });
       const items = [
-        { label: 'Sort products by relevance', name: 'relevance' },
-        { label: 'Sort products by price', name: 'priceASC' },
-        { label: 'Sort products by magic', name: 'other' },
+        { label: 'Sort products by relevance', value: 'relevance' },
+        { label: 'Sort products by price', value: 'priceASC' },
+        { label: 'Sort products by magic', value: 'other' },
       ];
 
       const widget = makeWidget({
