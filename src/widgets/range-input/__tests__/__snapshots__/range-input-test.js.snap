@@ -5,7 +5,6 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   collapsible={false}
   cssClasses={
     Object {
-      "button": "ais-RangeInput-button",
       "form": "ais-RangeInput-form custom-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max custom-inputMax",
@@ -14,6 +13,7 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
       "noRefinement": "ais-RangeInput--noRefinement",
       "root": "ais-RangeInput custom-root",
       "separator": "ais-RangeInput-separator custom-separator",
+      "submit": "ais-RangeInput-submit custom-submit",
     }
   }
   labels={
@@ -40,7 +40,6 @@ exports[`rangeInput expect to render with custom labels 1`] = `
   collapsible={false}
   cssClasses={
     Object {
-      "button": "ais-RangeInput-button",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -49,6 +48,7 @@ exports[`rangeInput expect to render with custom labels 1`] = `
       "noRefinement": "ais-RangeInput--noRefinement",
       "root": "ais-RangeInput",
       "separator": "ais-RangeInput-separator",
+      "submit": "ais-RangeInput-submit",
     }
   }
   labels={
@@ -75,7 +75,6 @@ exports[`rangeInput expect to render with refinement 1`] = `
   collapsible={false}
   cssClasses={
     Object {
-      "button": "ais-RangeInput-button",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -84,6 +83,7 @@ exports[`rangeInput expect to render with refinement 1`] = `
       "noRefinement": "ais-RangeInput--noRefinement",
       "root": "ais-RangeInput",
       "separator": "ais-RangeInput-separator",
+      "submit": "ais-RangeInput-submit",
     }
   }
   labels={
@@ -110,7 +110,6 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   collapsible={false}
   cssClasses={
     Object {
-      "button": "ais-RangeInput-button",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -119,6 +118,7 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
       "noRefinement": "ais-RangeInput--noRefinement",
       "root": "ais-RangeInput",
       "separator": "ais-RangeInput-separator",
+      "submit": "ais-RangeInput-submit",
     }
   }
   labels={
@@ -145,7 +145,6 @@ exports[`rangeInput expect to render with results 1`] = `
   collapsible={false}
   cssClasses={
     Object {
-      "button": "ais-RangeInput-button",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -154,6 +153,7 @@ exports[`rangeInput expect to render with results 1`] = `
       "noRefinement": "ais-RangeInput--noRefinement",
       "root": "ais-RangeInput",
       "separator": "ais-RangeInput-separator",
+      "submit": "ais-RangeInput-submit",
     }
   }
   labels={
@@ -180,7 +180,6 @@ exports[`rangeInput expect to render without results 1`] = `
   collapsible={false}
   cssClasses={
     Object {
-      "button": "ais-RangeInput-button",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -189,6 +188,7 @@ exports[`rangeInput expect to render without results 1`] = `
       "noRefinement": "ais-RangeInput--noRefinement",
       "root": "ais-RangeInput",
       "separator": "ais-RangeInput-separator",
+      "submit": "ais-RangeInput-submit",
     }
   }
   labels={

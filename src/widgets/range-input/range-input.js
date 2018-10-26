@@ -153,7 +153,7 @@ export default function rangeInput({
       suit({ descendantName: 'separator' }),
       userCssClasses.separator
     ),
-    button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
+    submit: cx(suit({ descendantName: 'submit' }), userCssClasses.submit),
   };
 
   const specializedRenderer = renderer({
