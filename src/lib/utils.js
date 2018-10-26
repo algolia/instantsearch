@@ -238,6 +238,7 @@ function getRefinements(results, state, clearsQuery) {
             type: 'query',
             name: state.query,
             query: state.query,
+            attributeName: 'query',
           },
         ]
       : [];
