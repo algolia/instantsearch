@@ -77,7 +77,7 @@ class RangeInput extends Component {
 
           <button
             type="submit"
-            className={cssClasses.button}
+            className={cssClasses.submit}
             disabled={isDisabled}
           >
             {labels.submit}
@@ -105,7 +105,7 @@ RangeInput.propTypes = {
     inputMin: PropTypes.string.isRequired,
     inputMax: PropTypes.string.isRequired,
     separator: PropTypes.string.isRequired,
-    button: PropTypes.string.isRequired,
+    submit: PropTypes.string.isRequired,
   }).isRequired,
   labels: PropTypes.shape({
     separator: PropTypes.string.isRequired,

@@ -17,7 +17,7 @@ describe('RangeInput', () => {
       inputMin: 'inputMin',
       inputMax: 'inputMax',
       separator: 'separator',
-      button: 'button',
+      submit: 'submit',
     },
     labels: {
       separator: 'to',

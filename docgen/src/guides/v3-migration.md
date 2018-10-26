@@ -706,7 +706,7 @@ Widget removed.
 | `ais-range-input--inputMin`  | `ais-RangeInput-input--min`    |
 | `ais-range-input--inputMax`  | `ais-RangeInput-input--max`    |
 | `ais-range-input--separator` | `ais-RangeInput-separator`     |
-| `ais-range-input--submit`    | `ais-RangeInput-button`        |
+| `ais-range-input--submit`    | `ais-RangeInput-submit`        |
 
 #### Markup
 
