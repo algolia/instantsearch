@@ -43,18 +43,15 @@ const InfiniteHits = ({
         ))}
       </ol>
 
-      {isLastPage ? (
-        <button disabled className={cssClasses.loadMore}>
-          {loadMoreLabel}
-        </button>
-      ) : (
-        <button
-          onClick={showMore}
-          className={cx(cssClasses.loadMore, cssClasses.disabledLoadMore)}
-        >
-          {loadMoreLabel}
-        </button>
-      )}
+      <button
+        className={cx(cssClasses.loadMore, {
+          [cssClasses.disabledLoadMore]: isLastPage,
+        })}
+        disabled={isLastPage}
+        onClick={showMore}
+      >
+        {loadMoreLabel}
+      </button>
     </div>
   );
 };

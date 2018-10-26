@@ -25,7 +25,8 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = 
     />
   </ol>
   <button
-    className="loadMore disabledLoadMore"
+    className="loadMore"
+    disabled={false}
   />
 </div>
 `;
@@ -55,7 +56,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
     />
   </ol>
   <button
-    className="loadMore"
+    className="loadMore disabledLoadMore"
     disabled={true}
   />
 </div>
