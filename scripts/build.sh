@@ -11,9 +11,6 @@ NODE_ENV=production BABEL_ENV=production webpack --config scripts/webpack.config
 # https://stackoverflow.com/questions/16745988/sed-command-with-i-option-in-place-editing-works-fine-on-ubuntu-but-not-mac
 sed -i.bak 's/sourceMappingURL=instantsearch\.min\.js\.map/sourceMappingURL=\/dist\/instantsearch\.min\.js\.map/g' dist/instantsearch.min.js && rm dist/instantsearch.min.js.bak
 
-csso dist/instantsearch.css dist/instantsearch.min.css --map file &
-csso dist/instantsearch-theme-algolia.css dist/instantsearch-theme-algolia.min.css --map file
-
 wait
 
 printf "dist/instantsearch.min.js gzipped will weigh `cat dist/instantsearch.min.js | gzip -9 | wc -c | pretty-bytes`\n\n"

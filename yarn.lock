@@ -3248,14 +3248,6 @@ css-to-react-native@^2.0.3:
     fbjs "^0.8.5"
     postcss-value-parser "^3.3.0"
 
-css-tree@1.0.0-alpha.27:
-  version "1.0.0-alpha.27"
-  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha.27.tgz#f211526909c7dc940843d83b9376ed98ddb8de47"
-  integrity sha512-BAYp9FyN4jLXjfvRpTDchBllDptqlK9I7OsagXCG9Am5C+5jc8eRZHgqb9x500W2OKS14MMlpQc/nmh/aA7TEQ==
-  dependencies:
-    mdn-data "^1.0.0"
-    source-map "^0.5.3"
-
 css-value@~0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/css-value/-/css-value-0.0.1.tgz#5efd6c2eea5ea1fd6b6ac57ec0427b18452424ea"
@@ -3318,23 +3310,6 @@ cssnano@^3.10.0:
     postcss-unique-selectors "^2.0.2"
     postcss-value-parser "^3.2.3"
     postcss-zindex "^2.0.1"
-
-csso-cli@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/csso-cli/-/csso-cli-1.1.0.tgz#c787557612fae522875788bfb6e69594fe79b3c7"
-  integrity sha1-x4dVdhL65SKHV4i/tuaVlP55s8c=
-  dependencies:
-    chokidar "^1.6.1"
-    clap "^1.0.9"
-    csso "^3.2.0"
-    source-map "^0.5.3"
-
-csso@^3.2.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/csso/-/csso-3.5.0.tgz#acdbba5719e2c87bc801eadc032764b2e4b9d4e7"
-  integrity sha512-WtJjFP3ZsSdWhiZr4/k1B9uHPgYjFYnDxfbaJxk1hz5PDLIJ5BCRWkJqaztZ0DbP8d2ZIVwUPIJb2YmCwkPaMw==
-  dependencies:
-    css-tree "1.0.0-alpha.27"
 
 csso@~2.3.1:
   version "2.3.2"
@@ -7601,11 +7576,6 @@ md5@^2.2.1:
     charenc "~0.0.1"
     crypt "~0.0.1"
     is-buffer "~1.1.1"
-
-mdn-data@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-1.1.0.tgz#a7056319da95a2d0881267d7263075042eb061e2"
-  integrity sha512-jC6B3BFC07cCOU8xx1d+sQtDkVIpGKWv4TzK7pN7PyObdbwlIFJbHYk8ofvr0zrU8SkV1rSi87KAHhWCdLGw1Q==
 
 media-typer@0.3.0:
   version "0.3.0"

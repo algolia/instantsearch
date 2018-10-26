@@ -313,7 +313,7 @@ yarn lint
 ```
 
 The JS files are validated using a combination of prettier (strict syntax form) and eslint rules (for
-common mistakes and patterns). The scss linter uses sass-lint.
+common mistakes and patterns).
 
 ## Release 🛳
 

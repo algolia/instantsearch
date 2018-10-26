@@ -78,7 +78,6 @@
     "compression": "1.7.2",
     "conventional-changelog-cli": "1.3.16",
     "css-loader": "0.28.10",
-    "csso-cli": "1.1.0",
     "dev-novel": "0.0.6",
     "doctoc": "1.3.1",
     "enzyme": "3.3.0",
