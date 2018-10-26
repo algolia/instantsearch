@@ -1,23 +1,7 @@
 {
-  "pinVersions": true,
-  "semanticCommits": true,
-  "extends": [":library"],
-  "depTypes": [
-    {
-      "depType": "dependencies",
-      "pinVersions": false,
-      "semanticPrefix": "chore(deps): "
-    }
-  ],
-  "ignoreDeps": ["jsdoc-parse", "uglify-js"],
-  "packageRules": [
-    {
-      "packagePatterns": "^@storybook",
-      "groupName": ["@storybook packages"]
-    }
-  ],
-  "automerge": true,
-  "major": {
-    "automerge": false
-  }
+  "extends": [
+    "config:js-lib",
+    ":automergeMinor",
+    ":automergePr"
+  ]
 }
