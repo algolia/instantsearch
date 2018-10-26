@@ -35,8 +35,8 @@ describe('sortBy()', () => {
 
     container = document.createElement('div');
     items = [
-      { name: 'index-a', label: 'Index A' },
-      { name: 'index-b', label: 'Index B' },
+      { value: 'index-a', label: 'Index A' },
+      { value: 'index-b', label: 'Index B' },
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],

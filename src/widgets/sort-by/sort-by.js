@@ -45,8 +45,8 @@ sortBy({
 
 /**
  * @typedef {Object} SortByIndexDefinition
- * @property {string} name The name of the index in Algolia.
- * @property {string} label The name of the index, for user usage.
+ * @property {string} value The name of the index to target.
+ * @property {string} label The label of the index to display.
  */
 
 /**
@@ -72,9 +72,9 @@ sortBy({
  *   instantsearch.widgets.sortBy({
  *     container: '#sort-by-container',
  *     items: [
- *       {name: 'instant_search', label: 'Most relevant'},
- *       {name: 'instant_search_price_asc', label: 'Lowest price'},
- *       {name: 'instant_search_price_desc', label: 'Highest price'}
+ *       {value: 'instant_search', label: 'Most relevant'},
+ *       {value: 'instant_search_price_asc', label: 'Lowest price'},
+ *       {value: 'instant_search_price_desc', label: 'Highest price'}
  *     ]
  *   })
  * );
