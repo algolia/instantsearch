@@ -619,6 +619,20 @@ describe('InstantSearch lifecycle', () => {
       expect(search.searchParameters.facets).toEqual(['price']);
       expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
     });
+
+    it('should not trigger a search without widgets to add', () => {
+      search.start();
+
+      expect(helperSearchSpy.callCount).toBe(1);
+      expect(search.widgets).toHaveLength(0);
+      expect(search.started).toBe(true);
+
+      search.addWidgets([]);
+
+      expect(helperSearchSpy.callCount).toBe(1);
+      expect(search.widgets).toHaveLength(0);
+      expect(search.started).toBe(true);
+    });
   });
 
   it('should remove all widgets without triggering a search on dispose', () => {

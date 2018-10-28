@@ -342,6 +342,31 @@ describe('utils.getRefinements', () => {
     );
   });
 
+  it('should inject query facet if clearQuery === true', () => {
+    helper.setQuery('my query');
+    const expected = [
+      {
+        type: 'query',
+        attributeName: 'query',
+        name: 'my query',
+        query: 'my query',
+      },
+    ];
+    const clearsQuery = true;
+    expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
+      expected
+    );
+  });
+
+  it('should retrieve one facetRefinement and not inject query facet if clearQuery === false', () => {
+    helper.setQuery('my query');
+    const expected = [];
+    const clearsQuery = false;
+    expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
+      expected
+    );
+  });
+
   it('should retrieve multiple facetsRefinements on one facet', () => {
     helper
       .toggleRefinement('facet1', 'facet1val1')

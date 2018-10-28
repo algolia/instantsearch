@@ -135,7 +135,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
   const optionsHTML = items.map(function(item) {
     return (
       '<option value="' + item.value + '"' + (item.isRefined ? ' selected' : '') + '>' +
-      item.label + '(' + item.count ')' +
+      item.label + '(' + item.count + ')' +
       '</option>'
     );
   });
@@ -170,7 +170,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
   const optionsHTML = items.map(function(item) {
     return (
       '<option value="' + item.value + '"' + (item.isRefined ? ' selected' : '') + '>' +
-      item.label + '(' + item.count ')' +
+      item.label + '(' + item.count + ')' +
       '</option>'
     );
   });

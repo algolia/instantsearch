@@ -214,7 +214,7 @@ To help you migrate, please refer to the migration guide: https://community.algo
     if (lastWidget) this.widgets.push(lastWidget);
 
     // Init the widget directly if instantsearch has been already started
-    if (this.started) {
+    if (this.started && Boolean(widgets.length)) {
       this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
         ...this.helper.state,
       });
