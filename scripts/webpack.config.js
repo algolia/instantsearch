@@ -4,12 +4,8 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
-
-const extractCSS = new ExtractTextPlugin('instantsearch.css');
-const extractTheme = new ExtractTextPlugin('instantsearch-theme-algolia.css');
 
 const {
   NODE_ENV = 'development',
@@ -22,14 +18,7 @@ module.exports = {
   devtool: 'source-map',
 
   entry: {
-    instantsearch: [
-      // transpile SASS and extract to CSS
-      path.join(__dirname, '../src/css/instantsearch-theme-algolia.scss'),
-      path.join(__dirname, '../src/css/instantsearch.scss'),
-
-      // transpile JS library
-      path.join(__dirname, '../index.js'),
-    ],
+    instantsearch: [path.join(__dirname, '../index.js')],
   },
 
   output: {
@@ -45,22 +34,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: 'happypack/loader?id=babel',
-      },
-      {
-        test: /\.s?css$/,
-        include: /instantsearch-theme-algolia\.scss/,
-        use: extractTheme.extract({
-          fallback: 'style-loader',
-          use: 'happypack/loader?id=style',
-        }),
-      },
-      {
-        test: /\.s?(c|a)ss$/,
-        include: /instantsearch\.scss/,
-        use: extractCSS.extract({
-          fallback: 'style-loader',
-          use: 'happypack/loader?id=style',
-        }),
       },
     ],
   },
@@ -106,17 +79,5 @@ module.exports = {
       loaders: ['babel-loader'],
       id: 'babel',
     }),
-
-    new HappyPack({
-      loaders: [
-        { loader: 'css-loader', options: { minimize: false, sourceMap: true } },
-        { loader: 'postcss-loader', options: { sourceMap: true } },
-        { loader: 'sass-loader', options: { sourceMap: true } },
-      ],
-      id: 'style',
-    }),
-
-    extractCSS,
-    extractTheme,
   ],
 };
