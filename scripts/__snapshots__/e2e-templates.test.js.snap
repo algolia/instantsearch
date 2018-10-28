@@ -3688,6 +3688,12 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"lint\\": \\"eslint .\\",
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
+  \\"browserslist\\": [
+    \\">0.2%\\",
+    \\"not dead\\",
+    \\"not ie <= 11\\",
+    \\"not op_mini all\\"
+  ],
   \\"partialDependencies\\": {
     \\"react-instantsearch-dom\\": \\"1.0.0\\"
   }
