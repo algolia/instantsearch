@@ -41,4 +41,4 @@ npx surge
 npx now .
 ```
 
-[Learn more Now →](https://zeit.co/now)
+[Learn more about Now →](https://zeit.co/now)
