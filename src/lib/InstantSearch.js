@@ -227,6 +227,18 @@ To help you migrate, please refer to the migration guide: https://community.algo
 
       this.helper.search();
     }
+
+    if (process.env.NODE_ENV === 'development' && !this.started) {
+      clearTimeout(this._widgetTimer);
+      this._widgetTimer = setTimeout(
+        () =>
+          // eslint-disable-next-line no-console
+          console.warn(
+            `InstantSearch.js: search.start() was not called within 5 seconds of adding your last widget. Please make sure you are calling search.start()`
+          ),
+        5000
+      );
+    }
   }
 
   /**
@@ -401,6 +413,10 @@ To help you migrate, please refer to the migration guide: https://community.algo
         }, this._stalledSearchDelay);
       }
     });
+
+    if (process.env.NODE_ENV === 'development') {
+      clearTimeout(this._widgetTimer);
+    }
 
     // track we started the search if we add more widgets,
     // to init them directly after add
