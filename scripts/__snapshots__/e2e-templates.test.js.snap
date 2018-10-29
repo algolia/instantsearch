@@ -55,6 +55,7 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
             \\"tsConfig\\": \\"src/tsconfig.app.json\\",
             \\"assets\\": [
               \\"src/favicon.png\\",
+              \\"src/manifest.json\\",
               \\"src/assets\\"
             ],
             \\"styles\\": [
