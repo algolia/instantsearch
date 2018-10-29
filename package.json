@@ -25,7 +25,6 @@
     "lint:css": "./scripts/lint-css.sh",
     "docs:build:dev": "./scripts/docs/build-dev.sh",
     "docs:publish": "./scripts/docs/publish.sh",
-    "finish-release": "./scripts/finish-release.sh",
     "view-changelog": "conventional-changelog -p angular",
     "release": "./scripts/release.js",
     "test": "jest",
