@@ -177,7 +177,6 @@ Here are the main files and folders of the project.
   ▸ components/       << The pReact components for the UI of our widgets (UI)
   ▸ connectors/       << The source of all the connectors (UX without UI)
   ▸ css/              << The source of the themes (reset / algolia theme)
-  ▸ decorators/       << Preact HoC that factorize some behaviour of the widgets
   ▸ lib/              << The core of the library, instantsearch, url
   ▸ widgets/          << The source of the widgets (UX + UI)
   ▸ helpers/          << The source of the method helpers
