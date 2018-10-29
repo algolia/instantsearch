@@ -11,6 +11,7 @@
   ],
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
+  "repository": "algolia/instantsearch.js",
   "main": "dist-es5-module/index.js",
   "module": "./es/index.js",
   "jsdelivr": "dist/instantsearch.min.js",
@@ -38,18 +39,24 @@
     "serve": "./scripts/serve.sh",
     "fix:prettier": "eslint --fix -c .eslintrc.js ."
   },
-  "renovate": {
-    "extends": [
-      "config:js-lib",
-      "algolia"
-    ]
-  },
-  "repository": "algolia/instantsearch.js",
   "files": [
     "dist",
     "dist-es5-module",
     "es"
   ],
+  "dependencies": {
+    "algoliasearch-helper": "^2.26.0",
+    "classnames": "^2.2.5",
+    "events": "^1.1.0",
+    "hogan.js": "^3.0.2",
+    "lodash": "^4.17.5",
+    "preact": "^8.2.7",
+    "preact-compat": "^3.18.0",
+    "preact-rheostat": "^2.1.1",
+    "prop-types": "^15.5.10",
+    "qs": "^6.5.1",
+    "to-factory": "^1.0.0"
+  },
   "devDependencies": {
     "algoliasearch": "3.30.0",
     "argos-cli": "0.0.9",
@@ -128,19 +135,6 @@
     "webpack": "3.10.0",
     "webpack-dev-server": "2.11.2"
   },
-  "dependencies": {
-    "algoliasearch-helper": "^2.26.0",
-    "classnames": "^2.2.5",
-    "events": "^1.1.0",
-    "hogan.js": "^3.0.2",
-    "lodash": "^4.17.5",
-    "preact": "^8.2.7",
-    "preact-compat": "^3.18.0",
-    "preact-rheostat": "^2.1.1",
-    "prop-types": "^15.5.10",
-    "qs": "^6.5.1",
-    "to-factory": "^1.0.0"
-  },
   "jest": {
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
@@ -151,6 +145,12 @@
     "watchPlugins": [
       "jest-watch-typeahead/filename",
       "jest-watch-typeahead/testname"
+    ]
+  },
+  "renovate": {
+    "extends": [
+      "config:js-lib",
+      "algolia"
     ]
   },
   "bundlesize": [
