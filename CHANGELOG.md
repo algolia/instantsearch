@@ -1,3 +1,44 @@
+<a name="4.1.0"></a>
+# [4.1.0](https://github.com/algolia/create-instantsearch-app/compare/4.0.0...4.1.0) (2018-10-29)
+
+
+### Bug Fixes
+
+* **angular:** add prod param to build command ([#278](https://github.com/algolia/create-instantsearch-app/issues/278)) ([0bc801b](https://github.com/algolia/create-instantsearch-app/commit/0bc801b))
+* **angular:** fix manifest and Angular dependencies ([#310](https://github.com/algolia/create-instantsearch-app/issues/310)) ([d4dd811](https://github.com/algolia/create-instantsearch-app/commit/d4dd811))
+* **autocomplete:** remove useless $hits variable ([#252](https://github.com/algolia/create-instantsearch-app/issues/252)) ([1b04e8d](https://github.com/algolia/create-instantsearch-app/commit/1b04e8d))
+* **cli:** Fix prompt typo ([#230](https://github.com/algolia/create-instantsearch-app/issues/230)) ([bf74d80](https://github.com/algolia/create-instantsearch-app/commit/bf74d80))
+* **deps:** update angular monorepo to v6.1.10 ([#287](https://github.com/algolia/create-instantsearch-app/issues/287)) ([173ae07](https://github.com/algolia/create-instantsearch-app/commit/173ae07))
+* **deps:** update angular monorepo to v6.1.7 ([#234](https://github.com/algolia/create-instantsearch-app/issues/234)) ([976612e](https://github.com/algolia/create-instantsearch-app/commit/976612e))
+* **deps:** update angular monorepo to v6.1.9 ([#269](https://github.com/algolia/create-instantsearch-app/issues/269)) ([f696ac0](https://github.com/algolia/create-instantsearch-app/commit/f696ac0))
+* **deps:** update dependency commander to v2.18.0 ([#235](https://github.com/algolia/create-instantsearch-app/issues/235)) ([ea3ab43](https://github.com/algolia/create-instantsearch-app/commit/ea3ab43))
+* **deps:** update dependency commander to v2.19.0 ([#288](https://github.com/algolia/create-instantsearch-app/issues/288)) ([4ab3fd3](https://github.com/algolia/create-instantsearch-app/commit/4ab3fd3))
+* **deps:** update dependency expo to v29.0.1 ([#249](https://github.com/algolia/create-instantsearch-app/issues/249)) ([9eed507](https://github.com/algolia/create-instantsearch-app/commit/9eed507))
+* **deps:** update dependency expo to v30 ([#241](https://github.com/algolia/create-instantsearch-app/issues/241)) ([45b7ae5](https://github.com/algolia/create-instantsearch-app/commit/45b7ae5))
+* **deps:** update dependency load-json-file to v5.1.0 ([#270](https://github.com/algolia/create-instantsearch-app/issues/270)) ([2c16283](https://github.com/algolia/create-instantsearch-app/commit/2c16283))
+* **deps:** update dependency metalsmith-ignore to v1 ([#242](https://github.com/algolia/create-instantsearch-app/issues/242)) ([2352281](https://github.com/algolia/create-instantsearch-app/commit/2352281))
+* **deps:** update dependency rxjs to v6.3.2 ([#236](https://github.com/algolia/create-instantsearch-app/issues/236)) ([950a737](https://github.com/algolia/create-instantsearch-app/commit/950a737))
+* **deps:** update dependency rxjs to v6.3.3 ([#271](https://github.com/algolia/create-instantsearch-app/issues/271)) ([a13c192](https://github.com/algolia/create-instantsearch-app/commit/a13c192))
+* **deps:** update dependency vue to v2.5.17 ([#176](https://github.com/algolia/create-instantsearch-app/issues/176)) ([99fd4c1](https://github.com/algolia/create-instantsearch-app/commit/99fd4c1))
+* **deps:** update react monorepo to v16.5.0 ([#238](https://github.com/algolia/create-instantsearch-app/issues/238)) ([cf5d036](https://github.com/algolia/create-instantsearch-app/commit/cf5d036))
+* **deps:** update react monorepo to v16.5.1 ([#251](https://github.com/algolia/create-instantsearch-app/issues/251)) ([0086764](https://github.com/algolia/create-instantsearch-app/commit/0086764))
+* **deps:** update react monorepo to v16.5.2 ([#272](https://github.com/algolia/create-instantsearch-app/issues/272)) ([8401d1b](https://github.com/algolia/create-instantsearch-app/commit/8401d1b))
+* **InstantSearch:** disable autofocus ([#257](https://github.com/algolia/create-instantsearch-app/issues/257)) ([ed1d98a](https://github.com/algolia/create-instantsearch-app/commit/ed1d98a))
+* **templates:** Add Vue ESLint config ([#240](https://github.com/algolia/create-instantsearch-app/issues/240)) ([c1a5ecf](https://github.com/algolia/create-instantsearch-app/commit/c1a5ecf))
+
+
+### Features
+
+* **cli:** add default Algolia credentials ([#291](https://github.com/algolia/create-instantsearch-app/issues/291)) ([b3dc47f](https://github.com/algolia/create-instantsearch-app/commit/b3dc47f))
+* **react:** upgrade to react-scripts@2 ([#300](https://github.com/algolia/create-instantsearch-app/issues/300)) ([f8ac929](https://github.com/algolia/create-instantsearch-app/commit/f8ac929))
+
+
+### Reverts
+
+* fix(deps): update dependency react-native to v0.57.1 ([#250](https://github.com/algolia/create-instantsearch-app/issues/250)) ([24b1935](https://github.com/algolia/create-instantsearch-app/commit/24b1935))
+
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/algolia/create-instantsearch-app/compare/3.3.0...4.0.0) (2018-09-03)
 
