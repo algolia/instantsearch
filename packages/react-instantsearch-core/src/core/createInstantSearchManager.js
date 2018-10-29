@@ -271,14 +271,18 @@ export default function createInstantSearchManager({
     search();
   }
 
-  function onSearchForFacetValues({ facetName, query, maxFacetHits }) {
+  function onSearchForFacetValues({ facetName, query, maxFacetHits = 10 }) {
+    // The values 1, 100 are the min / max values that the engine accepts.
+    // see: https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits
+    const maxFacetHitsWithinRange = Math.max(1, Math.min(maxFacetHits, 100));
+
     store.setState({
       ...store.getState(),
       searchingForFacetValues: true,
     });
 
     helper
-      .searchForFacetValues(facetName, query, maxFacetHits)
+      .searchForFacetValues(facetName, query, maxFacetHitsWithinRange)
       .then(
         content => {
           store.setState({
