@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.10.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-search-box {
+/*! instantsearch.js preview-2.10.3 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-search-box {
   position: relative;
   max-width: 300px;
   width: 100%; }
@@ -112,8 +112,6 @@
       box-shadow: inset 0 0 0 1px #337AB7;
       background: #FFFFFF; }
     .sbx-sffv__input::-webkit-input-placeholder {
-      color: #BBBBBB; }
-    .sbx-sffv__input:-ms-input-placeholder {
       color: #BBBBBB; }
     .sbx-sffv__input::-ms-input-placeholder {
       color: #BBBBBB; }
