@@ -212,13 +212,10 @@ Here are the main files and folders of the project.
 ```
 ▾ dev/
   ▾ app/                      << the source of the dev app
-    ▸ custom-widgets/         << the source of the custom widgets to validate the connector API
-    ▸ templates/              << templates used for the common widgets
+    ▸ builtin/                << templates used for built-in widgets
+    ▸ utils/                  << utility functions to build stories
       index.js                << main script of the dev app
-      init-builtin-widgets.js << initialization of the IS.js app with built-in widgets
-      init-jquery-widgets.js  << initialization of the IS.js app with custom widget / jQuery
-      init-vanilla-widgets.js << initialization of the IS.js app with other custom widgets
-      wrap-with-hits.js       << utility source that adds a hits and searchbox for each story
+      init-unmount-widgets.js << initialization of the IS.js app with unmountable widgets
     style.css
     template.html
     webpack.config.js
