@@ -18,7 +18,6 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
         "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "resetLabel": false,
       },
@@ -45,7 +44,6 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
         "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "resetLabel": false,
       },
@@ -72,7 +70,6 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
         "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "resetLabel": false,
       },
@@ -99,7 +96,6 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
         "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "resetLabel": false,
       },

@@ -11,9 +11,13 @@ exports[`GeoSearchControls Clear button expect to render the button when the ref
     disabled={false}
     onClick={[Function]}
   >
-    <Component
+    <Template
+      data={Object {}}
       rootTagName="span"
       templateKey="reset"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
     />
   </GeoSearchButton>
 </div>
@@ -31,9 +35,13 @@ exports[`GeoSearchControls Control disabled expect to render the button disabled
       disabled={true}
       onClick={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="redo"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchButton>
   </div>
@@ -50,9 +58,13 @@ exports[`GeoSearchControls Control disabled expect to render the button enabled 
       disabled={false}
       onClick={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="redo"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchButton>
   </div>
@@ -69,9 +81,13 @@ exports[`GeoSearchControls Control enabled expect to render the button when refi
       disabled={false}
       onClick={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="redo"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchButton>
   </div>
@@ -89,9 +105,13 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
       classNameLabel="label label-selected"
       onToggle={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="toggle"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchToggle>
   </div>
@@ -109,9 +129,13 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
       classNameLabel="label label-selected"
       onToggle={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="toggle"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchToggle>
   </div>
@@ -129,9 +153,13 @@ exports[`GeoSearchControls Control enabled expect to render the toggle unchecked
       classNameLabel="label"
       onToggle={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="toggle"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchToggle>
   </div>

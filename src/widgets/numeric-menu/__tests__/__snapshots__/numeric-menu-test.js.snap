@@ -55,7 +55,6 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
 </label>",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
       },
@@ -120,7 +119,6 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
 </label>",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
       },
@@ -190,7 +188,6 @@ exports[`numericMenu() renders with transformed items 1`] = `
 </label>",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
       },

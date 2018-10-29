@@ -58,7 +58,6 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
         "searchableNoResults": "No results",
       },
       "templatesConfig": Object {},
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "searchableNoResults": false,

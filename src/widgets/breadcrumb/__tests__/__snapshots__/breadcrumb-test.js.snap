@@ -37,7 +37,6 @@ exports[`breadcrumb() render renders transformed items correctly 1`] = `
         "separator": ">",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "home": false,
         "separator": false,

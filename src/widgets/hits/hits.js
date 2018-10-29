@@ -8,19 +8,12 @@ import { component } from '../../lib/suit';
 
 const suit = component('Hits');
 
-const renderer = ({
-  renderState,
-  cssClasses,
-  containerNode,
-  transformData,
-  templates,
-}) => (
+const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
   { hits: receivedHits, results, instantSearchInstance },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -45,7 +38,6 @@ hits({
   [ transformItems ],
   [ cssClasses.{root, emptyRoot, item} ],
   [ templates.{empty, item} ],
-  [ transformData.{empty, item} ],
 })`;
 
 /**
@@ -72,7 +64,6 @@ hits({
  * @typedef {Object} HitsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {HitsTemplates} [templates] Templates to use for the widget.
- * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -105,7 +96,6 @@ export default function hits({
   container,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  transformData,
   escapeHTML = true,
   transformItems,
 }) {
@@ -129,7 +119,6 @@ export default function hits({
     containerNode,
     cssClasses,
     renderState: {},
-    transformData,
     templates,
   });
 

@@ -86,17 +86,14 @@ describe('utils.prepareTemplateProps', () => {
     bar: 'tata',
   };
   const templatesConfig = [];
-  const transformData = () => {}; // eslint-disable-line func-style
 
   it('should return the default templates and set useCustomCompileOptions to false when using the defaults', () => {
     const defaultsPrepared = utils.prepareTemplateProps({
-      transformData,
       defaultTemplates,
       undefined,
       templatesConfig,
     });
 
-    expect(defaultsPrepared.transformData).toBe(transformData);
     expect(defaultsPrepared.useCustomCompileOptions).toEqual({
       foo: false,
       bar: false,
@@ -108,13 +105,11 @@ describe('utils.prepareTemplateProps', () => {
   it('should return the missing default templates and set useCustomCompileOptions for the custom template', () => {
     const templates = { foo: 'baz' };
     const defaultsPrepared = utils.prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templates,
       templatesConfig,
     });
 
-    expect(defaultsPrepared.transformData).toBe(transformData);
     expect(defaultsPrepared.useCustomCompileOptions).toEqual({
       foo: true,
       bar: false,
@@ -133,13 +128,11 @@ describe('utils.prepareTemplateProps', () => {
     };
 
     const preparedProps = utils.prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templates,
       templatesConfig,
     });
 
-    expect(preparedProps.transformData).toBe(transformData);
     expect(preparedProps.useCustomCompileOptions).toEqual({
       foo: true,
       bar: false,

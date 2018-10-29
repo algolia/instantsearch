@@ -115,18 +115,15 @@ function bemHelper(block) {
 /**
  * Prepares an object to be passed to the Template widget
  * @param {object} unknownBecauseES6 an object with the following attributes:
- *  - transformData
  *  - defaultTemplate
  *  - templates
  *  - templatesConfig
  * @return {object} the configuration with the attributes:
- *  - transformData
  *  - defaultTemplate
  *  - templates
  *  - useCustomCompileOptions
  */
 function prepareTemplateProps({
-  transformData,
   defaultTemplates,
   templates,
   templatesConfig,
@@ -134,7 +131,6 @@ function prepareTemplateProps({
   const preparedTemplates = prepareTemplates(defaultTemplates, templates);
 
   return {
-    transformData,
     templatesConfig,
     ...preparedTemplates,
   };
