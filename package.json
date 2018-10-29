@@ -7,6 +7,7 @@
     "algolia",
     "instantsearch",
     "search",
+    "widget",
     "vanilla"
   ],
   "author": "Algolia <support@algolia.com>",
