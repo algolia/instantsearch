@@ -2,7 +2,6 @@
 /* eslint camelcase: 0 */
 
 const path = require('path');
-
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPluging = require('html-webpack-plugin');

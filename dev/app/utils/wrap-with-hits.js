@@ -83,6 +83,3 @@ export const wrapWithHits = (
     window.search.start();
   });
 };
-
-export const wrapWithHitsAndJquery = (fn, config = {}) =>
-  wrapWithHits(container => fn(window.$(container)), config);

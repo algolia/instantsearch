@@ -42,9 +42,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * **Autocomplete** connector provides the logic to build a widget that will give the user the ability to search into multiple indices.
  *
  * This connector provides a `refine()` function to search for a query and a `currentRefinement` as the current query used to search.
- *
- * THere's a complete example available on how to write a custom **Autocomplete** widget:
- * [autocomplete.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/autocomplete.js)
  * @type {Connector}
  * @param {function(AutocompleteRenderingOptions, boolean)} renderFn Rendering function for the custom **Autocomplete** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
