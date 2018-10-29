@@ -247,17 +247,7 @@ function getRefinement(state, type, attributeName, name, resultsFacets) {
 }
 
 function getRefinements(results, state, clearsQuery) {
-  const res =
-    clearsQuery && state.query && state.query.trim()
-      ? [
-          {
-            attributeName: 'query',
-            type: 'query',
-            name: state.query,
-            query: state.query,
-          },
-        ]
-      : [];
+  const res = [];
 
   forEach(state.facetsRefinements, (refinements, attributeName) => {
     forEach(refinements, name => {
@@ -320,6 +310,15 @@ function getRefinements(results, state, clearsQuery) {
   forEach(state.tagRefinements, name => {
     res.push({ type: 'tag', attributeName: '_tags', name });
   });
+
+  if (clearsQuery && state.query && state.query.trim()) {
+    res.push({
+      attributeName: 'query',
+      type: 'query',
+      name: state.query,
+      query: state.query,
+    });
+  }
 
   return res;
 }
