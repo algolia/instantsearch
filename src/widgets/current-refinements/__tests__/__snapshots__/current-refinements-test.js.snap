@@ -1,0 +1,280 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`currentRefinements() render() DOM output renders correctly 1`] = `
+<CurrentRefinements
+  cssClasses={
+    Object {
+      "category": "ais-CurrentRefinements-category category",
+      "categoryLabel": "ais-CurrentRefinements-categoryLabel categoryLabel",
+      "delete": "ais-CurrentRefinements-delete delete",
+      "item": "ais-CurrentRefinements-item item",
+      "label": "ais-CurrentRefinements-label label",
+      "list": "ais-CurrentRefinements-list list",
+      "root": "ais-CurrentRefinements root",
+    }
+  }
+  items={
+    Array [
+      Object {
+        "attribute": "_tags",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "_tags",
+            "label": "tag1",
+            "type": "tag",
+            "value": "tag1",
+          },
+          Object {
+            "attribute": "_tags",
+            "label": "tag2",
+            "type": "tag",
+            "value": "tag2",
+          },
+        ],
+      },
+      Object {
+        "attribute": "disjunctiveFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
+          },
+        ],
+      },
+      Object {
+        "attribute": "extraFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "extraFacet",
+            "count": 42,
+            "exhaustive": true,
+            "label": "extraFacet-val1",
+            "type": "facet",
+            "value": "extraFacet-val1",
+          },
+        ],
+      },
+      Object {
+        "attribute": "facet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "facet",
+            "count": 1,
+            "exhaustive": true,
+            "label": "facet-val1",
+            "type": "facet",
+            "value": "facet-val1",
+          },
+          Object {
+            "attribute": "facet",
+            "count": 2,
+            "exhaustive": true,
+            "label": "facet-val2",
+            "type": "facet",
+            "value": "facet-val2",
+          },
+        ],
+      },
+      Object {
+        "attribute": "facetExclude",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "facetExclude",
+            "label": "facetExclude-val1",
+            "type": "exclude",
+            "value": "facetExclude-val1",
+          },
+          Object {
+            "attribute": "facetExclude",
+            "label": "facetExclude-val2",
+            "type": "exclude",
+            "value": "facetExclude-val2",
+          },
+        ],
+      },
+      Object {
+        "attribute": "hierarchicalFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "hierarchicalFacet",
+            "count": 6,
+            "exhaustive": true,
+            "label": "hierarchicalFacet-val1 > hierarchicalFacet-val2",
+            "type": "hierarchical",
+            "value": "hierarchicalFacet-val1 > hierarchicalFacet-val2",
+          },
+        ],
+      },
+      Object {
+        "attribute": "numericDisjunctiveFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≥ 3",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 3,
+          },
+          Object {
+            "attribute": "numericDisjunctiveFacet",
+            "label": "≤ 4",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 4,
+          },
+        ],
+      },
+      Object {
+        "attribute": "numericFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
+          },
+        ],
+      },
+    ]
+  }
+/>
+`;
+
+exports[`currentRefinements() render() options.container should render with a HTMLElement container 1`] = `
+<CurrentRefinements
+  cssClasses={
+    Object {
+      "category": "ais-CurrentRefinements-category",
+      "categoryLabel": "ais-CurrentRefinements-categoryLabel",
+      "delete": "ais-CurrentRefinements-delete",
+      "item": "ais-CurrentRefinements-item",
+      "label": "ais-CurrentRefinements-label",
+      "list": "ais-CurrentRefinements-list",
+      "root": "ais-CurrentRefinements",
+    }
+  }
+  items={Array []}
+/>
+`;
+
+exports[`currentRefinements() render() options.container should render with a string container 1`] = `
+<CurrentRefinements
+  cssClasses={
+    Object {
+      "category": "ais-CurrentRefinements-category",
+      "categoryLabel": "ais-CurrentRefinements-categoryLabel",
+      "delete": "ais-CurrentRefinements-delete",
+      "item": "ais-CurrentRefinements-item",
+      "label": "ais-CurrentRefinements-label",
+      "list": "ais-CurrentRefinements-list",
+      "root": "ais-CurrentRefinements",
+    }
+  }
+  items={Array []}
+/>
+`;
+
+exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 1`] = `
+<CurrentRefinements
+  cssClasses={
+    Object {
+      "category": "ais-CurrentRefinements-category",
+      "categoryLabel": "ais-CurrentRefinements-categoryLabel",
+      "delete": "ais-CurrentRefinements-delete",
+      "item": "ais-CurrentRefinements-item",
+      "label": "ais-CurrentRefinements-label",
+      "list": "ais-CurrentRefinements-list",
+      "root": "ais-CurrentRefinements",
+    }
+  }
+  items={
+    Array [
+      Object {
+        "attribute": "facet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "facet",
+            "count": 1,
+            "label": "facet-val1",
+            "type": "facet",
+            "value": "facet-val1",
+          },
+        ],
+      },
+    ]
+  }
+/>
+`;
+
+exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 2`] = `
+<CurrentRefinements
+  cssClasses={
+    Object {
+      "category": "ais-CurrentRefinements-category",
+      "categoryLabel": "ais-CurrentRefinements-categoryLabel",
+      "delete": "ais-CurrentRefinements-delete",
+      "item": "ais-CurrentRefinements-item",
+      "label": "ais-CurrentRefinements-label",
+      "list": "ais-CurrentRefinements-list",
+      "root": "ais-CurrentRefinements",
+    }
+  }
+  items={
+    Array [
+      Object {
+        "attribute": "facet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "facet",
+            "count": 1,
+            "label": "facet-val1",
+            "type": "facet",
+            "value": "facet-val1",
+          },
+        ],
+      },
+    ]
+  }
+/>
+`;
+
+exports[`currentRefinements() usage throws usage when no options provided 1`] = `
+"Usage:
+currentRefinements({
+  container,
+  [ includedAttributes ],
+  [ excludedAttributes = ['query'] ],
+  [ cssClasses.{root, list, item, label, category, categoryLabel, delete} ],
+  [ transformItems ]
+})"
+`;

@@ -1,7 +1,7 @@
 import initAnalyticsStories from './stories/analytics.stories';
 import initBreadcrumbStories from './stories/breadcrumb.stories.js';
 import initClearRefinementsStories from './stories/clear-refinements.stories';
-import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
+import initCurrentRefinementsStories from './stories/current-refinements.stories';
 import initGeoSearch from './stories/geo-search.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
@@ -28,7 +28,7 @@ export default () => {
   initAnalyticsStories();
   initBreadcrumbStories();
   initClearRefinementsStories();
-  initCurrentRefinedValuesStories();
+  initCurrentRefinementsStories();
   initGeoSearch();
   initHierarchicalMenu();
   initHitsStories();

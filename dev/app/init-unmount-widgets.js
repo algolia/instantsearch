@@ -74,10 +74,10 @@ export default () => {
     )
   );
 
-  storiesOf('CurrentRefinedValues').add(
+  storiesOf('CurrentRefinements').add(
     'default',
     wrapWithUnmount(
-      container => instantsearch.widgets.currentRefinedValues({ container }),
+      container => instantsearch.widgets.currentRefinements({ container }),
       {
         searchParameters: {
           disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },

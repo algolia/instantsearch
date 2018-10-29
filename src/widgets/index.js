@@ -10,8 +10,8 @@ export {
 } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure.js';
 export {
-  default as currentRefinedValues,
-} from '../widgets/current-refined-values/current-refined-values.js';
+  default as currentRefinements,
+} from './current-refinements/current-refinements.js';
 export { default as geoSearch } from './geo-search/geo-search.js';
 export {
   default as hierarchicalMenu,

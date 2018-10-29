@@ -1,6 +1,12 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import * as utils from '../utils';
 
+describe('capitalize', () => {
+  it('should capitalize the first character only', () => {
+    expect(utils.capitalize('hello')).toBe('Hello');
+  });
+});
+
 describe('utils.getContainerNode', () => {
   it('should be able to get a node from a node', () => {
     const d = document.body;
@@ -354,24 +360,24 @@ describe('utils.getRefinements', () => {
     );
   });
 
-  it('should inject query facet if clearQuery === true', () => {
-    helper.setQuery('my query');
+  it('should retrieve one query refinement when `clearsQuery` is true', () => {
+    helper.setQuery('a query');
     const expected = [
       {
         type: 'query',
         attributeName: 'query',
-        name: 'my query',
-        query: 'my query',
+        name: 'a query',
+        query: 'a query',
       },
     ];
     const clearsQuery = true;
-    expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
-      expected
-    );
+    expect(
+      utils.getRefinements(results, helper.state, clearsQuery)
+    ).toContainEqual(expected[0]);
   });
 
-  it('should retrieve one facetRefinement and not inject query facet if clearQuery === false', () => {
-    helper.setQuery('my query');
+  it('should not retrieve any query refinements if `clearsQuery` if false', () => {
+    helper.setQuery('a query');
     const expected = [];
     const clearsQuery = false;
     expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
@@ -718,9 +724,10 @@ describe('utils.getRefinements', () => {
       {
         type: 'hierarchical',
         attributeName: 'hierarchicalFacet2',
-        name: 'lvl1val1',
+        name: 'hierarchicalFacet2lvl0val1 > lvl1val1',
       },
     ];
+
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
     );
