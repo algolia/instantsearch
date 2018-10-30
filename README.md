@@ -4,7 +4,7 @@
   </a>
 
   <p align="center">
-    InstantSearch.js is a library for building blazing fast search-as-you-type search UIs with <a href="https://www.algolia.com">Algolia</a>.
+    InstantSearch.js is a JavaScript library for building performant and instant search experiences with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
   </p>
 </p>
 
@@ -171,7 +171,7 @@ InstantSearch.js is [MIT licensed][license-url].
 
 <!-- Links -->
 
-[algolia-website]: https://algolia.com
+[algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch/
 [vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
