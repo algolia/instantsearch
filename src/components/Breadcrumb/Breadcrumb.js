@@ -1,7 +1,7 @@
 import React from 'preact-compat';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import Template from '../Template.js';
+import Template from '../Template/Template';
 
 const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
   item,

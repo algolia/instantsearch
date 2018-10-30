@@ -1,8 +1,7 @@
 import React from 'react';
 import MenuSelect from '../MenuSelect';
 import { mount } from 'enzyme';
-
-import defaultTemplates from '../../widgets/menu-select/defaultTemplates';
+import defaultTemplates from '../../../widgets/menu-select/defaultTemplates';
 
 describe('MenuSelect', () => {
   const cssClasses = {

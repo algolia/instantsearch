@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { isSpecialClick } from '../../lib/utils.js';
-import Template from '../Template.js';
+import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem.js';
 import SearchBox from '../SearchBox';
 

@@ -1,7 +1,7 @@
 import React from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import Template from '../Template';
+import Template from '../Template/Template';
 import GeoSearchButton from './GeoSearchButton';
 import GeoSearchToggle from './GeoSearchToggle';
 
