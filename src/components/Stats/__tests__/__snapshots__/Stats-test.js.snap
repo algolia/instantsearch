@@ -19,7 +19,7 @@ exports[`Stats should render <Template data= /> 1`] = `
 <div
   className="root"
 >
-  <Component
+  <Template
     data={
       Object {
         "cssClasses": Object {
@@ -44,6 +44,9 @@ exports[`Stats should render <Template data= /> 1`] = `
     }
     rootTagName="span"
     templateKey="text"
+    templates={Object {}}
+    templatesConfig={Object {}}
+    useCustomCompileOptions={Object {}}
   />
 </div>
 `;

@@ -31,7 +31,6 @@ exports[`menuSelect render renders correctly 1`] = `
         "seeAllOptions": "See all",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "seeAllOptions": false,
@@ -74,7 +73,6 @@ exports[`menuSelect render renders transformed items correctly 1`] = `
         "seeAllOptions": "See all",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "seeAllOptions": false,

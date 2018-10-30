@@ -5,14 +5,18 @@ exports[`RefinementListItem renders an item 1`] = `
   className="item class"
   onClick={[Function]}
 >
-  <Component
+  <Template
     data={
       Object {
         "template": "data",
       }
     }
+    rootTagName="div"
     template="props"
     templateKey="item key"
+    templates={Object {}}
+    templatesConfig={Object {}}
+    useCustomCompileOptions={Object {}}
   />
   <div />
 </li>

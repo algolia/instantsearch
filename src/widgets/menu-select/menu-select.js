@@ -8,19 +8,12 @@ import { component } from '../../lib/suit';
 
 const suit = component('MenuSelect');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-  transformData,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   { refine, items, canRefine, instantSearchInstance },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -48,7 +41,6 @@ menuSelect({
   [ limit=10 ],
   [ cssClasses.{root, noRefinementRoot, select, option} ]
   [ templates.{item,seeAllOptions} ],
-  [ transformData.{item} ],
   [ transformItems ]
 })`;
 
@@ -81,7 +73,6 @@ menuSelect({
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {MenuSelectTemplates} [templates] Customize the output through templating.
  * @property {number} [limit=10] How many facets values to retrieve.
- * @property {MenuSelectTransforms} [transformData] Set of functions to update the data before passing them to the templates.
  * @property {MenuSelectCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -108,7 +99,6 @@ export default function menuSelect({
   limit = 10,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  transformData,
   transformItems,
 }) {
   if (!container || !attribute) {
@@ -131,7 +121,6 @@ export default function menuSelect({
     cssClasses,
     renderState: {},
     templates,
-    transformData,
   });
 
   try {

@@ -32,7 +32,6 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -73,7 +72,6 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -114,7 +112,6 @@ exports[`currentToggle() good usage render understands cssClasses 1`] = `
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -155,7 +152,6 @@ exports[`currentToggle() good usage render when refined 1`] = `
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -196,7 +192,6 @@ exports[`currentToggle() good usage render when refined 2`] = `
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -237,7 +232,6 @@ exports[`currentToggle() good usage render with facet values 1`] = `
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -278,7 +272,6 @@ exports[`currentToggle() good usage render with facet values 2`] = `
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -319,7 +312,6 @@ exports[`currentToggle() good usage render without facet values 1`] = `
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },
@@ -360,7 +352,6 @@ exports[`currentToggle() good usage render without facet values 2`] = `
         "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "labelText": false,
       },

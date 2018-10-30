@@ -13,7 +13,6 @@ const renderer = ({
   containerNode,
   renderState,
   templates,
-  transformData,
   loadMoreLabel,
 }) => (
   { hits, results, showMore, isLastPage, instantSearchInstance },
@@ -21,7 +20,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -52,7 +50,6 @@ infiniteHits({
   [ loadMoreLabel = "Show more results" ],
   [ cssClasses.{root, emptyRoot, list, item, loadMore, disabledLoadMore} ],
   [ templates.{empty,item} | templates.{empty} ],
-  [ transformData.{empty,item} | transformData.{empty} ],
 })`;
 
 /**
@@ -82,7 +79,6 @@ infiniteHits({
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget.
  * @property  {string} [loadMoreLabel="Show more results"] label used on the load more button.
- * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -116,7 +112,6 @@ export default function infiniteHits({
   cssClasses: userCssClasses = {},
   loadMoreLabel = 'Show more results',
   templates = defaultTemplates,
-  transformData,
   escapeHTML = true,
   transformItems,
 } = {}) {
@@ -148,7 +143,6 @@ export default function infiniteHits({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    transformData,
     templates,
     loadMoreLabel,
     renderState: {},

@@ -14,7 +14,6 @@ const renderer = ({
   collapsible,
   renderState,
   templates,
-  transformData,
 }) => (
   {
     hitsPerPage,
@@ -29,7 +28,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -58,7 +56,6 @@ const usage = `Usage:
 stats({
   container,
   [ templates.{text} ],
-  [ transformData.{text} ],
   [ cssClasses.{root, text} ],
 })`;
 
@@ -96,7 +93,6 @@ stats({
  * @typedef {Object} StatsWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {StatsWidgetTemplates} [templates] Templates to use for the widget.
- * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data before being used for templating. Valid keys are `text` for the text template.
  * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
@@ -121,7 +117,6 @@ export default function stats({
   container,
   cssClasses: userCssClasses = {},
   collapsible = false,
-  transformData,
   templates = defaultTemplates,
 } = {}) {
   if (!container) {
@@ -141,7 +136,6 @@ export default function stats({
     collapsible,
     renderState: {},
     templates,
-    transformData,
   });
 
   try {

@@ -100,7 +100,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
 {{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
       },
@@ -232,7 +231,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
 {{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
       },

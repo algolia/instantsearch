@@ -43,7 +43,6 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "showMoreActive": false,
@@ -99,7 +98,6 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": true,
         "showMoreActive": false,
@@ -157,7 +155,6 @@ exports[`hierarchicalMenu() render has a transformItems options 1`] = `
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "showMoreActive": false,
@@ -202,7 +199,6 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "showMoreActive": false,
@@ -247,7 +243,6 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "showMoreActive": false,
@@ -303,7 +298,6 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "showMoreActive": false,

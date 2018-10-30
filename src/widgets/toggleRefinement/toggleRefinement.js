@@ -8,19 +8,12 @@ import { component } from '../../lib/suit.js';
 
 const suit = component('ToggleRefinement');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-  transformData,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   { value, createURL, refine, instantSearchInstance },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -49,7 +42,6 @@ toggleRefinement({
   [ off = undefined ],
   [ cssClasses.{root, label, labelText, checkbox} ],
   [ templates.{labelText} ],
-  [ transformData.{labelText} ],
 })`;
 
 /**
@@ -84,7 +76,6 @@ toggleRefinement({
  * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
  * having `false` has a value for the selected attribute.
  * @property {ToggleWidgetTemplates} [templates] Templates to use for the widget.
- * @property {ToggleWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
  * @property {ToggleWidgetCSSClasses} [cssClasses] CSS classes to add.
  */
 
@@ -122,7 +113,6 @@ export default function toggleRefinement({
   attribute,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  transformData,
   on = true,
   off,
 } = {}) {
@@ -147,7 +137,6 @@ export default function toggleRefinement({
     cssClasses,
     renderState: {},
     templates,
-    transformData,
   });
 
   try {

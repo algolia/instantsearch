@@ -45,7 +45,6 @@ exports[`menu render renders transformed items 1`] = `
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "showMoreActive": false,
@@ -101,7 +100,6 @@ exports[`menu render snapshot 1`] = `
         "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
         "showMoreActive": false,

@@ -8,13 +8,7 @@ import { component } from '../../lib/suit';
 
 const suit = component('Breadcrumb');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  renderState,
-  templates,
-  transformData,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   { canRefine, createURL, instantSearchInstance, items, refine },
   isFirstRendering
 ) => {
@@ -23,7 +17,6 @@ const renderer = ({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
-      transformData,
     });
 
     return;
@@ -48,7 +41,6 @@ breadcrumb({
   attributes,
   [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
   [ templates.{home, separator}]
-  [ transformData.{item} ],
   [ transformItems ],
 })`;
 
@@ -81,7 +73,6 @@ breadcrumb({
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
- * @property {BreadcrumbTransforms} [transformData] Set of functions to transform the data passed to the templates.
  * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -145,7 +136,6 @@ export default function breadcrumb({
   cssClasses: userCssClasses = {},
   rootPath = null,
   templates = defaultTemplates,
-  transformData,
   transformItems,
 } = {}) {
   if (!container) {
@@ -178,7 +168,6 @@ export default function breadcrumb({
     cssClasses,
     renderState: {},
     templates,
-    transformData,
   });
 
   try {

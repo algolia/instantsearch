@@ -40,7 +40,6 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
         "item": [Function],
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
@@ -90,7 +89,6 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
         "item": [Function],
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
@@ -142,7 +140,6 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
         "item": [Function],
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
@@ -194,7 +191,6 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
         "item": [Function],
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
@@ -246,7 +242,6 @@ exports[`infiniteHits() renders transformed items 1`] = `
         "item": [Function],
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,

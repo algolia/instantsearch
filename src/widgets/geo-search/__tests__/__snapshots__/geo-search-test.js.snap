@@ -35,7 +35,6 @@ Array [
           "toggle": "Search as I move the map",
         },
         "templatesConfig": undefined,
-        "transformData": undefined,
         "useCustomCompileOptions": Object {
           "redo": true,
           "reset": true,
@@ -85,7 +84,6 @@ Array [
           "toggle": "Search as I move the map",
         },
         "templatesConfig": undefined,
-        "transformData": undefined,
         "useCustomCompileOptions": Object {
           "redo": true,
           "reset": true,
