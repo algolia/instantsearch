@@ -28,7 +28,7 @@ submit-title | String | `'search'` | The submit button's alternative text | no
 reset-title | String | `'clear'` | The clear button's alternative text | no
 autofocus | Boolean | `false` | Whether to automatically focus on the input when rendered | no
 show-loading-indicator | Boolean | `false` | Show a spinner in the search box if a delay is passed and no results are returned yet | no
-class-names | Object | | Override class names | no
+class-names | Object | `{}` | Override class names | no
 
 ## Slots
 

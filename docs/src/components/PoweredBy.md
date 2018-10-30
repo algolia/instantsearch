@@ -32,12 +32,11 @@ Dark background:
 Name | Type | Default | Description | Required
 ---|---|---|---|---
 theme | `"light" | "dark"` | `"light"` | Use a version of the logo legible on light or dark backgrounds | no
-class-names | Object | | Override class names | no
+class-names | Object | `{}` | Override class names | no
 
 ## Slots
 
 This component provides no slots
-
 
 ## CSS classes
 

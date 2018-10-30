@@ -65,7 +65,7 @@ attribute | String | `defaultValue` | The name of the attribute in your record |
 min | Number | - | Minimum value of the range | no
 max | Number | - | Maximum value of the range | no
 precision | Number | 0 | Number of digits after the decimal point to enforce | no
-class-names | Object | | Override class names | no
+class-names | Object | `{}` | Override class names | no
 
 ## CSS classes
 
@@ -97,4 +97,4 @@ Class name | Description
 `ais-RangeInput-input--min` | The minimum bound of the range
 `ais-RangeInput-input--max` | The maximum bound of the range
 
-class-names | Object | | Override class names | no
+class-names | Object | `{}` | Override class names | no

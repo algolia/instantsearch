@@ -27,7 +27,7 @@ Name | Type | Default | Description | Required
 ---|---|---|---|---
 indices | `Array<{label: String, value: String}>` | `[]` | Additional indices to search in | no
 escapeHTML | Boolean | true | Escape raw HTML in the hits | no
-class-names | Object | | Override class names | no
+class-names | Object | `{}` | Override class names | no
 
 ## Slots
 
