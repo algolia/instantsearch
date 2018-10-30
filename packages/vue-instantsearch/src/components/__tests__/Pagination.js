@@ -161,3 +161,79 @@ it('calls the Panel mixin with `nbPages`', () => {
 
   expect(mapStateToCanRefine()).toBe(false);
 });
+
+it('implements showFirst', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(Pagination, {
+    propsData: {
+      showFirst: false,
+    },
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--firstPage').exists()).toBe(false);
+
+  wrapper.setProps({
+    showFirst: true,
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--firstPage').exists()).toBe(true);
+});
+
+it('implements showPrevious', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(Pagination, {
+    propsData: {
+      showPrevious: false,
+    },
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--previousPage').exists()).toBe(
+    false
+  );
+
+  wrapper.setProps({
+    showPrevious: true,
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--previousPage').exists()).toBe(
+    true
+  );
+});
+
+it('implements showLast', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(Pagination, {
+    propsData: {
+      showLast: false,
+    },
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--lastPage').exists()).toBe(false);
+
+  wrapper.setProps({
+    showLast: true,
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--lastPage').exists()).toBe(true);
+});
+
+it('implements showNext', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(Pagination, {
+    propsData: {
+      showNext: false,
+    },
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--nextPage').exists()).toBe(false);
+
+  wrapper.setProps({
+    showNext: true,
+  });
+
+  expect(wrapper.find('.ais-Pagination-item--nextPage').exists()).toBe(true);
+});

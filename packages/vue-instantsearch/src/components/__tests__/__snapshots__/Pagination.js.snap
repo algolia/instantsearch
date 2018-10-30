@@ -95,7 +95,7 @@ exports[`renders correctly first page 1`] = `
 <div class="ais-Pagination">
   <ul class="ais-Pagination-list">
     <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
-      <span aria-label="Previous"
+      <span aria-label="First"
             class="ais-Pagination-link"
       >
         ‹‹
