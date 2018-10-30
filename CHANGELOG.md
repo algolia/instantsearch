@@ -1,3 +1,12 @@
+<a name="2.10.4"></a>
+## [2.10.4](https://github.com/algolia/instantsearch.js/compare/v2.10.3...v2.10.4) (2018-10-30)
+
+
+### Bug Fixes
+
+* **getRefinements:** provide attributeName for type: query ([6a58b99](https://github.com/algolia/instantsearch.js/commit/6a58b99)), closes [#3205](https://github.com/algolia/instantsearch.js/issues/3205)
+
+
 <a name="2.10.3"></a>
 ## [2.10.3](https://github.com/algolia/instantsearch.js/compare/v2.10.2...v2.10.3) (2018-10-29)
 
@@ -5,7 +14,6 @@
 ### Bug Fixes
 
 * **deps:** unpin production dependencies ([257ecb7](https://github.com/algolia/instantsearch.js/commit/257ecb7))
-* **getRefinements:** provide attributeName for type: query ([6a58b99](https://github.com/algolia/instantsearch.js/commit/6a58b99)), closes [#3205](https://github.com/algolia/instantsearch.js/issues/3205)
 * **InstantSearch:** avoid useless search on addWidgets ([#3178](https://github.com/algolia/instantsearch.js/issues/3178)) ([961626d](https://github.com/algolia/instantsearch.js/commit/961626d))
 * **numericselector:** default value can be undefined ([#3139](https://github.com/algolia/instantsearch.js/issues/3139)) ([39d22f5](https://github.com/algolia/instantsearch.js/commit/39d22f5))
 
