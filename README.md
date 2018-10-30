@@ -79,7 +79,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: document.querySelector('#brand'),
-    attributeName: 'brand',
+    attribute: 'brand',
   })
 );
 
