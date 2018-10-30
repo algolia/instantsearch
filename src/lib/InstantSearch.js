@@ -13,6 +13,7 @@ import simpleMapping from './stateMappings/simple.js';
 import historyRouter from './routers/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
+import { warn } from './utils';
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
@@ -232,9 +233,8 @@ To help you migrate, please refer to the migration guide: https://community.algo
       clearTimeout(this._widgetTimer);
       this._widgetTimer = setTimeout(
         () =>
-          // eslint-disable-next-line no-console
-          console.warn(
-            `InstantSearch.js: search.start() was not called within 5 seconds of adding your last widget. Please make sure you are calling search.start()`
+          warn(
+            `search.start() was not called within 5 seconds of adding your last widget. Please make sure you are calling search.start()`
           ),
         5000
       );
