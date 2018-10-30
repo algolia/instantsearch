@@ -55,7 +55,7 @@ Class name | Description
 `.ais-Pagination-item--lastPage` | the "last" pagination list item
 `.ais-Pagination-item--previousPage` | the "previous" pagination list item
 `.ais-Pagination-item--nextPage` | the "next" pagination list item
-`.ais-Pagination-item--page` | the "page" pagination list item
+`.ais-Pagination-item--item` | the "page" pagination list item
 `.ais-Pagination-item--selected` | the selected pagination list item
 `.ais-Pagination-item--disabled` | the disabled pagination list item
 `.ais-Pagination-link` | the pagination clickable element
