@@ -1,3 +1,13 @@
+<a name="5.3.2"></a>
+## [5.3.2](https://github.com/algolia/react-instantsearch/compare/v5.3.1...v5.3.2) (2018-10-30)
+
+
+### Bug Fixes
+
+* **sffv:** clamp maxFacetHits to the allowed range ([#1696](https://github.com/algolia/react-instantsearch/issues/1696)) ([83ce245](https://github.com/algolia/react-instantsearch/commit/83ce245))
+
+
+
 <a name="5.3.1"></a>
 ## [5.3.1](https://github.com/algolia/react-instantsearch/compare/v5.3.0...v5.3.1) (2018-09-26)
 
