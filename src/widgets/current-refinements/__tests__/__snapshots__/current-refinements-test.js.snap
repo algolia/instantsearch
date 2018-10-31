@@ -16,46 +16,6 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
   items={
     Array [
       Object {
-        "attribute": "_tags",
-        "refine": [Function],
-        "refinements": Array [
-          Object {
-            "attribute": "_tags",
-            "label": "tag1",
-            "type": "tag",
-            "value": "tag1",
-          },
-          Object {
-            "attribute": "_tags",
-            "label": "tag2",
-            "type": "tag",
-            "value": "tag2",
-          },
-        ],
-      },
-      Object {
-        "attribute": "disjunctiveFacet",
-        "refine": [Function],
-        "refinements": Array [
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val1",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val1",
-          },
-          Object {
-            "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
-            "label": "disjunctiveFacet-val2",
-            "type": "disjunctive",
-            "value": "disjunctiveFacet-val2",
-          },
-        ],
-      },
-      Object {
         "attribute": "extraFacet",
         "refine": [Function],
         "refinements": Array [
@@ -110,6 +70,28 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         ],
       },
       Object {
+        "attribute": "disjunctiveFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 3,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val1",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val1",
+          },
+          Object {
+            "attribute": "disjunctiveFacet",
+            "count": 4,
+            "exhaustive": true,
+            "label": "disjunctiveFacet-val2",
+            "type": "disjunctive",
+            "value": "disjunctiveFacet-val2",
+          },
+        ],
+      },
+      Object {
         "attribute": "hierarchicalFacet",
         "refine": [Function],
         "refinements": Array [
@@ -120,6 +102,26 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "label": "hierarchicalFacet-val1 > hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val1 > hierarchicalFacet-val2",
+          },
+        ],
+      },
+      Object {
+        "attribute": "numericFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "numericFacet",
+            "label": "≥ 1",
+            "operator": ">=",
+            "type": "numeric",
+            "value": 1,
+          },
+          Object {
+            "attribute": "numericFacet",
+            "label": "≤ 2",
+            "operator": "<=",
+            "type": "numeric",
+            "value": 2,
           },
         ],
       },
@@ -144,22 +146,20 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         ],
       },
       Object {
-        "attribute": "numericFacet",
+        "attribute": "_tags",
         "refine": [Function],
         "refinements": Array [
           Object {
-            "attribute": "numericFacet",
-            "label": "≥ 1",
-            "operator": ">=",
-            "type": "numeric",
-            "value": 1,
+            "attribute": "_tags",
+            "label": "tag1",
+            "type": "tag",
+            "value": "tag1",
           },
           Object {
-            "attribute": "numericFacet",
-            "label": "≤ 2",
-            "operator": "<=",
-            "type": "numeric",
-            "value": 2,
+            "attribute": "_tags",
+            "label": "tag2",
+            "type": "tag",
+            "value": "tag2",
           },
         ],
       },
