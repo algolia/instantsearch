@@ -1,6 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import Selector from '../../components/Selector.js';
+import Selector from '../../components/Selector/Selector.js';
 import connectSortBy from '../../connectors/sort-by/connectSortBy.js';
 import { getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit.js';

@@ -1,6 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import ToggleRefinement from '../../components/ToggleRefinement.js';
+import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement.js';
 import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement.js';
 import defaultTemplates from './defaultTemplates.js';
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';

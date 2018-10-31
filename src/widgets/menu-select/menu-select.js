@@ -1,7 +1,7 @@
 import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import connectMenu from '../../connectors/menu/connectMenu';
-import MenuSelect from '../../components/MenuSelect';
+import MenuSelect from '../../components/MenuSelect/MenuSelect';
 import defaultTemplates from './defaultTemplates';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 import { component } from '../../lib/suit';
