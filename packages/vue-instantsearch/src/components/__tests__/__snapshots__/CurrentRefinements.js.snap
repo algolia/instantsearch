@@ -1,5 +1,131 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`custom render gives all relevant info to scoped slot 1`] = `
+
+<div class="ais-CurrentRefinements">
+  <div>
+    <div>
+      <button>
+        <a href="?brands=apple">
+          url
+        </a>
+        <pre>
+          {
+  "attribute": "brands",
+  "label": "apple",
+  "value": {
+    "attributeName": "brands",
+    "computedLabel": "apple"
+  }
+}
+        </pre>
+      </button>
+    </div>
+    <div>
+      <button>
+        <a href="?colors=red">
+          url
+        </a>
+        <pre>
+          {
+  "attribute": "colors",
+  "label": "red",
+  "value": {
+    "attributeName": "colors",
+    "computedLabel": "red"
+  }
+}
+        </pre>
+      </button>
+    </div>
+    <div>
+      <button>
+        <a href="?requirements=free">
+          url
+        </a>
+        <pre>
+          {
+  "attribute": "requirements",
+  "label": "free",
+  "value": {
+    "attributeName": "requirements",
+    "computedLabel": "free"
+  }
+}
+        </pre>
+      </button>
+    </div>
+  </div>
+</div>
+
+`;
+
+exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
+
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li>
+      <div>
+        <button>
+          <a href="?brands=apple">
+            url
+          </a>
+          <pre>
+            {
+  "attribute": "brands",
+  "label": "apple",
+  "value": {
+    "attributeName": "brands",
+    "computedLabel": "apple"
+  }
+}
+          </pre>
+        </button>
+      </div>
+    </li>
+    <li>
+      <div>
+        <button>
+          <a href="?colors=red">
+            url
+          </a>
+          <pre>
+            {
+  "attribute": "colors",
+  "label": "red",
+  "value": {
+    "attributeName": "colors",
+    "computedLabel": "red"
+  }
+}
+          </pre>
+        </button>
+      </div>
+    </li>
+    <li>
+      <div>
+        <button>
+          <a href="?requirements=free">
+            url
+          </a>
+          <pre>
+            {
+  "attribute": "requirements",
+  "label": "free",
+  "value": {
+    "attributeName": "requirements",
+    "computedLabel": "free"
+  }
+}
+          </pre>
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+`;
+
 exports[`default value of excludedAttributes is ["query"] 1`] = `
 
 <div class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement">

@@ -54,7 +54,7 @@ Note that you can not use `includedAttributes` and `excludedAttributes` at the s
 name | scope | Description
 ---|---|---
 `default` | `{ items: Item[], refine: Item => void, createURL: Item.value => string }` | Override how all the items look
-`item` | `{ item: Item, refine: Item => void }` | Override how an item looks
+`item` | `{ item: Item, refine: Item => void, createURL: () => string }` | Override how an item looks
 
 All elements in `items` have the keys:
 

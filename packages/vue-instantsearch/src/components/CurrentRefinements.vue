@@ -17,6 +17,7 @@
             name="item"
             :refine="state.refine"
             :item="item"
+            :createURL="() => state.createURL(item.value)"
           >
             <span :class="suit('item')">
               <span :class="suit('label')">{{ item.attribute | capitalize }}: {{ item.label }}</span>

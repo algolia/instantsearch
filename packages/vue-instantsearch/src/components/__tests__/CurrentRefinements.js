@@ -223,3 +223,170 @@ it('calls `refine` with an item', () => {
     computedLabel: 'apple',
   });
 });
+
+describe('custom render', () => {
+  const defaultScopedSlot = `
+    <div slot-scope="{ items, createURL, refine }">
+      <div v-for="item in items" :key="item.attributeName">
+        <button
+          @click="refine(item.value)"
+        >
+          <a :href="createURL(item.value)">
+            url
+          </a>
+          <pre>{{item}}</pre>
+        </button>
+      </div>
+    </div>
+  `;
+
+  const itemScopedSlot = `
+    <div slot-scope="{ item, createURL, refine }">
+      <button
+        @click="refine()"
+      >
+        <a :href="createURL()">
+          url
+        </a>
+        <pre>{{item}}</pre>
+      </button>
+    </div>
+  `;
+
+  const refinements = [
+    {
+      attributeName: 'brands',
+      computedLabel: 'apple',
+    },
+    {
+      attributeName: 'colors',
+      computedLabel: 'red',
+    },
+    {
+      attributeName: 'requirements',
+      computedLabel: 'free',
+    },
+  ];
+
+  it('gives all relevant info to scoped slot', () => {
+    __setState({
+      refinements,
+      refine: jest.fn(),
+      createURL: jest.fn(
+        ({ attributeName, computedLabel }) =>
+          `?${attributeName}=${computedLabel}`
+      ),
+    });
+
+    const wrapper = mount(CurrentRefinements, {
+      scopedSlots: {
+        default: defaultScopedSlot,
+      },
+    });
+
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('has same amount of items', () => {
+    __setState({
+      refinements,
+      refine: jest.fn(),
+      createURL: jest.fn(
+        ({ attributeName, computedLabel }) =>
+          `?${attributeName}=${computedLabel}`
+      ),
+    });
+
+    const wrapper = mount(CurrentRefinements, {
+      scopedSlots: {
+        default: defaultScopedSlot,
+      },
+    });
+
+    expect(wrapper.findAll('button')).toHaveLength(refinements.length);
+  });
+
+  it('creates URLs', () => {
+    __setState({
+      refinements,
+      refine: jest.fn(),
+      createURL: jest.fn(
+        ({ attributeName, computedLabel }) =>
+          `?${attributeName}=${computedLabel}`
+      ),
+    });
+
+    const wrapper = mount(CurrentRefinements, {
+      scopedSlots: {
+        default: defaultScopedSlot,
+      },
+    });
+
+    expect(
+      wrapper
+        .findAll('button a')
+        .filter(link => Boolean(link.attributes('href')))
+    ).toHaveLength(refinements.length);
+  });
+
+  it('item slot gives all relevant info to scoped slot', () => {
+    __setState({
+      refinements,
+      refine: jest.fn(),
+      createURL: jest.fn(
+        ({ attributeName, computedLabel }) =>
+          `?${attributeName}=${computedLabel}`
+      ),
+    });
+
+    const wrapper = mount(CurrentRefinements, {
+      scopedSlots: {
+        item: itemScopedSlot,
+      },
+    });
+
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('item slot has same amount of items', () => {
+    __setState({
+      refinements,
+      refine: jest.fn(),
+      createURL: jest.fn(
+        ({ attributeName, computedLabel }) =>
+          `?${attributeName}=${computedLabel}`
+      ),
+    });
+
+    const wrapper = mount(CurrentRefinements, {
+      scopedSlots: {
+        item: itemScopedSlot,
+      },
+    });
+
+    expect(wrapper.findAll('button')).toHaveLength(refinements.length);
+  });
+
+  it('item slot has URLs', () => {
+    __setState({
+      refinements,
+      refine: jest.fn(),
+      createURL: jest.fn(
+        ({ attributeName, computedLabel }) =>
+          `?${attributeName}=${computedLabel}`
+      ),
+    });
+
+    const wrapper = mount(CurrentRefinements, {
+      scopedSlots: {
+        item: itemScopedSlot,
+      },
+    });
+
+    expect(
+      wrapper
+        .findAll('button a')
+        .filter(link => Boolean(link.attributes('href')))
+    ).toHaveLength(refinements.length);
+  });
+});
