@@ -15,14 +15,14 @@ don't hesitate to leave a message on the [community forum](https://discourse.alg
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Contributing with an new issue](#contributing-with-an-new-issue)
+- [Contributing with a new issue](#contributing-with-a-new-issue)
 - [The code contribution process](#the-code-contribution-process)
 - [Commit conventions](#commit-conventions)
 - [Branches organization](#branches-organization)
 - [Requirements](#requirements)
 - [Launch the dev environment](#launch-the-dev-environment)
 - [Updating the examples](#updating-the-examples)
-- [Folders of the project 🗺](#folders-of-the-project-%F0%9F%97%BA)
+- [Folders of the project](#folders-of-the-project)
   - [The source folder](#the-source-folder)
   - [The documentation source](#the-documentation-source)
   - [The dev app](#the-dev-app)
@@ -37,7 +37,7 @@ don't hesitate to leave a message on the [community forum](https://discourse.alg
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Contributing with an new issue
+## Contributing with a new issue
 
 Opening an issue is very useful for us so don't hesitate, we'll make sure to fix it
 as soon as possible if it's technically feasible and doesn't have important side effects
@@ -152,7 +152,7 @@ yarn build
 
 And also relaunch the dev environement afterwards.
 
-## Folders of the project 🗺
+## Folders of the project
 
 Here are the main files and folders of the project.
 
