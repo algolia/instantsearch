@@ -276,18 +276,6 @@ function normalizeRefinement(refinement) {
   };
 }
 
-function compareObjects(a, b, attribute) {
-  if (a[attribute] === b[attribute]) {
-    return 0;
-  }
-
-  if (a[attribute] < b[attribute]) {
-    return -1;
-  }
-
-  return 1;
-}
-
 function groupItemsByRefinements(items, helper) {
   return items.reduce(
     (results, currentItem) => [
@@ -297,9 +285,7 @@ function groupItemsByRefinements(items, helper) {
         refinements: items
           .filter(result => result.attribute === currentItem.attribute)
           // We want to keep the order of refinements except the numeric ones.
-          .sort(
-            (a, b) => (a.type === 'numeric' ? compareObjects(a, b, 'value') : 0)
-          ),
+          .sort((a, b) => (a.type === 'numeric' ? a.value - b.value : 0)),
         refine: refinement => clearRefinement(helper, refinement),
       },
     ],
