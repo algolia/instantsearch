@@ -276,33 +276,19 @@ function normalizeRefinement(refinement) {
   };
 }
 
-function compareObjects(a, b, attribute) {
-  if (a[attribute] === b[attribute]) {
-    return 0;
-  }
-
-  if (a[attribute] < b[attribute]) {
-    return -1;
-  }
-
-  return 1;
-}
-
 function groupItemsByRefinements(items, helper) {
   return items.reduce(
-    (results, currentItem) =>
-      [
-        {
-          attribute: currentItem.attribute,
-          refinements: items
-            .filter(result => result.attribute === currentItem.attribute)
-            .sort((a, b) =>
-              compareObjects(a, b, a.type === 'numeric' ? 'value' : 'label')
-            ),
-          refine: refinement => clearRefinement(helper, refinement),
-        },
-        ...results.filter(result => result.attribute !== currentItem.attribute),
-      ].sort((a, b) => compareObjects(a, b, 'attribute')),
+    (results, currentItem) => [
+      ...results.filter(result => result.attribute !== currentItem.attribute),
+      {
+        attribute: currentItem.attribute,
+        refinements: items
+          .filter(result => result.attribute === currentItem.attribute)
+          // We want to keep the order of refinements except the numeric ones.
+          .sort((a, b) => (a.type === 'numeric' ? a.value - b.value : 0)),
+        refine: refinement => clearRefinement(helper, refinement),
+      },
+    ],
     []
   );
 }

@@ -103,17 +103,26 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].items).toEqual([
-        expect.objectContaining({
-          attribute: 'facet1',
-        }),
-        expect.objectContaining({
-          attribute: 'facet2',
-        }),
-        expect.objectContaining({
-          attribute: 'facet3',
-        }),
-      ]);
+      expect(rendering.mock.calls[0][0].items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            attribute: 'facet1',
+          }),
+          expect.objectContaining({
+            attribute: 'facet2',
+          }),
+          expect.objectContaining({
+            attribute: 'facet3',
+          }),
+        ])
+      );
+      expect(rendering.mock.calls[0][0].items).toEqual(
+        expect.not.arrayContaining([
+          expect.objectContaining({
+            attribute: 'query',
+          }),
+        ])
+      );
     });
 
     it('includes only the `includedAttributes`', () => {
@@ -259,20 +268,22 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].items).toEqual([
-        expect.objectContaining({
-          attribute: 'facet1',
-          transformed: true,
-        }),
-        expect.objectContaining({
-          attribute: 'facet2',
-          transformed: true,
-        }),
-        expect.objectContaining({
-          attribute: 'facet3',
-          transformed: true,
-        }),
-      ]);
+      expect(rendering.mock.calls[0][0].items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            attribute: 'facet1',
+            transformed: true,
+          }),
+          expect.objectContaining({
+            attribute: 'facet2',
+            transformed: true,
+          }),
+          expect.objectContaining({
+            attribute: 'facet3',
+            transformed: true,
+          }),
+        ])
+      );
 
       widget.render({
         results: new SearchResults(helper.state, [{}]),
@@ -281,20 +292,22 @@ describe('connectCurrentRefinements', () => {
         createURL: () => '#',
       });
 
-      expect(rendering.mock.calls[0][0].items).toEqual([
-        expect.objectContaining({
-          attribute: 'facet1',
-          transformed: true,
-        }),
-        expect.objectContaining({
-          attribute: 'facet2',
-          transformed: true,
-        }),
-        expect.objectContaining({
-          attribute: 'facet3',
-          transformed: true,
-        }),
-      ]);
+      expect(rendering.mock.calls[0][0].items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            attribute: 'facet1',
+            transformed: true,
+          }),
+          expect.objectContaining({
+            attribute: 'facet2',
+            transformed: true,
+          }),
+          expect.objectContaining({
+            attribute: 'facet3',
+            transformed: true,
+          }),
+        ])
+      );
     });
 
     it('sort numeric refinements by numeric value', () => {
@@ -442,7 +455,7 @@ describe('connectCurrentRefinements', () => {
 
       helper
         .addFacetRefinement('facet1', 'facetValue')
-        .addFacetRefinement('facet2', 'facetValue2');
+        .addFacetRefinement('facet2', 'facetValue');
 
       widget.render({
         results: new SearchResults(helper.state, [{}]),
@@ -452,14 +465,16 @@ describe('connectCurrentRefinements', () => {
       });
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
-      expect(secondRenderingOptions.items).toEqual([
-        expect.objectContaining({
-          attribute: 'facet1',
-        }),
-        expect.objectContaining({
-          attribute: 'facet2',
-        }),
-      ]);
+      expect(secondRenderingOptions.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            attribute: 'facet1',
+          }),
+          expect.objectContaining({
+            attribute: 'facet2',
+          }),
+        ])
+      );
     });
   });
 });
