@@ -10,6 +10,7 @@
       :items="items"
       :refine="refine"
       :search-for-items="state.searchForItems"
+      :search-for-items-query="searchForFacetValuesQuery"
       :toggle-show-more="toggleShowMore"
       :is-showing-more="state.isShowingMore"
       :createURL="state.createURL"
