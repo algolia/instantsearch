@@ -238,10 +238,10 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
     widthInCm: 30
   },
   priceRanges: {
-    price: '200-20000'
+    price: '200:20000'
   },
   range: {
-    ageInYears: '2-10'
+    ageInYears: '2:10'
   },
   starRating: {
     rating: 3
