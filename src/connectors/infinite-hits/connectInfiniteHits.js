@@ -113,8 +113,6 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           lastReceivedPage = -1;
         }
 
-        results.hits = transformItems(results.hits);
-
         if (
           widgetParams.escapeHTML &&
           results.hits &&
@@ -122,6 +120,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         ) {
           results.hits = escapeHTML(results.hits);
         }
+
+        results.hits = transformItems(results.hits);
 
         if (lastReceivedPage < state.page) {
           hitsCache = [...hitsCache, ...results.hits];

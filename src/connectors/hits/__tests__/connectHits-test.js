@@ -199,4 +199,83 @@ describe('connectHits', () => {
       expect.anything()
     );
   });
+
+  it('transform items after escaping', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget({
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          _highlightResult: {
+            name: {
+              value: item._highlightResult.name.value.toUpperCase(),
+            },
+          },
+        })),
+      escapeHTML: true,
+    });
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const hits = [
+      {
+        name: 'hello',
+        _highlightResult: {
+          name: {
+            value: 'he__ais-highlight__llo__/ais-highlight__',
+          },
+        },
+      },
+      {
+        name: 'halloween',
+        _highlightResult: {
+          name: {
+            value: 'ha__ais-highlight__llo__/ais-highlight__ween',
+          },
+        },
+      },
+    ];
+
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        hits: [
+          {
+            name: 'hello',
+            _highlightResult: {
+              name: {
+                value: 'HE<MARK>LLO</MARK>',
+              },
+            },
+          },
+          {
+            name: 'halloween',
+            _highlightResult: {
+              name: {
+                value: 'HA<MARK>LLO</MARK>WEEN',
+              },
+            },
+          },
+        ],
+        results,
+      }),
+      expect.anything()
+    );
+  });
 });

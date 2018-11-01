@@ -82,8 +82,6 @@ export default function connectHits(renderFn, unmountFn) {
       },
 
       render({ results, instantSearchInstance }) {
-        results.hits = transformItems(results.hits);
-
         if (
           widgetParams.escapeHTML &&
           results.hits &&
@@ -91,6 +89,8 @@ export default function connectHits(renderFn, unmountFn) {
         ) {
           results.hits = escapeHTML(results.hits);
         }
+
+        results.hits = transformItems(results.hits);
 
         renderFn(
           {
