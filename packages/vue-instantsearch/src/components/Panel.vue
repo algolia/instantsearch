@@ -6,7 +6,7 @@
     >
       <slot name="header" />
     </div>
-    <div class="ais-Panel-body">
+    <div :class="suit('body')">
       <slot />
     </div>
     <div
