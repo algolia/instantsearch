@@ -61,7 +61,7 @@ export default {
 
 Name | Type | Default | Description | Required
 ---|---|---|---|---
-attribute | String | `defaultValue` | The name of the attribute in your record | yes
+attribute | String | | The name of the attribute in your record | yes
 min | Number | - | Minimum value of the range | no
 max | Number | - | Maximum value of the range | no
 precision | Number | 0 | Number of digits after the decimal point to enforce | no
