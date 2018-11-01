@@ -12,6 +12,7 @@
       :search-for-items="state.searchForItems"
       :search-for-items-query="searchForFacetValuesQuery"
       :toggle-show-more="toggleShowMore"
+      :can-toggle-show-more="state.canToggleShowMore"
       :is-showing-more="state.isShowingMore"
       :createURL="state.createURL"
       :is-from-search="state.isFromSearch"

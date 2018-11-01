@@ -37,7 +37,7 @@ class-names | Object | `{}` | Override class names | no
 
 Name | Scope | Description
 ---|---|---
-default | `{ items: Array<Item>, refine: (Item.value) => void, searchable: Boolean, searchForItemsQuery: String, searchForItems: (String) => void, isFromSearch: Boolean, toggleShowMore: Function, isShowingMore: Boolean, createURL: Function, canRefine: Boolean, noRefinement: Boolean }` | Slot to override the DOM output
+default | `{ items: Array<Item>, refine: (Item.value) => void, searchable: Boolean, searchForItemsQuery: String, searchForItems: (String) => void, isFromSearch: Boolean, toggleShowMore: Function, isShowingMore: Boolean, canToggleShowMore: Boolean, createURL: Function, canRefine: Boolean, noRefinement: Boolean }` | Slot to override the DOM output
 item | `{ item: Item, refine: (Item.value) => void, createURL: (Item) => String }` | Slot to override the DOM of a single item in the list
 showMoreLabel | `{ isShowingMore: Boolean }` | Slot to override the text shown in the "show more" button
 noResults | `{ query: String }` | Slot to override the text shown when "searchable" is true and there are no results
