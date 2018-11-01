@@ -40,6 +40,7 @@
             name="item"
             :item="item"
             :refine="refine"
+            :createURL="state.createURL"
           >
             <label :class="suit('label')">
               <input

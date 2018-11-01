@@ -37,10 +37,17 @@ class-names | Object | `{}` | Override class names | no
 
 Name | Scope | Description
 ---|---|---
-default | `{ items: Array, refine: Function, searchable: Boolean, searchForItems: Function, isFromSearch: Boolean, toggleShowMore: Function, isShowingMore: Boolean, createURL: Function, canRefine: Boolean, noRefinement: Boolean }` | Slot to override the DOM output
-item | `{ value: String, label: String, count: Number, isRefined: Boolean, highlighted }` | Slot to override the DOM of a single item in the list
+default | `{ items: Array<Item>, refine: (Item.value) => void, searchable: Boolean, searchForItems: Function, isFromSearch: Boolean, toggleShowMore: Function, isShowingMore: Boolean, createURL: Function, canRefine: Boolean, noRefinement: Boolean }` | Slot to override the DOM output
+item | `{ item: Item, refine: (Item.value) => void, createURL: (Item) => String }` | Slot to override the DOM of a single item in the list
 showMoreLabel | `{ isShowingMore: Boolean }` | Slot to override the text shown in the "show more" button
 noResults | `{ query: String }` | Slot to override the text shown when "searchable" is true and there are no results
+
+With `Item` being an object containing:
+
+* label (String): string form of the value
+* count (Number): number of hits that would be shown if this item is applied
+* isRefined (Boolean): is the value applied already
+* value (String): value to give to `refine`
 
 Note that if you override the default or item slot, and you still want highlighting when `searchable` is enabled, you should use [ais-highlight](./highlight) to have this feature: 
 
