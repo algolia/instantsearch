@@ -65,4 +65,19 @@ storiesOf('ais-current-refinements', module)
         );
       },
     },
+  }))
+  .add('with custom rendering', () => ({
+    template: `
+      <ais-current-refinements :excluded-attributes="[]">
+        <template slot-scope="{ refine, items, createURL }">
+          <button
+            v-for="item in items"
+            :key="item.attribute"
+            @click="refine(item.value)"
+          >
+            {{item.attribute}}: {{item.label}}
+          </button>
+        </template>
+      </ais-current-refinements>
+    `,
   }));
