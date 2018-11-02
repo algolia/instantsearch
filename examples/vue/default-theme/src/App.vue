@@ -64,13 +64,13 @@
             </div>
           </header>
 
-          <ais-search-state>
+          <ais-state-results>
             <template slot-scope="{ query, hits }">
               <p class="no-results" v-if="hits.length === 0">
                 No results found matching <em>{{ query }}</em>.
               </p>
             </template>
-          </ais-search-state>
+          </ais-state-results>
 
           <ais-hits>
             <article

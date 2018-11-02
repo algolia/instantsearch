@@ -1,7 +1,7 @@
 import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
 
-storiesOf('ais-search-state', module)
+storiesOf('ais-state-results', module)
   .addDecorator(
     previewWrapper({
       indexName: 'demo-query-rules',
@@ -31,13 +31,13 @@ storiesOf('ais-search-state', module)
     })
   )
   .add('default display', () => ({
-    template: `<ais-search-state></ais-search-state>`,
+    template: `<ais-state-results />`,
   }))
   .add('custom "autocomplete"', () => ({
     template: `
     <div>
       <ais-search-box />
-      <ais-search-state>
+      <ais-state-results>
         <template slot-scope="{ query }">
           <ais-hits v-if="query">
             <h3
@@ -51,7 +51,7 @@ storiesOf('ais-search-state', module)
             </h3>
           </ais-hits>
         </template>
-      </ais-search-state>
+      </ais-state-results>
     </div>
     `,
     methods: {
@@ -66,7 +66,7 @@ storiesOf('ais-search-state', module)
     <div>
       <ais-search-box />
       <p>type "documentary"</p>
-      <ais-search-state>
+      <ais-state-results>
         <template slot-scope="{ userData }">
           <div>
             <img
@@ -76,7 +76,7 @@ storiesOf('ais-search-state', module)
             />
           </div>
         </template>
-      </ais-search-state>
+      </ais-state-results>
     </div>
     `,
   }))
@@ -85,13 +85,13 @@ storiesOf('ais-search-state', module)
       <div>
         <ais-search-box />
         <ais-hits />
-        <ais-search-state>
+        <ais-state-results>
           <template slot-scope="{ query, hits }">
             <p v-if="hits.length === 0">
               No results found for the query: <q>{{ query }}</q>
             </p>
           </template>
-        </ais-search-state>
+        </ais-state-results>
       </div>
     `,
   }));

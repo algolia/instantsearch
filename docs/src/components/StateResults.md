@@ -1,28 +1,28 @@
 ---
-title: SearchState
+title: StateResults
 mainTitle: Components
 layout: main.pug
 category: Components
 withHeadings: true
 navWeight: 6
 editable: true
-githubSource: docs/src/components/SearchState.md
+githubSource: docs/src/components/StateResults.md
 ---
 
-The SearchState widget allows you reach into the current search state, for example for conditional rendering or other rendering that depends on what the current refinement or results are.
+The StateResults widget allows you reach into the current search state, for example for conditional rendering or other rendering that depends on what the current refinement or results are.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=SearchState">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=StateResults">🕹 try out live</a>
 
 ## Usage
 
 ### custom "autocomplete"
 
-SearchState can be used to put a conditional statement around the hits if there's a query.
+StateResults can be used to put a conditional statement around the hits if there's a query.
 
 ```html
 <div>
   <ais-search-box />
-  <ais-search-state>
+  <ais-state-results>
     <template slot-scope="{ query }">
       <ais-hits v-if="query">
         <h3
@@ -36,37 +36,37 @@ SearchState can be used to put a conditional statement around the hits if there'
         </h3>
       </ais-hits>
     </template>
-  </ais-search-state>
+  </ais-state-results>
 </div>
 ```
 
 ### No results
 
-SearchState can be used to put a conditional statement around a message to show if there are no results.
+StateResults can be used to put a conditional statement around a message to show if there are no results.
 
 ```html
 <div>
   <ais-search-box />
   <ais-hits />
-  <ais-search-state>
+  <ais-state-results>
     <template slot-scope="{ query, hits }">
       <p v-if="hits.length === 0">
         No results found for the query: <q>{{ query }}</q>
       </p>
     </template>
-  </ais-search-state>
+  </ais-state-results>
 </div>
 ```
 
 ## Banner from query rules
 
-If you have a [query rule with userData](https://www.algolia.com/doc/guides/query-rules/query-rules-usage/#return-user-data) in it, you can use SearchState to get this user data as a banner.
+If you have a [query rule with userData](https://www.algolia.com/doc/guides/query-rules/query-rules-usage/#return-user-data) in it, you can use StateResults to get this user data as a banner.
 
 ```html
 <div>
   <ais-search-box />
   <p>type "documentary"</p>
-  <ais-search-state>
+  <ais-state-results>
     <template slot-scope="{ userData }">
       <div>
         <img
@@ -76,7 +76,7 @@ If you have a [query rule with userData](https://www.algolia.com/doc/guides/quer
         />
       </div>
     </template>
-  </ais-search-state>
+  </ais-state-results>
 </div>
 ```
 
@@ -98,4 +98,4 @@ Note that you can pass the prop `class-names`, with an object of class names and
 
 Class name | Description
 ---|---
-`ais-SearchState` | The root div of the widget
+`ais-StateResults` | The root div of the widget

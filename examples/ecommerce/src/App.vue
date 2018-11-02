@@ -108,13 +108,13 @@
               slot-scope="{ items }"
               class="products"
             >
-              <ais-search-state>
+              <ais-state-results>
                 <template slot-scope="{ query, hits }">
                   <p class="products-no-results" v-if="hits.length === 0">
                     No results found matching <strong>{{query}}</strong>.
                   </p>
                 </template>
-              </ais-search-state>
+              </ais-state-results>
               <article
                 v-for="item in items"
                 :key="item.objectID"

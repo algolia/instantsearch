@@ -64,7 +64,7 @@ Each component also provides a function called `refine`. This function can be ca
 </ais-menu>
 ```
 
-More examples of this can be found in the [ais-search-state](components/SearchState.html) component.
+More examples of this can be found in the [ais-state-results](components/StateResults.html) component.
 
 ## Complete custom components
 

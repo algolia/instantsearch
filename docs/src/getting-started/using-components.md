@@ -42,7 +42,7 @@ You can try most of them out in our playground.
 * [ais-powered-by](components/PoweredBy.html)
 * [ais-rating-menu](components/RatingMenu.html)
 * [ais-search-box](components/SearchBox.html)
-* [ais-search-state](components/SearchState.html)
+* [ais-state-results](components/StateResults.html)
 * [ais-snippet](components/Snippet.html)
 * [ais-stats](components/Stats.html)
 

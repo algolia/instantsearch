@@ -47,10 +47,10 @@ const connectStateResults = (renderFn, unmountFn) => (widgetParams = {}) => ({
 });
 
 export default {
-  name: 'AisSearchState',
+  name: 'AisStateResults',
   mixins: [
     createWidgetMixin({ connector: connectStateResults }),
-    createSuitMixin({ name: 'SearchState' }),
+    createSuitMixin({ name: 'StateResults' }),
   ],
 };
 </script>

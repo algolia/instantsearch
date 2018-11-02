@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import SearchState from '../SearchState.vue';
+import StateResults from '../StateResults.vue';
 import { __setState } from '../../mixins/widget';
 jest.mock('../../mixins/widget');
 
@@ -11,13 +11,13 @@ it('renders explanation if no slot is used', () => {
       page: 1,
     },
   });
-  const wrapper = mount(SearchState);
+  const wrapper = mount(StateResults);
   expect(wrapper.html()).toMatchSnapshot();
 });
 
 it("doesn't render if no results", () => {
   __setState({});
-  const wrapper = mount(SearchState);
+  const wrapper = mount(StateResults);
   expect(wrapper.html()).toBeUndefined();
 });
 
@@ -32,7 +32,7 @@ it('gives results to default slot', () => {
     results,
   });
 
-  mount(SearchState, {
+  mount(StateResults, {
     scopedSlots: {
       default: props => expect(props).toEqual(results),
     },
@@ -48,7 +48,7 @@ it('allows default slot to render whatever they want (truthy query)', () => {
     },
   });
 
-  const wrapper = mount(SearchState, {
+  const wrapper = mount(StateResults, {
     scopedSlots: {
       default: `
       <template slot-scope="{ query }">
@@ -74,7 +74,7 @@ it('allows default slot to render whatever they want (falsy query)', () => {
     },
   });
 
-  const wrapper = mount(SearchState, {
+  const wrapper = mount(StateResults, {
     scopedSlots: {
       default: `
       <template slot-scope="{ query }">

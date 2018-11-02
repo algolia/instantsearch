@@ -24,7 +24,7 @@ export { default as AisPoweredBy } from './components/PoweredBy.vue';
 export { default as AisRangeInput } from './components/RangeInput.vue';
 export { default as AisRatingMenu } from './components/RatingMenu.vue';
 export { default as AisRefinementList } from './components/RefinementList.vue';
-export { default as AisSearchState } from './components/SearchState.vue';
+export { default as AisStateResults } from './components/StateResults.vue';
 export { default as AisSearchBox } from './components/SearchBox.vue';
 export { default as AisSnippet } from './components/Snippet.vue';
 export { default as AisSortBy } from './components/SortBy.vue';

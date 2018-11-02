@@ -39,9 +39,11 @@ Find more information on these in their respective documentation.
 
 This widget is the replacement of `query-parameters` on `ais-index`. 
 
-2. `ais-search-state`
+2. `ais-state-results`
 
 This component can be used for conditional rendering, and getting information that's not returned in `ais-hits`.
+
+Note that this component was called `ais-search-state` until, and including alpha 3
 
 3. `ais-breadcrumb`
 
