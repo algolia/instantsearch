@@ -38,3 +38,4 @@ export { default as analytics } from './analytics/analytics.js';
 export { default as breadcrumb } from './breadcrumb/breadcrumb.js';
 export { default as menuSelect } from './menu-select/menu-select.js';
 export { default as poweredBy } from './powered-by/powered-by.js';
+export { default as panel } from './panel/panel.js';
