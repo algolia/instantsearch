@@ -226,7 +226,7 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
     type: 'antique'
   },
   hierarchicalMenu: {
-    category: 'Decoration > Clocks'
+    category: ['Decoration > Clocks']
   },
   refinementList: {
     colors: ['white', 'black']
@@ -238,10 +238,10 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
     widthInCm: 30
   },
   priceRanges: {
-    price: '200-20000'
+    price: '200:20000'
   },
   range: {
-    ageInYears: '2-10'
+    ageInYears: '2:10'
   },
   starRating: {
     rating: 3
