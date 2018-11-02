@@ -38,14 +38,14 @@ storiesOf('ais-range-input', module)
   .add('with a custom render', () => ({
     template: `
       <ais-range-input attribute="price">
-        <template slot-scope="{ refine, currentRefinements }">
-          <form  @submit.prevent="refine(min, max)" >
+        <template slot-scope="{ refine, currentRefinement }">
+          <form  @submit.prevent="refine({ min, max })" >
             <label>
               <input
                 type="number"
                 :max="this.max"
                 :placeholder="this.max"
-                :value="currentRefinements && currentRefinements[0]"
+                :value="currentRefinement.min"
                 @change="min = $event.currentTarget.value"
               />
             </label>
@@ -53,9 +53,9 @@ storiesOf('ais-range-input', module)
             <label >
               <input
                 type="number"
-                :max="this.max"
+                :min="this.min"
                 :placeholder="this.max"
-                :value="currentRefinements && currentRefinements[1]"
+                :value="currentRefinement.max"
                 @change="max = $event.currentTarget.value"
               />
             </label>
@@ -74,24 +74,25 @@ storiesOf('ais-range-input', module)
   .add('with vue-slider-component', () => ({
     template: `
       <ais-range-input attribute="price">
-        <template slot-scope="{ refine, currentRefinements, range }">
+        <template
+          slot-scope="{
+            refine,
+            currentRefinement: { min: minValue, max: maxValue },
+            range: { min: minRange, max: maxRange }
+          }"
+        >
           <vue-slider
-            :min="range.min"
-            :max="range.max"
-            :value="toValue(currentRefinements, range)"
-            @input="refine($event[0], $event[1])"
+            :min="minRange"
+            :max="maxRange"
+            :value="[
+              minValue !== null ? minValue : minRange,
+              maxValue !== null ? maxValue : maxRange,
+            ]"
+            @input="refine({ min: $event[0], max: $event[1] })"
           />
         </template>
       </ais-range-input>
     `,
-    methods: {
-      toValue([min, max], range) {
-        return [
-          min === -Infinity ? range.min : min,
-          max === Infinity ? range.max : max,
-        ];
-      },
-    },
     components: { VueSlider },
   }))
   .add('with vuetify slider', () => ({
@@ -99,12 +100,21 @@ storiesOf('ais-range-input', module)
     <v-app>
       <v-container mt-4>
         <ais-range-input attribute="price">
-          <template slot-scope="{ refine, currentRefinements, range }">
+          <template
+            slot-scope="{
+              refine,
+              currentRefinement: { min: minValue, max: maxValue },
+              range: { min: minRange, max: maxRange }
+            }"
+          >
             <v-range-slider
-              :min="range.min"
-              :max="range.max"
-              :value="toValue(currentRefinements, range)"
-              @input="refine($event[0], $event[1])"
+              :min="minRange"
+              :max="maxRange"
+              :value="[
+                minValue !== null ? minValue : minRange,
+                maxValue !== null ? maxValue : maxRange,
+              ]"
+              @input="refine({min: $event[0], max: $event[1]})"
               thumb-label="always"
             />
           </template>
@@ -112,17 +122,6 @@ storiesOf('ais-range-input', module)
       </v-container>
     </v-app>
     `,
-    methods: {
-      toValue([min, max], range) {
-        return [
-          min === -Infinity ? range.min : min,
-          max === Infinity ? range.max : max,
-        ];
-      },
-    },
-    // components: {
-    //   VRangeSlider,
-    // },
   }))
   .add('with a Panel', () => ({
     template: `

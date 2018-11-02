@@ -78,7 +78,7 @@ Note that you can pass the prop `class-names`, with an object of class names and
 
 Name | Scope | Description
 ---|---|---
-default | `{ refine: (min, max) => void, currentRefinements: [number, number], noRefinements, range: {min: number, max: number}}` | Slot to override the DOM output. `refine` takes the updated values and then trigger the search. The `currentRefinements` contains the min and the max as set in the search state (and should be used to render the input values).
+default | `{ refine: ({ min, max }) => void, currentRefinement: { min: number, max: number }, noRefinements, range: { min: number, max: number }}` | Slot to override the DOM output. `refine` takes the updated values and then trigger the search. The `currentRefinements` contains the min and the max as set in the search state (and should be used to render the input values).
 minLabel | | Slot for giving the min input a label
 maxLabel | | Slot for giving the max input a label
 separator| | Slot for modifying the separator between the two inputs

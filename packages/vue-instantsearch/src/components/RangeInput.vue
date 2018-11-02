@@ -4,14 +4,14 @@
     :class="[suit(), !canRefine && suit('', 'noRefinement')]"
   >
     <slot
-      :currentRefinements="state.start"
+      :current-refinement="values"
       :refine="refine"
       :can-refine="canRefine"
       :range="state.range"
     >
       <form
         :class="suit('form')"
-        @submit.prevent="refine(minInput, maxInput)"
+        @submit.prevent="refine({ min: minInput, max: maxInput })"
       >
         <label :class="suit('label')">
           <slot name="minLabel" />
@@ -124,7 +124,7 @@ export default {
     },
   },
   methods: {
-    refine(min, max) {
+    refine({ min, max }) {
       this.state.refine([min, max]);
     },
   },
