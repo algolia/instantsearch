@@ -11,7 +11,7 @@
       <ul :class="suit('list')">
         <li
           v-for="item in refinements"
-          :key="item.attributeName"
+          :key="item.attribute"
         >
           <slot
             name="item"
