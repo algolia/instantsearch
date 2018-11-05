@@ -13,7 +13,7 @@ exports[`hitsPerPage() calls twice ReactDOM.render(<Selector props />, container
       }
     }
     currentValue={10}
-    options={
+    items={
       Array [
         Object {
           "isRefined": true,
@@ -45,7 +45,7 @@ exports[`hitsPerPage() renders transformed items 1`] = `
       }
     }
     currentValue={10}
-    options={
+    items={
       Array [
         Object {
           "isRefined": true,

@@ -12,7 +12,7 @@ describe('Selector', () => {
         select: 'custom-select',
         option: 'custom-option',
       },
-      options: [
+      items: [
         { value: 'index-a', label: 'Index A' },
         { value: 'index-b', label: 'Index B' },
       ],
@@ -30,7 +30,7 @@ describe('Selector', () => {
         select: 'custom-select',
         option: 'custom-option',
       },
-      options: [
+      items: [
         { value: 10, label: '10 results per page' },
         { value: 20, label: '20 results per page' },
       ],

@@ -22,7 +22,7 @@ const renderer = ({ containerNode, cssClasses }) => (
       <Selector
         cssClasses={cssClasses}
         currentValue={currentValue}
-        options={items}
+        items={items}
         setValue={refine}
       />
     </div>,
@@ -53,7 +53,7 @@ hitsPerPage({
  */
 
 /**
- * @typedef {Object} HitsPerPageWidgetOptions
+ * @typedef {Object} HitsPerPageWidgetItems
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {HitsPerPageItems[]} items Array of objects defining the different values and labels.
  * @property {HitsPerPageCSSClasses} [cssClasses] CSS classes to be added.
@@ -68,7 +68,7 @@ hitsPerPage({
  * @type {WidgetFactory}
  * @devNovel HitsPerPage
  * @category basic
- * @param {HitsPerPageWidgetOptions} $0 The options of the HitPerPageSelector widget.
+ * @param {HitsPerPageWidgetItems} $0 The options of the HitPerPageSelector widget.
  * @return {Widget} A new instance of the HitPerPageSelector widget.
  * @example
  * search.addWidget(

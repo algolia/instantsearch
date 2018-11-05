@@ -12,7 +12,7 @@ class Selector extends Component {
   }
 
   render() {
-    const { currentValue, options } = this.props;
+    const { currentValue, items } = this.props;
 
     return (
       <select
@@ -20,7 +20,7 @@ class Selector extends Component {
         onChange={this.handleChange}
         value={`${currentValue}`}
       >
-        {options.map(option => (
+        {items.map(option => (
           <option
             className={cx(this.props.cssClasses.option)}
             key={option.label + option.value}
@@ -50,7 +50,7 @@ Selector.propTypes = {
     ]),
   }),
   currentValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  options: PropTypes.arrayOf(
+  items: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       label: PropTypes.string.isRequired,

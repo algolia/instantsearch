@@ -88,12 +88,6 @@ describe('sortBy()', () => {
     expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
-  it('sets the underlying index', () => {
-    widget.setIndex('index-b');
-    expect(helper.setIndex).toHaveBeenCalledTimes(1, 'setIndex called once');
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
-  });
-
   it('should throw if there is no name attribute in a passed object', () => {
     items.length = 0;
     items.push({ label: 'Label without a name' });

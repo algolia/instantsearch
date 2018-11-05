@@ -8,7 +8,7 @@ import { component } from '../../lib/suit.js';
 const suit = component('SortBy');
 
 const renderer = ({ containerNode, cssClasses }) => (
-  { currentRefinement, options, refine },
+  { currentRefinement, items, refine },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -20,7 +20,7 @@ const renderer = ({ containerNode, cssClasses }) => (
       <Selector
         cssClasses={cssClasses}
         currentValue={currentRefinement}
-        options={options}
+        items={items}
         setValue={refine}
       />
     </div>,
@@ -50,7 +50,7 @@ sortBy({
  */
 
 /**
- * @typedef {Object} SortByWidgetOptions
+ * @typedef {Object} SortByWidgetItems
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {SortByIndexDefinition[]} items Array of objects defining the different indices to choose from.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
@@ -65,7 +65,7 @@ sortBy({
  * @type {WidgetFactory}
  * @devNovel SortBy
  * @category sort
- * @param {SortByWidgetOptions} $0 Options for the SortBy widget
+ * @param {SortByWidgetItems} $0 Options for the SortBy widget
  * @return {Widget} Creates a new instance of the SortBy widget.
  * @example
  * search.addWidget(

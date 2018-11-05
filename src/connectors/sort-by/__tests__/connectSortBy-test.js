@@ -42,7 +42,7 @@ describe('connectSortBy', () => {
       expect.objectContaining({
         currentRefinement: helper.state.index,
         widgetParams: { items },
-        options: [
+        items: [
           { label: 'Sort products by relevance', value: 'relevance' },
           { label: 'Sort products by price', value: 'priceASC' },
         ],
@@ -63,7 +63,7 @@ describe('connectSortBy', () => {
       expect.objectContaining({
         currentRefinement: helper.state.index,
         widgetParams: { items },
-        options: [
+        items: [
           { label: 'Sort products by relevance', value: 'relevance' },
           { label: 'Sort products by price', value: 'priceASC' },
         ],
@@ -101,7 +101,7 @@ describe('connectSortBy', () => {
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        options: [
+        items: [
           { label: 'transformed', value: 'relevance' },
           { label: 'transformed', value: 'priceASC' },
         ],
@@ -118,7 +118,7 @@ describe('connectSortBy', () => {
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        options: [
+        items: [
           { label: 'transformed', value: 'relevance' },
           { label: 'transformed', value: 'priceASC' },
         ],

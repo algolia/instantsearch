@@ -5,9 +5,9 @@ const usage = `Usage:
 var customSortBy = connectSortBy(function render(params, isFirstRendering) {
   // params = {
   //   currentRefinement,
-  //   options,
+  //   items,
   //   refine,
-  //   hasNoResults,
+  //   canRefine,
   //   instantSearchInstance,
   //   widgetParams,
   // }
@@ -28,7 +28,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
- * @typedef {Object} CustomSortByWidgetOptions
+ * @typedef {Object} CustomSortByWidgetItems
  * @property {SortByItem[]} items Array of objects defining the different indices to choose from.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -36,10 +36,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} SortByRenderingOptions
  * @property {string} currentRefinement The currently selected index.
- * @property {SortByItem[]} options All the available indices
+ * @property {SortByItem[]} items All the available indices
  * @property {function(string)} refine Switches indices and triggers a new search.
- * @property {boolean} hasNoResults `true` if the last search contains no result.
- * @property {Object} widgetParams All original `CustomSortByWidgetOptions` forwarded to the `renderFn`.
+ * @property {boolean} canRefine `false` if the last search contains no result.
+ * @property {Object} widgetParams All original `CustomSortByWidgetItems` forwarded to the `renderFn`.
  */
 
 /**
@@ -49,12 +49,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * This connector provides the `refine` function that allows to switch indices.
  * The connector provides to the rendering: `refine()` to switch the current index and
- * `options` that are the values that can be selected. `refine` should be used
- * with `options.value`.
+ * `items` that are the values that can be selected. `refine` should be used
+ * with `items.value`.
  * @type {Connector}
  * @param {function(SortByRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBy** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomSortByWidgetOptions)} Re-usable widget factory for a custom **SortBy** widget.
+ * @return {function(CustomSortByWidgetItems)} Re-usable widget factory for a custom **SortBy** widget.
  * @example
  * // custom `renderFn` to render the custom SortBy widget
  * function renderFn(SortByRenderingOptions, isFirstRendering) {
@@ -67,7 +67,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *       });
  *   }
  *
- *   var optionsHTML = SortByRenderingOptions.options.map(function(option) {
+ *   var optionsHTML = SortByRenderingOptions.items.map(function(option) {
  *     return `
  *       <option
  *         value="${option.value}"
@@ -108,6 +108,8 @@ export default function connectSortBy(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
+    let _setIndex;
+
     return {
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.getIndex();
@@ -120,14 +122,13 @@ export default function connectSortBy(renderFn, unmountFn) {
         }
 
         this.initialIndex = instantSearchInstance.indexName;
-        this.setIndex = indexName => helper.setIndex(indexName).search();
+        _setIndex = indexName => helper.setIndex(indexName).search();
 
         renderFn(
           {
+            ...this.getRenderingOptions(),
             currentRefinement: currentIndex,
-            options: transformItems(items),
-            refine: this.setIndex,
-            hasNoResults: true,
+            refine: _setIndex,
             widgetParams,
             instantSearchInstance,
           },
@@ -138,10 +139,9 @@ export default function connectSortBy(renderFn, unmountFn) {
       render({ helper, results, instantSearchInstance }) {
         renderFn(
           {
+            ...this.getRenderingOptions({ results }),
             currentRefinement: helper.getIndex(),
-            options: transformItems(items),
-            refine: this.setIndex,
-            hasNoResults: results.nbHits === 0,
+            refine: _setIndex,
             widgetParams,
             instantSearchInstance,
           },
@@ -173,6 +173,13 @@ export default function connectSortBy(renderFn, unmountFn) {
           'index',
           uiState.sortBy || this.initialIndex
         );
+      },
+
+      getRenderingOptions({ results } = {}) {
+        return {
+          items: transformItems(items),
+          canRefine: results && results.nbHits > 0,
+        };
       },
     };
   };
