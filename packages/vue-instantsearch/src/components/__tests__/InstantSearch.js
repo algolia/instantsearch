@@ -55,7 +55,10 @@ it('passes props to InstantSearch.js', () => {
     propsData: {
       searchClient,
       indexName: 'something',
-      routing: true,
+      routing: {
+        router: {},
+        stateMapping: {},
+      },
       stalledSearchDelay: 250,
       searchFunction,
     },
@@ -63,7 +66,10 @@ it('passes props to InstantSearch.js', () => {
 
   expect(instantsearch).toHaveBeenCalledWith({
     indexName: 'something',
-    routing: true,
+    routing: {
+      router: {},
+      stateMapping: {},
+    },
     searchClient,
     searchFunction,
     stalledSearchDelay: 250,

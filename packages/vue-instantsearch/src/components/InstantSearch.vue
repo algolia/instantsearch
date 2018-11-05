@@ -55,8 +55,18 @@ export default {
       required: true,
     },
     routing: {
-      type: [Boolean, Object],
       default: null,
+      validator(value) {
+        if (
+          typeof value === 'boolean' ||
+          !value.router ||
+          !value.stateMapping
+        ) {
+          warn('routing should be an object, with `router` and `stateMapping`');
+          return false;
+        }
+        return true;
+      },
     },
     stalledSearchDelay: {
       type: Number,

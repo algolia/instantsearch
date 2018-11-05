@@ -160,9 +160,7 @@ If you're using this, and have suggestions or questions, [please get in touch](h
 
 3. Routing
 
-Routing is not fully fleshed out yet. It's possible to set the `routing` prop to `true` or an object with the options, but it doesn't integrate with Vue Router yet at this point.
-
-If you're using this, and have suggestions, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
+You're now able to use routing in InstantSearch with, or without Vue Router. Read more on how to use that [here](/advanced/vue-router-url-sync.html).
 
 4. changing props on `ais-instant-search`
 

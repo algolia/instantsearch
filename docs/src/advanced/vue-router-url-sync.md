@@ -11,25 +11,49 @@ githubSource: docs/src/advanced/vue-router-url-sync.md
 
 > NOTE: this guide **has** been updated for v2
 
-Currently there's three existing ways how to use InstantSearch routing.
 
-The first option is putting `:routing="true"` on `ais-instant-search`. This will use the default serialising that doesn't lose any information, but might be a bit verbose
 
-The second option is to put an object of configuration. This object can take `stateMapping`, with the functions `stateToRoute` and `routeToState` to serialise differently, but still use the default routing. This allows to rename things to make them easier to read, without touching how the serialising itself happens.
+The `routing` prop on `ais-instant-search` accepts an object. The simplest way to get started without customising URLs at all is the following:
 
-Finally, you can also change the URL to use full URLs, rather than just the query string. You need to change the `router` key inside the `routing` object. You can import the default (history) router from `import {history} from 'instantsearch.js/es/lib/routers'`, and modify, like in InstantSearch JS.
+```vue
+<template>
+  <ais-instant-search
+    :routing="{
+      router: historyRouter(),
+      stateMapping: simpleMapping(),
+    }"
+  >
+    <!-- Your search components go in here -->
+  </ais-instant-search>
+</template>
 
-[![Edit vue-instantsearch-app](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/q8pmz6n7lj?module=%2Fsrc%2FApp.vue)
+<script>
+import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
 
-All docs for InstantSearch routing configuration are [here](https://community.algolia.com/instantsearch.js/v2/guides/routing.html).
+export default {
+  data() {
+    return {
+      historyRouter,
+      simpleMapping,
+    };
+  },
+};
+</script>
+```
 
-Finally an option is to use Vue Router. All previous examples will _work_ using Vue Router, as long as they don't conflict, as long as you don't try to do specific Vue Router things which are controlled by InstantSearch, since InstantSearch provided query strings won't be available to Vue Router, as soon as the routing changes from its initial deserialization.
+They're routing object contains two keys: `history` and `stateMapping`:
 
-## How **do** I use Vue Router?
+- **history**: used for writing and reading to the URL,
+- **stateMapping**: used for mapping the InstantSearch state towards the state that will be read and written to the URL.
 
-If you have a Vue Router configuration that requires a synchronized use of the query parameters, or other parameters, as described in the InstantSearch guide, you need to write a custom "router" key for InstantSearch:
+If you want to customise which things are written in the URL but don't want to customise how exactly the URL looks you will use state mapping. The way to do this is replacing the call to `stateMapping` with an object with the functions `stateToRoute` and `routeToState`.
+
+If you also want to customise how the URL is read and written, for example when you are using Vue Router, you will override the behaviour of `router`. Note however that to use Vue Router, you don't **need** to synchronise InstantSearch routing to Vue Router routing, the only reason to do is if you are doing other router functions on your search page as well, and want to avoid conflicts when both are writing to the URL at the same time. To do this, you pass an object to the `router` key:
 
 ```js
+const router = this.router; /* get this from Vue Router */
+
 const instantSearchRouting = {
   router: {
     read() {
@@ -102,3 +126,5 @@ const router = new Router({
 ```
 
 Note that the `qs` module is already used in InstantSearch, so this will not add to your bundle size, unless you use a different version.
+
+All docs for InstantSearch routing configuration are [here](https://community.algolia.com/instantsearch.js/v2/guides/routing.html).

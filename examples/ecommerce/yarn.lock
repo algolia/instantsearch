@@ -1119,7 +1119,7 @@ algoliasearch-helper@2.26.0:
     qs "^6.5.1"
     util "^0.10.3"
 
-algoliasearch-helper@^2.26.1:
+algoliasearch-helper@^2.26.0, algoliasearch-helper@^2.26.1:
   version "2.26.1"
   resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.26.1.tgz#75bd34f095e852d1bda483b8ebfb83c3c6e2852c"
   integrity sha512-fQBZZXC3rac4wadRj5wA/gxy88Twb+GQF3n8foew8SAsqe9Q59PFq1y3j08pr6eNSRYkZJV7qMpe7ox5D27KOw==
@@ -1150,7 +1150,7 @@ algoliasearch@3.27.0:
     semver "^5.1.0"
     tunnel-agent "^0.6.0"
 
-algoliasearch@^3.30.0:
+algoliasearch@^3.27.0, algoliasearch@^3.30.0:
   version "3.30.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.30.0.tgz#355585e49b672e5f71d45b9c2b371ecdff129cd1"
   integrity sha512-FuinyPgNn0MeAHm9pan6rLgY6driY3mcTo4AWNBMY1MUReeA5PQA8apV/3SNXqA5bbsuvMvmA0ZrVzrOmEeQTA==
@@ -1926,6 +1926,11 @@ classnames@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
   integrity sha1-+zgB1FNGdknvNgPH1hoCvRKb3m0=
+
+classnames@^2.2.5:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 clean-css@4.2.x:
   version "4.2.1"
@@ -3832,7 +3837,7 @@ hoek@5.x.x:
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-5.0.4.tgz#0f7fa270a1cafeb364a4b2ddfaa33f864e4157da"
   integrity sha512-Alr4ZQgoMlnere5FZJsIyfIjORBqZll5POhDsF4q64dPuJR6rNxXdDxtHSQq8OXRurhmx+PWYEE8bXRROY8h0w==
 
-hogan.js@3.0.2:
+hogan.js@3.0.2, hogan.js@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/hogan.js/-/hogan.js-3.0.2.tgz#4cd9e1abd4294146e7679e41d7898732b02c7bfd"
   integrity sha1-TNnhq9QpQUbnZ55B14mHMrAse/0=
@@ -4124,6 +4129,24 @@ instantsearch.js@^2.10.2:
     prop-types "15.5.10"
     qs "6.5.1"
     to-factory "1.0.0"
+
+instantsearch.js@^2.10.4:
+  version "2.10.4"
+  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-2.10.4.tgz#446b1ce06eff52c86f195e761087950020cc7fee"
+  integrity sha512-hhGdYQJBejN4Xm1ElirNenD1BUsP6HE9HOoAII13psn1vXnKE89oQ7/3Z/fpVRBKM0P2KopXJZ5WVn2JFp7ZDQ==
+  dependencies:
+    algoliasearch "^3.27.0"
+    algoliasearch-helper "^2.26.0"
+    classnames "^2.2.5"
+    events "^1.1.0"
+    hogan.js "^3.0.2"
+    lodash "^4.17.5"
+    preact "^8.2.7"
+    preact-compat "^3.18.0"
+    preact-rheostat "^2.1.1"
+    prop-types "^15.5.10"
+    qs "^6.5.1"
+    to-factory "^1.0.0"
 
 internal-ip@^3.0.1:
   version "3.0.1"
@@ -6130,7 +6153,7 @@ preact-compat@3.18.0:
     prop-types "^15.5.8"
     standalone-react-addons-pure-render-mixin "^0.1.1"
 
-preact-compat@^3.17.0:
+preact-compat@^3.17.0, preact-compat@^3.18.0:
   version "3.18.4"
   resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.18.4.tgz#fbe76ddd30356c68e3ccde608107104946f2cf8d"
   integrity sha512-aR5CvCIDerE2Y201ERVkWQdTAQKhKGNYujEk4tbyfQDInFTrnCCa3KCeGtULZrwy0PNRBjdQa2/Za7qv7ALNFg==
@@ -6148,7 +6171,7 @@ preact-render-to-string@^3.6.0, preact-render-to-string@^3.8.2:
   dependencies:
     pretty-format "^3.5.1"
 
-preact-rheostat@2.1.1:
+preact-rheostat@2.1.1, preact-rheostat@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/preact-rheostat/-/preact-rheostat-2.1.1.tgz#45fcb4c2f4f7beb6dbd5e0f18f744655fc16ac7c"
   integrity sha512-d03JgkpbjknALYl+zfNiJQ60sFd4A0YjnLCe/DB+rqKQck7jXpsW9RqSN0R50/lV8fEezhVCjq2WMPDDOKmwaA==
@@ -6168,7 +6191,7 @@ preact@8.2.7:
   resolved "https://registry.yarnpkg.com/preact/-/preact-8.2.7.tgz#316249fb678cd5e93e7cee63cea7bfb62dbd6814"
   integrity sha512-m34Ke8U32HyKRVzUOCAcaiIBLR2ye6syiuRclU5DxyixDPDFqdLbIElhERBrF6gDbPKQR+Vpv5bZ9CCbvN6pdQ==
 
-preact@^8.2.5:
+preact@^8.2.5, preact@^8.2.7:
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/preact/-/preact-8.3.1.tgz#ed34f79d09edc5efd32a378a3416ef5dc531e3ac"
   integrity sha512-s8H1Y8O9e+mOBo3UP1jvWqArPmjCba2lrrGLlq/0kN1XuIINUbYtf97iiXKxCuG3eYwmppPKnyW2DBrNj/TuTg==
@@ -7398,7 +7421,7 @@ to-arraybuffer@^1.0.0:
   resolved "https://registry.yarnpkg.com/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz#7d229b1fcc637e466ca081180836a7aabff83f43"
   integrity sha1-fSKbH8xjfkZsoIEYCDanqr/4P0M=
 
-to-factory@1.0.0:
+to-factory@1.0.0, to-factory@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/to-factory/-/to-factory-1.0.0.tgz#8738af8bd97120ad1d4047972ada5563bf9479b1"
   integrity sha1-hzivi9lxIK0dQEeXKtpVY7+UebE=

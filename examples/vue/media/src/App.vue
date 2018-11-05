@@ -2,7 +2,7 @@
   <ais-instant-search
     :search-client="searchClient"
     index-name="movies"
-    :routing="true"
+    :routing="routing"
   >
     <header class="navbar">
       <img src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png" width="40">
@@ -96,6 +96,9 @@
 
 <script>
 import algoliasearch from 'algoliasearch/lite';
+import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
+
 import './App.css';
 
 export default {
@@ -105,6 +108,10 @@ export default {
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
+      routing: {
+        router: historyRouter(),
+        stateMapping: simpleMapping(),
+      }
     };
   },
 };

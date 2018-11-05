@@ -3,7 +3,7 @@
     <ais-instant-search
       :search-client="searchClient"
       index-name="instant_search"
-      :routing="true"
+      :routing="routing"
     >
       <ais-configure :hitsPerPage="16" />
 
@@ -119,6 +119,9 @@
 
 <script>
 import algoliasearch from 'algoliasearch/lite';
+import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
+
 import './App.css';
 
 export default {
@@ -128,6 +131,10 @@ export default {
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
+      routing: {
+        router: historyRouter(),
+        stateMapping: simpleMapping(),
+      }
     };
   },
 };
