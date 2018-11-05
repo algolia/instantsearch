@@ -13,10 +13,10 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.panel({
           templates: {
-            header: ({ results }) =>
-              `Header ${results ? `(${results.nbHits} hits)` : ''}`,
+            header: 'Header',
             footer: 'Footer',
           },
+          hidden: ({ items }) => items.length === 0,
         })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'brand',
