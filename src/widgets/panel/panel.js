@@ -8,12 +8,18 @@ import Template from '../../components/Template/Template';
 const suit = component('Panel');
 
 const renderer = ({ containerNode, cssClasses, templates, templateProps }) => ({
-  results,
-} = {}) => {
+  renderingOptions,
+  hidden,
+}) => {
   let bodyReference = null;
 
   render(
-    <div className={cssClasses.root}>
+    <div
+      className={cx(cssClasses.root, {
+        [cssClasses.noRefinementRoot]: !renderingOptions.canRefine,
+      })}
+      hidden={hidden}
+    >
       {templates.header && (
         <Template
           {...templateProps}
@@ -21,7 +27,7 @@ const renderer = ({ containerNode, cssClasses, templates, templateProps }) => ({
           rootProps={{
             className: cssClasses.header,
           }}
-          data={{ results }}
+          data={renderingOptions}
         />
       )}
       <div className={cssClasses.body} ref={ref => (bodyReference = ref)} />
@@ -32,7 +38,7 @@ const renderer = ({ containerNode, cssClasses, templates, templateProps }) => ({
           rootProps={{
             className: cssClasses.footer,
           }}
-          data={{ results }}
+          data={renderingOptions}
         />
       )}
     </div>,
@@ -65,6 +71,7 @@ const myWidget = widgetWithHeaderFooter(widgetOptions)`;
 
 export default function panel({
   templates,
+  hidden = () => false,
   cssClasses: userCssClasses = {},
 } = {}) {
   const cssClasses = {
@@ -92,7 +99,7 @@ export default function panel({
     const defaultTemplates = { header: '', footer: '' };
     const templateProps = prepareTemplateProps({ defaultTemplates, templates });
 
-    const specializedRenderer = renderer({
+    const renderPanel = renderer({
       containerNode: getContainerNode(container),
       cssClasses,
       templates,
@@ -100,7 +107,12 @@ export default function panel({
     });
 
     try {
-      const { bodyReference } = specializedRenderer();
+      const { bodyReference } = renderPanel({
+        renderingOptions: {
+          canRefine: false,
+        },
+        hidden: true,
+      });
 
       const widget = widgetFactory({
         ...widgetOptions,
@@ -114,8 +126,14 @@ export default function panel({
           widget.dispose();
         },
         render(options) {
-          specializedRenderer({
-            results: options.results,
+          const renderingOptions =
+            typeof widget.getRenderingOptions === 'function'
+              ? widget.getRenderingOptions(options)
+              : { canRefine: true };
+
+          renderPanel({
+            renderingOptions,
+            hidden: Boolean(hidden(renderingOptions)),
           });
           widget.render(options);
         },
