@@ -11,21 +11,21 @@ githubSource: docs/src/advanced/custom-backend.md
 
 > This guide is compatible with Vue InstantSearch ≥ 1.6.0.
 
-Advanced InstantSearch users may have the need to query Algolia’s servers from their backend instead of the frontend, while still being able to reuse InstantSearch widgets. Possible motivations could be for security restrictions, for SEO purposes or to enrich the data sent by the custom server (i.e. fetch Algolia data and data from their own servers). If this sounds appealing to you, feel free to follow this guide. Keep in mind though that we, at Algolia, [recommend doing frontend search](https://www.algolia.com/doc/faq/searching/searching-from-the-front-end-or-the-back-end/#we-definitely-recommend-frontend-search) for performance and high availability reasons.
+Advanced InstantSearch users may have the need to query Algolia's servers from their backend instead of the frontend, while still being able to reuse InstantSearch widgets. Possible motivations could be for security restrictions, for SEO purposes or to enrich the data sent by the custom server (i.e. fetch Algolia data and data from their own servers). If this sounds appealing to you, feel free to follow this guide. Keep in mind though that we, at Algolia, [recommend doing frontend search](https://www.algolia.com/doc/faq/searching/searching-from-the-front-end-or-the-back-end/#we-definitely-recommend-frontend-search) for performance and high availability reasons.
 
 By the end of this guide, you will have learned how to leverage InstantSearch with your own backend architecture to query Algolia.
 
-## How it’s made possible
+## How it's made possible
 
 InstantSearch is the UI part on top a search client with a state managed by a [JavaScript Helper](https://github.com/algolia/algoliasearch-helper-js). These three layers are composable and can be interchanged to leverage the InstantSearch widgets system with different search clients.
 
-The [search client](https://github.com/algolia/algoliasearch-client-javascript) that Algolia offers queries Algolia's backends whenever the user refines the search. It is possible to implement your own search client that queries your backend, which then queries Algolia’s backends with the [Algolia search client](https://github.com/algolia/algoliasearch-client-javascript) on your server.
+The [search client](https://github.com/algolia/algoliasearch-client-javascript) that Algolia offers queries Algolia's backends whenever the user refines the search. It is possible to implement your own search client that queries your backend, which then queries Algolia's backend with the [Algolia search client](https://github.com/algolia/algoliasearch-client-javascript) on your server.
 
 To create your own client, you will need to implement a given interface that receives and returns formatted data that InstantSearch can understand.
 
 ## On the backend: create the necessary routes
 
-This guide assumes that you’ve got an existing server running on [http://localhost:3000](http://localhost:3000) with the route `POST /search` that takes the default Algolia query parameters as JSON. This backend could be using the [JavasScript API client](https://www.algolia.com/doc/api-client/javascript/getting-started/) to query Algolia, on top of any other operations you want to perform.
+This guide assumes that you've got an existing server running on [http://localhost:3000](http://localhost:3000) with the route `POST /search` that takes the default Algolia query parameters as JSON. This backend could be using the [JavasScript API client](https://www.algolia.com/doc/api-client/javascript/getting-started/) to query Algolia, on top of any other operations you want to perform.
 
 The `algoliasearch` package will allow you to query Algolia from your backend. Here's an example using [Express](https://expressjs.com/):
 
@@ -92,7 +92,7 @@ We use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_AP
 
 ## Using the search client with InstantSearch
 
-Now, we need to tell InstantSearch to use the search client that we’ve created. This is possible with the `searchClient` option. This parameter will disable all Algolia requests coming from the frontend and will proxy them to your own backend implementation.
+Now, we need to tell InstantSearch to use the search client that we've created. This is possible with the `searchClient` option. This parameter will disable all Algolia requests coming from the frontend and will proxy them to your own backend implementation.
 
 ```html
 <ais-index
@@ -103,11 +103,11 @@ Now, we need to tell InstantSearch to use the search client that we’ve created
 </ais-index>
 ```
 
-That’s it! InstantSearch is now requesting your own backend and will display the UI accordingly.
+That's it! InstantSearch is now requesting your own backend and will display the UI accordingly.
 
 ## Going further: enriching data from the backend
 
-Now that you’ve got InstantSearch querying your own backend before fetching results from Algolia, you could merge Algolia’s data to yours to offer your users more exhaustive results.
+Now that you've got InstantSearch querying your own backend before fetching results from Algolia, you could merge Algolia's data to yours to offer your users more exhaustive results.
 
 A recurring problem with e-commerce websites using Algolia is to manage the remaining stock for each product; it is sometimes hard to keep track of the exact number of items. An approach made possible with a custom backend is to only store the item's availability on each Algolia record (`none`, `low`, `medium`, `high`) and to fetch the exact stock on your database.
 
