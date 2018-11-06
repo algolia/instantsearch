@@ -16,7 +16,7 @@ export default () => {
             header: 'Header',
             footer: 'Footer',
           },
-          hidden: ({ items }) => items.length === 0,
+          hidden: ({ canRefine }) => !canRefine,
         })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'brand',
