@@ -21,12 +21,19 @@ describe('panel call', () => {
     ).not.toThrow();
   });
 
-  test('with `hidden` as a boolean throws usage', () => {
-    expect(() =>
-      panel({
-        hidden: true,
-      })
-    ).toThrow(/^\[InstantSearch.js\]/);
+  test('with `hidden` as a boolean warns', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
+    panel({
+      hidden: true,
+    });
+
+    expect(warn).toHaveBeenCalledWith(
+      '[InstantSearch.js]: The `hidden` option in the "panel" widget expects a function returning a boolean (received "boolean" type).'
+    );
+
+    warn.mockRestore();
   });
 
   test('with a widget without `container` throws', () => {

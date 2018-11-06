@@ -1,6 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
+import { getContainerNode, prepareTemplateProps, warn } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
 
@@ -41,8 +41,8 @@ export default function panel({
   cssClasses: userCssClasses = {},
 } = {}) {
   if (typeof hidden !== 'function') {
-    throw new Error(
-      `[InstantSearch.js] The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).\n\n${usage}`
+    warn(
+      `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).`
     );
   }
 
