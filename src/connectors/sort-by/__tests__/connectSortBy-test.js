@@ -300,4 +300,11 @@ describe('connectSortBy', () => {
       });
     });
   });
+
+  it('provides getRenderingOptions()', () => {
+    const makeWidget = connectSortBy(() => {});
+    const widget = makeWidget({ items: [] });
+
+    expect(widget.getRenderingOptions).toBeDefined();
+  });
 });
