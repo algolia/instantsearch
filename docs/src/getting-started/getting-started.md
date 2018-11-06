@@ -38,7 +38,7 @@ $ cd vue-instantsearch-getting-started
 Add Vue InstantSearch as a dependency, it's published on [npm](https://www.npmjs.com):
 
 ```shell
-$ npm install vue-instantsearch@alpha
+$ npm install vue-instantsearch@beta
 ```
 
 ## Run the development environment

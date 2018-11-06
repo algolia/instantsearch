@@ -11,9 +11,12 @@ githubSource: docs/src/getting-started/migration.md
 
 ## v1 -> v2
 
-Vue InstantSearch v2 has just been released as the first alpha version. An alpha version means that there are known limitations, and this shouldn't be used in a production environment without knowing the risks of options that can be changed without major version. 
+Vue InstantSearch v2 has just been released as a **beta** version. A beta version means that there are known limitations, and this shouldn't be used in a production environment without knowing the risks of options that can be changed without major version.
 
-This also means that we are still in a state where things can change where necessary. If you have any feedback here, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
+The limitations here that make this a beta version are:
+
+- no server side rendering support
+- some smaller breaking changes can still occur between versions
 
 ### Renamed components
 
@@ -143,7 +146,7 @@ Each widget lists the CSS classes it uses in its documentation page.
 
 1. SSR
 
-In this alpha version there's no server side rendering support. To align this with your site which might already use SSR, you can disable that for now, by wrapping the `ais-instant-search` component in a `no-ssr` component.
+In this version there's no server side rendering support. To align this with your site which might already use SSR, you can disable that for now, by wrapping the `ais-instant-search` component in a `no-ssr` component.
 
 The reason we chose not to enable SSR yet, is because we are looking for a elegant way of integrating it, without needing to write lots of custom code for the server side parts. 
 
