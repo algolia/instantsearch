@@ -177,7 +177,7 @@ export default function connectSortBy(renderFn, unmountFn) {
         return {
           items: transformItems(items),
           canRefine: results && results.nbHits > 0,
-          currentIndex: helper.getIndex(),
+          currentRefinement: helper.getIndex(),
         };
       },
     };
