@@ -57,6 +57,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 export default function connectBreadcrumb(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
+
   return (widgetParams = {}) => {
     const {
       attributes,
@@ -70,8 +71,11 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
+    let renderingRefine;
+    let renderingCreateURL;
+
     return {
-      getConfiguration: currentConfiguration => {
+      getConfiguration(currentConfiguration) {
         if (currentConfiguration.hierarchicalFacets) {
           const isFacetSet = find(
             currentConfiguration.hierarchicalFacets,
@@ -102,8 +106,22 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
         };
       },
 
+      getRenderingOptions({ results, state }) {
+        const [{ name: facetName }] = state.hierarchicalFacets;
+        const facetValues = results.getFacetValues(facetName);
+        const data = Array.isArray(facetValues.data) ? facetValues.data : [];
+
+        const items = transformItems(shiftItemsValues(prepareItems(data)));
+        const canRefine = items.length > 0;
+
+        return {
+          canRefine,
+          items,
+        };
+      },
+
       init({ createURL, helper, instantSearchInstance }) {
-        this._createURL = facetValue => {
+        renderingCreateURL = facetValue => {
           if (!facetValue) {
             const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
               hierarchicalFacetName
@@ -122,7 +140,7 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
           );
         };
 
-        this._refine = function(facetValue) {
+        renderingRefine = function(facetValue) {
           if (!facetValue) {
             const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
               hierarchicalFacetName
@@ -139,11 +157,11 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
 
         renderFn(
           {
-            createURL: this._createURL,
+            createURL: renderingCreateURL,
             canRefine: false,
             instantSearchInstance,
             items: [],
-            refine: this._refine,
+            refine: renderingRefine,
             widgetParams,
           },
           true
@@ -151,19 +169,12 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
       },
 
       render({ instantSearchInstance, results, state }) {
-        const [{ name: facetName }] = state.hierarchicalFacets;
-
-        const facetValues = results.getFacetValues(facetName);
-        const data = Array.isArray(facetValues.data) ? facetValues.data : [];
-        const items = transformItems(shiftItemsValues(prepareItems(data)));
-
         renderFn(
           {
-            canRefine: items.length > 0,
-            createURL: this._createURL,
+            ...this.getRenderingOptions({ results, state }),
+            createURL: renderingCreateURL,
             instantSearchInstance,
-            items,
-            refine: this._refine,
+            refine: renderingRefine,
             widgetParams,
           },
           false

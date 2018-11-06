@@ -620,4 +620,11 @@ describe('connectBreadcrumb', () => {
       ],
     });
   });
+
+  it('provides getRenderingOptions()', () => {
+    const makeWidget = connectBreadcrumb(() => {});
+    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+
+    expect(widget.getRenderingOptions).toBeDefined();
+  });
 });
