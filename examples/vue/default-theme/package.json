@@ -10,7 +10,7 @@
   "dependencies": {
     "instantsearch.js": "^2.10.4",
     "vue": "^2.5.17",
-    "vue-instantsearch": "2.0.0-alpha.3"
+    "vue-instantsearch": "^2.0.0-beta.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",
