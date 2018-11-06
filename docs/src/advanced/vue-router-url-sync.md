@@ -51,7 +51,7 @@ If you want to customise which things are written in the URL but don't want to c
 
 If you also want to customise how the URL is read and written, for example when you are using Vue Router, you will override the behaviour of `router`. Note however that to use Vue Router, you don't **need** to synchronise InstantSearch routing to Vue Router routing, the only reason to do is if you are doing other router functions on your search page as well, and want to avoid conflicts when both are writing to the URL at the same time. To do this, you pass an object to the `router` key:
 
-```js
+```javascript
 const router = this.router; /* get this from Vue Router */
 
 const instantSearchRouting = {
@@ -77,7 +77,7 @@ const instantSearchRouting = {
 
 Note that in this example only use the `query` key is used, but other Vue Router keys can also be used. It's advised here to use a `stateMapping` that changes nested objects into flat objects. The reason why you need flat objects, is because by default Vue Router will serialize an object as value for a query string object as `[object Object]`. This can be avoided by either _not_ having deep objects (possibly replaced by arrays, or a flat version with only what you need in your app):
 
-```js
+```javascript
 const stateMapping = {
   stateToRoute(uiState) {
     return {
@@ -106,7 +106,7 @@ const stateMapping = {
 
 Or by modifying the Vue Router to allow nested objects in the query string:
 
-```js
+```javascript
 import qs from 'qs';
 
 const router = new Router({

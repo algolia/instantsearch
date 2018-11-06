@@ -89,7 +89,7 @@ Then, all information from that connector will be available to your template as 
 
 Then we can make use of `state` here to for example filter over the items (note that this is also possible with `transform-items` prop on `ais-menu`):
 
-```js
+```javascript
 export default {
   // ...
   computed: {
@@ -118,7 +118,7 @@ Then in our template, we can use this as expected:
 
 Finally, if you want to make your own connector, you can do that using a function with this signature:
 
-```js
+```javascript
 const connector = (renderFn, unmountFn) => (widgetParams = {}) => ({
   init({ instantSearchInstance }) {
     renderFn(

@@ -71,7 +71,7 @@ Functionally this is not any different from directly passing the created search 
 
 Since we don't want to do a request when the query is empty (`""`), we first need to detect it:
 
-```js
+```javascript
 const searchClient = {
   async search(requests) {
     if (requests.every(({ params: { query } }) => Boolean(query) === false)) {
@@ -86,7 +86,7 @@ There can be multiple requests done in case a user for example clicks a hierarch
 
 Then, we need to return a [formatted response](https://www.algolia.com/doc/api-reference/api-methods/search/?language=javascript#response). This is an array of objects of the same length as the `requests` array. At the bare minimum, each object needs to contain: `processingTimeMS`, `nbHits`, `hits` and `facets`:
 
-```js
+```javascript
 const searchClient = {
   async search(requests) {
     if (requests.every(({ params: { query } }) => Boolean(query) === false)) {

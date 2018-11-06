@@ -71,7 +71,7 @@ npm install instantsearch.css --save
 
 Then in your JS entry point (`main.js`) you need to import it:
 
-```js
+```javascript
 import 'instantsearch.css/themes/reset.css';
 
 // or
