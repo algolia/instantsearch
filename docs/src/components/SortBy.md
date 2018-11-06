@@ -1,5 +1,5 @@
 ---
-title: Sort by selector
+title: SortBy
 mainTitle: Components
 layout: main.pug
 category: Components
