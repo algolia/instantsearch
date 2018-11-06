@@ -1,79 +1,51 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import Template from '../../components/Template/Template';
+import Panel from '../../components/Panel/Panel';
 
 const suit = component('Panel');
 
-const renderer = ({ containerNode, cssClasses, templates, templateProps }) => ({
+const renderer = ({ containerNode, cssClasses, templateProps }) => ({
   renderingOptions,
   hidden,
 }) => {
   let bodyReference = null;
 
   render(
-    <div
-      className={cx(cssClasses.root, {
-        [cssClasses.noRefinementRoot]: !renderingOptions.canRefine,
-      })}
+    <Panel
+      cssClasses={cssClasses}
       hidden={hidden}
-    >
-      {templates.header && (
-        <Template
-          {...templateProps}
-          templateKey="header"
-          rootProps={{
-            className: cssClasses.header,
-          }}
-          data={renderingOptions}
-        />
-      )}
-      <div className={cssClasses.body} ref={ref => (bodyReference = ref)} />
-      {templates.footer && (
-        <Template
-          {...templateProps}
-          templateKey="footer"
-          rootProps={{
-            className: cssClasses.footer,
-          }}
-          data={renderingOptions}
-        />
-      )}
-    </div>,
+      templateProps={templateProps}
+      data={renderingOptions}
+      setBodyRef={ref => (bodyReference = ref)}
+    />,
     containerNode
   );
 
   return { bodyReference };
 };
 
-renderer.propTypes = {
-  templates: PropTypes.object.isRequired,
-  templateProps: PropTypes.object.isRequired,
-  cssClasses: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    noRefinementRoot: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired,
-    header: PropTypes.string.isRequired,
-    footer: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
 const usage = `Usage:
 const widgetWithHeaderFooter = panel({
-  container,
-  [ cssClasses.{root, noRefinementRoot, body, header, footer} ],
   [ templates.{header, footer} ],
+  [ hidden ],
+  [ cssClasses.{root, noRefinementRoot, body, header, footer} ],
 })(widget);
 
 const myWidget = widgetWithHeaderFooter(widgetOptions)`;
 
 export default function panel({
-  templates,
+  templates = {},
   hidden = () => false,
   cssClasses: userCssClasses = {},
 } = {}) {
+  if (typeof hidden !== 'function') {
+    throw new Error(
+      `[InstantSearch.js] The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).\n\n${usage}`
+    );
+  }
+
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
     noRefinementRoot: cx(
@@ -85,14 +57,14 @@ export default function panel({
     footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
   };
 
-  return widgetFactory => widgetOptions => {
+  return widgetFactory => (widgetOptions = {}) => {
     const { container } = widgetOptions;
 
     if (!container) {
       throw new Error(
-        `[InstantSearch.js] The widget "${
+        `[InstantSearch.js] The \`container\` option is required in the widget "${
           widgetFactory.name
-        }" is missing a container option.`
+        }".`
       );
     }
 
@@ -102,7 +74,6 @@ export default function panel({
     const renderPanel = renderer({
       containerNode: getContainerNode(container),
       cssClasses,
-      templates,
       templateProps,
     });
 
