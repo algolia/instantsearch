@@ -108,7 +108,7 @@ export default function connectSortBy(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
-    let _setIndex;
+    let setIndex;
 
     return {
       init({ helper, instantSearchInstance }) {
@@ -122,13 +122,12 @@ export default function connectSortBy(renderFn, unmountFn) {
         }
 
         this.initialIndex = instantSearchInstance.indexName;
-        _setIndex = indexName => helper.setIndex(indexName).search();
+        setIndex = indexName => helper.setIndex(indexName).search();
 
         renderFn(
           {
-            ...this.getRenderingOptions(),
-            currentRefinement: currentIndex,
-            refine: _setIndex,
+            ...this.getRenderingOptions({ helper }),
+            refine: setIndex,
             widgetParams,
             instantSearchInstance,
           },
@@ -139,9 +138,8 @@ export default function connectSortBy(renderFn, unmountFn) {
       render({ helper, results, instantSearchInstance }) {
         renderFn(
           {
-            ...this.getRenderingOptions({ results }),
-            currentRefinement: helper.getIndex(),
-            refine: _setIndex,
+            ...this.getRenderingOptions({ results, helper }),
+            refine: setIndex,
             widgetParams,
             instantSearchInstance,
           },
@@ -175,10 +173,11 @@ export default function connectSortBy(renderFn, unmountFn) {
         );
       },
 
-      getRenderingOptions({ results } = {}) {
+      getRenderingOptions({ results, helper }) {
         return {
           items: transformItems(items),
           canRefine: results && results.nbHits > 0,
+          currentIndex: helper.getIndex(),
         };
       },
     };
