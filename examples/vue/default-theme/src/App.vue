@@ -56,9 +56,9 @@
               <label>Sort by</label>
               <ais-sort-by
                 :items="[
-                  { name: 'instant_search', label: 'Featured' },
-                  { name: 'instant_search_price_asc', label: 'Price asc.' },
-                  { name: 'instant_search_price_desc', label: 'Price desc.' },
+                  { value: 'instant_search', label: 'Featured' },
+                  { value: 'instant_search_price_asc', label: 'Price asc.' },
+                  { value: 'instant_search_price_desc', label: 'Price desc.' },
                 ]"
               />
             </div>
