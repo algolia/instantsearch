@@ -1,3 +1,35 @@
+<a name="2.0.0-beta.1"></a>
+# [2.0.0-beta.1](https://github.com/algolia/vue-instantsearch/compare/2.0.0-alpha.3...2.0.0-beta.1) (2018-11-06)
+
+
+### Bug Fixes
+
+* **CurrentRefinements:** use existing key ([5d0b72f](https://github.com/algolia/vue-instantsearch/commit/5d0b72f))
+* **example:** add codesandbox config ([#556](https://github.com/algolia/vue-instantsearch/issues/556)) ([e7492eb](https://github.com/algolia/vue-instantsearch/commit/e7492eb))
+* **Panel:** make body class name computed ([589f076](https://github.com/algolia/vue-instantsearch/commit/589f076))
+* **RefinementList:** give canToggleShowMore to default slot ([08c325f](https://github.com/algolia/vue-instantsearch/commit/08c325f))
+* **RefinementList:** pass createURL to item ([6834766](https://github.com/algolia/vue-instantsearch/commit/6834766))
+* **SortBy:** label & value instead of label & name ([be42471](https://github.com/algolia/vue-instantsearch/commit/be42471))
+
+
+### Features
+
+* **CurrentRefinements:** consolidate API ([#550](https://github.com/algolia/vue-instantsearch/issues/550)) ([2b08b76](https://github.com/algolia/vue-instantsearch/commit/2b08b76))
+* **CurrentRefinements:** expose createURL ([c0bf7e5](https://github.com/algolia/vue-instantsearch/commit/c0bf7e5))
+* **CurrentRefinements:** give createURL to slot ([#557](https://github.com/algolia/vue-instantsearch/issues/557)) ([00c2865](https://github.com/algolia/vue-instantsearch/commit/00c2865))
+* **InfiniteHits:** add loadMore slot ([d313acb](https://github.com/algolia/vue-instantsearch/commit/d313acb))
+* **IS:** allow change of stalled search delay and search function ([1d38d5e](https://github.com/algolia/vue-instantsearch/commit/1d38d5e))
+* **MenuSelect:** add createURL in slot ([d61fc82](https://github.com/algolia/vue-instantsearch/commit/d61fc82))
+* **MenuSelect:** add item slot ([#555](https://github.com/algolia/vue-instantsearch/issues/555)) ([1071eea](https://github.com/algolia/vue-instantsearch/commit/1071eea))
+* **RangeInput:** refine & currentRefinement sync ([#560](https://github.com/algolia/vue-instantsearch/issues/560)) ([433e88b](https://github.com/algolia/vue-instantsearch/commit/433e88b))
+* **RatingMenu:** add slot for & up ([6717db6](https://github.com/algolia/vue-instantsearch/commit/6717db6))
+* **RatingMenu:** createURL & stars ([038ec56](https://github.com/algolia/vue-instantsearch/commit/038ec56))
+* **RefinementList:** provide SFFV query to default stot ([a32e38c](https://github.com/algolia/vue-instantsearch/commit/a32e38c))
+* **router:** force object form ([#562](https://github.com/algolia/vue-instantsearch/issues/562)) ([5f1976d](https://github.com/algolia/vue-instantsearch/commit/5f1976d))
+* **SearchBox:** forward class-names & slots ([#553](https://github.com/algolia/vue-instantsearch/issues/553)) ([b2122dd](https://github.com/algolia/vue-instantsearch/commit/b2122dd))
+
+
+
 <a name="2.0.0-alpha.3"></a>
 # [2.0.0-alpha.3](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-alpha.2...v2.0.0-alpha.3) (2018-10-02)
 
