@@ -32,7 +32,12 @@ export default () => {
           instantsearch.widgets.panel({
             templates: {
               header: 'Header',
-              footer: 'Footer',
+              footer: ({ items, currentRefinement }) =>
+                items
+                  ? `${
+                      items.length
+                    } items available ("${currentRefinement}" selected)`
+                  : '',
             },
           })(instantsearch.widgets.sortBy)({
             container,
