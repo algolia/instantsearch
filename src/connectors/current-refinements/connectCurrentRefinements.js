@@ -128,20 +128,27 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
     } = widgetParams;
 
     return {
-      init({ helper, createURL, instantSearchInstance }) {
+      getRenderingOptions({ results, state, helper }) {
         const items = transformItems(
           getFilteredRefinements({
-            results: {},
-            state: helper.state,
+            results,
+            state: state || (helper && helper.state),
             helper,
             includedAttributes,
             excludedAttributes,
           })
         );
 
+        return {
+          items,
+          canRefine: items.length > 0,
+        };
+      },
+
+      init({ helper, createURL, instantSearchInstance }) {
         renderFn(
           {
-            items,
+            ...this.getRenderingOptions({ results: {}, helper }),
             refine: refinement => clearRefinement(helper, refinement),
             createURL: refinement =>
               createURL(clearRefinementFromState(helper.state, refinement)),
@@ -153,19 +160,9 @@ export default function connectCurrentRefinements(renderFn, unmountFn) {
       },
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
-        const items = transformItems(
-          getFilteredRefinements({
-            results,
-            state,
-            helper,
-            includedAttributes,
-            excludedAttributes,
-          })
-        );
-
         renderFn(
           {
-            items,
+            ...this.getRenderingOptions({ results, state, helper }),
             refine: refinement => clearRefinement(helper, refinement),
             createURL: refinement =>
               createURL(clearRefinementFromState(helper.state, refinement)),

@@ -477,4 +477,22 @@ describe('connectCurrentRefinements', () => {
       );
     });
   });
+
+  describe('getRenderingOptions()', () => {
+    it('is defined and returns the correct options', () => {
+      const makeWidget = connectCurrentRefinements(() => {});
+      const widget = makeWidget({});
+      const helper = jsHelper({});
+      helper.search = () => {};
+      const results = new SearchResults(helper.state, [{}]);
+
+      expect(widget.getRenderingOptions).toBeDefined();
+      expect(
+        widget.getRenderingOptions({ results, helper, state: helper.state })
+      ).toEqual({
+        canRefine: false,
+        items: [],
+      });
+    });
+  });
 });
