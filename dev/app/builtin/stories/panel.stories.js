@@ -7,21 +7,45 @@ import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 const stories = storiesOf('Panel');
 
 export default () => {
-  stories.add(
-    'with default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.panel({
-          templates: {
-            header: 'Header',
-            footer: 'Footer',
-          },
-          hidden: ({ canRefine }) => !canRefine,
-        })(instantsearch.widgets.refinementList)({
-          container,
-          attribute: 'brand',
-        })
-      );
-    })
-  );
+  stories
+    .add(
+      'with default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.panel({
+            templates: {
+              header: 'Header',
+              footer: 'Footer',
+            },
+            hidden: ({ canRefine }) => !canRefine,
+          })(instantsearch.widgets.refinementList)({
+            container,
+            attribute: 'brand',
+          })
+        );
+      })
+    )
+    .add(
+      'with currentRefinements',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.configure({
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.panel({
+            templates: {
+              header: 'Header',
+              footer: 'Footer',
+            },
+          })(instantsearch.widgets.currentRefinements)({
+            container,
+          })
+        );
+      })
+    );
 };
