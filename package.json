@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "2.10.3",
+  "version": "2.10.4",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "keywords": [
