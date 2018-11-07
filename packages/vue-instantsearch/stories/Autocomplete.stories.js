@@ -62,12 +62,12 @@ storiesOf('ais-autocomplete', module)
         <ais-autocomplete
           :indices="[
             {
-              value: 'atis-prods',
+              value: 'airbnb',
               label: 'ATIS',
             },
             {
-              value: 'instant_search',
-              label: 'BestBuy',
+              value: 'instantsearch_query_suggestions',
+              label: 'query-suggestions',
             }
           ]"
         >
@@ -84,13 +84,20 @@ storiesOf('ais-autocomplete', module)
               <img
                 :src="suggestion.item.image"
                 style="height: 50px;"
+                v-if="suggestion.item.image"
               />
               <span>
                 <ais-highlight
                   :hit="suggestion.item"
                   attribute="name"
+                  v-if="suggestion.item.name"
                 />
-                <strong>$ {{ suggestion.item.price }}</strong>
+                <span v-if="suggestion.item.query">
+                  {{suggestion.item.query}}
+                </span>
+                <strong v-if="suggestion.item.price">
+                  $ {{ suggestion.item.price }}
+                </strong>
               </span>
             </template>
             </vue-autosuggest>
