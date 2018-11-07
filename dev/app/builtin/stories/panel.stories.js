@@ -40,7 +40,13 @@ export default () => {
           instantsearch.widgets.panel({
             templates: {
               header: 'Header',
-              footer: 'Footer',
+              footer: ({ items }) =>
+                items
+                  ? `${items.length} items | ${items.reduce(
+                      (sum, item) => sum + item.refinements.length,
+                      0
+                    )} refinements`
+                  : '',
             },
           })(instantsearch.widgets.currentRefinements)({
             container,
