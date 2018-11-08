@@ -133,6 +133,10 @@ This is now handled by the `search-client` prop. Search client is what gets retu
 
 When you used to put this on `ais-results` (now called `ais-hits`), it allows to load next pages without pagination, but with a "next page" button, as well as showing all pages rather than a single one. Replaced by `ais-infinite-hits`.
 
+* `auto-search`
+
+This option is removed in favor of a more complete way of not doing queries using the search client. Information on that can be found [here](/advanced/conditional-requests.html).
+
 
 ### CSS class names
 
