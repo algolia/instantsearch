@@ -13,6 +13,13 @@ const docSearch = {
 
 const header = new alg.communityHeader(docSearch);
 
+function removeDocSearch() {
+  const container = document.querySelector('.algc-search__input--docsearch');
+  container.parentNode.removeChild(container);
+}
+
+removeDocSearch();
+
 const container = document.querySelector('.documentation-container');
 const codeSamples = document.querySelectorAll('.code-sample');
 
