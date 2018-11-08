@@ -16,9 +16,10 @@
   "main": "dist-es5-module/index.js",
   "module": "./es/index.js",
   "jsdelivr": "dist/instantsearch.min.js",
-  "sideEffects": false,
   "scripts": {
     "build": "./scripts/build.sh",
+    "build:umd": "BABEL_ENV=es rollup --config scripts/rollup.config.js",
+    "build:es": "BABEL_ENV=es babel -q index.es6.js -o es/index.js --quiet && babel src -d dist/es --ignore __tests__,__mocks__ --quiet",
     "dev": "./scripts/dev.sh",
     "dev-novel": "NODE_ENV=development webpack-dev-server --config dev/webpack.config.js",
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
@@ -67,6 +68,7 @@
     "babel-core": "6.26.3",
     "babel-eslint": "8.2.6",
     "babel-loader": "7.1.4",
+    "babel-plugin-external-helpers": "6.22.0",
     "babel-plugin-module-resolver": "3.0.0",
     "babel-plugin-rewire": "1.1.0",
     "babel-plugin-syntax-jsx": "6.18.0",
@@ -118,6 +120,14 @@
     "pretty-bytes-cli": "2.0.0",
     "raw-loader": "0.5.1",
     "react-test-renderer": "15.6.1",
+    "rollup": "0.67.0",
+    "rollup-plugin-babel": "3.0.7",
+    "rollup-plugin-commonjs": "9.2.0",
+    "rollup-plugin-filesize": "5.0.1",
+    "rollup-plugin-node-globals": "1.4.0",
+    "rollup-plugin-node-resolve": "3.4.0",
+    "rollup-plugin-replace": "2.1.0",
+    "rollup-plugin-uglify": "6.0.0",
     "sass-lint": "1.12.1",
     "sass-loader": "6.0.7",
     "scriptjs": "2.5.8",
@@ -146,7 +156,10 @@
     "watchPlugins": [
       "jest-watch-typeahead/filename",
       "jest-watch-typeahead/testname"
-    ]
+    ],
+    "globals": {
+      "__DEV__": true
+    }
   },
   "renovate": {
     "extends": [
@@ -156,8 +169,8 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/instantsearch.min.js",
-      "maxSize": "111 kB"
+      "path": "./dist/umd/instantsearch.production.min.js",
+      "maxSize": "100 kB"
     }
   ]
 }

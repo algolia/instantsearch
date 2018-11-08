@@ -1,50 +1,62 @@
 {
   "env": {
-    "test": {
-      "presets": [
-        ["env", {"targets": { "node": "current" }}],
-        "react",
-        "stage-2"
-      ],
-      "plugins": [
-        "babel-plugin-rewire",
-        ["module-resolver", {
-          "alias": {
-            "preact-compat": "react"
-          }
-        }]
-      ]
-    },
     "development": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 10"] } }],
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions", "ie >= 9"]
+            }
+          }
+        ],
         "react",
         "stage-2"
       ]
     },
     "production": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 10"] } }],
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions", "ie >= 9"]
+            }
+          }
+        ],
         "react",
         "stage-2"
-      ],
-      "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-pure-class-to-function"
       ]
     },
-    "production-es6": {
+    "es": {
       "presets": [
-        ["env", { "modules": false, "targets": { "browsers": ["last 2 versions", "ie >= 10"] } }],
+        [
+          "env",
+          {
+            "modules": false,
+            "targets": {
+              "browsers": ["last 2 versions", "ie >= 9"]
+            }
+          }
+        ],
+        "react",
+        "stage-2"
+      ]
+    },
+    "test": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions", "ie >= 9"]
+            }
+          }
+        ],
         "react",
         "stage-2"
       ],
-      "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-pure-class-to-function"
-      ]
+      "plugins": ["rewire"]
     }
   }
 }
