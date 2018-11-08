@@ -137,6 +137,25 @@ When you used to put this on `ais-results` (now called `ais-hits`), it allows to
 
 This option is removed in favor of a more complete way of not doing queries using the search client. Information on that can be found [here](/advanced/conditional-requests.html).
 
+### Removed components
+
+* `ais-input`
+
+This component has been removed with as alternative having two options:
+
+1. use `ais-search-box` and style it to not include the extra items
+2. use the default slot of `ais-search-box` to use it with your own custom input ([see live](/stories//?selectedKind=ais-search-box&selectedStory=with%20custom%20rendering)):
+
+```vue
+<ais-search-box autofocus>
+  <input
+    slot-scope="{ currentRefinement, refine }"
+    :value="currentRefinement"
+    @input="refine($event.currentTarget.value)"
+    placeholder="Custom SearchBox"
+  />
+</ais-search-box>
+```
 
 ### CSS class names
 
