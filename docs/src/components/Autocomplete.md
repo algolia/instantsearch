@@ -11,7 +11,7 @@ githubSource: docs/src/components/Autocomplete.md
 
 Autocomplete is a component which can be used for third-party dropdown components. For one index, or additional indices.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Autocomplete">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-autocomplete">🕹 try out live</a>
 
 ## Usage
 

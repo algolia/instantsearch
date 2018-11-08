@@ -11,7 +11,7 @@ githubSource: docs/src/components/Pagination.md
 
 A component to navigate between different pages of results.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Pagination">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-pagination">🕹 try out live</a>
 
 ## Usage
 

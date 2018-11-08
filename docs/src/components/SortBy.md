@@ -13,7 +13,7 @@ A component that lets the user change the sorting by changing the index the sear
 
 To be able to sort results with the Algolia engine, you need to have different indices. To read more about sorting with Algolia, please checkout the [official documentation about sorting](https://www.algolia.com/doc/guides/relevance/sorting/#guides).
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=SortBy">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-sort-by">🕹 try out live</a>
 
 ## Usage
 

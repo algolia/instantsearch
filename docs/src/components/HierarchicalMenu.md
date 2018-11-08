@@ -11,7 +11,7 @@ githubSource: docs/src/components/HierarchicalMenu.md
 
 The hierarchical menu lets the user browse attributes using a tree-like structure. This is commonly used for multi-level categorization of products on e-commerce websites. From a UX point of view, we suggest not displaying more than two levels deep.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=HierarchicalMenu">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-hierarchical-menu">🕹 try out live</a>
 
 ## Usage
 

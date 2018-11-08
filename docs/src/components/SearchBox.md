@@ -11,7 +11,7 @@ githubSource: docs/src/components/SearchBox.md
 
 A search input with a clear and submit button.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=SearchBox">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-search-box">🕹 try out live</a>
 
 ## Usage
 

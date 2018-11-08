@@ -11,7 +11,7 @@ githubSource: docs/src/components/Stats.md
 
 A component that displays the total number of results found and the processing time in milliseconds.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Stats">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-stats">🕹 try out live</a>
 
 ## Usage
 

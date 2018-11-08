@@ -11,7 +11,7 @@ githubSource: docs/src/components/Hits.md
 
 A component to format and render the search results.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Hits">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-hits">🕹 try out live</a>
 
 ## Usage
 

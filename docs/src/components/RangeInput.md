@@ -11,7 +11,7 @@ githubSource: docs/src/components/RangeInput.md
 
 The range input widget allows a user to select a numeric range using a minimum and maximum input.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=RangeInput">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-range-input">🕹 try out live</a>
 
 ## Usage
 
@@ -55,7 +55,7 @@ export default {
 </script>
 ```
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=RangeInput&selectedStory=with%20vue-slider-component">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-range-input&selectedStory=with%20vue-slider-component">🕹 try out live</a>
 
 ## Props
 

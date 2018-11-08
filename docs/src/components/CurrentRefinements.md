@@ -11,7 +11,7 @@ githubSource: docs/src/components/current-refinements.md
 
 Show the currently refined values and allow them to be unset.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=CurrentRefinements">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-current-refinements">🕹 try out live</a>
 
 ## Usage
 

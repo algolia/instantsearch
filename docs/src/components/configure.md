@@ -13,7 +13,7 @@ A component which renders nothing, but allows you to pass extra search parameter
 
 Note that other widgets may override certain parameters. For example, using `facetFilters` will be overriden, but `filters` won't be.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Configure">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-configure">🕹 try out live</a>
 
 ## Usage
 

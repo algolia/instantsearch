@@ -11,7 +11,7 @@ githubSource: docs/src/components/Breadcrumb.md
 
 The breadcrumb widget allows you to visualize which level of a hierarchical facet is currently selected.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Breadcrumb">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-breadcrumb">🕹 try out live</a>
 
 ## Usage
 

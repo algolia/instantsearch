@@ -11,7 +11,7 @@ githubSource: docs/src/components/HitsPerPage.md
 
 Displays a `select` element allowing users to choose the number of hits to display.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=HitsPerPage">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-hits-per-page">🕹 try out live</a>
 
 ## Usage
 

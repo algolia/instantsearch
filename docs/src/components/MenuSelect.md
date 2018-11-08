@@ -11,7 +11,7 @@ githubSource: docs/src/components/MenuSelect.md
 
 Create a menu based on a facet with a `select` element.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=MenuSelect">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-menu-select">🕹 try out live</a>
 
 ## Usage
 

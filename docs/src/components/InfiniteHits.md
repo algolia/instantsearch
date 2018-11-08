@@ -11,7 +11,7 @@ githubSource: docs/src/components/InfiniteHits.md
 
 Displays an infinite list of hits along with a load more button.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=InfiniteHits">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-infinite-hits">🕹 try out live</a>
 
 ## Usage
 

@@ -11,7 +11,7 @@ githubSource: docs/src/components/StateResults.md
 
 The StateResults widget allows you reach into the current search state, for example for conditional rendering or other rendering that depends on what the current refinement or results are.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=StateResults">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-state-results">🕹 try out live</a>
 
 ## Usage
 

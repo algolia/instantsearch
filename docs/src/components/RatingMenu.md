@@ -11,7 +11,7 @@ githubSource: docs/src/components/RatingMenu.md
 
 A rating menu is a numeric list of a rating. By default visualized with stars. Note that the attribute needs to have integers
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=RatingMenu">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-rating-menu">🕹 try out live</a>
 
 ## Usage
 

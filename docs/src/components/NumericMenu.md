@@ -11,7 +11,7 @@ githubSource: docs/src/components/NumericMenu.md
 
 The numeric menu list is a widget that displays a list of numeric filters in a list. Those numeric filters are pre-configured when creating the widget.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=NumericMenu">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-numeric-menu">🕹 try out live</a>
 
 ## Usage
 

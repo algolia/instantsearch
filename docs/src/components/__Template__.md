@@ -11,7 +11,7 @@ githubSource: docs/src/components/__Template__.md
 
 Oh you're gonna love templates.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Template">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-template">🕹 try out live</a>
 
 ## Usage
 

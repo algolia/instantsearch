@@ -16,7 +16,7 @@ The toggle widget lets the user either:
 
 This widget is particularly useful if you have a boolean value in the records.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=ToggleRefinement">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-toggle-refinement">🕹 try out live</a>
 
 ## Usage
 

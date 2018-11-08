@@ -11,7 +11,7 @@ githubSource: docs/src/components/RefinementList.md
 
 A refinement list takes all possible values for a certain attribute and puts them in a list. A user is then able to pick one or multiple refinements for this attribute. It's also possible to search within the possible values of this attribute. Make sure that your attribute of choice is set up in `attributesForFaceting`, `searchable` if you want so.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=RefinementList">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-refinement-list">🕹 try out live</a>
 
 ## Usage
 

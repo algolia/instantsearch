@@ -11,7 +11,7 @@ githubSource: docs/src/components/Panel.md
 
 The Panel widget wraps other widgets in a consistent panel design. It also reacts, indicates and set CSS classes when widgets are no more relevant for refining. E.g. when a RefinementList becomes empty because of the current search results.
 
-<a class="btn btn-static-theme" href="stories/?selectedKind=Panel">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=ais-panel">🕹 try out live</a>
 
 ## Usage
 
