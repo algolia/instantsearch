@@ -3508,9 +3508,9 @@ jest-haste-map@^23.6.0:
     micromatch "^2.3.11"
     sane "^2.0.0"
 
-jest-image-snapshot@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/jest-image-snapshot/-/jest-image-snapshot-2.6.0.tgz#eda88e08e0a2022c1094d8e2ab5afd3e7c9809e2"
+jest-image-snapshot@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/jest-image-snapshot/-/jest-image-snapshot-2.7.0.tgz#6e3b11a1d5895123c45ce034e0fd163fe49e6149"
   dependencies:
     chalk "^1.1.3"
     get-stdin "^5.0.1"
