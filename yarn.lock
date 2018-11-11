@@ -12900,10 +12900,10 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
   integrity sha512-nJmSswG4As/MkRq7QZFuH/sf/yuv8ODdMZrY4Bedjp77a5MK4A6s7YbBB64c9u79EBUOfXUXBvArmvzTD0X+6g==
 
-netlify-cli@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.2.0.tgz#748727838d2ab56c15066b5aec9b796e519d2133"
-  integrity sha512-qNJvBuV8mZI3XPHlaqR1PJMxdY+xhB4YXwssYrmmII37NCsR4U8O8n1ysU+140b4gnqdJLyhy8hmzf+zoSKszA==
+netlify-cli@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.2.1.tgz#066de5a582c74f2864f8ae94dae9dd55072352bc"
+  integrity sha512-wivRx2y/ZK881b4n5U7B0EGHXS9KDWMxnzkqT7KmsBLu4sbsaMXdJyWv+g0tKHplrkaJl6cT37wNDNM89+EQKg==
   dependencies:
     "@iarna/toml" "^2.0.0"
     "@oclif/command" "^1"
@@ -12932,7 +12932,7 @@ netlify-cli@2.2.0:
     lodash.snakecase "^4.1.1"
     log-symbols "^2.2.0"
     make-dir "^1.3.0"
-    netlify "^2.2.0"
+    netlify "^2.2.1"
     node-fetch "^2.2.0"
     ora "^3.0.0"
     p-wait-for "^2.0.0"
@@ -12943,10 +12943,10 @@ netlify-cli@2.2.0:
     uuid "^3.3.2"
     write-file-atomic "^2.3.0"
 
-netlify@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/netlify/-/netlify-2.2.0.tgz#081e4fc2c6413847c40594bfcbfe25b95b3bba74"
-  integrity sha512-q9ndLiJeta/k3DT/Time6SukDuUJ3qnp1OPw4vZEOldzyKEsZB9uvhCU2eeol0FzhXrImpujruf0mJ/dcZp9eg==
+netlify@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/netlify/-/netlify-2.2.1.tgz#0f25e445540e66a49e433905e2783a4dc8d1ea54"
+  integrity sha512-Wafb7jZoSuzsRJP3l2eYbCwRkxUn8DbyuWQKpgPNuh6RDhDFOt9Mrv3sSbU0dREJBN8gUBFBAbaJ3+gotXSZrQ==
   dependencies:
     "@netlify/open-api" "^0.5.0"
     archiver "^3.0.0"
