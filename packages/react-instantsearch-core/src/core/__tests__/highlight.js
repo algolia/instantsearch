@@ -124,7 +124,7 @@ describe('parseAlgoliaHit()', () => {
         hit: null,
         highlightProperty: '_highlightResult',
       })
-    ).toThrowError('`hit`, the matching record, must be provided');
+    ).toThrow('`hit`, the matching record, must be provided');
   });
 
   it('throws when hit is `undefined`', () => {
@@ -134,7 +134,7 @@ describe('parseAlgoliaHit()', () => {
         hit: undefined,
         highlightProperty: '_highlightResult',
       })
-    ).toThrowError('`hit`, the matching record, must be provided');
+    ).toThrow('`hit`, the matching record, must be provided');
   });
 });
 

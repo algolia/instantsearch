@@ -77,9 +77,8 @@ function scrollSpy(sidebarContainer, headersContainer) {
         // and element should be in viewport
       )
       // then we take the closest to this position as reference
-      .sort(
-        (header1, header2) =>
-          Math.abs(header1.rect.top) < Math.abs(header2.rect.top) ? -1 : 1
+      .sort((header1, header2) =>
+        Math.abs(header1.rect.top) < Math.abs(header2.rect.top) ? -1 : 1
       );
 
     if (headers[0] && highestVisibleHeaders.length === 0) {

@@ -148,8 +148,8 @@ class SearchBox extends Component {
       return;
     }
 
-    const shortcuts = this.props.focusShortcuts.map(
-      key => (typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key)
+    const shortcuts = this.props.focusShortcuts.map(key =>
+      typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key
     );
 
     const elt = e.target || e.srcElement;
