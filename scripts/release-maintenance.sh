@@ -52,7 +52,7 @@ conventional-changelog --preset angular --infile CHANGELOG.md --same-file
 
 # regenerate readme TOC
 printf "\n\nRelease: generate TOCS"
-npm run doctoc
+npm run docs:doctoc
 
 # regenerate widgets jsdoc
 printf "\n\nRelease: regenerate widgets jsdoc"

@@ -327,7 +327,7 @@ npm run release
 For the maintenance version, go on maintenance (`git checkout maintenance`) and use:
 
 ```sh
-npm run release-maintenance
+npm run release:maintenance
 ```
 
 **Be sure to use `$ npm run` instead of `$ yarn run` to avoid issues**

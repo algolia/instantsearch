@@ -173,7 +173,7 @@ inquirer
 
         // regenerate README TOC
         shell.echo(colors.blue('Generate TOCS'));
-        shell.exec('npm run doctoc');
+        shell.exec('npm run docs:doctoc');
 
         // regenerate yarn.lock
         shell.exec('yarn');
