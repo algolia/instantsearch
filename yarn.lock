@@ -5388,10 +5388,10 @@ cli-width@^2.0.0:
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.2.0.tgz#ff19ede8a9a5e579324147b0c11f0fbcbabed639"
   integrity sha1-/xnt6Kml5XkyQUewwR8PvLq+1jk=
 
-clipboard@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.2.tgz#dddda353e2cdd4fbfdaa680752ec67d8334dd181"
-  integrity sha512-kr53YUunMs26TNMZ+O++poRqAVRFskEi7xrqJwMWrTPMOF5pfXkRz8tDw52lKdfkF8b81G8vS6hIR952JgGmIw==
+clipboard@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.3.tgz#5ce6d4d6d5d30a3addec2f3a18eab84e526106da"
+  integrity sha512-ZCKqjAwpnlZbzL7kFeihGKoMbs6sD5DnJfmtQZNnzaUbHGKjhTf+RYRUzbz+4xEl8pShaCstCc3cLNOEvCWskw==
   dependencies:
     good-listener "^1.2.2"
     select "^1.1.2"
