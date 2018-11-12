@@ -16,7 +16,8 @@ exports[`custom render gives all relevant info to scoped slot 1`] = `
   "value": {
     "attributeName": "brands",
     "computedLabel": "apple"
-  }
+  },
+  "key": "brands-apple"
 }
         </pre>
       </button>
@@ -33,7 +34,8 @@ exports[`custom render gives all relevant info to scoped slot 1`] = `
   "value": {
     "attributeName": "colors",
     "computedLabel": "red"
-  }
+  },
+  "key": "colors-red"
 }
         </pre>
       </button>
@@ -50,7 +52,8 @@ exports[`custom render gives all relevant info to scoped slot 1`] = `
   "value": {
     "attributeName": "requirements",
     "computedLabel": "free"
-  }
+  },
+  "key": "requirements-free"
 }
         </pre>
       </button>
@@ -77,7 +80,8 @@ exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
   "value": {
     "attributeName": "brands",
     "computedLabel": "apple"
-  }
+  },
+  "key": "brands-apple"
 }
           </pre>
         </button>
@@ -96,7 +100,8 @@ exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
   "value": {
     "attributeName": "colors",
     "computedLabel": "red"
-  }
+  },
+  "key": "colors-red"
 }
           </pre>
         </button>
@@ -115,7 +120,8 @@ exports[`custom render item slot gives all relevant info to scoped slot 1`] = `
   "value": {
     "attributeName": "requirements",
     "computedLabel": "free"
-  }
+  },
+  "key": "requirements-free"
 }
           </pre>
         </button>
@@ -177,6 +183,35 @@ exports[`renders correctly (empty) 1`] = `
 
 <div class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement">
   <ul class="ais-CurrentRefinements-list">
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly (with duplicate refinements) 1`] = `
+
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li>
+      <span class="ais-CurrentRefinements-item">
+        <span class="ais-CurrentRefinements-label">
+          Brands: apple
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+    <li>
+      <span class="ais-CurrentRefinements-item">
+        <span class="ais-CurrentRefinements-label">
+          Brands: samsung
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
   </ul>
 </div>
 

@@ -100,6 +100,29 @@ it('renders correctly (with refinements)', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
+it('renders correctly (with duplicate refinements)', () => {
+  __setState({
+    refinements: [
+      {
+        computedLabel: 'some query',
+        name: 'some query',
+        query: 'some query',
+        type: 'query',
+      },
+      {
+        attributeName: 'brands',
+        computedLabel: 'apple',
+      },
+      {
+        attributeName: 'brands',
+        computedLabel: 'samsung',
+      },
+    ],
+  });
+  const wrapper = mount(CurrentRefinements);
+  expect(wrapper.html()).toMatchSnapshot();
+});
+
 it('renders correctly (with query)', () => {
   __setState({
     refinements: [

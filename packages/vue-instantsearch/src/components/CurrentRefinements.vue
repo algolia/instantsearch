@@ -11,7 +11,7 @@
       <ul :class="suit('list')">
         <li
           v-for="item in refinements"
-          :key="item.attribute"
+          :key="item.key"
         >
           <slot
             name="item"
@@ -69,12 +69,16 @@ export default {
       return this.refinements.length === 0;
     },
     refinements() {
-      let refinements = this.state.refinements.map(item => ({
-        type: item.type,
-        attribute: item.type === 'query' ? 'query' : item.attributeName,
-        label: item.computedLabel,
-        value: item,
-      }));
+      let refinements = this.state.refinements.map(item => {
+        const attribute = item.type === 'query' ? 'query' : item.attributeName;
+        return {
+          type: item.type,
+          attribute,
+          label: item.computedLabel,
+          value: item,
+          key: `${attribute}-${item.computedLabel}`,
+        };
+      });
 
       if (this.includedAttributes) {
         refinements = refinements.filter(
