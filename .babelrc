@@ -28,6 +28,21 @@
         "stage-2"
       ]
     },
+    "umd": {
+      "presets": [
+        [
+          "env",
+          {
+            "modules": false,
+            "targets": {
+              "browsers": ["last 2 versions", "ie >= 9"]
+            }
+          }
+        ],
+        "react",
+        "stage-2"
+      ]
+    },
     "es": {
       "presets": [
         [
@@ -41,6 +56,17 @@
         ],
         "react",
         "stage-2"
+      ],
+      "plugins": [
+        [
+          "inline-replace-variables",
+          {
+            "__DEV__": {
+              "type": "node",
+              "replacement": "process.env.NODE_ENV === 'development'"
+            }
+          }
+        ]
       ]
     },
     "test": {
