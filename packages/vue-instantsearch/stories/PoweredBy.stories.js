@@ -4,7 +4,10 @@ import { previewWrapper } from './utils';
 storiesOf('ais-powered-by', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
-    template: '<ais-powered-by></ais-powered-by>',
+    template: `
+    <div style="padding: 1em;">
+      <ais-powered-by></ais-powered-by>
+    </div>`,
   }))
   .add('dark', () => ({
     template: `
