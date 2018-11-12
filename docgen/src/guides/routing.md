@@ -152,7 +152,7 @@ const search = instantsearch({
 });
 ```
 
-As you can see, we are now using the [instantsearch.routers.history](routing.html#instantsearchroutershistory-api) so that we can explicitly set options on the default router mechanism used in the previous example. What we see also is that both the `router` and `stateMapping` options can be used together as a way to easily map `uiState` to `routeState` and vice versa.
+As you can see, we are now using the [instantsearch.routers.history](guides/routing.html#instantsearchroutershistory-api) so that we can explicitly set options on the default router mechanism used in the previous example. What we see also is that both the `router` and `stateMapping` options can be used together as a way to easily map `uiState` to `routeState` and vice versa.
 
 Using that we can configure:
 - `windowTitle`: This method can be used to map the object (`routeState`) returned from `stateToRoute` to your window title
@@ -261,6 +261,6 @@ If you were previously using the `urlSync` option, you should migrate to the new
 
 - `urlSync: true` becomes `routing: true`
 - `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}`
-- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](#user-friendly-urls) to know how to configure it
-- `useHash` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)
-- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)
+- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](guides/routing.html#user-friendly-urls) to know how to configure it
+- `useHash` is removed but can be achieved using an advanced configuration of the [history router](guides/routing.html#instantsearchroutershistory-api)
+- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](guides/routing.html#instantsearchroutershistory-api)
