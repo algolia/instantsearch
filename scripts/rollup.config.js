@@ -43,19 +43,18 @@ const createConfiguration = ({ mode = 'production', minify = true } = {}) => ({
     banner: license,
     sourcemap: true,
   },
-  plugins: plugins.concat(
-    [
-      minify &&
-        uglify({
-          output: {
-            preamble: license,
-          },
-        }),
-      replace({
-        __DEV__: mode === 'development',
+  plugins: [
+    ...plugins,
+    replace({
+      __DEV__: mode === 'development',
+    }),
+    minify &&
+      uglify({
+        output: {
+          preamble: license,
+        },
       }),
-    ].filter(Boolean)
-  ),
+  ].filter(Boolean),
 });
 
 export default [
