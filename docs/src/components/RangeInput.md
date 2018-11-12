@@ -26,12 +26,21 @@ There's no built-in slider in Vue InstantSearch, but you can use third-party sli
 ```vue
 <template>
   <ais-range-input attribute="price">
-    <template slot-scope="{ refine, currentRefinements, range }">
+    <template
+      slot-scope="{
+        refine,
+        currentRefinement: { min: minValue, max: maxValue },
+        range: { min: minRange, max: maxRange }
+      }"
+    >
       <vue-slider
-        :min="range.min"
-        :max="range.max"
-        :value="toValue(currentRefinements, range)"
-        @input="refine($event[0], $event[1])"
+        :min="minRange"
+        :max="maxRange"
+        :value="[
+          minValue !== null ? minValue : minRange,
+          maxValue !== null ? maxValue : maxRange,
+        ]"
+        @input="refine({ min: $event[0], max: $event[1] })"
       />
     </template>
   </ais-range-input>
@@ -42,14 +51,6 @@ import VueSlider from 'vue-slider-component';
 export default {
   components: {
     VueSlider,
-  },
-  methods: {
-    toValue([min, max], range) {
-      return [
-        min === -Infinity ? range.min : min,
-        max === Infinity ? range.max : max,
-      ];
-    },
   },
 }:
 </script>
