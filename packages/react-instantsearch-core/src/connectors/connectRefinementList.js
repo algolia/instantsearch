@@ -87,6 +87,7 @@ function cleanUp(props, searchState, context) {
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the RefinementList can display.
  * @providedPropType {function} searchForItems - a function to toggle a search inside items values
  * @providedPropType {boolean} isFromSearch - a boolean that says if the `items` props contains facet values from the global search or from the search inside items.
+ * @providedPropType {boolean} canRefine - a boolean that says whether you can refine
  */
 
 const sortBy = ['isRefined', 'count:desc', 'name:asc'];
