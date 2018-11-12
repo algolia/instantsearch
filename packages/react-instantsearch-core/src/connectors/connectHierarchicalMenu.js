@@ -70,14 +70,13 @@ function transformValue(value, props, searchState, context) {
 }
 
 const truncate = (items = [], limit = 10) =>
-  items.slice(0, limit).map(
-    (item = {}) =>
-      Array.isArray(item.items)
-        ? {
-            ...item,
-            items: truncate(item.items, limit),
-          }
-        : item
+  items.slice(0, limit).map((item = {}) =>
+    Array.isArray(item.items)
+      ? {
+          ...item,
+          items: truncate(item.items, limit),
+        }
+      : item
   );
 
 function refine(props, searchState, nextRefinement, context) {

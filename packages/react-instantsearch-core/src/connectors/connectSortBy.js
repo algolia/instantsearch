@@ -62,11 +62,10 @@ export default createConnector({
       searchState,
       this.context
     );
-    const items = props.items.map(
-      item =>
-        item.value === currentRefinement
-          ? { ...item, isRefined: true }
-          : { ...item, isRefined: false }
+    const items = props.items.map(item =>
+      item.value === currentRefinement
+        ? { ...item, isRefined: true }
+        : { ...item, isRefined: false }
     );
     return {
       items: props.transformItems ? props.transformItems(items) : items,

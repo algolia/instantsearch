@@ -65,7 +65,7 @@ describe('InstantSearch', () => {
       wrapper.setProps({
         searchState: undefined,
       });
-    }).toThrowError(
+    }).toThrow(
       "You can't switch <InstantSearch> from being controlled to uncontrolled"
     );
 
@@ -80,7 +80,7 @@ describe('InstantSearch', () => {
         onSearchStateChange: () => null,
         createURL: () => null,
       });
-    }).toThrowError(
+    }).toThrow(
       "You can't switch <InstantSearch> from being uncontrolled to controlled"
     );
 
@@ -100,7 +100,7 @@ describe('InstantSearch', () => {
         onSearchStateChange: undefined,
         createURL: undefined,
       });
-    }).toThrowError(
+    }).toThrow(
       "You can't switch <InstantSearch> from being controlled to uncontrolled"
     );
   });

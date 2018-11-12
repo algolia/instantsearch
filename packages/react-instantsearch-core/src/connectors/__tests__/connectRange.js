@@ -440,7 +440,7 @@ describe('connectRange', () => {
           { min: NaN, max: 5 }
         );
       }
-      expect(shouldNotRefineWithNaN).toThrowError(
+      expect(shouldNotRefineWithNaN).toThrow(
         "You can't provide non finite values to the range connector"
       );
 
@@ -455,7 +455,7 @@ describe('connectRange', () => {
           { min: null, max: 5 }
         );
       }
-      expect(shouldNotRefineWithNull).toThrowError(
+      expect(shouldNotRefineWithNull).toThrow(
         "You can't provide non finite values to the range connector"
       );
     });

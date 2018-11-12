@@ -226,10 +226,10 @@ describe('SearchBox', () => {
 
     // simulate form events `onReset` && `onSubmit`
     wrapper.find('form').simulate('submit');
-    expect(onSubmit).toBeCalled();
+    expect(onSubmit).toHaveBeenCalled();
 
     wrapper.find('form').simulate('reset');
-    expect(onReset).toBeCalled();
+    expect(onReset).toHaveBeenCalled();
 
     // simulate input search events
     inputEventsList.forEach(eventName => {
@@ -237,7 +237,7 @@ describe('SearchBox', () => {
         .find('input')
         .simulate(eventName.replace(/^on/, '').toLowerCase());
 
-      expect(inputProps[eventName]).toBeCalled();
+      expect(inputProps[eventName]).toHaveBeenCalled();
     });
 
     wrapper.unmount();

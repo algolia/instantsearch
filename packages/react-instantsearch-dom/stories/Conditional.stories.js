@@ -7,13 +7,12 @@ const stories = storiesOf('Conditionals', module);
 
 stories
   .add('NoResults/HasResults', () => {
-    const Content = connectStateResults(
-      ({ searchState, searchResults }) =>
-        searchResults && searchResults.nbHits !== 0 ? (
-          <div>Some results</div>
-        ) : (
-          <div>No results has been found for {searchState.query}</div>
-        )
+    const Content = connectStateResults(({ searchState, searchResults }) =>
+      searchResults && searchResults.nbHits !== 0 ? (
+        <div>Some results</div>
+      ) : (
+        <div>No results has been found for {searchState.query}</div>
+      )
     );
     return (
       <WrapWithHits linkedStoryGroup="Conditional">
@@ -22,13 +21,12 @@ stories
     );
   })
   .add('NoQuery/HasQuery', () => {
-    const Content = connectStateResults(
-      ({ searchState }) =>
-        searchState && searchState.query ? (
-          <div>The query {searchState.query} exists</div>
-        ) : (
-          <div>No query</div>
-        )
+    const Content = connectStateResults(({ searchState }) =>
+      searchState && searchState.query ? (
+        <div>The query {searchState.query} exists</div>
+      ) : (
+        <div>No query</div>
+      )
     );
     return (
       <WrapWithHits linkedStoryGroup="Conditional">
@@ -37,9 +35,8 @@ stories
     );
   })
   .add('NoLoading/HasQuery', () => {
-    const Content = connectStateResults(
-      ({ searching }) =>
-        searching ? <div>searching</div> : <div>No searching</div>
+    const Content = connectStateResults(({ searching }) =>
+      searching ? <div>searching</div> : <div>No searching</div>
     );
     return (
       <WrapWithHits linkedStoryGroup="Conditional">
