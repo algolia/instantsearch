@@ -29,7 +29,8 @@ for example in docs/v2/examples/*; do
 done
 
 # Copy instantsearch.js builds to the website root
-cp dist/* docs/v2/
+mkdir docs/v2/lib/
+cp -a dist/* docs/v2/lib/
 
 # Build dev-novel
 NODE_ENV=production webpack --config dev/webpack.config.js
