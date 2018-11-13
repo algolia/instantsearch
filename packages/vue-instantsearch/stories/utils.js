@@ -37,11 +37,11 @@ export const previewWrapper = ({
       index-name="${indexName}"
     >
       <ais-configure :hitsPerPage="3" />
-      <div class="container container-preview">
+      <div class="vis-container vis-container-preview">
         <story />
       </div>
 
-      <div class="container container-playground">
+      <div class="vis-container vis-container-playground">
         <div class="panel-left">
           ${filters}
         </div>

@@ -5,12 +5,12 @@ body {
   margin: 10px;
 }
 
-.container {
+.vis-container {
   position: relative;
   padding: 50px 40px 40px;
 }
 
-.container::after {
+.vis-container::after {
   font-size: 13px;
   top: 0;
   left: 0;
@@ -23,12 +23,12 @@ body {
   border-width: 0 1px 1px 0;
 }
 
-.container-preview {
+.vis-container-preview {
   border: solid 1px #e4e4e4;
   border-radius: 5px 5px 0px 0px;
 }
 
-.container-preview::after {
+.vis-container-preview::after {
   content: 'Preview';
   border-radius: 4px 0 0;
 }
@@ -37,14 +37,14 @@ body {
   margin-bottom: 10px;
 }
 
-.container-playground {
+.vis-container-playground {
   border-left: solid 1px #e4e4e4;
   border-right: solid 1px #e4e4e4;
   border-bottom: solid 1px #e4e4e4;
   display: flex;
 }
 
-.container-playground::after {
+.vis-container-playground::after {
   content: 'Playground';
 }
 
