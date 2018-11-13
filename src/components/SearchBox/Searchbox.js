@@ -87,7 +87,7 @@ class SearchBox extends Component {
             className={cssClasses.reset}
             type="reset"
             title="Clear the search query."
-            hidden
+            hidden={!this.input || this.input.value.length === 0}
           >
             <svg
               className={cssClasses.resetIcon}
