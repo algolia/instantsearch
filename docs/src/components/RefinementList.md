@@ -25,6 +25,7 @@ Name | Type | Default | Description | Required
 ---|---|---|---|---
 attribute | string | | The attribute to refine on click | yes
 searchable | boolean | `false` | You can also search within the options of this | no
+searchablePlaceholder | string | "Search here …" | If searchable is `true`, this will be the placeholder for that search box | no
 operator | "or" / "and" | "or" | How to apply refinements | no
 limit | number | 10 | Number of items to show | no
 showMoreLimit | number | 20 | Number of items to show when the user clicked on “show more items” | no

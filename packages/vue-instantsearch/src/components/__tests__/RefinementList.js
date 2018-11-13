@@ -72,14 +72,35 @@ it('renders correctly (empty)', () => {
 it("renders correctly when it's searchable", () => {
   __setState({
     ...defaultState,
-    searchable: true,
   });
   const wrapper = mount(RefinementList, {
     propsData: {
+      searchable: true,
       attribute: 'something',
     },
   });
   expect(wrapper.html()).toMatchSnapshot();
+
+  expect(wrapper.find('.ais-SearchBox-input').exists()).toBe(true);
+});
+
+it("allows override of placeholder when it's searchable", () => {
+  __setState({
+    ...defaultState,
+    searchable: true,
+  });
+  const placeholder = 'search in dogs';
+  const wrapper = mount(RefinementList, {
+    propsData: {
+      searchable: true,
+      attribute: 'something',
+      searchablePlaceholder: placeholder,
+    },
+  });
+
+  expect(wrapper.find('.ais-SearchBox-input').attributes('placeholder')).toBe(
+    placeholder
+  );
 });
 
 it("disables show more if can't refine", () => {

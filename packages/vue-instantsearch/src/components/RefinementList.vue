@@ -22,7 +22,10 @@
         :class="suit('searchBox')"
         v-if="searchable"
       >
-        <search-input v-model="searchForFacetValues" />
+        <search-input
+          v-model="searchForFacetValues"
+          :placeholder="searchablePlaceholder"
+        />
       </div>
       <slot
         name="noResults"
@@ -120,6 +123,11 @@ export default {
     searchable: {
       type: Boolean,
       default: false,
+    },
+    searchablePlaceholder: {
+      default: 'Search here…',
+      type: String,
+      required: false,
     },
     operator: {
       default: 'or',
