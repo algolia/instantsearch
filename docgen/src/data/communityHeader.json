@@ -125,8 +125,8 @@
     "name": "<span class='hidden-sm'>Demos</span>",
     "url": "examples.html"
   },  {
-    "name": "v1",
-    "url": "https://community.algolia.com/instantsearch.js/v1/"
+    "name": "v2",
+    "url": "https://community.algolia.com/instantsearch.js/v2/"
   }, {
     "name": "GitHub",
     "image": "<img src='assets/img/github-icon.svg'/>",
@@ -177,8 +177,8 @@
     "url": "examples.html"
   },
   {
-    "name": "v1",
-    "url": "https://community.algolia.com/instantsearch.js/v1/"
+    "name": "v2",
+    "url": "https://community.algolia.com/instantsearch.js/v2/"
   }],
   "docSearch": {
     "input_selector": "searchbox",

@@ -20,11 +20,11 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",
-    "dev-novel": "NODE_ENV=development webpack-dev-server --config dev/webpack.config.js",
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "lint": "yarn run lint:js && yarn run lint:css",
     "lint:js": "eslint .",
     "lint:css": "./scripts/lint-css.sh",
+    "docs:storybook": "NODE_ENV=development webpack-dev-server --config storybook/webpack.config.js",
     "docs:build:dev": "./scripts/docs/build-dev.sh",
     "docs:publish": "./scripts/docs/publish.sh",
     "view-changelog": "conventional-changelog -p angular",

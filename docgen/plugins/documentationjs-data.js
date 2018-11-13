@@ -234,5 +234,5 @@ function isCustomType(name) {
 }
 
 function createDevNovelURL(devNovel) {
-  return devNovel ? `dev-novel?selectedStory=${devNovel.description}.default` : '';
+  return devNovel ? `stories?selectedStory=${devNovel.description}.default` : '';
 }
