@@ -27,10 +27,10 @@ const plugins = [
   }),
 ];
 
-const createConfiguration = ({ mode = 'production', minify = true } = {}) => ({
+const createConfiguration = ({ mode, filename }) => ({
   input: 'index.js',
   output: {
-    file: `dist/umd/instantsearch.${mode}${minify ? '.min' : ''}.js`,
+    file: `dist/umd/${filename}`,
     name: 'instantsearch',
     format: 'umd',
     banner: license,
@@ -41,7 +41,7 @@ const createConfiguration = ({ mode = 'production', minify = true } = {}) => ({
     replace({
       __DEV__: mode === 'development',
     }),
-    minify &&
+    mode === 'production' &&
       uglify({
         output: {
           preamble: license,
@@ -53,10 +53,10 @@ const createConfiguration = ({ mode = 'production', minify = true } = {}) => ({
 export default [
   createConfiguration({
     mode: 'development',
-    minify: false,
+    filename: 'instantsearch.development.js',
   }),
   createConfiguration({
     mode: 'production',
-    minify: true,
+    filename: 'instantsearch.production.min.js',
   }),
 ];
