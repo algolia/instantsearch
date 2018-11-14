@@ -21,7 +21,7 @@ module.exports = {
           'webpack/hot/only-dev-server',
           './dev/app',
         ],
-        instantsearch: './index.js',
+        instantsearch: './src/index.js',
       }
     : {
         bundle: './dev/app',

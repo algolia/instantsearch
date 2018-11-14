@@ -28,7 +28,7 @@ const plugins = [
 ];
 
 const createConfiguration = ({ mode, filename }) => ({
-  input: 'index.js',
+  input: 'src/index.js',
   output: {
     file: `dist/umd/${filename}`,
     name: 'instantsearch',
