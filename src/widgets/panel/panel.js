@@ -94,7 +94,10 @@ export default function panel({
         ...widget,
         dispose() {
           unmountComponentAtNode(getContainerNode(container));
-          widget.dispose();
+
+          if (typeof widget.dispose === 'function') {
+            widget.dispose();
+          }
         },
         render(options) {
           const renderingOptions =
