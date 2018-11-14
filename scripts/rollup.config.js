@@ -18,12 +18,7 @@ const plugins = [
   }),
   babel({
     exclude: 'node_modules/**',
-    plugins: [
-      'external-helpers',
-      'transform-react-remove-prop-types',
-      'transform-react-constant-elements',
-      'transform-react-pure-class-to-function',
-    ],
+    plugins: ['external-helpers'],
   }),
   commonjs(),
   filesize({

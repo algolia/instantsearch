@@ -12,6 +12,11 @@
         ],
         "react",
         "stage-2"
+      ],
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-pure-class-to-function"
       ]
     },
     "production": {
@@ -26,6 +31,11 @@
         ],
         "react",
         "stage-2"
+      ],
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-pure-class-to-function"
       ]
     },
     "umd": {
@@ -41,6 +51,11 @@
         ],
         "react",
         "stage-2"
+      ],
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-pure-class-to-function"
       ]
     },
     "es": {
@@ -58,6 +73,9 @@
         "stage-2"
       ],
       "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-pure-class-to-function",
         [
           "inline-replace-variables",
           {
@@ -82,7 +100,17 @@
         "react",
         "stage-2"
       ],
-      "plugins": ["rewire"]
+      "plugins": [
+        "rewire",
+        [
+          "module-resolver",
+          {
+            "alias": {
+              "preact-compat": "react"
+            }
+          }
+        ]
+      ]
     }
   }
 }
