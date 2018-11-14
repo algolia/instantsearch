@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';
 
-const Panel = ({ cssClasses, hidden, templateProps, data, setBodyRef }) => (
+const Panel = ({ cssClasses, hidden, templateProps, data, onRef }) => (
   <div
     className={cx(cssClasses.root, {
       [cssClasses.noRefinementRoot]: !data.canRefine,
@@ -21,7 +21,7 @@ const Panel = ({ cssClasses, hidden, templateProps, data, setBodyRef }) => (
       />
     )}
 
-    <div className={cssClasses.body} ref={setBodyRef} />
+    <div className={cssClasses.body} ref={onRef} />
 
     {templateProps.templates.footer && (
       <Template
@@ -38,7 +38,7 @@ const Panel = ({ cssClasses, hidden, templateProps, data, setBodyRef }) => (
 
 Panel.propTypes = {
   // Prop to get the panel body reference to insert the widget
-  setBodyRef: PropTypes.func,
+  onRef: PropTypes.func,
   cssClasses: PropTypes.shape({
     root: PropTypes.string.isRequired,
     noRefinementRoot: PropTypes.string.isRequired,

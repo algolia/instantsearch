@@ -10,7 +10,7 @@ const renderer = ({ containerNode, cssClasses, templateProps }) => ({
   renderingOptions,
   hidden,
 }) => {
-  let bodyReference = null;
+  let bodyRef = null;
 
   render(
     <Panel
@@ -18,12 +18,12 @@ const renderer = ({ containerNode, cssClasses, templateProps }) => ({
       hidden={hidden}
       templateProps={templateProps}
       data={renderingOptions}
-      setBodyRef={ref => (bodyReference = ref)}
+      onRef={ref => (bodyRef = ref)}
     />,
     containerNode
   );
 
-  return { bodyReference };
+  return { bodyRef };
 };
 
 const usage = `Usage:
@@ -78,7 +78,7 @@ export default function panel({
     });
 
     try {
-      const { bodyReference } = renderPanel({
+      const { bodyRef } = renderPanel({
         renderingOptions: {
           canRefine: false,
         },
@@ -87,7 +87,7 @@ export default function panel({
 
       const widget = widgetFactory({
         ...widgetOptions,
-        container: getContainerNode(bodyReference),
+        container: getContainerNode(bodyRef),
       });
 
       return {
