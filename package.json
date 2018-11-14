@@ -16,6 +16,7 @@
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "jsdelivr": "dist/umd/instantsearch.production.min.js",
+  "sideEffects": false,
   "scripts": {
     "dev": "./scripts/dev.sh",
     "build": "yarn build:cjs && yarn build:es && yarn build:umd",
