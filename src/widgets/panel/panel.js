@@ -109,7 +109,10 @@ export default function panel({
             renderingOptions,
             hidden: Boolean(hidden(renderingOptions)),
           });
-          widget.render(options);
+
+          if (typeof widget.render === 'function') {
+            widget.render(options);
+          }
         },
       };
     } catch (error) {
