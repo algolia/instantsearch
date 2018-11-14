@@ -3,7 +3,7 @@
 import { storiesOf, action } from 'dev-novel';
 import instantsearchPlacesWidget from 'places.js/instantsearchWidget';
 import injectScript from 'scriptjs';
-import instantsearch from '../../../../index';
+import instantsearch from '../../instantsearch';
 import { wrapWithHits } from '../../utils/wrap-with-hits';
 import createInfoBox from '../../utils/create-info-box';
 

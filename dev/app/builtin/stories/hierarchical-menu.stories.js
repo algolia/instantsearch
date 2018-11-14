@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 
 import { storiesOf } from 'dev-novel';
-import instantsearch from '../../../../index';
+import instantsearch from '../../instantsearch';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
 const stories = storiesOf('HierarchicalMenu');
