@@ -13,7 +13,7 @@ describe('panel call', () => {
     ).not.toThrow();
   });
 
-  test('with a `hidden` function does not throw', () => {
+  test('with `hidden` as function does not throw', () => {
     expect(() =>
       panel({
         hidden: () => true,
@@ -21,7 +21,7 @@ describe('panel call', () => {
     ).not.toThrow();
   });
 
-  test('with `hidden` as a boolean warns', () => {
+  test('with `hidden` as boolean warns', () => {
     const warn = jest.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
