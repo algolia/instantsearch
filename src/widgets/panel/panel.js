@@ -90,6 +90,11 @@ export default function panel({
         container: getContainerNode(bodyRef),
       });
 
+      const renderingOptions =
+        typeof widget.getRenderingOptions === 'function'
+          ? widget.getRenderingOptions(options)
+          : { canRefine: true };
+
       return {
         ...widget,
         dispose() {
@@ -100,11 +105,6 @@ export default function panel({
           }
         },
         render(options) {
-          const renderingOptions =
-            typeof widget.getRenderingOptions === 'function'
-              ? widget.getRenderingOptions(options)
-              : { canRefine: true };
-
           renderPanel({
             renderingOptions,
             hidden: Boolean(hidden(renderingOptions)),
