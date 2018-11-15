@@ -108,15 +108,9 @@ const common = [
   copy({
     pattern: '**',
     transform: path => {
-      return `v2/${path}`;
+      return `${path}`;
     },
     move: true
-  }),
-  copy({
-    pattern: 'v2/index.html',
-    transform: path => {
-      return 'index.html'
-    }
   }),
   // perfStop(),
 ];
