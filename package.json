@@ -117,7 +117,6 @@
     "prettier": "1.14.3",
     "pretty-bytes-cli": "2.0.0",
     "raw-loader": "0.5.1",
-    "react-test-renderer": "15.6.1",
     "sass-lint": "1.12.1",
     "sass-loader": "6.0.7",
     "scriptjs": "2.5.8",
