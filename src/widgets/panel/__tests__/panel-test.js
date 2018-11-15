@@ -40,7 +40,7 @@ describe('panel call', () => {
     const fakeWidget = () => {};
 
     expect(() => panel()(fakeWidget)({})).toThrowErrorMatchingInlineSnapshot(
-      `"[InstantSearch.js] The \`container\` option is required in the widget \\"fakeWidget\\"."`
+      `"[InstantSearch.js] The \`container\` option is required in the widget within the panel."`
     );
   });
 });

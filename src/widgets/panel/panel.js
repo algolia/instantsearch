@@ -62,9 +62,7 @@ export default function panel({
 
     if (!container) {
       throw new Error(
-        `[InstantSearch.js] The \`container\` option is required in the widget "${
-          widgetFactory.name
-        }".`
+        `[InstantSearch.js] The \`container\` option is required in the widget within the panel.`
       );
     }
 
