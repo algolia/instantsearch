@@ -58,6 +58,34 @@
         "transform-react-pure-class-to-function"
       ]
     },
+    "cjs": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": ["last 2 versions", "ie >= 9"]
+            }
+          }
+        ],
+        "react",
+        "stage-2"
+      ],
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-pure-class-to-function",
+        [
+          "inline-replace-variables",
+          {
+            "__DEV__": {
+              "type": "node",
+              "replacement": "process.env.NODE_ENV === 'development'"
+            }
+          }
+        ]
+      ]
+    },
     "es": {
       "presets": [
         [
