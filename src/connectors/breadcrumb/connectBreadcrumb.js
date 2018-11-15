@@ -140,7 +140,7 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
           );
         };
 
-        renderingRefine = function(facetValue) {
+        renderingRefine = facetValue => {
           if (!facetValue) {
             const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
               hierarchicalFacetName
