@@ -7,7 +7,7 @@ category: guides
 withHeadings: true
 navWeight: 30
 editable: true
-githubSource: docgen/src/guides/usage.md.hbs
+githubSource: docgen/src/guides/usage.md
 ---
 
 ## Use InstantSearch.js
@@ -31,7 +31,7 @@ We also provide you a default Algolia theme for the widgets to be effectively st
 
 You will then have access to the `instantsearch` function in the global scope (window).
 
-The jsDeliver CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
+> We recommend using jsDelivr only for prototyping, **not for production applications**. Whenever possible, you should host your assets yourself or use a premium CDN service. jsDelivr is a free service and isn’t operated by Algolia, so we won’t be able to provide support if it fails.
 
 ## With a build system
 
@@ -87,7 +87,7 @@ search.addWidget(connectSearchBox(function() { ... })({ ... }))
 
 We support the **last two versions of major browsers** (Chrome, Edge, Firefox, Safari).
 
-To support [IE11](https://en.wikipedia.org/wiki/Internet_Explorer_11), we recommend loading [polyfill.io](https://polyfill.io): 
+To support [IE11](https://en.wikipedia.org/wiki/Internet_Explorer_11), we recommend loading [polyfill.io](https://polyfill.io):
 
 ```html
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes"></script>
