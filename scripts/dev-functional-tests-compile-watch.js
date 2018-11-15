@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
+import * as rollup from 'rollup';
 import watch from 'watch';
 import { join } from 'path';
-const rollup = require('rollup');
 
 export default callback => {
   watch.watchTree(
@@ -25,7 +25,7 @@ export default callback => {
 
   const rollupWatcher = rollup.watch();
 
-  rollupWatcher.on('START', event => {
+  rollupWatcher.on('START', () => {
     callback();
   });
 
