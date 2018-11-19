@@ -152,7 +152,7 @@ const search = instantsearch({
 });
 ```
 
-As you can see, we are now using the [instantsearch.routers.history](routing.html#instantsearchroutershistory-api) so that we can explicitly set options on the default router mechanism used in the previous example. What we see also is that both the `router` and `stateMapping` options can be used together as a way to easily map `uiState` to `routeState` and vice versa.
+As you can see, we are now using the [instantsearch.routers.history](guides/routing.html#instantsearchroutershistory-api) so that we can explicitly set options on the default router mechanism used in the previous example. What we see also is that both the `router` and `stateMapping` options can be used together as a way to easily map `uiState` to `routeState` and vice versa.
 
 Using that we can configure:
 - `windowTitle`: This method can be used to map the object (`routeState`) returned from `stateToRoute` to your window title
@@ -226,7 +226,7 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
     type: 'antique'
   },
   hierarchicalMenu: {
-    category: 'Decoration > Clocks'
+    category: ['Decoration > Clocks']
   },
   refinementList: {
     colors: ['white', 'black']
@@ -235,7 +235,7 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
     heightInCm: 40
   },
   range: {
-    ageInYears: '2-10'
+    ageInYears: '2:10'
   },
   ratingMenu: {
     rating: 3

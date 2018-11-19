@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import { isSpecialClick } from '../../lib/utils.js';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem.js';
-import SearchBox from '../SearchBox';
+import SearchBox from '../SearchBox/Searchbox';
 
 class RefinementList extends Component {
   constructor(props) {

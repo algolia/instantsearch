@@ -16,6 +16,8 @@ export default () => {
   stories.add(
     'with dark theme',
     wrapWithHits(container => {
+      container.style.backgroundColor = '#282c34';
+
       window.search.addWidget(
         instantsearch.widgets.poweredBy({ container, theme: 'dark' })
       );
