@@ -1,12 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { createRenderer } from 'react-test-renderer/shallow';
 
 import Slider from '../Slider';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {
-    const tree = createRenderer().render(
+    const tree = shallow(
       <Slider
         refine={() => undefined}
         min={0}
@@ -23,7 +22,7 @@ describe('Slider', () => {
   });
 
   it('expect to render without pips', () => {
-    const tree = createRenderer().render(
+    const tree = shallow(
       <Slider
         refine={() => undefined}
         min={0}
@@ -40,7 +39,7 @@ describe('Slider', () => {
   });
 
   it('expect to render with CSS classes', () => {
-    const tree = createRenderer().render(
+    const tree = shallow(
       <Slider
         refine={() => undefined}
         min={0}

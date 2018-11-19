@@ -19,12 +19,12 @@ module.exports = {
         bundle: [
           'webpack-dev-server/client?http://localhost:8080',
           'webpack/hot/only-dev-server',
-          './dev/app',
+          './storybook/app',
         ],
         instantsearch: './index.js',
       }
     : {
-        bundle: './dev/app',
+        bundle: './storybook/app',
       },
 
   output: {

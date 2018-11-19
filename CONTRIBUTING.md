@@ -71,9 +71,9 @@ On it you can find:
 1. The generated documentation: https://**deploy-url-netlify**/
     - for example: https://deploy-preview-2383--algolia-instantsearch.netlify.com/
     - source: https://github.com/algolia/instantsearch.js/tree/develop/docgen
-2. A playground for the widgets: https://**deploy-url-netlify**/v2/dev-novel
-    - for example: https://deploy-preview-3102--algolia-instantsearch.netlify.com/v2/dev-novel
-    - source: https://github.com/algolia/instantsearch.js/tree/develop/dev
+2. A playground for the widgets: https://**deploy-url-netlify**/stories
+    - for example: https://deploy-preview-3102--algolia-instantsearch.netlify.com/stories
+    - source: https://github.com/algolia/instantsearch.js/tree/develop/storybook
 
 ## Commit conventions
 
