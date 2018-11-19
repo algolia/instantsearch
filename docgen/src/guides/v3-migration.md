@@ -2,6 +2,29 @@ This document helps you migrate from InstantSearch 2 to InstantSearch 3.
 
 InstantSearch 3 introduces some breaking changes in the widget's naming, options and markup.
 
+## Imports
+
+### ES
+
+All imports from the ES build become top-level.
+
+### Previous usage
+
+```js
+import instantsearch from 'instantsearch.js';
+import { searchBox } from 'instantsearch.js/es/widgets';
+import { connectSearchBox } from 'instantsearch.js/es/connectors';
+```
+
+### New usage
+
+```js
+import instantsearch, {
+  searchBox,
+  connectSearchBox,
+} from 'instantsearch.js';
+```
+
 ## InstantSearch
 
 ### `appId` and `apiKey` are replaced by `searchClient`
