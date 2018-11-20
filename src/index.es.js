@@ -1,12 +1,8 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import toFactory from 'to-factory';
 import InstantSearch from './lib/InstantSearch';
-import version from './lib/version';
 
 const instantSearchFactory = toFactory(InstantSearch);
-instantSearchFactory.version = version;
-instantSearchFactory.createQueryString =
-  algoliasearchHelper.url.getQueryStringFromState;
 
 Object.defineProperty(instantSearchFactory, 'widgets', {
   get() {
@@ -31,6 +27,12 @@ import { connectSearchBox } from 'instantsearch.js'`
   },
 });
 
+const createQueryString = algoliasearchHelper.url.getQueryStringFromState;
+
+export { default as version } from './lib/version';
+export { createQueryString };
+// export { default as routers } from './lib/routers';
+// export { default as stateMapping } from './lib/stateMapping';
 export * from './helpers';
 export * from './connectors';
 export * from './widgets';
