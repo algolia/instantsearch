@@ -52,7 +52,7 @@ Each component also provides a function called `refine`. This function can be ca
 
 ```html
 <ais-menu attribute="brands">
-  <template slot-scope="{ items }">
+  <template slot-scope="{ items, refine }">
     <ul>
       <li v-for="item in items" :key="item.value">
         <button @click="refine(item.value)">
