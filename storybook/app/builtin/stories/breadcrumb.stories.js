@@ -188,7 +188,7 @@ export default () => {
             transformItems: items =>
               items.map(item => ({
                 ...item,
-                name: `${item.name} (transformed)`,
+                label: `${item.label} (transformed)`,
               })),
           })
         );
