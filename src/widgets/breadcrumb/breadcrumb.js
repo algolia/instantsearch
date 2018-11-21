@@ -147,7 +147,7 @@ export default function breadcrumb({
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
     noRefinementRoot: cx(
-      suit({ modifierName: 'noRefinementRoot' }),
+      suit({ modifierName: 'noRefinement' }),
       userCssClasses.noRefinementRoot
     ),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),

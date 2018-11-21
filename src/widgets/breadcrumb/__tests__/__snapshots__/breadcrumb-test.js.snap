@@ -9,7 +9,7 @@ exports[`breadcrumb() render renders transformed items correctly 1`] = `
       "item": "ais-Breadcrumb-item",
       "link": "ais-Breadcrumb-link",
       "list": "ais-Breadcrumb-list",
-      "noRefinementRoot": "ais-Breadcrumb--noRefinementRoot",
+      "noRefinementRoot": "ais-Breadcrumb--noRefinement",
       "root": "ais-Breadcrumb",
       "selectedItem": "ais-Breadcrumb-item--selected",
       "separator": "ais-Breadcrumb-separator",
