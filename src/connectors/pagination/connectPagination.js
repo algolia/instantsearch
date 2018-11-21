@@ -15,7 +15,7 @@ var customPagination = connectPagination(function render(params, isFirstRenderin
 });
 search.addWidget(
   customPagination({
-    [ maxPages ]
+    [ totalPages ]
     [ padding ]
   })
 );
@@ -24,8 +24,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomPaginationWidgetOptions
- * @property {number} [maxPages] The max number of pages to browse.
- * @property {number} [padding=3] The padding of pages to show around the current page
+ * @property {number} [totalPages] The total number of pages to browse.
+ * @property {number} [padding = 3] The padding of pages to show around the current page
  */
 
 /**
@@ -92,7 +92,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * search.addWidget(
  *   customPagination({
  *     containerNode: $('#custom-pagination-container'),
- *     maxPages: 20,
+ *     totalPages: 20,
  *     padding: 4,
  *   })
  * );
@@ -101,7 +101,7 @@ export default function connectPagination(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { maxPages, padding = 3 } = widgetParams;
+    const { totalPages, padding = 3 } = widgetParams;
 
     const pager = new Paginator({
       currentPage: 0,
@@ -136,7 +136,9 @@ export default function connectPagination(renderFn, unmountFn) {
       },
 
       getMaxPage({ nbPages }) {
-        return maxPages !== undefined ? Math.min(maxPages, nbPages) : nbPages;
+        return totalPages !== undefined
+          ? Math.min(totalPages, nbPages)
+          : nbPages;
       },
 
       render({ results, state, instantSearchInstance }) {

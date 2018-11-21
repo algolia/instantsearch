@@ -20,16 +20,18 @@ describe('pagination()', () => {
 
     container = document.createElement('div');
     cssClasses = {
-      root: ['root', 'cx'],
+      root: ['root', 'customRoot'],
+      noRefinementRoot: 'noRefinementRoot',
+      list: 'list',
       item: 'item',
+      firstPageItem: 'firstPageItem',
+      lastPageItem: 'lastPageItem',
+      previousPageItem: 'previousPageItem',
+      nextPageItem: 'nextPageItem',
+      pageItem: 'pageItem',
+      selectedItem: 'selectedItem',
+      disabledItem: 'disabledItem',
       link: 'link',
-      page: 'page',
-      previous: 'previous',
-      next: 'next',
-      first: 'first',
-      last: 'last',
-      active: 'active',
-      disabled: 'disabled',
     };
     widget = pagination({ container, scrollTo: false, cssClasses });
     results = {
@@ -121,15 +123,17 @@ describe('pagination MaxPage', () => {
     container = document.createElement('div');
     cssClasses = {
       root: 'root',
+      noRefinementRoot: 'noRefinementRoot',
+      list: 'list',
       item: 'item',
+      firstPageItem: 'firstPageItem',
+      lastPageItem: 'lastPageItem',
+      previousPageItem: 'previousPageItem',
+      nextPageItem: 'nextPageItem',
+      pageItem: 'pageItem',
+      selectedItem: 'selectedItem',
+      disabledItem: 'disabledItem',
       link: 'link',
-      page: 'page',
-      previous: 'previous',
-      next: 'next',
-      first: 'first',
-      last: 'last',
-      active: 'active',
-      disabled: 'disabled',
     };
     results = {
       hits: [{ first: 'hit', second: 'hit' }],
@@ -145,14 +149,14 @@ describe('pagination MaxPage', () => {
     expect(widget.getMaxPage(results)).toEqual(30);
   });
 
-  it('does reduce the number of page if lower than nbPages', () => {
-    paginationOptions.maxPages = 20;
+  it('does reduce the number of pages if lower than nbPages', () => {
+    paginationOptions.totalPages = 20;
     widget = pagination(paginationOptions);
     expect(widget.getMaxPage(results)).toEqual(20);
   });
 
-  it('does not reduce the number of page if greater than nbPages', () => {
-    paginationOptions.maxPages = 40;
+  it('does not reduce the number of pages if greater than nbPages', () => {
+    paginationOptions.totalPages = 40;
     widget = pagination(paginationOptions);
     expect(widget.getMaxPage(results)).toEqual(30);
   });
