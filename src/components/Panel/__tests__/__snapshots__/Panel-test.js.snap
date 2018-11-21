@@ -2,35 +2,8 @@
 
 exports[`Panel should render component with \`hidden\` prop 1`] = `
 <div
-  className="root"
-  hidden={true}
->
-  <div
-    className="header"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Header",
-      }
-    }
-  />
-  <div
-    className="body"
-  />
-  <div
-    className="footer"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Footer",
-      }
-    }
-  />
-</div>
-`;
-
-exports[`Panel should render component with \`noRefinementRoot\` CSS class 1`] = `
-<div
   className="root noRefinementRoot"
-  hidden={false}
+  hidden={true}
 >
   <div
     className="header"

@@ -6,7 +6,7 @@ import Template from '../Template/Template';
 const Panel = ({ cssClasses, hidden, templateProps, data, onRef }) => (
   <div
     className={cx(cssClasses.root, {
-      [cssClasses.noRefinementRoot]: !data.canRefine,
+      [cssClasses.noRefinementRoot]: hidden,
     })}
     hidden={hidden}
   >
@@ -50,9 +50,7 @@ Panel.propTypes = {
     templates: PropTypes.object.isRequired,
   }).isRequired,
   hidden: PropTypes.bool.isRequired,
-  data: PropTypes.shape({
-    canRefine: PropTypes.bool.isRequired,
-  }).isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 export default Panel;

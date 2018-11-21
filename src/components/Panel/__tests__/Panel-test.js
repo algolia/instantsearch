@@ -13,9 +13,7 @@ describe('Panel', () => {
         footer: 'footer',
       },
       hidden: false,
-      data: {
-        canRefine: true,
-      },
+      data: {},
       templateProps: {
         templates: {
           header: 'Header',
@@ -36,7 +34,7 @@ describe('Panel', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('should render component with `noRefinementRoot` CSS class', () => {
+  test('should render component with `hidden` prop', () => {
     const props = {
       cssClasses: {
         root: 'root',
@@ -45,10 +43,8 @@ describe('Panel', () => {
         header: 'header',
         footer: 'footer',
       },
-      hidden: false,
-      data: {
-        canRefine: false,
-      },
+      hidden: true,
+      data: {},
       templateProps: {
         templates: {
           header: 'Header',
@@ -61,37 +57,6 @@ describe('Panel', () => {
 
     expect(wrapper.find('.root')).toHaveLength(1);
     expect(wrapper.find('.noRefinementRoot')).toHaveLength(1);
-    expect(wrapper.find('.body')).toHaveLength(1);
-    expect(wrapper.find('.header')).toHaveLength(1);
-    expect(wrapper.find('.footer')).toHaveLength(1);
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  test('should render component with `hidden` prop', () => {
-    const props = {
-      cssClasses: {
-        root: 'root',
-        noRefinementRoot: 'noRefinementRoot',
-        body: 'body',
-        header: 'header',
-        footer: 'footer',
-      },
-      hidden: true,
-      data: {
-        canRefine: true,
-      },
-      templateProps: {
-        templates: {
-          header: 'Header',
-          footer: 'Footer',
-        },
-      },
-    };
-
-    const wrapper = mount(<Panel {...props} />);
-
-    expect(wrapper.find('.root')).toHaveLength(1);
-    expect(wrapper.find('.noRefinementRoot')).toHaveLength(0);
     expect(wrapper.find('.body')).toHaveLength(1);
     expect(wrapper.find('.header')).toHaveLength(1);
     expect(wrapper.find('.footer')).toHaveLength(1);

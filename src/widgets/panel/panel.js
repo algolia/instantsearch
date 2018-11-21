@@ -7,7 +7,7 @@ import Panel from '../../components/Panel/Panel';
 const suit = component('Panel');
 
 const renderer = ({ containerNode, cssClasses, templateProps }) => ({
-  renderingOptions,
+  options,
   hidden,
 }) => {
   let bodyRef = null;
@@ -17,7 +17,7 @@ const renderer = ({ containerNode, cssClasses, templateProps }) => ({
       cssClasses={cssClasses}
       hidden={hidden}
       templateProps={templateProps}
-      data={renderingOptions}
+      data={options}
       onRef={ref => (bodyRef = ref)}
     />,
     containerNode
@@ -77,9 +77,7 @@ export default function panel({
 
     try {
       const { bodyRef } = renderPanel({
-        renderingOptions: {
-          canRefine: false,
-        },
+        options: {},
         hidden: true,
       });
 
@@ -87,11 +85,6 @@ export default function panel({
         ...widgetOptions,
         container: getContainerNode(bodyRef),
       });
-
-      const renderingOptions =
-        typeof widget.getRenderingOptions === 'function'
-          ? widget.getRenderingOptions(options)
-          : { canRefine: true };
 
       return {
         ...widget,
@@ -104,8 +97,8 @@ export default function panel({
         },
         render(options) {
           renderPanel({
-            renderingOptions,
-            hidden: Boolean(hidden(renderingOptions)),
+            options,
+            hidden: Boolean(hidden(options)),
           });
 
           if (typeof widget.render === 'function') {
