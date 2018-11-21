@@ -13,10 +13,11 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.panel({
           templates: {
-            header: 'Header',
+            header: ({ results }) =>
+              `Header ${results ? `| ${results.nbHits} results` : ''}`,
             footer: 'Footer',
           },
-          hidden: ({ canRefine }) => !canRefine,
+          hidden: ({ results }) => results.nbHits === 0,
         })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'brand',
