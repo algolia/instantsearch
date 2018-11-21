@@ -12,7 +12,7 @@ describe('Breadcrumb', () => {
       items: [],
       cssClasses: {
         root: 'root',
-        noRefinement: 'noRefinement',
+        noRefinementRoot: 'noRefinementRoot',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -46,7 +46,7 @@ describe('Breadcrumb', () => {
       ],
       cssClasses: {
         root: 'root',
-        noRefinement: 'noRefinement',
+        noRefinementRoot: 'noRefinementRoot',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -84,7 +84,7 @@ describe('Breadcrumb', () => {
       ],
       cssClasses: {
         root: 'root',
-        noRefinement: 'noRefinement',
+        noRefinementRoot: 'noRefinementRoot',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',

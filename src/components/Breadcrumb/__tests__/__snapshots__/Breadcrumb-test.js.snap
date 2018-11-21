@@ -26,7 +26,7 @@ exports[`Breadcrumb should render <Breadcrumb /> 1`] = `
 
 exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
 <div
-  className="root noRefinement"
+  className="root noRefinementRoot"
 >
   <ul
     className="list"
@@ -65,7 +65,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
 
 exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
 <div
-  className="root noRefinement"
+  className="root noRefinementRoot"
 >
   <ul
     className="list"

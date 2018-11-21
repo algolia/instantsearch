@@ -39,7 +39,7 @@ const usage = `Usage:
 breadcrumb({
   container,
   attributes,
-  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
+  [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, separator, link} ],
   [ templates.{home, separator}]
   [ transformItems ],
 })`;
@@ -47,7 +47,7 @@ breadcrumb({
 /**
  * @typedef {Object} BreadcrumbCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element of the widget.
- * @property {string|string[]} [noRefinement] CSS class to add to the root element of the widget if there are no refinements.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element of the widget if there are no refinements.
  * @property {string|string[]} [list] CSS class to add to the list element.
  * @property {string|string[]} [item] CSS class to add to the items of the list. The items contains the link and the separator.
  * @property {string|string[]} [selectedItem] CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
@@ -146,9 +146,9 @@ export default function breadcrumb({
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
-    noRefinement: cx(
-      suit({ modifierName: 'noRefinement' }),
-      userCssClasses.noRefinement
+    noRefinementRoot: cx(
+      suit({ modifierName: 'noRefinementRoot' }),
+      userCssClasses.noRefinementRoot
     ),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
