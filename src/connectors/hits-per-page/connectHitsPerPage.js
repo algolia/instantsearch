@@ -147,14 +147,14 @@ The first one will be picked, you should probably set only one default value`
           if (state.hitsPerPage === undefined) {
             if (window.console) {
               warn(
-                `[Warning][hitsPerPageSelector] hitsPerPage not defined.
+                `[hitsPerPageSelector] hitsPerPage not defined.
   You should probably set the value \`hitsPerPage\`
   using the searchParameters attribute of the instantsearch constructor.`
               );
             }
           } else if (window.console) {
             warn(
-              `[Warning][hitsPerPageSelector] No item in \`items\`
+              `[hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
             );
           }
