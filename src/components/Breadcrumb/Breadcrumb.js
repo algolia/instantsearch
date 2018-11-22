@@ -51,7 +51,7 @@ const Breadcrumb = ({
 }) => (
   <div
     className={cx(cssClasses.root, {
-      [cssClasses.noRefinementRoot]: items.length > 0,
+      [cssClasses.noRefinementRoot]: items.length === 0,
     })}
   >
     <ul className={cssClasses.list}>
