@@ -1590,18 +1590,20 @@ browser-resolve@^1.7.0:
   dependencies:
     resolve "1.1.7"
 
-browser-sync-client@^2.26.0:
-  version "2.26.0"
-  resolved "https://registry.yarnpkg.com/browser-sync-client/-/browser-sync-client-2.26.0.tgz#ea8b38a251e8445177e23a0e37b68b1e4eeff0a0"
-  integrity sha512-XRVN6xNFCQYb5mjrDoVzdV2rBK6PMLtTeYkKcs5UPp+/cuviB8z8odaHx0Oe/cAs3Vl45csRdpa7T+q1Zf+6qQ==
+browser-sync-client@^2.26.2:
+  version "2.26.2"
+  resolved "https://registry.yarnpkg.com/browser-sync-client/-/browser-sync-client-2.26.2.tgz#dd0070c80bdc6d9021e89f7837ee70ed0a8acf91"
+  integrity sha512-FEuVJD41fI24HJ30XOT2RyF5WcnEtdJhhTqeyDlnMk/8Ox9MZw109rvk9pdfRWye4soZLe+xcAo9tHSMxvgAdw==
   dependencies:
+    etag "1.8.1"
+    fresh "0.5.2"
     mitt "^1.1.3"
     rxjs "^5.5.6"
 
-browser-sync-ui@^2.26.0:
-  version "2.26.0"
-  resolved "https://registry.yarnpkg.com/browser-sync-ui/-/browser-sync-ui-2.26.0.tgz#8fd7ec972fc30288ca3706df6c3e79ef784710e5"
-  integrity sha512-7bXPmkQ9GuSPUgji3Nb4y0IL8wS2LfdrKSG28bQwvys5bs4kWyXDec2RkYBiupTTModM5lbwXgtmoh7GWQuLGg==
+browser-sync-ui@^2.26.2:
+  version "2.26.2"
+  resolved "https://registry.yarnpkg.com/browser-sync-ui/-/browser-sync-ui-2.26.2.tgz#a1d8e107cfed5849d77e3bbd84ae5d566beb4ea0"
+  integrity sha512-LF7GMWo8ELOE0eAlxuRCfnGQT1ZxKP9flCfGgZdXFc6BwmoqaJHlYe7MmVvykKkXjolRXTz8ztXAKGVqNwJ3EQ==
   dependencies:
     async-each-series "0.1.1"
     connect-history-api-fallback "^1"
@@ -1610,13 +1612,13 @@ browser-sync-ui@^2.26.0:
     socket.io-client "^2.0.4"
     stream-throttle "^0.1.3"
 
-browser-sync@2.26.0:
-  version "2.26.0"
-  resolved "https://registry.yarnpkg.com/browser-sync/-/browser-sync-2.26.0.tgz#63b401c51b715e85dc4df9ef1d135a63a6d3889e"
-  integrity sha512-/2f2/jPmFEdPw7wcARid/oGO237RMfZ8SyAYVtF4Zq5R/E+78zx/rH6aFc/UFY+VDHcsCqmDsfIEi/q1fA3l4Q==
+browser-sync@2.26.3:
+  version "2.26.3"
+  resolved "https://registry.yarnpkg.com/browser-sync/-/browser-sync-2.26.3.tgz#1b59bd5935938a5b0fa73b3d78ef1050bd2bf912"
+  integrity sha512-VLzpjCA4uXqfzkwqWtMM6hvPm2PNHp2RcmzBXcbi6C9WpkUhhFb8SVAr4CFrCsFxDg+oY6HalOjn8F+egyvhag==
   dependencies:
-    browser-sync-client "^2.26.0"
-    browser-sync-ui "^2.26.0"
+    browser-sync-client "^2.26.2"
+    browser-sync-ui "^2.26.2"
     bs-recipes "1.3.4"
     bs-snippet-injector "^2.0.1"
     chokidar "^2.0.4"
@@ -1638,6 +1640,7 @@ browser-sync@2.26.0:
     raw-body "^2.3.2"
     resp-modifier "6.0.2"
     rx "4.1.0"
+    send "0.16.2"
     serve-index "1.9.1"
     serve-static "1.13.2"
     server-destroy "1.0.1"
@@ -3162,7 +3165,7 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
   integrity sha1-Cr9PHKpbyx96nYrMbepPqqBLrJs=
 
-etag@^1.8.1, etag@~1.8.1:
+etag@1.8.1, etag@^1.8.1, etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
