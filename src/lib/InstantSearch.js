@@ -11,6 +11,7 @@ import simpleMapping from './stateMappings/simple.js';
 import historyRouter from './routers/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
+import { warn } from './utils';
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
@@ -124,6 +125,12 @@ class InstantSearch extends EventEmitter {
       );
     }
 
+    // The routing manager widget is always added manually at the last position.
+    // By removing it from the last position and adding it back after, we ensure
+    // it keeps this position.
+    // fixes #3148
+    const lastWidget = this.widgets.pop();
+
     widgets.forEach(widget => {
       // Add the widget to the list of widget
       if (widget.render === undefined && widget.init === undefined) {
@@ -132,6 +139,9 @@ class InstantSearch extends EventEmitter {
 
       this.widgets.push(widget);
     });
+
+    // Second part of the fix for #3148
+    if (lastWidget) this.widgets.push(lastWidget);
 
     // Init the widget directly if instantsearch has been already started
     if (this.started && Boolean(widgets.length)) {
