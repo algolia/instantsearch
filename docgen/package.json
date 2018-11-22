@@ -12,7 +12,7 @@
     "algolia-frontend-components": "0.0.34",
     "autoprefixer": "8.6.5",
     "babel-cli": "6.26.0",
-    "babel-loader": "7.1.4",
+    "babel-loader": "7.1.5",
     "babel-preset-env": "1.7.0",
     "babel-preset-stage-2": "6.24.1",
     "browser-sync": "2.26.0",
