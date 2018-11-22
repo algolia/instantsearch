@@ -1048,10 +1048,10 @@ babel-plugin-module-resolver@3.0.0:
     reselect "^3.0.1"
     resolve "^1.4.0"
 
-babel-plugin-rewire@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-rewire/-/babel-plugin-rewire-1.1.0.tgz#a6b966d9d8c06c03d95dcda2eec4e2521519549b"
-  integrity sha1-prlm2djAbAPZXc2i7sTiUhUZVJs=
+babel-plugin-rewire@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-rewire/-/babel-plugin-rewire-1.2.0.tgz#822562d72ed2c84e47c0f95ee232c920853e9d89"
+  integrity sha512-JBZxczHw3tScS+djy6JPLMjblchGhLI89ep15H3SyjujIzlxo5nr6Yjo7AXotdeVczeBmWs0tF8PgJWDdgzAkQ==
 
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"
