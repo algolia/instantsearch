@@ -18,7 +18,7 @@
     "browser-sync": "2.26.0",
     "clipboard": "2.0.1",
     "codemirror": "5.35.0",
-    "compression": "1.7.2",
+    "compression": "1.7.3",
     "documentation": "6.1.0",
     "json-loader": "0.5.7",
     "jstransformer-handlebars": "1.1.0",
