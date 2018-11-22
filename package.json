@@ -116,7 +116,7 @@
     "semver": "5.5.0",
     "shelljs": "0.8.2",
     "sinon": "4.4.2",
-    "style-loader": "0.20.3",
+    "style-loader": "0.23.1",
     "uglifyjs-webpack-plugin": "1.1.4",
     "unminified-webpack-plugin": "1.4.1",
     "watch": "1.0.2",
