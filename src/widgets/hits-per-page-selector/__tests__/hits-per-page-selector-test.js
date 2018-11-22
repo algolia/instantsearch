@@ -116,7 +116,7 @@ describe('hitsPerPageSelector()', () => {
     widget.init({ state: helper.state, helper });
     expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
     expect(consoleWarn.mock.calls[0][0]).toEqual(
-      `[Warning][hitsPerPageSelector] No item in \`items\`
+      `[InstantSearch.js]: [hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: 20)`
     );
   });
@@ -126,7 +126,7 @@ describe('hitsPerPageSelector()', () => {
     widget.init({ state: helper.state, helper });
     expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
     expect(consoleWarn.mock.calls[0][0]).toEqual(
-      `[Warning][hitsPerPageSelector] No item in \`items\`
+      `[InstantSearch.js]: [hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: -1)`
     );
   });

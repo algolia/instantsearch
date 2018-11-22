@@ -1,7 +1,7 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
 
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering, warn } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
@@ -110,8 +110,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
               isFacetSet.separator === separator
             )
           ) {
-            // eslint-disable-next-line no-console
-            console.warn(
+            warn(
               'using Breadcrumb & HierarchicalMenu on the same facet with different options'
             );
             return {};

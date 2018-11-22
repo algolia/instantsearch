@@ -13,6 +13,7 @@ import simpleMapping from './stateMappings/simple.js';
 import historyRouter from './routers/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
+import { warn } from './utils';
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
@@ -133,21 +134,20 @@ class InstantSearch extends EventEmitter {
           'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
         );
       }
-      /* eslint-disable no-console */
-      console.warn(
-        'InstantSearch.js: `urlSync` option is deprecated and will be removed in the next major version.'
+
+      warn(
+        '`urlSync` option is deprecated and will be removed in the next major version.\n' +
+          'You can now use the new `routing` option.'
       );
-      console.warn('You can now use the new `routing` option');
 
       if (urlSync === true) {
         // when using urlSync: true
-        console.warn('Use it like this: `routing: true`');
+        warn('Use it like this: `routing: true`');
       }
 
-      console.warn(
+      warn(
         'For advanced use cases, checkout the documentation: https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync'
       );
-      /* eslint-enable no-console */
     }
 
     this.urlSync = urlSync === true ? {} : urlSync;
@@ -159,9 +159,8 @@ class InstantSearch extends EventEmitter {
       };
 
     if (options.createAlgoliaClient) {
-      // eslint-disable-next-line no-console
-      console.warn(`
-InstantSearch.js: \`createAlgoliaClient\` option is deprecated and will be removed in the next major version.
+      warn(`
+\`createAlgoliaClient\` option is deprecated and will be removed in the next major version.
 Please use \`searchClient\` instead: https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient.
 To help you migrate, please refer to the migration guide: https://community.algolia.com/instantsearch.js/v2/guides/prepare-for-v3.html`);
     }
