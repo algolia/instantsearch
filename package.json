@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "2.10.2",
+  "version": "2.10.4",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "keywords": [
@@ -25,7 +25,6 @@
     "lint:css": "./scripts/lint-css.sh",
     "docs:build:dev": "./scripts/docs/build-dev.sh",
     "docs:publish": "./scripts/docs/publish.sh",
-    "finish-release": "./scripts/finish-release.sh",
     "view-changelog": "conventional-changelog -p angular",
     "release": "./scripts/release.js",
     "test": "jest",
@@ -85,7 +84,7 @@
     "enzyme-to-json": "3.3.1",
     "eslint": "4.18.2",
     "eslint-config-algolia": "13.1.0",
-    "eslint-config-prettier": "2.9.0",
+    "eslint-config-prettier": "2.10.0",
     "eslint-import-resolver-webpack": "0.8.4",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jasmine": "2.9.3",

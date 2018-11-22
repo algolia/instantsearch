@@ -15,29 +15,29 @@ don't hesitate to leave a message on the [community forum](https://discourse.alg
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Contributing with an new issue ⚠️](#contributing-with-an-new-issue-)
-- [The code contribution process 🤘](#the-code-contribution-process-)
-- [Commit conventions 🤓](#commit-conventions-)
-- [Branches organization 🌳](#branches-organization-)
+- [Contributing with a new issue](#contributing-with-a-new-issue)
+- [The code contribution process](#the-code-contribution-process)
+- [Commit conventions](#commit-conventions)
+- [Branches organization](#branches-organization)
 - [Requirements](#requirements)
-- [Launch the dev environment 👩‍💻](#launch-the-dev-environment-%E2%80%8D)
+- [Launch the dev environment](#launch-the-dev-environment)
 - [Updating the examples](#updating-the-examples)
-- [Folders of the project 🗺](#folders-of-the-project-%F0%9F%97%BA)
+- [Folders of the project](#folders-of-the-project)
   - [The source folder](#the-source-folder)
   - [The documentation source](#the-documentation-source)
   - [The dev app](#the-dev-app)
-- [Tests 🔬](#tests-)
+- [Tests](#tests)
   - [Unit tests](#unit-tests)
   - [Functional tests](#functional-tests)
-- [Linting ✨](#linting-)
-- [Release 🛳](#release-%F0%9F%9B%B3)
+- [Linting](#linting)
+- [Release](#release)
   - [Main version](#main-version)
   - [Maintenance version](#maintenance-version)
-- [Updating the docs 📚](#updating-the-docs-)
+- [Updating the docs](#updating-the-docs)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Contributing with an new issue ⚠️
+## Contributing with a new issue
 
 Opening an issue is very useful for us so don't hesitate, we'll make sure to fix it
 as soon as possible if it's technically feasible and doesn't have important side effects
@@ -50,7 +50,7 @@ hesitate to thumb up an issue that corresponds to the problem you found.
 Another element that will help us go faster at solving the issue is to provide a reproducible
 test case. We often recommend to [use this CodeSandbox template](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js).
 
-## The code contribution process 🤘
+## The code contribution process
 
 On your side:
  - Fork and clone the project
@@ -75,7 +75,7 @@ On it you can find:
     - for example: https://deploy-preview-3102--algolia-instantsearch.netlify.com/v2/dev-novel
     - source: https://github.com/algolia/instantsearch.js/tree/develop/dev
 
-## Commit conventions 🤓
+## Commit conventions
 
 This project follows the [conventional changelog](https://conventionalcommits.org/) approach.
 This means that all commit messages should be formatted using the following scheme:
@@ -102,7 +102,7 @@ Some examples of valid commit messages (first line):
  - fix(connectRefinementList): set default value for limit
  - chore: reword contributions guides
 
-## Branches organization 🌳
+## Branches organization
 
 The project is based on the classic GitHub flow because we are building a library and
 each version must be crafted with care. We also maintain a branch specific for the older
@@ -126,7 +126,7 @@ To run this project, you will need:
  - Node.js >= 8 (current stable version) -- using nvm makes the life easier - [install instructions](https://github.com/creationix/nvm#install-script)
  - Yarn https://yarnpkg.com/en/
 
-## Launch the dev environment 👩‍💻
+## Launch the dev environment
 
 During the development, we use two main tools. The dev app / playground in which we create stories
 for the different widgets and the documentation website which has create API documentation based
@@ -152,7 +152,7 @@ yarn build
 
 And also relaunch the dev environement afterwards.
 
-## Folders of the project 🗺
+## Folders of the project
 
 Here are the main files and folders of the project.
 
@@ -223,7 +223,7 @@ Here are the main files and folders of the project.
     webpack.config.js
 ```
 
-## Tests 🔬
+## Tests
 
 ### Unit tests
 Our unit tests are written with [Jest](https://facebook.github.io/jest/):
@@ -299,7 +299,7 @@ the test page with your VM. **Do not commit this change**
 Then you should be able debug using the dev setup: `yarn run dev` and the virtual machine. You can also
 run the page used for function tests using `yarn run test:functional:dev:debug-server`
 
-## Linting ✨
+## Linting
 
 Linters are static checkers for the code. They help us maintain a consistent code base. They are used
 for js and SCSS files.
@@ -314,7 +314,7 @@ yarn lint
 The JS files are validated using a combination of prettier (strict syntax form) and eslint rules (for
 common mistakes and patterns). The scss linter uses sass-lint.
 
-## Release 🛳
+## Release
 
 ### Main version
 For the main version, go on develop (`git checkout develop`) and use:
@@ -335,7 +335,7 @@ npm run release-maintenance
 
 **Be sure to use `$ npm run` instead of `$ yarn run` to avoid issues**
 
-#### Beta version β
+#### Beta version
 
 Beta version release is available on any branch except `master`, `maintenance`. The
 main use cases are for releasing a patch before the official release, or create custom builds
@@ -355,7 +355,7 @@ npm run release -- --beta
 
 **Be sure to use `$ npm run` instead of `$ yarn run` to avoid issues**
 
-## Updating the docs 📚
+## Updating the docs
 
 The documentation website is created and pushed during the release of main version.
 

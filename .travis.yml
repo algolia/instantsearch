@@ -17,7 +17,6 @@ branches:
   - develop
   - feat/instantsearch.js/v2
   - "/^feat\\/\\d+\\.\\d+$/"
-sudo: false
 cache:
   yarn: true
 script:
