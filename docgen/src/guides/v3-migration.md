@@ -1278,6 +1278,10 @@ We've moved the `label` into the `templates.labelText` template to make it consi
 
 ## Connectors
 
+### connectBreadcrumb
+
+- The BreadcrumbItem `name` property is renamed to `label`.
+
 ### connectRange
 
 #### Options

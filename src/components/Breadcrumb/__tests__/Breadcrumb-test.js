@@ -41,7 +41,7 @@ describe('Breadcrumb', () => {
       items: [
         {
           value: 'val0',
-          name: 'name0',
+          label: 'label0',
         },
       ],
       cssClasses: {
@@ -75,11 +75,11 @@ describe('Breadcrumb', () => {
       items: [
         {
           value: 'val0',
-          name: 'name0',
+          label: 'label0',
         },
         {
           value: 'val1',
-          name: 'name1',
+          label: 'label1',
         },
       ],
       cssClasses: {

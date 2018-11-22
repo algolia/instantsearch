@@ -18,12 +18,12 @@ exports[`breadcrumb() render renders transformed items correctly 1`] = `
   items={
     Array [
       Object {
-        "name": "Cameras & Camcorders",
+        "label": "Cameras & Camcorders",
         "transformed": true,
         "value": "Cameras & Camcorders > Digital Cameras",
       },
       Object {
-        "name": "Digital Cameras",
+        "label": "Digital Cameras",
         "transformed": true,
         "value": null,
       },

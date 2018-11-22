@@ -210,7 +210,7 @@ export default () => {
     wrapWithUnmount(container =>
       instantsearch.widgets.pagination({
         container,
-        maxPages: 20,
+        totalPages: 20,
       })
     )
   );

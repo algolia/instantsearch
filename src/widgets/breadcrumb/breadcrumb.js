@@ -39,9 +39,10 @@ const usage = `Usage:
 breadcrumb({
   container,
   attributes,
-  [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, separator, link} ],
-  [ templates.{home, separator}]
+  [ rootPath = null ],
   [ transformItems ],
+  [ templates.{home, separator}],
+  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
 })`;
 
 /**
@@ -70,11 +71,10 @@ breadcrumb({
  * @typedef {Object} BreadcrumbWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the breadcrumb.
- *
- * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
- * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
+ * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  */
 
 /**

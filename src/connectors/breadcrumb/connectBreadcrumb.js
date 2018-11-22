@@ -24,7 +24,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} BreadcrumbItem
- * @property {string} name Name of the category or subcategory.
+ * @property {string} label Label of the category or subcategory.
  * @property {string} value Value of breadcrumb item.
  */
 
@@ -181,7 +181,7 @@ function prepareItems(data) {
   return data.reduce((result, currentItem) => {
     if (currentItem.isRefined) {
       result.push({
-        name: currentItem.name,
+        label: currentItem.name,
         value: currentItem.path,
       });
       if (Array.isArray(currentItem.data)) {
@@ -194,7 +194,7 @@ function prepareItems(data) {
 
 function shiftItemsValues(array) {
   return array.map((x, idx) => ({
-    name: x.name,
+    label: x.label,
     value: idx + 1 === array.length ? null : array[idx + 1].value,
   }));
 }

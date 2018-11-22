@@ -289,8 +289,8 @@ Update the config of the dev server (instantsearch.js/scripts/dev.sh) so that yo
 the test page with your VM. **Do not commit this change**
 
 ```diff
-- webpack-dev-server --config dev/webpack.dev.config.babel.js --hot --inline --no-info &
-+ webpack-dev-server --config dev/webpack.dev.config.babel.js --hot --inline --no-info --public [your_ip] &
+- webpack-dev-server --config storybook/webpack.dev.config.babel.js --hot --inline --no-info &
++ webpack-dev-server --config storybook/webpack.dev.config.babel.js --hot --inline --no-info --public [your_ip] &
 ```
 
 Then you should be able debug using the dev setup: `yarn run dev` and the virtual machine. You can also

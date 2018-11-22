@@ -10,7 +10,7 @@ const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
 ) => {
   const isLast = idx === items.length - 1;
   const link = isLast ? (
-    item.name
+    item.label
   ) : (
     <a
       className={cssClasses.link}
@@ -20,13 +20,13 @@ const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
         refine(item.value);
       }}
     >
-      {item.name}
+      {item.label}
     </a>
   );
 
   return (
     <li
-      key={item.name + idx}
+      key={item.label + idx}
       className={cx(cssClasses.item, {
         [cssClasses.selectedItem]: isLast,
       })}
@@ -93,7 +93,7 @@ Breadcrumb.propTypes = {
   }).isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
       value: PropTypes.string,
     })
   ).isRequired,

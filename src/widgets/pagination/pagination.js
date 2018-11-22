@@ -142,7 +142,7 @@ pagination({
  * search.addWidget(
  *   instantsearch.widgets.pagination({
  *     container: '#pagination-container',
- *     maxPages: 20,
+ *     totalPages: 20,
  *     // default is to scroll to 'body', here we disable this behavior
  *     scrollTo: false,
  *     showFirst: false,
@@ -154,7 +154,7 @@ export default function pagination({
   container,
   labels: userLabels = defaultLabels,
   cssClasses: userCssClasses = {},
-  maxPages,
+  totalPages,
   padding,
   showFirst = true,
   showLast = true,
@@ -228,7 +228,7 @@ export default function pagination({
     const makeWidget = connectPagination(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ maxPages, padding });
+    return makeWidget({ totalPages, padding });
   } catch (error) {
     throw new Error(usage);
   }
