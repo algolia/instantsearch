@@ -97,8 +97,8 @@
         "url": "guides/custom-backend.html"
       },
       {
-        "name": "Prepare for v3",
-        "url": "guides/prepare-for-v3.html"
+        "name": "Upgrade to InstantSearch 3",
+        "url": "guides/v3-migration.html"
       }
     ]
   },
@@ -157,8 +157,8 @@
     "url": "guides/custom-backend.html"
   },
   {
-    "name": "Prepare for v3",
-    "url": "guides/prepare-for-v3.html"
+    "name": "Upgrade to InstantSearch 3",
+    "url": "guides/v3-migration.html"
   },
   {
     "name": "instantsearch()",

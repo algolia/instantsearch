@@ -1,3 +1,14 @@
+---
+title: Upgrade to InstantSearch 3
+mainTitle: Guides
+layout: main.pug
+category: guides
+withHeadings: true
+navWeight: 0
+editable: true
+githubSource: docgen/src/guides/v3-migration.md
+---
+
 This document helps you migrate from InstantSearch 2 to InstantSearch 3.
 
 InstantSearch 3 introduces some breaking changes in the widget's naming, options and markup.
@@ -42,7 +53,7 @@ Since InstantSearch.js first public release, we have provided an option to custo
 
 ### Previous usage
 
-```js
+```javascript
 search.addWidget(
   instantsearch.widget.refinementList({
     container: '#facet',
@@ -59,7 +70,7 @@ search.addWidget(
 
 ### New usage
 
-```js
+```javascript
 search.addWidget(
   instantsearch.widget.refinementList({
     container: '#facet',
@@ -1191,7 +1202,7 @@ Finally, `autofocus` is now set to `false` by default and does not support the `
 
 - A `sortBy` item value is now `value` instead of `name`:
 
-```js
+```javascript
 const sortByItem = {
   value: string,
   label: string,
