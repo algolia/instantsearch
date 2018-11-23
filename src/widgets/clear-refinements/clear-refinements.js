@@ -8,13 +8,10 @@ import { component } from '../../lib/suit';
 
 const suit = component('ClearRefinements');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  renderState,
-  templates,
-}) => ({ refine, hasRefinements, instantSearchInstance }, isFirstRendering) => {
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
+  { refine, hasRefinements, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -27,7 +24,6 @@ const renderer = ({
   render(
     <ClearRefinements
       refine={refine}
-      collapsible={collapsible}
       cssClasses={cssClasses}
       hasRefinements={hasRefinements}
       templateProps={renderState.templateProps}
@@ -41,7 +37,7 @@ clearRefinements({
   container,
   [ cssClasses.{root,button,disabledButton} ],
   [ templates.{resetLabel}={resetLabel: 'Clear all refinements'} ],
-  [ collapsible=false ],
+  [ includedAttributes=[] ]
   [ excludedAttributes=[] ]
 })`;
 /**
@@ -60,9 +56,9 @@ clearRefinements({
  * @typedef {Object} ClearRefinementsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} [excludedAttributes] List of attributes names to exclude from clear actions.
+ * // TODO: add included
  * @property {ClearRefinementsTemplates} [templates] Templates to use for the widget.
  * @property {ClearRefinementsCSSClasses} [cssClasses] CSS classes to be added.
- * @property {boolean} [clearsQuery = false] If true, the widget will also clear the query.
  */
 
 /**
@@ -82,7 +78,6 @@ clearRefinements({
  *     templates: {
  *       resetLabel: 'Reset everything'
  *     },
- *     clearsQuery: true,
  *   })
  * );
  */
@@ -90,9 +85,8 @@ export default function clearRefinements({
   container,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
-  collapsible = false,
-  excludedAttributes = [],
-  clearsQuery = false,
+  includedAttributes,
+  excludedAttributes,
 }) {
   if (!container) {
     throw new Error(usage);
@@ -112,7 +106,6 @@ export default function clearRefinements({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    collapsible,
     renderState: {},
     templates,
   });
@@ -121,7 +114,10 @@ export default function clearRefinements({
     const makeWidget = connectClearRefinements(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ excludedAttributes, clearsQuery });
+    return makeWidget({
+      includedAttributes,
+      excludedAttributes,
+    });
   } catch (error) {
     throw new Error(usage);
   }

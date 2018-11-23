@@ -17,7 +17,6 @@ var customClearRefinements = connectClearRefinements(function render(params, isF
 search.addWidget(
   customClearRefinements({
     [ excludedAttributes = [] ],
-    [ clearsQuery = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearRefinements.html
@@ -26,7 +25,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomClearRefinementsWidgetOptions
  * @property {string[]} [excludedAttributes = []] Every attributes that should not be removed when calling `refine()`.
- * @property {boolean} [clearsQuery = false] If `true`, `refine()` also clears the current search query.
  */
 
 /**
@@ -83,26 +81,30 @@ export default function connectClearRefinements(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { excludedAttributes = [], clearsQuery = false } = widgetParams;
+    if (widgetParams.includedAttributes && widgetParams.excludedAttributes) {
+      throw new Error(
+        '`includedAttributes` and `excludedAttributes` cannot be used together.'
+      );
+    }
+    const { includedAttributes = [], excludedAttributes = ['query'], } = widgetParams;
 
     return {
       init({ helper, instantSearchInstance, createURL }) {
         const attributesToClear = getAttributesToClear({
           helper,
+          includedAttributes,
           excludedAttributes,
         });
 
-        const hasRefinements = clearsQuery
-          ? attributesToClear.length !== 0 || helper.state.query !== ''
-          : attributesToClear.length !== 0;
+        const hasRefinements = attributesToClear.length > 0;
 
         this._refine = () => {
           helper
             .setState(
               clearRefinements({
                 helper,
+                includedAttributes,
                 excludedAttributes,
-                clearsQuery,
               })
             )
             .search();
@@ -112,8 +114,8 @@ export default function connectClearRefinements(renderFn, unmountFn) {
           createURL(
             clearRefinements({
               helper,
+              includedAttributes,
               excludedAttributes,
-              clearsQuery,
             })
           );
 
@@ -132,12 +134,11 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       render({ helper, instantSearchInstance }) {
         const attributesToClear = getAttributesToClear({
           helper,
+          includedAttributes,
           excludedAttributes,
         });
 
-        const hasRefinements = clearsQuery
-          ? attributesToClear.length !== 0 || helper.state.query !== ''
-          : attributesToClear.length !== 0;
+        const hasRefinements = attributesToClear.length > 0;
 
         renderFn(
           {

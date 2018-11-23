@@ -277,6 +277,46 @@ describe('connectClearRefinements', () => {
     expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
   });
 
+  it('can include some attributes', () => {
+    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
+      facets: ['facet1', 'facet2'],
+    });
+    helper.search = () => {};
+
+    const rendering = jest.fn();
+    const makeWidget = connectClearRefinements(rendering);
+    const widget = makeWidget({ includedAttributes: ['facet1'] });
+
+    {
+      helper.toggleRefinement('facet1', 'value')
+        .toggleRefinement('facet2', 'value');
+
+      helper.setQuery('not empty');
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      expect(helper.hasRefinements('facet1')).toBe(true);
+      expect(helper.hasRefinements('facet2')).toBe(true);
+
+      const refine = rendering.mock.calls[0][0].refine;
+      refine();
+      widget.render({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      })
+      expect(helper.hasRefinements('facet1')).toBe(false);
+      expect(helper.hasRefinements('facet2')).toBe(true);
+      expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
+    }
+  });
+
   it('can exclude some attributes', () => {
     const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
       facets: ['facet'],
@@ -383,6 +423,30 @@ describe('connectClearRefinements', () => {
     }
   });
 
+  it('throws an error when some included is used with excluded', () => {
+    const helper = jsHelper(
+      {
+        addAlgoliaAgent: () => {},
+      },
+      '',
+      {
+        facets: ['facet1', 'facet2'],
+      }
+    );
+    helper.search = () => {};
+
+    const rendering = jest.fn();
+    const makeWidget = connectClearRefinements(rendering);
+    expect(() => {
+      makeWidget({
+        includedAttributes: ['facet1'],
+        excludedAttributes: ['facet2'],
+        clearsQuery: true,
+      });
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"\`includedAttributes\` and \`excludedAttributes\` cannot be used together."`
+    );
+  });
   describe('createURL', () => {
     it('consistent with the list of excludedAttributes', () => {
       const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
