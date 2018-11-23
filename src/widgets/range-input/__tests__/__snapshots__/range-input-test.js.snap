@@ -2,7 +2,6 @@
 
 exports[`rangeInput expect to render with custom classNames 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form custom-form",
@@ -37,7 +36,6 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
 
 exports[`rangeInput expect to render with custom labels 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -72,7 +70,6 @@ exports[`rangeInput expect to render with custom labels 1`] = `
 
 exports[`rangeInput expect to render with refinement 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -107,7 +104,6 @@ exports[`rangeInput expect to render with refinement 1`] = `
 
 exports[`rangeInput expect to render with refinement at boundaries 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -142,7 +138,6 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
 
 exports[`rangeInput expect to render with results 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -177,7 +172,6 @@ exports[`rangeInput expect to render with results 1`] = `
 
 exports[`rangeInput expect to render without results 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",

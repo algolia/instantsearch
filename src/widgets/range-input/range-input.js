@@ -7,13 +7,10 @@ import { component } from '../../lib/suit';
 
 const suit = component('RangeInput');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  labels,
-  collapsible,
-  renderState,
-}) => ({ refine, range, start, widgetParams }, isFirstRendering) => {
+const renderer = ({ containerNode, cssClasses, labels, renderState }) => (
+  { refine, range, start, widgetParams },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     return;
   }
@@ -37,7 +34,6 @@ const renderer = ({
       cssClasses={cssClasses}
       labels={labels}
       refine={refine}
-      collapsible={collapsible}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -53,7 +49,6 @@ rangeInput({
   [ precision = 0 ],
   [ cssClasses.{root, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit} ],
   [ labels.{separator, submit} ],
-  [ collapsible=false ]
 })`;
 
 /**
@@ -84,7 +79,6 @@ rangeInput({
  * @property {number} [precision = 0] Number of digits after decimal point to use.
  * @property {RangeInputClasses} [cssClasses] CSS classes to add.
  * @property {RangeInputLabels} [labels] Labels to use for the widget.
- * @property {boolean} [collapsible=false] Hide the widget body and footer when clicking on header.
  */
 
 /**
@@ -121,7 +115,6 @@ export default function rangeInput({
   precision = 0,
   cssClasses: userCssClasses = {},
   labels: userLabels = {},
-  collapsible = false,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -160,7 +153,6 @@ export default function rangeInput({
     containerNode,
     cssClasses,
     labels,
-    collapsible,
     renderState: {},
   });
 

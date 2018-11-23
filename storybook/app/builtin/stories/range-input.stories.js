@@ -39,21 +39,6 @@ export default () => {
       })
     )
     .add(
-      'collapsible',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeInput({
-            container,
-            attribute: 'price',
-            collapsible: true,
-            templates: {
-              header: 'Range input',
-            },
-          })
-        );
-      })
-    )
-    .add(
       'with floating number',
       wrapWithHits(container => {
         window.search.addWidget(
