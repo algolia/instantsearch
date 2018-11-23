@@ -8,13 +8,7 @@ import { component } from '../../lib/suit';
 
 const suit = component('Stats');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  renderState,
-  templates,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   {
     hitsPerPage,
     nbHits,
@@ -38,7 +32,6 @@ const renderer = ({
 
   render(
     <Stats
-      collapsible={collapsible}
       cssClasses={cssClasses}
       hitsPerPage={hitsPerPage}
       nbHits={nbHits}
@@ -116,7 +109,6 @@ stats({
 export default function stats({
   container,
   cssClasses: userCssClasses = {},
-  collapsible = false,
   templates = defaultTemplates,
 } = {}) {
   if (!container) {
@@ -133,7 +125,6 @@ export default function stats({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    collapsible,
     renderState: {},
     templates,
   });

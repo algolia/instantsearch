@@ -2,7 +2,6 @@
 
 exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 1`] = `
 <Stats
-  collapsible={false}
   cssClasses={
     Object {
       "root": "ais-Stats",
@@ -33,7 +32,6 @@ exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 1`] = `
 
 exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 2`] = `
 <Stats
-  collapsible={false}
   cssClasses={
     Object {
       "root": "ais-Stats",
