@@ -11,7 +11,6 @@ import simpleMapping from './stateMappings/simple.js';
 import historyRouter from './routers/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
-import { warn } from './utils';
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
