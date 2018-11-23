@@ -51,7 +51,7 @@ const Breadcrumb = ({
 }) => (
   <div
     className={cx(cssClasses.root, {
-      [cssClasses.noRefinement]: items.length > 0,
+      [cssClasses.noRefinementRoot]: items.length === 0,
     })}
   >
     <ul className={cssClasses.list}>
@@ -84,7 +84,7 @@ Breadcrumb.propTypes = {
   createURL: PropTypes.func.isRequired,
   cssClasses: PropTypes.shape({
     root: PropTypes.string.isRequired,
-    noRefinement: PropTypes.string.isRequired,
+    noRefinementRoot: PropTypes.string.isRequired,
     list: PropTypes.string.isRequired,
     item: PropTypes.string.isRequired,
     selectedItem: PropTypes.string.isRequired,

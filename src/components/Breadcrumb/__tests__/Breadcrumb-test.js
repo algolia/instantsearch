@@ -12,7 +12,7 @@ describe('Breadcrumb', () => {
       items: [],
       cssClasses: {
         root: 'root',
-        noRefinement: 'noRefinement',
+        noRefinementRoot: 'noRefinementRoot',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -29,6 +29,7 @@ describe('Breadcrumb', () => {
     };
     const wrapper = mount(<Breadcrumb {...props} />);
 
+    expect(wrapper.find('.noRefinementRoot')).toHaveLength(1);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -46,7 +47,7 @@ describe('Breadcrumb', () => {
       ],
       cssClasses: {
         root: 'root',
-        noRefinement: 'noRefinement',
+        noRefinementRoot: 'noRefinementRoot',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -63,10 +64,11 @@ describe('Breadcrumb', () => {
     };
     const wrapper = mount(<Breadcrumb {...props} />);
 
+    expect(wrapper.find('.noRefinementRoot')).toHaveLength(0);
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('should render <Breadcrumb /> with items', () => {
+  it('should render <Breadcrumb /> with multiple items', () => {
     const props = {
       createURL: data => {
         JSON.stringify(data);
@@ -84,7 +86,7 @@ describe('Breadcrumb', () => {
       ],
       cssClasses: {
         root: 'root',
-        noRefinement: 'noRefinement',
+        noRefinementRoot: 'noRefinementRoot',
         list: 'list',
         item: 'item',
         selectedItem: 'selectedItem',
@@ -101,6 +103,7 @@ describe('Breadcrumb', () => {
     };
     const wrapper = mount(<Breadcrumb {...props} />);
 
+    expect(wrapper.find('.noRefinementRoot')).toHaveLength(0);
     expect(wrapper).toMatchSnapshot();
   });
 });
