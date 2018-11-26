@@ -1252,7 +1252,7 @@ const sortByItem = {
 
 `collapsible` and `autoHideContainer` options have been removed. These options are now implemented as part of the Panel widget wrapper.
 
-We've moved the `label` into the `templates.labelText` template to make it consistent with the templates parameters of other widgets and we removed the `item` template. We are now providing the data that were provided to `templates.item` to `templates.labelText`.
+The `label` options has been moved into the `templates.labelText` template to make it consistent with the templates parameters of other widgets and we removed the `item` template. We are now providing the data that were provided to `templates.item` to `templates.labelText`. If your index attribute is called `free_shipping`, the default template will display "free_shipping". To rename it, change `templates.labelText` to "Free shipping".
 
 #### CSS classes
 
