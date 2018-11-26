@@ -16,6 +16,7 @@ branches:
   - master
   - develop
   - feat/instantsearch.js/v2
+  - "/^v\\d+\\.\\d+$/"
   - "/^feat\\/\\d+\\.\\d+$/"
 cache:
   yarn: true
