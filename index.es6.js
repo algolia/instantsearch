@@ -1,5 +1,4 @@
 /* eslint max-len: 0 */
-import algoliasearchHelper from 'algoliasearch-helper';
 import toFactory from 'to-factory';
 
 /* eslint-disable import/no-unresolved */
@@ -13,8 +12,6 @@ import { snippet, highlight } from './helpers';
 const instantSearchFactory = toFactory(InstantSearch);
 
 instantSearchFactory.version = version;
-instantSearchFactory.createQueryString =
-  algoliasearchHelper.url.getQueryStringFromState;
 instantSearchFactory.snippet = snippet;
 instantSearchFactory.highlight = highlight;
 

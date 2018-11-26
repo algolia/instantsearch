@@ -97,6 +97,10 @@ Here are the elements you need to migrate:
 
 `createAlgoliaClient` is replaced by `searchClient`.
 
+### `createQueryString` is dropped
+
+URL synchronization is done via Routing alone now.
+
 ## Widgets
 
 ### Breadcrumb
