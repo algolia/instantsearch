@@ -65,11 +65,6 @@ stats({
  */
 
 /**
- * @typedef {Object} StatsWidgetTransforms
- * @property {function(StatsTextData):object} [text] Updates the content of object passed to the `text` template.
- */
-
-/**
  * @typedef {Object} StatsTextData
  * @property {boolean} hasManyResults True if the result set has more than one result.
  * @property {boolean} hasNoResults True if the result set has no result.

@@ -63,11 +63,6 @@ breadcrumb({
  */
 
 /**
- * @typedef {Object} BreadcrumbTransforms
- * @property {function(object):object} [item] Method to change the object passed to the `item` template
- */
-
-/**
  * @typedef {Object} BreadcrumbWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the breadcrumb.

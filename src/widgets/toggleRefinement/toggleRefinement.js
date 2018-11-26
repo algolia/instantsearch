@@ -46,15 +46,10 @@ toggleRefinement({
 
 /**
  * @typedef {Object} ToggleWidgetCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [label] CSS class to add to the label wrapping element
- * @property  {string|string[]} [checkbox] CSS class to add to the checkbox
- * @property  {string|string[]} [labelText] CSS class to add to the label text.
- */
-
-/**
- * @typedef {Object} ToggleWidgetTransforms
- * @property  {function(Object):Object} labelText the text that describes the toggle action. This
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [label] CSS class to add to the label wrapping element
+ * @property {string|string[]} [checkbox] CSS class to add to the checkbox
+ * @property {string|string[]} [labelText] CSS class to add to the label text.
  */
 
 /**
