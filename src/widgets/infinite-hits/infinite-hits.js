@@ -8,13 +8,7 @@ import { component } from '../../lib/suit';
 
 const suit = component('InfiniteHits');
 
-const renderer = ({
-  cssClasses,
-  containerNode,
-  renderState,
-  templates,
-  loadMoreLabel,
-}) => (
+const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
   { hits, results, showMore, isLastPage, instantSearchInstance },
   isFirstRendering
 ) => {
@@ -33,7 +27,6 @@ const renderer = ({
       hits={hits}
       results={results}
       showMore={showMore}
-      loadMoreLabel={loadMoreLabel}
       templateProps={renderState.templateProps}
       isLastPage={isLastPage}
     />,
@@ -47,21 +40,15 @@ infiniteHits({
   container,
   [ escapeHTML = true ],
   [ transformItems ],
-  [ loadMoreLabel = "Show more results" ],
   [ cssClasses.{root, emptyRoot, list, item, loadMore, disabledLoadMore} ],
-  [ templates.{empty,item} | templates.{empty} ],
+  [ templates.{empty, item, showMore} ],
 })`;
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
- * @property {string|function} [empty=""] Template used when there are no results.
- * @property {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
- */
-
-/**
- * @typedef {Object} InfiniteHitsTransforms
- * @property {function} [empty] Method used to change the object passed to the `empty` template.
- * @property {function} [item] Method used to change the object passed to the `item` template.
+ * @property {string|function} [empty = "No results"] Template used when there are no results.
+ * @property {string|function} [showMore = "Show more results"] Template used for the "load more" button.
+ * @property {string|function} [item = ""] Template used for each result. This template will receive an object containing a single record.
  */
 
 /**
@@ -78,7 +65,6 @@ infiniteHits({
  * @typedef {Object} InfiniteHitsWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget.
- * @property  {string} [loadMoreLabel="Show more results"] label used on the load more button.
  * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -101,6 +87,7 @@ infiniteHits({
  *     container: '#infinite-hits-container',
  *     templates: {
  *       empty: 'No results',
+ *       showMore: 'Show more results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
  *     transformItems: items => items.map(item => item),
@@ -110,7 +97,6 @@ infiniteHits({
 export default function infiniteHits({
   container,
   cssClasses: userCssClasses = {},
-  loadMoreLabel = 'Show more results',
   templates = defaultTemplates,
   escapeHTML = true,
   transformItems,
@@ -144,7 +130,6 @@ export default function infiniteHits({
     containerNode,
     cssClasses,
     templates,
-    loadMoreLabel,
     renderState: {},
   });
 

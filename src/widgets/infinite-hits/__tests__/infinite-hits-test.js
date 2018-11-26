@@ -117,6 +117,5 @@ describe('infiniteHits()', () => {
 
   afterEach(() => {
     infiniteHits.__ResetDependency__('render');
-    infiniteHits.__ResetDependency__('defaultTemplates');
   });
 });

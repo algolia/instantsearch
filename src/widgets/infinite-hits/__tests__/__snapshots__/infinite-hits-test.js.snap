@@ -21,7 +21,6 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
     ]
   }
   isLastPage={false}
-  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -38,11 +37,13 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMore": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMore": false,
       },
     }
   }
@@ -70,7 +71,6 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
     ]
   }
   isLastPage={false}
-  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -87,11 +87,13 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMore": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMore": false,
       },
     }
   }
@@ -119,7 +121,6 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     ]
   }
   isLastPage={false}
-  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -138,11 +139,13 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMore": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMore": false,
       },
     }
   }
@@ -170,7 +173,6 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     ]
   }
   isLastPage={true}
-  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -189,11 +191,13 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMore": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMore": false,
       },
     }
   }
@@ -222,7 +226,6 @@ exports[`infiniteHits() renders transformed items 1`] = `
     ]
   }
   isLastPage={false}
-  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -240,11 +243,13 @@ exports[`infiniteHits() renders transformed items 1`] = `
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMore": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMore": false,
       },
     }
   }
