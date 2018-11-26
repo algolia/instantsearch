@@ -15191,10 +15191,10 @@ react-dev-utils@^5.0.0:
     strip-ansi "3.0.1"
     text-table "0.2.0"
 
-react-devtools-core@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-3.4.0.tgz#6b61594dce01b129a9e0b44b5bc4952f8f59ceec"
-  integrity sha512-yV3LLhoRwbfcQyVPNwb1EZ9W7CGu+kX2EqyZ3Cl5C+cbXcb6FJ3YSeeBt9BQB+hjyjRMBjQSKqnpPS6OMSEUow==
+react-devtools-core@^3.4.2:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-3.4.3.tgz#1a06b7dc546d41ecf8dc4fbabea2d79d339353cf"
+  integrity sha512-t3f6cRH5YSKv8qjRl1Z+1e0OwBZwJSdOAhJ9QAJdVKML7SmqAKKv3DxF+Ue03pE1N2UipPsLmaNcPzzMjIdZQg==
   dependencies:
     shell-quote "^1.6.1"
     ws "^3.3.1"
@@ -15354,10 +15354,10 @@ react-modal@^3.1.10, react-modal@^3.3.2:
     prop-types "^15.5.10"
     warning "^3.0.0"
 
-react-native@0.57.5:
-  version "0.57.5"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.57.5.tgz#f1dbcbf1f889845fba954f3e0d47e61cf89d41d9"
-  integrity sha512-b/RNXcifPr4CrYZEAWmyD+W//KWZkEO4p6/TOZmLPP4M+vkqWqt0wmSW6JWn1bTEeZmRjx1JJZeVtYmtIVl/KA==
+react-native@0.57.6:
+  version "0.57.6"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.57.6.tgz#517a5df8a635e9f465abec1e47d7d66b0e206c06"
+  integrity sha512-9iDjfoJcF4mWP86F3hAj0sdjIPXR262r1QeHUJwR7oF6s5DAMDCkndpKOawHcDE9vBrpVeu86erbIog+5b2DCg==
   dependencies:
     "@babel/runtime" "^7.0.0"
     absolute-path "^0.0.0"
@@ -15399,7 +15399,7 @@ react-native@0.57.5:
     promise "^7.1.1"
     prop-types "^15.5.8"
     react-clone-referenced-element "^1.0.1"
-    react-devtools-core "^3.4.0"
+    react-devtools-core "^3.4.2"
     react-timer-mixin "^0.13.2"
     regenerator-runtime "^0.11.0"
     rimraf "^2.5.4"
