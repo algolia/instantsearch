@@ -375,9 +375,14 @@ function getAttributesToClear({
   excludedAttributes,
 }) {
   const lastResults = helper.lastResults || {};
-  const attributesToClear =
-    includedAttributes ||
-    getRefinements(lastResults, helper.state).map(one => one.attributeName);
+  const attributesToClear = getRefinements(lastResults, helper.state)
+    .map(refinement => refinement.attributeName)
+    .filter(
+      attribute =>
+        !includedAttributes ||
+        includedAttributes.length === 0 ||
+        includedAttributes.includes(attribute)
+    );
 
   return attributesToClear.filter(
     attribute => excludedAttributes.indexOf(attribute) === -1
