@@ -37,14 +37,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomToggleWidgetOptions
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
- * @property {Object} [on=true] Value to filter on when toggled.
+ * @property {Object} [on = true] Value to filter on when toggled.
  * @property {Object} [off] Value to filter on when not toggled.
  */
 
 /**
  * @typedef {Object} ToggleRenderingOptions
  * @property {ToggleValue} value The current toggle value.
- * @property {function(): string} createURL Creates an URL for the next state.
+ * @property {function():string} createURL Creates an URL for the next state.
  * @property {function(value)} refine Updates to the next state by applying the toggle refinement.
  * @property {Object} widgetParams All original `CustomToggleWidgetOptions` forwarded to the `renderFn`.
  */
@@ -182,6 +182,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         };
 
         const value = {
+          name: attribute,
           isRefined,
           count: null,
           onFacetValue,
@@ -234,6 +235,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         const nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
         const value = {
+          name: attribute,
           isRefined,
           count: nextRefinement === undefined ? null : nextRefinement.count,
           onFacetValue,

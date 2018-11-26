@@ -16,12 +16,13 @@ const ToggleRefinement = ({
         checked={currentRefinement.isRefined}
         onChange={event => refine(!event.target.checked)}
       />
+
       <Template
+        {...templateProps}
         rootTagName="span"
         rootProps={{ className: cssClasses.labelText }}
         templateKey="labelText"
         data={currentRefinement}
-        {...templateProps}
       />
     </label>
   </div>

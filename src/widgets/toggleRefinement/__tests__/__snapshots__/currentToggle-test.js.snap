@@ -15,6 +15,7 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
     Object {
       "count": 1,
       "isRefined": false,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 2,
         "isRefined": true,
@@ -55,6 +56,7 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
     Object {
       "count": 1,
       "isRefined": false,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 2,
         "isRefined": true,
@@ -95,6 +97,7 @@ exports[`currentToggle() good usage render understands cssClasses 1`] = `
     Object {
       "count": 2,
       "isRefined": false,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
@@ -135,6 +138,7 @@ exports[`currentToggle() good usage render when refined 1`] = `
     Object {
       "count": 3,
       "isRefined": true,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
@@ -175,6 +179,7 @@ exports[`currentToggle() good usage render when refined 2`] = `
     Object {
       "count": 3,
       "isRefined": true,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
@@ -215,6 +220,7 @@ exports[`currentToggle() good usage render with facet values 1`] = `
     Object {
       "count": 2,
       "isRefined": false,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
@@ -255,6 +261,7 @@ exports[`currentToggle() good usage render with facet values 2`] = `
     Object {
       "count": 2,
       "isRefined": false,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
@@ -295,6 +302,7 @@ exports[`currentToggle() good usage render without facet values 1`] = `
     Object {
       "count": null,
       "isRefined": false,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 0,
         "isRefined": false,
@@ -335,6 +343,7 @@ exports[`currentToggle() good usage render without facet values 2`] = `
     Object {
       "count": null,
       "isRefined": false,
+      "name": "world!",
       "offFacetValue": Object {
         "count": 0,
         "isRefined": false,

@@ -65,8 +65,8 @@ toggleRefinement({
  * @typedef {Object} ToggleWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
- * @property  {string|number|boolean} on Value to filter on when checked.
- * @property  {string|number|boolean} off Value to filter on when unchecked.
+ * @property {string|number|boolean} on Value to filter on when checked.
+ * @property {string|number|boolean} off Value to filter on when unchecked.
  * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
  * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
  * having `false` has a value for the selected attribute.
