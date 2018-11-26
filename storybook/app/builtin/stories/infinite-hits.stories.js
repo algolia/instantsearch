@@ -14,7 +14,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.infiniteHits({
             container,
-            loadMoreLabel: 'Show more',
             templates: {
               item: '{{name}}',
             },
@@ -34,7 +33,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.infiniteHits({
             container,
-            loadMoreLabel: 'Show more',
             cssClasses: {
               loadMore: 'button',
             },
@@ -46,12 +44,25 @@ export default () => {
       })
     )
     .add(
+      'with custom "showMore" template',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            templates: {
+              item: '{{name}}',
+              showMore: 'Load more',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with transformed items',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.infiniteHits({
             container,
-            loadMoreLabel: 'Show more',
             templates: {
               item: '{{name}}',
             },
