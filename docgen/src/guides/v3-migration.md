@@ -393,9 +393,10 @@ With the redo button:
 
 #### Options
 
-| Before       | After        |
-| ------------ | ------------ |
-| `escapeHits` | `escapeHTML` |
+| Before          | After                |
+| --------------- | -------------------- |
+| `escapeHits`    | `escapeHTML`         |
+| `loadMoreLabel` | `templates.showMore` |
 
 - `escapeHTML` defaults to `true`
 
@@ -1195,7 +1196,7 @@ Finally, `autofocus` is now set to `false` by default and does not support the `
 const sortByItem = {
   value: string,
   label: string,
-}
+};
 ```
 
 #### CSS classes
