@@ -85,10 +85,6 @@
         "url": "guides/calendar-widget.html"
       },
       {
-        "name": "Migrate from V1",
-        "url": "guides/migration.html"
-      },
-      {
         "name": "Integrate with Angular (2+)",
         "url": "guides/angular-integration.html"
       },
@@ -147,10 +143,6 @@
   {
     "name": "Design the no result page",
     "url": "guides/no-result.html"
-  },
-  {
-    "name": "Migrate from V1",
-    "url": "guides/migration.html"
   },
   {
     "name": "Use your own backend",
