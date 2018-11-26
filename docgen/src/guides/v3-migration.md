@@ -11,13 +11,13 @@ githubSource: docgen/src/guides/v3-migration.md
 
 This document helps you migrate from InstantSearch 2 to InstantSearch 3.
 
-InstantSearch 3 introduces some breaking changes in the widget's naming, options and markup.
+InstantSearch 3 introduces some breaking changes in the widgets' naming, options and markup.
 
 ## InstantSearch
 
 ### `appId` and `apiKey` are replaced by `searchClient`
 
-### Previous usage
+#### Previous usage
 
 1.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
 2.  Initialize InstantSearch
@@ -32,7 +32,7 @@ const search = instantsearch({
 search.start();
 ```
 
-### New usage
+#### New usage
 
 1.  [Import `algoliasearch`](https://www.algolia.com/doc/api-client/javascript/getting-started/) (prefer the [lite version](https://github.com/algolia/algoliasearch-client-javascript#search-onlylite-client) for search only)
 2.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
@@ -47,11 +47,11 @@ const search = instantsearch({
 search.start();
 ```
 
-## `transformData` is replaced by `transformItems`
+### `transformData` is replaced by `transformItems`
 
 Since InstantSearch.js first public release, we have provided an option to customize the values used in the widgets. This method was letting you map 1-1 the values with other values. With React Instantsearch, we implemented a slightly different API that allows to map over the list of values and to change their content.
 
-### Previous usage
+#### Previous usage
 
 ```javascript
 search.addWidget(
@@ -68,7 +68,7 @@ search.addWidget(
 );
 ```
 
-### New usage
+#### New usage
 
 ```javascript
 search.addWidget(
@@ -98,11 +98,11 @@ Here are the elements you need to migrate:
 
 ### `collapsible` is dropped
 
-`collapsible` are replaced by the `panel` widget.
+`collapsible` is replaced by the `panel` widget.
 
 ### `autoHideContainer` is dropped
 
-`autoHideContainer` are replaced by the `panel` widget.
+`autoHideContainer` is replaced by the `panel` widget.
 
 ### `createAlgoliaClient` is dropped
 
