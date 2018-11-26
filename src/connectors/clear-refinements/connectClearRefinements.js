@@ -16,7 +16,9 @@ var customClearRefinements = connectClearRefinements(function render(params, isF
 });
 search.addWidget(
   customClearRefinements({
-    [ excludedAttributes = [] ],
+    [ includedAttributes = [] ],
+    [ excludedAttributes = ['query'] ],
+    [ transformItems ],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearRefinements.html
@@ -24,7 +26,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomClearRefinementsWidgetOptions
- * @property {string[]} [excludedAttributes = []] Every attributes that should not be removed when calling `refine()`.
+ * @property {string[]} [includedAttributes = []] The attributes to include in the refinements to clear (all by default). Cannot be used with `excludedAttributes`.
+ * @property {string[]} [excludedAttributes = ['query']] The attributes to exclude from the refinements to clear. Cannot be used with `includedAttributes`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -86,7 +90,11 @@ export default function connectClearRefinements(renderFn, unmountFn) {
         '`includedAttributes` and `excludedAttributes` cannot be used together.'
       );
     }
-    const { includedAttributes = [], excludedAttributes = ['query'], } = widgetParams;
+    const {
+      includedAttributes = [],
+      excludedAttributes = ['query'],
+      transformItems = items => items,
+    } = widgetParams;
 
     return {
       init({ helper, instantSearchInstance, createURL }) {

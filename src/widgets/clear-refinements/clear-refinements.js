@@ -35,10 +35,11 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
 const usage = `Usage:
 clearRefinements({
   container,
-  [ cssClasses.{root,button,disabledButton} ],
-  [ templates.{resetLabel}={resetLabel: 'Clear all refinements'} ],
-  [ includedAttributes=[] ]
-  [ excludedAttributes=[] ]
+  [ includedAttributes = [] ],
+  [ excludedAttributes = ['query'] ],
+  [ transformItems ],
+  [ templates.{resetLabel} ],
+  [ cssClasses.{root, button, disabledButton} ],
 })`;
 /**
  * @typedef {Object} ClearRefinementsCSSClasses
@@ -55,8 +56,9 @@ clearRefinements({
 /**
  * @typedef {Object} ClearRefinementsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string[]} [excludedAttributes] List of attributes names to exclude from clear actions.
- * // TODO: add included
+ * @property {string[]} [includedAttributes = []] The attributes to include in the refinements to clear (all by default). Cannot be used with `excludedAttributes`.
+ * @property {string[]} [excludedAttributes = ['query']] The attributes to exclude from the refinements to clear. Cannot be used with `includedAttributes`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {ClearRefinementsTemplates} [templates] Templates to use for the widget.
  * @property {ClearRefinementsCSSClasses} [cssClasses] CSS classes to be added.
  */
@@ -84,9 +86,10 @@ clearRefinements({
 export default function clearRefinements({
   container,
   templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
   includedAttributes,
   excludedAttributes,
+  transformItems,
+  cssClasses: userCssClasses = {},
 }) {
   if (!container) {
     throw new Error(usage);
@@ -117,6 +120,7 @@ export default function clearRefinements({
     return makeWidget({
       includedAttributes,
       excludedAttributes,
+      transformItems,
     });
   } catch (error) {
     throw new Error(usage);
