@@ -1,6 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`clearRefinements() cssClasses should allow overriding css classes 1`] = `
+exports[`clearRefinements() cssClasses should add the default CSS classes 1`] = `
+Object {
+  "button": "ais-ClearRefinements-button",
+  "disabledButton": "ais-ClearRefinements-button--disabled",
+  "root": "ais-ClearRefinements",
+}
+`;
+
+exports[`clearRefinements() cssClasses should allow overriding CSS classes 1`] = `
 Object {
   "button": "ais-ClearRefinements-button myButton myPrimaryButton",
   "disabledButton": "ais-ClearRefinements-button--disabled disabled",

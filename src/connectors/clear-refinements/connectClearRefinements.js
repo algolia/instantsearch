@@ -90,6 +90,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
         '`includedAttributes` and `excludedAttributes` cannot be used together.'
       );
     }
+
     const {
       includedAttributes = [],
       excludedAttributes = ['query'],
@@ -98,13 +99,17 @@ export default function connectClearRefinements(renderFn, unmountFn) {
 
     return {
       init({ helper, instantSearchInstance, createURL }) {
-        const attributesToClear = getAttributesToClear({
-          helper,
-          includedAttributes,
-          excludedAttributes,
-        });
-
+        const attributesToClear = transformItems(
+          getAttributesToClear({
+            helper,
+            includedAttributes,
+            excludedAttributes,
+          })
+        );
         const hasRefinements = attributesToClear.length > 0;
+        const clearsQuery =
+          includedAttributes.indexOf('query') !== -1 ||
+          excludedAttributes.indexOf('query') === -1;
 
         this._refine = () => {
           helper
@@ -113,6 +118,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
                 helper,
                 includedAttributes,
                 excludedAttributes,
+                clearsQuery,
               })
             )
             .search();
@@ -124,13 +130,14 @@ export default function connectClearRefinements(renderFn, unmountFn) {
               helper,
               includedAttributes,
               excludedAttributes,
+              clearsQuery,
             })
           );
 
         renderFn(
           {
-            refine: this._refine,
             hasRefinements,
+            refine: this._refine,
             createURL: this._createURL,
             instantSearchInstance,
             widgetParams,
@@ -140,18 +147,19 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       },
 
       render({ helper, instantSearchInstance }) {
-        const attributesToClear = getAttributesToClear({
-          helper,
-          includedAttributes,
-          excludedAttributes,
-        });
-
+        const attributesToClear = transformItems(
+          getAttributesToClear({
+            helper,
+            includedAttributes,
+            excludedAttributes,
+          })
+        );
         const hasRefinements = attributesToClear.length > 0;
 
         renderFn(
           {
-            refine: this._refine,
             hasRefinements,
+            refine: this._refine,
             createURL: this._createURL,
             instantSearchInstance,
             widgetParams,

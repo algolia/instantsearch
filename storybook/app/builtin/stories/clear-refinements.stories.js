@@ -27,25 +27,43 @@ export default () => {
       )
     )
     .add(
-      'with nothing to clear',
+      'with query only (via includedAttributes)',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.clearRefinements({
             container,
+            includedAttributes: ['query'],
+            templates: {
+              resetLabel: 'Clear query',
+            },
           })
         );
       })
     )
     .add(
-      'with clear refinements and query',
+      'with query only (via excludedAttributes)',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.clearRefinements({
+            container,
+            excludedAttributes: [],
+            templates: {
+              resetLabel: 'Clear refinements and query',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with refinements and query',
       wrapWithHits(
         container => {
           window.search.addWidget(
             instantsearch.widgets.clearRefinements({
               container,
-              clearsQuery: true,
+              excludedAttributes: [],
               templates: {
-                link: 'Clear refinements and query',
+                resetLabel: 'Clear refinements and query',
               },
             })
           );
@@ -57,5 +75,15 @@ export default () => {
           },
         }
       )
+    )
+    .add(
+      'with nothing to clear',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.clearRefinements({
+            container,
+          })
+        );
+      })
     );
 };

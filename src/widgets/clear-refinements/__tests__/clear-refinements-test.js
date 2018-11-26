@@ -6,6 +6,7 @@ describe('clearRefinements()', () => {
   let ReactDOM;
   let container;
   let results;
+  let client;
   let helper;
   let createURL;
 
@@ -17,6 +18,7 @@ describe('clearRefinements()', () => {
 
     container = document.createElement('div');
     results = {};
+    client = algoliasearch('APP_ID', 'API_KEY');
     helper = {
       state: {
         clearRefinements: jest.fn().mockReturnThis(),
@@ -98,62 +100,8 @@ describe('clearRefinements()', () => {
   });
 
   describe('cssClasses', () => {
-    it('should add the default CSS class when not overriden', () => {
-      const client = algoliasearch('APP_ID', 'API_KEY');
-      helper = algoliasearchHelper(client, 'index_name', {
-        facets: [
-          'facet1',
-          'facet2',
-          'facetExclude',
-          'numericFacet',
-          'extraFacet',
-        ],
-        disjunctiveFacets: ['disjunctiveFacet', 'numericDisjunctiveFacet'],
-        hierarchicalFacets: [
-          {
-            name: 'hierarchicalFacet',
-            attributes: ['hierarchicalFacet-val1', 'hierarchicalFacet-val2'],
-            separator: ' > ',
-          },
-        ],
-      });
-      const widget = clearRefinements({
-        container,
-      });
-      helper
-        .addFacetRefinement('facet1', 'facet1-val0')
-        .addFacetRefinement('facet1', 'facet1-val1')
-        .addFacetRefinement('facet2', 'facet2-val');
-      widget.init({
-        helper,
-        createURL,
-        instantSearchInstance: {
-          templatesConfig: {},
-        },
-      });
-
-      widget.render({ results, helper, state: helper.state, createURL });
-      expect(ReactDOM.render.mock.calls[0][0].props.hasRefinements).toBe(true);
-    });
-    it('should add the default CSS class when not overriden', () => {
-      const client = algoliasearch('APP_ID', 'API_KEY');
-      helper = algoliasearchHelper(client, 'index_name', {
-        facets: [
-          'facet1',
-          'facet2',
-          'facetExclude',
-          'numericFacet',
-          'extraFacet',
-        ],
-        disjunctiveFacets: ['disjunctiveFacet', 'numericDisjunctiveFacet'],
-        hierarchicalFacets: [
-          {
-            name: 'hierarchicalFacet',
-            attributes: ['hierarchicalFacet-val1', 'hierarchicalFacet-val2'],
-            separator: ' > ',
-          },
-        ],
-      });
+    it('should add the default CSS classes', () => {
+      helper = algoliasearchHelper(client, 'index_name');
       const widget = clearRefinements({
         container,
       });
@@ -167,9 +115,12 @@ describe('clearRefinements()', () => {
       });
 
       widget.render({ results, helper, state: helper.state, createURL });
-      expect(ReactDOM.render.mock.calls[0][0].props.hasRefinements).toBe(false);
+      expect(
+        ReactDOM.render.mock.calls[0][0].props.cssClasses
+      ).toMatchSnapshot();
     });
-    it('should allow overriding css classes', () => {
+
+    it('should allow overriding CSS classes', () => {
       const widget = clearRefinements({
         container,
         cssClasses: {
@@ -190,32 +141,6 @@ describe('clearRefinements()', () => {
       expect(
         ReactDOM.render.mock.calls[0][0].props.cssClasses
       ).toMatchSnapshot();
-    });
-  });
-
-  describe('options.includeAttributes', () => {
-    it('should pass', () => {
-      const widget = clearRefinements({
-        container,
-        includedAttributes: ['facet'],
-      });
-      widget.init({
-        helper,
-        createURL,
-        instantSearchInstance: {
-          templatesConfig: {},
-        },
-      });
-      helper = {
-        state: {
-          clearRefinements: jest.fn().mockReturnThis(),
-          clearTags: jest.fn().mockReturnThis(),
-        },
-        search: jest.fn(),
-      };
-      widget.render({ results, helper, state: helper.state, createURL });
-
-      // expect(ReactDOM.render.mock.calls[0][0].props).toMatchSnapshot();
     });
   });
 
