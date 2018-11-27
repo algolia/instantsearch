@@ -11,12 +11,6 @@ before_install:
 - git config --global user.email "algobot@users.noreply.github.com"
 - git config --global user.name "algobot"
 - npm install -g yarn@1.10.1
-branches:
-  only:
-  - master
-  - develop
-  - feat/instantsearch.js/v2
-  - "/^feat\\/\\d+\\.\\d+$/"
 cache:
   yarn: true
 script:
