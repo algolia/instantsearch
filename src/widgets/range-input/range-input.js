@@ -47,20 +47,20 @@ rangeInput({
   [ min ],
   [ max ],
   [ precision = 0 ],
-  [ cssClasses.{root, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit} ],
+  [ cssClasses.{root, noRefinement, form, label, input, inputMin, inputMax, separator, submit} ],
   [ labels.{separator, submit} ],
 })`;
 
 /**
  * @typedef {Object} RangeInputClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [noRefinement] CSS class to add to the root element when there's no refinements.
  * @property {string|string[]} [form] CSS class to add to the form element.
- * @property {string|string[]} [fieldset] CSS class to add to the fieldset element.
- * @property {string|string[]} [labelMin] CSS class to add to the min label element.
+ * @property {string|string[]} [label] CSS class to add to the label element.
+ * @property {string|string[]} [input] CSS class to add to the input element.
  * @property {string|string[]} [inputMin] CSS class to add to the min input element.
- * @property {string|string[]} [separator] CSS class to add to the separator of the form.
- * @property {string|string[]} [labelMax] CSS class to add to the max label element.
  * @property {string|string[]} [inputMax] CSS class to add to the max input element.
+ * @property {string|string[]} [separator] CSS class to add to the separator of the form.
  * @property {string|string[]} [submit] CSS class to add to the submit button of the form.
  */
 
