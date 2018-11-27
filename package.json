@@ -83,7 +83,7 @@
     "react-dom": "16.6.3",
     "react-instantsearch-dom": "5.3.2",
     "react-instantsearch-dom-maps": "5.3.2",
-    "react-native": "0.57.6",
+    "react-native": "0.57.7",
     "rheostat": "2.2.0",
     "storybook-addon-a11y": "3.1.9",
     "storybook-addon-jsx": "5.4.0",
