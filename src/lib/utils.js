@@ -325,23 +325,10 @@ function getRefinements(results, state, clearsQuery) {
  * is not provided, this list of all the currently refined attributes is used as included attributes.
  * @param {object} $0 parameters
  * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.includedAttributes] list of parameters to clear
- * @param {string[]} [$0.excludedAttributes=[]] list of parameters not to remove (will impact the included attributes list)
- * @param {boolean} [$0.clearsQuery=false] clears the query if need be
+ * @param {string[]} [$0.attributesToClear = []] list of parameters to clear
  * @returns {SearchParameters} search parameters with refinements cleared
  */
-function clearRefinements({
-  helper,
-  includedAttributes,
-  excludedAttributes = [],
-  clearsQuery = false,
-}) {
-  const attributesToClear = getAttributesToClear({
-    helper,
-    includedAttributes,
-    excludedAttributes,
-  });
-
+function clearRefinements({ helper, attributesToClear = [] }) {
   let finalState = helper.state;
 
   attributesToClear.forEach(attribute => {
@@ -352,7 +339,7 @@ function clearRefinements({
     }
   });
 
-  if (clearsQuery) {
+  if (attributesToClear.indexOf('query') !== -1) {
     finalState = finalState.setQuery('');
   }
 
@@ -373,17 +360,19 @@ function getAttributesToClear({
   helper,
   includedAttributes = [],
   excludedAttributes = [],
+  transformItems = items => items,
 }) {
   const lastResults = helper.lastResults || {};
   const includesQuery =
     includedAttributes.indexOf('query') !== -1 ||
     excludedAttributes.indexOf('query') === -1;
-  const attributesToClear = getRefinements(
-    lastResults,
-    helper.state,
-    includesQuery
-  )
-    .map(refinement => refinement.attributeName)
+  const attributesToClear = transformItems(
+    getRefinements(lastResults, helper.state, includesQuery).map(
+      refinement => refinement.attributeName
+    )
+  );
+
+  const filteredAttributesToClear = attributesToClear
     .filter(
       attribute =>
         // if the array is empty (default case), we keep all the attributes
@@ -397,7 +386,7 @@ function getAttributesToClear({
         excludedAttributes.indexOf(attribute) === -1
     );
 
-  return attributesToClear;
+  return filteredAttributesToClear;
 }
 
 function prefixKeys(prefix, obj) {

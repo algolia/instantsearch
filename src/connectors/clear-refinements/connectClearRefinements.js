@@ -1,7 +1,7 @@
 import {
   checkRendering,
   clearRefinements,
-  getAttributesToClear,
+  getRefinements,
 } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -99,26 +99,25 @@ export default function connectClearRefinements(renderFn, unmountFn) {
 
     return {
       init({ helper, instantSearchInstance, createURL }) {
-        const attributesToClear = transformItems(
-          getAttributesToClear({
-            helper,
-            includedAttributes,
-            excludedAttributes,
-          })
-        );
+        const attributesToClear = getAttributesToClear({
+          helper,
+          includedAttributes,
+          excludedAttributes,
+          transformItems,
+        });
         const hasRefinements = attributesToClear.length > 0;
-        const clearsQuery =
-          includedAttributes.indexOf('query') !== -1 ||
-          excludedAttributes.indexOf('query') === -1;
 
         this._refine = () => {
           helper
             .setState(
               clearRefinements({
                 helper,
-                includedAttributes,
-                excludedAttributes,
-                clearsQuery,
+                attributesToClear: getAttributesToClear({
+                  helper,
+                  includedAttributes,
+                  excludedAttributes,
+                  transformItems,
+                }),
               })
             )
             .search();
@@ -128,9 +127,12 @@ export default function connectClearRefinements(renderFn, unmountFn) {
           createURL(
             clearRefinements({
               helper,
-              includedAttributes,
-              excludedAttributes,
-              clearsQuery,
+              attributesToClear: getAttributesToClear({
+                helper,
+                includedAttributes,
+                excludedAttributes,
+                transformItems,
+              }),
             })
           );
 
@@ -147,13 +149,12 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       },
 
       render({ helper, instantSearchInstance }) {
-        const attributesToClear = transformItems(
-          getAttributesToClear({
-            helper,
-            includedAttributes,
-            excludedAttributes,
-          })
-        );
+        const attributesToClear = getAttributesToClear({
+          helper,
+          includedAttributes,
+          excludedAttributes,
+          transformItems,
+        });
         const hasRefinements = attributesToClear.length > 0;
 
         renderFn(
@@ -173,4 +174,34 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       },
     };
   };
+}
+
+function getAttributesToClear({
+  helper,
+  includedAttributes,
+  excludedAttributes,
+  transformItems,
+}) {
+  const clearsQuery =
+    includedAttributes.indexOf('query') !== -1 ||
+    excludedAttributes.indexOf('query') === -1;
+
+  return transformItems(
+    getRefinements(helper.lastResults || {}, helper.state, clearsQuery)
+      .map(refinement => refinement.attributeName)
+      .filter(
+        attribute =>
+          // If the array is empty (default case), we keep all the attributes
+          includedAttributes.length === 0 ||
+          // Otherwise, only add the specified attributes
+          includedAttributes.indexOf(attribute) !== -1
+      )
+      .filter(
+        attribute =>
+          // If the query is included, we ignore the default `excludedAttributes = ['query']`
+          (attribute === 'query' && clearsQuery) ||
+          // Otherwise, ignore the excluded attributes
+          excludedAttributes.indexOf(attribute) === -1
+      )
+  );
 }

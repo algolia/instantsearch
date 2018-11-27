@@ -113,5 +113,54 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with transformed items',
+      wrapWithHits(
+        container => {
+          const clearRefinementsContainer = document.createElement('div');
+          container.appendChild(clearRefinementsContainer);
+          const refinementListContainer = document.createElement('div');
+          container.appendChild(refinementListContainer);
+          const numericMenuContainer = document.createElement('div');
+          container.appendChild(numericMenuContainer);
+
+          window.search.addWidget(
+            instantsearch.widgets.clearRefinements({
+              container: clearRefinementsContainer,
+              excludedAttributes: [],
+              transformItems: items =>
+                items.filter(attribute => attribute !== 'brand'),
+            })
+          );
+
+          window.search.addWidget(
+            instantsearch.widgets.refinementList({
+              container: refinementListContainer,
+              attribute: 'brand',
+            })
+          );
+
+          window.search.addWidget(
+            instantsearch.widgets.numericMenu({
+              container: numericMenuContainer,
+              attribute: 'price',
+              items: [
+                { label: 'All' },
+                { end: 10, label: '≤ $10' },
+                { start: 10, end: 100, label: '$10–$100' },
+                { start: 100, end: 500, label: '$100–$500' },
+                { start: 500, label: '≥ $500' },
+              ],
+            })
+          );
+        },
+        {
+          searchParameters: {
+            disjunctiveFacetsRefinements: { brand: ['Apple'] },
+            disjunctiveFacets: ['brand'],
+          },
+        }
+      )
     );
 };

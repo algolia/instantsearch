@@ -1007,202 +1007,89 @@ describe('utils.clearRefinements', () => {
     return helper;
   };
 
-  describe('Without clearsQuery', () => {
-    it('can clear all the parameters refined', () => {
-      const helper = initHelperWithRefinements();
+  it('does not clear anything without attributes', () => {
+    const helper = initHelperWithRefinements();
 
-      const finalState = utils.clearRefinements({
-        helper,
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
+    const finalState = utils.clearRefinements({
+      helper,
     });
 
-    it('can clear all the parameters defined in the included attributes list', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        includedAttributes: ['conjFacet'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        helper.state.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
-    });
-
-    it('can clear all the parameters refined but the ones in the black list', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        excludedAttributes: ['conjFacet'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
-    });
-
-    it('can clear all the parameters in the included attributes except the ones in the excluded attributes list', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        includedAttributes: ['conjFacet', 'disjFacet'],
-        excludedAttributes: ['conjFacet'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
-    });
-
-    it('can clear tags only (including tags)', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        includedAttributes: ['_tags'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        finalState.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual([]);
-    });
-
-    it('can clear everything but the tags (excluding tags)', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        excludedAttributes: ['_tags'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
-    });
+    expect(finalState.query).toBe(helper.state.query);
+    expect(finalState.facetsRefinements).toEqual(
+      helper.state.facetsRefinements
+    );
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
   });
 
-  describe('With clearsQuery', () => {
-    it('can clear all the parameters refined', () => {
-      const helper = initHelperWithRefinements();
+  it('can clear all the parameters defined in the list', () => {
+    const helper = initHelperWithRefinements();
 
-      const finalState = utils.clearRefinements({
-        helper,
-        clearsQuery: true,
-      });
-
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['conjFacet'],
     });
 
-    it('can clear all the parameters defined in the included attributes list', () => {
-      const helper = initHelperWithRefinements();
+    expect(finalState.query).toBe(helper.state.query);
+    expect(finalState.facetsRefinements).toEqual({});
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
+  });
 
-      const finalState = utils.clearRefinements({
-        helper,
-        includedAttributes: ['conjFacet'],
-        clearsQuery: true,
-      });
+  it('can clear tags only (including tags)', () => {
+    const helper = initHelperWithRefinements();
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        helper.state.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['_tags'],
     });
 
-    it('can clear all the parameters refined but the ones in the black list', () => {
-      const helper = initHelperWithRefinements();
+    expect(finalState.query).toBe(helper.state.query);
+    expect(finalState.facetsRefinements).toEqual(
+      helper.state.facetsRefinements
+    );
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      finalState.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual([]);
+  });
 
-      const finalState = utils.clearRefinements({
-        helper,
-        excludedAttributes: ['conjFacet'],
-        clearsQuery: true,
-      });
+  it('can clear the query alone', () => {
+    const helper = initHelperWithRefinements();
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['query'],
     });
 
-    it('can clear all the parameters in the included attributes list except the ones in the black list', () => {
-      const helper = initHelperWithRefinements();
+    expect(finalState.query).toBe('');
+    expect(finalState.facetsRefinements).toEqual(
+      helper.state.facetsRefinements
+    );
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
+  });
 
-      const finalState = utils.clearRefinements({
-        helper,
-        includedAttributes: ['conjFacet', 'disjFacet'],
-        excludedAttributes: ['conjFacet'],
-        clearsQuery: true,
-      });
+  it('can clear the query alone and other refinements', () => {
+    const helper = initHelperWithRefinements();
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['query', 'conjFacet'],
     });
 
-    it('can clear tags only (including tags)', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        includedAttributes: ['_tags'],
-        clearsQuery: true,
-      });
-
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        finalState.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual([]);
-    });
-
-    it('can clear everything but the tags (excluding tags)', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        excludedAttributes: ['_tags'],
-        clearsQuery: true,
-      });
-
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
-    });
+    expect(finalState.query).toBe('');
+    expect(finalState.facetsRefinements).toEqual({});
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
   });
 });
 

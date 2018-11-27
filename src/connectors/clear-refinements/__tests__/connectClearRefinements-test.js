@@ -447,7 +447,7 @@ describe('connectClearRefinements', () => {
       });
 
       expect(helper.hasRefinements('facet1')).toBe(true);
-      expect(helper.hasRefinements('facet2')).toBe(false);
+      expect(helper.hasRefinements('facet2')).toBe(true);
       expect(helper.hasRefinements('facet3')).toBe(false);
       expect(helper.getState().query).toBe('');
       expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
