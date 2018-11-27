@@ -788,9 +788,12 @@ Widget removed.
 
 #### Options
 
-| Before          | After       |
-| --------------- | ----------- |
-| `attributeName` | `attribute` |
+| Before             | After                     |
+| ------------------ | ------------------------- |
+| `attributeName`    | `attribute`               |
+| `labels`           | `templates`               |
+| `labels.separator` | `templates.separatorText` |
+| `labels.submit`    | `templates.submitText`    |
 
 #### CSS classes
 

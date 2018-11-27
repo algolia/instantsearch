@@ -84,18 +84,15 @@ describe('rangeInput', () => {
       container,
       attribute,
       cssClasses: {
-        root: 'custom-root',
-        header: 'custom-header',
-        body: 'custom-body',
-        form: 'custom-form',
-        fieldset: 'custom-fieldset',
-        labelMin: 'custom-labelMin',
-        inputMin: 'custom-inputMin',
-        separator: 'custom-separator',
-        labelMax: 'custom-labelMax',
-        inputMax: 'custom-inputMax',
-        submit: 'custom-submit',
-        footer: 'custom-footer',
+        root: 'root',
+        noRefinement: 'noRefinement',
+        form: 'form',
+        label: 'label',
+        input: 'input',
+        inputMin: 'inputMin',
+        inputMax: 'inputMax',
+        separator: 'separator',
+        submit: 'submit',
       },
     });
 
@@ -106,7 +103,7 @@ describe('rangeInput', () => {
     expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
-  it('expect to render with custom labels', () => {
+  it('expect to render with custom templates', () => {
     const container = createContainer();
     const helper = createHelper();
     const results = [];
@@ -114,9 +111,9 @@ describe('rangeInput', () => {
     const widget = rangeInput({
       container,
       attribute,
-      labels: {
-        separator: 'custom-separator',
-        submit: 'custom-submit',
+      templates: {
+        separatorText: 'custom separator',
+        submitText: 'custom submit',
       },
     });
 

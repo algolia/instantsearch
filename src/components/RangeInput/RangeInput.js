@@ -1,6 +1,7 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Template from '../Template/Template';
 
 class RangeInput extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class RangeInput extends Component {
 
   render() {
     const { min: minValue, max: maxValue } = this.state;
-    const { min, max, step, cssClasses, labels } = this.props;
+    const { min, max, step, cssClasses, templateProps } = this.props;
     const isDisabled = min >= max;
 
     const hasRefinements = Boolean(minValue || maxValue);
@@ -59,7 +60,14 @@ class RangeInput extends Component {
             />
           </label>
 
-          <span className={cssClasses.separator}>{labels.separator}</span>
+          <Template
+            {...templateProps}
+            templateKey="separatorText"
+            rootTagName="span"
+            rootProps={{
+              className: cssClasses.separator,
+            }}
+          />
 
           <label className={cssClasses.label}>
             <input
@@ -75,13 +83,16 @@ class RangeInput extends Component {
             />
           </label>
 
-          <button
-            type="submit"
-            className={cssClasses.submit}
-            disabled={isDisabled}
-          >
-            {labels.submit}
-          </button>
+          <Template
+            {...templateProps}
+            templateKey="submitText"
+            rootTagName="button"
+            rootProps={{
+              type: 'submit',
+              className: cssClasses.submit,
+              disabled: isDisabled,
+            }}
+          />
         </form>
       </div>
     );
@@ -107,10 +118,12 @@ RangeInput.propTypes = {
     separator: PropTypes.string.isRequired,
     submit: PropTypes.string.isRequired,
   }).isRequired,
-  labels: PropTypes.shape({
-    separator: PropTypes.string.isRequired,
-    submit: PropTypes.string.isRequired,
-  }).isRequired,
+  templateProps: PropTypes.shape({
+    templates: PropTypes.shape({
+      separatorText: PropTypes.string.isRequired,
+      submitText: PropTypes.string.isRequired,
+    }).isRequired,
+  }),
   refine: PropTypes.func.isRequired,
 };
 

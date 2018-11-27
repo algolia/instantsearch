@@ -2,16 +2,20 @@ import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput.js';
 import connectRange from '../../connectors/range/connectRange.js';
-import { getContainerNode } from '../../lib/utils.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit';
 
 const suit = component('RangeInput');
 
-const renderer = ({ containerNode, cssClasses, labels, renderState }) => (
-  { refine, range, start, widgetParams },
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
+  { refine, range, start, widgetParams, instantSearchInstance },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
     return;
   }
 
@@ -32,7 +36,6 @@ const renderer = ({ containerNode, cssClasses, labels, renderState }) => (
       step={step}
       values={values}
       cssClasses={cssClasses}
-      labels={labels}
       refine={refine}
       templateProps={renderState.templateProps}
     />,
@@ -47,8 +50,8 @@ rangeInput({
   [ min ],
   [ max ],
   [ precision = 0 ],
+  [ templates.{separatorText, submitText} ],
   [ cssClasses.{root, noRefinement, form, label, input, inputMin, inputMax, separator, submit} ],
-  [ labels.{separator, submit} ],
 })`;
 
 /**
@@ -65,9 +68,9 @@ rangeInput({
  */
 
 /**
- * @typedef {Object} RangeInputLabels
- * @property {string} [separator="to"] Separator label, between min and max.
- * @property {string} [submit="Go"] Button label.
+ * @typedef {Object} RangeInputTemplates
+ * @property {string} [separatorText = "to"] The label of the separator, between min and max.
+ * @property {string} [submitText = "Go"] The label of the submit button.
  */
 
 /**
@@ -77,8 +80,8 @@ rangeInput({
  * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
  * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set.
  * @property {number} [precision = 0] Number of digits after decimal point to use.
+ * @property {RangeInputTemplates} [templates] Labels to use for the widget.
  * @property {RangeInputClasses} [cssClasses] CSS classes to add.
- * @property {RangeInputLabels} [labels] Labels to use for the widget.
  */
 
 /**
@@ -100,9 +103,9 @@ rangeInput({
  *   instantsearch.widgets.rangeInput({
  *     container: '#range-input',
  *     attribute: 'price',
- *     labels: {
- *       separator: 'to',
- *       submit: 'Go'
+ *     templates: {
+ *       separatorText: 'to',
+ *       submitText: 'Go'
  *     },
  *   })
  * );
@@ -114,7 +117,7 @@ export default function rangeInput({
   max,
   precision = 0,
   cssClasses: userCssClasses = {},
-  labels: userLabels = {},
+  templates: userTemplates = {},
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -122,10 +125,10 @@ export default function rangeInput({
 
   const containerNode = getContainerNode(container);
 
-  const labels = {
-    separator: 'to',
-    submit: 'Go',
-    ...userLabels,
+  const templates = {
+    separatorText: 'to',
+    submitText: 'Go',
+    ...userTemplates,
   };
 
   const cssClasses = {
@@ -152,7 +155,7 @@ export default function rangeInput({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    labels,
+    templates,
     renderState: {},
   });
 
