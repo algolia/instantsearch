@@ -171,7 +171,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
 
     const toggleRefineOnMapMove = () =>
       widgetState.internalToggleRefineOnMapMove();
-    const createInternalToggleRefinementonMapMove = (render, args) => () => {
+    const createInternalToggleRefinementOnMapMove = (render, args) => () => {
       widgetState.isRefineOnMapMove = !widgetState.isRefineOnMapMove;
 
       render(args);
@@ -199,7 +199,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       const { state, helper, instantSearchInstance } = initArgs;
       const isFirstRendering = true;
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
         noop,
         initArgs
       );
@@ -251,7 +251,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       widgetState.lastRefinePosition = state.aroundLatLng || '';
       widgetState.lastRefineBoundingBox = state.insideBoundingBox || '';
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
         render,
         renderArgs
       );
