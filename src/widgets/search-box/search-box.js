@@ -97,21 +97,26 @@ const renderer = ({
       `.${cssClasses.loadingIndicator}`
     );
 
-    if (isSearchStalled) {
-      loadingIndicatorElement.removeAttribute('hidden');
-    } else {
-      loadingIndicatorElement.setAttribute('hidden', '');
+    if (loadingIndicatorElement) {
+      if (isSearchStalled) {
+        loadingIndicatorElement.removeAttribute('hidden');
+      } else {
+        loadingIndicatorElement.setAttribute('hidden', '');
+      }
     }
   }
 
   if (showReset) {
     const resetElement = containerNode.querySelector(`.${cssClasses.reset}`);
-    const isUserTyping = Boolean(query && query.trim());
 
-    if (isUserTyping && !isSearchStalled) {
-      resetElement.removeAttribute('hidden');
-    } else {
-      resetElement.setAttribute('hidden', '');
+    if (resetElement) {
+      const isUserTyping = Boolean(query && query.trim());
+
+      if (isUserTyping && !isSearchStalled) {
+        resetElement.removeAttribute('hidden');
+      } else {
+        resetElement.setAttribute('hidden', '');
+      }
     }
   }
 };
@@ -126,7 +131,7 @@ const usage = `Usage:
 searchBox({
   container,
   [ placeholder ],
-  [ cssClasses.{root, input, reset, submit, loadingIndicator} ],
+  [ cssClasses.{root, form, input, submit, submitIcon, reset, resetIcon, loadingIndicator, loadingIcon} ],
   [ autofocus = false ],
   [ searchAsYouType = true ],
   [ showReset = true ],
@@ -148,11 +153,12 @@ searchBox({
  * @property {string|string[]} [root] CSS class to add to the wrapping `<div>`
  * @property {string|string[]} [form] CSS class to add to the form
  * @property {string|string[]} [input] CSS class to add to the input.
+ * @property {string|string[]} [submit] CSS classes added to the submit button.
+ * @property {string|string[]} [submitIcon] CSS classes added to the submit icon.
  * @property {string|string[]} [reset] CSS classes added to the reset button.
  * @property {string|string[]} [resetIcon] CSS classes added to the reset icon.
  * @property {string|string[]} [loadingIndicator] CSS classes added to the loading indicator element.
  * @property {string|string[]} [loadingIcon] CSS classes added to the loading indicator icon.
- * @property {string|string[]} [submit] CSS classes added to the submit.
  */
 
 /**
