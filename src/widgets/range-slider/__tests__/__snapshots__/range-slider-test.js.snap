@@ -5,11 +5,7 @@ exports[`rangeSlider widget usage max option will use the results min when only 
   cssClasses={
     Object {
       "disabledRoot": "ais-RangeSlider--disabled",
-      "handle": "ais-RangeSlider-handle",
-      "lowerHandle": "ais-RangeSlider-handle--lower",
       "root": "ais-RangeSlider",
-      "tooltip": "ais-RangeSlider-tooltip",
-      "upperHandle": "ais-RangeSlider-handle--upper",
     }
   }
   max={100}
@@ -32,11 +28,7 @@ exports[`rangeSlider widget usage min option sets the right range 1`] = `
   cssClasses={
     Object {
       "disabledRoot": "ais-RangeSlider--disabled",
-      "handle": "ais-RangeSlider-handle",
-      "lowerHandle": "ais-RangeSlider-handle--lower",
       "root": "ais-RangeSlider",
-      "tooltip": "ais-RangeSlider-tooltip",
-      "upperHandle": "ais-RangeSlider-handle--upper",
     }
   }
   max={200}
@@ -59,11 +51,7 @@ exports[`rangeSlider widget usage min option will use the results max when only 
   cssClasses={
     Object {
       "disabledRoot": "ais-RangeSlider--disabled",
-      "handle": "ais-RangeSlider-handle",
-      "lowerHandle": "ais-RangeSlider-handle--lower",
       "root": "ais-RangeSlider",
-      "tooltip": "ais-RangeSlider-tooltip",
-      "upperHandle": "ais-RangeSlider-handle--upper",
     }
   }
   max={5000}
@@ -86,11 +74,7 @@ exports[`rangeSlider widget usage should render without results 1`] = `
   cssClasses={
     Object {
       "disabledRoot": "ais-RangeSlider--disabled",
-      "handle": "ais-RangeSlider-handle",
-      "lowerHandle": "ais-RangeSlider-handle--lower",
       "root": "ais-RangeSlider root cx",
-      "tooltip": "ais-RangeSlider-tooltip",
-      "upperHandle": "ais-RangeSlider-handle--upper",
     }
   }
   max={0}
@@ -113,11 +97,7 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] =
   cssClasses={
     Object {
       "disabledRoot": "ais-RangeSlider--disabled",
-      "handle": "ais-RangeSlider-handle",
-      "lowerHandle": "ais-RangeSlider-handle--lower",
       "root": "ais-RangeSlider",
-      "tooltip": "ais-RangeSlider-tooltip",
-      "upperHandle": "ais-RangeSlider-handle--upper",
     }
   }
   max={5000}
@@ -140,11 +120,7 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 2`] =
   cssClasses={
     Object {
       "disabledRoot": "ais-RangeSlider--disabled",
-      "handle": "ais-RangeSlider-handle",
-      "lowerHandle": "ais-RangeSlider-handle--lower",
       "root": "ais-RangeSlider",
-      "tooltip": "ais-RangeSlider-tooltip",
-      "upperHandle": "ais-RangeSlider-handle--upper",
     }
   }
   max={5000}

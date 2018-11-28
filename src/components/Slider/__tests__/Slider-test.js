@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-
 import Slider from '../Slider';
 
 describe('Slider', () => {
@@ -14,7 +13,10 @@ describe('Slider', () => {
         pips={true}
         step={2}
         tooltips={true}
-        cssClasses={{ root: 'root' }}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
       />
     );
 
@@ -31,7 +33,10 @@ describe('Slider', () => {
         pips={false}
         step={2}
         tooltips={true}
-        cssClasses={{ root: 'root' }}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
       />
     );
 
@@ -50,6 +55,7 @@ describe('Slider', () => {
         tooltips={true}
         cssClasses={{
           root: 'root',
+          disabledRoot: 'disabledRoot',
         }}
       />
     );
@@ -66,7 +72,10 @@ describe('Slider', () => {
       pips: true,
       step: 2,
       tooltips: true,
-      cssClasses: { root: 'root' },
+      cssClasses: {
+        root: 'root',
+        disabledRoot: 'disabledRoot',
+      },
     };
 
     shallow(<Slider {...props} />)
