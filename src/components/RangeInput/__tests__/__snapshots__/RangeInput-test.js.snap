@@ -22,11 +22,19 @@ exports[`RangeInput expect to render 1`] = `
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -41,13 +49,21 @@ exports[`RangeInput expect to render 1`] = `
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -74,11 +90,19 @@ exports[`RangeInput expect to render with disabled state 1`] = `
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -93,13 +117,21 @@ exports[`RangeInput expect to render with disabled state 1`] = `
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={true}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": true,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -127,11 +159,19 @@ exports[`RangeInput expect to render with values 1`] = `
         value={20}
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -147,13 +187,21 @@ exports[`RangeInput expect to render with values 1`] = `
         value={480}
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -180,11 +228,19 @@ exports[`RangeInput onChange expect to update the state when max change 1`] = `
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -200,13 +256,21 @@ exports[`RangeInput onChange expect to update the state when max change 1`] = `
         value={480}
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -234,11 +298,19 @@ exports[`RangeInput onChange expect to update the state when min change 1`] = `
         value={20}
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -253,13 +325,21 @@ exports[`RangeInput onChange expect to update the state when min change 1`] = `
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -286,11 +366,19 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -305,13 +393,21 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -338,11 +434,19 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -357,13 +461,21 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -391,11 +503,19 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         value={40}
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -411,13 +531,21 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         value={460}
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
@@ -445,11 +573,19 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         value={40}
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
       className="label"
     >
@@ -465,13 +601,21 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         value={460}
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      type="submit"
-    >
-      Go
-    </button>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
   </form>
 </div>
 `;
