@@ -55,13 +55,14 @@ rangeSlider({
   [ step = 1 ],
   [ precision = 0 ],
   [ tooltips = true ],
-  [ cssClasses.{root} ]
+  [ cssClasses.{root, disabledRoot} ]
 });
 `;
 
 /**
  * @typedef {Object} RangeSliderCssClasses
  * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [disabledRoot] CSS class to add to the disabled root element.
  */
 
 /**
@@ -138,16 +139,6 @@ export default function rangeSlider({
       suit({ modifierName: 'disabled' }),
       userCssClasses.disabledRoot
     ),
-    handle: cx(suit({ descendantName: 'handle' }), userCssClasses.handle),
-    lowerHandle: cx(
-      suit({ descendantName: 'handle', modifierName: 'lower' }),
-      userCssClasses.lowerHandle
-    ),
-    upperHandle: cx(
-      suit({ descendantName: 'handle', modifierName: 'upper' }),
-      userCssClasses.upperHandle
-    ),
-    tooltip: cx(suit({ descendantName: 'tooltip' }), userCssClasses.tooltip),
   };
 
   const specializedRenderer = renderer({
