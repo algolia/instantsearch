@@ -15,9 +15,9 @@ To identify correctly the input as a search box we added a magnifier glass at th
 and a reset button displayed as a cross on the end.
 
 You can customize the result with these two options:
- - **reset** `boolan|{template?: string|Function, cssClasses?: {root: string}}`
+ - **reset** `boolean|{template?: string|Function, cssClasses?: {root: string}}`
    Display a reset button in the input when there is a query.
- - **magnifier** `boolan|{template?: string|Function, cssClasses?: {root: string}}`
+ - **magnifier** `boolean|{template?: string|Function, cssClasses?: {root: string}}`
    Display a magnifier should at beginning of the input.
    
 To make the search box like in v1, you can do the following:
