@@ -18,7 +18,6 @@ export {
   isSpecialClick,
   isDomElement,
   getRefinements,
-  getAttributesToClear,
   clearRefinements,
   prefixKeys,
   escapeRefinement,
@@ -344,49 +343,6 @@ function clearRefinements({ helper, attributesToClear = [] }) {
   }
 
   return finalState;
-}
-
-/**
- * Computes the list of attributes (conjunctive, disjunctive, hierarchical facet + numerical attributes)
- * to clear based on optionals included and excluded attributes lists.
- * The included attributes list is applied before the excluded attributes list.
- * @param {object} $0 parameters
- * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.includedAttributes = []] attributes to clear (defaults to all attributes)
- * @param {string[]} [$0.excludedAttributes = []] attributes to keep, will override the included attributes list
- * @returns {string[]} the list of attributes to clear based on the rules
- */
-function getAttributesToClear({
-  helper,
-  includedAttributes = [],
-  excludedAttributes = [],
-  transformItems = items => items,
-}) {
-  const lastResults = helper.lastResults || {};
-  const includesQuery =
-    includedAttributes.indexOf('query') !== -1 ||
-    excludedAttributes.indexOf('query') === -1;
-  const attributesToClear = transformItems(
-    getRefinements(lastResults, helper.state, includesQuery).map(
-      refinement => refinement.attributeName
-    )
-  );
-
-  const filteredAttributesToClear = attributesToClear
-    .filter(
-      attribute =>
-        // if the array is empty (default case), we keep all the attributes
-        includedAttributes.length === 0 ||
-        includedAttributes.includes(attribute)
-    )
-    .filter(
-      attribute =>
-        // If the query is included, we need to ignore the default `excludedAttributes = ['query']`
-        (includesQuery && attribute === 'query') ||
-        excludedAttributes.indexOf(attribute) === -1
-    );
-
-  return filteredAttributesToClear;
 }
 
 function prefixKeys(prefix, obj) {
