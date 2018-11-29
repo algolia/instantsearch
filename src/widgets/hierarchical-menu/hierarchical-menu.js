@@ -55,15 +55,18 @@ const usage = `Usage:
 hierarchicalMenu({
   container,
   attributes,
-  [ separator=' > ' ],
+  [ separator = ' > ' ],
   [ rootPath ],
-  [ showParentLevel=false ],
-  [ limit=10 ],
-  [ sortBy=['name:asc'] ],
+  [ showParentLevel = true ],
+  [ limit = 10 ],
+  [ showMore = false ],
+  [ showMoreLimit = limit * 2 ],
+  [ sortBy = ['name:asc'] ],
   [ cssClasses.{root, noRefinementRoot, list, childList, item, selectedItem, parentItem, link, label, count, showMore, disabledShowMore} ],
   [ templates.{item, showMoreText} ],
   [ transformItems ]
 })`;
+
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
@@ -90,10 +93,12 @@ hierarchicalMenu({
  * @typedef {Object} HierarchicalMenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
- * @property {number} [limit=10] How much facet values to get.
- * @property {string} [separator=" > "] Separator used in the attributes to separate level values.
+ * @property {string} [separator = " > "] Separator used in the attributes to separate level values.
  * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @property {boolean} [showParentLevel=true] Show the siblings of the selected parent level of the current refined value. This
+ * @property {boolean} [showParentLevel = true] Show the siblings of the selected parent level of the current refined value. This
+ * @property {number} [limit = 10] How much facet values to get.
+ * @property {boolean} [showMore = false] Whether to display the "show more" button.
+ * @property {number} [showMoreLimit = limit * 2] How much facet values to get when showing more.
  * does not impact the root level.
  *
  * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.
@@ -115,12 +120,12 @@ hierarchicalMenu({
  *     - **lvl2**
  * - Parent lvl0
  * - Parent lvl0
- * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {HierarchicalMenuTemplates} [templates] Templates to use for the widget.
  * @property {HierarchicalMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -177,16 +182,16 @@ hierarchicalMenu({
 export default function hierarchicalMenu({
   container,
   attributes,
-  separator = ' > ',
-  rootPath = null,
-  showParentLevel = true,
-  limit = 10,
-  sortBy = ['name:asc'],
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
+  separator,
+  rootPath,
+  showParentLevel,
+  limit,
   showMore = false,
   showMoreLimit,
+  sortBy,
   transformItems,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
 } = {}) {
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
@@ -237,12 +242,14 @@ export default function hierarchicalMenu({
       specializedRenderer,
       () => unmountComponentAtNode(containerNode)
     );
+
     return makeHierarchicalMenu({
       attributes,
       separator,
       rootPath,
       showParentLevel,
       limit,
+      showMore,
       showMoreLimit,
       sortBy,
       transformItems,
