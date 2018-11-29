@@ -18,10 +18,7 @@ The `routing` prop on `ais-instant-search` accepts an object. The simplest way t
 ```vue
 <template>
   <ais-instant-search
-    :routing="{
-      router: historyRouter(),
-      stateMapping: simpleMapping(),
-    }"
+    :routing="routing"
   >
     <!-- Your search components go in here -->
   </ais-instant-search>
@@ -34,8 +31,10 @@ import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
 export default {
   data() {
     return {
-      historyRouter,
-      simpleMapping,
+      routing: {
+        router: historyRouter(),
+        stateMapping: simpleMapping(),
+      },
     };
   },
 };
