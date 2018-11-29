@@ -158,13 +158,14 @@ class RefinementList extends Component {
     const showMoreButton = this.props.showMore === true && (
       <Template
         {...this.props.templateProps}
-        templateKey={
-          this.props.isShowingMore ? 'showMoreActive' : 'showMoreInactive'
-        }
+        templateKey="showMoreText"
         rootTagName="button"
         rootProps={{
           className: showMoreButtonClassName,
           onClick: this.props.toggleShowMore,
+        }}
+        data={{
+          isShowingMore: this.props.isShowingMore,
         }}
       />
     );

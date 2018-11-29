@@ -155,7 +155,9 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
     className="showMore disabledShowMore"
     dangerouslySetInnerHTML={
       Object {
-        "__html": Object {},
+        "__html": Object {
+          "isShowingMore": false,
+        },
       }
     }
   />
@@ -240,7 +242,9 @@ exports[`RefinementList rendering with facets and show more 1`] = `
     className="showMore"
     dangerouslySetInnerHTML={
       Object {
-        "__html": Object {},
+        "__html": Object {
+          "isShowingMore": false,
+        },
       }
     }
   />

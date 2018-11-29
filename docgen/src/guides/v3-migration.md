@@ -992,13 +992,27 @@ Widget removed.
 | `searchForFacetValues.isAlwaysActive`      | `searchableIsAlwaysActive`      |
 | `searchForFacetValues.escapeFacetValues`   | `searchableEscapeFacetValues`   |
 | `searchForFacetValues.templates.noResults` | `templates.searchableNoResults` |
-| `showMore.templates.active`                | `templates.showMoreActive`      |
-| `showMore.templates.inactive`              | `templates.showMoreInactive`    |
+| `showMore.templates.active`                | `templates.showMoreText`      |
+| `showMore.templates.inactive`              | `templates.showMoreText`    |
 
 - `searchablePlaceholder` defaults to `"Search..."`
 - `searchableEscapeFacetValues` defaults to `true`
 - `searchableIsAlwaysActive` defaults to `true`
 - `showMore` is now a boolean option (`searchForFacetValues.templates` and `showMore.templates` are now in `templates`)
+- An object containing `isShowingMore` is passed to `showMoreText` template to toggle between the two states:
+
+```
+{
+  showMoreText: `
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  `
+}
+```
 
 #### CSS classes
 

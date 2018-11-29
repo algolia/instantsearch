@@ -140,7 +140,7 @@ describe('RefinementList', () => {
       };
 
       const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="showMoreInactive"]');
+      const wrapper = root.find('[templateKey="showMoreText"]');
 
       expect(wrapper).toHaveLength(1);
     });
@@ -158,30 +158,9 @@ describe('RefinementList', () => {
       };
 
       const root = shallowRender(props);
-      const wrapper = root
-        .find('Template')
-        .filter({ templateKey: 'showMoreInactive' });
+      const wrapper = root.find('[templateKey="showMoreText"]');
 
       expect(wrapper).toHaveLength(0);
-    });
-
-    it('should displays showLess', () => {
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
-        ],
-        showMore: true,
-        isShowingMore: true,
-        canToggleShowMore: true,
-      };
-
-      const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="showMoreActive"]');
-
-      expect(wrapper).toHaveLength(1);
     });
   });
 
@@ -343,11 +322,12 @@ describe('RefinementList', () => {
         cssClasses,
         className: 'customClassName',
         showMore: true,
+        isShowingMore: false,
         canToggleShowMore: true,
         templateProps: {
           templates: {
             item: item => item,
-            showMoreInactive: x => x,
+            showMoreText: x => x,
           },
         },
         toggleRefinement: () => {},
@@ -377,11 +357,12 @@ describe('RefinementList', () => {
         cssClasses,
         className: 'customClassName',
         showMore: true,
+        isShowingMore: false,
         canToggleShowMore: false,
         templateProps: {
           templates: {
             item: item => item,
-            showMoreInactive: x => x,
+            showMoreText: x => x,
           },
         },
         toggleRefinement: () => {},
