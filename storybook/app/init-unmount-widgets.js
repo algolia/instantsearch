@@ -262,7 +262,7 @@ export default () => {
         container,
         attribute: 'rating',
         max: 5,
-        labels: {
+        templates: {
           andUp: '& Up',
         },
       })

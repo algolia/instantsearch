@@ -3,19 +3,12 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu.js';
 import defaultTemplates from './defaultTemplates.js';
-import defaultLabels from './defaultLabels.js';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit.js';
 
 const suit = component('RatingMenu');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  templates,
-  renderState,
-  labels,
-}) => (
+const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
   { refine, items, createURL, instantSearchInstance },
   isFirstRendering
 ) => {
@@ -33,7 +26,7 @@ const renderer = ({
     <RefinementList
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={items.map(item => ({ ...item, labels }))}
+      facetValues={items.map(item => ({ ...item, templates }))}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
     >
@@ -59,18 +52,13 @@ ratingMenu({
   attribute,
   [ max = 5 ],
   [ cssClasses.{root, list, item, selectedItem, disabledItem, link, starIcon, fullStarIcon, emptyStarIcon, label, count} ],
-  [ templates.{item} ],
-  [ labels.{andUp} ],
+  [ templates.{item, andUp} ],
 })`;
-
-/**
- * @typedef {Object} RatingMenuWidgetLabels
- * @property {string} [andUp] Label used to suffix the ratings.
- */
 
 /**
  * @typedef {Object} RatingMenuWidgetTemplates
  * @property  {string|function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string} [andUp] Template used to suffix the rating item.
  */
 
 /**
@@ -94,7 +82,6 @@ ratingMenu({
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute in your records that contains the ratings.
  * @property {number} [max=5] The maximum rating value.
- * @property {RatingMenuWidgetLabels} [labels] Labels used by the default template.
  * @property {RatingMenuWidgetTemplates} [templates] Templates to use for the widget.
  * @property {RatingMenuWidgetCssClasses} [cssClasses] CSS classes to add.
  */
@@ -122,7 +109,7 @@ ratingMenu({
  *     container: '#stars',
  *     attribute: 'rating',
  *     max: 5,
- *     labels: {
+ *     templates: {
  *       andUp: '& Up'
  *     }
  *   })
@@ -133,7 +120,6 @@ export default function ratingMenu({
   attribute,
   max = 5,
   cssClasses: userCssClasses = {},
-  labels = defaultLabels,
   templates = defaultTemplates,
 } = {}) {
   if (!container) {
@@ -177,7 +163,6 @@ export default function ratingMenu({
     cssClasses,
     renderState: {},
     templates,
-    labels,
   });
 
   try {

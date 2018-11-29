@@ -915,9 +915,10 @@ Widget removed.
 
 ### Options
 
-| Before          | After       |
-| --------------- | ----------- |
-| `attributeName` | `attribute` |
+| Before          | After             |
+| --------------- | ----------------- |
+| `attributeName` | `attribute`       |
+| `labels.andUp`  | `templates.andUp` |
 
 ### CSS classes
 
