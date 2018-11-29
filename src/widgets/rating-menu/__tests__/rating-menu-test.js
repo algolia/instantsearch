@@ -1,6 +1,5 @@
 import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import ratingMenu from '../rating-menu.js';
-import defaultTemplates from '../../../widgets/rating-menu/defaultTemplates.js';
 
 describe('ratingMenu()', () => {
   const attribute = 'anAttrName';
