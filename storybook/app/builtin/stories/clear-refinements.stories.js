@@ -115,7 +115,7 @@ export default () => {
       })
     )
     .add(
-      'with transformed items',
+      'with brands excluded (via transformItems)',
       wrapWithHits(
         container => {
           const clearRefinementsContainer = document.createElement('div');
