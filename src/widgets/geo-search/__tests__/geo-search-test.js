@@ -232,6 +232,7 @@ describe('GeoSearch', () => {
     const actual = renderer.mock.calls[0][0].widgetParams.templates;
 
     const expectation = {
+      HTMLMarker: '<p>Your custom HTML Marker</p>',
       reset: 'Clear the map refinement',
       toggle: 'Search when the map move',
       redo: 'Redo search here',
@@ -924,7 +925,9 @@ describe('GeoSearch', () => {
           createOptions: item => ({
             title: `ID: ${item.objectID}`,
           }),
-          template: '<p>{{objectID}}</p>',
+        },
+        templates: {
+          HTMLMarker: '<p>{{objectID}}</p>',
         },
       });
 

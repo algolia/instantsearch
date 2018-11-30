@@ -140,7 +140,6 @@ const geoSearch = ({
   };
 
   const defaultCustomHTMLMarker = {
-    template: '<p>Your custom HTML Marker</p>',
     createOptions: noop,
     events: {},
   };
@@ -207,8 +206,8 @@ const geoSearch = ({
       position: item._geoloc,
       className: cx(suit({ descendantName: 'marker' })),
       template: renderTemplate({
-        templateKey: 'template',
-        templates: customHTMLMarker,
+        templateKey: 'HTMLMarker',
+        templates,
         data: item,
       }),
     });

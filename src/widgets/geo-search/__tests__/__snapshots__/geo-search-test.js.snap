@@ -31,12 +31,14 @@ Array [
     templateProps={
       Object {
         "templates": Object {
+          "HTMLMarker": "<p>Your custom HTML Marker</p>",
           "redo": "Redo search here",
           "reset": "Clear the map refinement",
           "toggle": "Search as I move the map",
         },
         "templatesConfig": undefined,
         "useCustomCompileOptions": Object {
+          "HTMLMarker": true,
           "redo": true,
           "reset": true,
           "toggle": true,
@@ -81,12 +83,14 @@ Array [
     templateProps={
       Object {
         "templates": Object {
+          "HTMLMarker": "<p>Your custom HTML Marker</p>",
           "redo": "Redo search here",
           "reset": "Clear the map refinement",
           "toggle": "Search as I move the map",
         },
         "templatesConfig": undefined,
         "useCustomCompileOptions": Object {
+          "HTMLMarker": true,
           "redo": true,
           "reset": true,
           "toggle": true,
