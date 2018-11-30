@@ -38,7 +38,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {object} CustomHTMLMarkerOptions
- * @property {string|function(item): string} template Template to use for the marker.
  * @property {function(item): HTMLMarkerOptions} [createOptions] Function used to create the options passed to the HTMLMarker.
  * @property {{ eventType: function(object) }} [events] Object that takes an event type (ex: `click`, `mouseover`) as key and a listener as value. The listener is provided with an object that contains `event`, `item`, `marker`, `map`.
  */
@@ -65,6 +64,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {object} GeoSearchTemplates
+ * @property {string|function(object): string} [HTMLMarker] Template to use for the marker.
  * @property {string|function(object): string} [reset] Template for the reset button.
  * @property {string|function(object): string} [toggle] Template for the toggle label.
  * @property {string|function(object): string} [redo] Template for the redo button.

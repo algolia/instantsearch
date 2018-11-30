@@ -269,13 +269,14 @@ URL synchronization is done via Routing alone now.
 
 #### Options
 
-| Before                    | After                                                  |
-| ------------------------- | ------------------------------------------------------ |
-| `paddingBoundingBox`      | Removed                                                |
-| `enableGeolocationWithIP` | Removed - use the Configure widget instead (see below) |
-| `position`                | Removed - use the Configure widget instead (see below) |
-| `radius`                  | Removed - use the Configure widget instead (see below) |
-| `precision`               | Removed - use the Configure widget instead (see below) |
+| Before                      | After                                                  |
+| --------------------------- | ------------------------------------------------------ |
+| `customHTMLMarker.template` | `templates.HTMLMarker`                                 |
+| `paddingBoundingBox`        | Removed                                                |
+| `enableGeolocationWithIP`   | Removed - use the Configure widget instead (see below) |
+| `position`                  | Removed - use the Configure widget instead (see below) |
+| `radius`                    | Removed - use the Configure widget instead (see below) |
+| `precision`                 | Removed - use the Configure widget instead (see below) |
 
 - `paddingBoundingBox` was in conflict with the `routing` option - so we removed it to support URLSync for the GeoSearch widget.
 
