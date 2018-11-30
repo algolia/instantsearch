@@ -83,7 +83,7 @@ hierarchicalMenu({
 /**
  * @typedef {Object} HierarchicalMenuTemplates
  * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property {string|function} [showMoreText] Template used for the show more text.
+ * @property {string|function} [showMoreText] Template used for the show more text, provided with `isShowingMore` data property.
  */
 
 /**
