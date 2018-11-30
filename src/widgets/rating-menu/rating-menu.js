@@ -26,7 +26,7 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
     <RefinementList
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={items.map(item => ({ ...item, templates }))}
+      facetValues={items}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
     >
@@ -52,13 +52,12 @@ ratingMenu({
   attribute,
   [ max = 5 ],
   [ cssClasses.{root, list, item, selectedItem, disabledItem, link, starIcon, fullStarIcon, emptyStarIcon, label, count} ],
-  [ templates.{item, andUp} ],
+  [ templates.{item} ],
 })`;
 
 /**
  * @typedef {Object} RatingMenuWidgetTemplates
  * @property  {string|function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property {string} [andUp] Template used to suffix the rating item.
  */
 
 /**
@@ -81,7 +80,7 @@ ratingMenu({
  * @typedef {Object} RatingMenuWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute in your records that contains the ratings.
- * @property {number} [max=5] The maximum rating value.
+ * @property {number} [max = 5] The maximum rating value.
  * @property {RatingMenuWidgetTemplates} [templates] Templates to use for the widget.
  * @property {RatingMenuWidgetCssClasses} [cssClasses] CSS classes to add.
  */
@@ -109,9 +108,6 @@ ratingMenu({
  *     container: '#stars',
  *     attribute: 'rating',
  *     max: 5,
- *     templates: {
- *       andUp: '& Up'
- *     }
  *   })
  * );
  */

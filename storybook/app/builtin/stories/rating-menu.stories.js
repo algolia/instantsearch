@@ -16,9 +16,6 @@ export default () => {
             container,
             attribute: 'rating',
             max: 5,
-            templates: {
-              andUp: '& Up',
-            },
           })
         );
       })
@@ -31,9 +28,6 @@ export default () => {
             container,
             attribute: 'rating',
             max: 7,
-            templates: {
-              andUp: '& Up',
-            },
           })
         );
       })

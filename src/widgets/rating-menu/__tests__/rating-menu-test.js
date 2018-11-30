@@ -78,7 +78,6 @@ describe('ratingMenu()', () => {
         name: '1',
         value: '1',
         stars: [true, false, false, false, false],
-        templates: expect.objectContaining({ andUp: '& Up' }),
       },
     ]);
   });
@@ -159,7 +158,7 @@ describe('ratingMenu()', () => {
       {
         count: 1000,
         isRefined: false,
-        templates: expect.objectContaining({ andUp: '& Up' }),
+
         name: '4',
         value: '4',
         stars: [true, true, true, true, false],
@@ -167,7 +166,7 @@ describe('ratingMenu()', () => {
       {
         count: 1050,
         isRefined: false,
-        templates: expect.objectContaining({ andUp: '& Up' }),
+
         name: '3',
         value: '3',
         stars: [true, true, true, false, false],
@@ -175,7 +174,7 @@ describe('ratingMenu()', () => {
       {
         count: 1070,
         isRefined: false,
-        templates: expect.objectContaining({ andUp: '& Up' }),
+
         name: '2',
         value: '2',
         stars: [true, true, false, false, false],
@@ -183,7 +182,7 @@ describe('ratingMenu()', () => {
       {
         count: 1080,
         isRefined: false,
-        templates: expect.objectContaining({ andUp: '& Up' }),
+
         name: '1',
         value: '1',
         stars: [true, false, false, false, false],
