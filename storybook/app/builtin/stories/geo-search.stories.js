@@ -470,16 +470,18 @@ export default () => {
                     y: 5,
                   },
                 }),
-                template: `
-                  <div class="my-custom-marker">
-                    {{price_formatted}}
-                  </div>
-                `,
                 events: {
                   click: ({ event, item, marker, map }) => {
                     logger(event, item, marker, map);
                   },
                 },
+              },
+              templates: {
+                HTMLMarker: `
+                  <div class="my-custom-marker">
+                    {{price_formatted}}
+                  </div>
+                `,
               },
               container,
               initialPosition,
@@ -515,11 +517,6 @@ export default () => {
                     y: 5,
                   },
                 }),
-                template: `
-                  <div class="my-custom-marker">
-                    {{price_formatted}}
-                  </div>
-                `,
                 events: {
                   click: ({ item, marker, map }) => {
                     if (InfoWindow.getMap()) {
@@ -531,6 +528,13 @@ export default () => {
                     InfoWindow.open(map, marker);
                   },
                 },
+              },
+              templates: {
+                HTMLMarker: `
+                  <div class="my-custom-marker">
+                    {{price_formatted}}
+                  </div>
+                `,
               },
               container,
               initialPosition,
@@ -576,11 +580,6 @@ export default () => {
                     y: 5,
                   },
                 }),
-                template: `
-                  <div class="my-custom-marker">
-                    {{price_formatted}}
-                  </div>
-                `,
                 events: {
                   click: ({ item, marker, map }) => {
                     if (InfoBoxInstance.getMap()) {
@@ -596,6 +595,13 @@ export default () => {
                     InfoBoxInstance.open(map, marker);
                   },
                 },
+              },
+              templates: {
+                HTMLMarker: `
+                  <div class="my-custom-marker">
+                    {{price_formatted}}
+                  </div>
+                `,
               },
               container,
               initialPosition,
@@ -663,11 +669,6 @@ export default () => {
                     y: 5,
                   },
                 }),
-                template: `
-                  <div class="my-custom-marker" data-id="{{objectID}}">
-                    {{price_formatted}}
-                  </div>
-                `,
                 events: {
                   mouseover: ({ item }) => {
                     removeActiveHitClassNames();
@@ -682,6 +683,13 @@ export default () => {
                     removeActiveHitClassNames();
                   },
                 },
+              },
+              templates: {
+                HTMLMarker: `
+                  <div class="my-custom-marker" data-id="{{objectID}}">
+                    {{price_formatted}}
+                  </div>
+                `,
               },
               container,
               initialPosition,
