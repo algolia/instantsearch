@@ -166,4 +166,4 @@ exports[`GeoSearchControls Control enabled expect to render the toggle unchecked
 </div>
 `;
 
-exports[`GeoSearchControls expect to render nothing with refine dsiabled 1`] = `""`;
+exports[`GeoSearchControls expect to render nothing with refine disabled 1`] = `""`;

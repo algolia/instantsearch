@@ -27,7 +27,7 @@ describe('GeoSearchControls', () => {
     templateProps: {},
   };
 
-  it('expect to render nothing with refine dsiabled', () => {
+  it('expect to render nothing with refine disabled', () => {
     const props = {
       ...defaultProps,
       enableRefine: false,
