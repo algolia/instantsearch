@@ -977,6 +977,131 @@ describe('GeoSearch', () => {
       createHTMLMarker.mockRestore();
     });
 
+    it('expect to render custom HTML markers with only the template provided', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const googleReference = createFakeGoogleReference();
+      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+
+      createHTMLMarker.mockImplementation(() => HTMLMarker);
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        templates: {
+          HTMLMarker: '<p>{{objectID}}</p>',
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      expect(HTMLMarker).toHaveBeenCalledTimes(3);
+      expect(HTMLMarker.mock.calls).toEqual([
+        [
+          expect.objectContaining({
+            __id: 123,
+            template: '<p>123</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 456,
+            template: '<p>456</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 789,
+            template: '<p>789</p>',
+          }),
+        ],
+      ]);
+
+      createHTMLMarker.mockRestore();
+    });
+
+    it('expect to render custom HTML markers with only the object provided', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const googleReference = createFakeGoogleReference();
+      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+
+      createHTMLMarker.mockImplementation(() => HTMLMarker);
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        customHTMLMarker: {
+          createOptions: item => ({
+            title: `ID: ${item.objectID}`,
+          }),
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      expect(HTMLMarker).toHaveBeenCalledTimes(3);
+      expect(HTMLMarker.mock.calls).toEqual([
+        [
+          expect.objectContaining({
+            __id: 123,
+            title: 'ID: 123',
+            template: '<p>Your custom HTML Marker</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 456,
+            title: 'ID: 456',
+            template: '<p>Your custom HTML Marker</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 789,
+            title: 'ID: 789',
+            template: '<p>Your custom HTML Marker</p>',
+          }),
+        ],
+      ]);
+
+      createHTMLMarker.mockRestore();
+    });
+
     it('expect to setup listeners on custom HTML markers', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();

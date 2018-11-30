@@ -126,7 +126,7 @@ const geoSearch = ({
   templates: userTemplates = {},
   cssClasses: userCssClasses = {},
   builtInMarker: userBuiltInMarker = {},
-  customHTMLMarker: userCustomHTMLMarker = false,
+  customHTMLMarker: userCustomHTMLMarker,
   enableRefine = true,
   enableClearMapRefinement = true,
   enableRefineControl = true,
@@ -184,7 +184,10 @@ const geoSearch = ({
     ...userBuiltInMarker,
   };
 
-  const customHTMLMarker = Boolean(userCustomHTMLMarker) && {
+  const isCustomHTMLMarker =
+    Boolean(userCustomHTMLMarker) || Boolean(userTemplates.HTMLMarker);
+
+  const customHTMLMarker = isCustomHTMLMarker && {
     ...defaultCustomHTMLMarker,
     ...userCustomHTMLMarker,
   };
