@@ -38,8 +38,6 @@ export default () => {
     'default',
     wrapWithHitsAndConfiguration((container, start) =>
       injectGoogleMaps(() => {
-        container.style.height = '600px';
-
         window.search.addWidget(
           instantsearch.widgets.configure({
             aroundLatLngViaIP: true,
@@ -63,8 +61,6 @@ export default () => {
     'with IP',
     wrapWithHitsAndConfiguration((container, start) =>
       injectGoogleMaps(() => {
-        container.style.height = '600px';
-
         window.search.addWidget(
           instantsearch.widgets.configure({
             aroundLatLngViaIP: true,
@@ -87,8 +83,6 @@ export default () => {
     'with position',
     wrapWithHitsAndConfiguration((container, start) =>
       injectGoogleMaps(() => {
-        container.style.height = '600px';
-
         window.search.addWidget(
           instantsearch.widgets.configure({
             aroundLatLng: '37.7793, -122.419',
@@ -115,7 +109,6 @@ export default () => {
       injectGoogleMaps(() => {
         const placesElement = document.createElement('input');
         const mapElement = document.createElement('div');
-        mapElement.style.height = '500px';
         mapElement.style.marginTop = '20px';
 
         container.appendChild(placesElement);
@@ -153,8 +146,6 @@ export default () => {
     'with refine disabled',
     wrapWithHitsAndConfiguration((container, start) =>
       injectGoogleMaps(() => {
-        container.style.height = '600px';
-
         window.search.addWidget(
           instantsearch.widgets.configure({
             aroundLatLngViaIP: true,
@@ -179,8 +170,6 @@ export default () => {
       'with control & refine on map move',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -206,8 +195,6 @@ export default () => {
       'with control & disable refine on map move',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -233,8 +220,6 @@ export default () => {
       'without control & refine on map move',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -260,8 +245,6 @@ export default () => {
       'without control & disable refine on map move',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -287,8 +270,6 @@ export default () => {
       'with custom templates for controls',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -317,8 +298,6 @@ export default () => {
       'with custom map options',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -346,8 +325,6 @@ export default () => {
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
           const logger = action('[GeoSearch] click: builtInMarker');
-
-          container.style.height = '600px';
 
           window.search.addWidget(
             instantsearch.widgets.configure({
@@ -384,8 +361,6 @@ export default () => {
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
           const InfoWindow = new window.google.maps.InfoWindow();
-
-          container.style.height = '600px';
 
           window.search.addWidget(
             instantsearch.widgets.configure({
@@ -437,8 +412,6 @@ export default () => {
             });
           });
 
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -480,8 +453,6 @@ export default () => {
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
           const logger = action('[GeoSearch] click: HTMLMarker');
-
-          container.style.height = '600px';
 
           window.search.addWidget(
             instantsearch.widgets.configure({
@@ -527,8 +498,6 @@ export default () => {
           const InfoWindow = new window.google.maps.InfoWindow({
             pixelOffset: new window.google.maps.Size(0, -30),
           });
-
-          container.style.height = '600px';
 
           window.search.addWidget(
             instantsearch.widgets.configure({
@@ -590,8 +559,6 @@ export default () => {
               ),
             });
           });
-
-          container.style.height = '600px';
 
           window.search.addWidget(
             instantsearch.widgets.configure({
@@ -680,8 +647,6 @@ export default () => {
             removeActiveMarkerClassNames();
           });
 
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
@@ -733,8 +698,6 @@ export default () => {
       wrapWithHitsAndConfiguration(
         (container, start) =>
           injectGoogleMaps(() => {
-            container.style.height = '600px';
-
             window.search.addWidget(
               instantsearch.widgets.configure({
                 aroundLatLngViaIP: true,
@@ -768,8 +731,6 @@ export default () => {
       'with transformed items',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
-          container.style.height = '600px';
-
           window.search.addWidget(
             instantsearch.widgets.configure({
               aroundLatLngViaIP: true,
