@@ -52,6 +52,18 @@
 
 /* GeoSearch */
 
+.ais-GeoSearch {
+  width: 850px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.algolia-places {
+  display: block !important;
+  width: 850px;
+  margin: 0 auto;
+}
+
 .my-custom-marker {
   position: relative;
   background-color: white;
