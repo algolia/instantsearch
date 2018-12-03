@@ -38,7 +38,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {object} CustomHTMLMarkerOptions
- * @property {string|function(item): string} template Template to use for the marker.
  * @property {function(item): HTMLMarkerOptions} [createOptions] Function used to create the options passed to the HTMLMarker.
  * @property {{ eventType: function(object) }} [events] Object that takes an event type (ex: `click`, `mouseover`) as key and a listener as value. The listener is provided with an object that contains `event`, `item`, `marker`, `map`.
  */
@@ -65,6 +64,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {object} GeoSearchTemplates
+ * @property {string|function(object): string} [HTMLMarker] Template to use for the marker.
  * @property {string|function(object): string} [reset] Template for the reset button.
  * @property {string|function(object): string} [toggle] Template for the toggle label.
  * @property {string|function(object): string} [redo] Template for the redo button.
@@ -88,7 +88,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {object} [mapOptions] Option forwarded to the Google Maps constructor. <br />
  * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions) for more information.
  * @property {BuiltInMarkerOptions} [builtInMarker] Options for customize the built-in Google Maps marker. This option is ignored when the `customHTMLMarker` is provided.
- * @property {CustomHTMLMarkerOptions|boolean} [customHTMLMarker=false] Options for customize the HTML marker. We provide an alternative to the built-in Google Maps marker in order to have a full control of the marker rendering. You can use plain HTML to build your marker.
+ * @property {CustomHTMLMarkerOptions} [customHTMLMarker] Options for customize the HTML marker. We provide an alternative to the built-in Google Maps marker in order to have a full control of the marker rendering. You can use plain HTML to build your marker.
  * @property {boolean} [enableRefine=true] If true, the map is used to search - otherwise it's for display purposes only.
  * @property {boolean} [enableClearMapRefinement=true] If true, a button is displayed on the map when the refinement is coming from the map in order to remove it.
  * @property {boolean} [enableRefineControl=true] If true, the user can toggle the option `enableRefineOnMapMove` directly from the map.
@@ -126,7 +126,7 @@ const geoSearch = ({
   templates: userTemplates = {},
   cssClasses: userCssClasses = {},
   builtInMarker: userBuiltInMarker = {},
-  customHTMLMarker: userCustomHTMLMarker = false,
+  customHTMLMarker: userCustomHTMLMarker,
   enableRefine = true,
   enableClearMapRefinement = true,
   enableRefineControl = true,
@@ -140,7 +140,6 @@ const geoSearch = ({
   };
 
   const defaultCustomHTMLMarker = {
-    template: '<p>Your custom HTML Marker</p>',
     createOptions: noop,
     events: {},
   };
@@ -185,7 +184,10 @@ const geoSearch = ({
     ...userBuiltInMarker,
   };
 
-  const customHTMLMarker = Boolean(userCustomHTMLMarker) && {
+  const isCustomHTMLMarker =
+    Boolean(userCustomHTMLMarker) || Boolean(userTemplates.HTMLMarker);
+
+  const customHTMLMarker = isCustomHTMLMarker && {
     ...defaultCustomHTMLMarker,
     ...userCustomHTMLMarker,
   };
@@ -207,8 +209,8 @@ const geoSearch = ({
       position: item._geoloc,
       className: cx(suit({ descendantName: 'marker' })),
       template: renderTemplate({
-        templateKey: 'template',
-        templates: customHTMLMarker,
+        templateKey: 'HTMLMarker',
+        templates,
         data: item,
       }),
     });
