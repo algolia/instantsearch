@@ -1,7 +1,7 @@
 import {
   checkRendering,
   clearRefinements,
-  getAttributesToClear,
+  getRefinements,
 } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -16,8 +16,9 @@ var customClearRefinements = connectClearRefinements(function render(params, isF
 });
 search.addWidget(
   customClearRefinements({
-    [ excludedAttributes = [] ],
-    [ clearsQuery = false ]
+    [ includedAttributes = [] ],
+    [ excludedAttributes = ['query'] ],
+    [ transformItems ],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearRefinements.html
@@ -25,8 +26,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomClearRefinementsWidgetOptions
- * @property {string[]} [excludedAttributes = []] Every attributes that should not be removed when calling `refine()`.
- * @property {boolean} [clearsQuery = false] If `true`, `refine()` also clears the current search query.
+ * @property {string[]} [includedAttributes = []] The attributes to include in the refinements to clear (all by default). Cannot be used with `excludedAttributes`.
+ * @property {string[]} [excludedAttributes = ['query']] The attributes to exclude from the refinements to clear. Cannot be used with `includedAttributes`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -83,26 +85,39 @@ export default function connectClearRefinements(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { excludedAttributes = [], clearsQuery = false } = widgetParams;
+    if (widgetParams.includedAttributes && widgetParams.excludedAttributes) {
+      throw new Error(
+        '`includedAttributes` and `excludedAttributes` cannot be used together.'
+      );
+    }
+
+    const {
+      includedAttributes = [],
+      excludedAttributes = ['query'],
+      transformItems = items => items,
+    } = widgetParams;
 
     return {
       init({ helper, instantSearchInstance, createURL }) {
         const attributesToClear = getAttributesToClear({
           helper,
+          includedAttributes,
           excludedAttributes,
+          transformItems,
         });
-
-        const hasRefinements = clearsQuery
-          ? attributesToClear.length !== 0 || helper.state.query !== ''
-          : attributesToClear.length !== 0;
+        const hasRefinements = attributesToClear.length > 0;
 
         this._refine = () => {
           helper
             .setState(
               clearRefinements({
                 helper,
-                excludedAttributes,
-                clearsQuery,
+                attributesToClear: getAttributesToClear({
+                  helper,
+                  includedAttributes,
+                  excludedAttributes,
+                  transformItems,
+                }),
               })
             )
             .search();
@@ -112,15 +127,19 @@ export default function connectClearRefinements(renderFn, unmountFn) {
           createURL(
             clearRefinements({
               helper,
-              excludedAttributes,
-              clearsQuery,
+              attributesToClear: getAttributesToClear({
+                helper,
+                includedAttributes,
+                excludedAttributes,
+                transformItems,
+              }),
             })
           );
 
         renderFn(
           {
-            refine: this._refine,
             hasRefinements,
+            refine: this._refine,
             createURL: this._createURL,
             instantSearchInstance,
             widgetParams,
@@ -132,17 +151,16 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       render({ helper, instantSearchInstance }) {
         const attributesToClear = getAttributesToClear({
           helper,
+          includedAttributes,
           excludedAttributes,
+          transformItems,
         });
-
-        const hasRefinements = clearsQuery
-          ? attributesToClear.length !== 0 || helper.state.query !== ''
-          : attributesToClear.length !== 0;
+        const hasRefinements = attributesToClear.length > 0;
 
         renderFn(
           {
-            refine: this._refine,
             hasRefinements,
+            refine: this._refine,
             createURL: this._createURL,
             instantSearchInstance,
             widgetParams,
@@ -156,4 +174,34 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       },
     };
   };
+}
+
+function getAttributesToClear({
+  helper,
+  includedAttributes,
+  excludedAttributes,
+  transformItems,
+}) {
+  const clearsQuery =
+    includedAttributes.indexOf('query') !== -1 ||
+    excludedAttributes.indexOf('query') === -1;
+
+  return transformItems(
+    getRefinements(helper.lastResults || {}, helper.state, clearsQuery)
+      .map(refinement => refinement.attributeName)
+      .filter(
+        attribute =>
+          // If the array is empty (default case), we keep all the attributes
+          includedAttributes.length === 0 ||
+          // Otherwise, only add the specified attributes
+          includedAttributes.indexOf(attribute) !== -1
+      )
+      .filter(
+        attribute =>
+          // If the query is included, we ignore the default `excludedAttributes = ['query']`
+          (attribute === 'query' && clearsQuery) ||
+          // Otherwise, ignore the excluded attributes
+          excludedAttributes.indexOf(attribute) === -1
+      )
+  );
 }

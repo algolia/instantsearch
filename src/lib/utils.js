@@ -18,7 +18,6 @@ export {
   isSpecialClick,
   isDomElement,
   getRefinements,
-  getAttributesToClear,
   clearRefinements,
   prefixKeys,
   escapeRefinement,
@@ -325,23 +324,10 @@ function getRefinements(results, state, clearsQuery) {
  * is not provided, this list of all the currently refined attributes is used as included attributes.
  * @param {object} $0 parameters
  * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.includedAttributes] list of parameters to clear
- * @param {string[]} [$0.excludedAttributes=[]] list of parameters not to remove (will impact the included attributes list)
- * @param {boolean} [$0.clearsQuery=false] clears the query if need be
+ * @param {string[]} [$0.attributesToClear = []] list of parameters to clear
  * @returns {SearchParameters} search parameters with refinements cleared
  */
-function clearRefinements({
-  helper,
-  includedAttributes,
-  excludedAttributes = [],
-  clearsQuery = false,
-}) {
-  const attributesToClear = getAttributesToClear({
-    helper,
-    includedAttributes,
-    excludedAttributes,
-  });
-
+function clearRefinements({ helper, attributesToClear = [] }) {
   let finalState = helper.state;
 
   attributesToClear.forEach(attribute => {
@@ -352,36 +338,11 @@ function clearRefinements({
     }
   });
 
-  if (clearsQuery) {
+  if (attributesToClear.indexOf('query') !== -1) {
     finalState = finalState.setQuery('');
   }
 
   return finalState;
-}
-
-/**
- * Computes the list of attributes (conjunctive, disjunctive, hierarchical facet + numerical attributes)
- * to clear based on optionals included and excluded attributes lists.
- * The included attributes list is applied before the excluded attributes list.
- * @param {object} $0 parameters
- * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.includedAttributes] attributes to clear (defaults to all attributes)
- * @param {string[]} [$0.excludedAttributes=[]] attributes to keep, will override the included attributes list
- * @returns {string[]} the list of attributes to clear based on the rules
- */
-function getAttributesToClear({
-  helper,
-  includedAttributes,
-  excludedAttributes,
-}) {
-  const lastResults = helper.lastResults || {};
-  const attributesToClear =
-    includedAttributes ||
-    getRefinements(lastResults, helper.state).map(one => one.attributeName);
-
-  return attributesToClear.filter(
-    attribute => excludedAttributes.indexOf(attribute) === -1
-  );
 }
 
 function prefixKeys(prefix, obj) {
