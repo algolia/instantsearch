@@ -918,7 +918,9 @@ Widget removed.
 | Before          | After             |
 | --------------- | ----------------- |
 | `attributeName` | `attribute`       |
-| `labels.andUp`  | `templates.andUp` |
+| `labels.andUp`  | Removed           |
+
+The value for the label `andUp` is now inlined inside `templates.item`.
 
 ### CSS classes
 
