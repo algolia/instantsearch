@@ -262,9 +262,6 @@ export default () => {
         container,
         attribute: 'rating',
         max: 5,
-        labels: {
-          andUp: '& Up',
-        },
       })
     )
   );
