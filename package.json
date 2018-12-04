@@ -40,7 +40,7 @@
     "@storybook/addons": "3.4.11",
     "@storybook/react": "3.4.11",
     "@storybook/ui": "3.4.11",
-    "algoliasearch": "3.30.0",
+    "algoliasearch": "3.31.0",
     "argos-cli": "0.0.9",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
@@ -114,7 +114,7 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "63.75 kB"
+      "maxSize": "64 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
@@ -122,7 +122,7 @@
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
-      "maxSize": "63 kB"
+      "maxSize": "64 kB"
     },
     {
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",
