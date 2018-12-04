@@ -2726,13 +2726,13 @@ autocomplete.js@^0.32.0:
   dependencies:
     immediate "^3.2.3"
 
-autoprefixer@9.4.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.4.0.tgz#4264ee11fdde83e6a2fb0136e6954af6361bf0b6"
-  integrity sha512-gv1a1rzOyxmB2JuyXDLVNWyyUl1uelaKyxO1OP3UNWk7jAP+EhAT9rZdcDBH0C+ZEeTL56qNR4j2TjRZL68bXA==
+autoprefixer@9.4.1:
+  version "9.4.1"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.4.1.tgz#a3d7e9c5940ba85778ab780536f1cc51bd2dfbd6"
+  integrity sha512-T15Bt8akUOGqhkXPLKipYzzmmOOQ+H4dmZtk3VUNBbFiYuUh5uvXb/THxGGxbRlaNG+i39Qm3UdpLtpdiCMw9w==
   dependencies:
     browserslist "^4.3.5"
-    caniuse-lite "^1.0.30000912"
+    caniuse-lite "^1.0.30000914"
     normalize-range "^0.1.2"
     num2fraction "^1.2.2"
     postcss "^7.0.6"
@@ -5056,6 +5056,11 @@ caniuse-lite@^1.0.30000912:
   version "1.0.30000913"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000913.tgz#560311ecf242eaf12159b720e64b11ebd759b5e4"
   integrity sha512-PP7Ypc35XY1mNduHqweGNOp0qfNUCmaQauGOYDByvirlFjrzRyY72pBRx7jnBidOB8zclg00DAzsy2H475BouQ==
+
+caniuse-lite@^1.0.30000914:
+  version "1.0.30000914"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000914.tgz#f802b4667c24d0255f54a95818dcf8e1aa41f624"
+  integrity sha512-qqj0CL1xANgg6iDOybiPTIxtsmAnfIky9mBC35qgWrnK4WwmhqfpmkDYMYgwXJ8LRZ3/2jXlCntulO8mBaAgSg==
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
