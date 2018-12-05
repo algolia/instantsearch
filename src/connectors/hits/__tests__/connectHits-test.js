@@ -1,4 +1,5 @@
 import jsHelper from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
 const SearchResults = jsHelper.SearchResults;
 
 import connectHits from '../connectHits.js';
@@ -12,8 +13,8 @@ describe('connectHits', () => {
     const widget = makeWidget({ escapeHTML: true });
 
     expect(widget.getConfiguration()).toEqual({
-      highlightPreTag: '__ais-highlight__',
-      highlightPostTag: '__/ais-highlight__',
+      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
     });
 
     // test if widget is not rendered yet at this point
@@ -122,7 +123,9 @@ describe('connectHits', () => {
       {
         _highlightResult: {
           foobar: {
-            value: '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
+              TAG_PLACEHOLDER.highlightPostTag
+            }</script>`,
           },
         },
       },
@@ -230,7 +233,9 @@ describe('connectHits', () => {
         name: 'hello',
         _highlightResult: {
           name: {
-            value: 'he__ais-highlight__llo__/ais-highlight__',
+            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${
+              TAG_PLACEHOLDER.highlightPostTag
+            }`,
           },
         },
       },
@@ -238,7 +243,9 @@ describe('connectHits', () => {
         name: 'halloween',
         _highlightResult: {
           name: {
-            value: 'ha__ais-highlight__llo__/ais-highlight__ween',
+            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${
+              TAG_PLACEHOLDER.highlightPostTag
+            }ween`,
           },
         },
       },

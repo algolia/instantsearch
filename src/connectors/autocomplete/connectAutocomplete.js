@@ -1,4 +1,4 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight';
+import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
@@ -60,7 +60,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHits ? tagConfig : undefined;
+        return widgetParams.escapeHits ? TAG_PLACEHOLDER : undefined;
       },
 
       init({ instantSearchInstance, helper }) {

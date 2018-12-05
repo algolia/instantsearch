@@ -1,5 +1,5 @@
 import { checkRendering } from '../../lib/utils.js';
-import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
+import { TAG_PLACEHOLDER, escapeFacets } from '../../lib/escape-highlight.js';
 import isEqual from 'lodash/isEqual';
 
 const usage = `Usage:
@@ -256,10 +256,10 @@ export default function connectRefinementList(renderFn, unmountFn) {
       } else {
         const tags = {
           highlightPreTag: escapeFacetValues
-            ? tagConfig.highlightPreTag
+            ? TAG_PLACEHOLDER.highlightPreTag
             : '<mark>',
           highlightPostTag: escapeFacetValues
-            ? tagConfig.highlightPostTag
+            ? TAG_PLACEHOLDER.highlightPostTag
             : '</mark>',
         };
 
