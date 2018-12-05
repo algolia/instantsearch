@@ -1,4 +1,5 @@
 import { getPropertyByPath } from '../lib/utils';
+import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
 const suit = component('Snippet');
@@ -16,6 +17,12 @@ export default function snippet({
   });
 
   return attributeValue
-    .replace(/<em>/g, `<${highlightedTagName} class="${className}">`)
-    .replace(/<\/em>/g, `</${highlightedTagName}>`);
+    .replace(
+      new RegExp(TAG_REPLACEMENT.highlightPreTag, 'g'),
+      `<${highlightedTagName} class="${className}">`
+    )
+    .replace(
+      new RegExp(TAG_REPLACEMENT.highlightPostTag, 'g'),
+      `</${highlightedTagName}>`
+    );
 }

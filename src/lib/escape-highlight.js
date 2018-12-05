@@ -8,10 +8,21 @@ export const TAG_PLACEHOLDER = {
   highlightPostTag: '__/ais-highlight__',
 };
 
+export const TAG_REPLACEMENT = {
+  highlightPreTag: '<mark>',
+  highlightPostTag: '</mark>',
+};
+
 function replaceTagsAndEscape(value) {
   return escape(value)
-    .replace(new RegExp(TAG_PLACEHOLDER.highlightPreTag, 'g'), '<mark>')
-    .replace(new RegExp(TAG_PLACEHOLDER.highlightPostTag, 'g'), '</mark>');
+    .replace(
+      new RegExp(TAG_PLACEHOLDER.highlightPreTag, 'g'),
+      TAG_REPLACEMENT.highlightPreTag
+    )
+    .replace(
+      new RegExp(TAG_PLACEHOLDER.highlightPostTag, 'g'),
+      TAG_REPLACEMENT.highlightPostTag
+    );
 }
 
 function recursiveEscape(input) {
