@@ -56,7 +56,7 @@ export default () => {
             container,
             templates: {
               item:
-                '{{#helpers.highlight}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.highlight}}',
+                '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
             },
           })
         );

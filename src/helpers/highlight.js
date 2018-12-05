@@ -1,7 +1,7 @@
 import { getPropertyByPath } from '../lib/utils';
 import { component } from '../lib/suit';
 
-const suit = component('HighLight');
+const suit = component('Highlight');
 
 export default function highlight({
   attribute,
