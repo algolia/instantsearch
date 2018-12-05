@@ -11,12 +11,11 @@ export default function highlight({
   const attributeValue =
     getPropertyByPath(hit, `_highlightResult.${attribute}.value`) || '';
 
+  const className = suit({
+    descendantName: 'highlighted',
+  });
+
   return attributeValue
-    .replace(
-      /<em>/g,
-      `<${highlightedTagName} class="${suit({
-        descendantName: 'highlighted',
-      })}">`
-    )
+    .replace(/<em>/g, `<${highlightedTagName} class="${className}">`)
     .replace(/<\/em>/g, `</${highlightedTagName}>`);
 }
