@@ -84,6 +84,36 @@ search.addWidget(
 );
 ```
 
+### `instantsearch.highlight` and `instantsearch.snippet`
+
+One powerful feature to demonstrate to users why a result matched their query is highlighting. InstantSearch was relying on some internals to support this inside the template of the widgets (see below). We now have two dedicated helpers to support both highlighting and snippetting. You can find more information about that [inside their documentation](LINK_NEW_DOC_).
+
+#### Previous usage
+
+```javascript
+search.addWidget(
+  instantsearch.widget.hits({
+    container: '#hits',
+    templates: {
+      item: '{{{ _highlightResult.name.value }}}',
+    },
+  })
+);
+```
+
+#### New usage
+
+```javascript
+search.addWidget(
+  instantsearch.widget.hits({
+    container: '#hits',
+    templates: {
+      item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+    },
+  })
+);
+```
+
 ### `urlSync` is dropped
 
 If you were previously using the `urlSync` option, you should now migrate to the new `routing` feature.

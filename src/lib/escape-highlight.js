@@ -3,15 +3,26 @@ import escape from 'lodash/escape';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 
-export const tagConfig = {
+export const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
   highlightPostTag: '__/ais-highlight__',
 };
 
+export const TAG_REPLACEMENT = {
+  highlightPreTag: '<mark>',
+  highlightPostTag: '</mark>',
+};
+
 function replaceTagsAndEscape(value) {
   return escape(value)
-    .replace(new RegExp(tagConfig.highlightPreTag, 'g'), '<mark>')
-    .replace(new RegExp(tagConfig.highlightPostTag, 'g'), '</mark>');
+    .replace(
+      new RegExp(TAG_PLACEHOLDER.highlightPreTag, 'g'),
+      TAG_REPLACEMENT.highlightPreTag
+    )
+    .replace(
+      new RegExp(TAG_PLACEHOLDER.highlightPostTag, 'g'),
+      TAG_REPLACEMENT.highlightPostTag
+    );
 }
 
 function recursiveEscape(input) {

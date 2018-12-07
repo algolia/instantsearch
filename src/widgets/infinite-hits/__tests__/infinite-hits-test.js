@@ -1,4 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
 import infiniteHits from '../infinite-hits';
 
 describe('infiniteHits call', () => {
@@ -33,8 +34,8 @@ describe('infiniteHits()', () => {
 
   it('It does have a specific configuration', () => {
     expect(widget.getConfiguration()).toEqual({
-      highlightPostTag: '__/ais-highlight__',
-      highlightPreTag: '__ais-highlight__',
+      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
     });
   });
 
