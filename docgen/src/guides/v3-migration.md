@@ -86,7 +86,7 @@ search.addWidget(
 
 ### `instantsearch.highlight` and `instantsearch.snippet`
 
-One powerfull feature to demonstrate to searchers why a result matched their query is highlighting. InstantSearch was relying on some internals to support this inside the template of the widgets (see below). We now have two dedicated helpers to support both highlighting and snippetting. You can find more information about that [inside their documentation](LINK_NEW_DOC_).
+One powerful feature to demonstrate to users why a result matched their query is highlighting. InstantSearch was relying on some internals to support this inside the template of the widgets (see below). We now have two dedicated helpers to support both highlighting and snippetting. You can find more information about that [inside their documentation](LINK_NEW_DOC_).
 
 #### Previous usage
 
