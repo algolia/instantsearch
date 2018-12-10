@@ -868,12 +868,17 @@ Widget removed.
 
 #### Options
 
-| Before          | After                  |
-| --------------- | ---------------------- |
-| `maxPages`      | `totalPages`           |
-| `showFirstLast` | `showFirst` `showLast` |
-|                 | `showNext`             |
-|                 | `showPrevious`         |
+| Before            | After                  |
+| ----------------- | ---------------------- |
+| `maxPages`        | `totalPages`           |
+| `showFirstLast`   | `showFirst` `showLast` |
+|                   | `showNext`             |
+|                   | `showPrevious`         |
+| `labels`          | `templates`            |
+| `labels.previous` | `templates.previous`   |
+| `labels.next`     | `templates.next`       |
+| `labels.first`    | `templates.first`      |
+| `labels.last`     | `templates.last`       |
 
 #### CSS classes
 

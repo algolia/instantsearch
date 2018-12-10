@@ -73,5 +73,21 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with templates',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            templates: {
+              previous: 'Previous',
+              next: 'Next',
+              first: 'First',
+              last: 'Last',
+            },
+          })
+        );
+      })
     );
 };

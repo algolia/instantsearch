@@ -53,7 +53,7 @@ class Pagination extends Component {
       ariaLabel: 'Previous',
       additionalClassName: this.props.cssClasses.previousPageItem,
       isDisabled: this.props.nbHits === 0 || isFirstPage,
-      label: this.props.labels.previous,
+      label: this.props.templates.previous,
       pageNumber: currentPage - 1,
       createURL,
     });
@@ -64,7 +64,7 @@ class Pagination extends Component {
       ariaLabel: 'Next',
       additionalClassName: this.props.cssClasses.nextPageItem,
       isDisabled: this.props.nbHits === 0 || isLastPage,
-      label: this.props.labels.next,
+      label: this.props.templates.next,
       pageNumber: currentPage + 1,
       createURL,
     });
@@ -75,7 +75,7 @@ class Pagination extends Component {
       ariaLabel: 'First',
       additionalClassName: this.props.cssClasses.firstPageItem,
       isDisabled: this.props.nbHits === 0 || isFirstPage,
-      label: this.props.labels.first,
+      label: this.props.templates.first,
       pageNumber: 0,
       createURL,
     });
@@ -86,7 +86,7 @@ class Pagination extends Component {
       ariaLabel: 'Last',
       additionalClassName: this.props.cssClasses.lastPageItem,
       isDisabled: this.props.nbHits === 0 || isLastPage,
-      label: this.props.labels.last,
+      label: this.props.templates.last,
       pageNumber: nbPages - 1,
       createURL,
     });
@@ -151,7 +151,7 @@ Pagination.propTypes = {
     link: PropTypes.string.isRequired,
   }).isRequired,
   currentPage: PropTypes.number,
-  labels: PropTypes.shape({
+  templates: PropTypes.shape({
     first: PropTypes.string.isRequired,
     last: PropTypes.string.isRequired,
     next: PropTypes.string.isRequired,
