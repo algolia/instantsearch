@@ -14,6 +14,11 @@ exports[`PoweredBy default 1`] = `
     <svg
       className="logo"
       height="1.2em"
+      style={
+        Object {
+          "width": "auto",
+        }
+      }
       viewBox="0 0 168 24"
     >
       <path
@@ -51,6 +56,11 @@ exports[`PoweredBy with dark theme 1`] = `
     <svg
       className="logo"
       height="1.2em"
+      style={
+        Object {
+          "width": "auto",
+        }
+      }
       viewBox="0 0 168 24"
     >
       <path
