@@ -30,7 +30,7 @@ describe('connectPoweredBy', () => {
     expect(rendering).toHaveBeenCalledWith(
       expect.objectContaining({
         url:
-          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=&utm_campaign=poweredby',
+          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
       }),
       true
     );
@@ -46,7 +46,7 @@ describe('connectPoweredBy', () => {
     expect(rendering).toHaveBeenCalledWith(
       expect.objectContaining({
         url:
-          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=&utm_campaign=poweredby',
+          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=localhost&utm_campaign=poweredby',
       }),
       false
     );
