@@ -102,7 +102,7 @@
     "jsdom-global": "3.0.2",
     "json": "9.0.6",
     "mkdirp": "0.5.1",
-    "mversion": "1.10.1",
+    "mversion": "1.12.0",
     "node-sass": "4.7.2",
     "places.js": "1.11.0",
     "postcss-loader": "2.1.6",
