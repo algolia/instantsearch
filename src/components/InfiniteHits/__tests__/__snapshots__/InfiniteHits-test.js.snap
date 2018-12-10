@@ -28,7 +28,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = 
     className="loadMore"
     dangerouslySetInnerHTML={
       Object {
-        "__html": "showMore",
+        "__html": "showMoreText",
       }
     }
     disabled={false}
@@ -64,7 +64,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
     className="loadMore disabledLoadMore"
     dangerouslySetInnerHTML={
       Object {
-        "__html": "showMore",
+        "__html": "showMoreText",
       }
     }
     disabled={true}

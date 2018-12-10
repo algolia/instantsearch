@@ -44,7 +44,7 @@ const InfiniteHits = ({
 
       <Template
         {...templateProps}
-        templateKey="showMore"
+        templateKey="showMoreText"
         rootTagName="button"
         rootProps={{
           className: cx(cssClasses.loadMore, {
