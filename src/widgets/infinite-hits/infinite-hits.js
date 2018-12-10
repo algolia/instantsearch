@@ -41,13 +41,13 @@ infiniteHits({
   [ escapeHTML = true ],
   [ transformItems ],
   [ cssClasses.{root, emptyRoot, list, item, loadMore, disabledLoadMore} ],
-  [ templates.{empty, item, showMore} ],
+  [ templates.{empty, item, showMoreText} ],
 })`;
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
  * @property {string|function} [empty = "No results"] Template used when there are no results.
- * @property {string|function} [showMore = "Show more results"] Template used for the "load more" button.
+ * @property {string|function} [showMoreText = "Show more results"] Template used for the "load more" button.
  * @property {string|function} [item = ""] Template used for each result. This template will receive an object containing a single record.
  */
 
@@ -87,7 +87,7 @@ infiniteHits({
  *     container: '#infinite-hits-container',
  *     templates: {
  *       empty: 'No results',
- *       showMore: 'Show more results',
+ *       showMoreText: 'Show more results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
  *     transformItems: items => items.map(item => item),

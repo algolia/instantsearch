@@ -44,14 +44,14 @@ export default () => {
       })
     )
     .add(
-      'with custom "showMore" template',
+      'with custom "showMoreText" template',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.infiniteHits({
             container,
             templates: {
               item: '{{name}}',
-              showMore: 'Load more',
+              showMoreText: 'Load more',
             },
           })
         );

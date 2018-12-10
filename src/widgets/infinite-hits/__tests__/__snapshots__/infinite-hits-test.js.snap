@@ -37,13 +37,13 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
       "templates": Object {
         "empty": "No results",
         "item": [Function],
-        "showMore": "Show more results",
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
-        "showMore": false,
+        "showMoreText": false,
       },
     }
   }
@@ -87,13 +87,13 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
       "templates": Object {
         "empty": "No results",
         "item": [Function],
-        "showMore": "Show more results",
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
-        "showMore": false,
+        "showMoreText": false,
       },
     }
   }
@@ -139,13 +139,13 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "templates": Object {
         "empty": "No results",
         "item": [Function],
-        "showMore": "Show more results",
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
-        "showMore": false,
+        "showMoreText": false,
       },
     }
   }
@@ -191,13 +191,13 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "templates": Object {
         "empty": "No results",
         "item": [Function],
-        "showMore": "Show more results",
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
-        "showMore": false,
+        "showMoreText": false,
       },
     }
   }
@@ -243,13 +243,13 @@ exports[`infiniteHits() renders transformed items 1`] = `
       "templates": Object {
         "empty": "No results",
         "item": [Function],
-        "showMore": "Show more results",
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
-        "showMore": false,
+        "showMoreText": false,
       },
     }
   }
