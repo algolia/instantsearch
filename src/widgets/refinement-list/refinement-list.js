@@ -72,7 +72,7 @@ refinementList({
   [ showMore = false],
   [ showMoreLimit = 10 ],
   [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
-  [ templates.{item, searchableNoResults, showMoreActive, showMoreInactive} ],
+  [ templates.{item, searchableNoResults, showMoreText} ],
   [ searchable ],
   [ searchablePlaceholder ],
   [ searchableIsAlwaysActive = true ],
@@ -84,8 +84,7 @@ refinementList({
  * @typedef {Object} RefinementListTemplates
  * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
  * @property {string|function} [searchableNoResults] Templates to use for search for facet values.
- * @property {string|function} [showMoreActive] Template used when showMore was clicked.
- * @property {string|function} [showMoreInactive] Template used when showMore not clicked.
+ * @property {string|function} [showMoreText] Template used for the show more text, provided with `isShowingMore` data property.
  */
 
 /**

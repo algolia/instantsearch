@@ -56,11 +56,20 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
   <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
 </label>",
         "searchableNoResults": "No results",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+    ",
       },
       "templatesConfig": Object {},
       "useCustomCompileOptions": Object {
         "item": false,
         "searchableNoResults": false,
+        "showMoreText": false,
       },
     }
   }
