@@ -22,14 +22,6 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   currentPage={0}
   isFirstPage={true}
   isLastPage={false}
-  labels={
-    Object {
-      "first": "«",
-      "last": "»",
-      "next": "›",
-      "previous": "‹",
-    }
-  }
   nbHits={200}
   nbPages={20}
   pages={
@@ -48,6 +40,14 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   showLast={true}
   showNext={true}
   showPrevious={true}
+  templates={
+    Object {
+      "first": "«",
+      "last": "»",
+      "next": "›",
+      "previous": "‹",
+    }
+  }
 />
 `;
 
@@ -73,14 +73,6 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   currentPage={0}
   isFirstPage={true}
   isLastPage={false}
-  labels={
-    Object {
-      "first": "«",
-      "last": "»",
-      "next": "›",
-      "previous": "‹",
-    }
-  }
   nbHits={200}
   nbPages={20}
   pages={
@@ -99,5 +91,13 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   showLast={true}
   showNext={true}
   showPrevious={true}
+  templates={
+    Object {
+      "first": "«",
+      "last": "»",
+      "next": "›",
+      "previous": "‹",
+    }
+  }
 />
 `;

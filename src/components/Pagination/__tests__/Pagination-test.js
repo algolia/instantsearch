@@ -25,7 +25,7 @@ describe('Pagination', () => {
       link: 'link',
     },
     createURL: (...args) => JSON.stringify(args),
-    labels: { first: '', last: '', next: '', previous: '' },
+    templates: { first: '', last: '', next: '', previous: '' },
     currentPage: 0,
     nbHits: 200,
     pages: pager.pages(),
