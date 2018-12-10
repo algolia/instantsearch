@@ -1,5 +1,6 @@
-import jsHelper from 'algoliasearch-helper';
+import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import connectAutocomplete from '../connectAutocomplete.js';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
 
 const fakeClient = { addAlgoliaAgent: () => {} };
 
@@ -68,5 +69,85 @@ describe('connectAutocomplete', () => {
     expect(refine).toBe(widget._refine);
     expect(helper.search).toHaveBeenCalledTimes(1);
     expect(helper.getState().query).toBe('foo');
+  });
+
+  it('with escapeHTML should escape the hits', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectAutocomplete(renderFn);
+    const widget = makeWidget({ escapeHTML: true });
+
+    const helper = jsHelper(fakeClient, '', {});
+    helper.search = jest.fn();
+
+    const hits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
+              TAG_PLACEHOLDER.highlightPostTag
+            }</script>`,
+          },
+        },
+      },
+    ];
+
+    const escapedHits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+          },
+        },
+      },
+    ];
+
+    widget.init({ helper, instantSearchInstance: {} });
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const rendering = renderFn.mock.calls[1][0];
+
+    expect(rendering.indices[0].hits).toEqual(
+      expect.arrayContaining(escapedHits)
+    );
+  });
+
+  it('without escapeHTML should not escape the hits', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectAutocomplete(renderFn);
+    const widget = makeWidget({ escapeHTML: false });
+
+    const helper = jsHelper(fakeClient, '', {});
+    helper.search = jest.fn();
+
+    const hits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
+              TAG_PLACEHOLDER.highlightPostTag
+            }</script>`,
+          },
+        },
+      },
+    ];
+
+    widget.init({ helper, instantSearchInstance: {} });
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const rendering = renderFn.mock.calls[1][0];
+
+    expect(rendering.indices[0].hits).toEqual(expect.arrayContaining(hits));
   });
 });

@@ -1478,6 +1478,16 @@ The `label` options has been moved into the `templates.labelText` template to ma
 
 ## Connectors
 
+### connectAutocomplete
+
+#### Options
+
+| Before          | After           |
+| --------------- | --------------- |
+| `escapeHits`    | `escapeHTML`    |
+
+- `escapeHTML` becomes `true` by default.
+
 ### connectBreadcrumb
 
 - The BreadcrumbItem `name` property is renamed to `label`.

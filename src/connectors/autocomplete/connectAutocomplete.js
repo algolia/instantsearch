@@ -1,4 +1,4 @@
-import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
+import escapeHTML, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
@@ -11,7 +11,7 @@ var customAutcomplete = connectAutocomplete(function render(params, isFirstRende
 });
 search.addWiget(customAutcomplete({
   [ indices ],
-  [ escapeHits = false ]
+  [ escapeHTML = true ],
 }));
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectAutocomplete.html
 `;
@@ -35,7 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CustomAutocompleteWidgetOptions
  * @property {{value: string, label: string}[]} [indices = []] Name of the others indices to search into.
- * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {boolean} [escapeHTML = true] If true, escape HTML tags from `hits[i]._highlightResult`.
  */
 
 /**
@@ -60,7 +60,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHits ? TAG_PLACEHOLDER : undefined;
+        return widgetParams.escapeHTML ? TAG_PLACEHOLDER : undefined;
       },
 
       init({ instantSearchInstance, helper }) {
@@ -104,11 +104,11 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         const derivedIndex = this.indices.find(i => i.label === label);
 
         if (
-          widgetParams.escapeHits &&
+          widgetParams.escapeHTML &&
           results.hits &&
           results.hits.length > 0
         ) {
-          results.hits = escapeHits(results.hits);
+          results.hits = escapeHTML(results.hits);
         }
 
         derivedIndex.results = results;
