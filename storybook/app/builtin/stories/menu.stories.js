@@ -60,8 +60,13 @@ export default () => {
             showMore: true,
             showMoreLimit: 10,
             templates: {
-              showMoreActive: 'Show way less',
-              showMoreInactive: 'Show way more',
+              showMoreText: `
+                {{#isShowingMore}}
+                  ⬆️
+                {{/isShowingMore}}
+                {{^isShowingMore}}
+                  ⬇️
+                {{/isShowingMore}}`,
             },
           })
         );
