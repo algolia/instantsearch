@@ -553,10 +553,10 @@ With the redo button:
 
 #### Options
 
-| Before          | After                |
-| --------------- | -------------------- |
-| `escapeHits`    | `escapeHTML`         |
-| `loadMoreLabel` | `templates.showMore` |
+| Before          | After                    |
+| --------------- | ------------------------ |
+| `escapeHits`    | `escapeHTML`             |
+| `loadMoreLabel` | `templates.showMoreText` |
 
 - `escapeHTML` defaults to `true`
 
