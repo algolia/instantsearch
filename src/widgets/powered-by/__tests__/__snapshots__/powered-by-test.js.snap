@@ -4,8 +4,8 @@ exports[`poweredBy renders only once at init 1`] = `
 <PoweredBy
   cssClasses={
     Object {
-      "link": "ais-PoweredBy link",
-      "logo": "ais-PoweredBy logo",
+      "link": "ais-PoweredBy-link link",
+      "logo": "ais-PoweredBy-logo logo",
       "root": "ais-PoweredBy ais-PoweredBy--light root",
     }
   }

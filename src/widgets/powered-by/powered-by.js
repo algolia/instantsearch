@@ -78,8 +78,8 @@ export default function poweredBy({
       suit({ modifierName: theme === 'dark' ? 'dark' : 'light' }),
       userCssClasses.root
     ),
-    link: cx(suit({ descendant: 'link' }), userCssClasses.link),
-    logo: cx(suit({ descendant: 'logo' }), userCssClasses.logo),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+    logo: cx(suit({ descendantName: 'logo' }), userCssClasses.logo),
   };
 
   const specializedRenderer = renderer({
