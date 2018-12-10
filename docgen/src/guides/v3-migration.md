@@ -718,11 +718,25 @@ With the redo button:
 | ----------------------------- | ---------------------------- |
 | `attributeName`               | `attribute`                  |
 | `showMore.limit`              | `showMoreLimit`              |
-| `showMore.templates.active`   | `templates.showMoreActive`   |
-| `showMore.templates.inactive` | `templates.showMoreInactive` |
+| `showMore.templates.active`   | `templates.showMoreText`     |
+| `showMore.templates.inactive` | `templates.showMoreText`     |
 
 - `showMore` is now a boolean option (`showMore.templates` are now in `templates`)
 - `sortBy` defaults to `['isRefined', 'name:asc']`
+- An object containing `isShowingMore` is passed to `showMoreText` template to toggle between the two states:
+
+```
+{
+  showMoreText: `
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  `
+}
+```
 
 #### CSS classes
 
