@@ -7394,10 +7394,10 @@ envinfo@^5.7.0:
   resolved "https://registry.yarnpkg.com/envinfo/-/envinfo-5.10.0.tgz#503a9774ae15b93ea68bdfae2ccd6306624ea6df"
   integrity sha512-rXbzXWvnQxy+TcqZlARbWVQwgGVVouVJgFZhLVN5htjLxl1thstrP2ZGi0pXC309AbK7gVOPU+ulz/tmpCI7iw==
 
-enzyme-adapter-react-16@1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.7.0.tgz#90344395a89624edbe7f0e443bc19fef62bf1f9f"
-  integrity sha512-rDr0xlnnFPffAPYrvG97QYJaRl9unVDslKee33wTStsBEwZTkESX1H7VHGT5eUc6ifNzPgOJGvSh2zpHT4gXjA==
+enzyme-adapter-react-16@1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.7.1.tgz#c37c4cb0fd75e88a063154a7a88096474914496a"
+  integrity sha512-OQXKgfHWyHN3sFu2nKj3mhgRcqIPIJX6aOzq5AHVFES4R9Dw/vCBZFMPyaG81g2AZ5DogVh39P3MMNUbqNLTcw==
   dependencies:
     enzyme-adapter-utils "^1.9.0"
     function.prototype.name "^1.1.0"
