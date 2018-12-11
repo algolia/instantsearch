@@ -41,23 +41,6 @@ dist
 └── instantsearch.production.min.js.map
 ```
 
-### Previous usage
-
-```js
-import instantsearch from 'instantsearch.js';
-import { searchBox } from 'instantsearch.js/es/widgets';
-import { connectSearchBox } from 'instantsearch.js/es/connectors';
-```
-
-### New usage
-
-```js
-import instantsearch, {
-  searchBox,
-  connectSearchBox,
-} from 'instantsearch.js';
-```
-
 ## InstantSearch
 
 ### `appId` and `apiKey` are replaced by `searchClient`
