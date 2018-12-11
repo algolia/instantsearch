@@ -101,6 +101,8 @@ describe('connectAutocomplete', () => {
       },
     ];
 
+    escapedHits.__escaped = true;
+
     widget.init({ helper, instantSearchInstance: {} });
     const results = new SearchResults(helper.state, [{ hits }]);
     widget.render({
@@ -112,9 +114,7 @@ describe('connectAutocomplete', () => {
 
     const rendering = renderFn.mock.calls[1][0];
 
-    expect(rendering.indices[0].hits).toEqual(
-      expect.arrayContaining(escapedHits)
-    );
+    expect(rendering.indices[0].hits).toEqual(escapedHits);
   });
 
   it('without escapeHTML should not escape the hits', () => {
@@ -148,6 +148,6 @@ describe('connectAutocomplete', () => {
 
     const rendering = renderFn.mock.calls[1][0];
 
-    expect(rendering.indices[0].hits).toEqual(expect.arrayContaining(hits));
+    expect(rendering.indices[0].hits).toEqual(hits);
   });
 });
