@@ -16,7 +16,7 @@ Object.defineProperty(instantSearchFactory, 'widgets', {
 
 To import the widgets:
 
-import { searchBox } from 'instantsearch.js'`
+import { searchBox } from 'instantsearch.js/es/widgets'`
     );
   },
 });
@@ -28,7 +28,7 @@ Object.defineProperty(instantSearchFactory, 'connectors', {
 
 To import the connectors:
 
-import { connectSearchBox } from 'instantsearch.js'`
+import { connectSearchBox } from 'instantsearch.js/es/connectors'`
     );
   },
 });
