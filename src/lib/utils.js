@@ -18,7 +18,6 @@ export {
   isSpecialClick,
   isDomElement,
   getRefinements,
-  getAttributesToClear,
   clearRefinements,
   prefixKeys,
   escapeRefinement,
@@ -27,7 +26,8 @@ export {
   isReactElement,
   deprecate,
   warn,
-  parseAroundLatLngFromString,
+  aroundLatLngToPosition,
+  insideBoundingBoxToBoundingBox,
 };
 
 function capitalize(string) {
@@ -325,23 +325,10 @@ function getRefinements(results, state, clearsQuery) {
  * is not provided, this list of all the currently refined attributes is used as included attributes.
  * @param {object} $0 parameters
  * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.includedAttributes] list of parameters to clear
- * @param {string[]} [$0.excludedAttributes=[]] list of parameters not to remove (will impact the included attributes list)
- * @param {boolean} [$0.clearsQuery=false] clears the query if need be
+ * @param {string[]} [$0.attributesToClear = []] list of parameters to clear
  * @returns {SearchParameters} search parameters with refinements cleared
  */
-function clearRefinements({
-  helper,
-  includedAttributes,
-  excludedAttributes = [],
-  clearsQuery = false,
-}) {
-  const attributesToClear = getAttributesToClear({
-    helper,
-    includedAttributes,
-    excludedAttributes,
-  });
-
+function clearRefinements({ helper, attributesToClear = [] }) {
   let finalState = helper.state;
 
   attributesToClear.forEach(attribute => {
@@ -352,36 +339,11 @@ function clearRefinements({
     }
   });
 
-  if (clearsQuery) {
+  if (attributesToClear.indexOf('query') !== -1) {
     finalState = finalState.setQuery('');
   }
 
   return finalState;
-}
-
-/**
- * Computes the list of attributes (conjunctive, disjunctive, hierarchical facet + numerical attributes)
- * to clear based on optionals included and excluded attributes lists.
- * The included attributes list is applied before the excluded attributes list.
- * @param {object} $0 parameters
- * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.includedAttributes] attributes to clear (defaults to all attributes)
- * @param {string[]} [$0.excludedAttributes=[]] attributes to keep, will override the included attributes list
- * @returns {string[]} the list of attributes to clear based on the rules
- */
-function getAttributesToClear({
-  helper,
-  includedAttributes,
-  excludedAttributes,
-}) {
-  const lastResults = helper.lastResults || {};
-  const attributesToClear =
-    includedAttributes ||
-    getRefinements(lastResults, helper.state).map(one => one.attributeName);
-
-  return attributesToClear.filter(
-    attribute => excludedAttributes.indexOf(attribute) === -1
-  );
 }
 
 function prefixKeys(prefix, obj) {
@@ -456,11 +418,11 @@ function warn(message) {
 }
 
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
-function parseAroundLatLngFromString(value) {
+function aroundLatLngToPosition(value) {
   const pattern = value.match(latLngRegExp);
 
-  // Since the value provided is the one send with the query, the API should
-  // throw an error due to the wrong format. So throw an error should be safe..
+  // Since the value provided is the one send with the request, the API should
+  // throw an error due to the wrong format. So throw an error should be safe.
   if (!pattern) {
     throw new Error(`Invalid value for "aroundLatLng" parameter: "${value}"`);
   }
@@ -475,4 +437,58 @@ export function getPropertyByPath(object, path) {
   const parts = path.split('.');
 
   return parts.reduce((current, key) => current && current[key], object);
+}
+
+function insideBoundingBoxArrayToBoundingBox(value) {
+  const [[neLat, neLng, swLat, swLng] = []] = value;
+
+  // Since the value provided is the one send with the request, the API should
+  // throw an error due to the wrong format. So throw an error should be safe.
+  if (!neLat || !neLng || !swLat || !swLng) {
+    throw new Error(
+      `Invalid value for "insideBoundingBox" parameter: [${value}]`
+    );
+  }
+
+  return {
+    northEast: {
+      lat: neLat,
+      lng: neLng,
+    },
+    southWest: {
+      lat: swLat,
+      lng: swLng,
+    },
+  };
+}
+
+function insideBoundingBoxStringToBoundingBox(value) {
+  const [neLat, neLng, swLat, swLng] = value.split(',').map(parseFloat);
+
+  // Since the value provided is the one send with the request, the API should
+  // throw an error due to the wrong format. So throw an error should be safe.
+  if (!neLat || !neLng || !swLat || !swLng) {
+    throw new Error(
+      `Invalid value for "insideBoundingBox" parameter: "${value}"`
+    );
+  }
+
+  return {
+    northEast: {
+      lat: neLat,
+      lng: neLng,
+    },
+    southWest: {
+      lat: swLat,
+      lng: swLng,
+    },
+  };
+}
+
+function insideBoundingBoxToBoundingBox(value) {
+  if (Array.isArray(value)) {
+    return insideBoundingBoxArrayToBoundingBox(value);
+  }
+
+  return insideBoundingBoxStringToBoundingBox(value);
 }

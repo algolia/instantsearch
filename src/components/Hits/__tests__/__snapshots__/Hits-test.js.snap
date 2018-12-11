@@ -38,7 +38,7 @@ exports[`Hits markup should render <Hits /> without highlight function 1`] = `
       className="item"
       dangerouslySetInnerHTML={
         Object {
-          "__html": "<mark class=\\"ais-HighLight-highlighted\\">name 1</mark>",
+          "__html": "<mark class=\\"ais-Highlight-highlighted\\">name 1</mark>",
         }
       }
     />
@@ -46,7 +46,7 @@ exports[`Hits markup should render <Hits /> without highlight function 1`] = `
       className="item"
       dangerouslySetInnerHTML={
         Object {
-          "__html": "<mark class=\\"ais-HighLight-highlighted\\">name 2</mark>",
+          "__html": "<mark class=\\"ais-Highlight-highlighted\\">name 2</mark>",
         }
       }
     />

@@ -1,5 +1,10 @@
 import noop from 'lodash/noop';
-import { checkRendering, parseAroundLatLngFromString } from '../../lib/utils';
+import {
+  checkRendering,
+  warn,
+  aroundLatLngToPosition,
+  insideBoundingBoxToBoundingBox,
+} from '../../lib/utils';
 
 const usage = `Usage:
 
@@ -7,6 +12,7 @@ var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering)
   // params = {
   //   items,
   //   position,
+  //   currentRefinement,
   //   refine,
   //   clearMapRefinement,
   //   isRefinedWithMap,
@@ -23,10 +29,6 @@ var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering)
 search.addWidget(
   customGeoSearch({
     [ enableRefineOnMapMove = true ],
-    [ enableGeolocationWithIP = true ],
-    [ position ],
-    [ radius ],
-    [ precision ],
     [ transformItems ],
   })
 );
@@ -49,19 +51,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomGeoSearchWidgetOptions
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
- * @property {boolean} [enableGeolocationWithIP=true] If true, the IP will be use for the geolocation. When the `position` option is provided this option will be ignored. See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLngViaIP) for more information.
- * @property {LatLng} [position] Position that will be use to search around. <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLng) for more information.
- * @property {number} [radius] Maximum radius to search around the position (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more information.
- * @property {number} [precision] Precision of geo search (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more information.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
  * @typedef {Object} GeoSearchRenderingOptions
  * @property {Object[]} items The matched hits from Algolia API.
+ * @property {LatLng} position The current position of the search.
+ * @property {Bounds} currentRefinement The current bounding box of the search.
  * @property {function(Bounds)} refine Sets a bounding box to filter the results from the given map bounds.
  * @property {function()} clearMapRefinement Reset the current bounding box refinement.
  * @property {function(): boolean} isRefinedWithMap Return true if the current refinement is set with the map bounds.
@@ -135,12 +132,75 @@ const connectGeoSearch = (renderFn, unmountFn) => {
   return (widgetParams = {}) => {
     const {
       enableRefineOnMapMove = true,
-      enableGeolocationWithIP = true,
-      position,
-      radius,
-      precision,
       transformItems = items => items,
     } = widgetParams;
+
+    // Always trigger this message because the default value was `true`. We can't
+    // display the message only when the parameter is defined otherwise a user that was
+    // relying on the default value won't have any information about the changes.
+    warn(`
+The option \`enableGeolocationWithIP\` has been removed from the GeoSearch widget.
+Please consider using the \`Configure\` widget instead:
+
+search.addWidget(
+  configure({
+    aroundLatLngViaIP: ${widgetParams.enableGeolocationWithIP || 'true'},
+  })
+);
+
+You can find more information inside the migration guide:
+http://community.algolia.com/instantsearch.js/migration-guide
+        `);
+
+    if (typeof widgetParams.position !== 'undefined') {
+      warn(`
+The option \`position\` has been removed from the GeoSearch widget.
+Please consider using the \`Configure\` widget instead:
+
+search.addWidget(
+  configure({
+    aroundLatLng: '${widgetParams.position.lat}, ${widgetParams.position.lng}',
+  })
+);
+
+You can find more information inside the migration guide:
+http://community.algolia.com/instantsearch.js/migration-guide
+      `);
+    }
+
+    if (typeof widgetParams.radius !== 'undefined') {
+      warn(`
+The option \`radius\` has been removed from the GeoSearch widget.
+Please consider using the \`Configure\` widget instead:
+
+search.addWidget(
+  configure({
+    aroundRadius: ${widgetParams.radius},
+  })
+);
+
+You can find more information inside the migration guide:
+
+http://community.algolia.com/instantsearch.js/migration-guide
+      `);
+    }
+
+    if (typeof widgetParams.precision !== 'undefined') {
+      warn(`
+The option \`precision\` has been removed from the GeoSearch widget.
+Please consider using the \`Configure\` widget instead:
+
+search.addWidget(
+  configure({
+    aroundPrecision: ${widgetParams.precision},
+  })
+);
+
+You can find more information inside the migration guide:
+
+http://community.algolia.com/instantsearch.js/migration-guide
+      `);
+    }
 
     const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
@@ -152,7 +212,11 @@ const connectGeoSearch = (renderFn, unmountFn) => {
     };
 
     const getPositionFromState = state =>
-      state.aroundLatLng && parseAroundLatLngFromString(state.aroundLatLng);
+      state.aroundLatLng && aroundLatLngToPosition(state.aroundLatLng);
+
+    const getCurrentRefinementFromState = state =>
+      state.insideBoundingBox &&
+      insideBoundingBoxToBoundingBox(state.insideBoundingBox);
 
     const refine = helper => ({ northEast: ne, southWest: sw }) => {
       const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
@@ -171,7 +235,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
 
     const toggleRefineOnMapMove = () =>
       widgetState.internalToggleRefineOnMapMove();
-    const createInternalToggleRefinementonMapMove = (render, args) => () => {
+    const createInternalToggleRefinementOnMapMove = (render, args) => () => {
       widgetState.isRefineOnMapMove = !widgetState.isRefineOnMapMove;
 
       render(args);
@@ -199,7 +263,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       const { state, helper, instantSearchInstance } = initArgs;
       const isFirstRendering = true;
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
         noop,
         initArgs
       );
@@ -213,6 +277,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         {
           items: [],
           position: getPositionFromState(state),
+          currentRefinement: getCurrentRefinementFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
@@ -251,7 +316,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       widgetState.lastRefinePosition = state.aroundLatLng || '';
       widgetState.lastRefineBoundingBox = state.insideBoundingBox || '';
 
-      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
         render,
         renderArgs
       );
@@ -267,6 +332,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         {
           items,
           position: getPositionFromState(state),
+          currentRefinement: getCurrentRefinementFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
@@ -285,57 +351,41 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       init,
       render,
 
-      getConfiguration(previous) {
-        const configuration = {};
-
-        if (
-          enableGeolocationWithIP &&
-          !position &&
-          !previous.aroundLatLng &&
-          previous.aroundLatLngViaIP === undefined
-        ) {
-          configuration.aroundLatLngViaIP = true;
-        }
-
-        if (position && !previous.aroundLatLng && !previous.aroundLatLngViaIP) {
-          configuration.aroundLatLng = `${position.lat}, ${position.lng}`;
-        }
-
-        if (radius && !previous.aroundRadius) {
-          configuration.aroundRadius = radius;
-        }
-
-        if (precision && !previous.aroundPrecision) {
-          configuration.aroundPrecision = precision;
-        }
-
-        return configuration;
-      },
-
       dispose({ state }) {
         unmountFn();
 
-        let nextState = state;
+        return state.setQueryParameter('insideBoundingBox');
+      },
 
-        if (enableGeolocationWithIP && !position) {
-          nextState = nextState.setQueryParameter('aroundLatLngViaIP');
+      getWidgetState(uiState, { searchParameters }) {
+        const boundingBox = searchParameters.insideBoundingBox;
+
+        if (
+          !boundingBox ||
+          (uiState &&
+            uiState.geoSearch &&
+            uiState.geoSearch.boundingBox === boundingBox)
+        ) {
+          return uiState;
         }
 
-        if (position) {
-          nextState = nextState.setQueryParameter('aroundLatLng');
+        return {
+          ...uiState,
+          geoSearch: {
+            boundingBox,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        if (!uiState || !uiState.geoSearch) {
+          return searchParameters.setQueryParameter('insideBoundingBox');
         }
 
-        if (radius) {
-          nextState = nextState.setQueryParameter('aroundRadius');
-        }
-
-        if (precision) {
-          nextState = nextState.setQueryParameter('aroundPrecision');
-        }
-
-        nextState = nextState.setQueryParameter('insideBoundingBox');
-
-        return nextState;
+        return searchParameters.setQueryParameter(
+          'insideBoundingBox',
+          uiState.geoSearch.boundingBox
+        );
       },
     };
   };

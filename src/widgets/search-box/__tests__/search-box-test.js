@@ -79,15 +79,20 @@ describe('searchBox()', () => {
         root: ['root', 'customRoot'],
         form: 'form',
         input: 'input',
+        submit: 'submit',
         reset: 'reset',
         resetIcon: 'resetIcon',
         loadingIndicator: 'loadingIndicator',
         loadingIcon: 'loadingIcon',
-        submit: 'submit',
       };
 
       widget = searchBox(opts);
       widget.init({ state, helper, onHistoryChange });
+      widget.render({
+        state,
+        helper,
+        searchMetadata: { isSearchStalled: false },
+      });
 
       expect(container.querySelector('.ais-SearchBox').classList).toContain(
         'root'
@@ -102,14 +107,14 @@ describe('searchBox()', () => {
         container.querySelector('.ais-SearchBox-input').classList
       ).toContain('input');
       expect(
+        container.querySelector('.ais-SearchBox-submit').classList
+      ).toContain('submit');
+      expect(
         container.querySelector('.ais-SearchBox-reset').classList
       ).toContain('reset');
       expect(
         container.querySelector('.ais-SearchBox-resetIcon').classList
       ).toContain('resetIcon');
-      expect(
-        container.querySelector('.ais-SearchBox-submit').classList
-      ).toContain('submit');
       expect(
         container.querySelector('.ais-SearchBox-loadingIndicator').classList
       ).toContain('loadingIndicator');

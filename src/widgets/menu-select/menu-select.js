@@ -60,11 +60,6 @@ menuSelect({
  */
 
 /**
- * @typedef {Object} MenuSelectTransforms
- * @property {function} [item] Method to change the object passed to the `item` template.
- */
-
-/**
  * @typedef {Object} MenuSelectWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attribute Name of the attribute for faceting

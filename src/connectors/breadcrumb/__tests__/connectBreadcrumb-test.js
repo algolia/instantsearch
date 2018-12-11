@@ -198,7 +198,7 @@ describe('connectBreadcrumb', () => {
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toEqual([
-      { name: 'Decoration', value: null },
+      { label: 'Decoration', value: null },
     ]);
   });
 
@@ -251,7 +251,7 @@ describe('connectBreadcrumb', () => {
     const widget = makeWidget({
       attributes: ['category', 'sub_category'],
       transformItems: items =>
-        items.map(item => ({ ...item, name: 'transformed' })),
+        items.map(item => ({ ...item, label: 'transformed' })),
     });
 
     const config = widget.getConfiguration({});
@@ -299,7 +299,7 @@ describe('connectBreadcrumb', () => {
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toEqual([
-      expect.objectContaining({ name: 'transformed' }),
+      expect.objectContaining({ label: 'transformed' }),
     ]);
   });
 

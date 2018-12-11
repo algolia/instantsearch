@@ -41,14 +41,19 @@ exports[`menu render renders transformed items 1`] = `
     Object {
       "templates": Object {
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-        "showMoreActive": "Show less",
-        "showMoreInactive": "Show more",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
-        "showMoreActive": false,
-        "showMoreInactive": false,
+        "showMoreText": false,
       },
     }
   }
@@ -96,14 +101,19 @@ exports[`menu render snapshot 1`] = `
     Object {
       "templates": Object {
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-        "showMoreActive": "Show less",
-        "showMoreInactive": "Show more",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
-        "showMoreActive": false,
-        "showMoreInactive": false,
+        "showMoreText": false,
       },
     }
   }

@@ -1,12 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { createRenderer } from 'react-test-renderer/shallow';
-
 import Slider from '../Slider';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {
-    const tree = createRenderer().render(
+    const tree = shallow(
       <Slider
         refine={() => undefined}
         min={0}
@@ -15,7 +13,10 @@ describe('Slider', () => {
         pips={true}
         step={2}
         tooltips={true}
-        cssClasses={{ root: 'root' }}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
       />
     );
 
@@ -23,24 +24,7 @@ describe('Slider', () => {
   });
 
   it('expect to render without pips', () => {
-    const tree = createRenderer().render(
-      <Slider
-        refine={() => undefined}
-        min={0}
-        max={500}
-        values={[0, 0]}
-        pips={false}
-        step={2}
-        tooltips={true}
-        cssClasses={{ root: 'root' }}
-      />
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  it('expect to render with CSS classes', () => {
-    const tree = createRenderer().render(
+    const tree = shallow(
       <Slider
         refine={() => undefined}
         min={0}
@@ -51,6 +35,27 @@ describe('Slider', () => {
         tooltips={true}
         cssClasses={{
           root: 'root',
+          disabledRoot: 'disabledRoot',
+        }}
+      />
+    );
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('expect to render with CSS classes', () => {
+    const tree = shallow(
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={false}
+        step={2}
+        tooltips={true}
+        cssClasses={{
+          root: 'root',
+          disabledRoot: 'disabledRoot',
         }}
       />
     );
@@ -67,7 +72,10 @@ describe('Slider', () => {
       pips: true,
       step: 2,
       tooltips: true,
-      cssClasses: { root: 'root' },
+      cssClasses: {
+        root: 'root',
+        disabledRoot: 'disabledRoot',
+      },
     };
 
     shallow(<Slider {...props} />)

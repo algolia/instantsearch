@@ -29,9 +29,28 @@ export default () => {
             limit: 3,
             showMore: true,
             showMoreLimit: 10,
+          })
+        );
+      })
+    )
+    .add(
+      'with show more and templates',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container,
+            attribute: 'brand',
+            limit: 3,
+            showMore: true,
+            showMoreLimit: 10,
             templates: {
-              showMoreActive: 'Show way less',
-              showMoreInactive: 'Show way less',
+              showMoreText: `
+                {{#isShowingMore}}
+                  ⬆️
+                {{/isShowingMore}}
+                {{^isShowingMore}}
+                  ⬇️
+                {{/isShowingMore}}`,
             },
           })
         );

@@ -210,7 +210,7 @@ export default () => {
     wrapWithUnmount(container =>
       instantsearch.widgets.pagination({
         container,
-        maxPages: 20,
+        totalPages: 20,
       })
     )
   );
@@ -262,9 +262,6 @@ export default () => {
         container,
         attribute: 'rating',
         max: 5,
-        labels: {
-          andUp: '& Up',
-        },
       })
     )
   );

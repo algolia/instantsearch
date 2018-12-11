@@ -1,3 +1,3 @@
 export default {
-  resetLabel: 'Clear all refinements',
+  resetLabel: 'Clear refinements',
 };

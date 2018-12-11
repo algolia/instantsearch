@@ -30,7 +30,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string} value The value of the menu item.
  * @property {string} label Human-readable value of the menu item.
  * @property {number} count Number of results matched after refinement is applied.
- * @property {isRefined} boolean Indicates if the refinement is applied.
+ * @property {boolean} isRefined Indicates if the refinement is applied.
  */
 
 /**

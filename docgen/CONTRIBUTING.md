@@ -88,7 +88,7 @@ The index name of the app to run the code samples on.
 ---
 title: Introduction
 mainTitle: Widgets
-layout: widget-showcase.pug
+layout: widget.pug
 category: widgets
 withHeadings: true
 navWeight: 100

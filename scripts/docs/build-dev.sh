@@ -19,9 +19,8 @@ mkdir -p docs
   NODE_ENV=$NODE_ENV yarn run build
 )
 
-
 # Package the examples in the website
-for example in docs/v2/examples/*; do
+for example in docs/examples/*; do
   if [ -d "$example" ]; then
     name=$(basename "$example")
     (cd "$example" && zip -r "../$name.zip" ./*)
@@ -29,11 +28,10 @@ for example in docs/v2/examples/*; do
 done
 
 # Copy instantsearch.js builds to the website root
-mkdir docs/v2/lib/
-cp -a dist/* docs/v2/lib/
+cp dist/* docs/
 
-# Build dev-novel
-NODE_ENV=production webpack --config dev/webpack.config.js
+# Build storybook
+NODE_ENV=production webpack --config storybook/webpack.config.js
 
-# Move dev-novel to website-root
-mv dev/dist docs/v2/dev-novel
+# Move storybook to website-root
+mv storybook/dist docs/stories

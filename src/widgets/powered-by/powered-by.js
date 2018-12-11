@@ -27,7 +27,6 @@ const usage = `Usage:
 poweredBy({
   container,
   [ theme = 'light' ],
-  [ url ],
 })`;
 
 /**
@@ -41,7 +40,6 @@ poweredBy({
  * @typedef {Object} PoweredByWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} [theme] The theme of the logo ("light" or "dark").
- * @property {string} [url] The URL to redirect to.
  * @property {PoweredByWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
@@ -64,7 +62,6 @@ export default function poweredBy({
   container,
   cssClasses: userCssClasses = {},
   theme = 'light',
-  url,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -78,8 +75,8 @@ export default function poweredBy({
       suit({ modifierName: theme === 'dark' ? 'dark' : 'light' }),
       userCssClasses.root
     ),
-    link: cx(suit({ descendant: 'link' }), userCssClasses.link),
-    logo: cx(suit({ descendant: 'logo' }), userCssClasses.logo),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+    logo: cx(suit({ descendantName: 'logo' }), userCssClasses.logo),
   };
 
   const specializedRenderer = renderer({
@@ -91,7 +88,8 @@ export default function poweredBy({
     const makeWidget = connectPoweredBy(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ url, theme });
+
+    return makeWidget({ theme });
   } catch (error) {
     throw new Error(usage);
   }

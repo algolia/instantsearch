@@ -1,6 +1,17 @@
+---
+title: Upgrade to InstantSearch 3
+mainTitle: Guides
+layout: main.pug
+category: guides
+withHeadings: true
+navWeight: 0
+editable: true
+githubSource: docgen/src/guides/v3-migration.md
+---
+
 This document helps you migrate from InstantSearch 2 to InstantSearch 3.
 
-InstantSearch 3 introduces some breaking changes in the widget's naming, options and markup.
+InstantSearch 3 introduces some breaking changes in the widgets' naming, options and markup.
 
 ## Imports
 
@@ -29,7 +40,7 @@ import instantsearch, {
 
 ### `appId` and `apiKey` are replaced by `searchClient`
 
-### Previous usage
+#### Previous usage
 
 1.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
 2.  Initialize InstantSearch
@@ -44,7 +55,7 @@ const search = instantsearch({
 search.start();
 ```
 
-### New usage
+#### New usage
 
 1.  [Import `algoliasearch`](https://www.algolia.com/doc/api-client/javascript/getting-started/) (prefer the [lite version](https://github.com/algolia/algoliasearch-client-javascript#search-onlylite-client) for search only)
 2.  [Import `InstantSearch.js`](https://community.algolia.com/instantsearch.js/v2/getting-started.html#install-instantsearchjs)
@@ -59,13 +70,13 @@ const search = instantsearch({
 search.start();
 ```
 
-## `transformData` is replaced by `transformItems`
+### `transformData` is replaced by `transformItems`
 
 Since InstantSearch.js first public release, we have provided an option to customize the values used in the widgets. This method was letting you map 1-1 the values with other values. With React Instantsearch, we implemented a slightly different API that allows to map over the list of values and to change their content.
 
-### Previous usage
+#### Previous usage
 
-```js
+```javascript
 search.addWidget(
   instantsearch.widget.refinementList({
     container: '#facet',
@@ -80,9 +91,9 @@ search.addWidget(
 );
 ```
 
-### New usage
+#### New usage
 
-```js
+```javascript
 search.addWidget(
   instantsearch.widget.refinementList({
     container: '#facet',
@@ -92,6 +103,36 @@ search.addWidget(
         ...item,
         count: 0,
       })),
+  })
+);
+```
+
+### `instantsearch.highlight` and `instantsearch.snippet`
+
+One powerful feature to demonstrate to users why a result matched their query is highlighting. InstantSearch was relying on some internals to support this inside the template of the widgets (see below). We now have two dedicated helpers to support both highlighting and snippetting. You can find more information about that [inside their documentation](LINK_NEW_DOC_).
+
+#### Previous usage
+
+```javascript
+search.addWidget(
+  instantsearch.widget.hits({
+    container: '#hits',
+    templates: {
+      item: '{{{ _highlightResult.name.value }}}',
+    },
+  })
+);
+```
+
+#### New usage
+
+```javascript
+search.addWidget(
+  instantsearch.widget.hits({
+    container: '#hits',
+    templates: {
+      item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+    },
   })
 );
 ```
@@ -110,15 +151,19 @@ Here are the elements you need to migrate:
 
 ### `collapsible` is dropped
 
-`collapsible` are replaced by the `panel` widget.
+`collapsible` is replaced by the `panel` widget.
 
 ### `autoHideContainer` is dropped
 
-`autoHideContainer` are replaced by the `panel` widget.
+`autoHideContainer` is replaced by the `panel` widget.
 
 ### `createAlgoliaClient` is dropped
 
 `createAlgoliaClient` is replaced by `searchClient`.
+
+### `createQueryString` is dropped
+
+URL synchronization is done via Routing alone now.
 
 ## Widgets
 
@@ -273,6 +318,121 @@ Here are the elements you need to migrate:
 
 ### GeoSearch
 
+#### Options
+
+#### Options
+
+| Before                      | After                                                  |
+| --------------------------- | ------------------------------------------------------ |
+| `customHTMLMarker.template` | `templates.HTMLMarker`                                 |
+| `paddingBoundingBox`        | Removed                                                |
+| `enableGeolocationWithIP`   | Removed - use the Configure widget instead (see below) |
+| `position`                  | Removed - use the Configure widget instead (see below) |
+| `radius`                    | Removed - use the Configure widget instead (see below) |
+| `precision`                 | Removed - use the Configure widget instead (see below) |
+
+- `paddingBoundingBox` was in conflict with the `routing` option - so we removed it to support URLSync for the GeoSearch widget.
+
+#### `enableGeolocationWithIP`
+
+**Before:**
+
+```javascript
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  enableGeolocationWithIP: true,
+  container,
+});
+```
+
+**After:**
+
+```javascript
+instantsearch.widgets.configure({
+  aroundLatLngViaIP: true,
+});
+
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  container,
+});
+```
+
+#### `position`
+
+**Before:**
+
+```javascript
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  position: { lat: 40.71, lng: -74.01 },
+  container,
+});
+```
+
+**After:**
+
+```javascript
+instantsearch.widgets.configure({
+  aroundLatLng: '40.71, -74.01',
+});
+
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  container,
+});
+```
+
+#### `radius`
+
+**Before:**
+
+```javascript
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  radius: 1000,
+  container,
+});
+```
+
+**After:**
+
+```javascript
+instantsearch.widgets.configure({
+  aroundRadius: 1000,
+});
+
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  container,
+});
+```
+
+#### `precision`
+
+**Before:**
+
+```javascript
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  precision: 1000,
+  container,
+});
+```
+
+**After:**
+
+```javascript
+instantsearch.widgets.configure({
+  aroundPrecision: 1000,
+});
+
+instantsearch.widgets.geoSearch({
+  googleReference: window.google,
+  container,
+});
+```
+
 #### CSS classes
 
 | Before                                | After                           |
@@ -416,9 +576,10 @@ With the redo button:
 
 #### Options
 
-| Before       | After        |
-| ------------ | ------------ |
-| `escapeHits` | `escapeHTML` |
+| Before          | After                    |
+| --------------- | ------------------------ |
+| `escapeHits`    | `escapeHTML`             |
+| `loadMoreLabel` | `templates.showMoreText` |
 
 - `escapeHTML` defaults to `true`
 
@@ -580,11 +741,25 @@ With the redo button:
 | ----------------------------- | ---------------------------- |
 | `attributeName`               | `attribute`                  |
 | `showMore.limit`              | `showMoreLimit`              |
-| `showMore.templates.active`   | `templates.showMoreActive`   |
-| `showMore.templates.inactive` | `templates.showMoreInactive` |
+| `showMore.templates.active`   | `templates.showMoreText`     |
+| `showMore.templates.inactive` | `templates.showMoreText`     |
 
 - `showMore` is now a boolean option (`showMore.templates` are now in `templates`)
 - `sortBy` defaults to `['isRefined', 'name:asc']`
+- An object containing `isShowingMore` is passed to `showMoreText` template to toggle between the two states:
+
+```
+{
+  showMoreText: `
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  `
+}
+```
 
 #### CSS classes
 
@@ -730,12 +905,17 @@ Widget removed.
 
 #### Options
 
-| Before          | After                  |
-| --------------- | ---------------------- |
-| `maxPages`      | `totalPages`           |
-| `showFirstLast` | `showFirst` `showLast` |
-|                 | `showNext`             |
-|                 | `showPrevious`         |
+| Before            | After                  |
+| ----------------- | ---------------------- |
+| `maxPages`        | `totalPages`           |
+| `showFirstLast`   | `showFirst` `showLast` |
+|                   | `showNext`             |
+|                   | `showPrevious`         |
+| `labels`          | `templates`            |
+| `labels.previous` | `templates.previous`   |
+| `labels.next`     | `templates.next`       |
+| `labels.first`    | `templates.first`      |
+| `labels.last`     | `templates.last`       |
 
 #### CSS classes
 
@@ -795,9 +975,12 @@ Widget removed.
 
 #### Options
 
-| Before          | After       |
-| --------------- | ----------- |
-| `attributeName` | `attribute` |
+| Before             | After                     |
+| ------------------ | ------------------------- |
+| `attributeName`    | `attribute`               |
+| `labels`           | `templates`               |
+| `labels.separator` | `templates.separatorText` |
+| `labels.submit`    | `templates.submitText`    |
 
 #### CSS classes
 
@@ -919,9 +1102,12 @@ Widget removed.
 
 ### Options
 
-| Before          | After       |
-| --------------- | ----------- |
-| `attributeName` | `attribute` |
+| Before          | After             |
+| --------------- | ----------------- |
+| `attributeName` | `attribute`       |
+| `labels.andUp`  | Removed           |
+
+The value for the label `andUp` is now inlined inside `templates.item`.
 
 ### CSS classes
 
@@ -996,13 +1182,27 @@ Widget removed.
 | `searchForFacetValues.isAlwaysActive`      | `searchableIsAlwaysActive`      |
 | `searchForFacetValues.escapeFacetValues`   | `searchableEscapeFacetValues`   |
 | `searchForFacetValues.templates.noResults` | `templates.searchableNoResults` |
-| `showMore.templates.active`                | `templates.showMoreActive`      |
-| `showMore.templates.inactive`              | `templates.showMoreInactive`    |
+| `showMore.templates.active`                | `templates.showMoreText`      |
+| `showMore.templates.inactive`              | `templates.showMoreText`    |
 
 - `searchablePlaceholder` defaults to `"Search..."`
 - `searchableEscapeFacetValues` defaults to `true`
 - `searchableIsAlwaysActive` defaults to `true`
 - `showMore` is now a boolean option (`searchForFacetValues.templates` and `showMore.templates` are now in `templates`)
+- An object containing `isShowingMore` is passed to `showMoreText` template to toggle between the two states:
+
+```
+{
+  showMoreText: `
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  `
+}
+```
 
 #### CSS classes
 
@@ -1214,11 +1414,11 @@ Finally, `autofocus` is now set to `false` by default and does not support the `
 
 - A `sortBy` item value is now `value` instead of `name`:
 
-```js
+```javascript
 const sortByItem = {
   value: string,
   label: string,
-}
+};
 ```
 
 #### CSS classes
@@ -1275,7 +1475,7 @@ const sortByItem = {
 
 `collapsible` and `autoHideContainer` options have been removed. These options are now implemented as part of the Panel widget wrapper.
 
-We've moved the `label` into the `templates.labelText` template to make it consistent with the templates parameters of other widgets and we removed the `item` template. We are now providing the data that were provided to `templates.item` to `templates.labelText`.
+The `label` options has been moved into the `templates.labelText` template to make it consistent with the templates parameters of other widgets and we removed the `item` template. We are now providing the data that were provided to `templates.item` to `templates.labelText`. If your index attribute is called `free_shipping`, the default template will display "free_shipping". To rename it, change `templates.labelText` to "Free shipping".
 
 #### CSS classes
 
@@ -1300,6 +1500,136 @@ We've moved the `label` into the `templates.labelText` template to make it consi
 ```
 
 ## Connectors
+
+### connectBreadcrumb
+
+- The BreadcrumbItem `name` property is renamed to `label`.
+
+### connectGeoSearch
+
+#### Options
+
+| Before                    | After                                                  |
+| ------------------------- | ------------------------------------------------------ |
+| `paddingBoundingBox`      | Removed                                                |
+| `enableGeolocationWithIP` | Removed - use the Configure widget instead (see below) |
+| `position`                | Removed - use the Configure widget instead (see below) |
+| `radius`                  | Removed - use the Configure widget instead (see below) |
+| `precision`               | Removed - use the Configure widget instead (see below) |
+
+- `paddingBoundingBox` was in conflict with the `routing` option - so we removed it to support URLSync for the GeoSearch widget.
+
+#### `enableGeolocationWithIP`
+
+**Before:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+customGeoSearch({
+  enableGeolocationWithIP: true,
+});
+```
+
+**After:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+instantsearch.widgets.configure({
+  aroundLatLngViaIP: true,
+});
+
+customGeoSearch();
+```
+
+#### `position`
+
+**Before:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+customGeoSearch({
+  position: { lat: 40.71, lng: -74.01 },
+});
+```
+
+**After:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+instantsearch.widgets.configure({
+  aroundLatLng: '40.71, -74.01',
+});
+
+customGeoSearch();
+```
+
+#### `radius`
+
+**Before:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+customGeoSearch({
+  radius: 1000,
+});
+```
+
+**After:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+instantsearch.widgets.configure({
+  aroundRadius: 1000,
+});
+
+customGeoSearch();
+```
+
+#### `precision`
+
+**Before:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+customGeoSearch({
+  precision: 1000,
+});
+```
+
+**After:**
+
+```javascript
+const customGeoSearch = instantsearch.connectors.connectGeoSearch(() => {
+  // Render implementation
+});
+
+instantsearch.widgets.configure({
+  aroundPrecision: 1000,
+});
+
+customGeoSearch();
+```
 
 ### connectRange
 

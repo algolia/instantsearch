@@ -2,7 +2,7 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { tagConfig } from '../../../lib/escape-highlight.js';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
 
 import connectRefinementList from '../connectRefinementList.js';
 
@@ -917,7 +917,7 @@ describe('connectRefinementList', () => {
     const helper = jsHelper({}, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
-      ...tagConfig,
+      ...TAG_PLACEHOLDER,
     });
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
@@ -1021,7 +1021,7 @@ describe('connectRefinementList', () => {
     const helper = jsHelper({}, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
-      ...tagConfig,
+      ...TAG_PLACEHOLDER,
     });
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
@@ -1030,15 +1030,15 @@ describe('connectRefinementList', () => {
         facetHits: [
           {
             count: 33,
-            highlighted: `Salvador ${tagConfig.highlightPreTag}Da${
-              tagConfig.highlightPostTag
+            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${
+              TAG_PLACEHOLDER.highlightPostTag
             }li`,
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: `${tagConfig.highlightPreTag}Da${
-              tagConfig.highlightPostTag
+            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${
+              TAG_PLACEHOLDER.highlightPostTag
             }vidoff`,
             value: 'Davidoff',
           },
@@ -1094,7 +1094,7 @@ describe('connectRefinementList', () => {
     expect(sffvQuery).toBe('da');
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
-    expect(paramOverride).toEqual(tagConfig);
+    expect(paramOverride).toEqual(TAG_PLACEHOLDER);
 
     return Promise.resolve().then(() => {
       expect(rendering).toHaveBeenCalledTimes(3);

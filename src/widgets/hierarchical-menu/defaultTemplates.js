@@ -4,6 +4,12 @@ export default {
     '<span class="{{cssClasses.label}}">{{label}}</span>' +
     '<span class="{{cssClasses.count}}">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>' +
     '</a>',
-  showMoreActive: 'Show less',
-  showMoreInactive: 'Show more',
+  showMoreText: `
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  `,
 };

@@ -55,12 +55,6 @@ hits({
  */
 
 /**
- * @typedef {Object} HitsTransforms
- * @property {function(object):object} [empty] Method used to change the object passed to the `empty` template.
- * @property {function(object):object} [item] Method used to change the object passed to the `item` template.
- */
-
-/**
  * @typedef {Object} HitsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {HitsTemplates} [templates] Templates to use for the widget.

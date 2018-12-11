@@ -32,6 +32,7 @@ describe('InfiniteHits', () => {
         templateProps: {
           templates: {
             item: 'item',
+            showMoreText: 'showMoreText',
           },
         },
         cssClasses,
@@ -61,6 +62,7 @@ describe('InfiniteHits', () => {
         templateProps: {
           templates: {
             item: 'item',
+            showMoreText: 'showMoreText',
           },
         },
         cssClasses,
@@ -81,6 +83,7 @@ describe('InfiniteHits', () => {
         templateProps: {
           templates: {
             empty: 'empty',
+            showMoreText: 'showMoreText',
           },
         },
         cssClasses,
@@ -101,6 +104,7 @@ describe('InfiniteHits', () => {
         templateProps: {
           templates: {
             empty: 'empty',
+            showMoreText: 'showMoreText',
           },
         },
         cssClasses,

@@ -1,7 +1,6 @@
 /** @module module:instantsearch */
 
 import toFactory from 'to-factory';
-import algoliasearchHelper from 'algoliasearch-helper';
 
 import InstantSearch from './InstantSearch.js';
 import version from './version.js';
@@ -127,8 +126,6 @@ const instantsearch = toFactory(InstantSearch);
 
 instantsearch.routers = routers;
 instantsearch.stateMappings = stateMappings;
-instantsearch.createQueryString =
-  algoliasearchHelper.url.getQueryStringFromState;
 instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
 instantsearch.version = version;

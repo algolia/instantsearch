@@ -39,15 +39,16 @@ const usage = `Usage:
 breadcrumb({
   container,
   attributes,
-  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
-  [ templates.{home, separator}]
+  [ rootPath = null ],
   [ transformItems ],
+  [ templates.{home, separator}],
+  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
 })`;
 
 /**
  * @typedef {Object} BreadcrumbCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element of the widget.
- * @property {string|string[]} [noRefinement] CSS class to add to the root element of the widget if there are no refinements.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element of the widget if there are no refinements.
  * @property {string|string[]} [list] CSS class to add to the list element.
  * @property {string|string[]} [item] CSS class to add to the items of the list. The items contains the link and the separator.
  * @property {string|string[]} [selectedItem] CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
@@ -62,19 +63,13 @@ breadcrumb({
  */
 
 /**
- * @typedef {Object} BreadcrumbTransforms
- * @property {function(object):object} [item] Method to change the object passed to the `item` template
- */
-
-/**
  * @typedef {Object} BreadcrumbWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the breadcrumb.
- *
- * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
- * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
+ * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  */
 
 /**
@@ -146,9 +141,9 @@ export default function breadcrumb({
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
-    noRefinement: cx(
+    noRefinementRoot: cx(
       suit({ modifierName: 'noRefinement' }),
-      userCssClasses.noRefinement
+      userCssClasses.noRefinementRoot
     ),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),

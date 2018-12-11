@@ -3,13 +3,12 @@ import { checkRendering } from '../../lib/utils.js';
 const usage = `Usage:
 var customPoweredBy = connectPoweredBy(function render(params, isFirstRendering) {
   // params = {
+  //   url,
   //   widgetParams,
-  //   instantSearchInstance,
   // }
 });
 search.addWidget(customPoweredBy({
-  [ theme = 'light' ],
-  [ url ]
+  [ url ],
 }));
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPoweredBy.html`;
 
@@ -36,25 +35,26 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 export default function connectPoweredBy(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
+  const defaultUrl =
+    'https://www.algolia.com/?' +
+    'utm_source=instantsearch.js&' +
+    'utm_medium=website&' +
+    `utm_content=${
+      typeof window !== 'undefined' && window.location
+        ? window.location.hostname
+        : ''
+    }&` +
+    'utm_campaign=poweredby';
+
   return (widgetParams = {}) => {
-    const url =
-      widgetParams.url ||
-      'https://www.algolia.com/?' +
-        'utm_source=instantsearch.js&' +
-        'utm_medium=website&' +
-        `utm_content=${
-          typeof window !== 'undefined' && window.location
-            ? window.location.hostname
-            : ''
-        }&` +
-        'utm_campaign=poweredby';
+    const { url = defaultUrl } = widgetParams;
 
     return {
       init() {
         renderFn(
           {
-            widgetParams,
             url,
+            widgetParams,
           },
           true
         );
@@ -63,8 +63,8 @@ export default function connectPoweredBy(renderFn, unmountFn) {
       render() {
         renderFn(
           {
-            widgetParams,
             url,
+            widgetParams,
           },
           false
         );

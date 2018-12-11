@@ -2,7 +2,7 @@
 
 exports[`Breadcrumb should render <Breadcrumb /> 1`] = `
 <div
-  className="root"
+  className="root noRefinementRoot"
 >
   <ul
     className="list"
@@ -26,7 +26,7 @@ exports[`Breadcrumb should render <Breadcrumb /> 1`] = `
 
 exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
 <div
-  className="root noRefinement"
+  className="root"
 >
   <ul
     className="list"
@@ -46,7 +46,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
     </li>
     <li
       className="item selectedItem"
-      key="name00"
+      key="label00"
     >
       <span
         aria-hidden={true}
@@ -57,15 +57,15 @@ exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
           }
         }
       />
-      name0
+      label0
     </li>
   </ul>
 </div>
 `;
 
-exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
+exports[`Breadcrumb should render <Breadcrumb /> with multiple items 1`] = `
 <div
-  className="root noRefinement"
+  className="root"
 >
   <ul
     className="list"
@@ -85,7 +85,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
     </li>
     <li
       className="item"
-      key="name00"
+      key="label00"
     >
       <span
         aria-hidden={true}
@@ -100,12 +100,12 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
         className="link"
         onClick={[Function]}
       >
-        name0
+        label0
       </a>
     </li>
     <li
       className="item selectedItem"
-      key="name11"
+      key="label11"
     >
       <span
         aria-hidden={true}
@@ -116,7 +116,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
           }
         }
       />
-      name1
+      label1
     </li>
   </ul>
 </div>

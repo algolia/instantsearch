@@ -61,7 +61,7 @@ hierarchicalMenu({
   [ limit=10 ],
   [ sortBy=['name:asc'] ],
   [ cssClasses.{root, noRefinementRoot, list, childList, item, selectedItem, parentItem, link, label, count, showMore, disabledShowMore} ],
-  [ templates.{item, showMoreActive, showMoreInactive} ],
+  [ templates.{item, showMoreText} ],
   [ transformItems ]
 })`;
 /**
@@ -83,8 +83,7 @@ hierarchicalMenu({
 /**
  * @typedef {Object} HierarchicalMenuTemplates
  * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property {string|function} [showMoreActive] Template used when showMore was clicked.
- * @property {string|function} [showMoreInactive] Template used when showMore not clicked.
+ * @property {string|function} [showMoreText] Template used for the show more text, provided with `isShowingMore` data property.
  */
 
 /**

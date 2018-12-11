@@ -30,7 +30,7 @@ const plugins = [
 const createConfiguration = ({ mode, filename }) => ({
   input: 'src/index.js',
   output: {
-    file: `dist/umd/${filename}`,
+    file: `dist/${filename}`,
     name: 'instantsearch',
     format: 'umd',
     banner: license,

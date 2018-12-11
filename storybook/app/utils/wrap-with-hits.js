@@ -69,7 +69,7 @@ export const wrapWithHits = (
   window.search.addWidget(
     instantsearch.widgets.pagination({
       container: '#results-pagination-container',
-      maxPages: 20,
+      totalPages: 20,
     })
   );
 

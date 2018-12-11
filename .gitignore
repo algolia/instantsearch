@@ -1,14 +1,17 @@
 node_modules/
-dist/
-npm-debug.log
-docs/
 !scripts/docs/
+npm-debug.log
+yarn-error.log
 .DS_Store
 
-# Ignore staging build files
-dev/dist/*
+# Bundle build files
+/dist
+/dist-es5-module
+/es
 
-# Ignore Argos CI screenshots.
-functional-tests/screenshots/
+# Generated files
+/docs
+/storybook/dist/*
 
-yarn-error.log
+# Argos CI screenshots
+/functional-tests/screenshots/

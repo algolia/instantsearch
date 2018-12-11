@@ -53,7 +53,7 @@ We also provide you a default Algolia theme for the widgets to be effectively st
 
 You will then have access to the `instantsearch` function in the global scope (`window`).
 
-The jsDeliver CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
+> We recommend using jsDelivr only for prototyping, **not for production applications**. Whenever possible, you should host your assets yourself or use a premium CDN service. jsDelivr is a free service and isn’t operated by Algolia, so we won’t be able to provide support if it fails.
 
 ### From NPM/Yarn
 
@@ -140,7 +140,7 @@ All the widgets provided by the library can be found in the namespace `instantse
 
 You should now be able to see the results without any styling. This view lets you inspect the values that are retrieved from Algolia, in order to build your custom view.
 
-In order to customize the view for each product, we can use a special option of the hit widget: `templates`. This option accepts a [Mustache](https://community.algolia.com/instantsearch.js/documentation/) template string or a function returning a string.
+In order to customize the view for each product, we can use a special option of the hit widget: `templates`. This option accepts a [Mustache](https://mustache.github.io/mustache.5.html) template string or a function returning a string.
 
 ```html
 <div id="hits">
@@ -328,7 +328,7 @@ Those two features are implemented respectively with the [pagination](widgets/pa
   search.addWidget(
     instantsearch.widgets.pagination({
       container: '#pagination',
-      maxPages: 20,
+      totalPages: 20,
       // default is to scroll to 'body', here we disable this behavior
       scrollTo: false
     })

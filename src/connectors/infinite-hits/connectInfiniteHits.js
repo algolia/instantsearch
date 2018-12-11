@@ -1,4 +1,4 @@
-import escapeHTML, { tagConfig } from '../../lib/escape-highlight.js';
+import escapeHTML, { TAG_PLACEHOLDER } from '../../lib/escape-highlight.js';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -88,7 +88,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHTML ? tagConfig : undefined;
+        return widgetParams.escapeHTML ? TAG_PLACEHOLDER : undefined;
       },
 
       init({ instantSearchInstance, helper }) {

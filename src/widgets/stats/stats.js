@@ -8,13 +8,7 @@ import { component } from '../../lib/suit';
 
 const suit = component('Stats');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  renderState,
-  templates,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   {
     hitsPerPage,
     nbHits,
@@ -38,7 +32,6 @@ const renderer = ({
 
   render(
     <Stats
-      collapsible={collapsible}
       cssClasses={cssClasses}
       hitsPerPage={hitsPerPage}
       nbHits={nbHits}
@@ -69,11 +62,6 @@ stats({
  * @typedef {Object} StatsWidgetCssClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
  * @property {string|string[]} [text] CSS class to add to the text span element.
- */
-
-/**
- * @typedef {Object} StatsWidgetTransforms
- * @property {function(StatsTextData):object} [text] Updates the content of object passed to the `text` template.
  */
 
 /**
@@ -116,7 +104,6 @@ stats({
 export default function stats({
   container,
   cssClasses: userCssClasses = {},
-  collapsible = false,
   templates = defaultTemplates,
 } = {}) {
   if (!container) {
@@ -133,7 +120,6 @@ export default function stats({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    collapsible,
     renderState: {},
     templates,
   });

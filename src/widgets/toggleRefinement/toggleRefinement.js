@@ -46,15 +46,10 @@ toggleRefinement({
 
 /**
  * @typedef {Object} ToggleWidgetCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [label] CSS class to add to the label wrapping element
- * @property  {string|string[]} [checkbox] CSS class to add to the checkbox
- * @property  {string|string[]} [labelText] CSS class to add to the label text.
- */
-
-/**
- * @typedef {Object} ToggleWidgetTransforms
- * @property  {function(Object):Object} labelText the text that describes the toggle action. This
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [label] CSS class to add to the label wrapping element
+ * @property {string|string[]} [checkbox] CSS class to add to the checkbox
+ * @property {string|string[]} [labelText] CSS class to add to the label text.
  */
 
 /**
@@ -70,8 +65,8 @@ toggleRefinement({
  * @typedef {Object} ToggleWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
- * @property  {string|number|boolean} on Value to filter on when checked.
- * @property  {string|number|boolean} off Value to filter on when unchecked.
+ * @property {string|number|boolean} on Value to filter on when checked.
+ * @property {string|number|boolean} off Value to filter on when unchecked.
  * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
  * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
  * having `false` has a value for the selected attribute.

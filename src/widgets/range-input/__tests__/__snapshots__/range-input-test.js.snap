@@ -2,30 +2,36 @@
 
 exports[`rangeInput expect to render with custom classNames 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
-      "form": "ais-RangeInput-form custom-form",
-      "input": "ais-RangeInput-input",
-      "inputMax": "ais-RangeInput-input--max custom-inputMax",
-      "inputMin": "ais-RangeInput-input--min custom-inputMin",
-      "label": "ais-RangeInput-label",
+      "form": "ais-RangeInput-form form",
+      "input": "ais-RangeInput-input input",
+      "inputMax": "ais-RangeInput-input--max inputMax",
+      "inputMin": "ais-RangeInput-input--min inputMin",
+      "label": "ais-RangeInput-label label",
       "noRefinement": "ais-RangeInput--noRefinement",
-      "root": "ais-RangeInput custom-root",
-      "separator": "ais-RangeInput-separator custom-separator",
-      "submit": "ais-RangeInput-submit custom-submit",
-    }
-  }
-  labels={
-    Object {
-      "separator": "to",
-      "submit": "Go",
+      "root": "ais-RangeInput root",
+      "separator": "ais-RangeInput-separator separator",
+      "submit": "ais-RangeInput-submit submit",
     }
   }
   max={0}
   min={0}
   refine={[Function]}
   step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "separatorText": "to",
+        "submitText": "Go",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "separatorText": true,
+        "submitText": true,
+      },
+    }
+  }
   values={
     Object {
       "max": undefined,
@@ -35,9 +41,8 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
 />
 `;
 
-exports[`rangeInput expect to render with custom labels 1`] = `
+exports[`rangeInput expect to render with custom templates 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -51,16 +56,23 @@ exports[`rangeInput expect to render with custom labels 1`] = `
       "submit": "ais-RangeInput-submit",
     }
   }
-  labels={
-    Object {
-      "separator": "custom-separator",
-      "submit": "custom-submit",
-    }
-  }
   max={0}
   min={0}
   refine={[Function]}
   step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "separatorText": "custom separator",
+        "submitText": "custom submit",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "separatorText": true,
+        "submitText": true,
+      },
+    }
+  }
   values={
     Object {
       "max": undefined,
@@ -72,7 +84,6 @@ exports[`rangeInput expect to render with custom labels 1`] = `
 
 exports[`rangeInput expect to render with refinement 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -86,16 +97,23 @@ exports[`rangeInput expect to render with refinement 1`] = `
       "submit": "ais-RangeInput-submit",
     }
   }
-  labels={
-    Object {
-      "separator": "to",
-      "submit": "Go",
-    }
-  }
   max={500}
   min={10}
   refine={[Function]}
   step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "separatorText": "to",
+        "submitText": "Go",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "separatorText": true,
+        "submitText": true,
+      },
+    }
+  }
   values={
     Object {
       "max": 475,
@@ -107,7 +125,6 @@ exports[`rangeInput expect to render with refinement 1`] = `
 
 exports[`rangeInput expect to render with refinement at boundaries 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -121,16 +138,23 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
       "submit": "ais-RangeInput-submit",
     }
   }
-  labels={
-    Object {
-      "separator": "to",
-      "submit": "Go",
-    }
-  }
   max={500}
   min={10}
   refine={[Function]}
   step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "separatorText": "to",
+        "submitText": "Go",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "separatorText": true,
+        "submitText": true,
+      },
+    }
+  }
   values={
     Object {
       "max": undefined,
@@ -142,7 +166,6 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
 
 exports[`rangeInput expect to render with results 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -156,16 +179,23 @@ exports[`rangeInput expect to render with results 1`] = `
       "submit": "ais-RangeInput-submit",
     }
   }
-  labels={
-    Object {
-      "separator": "to",
-      "submit": "Go",
-    }
-  }
   max={500}
   min={10}
   refine={[Function]}
   step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "separatorText": "to",
+        "submitText": "Go",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "separatorText": true,
+        "submitText": true,
+      },
+    }
+  }
   values={
     Object {
       "max": undefined,
@@ -177,7 +207,6 @@ exports[`rangeInput expect to render with results 1`] = `
 
 exports[`rangeInput expect to render without results 1`] = `
 <RangeInput
-  collapsible={false}
   cssClasses={
     Object {
       "form": "ais-RangeInput-form",
@@ -191,16 +220,23 @@ exports[`rangeInput expect to render without results 1`] = `
       "submit": "ais-RangeInput-submit",
     }
   }
-  labels={
-    Object {
-      "separator": "to",
-      "submit": "Go",
-    }
-  }
   max={0}
   min={0}
   refine={[Function]}
   step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "separatorText": "to",
+        "submitText": "Go",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "separatorText": true,
+        "submitText": true,
+      },
+    }
+  }
   values={
     Object {
       "max": undefined,

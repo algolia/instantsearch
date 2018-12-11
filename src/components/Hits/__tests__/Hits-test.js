@@ -1,8 +1,9 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import Hits from '../Hits';
-import Template from '../../Template/Template';
 import { highlight } from '../../../helpers';
+import { TAG_REPLACEMENT } from '../../../lib/escape-highlight';
+import Template from '../../Template/Template';
+import Hits from '../Hits';
 
 describe('Hits', () => {
   const cssClasses = {
@@ -251,7 +252,9 @@ describe('Hits', () => {
           name: 'name 1',
           _highlightResult: {
             name: {
-              value: '<em>name 1</em>',
+              value: `${TAG_REPLACEMENT.highlightPreTag}name 1${
+                TAG_REPLACEMENT.highlightPostTag
+              }`,
             },
           },
         },
@@ -260,7 +263,9 @@ describe('Hits', () => {
           name: 'name 2',
           _highlightResult: {
             name: {
-              value: '<em>name 2</em>',
+              value: `${TAG_REPLACEMENT.highlightPreTag}name 2${
+                TAG_REPLACEMENT.highlightPostTag
+              }`,
             },
           },
         },

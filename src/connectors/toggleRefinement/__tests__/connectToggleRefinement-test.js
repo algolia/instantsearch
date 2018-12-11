@@ -44,6 +44,7 @@ describe('connectToggleRefinement', () => {
         rendering.mock.calls.length - 1
       ][0];
       expect(value).toEqual({
+        name: 'isShippingFree',
         count: null,
         isRefined: false,
         onFacetValue: {
@@ -90,6 +91,7 @@ describe('connectToggleRefinement', () => {
         rendering.mock.calls.length - 1
       ][0];
       expect(value).toEqual({
+        name: 'isShippingFree',
         count: 45,
         isRefined: false,
         onFacetValue: {
@@ -132,6 +134,7 @@ describe('connectToggleRefinement', () => {
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
+        name: 'isShippingFree',
         count: null,
         isRefined: false,
         onFacetValue: {
@@ -179,6 +182,7 @@ describe('connectToggleRefinement', () => {
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
+        name: 'isShippingFree',
         count: 45,
         isRefined: false,
         onFacetValue: {
@@ -230,6 +234,7 @@ describe('connectToggleRefinement', () => {
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
+        name: 'isShippingFree',
         count: 85,
         isRefined: true,
         onFacetValue: {
@@ -279,6 +284,7 @@ describe('connectToggleRefinement', () => {
       const { refine, value } = renderOptions;
 
       expect(value).toEqual({
+        name: 'isShippingFree',
         count: null,
         isRefined: false,
         onFacetValue: {
@@ -335,6 +341,7 @@ describe('connectToggleRefinement', () => {
       const { refine, value } = renderOptions;
       expect(value).toEqual({
         // the value is the one that is not selected
+        name: 'isShippingFree',
         count: 45,
         isRefined: false,
         onFacetValue: {
@@ -386,6 +393,7 @@ describe('connectToggleRefinement', () => {
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
+        name: 'isShippingFree',
         count: 40,
         isRefined: true,
         onFacetValue: {

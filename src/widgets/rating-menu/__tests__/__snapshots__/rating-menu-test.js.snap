@@ -25,9 +25,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "4",
         "stars": Array [
           true,
@@ -41,9 +38,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "3",
         "stars": Array [
           true,
@@ -57,9 +51,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "2",
         "stars": Array [
           true,
@@ -73,9 +64,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "1",
         "stars": Array [
           true,
@@ -95,7 +83,7 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
   {{#stars}}<svg class=\\"{{cssClasses.starIcon}} {{#.}}{{cssClasses.fullStarIcon}}{{/.}}{{^.}}{{cssClasses.emptyStarIcon}}{{/.}}\\" aria-hidden=\\"true\\" width=\\"24\\" height=\\"24\\">
     {{#.}}<use xlink:href=\\"#ais-RatingMenu-starSymbol\\"></use>{{/.}}{{^.}}<use xlink:href=\\"#ais-RatingMenu-starEmptySymbol\\"></use>{{/.}}
   </svg>{{/stars}}
-  <span class=\\"{{cssClasses.label}}\\">{{labels.andUp}}</span>
+  <span class=\\"{{cssClasses.label}}\\">& Up</span>
   {{#count}}<span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>{{/count}}
 {{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
       },
@@ -156,9 +144,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "4",
         "stars": Array [
           true,
@@ -172,9 +157,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "3",
         "stars": Array [
           true,
@@ -188,9 +170,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "2",
         "stars": Array [
           true,
@@ -204,9 +183,6 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
       Object {
         "count": 0,
         "isRefined": false,
-        "labels": Object {
-          "andUp": "& Up",
-        },
         "name": "1",
         "stars": Array [
           true,
@@ -226,7 +202,7 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
   {{#stars}}<svg class=\\"{{cssClasses.starIcon}} {{#.}}{{cssClasses.fullStarIcon}}{{/.}}{{^.}}{{cssClasses.emptyStarIcon}}{{/.}}\\" aria-hidden=\\"true\\" width=\\"24\\" height=\\"24\\">
     {{#.}}<use xlink:href=\\"#ais-RatingMenu-starSymbol\\"></use>{{/.}}{{^.}}<use xlink:href=\\"#ais-RatingMenu-starEmptySymbol\\"></use>{{/.}}
   </svg>{{/stars}}
-  <span class=\\"{{cssClasses.label}}\\">{{labels.andUp}}</span>
+  <span class=\\"{{cssClasses.label}}\\">& Up</span>
   {{#count}}<span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>{{/count}}
 {{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
       },

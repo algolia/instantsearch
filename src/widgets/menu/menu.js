@@ -65,7 +65,7 @@ menu({
   [ showMore = false ],
   [ showMoreLimit = 10 ],
   [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, link, label, count, showMore, disabledShowMore} ],
-  [ templates.{item, showMoreActive, showMoreInactive} ],
+  [ templates.{item, showMoreText} ],
   [ transformItems ]
 })`;
 
@@ -86,8 +86,7 @@ menu({
 /**
  * @typedef {Object} MenuTemplates
  * @property {string|function({count: number, cssClasses: object, isRefined: boolean, label: string, url: string, value: string}):string} [item] Item template. The string template gets the same values as the function.
- * @property {string} [showMoreActive] Template used when showMore was clicked.
- * @property {string} [showMoreInactive] Template used when showMore not clicked.
+ * @property {string} [showMoreText] Template used for the show more text, provided with `isShowingMore` data property.
  */
 
 /**

@@ -178,16 +178,15 @@ describe('InstantSearch lifecycle', () => {
     });
   });
 
-  describe('when we have 5 widgets', () => {
+  describe('when we have 5 widgets (at once)', () => {
     let widgets;
 
     beforeEach(() => {
-      widgets = range(5);
-      widgets = widgets.map((widget, widgetIndex) => ({
+      widgets = range(5).map((widget, widgetIndex) => ({
         init() {},
         getConfiguration: jest.fn().mockReturnValue({ values: [widgetIndex] }),
       }));
-      widgets.forEach(search.addWidget, search);
+      search.addWidgets(widgets);
       search.start();
     });
 

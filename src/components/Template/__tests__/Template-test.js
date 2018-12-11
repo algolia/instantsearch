@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Template from '../Template';
-import renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 
 describe('Template', () => {
   it('throws an error when templates as functions returning a React element', () => {
@@ -11,7 +11,7 @@ describe('Template', () => {
       }, // eslint-disable-line react/display-name
       data: { type: 'functions' },
     });
-    expect(() => renderer.create(<Template {...props} />)).toThrow();
+    expect(() => mount(<Template {...props} />)).toThrow();
   });
 
   it('can configure compilation options', () => {
@@ -21,13 +21,14 @@ describe('Template', () => {
       useCustomCompileOptions: { test: true },
       templatesConfig: { compileOptions: { delimiters: '<% %>' } },
     });
-    const tree = renderer.create(<Template {...props} />).toJSON();
+    const tree = mount(<Template {...props} />);
+
     expect(tree).toMatchSnapshot();
   });
 
   it('can configure custom rootTagName', () => {
     const props = getProps({ rootTagName: 'span' });
-    const tree = renderer.create(<Template {...props} />).toJSON();
+    const tree = mount(<Template {...props} />);
 
     expect(tree).toMatchSnapshot();
   });
@@ -38,7 +39,8 @@ describe('Template', () => {
     const props = getProps({
       rootProps: { className: 'hey', onClick: fn },
     });
-    const tree = renderer.create(<Template {...props} />).toJSON();
+    const tree = mount(<Template {...props} />);
+
     expect(tree).toMatchSnapshot();
   });
 

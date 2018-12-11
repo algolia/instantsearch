@@ -75,11 +75,6 @@ numericMenu({
  */
 
 /**
- * @typedef {Object} NumericMenuTransforms
- * @property {function({name: string, isRefined: boolean, url: string}):object} item Transforms the data for a single item to render.
- */
-
-/**
  * @typedef {Object} NumericMenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attribute Name of the attribute for filtering.

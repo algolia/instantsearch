@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import { isSpecialClick } from '../../lib/utils.js';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem.js';
-import SearchBox from '../SearchBox';
+import SearchBox from '../SearchBox/Searchbox';
 
 class RefinementList extends Component {
   constructor(props) {
@@ -158,13 +158,14 @@ class RefinementList extends Component {
     const showMoreButton = this.props.showMore === true && (
       <Template
         {...this.props.templateProps}
-        templateKey={
-          this.props.isShowingMore ? 'showMoreActive' : 'showMoreInactive'
-        }
+        templateKey="showMoreText"
         rootTagName="button"
         rootProps={{
           className: showMoreButtonClassName,
           onClick: this.props.toggleShowMore,
+        }}
+        data={{
+          isShowingMore: this.props.isShowingMore,
         }}
       />
     );

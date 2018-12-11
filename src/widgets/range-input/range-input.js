@@ -2,19 +2,20 @@ import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput.js';
 import connectRange from '../../connectors/range/connectRange.js';
-import { getContainerNode } from '../../lib/utils.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit';
 
 const suit = component('RangeInput');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  labels,
-  collapsible,
-  renderState,
-}) => ({ refine, range, start, widgetParams }, isFirstRendering) => {
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
+  { refine, range, start, widgetParams, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
     return;
   }
 
@@ -35,9 +36,7 @@ const renderer = ({
       step={step}
       values={values}
       cssClasses={cssClasses}
-      labels={labels}
       refine={refine}
-      collapsible={collapsible}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -51,28 +50,27 @@ rangeInput({
   [ min ],
   [ max ],
   [ precision = 0 ],
-  [ cssClasses.{root, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit} ],
-  [ labels.{separator, submit} ],
-  [ collapsible=false ]
+  [ templates.{separatorText, submitText} ],
+  [ cssClasses.{root, noRefinement, form, label, input, inputMin, inputMax, separator, submit} ],
 })`;
 
 /**
  * @typedef {Object} RangeInputClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [noRefinement] CSS class to add to the root element when there's no refinements.
  * @property {string|string[]} [form] CSS class to add to the form element.
- * @property {string|string[]} [fieldset] CSS class to add to the fieldset element.
- * @property {string|string[]} [labelMin] CSS class to add to the min label element.
+ * @property {string|string[]} [label] CSS class to add to the label element.
+ * @property {string|string[]} [input] CSS class to add to the input element.
  * @property {string|string[]} [inputMin] CSS class to add to the min input element.
- * @property {string|string[]} [separator] CSS class to add to the separator of the form.
- * @property {string|string[]} [labelMax] CSS class to add to the max label element.
  * @property {string|string[]} [inputMax] CSS class to add to the max input element.
+ * @property {string|string[]} [separator] CSS class to add to the separator of the form.
  * @property {string|string[]} [submit] CSS class to add to the submit button of the form.
  */
 
 /**
- * @typedef {Object} RangeInputLabels
- * @property {string} [separator="to"] Separator label, between min and max.
- * @property {string} [submit="Go"] Button label.
+ * @typedef {Object} RangeInputTemplates
+ * @property {string} [separatorText = "to"] The label of the separator, between min and max.
+ * @property {string} [submitText = "Go"] The label of the submit button.
  */
 
 /**
@@ -82,9 +80,8 @@ rangeInput({
  * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
  * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set.
  * @property {number} [precision = 0] Number of digits after decimal point to use.
+ * @property {RangeInputTemplates} [templates] Labels to use for the widget.
  * @property {RangeInputClasses} [cssClasses] CSS classes to add.
- * @property {RangeInputLabels} [labels] Labels to use for the widget.
- * @property {boolean} [collapsible=false] Hide the widget body and footer when clicking on header.
  */
 
 /**
@@ -106,9 +103,9 @@ rangeInput({
  *   instantsearch.widgets.rangeInput({
  *     container: '#range-input',
  *     attribute: 'price',
- *     labels: {
- *       separator: 'to',
- *       submit: 'Go'
+ *     templates: {
+ *       separatorText: 'to',
+ *       submitText: 'Go'
  *     },
  *   })
  * );
@@ -120,8 +117,7 @@ export default function rangeInput({
   max,
   precision = 0,
   cssClasses: userCssClasses = {},
-  labels: userLabels = {},
-  collapsible = false,
+  templates: userTemplates = {},
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -129,10 +125,10 @@ export default function rangeInput({
 
   const containerNode = getContainerNode(container);
 
-  const labels = {
-    separator: 'to',
-    submit: 'Go',
-    ...userLabels,
+  const templates = {
+    separatorText: 'to',
+    submitText: 'Go',
+    ...userTemplates,
   };
 
   const cssClasses = {
@@ -159,8 +155,7 @@ export default function rangeInput({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    labels,
-    collapsible,
+    templates,
     renderState: {},
   });
 

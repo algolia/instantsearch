@@ -1,6 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import defaults from 'lodash/defaults';
 import Pagination from '../../components/Pagination/Pagination.js';
 import connectPagination from '../../connectors/pagination/connectPagination.js';
 import { getContainerNode } from '../../lib/utils.js';
@@ -8,7 +7,7 @@ import { component } from '../../lib/suit';
 
 const suit = component('Pagination');
 
-const defaultLabels = {
+const defaultTemplates = {
   previous: '‹',
   next: '›',
   first: '«',
@@ -18,7 +17,7 @@ const defaultLabels = {
 const renderer = ({
   containerNode,
   cssClasses,
-  labels,
+  templates,
   totalPages,
   showFirst,
   showLast,
@@ -53,7 +52,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       currentPage={currentRefinement}
-      labels={labels}
+      templates={templates}
       nbHits={nbHits}
       nbPages={nbPages}
       pages={pages}
@@ -73,15 +72,15 @@ const renderer = ({
 const usage = `Usage:
 pagination({
   container,
-  [ cssClasses.{root, noRefinementRoot, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link} ],
-  [ labels.{previous,next,first,last} ],
   [ totalPages ],
-  [ padding=3 ],
-  [ showFirst=true ],
-  [ showLast=true ],
-  [ showPrevious=true ],
-  [ showNext=true ],
-  [ scrollTo='body' ]
+  [ padding = 3 ],
+  [ showFirst = true ],
+  [ showLast = true ],
+  [ showPrevious = true ],
+  [ showNext = true ],
+  [ scrollTo = 'body' ]
+  [ templates.{previous, next, first, last} ],
+  [ cssClasses.{root, noRefinementRoot, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link} ],
 })`;
 
 /**
@@ -101,7 +100,7 @@ pagination({
  */
 
 /**
- * @typedef {Object} PaginationLabels
+ * @typedef {Object} PaginationTemplates
  * @property  {string} [previous] Label for the Previous link.
  * @property  {string} [next] Label for the Next link.
  * @property  {string} [first] Label for the First link.
@@ -118,7 +117,7 @@ pagination({
  * @property  {boolean} [showLast=true] Whether to show the last page” control
  * @property  {boolean} [showNext=true] Whether to show the “next page” control
  * @property  {boolean} [showPrevious=true] 	Whether to show the “previous page” control
- * @property  {PaginationLabels} [labels] Text to display in the various links (prev, next, first, last).
+ * @property  {PaginationTemplates} [templates] Text to display in the links.
  * @property  {PaginationCSSClasses} [cssClasses] CSS classes to be added.
  */
 
@@ -142,7 +141,7 @@ pagination({
  * search.addWidget(
  *   instantsearch.widgets.pagination({
  *     container: '#pagination-container',
- *     maxPages: 20,
+ *     totalPages: 20,
  *     // default is to scroll to 'body', here we disable this behavior
  *     scrollTo: false,
  *     showFirst: false,
@@ -152,9 +151,9 @@ pagination({
  */
 export default function pagination({
   container,
-  labels: userLabels = defaultLabels,
+  templates: userTemplates = {},
   cssClasses: userCssClasses = {},
-  maxPages,
+  totalPages,
   padding,
   showFirst = true,
   showLast = true,
@@ -210,12 +209,12 @@ export default function pagination({
     link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
   };
 
-  const labels = defaults(userLabels, defaultLabels);
+  const templates = { ...defaultTemplates, ...userTemplates };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    labels,
+    templates,
     showFirst,
     showLast,
     showPrevious,
@@ -228,7 +227,7 @@ export default function pagination({
     const makeWidget = connectPagination(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ maxPages, padding });
+    return makeWidget({ totalPages, padding });
   } catch (error) {
     throw new Error(usage);
   }

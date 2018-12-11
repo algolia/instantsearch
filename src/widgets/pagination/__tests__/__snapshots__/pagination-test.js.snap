@@ -5,31 +5,23 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   createURL={[Function]}
   cssClasses={
     Object {
-      "disabledItem": "ais-Pagination-item--disabled",
-      "firstPageItem": "ais-Pagination-item--firstPage",
+      "disabledItem": "ais-Pagination-item--disabled disabledItem",
+      "firstPageItem": "ais-Pagination-item--firstPage firstPageItem",
       "item": "ais-Pagination-item item",
-      "lastPageItem": "ais-Pagination-item--lastPage",
+      "lastPageItem": "ais-Pagination-item--lastPage lastPageItem",
       "link": "ais-Pagination-link link",
-      "list": "ais-Pagination-list",
-      "nextPageItem": "ais-Pagination-item--nextPage",
-      "noRefinementRoot": "ais-Pagination--noRefinement",
-      "pageItem": "ais-Pagination-item--page",
-      "previousPageItem": "ais-Pagination-item--previousPage",
-      "root": "ais-Pagination root cx",
-      "selectedItem": "ais-Pagination-item--selected",
+      "list": "ais-Pagination-list list",
+      "nextPageItem": "ais-Pagination-item--nextPage nextPageItem",
+      "noRefinementRoot": "ais-Pagination--noRefinement noRefinementRoot",
+      "pageItem": "ais-Pagination-item--page pageItem",
+      "previousPageItem": "ais-Pagination-item--previousPage previousPageItem",
+      "root": "ais-Pagination root customRoot",
+      "selectedItem": "ais-Pagination-item--selected selectedItem",
     }
   }
   currentPage={0}
   isFirstPage={true}
   isLastPage={false}
-  labels={
-    Object {
-      "first": "«",
-      "last": "»",
-      "next": "›",
-      "previous": "‹",
-    }
-  }
   nbHits={200}
   nbPages={20}
   pages={
@@ -48,6 +40,14 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   showLast={true}
   showNext={true}
   showPrevious={true}
+  templates={
+    Object {
+      "first": "«",
+      "last": "»",
+      "next": "›",
+      "previous": "‹",
+    }
+  }
 />
 `;
 
@@ -56,31 +56,23 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   createURL={[Function]}
   cssClasses={
     Object {
-      "disabledItem": "ais-Pagination-item--disabled",
-      "firstPageItem": "ais-Pagination-item--firstPage",
+      "disabledItem": "ais-Pagination-item--disabled disabledItem",
+      "firstPageItem": "ais-Pagination-item--firstPage firstPageItem",
       "item": "ais-Pagination-item item",
-      "lastPageItem": "ais-Pagination-item--lastPage",
+      "lastPageItem": "ais-Pagination-item--lastPage lastPageItem",
       "link": "ais-Pagination-link link",
-      "list": "ais-Pagination-list",
-      "nextPageItem": "ais-Pagination-item--nextPage",
-      "noRefinementRoot": "ais-Pagination--noRefinement",
-      "pageItem": "ais-Pagination-item--page",
-      "previousPageItem": "ais-Pagination-item--previousPage",
-      "root": "ais-Pagination root cx",
-      "selectedItem": "ais-Pagination-item--selected",
+      "list": "ais-Pagination-list list",
+      "nextPageItem": "ais-Pagination-item--nextPage nextPageItem",
+      "noRefinementRoot": "ais-Pagination--noRefinement noRefinementRoot",
+      "pageItem": "ais-Pagination-item--page pageItem",
+      "previousPageItem": "ais-Pagination-item--previousPage previousPageItem",
+      "root": "ais-Pagination root customRoot",
+      "selectedItem": "ais-Pagination-item--selected selectedItem",
     }
   }
   currentPage={0}
   isFirstPage={true}
   isLastPage={false}
-  labels={
-    Object {
-      "first": "«",
-      "last": "»",
-      "next": "›",
-      "previous": "‹",
-    }
-  }
   nbHits={200}
   nbPages={20}
   pages={
@@ -99,5 +91,13 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   showLast={true}
   showNext={true}
   showPrevious={true}
+  templates={
+    Object {
+      "first": "«",
+      "last": "»",
+      "next": "›",
+      "previous": "‹",
+    }
+  }
 />
 `;

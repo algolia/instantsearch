@@ -2,35 +2,17 @@ import React, { render } from 'preact-compat';
 import { prepareTemplateProps } from '../../lib/utils';
 import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
 
-const refineWithMap = ({ refine, paddingBoundingBox, mapInstance }) => {
-  // Function for compute the projection of LatLng to Point (pixel)
-  // Builtin in Leaflet: myMapInstance.project(LatLng, zoom)
-  // http://krasimirtsonev.com/blog/article/google-maps-api-v3-convert-latlng-object-to-actual-pixels-point-object
-  // http://leafletjs.com/reference-1.2.0.html#map-project
-  const scale = Math.pow(2, mapInstance.getZoom());
-
-  const northEastPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(mapInstance.getBounds().getNorthEast());
-
-  northEastPoint.x = northEastPoint.x - paddingBoundingBox.right / scale;
-  northEastPoint.y = northEastPoint.y + paddingBoundingBox.top / scale;
-
-  const southWestPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(mapInstance.getBounds().getSouthWest());
-
-  southWestPoint.x = southWestPoint.x + paddingBoundingBox.right / scale;
-  southWestPoint.y = southWestPoint.y - paddingBoundingBox.bottom / scale;
-
-  const ne = mapInstance.getProjection().fromPointToLatLng(northEastPoint);
-  const sw = mapInstance.getProjection().fromPointToLatLng(southWestPoint);
-
+const refineWithMap = ({ refine, mapInstance }) =>
   refine({
-    northEast: { lat: ne.lat(), lng: ne.lng() },
-    southWest: { lat: sw.lat(), lng: sw.lng() },
+    northEast: mapInstance
+      .getBounds()
+      .getNorthEast()
+      .toJSON(),
+    southWest: mapInstance
+      .getBounds()
+      .getSouthWest()
+      .toJSON(),
   });
-};
 
 const collectMarkersForNextRender = (markers, nextIds) =>
   markers.reduce(
@@ -44,10 +26,29 @@ const collectMarkersForNextRender = (markers, nextIds) =>
     [[], []]
   );
 
+const createBoundingBoxFromMarkers = (google, markers) => {
+  const latLngBounds = markers.reduce(
+    (acc, marker) => acc.extend(marker.getPosition()),
+    new google.maps.LatLngBounds()
+  );
+
+  return {
+    northEast: latLngBounds.getNorthEast().toJSON(),
+    southWest: latLngBounds.getSouthWest().toJSON(),
+  };
+};
+
+const lockUserInteraction = (renderState, functionThatAltersTheMapPosition) => {
+  renderState.isUserInteraction = false;
+  functionThatAltersTheMapPosition();
+  renderState.isUserInteraction = true;
+};
+
 const renderer = (
   {
     items,
     position,
+    currentRefinement,
     refine,
     clearMapRefinement,
     toggleRefineOnMapMove,
@@ -67,9 +68,9 @@ const renderer = (
     templates,
     initialZoom,
     initialPosition,
+    enableRefine,
     enableClearMapRefinement,
     enableRefineControl,
-    paddingBoundingBox,
     mapOptions,
     createMarker,
     markerOptions,
@@ -106,7 +107,7 @@ const renderer = (
 
     const setupListenersWhenMapIsReady = () => {
       const onChange = () => {
-        if (renderState.isUserInteraction) {
+        if (renderState.isUserInteraction && enableRefine) {
           setMapMoveSinceLastRefine();
 
           if (isRefineOnMapMove()) {
@@ -126,7 +127,6 @@ const renderer = (
           refineWithMap({
             mapInstance: renderState.mapInstance,
             refine,
-            paddingBoundingBox,
           });
         }
       });
@@ -144,15 +144,6 @@ const renderer = (
     });
 
     return;
-  }
-
-  if (!items.length && !isRefinedWithMap() && !hasMapMoveSinceLastRefine()) {
-    const initialMapPosition = position || initialPosition;
-
-    renderState.isUserInteraction = false;
-    renderState.mapInstance.setCenter(initialMapPosition);
-    renderState.mapInstance.setZoom(initialZoom);
-    renderState.isUserInteraction = true;
   }
 
   // Collect markers that need to be updated or removed
@@ -194,29 +185,40 @@ const renderer = (
     })
   );
 
-  // Fit the map to the markers when needed
-  const hasMarkers = renderState.markers.length;
-  const center = renderState.mapInstance.getCenter();
-  const zoom = renderState.mapInstance.getZoom();
-  const isPositionInitialize = center !== undefined && zoom !== undefined;
-  const enableFitBounds =
-    !hasMapMoveSinceLastRefine() &&
-    (!isRefinedWithMap() || (isRefinedWithMap() && !isPositionInitialize));
+  const shouldUpdate = !hasMapMoveSinceLastRefine();
 
-  if (hasMarkers && enableFitBounds) {
-    const bounds = renderState.markers.reduce(
-      (acc, marker) => acc.extend(marker.getPosition()),
-      new googleReference.maps.LatLngBounds()
-    );
+  // We use this value for differentiate the padding to apply during
+  // fitBounds. When we don't have a currenRefinement (boundingBox)
+  // we let Google Maps compute the automatic padding. But when we
+  // provide the currentRefinement we explicitly set the padding
+  // to `0` otherwise the map will decrease the zoom on each refine.
+  const boundingBoxPadding = currentRefinement ? 0 : null;
+  const boundingBox =
+    !currentRefinement && Boolean(renderState.markers.length)
+      ? createBoundingBoxFromMarkers(googleReference, renderState.markers)
+      : currentRefinement;
 
-    renderState.isUserInteraction = false;
-    renderState.mapInstance.fitBounds(bounds);
-    renderState.isUserInteraction = true;
+  if (boundingBox && shouldUpdate) {
+    lockUserInteraction(renderState, () => {
+      renderState.mapInstance.fitBounds(
+        new googleReference.maps.LatLngBounds(
+          boundingBox.southWest,
+          boundingBox.northEast
+        ),
+        boundingBoxPadding
+      );
+    });
+  } else if (shouldUpdate) {
+    lockUserInteraction(renderState, () => {
+      renderState.mapInstance.setCenter(position || initialPosition);
+      renderState.mapInstance.setZoom(initialZoom);
+    });
   }
 
   render(
     <GeoSearchControls
       cssClasses={cssClasses}
+      enableRefine={enableRefine}
       enableRefineControl={enableRefineControl}
       enableClearMapRefinement={enableClearMapRefinement}
       isRefineOnMapMove={isRefineOnMapMove()}
@@ -227,7 +229,6 @@ const renderer = (
         refineWithMap({
           mapInstance: renderState.mapInstance,
           refine,
-          paddingBoundingBox,
         })
       }
       onClearClick={clearMapRefinement}

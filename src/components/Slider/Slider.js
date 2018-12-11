@@ -21,10 +21,7 @@ class Slider extends Component {
     ]),
     cssClasses: PropTypes.shape({
       root: PropTypes.string.isRequired,
-      handle: PropTypes.string,
-      lowerHandle: PropTypes.string,
-      upperHandle: PropTypes.string,
-      tooltip: PropTypes.string,
+      disabledRoot: PropTypes.string.isRequired,
     }).isRequired,
   };
 
@@ -68,20 +65,14 @@ class Slider extends Component {
       ? tooltips.format(roundedValue)
       : roundedValue;
 
-    const className = cx(
-      this.props.cssClasses.handle,
-      {
-        [this.props.cssClasses.lowerHandle]: props['data-handle-key'] === 0,
-        [this.props.cssClasses.upperHandle]: props['data-handle-key'] === 1,
-      },
-      props.className
-    );
+    const className = cx(props.className, {
+      'rheostat-handle-lower': props['data-handle-key'] === 0,
+      'rheostat-handle-upper': props['data-handle-key'] === 1,
+    });
 
     return (
       <div {...props} className={className}>
-        {tooltips && (
-          <div className={this.props.cssClasses.tooltip}>{value}</div>
-        )}
+        {tooltips && <div className="rheostat-tooltip">{value}</div>}
       </div>
     );
   };

@@ -7,7 +7,6 @@ const InfiniteHits = ({
   results,
   hits,
   showMore,
-  loadMoreLabel,
   isLastPage,
   cssClasses,
   templateProps,
@@ -43,15 +42,18 @@ const InfiniteHits = ({
         ))}
       </ol>
 
-      <button
-        className={cx(cssClasses.loadMore, {
-          [cssClasses.disabledLoadMore]: isLastPage,
-        })}
-        disabled={isLastPage}
-        onClick={showMore}
-      >
-        {loadMoreLabel}
-      </button>
+      <Template
+        {...templateProps}
+        templateKey="showMoreText"
+        rootTagName="button"
+        rootProps={{
+          className: cx(cssClasses.loadMore, {
+            [cssClasses.disabledLoadMore]: isLastPage,
+          }),
+          disabled: isLastPage,
+          onClick: showMore,
+        }}
+      />
     </div>
   );
 };
@@ -68,7 +70,6 @@ InfiniteHits.propTypes = {
   hits: PropTypes.array.isRequired,
   results: PropTypes.object.isRequired,
   showMore: PropTypes.func,
-  loadMoreLabel: PropTypes.string,
   templateProps: PropTypes.object.isRequired,
   isLastPage: PropTypes.bool.isRequired,
 };

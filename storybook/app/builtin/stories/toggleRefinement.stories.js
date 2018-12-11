@@ -15,6 +15,17 @@ export default () => {
           instantsearch.widgets.toggleRefinement({
             container,
             attribute: 'free_shipping',
+          })
+        );
+      })
+    )
+    .add(
+      'with label',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.toggleRefinement({
+            container,
+            attribute: 'free_shipping',
             templates: {
               labelText: 'Free Shipping (toggle single value)',
             },
