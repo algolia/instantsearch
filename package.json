@@ -13,9 +13,10 @@
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
   "repository": "algolia/instantsearch.js",
-  "main": "dist/cjs/index.js",
-  "module": "dist/es/index.js",
-  "jsdelivr": "dist/umd/instantsearch.production.min.js",
+  "main": "dist-es5-module/index.js",
+  "module": "es/index.js",
+  "jsdelivr": "dist/instantsearch.production.min.js",
+  "unpkg": "dist/instantsearch.production.min.js",
   "sideEffects": false,
   "scripts": {
     "dev": "./scripts/dev.sh",
