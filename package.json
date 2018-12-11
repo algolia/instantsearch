@@ -19,7 +19,8 @@
   "sideEffects": false,
   "scripts": {
     "dev": "./scripts/dev.sh",
-    "build": "yarn build:cjs && yarn build:es && yarn build:umd",
+    "start": "yarn run dev",
+    "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
     "build:umd": "BABEL_ENV=umd rollup --config scripts/rollup.config.js",
     "build:cjs": "BABEL_ENV=cjs babel src --out-dir dist-es5-module/ --ignore src/index.es.js,__tests__,__mocks__ --quiet",
     "build:es": "BABEL_ENV=es babel src --out-dir es/ --ignore src/index.es.js,__tests__,__mocks__ --quiet && BABEL_ENV=es babel src/index.es.js --out-file es/index.js --quiet",
