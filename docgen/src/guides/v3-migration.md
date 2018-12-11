@@ -15,9 +15,31 @@ InstantSearch 3 introduces some breaking changes in the widgets' naming, options
 
 ## Imports
 
-### ES
+The CJS and ES imports remain unchanged.
 
-All imports from the ES build become top-level.
+### UMD
+
+We're introducing a new naming for the UMD imports. This makes it clearer which InstantSearch.js bundle to use either in development or in production. The production bundle will get lighter over time as it won't include the runtime warnings and documentation.
+
+#### Before
+
+```
+dist
+├── instantsearch.js
+├── instantsearch.js.map
+├── instantsearch.min.js
+└── instantsearch.min.js.map
+```
+
+#### After
+
+```
+dist
+├── instantsearch.development.js
+├── instantsearch.development.js.map
+├── instantsearch.production.min.js
+└── instantsearch.production.min.js.map
+```
 
 ### Previous usage
 
