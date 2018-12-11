@@ -45,7 +45,9 @@
     "release:view-changelog": "conventional-changelog -p angular"
   },
   "files": [
-    "dist"
+    "dist",
+    "dist-es5-module",
+    "es"
   ],
   "dependencies": {
     "algoliasearch-helper": "^2.26.0",
