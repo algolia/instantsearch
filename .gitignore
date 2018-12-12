@@ -6,7 +6,7 @@ yarn-error.log
 
 # Bundle build files
 /dist
-/dist-es5-module
+/cjs
 /es
 
 # Generated files

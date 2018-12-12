@@ -13,7 +13,7 @@
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
   "repository": "algolia/instantsearch.js",
-  "main": "dist-es5-module/index.js",
+  "main": "cjs/index.js",
   "module": "es/index.js",
   "jsdelivr": "dist/instantsearch.production.min.js",
   "unpkg": "dist/instantsearch.production.min.js",
@@ -23,7 +23,7 @@
     "start": "yarn run dev",
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
     "build:umd": "BABEL_ENV=umd rollup --config scripts/rollup.config.js",
-    "build:cjs": "BABEL_ENV=cjs babel src --out-dir dist-es5-module/ --ignore src/index.es.js,__tests__,__mocks__ --quiet",
+    "build:cjs": "BABEL_ENV=cjs babel src --out-dir cjs/ --ignore src/index.es.js,__tests__,__mocks__ --quiet",
     "build:es": "BABEL_ENV=es babel src --out-dir es/ --ignore src/index.es.js,__tests__,__mocks__ --quiet && BABEL_ENV=es babel src/index.es.js --out-file es/index.js --quiet",
     "docs:storybook": "NODE_ENV=development webpack-dev-server --config storybook/webpack.config.js",
     "docs:doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
@@ -48,7 +48,7 @@
   },
   "files": [
     "dist",
-    "dist-es5-module",
+    "cjs",
     "es"
   ],
   "dependencies": {
