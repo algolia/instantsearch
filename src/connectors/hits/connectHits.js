@@ -1,4 +1,4 @@
-import escapeHTML, { TAG_PLACEHOLDER } from '../../lib/escape-highlight.js';
+import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight.js';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -62,11 +62,11 @@ export default function connectHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { transformItems = items => items } = widgetParams;
+    const { escapeHTML = true, transformItems = items => items } = widgetParams;
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHTML ? TAG_PLACEHOLDER : undefined;
+        return escapeHTML ? TAG_PLACEHOLDER : undefined;
       },
 
       init({ instantSearchInstance }) {
@@ -82,12 +82,8 @@ export default function connectHits(renderFn, unmountFn) {
       },
 
       render({ results, instantSearchInstance }) {
-        if (
-          widgetParams.escapeHTML &&
-          results.hits &&
-          results.hits.length > 0
-        ) {
-          results.hits = escapeHTML(results.hits);
+        if (escapeHTML && results.hits && results.hits.length > 0) {
+          results.hits = escapeHits(results.hits);
         }
 
         results.hits = transformItems(results.hits);

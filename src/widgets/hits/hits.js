@@ -88,10 +88,10 @@ hits({
  */
 export default function hits({
   container,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  escapeHTML = true,
+  escapeHTML,
   transformItems,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
 }) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);

@@ -76,6 +76,7 @@ describe('connectHits', () => {
     );
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    hits.__escaped = true;
 
     const results = new SearchResults(helper.state, [
       { hits: [].concat(hits) },
