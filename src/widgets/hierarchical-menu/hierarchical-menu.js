@@ -60,7 +60,7 @@ hierarchicalMenu({
   [ showParentLevel = true ],
   [ limit = 10 ],
   [ showMore = false ],
-  [ showMoreLimit = limit * 2 ],
+  [ showMoreLimit = 20 ],
   [ sortBy = ['name:asc'] ],
   [ cssClasses.{root, noRefinementRoot, list, childList, item, selectedItem, parentItem, link, label, count, showMore, disabledShowMore} ],
   [ templates.{item, showMoreText} ],
@@ -96,9 +96,9 @@ hierarchicalMenu({
  * @property {string} [separator = " > "] Separator used in the attributes to separate level values.
  * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
  * @property {boolean} [showParentLevel = true] Show the siblings of the selected parent level of the current refined value. This
- * @property {number} [limit = 10] How much facet values to get.
+ * @property {number} [limit = 10] Max number of values to display.
  * @property {boolean} [showMore = false] Whether to display the "show more" button.
- * @property {number} [showMoreLimit = limit * 2] How much facet values to get when showing more.
+ * @property {number} [showMoreLimit = 10] Max number of values to display when showing more.
  * does not impact the root level.
  *
  * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.

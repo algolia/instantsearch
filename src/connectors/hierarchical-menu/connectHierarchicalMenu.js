@@ -20,7 +20,7 @@ search.addWidget(
     [ showParentLevel = true ],
     [ limit = 10 ],
     [ showMore = false ],
-    [ showMoreLimit = limit * 2 ],
+    [ showMoreLimit = 20 ],
     [ sortBy = ['name:asc'] ],
     [ transformItems ],
   })
@@ -44,9 +44,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {boolean} [showParentLevel=false] Show the siblings of the selected parent levels of the current refined value. This
  * does not impact the root level.
- * @property {number} [limit = 10] Max number of value to display.
+ * @property {number} [limit = 10] Max number of values to display.
  * @property {boolean} [showMore = false] Whether to display the "show more" button.
- * @property {number} [showMoreLimit = limit * 2] Max number of value to display when showing more.
+ * @property {number} [showMoreLimit = 20] Max number of values to display when showing more.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
@@ -87,13 +87,17 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       showParentLevel = true,
       limit = 10,
       showMore,
-      showMoreLimit = limit * 2,
+      showMoreLimit = 20,
       sortBy = ['name:asc'],
       transformItems = items => items,
     } = widgetParams;
 
     if (!attributes || !attributes.length) {
       throw new Error(usage);
+    }
+
+    if (showMore === true && showMoreLimit <= limit) {
+      throw new Error('`showMoreLimit` must be greater than `limit`.');
     }
 
     // we need to provide a hierarchicalFacet name for the search state

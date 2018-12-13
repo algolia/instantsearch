@@ -49,7 +49,7 @@ describe('hierarchicalMenu()', () => {
             showParentLevel: true,
           },
         ],
-        maxValuesPerFacet: 10,
+        maxValuesPerFacet: 20,
       });
     });
 
@@ -66,7 +66,7 @@ describe('hierarchicalMenu()', () => {
             showParentLevel: true,
           },
         ],
-        maxValuesPerFacet: 10,
+        maxValuesPerFacet: 20,
       });
     });
 
@@ -86,7 +86,7 @@ describe('hierarchicalMenu()', () => {
             showParentLevel: false,
           },
         ],
-        maxValuesPerFacet: 10,
+        maxValuesPerFacet: 20,
       });
     });
 
@@ -103,7 +103,7 @@ describe('hierarchicalMenu()', () => {
             showParentLevel: true,
           },
         ],
-        maxValuesPerFacet: 10,
+        maxValuesPerFacet: 20,
       });
     });
 
@@ -126,7 +126,7 @@ describe('hierarchicalMenu()', () => {
           hierarchicalMenu({ limit: 10, ...options }).getConfiguration({
             maxValuesPerFacet: 3,
           }).maxValuesPerFacet
-        ).toBe(10));
+        ).toBe(20));
     });
   });
 
