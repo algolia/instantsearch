@@ -41,6 +41,20 @@ dist
 └── instantsearch.production.min.js.map
 ```
 
+### CJS
+
+#### Before
+
+```js
+const instantsearch = require('instantsearch.js');
+```
+
+#### After
+
+```js
+const instantsearch = require('instantsearch.js').default;
+```
+
 ## InstantSearch
 
 ### `appId` and `apiKey` are replaced by `searchClient`
