@@ -515,3 +515,46 @@ describe('InstantSearch lifecycle', () => {
     expect(helperSearchSpy).toHaveBeenCalledTimes(1);
   });
 });
+
+it('Allows to start without widgets', () => {
+  const instance = new InstantSearch({
+    searchClient: {
+      search() {
+        return Promise.resolve({
+          results: [
+            {
+              query: 'fake query',
+            },
+          ],
+        });
+      },
+    },
+    indexName: 'bogus',
+  });
+
+  expect(() => instance.start()).not.toThrow();
+});
+
+it('Does not allow to start twice', () => {
+  const instance = new InstantSearch({
+    searchClient: {
+      search() {
+        return Promise.resolve({
+          results: [
+            {
+              query: 'fake query',
+            },
+          ],
+        });
+      },
+    },
+    indexName: 'bogus',
+  });
+
+  expect(() => instance.start()).not.toThrow();
+  expect(() => {
+    instance.start();
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"start() has been already called once"`
+  );
+});
