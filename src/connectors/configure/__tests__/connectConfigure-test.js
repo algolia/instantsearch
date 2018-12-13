@@ -13,18 +13,22 @@ describe('connectConfigure', () => {
     helper = algoliasearchHelper(fakeClient, '', {});
   });
 
-  describe('throws on bad usage', () => {
-    it('without searchParameters', () => {
+  describe('Usage', () => {
+    it('throws without searchParameters', () => {
       const makeWidget = connectConfigure();
       expect(() => makeWidget()).toThrow();
     });
 
-    it('with a renderFn but no unmountFn', () => {
-      expect(() => connectConfigure(jest.fn(), undefined)).toThrow();
+    it('does not throw with a render function but without an unmount function', () => {
+      expect(() => connectConfigure(jest.fn(), undefined)).not.toThrow();
     });
 
-    it('with a unmountFn but no renderFn', () => {
-      expect(() => connectConfigure(undefined, jest.fn())).toThrow();
+    it('with a unmount function but no render function does not throw', () => {
+      expect(() => connectConfigure(undefined, jest.fn())).not.toThrow();
+    });
+
+    it('does not throw without render and unmount functions', () => {
+      expect(() => connectConfigure(undefined, undefined)).not.toThrow();
     });
   });
 

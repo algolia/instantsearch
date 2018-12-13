@@ -1,18 +1,25 @@
-import isFunction from 'lodash/isFunction';
+import noop from 'lodash/noop';
 import isPlainObject from 'lodash/isPlainObject';
 
 import { enhanceConfiguration } from '../../lib/InstantSearch.js';
 
 const usage = `Usage:
-var customConfigureWidget = connectConfigure(
+var customConfigure = connectConfigure(
   function renderFn(params, isFirstRendering) {
     // params = {
     //   refine,
-    //   widgetParams
+    //   widgetParams,
     // }
-  },
-  function disposeFn() {}
-)
+  }
+);
+search.addWidget(
+  customConfigure({
+    searchParameters: {
+      // any search parameter: https://www.algolia.com/doc/api-reference/search-api-parameters/
+    }
+  })
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectConfigure.html
 `;
 
 /**
@@ -35,14 +42,7 @@ var customConfigureWidget = connectConfigure(
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomConfigureWidgetOptions)} Re-usable widget factory for a custom **Configure** widget.
  */
-export default function connectConfigure(renderFn, unmountFn) {
-  if (
-    (isFunction(renderFn) && !isFunction(unmountFn)) ||
-    (!isFunction(renderFn) && isFunction(unmountFn))
-  ) {
-    throw new Error(usage);
-  }
-
+export default function connectConfigure(renderFn = noop, unmountFn = noop) {
   return (widgetParams = {}) => {
     if (!isPlainObject(widgetParams.searchParameters)) {
       throw new Error(usage);
@@ -56,15 +56,13 @@ export default function connectConfigure(renderFn, unmountFn) {
       init({ helper }) {
         this._refine = this.refine(helper);
 
-        if (isFunction(renderFn)) {
-          renderFn(
-            {
-              refine: this._refine,
-              widgetParams,
-            },
-            true
-          );
-        }
+        renderFn(
+          {
+            refine: this._refine,
+            widgetParams,
+          },
+          true
+        );
       },
 
       refine(helper) {
@@ -87,19 +85,18 @@ export default function connectConfigure(renderFn, unmountFn) {
       },
 
       render() {
-        if (renderFn) {
-          renderFn(
-            {
-              refine: this._refine,
-              widgetParams,
-            },
-            false
-          );
-        }
+        renderFn(
+          {
+            refine: this._refine,
+            widgetParams,
+          },
+          false
+        );
       },
 
       dispose({ state }) {
-        if (unmountFn) unmountFn();
+        unmountFn();
+
         return this.removeSearchParameters(state);
       },
 
