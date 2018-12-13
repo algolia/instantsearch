@@ -41,7 +41,7 @@ dist
 └── instantsearch.production.min.js.map
 ```
 
-### CJS
+### CommonJS
 
 #### Before
 
