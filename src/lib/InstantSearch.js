@@ -252,9 +252,6 @@ class InstantSearch extends EventEmitter {
    * @return {undefined} Does not return anything
    */
   start() {
-    if (!this.widgets)
-      throw new Error('No widgets were added to instantsearch.js');
-
     if (this.started) throw new Error('start() has been already called once');
 
     let searchParametersFromUrl;
