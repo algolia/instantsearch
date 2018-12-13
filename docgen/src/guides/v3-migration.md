@@ -13,6 +13,48 @@ This document helps you migrate from InstantSearch 2 to InstantSearch 3.
 
 InstantSearch 3 introduces some breaking changes in the widgets' naming, options and markup.
 
+## Imports
+
+The CJS and ES imports remain unchanged.
+
+### UMD
+
+We're introducing a new naming for the UMD imports. This makes it clearer which InstantSearch.js bundle to use either in development or in production. The production bundle will get lighter over time as it won't include the runtime warnings and documentation.
+
+#### Before
+
+```
+dist
+├── instantsearch.js
+├── instantsearch.js.map
+├── instantsearch.min.js
+└── instantsearch.min.js.map
+```
+
+#### After
+
+```
+dist
+├── instantsearch.development.js
+├── instantsearch.development.js.map
+├── instantsearch.production.min.js
+└── instantsearch.production.min.js.map
+```
+
+### CommonJS
+
+#### Before
+
+```js
+const instantsearch = require('instantsearch.js');
+```
+
+#### After
+
+```js
+const instantsearch = require('instantsearch.js').default;
+```
+
 ## InstantSearch
 
 ### `appId` and `apiKey` are replaced by `searchClient`

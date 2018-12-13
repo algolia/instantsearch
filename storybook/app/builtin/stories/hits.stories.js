@@ -2,7 +2,7 @@
 
 import { storiesOf } from 'dev-novel';
 import algoliasearch from 'algoliasearch/lite';
-import instantsearch from '../../../../index';
+import instantsearch from '../../instantsearch';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
 const stories = storiesOf('Hits');

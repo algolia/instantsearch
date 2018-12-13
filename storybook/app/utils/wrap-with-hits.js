@@ -2,7 +2,7 @@
 
 import { action } from 'dev-novel';
 import algoliasearch from 'algoliasearch/lite';
-import instantsearch from '../../../index.js';
+import instantsearch from '../instantsearch';
 import item from './item.html';
 import empty from './no-results.html';
 
