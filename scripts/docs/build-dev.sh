@@ -27,11 +27,12 @@ for example in docs/examples/*; do
   fi
 done
 
-# Copy instantsearch.js builds to the website root
-cp dist/* docs/
+# Copy instantsearch.js UMD builds to the website root
+mkdir docs/lib
+cp dist/* docs/lib
 
 # Build storybook
-NODE_ENV=production webpack --config storybook/webpack.config.js
+yarn run docs:storybook:build
 
 # Move storybook to website-root
 mv storybook/dist docs/stories

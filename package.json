@@ -26,6 +26,7 @@
     "build:cjs": "BABEL_ENV=cjs babel src --out-dir cjs/ --ignore src/index.es.js,__tests__,__mocks__ --quiet",
     "build:es": "BABEL_ENV=es babel src --out-dir es/ --ignore src/index.es.js,__tests__,__mocks__ --quiet && BABEL_ENV=es babel src/index.es.js --out-file es/index.js --quiet",
     "docs:storybook": "NODE_ENV=development webpack-dev-server --config storybook/webpack.config.js",
+    "docs:storybook:build": "NODE_ENV=production webpack --config storybook/webpack.config.js",
     "docs:doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "docs:build:dev": "./scripts/docs/build-dev.sh",
     "docs:publish": "./scripts/docs/publish.sh",
