@@ -40,6 +40,7 @@ const createConfiguration = ({ mode, filename }) => ({
     ...plugins,
     replace({
       __DEV__: mode === 'development',
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     mode === 'production' &&
       uglify({
