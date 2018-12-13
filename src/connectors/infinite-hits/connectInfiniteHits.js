@@ -1,4 +1,4 @@
-import escapeHTML, { TAG_PLACEHOLDER } from '../../lib/escape-highlight.js';
+import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight.js';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -15,7 +15,7 @@ var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRend
 search.addWidget(
   customInfiniteHits({
     [ escapeHTML = true ],
-    [ transformItems ]
+    [ transformItems ],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html
@@ -80,7 +80,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { transformItems = items => items } = widgetParams;
+    const { escapeHTML = true, transformItems = items => items } = widgetParams;
     let hitsCache = [];
     let lastReceivedPage = -1;
 
@@ -88,7 +88,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHTML ? TAG_PLACEHOLDER : undefined;
+        return escapeHTML ? TAG_PLACEHOLDER : undefined;
       },
 
       init({ instantSearchInstance, helper }) {
@@ -113,12 +113,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           lastReceivedPage = -1;
         }
 
-        if (
-          widgetParams.escapeHTML &&
-          results.hits &&
-          results.hits.length > 0
-        ) {
-          results.hits = escapeHTML(results.hits);
+        if (escapeHTML && results.hits && results.hits.length > 0) {
+          results.hits = escapeHits(results.hits);
         }
 
         results.hits = transformItems(results.hits);
