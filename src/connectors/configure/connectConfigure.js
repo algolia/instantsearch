@@ -13,7 +13,11 @@ var customConfigure = connectConfigure(
   }
 );
 search.addWidget(
-  customConfigure({})
+  customConfigure({
+    searchParameters: {
+      // any search parameter: https://www.algolia.com/doc/api-reference/search-api-parameters/
+    }
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectConfigure.html
 `;
