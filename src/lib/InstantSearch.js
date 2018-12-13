@@ -1,7 +1,6 @@
 // we use the full path to the lite build to solve a meteor.js issue:
 // https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
 import algoliasearchHelper from 'algoliasearch-helper';
-import forEach from 'lodash/forEach';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
@@ -356,7 +355,7 @@ class InstantSearch extends EventEmitter {
       this._isSearchStalled = false;
     }
 
-    forEach(this.widgets, widget => {
+    this.widgets.forEach(widget => {
       if (!widget.render) {
         return;
       }
@@ -382,7 +381,7 @@ class InstantSearch extends EventEmitter {
   }
 
   _init(state, helper) {
-    forEach(this.widgets, widget => {
+    this.widgets.forEach(widget => {
       if (widget.init) {
         widget.init({
           state,
