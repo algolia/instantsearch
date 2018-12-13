@@ -5743,10 +5743,10 @@ metalsmith-in-place@4.1.1:
     jstransformer "^1.0.0"
     multimatch "^2.1.0"
 
-metalsmith-layouts@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/metalsmith-layouts/-/metalsmith-layouts-2.1.0.tgz#523ce8778795a1fffd3390fa4a88e27911b47846"
-  integrity sha512-saRKs8tvvD2Wq0Ff0yoqDmWxQNn14rJRK9ayUBo02fG9Kpf6cEEgRbwsE5//zZ52JhadBMM33w5N5wjeKDSvLg==
+metalsmith-layouts@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/metalsmith-layouts/-/metalsmith-layouts-2.3.0.tgz#c73c3a3215f83a15d5822d226fd710dad67c0714"
+  integrity sha512-WVWpySwnuqnE2CxMbvmZ+cKaGP1PVRcLOivicwNR3jjYcLTZ98XxKldgT+USD3rg52gWzDhAY9i8fYX8ZPBIUg==
   dependencies:
     debug "^3.1.0"
     inputformat-to-jstransformer "^1.2.1"
