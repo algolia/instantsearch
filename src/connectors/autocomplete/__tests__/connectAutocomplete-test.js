@@ -37,6 +37,17 @@ describe('connectAutocomplete', () => {
     expect(renderFn.mock.calls[1][1]).toBeFalsy();
   });
 
+  it('sets the default configuration', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectAutocomplete(renderFn);
+    const widget = makeWidget();
+
+    expect(widget.getConfiguration()).toEqual({
+      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
+    });
+  });
+
   it('creates derived helper', () => {
     const renderFn = jest.fn();
     const makeWidget = connectAutocomplete(renderFn);

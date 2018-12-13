@@ -1,4 +1,4 @@
-import escapeHTML, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
+import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
@@ -51,7 +51,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { indices = [] } = widgetParams;
+    const { escapeHTML = true, indices = [] } = widgetParams;
 
     // user passed a wrong `indices` option type
     if (!Array.isArray(indices)) {
@@ -60,7 +60,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHTML ? TAG_PLACEHOLDER : undefined;
+        return escapeHTML ? TAG_PLACEHOLDER : undefined;
       },
 
       init({ instantSearchInstance, helper }) {
@@ -103,12 +103,8 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       saveResults({ results, label }) {
         const derivedIndex = this.indices.find(i => i.label === label);
 
-        if (
-          widgetParams.escapeHTML &&
-          results.hits &&
-          results.hits.length > 0
-        ) {
-          results.hits = escapeHTML(results.hits);
+        if (escapeHTML && results && results.hits && results.hits.length > 0) {
+          results.hits = escapeHits(results.hits);
         }
 
         derivedIndex.results = results;
