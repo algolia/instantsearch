@@ -14,12 +14,12 @@ describe('connectConfigure', () => {
   });
 
   describe('Usage', () => {
-    it('without searchParameters throws', () => {
+    it('throws without searchParameters', () => {
       const makeWidget = connectConfigure();
       expect(() => makeWidget()).toThrow();
     });
 
-    it('with a render function but no unmount function does not throw', () => {
+    it('does not throw with a render function but without an unmount function', () => {
       expect(() => connectConfigure(jest.fn(), undefined)).not.toThrow();
     });
 
@@ -27,8 +27,8 @@ describe('connectConfigure', () => {
       expect(() => connectConfigure(undefined, jest.fn())).not.toThrow();
     });
 
-    it('without unmount and render functions does not throw', () => {
-      expect(() => connectConfigure(undefined, jest.fn())).not.toThrow();
+    it('does not throw without render and unmount functions', () => {
+      expect(() => connectConfigure(undefined, undefined)).not.toThrow();
     });
   });
 
