@@ -6101,10 +6101,10 @@ negotiator@0.6.1:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
   integrity sha1-KzJxhOiZIQEXeyhWP7XnECrNDKk=
 
-netlify-cli@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-1.2.2.tgz#e2719952bcd4a698fa75616ab003e111541207e0"
-  integrity sha1-4nGZUrzUppj6dWFqsAPhEVQSB+A=
+netlify-cli@1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-1.2.3.tgz#e73c1870fd84162a1e82ccd2d3e846dc1d293603"
+  integrity sha512-zD32BacuUMW0F/VjfxoN7aEWX3bt5GH70JPqSKeskEayvH3SkLfw/X/i962aQXjIeJaB2pBIALov+biKtGhwjg==
   dependencies:
     chalk "^0.5.1"
     commander "^2.9.0"
