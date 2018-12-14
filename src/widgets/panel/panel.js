@@ -71,10 +71,12 @@ const myWidget = widgetWithHeaderFooter(widgetOptions)`;
  *   },
  * })(instantsearch.widgets.refinementList);
  *
- * refinementListWithPanel({
- *   container: '#refinement-list',
- *   attribute: 'brand',
- * });
+ * search.addWidget(
+ *   refinementListWithPanel({
+ *     container: '#refinement-list',
+ *     attribute: 'brand',
+ *   })
+ * );
  */
 export default function panel({
   templates = {},
