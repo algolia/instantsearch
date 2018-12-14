@@ -14,7 +14,7 @@ var customStarRating = connectRatingMenu(function render(params, isFirstRenderin
 search.addWidget(
   customStarRatingI({
     attribute,
-    [ max=5 ],
+    [ max = 5 ],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRatingMenu.html
@@ -114,14 +114,43 @@ export default function connectRatingMenu(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
+    let createURLFn;
+
+    function toggleRefinement(helper, facetValue) {
+      const isRefined = getRefinedStar(helper.state) === Number(facetValue);
+      helper.clearRefinements(attribute);
+
+      if (!isRefined) {
+        for (let val = Number(facetValue); val <= max; ++val) {
+          helper.addDisjunctiveFacetRefinement(attribute, val);
+        }
+      }
+
+      helper.search();
+    }
+
+    function getRefinedStar(searchParameters) {
+      let refinedStar = undefined;
+      const refinements = searchParameters.getDisjunctiveRefinements(attribute);
+
+      refinements.forEach(refinement => {
+        if (!refinedStar || Number(refinement) < refinedStar) {
+          refinedStar = Number(refinement);
+        }
+      });
+
+      return refinedStar;
+    }
+
     return {
       getConfiguration() {
-        return { disjunctiveFacets: [attribute] };
+        return {
+          disjunctiveFacets: [attribute],
+        };
       },
 
       init({ helper, createURL, instantSearchInstance }) {
-        this._toggleRefinement = this._toggleRefinement.bind(this, helper);
-        this._createURL = state => facetValue =>
+        createURLFn = state => facetValue =>
           createURL(state.toggleRefinement(attribute, facetValue));
 
         renderFn(
@@ -129,8 +158,8 @@ export default function connectRatingMenu(renderFn, unmountFn) {
             instantSearchInstance,
             items: [],
             hasNoResults: true,
-            refine: this._toggleRefinement,
-            createURL: this._createURL(helper.state),
+            refine: toggleRefinement.bind(this, helper),
+            createURL: createURLFn(helper.state),
             widgetParams,
           },
           true
@@ -140,30 +169,37 @@ export default function connectRatingMenu(renderFn, unmountFn) {
       render({ helper, results, state, instantSearchInstance }) {
         const facetValues = [];
         const allValues = {};
+
         for (let v = max; v >= 0; --v) {
           allValues[v] = 0;
         }
+
         results.getFacetValues(attribute).forEach(facet => {
           const val = Math.round(facet.name);
           if (!val || val > max) {
             return;
           }
+
           for (let v = val; v >= 1; --v) {
             allValues[v] += facet.count;
           }
         });
-        const refinedStar = this._getRefinedStar(helper.state);
+
+        const refinedStar = getRefinedStar(helper.state);
         for (let star = max - 1; star >= 1; --star) {
           const count = allValues[star];
+
           if (refinedStar && star !== refinedStar && count === 0) {
             // skip count==0 when at least 1 refinement is enabled
             // eslint-disable-next-line no-continue
             continue;
           }
+
           const stars = [];
           for (let i = 1; i <= max; ++i) {
             stars.push(i <= star);
           }
+
           facetValues.push({
             stars,
             name: String(star),
@@ -178,8 +214,8 @@ export default function connectRatingMenu(renderFn, unmountFn) {
             instantSearchInstance,
             items: facetValues,
             hasNoResults: results.nbHits === 0,
-            refine: this._toggleRefinement,
-            createURL: this._createURL(state),
+            refine: toggleRefinement.bind(this, helper),
+            createURL: createURLFn(state),
             widgetParams,
           },
           false
@@ -197,14 +233,17 @@ export default function connectRatingMenu(renderFn, unmountFn) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const refinedStar = this._getRefinedStar(searchParameters);
+        const refinedStar = getRefinedStar(searchParameters);
+
         if (
           refinedStar === undefined ||
           (uiState &&
             uiState.ratingMenu &&
             uiState.ratingMenu[attribute] === refinedStar)
-        )
+        ) {
           return uiState;
+        }
+
         return {
           ...uiState,
           ratingMenu: {
@@ -217,9 +256,11 @@ export default function connectRatingMenu(renderFn, unmountFn) {
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const starRatingFromURL =
           uiState.ratingMenu && uiState.ratingMenu[attribute];
-        const refinedStar = this._getRefinedStar(searchParameters);
+        const refinedStar = getRefinedStar(searchParameters);
 
-        if (starRatingFromURL === refinedStar) return searchParameters;
+        if (starRatingFromURL === refinedStar) {
+          return searchParameters;
+        }
 
         let clearedSearchParam = searchParameters.clearRefinements(attribute);
 
@@ -233,31 +274,6 @@ export default function connectRatingMenu(renderFn, unmountFn) {
         }
 
         return clearedSearchParam;
-      },
-
-      _toggleRefinement(helper, facetValue) {
-        const isRefined =
-          this._getRefinedStar(helper.state) === Number(facetValue);
-        helper.clearRefinements(attribute);
-        if (!isRefined) {
-          for (let val = Number(facetValue); val <= max; ++val) {
-            helper.addDisjunctiveFacetRefinement(attribute, val);
-          }
-        }
-        helper.search();
-      },
-
-      _getRefinedStar(searchParameters) {
-        let refinedStar = undefined;
-        const refinements = searchParameters.getDisjunctiveRefinements(
-          attribute
-        );
-        refinements.forEach(r => {
-          if (!refinedStar || Number(r) < refinedStar) {
-            refinedStar = Number(r);
-          }
-        });
-        return refinedStar;
       },
     };
   };
