@@ -25,7 +25,7 @@ don't hesitate to leave a message on the [community forum](https://discourse.alg
 - [Folders of the project](#folders-of-the-project)
   - [The source folder](#the-source-folder)
   - [The documentation source](#the-documentation-source)
-  - [The dev app](#the-dev-app)
+  - [The storybook source](#the-storybook-source)
 - [Tests](#tests)
   - [Unit tests](#unit-tests)
   - [Functional tests](#functional-tests)
