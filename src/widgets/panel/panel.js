@@ -35,6 +35,47 @@ const widgetWithHeaderFooter = panel({
 
 const myWidget = widgetWithHeaderFooter(widgetOptions)`;
 
+/**
+ * @typedef {Object} PanelWidgetCSSClasses
+ * @property  {string|string[]} [root] CSS classes added to the root element of the widget.
+ * @property  {string|string[]} [noRefinementRoot] CSS classes added to the root element of the widget when there's no refinements.
+ * @property  {string|string[]} [header] CSS class to add to the header.
+ * @property  {string|string[]} [footer] CSS class to add to the SVG footer.
+ */
+
+/**
+ * @typedef {Object} PanelTemplates
+ * @property {string|function} [header = ''] Template to use for the header.
+ * @property {string|function} [footer = ''] Template to use for the footer.
+ */
+
+/**
+ * @typedef {Object} PanelWidgetOptions
+ * @property {function} [hidden] This function is called on each render to determine from the render options if the panel have to be hidden or not. If the value is `true` the CSS class `noRefinementRoot` is applied and the wrapper is hidden.
+ * @property {PanelTemplates} [templates] Templates to use for the widgets.
+ * @property {PanelWidgetCSSClasses} [cssClasses] CSS classes to add.
+ */
+
+/**
+ * The panel widget wraps other widgets in a consistent panel design. It also reacts, indicates and sets CSS classes when widgets are no more relevant for refining.
+ *
+ * @type {WidgetFactory}
+ * @devNovel Panel
+ * @category metadata
+ * @param {PanelWidgetOptions} $0 Panel widget options.
+ * @return {function} A new panel widget instance
+ * @example
+ * const refinementListWithPanel = instantsearch.widgets.panel({
+ *   templates: {
+ *     header: 'Brand',
+ *   },
+ * })(instantsearch.widgets.refinementList);
+ *
+ * refinementListWithPanel({
+ *   container: '#refinement-list',
+ *   attribute: 'brand',
+ * });
+ */
 export default function panel({
   templates = {},
   hidden = () => false,
