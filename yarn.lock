@@ -2231,7 +2231,7 @@ algoliasearch-helper@^2.26.0:
     qs "^6.5.1"
     util "^0.10.3"
 
-algoliasearch@3.31.0, algoliasearch@^3.27.1:
+algoliasearch@3.31.0, algoliasearch@^3.27.1, algoliasearch@^3.31.0:
   version "3.31.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.31.0.tgz#c4083375ff02538ef50d9ec73e6a72e5e19ed96f"
   integrity sha512-RJ3m8bQEitEQvWVfJa8WCTM4B9WSt0D4PPEYoqOga7Q0GAfBOqXTWeFYyDO46o085SWBSBWBInVuKyr5BIFP3A==
@@ -2791,10 +2791,10 @@ atob@^2.0.0:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.0.tgz#ab2b150e51d7b122b9efc8d7340c06b6c41076bc"
   integrity sha512-SuiKH8vbsOyCALjA/+EINmt/Kdl+TQPrtFgW7XZZcwtryFu9e5kQoX3bjCW6mIvGH1fbeAZZuvwGR5IlBRznGw==
 
-autocomplete.js@^0.32.0:
-  version "0.32.0"
-  resolved "https://registry.yarnpkg.com/autocomplete.js/-/autocomplete.js-0.32.0.tgz#a00eab44dcb9e573ebd8bb3178e7fe67466cd4f1"
-  integrity sha512-GYGmOo0r2wLgUEYE5J9z9OSLb8e0SAicgDR1M1pHOvwQ0Hc1SLHR0EqjDhl+lhl01cYq2d7lLbsgRmaizgLqrA==
+autocomplete.js@^0.33.0:
+  version "0.33.0"
+  resolved "https://registry.yarnpkg.com/autocomplete.js/-/autocomplete.js-0.33.0.tgz#33d460367e2e7b6c2fe424353d955e022fe4594c"
+  integrity sha512-J0F7BkPhYwXvfs8Skp6v2e2IHYv0SL8INyHYwb7nUpvKHr96g6zS8RNEFGEfEuO3ND+XUsesEMM59LlwQoLfoA==
   dependencies:
     immediate "^3.2.3"
 
@@ -14357,14 +14357,14 @@ pkg-dir@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@1.14.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.14.0.tgz#95a745b2cc4a9ba0f57476d4e84404f4312a6494"
-  integrity sha512-3aiscIBkLu82Lx60ZroKCN/u2ats7r3kzygSqwG72C4TXpyVWXB/WrP0ljlPeFFl8ZKgblP3rEkhFujUZEm8Mg==
+places.js@1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.15.0.tgz#99bb418d8d1ef2ea67d89f2f6cb3a32e5661693b"
+  integrity sha512-9fcWgkkZNedB+rztRoa/21PrLQbuxRJwS1A3ACYnc6DdXF5qb6rUPZvfdxn+rj9C2iQQ6kcCo5+OQFGsYi8WPQ==
   dependencies:
     algolia-aerial "^1.5.3"
-    algoliasearch "^3.27.1"
-    autocomplete.js "^0.32.0"
+    algoliasearch "^3.31.0"
+    autocomplete.js "^0.33.0"
     events "^3.0.0"
     insert-css "^2.0.0"
 
