@@ -11,7 +11,9 @@ search.addWidget(
     container: '#searchbox',
     showReset: false,
     cssClasses: {
-      input: 'form-control',
+      root: 'root',
+      form: 'form',
+      input: 'input form-control',
       submit: 'btn btn-default',
       reset: 'btn btn-default',
     },
@@ -57,15 +59,8 @@ search.addWidget(
         return item;
       });
     },
-  })
-);
-
-search.addWidget(
-  instantsearch.widgets.pagination({
-    container: '#pagination',
     cssClasses: {
-      list: 'pagination',
-      selectedItem: 'active',
+      list: 'list',
     },
   })
 );
@@ -89,6 +84,7 @@ search.addWidget(
       list: 'nav nav-list',
       count: 'badge pull-right',
       selectedItem: 'active',
+      item: 'item',
     },
   })
 );
@@ -109,8 +105,23 @@ search.addWidget(
     attribute: 'rating',
     cssClasses: {
       list: 'nav',
+      link: 'link',
+      item: 'item',
+      selectedItem: 'selectedItem',
       starIcon: 'starIcon',
       count: 'badge pull-right',
+    },
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.pagination({
+    container: '#pagination',
+    cssClasses: {
+      root: 'root',
+      list: 'pagination',
+      disabledItem: 'disabledItem',
+      selectedItem: 'selectedItem',
     },
   })
 );

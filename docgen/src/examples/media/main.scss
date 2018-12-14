@@ -61,11 +61,15 @@ header {
     margin-left: 240px;
     max-width: 400px;
 
-    .ais-SearchBox {
+    .root {
       max-width: inherit;
     }
 
-    .ais-SearchBox-form {
+    .input {
+      padding-left: 14px;
+    }
+
+    .form {
       display: flex;
       margin-top: 5px;
 
@@ -108,7 +112,7 @@ section {
       margin: 0 20px;
       font-size: 1.1em;
 
-      .ais-RefinementList li {
+      #genres li {
         a {
           display: block;
           padding: 2px 10px;
@@ -179,7 +183,7 @@ section {
     #ratings {
       margin-left: 10px;
 
-      .ais-RatingMenu-link {
+      .link {
         font-size: .9em;
 
         &:hover, &:active, &:focus {
@@ -187,12 +191,18 @@ section {
         }
       }
 
-      .ais-RatingMenu-item {
+      .item {
         margin-bottom: 6px;
       }
 
-      .ais-RatingMenu-item--selected a {
+      .selectedItem a {
         color: $media-red-dark;
+      }
+
+      .starIcon {
+        height: 14px;
+        width: auto;
+        fill: #fbae00;
       }
     }
 
@@ -216,15 +226,20 @@ section {
 
     #hits {
       padding: 0 15px;
+
+      .list {
+        list-style: none;
+        padding: 0;
+      }
     }
 
     #pagination {
-      .ais-Pagination {
+      .root {
         display: flex;
         justify-content: center;
       }
 
-      .ais-Pagination-item--disabled {
+      .disabledItem {
         display: none;
       }
 
@@ -234,7 +249,7 @@ section {
         color: $media-text-color;
         margin-right: 4px;
 
-        &.active {
+        &.selectedItem {
           border-color: darken($media-gray, 20%);
           background: $media-gray;
         }
@@ -283,24 +298,6 @@ section {
       color: #CE1312;
     }
   }
-}
-
-.ais-SearchBox-input {
-  padding-left: 14px;
-}
-
-.ais-Hits-list {
-  list-style: none;
-  padding: 0;
-}
-
-.ais-RatingMenu-starIcon {
-  fill: #fbae00;
-}
-
-.starIcon {
-  height: 14px;
-  width: auto;
 }
 
 .genre, .year {
