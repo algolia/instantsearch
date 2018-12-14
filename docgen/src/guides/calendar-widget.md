@@ -152,12 +152,12 @@ const datePicker = instantsearch.connectors.connectRange(
 );
 ```
 
-We've now created our widget factory `datePicker`. In order to use it, you must instantiate it with a [`CustomRangeWidgetOptions`](connectors/connectRange.html#struct-CustomRangeWidgetOptions) object, specifying the `attributeName` parameter: the index key we are refining with. In our case, since it is a calendar widget, we want to refine on the `date` attribute of our dataset.
+We've now created our widget factory `datePicker`. In order to use it, you must instantiate it with a [`CustomRangeWidgetOptions`](connectors/connectRange.html#struct-CustomRangeWidgetOptions) object, specifying the `attribute` parameter: the index key we are refining with. In our case, since it is a calendar widget, we want to refine on the `date` attribute of our dataset.
 
 ```javascript
 search.addWidget(
   datePicker({
-    attributeName: 'date',
+    attribute: 'date',
   })
 );
 ```
