@@ -202,7 +202,6 @@ section {
       .starIcon {
         height: 14px;
         width: auto;
-        fill: #fbae00;
       }
     }
 
@@ -310,4 +309,8 @@ section {
 
 .genre .badge {
   background: #BBBBBB;
+}
+
+.starIcon {
+  fill: #fbae00;
 }

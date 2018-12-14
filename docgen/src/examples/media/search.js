@@ -32,7 +32,7 @@ var hitTemplate =
   '<div class="media-object" style="background-image: url(\'{{image}}\');"></div>' +
   '</div>' +
   '<div class="media-body">' +
-  '<h4 class="media-heading">{{{_highlightResult.title.value}}} {{#stars}}<svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon{{#.}}--full{{/.}}{{^.}}--empty{{/.}}" aria-hidden="true" width="18" height="18"><use xlink:href="#ais-RatingMenu-{{#.}}starSymbol{{/.}}{{^.}}starEmptySymbol{{/.}}"></use></svg>{{/stars}}</h4>' +
+  '<h4 class="media-heading">{{{_highlightResult.title.value}}} {{#stars}}<svg class="starIcon ais-RatingMenu-starIcon ais-RatingMenu-starIcon{{#.}}--full{{/.}}{{^.}}--empty{{/.}}" aria-hidden="true" width="18" height="18"><use xlink:href="#ais-RatingMenu-{{#.}}starSymbol{{/.}}{{^.}}starEmptySymbol{{/.}}"></use></svg>{{/stars}}</h4>' +
   '<p class="year">{{year}}</p><p class="genre">{{#genre}}<span class="badge">{{.}}</span> {{/genre}}</p>' +
   '</div>' +
   '</div>';
