@@ -34,7 +34,9 @@ search.addWidget(
 
 const makeRangeWidget = instantsearch.connectors.connectRange(
   (options, isFirstRendering) => {
-    if (!isFirstRendering) return;
+    if (!isFirstRendering) {
+      return;
+    }
 
     const { refine } = options;
 
@@ -58,7 +60,7 @@ const makeRangeWidget = instantsearch.connectors.connectRange(
 );
 
 const dateRangeWidget = makeRangeWidget({
-  attributeName: 'date',
+  attribute: 'date',
 });
 
 search.addWidget(dateRangeWidget);
