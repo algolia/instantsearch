@@ -47,7 +47,7 @@ SearchParameters {
   "insideBoundingBox": undefined,
   "insidePolygon": undefined,
   "length": undefined,
-  "maxValuesPerFacet": 20,
+  "maxValuesPerFacet": 10,
   "minProximity": undefined,
   "minWordSizefor1Typo": undefined,
   "minWordSizefor2Typos": undefined,

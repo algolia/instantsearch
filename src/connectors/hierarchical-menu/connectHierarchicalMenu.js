@@ -86,7 +86,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       rootPath = null,
       showParentLevel = true,
       limit = 10,
-      showMore,
+      showMore = false,
       showMoreLimit = 20,
       sortBy = ['name:asc'],
       transformItems = items => items,
@@ -163,7 +163,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         widgetConfiguration.maxValuesPerFacet = Math.max(
           currentMaxValuesPerFacet,
-          showMoreLimit
+          showMore ? showMoreLimit : limit
         );
 
         return widgetConfiguration;

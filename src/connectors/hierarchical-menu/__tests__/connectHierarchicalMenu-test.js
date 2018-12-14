@@ -25,7 +25,7 @@ describe('connectHierarchicalMenu', () => {
               showParentLevel: true,
             },
           ],
-          maxValuesPerFacet: 20,
+          maxValuesPerFacet: 10,
         });
       }
 
@@ -56,7 +56,7 @@ describe('connectHierarchicalMenu', () => {
               showParentLevel: true,
             },
           ],
-          maxValuesPerFacet: 20,
+          maxValuesPerFacet: 10,
         });
       }
     });
@@ -178,7 +178,7 @@ describe('connectHierarchicalMenu', () => {
           showParentLevel: true,
         },
       ],
-      maxValuesPerFacet: 20,
+      maxValuesPerFacet: 10,
     });
 
     // test if widget is not rendered yet at this point
