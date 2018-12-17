@@ -52,6 +52,17 @@ describe('connectHits', () => {
     );
   });
 
+  it('sets the default configuration', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget();
+
+    expect(widget.getConfiguration()).toEqual({
+      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
+    });
+  });
+
   it('Provides the hits and the whole results', () => {
     const rendering = jest.fn();
     const makeWidget = connectHits(rendering);
