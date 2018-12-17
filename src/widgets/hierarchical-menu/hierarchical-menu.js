@@ -98,7 +98,7 @@ hierarchicalMenu({
  * @property {boolean} [showParentLevel = true] Show the siblings of the selected parent level of the current refined value. This
  * @property {number} [limit = 10] Max number of values to display.
  * @property {boolean} [showMore = false] Whether to display the "show more" button.
- * @property {number} [showMoreLimit = 10] Max number of values to display when showing more.
+ * @property {number} [showMoreLimit = 20] Max number of values to display when showing more.
  * does not impact the root level.
  *
  * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.
