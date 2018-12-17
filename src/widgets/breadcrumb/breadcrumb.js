@@ -39,6 +39,7 @@ const usage = `Usage:
 breadcrumb({
   container,
   attributes,
+  [ separator = ' > ' ],
   [ rootPath = null ],
   [ transformItems ],
   [ templates.{home, separator}],
@@ -58,14 +59,15 @@ breadcrumb({
 
 /**
  * @typedef {Object} BreadcrumbTemplates
- * @property {string|function(object):string} [home='Home'] Label of the breadcrumb's first element.
- * @property {string|function(object):string} [separator='>'] Symbol used to separate the elements of the breadcrumb.
+ * @property {string|function(object):string} [home = 'Home'] Label of the breadcrumb's first element.
+ * @property {string|function(object):string} [separator = '>'] Symbol used to separate the elements of the breadcrumb.
  */
 
 /**
  * @typedef {Object} BreadcrumbWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the breadcrumb.
+ * @property {string} [separator = " > "] The level separator used in the records.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -120,18 +122,20 @@ breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
  *     templates: { home: 'Home Page' },
+ *     separator: ' / ',
  *     rootPath: 'Cameras & Camcorders > Digital Cameras',
  *   })
  * );
  */
 
 export default function breadcrumb({
-  attributes,
   container,
-  cssClasses: userCssClasses = {},
+  attributes,
+  separator,
   rootPath = null,
-  templates = defaultTemplates,
   transformItems,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -169,7 +173,7 @@ export default function breadcrumb({
     const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeBreadcrumb({ attributes, rootPath, transformItems });
+    return makeBreadcrumb({ attributes, separator, rootPath, transformItems });
   } catch (error) {
     throw new Error(usage);
   }
