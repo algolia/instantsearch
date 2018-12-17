@@ -67,7 +67,7 @@ breadcrumb({
  * @typedef {Object} BreadcrumbWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the breadcrumb.
- * @property {string} [separator = " > "] The level separator used in the records.
+ * @property {string} [separator = ' > '] The level separator used in the records.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
