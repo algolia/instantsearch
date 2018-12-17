@@ -26,7 +26,8 @@ geoSearch({
   [ enableClearMapRefinement = true ],
   [ enableRefineControl = true ],
   [ enableRefineOnMapMove = true ],
-})
+  [ transformItems ],
+});
 
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html
 `;
@@ -93,6 +94,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {boolean} [enableClearMapRefinement=true] If true, a button is displayed on the map when the refinement is coming from the map in order to remove it.
  * @property {boolean} [enableRefineControl=true] If true, the user can toggle the option `enableRefineOnMapMove` directly from the map.
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
+ * @property {function} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**

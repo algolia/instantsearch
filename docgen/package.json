@@ -23,7 +23,7 @@
     "json-loader": "0.5.7",
     "jstransformer-handlebars": "1.1.0",
     "jstransformer-pug": "0.3.0",
-    "markdown-it": "8.4.1",
+    "markdown-it": "8.4.2",
     "markdown-it-anchor": "4.0.0",
     "metalsmith": "2.3.0",
     "metalsmith-copy": "0.4.0",
