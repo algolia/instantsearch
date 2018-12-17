@@ -292,10 +292,6 @@ describe('hierarchicalMenu()', () => {
         ReactDOM.render.mock.calls[0][0].props.facetValues;
       expect(actualFacetValues).toEqual(expectedFacetValues);
     });
-
-    afterEach(() => {
-      hierarchicalMenu.__ResetDependency__('defaultTemplates');
-    });
   });
 
   afterEach(() => {

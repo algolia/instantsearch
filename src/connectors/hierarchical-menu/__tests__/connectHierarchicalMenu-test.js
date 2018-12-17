@@ -115,8 +115,9 @@ describe('connectHierarchicalMenu', () => {
 
       const widget = makeWidget({
         attributes: ['category', 'sub_category'],
-        showMore: true,
         limit: 3,
+        showMore: true,
+        showMoreLimit: 6,
       });
 
       // when there is no other limit set
@@ -132,7 +133,7 @@ describe('connectHierarchicalMenu', () => {
               showParentLevel: true,
             },
           ],
-          maxValuesPerFacet: 3,
+          maxValuesPerFacet: 6,
         });
       }
 
@@ -537,13 +538,13 @@ describe('connectHierarchicalMenu', () => {
   });
 
   describe('show more', () => {
-    it('can toggle the limits', () => {
+    it('can toggle the limits based on the default showMoreLimit value', () => {
       const rendering = jest.fn();
       const makeWidget = connectHierarchicalMenu(rendering);
       const widget = makeWidget({
         attributes: ['category'],
         limit: 2,
-        showMoreLimit: 5,
+        showMore: true,
       });
 
       const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -638,6 +639,111 @@ describe('connectHierarchicalMenu', () => {
             {
               label: 'd',
               value: 'd',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+          ],
+        }),
+        expect.anything()
+      );
+    });
+
+    it('can toggle the limits based on showMoreLimit', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const widget = makeWidget({
+        attributes: ['category'],
+        limit: 2,
+        showMore: true,
+        showMoreLimit: 3,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                a: 880,
+                b: 880,
+                c: 880,
+                d: 880,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                a: 880,
+                b: 880,
+                c: 880,
+                d: 880,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const { toggleShowMore } = rendering.mock.calls[1][0];
+
+      expect(rendering).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          items: [
+            {
+              label: 'a',
+              value: 'a',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+            {
+              label: 'b',
+              value: 'b',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+          ],
+        }),
+        expect.anything()
+      );
+
+      toggleShowMore();
+
+      expect(rendering).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          items: [
+            {
+              label: 'a',
+              value: 'a',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+            {
+              label: 'b',
+              value: 'b',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+            {
+              label: 'c',
+              value: 'c',
               count: 880,
               isRefined: false,
               data: null,

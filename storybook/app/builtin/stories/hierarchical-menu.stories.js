@@ -94,9 +94,27 @@ export default () => {
               'hierarchicalCategories.lvl2',
               'hierarchicalCategories.lvl3',
             ],
-            showMore: true,
             limit: 3,
-            showMoreLimit: 10,
+            showMore: true,
+          })
+        );
+      })
+    )
+    .add(
+      'with show more and showMoreLimit',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+              'hierarchicalCategories.lvl3',
+            ],
+            limit: 3,
+            showMore: true,
+            showMoreLimit: 6,
           })
         );
       })
@@ -113,8 +131,8 @@ export default () => {
               'hierarchicalCategories.lvl2',
               'hierarchicalCategories.lvl3',
             ],
-            showMore: true,
             limit: 200,
+            showMore: true,
             showMoreLimit: 1000,
           })
         );

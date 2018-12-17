@@ -19,6 +19,8 @@ search.addWidget(
     [ rootPath = null ],
     [ showParentLevel = true ],
     [ limit = 10 ],
+    [ showMore = false ],
+    [ showMoreLimit = 20 ],
     [ sortBy = ['name:asc'] ],
     [ transformItems ],
   })
@@ -42,7 +44,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {boolean} [showParentLevel=false] Show the siblings of the selected parent levels of the current refined value. This
  * does not impact the root level.
- * @property {number} [limit = 10] Max number of value to display.
+ * @property {number} [limit = 10] Max number of values to display.
+ * @property {boolean} [showMore = false] Whether to display the "show more" button.
+ * @property {number} [showMoreLimit = 20] Max number of values to display when showing more.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
@@ -82,13 +86,18 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       rootPath = null,
       showParentLevel = true,
       limit = 10,
-      showMoreLimit,
+      showMore = false,
+      showMoreLimit = 20,
       sortBy = ['name:asc'],
       transformItems = items => items,
     } = widgetParams;
 
     if (!attributes || !attributes.length) {
       throw new Error(usage);
+    }
+
+    if (showMore === true && showMoreLimit <= limit) {
+      throw new Error('`showMoreLimit` must be greater than `limit`.');
     }
 
     // we need to provide a hierarchicalFacet name for the search state
@@ -117,7 +126,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      getConfiguration: currentConfiguration => {
+      getConfiguration(currentConfiguration) {
         if (currentConfiguration.hierarchicalFacets) {
           const isFacetSet = find(
             currentConfiguration.hierarchicalFacets,
@@ -149,22 +158,13 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
           ],
         };
 
-        if (limit !== undefined) {
-          const currentMaxValuesPerFacet =
-            currentConfiguration.maxValuesPerFacet || 0;
-          if (showMoreLimit === undefined) {
-            widgetConfiguration.maxValuesPerFacet = Math.max(
-              currentMaxValuesPerFacet,
-              limit
-            );
-          } else {
-            widgetConfiguration.maxValuesPerFacet = Math.max(
-              currentMaxValuesPerFacet,
-              limit,
-              showMoreLimit
-            );
-          }
-        }
+        const currentMaxValuesPerFacet =
+          currentConfiguration.maxValuesPerFacet || 0;
+
+        widgetConfiguration.maxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
 
         return widgetConfiguration;
       },
@@ -184,8 +184,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         renderFn(
           {
-            createURL: _createURL,
             items: [],
+            createURL: _createURL,
             refine: this._refine,
             instantSearchInstance,
             widgetParams,
@@ -249,16 +249,15 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         renderFn(
           {
-            createURL: _createURL,
             items,
             refine: this._refine,
+            createURL: _createURL,
             instantSearchInstance,
             widgetParams,
             isShowingMore: this.isShowingMore,
             toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore: showMoreLimit
-              ? this.isShowingMore || !hasExhaustiveItems
-              : false,
+            canToggleShowMore:
+              showMore && (this.isShowingMore || !hasExhaustiveItems),
           },
           false
         );
