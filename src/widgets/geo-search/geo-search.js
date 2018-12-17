@@ -29,6 +29,7 @@ geoSearch({
   [ position ],
   [ radius ],
   [ precision ],
+  [ transformItems ],
 })
 
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html
@@ -111,6 +112,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more information.
  * @property {number} [precision] Precision of geo search (in meters). <br />
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more information.
+ * @property {function} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
