@@ -44,7 +44,20 @@ export default () => {
             attribute: 'categories',
             limit: 3,
             showMore: true,
-            showMoreLimit: 10,
+          })
+        );
+      })
+    )
+    .add(
+      'with show more and showMoreLimit',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.menu({
+            container,
+            attribute: 'categories',
+            limit: 3,
+            showMore: true,
+            showMoreLimit: 6,
           })
         );
       })

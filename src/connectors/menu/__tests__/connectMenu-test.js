@@ -300,21 +300,11 @@ describe('connectMenu', () => {
   });
 
   describe('showMore', () => {
-    it('should throw when `showMoreLimit` is lower than `limit`', () => {
-      expect(() =>
-        connectMenu(() => {})({
-          attribute: 'myFacet',
-          limit: 10,
-          showMoreLimit: 1,
-        })
-      ).toThrow();
-    });
-
-    it('should provide `showMoreLimit` as `maxValuesPerFacet`', () => {
+    it('should set `maxValuesPerFacet` by default', () => {
       const widget = makeWidget({
         attribute: 'myFacet',
         limit: 10,
-        showMoreLimit: 20,
+        showMore: true,
       });
 
       expect(widget.getConfiguration({})).toEqual({
@@ -328,11 +318,31 @@ describe('connectMenu', () => {
       });
     });
 
+    it('should provide `showMoreLimit` as `maxValuesPerFacet`', () => {
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 30,
+      });
+
+      expect(widget.getConfiguration({})).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'myFacet',
+            attributes: ['myFacet'],
+          },
+        ],
+        maxValuesPerFacet: 30,
+      });
+    });
+
     it('should initialize with `isShowingMore === false`', () => {
       // Given
       const widget = makeWidget({
         attribute: 'myFacet',
         limit: 10,
+        showMore: true,
         showMoreLimit: 20,
       });
 
@@ -361,6 +371,7 @@ describe('connectMenu', () => {
       const widget = makeWidget({
         attribute: 'category',
         limit: 1,
+        showMore: true,
         showMoreLimit: 2,
       });
 
@@ -425,6 +436,7 @@ describe('connectMenu', () => {
       const widget = makeWidget({
         attribute: 'category',
         limit: 1,
+        showMore: true,
         showMoreLimit: 2,
       });
 

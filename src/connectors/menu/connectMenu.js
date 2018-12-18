@@ -16,8 +16,9 @@ var customMenu = connectMenu(function render(params, isFirstRendering) {
 search.addWidget(
   customMenu({
     attribute,
-    [ limit ],
-    [ showMoreLimit ],
+    [ limit = 10 ],
+    [ showMore = false ],
+    [ showMoreLimit = 20 ],
     [ sortBy = ['isRefined', 'name:asc'] ],
     [ transformItems ]
   })
@@ -37,7 +38,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @typedef {Object} CustomMenuWidgetOptions
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {number} [limit = 10] How many facets values to retrieve.
- * @property {number} [showMoreLimit = 10] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option.
+ * @property {number} [showMoreLimit = 20] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option.
  * @property {string[]|function} [sortBy = ['isRefined', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
@@ -113,13 +114,18 @@ export default function connectMenu(renderFn, unmountFn) {
     const {
       attribute,
       limit = 10,
+      showMore = false,
+      showMoreLimit = 20,
       sortBy = ['isRefined', 'name:asc'],
-      showMoreLimit = limit,
       transformItems = items => items,
     } = widgetParams;
 
-    if (!attribute || (!isNaN(showMoreLimit) && showMoreLimit < limit)) {
+    if (!attribute) {
       throw new Error(usage);
+    }
+
+    if (showMore === true && showMoreLimit <= limit) {
+      throw new Error('`showMoreLimit` should be greater than `limit`.');
     }
 
     return {
@@ -167,7 +173,7 @@ export default function connectMenu(renderFn, unmountFn) {
         const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
         widgetConfiguration.maxValuesPerFacet = Math.max(
           currentMaxValuesPerFacet,
-          showMoreLimit || limit
+          showMore ? showMoreLimit : limit
         );
 
         return widgetConfiguration;
@@ -226,7 +232,8 @@ export default function connectMenu(renderFn, unmountFn) {
             isShowingMore: this.isShowingMore,
             toggleShowMore: this.cachedToggleShowMore,
             canToggleShowMore:
-              this.isShowingMore || facetItems.length > this.getLimit(),
+              showMore &&
+              (this.isShowingMore || facetItems.length > this.getLimit()),
           },
           false
         );
