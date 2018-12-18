@@ -15625,10 +15625,10 @@ react-fuzzy@^0.5.1, react-fuzzy@^0.5.2:
     fuse.js "^3.0.1"
     prop-types "^15.5.9"
 
-react-hot-loader@4.6.1:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.6.1.tgz#7b4ebbbf931d864e78b31c25eee813fcf1ecfa99"
-  integrity sha512-BrMa/zyVq7aeHa2TDG6cVFgMiUut6OHZ/RkPqVHovsFbo0VI8VX7qCz2dYTDHFc9HtVrSUbJGd9LpFPIWtExBg==
+react-hot-loader@4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.6.2.tgz#9844b76a7bf4b6fdd45dd91f7e757ddf3aad5289"
+  integrity sha512-9XxH/t9jblu4vUDgxHcMLwvm4aOhaoxazzTP9vwjTVzOgU987T4rDYA85XrlmbDan9WkD+h/iVHOK8F8UnQsDg==
   dependencies:
     fast-levenshtein "^2.0.6"
     global "^4.3.0"
