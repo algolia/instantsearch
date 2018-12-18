@@ -7,6 +7,7 @@ const usage = `Usage:
 var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
   // params = {
   //   items,
+  //   createURL,
   //   refine,
   //   hasNoResults,
   //   instantSearchInstance,
@@ -43,6 +44,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} HitsPerPageRenderingOptions
  * @property {HitsPerPageRenderingOptionsItem[]} items Array of objects defining the different values and labels.
+ * @property {function(item.value)} createURL Creates the URL for a single item name in the list.
  * @property {function(number)} refine Sets the number of hits per page and trigger a search.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams Original `HitsPerPageWidgetOptions` forwarded to `renderFn`.
@@ -115,6 +117,7 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const { items: userItems, transformItems = items => items } = widgetParams;
     let items = userItems;
+    let createURLFn;
 
     if (!items) {
       throw new Error(usage);
@@ -137,7 +140,7 @@ The first one will be picked, you should probably set only one default value`
           : {};
       },
 
-      init({ helper, state, instantSearchInstance }) {
+      init({ helper, createURL, state, instantSearchInstance }) {
         const isCurrentInOptions = some(
           items,
           item => Number(state.hitsPerPage) === Number(item.value)
@@ -167,10 +170,16 @@ Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.
             ? helper.setQueryParameter('hitsPerPage', undefined).search()
             : helper.setQueryParameter('hitsPerPage', value).search();
 
+        createURLFn = value => {
+          this.setHitsPerPage(value);
+          return createURL(helper.state);
+        };
+
         renderFn(
           {
             items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
+            createURL: createURLFn,
             hasNoResults: true,
             widgetParams,
             instantSearchInstance,
@@ -186,6 +195,7 @@ Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.
           {
             items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
+            createURL: createURLFn,
             hasNoResults,
             widgetParams,
             instantSearchInstance,

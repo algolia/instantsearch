@@ -205,6 +205,33 @@ describe('connectHitsPerPage', () => {
     expect(helper.search).toHaveBeenCalledTimes(2);
   });
 
+  it('provides a createURL function', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+        { value: 20, label: '20 items per page' },
+      ],
+    });
+    const helper = jsHelper({}, '', {
+      hitsPerPage: 20,
+    });
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: state => state,
+    });
+
+    const { createURL } = rendering.mock.calls[0][0];
+    expect(helper.getQueryParameter('hitsPerPage')).toEqual(20);
+    const URLState = createURL(3);
+    expect(URLState.hitsPerPage).toEqual(3);
+  });
+
   it('provides the current hitsPerPage value', () => {
     const rendering = jest.fn();
     const makeWidget = connectHitsPerPage(rendering);
