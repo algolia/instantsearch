@@ -25,9 +25,9 @@ search.addWidget(
               ${instantsearch.highlight({ attribute: 'location', hit })}
             </small>
           </h3>
-          <small>on <strong>${moment(hit.date).format(
-            'dddd MMMM Do YYYY'
-          )}</strong></small>
+          <small>
+            on <strong>${moment(hit.date).format('dddd MMMM Do YYYY')}</strong>
+          </small>
         </li>
       `,
     },

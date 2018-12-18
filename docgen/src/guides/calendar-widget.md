@@ -66,10 +66,14 @@ search.addWidget(
       item: hit => `
         <li class="hit">
           <h3>
-            ${hit._highlightResult.name.value}
-            <small>in ${hit._highlightResult.location.value}</small>
+            ${instantsearch.highlight({ attribute: 'name', hit })}
+            <small>
+              ${instantsearch.highlight({ attribute: 'location', hit })}
+            </small>
           </h3>
-          <small>on <strong>${new Date(hit.date)}</strong></small>
+          <small>
+            on <strong>${new Date(hit.date)}</strong>
+          </small>
         </li>
       `,
     },
