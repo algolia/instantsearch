@@ -1345,7 +1345,7 @@
     debug "^4.0.1"
     semver "^5.5.1"
 
-"@oclif/command@^1.5.4":
+"@oclif/command@^1.4.31", "@oclif/command@^1.5.4":
   version "1.5.6"
   resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.6.tgz#318e03bc81513e90347ee6a0258140312e06e3d6"
   integrity sha512-XBj13dw13qrRzUfAc4d6b8PlZXALFglJ8xydX34aazLJCzeP8mtTcAJTi6ylTwWVhIW2HDO9npTd4FviDY279g==
@@ -1361,6 +1361,14 @@
   integrity sha512-ucSR89AZJ0v48d0ZWBXAWJAGe2uiGBNMnnqzE0fbc3/tDiUokgGleL990JFO3KEWrGYF1e+Sb+YMVIcPxaBKiw==
   dependencies:
     debug "^4.0.1"
+    tslib "^1.9.3"
+
+"@oclif/config@^1.6.22":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.9.0.tgz#f0df483bad3988f24cddd4d85fdc8eafa9eb7ff2"
+  integrity sha512-R9HJvS7x4Ff/VFGlg8b7hxFnuC77y7znr1iXwRay4Jhd/EFJyZRT9d9SHzA6TS8lz9vDTW93xOFakT9AXld4Kg==
+  dependencies:
+    debug "^4.1.0"
     tslib "^1.9.3"
 
 "@oclif/errors@^1.1.2", "@oclif/errors@^1.2.0", "@oclif/errors@^1.2.1":
@@ -1407,6 +1415,20 @@
     "@oclif/linewrap" "^1.0.0"
     chalk "^2.4.1"
     tslib "^1.9.3"
+
+"@oclif/plugin-autocomplete@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-autocomplete/-/plugin-autocomplete-0.1.0.tgz#3e813277deaa5f9fc6a67878a20bd337ee3776ec"
+  integrity sha512-Dz2dGyBoOUcv6/gqr9qaG7KTIkYxILL0MvMVwlhkS0f6UqCsh8fC3adYTr8BeIPQmUqWkACtC7bYp9DyQ8m2Jw==
+  dependencies:
+    "@oclif/command" "^1.4.31"
+    "@oclif/config" "^1.6.22"
+    "@types/fs-extra" "^5.0.2"
+    chalk "^2.4.1"
+    cli-ux "^4.4.0"
+    debug "^3.1.0"
+    fs-extra "^6.0.1"
+    moment "^2.22.1"
 
 "@oclif/plugin-help@^2.1.4":
   version "2.1.4"
@@ -1481,10 +1503,10 @@
     node-fetch "^2.3.0"
     universal-user-agent "^2.0.1"
 
-"@octokit/rest@^16.1.0":
-  version "16.1.0"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.1.0.tgz#43bee0f58821b6c6a4c9d63e14919a1fb67a71b5"
-  integrity sha512-/D1XokSycOE+prxxI2r9cxssiLMqcr+BsEUjdruC67puEEjNJjJoRIkuA1b20jOkX5Ue3Rz99Mu9rTnNmjetUA==
+"@octokit/rest@^16.2.0":
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.2.0.tgz#790d4189e8befd61e5cfebc4a6171b274d0526cb"
+  integrity sha512-4OyWqvF0mZhSe0NEcsXboq4WJ3HC2pThHCKWeJNd/8M10zDu0q9/Ct8u0IBzHXdgmfpE2hrJJdkIBSF2NlyB9A==
   dependencies:
     "@octokit/request" "2.2.0"
     before-after-hook "^1.2.0"
@@ -1931,6 +1953,13 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
   integrity sha512-KEIlhXnIutzKwRbQkGWb/I4HFqBuUykAdHgDED6xqwXJfONCjF5VoE0cXEiurh3XauygxzeDzgtXUqvLkxFzzA==
+
+"@types/fs-extra@^5.0.2":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-5.0.4.tgz#b971134d162cc0497d221adde3dbb67502225599"
+  integrity sha512-DsknoBvD8s+RFfSGjmERJ7ZOP1HI0UZRA3FSI+Zakhrc/Gy26YQsLI+m5V5DHxroHRJqCDLKJp7Hixn8zyaF7g==
+  dependencies:
+    "@types/node" "*"
 
 "@types/glob@*":
   version "5.0.35"
@@ -5501,33 +5530,7 @@ cli-usage@^0.1.2:
     marked "^0.3.12"
     marked-terminal "^2.0.0"
 
-cli-ux@^4.7.3, cli-ux@^4.8.2:
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/cli-ux/-/cli-ux-4.9.0.tgz#03e235c63c81614811f2400bb46ba140575b27c2"
-  integrity sha512-ab0RqYAX4mj3y2byircP+t8SsUdmwAa2lH4N6mN/UbjEBj/7A4cp/G3GKy3qU8q1HIndhf3OdgqaoWGozf13hA==
-  dependencies:
-    "@oclif/errors" "^1.2.0"
-    "@oclif/linewrap" "^1.0.0"
-    "@oclif/screen" "^1.0.2"
-    ansi-escapes "^3.1.0"
-    ansi-styles "^3.2.1"
-    cardinal "^2.1.1"
-    chalk "^2.4.1"
-    clean-stack "^1.3.0"
-    extract-stack "^1.0.0"
-    fs-extra "^7.0.0"
-    hyperlinker "^1.0.0"
-    indent-string "^3.2.0"
-    is-wsl "^1.1.0"
-    lodash "^4.17.11"
-    password-prompt "^1.0.7"
-    semver "^5.5.1"
-    strip-ansi "^4.0.0"
-    supports-color "^5.5.0"
-    supports-hyperlinks "^1.0.1"
-    treeify "^1.1.0"
-
-cli-ux@^4.9.3:
+cli-ux@^4.4.0, cli-ux@^4.9.3:
   version "4.9.3"
   resolved "https://registry.yarnpkg.com/cli-ux/-/cli-ux-4.9.3.tgz#4c3e070c1ea23eef010bbdb041192e0661be84ce"
   integrity sha512-/1owvF0SZ5Gn54cgrikJ0QskgTzeg30HGjkmjFoaHDJzAqFpuX1DBpFR8aLvsE1J5s9MgeYRENQK4BFwOag5VA==
@@ -5553,6 +5556,32 @@ cli-ux@^4.9.3:
     supports-hyperlinks "^1.0.1"
     treeify "^1.1.0"
     tslib "^1.9.3"
+
+cli-ux@^4.7.3, cli-ux@^4.8.2:
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/cli-ux/-/cli-ux-4.9.0.tgz#03e235c63c81614811f2400bb46ba140575b27c2"
+  integrity sha512-ab0RqYAX4mj3y2byircP+t8SsUdmwAa2lH4N6mN/UbjEBj/7A4cp/G3GKy3qU8q1HIndhf3OdgqaoWGozf13hA==
+  dependencies:
+    "@oclif/errors" "^1.2.0"
+    "@oclif/linewrap" "^1.0.0"
+    "@oclif/screen" "^1.0.2"
+    ansi-escapes "^3.1.0"
+    ansi-styles "^3.2.1"
+    cardinal "^2.1.1"
+    chalk "^2.4.1"
+    clean-stack "^1.3.0"
+    extract-stack "^1.0.0"
+    fs-extra "^7.0.0"
+    hyperlinker "^1.0.0"
+    indent-string "^3.2.0"
+    is-wsl "^1.1.0"
+    lodash "^4.17.11"
+    password-prompt "^1.0.7"
+    semver "^5.5.1"
+    strip-ansi "^4.0.0"
+    supports-color "^5.5.0"
+    supports-hyperlinks "^1.0.1"
+    treeify "^1.1.0"
 
 cli-width@^2.0.0:
   version "2.2.0"
@@ -8621,6 +8650,15 @@ fs-extra@^1.0.0:
     jsonfile "^2.1.0"
     klaw "^1.0.0"
 
+fs-extra@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-6.0.1.tgz#8abc128f7946e310135ddc93b98bddb410e7a34b"
+  integrity sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
 fs-extra@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.0.tgz#8cc3f47ce07ef7b3593a11b9fb245f7e34c041d6"
@@ -8924,10 +8962,10 @@ git-remote-origin-url@^2.0.0:
     gitconfiglocal "^1.0.0"
     pify "^2.3.0"
 
-git-repo-info@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/git-repo-info/-/git-repo-info-2.0.0.tgz#2e7a68ba3d0253e8e885c4138f922e6561de59bb"
-  integrity sha512-5wiwo0Pert7y8YtAC6Gym+ekeKojBospUEaQIPjK/djKvmONk7ZDpM986Q2OP5LEuwlmOom9Ji0XsGe78EFBeQ==
+git-repo-info@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/git-repo-info/-/git-repo-info-2.1.0.tgz#13d1f753c75bc2994432e65a71e35377ff563813"
+  integrity sha512-+kigfDB7j3W80f74BoOUX+lKOmf4pR3/i2Ww6baKTCPe2hD4FRdjhV3s4P5Dy0Tak1uY1891QhKoYNtnyX2VvA==
 
 git-semver-tags@^2.0.2:
   version "2.0.2"
@@ -12910,6 +12948,11 @@ moment@^2.21.0:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.0.tgz#7921ade01017dd45186e7fee5f424f0b8663a730"
   integrity sha512-1muXCh8jb1N/gHRbn9VDUBr0GYb8A/aVcHlII9QSB68a50spqEVLIGN6KVmCOnSvJrUhC0edGgKU5ofnGXdYdg==
 
+moment@^2.22.1:
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
+  integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
+
 morgan@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.0.tgz#d01fa6c65859b76fcf31b3cb53a3821a311d8051"
@@ -13074,19 +13117,20 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
   integrity sha512-nJmSswG4As/MkRq7QZFuH/sf/yuv8ODdMZrY4Bedjp77a5MK4A6s7YbBB64c9u79EBUOfXUXBvArmvzTD0X+6g==
 
-netlify-cli@2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.5.1.tgz#2648a58b63beda1c7277cdaec6101fca183a9087"
-  integrity sha512-r35S5Ox1qlO9bxWvUgmUx/jvYhugcQdy+0K98v82b4V60Tga7xFMxlCER7GzgImGVtuwOmoPSzKNcl335zKpqA==
+netlify-cli@2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.6.0.tgz#1eabc85e649354c7fc64adf1c20a3c0c4510d9a4"
+  integrity sha512-wKGUb0hHYMDQmg94KnI+dpjQVD2dto7/smyRqHkoTSn0HLvG/LW2nFxd1XzTS5Wal1/o8XcaozK3PbLikWiJXg==
   dependencies:
     "@iarna/toml" "^2.0.0"
     "@oclif/command" "^1"
     "@oclif/config" "^1"
     "@oclif/errors" "^1.1.2"
+    "@oclif/plugin-autocomplete" "^0.1.0"
     "@oclif/plugin-help" "^2.1.4"
     "@oclif/plugin-not-found" "^1.1.4"
     "@oclif/plugin-plugins" "^1.7.3"
-    "@octokit/rest" "^16.1.0"
+    "@octokit/rest" "^16.2.0"
     ascii-table "0.0.9"
     chalk "^2.4.1"
     ci-info "^1.4.0"
@@ -13097,7 +13141,7 @@ netlify-cli@2.5.1:
     dot-prop "^4.2.0"
     find-up "^3.0.0"
     git-remote-origin-url "^2.0.0"
-    git-repo-info "^2.0.0"
+    git-repo-info "^2.1.0"
     inquirer "^6.0.0"
     is-docker "^1.1.0"
     lodash.get "^4.4.2"
