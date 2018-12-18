@@ -2,34 +2,50 @@
 layout: example.pug
 title: Media search by Algolia
 ---
+
 <body>
   <header class="row">
-    <div><a href="https://community.algolia.com/instantsearch.js/" class="is-logo"><img src="logo-is.png" width="40"></a><a href="./" class="logo">You<i class="fa fa-youtube-play"></i></a></div>
-    <div class="searchbox-container">
-      <div class="input-group">
-        <input id="q" type="text" class="form-control"><span class="input-group-btn">
-          <button class="btn btn-default"><i class="fa fa-search"></i></button></span>
-      </div>
+    <div>
+      <a href="https://community.algolia.com/instantsearch.js/" class="is-logo"
+        ><img src="logo-is.png" width="40"/></a
+      ><a href="./" class="logo">You<i class="fa fa-youtube-play"></i></a>
     </div>
+    <div class="searchbox-container" id="searchbox"></div>
   </header>
+
   <section>
     <aside>
-      <ul class="nav nav-list">
-        <li><a href=""><i class="fa fa-home"></i> Home</a></li>
+      <ul id="home" class="nav nav-list">
+        <li>
+          <a href=""><i class="fa fa-home"></i> Home</a>
+        </li>
         <li class="separator"></li>
       </ul>
-      <h5><i class="fa fa-chevron-right"></i> Genres</h5>
+
       <div id="genres"></div>
-      <h5><i class="fa fa-chevron-right"></i> Ratings</h5>
-      <div id="ratings"></div>
-      <div class="thank-you">Data courtesy of <a href="https://www.imdb.com/">imdb.com</a></div>
+
+      <!-- TODO: remove panel-related elements once https://github.com/algolia/instantsearch.js/pull/3347 is merged -->
+      <div class="ais-Panel">
+        <div class="ais-Panel-header panel-header">
+          <i class="fa fa-chevron-right"></i> Ratings
+        </div>
+        <div class="ais-Panel-body"><div id="ratings"></div></div>
+      </div>
+
+      <div class="thank-you">
+        Data courtesy of <a href="https://www.imdb.com/">imdb.com</a>
+      </div>
     </aside>
+
     <article>
       <div id="stats" class="text-right text-muted"></div>
-      <hr>
+      <hr />
       <div id="hits"></div>
       <div id="pagination" class="text-center"></div>
     </article>
   </section>
+
   <script src="https://cdn.jsdelivr.net/npm/algoliasearch@3.30.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@beta"></script>
   <script src="search.js"></script>
+</body>
