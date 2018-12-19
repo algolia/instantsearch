@@ -1,6 +1,6 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-import { checkRendering, warn } from '../../lib/utils.js';
+import { checkRendering, warning } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
@@ -139,7 +139,9 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
               isFacetSet.separator === separator
             )
           ) {
-            warn(
+            warning(
+              isEqual(isFacetSet.attributes, attributes) &&
+                isFacetSet.separator === separator,
               'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
             );
             return {};
