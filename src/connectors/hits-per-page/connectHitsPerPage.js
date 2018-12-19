@@ -169,9 +169,9 @@ Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.
             ? helper.setQueryParameter('hitsPerPage', undefined).search()
             : helper.setQueryParameter('hitsPerPage', value).search();
 
-        this.createURL = state => value =>
+        this.createURL = helperState => value =>
           createURL(
-            state.setQueryParameter(
+            helperState.setQueryParameter(
               'hitsPerPage',
               !value && value !== 0 ? undefined : value
             )
