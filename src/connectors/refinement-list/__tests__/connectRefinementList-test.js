@@ -3,7 +3,6 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
-
 import connectRefinementList from '../connectRefinementList.js';
 
 describe('connectRefinementList', () => {
@@ -36,6 +35,28 @@ describe('connectRefinementList', () => {
         operator: 'YUP',
       })
     ).toThrow(/Usage:/);
+
+    expect(() =>
+      connectRefinementList(() => {})({
+        attribute: 'company',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 10,
+      })
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"\`showMoreLimit\` should be greater than \`limit\`."`
+    );
+
+    expect(() =>
+      connectRefinementList(() => {})({
+        attribute: 'company',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 5,
+      })
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"\`showMoreLimit\` should be greater than \`limit\`."`
+    );
   });
 
   describe('options configuring the helper', () => {
@@ -253,6 +274,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 3,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -350,6 +372,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 2,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -401,6 +424,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 1,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -455,6 +479,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 1,
+      showMore: true,
       showMoreLimit: 3,
     });
 

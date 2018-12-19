@@ -26,35 +26,17 @@ search.addWidget(
   customRefinementList({
     attribute,
     [ operator = 'or' ],
-    [ limit ],
-    [ showMoreLimit ],
+    [ limit = 10 ],
+    [ showMore = false ],
+    [ showMoreLimit = 20 ],
     [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
     [ escapeFacetValues = true ],
-    [ transformItems ]
+    [ transformItems ],
   })
 );
 
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
 `;
-
-export const checkUsage = ({
-  attribute,
-  operator,
-  showMoreLimit,
-  limit,
-  message,
-}) => {
-  const noAttributeName = attribute === undefined;
-  const invalidOperator = !/^(and|or)$/.test(operator);
-  const invalidShowMoreLimit =
-    showMoreLimit !== undefined
-      ? isNaN(showMoreLimit) || showMoreLimit < limit
-      : false;
-
-  if (noAttributeName || invalidOperator || invalidShowMoreLimit) {
-    throw new Error(message);
-  }
-};
 
 /**
  * @typedef {Object} RefinementListItem
@@ -70,7 +52,8 @@ export const checkUsage = ({
  * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
  * @property {number} [limit = 10] The max number of items to display when
  * `showMoreLimit` is not set or if the widget is showing less value.
- * @property {number} [showMoreLimit] The max number of items to display if the widget
+ * @property {boolean} [showMore = false] Whether to display a button that expands the number of items.
+ * @property {number} [showMoreLimit = 20] The max number of items to display if the widget
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  * @property {boolean} [escapeFacetValues = true] Escapes the content of the facet values.
@@ -162,19 +145,20 @@ export default function connectRefinementList(renderFn, unmountFn) {
       attribute,
       operator = 'or',
       limit = 10,
-      showMoreLimit,
+      showMore = false,
+      showMoreLimit = 20,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
       escapeFacetValues = true,
       transformItems = items => items,
     } = widgetParams;
 
-    checkUsage({
-      message: usage,
-      attribute,
-      operator,
-      showMoreLimit,
-      limit,
-    });
+    if (!attribute || !/^(and|or)$/.test(operator)) {
+      throw new Error(usage);
+    }
+
+    if (showMore === true && showMoreLimit <= limit) {
+      throw new Error('`showMoreLimit` should be greater than `limit`.');
+    }
 
     const formatItems = ({ name: label, ...item }) => ({
       ...item,
@@ -223,9 +207,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
           canRefine: isFromSearch || items.length > 0,
           widgetParams,
           isShowingMore,
-          canToggleShowMore: showMoreLimit
-            ? isShowingMore || !hasExhaustiveItems
-            : false,
+          canToggleShowMore: showMore && (isShowingMore || !hasExhaustiveItems),
           toggleShowMore,
           hasExhaustiveItems,
         },
@@ -323,21 +305,12 @@ export default function connectRefinementList(renderFn, unmountFn) {
           [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
         };
 
-        if (limit !== undefined) {
-          const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-          if (showMoreLimit === undefined) {
-            widgetConfiguration.maxValuesPerFacet = Math.max(
-              currentMaxValuesPerFacet,
-              limit
-            );
-          } else {
-            widgetConfiguration.maxValuesPerFacet = Math.max(
-              currentMaxValuesPerFacet,
-              limit,
-              showMoreLimit
-            );
-          }
-        }
+        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+
+        widgetConfiguration.maxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
 
         return widgetConfiguration;
       },

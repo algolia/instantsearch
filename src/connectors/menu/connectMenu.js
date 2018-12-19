@@ -38,6 +38,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @typedef {Object} CustomMenuWidgetOptions
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {number} [limit = 10] How many facets values to retrieve.
+ * @property {boolean} [showMore=false] Whether to display a button that expands the number of items.
  * @property {number} [showMoreLimit = 20] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option.
  * @property {string[]|function} [sortBy = ['isRefined', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
