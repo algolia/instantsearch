@@ -226,10 +226,20 @@ describe('connectHitsPerPage', () => {
       createURL: state => state,
     });
 
-    const { createURL } = rendering.mock.calls[0][0];
+    const createURLAtInit = rendering.mock.calls[0][0].createURL;
     expect(helper.getQueryParameter('hitsPerPage')).toEqual(20);
-    const URLState = createURL(3);
-    expect(URLState.hitsPerPage).toEqual(3);
+    const URLStateAtInit = createURLAtInit(3);
+    expect(URLStateAtInit.hitsPerPage).toEqual(3);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      createURL: state => state,
+    });
+
+    const createURLAtRender = rendering.mock.calls[1][0].createURL;
+    const URLStateAtRender = createURLAtRender(5);
+    expect(URLStateAtRender.hitsPerPage).toEqual(5);
   });
 
   it('provides the current hitsPerPage value', () => {

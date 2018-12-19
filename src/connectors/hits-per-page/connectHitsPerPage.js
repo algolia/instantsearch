@@ -117,7 +117,6 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const { items: userItems, transformItems = items => items } = widgetParams;
     let items = userItems;
-    let createURLFn;
 
     if (!items) {
       throw new Error(usage);
@@ -170,9 +169,9 @@ Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.
             ? helper.setQueryParameter('hitsPerPage', undefined).search()
             : helper.setQueryParameter('hitsPerPage', value).search();
 
-        createURLFn = value =>
+        this.createURL = state => value =>
           createURL(
-            helper.state.setQueryParameter(
+            state.setQueryParameter(
               'hitsPerPage',
               !value && value !== 0 ? undefined : value
             )
@@ -182,7 +181,7 @@ Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.
           {
             items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
-            createURL: createURLFn,
+            createURL: this.createURL(helper.state),
             hasNoResults: true,
             widgetParams,
             instantSearchInstance,
@@ -198,7 +197,7 @@ Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.
           {
             items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
-            createURL: createURLFn,
+            createURL: this.createURL(state),
             hasNoResults,
             widgetParams,
             instantSearchInstance,
