@@ -63,7 +63,7 @@ menu({
   [ sortBy = ['isRefined', 'name:asc'] ],
   [ limit = 10 ],
   [ showMore = false ],
-  [ showMoreLimit = 10 ],
+  [ showMoreLimit = 20 ],
   [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, link, label, count, showMore, disabledShowMore} ],
   [ templates.{item, showMoreText} ],
   [ transformItems ]
@@ -99,7 +99,7 @@ menu({
  * @property {MenuTemplates} [templates] Customize the output through templating.
  * @property {number} [limit=10] How many facets values to retrieve.
  * @property {boolean} [showMore=false] Limit the number of results and display a showMore button.
- * @property {number} [showMoreLimit=10] How many facets values to retrieve when showing more.
+ * @property {number} [showMoreLimit=20] Max number of values to display when showing more.
  * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -130,8 +130,8 @@ export default function menu({
   container,
   attribute,
   sortBy,
-  limit = 10,
-  showMore = false,
+  limit,
+  showMore,
   showMoreLimit,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
@@ -139,16 +139,6 @@ export default function menu({
 }) {
   if (!container) {
     throw new Error(usage);
-  }
-
-  if (!showMore && showMoreLimit) {
-    throw new Error(
-      '`showMoreLimit` must be used with `showMore` set to `true`.'
-    );
-  }
-
-  if (showMore && showMoreLimit < limit) {
-    throw new Error('`showMoreLimit` should be greater than `limit`.');
   }
 
   const containerNode = getContainerNode(container);
@@ -190,8 +180,9 @@ export default function menu({
     return makeWidget({
       attribute,
       limit,
-      sortBy,
+      showMore,
       showMoreLimit,
+      sortBy,
       transformItems,
     });
   } catch (error) {
