@@ -129,33 +129,25 @@ export default function panel({
         container: getContainerNode(bodyRef),
       });
 
-      // All widget's methods need to be bound to not lose the `this`
-      // context when called from the `panel` widget.
-      // We need to check the type of the widget's attributes before binding them
-      // because some are not methods.
-      Object.keys(widget)
-        .filter(attribute => typeof widget[attribute] === 'function')
-        .forEach(method => {
-          widget[method] = widget[method].bind(widget);
-        });
-
       return {
         ...widget,
-        dispose(options) {
+        dispose(...args) {
           unmountComponentAtNode(getContainerNode(container));
 
           if (typeof widget.dispose === 'function') {
-            widget.dispose(options);
+            widget.dispose.call(this, ...args);
           }
         },
-        render(options) {
+        render(...args) {
+          const [options] = args;
+
           renderPanel({
             options,
             hidden: Boolean(hidden(options)),
           });
 
           if (typeof widget.render === 'function') {
-            widget.render(options);
+            widget.render.call(this, ...args);
           }
         },
       };
