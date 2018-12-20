@@ -35,7 +35,7 @@ export default () => {
       })
     )
     .add(
-      'with custom default template',
+      'with custom default option template',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.menuSelect({
