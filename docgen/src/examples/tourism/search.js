@@ -38,8 +38,12 @@ $script('https://maps.googleapis.com/maps/api/js?v=weekly&key=AIzaSyBawL8VbstJDd
       '<img class="profile" src="{{user.user.thumbnail_url}}" />' +
     '</div>' +
     '<div class="infos">' +
-    '<h4 class="media-heading">{{{_highlightResult.name.value}}}</h4>' +
-    '<p>{{room_type}} - {{{_highlightResult.city.value}}}, {{{_highlightResult.country.value}}}</p>' +
+    '<h4 class="media-heading">{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</h4>' +
+    '<p>' +
+    '{{room_type}} - ' +
+    '{{#helpers.highlight}}{ "attribute": "city" }{{/helpers.highlight}},'+
+    '{{#helpers.highlight}}{ "attribute": "country" }{{/helpers.highlight}}' +
+    '</p>' +
     '</div>' +
     '</div>';
 
