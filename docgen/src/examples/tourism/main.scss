@@ -59,32 +59,39 @@ body {
     color: $aisdemo-color-gray-light;
   }
 
-  .ais-search-box {
+  .ais-SearchBox {
     position: absolute;
     top: 0;
     left: 180px;
     height: 100%;
     width: 33%;
+  }
 
-    &--reset {
-      fill: #BFC7D8;
-      top: calc(50% - 12px / 2);
-      right: 13px;
-    }
+  .ais-SearchBox-form {
+    position: absolute;
+    top: 15px;
+    width: 300px;
+    height: 40px;
+    border: 0;
+    box-shadow: none;
+  }
 
-    #q {
-      position: absolute;
-      top: 15px;
-      width: 300px;
-      height: 40px;
-      border: 0;
+  .ais-SearchBox-input {
+    position: absolute;
+    border: 0;
+    box-shadow: none;
+
+    &:focus {
+      outline: none;
       box-shadow: none;
-
-      &:focus {
-        outline: none;
-        box-shadow: none;
-      }
     }
+  }
+
+  .ais-SearchBox-reset {
+    position: absolute;
+    top: calc(50% - 25px / 2);
+    right: 13px;
+    fill: #BFC7D8;
   }
 }
 
@@ -143,11 +150,11 @@ body {
 
   #room_types {
 
-    .ais-refinement-list--count {
+    .ais-RefinementList-count {
       display: none;
     }
 
-    .ais-refinement-list--item {
+    .ais-RefinementList-item {
       display: inline-block;
       cursor: pointer;
 
@@ -161,7 +168,7 @@ body {
       }
     }
 
-    .ais-refinement-list--checkbox {
+    .ais-RefinementList-checkbox {
       position: relative;
       bottom: 3px;
       float: right;
@@ -178,9 +185,9 @@ body {
       }
     }
 
-    .ais-refinement-list--item__active {
+    .ais-RefinementList-item--selected {
 
-      .ais-refinement-list--checkbox {
+      .ais-RefinementList-checkbox {
 
         &::before {
           font-size: .85em;
@@ -196,11 +203,11 @@ body {
 
   #price {
 
-    .ais-range-slider--target {
+    .ais-RangeSlider-target {
       margin: 30px 9px 18px;
     }
 
-    .ais-range-slider--handle {
+    .ais-RangeSlider-handle {
       border-color: $aisdemo-primary-color;
     }
 
@@ -208,15 +215,8 @@ body {
       background-color: $aisdemo-primary-color !important;
     }
 
-    .ais-range-slider--tooltip {
-
-      &:last-child {
-        right: 0;
-      }
-    }
-
-    .ais-range-slider--connect {
-      background-color: $aisdemo-primary-color;
+    .rheostat-tooltip {
+      font-size: 0.8em;
     }
   }
 }
@@ -239,6 +239,25 @@ body {
   height: 400px;
 }
 
+.ais-GeoSearch,
+.ais-GeoSearch-map {
+  height: 100%;
+}
+
+.ais-GeoSearch-reset {
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  background-color: #ff585b;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
 
 /* RESULTS
 // ------------------------- */
@@ -249,44 +268,48 @@ body {
 
 #hits {
 
-  .hit {
+  .ais-Hits-list {
+    list-style: none;
 
-    .pictures-wrapper {
-      position: relative;
+    .hit {
 
-      .picture {
-        width: 100%;
+      .pictures-wrapper {
+        position: relative;
+
+        .picture {
+          width: 100%;
+        }
+
+        .profile {
+          position: absolute;
+          bottom: -16px;
+          right: 12px;
+          width: 60px;
+          border: 4px solid rgba(255, 255, 255, .3);
+          border-radius: 30px;
+        }
       }
 
-      .profile {
-        position: absolute;
-        bottom: -16px;
-        right: 12px;
-        width: 60px;
-        border: 4px solid rgba(255, 255, 255, .3);
-        border-radius: 30px;
+      .infos {
+        height: 90px;
+        padding: 16px 20px;
+
+        h4 {
+          font-size: 1em;
+          font-weight: normal;
+        }
+
+        p {
+          font-size: .8em;
+          color: $aisdemo-text-lighter-color;
+        }
+
+        em {
+          font-style: normal;
+          color: $aisdemo-primary-color;
+        }
+
       }
-    }
-
-    .infos {
-      height: 90px;
-      padding: 16px 20px;
-
-      h4 {
-        font-size: 1em;
-        font-weight: normal;
-      }
-
-      p {
-        font-size: .8em;
-        color: $aisdemo-text-lighter-color;
-      }
-
-      em {
-        font-style: normal;
-        color: $aisdemo-primary-color;
-      }
-
     }
   }
 }
@@ -297,12 +320,18 @@ body {
 #pagination {
   text-align: center;
 
-  .ais-pagination--item {
-    display: inline-block;
-    margin: 1px;
+  .ais-Pagination-list {
+    justify-content: center;
+    margin: 20px 0;
   }
 
-  .ais-pagination--link {
+  .ais-Pagination-item {
+    display: inline-block;
+    margin: 1px;
+    padding: 3px;
+  }
+
+  .ais-Pagination-link {
     color: $aisdemo-primary-color;
     border-radius: 4px;
     background: transparent;
@@ -316,7 +345,8 @@ body {
 
   .pagination > li > a, .pagination > li > span {
 
-    &:focus, &:hover {
+    &:focus,
+    &:hover {
       color: $aisdemo-color-white;
       border-color: $aisdemo-primary-color;
       background: $aisdemo-primary-color;
