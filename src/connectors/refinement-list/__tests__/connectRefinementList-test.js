@@ -93,6 +93,124 @@ describe('connectRefinementList', () => {
       );
     });
 
+    it('`showMoreLimit`', () => {
+      const { rendering, makeWidget } = createWidgetFactory();
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 20,
+        showMore: true,
+        showMoreLimit: 30,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      secondRenderingOptions.toggleShowMore();
+
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 30,
+      });
+
+      expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 100,
+      });
+    });
+
+    it('`showMoreLimit` without `showMore` does not set anything', () => {
+      const { rendering, makeWidget } = createWidgetFactory();
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 20,
+        showMoreLimit: 30,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      secondRenderingOptions.toggleShowMore();
+
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 20,
+      });
+    });
+
     it('`operator="and"`', () => {
       const { makeWidget } = createWidgetFactory();
       const widget = makeWidget({
