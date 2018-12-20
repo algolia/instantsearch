@@ -27,13 +27,13 @@ exports[`menuSelect render renders correctly 1`] = `
   templateProps={
     Object {
       "templates": Object {
+        "defaultOption": "See all",
         "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
-        "seeAllOptions": "See all",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
+        "defaultOption": false,
         "item": false,
-        "seeAllOptions": false,
       },
     }
   }
@@ -69,13 +69,13 @@ exports[`menuSelect render renders transformed items correctly 1`] = `
   templateProps={
     Object {
       "templates": Object {
+        "defaultOption": "See all",
         "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
-        "seeAllOptions": "See all",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
+        "defaultOption": false,
         "item": false,
-        "seeAllOptions": false,
       },
     }
   }
