@@ -1,0 +1,24 @@
+{
+  "name": "storybook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@storybook/html": "^4.1.2",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-syntax-jsx": "6.18.0",
+    "babel-preset-react": "6.24.1",
+    "babel-runtime": "6.26.0"
+  }
+}

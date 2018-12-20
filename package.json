@@ -25,8 +25,8 @@
     "build:umd": "BABEL_ENV=umd rollup --config scripts/rollup.config.js",
     "build:cjs": "BABEL_ENV=cjs babel src --out-dir cjs/ --ignore src/index.es.js,__tests__,__mocks__ --quiet",
     "build:es": "BABEL_ENV=es babel src --out-dir es/ --ignore src/index.es.js,__tests__,__mocks__ --quiet && BABEL_ENV=es babel src/index.es.js --out-file es/index.js --quiet",
-    "docs:storybook": "NODE_ENV=development webpack-dev-server --config storybook/webpack.config.js",
-    "docs:storybook:build": "NODE_ENV=production webpack --config storybook/webpack.config.js",
+    "docs:storybook": "start-storybook -p 6006",
+    "docs:storybook:build": "build-storybook",
     "docs:doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "docs:build:dev": "./scripts/docs/build-dev.sh",
     "docs:publish": "./scripts/docs/publish.sh",
@@ -66,6 +66,9 @@
     "to-factory": "^1.0.0"
   },
   "devDependencies": {
+    "@babel/core": "7.2.2",
+    "@storybook/addon-options": "4.1.2",
+    "@storybook/html": "4.1.2",
     "algoliasearch": "3.30.0",
     "argos-cli": "0.0.9",
     "autodll-webpack-plugin": "0.3.9",

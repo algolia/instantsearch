@@ -1,0 +1,185 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  margin: 10px;
+}
+
+.container {
+  position: relative;
+  padding: 50px 40px 40px;
+}
+
+.container::after {
+  font-size: 13px;
+  top: 0;
+  left: 0;
+  color: #999999;
+  padding: 4px 6px;
+  line-height: 1em;
+  position: absolute;
+  background-color: #f3f3f3;
+  border: solid 1px #e4e4e4;
+  margin: -1px 0px 0px -1px;
+}
+
+.container-preview {
+  border: solid 1px #e4e4e4;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.container-preview::after {
+  content: 'Preview';
+  border-radius: 4px 0 0;
+}
+
+.container-playground {
+  border-left: solid 1px #e4e4e4;
+  border-right: solid 1px #e4e4e4;
+  border-bottom: solid 1px #e4e4e4;
+}
+
+.container-playground::after {
+  content: 'Playground';
+}
+
+.searchBox {
+  margin-bottom: 20px;
+}
+
+/* Hit */
+
+/* .hit {
+  align-items: center;
+  display: flex;
+  padding: 5px 0;
+}
+
+.hit:hover {
+  cursor: pointer;
+}
+
+.hit--active {
+  background-color: #3369e7;
+  color: white;
+}
+
+.hit .hit-picture img {
+  height: auto;
+  width: 80px;
+}
+
+.hit .hit-content {
+  padding: 0 10px;
+}
+
+.hit .hit-type {
+  color: #888;
+  font-size: 13px;
+} */
+
+/* GeoSearch */
+
+.ais-GeoSearch {
+  width: 850px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.algolia-places {
+  display: block !important;
+  width: 850px;
+  margin: 0 auto;
+}
+
+.my-custom-marker {
+  position: relative;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 3px 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+.my-custom-marker:hover,
+.my-custom-marker--active {
+  background-color: #3369e7;
+  color: white;
+  cursor: pointer;
+}
+
+.my-custom-marker::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  bottom: -5px;
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  left: 50%;
+  margin-left: -4px;
+  transform: rotate(45deg);
+}
+
+.my-custom-marker:hover::after,
+.my-custom-marker--active::after {
+  background-color: #3369e7;
+}
+
+.my-custom-info-box {
+  position: relative;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 3px 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+.my-custom-info-box::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  bottom: -5px;
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  left: 50%;
+  margin-left: -4px;
+  transform: rotate(45deg);
+}
+
+.my-custom-info-box__text {
+  text-align: center;
+}
+
+.story-selector {
+  padding-left: 5px;
+  background: #333;
+}
+
+.tab {
+  height: 30px;
+  display: inline-block;
+  padding: 5px;
+  margin: 5px 2px 0 2px;
+  background: #d6d6d6;
+  color: #777;
+  text-decoration: none;
+}
+
+.tab.active {
+  background: #f7f7f7;
+  color: black;
+}
