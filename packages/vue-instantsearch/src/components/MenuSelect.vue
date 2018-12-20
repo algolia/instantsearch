@@ -17,7 +17,7 @@
           :class="suit('option')"
           value=""
         >
-          {{ label }}
+          <slot name="defaultOption">See all</slot>
         </option>
         <option
           v-for="item in state.items"
@@ -67,10 +67,6 @@ export default {
       default() {
         return ['name:asc'];
       },
-    },
-    label: {
-      type: String,
-      default: 'See all',
     },
     transformItems: {
       type: Function,

@@ -104,7 +104,9 @@ exports[`default render renders correctly with custom label 1`] = `
     <option value
             class="ais-MenuSelect-option"
     >
-      None
+      <span>
+        None
+      </span>
     </option>
     <option class="ais-MenuSelect-option"
             value="Apple"

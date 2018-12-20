@@ -111,13 +111,17 @@ describe('default render', () => {
 
     const props = {
       ...defaultProps,
-      label: 'None',
     };
 
     const wrapper = mount(MenuSelect, {
       propsData: props,
+      slots: {
+        // tag is needed here for Vue Test Utils, even if it's invalid HTML
+        defaultOption: '<span>None</span>',
+      },
     });
 
+    expect(wrapper.find('option').html()).toContain('None');
     expect(wrapper.html()).toMatchSnapshot();
   });
 
