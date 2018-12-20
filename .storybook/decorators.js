@@ -16,7 +16,7 @@ export const withHits = (storyFn, searchOptions = {}) => () => {
     indexName,
     searchClient: algoliasearch(appId, apiKey),
     searchParameters: {
-      hitsPerPage: 3,
+      hitsPerPage: 8,
       ...searchParameters,
     },
     routing: {
