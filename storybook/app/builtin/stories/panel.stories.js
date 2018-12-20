@@ -33,7 +33,6 @@ export default () => {
           instantsearch.widgets.panel({
             templates: {
               header: ({ results }) =>
-                console.log(results) ||
                 `Header ${results ? `| ${results.nbHits} results` : ''}`,
               footer: 'Footer',
             },
