@@ -33,6 +33,3 @@ cp dist/* docs/lib
 
 # Build storybook
 yarn run docs:storybook:build
-
-# Move storybook to website-root
-mv storybook/dist docs/stories
