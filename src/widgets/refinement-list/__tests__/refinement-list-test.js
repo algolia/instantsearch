@@ -1,6 +1,6 @@
-import algoliasearchHelper from 'algoliasearch-helper';
-const SearchParameters = algoliasearchHelper.SearchParameters;
+import { SearchParameters } from 'algoliasearch-helper';
 import refinementList from '../refinement-list.js';
+
 const instantSearchInstance = { templatesConfig: {} };
 
 describe('refinementList()', () => {
@@ -26,32 +26,6 @@ describe('refinementList()', () => {
         // When
         refinementList(options);
       }).toThrow(/^Usage:/);
-    });
-
-    it('throws an exception when showMoreLimit without showMore option', () => {
-      expect(
-        refinementList.bind(null, {
-          attribute: 'attribute',
-          container,
-          showMoreLimit: 10,
-        })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"\`showMoreLimit\` must be used with \`showMore\` set to \`true\`."`
-      );
-    });
-
-    it('throws an exception when showMoreLimit is lower than limit', () => {
-      expect(
-        refinementList.bind(null, {
-          attribute: 'attribute',
-          container,
-          limit: 20,
-          showMore: true,
-          showMoreLimit: 10,
-        })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"\`showMoreLimit\` should be greater than \`limit\`."`
-      );
     });
   });
 
@@ -168,7 +142,6 @@ describe('refinementList()', () => {
         container,
         attribute: 'attribute',
         limit: 1,
-        showMore: true,
       };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});

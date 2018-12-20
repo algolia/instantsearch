@@ -70,7 +70,7 @@ refinementList({
   [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
   [ limit = 10 ],
   [ showMore = false],
-  [ showMoreLimit = 10 ],
+  [ showMoreLimit = 20 ],
   [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
   [ templates.{item, searchableNoResults, showMoreText} ],
   [ searchable ],
@@ -123,9 +123,10 @@ refinementList({
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
  * @property {boolean} [searchable=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
- * @property {boolean} [showMore=false] Limit the number of results and display a showMore button.
+ * @property {number} [limit = 10] The minimum number of facet values to retrieve.
+ * @property {boolean} [showMore = false] Whether to display a button that expands the number of items.
+ * @property {number} [showMoreLimit = 20] The max number of items to display if the widget
  * @property {string} [searchablePlaceholder] Value of the search field placeholder.
  * @property {boolean} [searchableIsAlwaysActive=true] When `false` the search field will become disabled if
  * there are less items to display than the `options.limit`, otherwise the search field is always usable.
@@ -172,10 +173,10 @@ refinementList({
 export default function refinementList({
   container,
   attribute,
-  operator = 'or',
-  sortBy = ['isRefined', 'count:desc', 'name:asc'],
-  limit = 10,
-  showMore = false,
+  operator,
+  sortBy,
+  limit,
+  showMore,
   showMoreLimit,
   searchable = false,
   searchablePlaceholder = 'Search...',
@@ -187,16 +188,6 @@ export default function refinementList({
 } = {}) {
   if (!container) {
     throw new Error(usage);
-  }
-
-  if (!showMore && showMoreLimit) {
-    throw new Error(
-      '`showMoreLimit` must be used with `showMore` set to `true`.'
-    );
-  }
-
-  if (showMore && showMoreLimit < limit) {
-    throw new Error('`showMoreLimit` should be greater than `limit`.');
   }
 
   const escapeFacetValues = searchable
@@ -261,6 +252,7 @@ export default function refinementList({
       attribute,
       operator,
       limit,
+      showMore,
       showMoreLimit,
       sortBy,
       escapeFacetValues,

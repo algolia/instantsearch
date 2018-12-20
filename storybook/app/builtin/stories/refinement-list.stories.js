@@ -28,7 +28,20 @@ export default () => {
             attribute: 'brand',
             limit: 3,
             showMore: true,
-            showMoreLimit: 10,
+          })
+        );
+      })
+    )
+    .add(
+      'with show more and showMoreLimit',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container,
+            attribute: 'brand',
+            limit: 3,
+            showMore: true,
+            showMoreLimit: 6,
           })
         );
       })

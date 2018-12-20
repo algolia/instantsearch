@@ -43,7 +43,6 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
   isShowingMore={false}
   searchIsAlwaysActive={true}
   searchPlaceholder="Search..."
-  showMore={false}
   templateProps={
     Object {
       "templates": Object {
