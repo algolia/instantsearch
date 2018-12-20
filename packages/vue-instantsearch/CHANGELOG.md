@@ -1,3 +1,21 @@
+<a name="2.0.0-beta.2"></a>
+# [2.0.0-beta.2](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2018-12-20)
+
+
+### Bug Fixes
+
+* **CurrentRefinements:** compute unique key ([#577](https://github.com/algolia/vue-instantsearch/issues/577)) ([4e941ca](https://github.com/algolia/vue-instantsearch/commit/4e941ca)), closes [#574](https://github.com/algolia/vue-instantsearch/issues/574)
+* **PoweredBy:** new design & colors ([#578](https://github.com/algolia/vue-instantsearch/issues/578)) ([e1ea477](https://github.com/algolia/vue-instantsearch/commit/e1ea477)), closes [#571](https://github.com/algolia/vue-instantsearch/issues/571)
+* **rating-menu:** remove nonfunctional min prop ([#597](https://github.com/algolia/vue-instantsearch/issues/597)) ([26891e6](https://github.com/algolia/vue-instantsearch/commit/26891e6))
+* **RefinementList:** allow overriding of searchable placeholder ([#576](https://github.com/algolia/vue-instantsearch/issues/576)) ([d293b83](https://github.com/algolia/vue-instantsearch/commit/d293b83)), closes [#572](https://github.com/algolia/vue-instantsearch/issues/572)
+
+
+### Features
+
+* **MenuSelect:** use a slot for "defaultOption" ([#595](https://github.com/algolia/vue-instantsearch/issues/595)) ([2ca65f0](https://github.com/algolia/vue-instantsearch/commit/2ca65f0))
+
+
+
 <a name="2.0.0-beta.1"></a>
 # [2.0.0-beta.1](https://github.com/algolia/vue-instantsearch/compare/2.0.0-alpha.3...2.0.0-beta.1) (2018-11-06)
 
