@@ -1,3 +1,8 @@
+<a name="3.0.0"></a>
+## [3.0.0](https://github.com/algolia/instantsearch.js/compare/v2.10.3...v3.0.0) (2018-12-20)
+
+Check the [migration guide](https://github.com/algolia/instantsearch.js/blob/879aa20d3c1e2fe906bc526b05c57f6847c433be/docgen/src/guides/v3-migration.md).
+
 <a name="2.10.4"></a>
 ## [2.10.4](https://github.com/algolia/instantsearch.js/compare/v2.10.3...v2.10.4) (2018-10-30)
 
