@@ -1,20 +1,20 @@
 @charset 'utf-8';
 
-$gray-light: #EEE;
+$gray-light: #eee;
 $gray: #888;
-$dark-blue: #222F3F;
-$brand-primary: #0063C3;
-$primary-color: #FFBE61;
-$secondary-color: #B32500;
-$highlight-color: #FFFFE4;
-$shadow-color: rgba(0, 0, 0, .1);
+$dark-blue: #222f3f;
+$brand-primary: #0063c3;
+$primary-color: #ffbe61;
+$secondary-color: #b32500;
+$highlight-color: #ffffe4;
+$shadow-color: rgba(0, 0, 0, 0.1);
 
 $header-height: 60px;
 $sidebar-width: 230px;
 
 @mixin clearfix {
   &::after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }
@@ -67,7 +67,7 @@ header {
     margin-right: 16px;
     font-size: 30px;
     font-weight: bold;
-    color: #FFFFFF;
+    color: #fff;
 
     &:hover {
       text-decoration: none;
@@ -111,7 +111,7 @@ aside {
   width: $sidebar-width;
   padding: 20px;
   border-right: 1px solid $gray-light;
-  background: #FFFFFF;
+  background: #fff;
 
   .facet-category-title {
     font-size: 1.2em;
@@ -123,7 +123,7 @@ aside {
     padding-bottom: 12px;
     border-bottom: solid 1px $gray-light;
     margin-bottom: 12px;
-    font-size: .87em;
+    font-size: 0.87em;
   }
 
   .facet {
@@ -135,7 +135,8 @@ aside {
     margin: 4px 0;
   }
 
-  .facet-item, a {
+  .facet-item,
+  a {
     color: #000000;
 
     &:hover {
@@ -164,154 +165,6 @@ aside {
     margin-left: 4px;
     color: $gray;
   }
-
-  #colors {
-    @include clearfix;
-  }
-
-  .facet-color {
-    width: 28px;
-    height: 28px;
-    border-radius: 3px;
-    margin: 0 6px 6px;
-    display: block;
-    overflow: hidden;
-    float: left;
-
-    &.checked {
-      box-shadow: inset 0 0 0 4px rgba(#FFFFFF, .5);
-    }
-
-    &[data-facet-value="White"] {
-      background-color: #FFFFFF;
-      box-shadow: inset 0 0 0 1px #CCC;
-
-      &.checked {
-        box-shadow: inset 0 0 0 4px rgba(#000000, .1);
-      }
-    }
-
-    &[data-facet-value="Black"] {
-      background-color: #000000;
-    }
-
-    &[data-facet-value="Black-brown"] {
-      background-color: #382919;
-    }
-
-    &[data-facet-value="Pink"] {
-      background-color: #C0116D;
-    }
-
-    &[data-facet-value="Gray"] {
-      background-color: #6F6E6C;
-    }
-
-    &[data-facet-value="Blue"] {
-      background-color: #5182A1;
-    }
-
-    &[data-facet-value="Green"] {
-      background-color: #1E9C5E;
-    }
-
-    &[data-facet-value="Brown"] {
-      background-color: #7B6A63;
-    }
-
-    &[data-facet-value="Red"] {
-      background-color: #BC1C1A;
-    }
-
-    &[data-facet-value="Dark gray"] {
-      background-color: #444348;
-    }
-
-    &[data-facet-value="Silver color"] {
-      background-color: #AAAAA8;
-    }
-
-    &[data-facet-value="Light brown"] {
-      background-color: #C19A6E;
-    }
-
-    &[data-facet-value="Black-brown stain"] {
-      background-color: #4B4640;
-    }
-
-    &[data-facet-value="Off-white"] {
-      background-color: #D0C8B4;
-    }
-
-    &[data-facet-value="Beige"] {
-      background-color: #C9B8A3;
-    }
-
-    &[data-facet-value="Light green"] {
-      background-color: #ABBD9B;
-    }
-
-    &[data-facet-value="White stain"] {
-      background-color: #E4E1DC;
-    }
-
-    &[data-facet-value="Turquoise"] {
-      background-color: #46BCC9;
-    }
-
-    &[data-facet-value="Birch effect"] {
-      background-color: #CBBFA4;
-    }
-
-    &[data-facet-value="Yellow"] {
-      background-color: #F5E500;
-    }
-
-    &[data-facet-value="Dark blue"] {
-      background-color: #374063;
-    }
-
-    &[data-facet-value="Galvanized"] {
-      background-color: #726F6A;
-    }
-
-    &[data-facet-value="Birch"] {
-      background-color: #726F6A;
-    }
-
-    &[data-facet-value="Dark brown"] {
-      background-color: #74523E;
-    }
-
-    &[data-facet-value="High gloss gray"] {
-      background-color: #E5E5E5;
-    }
-
-    &[data-facet-value="Gray/white"] {
-      background-color: #E5E5E5;
-    }
-
-    &[data-facet-value="Red/white"] {
-      background-color: #FA757B;
-    }
-
-    &[data-facet-value="Clear"] {
-      background-color: #D5DAE0;
-    }
-
-    &[data-facet-value="Matte black"] {
-      background-color: #616872;
-    }
-
-    &[data-facet-value="Matte white"] {
-      background-color: #DCDBD7;
-    }
-
-    &[data-facet-value="White stained oak effect"] {
-      background-color: #E7E8E0;
-    }
-    // to fix - add more colors
-  }
 }
 
 .results-wrapper {
@@ -330,7 +183,7 @@ aside {
 
   label {
     font-weight: normal;
-    font-size: .8em;
+    font-size: 0.8em;
   }
 
   #sort-by {
@@ -338,42 +191,57 @@ aside {
   }
 }
 
-#clear-all {
+#clear-refinements {
   display: block;
   margin-bottom: 16px;
+
+  .ais-ClearRefinements-button,
+  .ais-ClearRefinements-button:hover {
+    background-color: #fff;
+    border: 1px solid #d3d3d3;
+    color: #000;
+    display: block;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
 
   .btn {
     font-size: 13px;
     padding: 0;
 
-    .ais-clear-all--link > div {
+    .ais-ClearRefinements-link > button {
       margin: 6px 12px;
     }
   }
 }
 
-#stats {
-  padding-right: 10px;
-  font-size: .8em;
-}
-
 #hits {
   @include clearfix;
-  margin: 0 -.5%;
+  margin: 0 -0.5%;
+}
+
+.ais-Hits-list {
+  margin-top: 0;
+}
+
+.ais-Hits-item,
+.ais-InfiniteHits-item,
+.ais-InfiniteResults-item,
+.ais-Results-item {
+  padding: 0;
+  border: none;
+  box-shadow: none;
 }
 
 .hit {
-  width: 24%;
-  float: left;
   padding: 10px 20px 20px;
   margin-bottom: 10px;
   border-bottom: solid 1px $gray-light;
-  margin: .5%;
   border: solid 1px $gray-light;
   box-shadow: 0 0 3px lighten($gray-light, 3%);
   position: relative;
 
-  @media( max-width: 960px) {
+  @media (max-width: 960px) {
     width: 49%;
   }
 
@@ -391,7 +259,7 @@ aside {
     margin: 0 auto;
 
     img {
-      transition: opacity 500ms cubic-bezier(.19, 1, .22, 1);
+      transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
       height: 150px;
       max-width: 100%;
     }
@@ -406,19 +274,18 @@ aside {
   .product-name {
     font-weight: bold;
     color: #000000;
-    font-size: .9em;
+    font-size: 0.9em;
     margin: 0 0 8px;
     min-width: 120px;
   }
 
   .product-type {
-    font-size: .8em;
+    font-size: 0.8em;
     margin: 0 0 10px;
     color: lighten($gray, 10%);
   }
 
   .product-rating {
-    //float: right;
     margin-bottom: 10px;
   }
 
@@ -430,56 +297,50 @@ aside {
     letter-spacing: -1px;
   }
 
-  em {
+  mark {
     color: #000000;
     font-style: normal;
     background-color: $primary-color;
   }
 }
 
-#pagination {
-  @include clearfix;
-  margin-top: 10px;
-  background-color: $gray-light;
-  font-size: 1.2em;
-  line-height: 3em;
+.ais-RangeInput-submit {
+  display: block;
+  float: right;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin-left: 4px;
+  font-size: 10px;
+  line-height: 20px;
+  border: solid 1px #888;
+  border-radius: 50%;
   text-align: center;
+  background: none;
+  color: #000000;
+}
 
-  .ais-pagination--item__active a {
-    color: #000000;
-    font-weight: bold;
-  }
+.ais-Panel-header {
+  margin: 4px 0;
+  clear: both;
+  padding: initial;
+  border-bottom: none;
+}
 
-  .ais-pagination--item__disabled {
-    visibility: visible;
+.ais-Panel-header h5 {
+  font-weight: bold;
+  text-transform: none;
+  font-size: 1.5em;
+  margin: 10px 0;
+}
 
-    a {
-      color: darken($gray-light, 20%);
-
-      &:hover {
-        cursor: default;
-        text-decoration: none;
-      }
-    }
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    padding: 0 8px;
-  }
-
-  .fa {
-    position: relative;
-    top: 5px;
-  }
+.ais-Stats-text {
+  padding-left: 10px;
+  font-size: 0.8em;
 }
 
 .thank-you {
   text-align: center;
-  font-size: .8em;
+  font-size: 0.8em;
   padding: 10px;
 }

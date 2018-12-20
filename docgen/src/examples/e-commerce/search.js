@@ -1,45 +1,69 @@
-'use strict';
 /* global instantsearch algoliasearch */
+'use strict';
 
 var search = instantsearch({
   indexName: 'instant_search',
   searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
-  routing: true
+  routing: true,
 });
 
+const customSearchbox = instantsearch.connectors.connectSearchBox(
+  ({ refine, widgetParams }, isFirstRender) => {
+    const { container, placeholder } = widgetParams;
+
+    if (isFirstRender) {
+      document.querySelector(container).innerHTML =
+        '<div class="input-group">' +
+        '<input type="search" auto-complete="off" class="form-control" id="q" placeholder="' +
+        placeholder +
+        '" />' +
+        '<span class="input-group-btn">' +
+        '<button class="btn btn-default"><i class="fa fa-search"></button>' +
+        '</span>' +
+        '</div>';
+
+      document.querySelector('#q').addEventListener('input', event => {
+        refine(event.target.value);
+      });
+    }
+  }
+);
+
 search.addWidget(
-  instantsearch.widgets.searchBox({
-    container: '#q',
-    placeholder: 'Search a product'
+  customSearchbox({
+    container: '#searchbox',
+    placeholder: 'Search a product',
   })
 );
 
 search.addWidget(
   instantsearch.widgets.stats({
-    container: '#stats'
+    container: '#stats',
   })
 );
 
 search.on('render', function() {
   $('.product-picture img').addClass('transparent');
-  $('.product-picture img').one('load', function() {
+  $('.product-picture img')
+    .one('load', function() {
       $(this).removeClass('transparent');
-  }).each(function() {
-      if(this.complete) $(this).load();
-  });
+    })
+    .each(function() {
+      if (this.complete) $(this).load();
+    });
 });
 
 var hitTemplate =
   '<article class="hit">' +
-      '<div class="product-picture-wrapper">' +
-        '<div class="product-picture"><img src="{{image}}" /></div>' +
-      '</div>' +
-      '<div class="product-desc-wrapper">' +
-        '<div class="product-name">{{{_highlightResult.name.value}}}</div>' +
-        '<div class="product-type">{{{_highlightResult.type.value}}}</div>' +
-        '<div class="product-price">${{price}}</div>' +
-        '<div class="product-rating">{{#stars}}<span class="ais-star-rating--star{{^.}}__empty{{/.}}"></span>{{/stars}}</div>' +
-      '</div>' +
+  '<div class="product-picture-wrapper">' +
+  '<div class="product-picture"><img src="{{image}}" /></div>' +
+  '</div>' +
+  '<div class="product-desc-wrapper">' +
+  '<div class="product-name">{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</div>' +
+  '<div class="product-type">{{#helpers.highlight}}{ "attribute": "type" }{{/helpers.highlight}}</div>' +
+  '<div class="ais-RatingMenu-link">{{#stars}}<svg class="starIcon ais-RatingMenu-starIcon ais-RatingMenu-starIcon{{#.}}--full{{/.}}{{^.}}--empty{{/.}}" aria-hidden="true" width="18" height="18"><use xlink:href="#ais-RatingMenu-{{#.}}starSymbol{{/.}}{{^.}}starEmptySymbol{{/.}}"></use></svg>{{/stars}}</div>' +
+  '<div class="product-price">${{price}}</div>' +
+  '</div>' +
   '</article>';
 
 var noResultsTemplate =
@@ -50,12 +74,9 @@ var menuTemplate =
 
 var facetTemplateCheckbox =
   '<a href="javascript:void(0);" class="facet-item">' +
-    '<input type="checkbox" class="{{cssClasses.checkbox}}" value="{{label}}" {{#isRefined}}checked{{/isRefined}} />{{label}}' +
-    '<span class="facet-count">({{count}})</span>' +
+  '<input type="checkbox" class="{{cssClasses.checkbox}}" value="{{label}}" {{#isRefined}}checked{{/isRefined}} />{{label}}' +
+  '<span class="facet-count">({{count}})</span>' +
   '</a>';
-
-var facetTemplateColors =
-  '<a href="javascript:void(0);" data-facet-value="{{label}}" class="facet-color {{#isRefined}}checked{{/isRefined}}"></a>';
 
 search.addWidget(
   instantsearch.widgets.hits({
@@ -63,30 +84,25 @@ search.addWidget(
     hitsPerPage: 16,
     templates: {
       empty: noResultsTemplate,
-      item: hitTemplate
+      item: hitTemplate,
     },
-    transformData: function(hit) {
-      hit.stars = [];
-      for (var i = 1; i <= 5; ++i) {
-        hit.stars.push(i <= hit.rating);
-      }
-      return hit;
-    }
+    transformItems: function(items) {
+      return items.map(function(item) {
+        item.stars = [];
+
+        for (var i = 1; i <= 5; ++i) {
+          item.stars.push(i <= item.rating);
+        }
+
+        return item;
+      });
+    },
   })
 );
 
 search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
-    cssClasses: {
-      active: 'active'
-    },
-    labels: {
-      previous: '<i class="fa fa-angle-left fa-2x"></i> Previous page',
-      next: 'Next page <i class="fa fa-angle-right fa-2x"></i>'
-    },
-    showFirst: false,
-    showLast: false
   })
 );
 
@@ -96,49 +112,75 @@ search.addWidget(
     attributes: [
       'hierarchicalCategories.lvl0',
       'hierarchicalCategories.lvl1',
-      'hierarchicalCategories.lvl2'
+      'hierarchicalCategories.lvl2',
     ],
     sortBy: ['name:asc'],
     templates: {
-      item: menuTemplate
-    }
+      item: menuTemplate,
+    },
   })
 );
 
+const typeList = instantsearch.widgets.panel({
+  templates: {
+    header: '<h5>Type</h5>',
+  },
+})(instantsearch.widgets.refinementList);
+
 search.addWidget(
-  instantsearch.widgets.refinementList({
+  typeList({
     container: '#types',
-    attributeName: 'type',
+    attribute: 'type',
     operator: 'or',
     limit: 5,
     templates: {
       item: facetTemplateCheckbox,
-      header: '<div class="facet-title">Type</div class="facet-title">'
-    }
+    },
   })
 );
 
+const brandList = instantsearch.widgets.panel({
+  templates: {
+    header: '<h5>Brand</h5>',
+  },
+})(instantsearch.widgets.refinementList);
+
 search.addWidget(
-  instantsearch.widgets.refinementList({
+  brandList({
     container: '#brands',
-    attributeName: 'brand',
+    attribute: 'brand',
     operator: 'or',
     limit: 5,
-    searchForFacetValues: true,
+    searchable: true,
     templates: {
       item: facetTemplateCheckbox,
-      header: '<div class="facet-title">Brand</div class="facet-title">'
-    }
+    },
   })
 );
 
+const ratingList = instantsearch.widgets.panel({
+  templates: {
+    header: '<h5>Rating</h5>',
+  },
+})(instantsearch.widgets.ratingMenu);
+
 search.addWidget(
-  instantsearch.widgets.starRating({
+  ratingList({
     container: '#rating',
-    attributeName: 'rating',
-    templates: {
-      header: '<div class="facet-title">Rating</div class="facet-title">'
-    }
+    attribute: 'rating',
+  })
+);
+
+const priceInput = instantsearch.widgets.panel({
+  templates: {
+    header: '<h5>Price</h5>',
+  },
+})(instantsearch.widgets.rangeInput);
+
+search.addWidget(
+  priceInput({
+    container: '#price',
+    attribute: 'price',
   })
 );
 
@@ -146,25 +188,18 @@ search.addWidget(
   instantsearch.widgets.sortBy({
     container: '#sort-by',
     items: [
-      {name: 'instant_search', label: 'Featured'},
-      {name: 'instant_search_price_asc', label: 'Price asc.'},
-      {name: 'instant_search_price_desc', label: 'Price desc.'}
+      { value: 'instant_search', label: 'Featured' },
+      { value: 'instant_search_price_asc', label: 'Price asc.' },
+      { value: 'instant_search_price_desc', label: 'Price desc.' },
     ],
-    label:'sort by'
+    label: 'sort by',
   })
 );
 
-// search.addWidget(
-//   instantsearch.widgets.clearAll({
-//     container: '#clear-all',
-//     templates: {
-//       link: '<i class="fa fa-eraser"></i> Clear all filters'
-//     },
-//     cssClasses: {
-//       root: 'btn btn-block btn-default'
-//     },
-//     autoHideContainer: true
-//   })
-// );
+search.addWidget(
+  instantsearch.widgets.clearRefinements({
+    container: '#clear-refinements',
+  })
+);
 
 search.start();
