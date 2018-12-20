@@ -936,7 +936,7 @@ describe('utils.deprecate', () => {
   });
 });
 
-describe('utils.warn', () => {
+describe('utils.warning', () => {
   let warn;
 
   beforeEach(() => {
@@ -949,19 +949,19 @@ describe('utils.warn', () => {
     utils.warning.cache = {};
   });
 
-  it('prints a warn message with a false condition', () => {
+  it('prints a warning message with a false condition', () => {
     utils.warning(false, 'message');
 
     expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
   });
 
-  it('does not print a warn message with a true condition', () => {
+  it('does not print a warning message with a true condition', () => {
     utils.warning(true, 'message');
 
     expect(warn).toHaveBeenCalledTimes(0);
   });
 
-  it('expect to print the same message only once', () => {
+  it('prints the same warning message only once', () => {
     utils.warning(false, 'message');
     expect(warn).toHaveBeenCalledTimes(1);
 
