@@ -14,7 +14,7 @@ const customSearchbox = instantsearch.connectors.connectSearchBox(
     if (isFirstRender) {
       document.querySelector(container).innerHTML =
         '<div class="input-group">' +
-        '<input type="search" auto-complete="off" class="form-control" id="q" placeholder="' +
+        '<input type="search" autocomplete="off" class="form-control" id="q" placeholder="' +
         placeholder +
         '" />' +
         '<span class="input-group-btn">' +
