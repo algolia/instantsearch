@@ -1,27 +1,14 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates.js';
+import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils';
+const suit = component('Breadcrumb');
 
-const bem = bemHelper('ais-breadcrumb');
-
-const renderer = ({
-  autoHideContainer,
-  containerNode,
-  cssClasses,
-  renderState,
-  separator,
-  templates,
-  transformData,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   { canRefine, createURL, instantSearchInstance, items, refine },
   isFirstRendering
 ) => {
@@ -30,12 +17,10 @@ const renderer = ({
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
-      transformData,
     });
+
     return;
   }
-
-  const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
   render(
     <Breadcrumb
@@ -44,8 +29,6 @@ const renderer = ({
       createURL={createURL}
       items={items}
       refine={refine}
-      separator={separator}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -56,44 +39,39 @@ const usage = `Usage:
 breadcrumb({
   container,
   attributes,
-  [ autoHideContainer=true ],
-  [ cssClasses.{disabledLabel, home, label, root, separator}={} ],
-  [ templates.{home, separator}]
-  [ transformData.{item} ],
+  [ separator = ' > ' ],
+  [ rootPath = null ],
   [ transformItems ],
+  [ templates.{home, separator}],
+  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
 })`;
 
 /**
  * @typedef {Object} BreadcrumbCSSClasses
- * @property {string|string[]} [disabledLabel] CSS class to add to the last element of the breadcrumb (which is not clickable).
- * @property {string|string[]} [home] CSS class to add to the first element of the breadcrumb.
- * @property {string|string[]} [label] CSS class to add to the text part of each element of the breadcrumb.
  * @property {string|string[]} [root] CSS class to add to the root element of the widget.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element of the widget if there are no refinements.
+ * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [item] CSS class to add to the items of the list. The items contains the link and the separator.
+ * @property {string|string[]} [selectedItem] CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
  * @property {string|string[]} [separator] CSS class to add to the separator.
+ * @property {string|string[]} [link] CSS class to add to the links in the items.
  */
 
 /**
  * @typedef {Object} BreadcrumbTemplates
- * @property {string|function(object):string} [home='Home'] Label of the breadcrumb's first element.
- * @property {string|function(object):string} [separator=''] Symbol used to separate the elements of the breadcrumb.
- */
-
-/**
- * @typedef {Object} BreadcrumbTransforms
- * @property {function(object):object} [item] Method to change the object passed to the `item` template
+ * @property {string|function(object):string} [home = 'Home'] Label of the breadcrumb's first element.
+ * @property {string|function(object):string} [separator = '>'] Symbol used to separate the elements of the breadcrumb.
  */
 
 /**
  * @typedef {Object} BreadcrumbWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the breadcrumb.
- *
- * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {string} [separator = ' > '] The level separator used in the records.
+ * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
- * @property {BreadcrumbTransforms} [transformData] Set of functions to transform the data passed to the templates.
- * @property {boolean} [autoHideContainer=true] Hides the container when there are no items in the breadcrumb.
- * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
+ * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  */
 
 /**
@@ -144,21 +122,20 @@ breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
  *     templates: { home: 'Home Page' },
+ *     separator: ' / ',
  *     rootPath: 'Cameras & Camcorders > Digital Cameras',
  *   })
  * );
  */
 
 export default function breadcrumb({
-  attributes,
-  autoHideContainer = false,
   container,
-  cssClasses: userCssClasses = {},
+  attributes,
+  separator,
   rootPath = null,
-  separator = ' > ',
-  templates = defaultTemplates,
-  transformData,
   transformItems,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -167,30 +144,37 @@ export default function breadcrumb({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    disabledLabel: cx(bem('disabledLabel'), userCssClasses.disabledLabel),
-    home: cx(bem('home'), userCssClasses.home),
-    item: cx(bem('item'), userCssClasses.item),
-    label: cx(bem('label'), userCssClasses.label),
-    root: cx(bem('root'), userCssClasses.root),
-    separator: cx(bem('separator'), userCssClasses.separator),
+    root: cx(suit(), userCssClasses.root),
+    noRefinementRoot: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinementRoot
+    ),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    selectedItem: cx(
+      suit({ descendantName: 'item', modifierName: 'selected' }),
+      userCssClasses.selectedItem
+    ),
+    separator: cx(
+      suit({ descendantName: 'separator' }),
+      userCssClasses.separator
+    ),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
   };
 
   const specializedRenderer = renderer({
-    autoHideContainer,
     containerNode,
     cssClasses,
     renderState: {},
-    separator,
     templates,
-    transformData,
   });
 
   try {
     const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeBreadcrumb({ attributes, rootPath, transformItems });
-  } catch (e) {
+    return makeBreadcrumb({ attributes, separator, rootPath, transformItems });
+  } catch (error) {
     throw new Error(usage);
   }
 }

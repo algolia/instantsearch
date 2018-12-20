@@ -1,10 +1,9 @@
 const ONE_DAY_IN_MS = 3600 * 24 * 1000;
 
 const search = instantsearch({
-  appId: 'latency',
-  apiKey: '059c79ddd276568e990286944276464a',
   indexName: 'concert_events_instantsearchjs',
-  routing: true
+  searchClient: algoliasearch('latency', '059c79ddd276568e990286944276464a'),
+  routing: true,
 });
 
 search.addWidget(
@@ -21,12 +20,14 @@ search.addWidget(
       item: hit => `
         <li class="hit">
           <h3>
-            ${hit._highlightResult.name.value}
-            <small>in ${hit._highlightResult.location.value}</small>
+            ${instantsearch.highlight({ attribute: 'name', hit })}
+            <small>
+              ${instantsearch.highlight({ attribute: 'location', hit })}
+            </small>
           </h3>
-          <small>on <strong>${moment(hit.date).format(
-            'dddd MMMM Do YYYY'
-          )}</strong></small>
+          <small>
+            on <strong>${moment(hit.date).format('dddd MMMM Do YYYY')}</strong>
+          </small>
         </li>
       `,
     },
@@ -35,7 +36,9 @@ search.addWidget(
 
 const makeRangeWidget = instantsearch.connectors.connectRange(
   (options, isFirstRendering) => {
-    if (!isFirstRendering) return;
+    if (!isFirstRendering) {
+      return;
+    }
 
     const { refine } = options;
 
@@ -59,7 +62,7 @@ const makeRangeWidget = instantsearch.connectors.connectRange(
 );
 
 const dateRangeWidget = makeRangeWidget({
-  attributeName: 'date',
+  attribute: 'date',
 });
 
 search.addWidget(dateRangeWidget);

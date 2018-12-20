@@ -1,71 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GeoSearch expect to render with custom classNames 1`] = `"<div class=\\"ais-geo-search custom-root\\"><div class=\\"ais-geo-search--map custom-map\\"></div><div class=\\"ais-geo-search--controls custom-controls\\"></div></div>"`;
-
-exports[`GeoSearch expect to render with custom classNames 2`] = `
-Array [
-  <GeoSearchControls
-    cssClasses={
-      Object {
-        "clear": "ais-geo-search--clear custom-clear",
-        "control": "ais-geo-search--control custom-control",
-        "controls": "ais-geo-search--controls custom-controls",
-        "map": "ais-geo-search--map custom-map",
-        "redo": "ais-geo-search--redo custom-redo",
-        "root": "ais-geo-search custom-root",
-        "toggleInput": "ais-geo-search--toggle-input custom-toggleInput",
-        "toggleLabel": "ais-geo-search--toggle-label custom-toggleLabel",
-        "toggleLabelActive": "ais-geo-search--toggle-label-active",
-      }
-    }
-    enableClearMapRefinement={true}
-    enableRefineControl={true}
-    hasMapMoveSinceLastRefine={false}
-    isRefineOnMapMove={true}
-    isRefinedWithMap={false}
-    onClearClick={[Function]}
-    onRefineClick={[Function]}
-    onRefineToggle={[Function]}
-    templateProps={
-      Object {
-        "templates": Object {
-          "clear": "Clear the map refinement",
-          "redo": "Redo search here",
-          "toggle": "Search as I move the map",
-        },
-        "templatesConfig": undefined,
-        "transformData": undefined,
-        "useCustomCompileOptions": Object {
-          "clear": true,
-          "redo": true,
-          "toggle": true,
-        },
-      }
-    }
-  />,
-  null,
-]
-`;
-
-exports[`GeoSearch expect to render 1`] = `"<div class=\\"ais-geo-search\\"><div class=\\"ais-geo-search--map\\"></div><div class=\\"ais-geo-search--controls\\"></div></div>"`;
+exports[`GeoSearch expect to render 1`] = `"<div class=\\"ais-GeoSearch\\"><div class=\\"ais-GeoSearch-map\\"></div><div class=\\"ais-GeoSearch-tree\\"></div></div>"`;
 
 exports[`GeoSearch expect to render 2`] = `
 Array [
   <GeoSearchControls
     cssClasses={
       Object {
-        "clear": "ais-geo-search--clear",
-        "control": "ais-geo-search--control",
-        "controls": "ais-geo-search--controls",
-        "map": "ais-geo-search--map",
-        "redo": "ais-geo-search--redo",
-        "root": "ais-geo-search",
-        "toggleInput": "ais-geo-search--toggle-input",
-        "toggleLabel": "ais-geo-search--toggle-label",
-        "toggleLabelActive": "ais-geo-search--toggle-label-active",
+        "control": "ais-GeoSearch-control",
+        "disabledRedo": "ais-GeoSearch-redo--disabled",
+        "input": "ais-GeoSearch-input",
+        "label": "ais-GeoSearch-label",
+        "map": "ais-GeoSearch-map",
+        "redo": "ais-GeoSearch-redo",
+        "reset": "ais-GeoSearch-reset",
+        "root": "ais-GeoSearch",
+        "selectedLabel": "ais-GeoSearch-label--selected",
+        "tree": "ais-GeoSearch-tree",
       }
     }
     enableClearMapRefinement={true}
+    enableRefine={true}
     enableRefineControl={true}
     hasMapMoveSinceLastRefine={false}
     isRefineOnMapMove={true}
@@ -76,22 +31,75 @@ Array [
     templateProps={
       Object {
         "templates": Object {
-          "clear": "Clear the map refinement",
+          "HTMLMarker": "<p>Your custom HTML Marker</p>",
           "redo": "Redo search here",
+          "reset": "Clear the map refinement",
           "toggle": "Search as I move the map",
         },
         "templatesConfig": undefined,
-        "transformData": undefined,
         "useCustomCompileOptions": Object {
-          "clear": true,
+          "HTMLMarker": true,
           "redo": true,
+          "reset": true,
           "toggle": true,
         },
       }
     }
   />,
   <div
-    class="ais-geo-search--controls"
+    class="ais-GeoSearch-tree"
+  />,
+]
+`;
+
+exports[`GeoSearch expect to render with custom classNames 1`] = `"<div class=\\"ais-GeoSearch custom-root\\"><div class=\\"ais-GeoSearch-map custom-map\\"></div><div class=\\"ais-GeoSearch-tree\\"></div></div>"`;
+
+exports[`GeoSearch expect to render with custom classNames 2`] = `
+Array [
+  <GeoSearchControls
+    cssClasses={
+      Object {
+        "control": "ais-GeoSearch-control custom-control",
+        "disabledRedo": "ais-GeoSearch-redo--disabled custom-redo-disabled",
+        "input": "ais-GeoSearch-input custom-input",
+        "label": "ais-GeoSearch-label custom-label",
+        "map": "ais-GeoSearch-map custom-map",
+        "redo": "ais-GeoSearch-redo custom-redo",
+        "reset": "ais-GeoSearch-reset custom-reset",
+        "root": "ais-GeoSearch custom-root",
+        "selectedLabel": "ais-GeoSearch-label--selected custom-label-selected",
+        "tree": "ais-GeoSearch-tree",
+      }
+    }
+    enableClearMapRefinement={true}
+    enableRefine={true}
+    enableRefineControl={true}
+    hasMapMoveSinceLastRefine={false}
+    isRefineOnMapMove={true}
+    isRefinedWithMap={false}
+    onClearClick={[Function]}
+    onRefineClick={[Function]}
+    onRefineToggle={[Function]}
+    templateProps={
+      Object {
+        "templates": Object {
+          "HTMLMarker": "<p>Your custom HTML Marker</p>",
+          "redo": "Redo search here",
+          "reset": "Clear the map refinement",
+          "toggle": "Search as I move the map",
+        },
+        "templatesConfig": undefined,
+        "useCustomCompileOptions": Object {
+          "HTMLMarker": true,
+          "redo": true,
+          "reset": true,
+          "toggle": true,
+        },
+      }
+    }
+  />,
+  <div
+    class="ais-GeoSearch-tree"
   />,
 ]
 `;

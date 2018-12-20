@@ -4,11 +4,12 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
 <InfiniteHits
   cssClasses={
     Object {
-      "empty": "ais-infinite-hits__empty",
-      "item": "ais-infinite-hits--item",
-      "root": "ais-infinite-hits root cx",
-      "showmore": "ais-infinite-hits--showmore",
-      "showmoreButton": "ais-infinite-hits--showmoreButton",
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "emptyRoot": "ais-InfiniteHits--empty",
+      "item": "ais-InfiniteHits-item",
+      "list": "ais-InfiniteHits-list",
+      "loadMore": "ais-InfiniteHits-loadMore",
+      "root": "ais-InfiniteHits root cx",
     }
   }
   hits={
@@ -31,18 +32,18 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
@@ -53,11 +54,12 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
 <InfiniteHits
   cssClasses={
     Object {
-      "empty": "ais-infinite-hits__empty",
-      "item": "ais-infinite-hits--item",
-      "root": "ais-infinite-hits root cx",
-      "showmore": "ais-infinite-hits--showmore",
-      "showmoreButton": "ais-infinite-hits--showmoreButton",
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "emptyRoot": "ais-InfiniteHits--empty",
+      "item": "ais-InfiniteHits-item",
+      "list": "ais-InfiniteHits-list",
+      "loadMore": "ais-InfiniteHits-loadMore",
+      "root": "ais-InfiniteHits root cx",
     }
   }
   hits={
@@ -80,18 +82,18 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
@@ -102,11 +104,12 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
 <InfiniteHits
   cssClasses={
     Object {
-      "empty": "ais-infinite-hits__empty",
-      "item": "ais-infinite-hits--item",
-      "root": "ais-infinite-hits root cx",
-      "showmore": "ais-infinite-hits--showmore",
-      "showmoreButton": "ais-infinite-hits--showmoreButton",
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "emptyRoot": "ais-InfiniteHits--empty",
+      "item": "ais-InfiniteHits-item",
+      "list": "ais-InfiniteHits-list",
+      "loadMore": "ais-InfiniteHits-loadMore",
+      "root": "ais-InfiniteHits root cx",
     }
   }
   hits={
@@ -131,18 +134,18 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
@@ -153,11 +156,12 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
 <InfiniteHits
   cssClasses={
     Object {
-      "empty": "ais-infinite-hits__empty",
-      "item": "ais-infinite-hits--item",
-      "root": "ais-infinite-hits root cx",
-      "showmore": "ais-infinite-hits--showmore",
-      "showmoreButton": "ais-infinite-hits--showmoreButton",
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "emptyRoot": "ais-InfiniteHits--empty",
+      "item": "ais-InfiniteHits-item",
+      "list": "ais-InfiniteHits-list",
+      "loadMore": "ais-InfiniteHits-loadMore",
+      "root": "ais-InfiniteHits root cx",
     }
   }
   hits={
@@ -182,18 +186,18 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
@@ -204,11 +208,12 @@ exports[`infiniteHits() renders transformed items 1`] = `
 <InfiniteHits
   cssClasses={
     Object {
-      "empty": "ais-infinite-hits__empty",
-      "item": "ais-infinite-hits--item",
-      "root": "ais-infinite-hits",
-      "showmore": "ais-infinite-hits--showmore",
-      "showmoreButton": "ais-infinite-hits--showmoreButton",
+      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "emptyRoot": "ais-InfiniteHits--empty",
+      "item": "ais-InfiniteHits-item",
+      "list": "ais-InfiniteHits-list",
+      "loadMore": "ais-InfiniteHits-loadMore",
+      "root": "ais-InfiniteHits",
     }
   }
   hits={
@@ -233,18 +238,18 @@ exports[`infiniteHits() renders transformed items 1`] = `
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
+        "showMoreText": "Show more results",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }

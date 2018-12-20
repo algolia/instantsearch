@@ -312,48 +312,6 @@ aside {
     }
     // to fix - add more colors
   }
-
-  .ais-price-ranges--form {
-    margin-top: 8px;
-  }
-
-  .ais-price-ranges--currency {
-    display: inline-block;
-    margin-right: 4px;
-  }
-
-  .ais-price-ranges--input {
-    display: inline-block;
-    width: 50px;
-    border-radius: 2px;
-    border: solid 1px $gray;
-    font-weight: normal;
-  }
-
-  .ais-price-ranges--button {
-    display: block;
-    float: right;
-    width: 22px;
-    height: 22px;
-    padding: 0;
-    margin-left: 4px;
-    font-size: 10px;
-    line-height: 20px;
-    border: solid 1px $gray;
-    border-radius: 50%;
-    text-align: center;
-    background-color: $gray-light;
-
-    &:hover {
-      color: $brand-primary;
-      background-color: #FFFFFF;
-    }
-
-    &:focus {
-      outline: none;
-      box-shadow: inset 0 0 0 1px $primary-color;
-    }
-  }
 }
 
 .results-wrapper {
@@ -375,7 +333,7 @@ aside {
     font-size: .8em;
   }
 
-  #sort-by-selector {
+  #sort-by {
     display: inline-block;
   }
 }

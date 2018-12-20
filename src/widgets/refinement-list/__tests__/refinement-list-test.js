@@ -1,12 +1,10 @@
-import algoliasearchHelper from 'algoliasearch-helper';
-const SearchParameters = algoliasearchHelper.SearchParameters;
+import { SearchParameters } from 'algoliasearch-helper';
 import refinementList from '../refinement-list.js';
+
 const instantSearchInstance = { templatesConfig: {} };
 
 describe('refinementList()', () => {
-  let autoHideContainer;
   let container;
-  let headerFooter;
   let options;
   let widget;
   let ReactDOM;
@@ -16,16 +14,12 @@ describe('refinementList()', () => {
 
     ReactDOM = { render: jest.fn() };
     refinementList.__Rewire__('render', ReactDOM.render);
-    autoHideContainer = jest.fn();
-    refinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = jest.fn();
-    refinementList.__Rewire__('headerFooterHOC', headerFooter);
   });
 
   describe('instantiated with wrong parameters', () => {
     it('should fail if no container', () => {
       // Given
-      options = { container: undefined, attributeName: 'foo' };
+      options = { container: undefined, attribute: 'foo' };
 
       // Then
       expect(() => {
@@ -48,7 +42,7 @@ describe('refinementList()', () => {
     }
 
     beforeEach(() => {
-      options = { container, attributeName: 'attributeName' };
+      options = { container, attribute: 'attribute' };
       results = {
         getFacetValues: jest
           .fn()
@@ -63,15 +57,18 @@ describe('refinementList()', () => {
         // Given
         const cssClasses = {
           root: ['root', 'cx'],
-          header: 'header',
-          body: 'body',
-          footer: 'footer',
+          noRefinementRoot: 'noRefinementRoot',
           list: 'list',
           item: 'item',
-          active: 'active',
+          selectedItem: 'selectedItem',
+          searchBox: 'searchBox',
           label: 'label',
           checkbox: 'checkbox',
+          labelText: 'labelText',
           count: 'count',
+          noResults: 'noResults',
+          showMore: 'showMore',
+          disabledShowMore: 'disabledShowMore',
         };
 
         // When
@@ -79,108 +76,45 @@ describe('refinementList()', () => {
         const actual = ReactDOM.render.mock.calls[0][0].props.cssClasses;
 
         // Then
-        expect(actual.root).toBe('ais-refinement-list root cx');
-        expect(actual.header).toBe('ais-refinement-list--header header');
-        expect(actual.body).toBe('ais-refinement-list--body body');
-        expect(actual.footer).toBe('ais-refinement-list--footer footer');
-        expect(actual.list).toBe('ais-refinement-list--list list');
-        expect(actual.item).toBe('ais-refinement-list--item item');
-        expect(actual.active).toBe('ais-refinement-list--item__active active');
-        expect(actual.label).toBe('ais-refinement-list--label label');
-        expect(actual.checkbox).toBe('ais-refinement-list--checkbox checkbox');
-        expect(actual.count).toBe('ais-refinement-list--count count');
-      });
-    });
-
-    describe('autoHideContainer', () => {
-      it('should set shouldAutoHideContainer to false if there are facetValues', () => {
-        // Given
-        results.getFacetValues = jest
-          .fn()
-          .mockReturnValue([{ name: 'foo' }, { name: 'bar' }]);
-
-        // When
-        renderWidget();
-        const actual =
-          ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer;
-
-        // Then
-        expect(actual).toBe(false);
-      });
-      it('should set shouldAutoHideContainer to true if no facet values', () => {
-        // Given
-        results.getFacetValues = jest.fn().mockReturnValue([]);
-
-        // When
-        renderWidget();
-        const actual =
-          ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer;
-
-        // Then
-        expect(actual).toBe(true);
-      });
-    });
-
-    describe('header', () => {
-      it('should pass the refined count to the header data', () => {
-        // Given
-        const facetValues = [
-          {
-            name: 'foo',
-            isRefined: true,
-          },
-          {
-            name: 'bar',
-            isRefined: true,
-          },
-          {
-            name: 'baz',
-            isRefined: false,
-          },
-        ];
-        results.getFacetValues = jest.fn().mockReturnValue(facetValues);
-
-        // When
-        renderWidget();
-        const props = ReactDOM.render.mock.calls[0][0].props;
-
-        // Then
-        expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
-      });
-
-      it('should dynamically update the header template on subsequent renders', () => {
-        // Given
-        const widgetOptions = { container, attributeName: 'type' };
-        const initOptions = { helper, createURL, instantSearchInstance };
-        const facetValues = [
-          {
-            name: 'foo',
-            isRefined: true,
-          },
-          {
-            name: 'bar',
-            isRefined: false,
-          },
-        ];
-        results.getFacetValues = jest.fn().mockReturnValue(facetValues);
-        const renderOptions = { results, helper, state };
-
-        // When
-        widget = refinementList(widgetOptions);
-        widget.init(initOptions);
-        widget.render(renderOptions);
-
-        // Then
-        let props = ReactDOM.render.mock.calls[0][0].props;
-        expect(props.headerFooterData.header.refinedFacetsCount).toEqual(1);
-
-        // When... second render call
-        facetValues[1].isRefined = true;
-        widget.render(renderOptions);
-
-        // Then
-        props = ReactDOM.render.mock.calls[1][0].props;
-        expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
+        expect(actual.root).toMatchInlineSnapshot(
+          `"ais-RefinementList root cx"`
+        );
+        expect(actual.noRefinementRoot).toMatchInlineSnapshot(
+          `"ais-RefinementList--noRefinement noRefinementRoot"`
+        );
+        expect(actual.list).toMatchInlineSnapshot(
+          `"ais-RefinementList-list list"`
+        );
+        expect(actual.item).toMatchInlineSnapshot(
+          `"ais-RefinementList-item item"`
+        );
+        expect(actual.selectedItem).toMatchInlineSnapshot(
+          `"ais-RefinementList-item--selected selectedItem"`
+        );
+        expect(actual.searchBox).toMatchInlineSnapshot(
+          `"ais-RefinementList-searchBox searchBox"`
+        );
+        expect(actual.label).toMatchInlineSnapshot(
+          `"ais-RefinementList-label label"`
+        );
+        expect(actual.checkbox).toMatchInlineSnapshot(
+          `"ais-RefinementList-checkbox checkbox"`
+        );
+        expect(actual.labelText).toMatchInlineSnapshot(
+          `"ais-RefinementList-labelText labelText"`
+        );
+        expect(actual.count).toMatchInlineSnapshot(
+          `"ais-RefinementList-count count"`
+        );
+        expect(actual.noResults).toMatchInlineSnapshot(
+          `"ais-RefinementList-noResults noResults"`
+        );
+        expect(actual.showMore).toMatchInlineSnapshot(
+          `"ais-RefinementList-showMore showMore"`
+        );
+        expect(actual.disabledShowMore).toMatchInlineSnapshot(
+          `"ais-RefinementList-showMore--disabled disabledShowMore"`
+        );
       });
     });
 
@@ -203,36 +137,37 @@ describe('refinementList()', () => {
   });
 
   describe('show more', () => {
-    it('should return a configuration with the highest limit value (default value)', () => {
+    it('should return a configuration with the same top-level limit value (default value)', () => {
       const opts = {
         container,
-        attributeName: 'attributeName',
+        attribute: 'attribute',
         limit: 1,
-        showMore: {},
       };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
-      expect(partialConfig.maxValuesPerFacet).toBe(100);
+      expect(partialConfig.maxValuesPerFacet).toBe(1);
     });
 
     it('should return a configuration with the highest limit value (custom value)', () => {
       const opts = {
         container,
-        attributeName: 'attributeName',
+        attribute: 'attribute',
         limit: 1,
-        showMore: { limit: 99 },
+        showMore: true,
+        showMoreLimit: 99,
       };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
-      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMore.limit);
+      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMoreLimit);
     });
 
     it('should not accept a show more limit that is < limit', () => {
       const opts = {
         container,
-        attributeName: 'attributeName',
+        attribute: 'attribute',
         limit: 100,
-        showMore: { limit: 1 },
+        showMore: true,
+        showMoreLimit: 1,
       };
       expect(() => refinementList(opts)).toThrow();
     });

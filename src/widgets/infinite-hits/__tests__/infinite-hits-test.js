@@ -1,4 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
 import infiniteHits from '../infinite-hits';
 
 describe('infiniteHits call', () => {
@@ -24,7 +25,7 @@ describe('infiniteHits()', () => {
     container = document.createElement('div');
     widget = infiniteHits({
       container,
-      escapeHits: true,
+      escapeHTML: true,
       cssClasses: { root: ['root', 'cx'] },
     });
     widget.init({ helper, instantSearchInstance: {} });
@@ -33,8 +34,8 @@ describe('infiniteHits()', () => {
 
   it('It does have a specific configuration', () => {
     expect(widget.getConfiguration()).toEqual({
-      highlightPostTag: '__/ais-highlight__',
-      highlightPreTag: '__ais-highlight__',
+      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
     });
   });
 
@@ -117,6 +118,5 @@ describe('infiniteHits()', () => {
 
   afterEach(() => {
     infiniteHits.__ResetDependency__('render');
-    infiniteHits.__ResetDependency__('defaultTemplates');
   });
 });

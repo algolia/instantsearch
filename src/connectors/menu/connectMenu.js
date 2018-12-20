@@ -15,10 +15,11 @@ var customMenu = connectMenu(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customMenu({
-    attributeName,
-    [ limit ],
-    [ showMoreLimit ]
-    [ sortBy = ['name:asc'] ]
+    attribute,
+    [ limit = 10 ],
+    [ showMore = false ],
+    [ showMoreLimit = 20 ],
+    [ sortBy = ['isRefined', 'name:asc'] ],
     [ transformItems ]
   })
 );
@@ -30,15 +31,16 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string} value The value of the menu item.
  * @property {string} label Human-readable value of the menu item.
  * @property {number} count Number of results matched after refinement is applied.
- * @property {isRefined} boolean Indicates if the refinement is applied.
+ * @property {boolean} isRefined Indicates if the refinement is applied.
  */
 
 /**
  * @typedef {Object} CustomMenuWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {number} [limit = 10] How many facets values to retrieve.
- * @property {number} [showMoreLimit = undefined] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option.
- * @property {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {boolean} [showMore = false] Whether to display a button that expands the number of items.
+ * @property {number} [showMoreLimit = 20] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option.
+ * @property {string[]|function} [sortBy = ['isRefined', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -64,7 +66,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * function to select an item. While selecting a new element, the `refine` will also unselect the
  * one that is currently selected.
  *
- * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
+ * **Requirement:** the attribute passed as `attribute` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  * @type {Connector}
  * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
@@ -101,7 +103,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * search.addWidget(
  *   customMenu({
  *     containerNode: $('#custom-menu-container'),
- *     attributeName: 'categories',
+ *     attribute: 'categories',
  *     limit: 10,
  *   })
  * );
@@ -111,15 +113,20 @@ export default function connectMenu(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
-      attributeName,
+      attribute,
       limit = 10,
-      sortBy = ['name:asc'],
-      showMoreLimit,
+      showMore = false,
+      showMoreLimit = 20,
+      sortBy = ['isRefined', 'name:asc'],
       transformItems = items => items,
     } = widgetParams;
 
-    if (!attributeName || (!isNaN(showMoreLimit) && showMoreLimit < limit)) {
+    if (!attribute) {
       throw new Error(usage);
+    }
+
+    if (showMore === true && showMoreLimit <= limit) {
+      throw new Error('`showMoreLimit` should be greater than `limit`.');
     }
 
     return {
@@ -146,13 +153,10 @@ export default function connectMenu(renderFn, unmountFn) {
       refine(helper) {
         return facetValue => {
           const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
-            attributeName
+            attribute
           );
           helper
-            .toggleRefinement(
-              attributeName,
-              facetValue ? facetValue : refinedItem
-            )
+            .toggleRefinement(attribute, facetValue ? facetValue : refinedItem)
             .search();
         };
       },
@@ -161,8 +165,8 @@ export default function connectMenu(renderFn, unmountFn) {
         const widgetConfiguration = {
           hierarchicalFacets: [
             {
-              name: attributeName,
-              attributes: [attributeName],
+              name: attribute,
+              attributes: [attribute],
             },
           ],
         };
@@ -170,7 +174,7 @@ export default function connectMenu(renderFn, unmountFn) {
         const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
         widgetConfiguration.maxValuesPerFacet = Math.max(
           currentMaxValuesPerFacet,
-          showMoreLimit || limit
+          showMore ? showMoreLimit : limit
         );
 
         return widgetConfiguration;
@@ -180,7 +184,7 @@ export default function connectMenu(renderFn, unmountFn) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         this._createURL = facetValue =>
-          createURL(helper.state.toggleRefinement(attributeName, facetValue));
+          createURL(helper.state.toggleRefinement(attribute, facetValue));
 
         this._refine = this.refine(helper);
 
@@ -202,7 +206,7 @@ export default function connectMenu(renderFn, unmountFn) {
 
       render({ results, instantSearchInstance }) {
         const facetItems =
-          results.getFacetValues(attributeName, { sortBy }).data || [];
+          results.getFacetValues(attribute, { sortBy }).data || [];
         const items = transformItems(
           facetItems
             .slice(0, this.getLimit())
@@ -229,7 +233,8 @@ export default function connectMenu(renderFn, unmountFn) {
             isShowingMore: this.isShowingMore,
             toggleShowMore: this.cachedToggleShowMore,
             canToggleShowMore:
-              this.isShowingMore || facetItems.length > this.getLimit(),
+              showMore &&
+              (this.isShowingMore || facetItems.length > this.getLimit()),
           },
           false
         );
@@ -240,11 +245,11 @@ export default function connectMenu(renderFn, unmountFn) {
 
         let nextState = state;
 
-        if (state.isHierarchicalFacetRefined(attributeName)) {
-          nextState = state.removeHierarchicalFacetRefinement(attributeName);
+        if (state.isHierarchicalFacetRefined(attribute)) {
+          nextState = state.removeHierarchicalFacetRefinement(attribute);
         }
 
-        nextState = nextState.removeHierarchicalFacet(attributeName);
+        nextState = nextState.removeHierarchicalFacet(attribute);
 
         if (
           nextState.maxValuesPerFacet === limit ||
@@ -258,12 +263,12 @@ export default function connectMenu(renderFn, unmountFn) {
 
       getWidgetState(uiState, { searchParameters }) {
         const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
-          attributeName
+          attribute
         );
 
         if (
           !refinedItem ||
-          (uiState.menu && uiState.menu[attributeName] === refinedItem)
+          (uiState.menu && uiState.menu[attribute] === refinedItem)
         ) {
           return uiState;
         }
@@ -272,29 +277,29 @@ export default function connectMenu(renderFn, unmountFn) {
           ...uiState,
           menu: {
             ...uiState.menu,
-            [attributeName]: refinedItem,
+            [attribute]: refinedItem,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (uiState.menu && uiState.menu[attributeName]) {
-          const uiStateRefinedItem = uiState.menu[attributeName];
+        if (uiState.menu && uiState.menu[attribute]) {
+          const uiStateRefinedItem = uiState.menu[attribute];
           const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
-            attributeName,
+            attribute,
             uiStateRefinedItem
           );
           if (isAlreadyRefined) return searchParameters;
           return searchParameters.toggleRefinement(
-            attributeName,
+            attribute,
             uiStateRefinedItem
           );
         }
-        if (searchParameters.isHierarchicalFacetRefined(attributeName)) {
+        if (searchParameters.isHierarchicalFacetRefined(attribute)) {
           const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
-            attributeName
+            attribute
           );
-          return searchParameters.toggleRefinement(attributeName, refinedItem);
+          return searchParameters.toggleRefinement(attribute, refinedItem);
         }
         return searchParameters;
       },

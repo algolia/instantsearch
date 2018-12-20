@@ -1,32 +1,19 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
-import InfiniteHits from '../../components/InfiniteHits.js';
+import InfiniteHits from '../../components/InfiniteHits/InfiniteHits.js';
 import defaultTemplates from './defaultTemplates.js';
 import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+const suit = component('InfiniteHits');
 
-const bem = bemHelper('ais-infinite-hits');
-
-const renderer = ({
-  cssClasses,
-  containerNode,
-  renderState,
-  templates,
-  transformData,
-  showMoreLabel,
-}) => (
+const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
   { hits, results, showMore, isLastPage, instantSearchInstance },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -40,7 +27,6 @@ const renderer = ({
       hits={hits}
       results={results}
       showMore={showMore}
-      showMoreLabel={showMoreLabel}
       templateProps={renderState.templateProps}
       isLastPage={isLastPage}
     />,
@@ -52,43 +38,35 @@ const usage = `
 Usage:
 infiniteHits({
   container,
-  [ escapeHits = false ],
+  [ escapeHTML = true ],
   [ transformItems ],
-  [ showMoreLabel ],
-  [ cssClasses.{root,empty,item,showmore,showmoreButton}={} ],
-  [ templates.{empty,item} | templates.{empty} ],
-  [ transformData.{empty,item} | transformData.{empty} ],
+  [ cssClasses.{root, emptyRoot, list, item, loadMore, disabledLoadMore} ],
+  [ templates.{empty, item, showMoreText} ],
 })`;
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
- * @property {string|function} [empty=""] Template used when there are no results.
- * @property {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
- */
-
-/**
- * @typedef {Object} InfiniteHitsTransforms
- * @property {function} [empty] Method used to change the object passed to the `empty` template.
- * @property {function} [item] Method used to change the object passed to the `item` template.
+ * @property {string|function} [empty = "No results"] Template used when there are no results.
+ * @property {string|function} [showMoreText = "Show more results"] Template used for the "load more" button.
+ * @property {string|function} [item = ""] Template used for each result. This template will receive an object containing a single record.
  */
 
 /**
  * @typedef {object} InfiniteHitsCSSClasses
  * @property {string|string[]} [root] CSS class to add to the wrapping element.
- * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [emptyRoot] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [list] CSS class to add to the list of results.
  * @property {string|string[]} [item] CSS class to add to each result.
- * @property {string|string[]} [showmore] CSS class to add to the show more button container.
- * @property {string|string[]} [showmoreButton] CSS class to add to the show more button.
+ * @property {string|string[]} [loadMore] CSS class to add to the load more button.
+ * @property {string|string[]} [disabledLoadMore] CSS class to add to the load more button when disabled.
  */
 
 /**
  * @typedef {Object} InfiniteHitsWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget.
- * @property  {string} [showMoreLabel="Show more results"] label used on the show more button.
- * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
- * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -109,21 +87,19 @@ infiniteHits({
  *     container: '#infinite-hits-container',
  *     templates: {
  *       empty: 'No results',
+ *       showMoreText: 'Show more results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
- *     escapeHits: true,
  *     transformItems: items => items.map(item => item),
  *   })
  * );
  */
 export default function infiniteHits({
   container,
-  cssClasses: userCssClasses = {},
-  showMoreLabel = 'Show more results',
-  templates = defaultTemplates,
-  transformData,
-  escapeHits = false,
+  escapeHTML,
   transformItems,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
 } = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -139,19 +115,21 @@ export default function infiniteHits({
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty),
-    showmore: cx(bem('showmore'), userCssClasses.showmore),
-    showmoreButton: cx(bem('showmoreButton'), userCssClasses.showmoreButton),
+    root: cx(suit(), userCssClasses.root),
+    emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    loadMore: cx(suit({ descendantName: 'loadMore' }), userCssClasses.loadMore),
+    disabledLoadMore: cx(
+      suit({ descendantName: 'loadMore', modifierName: 'disabled' }),
+      userCssClasses.disabledLoadMore
+    ),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    transformData,
     templates,
-    showMoreLabel,
     renderState: {},
   });
 
@@ -159,8 +137,8 @@ export default function infiniteHits({
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeInfiniteHits({ escapeHits, transformItems });
-  } catch (e) {
+    return makeInfiniteHits({ escapeHTML, transformItems });
+  } catch (error) {
     throw new Error(usage);
   }
 }

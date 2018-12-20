@@ -61,19 +61,21 @@ header {
     margin-left: 240px;
     max-width: 400px;
 
-    .ais-search-box {
+    .root {
       max-width: inherit;
-
-      #q {
-        border-radius: 0;
-        padding-bottom: 7px;
-      }
     }
 
-    .input-group {
+    .input {
+      padding-left: 14px;
+    }
+
+    .form {
+      display: flex;
       margin-top: 5px;
 
       .form-control {
+        border-radius: 0;
+        padding-bottom: 7px;
 
         &:focus {
           outline: none;
@@ -81,11 +83,12 @@ header {
         }
       }
 
-      .input-group-btn button {
+      button {
         padding-left: 20px;
         padding-right: 20px;
         background: $media-gray-light;
         border-radius: 0;
+        margin-left: -1px;
       }
     }
   }
@@ -107,9 +110,9 @@ section {
 
     .nav {
       margin: 0 20px;
+      font-size: 1.1em;
 
-      li {
-
+      #genres li {
         a {
           display: block;
           padding: 2px 10px;
@@ -120,7 +123,9 @@ section {
             background: $media-text-color;
           }
         }
+      }
 
+      li {
         &.separator {
           height: 1px;
           background: $media-gray;
@@ -128,23 +133,22 @@ section {
       }
     }
 
-    h5 {
+    .panel-header {
       color: $media-red-dark;
       margin-left: 30px;
       text-transform: uppercase;
       font-size: 10px;
       margin-top: 20px;
+      border-bottom: none;
     }
 
     .badge {
-      font-size: .8em;
       background: #BBBBBB;
       position: relative;
       top: 1px;
     }
 
     #genres {
-
       label {
         display: block;
         cursor: pointer;
@@ -179,7 +183,7 @@ section {
     #ratings {
       margin-left: 10px;
 
-      .ais-stars-list--link {
+      .link {
         font-size: .9em;
 
         &:hover, &:active, &:focus {
@@ -187,16 +191,17 @@ section {
         }
       }
 
-      .ais-stars-list--count {
-        font-size: 8px;
-      }
-
-      .ais-star-rating--item {
+      .item {
         margin-bottom: 6px;
       }
 
-      .ais-star-rating--item__active a {
+      .selectedItem a {
         color: $media-red-dark;
+      }
+
+      .starIcon {
+        height: 14px;
+        width: auto;
       }
     }
 
@@ -220,9 +225,22 @@ section {
 
     #hits {
       padding: 0 15px;
+
+      .list {
+        list-style: none;
+        padding: 0;
+      }
     }
 
     #pagination {
+      .root {
+        display: flex;
+        justify-content: center;
+      }
+
+      .disabledItem {
+        display: none;
+      }
 
       .pagination a {
         background: $media-gray-light;
@@ -230,7 +248,7 @@ section {
         color: $media-text-color;
         margin-right: 4px;
 
-        &.active {
+        &.selectedItem {
           border-color: darken($media-gray, 20%);
           background: $media-gray;
         }
@@ -247,7 +265,7 @@ section {
       height: 130px;
       border: 1px solid #F3F3F3;
 
-      em {
+      mark {
         font-style: normal;
         background: $highlight-color;
         text-decoration: underline;
@@ -281,10 +299,6 @@ section {
   }
 }
 
-.ais-search-box--input {
-  padding-left: 14px;
-}
-
 .genre, .year {
   margin: 12px 0;
 }
@@ -295,4 +309,8 @@ section {
 
 .genre .badge {
   background: #BBBBBB;
+}
+
+.starIcon {
+  fill: #fbae00;
 }

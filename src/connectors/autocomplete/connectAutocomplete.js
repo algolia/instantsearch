@@ -1,4 +1,4 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight';
+import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
@@ -11,7 +11,7 @@ var customAutcomplete = connectAutocomplete(function render(params, isFirstRende
 });
 search.addWiget(customAutcomplete({
   [ indices ],
-  [ escapeHits = false ]
+  [ escapeHTML = true ],
 }));
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectAutocomplete.html
 `;
@@ -35,16 +35,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CustomAutocompleteWidgetOptions
  * @property {{value: string, label: string}[]} [indices = []] Name of the others indices to search into.
- * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {boolean} [escapeHTML = true] If true, escape HTML tags from `hits[i]._highlightResult`.
  */
 
 /**
  * **Autocomplete** connector provides the logic to build a widget that will give the user the ability to search into multiple indices.
  *
  * This connector provides a `refine()` function to search for a query and a `currentRefinement` as the current query used to search.
- *
- * THere's a complete example available on how to write a custom **Autocomplete** widget:
- * [autocomplete.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/autocomplete.js)
  * @type {Connector}
  * @param {function(AutocompleteRenderingOptions, boolean)} renderFn Rendering function for the custom **Autocomplete** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
@@ -54,7 +51,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { indices = [] } = widgetParams;
+    const { escapeHTML = true, indices = [] } = widgetParams;
 
     // user passed a wrong `indices` option type
     if (!Array.isArray(indices)) {
@@ -63,7 +60,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHits ? tagConfig : undefined;
+        return escapeHTML ? TAG_PLACEHOLDER : undefined;
       },
 
       init({ instantSearchInstance, helper }) {
@@ -106,11 +103,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       saveResults({ results, label }) {
         const derivedIndex = this.indices.find(i => i.label === label);
 
-        if (
-          widgetParams.escapeHits &&
-          results.hits &&
-          results.hits.length > 0
-        ) {
+        if (escapeHTML && results && results.hits && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
 

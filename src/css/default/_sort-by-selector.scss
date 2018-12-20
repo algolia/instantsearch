@@ -1,9 +1,0 @@
-// sass-lint:disable no-empty-rulesets
-@import "../base";
-@import "variables";
-
-@include block(sort-by-selector) {
-  @include element(item) {
-    /* selector item */
-  }
-}

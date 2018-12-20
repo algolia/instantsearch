@@ -15,16 +15,11 @@ const Pit = ({ style, children }) => {
   return (
     <div
       style={{ ...style, marginLeft: positionValue === 100 ? '-2px' : 0 }}
-      className={cx(
-        'ais-range-slider--marker ais-range-slider--marker-horizontal',
-        {
-          'ais-range-slider--marker-large': shouldDisplayValue,
-        }
-      )}
+      className={cx('rheostat-marker', 'rheostat-marker-horizontal', {
+        'rheostat-marker-large': shouldDisplayValue,
+      })}
     >
-      {shouldDisplayValue ? (
-        <div className="ais-range-slider--value">{pitValue}</div>
-      ) : null}
+      {shouldDisplayValue && <div className={'rheostat-value'}>{pitValue}</div>}
     </div>
   );
 };

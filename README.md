@@ -4,7 +4,7 @@
   </a>
 
   <p align="center">
-    InstantSearch.js is a library for building blazing fast search-as-you-type search UIs with <a href="https://www.algolia.com">Algolia</a>.
+    InstantSearch.js is a JavaScript library for building performant and instant search experiences with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
   </p>
 </p>
 
@@ -25,6 +25,7 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 
 - [Why](#why)
 - [Getting started](#getting-started)
+- [Installation](#installation)
 - [Documentation](#documentation)
 - [Demos](#demos)
 - [Playground](#playground)
@@ -51,15 +52,14 @@ Using InstantSearch.js is as simple as adding this JavaScript code to your page:
 ```javascript
 // 1. Instantiate the search
 const search = instantsearch({
-  appId: 'latency',
-  apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
+  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
 });
 
 // 2. Create an interactive search box
 search.addWidget(
   instantsearch.widgets.searchBox({
-    container: document.querySelector('#searchBox'),
+    container: '#searchbox',
     placeholder: 'Search for products',
   })
 );
@@ -67,9 +67,9 @@ search.addWidget(
 // 3. Plug the search results into the product container
 search.addWidget(
   instantsearch.widgets.hits({
-    container: document.querySelector('#products'),
+    container: '#products',
     templates: {
-      item: '{{{_highlightResult.name.value}}}',
+      item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
     },
   })
 );
@@ -77,8 +77,8 @@ search.addWidget(
 // 4. Make the brands refinable
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: document.querySelector('#brand'),
-    attributeName: 'brand',
+    container: '#brand',
+    attribute: 'brand',
   })
 );
 
@@ -95,6 +95,14 @@ search.start();
 </p>
 
 To learn more about the library, follow the [getting started](https://community.algolia.com/instantsearch.js/v2/getting-started.html) guide or check how to [add it to your own project](https://community.algolia.com/instantsearch.js/v2/guides/usage.html).
+
+## Installation
+
+```sh
+npm install instantsearch.js algoliasearch
+# or
+yarn add instantsearch.js algoliasearch
+```
 
 ## Documentation
 
@@ -135,7 +143,7 @@ To start contributing to code, you need to:
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 1.  Install the dependencies: `yarn`
 1.  Run the development mode: `yarn run dev`
-1.  [Open dev-novel](http://localhost:8080)
+1.  [Open the stories](http://localhost:8080)
 
 Please read [our contribution process](CONTRIBUTING.md) to learn more.
 
@@ -154,7 +162,7 @@ InstantSearch.js is [MIT licensed][license-url].
 
 <!-- Links -->
 
-[algolia-website]: https://algolia.com
+[algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch/
 [vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android

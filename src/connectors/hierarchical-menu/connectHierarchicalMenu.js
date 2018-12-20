@@ -1,6 +1,5 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-
 import { checkRendering, warn } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -20,6 +19,8 @@ search.addWidget(
     [ rootPath = null ],
     [ showParentLevel = true ],
     [ limit = 10 ],
+    [ showMore = false ],
+    [ showMoreLimit = 20 ],
     [ sortBy = ['name:asc'] ],
     [ transformItems ],
   })
@@ -43,7 +44,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
  * @property {boolean} [showParentLevel=false] Show the siblings of the selected parent levels of the current refined value. This
  * does not impact the root level.
- * @property {number} [limit = 10] Max number of value to display.
+ * @property {number} [limit = 10] Max number of values to display.
+ * @property {boolean} [showMore = false] Whether to display the "show more" button.
+ * @property {number} [showMoreLimit = 20] Max number of values to display when showing more.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
@@ -67,7 +70,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * levels deep.
  *
  * There's a complete example available on how to write a custom **HierarchicalMenu**:
- *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/jquery/widgets/hierarchicalMenu.js)
+ *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/storybook/app/jquery/widgets/hierarchicalMenu.js)
  * @type {Connector}
  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
@@ -83,6 +86,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       rootPath = null,
       showParentLevel = true,
       limit = 10,
+      showMore = false,
+      showMoreLimit = 20,
       sortBy = ['name:asc'],
       transformItems = items => items,
     } = widgetParams;
@@ -91,13 +96,37 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
+    if (showMore === true && showMoreLimit <= limit) {
+      throw new Error('`showMoreLimit` must be greater than `limit`.');
+    }
+
     // we need to provide a hierarchicalFacet name for the search state
     // so that we can always map $hierarchicalFacetName => real attributes
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
 
     return {
-      getConfiguration: currentConfiguration => {
+      isShowingMore: false,
+
+      // Provide the same function to the `renderFn` so that way the user
+      // has to only bind it once when `isFirstRendering` for instance
+      toggleShowMore() {},
+      cachedToggleShowMore() {
+        this.toggleShowMore();
+      },
+
+      createToggleShowMore(renderOptions) {
+        return () => {
+          this.isShowingMore = !this.isShowingMore;
+          this.render(renderOptions);
+        };
+      },
+
+      getLimit() {
+        return this.isShowingMore ? showMoreLimit : limit;
+      },
+
+      getConfiguration(currentConfiguration) {
         if (currentConfiguration.hierarchicalFacets) {
           const isFacetSet = find(
             currentConfiguration.hierarchicalFacets,
@@ -111,13 +140,13 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
             )
           ) {
             warn(
-              'using Breadcrumb & HierarchicalMenu on the same facet with different options'
+              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
             );
             return {};
           }
         }
 
-        return {
+        const widgetConfiguration = {
           hierarchicalFacets: [
             {
               name: hierarchicalFacetName,
@@ -127,14 +156,21 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
               showParentLevel,
             },
           ],
-          maxValuesPerFacet:
-            currentConfiguration.maxValuesPerFacet !== undefined
-              ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
-              : limit,
         };
+
+        const currentMaxValuesPerFacet =
+          currentConfiguration.maxValuesPerFacet || 0;
+
+        widgetConfiguration.maxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        return widgetConfiguration;
       },
 
       init({ helper, createURL, instantSearchInstance }) {
+        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
@@ -148,11 +184,14 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         renderFn(
           {
-            createURL: _createURL,
             items: [],
+            createURL: _createURL,
             refine: this._refine,
             instantSearchInstance,
             widgetParams,
+            isShowingMore: false,
+            toggleShowMore: this.cachedToggleShowMore,
+            canToggleShowMore: false,
           },
           true
         );
@@ -160,7 +199,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
       _prepareFacetValues(facetValues, state) {
         return facetValues
-          .slice(0, limit)
+          .slice(0, this.getLimit())
           .map(({ name: label, path: value, ...subValue }) => {
             if (Array.isArray(subValue.data)) {
               subValue.data = this._prepareFacetValues(subValue.data, state);
@@ -169,13 +208,19 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
           });
       },
 
-      render({ results, state, createURL, instantSearchInstance }) {
+      render(renderOptions) {
+        const {
+          results,
+          state,
+          createURL,
+          instantSearchInstance,
+        } = renderOptions;
+
+        const facetValues =
+          results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [];
         const items = transformItems(
-          this._prepareFacetValues(
-            results.getFacetValues(hierarchicalFacetName, { sortBy }).data ||
-              [],
-            state
-          )
+          this._prepareFacetValues(facetValues),
+          state
         );
 
         // Bind createURL to this specific attribute
@@ -185,13 +230,34 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
           );
         }
 
+        const maxValuesPerFacetConfig = state.getQueryParameter(
+          'maxValuesPerFacet'
+        );
+        const currentLimit = this.getLimit();
+        // If the limit is the max number of facet retrieved it is impossible to know
+        // if the facets are exhaustive. The only moment we are sure it is exhaustive
+        // is when it is strictly under the number requested unless we know that another
+        // widget has requested more values (maxValuesPerFacet > getLimit()).
+        // Because this is used for making the search of facets unable or not, it is important
+        // to be conservative here.
+        const hasExhaustiveItems =
+          maxValuesPerFacetConfig > currentLimit
+            ? facetValues.length <= currentLimit
+            : facetValues.length < currentLimit;
+
+        this.toggleShowMore = this.createToggleShowMore(renderOptions);
+
         renderFn(
           {
-            createURL: _createURL,
             items,
             refine: this._refine,
+            createURL: _createURL,
             instantSearchInstance,
             widgetParams,
+            isShowingMore: this.isShowingMore,
+            toggleShowMore: this.cachedToggleShowMore,
+            canToggleShowMore:
+              showMore && (this.isShowingMore || !hasExhaustiveItems),
           },
           false
         );

@@ -1,8 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import expect from 'expect';
-import sinon from 'sinon';
-import { RawRefinementList as RefinementList } from '../RefinementList';
+import { shallow, mount } from 'enzyme';
+import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
 const defaultProps = {
@@ -14,7 +12,7 @@ describe('RefinementList', () => {
   let createURL;
 
   function shallowRender(extraProps = {}) {
-    createURL = sinon.spy();
+    createURL = () => {};
     const props = {
       ...defaultProps,
       createURL,
@@ -25,24 +23,20 @@ describe('RefinementList', () => {
   }
 
   describe('cssClasses', () => {
-    it('should add the `list` class to the root element', () => {
-      // Given
+    it('should add the `root` class to the root element', () => {
       const props = {
         ...defaultProps,
         cssClasses: {
-          list: 'list',
+          root: 'root',
         },
       };
 
-      // When
-      const actual = shallowRender(props);
+      const wrapper = shallowRender(props);
 
-      // Then
-      expect(actual.hasClass('list')).toEqual(true);
+      expect(wrapper.hasClass('root')).toEqual(true);
     });
 
     it('should set item classes to the refinements', () => {
-      // Given
       const props = {
         ...defaultProps,
         cssClasses: {
@@ -51,19 +45,16 @@ describe('RefinementList', () => {
         facetValues: [{ value: 'foo', isRefined: true }],
       };
 
-      // When
-      const actual = shallowRender(props).find(RefinementListItem);
+      const wrapper = shallowRender(props).find(RefinementListItem);
 
-      // Then
-      expect(actual.props().itemClassName).toContain('item');
+      expect(wrapper.props().className).toContain('item');
     });
 
     it('should set active classes to the active refinements', () => {
-      // Given
       const props = {
         ...defaultProps,
         cssClasses: {
-          active: 'active',
+          selectedItem: 'active',
         },
         facetValues: [
           { value: 'foo', isRefined: true },
@@ -71,19 +62,16 @@ describe('RefinementList', () => {
         ],
       };
 
-      // When
       const activeItem = shallowRender(props).find({ isRefined: true });
       const inactiveItem = shallowRender(props).find({ isRefined: false });
 
-      // Then
-      expect(activeItem.props().itemClassName).toContain('active');
-      expect(inactiveItem.props().itemClassName).not.toContain('active');
+      expect(activeItem.props().className).toContain('active');
+      expect(inactiveItem.props().className).not.toContain('active');
     });
   });
 
   describe('items', () => {
     it('should have the correct names', () => {
-      // Given
       const props = {
         ...defaultProps,
         facetValues: [
@@ -92,18 +80,15 @@ describe('RefinementList', () => {
         ],
       };
 
-      // When
       const items = shallowRender(props).find(RefinementListItem);
       const firstItem = items.at(0);
       const secondItem = items.at(1);
 
-      // Then
       expect(firstItem.props().facetValueToRefine).toEqual('foo');
       expect(secondItem.props().facetValueToRefine).toEqual('bar');
     });
 
     it('should correctly set if refined or not', () => {
-      // Given
       const props = {
         ...defaultProps,
         facetValues: [
@@ -112,12 +97,10 @@ describe('RefinementList', () => {
         ],
       };
 
-      // When
       const items = shallowRender(props).find(RefinementListItem);
       const firstItem = items.at(0);
       const secondItem = items.at(1);
 
-      // Then
       expect(firstItem.props().isRefined).toEqual(false);
       expect(secondItem.props().isRefined).toEqual(true);
     });
@@ -125,7 +108,6 @@ describe('RefinementList', () => {
 
   describe('count', () => {
     it('should pass the count to the templateData', () => {
-      // Given
       const props = {
         ...defaultProps,
         facetValues: [
@@ -134,12 +116,10 @@ describe('RefinementList', () => {
         ],
       };
 
-      // When
       const items = shallowRender(props).find(RefinementListItem);
       const firstItem = items.at(0);
       const secondItem = items.at(1);
 
-      // Then
       expect(firstItem.props().templateData.count).toEqual(42);
       expect(secondItem.props().templateData.count).toEqual(16);
     });
@@ -147,7 +127,6 @@ describe('RefinementList', () => {
 
   describe('showMore', () => {
     it('adds a showMore link when the feature is enabled', () => {
-      // Given
       const props = {
         ...defaultProps,
         facetValues: [
@@ -160,16 +139,13 @@ describe('RefinementList', () => {
         canToggleShowMore: true,
       };
 
-      // When
       const root = shallowRender(props);
-      const actual = root.find('[templateKey="show-more-inactive"]');
+      const wrapper = root.find('[templateKey="showMoreText"]');
 
-      // Then
-      expect(actual).toHaveLength(1);
+      expect(wrapper).toHaveLength(1);
     });
 
     it('does not add a showMore link when the feature is disabled', () => {
-      // Given
       const props = {
         ...defaultProps,
         facetValues: [
@@ -181,42 +157,15 @@ describe('RefinementList', () => {
         isShowingMore: false,
       };
 
-      // When
       const root = shallowRender(props);
-      const actual = root
-        .find('Template')
-        .filter({ templateKey: 'show-more-inactive' });
+      const wrapper = root.find('[templateKey="showMoreText"]');
 
-      // Then
-      expect(actual).toHaveLength(0);
-    });
-
-    it('should displays showLess', () => {
-      // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
-        ],
-        showMore: true,
-        isShowingMore: true,
-        canToggleShowMore: true,
-      };
-
-      // When
-      const root = shallowRender(props);
-      const actual = root.find('[templateKey="show-more-active"]');
-
-      // Then
-      expect(actual).toHaveLength(1);
+      expect(wrapper).toHaveLength(0);
     });
   });
 
   describe('sublist', () => {
     it('should create a subList with the sub values', () => {
-      // Given
       const props = {
         ...defaultProps,
         facetValues: [
@@ -231,20 +180,17 @@ describe('RefinementList', () => {
         ],
       };
 
-      // When
       const root = shallowRender(props);
       const mainItem = root.find(RefinementListItem).at(0);
       const subList = shallow(mainItem.props().subItems);
       const subItems = subList.find(RefinementListItem);
 
-      // Then
       expect(mainItem.props().facetValueToRefine).toEqual('foo');
       expect(subItems.at(0).props().facetValueToRefine).toEqual('bar');
       expect(subItems.at(1).props().facetValueToRefine).toEqual('baz');
     });
 
     it('should add depth class for each depth', () => {
-      // Given
       const props = {
         ...defaultProps,
         cssClasses: {
@@ -262,14 +208,203 @@ describe('RefinementList', () => {
         ],
       };
 
-      // When
       const root = shallowRender(props);
       const mainItem = root.find(RefinementListItem).at(0);
       const subList = shallow(mainItem.props().subItems);
 
-      // Then
-      expect(root.props().className).toContain('depth-0');
-      expect(subList.props().className).toContain('depth-1');
+      expect(root.props().children[2].props.className).toContain('depth-0');
+      expect(subList.props().children[2].props.className).toContain('depth-1');
+    });
+  });
+
+  describe('rendering', () => {
+    const cssClasses = {
+      root: 'root',
+      noRefinementRoot: 'noRefinementRoot',
+      list: 'list',
+      item: 'item',
+      selectedItem: 'selectedItem',
+      searchBox: 'searchBox',
+      label: 'label',
+      checkbox: 'checkbox',
+      labelText: 'labelText',
+      count: 'count',
+      noResults: 'noResults',
+      showMore: 'showMore',
+      disabledShowMore: 'disabledShowMore',
+    };
+
+    it('without facets', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [],
+        cssClasses,
+        className: 'customClassName',
+        templateProps: {},
+        toggleRefinement: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('without facets from search', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [],
+        cssClasses,
+        className: 'customClassName',
+        isFromSearch: true,
+        searchPlaceholder: 'Search',
+        searchFacetValues: x => x,
+        templateProps: {
+          templates: {
+            item: item => item,
+            searchableNoResults: x => x,
+          },
+        },
+        toggleRefinement: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('with facets', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+        className: 'customClassName',
+        templateProps: {
+          templates: {
+            item: item => item,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('with facets and show more', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+        className: 'customClassName',
+        showMore: true,
+        isShowingMore: false,
+        canToggleShowMore: true,
+        templateProps: {
+          templates: {
+            item: item => item,
+            showMoreText: x => x,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('with facets and disabled show more', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+        className: 'customClassName',
+        showMore: true,
+        isShowingMore: false,
+        canToggleShowMore: false,
+        templateProps: {
+          templates: {
+            item: item => item,
+            showMoreText: x => x,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('with facets from search', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+        className: 'customClassName',
+        isFromSearch: true,
+        searchPlaceholder: 'Search',
+        searchFacetValues: x => x,
+        templateProps: {
+          templates: {
+            item: item => item,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
     });
   });
 });

@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Selector should render <Selector/> with numbers 1`] = `
+<select
+  className="custom-select"
+  onChange={[Function]}
+  value="10"
+>
+  <option
+    className="custom-option"
+    key="10 results per page10"
+    value="10"
+  >
+    10 results per page
+  </option>
+  <option
+    className="custom-option"
+    key="20 results per page20"
+    value="20"
+  >
+    20 results per page
+  </option>
+</select>
+`;
+
+exports[`Selector should render <Selector/> with strings 1`] = `
+<select
+  className="custom-select"
+  onChange={[Function]}
+  value="index-a"
+>
+  <option
+    className="custom-option"
+    key="Index Aindex-a"
+    value="index-a"
+  >
+    Index A
+  </option>
+  <option
+    className="custom-option"
+    key="Index Bindex-b"
+    value="index-b"
+  >
+    Index B
+  </option>
+</select>
+`;

@@ -1,0 +1,239 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
+<RefinementList
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "count": "ais-RatingMenu-count",
+      "disabledItem": "ais-RatingMenu-item--disabled",
+      "emptyStarIcon": "ais-RatingMenu-starIcon--empty",
+      "fullStarIcon": "ais-RatingMenu-starIcon--full",
+      "item": "ais-RatingMenu-item",
+      "label": "ais-RatingMenu-label",
+      "link": "ais-RatingMenu-link",
+      "list": "ais-RatingMenu-list",
+      "noRefinementRoot": "ais-RatingMenu--noRefinement",
+      "root": "ais-RatingMenu",
+      "selectedItem": "ais-RatingMenu-item--selected",
+      "starIcon": "ais-RatingMenu-starIcon",
+    }
+  }
+  depth={0}
+  facetValues={
+    Array [
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "4",
+        "stars": Array [
+          true,
+          true,
+          true,
+          true,
+          false,
+        ],
+        "value": "4",
+      },
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "3",
+        "stars": Array [
+          true,
+          true,
+          true,
+          false,
+          false,
+        ],
+        "value": "3",
+      },
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "2",
+        "stars": Array [
+          true,
+          true,
+          false,
+          false,
+          false,
+        ],
+        "value": "2",
+      },
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "1",
+        "stars": Array [
+          true,
+          false,
+          false,
+          false,
+          false,
+        ],
+        "value": "1",
+      },
+    ]
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "item": "{{#count}}<a class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" href=\\"{{href}}\\">{{/count}}{{^count}}<div class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" disabled>{{/count}}
+  {{#stars}}<svg class=\\"{{cssClasses.starIcon}} {{#.}}{{cssClasses.fullStarIcon}}{{/.}}{{^.}}{{cssClasses.emptyStarIcon}}{{/.}}\\" aria-hidden=\\"true\\" width=\\"24\\" height=\\"24\\">
+    {{#.}}<use xlink:href=\\"#ais-RatingMenu-starSymbol\\"></use>{{/.}}{{^.}}<use xlink:href=\\"#ais-RatingMenu-starEmptySymbol\\"></use>{{/.}}
+  </svg>{{/stars}}
+  <span class=\\"{{cssClasses.label}}\\">& Up</span>
+  {{#count}}<span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>{{/count}}
+{{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+>
+  <svg
+    style="display:none;"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <symbol
+      id="ais-RatingMenu-starSymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
+      />
+    </symbol>
+    <symbol
+      id="ais-RatingMenu-starEmptySymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
+      />
+    </symbol>
+  </svg>
+</RefinementList>
+`;
+
+exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
+<RefinementList
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "count": "ais-RatingMenu-count",
+      "disabledItem": "ais-RatingMenu-item--disabled",
+      "emptyStarIcon": "ais-RatingMenu-starIcon--empty",
+      "fullStarIcon": "ais-RatingMenu-starIcon--full",
+      "item": "ais-RatingMenu-item",
+      "label": "ais-RatingMenu-label",
+      "link": "ais-RatingMenu-link",
+      "list": "ais-RatingMenu-list",
+      "noRefinementRoot": "ais-RatingMenu--noRefinement",
+      "root": "ais-RatingMenu",
+      "selectedItem": "ais-RatingMenu-item--selected",
+      "starIcon": "ais-RatingMenu-starIcon",
+    }
+  }
+  depth={0}
+  facetValues={
+    Array [
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "4",
+        "stars": Array [
+          true,
+          true,
+          true,
+          true,
+          false,
+        ],
+        "value": "4",
+      },
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "3",
+        "stars": Array [
+          true,
+          true,
+          true,
+          false,
+          false,
+        ],
+        "value": "3",
+      },
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "2",
+        "stars": Array [
+          true,
+          true,
+          false,
+          false,
+          false,
+        ],
+        "value": "2",
+      },
+      Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "1",
+        "stars": Array [
+          true,
+          false,
+          false,
+          false,
+          false,
+        ],
+        "value": "1",
+      },
+    ]
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "item": "{{#count}}<a class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" href=\\"{{href}}\\">{{/count}}{{^count}}<div class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" disabled>{{/count}}
+  {{#stars}}<svg class=\\"{{cssClasses.starIcon}} {{#.}}{{cssClasses.fullStarIcon}}{{/.}}{{^.}}{{cssClasses.emptyStarIcon}}{{/.}}\\" aria-hidden=\\"true\\" width=\\"24\\" height=\\"24\\">
+    {{#.}}<use xlink:href=\\"#ais-RatingMenu-starSymbol\\"></use>{{/.}}{{^.}}<use xlink:href=\\"#ais-RatingMenu-starEmptySymbol\\"></use>{{/.}}
+  </svg>{{/stars}}
+  <span class=\\"{{cssClasses.label}}\\">& Up</span>
+  {{#count}}<span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>{{/count}}
+{{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+>
+  <svg
+    style="display:none;"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <symbol
+      id="ais-RatingMenu-starSymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
+      />
+    </symbol>
+    <symbol
+      id="ais-RatingMenu-starEmptySymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
+      />
+    </symbol>
+  </svg>
+</RefinementList>
+`;

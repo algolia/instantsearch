@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RawRangeInput expect to render 1`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput expect to render 1`] = `
+<div
+  className="root noRefinement"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
+        className="input inputMin"
         disabled={false}
         max={500}
         min={0}
@@ -22,16 +22,24 @@ exports[`RawRangeInput expect to render 1`] = `
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={false}
         max={500}
         min={0}
@@ -41,30 +49,38 @@ exports[`RawRangeInput expect to render 1`] = `
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;
 
-exports[`RawRangeInput expect to render with disabled state 1`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput expect to render with disabled state 1`] = `
+<div
+  className="root noRefinement"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
+        className="input inputMin"
         disabled={true}
         max={20}
         min={480}
@@ -74,16 +90,24 @@ exports[`RawRangeInput expect to render with disabled state 1`] = `
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={true}
         max={20}
         min={480}
@@ -93,30 +117,38 @@ exports[`RawRangeInput expect to render with disabled state 1`] = `
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={true}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": true,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;
 
-exports[`RawRangeInput expect to render with values 1`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput expect to render with values 1`] = `
+<div
+  className="root"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
+        className="input inputMin"
         disabled={false}
         max={500}
         min={0}
@@ -127,16 +159,24 @@ exports[`RawRangeInput expect to render with values 1`] = `
         value={20}
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={false}
         max={500}
         min={0}
@@ -147,30 +187,38 @@ exports[`RawRangeInput expect to render with values 1`] = `
         value={480}
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;
 
-exports[`RawRangeInput onChange expect to update the state when max change 1`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput onChange expect to update the state when max change 1`] = `
+<div
+  className="root"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
+        className="input inputMin"
         disabled={false}
         max={500}
         min={0}
@@ -180,16 +228,24 @@ exports[`RawRangeInput onChange expect to update the state when max change 1`] =
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={false}
         max={500}
         min={0}
@@ -200,30 +256,38 @@ exports[`RawRangeInput onChange expect to update the state when max change 1`] =
         value={480}
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;
 
-exports[`RawRangeInput onChange expect to update the state when min change 1`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput onChange expect to update the state when min change 1`] = `
+<div
+  className="root"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
+        className="input inputMin"
         disabled={false}
         max={500}
         min={0}
@@ -234,16 +298,24 @@ exports[`RawRangeInput onChange expect to update the state when min change 1`] =
         value={20}
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={false}
         max={500}
         min={0}
@@ -253,30 +325,38 @@ exports[`RawRangeInput onChange expect to update the state when min change 1`] =
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;
 
-exports[`RawRangeInput willReceiveProps expect to update the empty state from given props 1`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput willReceiveProps expect to update the empty state from given props 1`] = `
+<div
+  className="root noRefinement"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
+        className="input inputMin"
         disabled={false}
         max={500}
         min={0}
@@ -286,16 +366,24 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={false}
         max={500}
         min={0}
@@ -305,30 +393,38 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;
 
-exports[`RawRangeInput willReceiveProps expect to update the empty state from given props 2`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput willReceiveProps expect to update the empty state from given props 2`] = `
+<div
+  className="root noRefinement"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
+        className="input inputMin"
         disabled={false}
         max={500}
         min={0}
@@ -338,16 +434,24 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
         type="number"
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={false}
         max={500}
         min={0}
@@ -357,84 +461,38 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
         type="number"
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;
 
-exports[`RawRangeInput willReceiveProps expect to update the state from given props 1`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
+exports[`RangeInput willReceiveProps expect to update the state from given props 1`] = `
+<div
+  className="root"
 >
-  <fieldset
-    className="fieldset"
+  <form
+    className="form"
+    onSubmit={[Function]}
   >
     <label
-      className="labelMin"
+      className="label"
     >
       <input
-        className="inputMin"
-        disabled={false}
-        max={500}
-        min={0}
-        onChange={[Function]}
-        placeholder={0}
-        step={1}
-        type="number"
-        value={40}
-      />
-    </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
-    <label
-      className="labelMax"
-    >
-      <input
-        className="inputMax"
-        disabled={false}
-        max={500}
-        min={0}
-        onChange={[Function]}
-        placeholder={500}
-        step={1}
-        type="number"
-        value={460}
-      />
-    </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
-    >
-      Go
-    </button>
-  </fieldset>
-</form>
-`;
-
-exports[`RawRangeInput willReceiveProps expect to update the state from given props 2`] = `
-<form
-  className="form"
-  onSubmit={[Function]}
->
-  <fieldset
-    className="fieldset"
-  >
-    <label
-      className="labelMin"
-    >
-      <input
-        className="inputMin"
+        className="input inputMin"
         disabled={false}
         max={500}
         min={0}
@@ -445,16 +503,24 @@ exports[`RawRangeInput willReceiveProps expect to update the state from given pr
         value={40}
       />
     </label>
-    <span
-      className="separator"
-    >
-      to
-    </span>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
     <label
-      className="labelMax"
+      className="label"
     >
       <input
-        className="inputMax"
+        className="input inputMax"
         disabled={false}
         max={500}
         min={0}
@@ -465,13 +531,91 @@ exports[`RawRangeInput willReceiveProps expect to update the state from given pr
         value={460}
       />
     </label>
-    <button
-      className="submit"
-      disabled={false}
-      role="button"
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
+`;
+
+exports[`RangeInput willReceiveProps expect to update the state from given props 2`] = `
+<div
+  className="root"
+>
+  <form
+    className="form"
+    onSubmit={[Function]}
+  >
+    <label
+      className="label"
     >
-      Go
-    </button>
-  </fieldset>
-</form>
+      <input
+        className="input inputMin"
+        disabled={false}
+        max={500}
+        min={0}
+        onChange={[Function]}
+        placeholder={0}
+        step={1}
+        type="number"
+        value={40}
+      />
+    </label>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "separator",
+        }
+      }
+      rootTagName="span"
+      templateKey="separatorText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+    <label
+      className="label"
+    >
+      <input
+        className="input inputMax"
+        disabled={false}
+        max={500}
+        min={0}
+        onChange={[Function]}
+        placeholder={500}
+        step={1}
+        type="number"
+        value={460}
+      />
+    </label>
+    <Template
+      data={Object {}}
+      rootProps={
+        Object {
+          "className": "submit",
+          "disabled": false,
+          "type": "submit",
+        }
+      }
+      rootTagName="button"
+      templateKey="submitText"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
+    />
+  </form>
+</div>
 `;

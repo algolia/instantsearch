@@ -3,8 +3,6 @@ import InstantSearch from '../InstantSearch';
 
 jest.useFakeTimers();
 
-const appId = 'appId';
-const apiKey = 'apiKey';
 const indexName = 'lifecycle';
 
 describe('InstantSearch life cycle', () => {
@@ -18,11 +16,9 @@ describe('InstantSearch life cycle', () => {
     };
 
     const search = new InstantSearch({
-      appId,
-      apiKey,
       indexName,
       searchFunction: searchFunctionSpy,
-      createAlgoliaClient: () => fakeClient,
+      searchClient: fakeClient,
     });
 
     expect(searchFunctionSpy).not.toHaveBeenCalled();
@@ -63,10 +59,8 @@ describe('InstantSearch life cycle', () => {
     };
 
     const search = new InstantSearch({
-      appId,
-      apiKey,
       indexName,
-      createAlgoliaClient: () => fakeClient,
+      searchClient: fakeClient,
     });
 
     const widget = {
@@ -144,11 +138,9 @@ describe('InstantSearch life cycle', () => {
     };
 
     const search = new InstantSearch({
-      appId,
-      apiKey,
       indexName,
       searchFunction: searchFunctionSpy,
-      createAlgoliaClient: () => fakeClient,
+      searchClient: fakeClient,
     });
 
     search.start();
@@ -161,10 +153,13 @@ describe('InstantSearch life cycle', () => {
   });
 
   it('does not break when providing searchFunction with multiple resquests', () => {
+    const fakeClient = {
+      search: jest.fn(() => Promise.resolve({ results: [{}, {}] })),
+    };
+
     const search = new InstantSearch({
-      appId,
-      apiKey,
       indexName,
+      searchClient: fakeClient,
       searchFunction: h => {
         h.addDisjunctiveFacetRefinement('brand', 'Apple');
         h.search();

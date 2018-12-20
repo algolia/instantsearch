@@ -1,4 +1,3 @@
-import expect from 'expect';
 import { searchBox, prepareScreenshot } from './utils.js';
 
 describe('searchBox', () => {
@@ -8,7 +7,7 @@ describe('searchBox', () => {
     it('input is empty', () => expect(searchBox.get()).toBe(''));
 
     it('triggers an empty search', () => {
-      expect(browser.getText('#hits')).not.toContain('MP3');
+      expect(browser.getText('body #hits')).not.toContain('MP3');
       prepareScreenshot();
       browser.checkDocument({
         hide: ['.ais-stats--body'], // Flaky X ms information.
@@ -22,7 +21,7 @@ describe('searchBox', () => {
     it('fills the input', () => expect(searchBox.get()).toBe('mp3'));
 
     it('triggers a new search', () => {
-      expect(browser.getText('#hits')).toContain('MP3');
+      expect(browser.getText('body #hits')).toContain('MP3');
       prepareScreenshot();
       browser.checkDocument({
         hide: ['.ais-stats--body'], // Flaky X ms information.

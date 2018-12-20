@@ -26,9 +26,9 @@ describe('connectMenu', () => {
   });
 
   describe('options configuring the helper', () => {
-    it('`attributeName`', () => {
+    it('`attribute`', () => {
       const widget = makeWidget({
-        attributeName: 'myFacet',
+        attribute: 'myFacet',
       });
 
       expect(widget.getConfiguration({})).toEqual({
@@ -44,7 +44,7 @@ describe('connectMenu', () => {
 
     it('`limit`', () => {
       const widget = makeWidget({
-        attributeName: 'myFacet',
+        attribute: 'myFacet',
         limit: 20,
       });
 
@@ -64,7 +64,7 @@ describe('connectMenu', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const widget = makeWidget({
-      attributeName: 'myFacet',
+      attribute: 'myFacet',
       limit: 9,
     });
 
@@ -99,7 +99,7 @@ describe('connectMenu', () => {
       expect.objectContaining({
         canRefine: false,
         widgetParams: {
-          attributeName: 'myFacet',
+          attribute: 'myFacet',
           limit: 9,
         },
       }),
@@ -119,7 +119,7 @@ describe('connectMenu', () => {
       expect.objectContaining({
         canRefine: false,
         widgetParams: {
-          attributeName: 'myFacet',
+          attribute: 'myFacet',
           limit: 9,
         },
       }),
@@ -129,7 +129,7 @@ describe('connectMenu', () => {
 
   it('Provide a function to clear the refinements at each step', () => {
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -168,7 +168,7 @@ describe('connectMenu', () => {
 
   it('provides the correct facet values', () => {
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -240,7 +240,7 @@ describe('connectMenu', () => {
 
   it('provides the correct transformed facet values', () => {
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       transformItems: items =>
         items.map(item => ({
           ...item,
@@ -300,21 +300,11 @@ describe('connectMenu', () => {
   });
 
   describe('showMore', () => {
-    it('should throw when `showMoreLimit` is lower than `limit`', () => {
-      expect(() =>
-        connectMenu(() => {})({
-          attributeName: 'myFacet',
-          limit: 10,
-          showMoreLimit: 1,
-        })
-      ).toThrow();
-    });
-
-    it('should provide `showMoreLimit` as `maxValuesPerFacet`', () => {
+    it('should set `maxValuesPerFacet` by default', () => {
       const widget = makeWidget({
-        attributeName: 'myFacet',
+        attribute: 'myFacet',
         limit: 10,
-        showMoreLimit: 20,
+        showMore: true,
       });
 
       expect(widget.getConfiguration({})).toEqual({
@@ -328,11 +318,31 @@ describe('connectMenu', () => {
       });
     });
 
+    it('should provide `showMoreLimit` as `maxValuesPerFacet`', () => {
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 30,
+      });
+
+      expect(widget.getConfiguration({})).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'myFacet',
+            attributes: ['myFacet'],
+          },
+        ],
+        maxValuesPerFacet: 30,
+      });
+    });
+
     it('should initialize with `isShowingMore === false`', () => {
       // Given
       const widget = makeWidget({
-        attributeName: 'myFacet',
+        attribute: 'myFacet',
         limit: 10,
+        showMore: true,
         showMoreLimit: 20,
       });
 
@@ -359,8 +369,9 @@ describe('connectMenu', () => {
     it('should toggle `isShowingMore` when `toggleShowMore` is called', () => {
       // Given
       const widget = makeWidget({
-        attributeName: 'category',
+        attribute: 'category',
         limit: 1,
+        showMore: true,
         showMoreLimit: 2,
       });
 
@@ -423,8 +434,9 @@ describe('connectMenu', () => {
     it('should set canToggleShowMore to false when there are not enough items', () => {
       // Given
       const widget = makeWidget({
-        attributeName: 'category',
+        attribute: 'category',
         limit: 1,
+        showMore: true,
         showMoreLimit: 2,
       });
 
@@ -477,7 +489,7 @@ describe('connectMenu', () => {
       const rendering2 = jest.fn();
       const makeWidget2 = connectMenu(rendering2);
       const widget = makeWidget2({
-        attributeName: 'category',
+        attribute: 'category',
       });
 
       const helper = jsHelper({}, '', widget.getConfiguration({}));

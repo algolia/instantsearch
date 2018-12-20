@@ -2,8 +2,7 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { tagConfig } from '../../../lib/escape-highlight.js';
-
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
 import connectRefinementList from '../connectRefinementList.js';
 
 describe('connectRefinementList', () => {
@@ -32,17 +31,39 @@ describe('connectRefinementList', () => {
 
     expect(() =>
       connectRefinementList(() => {})({
-        attributeName: 'company',
+        attribute: 'company',
         operator: 'YUP',
       })
     ).toThrow(/Usage:/);
+
+    expect(() =>
+      connectRefinementList(() => {})({
+        attribute: 'company',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 10,
+      })
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"\`showMoreLimit\` should be greater than \`limit\`."`
+    );
+
+    expect(() =>
+      connectRefinementList(() => {})({
+        attribute: 'company',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 5,
+      })
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"\`showMoreLimit\` should be greater than \`limit\`."`
+    );
   });
 
   describe('options configuring the helper', () => {
-    it('`attributeName`', () => {
+    it('`attribute`', () => {
       const { makeWidget } = createWidgetFactory();
       const widget = makeWidget({
-        attributeName: 'myFacet',
+        attribute: 'myFacet',
       });
 
       expect(widget.getConfiguration()).toEqual({
@@ -54,7 +75,7 @@ describe('connectRefinementList', () => {
     it('`limit`', () => {
       const { makeWidget } = createWidgetFactory();
       const widget = makeWidget({
-        attributeName: 'myFacet',
+        attribute: 'myFacet',
         limit: 20,
       });
 
@@ -72,10 +93,128 @@ describe('connectRefinementList', () => {
       );
     });
 
+    it('`showMoreLimit`', () => {
+      const { rendering, makeWidget } = createWidgetFactory();
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 20,
+        showMore: true,
+        showMoreLimit: 30,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      secondRenderingOptions.toggleShowMore();
+
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 30,
+      });
+
+      expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 100,
+      });
+    });
+
+    it('`showMoreLimit` without `showMore` does not set anything', () => {
+      const { rendering, makeWidget } = createWidgetFactory();
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 20,
+        showMoreLimit: 30,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      secondRenderingOptions.toggleShowMore();
+
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 20,
+      });
+    });
+
     it('`operator="and"`', () => {
       const { makeWidget } = createWidgetFactory();
       const widget = makeWidget({
-        attributeName: 'myFacet',
+        attribute: 'myFacet',
         operator: 'and',
       });
 
@@ -91,7 +230,7 @@ describe('connectRefinementList', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const widget = makeWidget({
-      attributeName: 'myFacet',
+      attribute: 'myFacet',
       limit: 9,
     });
 
@@ -122,7 +261,7 @@ describe('connectRefinementList', () => {
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.canRefine).toBe(false);
     expect(firstRenderingOptions.widgetParams).toEqual({
-      attributeName: 'myFacet',
+      attribute: 'myFacet',
       limit: 9,
     });
 
@@ -140,7 +279,7 @@ describe('connectRefinementList', () => {
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canRefine).toBe(false);
     expect(secondRenderingOptions.widgetParams).toEqual({
-      attributeName: 'myFacet',
+      attribute: 'myFacet',
       limit: 9,
     });
   });
@@ -148,7 +287,7 @@ describe('connectRefinementList', () => {
   it('transforms items if requested', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       transformItems: items =>
         items.map(item => ({
           ...item,
@@ -211,7 +350,7 @@ describe('connectRefinementList', () => {
   it('Provide a function to clear the refinements at each step', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -251,8 +390,9 @@ describe('connectRefinementList', () => {
   it('If there are too few items then canToggleShowMore is false', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 3,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -298,7 +438,7 @@ describe('connectRefinementList', () => {
   it('If there are no showMoreLimit specified, canToggleShowMore is false', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 1,
     });
 
@@ -348,8 +488,9 @@ describe('connectRefinementList', () => {
   it('If there are same amount of items then canToggleShowMore is false', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -399,8 +540,9 @@ describe('connectRefinementList', () => {
   it('If there are enough items then canToggleShowMore is true', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 1,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -453,8 +595,9 @@ describe('connectRefinementList', () => {
   it('Show more should toggle between two limits', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 1,
+      showMore: true,
       showMoreLimit: 3,
     });
 
@@ -546,7 +689,7 @@ describe('connectRefinementList', () => {
   it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
     });
 
@@ -623,7 +766,7 @@ describe('connectRefinementList', () => {
   it('hasExhaustiveItems indicates if the items provided are exhaustive - with an other widgets making the maxValuesPerFacet bigger', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
     });
 
@@ -704,8 +847,9 @@ describe('connectRefinementList', () => {
   it('can search in facet values', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
+      escapeFacetValues: false,
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -716,12 +860,12 @@ describe('connectRefinementList', () => {
         facetHits: [
           {
             count: 33,
-            highlighted: 'Salvador <em>Da</em>li',
+            highlighted: 'Salvador <mark>Da</mark>li',
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: '<em>Da</em>vidoff',
+            highlighted: '<mark>Da</mark>vidoff',
             value: 'Davidoff',
           },
         ],
@@ -777,8 +921,8 @@ describe('connectRefinementList', () => {
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual({
-      highlightPreTag: undefined,
-      highlightPostTag: undefined,
+      highlightPreTag: '<mark>',
+      highlightPostTag: '</mark>',
     });
 
     return Promise.resolve().then(() => {
@@ -786,13 +930,13 @@ describe('connectRefinementList', () => {
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <em>Da</em>li',
+          highlighted: 'Salvador <mark>Da</mark>li',
           label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
-          highlighted: '<em>Da</em>vidoff',
+          highlighted: '<mark>Da</mark>vidoff',
           label: 'Davidoff',
           value: 'Davidoff',
         },
@@ -803,8 +947,9 @@ describe('connectRefinementList', () => {
   it('can search in facet values with transformed items', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
+      escapeFacetValues: false,
       transformItems: items =>
         items.map(item => ({
           ...item,
@@ -883,8 +1028,8 @@ describe('connectRefinementList', () => {
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual({
-      highlightPreTag: undefined,
-      highlightPostTag: undefined,
+      highlightPreTag: '<mark>',
+      highlightPostTag: '</mark>',
     });
 
     return Promise.resolve().then(() => {
@@ -907,14 +1052,15 @@ describe('connectRefinementList', () => {
   it('can search in facet values, and reset pre post tags if needed', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
+      escapeFacetValues: false,
     });
 
     const helper = jsHelper({}, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
-      ...tagConfig,
+      ...TAG_PLACEHOLDER,
     });
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
@@ -923,12 +1069,12 @@ describe('connectRefinementList', () => {
         facetHits: [
           {
             count: 33,
-            highlighted: 'Salvador <em>Da</em>li',
+            highlighted: 'Salvador <mark>Da</mark>li',
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: '<em>Da</em>vidoff',
+            highlighted: '<mark>Da</mark>vidoff',
             value: 'Davidoff',
           },
         ],
@@ -984,8 +1130,8 @@ describe('connectRefinementList', () => {
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual({
-      highlightPreTag: undefined,
-      highlightPostTag: undefined,
+      highlightPreTag: '<mark>',
+      highlightPostTag: '</mark>',
     });
 
     return Promise.resolve().then(() => {
@@ -993,13 +1139,13 @@ describe('connectRefinementList', () => {
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <em>Da</em>li',
+          highlighted: 'Salvador <mark>Da</mark>li',
           label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
-          highlighted: '<em>Da</em>vidoff',
+          highlighted: '<mark>Da</mark>vidoff',
           label: 'Davidoff',
           value: 'Davidoff',
         },
@@ -1007,10 +1153,10 @@ describe('connectRefinementList', () => {
     });
   });
 
-  it('can search in facet values, and set post and pre tags if escapeFacetValues is true', () => {
+  it('can search in facet values, and set post and pre tags by default', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
       escapeFacetValues: true,
     });
@@ -1018,7 +1164,7 @@ describe('connectRefinementList', () => {
     const helper = jsHelper({}, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
-      ...tagConfig,
+      ...TAG_PLACEHOLDER,
     });
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
@@ -1027,15 +1173,15 @@ describe('connectRefinementList', () => {
         facetHits: [
           {
             count: 33,
-            highlighted: `Salvador ${tagConfig.highlightPreTag}Da${
-              tagConfig.highlightPostTag
+            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${
+              TAG_PLACEHOLDER.highlightPostTag
             }li`,
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: `${tagConfig.highlightPreTag}Da${
-              tagConfig.highlightPostTag
+            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${
+              TAG_PLACEHOLDER.highlightPostTag
             }vidoff`,
             value: 'Davidoff',
           },
@@ -1091,20 +1237,20 @@ describe('connectRefinementList', () => {
     expect(sffvQuery).toBe('da');
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
-    expect(paramOverride).toEqual(tagConfig);
+    expect(paramOverride).toEqual(TAG_PLACEHOLDER);
 
     return Promise.resolve().then(() => {
       expect(rendering).toHaveBeenCalledTimes(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <em>Da</em>li',
+          highlighted: 'Salvador <mark>Da</mark>li',
           label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
-          highlighted: '<em>Da</em>vidoff',
+          highlighted: '<mark>Da</mark>vidoff',
           label: 'Davidoff',
           value: 'Davidoff',
         },
@@ -1118,7 +1264,7 @@ describe('connectRefinementList', () => {
       const makeWidget = connectRefinementList(rendering);
 
       const widget = makeWidget({
-        attributeName: 'facetAttribute',
+        attribute: 'facetAttribute',
         ...config,
       });
 

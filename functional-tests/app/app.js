@@ -1,10 +1,10 @@
-/* global instantsearch */
+/* global instantsearch algoliasearch */
 /* eslint-disable object-shorthand, prefer-template, prefer-arrow-callback */
 
-var search = instantsearch({ // eslint-disable-line
-  appId: 'latency',
-  apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
+// eslint-disable-next-line no-var
+var search = instantsearch({
   indexName: 'instant_search',
+  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
   routing: true,
   searchParameters: {
     hitsPerPage: 6,
@@ -26,9 +26,9 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.sortBySelector({
-    container: '#sort-by-selector',
-    indices: [
+  instantsearch.widgets.sortBy({
+    container: '#sort-by',
+    items: [
       { name: 'instant_search', label: 'Most relevant' },
       { name: 'instant_search_price_asc', label: 'Lowest price' },
       { name: 'instant_search_price_desc', label: 'Highest price' },
@@ -40,8 +40,8 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.hitsPerPageSelector({
-    container: '#hits-per-page-selector',
+  instantsearch.widgets.hitsPerPage({
+    container: '#hits-per-page',
     items: [
       { value: 6, label: '6 per page' },
       { value: 12, label: '12 per page' },
@@ -70,7 +70,7 @@ search.addWidget(
       root: 'pagination', // This uses Bootstrap classes
       active: 'active',
     },
-    maxPages: 20,
+    totalPages: 20,
   })
 );
 
@@ -268,41 +268,5 @@ search.addWidget(
 search.once('render', function() {
   document.querySelector('.search').className = 'row search search--visible';
 });
-
-search.addWidget(
-  instantsearch.widgets.priceRanges({
-    container: '#price-ranges',
-    attributeName: 'price',
-    templates: {
-      header: 'Price ranges',
-    },
-    cssClasses: {
-      header: 'facet-title',
-      body: 'nav nav-stacked',
-      range: 'facet-value',
-      form: '',
-      input: 'fixed-input-sm',
-      button: 'btn btn-default btn-sm',
-      item: 'item',
-    },
-  })
-);
-
-search.addWidget(
-  instantsearch.widgets.numericSelector({
-    container: '#popularity-selector',
-    operator: '>=',
-    attributeName: 'popularity',
-    options: [
-      { label: 'Default', value: 0 },
-      { label: 'Top 10', value: 9991 },
-      { label: 'Top 100', value: 9901 },
-      { label: 'Top 500', value: 9501 },
-    ],
-    cssClasses: {
-      select: 'form-control',
-    },
-  })
-);
 
 search.start();

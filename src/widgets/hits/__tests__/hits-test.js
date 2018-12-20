@@ -20,7 +20,6 @@ describe('hits()', () => {
 
     container = document.createElement('div');
     templateProps = {
-      transformData: undefined,
       templatesConfig: undefined,
       templates: defaultTemplates,
       useCustomCompileOptions: { item: false, empty: false },

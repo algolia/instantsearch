@@ -1,14 +1,38 @@
 import menu from '../menu';
 
 describe('menu', () => {
-  it('throws an exception when no attributeName', () => {
+  it('throws usage when no container', () => {
+    expect(menu.bind(null, { attribute: '' })).toThrow(/^Usage/);
+  });
+
+  it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
     expect(menu.bind(null, { container })).toThrow(/^Usage/);
   });
 
-  it('throws an exception when no container', () => {
-    const attributeName = '';
-    expect(menu.bind(null, { attributeName })).toThrow(/^Usage/);
+  it('throws an exception when showMoreLimit is equal to limit', () => {
+    expect(
+      menu.bind(null, {
+        attribute: 'attribute',
+        container: document.createElement('div'),
+        limit: 20,
+        showMore: true,
+        showMoreLimit: 20,
+      })
+    ).toThrow(/^Usage/);
+  });
+
+  it('throws an exception when showMoreLimit is lower than limit', () => {
+    const container = document.createElement('div');
+    expect(
+      menu.bind(null, {
+        attribute: 'attribute',
+        container,
+        limit: 20,
+        showMore: true,
+        showMoreLimit: 10,
+      })
+    ).toThrow(/^Usage/);
   });
 
   describe('render', () => {
@@ -35,7 +59,7 @@ describe('menu', () => {
     it('snapshot', () => {
       const widget = menu({
         container: document.createElement('div'),
-        attributeName: 'test',
+        attribute: 'test',
       });
 
       widget.init({
@@ -51,7 +75,7 @@ describe('menu', () => {
     it('renders transformed items', () => {
       const widget = menu({
         container: document.createElement('div'),
-        attributeName: 'test',
+        attribute: 'test',
         transformItems: items =>
           items.map(item => ({ ...item, transformed: true })),
       });

@@ -66,10 +66,14 @@ search.addWidget(
       item: hit => `
         <li class="hit">
           <h3>
-            ${hit._highlightResult.name.value}
-            <small>in ${hit._highlightResult.location.value}</small>
+            ${instantsearch.highlight({ attribute: 'name', hit })}
+            <small>
+              ${instantsearch.highlight({ attribute: 'location', hit })}
+            </small>
           </h3>
-          <small>on <strong>${new Date(hit.date)}</strong></small>
+          <small>
+            on <strong>${new Date(hit.date)}</strong>
+          </small>
         </li>
       `,
     },
@@ -77,7 +81,7 @@ search.addWidget(
 );
 ```
 
-We use the function syntax for the `item` template because we want to convert the numeric timestamp from our dataset to a JavaScript date on the fly. Be careful with user-generated data. You can use existing libraries to prevent XSS or use a [template](widgets-common-api.html#templates) and [`transformData`](widgets-common-api.html#transformdata) instead.
+We use the function syntax for the `item` template because we want to convert the numeric timestamp from our dataset to a JavaScript date on the fly. Be careful with user-generated data. You can use existing libraries to prevent XSS or use a [template](widgets-common-api.html#templates) and [`transformItems`](widgets-common-api.html#transformitems) instead.
 
 *Note: we've highlighted the event's name as well as its location because we set them both as searchable in the Algolia dashboard.*
 
@@ -152,12 +156,12 @@ const datePicker = instantsearch.connectors.connectRange(
 );
 ```
 
-We've now created our widget factory `datePicker`. In order to use it, you must instantiate it with a [`CustomRangeWidgetOptions`](connectors/connectRange.html#struct-CustomRangeWidgetOptions) object, specifying the `attributeName` parameter: the index key we are refining with. In our case, since it is a calendar widget, we want to refine on the `date` attribute of our dataset.
+We've now created our widget factory `datePicker`. In order to use it, you must instantiate it with a [`CustomRangeWidgetOptions`](connectors/connectRange.html#struct-CustomRangeWidgetOptions) object, specifying the `attribute` parameter: the index key we are refining with. In our case, since it is a calendar widget, we want to refine on the `date` attribute of our dataset.
 
 ```javascript
 search.addWidget(
   datePicker({
-    attributeName: 'date',
+    attribute: 'date',
   })
 );
 ```

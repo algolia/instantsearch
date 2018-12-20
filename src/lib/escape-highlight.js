@@ -3,15 +3,26 @@ import escape from 'lodash/escape';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 
-export const tagConfig = {
+export const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
   highlightPostTag: '__/ais-highlight__',
 };
 
-function replaceWithEmAndEscape(value) {
+export const TAG_REPLACEMENT = {
+  highlightPreTag: '<mark>',
+  highlightPostTag: '</mark>',
+};
+
+function replaceTagsAndEscape(value) {
   return escape(value)
-    .replace(new RegExp(tagConfig.highlightPreTag, 'g'), '<em>')
-    .replace(new RegExp(tagConfig.highlightPostTag, 'g'), '</em>');
+    .replace(
+      new RegExp(TAG_PLACEHOLDER.highlightPreTag, 'g'),
+      TAG_REPLACEMENT.highlightPreTag
+    )
+    .replace(
+      new RegExp(TAG_PLACEHOLDER.highlightPostTag, 'g'),
+      TAG_REPLACEMENT.highlightPostTag
+    );
 }
 
 function recursiveEscape(input) {
@@ -32,7 +43,7 @@ function recursiveEscape(input) {
 
   return {
     ...input,
-    value: replaceWithEmAndEscape(input.value),
+    value: replaceTagsAndEscape(input.value),
   };
 }
 
@@ -58,6 +69,6 @@ export default function escapeHits(hits) {
 export function escapeFacets(facetHits) {
   return facetHits.map(h => ({
     ...h,
-    highlighted: replaceWithEmAndEscape(h.highlighted),
+    highlighted: replaceTagsAndEscape(h.highlighted),
   }));
 }

@@ -1,4 +1,5 @@
 import jsHelper from 'algoliasearch-helper';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
 const SearchResults = jsHelper.SearchResults;
 
 import connectInfiniteHits from '../connectInfiniteHits.js';
@@ -10,12 +11,12 @@ describe('connectInfiniteHits', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({
-      escapeHits: true,
+      escapeHTML: true,
     });
 
     expect(widget.getConfiguration()).toEqual({
-      highlightPostTag: '__/ais-highlight__',
-      highlightPreTag: '__ais-highlight__',
+      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
     });
 
     // test if widget is not rendered yet at this point
@@ -42,7 +43,7 @@ describe('connectInfiniteHits', () => {
         isLastPage: true,
         instantSearchInstance: undefined,
         widgetParams: {
-          escapeHits: true,
+          escapeHTML: true,
         },
       }),
       true
@@ -68,11 +69,22 @@ describe('connectInfiniteHits', () => {
         isLastPage: false,
         instantSearchInstance: undefined,
         widgetParams: {
-          escapeHits: true,
+          escapeHTML: true,
         },
       }),
       false
     );
+  });
+
+  it('sets the default configuration', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget();
+
+    expect(widget.getConfiguration()).toEqual({
+      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
+    });
   });
 
   it('Provides the hits and the whole results', () => {
@@ -153,7 +165,7 @@ describe('connectInfiniteHits', () => {
   it('escape highlight properties if requested', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
-    const widget = makeWidget({ escapeHits: true });
+    const widget = makeWidget({ escapeHTML: true });
 
     const helper = jsHelper({}, '', {});
     helper.search = jest.fn();
@@ -173,7 +185,9 @@ describe('connectInfiniteHits', () => {
       {
         _highlightResult: {
           foobar: {
-            value: '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
+              TAG_PLACEHOLDER.highlightPostTag
+            }</script>`,
           },
         },
       },
@@ -191,7 +205,7 @@ describe('connectInfiniteHits', () => {
       {
         _highlightResult: {
           foobar: {
-            value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
       },
@@ -252,6 +266,89 @@ describe('connectInfiniteHits', () => {
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.hits).toEqual(transformedHits);
     expect(secondRenderingOptions.results).toEqual(results);
+  });
+
+  it('transform items after escaping', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          _highlightResult: {
+            name: {
+              value: item._highlightResult.name.value.toUpperCase(),
+            },
+          },
+        })),
+      escapeHTML: true,
+    });
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const hits = [
+      {
+        name: 'hello',
+        _highlightResult: {
+          name: {
+            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${
+              TAG_PLACEHOLDER.highlightPostTag
+            }`,
+          },
+        },
+      },
+      {
+        name: 'halloween',
+        _highlightResult: {
+          name: {
+            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${
+              TAG_PLACEHOLDER.highlightPostTag
+            }ween`,
+          },
+        },
+      },
+    ];
+
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        hits: [
+          {
+            name: 'hello',
+            _highlightResult: {
+              name: {
+                value: 'HE<MARK>LLO</MARK>',
+              },
+            },
+          },
+          {
+            name: 'halloween',
+            _highlightResult: {
+              name: {
+                value: 'HA<MARK>LLO</MARK>WEEN',
+              },
+            },
+          },
+        ],
+        results,
+      }),
+      expect.anything()
+    );
   });
 
   it('does not render the same page twice', () => {

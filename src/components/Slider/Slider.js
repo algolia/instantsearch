@@ -1,20 +1,13 @@
+import React, { Component } from 'preact-compat';
+import Rheostat from 'preact-rheostat';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 import times from 'lodash/times';
 import range from 'lodash/range';
 import has from 'lodash/has';
-
-import PropTypes from 'prop-types';
-
-import React, { Component } from 'preact-compat';
-
-import Rheostat from 'preact-rheostat';
-import cx from 'classnames';
-
 import Pit from './Pit.js';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-
-export class RawSlider extends Component {
+class Slider extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
@@ -26,6 +19,10 @@ export class RawSlider extends Component {
       PropTypes.bool,
       PropTypes.shape({ format: PropTypes.func.isRequired }),
     ]),
+    cssClasses: PropTypes.shape({
+      root: PropTypes.string.isRequired,
+      disabledRoot: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   get isDisabled() {
@@ -68,22 +65,20 @@ export class RawSlider extends Component {
       ? tooltips.format(roundedValue)
       : roundedValue;
 
-    const className = cx('ais-range-slider--handle', props.className, {
-      'ais-range-slider--handle-lower': props['data-handle-key'] === 0,
-      'ais-range-slider--handle-upper': props['data-handle-key'] === 1,
+    const className = cx(props.className, {
+      'rheostat-handle-lower': props['data-handle-key'] === 0,
+      'rheostat-handle-upper': props['data-handle-key'] === 1,
     });
 
     return (
       <div {...props} className={className}>
-        {tooltips ? (
-          <div className="ais-range-slider--tooltip">{value}</div>
-        ) : null}
+        {tooltips && <div className="rheostat-tooltip">{value}</div>}
       </div>
     );
   };
 
   render() {
-    const { tooltips, step, pips, values } = this.props;
+    const { tooltips, step, pips, values, cssClasses } = this.props;
 
     const { min, max } = this.isDisabled
       ? { min: this.props.min, max: this.props.max + 0.001 }
@@ -94,7 +89,11 @@ export class RawSlider extends Component {
       pips === false ? [] : this.computeDefaultPitPoints({ min, max });
 
     return (
-      <div className={this.isDisabled ? 'ais-range-slider--disabled' : ''}>
+      <div
+        className={cx(cssClasses.root, {
+          [cssClasses.disabledRoot]: this.isDisabled,
+        })}
+      >
         <Rheostat
           handle={this.createHandleComponent(tooltips)}
           onChange={this.handleChange}
@@ -112,4 +111,4 @@ export class RawSlider extends Component {
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(RawSlider));
+export default Slider;

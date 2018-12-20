@@ -7,13 +7,17 @@ exports[`GeoSearchControls Clear button expect to not render the button when the
 exports[`GeoSearchControls Clear button expect to render the button when the refinement come from the map 1`] = `
 <div>
   <GeoSearchButton
-    className="clear"
+    className="reset"
     disabled={false}
     onClick={[Function]}
   >
-    <Component
+    <Template
+      data={Object {}}
       rootTagName="span"
-      templateKey="clear"
+      templateKey="reset"
+      templates={Object {}}
+      templatesConfig={Object {}}
+      useCustomCompileOptions={Object {}}
     />
   </GeoSearchButton>
 </div>
@@ -27,13 +31,17 @@ exports[`GeoSearchControls Control disabled expect to render the button disabled
     className="control"
   >
     <GeoSearchButton
-      className="redo"
+      className="redo redo-disabled"
       disabled={true}
       onClick={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="redo"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchButton>
   </div>
@@ -50,9 +58,13 @@ exports[`GeoSearchControls Control disabled expect to render the button enabled 
       disabled={false}
       onClick={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="redo"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchButton>
   </div>
@@ -69,9 +81,13 @@ exports[`GeoSearchControls Control enabled expect to render the button when refi
       disabled={false}
       onClick={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="redo"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchButton>
   </div>
@@ -85,13 +101,17 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
   >
     <GeoSearchToggle
       checked={true}
-      classNameInput="toggleInput"
-      classNameLabel="toggleLabel toggleLabelActive"
+      classNameInput="input"
+      classNameLabel="label label-selected"
       onToggle={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="toggle"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchToggle>
   </div>
@@ -105,13 +125,17 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
   >
     <GeoSearchToggle
       checked={true}
-      classNameInput="toggleInput"
-      classNameLabel="toggleLabel toggleLabelActive"
+      classNameInput="input"
+      classNameLabel="label label-selected"
       onToggle={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="toggle"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchToggle>
   </div>
@@ -125,15 +149,21 @@ exports[`GeoSearchControls Control enabled expect to render the toggle unchecked
   >
     <GeoSearchToggle
       checked={false}
-      classNameInput="toggleInput"
-      classNameLabel="toggleLabel"
+      classNameInput="input"
+      classNameLabel="label"
       onToggle={[Function]}
     >
-      <Component
+      <Template
+        data={Object {}}
         rootTagName="span"
         templateKey="toggle"
+        templates={Object {}}
+        templatesConfig={Object {}}
+        useCustomCompileOptions={Object {}}
       />
     </GeoSearchToggle>
   </div>
 </div>
 `;
+
+exports[`GeoSearchControls expect to render nothing with refine disabled 1`] = `""`;

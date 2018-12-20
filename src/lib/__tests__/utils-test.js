@@ -1,6 +1,12 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import * as utils from '../utils';
 
+describe('capitalize', () => {
+  it('should capitalize the first character only', () => {
+    expect(utils.capitalize('hello')).toBe('Hello');
+  });
+});
+
 describe('utils.getContainerNode', () => {
   it('should be able to get a node from a node', () => {
     const d = document.body;
@@ -80,17 +86,14 @@ describe('utils.prepareTemplateProps', () => {
     bar: 'tata',
   };
   const templatesConfig = [];
-  const transformData = () => {}; // eslint-disable-line func-style
 
   it('should return the default templates and set useCustomCompileOptions to false when using the defaults', () => {
     const defaultsPrepared = utils.prepareTemplateProps({
-      transformData,
       defaultTemplates,
       undefined,
       templatesConfig,
     });
 
-    expect(defaultsPrepared.transformData).toBe(transformData);
     expect(defaultsPrepared.useCustomCompileOptions).toEqual({
       foo: false,
       bar: false,
@@ -102,13 +105,11 @@ describe('utils.prepareTemplateProps', () => {
   it('should return the missing default templates and set useCustomCompileOptions for the custom template', () => {
     const templates = { foo: 'baz' };
     const defaultsPrepared = utils.prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templates,
       templatesConfig,
     });
 
-    expect(defaultsPrepared.transformData).toBe(transformData);
     expect(defaultsPrepared.useCustomCompileOptions).toEqual({
       foo: true,
       bar: false,
@@ -127,13 +128,11 @@ describe('utils.prepareTemplateProps', () => {
     };
 
     const preparedProps = utils.prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templates,
       templatesConfig,
     });
 
-    expect(preparedProps.transformData).toBe(transformData);
     expect(preparedProps.useCustomCompileOptions).toEqual({
       foo: true,
       bar: false,
@@ -196,6 +195,18 @@ describe('utils.renderTemplate', () => {
     const expectation = 'it works with custom delimiter';
 
     expect(actual).toBe(expectation);
+  });
+
+  it('expect to compress templates', () => {
+    expect(
+      utils.renderTemplate({
+        templateKey: 'message',
+        templates: {
+          message: ` <h1> hello</h1>
+        <p>message</p> `,
+        },
+      })
+    ).toMatchInlineSnapshot(`"<h1> hello</h1> <p>message</p>"`);
   });
 
   it('expect to throw when the template is not a function or a string', () => {
@@ -342,24 +353,24 @@ describe('utils.getRefinements', () => {
     );
   });
 
-  it('should inject query facet if clearQuery === true', () => {
-    helper.setQuery('my query');
+  it('should retrieve one query refinement when `clearsQuery` is true', () => {
+    helper.setQuery('a query');
     const expected = [
       {
         type: 'query',
         attributeName: 'query',
-        name: 'my query',
-        query: 'my query',
+        name: 'a query',
+        query: 'a query',
       },
     ];
     const clearsQuery = true;
-    expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
-      expected
-    );
+    expect(
+      utils.getRefinements(results, helper.state, clearsQuery)
+    ).toContainEqual(expected[0]);
   });
 
-  it('should retrieve one facetRefinement and not inject query facet if clearQuery === false', () => {
-    helper.setQuery('my query');
+  it('should not retrieve any query refinements if `clearsQuery` if false', () => {
+    helper.setQuery('a query');
     const expected = [];
     const clearsQuery = false;
     expect(utils.getRefinements(results, helper.state, clearsQuery)).toEqual(
@@ -706,9 +717,10 @@ describe('utils.getRefinements', () => {
       {
         type: 'hierarchical',
         attributeName: 'hierarchicalFacet2',
-        name: 'lvl1val1',
+        name: 'hierarchicalFacet2lvl0val1 > lvl1val1',
       },
     ];
+
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
     );
@@ -956,26 +968,91 @@ describe('utils.warn', () => {
   });
 });
 
-describe('utils.parseAroundLatLngFromString', () => {
-  it('expect to return a LatLng object from string', () => {
-    const samples = [
-      { input: '10,12', expectation: { lat: 10, lng: 12 } },
-      { input: '10,    12', expectation: { lat: 10, lng: 12 } },
-      { input: '10.15,12', expectation: { lat: 10.15, lng: 12 } },
-      { input: '10,12.15', expectation: { lat: 10, lng: 12.15 } },
-    ];
-
-    samples.forEach(({ input, expectation }) => {
-      expect(utils.parseAroundLatLngFromString(input)).toEqual(expectation);
-    });
+describe('utils.aroundLatLngToPosition', () => {
+  it.each([
+    ['10,12', { lat: 10, lng: 12 }],
+    ['10,    12', { lat: 10, lng: 12 }],
+    ['10.15,12', { lat: 10.15, lng: 12 }],
+    ['10,12.15', { lat: 10, lng: 12.15 }],
+  ])('expect to return a Position from a string: %j', (input, expectation) => {
+    expect(utils.aroundLatLngToPosition(input)).toEqual(expectation);
   });
 
-  it('expect to throw an error when the parsing fail', () => {
-    const samples = [{ input: '10a,12' }, { input: '10.    12' }];
+  it.each([['10a,12'], ['10.    12']])(
+    'expect to throw an error with: %j',
+    input => {
+      expect(() => utils.aroundLatLngToPosition(input)).toThrowError(
+        `Invalid value for "aroundLatLng" parameter: "${input}"`
+      );
+    }
+  );
+});
 
-    samples.forEach(({ input }) => {
-      expect(() => utils.parseAroundLatLngFromString(input)).toThrow();
-    });
+describe('utils.insideBoundingBoxToBoundingBox', () => {
+  it.each([
+    [
+      '10,12,12,14',
+      {
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      },
+    ],
+    [
+      '10,   12    ,12      ,    14',
+      {
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      },
+    ],
+    [
+      '10.15,12.15,12.15,14.15',
+      {
+        northEast: { lat: 10.15, lng: 12.15 },
+        southWest: { lat: 12.15, lng: 14.15 },
+      },
+    ],
+  ])(
+    'expect to return a BoundingBox from a string: %j',
+    (input, expectation) => {
+      expect(utils.insideBoundingBoxToBoundingBox(input)).toEqual(expectation);
+    }
+  );
+
+  it.each([
+    [
+      [[10, 12, 12, 14]],
+      {
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      },
+    ],
+    [
+      [[10.15, 12.15, 12.15, 14.15]],
+      {
+        northEast: { lat: 10.15, lng: 12.15 },
+        southWest: { lat: 12.15, lng: 14.15 },
+      },
+    ],
+  ])(
+    'expect to return a BoundingBox from an array: %j',
+    (input, expectation) => {
+      expect(utils.insideBoundingBoxToBoundingBox(input)).toEqual(expectation);
+    }
+  );
+
+  it.each([[''], ['10'], ['10,12'], ['10,12,12'], ['10.  15,12,12']])(
+    'expect to throw an error with: %j',
+    input => {
+      expect(() => utils.insideBoundingBoxToBoundingBox(input)).toThrowError(
+        `Invalid value for "insideBoundingBox" parameter: "${input}"`
+      );
+    }
+  );
+
+  it.each([[[]], [[[]]]])('expect to throw an error with: %j', input => {
+    expect(() => utils.insideBoundingBoxToBoundingBox(input)).toThrowError(
+      `Invalid value for "insideBoundingBox" parameter: [${input}]`
+    );
   });
 });
 
@@ -995,201 +1072,124 @@ describe('utils.clearRefinements', () => {
     return helper;
   };
 
-  describe('Without clearsQuery', () => {
-    it('can clear all the parameters refined', () => {
-      const helper = initHelperWithRefinements();
+  it('does not clear anything without attributes', () => {
+    const helper = initHelperWithRefinements();
 
-      const finalState = utils.clearRefinements({
-        helper,
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
+    const finalState = utils.clearRefinements({
+      helper,
     });
 
-    it('can clear all the parameters defined in the whiteList', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        whiteList: ['conjFacet'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        helper.state.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
-    });
-
-    it('can clear all the parameters refined but the ones in the black list', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        blackList: ['conjFacet'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
-    });
-
-    it('can clear all the parameters in the whitelist except the ones in the black list', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        whiteList: ['conjFacet', 'disjFacet'],
-        blackList: ['conjFacet'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
-    });
-
-    it('can clear tags only (whitelisting tags)', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        whiteList: ['_tags'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        finalState.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual([]);
-    });
-
-    it('can clear everything but the tags (blacklisting tags)', () => {
-      const helper = initHelperWithRefinements();
-
-      const finalState = utils.clearRefinements({
-        helper,
-        blackList: ['_tags'],
-      });
-
-      expect(finalState.query).toBe(helper.state.query);
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
-    });
+    expect(finalState.query).toBe(helper.state.query);
+    expect(finalState.facetsRefinements).toEqual(
+      helper.state.facetsRefinements
+    );
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
   });
 
-  describe('With clearsQuery', () => {
-    it('can clear all the parameters refined', () => {
-      const helper = initHelperWithRefinements();
+  it('can clear all the parameters defined in the list', () => {
+    const helper = initHelperWithRefinements();
 
-      const finalState = utils.clearRefinements({
-        helper,
-        clearsQuery: true,
-      });
-
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['conjFacet'],
     });
 
-    it('can clear all the parameters defined in the whiteList', () => {
-      const helper = initHelperWithRefinements();
+    expect(finalState.query).toBe(helper.state.query);
+    expect(finalState.facetsRefinements).toEqual({});
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
+  });
 
-      const finalState = utils.clearRefinements({
-        helper,
-        whiteList: ['conjFacet'],
-        clearsQuery: true,
-      });
+  it('can clear tags only (including tags)', () => {
+    const helper = initHelperWithRefinements();
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        helper.state.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['_tags'],
     });
 
-    it('can clear all the parameters refined but the ones in the black list', () => {
-      const helper = initHelperWithRefinements();
+    expect(finalState.query).toBe(helper.state.query);
+    expect(finalState.facetsRefinements).toEqual(
+      helper.state.facetsRefinements
+    );
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      finalState.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual([]);
+  });
 
-      const finalState = utils.clearRefinements({
-        helper,
-        blackList: ['conjFacet'],
-        clearsQuery: true,
-      });
+  it('can clear the query alone', () => {
+    const helper = initHelperWithRefinements();
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual([]);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['query'],
     });
 
-    it('can clear all the parameters in the whitelist except the ones in the black list', () => {
-      const helper = initHelperWithRefinements();
+    expect(finalState.query).toBe('');
+    expect(finalState.facetsRefinements).toEqual(
+      helper.state.facetsRefinements
+    );
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
+  });
 
-      const finalState = utils.clearRefinements({
-        helper,
-        whiteList: ['conjFacet', 'disjFacet'],
-        blackList: ['conjFacet'],
-        clearsQuery: true,
-      });
+  it('can clear the query alone and other refinements', () => {
+    const helper = initHelperWithRefinements();
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
+    const finalState = utils.clearRefinements({
+      helper,
+      attributesToClear: ['query', 'conjFacet'],
     });
 
-    it('can clear tags only (whitelisting tags)', () => {
-      const helper = initHelperWithRefinements();
+    expect(finalState.query).toBe('');
+    expect(finalState.facetsRefinements).toEqual({});
+    expect(finalState.disjunctiveFacetsRefinements).toEqual(
+      helper.state.disjunctiveFacetsRefinements
+    );
+    expect(finalState.tagRefinements).toEqual(helper.state.tagRefinements);
+  });
+});
 
-      const finalState = utils.clearRefinements({
-        helper,
-        whiteList: ['_tags'],
-        clearsQuery: true,
-      });
+describe('utils.getPropertyByPath', () => {
+  it('should be able to get a property', () => {
+    const object = {
+      name: 'name',
+    };
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual(
-        helper.state.facetsRefinements
-      );
-      expect(finalState.disjunctiveFacetsRefinements).toEqual(
-        finalState.disjunctiveFacetsRefinements
-      );
-      expect(finalState.tagRefinements).toEqual([]);
-    });
+    expect(utils.getPropertyByPath(object, 'name')).toBe('name');
+  });
 
-    it('can clear everything but the tags (blacklisting tags)', () => {
-      const helper = initHelperWithRefinements();
+  it('should be able to get a nested property', () => {
+    const object = {
+      nested: {
+        name: 'name',
+      },
+    };
 
-      const finalState = utils.clearRefinements({
-        helper,
-        blackList: ['_tags'],
-        clearsQuery: true,
-      });
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe('name');
+  });
 
-      expect(finalState.query).toBe('');
-      expect(finalState.facetsRefinements).toEqual({});
-      expect(finalState.disjunctiveFacetsRefinements).toEqual({});
-      expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
-    });
+  it('returns undefined if does not exist', () => {
+    const object = {};
+
+    expect(utils.getPropertyByPath(object, 'random')).toBe(undefined);
+  });
+
+  it('should stop traversing when property is not an object', () => {
+    const object = {
+      nested: {
+        names: ['name'],
+      },
+    };
+
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe(undefined);
   });
 });

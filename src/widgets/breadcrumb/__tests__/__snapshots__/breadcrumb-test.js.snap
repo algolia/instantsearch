@@ -1,44 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`breadcrumb() render renders transformed items correctly 1`] = `
-<Breadcrumb-AutoHide
+<Breadcrumb
   canRefine={true}
   createURL={[Function]}
   cssClasses={
     Object {
-      "disabledLabel": "ais-breadcrumb--disabledLabel",
-      "home": "ais-breadcrumb--home",
-      "item": "ais-breadcrumb--item",
-      "label": "ais-breadcrumb--label",
-      "root": "ais-breadcrumb--root",
-      "separator": "ais-breadcrumb--separator",
+      "item": "ais-Breadcrumb-item",
+      "link": "ais-Breadcrumb-link",
+      "list": "ais-Breadcrumb-list",
+      "noRefinementRoot": "ais-Breadcrumb--noRefinement",
+      "root": "ais-Breadcrumb",
+      "selectedItem": "ais-Breadcrumb-item--selected",
+      "separator": "ais-Breadcrumb-separator",
     }
   }
   items={
     Array [
       Object {
-        "name": "Cameras & Camcorders",
+        "label": "Cameras & Camcorders",
         "transformed": true,
         "value": "Cameras & Camcorders > Digital Cameras",
       },
       Object {
-        "name": "Digital Cameras",
+        "label": "Digital Cameras",
         "transformed": true,
         "value": null,
       },
     ]
   }
   refine={[Function]}
-  separator=" > "
-  shouldAutoHideContainer={false}
   templateProps={
     Object {
       "templates": Object {
         "home": "Home",
-        "separator": "",
+        "separator": ">",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
         "home": false,
         "separator": false,

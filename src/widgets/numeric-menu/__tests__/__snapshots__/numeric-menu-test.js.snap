@@ -1,0 +1,198 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
+<RefinementList
+  attribute="price"
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "item": "ais-NumericMenu-item",
+      "label": "ais-NumericMenu-label",
+      "labelText": "ais-NumericMenu-labelText",
+      "list": "ais-NumericMenu-list",
+      "noRefinementRoot": "ais-NumericMenu--noRefinement",
+      "radio": "ais-NumericMenu-radio",
+      "root": "ais-NumericMenu root cx",
+      "selectedItem": "ais-NumericMenu-item--selected",
+    }
+  }
+  depth={0}
+  facetValues={
+    Array [
+      Object {
+        "isRefined": true,
+        "label": "All",
+        "value": "%7B%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "less than 4",
+        "value": "%7B%22end%22:4%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "4",
+        "value": "%7B%22start%22:4,%22end%22:4%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "between 5 and 10",
+        "value": "%7B%22start%22:5,%22end%22:10%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "more than 10",
+        "value": "%7B%22start%22:10%7D",
+      },
+    ]
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "item": "<label class=\\"{{cssClasses.label}}\\">
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
+  <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
+</label>",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+/>
+`;
+
+exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
+<RefinementList
+  attribute="price"
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "item": "ais-NumericMenu-item",
+      "label": "ais-NumericMenu-label",
+      "labelText": "ais-NumericMenu-labelText",
+      "list": "ais-NumericMenu-list",
+      "noRefinementRoot": "ais-NumericMenu--noRefinement",
+      "radio": "ais-NumericMenu-radio",
+      "root": "ais-NumericMenu root cx",
+      "selectedItem": "ais-NumericMenu-item--selected",
+    }
+  }
+  depth={0}
+  facetValues={
+    Array [
+      Object {
+        "isRefined": true,
+        "label": "All",
+        "value": "%7B%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "less than 4",
+        "value": "%7B%22end%22:4%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "4",
+        "value": "%7B%22start%22:4,%22end%22:4%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "between 5 and 10",
+        "value": "%7B%22start%22:5,%22end%22:10%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "more than 10",
+        "value": "%7B%22start%22:10%7D",
+      },
+    ]
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "item": "<label class=\\"{{cssClasses.label}}\\">
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
+  <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
+</label>",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+/>
+`;
+
+exports[`numericMenu() renders with transformed items 1`] = `
+<RefinementList
+  attribute="price"
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "item": "ais-NumericMenu-item",
+      "label": "ais-NumericMenu-label",
+      "labelText": "ais-NumericMenu-labelText",
+      "list": "ais-NumericMenu-list",
+      "noRefinementRoot": "ais-NumericMenu--noRefinement",
+      "radio": "ais-NumericMenu-radio",
+      "root": "ais-NumericMenu",
+      "selectedItem": "ais-NumericMenu-item--selected",
+    }
+  }
+  depth={0}
+  facetValues={
+    Array [
+      Object {
+        "isRefined": true,
+        "label": "All",
+        "transformed": true,
+        "value": "%7B%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "less than 4",
+        "transformed": true,
+        "value": "%7B%22end%22:4%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "4",
+        "transformed": true,
+        "value": "%7B%22start%22:4,%22end%22:4%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "between 5 and 10",
+        "transformed": true,
+        "value": "%7B%22start%22:5,%22end%22:10%7D",
+      },
+      Object {
+        "isRefined": false,
+        "label": "more than 10",
+        "transformed": true,
+        "value": "%7B%22start%22:10%7D",
+      },
+    ]
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "item": "<label class=\\"{{cssClasses.label}}\\">
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
+  <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
+</label>",
+      },
+      "templatesConfig": undefined,
+      "useCustomCompileOptions": Object {
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+/>
+`;

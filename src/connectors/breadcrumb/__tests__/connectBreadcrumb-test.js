@@ -4,7 +4,7 @@ const SearchResults = jsHelper.SearchResults;
 import connectBreadcrumb from '../connectBreadcrumb.js';
 
 describe('connectBreadcrumb', () => {
-  it('It should compute getConfiguration() correctly', () => {
+  it('should compute getConfiguration() correctly', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
 
@@ -53,6 +53,28 @@ describe('connectBreadcrumb', () => {
         ],
       });
     }
+  });
+
+  it('should compute getConfiguration() correctly with a custom separator', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectBreadcrumb(rendering);
+
+    const widget = makeWidget({
+      attributes: ['category', 'sub_category'],
+      separator: ' / ',
+    });
+    const widgetConfiguration = widget.getConfiguration({});
+
+    expect(widgetConfiguration).toEqual({
+      hierarchicalFacets: [
+        {
+          attributes: ['category', 'sub_category'],
+          name: 'category',
+          rootPath: null,
+          separator: ' / ',
+        },
+      ],
+    });
   });
 
   it('Renders during init and render', () => {
@@ -198,7 +220,7 @@ describe('connectBreadcrumb', () => {
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toEqual([
-      { name: 'Decoration', value: null },
+      { label: 'Decoration', value: null },
     ]);
   });
 
@@ -251,7 +273,7 @@ describe('connectBreadcrumb', () => {
     const widget = makeWidget({
       attributes: ['category', 'sub_category'],
       transformItems: items =>
-        items.map(item => ({ ...item, name: 'transformed' })),
+        items.map(item => ({ ...item, label: 'transformed' })),
     });
 
     const config = widget.getConfiguration({});
@@ -299,7 +321,7 @@ describe('connectBreadcrumb', () => {
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toEqual([
-      expect.objectContaining({ name: 'transformed' }),
+      expect.objectContaining({ label: 'transformed' }),
     ]);
   });
 

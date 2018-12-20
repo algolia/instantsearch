@@ -1,19 +1,15 @@
 // we use the full path to the lite build to solve a meteor.js issue:
 // https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
-import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
 import algoliasearchHelper from 'algoliasearch-helper';
-import forEach from 'lodash/forEach';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
-import urlSyncWidget from './url-sync.js';
 import RoutingManager from './RoutingManager.js';
 import simpleMapping from './stateMappings/simple.js';
 import historyRouter from './routers/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
-import { warn } from './utils';
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
@@ -23,41 +19,6 @@ const ROUTING_DEFAULT_OPTIONS = {
 function defaultCreateURL() {
   return '#';
 }
-const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) =>
-  defaultAlgoliasearch(appId, apiKey);
-
-const checkOptions = ({
-  appId,
-  apiKey,
-  indexName,
-  createAlgoliaClient,
-  searchClient,
-}) => {
-  if (!searchClient) {
-    if (appId === null || apiKey === null || indexName === null) {
-      const usage = `
-Usage: instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name'
-});`;
-      throw new Error(usage);
-    }
-  } else if (
-    searchClient &&
-    (indexName === null ||
-      appId !== null ||
-      apiKey !== null ||
-      createAlgoliaClient !== defaultCreateAlgoliaClient)
-  ) {
-    const usage = `
-Usage: instantsearch({
-  indexName: 'my_index_name',
-  searchClient: algoliasearch('appId', 'apiKey')
-});`;
-    throw new Error(usage);
-  }
-};
 
 /**
  * Widgets are the building blocks of InstantSearch.js. Any
@@ -79,41 +40,39 @@ class InstantSearch extends EventEmitter {
     super();
 
     const {
-      appId = null,
-      apiKey = null,
       indexName = null,
       numberLocale,
       searchParameters = {},
-      urlSync = null,
       routing = null,
       searchFunction,
-      createAlgoliaClient = defaultCreateAlgoliaClient,
       stalledSearchDelay = 200,
       searchClient = null,
     } = options;
 
-    checkOptions({
-      appId,
-      apiKey,
-      indexName,
-      createAlgoliaClient,
-      searchClient,
-    });
+    if (indexName === null || searchClient === null) {
+      throw new Error(`Usage: instantsearch({
+  indexName: 'indexName',
+  searchClient: algoliasearch('appId', 'apiKey')
+});`);
+    }
 
-    if (searchClient && typeof searchClient.search !== 'function') {
+    if (typeof options.urlSync !== 'undefined') {
       throw new Error(
-        'InstantSearch configuration error: `searchClient` must implement a `search(requests)` method.'
+        'InstantSearch.js V3: `urlSync` option has been removed. You can now use the new `routing` option'
       );
     }
 
-    const client =
-      searchClient || createAlgoliaClient(algoliasearch, appId, apiKey);
-
-    if (typeof client.addAlgoliaAgent === 'function') {
-      client.addAlgoliaAgent(`instantsearch.js ${version}`);
+    if (typeof searchClient.search !== 'function') {
+      throw new Error(
+        'The search client must implement a `search(requests)` method.'
+      );
     }
 
-    this.client = client;
+    if (typeof searchClient.addAlgoliaAgent === 'function') {
+      searchClient.addAlgoliaAgent(`instantsearch.js ${version}`);
+    }
+
+    this.client = searchClient;
     this.helper = null;
     this.indexName = indexName;
     this.searchParameters = { ...searchParameters, index: indexName };
@@ -128,42 +87,12 @@ class InstantSearch extends EventEmitter {
       this._searchFunction = searchFunction;
     }
 
-    if (urlSync !== null) {
-      if (routing !== null) {
-        throw new Error(
-          'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
-        );
-      }
-
-      warn(
-        '`urlSync` option is deprecated and will be removed in the next major version.\n' +
-          'You can now use the new `routing` option.'
-      );
-
-      if (urlSync === true) {
-        // when using urlSync: true
-        warn('Use it like this: `routing: true`');
-      }
-
-      warn(
-        'For advanced use cases, checkout the documentation: https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync'
-      );
-    }
-
-    this.urlSync = urlSync === true ? {} : urlSync;
     if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
     else if (isPlainObject(routing))
       this.routing = {
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
-
-    if (options.createAlgoliaClient) {
-      warn(`
-\`createAlgoliaClient\` option is deprecated and will be removed in the next major version.
-Please use \`searchClient\` instead: https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient.
-To help you migrate, please refer to the migration guide: https://community.algolia.com/instantsearch.js/v2/guides/prepare-for-v3.html`);
-    }
   }
 
   /**
@@ -282,11 +211,9 @@ To help you migrate, please refer to the migration guide: https://community.algo
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        // We don't want to re-add URlSync `getConfiguration` widget
-        // it can throw errors since it may re-add SearchParameters about something unmounted
-        this.searchParameters = this.widgets
-          .filter(w => w.constructor.name !== 'URLSync')
-          .reduce(enhanceConfiguration({}), { ...nextState });
+        this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+          ...nextState,
+        });
 
         this.helper.setState(this.searchParameters);
       }
@@ -324,22 +251,11 @@ To help you migrate, please refer to the migration guide: https://community.algo
    * @return {undefined} Does not return anything
    */
   start() {
-    if (!this.widgets)
-      throw new Error('No widgets were added to instantsearch.js');
-
     if (this.started) throw new Error('start() has been already called once');
 
     let searchParametersFromUrl;
 
-    if (this.urlSync) {
-      const syncWidget = urlSyncWidget(this.urlSync);
-      this._createURL = syncWidget.createURL.bind(syncWidget);
-      this._createAbsoluteURL = relative =>
-        this._createURL(relative, { absolute: true });
-      this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
-      this.widgets.push(syncWidget);
-      searchParametersFromUrl = syncWidget.searchParametersFromUrl;
-    } else if (this.routing) {
+    if (this.routing) {
       const routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
@@ -439,7 +355,7 @@ To help you migrate, please refer to the migration guide: https://community.algo
       this._isSearchStalled = false;
     }
 
-    forEach(this.widgets, widget => {
+    this.widgets.forEach(widget => {
       if (!widget.render) {
         return;
       }
@@ -465,7 +381,7 @@ To help you migrate, please refer to the migration guide: https://community.algo
   }
 
   _init(state, helper) {
-    forEach(this.widgets, widget => {
+    this.widgets.forEach(widget => {
       if (widget.init) {
         widget.init({
           state,

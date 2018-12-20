@@ -119,10 +119,8 @@ inquirer
     }
 
     shell.echo(colors.blue('Install dependencies'));
-    // shell.exec('rm -rf node_modules docgen/node_modules');
     shell.exec('yarn cache clean');
     shell.exec('yarn');
-    shell.exec('cd docgen && yarn');
 
     const { version: currentVersion } = require('../package.json');
     shell.echo(
@@ -173,7 +171,7 @@ inquirer
 
         // regenerate README TOC
         shell.echo(colors.blue('Generate TOCS'));
-        shell.exec('npm run doctoc');
+        shell.exec('npm run docs:doctoc');
 
         // regenerate yarn.lock
         shell.exec('yarn');
@@ -227,8 +225,6 @@ inquirer
 
               shell.exec('git push origin master');
               shell.exec('git push origin --tags');
-
-              shell.exec(`VERSION=${newVersion} npm run docs:publish`);
 
               shell.exec('git checkout develop');
               shell.exec('git pull origin develop');

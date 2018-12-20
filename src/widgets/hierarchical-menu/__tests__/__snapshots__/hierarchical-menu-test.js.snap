@@ -1,23 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<RefinementList
+  canToggleShowMore={false}
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-hierarchical-menu--item__active",
-      "body": "ais-hierarchical-menu--body",
-      "count": "ais-hierarchical-menu--count",
-      "depth": "ais-hierarchical-menu--list__lvl",
-      "footer": "ais-hierarchical-menu--footer",
-      "header": "ais-hierarchical-menu--header",
-      "item": "ais-hierarchical-menu--item",
-      "link": "ais-hierarchical-menu--link",
-      "list": "ais-hierarchical-menu--list",
-      "root": "ais-hierarchical-menu",
+      "childList": "ais-HierarchicalMenu-list--child",
+      "count": "ais-HierarchicalMenu-count",
+      "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+      "item": "ais-HierarchicalMenu-item",
+      "label": "ais-HierarchicalMenu-label",
+      "link": "ais-HierarchicalMenu-link",
+      "list": "ais-HierarchicalMenu-list",
+      "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+      "parentItem": "ais-HierarchicalMenu-item--parent",
+      "root": "ais-HierarchicalMenu",
+      "selectedItem": "ais-HierarchicalMenu-item--selected",
+      "showMore": "ais-HierarchicalMenu-showMore",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -30,45 +33,54 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
       },
     ]
   }
-  shouldAutoHideContainer={false}
+  isShowingMore={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render has a templates option 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<RefinementList
+  canToggleShowMore={false}
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-hierarchical-menu--item__active",
-      "body": "ais-hierarchical-menu--body",
-      "count": "ais-hierarchical-menu--count",
-      "depth": "ais-hierarchical-menu--list__lvl",
-      "footer": "ais-hierarchical-menu--footer",
-      "header": "ais-hierarchical-menu--header",
-      "item": "ais-hierarchical-menu--item",
-      "link": "ais-hierarchical-menu--link",
-      "list": "ais-hierarchical-menu--list",
-      "root": "ais-hierarchical-menu",
+      "childList": "ais-HierarchicalMenu-list--child",
+      "count": "ais-HierarchicalMenu-count",
+      "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+      "item": "ais-HierarchicalMenu-item",
+      "label": "ais-HierarchicalMenu-label",
+      "link": "ais-HierarchicalMenu-link",
+      "list": "ais-HierarchicalMenu-list",
+      "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+      "parentItem": "ais-HierarchicalMenu-item--parent",
+      "root": "ais-HierarchicalMenu",
+      "selectedItem": "ais-HierarchicalMenu-item--selected",
+      "showMore": "ais-HierarchicalMenu-showMore",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -81,45 +93,54 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
       },
     ]
   }
-  shouldAutoHideContainer={false}
+  isShowingMore={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "footer2",
-        "header": "header2",
         "item": "item2",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": true,
-        "header": true,
         "item": true,
+        "showMoreText": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render has a transformItems options 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<RefinementList
+  canToggleShowMore={false}
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-hierarchical-menu--item__active",
-      "body": "ais-hierarchical-menu--body",
-      "count": "ais-hierarchical-menu--count",
-      "depth": "ais-hierarchical-menu--list__lvl",
-      "footer": "ais-hierarchical-menu--footer",
-      "header": "ais-hierarchical-menu--header",
-      "item": "ais-hierarchical-menu--item",
-      "link": "ais-hierarchical-menu--link",
-      "list": "ais-hierarchical-menu--list",
-      "root": "ais-hierarchical-menu",
+      "childList": "ais-HierarchicalMenu-list--child",
+      "count": "ais-HierarchicalMenu-count",
+      "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+      "item": "ais-HierarchicalMenu-item",
+      "label": "ais-HierarchicalMenu-label",
+      "link": "ais-HierarchicalMenu-link",
+      "list": "ais-HierarchicalMenu-list",
+      "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+      "parentItem": "ais-HierarchicalMenu-item--parent",
+      "root": "ais-HierarchicalMenu",
+      "selectedItem": "ais-HierarchicalMenu-item--selected",
+      "showMore": "ais-HierarchicalMenu-showMore",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -134,125 +155,103 @@ exports[`hierarchicalMenu() render has a transformItems options 1`] = `
       },
     ]
   }
-  shouldAutoHideContainer={false}
+  isShowingMore={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<RefinementList
+  canToggleShowMore={false}
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-hierarchical-menu--item__active",
-      "body": "ais-hierarchical-menu--body",
-      "count": "ais-hierarchical-menu--count",
-      "depth": "ais-hierarchical-menu--list__lvl",
-      "footer": "ais-hierarchical-menu--footer",
-      "header": "ais-hierarchical-menu--header",
-      "item": "ais-hierarchical-menu--item",
-      "link": "ais-hierarchical-menu--link",
-      "list": "ais-hierarchical-menu--list",
-      "root": "ais-hierarchical-menu",
+      "childList": "ais-HierarchicalMenu-list--child",
+      "count": "ais-HierarchicalMenu-count",
+      "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
+      "item": "ais-HierarchicalMenu-item",
+      "label": "ais-HierarchicalMenu-label",
+      "link": "ais-HierarchicalMenu-link",
+      "list": "ais-HierarchicalMenu-list",
+      "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
+      "parentItem": "ais-HierarchicalMenu-item--parent",
+      "root": "ais-HierarchicalMenu",
+      "selectedItem": "ais-HierarchicalMenu-item--selected",
+      "showMore": "ais-HierarchicalMenu-showMore",
     }
   }
+  depth={0}
   facetValues={Array []}
-  shouldAutoHideContainer={true}
+  isShowingMore={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
   toggleRefinement={[Function]}
-/>
-`;
-
-exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no results 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
-  createURL={[Function]}
-  cssClasses={
-    Object {
-      "active": "ais-hierarchical-menu--item__active",
-      "body": "ais-hierarchical-menu--body",
-      "count": "ais-hierarchical-menu--count",
-      "depth": "ais-hierarchical-menu--list__lvl",
-      "footer": "ais-hierarchical-menu--footer",
-      "header": "ais-hierarchical-menu--header",
-      "item": "ais-hierarchical-menu--item",
-      "link": "ais-hierarchical-menu--link",
-      "list": "ais-hierarchical-menu--list",
-      "root": "ais-hierarchical-menu",
-    }
-  }
-  facetValues={Array []}
-  shouldAutoHideContainer={true}
-  templateProps={
-    Object {
-      "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-      },
-      "templatesConfig": undefined,
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
-      },
-    }
-  }
-  toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<RefinementList
+  canToggleShowMore={false}
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-hierarchical-menu--item__active active",
-      "body": "ais-hierarchical-menu--body body",
-      "count": "ais-hierarchical-menu--count count",
-      "depth": "ais-hierarchical-menu--list__lvl",
-      "footer": "ais-hierarchical-menu--footer footer",
-      "header": "ais-hierarchical-menu--header header",
-      "item": "ais-hierarchical-menu--item item",
-      "link": "ais-hierarchical-menu--link link",
-      "list": "ais-hierarchical-menu--list list",
-      "root": "ais-hierarchical-menu root cx",
+      "childList": "ais-HierarchicalMenu-list--child childList",
+      "count": "ais-HierarchicalMenu-count count",
+      "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled disabledShowMore",
+      "item": "ais-HierarchicalMenu-item item",
+      "label": "ais-HierarchicalMenu-label label",
+      "link": "ais-HierarchicalMenu-link link",
+      "list": "ais-HierarchicalMenu-list list",
+      "noRefinementRoot": "ais-HierarchicalMenu--noRefinement noRefinementRoot",
+      "parentItem": "ais-HierarchicalMenu-item--parent parentItem",
+      "root": "ais-HierarchicalMenu root",
+      "selectedItem": "ais-HierarchicalMenu-item--selected selectedItem",
+      "showMore": "ais-HierarchicalMenu-showMore showMore",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -265,23 +264,29 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
       },
     ]
   }
-  shouldAutoHideContainer={false}
+  isShowingMore={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "showMoreText": "
+    {{#isShowingMore}}
+      Show less
+    {{/isShowingMore}}
+    {{^isShowingMore}}
+      Show more
+    {{/isShowingMore}}
+  ",
       },
       "templatesConfig": undefined,
-      "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
+        "showMoreText": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;

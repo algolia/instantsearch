@@ -1,6 +1,0 @@
-# we do not want to lock down dependencies when used as an npm dependency,
-# only when we build
-docs/
-dev/
-scripts/
-**/__tests__/

@@ -7,6 +7,7 @@ const usage = `Usage:
 var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
   // params = {
   //   items,
+  //   createURL,
   //   refine,
   //   hasNoResults,
   //   instantSearchInstance,
@@ -43,6 +44,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} HitsPerPageRenderingOptions
  * @property {HitsPerPageRenderingOptionsItem[]} items Array of objects defining the different values and labels.
+ * @property {function(item.value)} createURL Creates the URL for a single item name in the list.
  * @property {function(number)} refine Sets the number of hits per page and trigger a search.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams Original `HitsPerPageWidgetOptions` forwarded to `renderFn`.
@@ -123,7 +125,7 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
     const defaultValues = items.filter(item => item.default);
     if (defaultValues.length > 1) {
       throw new Error(
-        `[Error][hitsPerPageSelector] more than one default value is specified in \`items[]\`
+        `[Error][hitsPerPage] more than one default value is specified in \`items[]\`
 The first one will be picked, you should probably set only one default value`
       );
     }
@@ -137,7 +139,7 @@ The first one will be picked, you should probably set only one default value`
           : {};
       },
 
-      init({ helper, state, instantSearchInstance }) {
+      init({ helper, createURL, state, instantSearchInstance }) {
         const isCurrentInOptions = some(
           items,
           item => Number(state.hitsPerPage) === Number(item.value)
@@ -145,19 +147,19 @@ The first one will be picked, you should probably set only one default value`
 
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
-            if (window.console) {
-              warn(
-                `[hitsPerPageSelector] hitsPerPage not defined.
-  You should probably set the value \`hitsPerPage\`
-  using the searchParameters attribute of the instantsearch constructor.`
-              );
-            }
-          } else if (window.console) {
             warn(
-              `[hitsPerPageSelector] No item in \`items\`
-  with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
+              `\`hitsPerPage\` is not defined.
+The option \`hitsPerPage\` needs to be set using the \`configure\` widget.
+
+Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.html`
             );
           }
+
+          warn(
+            `No items in HitsPerPage \`items\` with \`value: hitsPerPage\` (hitsPerPage: ${
+              state.hitsPerPage
+            })`
+          );
 
           items = [{ value: '', label: '' }, ...items];
         }
@@ -167,10 +169,19 @@ The first one will be picked, you should probably set only one default value`
             ? helper.setQueryParameter('hitsPerPage', undefined).search()
             : helper.setQueryParameter('hitsPerPage', value).search();
 
+        this.createURL = helperState => value =>
+          createURL(
+            helperState.setQueryParameter(
+              'hitsPerPage',
+              !value && value !== 0 ? undefined : value
+            )
+          );
+
         renderFn(
           {
             items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
+            createURL: this.createURL(helper.state),
             hasNoResults: true,
             widgetParams,
             instantSearchInstance,
@@ -186,6 +197,7 @@ The first one will be picked, you should probably set only one default value`
           {
             items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
+            createURL: this.createURL(state),
             hasNoResults,
             widgetParams,
             instantSearchInstance,

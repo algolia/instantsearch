@@ -1,6 +1,5 @@
 import instantsearch from '../main.js';
 import forEach from 'lodash/forEach';
-import expect from 'expect';
 
 describe('instantsearch()', () => {
   // to ensure the global.window is set
@@ -9,21 +8,6 @@ describe('instantsearch()', () => {
     expect(instantsearch.version).toMatch(
       /^(\d+\.)?(\d+\.)?(\*|\d+)(-beta.\d+)?$/
     );
-  });
-
-  it('statically creates a URL', () => {
-    expect(instantsearch.createQueryString({ hitsPerPage: 42 })).toEqual(
-      'hPP=42'
-    );
-  });
-
-  it('statically creates a complex URL', () => {
-    expect(
-      instantsearch.createQueryString({
-        hitsPerPage: 42,
-        facetsRefinements: { category: 'Home' },
-      })
-    ).toEqual('hPP=42&fR[category]=Home');
   });
 
   it('includes the widget functions', () => {
@@ -39,5 +23,12 @@ describe('instantsearch()', () => {
         'A connector must be a function'
       );
     });
+  });
+
+  it('includes the highlight helper function', () => {
+    expect(typeof instantsearch.highlight).toEqual(
+      'function',
+      'THe highlight helper must be a function'
+    );
   });
 });

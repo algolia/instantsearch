@@ -1,9 +1,9 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import cx from 'classnames';
+import Template from '../Template/Template';
 
-export class RawRangeInput extends Component {
+class RangeInput extends Component {
   constructor(props) {
     super(props);
 
@@ -34,15 +34,21 @@ export class RawRangeInput extends Component {
 
   render() {
     const { min: minValue, max: maxValue } = this.state;
-    const { min, max, step, cssClasses, labels } = this.props;
+    const { min, max, step, cssClasses, templateProps } = this.props;
     const isDisabled = min >= max;
 
+    const hasRefinements = Boolean(minValue || maxValue);
+
+    const rootClassNames = cx(cssClasses.root, {
+      [cssClasses.noRefinement]: !hasRefinements,
+    });
+
     return (
-      <form className={cssClasses.form} onSubmit={this.onSubmit}>
-        <fieldset className={cssClasses.fieldset}>
-          <label className={cssClasses.labelMin}>
+      <div className={rootClassNames}>
+        <form className={cssClasses.form} onSubmit={this.onSubmit}>
+          <label className={cssClasses.label}>
             <input
-              className={cssClasses.inputMin}
+              className={cx(cssClasses.input, cssClasses.inputMin)}
               type="number"
               min={min}
               max={max}
@@ -53,10 +59,19 @@ export class RawRangeInput extends Component {
               disabled={isDisabled}
             />
           </label>
-          <span className={cssClasses.separator}>{labels.separator}</span>
-          <label className={cssClasses.labelMax}>
+
+          <Template
+            {...templateProps}
+            templateKey="separatorText"
+            rootTagName="span"
+            rootProps={{
+              className: cssClasses.separator,
+            }}
+          />
+
+          <label className={cssClasses.label}>
             <input
-              className={cssClasses.inputMax}
+              className={cx(cssClasses.input, cssClasses.inputMax)}
               type="number"
               min={min}
               max={max}
@@ -67,20 +82,24 @@ export class RawRangeInput extends Component {
               disabled={isDisabled}
             />
           </label>
-          <button
-            role="button"
-            className={cssClasses.submit}
-            disabled={isDisabled}
-          >
-            {labels.submit}
-          </button>
-        </fieldset>
-      </form>
+
+          <Template
+            {...templateProps}
+            templateKey="submitText"
+            rootTagName="button"
+            rootProps={{
+              type: 'submit',
+              className: cssClasses.submit,
+              disabled: isDisabled,
+            }}
+          />
+        </form>
+      </div>
     );
   }
 }
 
-RawRangeInput.propTypes = {
+RangeInput.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
@@ -89,20 +108,23 @@ RawRangeInput.propTypes = {
     max: PropTypes.number,
   }).isRequired,
   cssClasses: PropTypes.shape({
+    root: PropTypes.string.isRequired,
+    noRefinement: PropTypes.string.isRequired,
     form: PropTypes.string.isRequired,
-    fieldset: PropTypes.string.isRequired,
-    labelMin: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    input: PropTypes.string.isRequired,
     inputMin: PropTypes.string.isRequired,
-    separator: PropTypes.string.isRequired,
-    labelMax: PropTypes.string.isRequired,
     inputMax: PropTypes.string.isRequired,
-    submit: PropTypes.string.isRequired,
-  }).isRequired,
-  labels: PropTypes.shape({
     separator: PropTypes.string.isRequired,
     submit: PropTypes.string.isRequired,
   }).isRequired,
+  templateProps: PropTypes.shape({
+    templates: PropTypes.shape({
+      separatorText: PropTypes.string.isRequired,
+      submitText: PropTypes.string.isRequired,
+    }).isRequired,
+  }),
   refine: PropTypes.func.isRequired,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawRangeInput));
+export default RangeInput;

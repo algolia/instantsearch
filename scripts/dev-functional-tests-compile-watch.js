@@ -1,24 +1,10 @@
 /* eslint-disable no-console */
 
-import webpack from 'webpack';
+import * as rollup from 'rollup';
 import watch from 'watch';
 import { join } from 'path';
-import config from './webpack.config.js';
-const compiler = webpack(config);
 
-export default cb => {
-  // watch webpack
-  compiler.watch(
-    {
-      aggregateTimeout: 300,
-      usePolling: true,
-    },
-    compilationDone
-  );
-
-  // watch test files
-  // first call triggers a watch, but we already have webpack watch triggering
-  // so we ignore first call
+export default callback => {
   watch.watchTree(
     join(__dirname, '..', 'functional-tests'),
     (f, curr, prev) => {
@@ -33,16 +19,23 @@ export default cb => {
       }
 
       console.log('Got test file change');
-      cb();
+      callback();
     }
   );
 
-  function compilationDone(err) {
-    if (err) {
-      throw err;
-    }
+  const rollupWatcher = rollup.watch();
 
+  rollupWatcher.on('START', () => {
+    callback();
+  });
+
+  rollupWatcher.on('ERROR', error => {
+    console.error(error);
+    throw error;
+  });
+
+  rollupWatcher.on('END', () => {
     console.log('Got webpack compilation event');
-    cb();
-  }
+    callback();
+  });
 };

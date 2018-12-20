@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hits markup should render <Hits /> 1`] = `
+<div
+  className="root"
+>
+  <ol
+    className="list"
+  >
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
+      }
+    />
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
+      }
+    />
+  </ol>
+</div>
+`;
+
+exports[`Hits markup should render <Hits /> without highlight function 1`] = `
+<div
+  className="root"
+>
+  <ol
+    className="list"
+  >
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "<mark class=\\"ais-Highlight-highlighted\\">name 1</mark>",
+        }
+      }
+    />
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "<mark class=\\"ais-Highlight-highlighted\\">name 2</mark>",
+        }
+      }
+    />
+  </ol>
+</div>
+`;

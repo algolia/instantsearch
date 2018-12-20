@@ -1,35 +1,44 @@
+import React from 'preact-compat';
 import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
+import Template from '../Template/Template';
 
-import Template from '../Template.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+const Stats = ({
+  nbHits,
+  hitsPerPage,
+  nbPages,
+  page,
+  processingTimeMS,
+  query,
+  templateProps,
+  cssClasses,
+}) => (
+  <div className={cssClasses.root}>
+    <Template
+      {...templateProps}
+      templateKey="text"
+      rootTagName="span"
+      rootProps={{ className: cssClasses.text }}
+      data={{
+        hasManyResults: nbHits > 1,
+        hasNoResults: nbHits === 0,
+        hasOneResult: nbHits === 1,
+        hitsPerPage,
+        nbHits,
+        nbPages,
+        page,
+        processingTimeMS,
+        query,
+        cssClasses,
+      }}
+    />
+  </div>
+);
 
-export class RawStats extends Component {
-  render() {
-    const data = {
-      hasManyResults: this.props.nbHits > 1,
-      hasNoResults: this.props.nbHits === 0,
-      hasOneResult: this.props.nbHits === 1,
-      hitsPerPage: this.props.hitsPerPage,
-      nbHits: this.props.nbHits,
-      nbPages: this.props.nbPages,
-      page: this.props.page,
-      processingTimeMS: this.props.processingTimeMS,
-      query: this.props.query,
-      cssClasses: this.props.cssClasses,
-    };
-
-    return (
-      <Template data={data} templateKey="body" {...this.props.templateProps} />
-    );
-  }
-}
-
-RawStats.propTypes = {
+Stats.propTypes = {
   cssClasses: PropTypes.shape({
-    time: PropTypes.string,
-  }),
+    root: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+  }).isRequired,
   hitsPerPage: PropTypes.number,
   nbHits: PropTypes.number,
   nbPages: PropTypes.number,
@@ -39,4 +48,4 @@ RawStats.propTypes = {
   templateProps: PropTypes.object.isRequired,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawStats));
+export default Stats;

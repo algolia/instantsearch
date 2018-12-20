@@ -60,9 +60,10 @@ You will then have access to the `instantsearch` function in the global scope (`
 If you have a JavaScript build system, you can install **InstantSearch.js** from NPM:
 
 ```javascript
-// `npm install instantsearch.js --save` OR
-// `yarn add instantsearch.js`
+// `npm install instantsearch.js algoliasearch` OR
+// `yarn add instantsearch.js algoliasearch`
 
+const algoliasearch = require('algoliasearch/lite');
 const instantsearch = require('instantsearch.js');
 ```
 
@@ -86,9 +87,8 @@ To initialize with the credentials proposed at the beginning:
 
 ```javascript
 const search = instantsearch({
-  appId: 'latency',
-  apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
+  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
   routing: true
 });
 
@@ -286,11 +286,11 @@ We now miss two elements in our search interface:
   * the ability to browse beyond the first page of results
   * the ability to reset the filters
 
-Those two features are implemented respectively with the [pagination](widgets/pagination.html), [clearAll](widgets/clearAll.html) and [currentRefinedValues](widgets/currentRefinedValues.html) widgets. Both have nice defaults which means that we can use them directly without further configuration.
+Those two features are implemented respectively with the [pagination](widgets/pagination.html), [clearAll](widgets/clearAll.html) and [currentRefinements](widgets/currentRefinements.html) widgets. Both have nice defaults which means that we can use them directly without further configuration.
 
 ```html
-<div id="current-refined-values">
-  <!-- CurrentRefinedValues widget will appear here -->
+<div id="current-refinements">
+  <!-- CurrentRefinements widget will appear here -->
 </div>
 
 <div id="clear-all">
@@ -306,13 +306,10 @@ Those two features are implemented respectively with the [pagination](widgets/pa
 <script>
   const search = instantsearch(options);
 
-  // initialize currentRefinedValues
+  // initialize currentRefinements
   search.addWidget(
-    instantsearch.widgets.currentRefinedValues({
-      container: '#current-refined-values',
-      // This widget can also contain a clear all link to remove all filters,
-      // we disable it in this example since we use `clearAll` widget on its own.
-      clearAll: false
+    instantsearch.widgets.currentRefinements({
+      container: '#current-refinements',
     })
   );
 
@@ -331,7 +328,7 @@ Those two features are implemented respectively with the [pagination](widgets/pa
   search.addWidget(
     instantsearch.widgets.pagination({
       container: '#pagination',
-      maxPages: 20,
+      totalPages: 20,
       // default is to scroll to 'body', here we disable this behavior
       scrollTo: false
     })

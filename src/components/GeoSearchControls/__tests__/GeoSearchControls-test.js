@@ -5,17 +5,19 @@ import GeoSearchControls from '../GeoSearchControls';
 describe('GeoSearchControls', () => {
   const CSSClassesDefaultProps = {
     control: 'control',
-    toggleLabel: 'toggleLabel',
-    toggleLabelActive: 'toggleLabelActive',
-    toggleInput: 'toggleInput',
+    label: 'label',
+    selectedLabel: 'label-selected',
+    input: 'input',
     redo: 'redo',
-    clear: 'clear',
+    disabledRedo: 'redo-disabled',
+    reset: 'reset',
   };
 
   const defaultProps = {
     cssClasses: CSSClassesDefaultProps,
     enableRefineControl: true,
     enableClearMapRefinement: true,
+    enableRefine: true,
     isRefineOnMapMove: true,
     isRefinedWithMap: false,
     hasMapMoveSinceLastRefine: false,
@@ -24,6 +26,17 @@ describe('GeoSearchControls', () => {
     onClearClick: () => {},
     templateProps: {},
   };
+
+  it('expect to render nothing with refine disabled', () => {
+    const props = {
+      ...defaultProps,
+      enableRefine: false,
+    };
+
+    const wrapper = shallow(<GeoSearchControls {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
 
   describe('Control enabled', () => {
     it('expect to render the toggle checked when refine on map move is enabled', () => {
@@ -213,7 +226,7 @@ describe('GeoSearchControls', () => {
       expect(wrapper).toMatchSnapshot();
     });
 
-    it('expect to call onClearClick when the clear button is clicked', () => {
+    it('expect to call onClearClick when the reset button is clicked', () => {
       const props = {
         ...defaultProps,
         enableRefineControl: false,
@@ -226,7 +239,7 @@ describe('GeoSearchControls', () => {
 
       expect(props.onClearClick).not.toHaveBeenCalled();
 
-      wrapper.find('.clear').simulate('click');
+      wrapper.find('.reset').simulate('click');
 
       expect(props.onClearClick).toHaveBeenCalled();
     });

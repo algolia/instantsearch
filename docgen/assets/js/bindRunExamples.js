@@ -1,16 +1,21 @@
 import instantsearch from "../../../src/lib/main.js";
+import algoliasearch from "algoliasearch/lite";
 import capitalize from "lodash/capitalize";
+
+const {
+  appId = "latency",
+  apiKey = "6be0576ff61c053d5f9a3225e2a90f76",
+  ...searchConfig
+} = window.searchConfig || {};
 
 window.instantsearch = instantsearch;
 window.search = instantsearch({
-  appId: "latency",
-  apiKey: "6be0576ff61c053d5f9a3225e2a90f76",
   indexName: "instant_search",
-  urlSync: false,
+  searchClient: algoliasearch(appId, apiKey),
   searchParameters: {
-    hitsPerPage: 3
+    hitsPerPage: 3,
   },
-  ...window.searchConfig
+  ...searchConfig
 });
 
 const el = html => {
@@ -108,7 +113,6 @@ function appendDefaultSearchWidgets(index) {
     instantsearch.widgets.searchBox({
       container: `#search-box-container-${index}`,
       placeholder: "Search for products",
-      autofocus: false
     })
   );
 

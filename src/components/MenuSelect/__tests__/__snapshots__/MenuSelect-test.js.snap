@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuSelect should render <MenuSelect /> with custom templates 1`] = `
+<div
+  className="root"
+>
+  <select
+    className="select"
+    onChange={[Function]}
+    value=""
+  >
+    <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "defaultOption",
+        }
+      }
+      value=""
+    />
+    <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "foo",
+        }
+      }
+      value="foo"
+    />
+    <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "bar",
+        }
+      }
+      value="bar"
+    />
+  </select>
+</div>
+`;
+
+exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
+<div
+  className="root"
+>
+  <select
+    className="select"
+    onChange={[Function]}
+    value=""
+  >
+    <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "See all",
+        }
+      }
+      value=""
+    />
+    <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "foo ()",
+        }
+      }
+      value="foo"
+    />
+    <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "bar ()",
+        }
+      }
+      value="bar"
+    />
+  </select>
+</div>
+`;
+
+exports[`MenuSelect should render <MenuSelect /> with no items 1`] = `
+<div
+  className="root noRefinementRoot"
+>
+  <select
+    className="select"
+    onChange={[Function]}
+    value=""
+  >
+    <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "See all",
+        }
+      }
+      value=""
+    />
+  </select>
+</div>
+`;

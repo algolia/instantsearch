@@ -11,9 +11,9 @@ jest.mock('preact-compat', () => {
 });
 
 describe('rangeInput', () => {
-  const attributeName = 'aNumAttr';
+  const attribute = 'aNumAttr';
   const createContainer = () => document.createElement('div');
-  const instantSearchInstance = { templatesConfig: undefined };
+  const instantSearchInstance = {};
   const createHelper = () =>
     new AlgoliasearchHelper(
       {
@@ -22,7 +22,7 @@ describe('rangeInput', () => {
         },
       },
       'indexName',
-      { disjunctiveFacets: [attributeName] }
+      { disjunctiveFacets: [attribute] }
     );
 
   afterEach(() => {
@@ -35,7 +35,7 @@ describe('rangeInput', () => {
     const results = {
       disjunctiveFacets: [
         {
-          name: attributeName,
+          name: attribute,
           stats: {
             min: 10,
             max: 500,
@@ -46,7 +46,7 @@ describe('rangeInput', () => {
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
     });
 
     widget.init({ helper, instantSearchInstance });
@@ -65,7 +65,7 @@ describe('rangeInput', () => {
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
     });
 
     widget.init({ helper, instantSearchInstance });
@@ -82,20 +82,17 @@ describe('rangeInput', () => {
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
       cssClasses: {
-        root: 'custom-root',
-        header: 'custom-header',
-        body: 'custom-body',
-        form: 'custom-form',
-        fieldset: 'custom-fieldset',
-        labelMin: 'custom-labelMin',
-        inputMin: 'custom-inputMin',
-        separator: 'custom-separator',
-        labelMax: 'custom-labelMax',
-        inputMax: 'custom-inputMax',
-        submit: 'custom-submit',
-        footer: 'custom-footer',
+        root: 'root',
+        noRefinement: 'noRefinement',
+        form: 'form',
+        label: 'label',
+        input: 'input',
+        inputMin: 'inputMin',
+        inputMax: 'inputMax',
+        separator: 'separator',
+        submit: 'submit',
       },
     });
 
@@ -106,17 +103,17 @@ describe('rangeInput', () => {
     expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
-  it('expect to render with custom labels', () => {
+  it('expect to render with custom templates', () => {
     const container = createContainer();
     const helper = createHelper();
     const results = [];
 
     const widget = rangeInput({
       container,
-      attributeName,
-      labels: {
-        separator: 'custom-separator',
-        submit: 'custom-submit',
+      attribute,
+      templates: {
+        separatorText: 'custom separator',
+        submitText: 'custom submit',
       },
     });
 
@@ -134,7 +131,7 @@ describe('rangeInput', () => {
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
       min: 20,
     });
 
@@ -152,7 +149,7 @@ describe('rangeInput', () => {
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
       max: 480,
     });
 
@@ -169,7 +166,7 @@ describe('rangeInput', () => {
     const results = {
       disjunctiveFacets: [
         {
-          name: attributeName,
+          name: attribute,
           stats: {
             min: 10,
             max: 500,
@@ -178,12 +175,12 @@ describe('rangeInput', () => {
       ],
     };
 
-    helper.addNumericRefinement(attributeName, '>=', 25);
-    helper.addNumericRefinement(attributeName, '<=', 475);
+    helper.addNumericRefinement(attribute, '>=', 25);
+    helper.addNumericRefinement(attribute, '<=', 475);
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
     });
 
     widget.init({ helper, instantSearchInstance });
@@ -202,12 +199,12 @@ describe('rangeInput', () => {
     const helper = createHelper();
     const results = {};
 
-    helper.addNumericRefinement(attributeName, '>=', 10);
-    helper.addNumericRefinement(attributeName, '<=', 500);
+    helper.addNumericRefinement(attribute, '>=', 10);
+    helper.addNumericRefinement(attribute, '<=', 500);
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
       min: 10,
       max: 500,
     });
@@ -223,26 +220,6 @@ describe('rangeInput', () => {
     });
   });
 
-  it('expect to render hidden', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = [];
-
-    const widget = rangeInput({
-      container,
-      attributeName,
-      min: 20,
-      max: 20,
-    });
-
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
-
-    expect(ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer).toBe(
-      true
-    );
-  });
-
   it('expect to call refine', () => {
     const container = createContainer();
     const helper = createHelper();
@@ -251,7 +228,7 @@ describe('rangeInput', () => {
 
     const widget = rangeInput({
       container,
-      attributeName,
+      attribute,
     });
 
     // Override _refine behavior to be able to check
@@ -274,7 +251,7 @@ describe('rangeInput', () => {
 
       const widget = rangeInput({
         container,
-        attributeName,
+        attribute,
         precision: 2,
       });
 
@@ -292,7 +269,7 @@ describe('rangeInput', () => {
 
       const widget = rangeInput({
         container,
-        attributeName,
+        attribute,
         precision: 0,
       });
 
@@ -310,7 +287,7 @@ describe('rangeInput', () => {
 
       const widget = rangeInput({
         container,
-        attributeName,
+        attribute,
         precision: 1,
       });
 
@@ -324,10 +301,10 @@ describe('rangeInput', () => {
 
   describe('throws', () => {
     it('throws an exception when no container', () => {
-      expect(() => rangeInput({ attributeName: '' })).toThrow(/^Usage:/);
+      expect(() => rangeInput({ attribute: '' })).toThrow(/^Usage:/);
     });
 
-    it('throws an exception when no attributeName', () => {
+    it('throws an exception when no attribute', () => {
       expect(() =>
         rangeInput({
           container: document.createElement('div'),

@@ -2,11 +2,7 @@ import dropdowns from './dropdowns.js';
 import move from './mover.js';
 import activateClipboard from './activateClipboard.js';
 import bindRunExamples from './bindRunExamples.js';
-
 import {fixSidebar, followSidebarNavigation} from './fix-sidebar.js';
-
-import '../../../src/css/instantsearch.scss';
-import '../../../src/css/instantsearch-theme-algolia.scss';
 
 var alg = require('algolia-frontend-components/javascripts.js');
 
