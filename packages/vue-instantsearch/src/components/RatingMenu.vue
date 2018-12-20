@@ -98,10 +98,6 @@ export default {
       type: String,
       required: true,
     },
-    min: {
-      type: Number,
-      default: 1,
-    },
     max: {
       type: Number,
       default: 5,
@@ -111,7 +107,6 @@ export default {
     widgetParams() {
       return {
         attributeName: this.attribute,
-        min: this.min,
         max: this.max,
       };
     },

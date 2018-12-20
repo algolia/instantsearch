@@ -24,7 +24,6 @@ A rating menu is a numeric list of a rating. By default visualized with stars. N
 Name | Type | Default | Description | Required
 ---|---|---|---|---
 attribute | string |  | The attribute to use for the rating | yes
-min | number | `1` | minimum rating to show | no
 max | number | `5` | maximum rating to show | no
 class-names | Object | `{}` | Override class names | no
 
