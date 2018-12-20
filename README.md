@@ -59,7 +59,7 @@ const search = instantsearch({
 // 2. Create an interactive search box
 search.addWidget(
   instantsearch.widgets.searchBox({
-    container: document.querySelector('#searchBox'),
+    container: '#searchbox',
     placeholder: 'Search for products',
   })
 );
@@ -67,9 +67,9 @@ search.addWidget(
 // 3. Plug the search results into the product container
 search.addWidget(
   instantsearch.widgets.hits({
-    container: document.querySelector('#products'),
+    container: '#products',
     templates: {
-      item: '{{{_highlightResult.name.value}}}',
+      item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
     },
   })
 );
@@ -77,7 +77,7 @@ search.addWidget(
 // 4. Make the brands refinable
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: document.querySelector('#brand'),
+    container: '#brand',
     attribute: 'brand',
   })
 );
