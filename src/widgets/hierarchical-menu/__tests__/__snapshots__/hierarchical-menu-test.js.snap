@@ -231,55 +231,6 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
 />
 `;
 
-exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no results 1`] = `
-<RefinementList
-  canToggleShowMore={false}
-  createURL={[Function]}
-  cssClasses={
-    Object {
-      "childList": "ais-HierarchicalMenu-list--child",
-      "count": "ais-HierarchicalMenu-count",
-      "disabledShowMore": "ais-HierarchicalMenu-showMore--disabled",
-      "item": "ais-HierarchicalMenu-item",
-      "label": "ais-HierarchicalMenu-label",
-      "link": "ais-HierarchicalMenu-link",
-      "list": "ais-HierarchicalMenu-list",
-      "noRefinementRoot": "ais-HierarchicalMenu--noRefinement",
-      "parentItem": "ais-HierarchicalMenu-item--parent",
-      "root": "ais-HierarchicalMenu",
-      "selectedItem": "ais-HierarchicalMenu-item--selected",
-      "showMore": "ais-HierarchicalMenu-showMore",
-    }
-  }
-  depth={0}
-  facetValues={Array []}
-  isShowingMore={false}
-  showMore={false}
-  templateProps={
-    Object {
-      "templates": Object {
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
-        "showMoreText": "
-    {{#isShowingMore}}
-      Show less
-    {{/isShowingMore}}
-    {{^isShowingMore}}
-      Show more
-    {{/isShowingMore}}
-  ",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "item": false,
-        "showMoreText": false,
-      },
-    }
-  }
-  toggleRefinement={[Function]}
-  toggleShowMore={[Function]}
-/>
-`;
-
 exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
 <RefinementList
   canToggleShowMore={false}
