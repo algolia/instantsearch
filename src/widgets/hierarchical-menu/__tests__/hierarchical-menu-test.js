@@ -227,14 +227,6 @@ describe('hierarchicalMenu()', () => {
       expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
-    it('sets shouldAutoHideContainer to true when no results', () => {
-      data = {};
-      widget = hierarchicalMenu(options);
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
     it('sets facetValues to empty array when no results', () => {
       data = {};
       widget = hierarchicalMenu(options);
