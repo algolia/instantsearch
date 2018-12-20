@@ -67,6 +67,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.2.2",
+    "@storybook/addon-actions": "4.1.3",
     "@storybook/addon-options": "4.1.2",
     "@storybook/html": "4.1.2",
     "algoliasearch": "3.30.0",

@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../src/index';
 
@@ -10,14 +11,25 @@ export const withHits = (storyFn, searchOptions = {}) => () => {
     ...instantsearchOptions
   } = searchOptions;
 
+  const urlLogger = action('Routing state');
   const search = instantsearch({
-    ...instantsearchOptions,
     indexName,
     searchClient: algoliasearch(appId, apiKey),
     searchParameters: {
       hitsPerPage: 3,
       ...searchParameters,
     },
+    routing: {
+      router: {
+        write: routeState => {
+          urlLogger(JSON.stringify(routeState, null, 2));
+        },
+        read: () => ({}),
+        createURL: () => '',
+        onUpdate: () => {},
+      },
+    },
+    ...instantsearchOptions,
   });
 
   const containerElement = document.createElement('div');

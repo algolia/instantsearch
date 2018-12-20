@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Analytics', module).add(
@@ -11,9 +12,9 @@ storiesOf('Analytics', module).add(
     search.addWidget(
       instantsearch.widgets.analytics({
         pushFunction(formattedParameters, state, results) {
-          // action('pushFunction[formattedParameters]')(formattedParameters);
-          // action('pushFunction[state]')(state);
-          // action('pushFunction[results]')(results);
+          action('pushFunction[formattedParameters]')(formattedParameters);
+          action('pushFunction[state]')(state);
+          action('pushFunction[results]')(results);
         },
         triggerOnUIInteraction: true,
         pushInitialSearch: false,
