@@ -1,24 +1,23 @@
 ---
 layout: example.pug
 title: E-Commerce search by Algolia
+stylesheets:
+  - https://unpkg.com/instantsearch.css@7.1.0/themes/algolia-min.css
 ---
+
 <div class="container-fluid">
   <header class="content-wrapper">
-    <a href="https://community.algolia.com/instantsearch.js/" class="is-logo"><img src="logo-is.png" width="40"></a>
+    <a href="https://community.algolia.com/instantsearch.js/" class="is-logo"
+      ><img src="logo-is.png" width="40"
+    /></a>
     <a href="./" class="logo">amazing</a>
 
-    <div class="input-group">
-      <input type="text" class="form-control" id="q" />
-      <span class="input-group-btn">
-        <button class="btn btn-default"><i class="fa fa-search"></i></button>
-      </span>
-    </div>
+    <div class="input-group" id="searchbox"></div>
   </header>
 
   <div class="content-wrapper">
-
     <aside>
-      <div id="clear-all"></div>
+      <div id="clear-refinements"></div>
 
       <section class="facet-wrapper">
         <div class="facet-category-title" class="facet">Show results for</div>
@@ -30,6 +29,7 @@ title: E-Commerce search by Algolia
         <div id="types" class="facet"></div>
         <div id="brands" class="facet"></div>
         <div id="rating" class="facet"></div>
+        <div id="price" class="facet"></div>
       </section>
 
       <div class="thank-you">
@@ -40,7 +40,6 @@ title: E-Commerce search by Algolia
     <div class="results-wrapper">
       <section id="results-topbar">
         <div class="sort-by">
-          <label>Sort by</label>
           <div id="sort-by"></div>
         </div>
 
@@ -50,10 +49,14 @@ title: E-Commerce search by Algolia
       <main id="hits"></main>
       <section id="pagination"></section>
     </div>
-
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js" async></script>
+<script
+  src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"
+  async
+></script>
+
 <script src="https://cdn.jsdelivr.net/npm/algoliasearch@3.30.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0"></script>
 <script src="search.js"></script>
