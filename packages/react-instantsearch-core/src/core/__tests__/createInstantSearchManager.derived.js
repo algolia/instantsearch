@@ -1,6 +1,6 @@
 import createInstantSearchManager from '../createInstantSearchManager';
 
-const flushPendingMicroTasks = () => new Promise(setImmediate);
+const runAllMicroTasks = () => new Promise(setImmediate);
 
 const createSearchClient = () => ({
   search(requests) {
@@ -88,7 +88,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await flushPendingMicroTasks();
+    await runAllMicroTasks();
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -106,7 +106,7 @@ describe('createInstantSearchManager with multi index', () => {
       })
     );
 
-    await flushPendingMicroTasks();
+    await runAllMicroTasks();
 
     // <SearchBox defaultRefinement="first query 2" />
     ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
@@ -121,7 +121,7 @@ describe('createInstantSearchManager with multi index', () => {
     // Simualte an udpate (see `createConnector`)
     ism.widgetsManager.update();
 
-    await flushPendingMicroTasks();
+    await runAllMicroTasks();
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -194,7 +194,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await flushPendingMicroTasks();
+    await runAllMicroTasks();
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -278,7 +278,7 @@ describe('createInstantSearchManager with multi index', () => {
 
     expect(ism.store.getState().results).toBe(null);
 
-    await flushPendingMicroTasks();
+    await runAllMicroTasks();
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
@@ -304,7 +304,7 @@ describe('createInstantSearchManager with multi index', () => {
     unregisterSecondIndexWidget();
     unregisterSecondSearchBoxWidget();
 
-    await flushPendingMicroTasks();
+    await runAllMicroTasks();
 
     expect(ism.store.getState().results).toEqual(
       expect.objectContaining({
@@ -350,7 +350,7 @@ describe('createInstantSearchManager with multi index', () => {
       props: {},
     });
 
-    await flushPendingMicroTasks();
+    await runAllMicroTasks();
 
     expect(ism.store.getState().results.first).toEqual(
       expect.objectContaining({
