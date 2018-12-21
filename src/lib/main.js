@@ -1,7 +1,5 @@
 /** @module module:instantsearch */
 
-import toFactory from 'to-factory';
-
 import InstantSearch from './InstantSearch.js';
 import version from './version.js';
 
@@ -119,10 +117,10 @@ import * as stateMappings from './stateMappings/index.js';
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](getting-started.html).
  * @function instantsearch
- * @param {InstantSearchOptions} $0 The options
+ * @param {InstantSearchOptions} options The options
  * @return {InstantSearch} the instantsearch instance
  */
-const instantsearch = toFactory(InstantSearch);
+const instantsearch = options => new InstantSearch(options);
 
 instantsearch.routers = routers;
 instantsearch.stateMappings = stateMappings;
