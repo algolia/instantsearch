@@ -109,7 +109,7 @@ var _keys = __webpack_require__(14);
 
 var _keys2 = _interopRequireDefault(_keys);
 
-var _uniq = __webpack_require__(387);
+var _uniq = __webpack_require__(386);
 
 var _uniq2 = _interopRequireDefault(_uniq);
 
@@ -121,11 +121,11 @@ var _mapValues = __webpack_require__(177);
 
 var _mapValues2 = _interopRequireDefault(_mapValues);
 
-var _curry = __webpack_require__(388);
+var _curry = __webpack_require__(387);
 
 var _curry2 = _interopRequireDefault(_curry);
 
-var _hogan = __webpack_require__(389);
+var _hogan = __webpack_require__(388);
 
 var _hogan2 = _interopRequireDefault(_hogan);
 
@@ -13384,6 +13384,8 @@ var _createHelpers = __webpack_require__(385);
 
 var _createHelpers2 = _interopRequireDefault(_createHelpers);
 
+var _utils = __webpack_require__(0);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13507,25 +13509,22 @@ var InstantSearch = function (_EventEmitter) {
       if (routing !== null) {
         throw new Error('InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time');
       }
-      /* eslint-disable no-console */
-      console.warn('InstantSearch.js: `urlSync` option is deprecated and will be removed in the next major version.');
-      console.warn('You can now use the new `routing` option');
+
+      (0, _utils.warn)('`urlSync` option is deprecated and will be removed in the next major version.\n' + 'You can now use the new `routing` option.');
 
       if (urlSync === true) {
         // when using urlSync: true
-        console.warn('Use it like this: `routing: true`');
+        (0, _utils.warn)('Use it like this: `routing: true`');
       }
 
-      console.warn('For advanced use cases, checkout the documentation: https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync');
-      /* eslint-enable no-console */
+      (0, _utils.warn)('For advanced use cases, checkout the documentation: https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync');
     }
 
     _this.urlSync = urlSync === true ? {} : urlSync;
     if (routing === true) _this.routing = ROUTING_DEFAULT_OPTIONS;else if ((0, _isPlainObject2.default)(routing)) _this.routing = _extends({}, ROUTING_DEFAULT_OPTIONS, routing);
 
     if (options.createAlgoliaClient) {
-      // eslint-disable-next-line no-console
-      console.warn('\nInstantSearch.js: `createAlgoliaClient` option is deprecated and will be removed in the next major version.\nPlease use `searchClient` instead: https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient.\nTo help you migrate, please refer to the migration guide: https://community.algolia.com/instantsearch.js/v2/guides/prepare-for-v3.html');
+      (0, _utils.warn)('\n`createAlgoliaClient` option is deprecated and will be removed in the next major version.\nPlease use `searchClient` instead: https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient.\nTo help you migrate, please refer to the migration guide: https://community.algolia.com/instantsearch.js/v2/guides/prepare-for-v3.html');
     }
     return _this;
   }
@@ -13565,6 +13564,12 @@ var InstantSearch = function (_EventEmitter) {
         throw new Error('You need to provide an array of widgets or call `addWidget()`');
       }
 
+      // The routing manager widget is always added manually at the last position.
+      // By removing it from the last position and adding it back after, we ensure
+      // it keeps this position.
+      // fixes #3148
+      var lastWidget = this.widgets.pop();
+
       widgets.forEach(function (widget) {
         // Add the widget to the list of widget
         if (widget.render === undefined && widget.init === undefined) {
@@ -13573,6 +13578,9 @@ var InstantSearch = function (_EventEmitter) {
 
         _this2.widgets.push(widget);
       });
+
+      // Second part of the fix for #3148
+      if (lastWidget) this.widgets.push(lastWidget);
 
       // Init the widget directly if instantsearch has been already started
       if (this.started && Boolean(widgets.length)) {
@@ -15023,8 +15031,7 @@ function connectHierarchicalMenu(renderFn, unmountFn) {
             return name === hierarchicalFacetName;
           });
           if (isFacetSet && !((0, _isEqual2.default)(isFacetSet.attributes, attributes) && isFacetSet.separator === separator)) {
-            // eslint-disable-next-line no-console
-            console.warn('using Breadcrumb & HierarchicalMenu on the same facet with different options');
+            (0, _utils.warn)('using Breadcrumb & HierarchicalMenu on the same facet with different options');
             return {};
           }
         }
@@ -15413,10 +15420,10 @@ function connectHitsPerPage(renderFn, unmountFn) {
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
             if (window.console) {
-              window.console.warn('[Warning][hitsPerPageSelector] hitsPerPage not defined.\n  You should probably set the value `hitsPerPage`\n  using the searchParameters attribute of the instantsearch constructor.');
+              (0, _utils.warn)('[hitsPerPageSelector] hitsPerPage not defined.\n  You should probably set the value `hitsPerPage`\n  using the searchParameters attribute of the instantsearch constructor.');
             }
           } else if (window.console) {
-            window.console.warn('[Warning][hitsPerPageSelector] No item in `items`\n  with `value: hitsPerPage` (hitsPerPage: ' + state.hitsPerPage + ')');
+            (0, _utils.warn)('[hitsPerPageSelector] No item in `items`\n  with `value: hitsPerPage` (hitsPerPage: ' + state.hitsPerPage + ')');
           }
 
           items = [{ value: '', label: '' }].concat(_toConsumableArray(items));
@@ -18270,8 +18277,7 @@ function connectBreadcrumb(renderFn, unmountFn) {
           });
           if (isFacetSet) {
             if (!(0, _isEqual2.default)(isFacetSet.attributes, attributes) || isFacetSet.separator !== separator) {
-              // eslint-disable-next-line no-console
-              console.warn('Using Breadcrumb & HierarchicalMenu on the same facet with different options. Adding that one will override the configuration of the HierarchicalMenu. Check your options.');
+              (0, _utils.warn)('Using Breadcrumb & HierarchicalMenu on the same facet with different options. Adding that one will override the configuration of the HierarchicalMenu. Check your options.');
             }
             return {};
           }
@@ -19180,7 +19186,7 @@ var _version = __webpack_require__(187);
 
 var _version2 = _interopRequireDefault(_version);
 
-var _index = __webpack_require__(386);
+var _index = __webpack_require__(391);
 
 var connectors = _interopRequireWildcard(_index);
 
@@ -31161,226 +31167,6 @@ exports.default = function (_ref) {
 /* 386 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _connectClearAll = __webpack_require__(188);
-
-Object.defineProperty(exports, 'connectClearAll', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectClearAll).default;
-  }
-});
-
-var _connectCurrentRefinedValues = __webpack_require__(189);
-
-Object.defineProperty(exports, 'connectCurrentRefinedValues', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectCurrentRefinedValues).default;
-  }
-});
-
-var _connectHierarchicalMenu = __webpack_require__(191);
-
-Object.defineProperty(exports, 'connectHierarchicalMenu', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectHierarchicalMenu).default;
-  }
-});
-
-var _connectHits = __webpack_require__(192);
-
-Object.defineProperty(exports, 'connectHits', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectHits).default;
-  }
-});
-
-var _connectHitsPerPage = __webpack_require__(193);
-
-Object.defineProperty(exports, 'connectHitsPerPage', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectHitsPerPage).default;
-  }
-});
-
-var _connectInfiniteHits = __webpack_require__(194);
-
-Object.defineProperty(exports, 'connectInfiniteHits', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectInfiniteHits).default;
-  }
-});
-
-var _connectMenu = __webpack_require__(110);
-
-Object.defineProperty(exports, 'connectMenu', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectMenu).default;
-  }
-});
-
-var _connectNumericRefinementList = __webpack_require__(195);
-
-Object.defineProperty(exports, 'connectNumericRefinementList', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectNumericRefinementList).default;
-  }
-});
-
-var _connectNumericSelector = __webpack_require__(196);
-
-Object.defineProperty(exports, 'connectNumericSelector', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectNumericSelector).default;
-  }
-});
-
-var _connectPagination = __webpack_require__(197);
-
-Object.defineProperty(exports, 'connectPagination', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectPagination).default;
-  }
-});
-
-var _connectPriceRanges = __webpack_require__(199);
-
-Object.defineProperty(exports, 'connectPriceRanges', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectPriceRanges).default;
-  }
-});
-
-var _connectRangeSlider = __webpack_require__(401);
-
-Object.defineProperty(exports, 'connectRangeSlider', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectRangeSlider).default;
-  }
-});
-
-var _connectRange = __webpack_require__(79);
-
-Object.defineProperty(exports, 'connectRange', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectRange).default;
-  }
-});
-
-var _connectRefinementList = __webpack_require__(200);
-
-Object.defineProperty(exports, 'connectRefinementList', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectRefinementList).default;
-  }
-});
-
-var _connectSearchBox = __webpack_require__(201);
-
-Object.defineProperty(exports, 'connectSearchBox', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectSearchBox).default;
-  }
-});
-
-var _connectSortBySelector = __webpack_require__(202);
-
-Object.defineProperty(exports, 'connectSortBySelector', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectSortBySelector).default;
-  }
-});
-
-var _connectStarRating = __webpack_require__(203);
-
-Object.defineProperty(exports, 'connectStarRating', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectStarRating).default;
-  }
-});
-
-var _connectStats = __webpack_require__(204);
-
-Object.defineProperty(exports, 'connectStats', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectStats).default;
-  }
-});
-
-var _connectToggle = __webpack_require__(205);
-
-Object.defineProperty(exports, 'connectToggle', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectToggle).default;
-  }
-});
-
-var _connectBreadcrumb = __webpack_require__(206);
-
-Object.defineProperty(exports, 'connectBreadcrumb', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectBreadcrumb).default;
-  }
-});
-
-var _connectGeoSearch = __webpack_require__(207);
-
-Object.defineProperty(exports, 'connectGeoSearch', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectGeoSearch).default;
-  }
-});
-
-var _connectConfigure = __webpack_require__(208);
-
-Object.defineProperty(exports, 'connectConfigure', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectConfigure).default;
-  }
-});
-
-var _connectAutocomplete = __webpack_require__(402);
-
-Object.defineProperty(exports, 'connectAutocomplete', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_connectAutocomplete).default;
-  }
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-/* 387 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var baseUniq = __webpack_require__(184);
 
 /**
@@ -31409,7 +31195,7 @@ module.exports = uniq;
 
 
 /***/ }),
-/* 388 */
+/* 387 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var createWrap = __webpack_require__(70);
@@ -31472,7 +31258,7 @@ module.exports = curry;
 
 
 /***/ }),
-/* 389 */
+/* 388 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -31492,14 +31278,14 @@ module.exports = curry;
 
 // This file is for use with Node.js. See dist/ for browser files.
 
-var Hogan = __webpack_require__(390);
-Hogan.Template = __webpack_require__(391).Template;
+var Hogan = __webpack_require__(389);
+Hogan.Template = __webpack_require__(390).Template;
 Hogan.template = Hogan.Template;
 module.exports = Hogan;
 
 
 /***/ }),
-/* 390 */
+/* 389 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -31928,7 +31714,7 @@ module.exports = Hogan;
 
 
 /***/ }),
-/* 391 */
+/* 390 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -32273,6 +32059,226 @@ var Hogan = {};
 
 })( true ? exports : Hogan);
 
+
+/***/ }),
+/* 391 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _connectClearAll = __webpack_require__(188);
+
+Object.defineProperty(exports, 'connectClearAll', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectClearAll).default;
+  }
+});
+
+var _connectCurrentRefinedValues = __webpack_require__(189);
+
+Object.defineProperty(exports, 'connectCurrentRefinedValues', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectCurrentRefinedValues).default;
+  }
+});
+
+var _connectHierarchicalMenu = __webpack_require__(191);
+
+Object.defineProperty(exports, 'connectHierarchicalMenu', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectHierarchicalMenu).default;
+  }
+});
+
+var _connectHits = __webpack_require__(192);
+
+Object.defineProperty(exports, 'connectHits', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectHits).default;
+  }
+});
+
+var _connectHitsPerPage = __webpack_require__(193);
+
+Object.defineProperty(exports, 'connectHitsPerPage', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectHitsPerPage).default;
+  }
+});
+
+var _connectInfiniteHits = __webpack_require__(194);
+
+Object.defineProperty(exports, 'connectInfiniteHits', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectInfiniteHits).default;
+  }
+});
+
+var _connectMenu = __webpack_require__(110);
+
+Object.defineProperty(exports, 'connectMenu', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectMenu).default;
+  }
+});
+
+var _connectNumericRefinementList = __webpack_require__(195);
+
+Object.defineProperty(exports, 'connectNumericRefinementList', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectNumericRefinementList).default;
+  }
+});
+
+var _connectNumericSelector = __webpack_require__(196);
+
+Object.defineProperty(exports, 'connectNumericSelector', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectNumericSelector).default;
+  }
+});
+
+var _connectPagination = __webpack_require__(197);
+
+Object.defineProperty(exports, 'connectPagination', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectPagination).default;
+  }
+});
+
+var _connectPriceRanges = __webpack_require__(199);
+
+Object.defineProperty(exports, 'connectPriceRanges', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectPriceRanges).default;
+  }
+});
+
+var _connectRangeSlider = __webpack_require__(401);
+
+Object.defineProperty(exports, 'connectRangeSlider', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectRangeSlider).default;
+  }
+});
+
+var _connectRange = __webpack_require__(79);
+
+Object.defineProperty(exports, 'connectRange', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectRange).default;
+  }
+});
+
+var _connectRefinementList = __webpack_require__(200);
+
+Object.defineProperty(exports, 'connectRefinementList', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectRefinementList).default;
+  }
+});
+
+var _connectSearchBox = __webpack_require__(201);
+
+Object.defineProperty(exports, 'connectSearchBox', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectSearchBox).default;
+  }
+});
+
+var _connectSortBySelector = __webpack_require__(202);
+
+Object.defineProperty(exports, 'connectSortBySelector', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectSortBySelector).default;
+  }
+});
+
+var _connectStarRating = __webpack_require__(203);
+
+Object.defineProperty(exports, 'connectStarRating', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectStarRating).default;
+  }
+});
+
+var _connectStats = __webpack_require__(204);
+
+Object.defineProperty(exports, 'connectStats', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectStats).default;
+  }
+});
+
+var _connectToggle = __webpack_require__(205);
+
+Object.defineProperty(exports, 'connectToggle', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectToggle).default;
+  }
+});
+
+var _connectBreadcrumb = __webpack_require__(206);
+
+Object.defineProperty(exports, 'connectBreadcrumb', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectBreadcrumb).default;
+  }
+});
+
+var _connectGeoSearch = __webpack_require__(207);
+
+Object.defineProperty(exports, 'connectGeoSearch', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectGeoSearch).default;
+  }
+});
+
+var _connectConfigure = __webpack_require__(208);
+
+Object.defineProperty(exports, 'connectConfigure', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectConfigure).default;
+  }
+});
+
+var _connectAutocomplete = __webpack_require__(402);
+
+Object.defineProperty(exports, 'connectAutocomplete', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_connectAutocomplete).default;
+  }
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
 /* 392 */
@@ -34311,7 +34317,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 var bem = (0, _utils.bemHelper)('ais-geo-search');
 
-var usage = 'Usage:\n\ngeoSearch({\n  container,\n  googleReference,\n  [ initialZoom = 1 ],\n  [ initialPosition = { lat: 0, lng: 0 } ],\n  [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],\n  [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],\n  [ templates.{clear,toggle,redo} ],\n  [ mapOptions ],\n  [ builtInMarker ],\n  [ customHTMLMarker = false ],\n  [ enableClearMapRefinement = true ],\n  [ enableRefineControl = true ],\n  [ enableRefineOnMapMove = true ],\n  [ enableGeolocationWithIP = true ],\n  [ position ],\n  [ radius ],\n  [ precision ],\n})\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html\n';
+var usage = 'Usage:\n\ngeoSearch({\n  container,\n  googleReference,\n  [ initialZoom = 1 ],\n  [ initialPosition = { lat: 0, lng: 0 } ],\n  [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],\n  [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],\n  [ templates.{clear,toggle,redo} ],\n  [ mapOptions ],\n  [ builtInMarker ],\n  [ customHTMLMarker = false ],\n  [ enableClearMapRefinement = true ],\n  [ enableRefineControl = true ],\n  [ enableRefineOnMapMove = true ],\n  [ enableGeolocationWithIP = true ],\n  [ position ],\n  [ radius ],\n  [ precision ],\n  [ transformItems ],\n})\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html\n';
 
 /**
  * @typedef {object} HTMLMarkerOptions
@@ -34390,6 +34396,7 @@ var usage = 'Usage:\n\ngeoSearch({\n  container,\n  googleReference,\n  [ initia
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more information.
  * @property {number} [precision] Precision of geo search (in meters). <br />
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more information.
+ * @property {function} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -34911,15 +34918,6 @@ var GeoSearchControls = function GeoSearchControls(_ref) {
     )
   );
 };
-
-var CSSClassesPropTypes = _propTypes2.default.shape({
-  control: _propTypes2.default.string.isRequired,
-  toggleLabel: _propTypes2.default.string.isRequired,
-  toggleLabelActive: _propTypes2.default.string.isRequired,
-  toggleInput: _propTypes2.default.string.isRequired,
-  redo: _propTypes2.default.string.isRequired,
-  clear: _propTypes2.default.string.isRequired
-});
 
 exports.default = GeoSearchControls;
 
@@ -44125,11 +44123,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var itemsPropType = _propTypes2.default.arrayOf(_propTypes2.default.shape({
-  name: _propTypes2.default.string,
-  value: _propTypes2.default.string
-}));
 
 var Breadcrumb = function (_PureComponent) {
   _inherits(Breadcrumb, _PureComponent);
