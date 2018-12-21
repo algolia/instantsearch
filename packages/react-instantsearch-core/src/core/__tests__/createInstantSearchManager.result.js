@@ -1,323 +1,244 @@
-import algoliaClient from 'algoliasearch/lite';
-import jsHepler from 'algoliasearch-helper';
 import createInstantSearchManager from '../createInstantSearchManager';
 
-jest.useFakeTimers();
+const flushPendingMicroTasks = () => new Promise(setImmediate);
 
-// We should avoid to rely on such mock, we do crazy stuff in order to have access
-// to the instance. An easier way is to pass the helper as an argument of the manager
-// with the default implementation as default value. With this change we can easily
-// pass a custom helper (mock or not).
-jest.mock('algoliasearch-helper', () => {
-  const actualJsHelper = require.requireActual('algoliasearch-helper');
-  const proxifyJsHelper = jest.fn((...args) => actualJsHelper(...args));
-
-  Object.keys(actualJsHelper).forEach(key => {
-    proxifyJsHelper[key] = actualJsHelper[key];
-  });
-
-  return proxifyJsHelper;
+const createSearchClient = () => ({
+  search: jest.fn(() =>
+    Promise.resolve({
+      results: [
+        {
+          hits: [{ value: 'results' }],
+        },
+      ],
+    })
+  ),
+  searchForFacetValues: jest.fn(() =>
+    Promise.resolve([
+      {
+        facetHits: [{ value: 'results' }],
+      },
+    ])
+  ),
 });
 
-const client = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
-client.search = jest.fn(() => Promise.resolve({ results: [{ hits: [] }] }));
+describe('createInstantSearchManager with results', () => {
+  describe('on search', () => {
+    it('updates the store on widget lifecycle', async () => {
+      const searchClient = createSearchClient();
 
-describe('createInstantSearchManager', () => {
-  describe('with correct result from algolia', () => {
-    describe('on widget lifecycle', () => {
-      it('updates the store and searches', () => {
-        expect.assertions(7);
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+      });
 
-        const _dispatchAlgoliaResponse = jest.fn(function(state) {
-          this.emit('result', { value: 'results' }, state);
-        });
+      ism.widgetsManager.registerWidget({
+        getSearchParameters: params => params.setQuery('search'),
+        props: {},
+        context: {},
+      });
 
-        jsHepler.mockImplementationOnce((...args) => {
-          const instance = jsHepler(...args);
+      expect(ism.store.getState().results).toBe(null);
 
-          instance._dispatchAlgoliaResponse = _dispatchAlgoliaResponse;
+      await flushPendingMicroTasks();
 
-          return instance;
-        });
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
+      expect(ism.store.getState().error).toBe(null);
 
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
+      ism.widgetsManager.update();
 
-        ism.widgetsManager.registerWidget({
-          getSearchParameters: params => params.setQuery('search'),
-          props: {},
-          context: {},
-        });
+      await flushPendingMicroTasks();
 
-        expect(ism.store.getState().results).toBe(null);
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
+      expect(ism.store.getState().error).toBe(null);
+    });
 
-        return Promise.resolve()
-          .then(() => {}) // Simulate next tick
-          .then(() => {
-            const store = ism.store.getState();
+    it('updates the store on external updates', async () => {
+      const searchClient = createSearchClient();
 
-            expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(1);
-            expect(store.results).toEqual({ value: 'results' });
-            expect(store.error).toBe(null);
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+      });
 
-            ism.widgetsManager.update();
-          })
-          .then(() => {})
-          .then(() => {
-            const store = ism.store.getState();
-            expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(2);
-            expect(store.results).toEqual({ value: 'results' });
-            expect(store.error).toBe(null);
-          });
+      ism.onExternalStateUpdate({});
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
+      expect(ism.store.getState().error).toBe(null);
+
+      ism.onExternalStateUpdate({});
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
+      expect(ism.store.getState().error).toBe(null);
+    });
+  });
+
+  describe('on search for facet values', () => {
+    // We should avoid to rely on such mock, we mostly do an integration tests rather than
+    // a unit ones for the manager. We have to simulate a real helper environement (facet,
+    // etc, ...) to have something that don't throw errors. An easier way would be to provide
+    // the helper to the manager with the real implementation by default. With this, we can easily
+    // pass a custom helper (mocked or not) and don't rely on the helper + client.
+
+    it('updates the store and searches', async () => {
+      const searchClient = createSearchClient();
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+      });
+
+      // We have to register the facet to be able to search on it
+      ism.widgetsManager.registerWidget({
+        getSearchParameters: params => params.addFacet('facetName'),
+        props: {},
+        context: {},
+      });
+
+      await flushPendingMicroTasks();
+
+      ism.onSearchForFacetValues({
+        facetName: 'facetName',
+        query: 'query',
+      });
+
+      expect(ism.store.getState().searchingForFacetValues).toBe(true);
+
+      await flushPendingMicroTasks();
+
+      expect(ism.store.getState().searchingForFacetValues).toBe(false);
+
+      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              facetName: 'facetName',
+              facetQuery: 'query',
+              maxFacetHits: 10,
+            }),
+          }),
+        ])
+      );
+
+      expect(ism.store.getState().resultsFacetValues).toEqual({
+        facetName: [expect.objectContaining({ value: 'results' })],
+        query: 'query',
       });
     });
 
-    describe('on external updates', () => {
-      it('updates the store and searches', () => {
-        expect.assertions(7);
+    it('updates the store and searches with maxFacetHits', async () => {
+      const searchClient = createSearchClient();
 
-        const _dispatchAlgoliaResponse = jest.fn(function(state) {
-          this.emit('result', { value: 'results' }, state);
-        });
-
-        jsHepler.mockImplementationOnce((...args) => {
-          const instance = jsHepler(...args);
-
-          instance._dispatchAlgoliaResponse = _dispatchAlgoliaResponse;
-
-          return instance;
-        });
-
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
-
-        ism.onExternalStateUpdate({});
-
-        expect(ism.store.getState().results).toBe(null);
-
-        return Promise.resolve()
-          .then(() => {
-            const store = ism.store.getState();
-            expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(1);
-            expect(store.results).toEqual({ value: 'results' });
-            expect(store.error).toBe(null);
-
-            ism.widgetsManager.update();
-          })
-          .then(() => {})
-          .then(() => {
-            const store = ism.store.getState();
-            expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(2);
-            expect(store.results).toEqual({ value: 'results' });
-            expect(store.error).toBe(null);
-          });
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
       });
+
+      // We have to register the facet to be able to search on it
+      ism.widgetsManager.registerWidget({
+        getSearchParameters: params => params.addFacet('facetName'),
+        props: {},
+        context: {},
+      });
+
+      await flushPendingMicroTasks();
+
+      ism.onSearchForFacetValues({
+        facetName: 'facetName',
+        query: 'query',
+        maxFacetHits: 25,
+      });
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              maxFacetHits: 25,
+            }),
+          }),
+        ])
+      );
     });
 
-    describe('on search for facet values', () => {
-      it('updates the store and searches', () => {
-        expect.assertions(4);
+    it('updates the store and searches with maxFacetHits out of range (higher)', async () => {
+      const searchClient = createSearchClient();
 
-        const searchForFacetValues = jest.fn(() =>
-          Promise.resolve({
-            facetHits: 'results',
-          })
-        );
-
-        jsHepler.mockImplementationOnce((...args) => {
-          const instance = jsHepler(...args);
-
-          instance.searchForFacetValues = searchForFacetValues;
-
-          return instance;
-        });
-
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
-
-        ism.onSearchForFacetValues({ facetName: 'facetName', query: 'query' });
-
-        expect(ism.store.getState().results).toBe(null);
-
-        return Promise.resolve().then(() => {
-          const store = ism.store.getState();
-
-          expect(searchForFacetValues).toHaveBeenCalledWith(
-            'facetName',
-            'query',
-            10
-          );
-
-          expect(store.searchingForFacetValues).toBe(false);
-
-          expect(store.resultsFacetValues).toEqual({
-            facetName: 'results',
-            query: 'query',
-          });
-        });
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
       });
 
-      it('updates the store and searches with maxFacetHits', () => {
-        expect.assertions(4);
-
-        const searchForFacetValues = jest.fn(() =>
-          Promise.resolve({
-            facetHits: 'results',
-          })
-        );
-
-        jsHepler.mockImplementationOnce((...args) => {
-          const instance = jsHepler(...args);
-
-          instance.searchForFacetValues = searchForFacetValues;
-
-          return instance;
-        });
-
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
-
-        ism.onSearchForFacetValues({
-          facetName: 'facetName',
-          query: 'query',
-          maxFacetHits: 25,
-        });
-
-        expect(ism.store.getState().results).toBe(null);
-
-        return Promise.resolve().then(() => {
-          const store = ism.store.getState();
-
-          expect(searchForFacetValues).toHaveBeenCalledWith(
-            'facetName',
-            'query',
-            25
-          );
-
-          expect(store.resultsFacetValues).toEqual({
-            facetName: 'results',
-            query: 'query',
-          });
-
-          expect(store.searchingForFacetValues).toBe(false);
-        });
+      // We have to register the facet to be able to search on it
+      ism.widgetsManager.registerWidget({
+        getSearchParameters: params => params.addFacet('facetName'),
+        props: {},
+        context: {},
       });
 
-      it('updates the store and searches with maxFacetHits out of range (higher)', () => {
-        expect.assertions(4);
+      await flushPendingMicroTasks();
 
-        const searchForFacetValues = jest.fn(() =>
-          Promise.resolve({
-            facetHits: 'results',
-          })
-        );
-
-        jsHepler.mockImplementationOnce((...args) => {
-          const instance = jsHepler(...args);
-
-          instance.searchForFacetValues = searchForFacetValues;
-
-          return instance;
-        });
-
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
-
-        ism.onSearchForFacetValues({
-          facetName: 'facetName',
-          query: 'query',
-          maxFacetHits: 125,
-        });
-
-        expect(ism.store.getState().results).toBe(null);
-
-        return Promise.resolve().then(() => {
-          const store = ism.store.getState();
-
-          expect(searchForFacetValues).toHaveBeenCalledWith(
-            'facetName',
-            'query',
-            100
-          );
-
-          expect(store.resultsFacetValues).toEqual({
-            facetName: 'results',
-            query: 'query',
-          });
-
-          expect(store.searchingForFacetValues).toBe(false);
-        });
+      ism.onSearchForFacetValues({
+        facetName: 'facetName',
+        query: 'query',
+        maxFacetHits: 125,
       });
 
-      it('updates the store and searches with maxFacetHits out of range (lower)', () => {
-        expect.assertions(4);
+      await flushPendingMicroTasks();
 
-        const searchForFacetValues = jest.fn(() =>
-          Promise.resolve({
-            facetHits: 'results',
-          })
-        );
+      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              maxFacetHits: 100,
+            }),
+          }),
+        ])
+      );
+    });
 
-        jsHepler.mockImplementationOnce((...args) => {
-          const instance = jsHepler(...args);
+    it('updates the store and searches with maxFacetHits out of range (lower)', async () => {
+      const searchClient = createSearchClient();
 
-          instance.searchForFacetValues = searchForFacetValues;
-
-          return instance;
-        });
-
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
-
-        ism.onSearchForFacetValues({
-          facetName: 'facetName',
-          query: 'query',
-          maxFacetHits: 0,
-        });
-
-        expect(ism.store.getState().results).toBe(null);
-
-        return Promise.resolve().then(() => {
-          const store = ism.store.getState();
-
-          expect(searchForFacetValues).toHaveBeenCalledWith(
-            'facetName',
-            'query',
-            1
-          );
-
-          expect(store.resultsFacetValues).toEqual({
-            facetName: 'results',
-            query: 'query',
-          });
-
-          expect(store.searchingForFacetValues).toBe(false);
-        });
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
       });
+
+      // We have to register the facet to be able to search on it
+      ism.widgetsManager.registerWidget({
+        getSearchParameters: params => params.addFacet('facetName'),
+        props: {},
+        context: {},
+      });
+
+      await flushPendingMicroTasks();
+
+      ism.onSearchForFacetValues({
+        facetName: 'facetName',
+        query: 'query',
+        maxFacetHits: 0,
+      });
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              maxFacetHits: 1,
+            }),
+          }),
+        ])
+      );
     });
   });
 });
