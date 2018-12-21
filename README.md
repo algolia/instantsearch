@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://community.algolia.com/instantsearch.js">
+  <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/">
     <img alt="InstantSearch.js" src="./docgen/assets/img/instantsearch-medal.svg" width="250">
   </a>
 
@@ -94,7 +94,7 @@ search.start();
   </a>
 </p>
 
-To learn more about the library, follow the [getting started](https://community.algolia.com/instantsearch.js/v2/getting-started.html) guide or check how to [add it to your own project](https://community.algolia.com/instantsearch.js/v2/guides/usage.html).
+To learn more about the library, follow the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/) guide or check how to [add it to your own project](https://www.algolia.com/doc/guides/building-search-ui/installation/js/).
 
 ## Installation
 
@@ -106,21 +106,21 @@ yarn add instantsearch.js algoliasearch
 
 ## Documentation
 
-The documentation is available at [community.algolia.com/instantsearch.js](https://community.algolia.com/instantsearch.js).
+The documentation is available on the [Algolia documentation website](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/).
 
 ## Demos
 
 | E-commerce                                                                                                                                                                                                                   | Media                                                                                                                                                                                                         | Travel                                                                                                                                                                                                              |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="https://community.algolia.com/instantsearch.js/v2/examples/e-commerce/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/e-commerce/capture.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://community.algolia.com/instantsearch.js/v2/examples/media/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/media/capture.png" width="250" alt="Media demo preview"></a> | <a href="https://community.algolia.com/instantsearch.js/v2/examples/tourism/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
+| <a href="https://instantsearchjs.netlify.com/examples/e-commerce/"><img src="https://instantsearchjs.netlify.com/examples/e-commerce/capture.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/media/"><img src="https://instantsearchjs.netlify.com/examples/media/capture.png" width="250" alt="Media demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/tourism/"><img src="https://instantsearchjs.netlify.com/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
 
-See more examples [on the website](https://community.algolia.com/instantsearch.js/v2/examples.html).
+See more demos [on the website](https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/).
 
 ## Playground
 
 You can get to know InstantSearch.js on [this playground](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js).
 
-Start by [adding widgets](https://community.algolia.com/instantsearch.js/v2/widgets.html) and tweaking the display. Once you feel familiar with the library, we recommend following the [getting started guide](https://community.algolia.com/instantsearch.js/v2/getting-started.html).
+Start by [adding widgets](https://www.algolia.com/doc/guides/building-search-ui/widgets/showcase/js/) and tweaking the display. Once you feel familiar with the library, we recommend following the [getting started guide](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
 
 ## Browser support
 
