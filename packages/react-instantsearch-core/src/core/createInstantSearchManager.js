@@ -287,19 +287,20 @@ export default function createInstantSearchManager({
         content => {
           store.setState({
             ...store.getState(),
+            error: null,
+            searchingForFacetValues: false,
             resultsFacetValues: {
               ...store.getState().resultsFacetValues,
               [facetName]: content.facetHits,
               query,
             },
-            searchingForFacetValues: false,
           });
         },
         error => {
           store.setState({
             ...store.getState(),
-            error,
             searchingForFacetValues: false,
+            error,
           });
         }
       )

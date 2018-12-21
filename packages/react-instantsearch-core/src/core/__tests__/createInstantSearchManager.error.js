@@ -1,150 +1,209 @@
-import algoliaClient from 'algoliasearch/lite';
 import createInstantSearchManager from '../createInstantSearchManager';
 
-jest.useFakeTimers();
+const flushPendingMicroTasks = () => new Promise(setImmediate);
 
-jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
-  let count = 0;
-  const Helper = require.requireActual(
-    'algoliasearch-helper/src/algoliasearch.helper.js'
-  );
-  Helper.prototype._dispatchAlgoliaResponse = function(state) {
-    if (count > 3) {
-      this.emit('result', { count: count++ }, state);
-    } else {
-      this.emit('error', { count: count++ }, state);
-    }
-  };
-  Helper.prototype.searchForFacetValues = () =>
-    Promise.reject(new Error('error'));
-  return Helper;
+const createSearchClient = () => ({
+  search: jest.fn(),
+  searchForFacetValues: jest.fn(),
 });
 
-const client = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
-client.search = jest.fn(() => Promise.resolve({ results: [{ hits: [] }] }));
+describe('createInstantSearchManager with errors', () => {
+  describe('on search', () => {
+    it('updates the store on widget lifecycle', async () => {
+      const searchClient = createSearchClient();
 
-describe('createInstantSearchManager errors', () => {
-  describe('with error from algolia', () => {
-    describe('on widget lifecycle', () => {
-      it('updates the store and searches', () => {
-        expect.assertions(5);
+      searchClient.search.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR_1'))
+      );
 
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
-
-        ism.widgetsManager.registerWidget({
-          getSearchParameters: params => params.setQuery('search'),
-          context: {},
-          props: {},
-        });
-
-        expect(ism.store.getState().error).toBe(null);
-
-        return Promise.resolve()
-          .then(() => {})
-          .then(() => {
-            const store = ism.store.getState();
-            expect(store.error).toEqual({ count: 0 });
-            expect(store.results).toEqual(null);
-
-            ism.widgetsManager.update();
-          })
-          .then(() => {})
-          .then(() => {
-            const store1 = ism.store.getState();
-            expect(store1.error).toEqual({ count: 1 });
-            expect(store1.results).toBe(null);
-          });
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
       });
+
+      ism.widgetsManager.registerWidget({
+        getSearchParameters: params => params.setQuery('search'),
+        context: {},
+        props: {},
+      });
+
+      expect(ism.store.getState().error).toBe(null);
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(ism.store.getState().error).toEqual(new Error('API_ERROR_1'));
+      expect(ism.store.getState().results).toEqual(null);
+
+      searchClient.search.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR_2'))
+      );
+
+      ism.widgetsManager.update();
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(ism.store.getState().error).toEqual(new Error('API_ERROR_2'));
+      expect(ism.store.getState().results).toEqual(null);
     });
 
-    describe('on external updates', () => {
-      it('updates the store and searches', () => {
-        expect.assertions(3);
+    it('updates the store on external updates', async () => {
+      const searchClient = createSearchClient();
 
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
+      searchClient.search.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR_1'))
+      );
 
-        ism.onExternalStateUpdate({});
-
-        expect(ism.store.getState().error).toBe(null);
-
-        return Promise.resolve()
-          .then(() => {})
-          .then(() => {
-            const store = ism.store.getState();
-            expect(store.error).toEqual({ count: 2 });
-            expect(store.results).toBe(null);
-          });
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
       });
+
+      ism.onExternalStateUpdate({});
+
+      expect(ism.store.getState().error).toBe(null);
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(ism.store.getState().error).toEqual(new Error('API_ERROR_1'));
+      expect(ism.store.getState().results).toEqual(null);
+
+      searchClient.search.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR_2'))
+      );
+
+      ism.onExternalStateUpdate({});
+
+      await flushPendingMicroTasks();
+
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(ism.store.getState().error).toEqual(new Error('API_ERROR_2'));
+      expect(ism.store.getState().results).toEqual(null);
     });
 
-    describe('on search for facet values', () => {
-      it('updates the store and searches', () => {
-        expect.assertions(3);
+    it('reset the error after a successful search', async () => {
+      const searchClient = createSearchClient();
 
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
+      searchClient.search.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR'))
+      );
 
-        ism.onSearchForFacetValues({ facetName: 'facetName', query: 'query' });
-
-        expect(ism.store.getState().error).toBe(null);
-
-        return Promise.resolve().then(() => {
-          const store = ism.store.getState();
-          expect(store.error.message).toEqual('error');
-          expect(store.searchingForFacetValues).toBe(false);
-        });
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
       });
+
+      ism.widgetsManager.registerWidget({
+        getSearchParameters: params => params.setQuery('search'),
+        context: {},
+        props: {},
+      });
+
+      expect(ism.store.getState().error).toBe(null);
+
+      await flushPendingMicroTasks();
+
+      expect(ism.store.getState().error).toEqual(new Error('API_ERROR'));
+      expect(ism.store.getState().results).toEqual(null);
+
+      searchClient.search.mockImplementation(() =>
+        Promise.resolve({
+          results: [
+            {
+              hits: [],
+            },
+          ],
+        })
+      );
+
+      ism.widgetsManager.update();
+
+      await flushPendingMicroTasks();
+
+      expect(ism.store.getState().error).toEqual(null);
+      expect(ism.store.getState().results).toEqual(
+        expect.objectContaining({
+          hits: [],
+        })
+      );
+    });
+  });
+
+  describe('on search for facet values', () => {
+    it('updates the store on function call', async () => {
+      const searchClient = createSearchClient();
+
+      searchClient.searchForFacetValues.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR'))
+      );
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+      });
+
+      ism.onSearchForFacetValues({
+        facetName: 'facetName',
+        query: 'query',
+      });
+
+      expect(ism.store.getState().searchingForFacetValues).toBe(true);
+      expect(ism.store.getState().error).toBe(null);
+
+      await flushPendingMicroTasks();
+
+      expect(ism.store.getState().searchingForFacetValues).toBe(false);
+      expect(ism.store.getState().error).toEqual(new Error('API_ERROR'));
     });
 
-    describe('reset error after a succesful query', () => {
-      it('on widget lifecyle', () => {
-        expect.assertions(5);
+    it('reset the error after a successful search', async () => {
+      const searchClient = createSearchClient();
 
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {},
-          searchClient: client,
-        });
+      searchClient.searchForFacetValues.mockImplementation(() =>
+        Promise.reject(new Error('API_ERROR'))
+      );
 
-        ism.widgetsManager.registerWidget({
-          getSearchParameters: params => params.setQuery('search'),
-          context: {},
-          props: {},
-        });
-
-        expect(ism.store.getState().error).toBe(null);
-
-        return Promise.resolve()
-          .then(() => {})
-          .then(() => {
-            const store = ism.store.getState();
-            expect(store.error).toEqual({ count: 3 });
-            expect(store.results).toEqual(null);
-
-            ism.widgetsManager.update();
-          })
-          .then(() => {})
-          .then(() => {
-            const store1 = ism.store.getState();
-            expect(store1.error).toEqual(null);
-            expect(store1.results).toEqual({ count: 4 });
-          });
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
       });
+
+      ism.onSearchForFacetValues({
+        facetName: 'facetName',
+        query: 'query',
+      });
+
+      expect(ism.store.getState().error).toBe(null);
+
+      await flushPendingMicroTasks();
+
+      expect(ism.store.getState().error).toEqual(new Error('API_ERROR'));
+      expect(ism.store.getState().resultsFacetValues).toBeUndefined();
+
+      searchClient.searchForFacetValues.mockImplementation(() =>
+        Promise.resolve([
+          {
+            facetHits: [],
+          },
+        ])
+      );
+
+      ism.onSearchForFacetValues({
+        facetName: 'facetName',
+        query: 'query',
+      });
+
+      await flushPendingMicroTasks();
+
+      expect(ism.store.getState().error).toBe(null);
+      expect(ism.store.getState().resultsFacetValues).toEqual(
+        expect.objectContaining({
+          facetName: [],
+          query: 'query',
+        })
+      );
     });
   });
 });
