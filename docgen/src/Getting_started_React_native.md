@@ -189,7 +189,7 @@ You should now be able to see the results and scroll to fetch more of them. Of c
 
 ## Add a SearchBox
 
-Now that we've added the results, we can start querying our index. To do this, we are gonna use the [connectSearchBox](connectors/connectSearchBox.html) connector.
+Now that we've added the results, we can start querying our index. To do this, we are going to use the [connectSearchBox](connectors/connectSearchBox.html) connector.
 
 This connector gives you two interesting properties:
 

@@ -116,7 +116,7 @@ Read the [styling](guide/Styling_widgets.html) guide for more information.
 The core of a search experience is to display results. By default, React InstantSearch
 will do a query at the start of the page and will retrieve the most relevant hits.
 
-To display results, we are gonna use the [Hits](widgets/Hits.html) widget. This widget will
+To display results, we are going to use the [Hits](widgets/Hits.html) widget. This widget will
 display all the results returned by Algolia, and it will update when there
 are new results.
 
