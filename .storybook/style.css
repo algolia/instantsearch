@@ -37,46 +37,30 @@ body {
   border-left: solid 1px #e4e4e4;
   border-right: solid 1px #e4e4e4;
   border-bottom: solid 1px #e4e4e4;
+  display: flex;
 }
 
 .container-playground::after {
   content: 'Playground';
 }
 
-.searchBox {
-  margin-bottom: 20px;
+.panel-left {
+  width: 160px;
+  margin-right: 20px;
 }
 
-/* Hit */
-
-/* .hit {
-  align-items: center;
-  display: flex;
-  padding: 5px 0;
+.panel-right {
+  flex: 1;
 }
 
-.hit:hover {
-  cursor: pointer;
+.stats {
+  margin-top: 0.5rem;
+  font-style: italic;
 }
 
-.hit--active {
-  background-color: #3369e7;
-  color: white;
+.hits {
+  margin: 1rem 0;
 }
-
-.hit .hit-picture img {
-  height: auto;
-  width: 80px;
-}
-
-.hit .hit-content {
-  padding: 0 10px;
-}
-
-.hit .hit-type {
-  color: #888;
-  font-size: 13px;
-} */
 
 /* GeoSearch */
 
