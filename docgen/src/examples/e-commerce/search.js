@@ -7,27 +7,28 @@ var search = instantsearch({
   routing: true,
 });
 
-const customSearchbox = instantsearch.connectors.connectSearchBox(
-  ({ refine, widgetParams }, isFirstRender) => {
-    const { container, placeholder } = widgetParams;
+var customSearchbox = instantsearch.connectors.connectSearchBox(function(
+  renderOptions,
+  isFirstRender
+) {
+  var widgetParams = renderOptions.widgetParams;
 
-    if (isFirstRender) {
-      document.querySelector(container).innerHTML =
-        '<div class="input-group">' +
-        '<input type="search" autocomplete="off" class="form-control" id="q" placeholder="' +
-        placeholder +
-        '" />' +
-        '<span class="input-group-btn">' +
-        '<button class="btn btn-default"><i class="fa fa-search"></button>' +
-        '</span>' +
-        '</div>';
+  if (isFirstRender) {
+    document.querySelector(widgetParams.container).innerHTML =
+      '<div class="input-group">' +
+      '<input type="search" autocomplete="off" class="form-control" id="q" placeholder="' +
+      widgetParams.placeholder +
+      '" />' +
+      '<span class="input-group-btn">' +
+      '<button class="btn btn-default"><i class="fa fa-search"></button>' +
+      '</span>' +
+      '</div>';
 
-      document.querySelector('#q').addEventListener('input', event => {
-        refine(event.target.value);
-      });
-    }
+    document.querySelector('#q').addEventListener('input', function(event) {
+      renderOptions.refine(event.target.value);
+    });
   }
-);
+});
 
 search.addWidget(
   customSearchbox({
@@ -121,7 +122,7 @@ search.addWidget(
   })
 );
 
-const typeList = instantsearch.widgets.panel({
+var typeList = instantsearch.widgets.panel({
   templates: {
     header: '<h5>Type</h5>',
   },
@@ -139,7 +140,7 @@ search.addWidget(
   })
 );
 
-const brandList = instantsearch.widgets.panel({
+var brandList = instantsearch.widgets.panel({
   templates: {
     header: '<h5>Brand</h5>',
   },
@@ -158,7 +159,7 @@ search.addWidget(
   })
 );
 
-const ratingList = instantsearch.widgets.panel({
+var ratingList = instantsearch.widgets.panel({
   templates: {
     header: '<h5>Rating</h5>',
   },
@@ -171,7 +172,7 @@ search.addWidget(
   })
 );
 
-const priceInput = instantsearch.widgets.panel({
+var priceInput = instantsearch.widgets.panel({
   templates: {
     header: '<h5>Price</h5>',
   },

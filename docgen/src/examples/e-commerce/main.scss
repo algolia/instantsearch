@@ -241,10 +241,6 @@ aside {
   box-shadow: 0 0 3px lighten($gray-light, 3%);
   position: relative;
 
-  @media (max-width: 960px) {
-    width: 49%;
-  }
-
   .product-picture-wrapper {
     display: table;
     table-layout: fixed;
