@@ -16,7 +16,9 @@ export const withHits = (storyFn, searchOptions = {}) => () => {
     indexName,
     searchClient: algoliasearch(appId, apiKey),
     searchParameters: {
-      hitsPerPage: 8,
+      hitsPerPage: 4,
+      attributesToSnippet: ['description:15'],
+      snippetEllipsisText: '[…]',
       ...searchParameters,
     },
     routing: {
@@ -137,8 +139,28 @@ export const withHits = (storyFn, searchOptions = {}) => () => {
     instantsearch.widgets.hits({
       container: hits,
       templates: {
-        item:
-          '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+        item: `
+<div
+  class="hits-image"
+  style="background-image: url({{image}})"
+></div>
+<article>
+  <header>
+    <strong>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</strong>
+  </header>
+  <p>
+    {{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}
+  </p>
+  <footer>
+    <p>
+      <strong>{{price}}$</strong>
+    </p>
+  </footer>
+</article>
+          `,
+      },
+      cssClasses: {
+        item: 'hits-item',
       },
     })
   );

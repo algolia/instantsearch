@@ -23,6 +23,8 @@ body {
   margin: -1px 0px 0px -1px;
 }
 
+/* Preview */
+
 .container-preview {
   border: solid 1px #e4e4e4;
   border-radius: 5px 5px 0px 0px;
@@ -32,6 +34,8 @@ body {
   content: 'Preview';
   border-radius: 4px 0 0;
 }
+
+/* Playground */
 
 .container-playground {
   border-left: solid 1px #e4e4e4;
@@ -45,7 +49,7 @@ body {
 }
 
 .panel-left {
-  width: 160px;
+  min-width: 160px;
   margin-right: 20px;
 }
 
@@ -59,7 +63,42 @@ body {
 }
 
 .hits {
-  margin: 1rem 0;
+  list-style: none;
+  padding: 0;
+  margin: 25px 0;
+}
+
+.hits-item {
+  display: flex;
+  align-items: center;
+  border: none;
+  box-shadow: none;
+  width: 100%;
+  min-height: 155px;
+}
+
+.hits-item:not(:last-of-type) {
+  border-bottom: 1px solid #eee;
+}
+
+.hits-item:last-child {
+  margin-bottom: 0;
+}
+
+.hits-image {
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  flex-shrink: 0;
+  margin-right: 1rem;
+}
+
+/* Panel */
+
+.ais-Panel {
+  margin-bottom: 25px;
 }
 
 /* GeoSearch */
