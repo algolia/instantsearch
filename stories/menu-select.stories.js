@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Menu-select', module)
+storiesOf('MenuSelect', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
@@ -9,28 +9,6 @@ storiesOf('Menu-select', module)
         instantsearch.widgets.menuSelect({
           container,
           attribute: 'categories',
-        })
-      );
-    })
-  )
-  .add(
-    'with show more and header',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.menuSelect({
-          container,
-          attribute: 'categories',
-          limit: 3,
-          showMore: {
-            templates: {
-              active: '<button>Show less</button>',
-              inactive: '<button>Show more</button>',
-            },
-            limit: 10,
-          },
-          templates: {
-            header: 'Categories (menu widget)',
-          },
         })
       );
     })
@@ -44,8 +22,22 @@ storiesOf('Menu-select', module)
           attribute: 'categories',
           limit: 10,
           templates: {
-            header: 'Categories (menu widget)',
             item: '{{label}}',
+          },
+        })
+      );
+    })
+  )
+  .add(
+    'with custom default option template',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidget(
+        instantsearch.widgets.menuSelect({
+          container,
+          attribute: 'categories',
+          limit: 10,
+          templates: {
+            defaultOption: 'Default choice',
           },
         })
       );
