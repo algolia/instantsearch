@@ -17,7 +17,7 @@ describe('Templates', () => {
     const templateName = path.basename(templatePath);
     const templateConfig = require(`${templatePath}/.template.js`);
 
-    describe(templateName, () => {
+    describe(`${templateName}`, () => {
       let temporaryDirectory;
       let appPath;
       let configFilePath;

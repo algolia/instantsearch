@@ -45,7 +45,7 @@ describe('Installation', () => {
       templates.forEach(templatePath => {
         const templateName = path.basename(templatePath);
 
-        describe(templateName, () => {
+        describe(`${templateName}`, () => {
           test('installs and builds correctly', () => {
             execSync(
               `yarn start ${appPath} \
