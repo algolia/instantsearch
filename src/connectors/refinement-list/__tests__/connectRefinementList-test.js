@@ -3,7 +3,6 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
-
 import connectRefinementList from '../connectRefinementList.js';
 
 describe('connectRefinementList', () => {
@@ -36,6 +35,28 @@ describe('connectRefinementList', () => {
         operator: 'YUP',
       })
     ).toThrow(/Usage:/);
+
+    expect(() =>
+      connectRefinementList(() => {})({
+        attribute: 'company',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 10,
+      })
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"\`showMoreLimit\` should be greater than \`limit\`."`
+    );
+
+    expect(() =>
+      connectRefinementList(() => {})({
+        attribute: 'company',
+        limit: 10,
+        showMore: true,
+        showMoreLimit: 5,
+      })
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"\`showMoreLimit\` should be greater than \`limit\`."`
+    );
   });
 
   describe('options configuring the helper', () => {
@@ -70,6 +91,124 @@ describe('connectRefinementList', () => {
         },
         'Can read the previous maxValuesPerFacet value'
       );
+    });
+
+    it('`showMoreLimit`', () => {
+      const { rendering, makeWidget } = createWidgetFactory();
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 20,
+        showMore: true,
+        showMoreLimit: 30,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      secondRenderingOptions.toggleShowMore();
+
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 30,
+      });
+
+      expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 100,
+      });
+    });
+
+    it('`showMoreLimit` without `showMore` does not set anything', () => {
+      const { rendering, makeWidget } = createWidgetFactory();
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 20,
+        showMoreLimit: 30,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+                c3: 880,
+                c4: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      secondRenderingOptions.toggleShowMore();
+
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 20,
+      });
     });
 
     it('`operator="and"`', () => {
@@ -253,6 +392,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 3,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -350,6 +490,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 2,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -401,6 +542,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 1,
+      showMore: true,
       showMoreLimit: 10,
     });
 
@@ -455,6 +597,7 @@ describe('connectRefinementList', () => {
     const widget = makeWidget({
       attribute: 'category',
       limit: 1,
+      showMore: true,
       showMoreLimit: 3,
     });
 

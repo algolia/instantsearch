@@ -16,7 +16,6 @@ describe('MenuSelect', () => {
       items: [{ value: 'foo', label: 'foo' }, { value: 'bar', label: 'bar' }],
       refine: () => {},
       templateProps: { templates: defaultTemplates },
-      shouldAutoHideContainer: false,
       cssClasses,
     };
 
@@ -30,7 +29,24 @@ describe('MenuSelect', () => {
       items: [],
       refine: () => {},
       templateProps: { templates: defaultTemplates },
-      shouldAutoHideContainer: false,
+      cssClasses,
+    };
+
+    const wrapper = mount(<MenuSelect {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('should render <MenuSelect /> with custom templates', () => {
+    const props = {
+      items: [{ value: 'foo', label: 'foo' }, { value: 'bar', label: 'bar' }],
+      refine: () => {},
+      templateProps: {
+        templates: {
+          item: '{{label}}',
+          defaultOption: 'defaultOption',
+        },
+      },
       cssClasses,
     };
 

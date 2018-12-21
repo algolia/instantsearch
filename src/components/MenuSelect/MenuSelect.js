@@ -38,7 +38,7 @@ class MenuSelect extends Component {
         >
           <Template
             {...templateProps}
-            templateKey="seeAllOptions"
+            templateKey="defaultOption"
             rootTagName="option"
             rootProps={{
               value: '',

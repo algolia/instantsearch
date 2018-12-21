@@ -1,6 +1,6 @@
-/* global instantsearch algoliasearch */
+/* global instantsearch algoliasearch $script */
 
-window.addEventListener('load', function() {
+$script('https://maps.googleapis.com/maps/api/js?v=weekly&key=AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ', function() {
   var search = instantsearch({
     searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
     indexName: 'airbnb',
@@ -8,10 +8,20 @@ window.addEventListener('load', function() {
   });
 
   search.addWidget(
+    instantsearch.widgets.configure({
+      aroundLatLngViaIP: true,
+      hitsPerPage: 12,
+    })
+  );
+
+  search.addWidget(
     instantsearch.widgets.searchBox({
-      container: '#q',
+      container: '#search-box',
       placeholder: 'Where are you going?',
-      showSubmit: false
+      showSubmit: false,
+      cssClasses: {
+        input: 'form-control',
+      }
     })
   );
 
@@ -28,8 +38,12 @@ window.addEventListener('load', function() {
       '<img class="profile" src="{{user.user.thumbnail_url}}" />' +
     '</div>' +
     '<div class="infos">' +
-    '<h4 class="media-heading">{{{_highlightResult.name.value}}}</h4>' +
-    '<p>{{room_type}} - {{{_highlightResult.city.value}}}, {{{_highlightResult.country.value}}}</p>' +
+    '<h4 class="media-heading">{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</h4>' +
+    '<p>' +
+    '{{room_type}} - ' +
+    '{{#helpers.highlight}}{ "attribute": "city" }{{/helpers.highlight}},'+
+    '{{#helpers.highlight}}{ "attribute": "country" }{{/helpers.highlight}}' +
+    '</p>' +
     '</div>' +
     '</div>';
 
@@ -38,7 +52,6 @@ window.addEventListener('load', function() {
   search.addWidget(
     instantsearch.widgets.hits({
       container: '#hits',
-      hitsPerPage: 12,
       templates: {
         empty: noResultsTemplate,
         item: hitTemplate
@@ -51,8 +64,8 @@ window.addEventListener('load', function() {
       container: '#pagination',
       scrollTo: '#results',
       cssClasses: {
-        root: 'pagination',
-        active: 'active'
+        list: 'pagination',
+        selectedItem: 'active'
       }
     })
   );
@@ -60,31 +73,39 @@ window.addEventListener('load', function() {
   search.addWidget(
     instantsearch.widgets.refinementList({
       container: '#room_types',
-      attributeName: 'room_type',
-      operator: 'or',
-      cssClasses: {item: ['col-sm-3']},
-      limit: 10,
-      sortBy: ['name:asc']
+      attribute: 'room_type',
+      sortBy: ['name:asc'],
+      cssClasses: {
+        item: ['col-sm-3']
+      },
     })
   );
 
   search.addWidget(
     instantsearch.widgets.rangeSlider({
       container: '#price',
-      attributeName: 'price',
+      attribute: 'price',
       pips: false,
-      tooltips: {format: function(rawValue) {return '$' + parseInt(rawValue)}}
+      tooltips: {
+        format: function(rawValue) {
+          return '$' + parseInt(rawValue);
+        },
+      },
     })
-    );
+  );
 
   search.addWidget(
-    instantsearch.widgets.googleMaps({
-      container: document.querySelector('#map'),
-      prepareMarkerData: function(hit, index, hits) {
-        return {
-          title: hit.description
-        };
-      }
+    instantsearch.widgets.geoSearch({
+      container: '#map',
+      googleReference: window.google,
+      enableRefineControl: false,
+      builtInMarker: {
+        createOption: function(hit) {
+          return {
+            title: hit.description
+          };
+        },
+      },
     })
   );
 

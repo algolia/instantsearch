@@ -131,21 +131,23 @@ export default function panel({
 
       return {
         ...widget,
-        dispose() {
+        dispose(...args) {
           unmountComponentAtNode(getContainerNode(container));
 
           if (typeof widget.dispose === 'function') {
-            widget.dispose();
+            widget.dispose.call(this, ...args);
           }
         },
-        render(options) {
+        render(...args) {
+          const [options] = args;
+
           renderPanel({
             options,
             hidden: Boolean(hidden(options)),
           });
 
           if (typeof widget.render === 'function') {
-            widget.render(options);
+            widget.render.call(this, ...args);
           }
         },
       };
