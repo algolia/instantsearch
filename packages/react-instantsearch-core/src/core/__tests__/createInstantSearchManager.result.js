@@ -1,6 +1,6 @@
 import createInstantSearchManager from '../createInstantSearchManager';
 
-const flushPendingMicroTasks = () => new Promise(setImmediate);
+const runAllMicroTasks = () => new Promise(setImmediate);
 
 const createSearchClient = () => ({
   search: jest.fn(() =>
@@ -39,7 +39,7 @@ describe('createInstantSearchManager with results', () => {
 
       expect(ism.store.getState().results).toBe(null);
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -47,7 +47,7 @@ describe('createInstantSearchManager with results', () => {
 
       ism.widgetsManager.update();
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -64,7 +64,7 @@ describe('createInstantSearchManager with results', () => {
 
       ism.onExternalStateUpdate({});
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -72,7 +72,7 @@ describe('createInstantSearchManager with results', () => {
 
       ism.onExternalStateUpdate({});
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(ism.store.getState().results.hits).toEqual([{ value: 'results' }]);
@@ -102,7 +102,7 @@ describe('createInstantSearchManager with results', () => {
         context: {},
       });
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -111,7 +111,7 @@ describe('createInstantSearchManager with results', () => {
 
       expect(ism.store.getState().searchingForFacetValues).toBe(true);
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(ism.store.getState().searchingForFacetValues).toBe(false);
 
@@ -148,7 +148,7 @@ describe('createInstantSearchManager with results', () => {
         context: {},
       });
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -156,7 +156,7 @@ describe('createInstantSearchManager with results', () => {
         maxFacetHits: 25,
       });
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([
@@ -184,7 +184,7 @@ describe('createInstantSearchManager with results', () => {
         context: {},
       });
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -192,7 +192,7 @@ describe('createInstantSearchManager with results', () => {
         maxFacetHits: 125,
       });
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([
@@ -220,7 +220,7 @@ describe('createInstantSearchManager with results', () => {
         context: {},
       });
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       ism.onSearchForFacetValues({
         facetName: 'facetName',
@@ -228,7 +228,7 @@ describe('createInstantSearchManager with results', () => {
         maxFacetHits: 0,
       });
 
-      await flushPendingMicroTasks();
+      await runAllMicroTasks();
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([
