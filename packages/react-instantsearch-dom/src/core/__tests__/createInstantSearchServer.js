@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-
-import { isEmpty } from 'lodash';
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -15,7 +12,7 @@ import createInstantSearchServer from '../createInstantSearchServer';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('createInstantSearchServer', () => {
-  const createAlgoliaClient = () => ({
+  const createSearchClient = () => ({
     search: () =>
       Promise.resolve({
         results: [{ query: 'query' }],
@@ -26,246 +23,275 @@ describe('createInstantSearchServer', () => {
     createConnector({
       displayName: 'CoolConnector',
       getProvidedProps: () => null,
-      getSearchParameters: (searchParameters, props, searchState) => {
+      getSearchParameters(searchParameters, _, searchState) {
         getSearchParameters();
 
-        return isEmpty(searchState)
-          ? searchParameters.setIndex(searchParameters.index)
-          : searchParameters.setIndex(
-              searchState.index
-                ? searchState.index
-                : searchState.indices[searchParameters.index].index
-            );
+        if (this.context && this.context.multiIndexContext) {
+          const index = this.context.multiIndexContext.targetedIndex;
+          const indexSearchState =
+            searchState.indices && searchState.indices[index]
+              ? searchState.indices[index]
+              : {};
+
+          return searchParameters.setQuery(indexSearchState.query || 'Apple');
+        }
+
+        return searchParameters.setQuery(searchState.query || 'Apple');
       },
       getMetadata: () => null,
       getId: () => 'id',
     })(() => null);
 
+  const requiredProps = {
+    indexName: 'indexName',
+  };
+
+  const requiredPropsWithSearchClient = {
+    ...requiredProps,
+    searchClient: createSearchClient(),
+  };
+
   describe('props', () => {
-    it('creates an algolia client using the provided factory', () => {
-      const algoliaClient = {
-        ...createAlgoliaClient(),
+    it('uses the provided factory', () => {
+      const searchClient = {
+        ...createSearchClient(),
         addAlgoliaAgent: jest.fn(),
       };
-      const createAlgoliaClientSpy = jest.fn(() => algoliaClient);
+
+      const createSearchClientMock = jest.fn(() => searchClient);
+
       const { InstantSearch } = createInstantSearchServer(
-        createAlgoliaClientSpy
+        createSearchClientMock
       );
 
-      shallow(<InstantSearch appId="app" apiKey="key" indexName="name" />);
+      const props = {
+        ...requiredProps,
+        appId: 'appId',
+        apiKey: 'apiKey',
+      };
 
-      expect(createAlgoliaClientSpy).toHaveBeenCalledTimes(1);
-      expect(createAlgoliaClientSpy).toHaveBeenCalledWith('app', 'key');
-      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
-      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(
+      shallow(<InstantSearch {...props} />);
+
+      expect(createSearchClientMock).toHaveBeenCalledTimes(1);
+      expect(createSearchClientMock).toHaveBeenCalledWith('appId', 'apiKey');
+      expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+      expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
         `react-instantsearch ${version}`
       );
     });
 
     it('uses the provided searchClient', () => {
-      const searchClient = createAlgoliaClient();
-      const createAlgoliaClientSpy = jest.fn(() => searchClient);
-      const { InstantSearch } = createInstantSearchServer(
-        createAlgoliaClientSpy
-      );
+      const { InstantSearch } = createInstantSearchServer();
 
-      const wrapper = shallow(
-        <InstantSearch searchClient={searchClient} indexName="name" />
-      );
+      const searchClient = createSearchClient();
+
+      const props = {
+        ...requiredProps,
+        searchClient,
+      };
+
+      const wrapper = shallow(<InstantSearch {...props} />);
 
       expect(wrapper.props().searchClient).toBe(searchClient);
     });
 
     it('uses the provided algoliaClient', () => {
+      const { InstantSearch } = createInstantSearchServer();
+
       const algoliaClient = {
-        ...createAlgoliaClient(),
+        ...createSearchClient(),
         addAlgoliaAgent: jest.fn(),
       };
-      const createAlgoliaClientSpy = jest.fn(() => algoliaClient);
-      const { InstantSearch } = createInstantSearchServer(
-        createAlgoliaClientSpy
-      );
 
-      const wrapper = shallow(
-        <InstantSearch algoliaClient={algoliaClient} indexName="name" />
-      );
+      const props = {
+        ...requiredProps,
+        algoliaClient,
+      };
+
+      const wrapper = shallow(<InstantSearch {...props} />);
 
       expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
       expect(wrapper.props().algoliaClient).toBe(algoliaClient);
     });
 
     it('does not throw if searchClient does not have a `addAlgoliaAgent()` method', () => {
-      const searchClient = createAlgoliaClient();
-      const createAlgoliaClientSpy = jest.fn(() => searchClient);
-      const { InstantSearch } = createInstantSearchServer(
-        createAlgoliaClientSpy
-      );
+      const { InstantSearch } = createInstantSearchServer();
 
-      const trigger = () =>
-        shallow(<InstantSearch indexName="name" searchClient={searchClient} />);
+      const props = {
+        ...requiredProps,
+        searchClient: createSearchClient(),
+      };
+
+      const trigger = () => shallow(<InstantSearch {...props} />);
 
       expect(() => trigger()).not.toThrow();
     });
 
     it('does not throw if algoliaClient does not have a `addAlgoliaAgent()` method', () => {
-      const algoliaClient = createAlgoliaClient();
-      const createAlgoliaClientSpy = jest.fn(() => algoliaClient);
-      const { InstantSearch } = createInstantSearchServer(
-        createAlgoliaClientSpy
-      );
+      const { InstantSearch } = createInstantSearchServer();
 
-      const trigger = () =>
-        shallow(
-          <InstantSearch indexName="name" algoliaClient={algoliaClient} />
-        );
+      const props = {
+        ...requiredProps,
+        algoliaClient: createSearchClient(),
+      };
+
+      const trigger = () => shallow(<InstantSearch {...props} />);
 
       expect(() => trigger()).not.toThrow();
     });
 
     it('throws if algoliaClient is given with searchClient', () => {
-      const { InstantSearch } = createInstantSearchServer(createAlgoliaClient);
+      const { InstantSearch } = createInstantSearchServer();
+
+      const props = {
+        ...requiredProps,
+        searchClient: createSearchClient(),
+        algoliaClient: createSearchClient(),
+      };
 
       const trigger = () =>
-        shallow(
-          <InstantSearch
-            indexName="name"
-            searchClient={createAlgoliaClient()}
-            algoliaClient={createAlgoliaClient()}
-          />
-        );
+        shallow(<InstantSearch indexName="name" {...props} />);
 
-      expect(() => trigger()).toThrow();
+      expect(() => trigger()).toThrowErrorMatchingInlineSnapshot(
+        `"react-instantsearch:: \`searchClient\` cannot be used with \`appId\`, \`apiKey\` or \`algoliaClient\`."`
+      );
     });
 
     it('throws if appId is given with searchClient', () => {
-      const { InstantSearch } = createInstantSearchServer(createAlgoliaClient);
+      const { InstantSearch } = createInstantSearchServer();
 
-      const trigger = () =>
-        shallow(
-          <InstantSearch
-            indexName="name"
-            appId="appId"
-            searchClient={createAlgoliaClient()}
-          />
-        );
+      const props = {
+        ...requiredProps,
+        appId: 'appId',
+        searchClient: createSearchClient(),
+      };
 
-      expect(() => trigger()).toThrow();
+      const trigger = () => shallow(<InstantSearch {...props} />);
+
+      expect(() => trigger()).toThrowErrorMatchingInlineSnapshot(
+        `"react-instantsearch:: \`searchClient\` cannot be used with \`appId\`, \`apiKey\` or \`algoliaClient\`."`
+      );
     });
 
     it('throws if apiKey is given with searchClient', () => {
-      const { InstantSearch } = createInstantSearchServer(createAlgoliaClient);
+      const { InstantSearch } = createInstantSearchServer();
 
-      const trigger = () =>
-        shallow(
-          <InstantSearch
-            indexName="name"
-            apiKey="apiKey"
-            searchClient={createAlgoliaClient()}
-          />
-        );
+      const props = {
+        ...requiredProps,
+        apiKey: 'apiKey',
+        searchClient: createSearchClient(),
+      };
 
-      expect(() => trigger()).toThrow();
+      const trigger = () => shallow(<InstantSearch {...props} />);
+
+      expect(() => trigger()).toThrowErrorMatchingInlineSnapshot(
+        `"react-instantsearch:: \`searchClient\` cannot be used with \`appId\`, \`apiKey\` or \`algoliaClient\`."`
+      );
     });
   });
 
   describe('single index', () => {
     it('results shoud be SearchResults from the helper', () => {
-      const { InstantSearch } = createInstantSearchServer(createAlgoliaClient);
+      const { InstantSearch } = createInstantSearchServer();
 
-      const wrapper = shallow(
-        <InstantSearch
-          appId="app"
-          apiKey="key"
-          indexName="name"
-          resultsState={{
-            _originalResponse: { results: [{ query: 'query' }] },
-            state: new SearchParameters(),
-          }}
-        />
-      );
+      const props = {
+        ...requiredPropsWithSearchClient,
+        resultsState: {
+          _originalResponse: { results: [{ query: 'query' }] },
+          state: new SearchParameters(),
+        },
+      };
+
+      const wrapper = shallow(<InstantSearch {...props} />);
 
       expect(wrapper.props().resultsState.getFacetByName).toBeDefined();
       expect(wrapper.props().resultsState.query).toEqual('query');
     });
 
     describe('find results', () => {
-      it('searchParameters should be cleaned each time', () => {
-        expect.assertions(1);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
+      it('searchParameters should be cleaned each time', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
 
         const getSearchParameters = jest.fn();
         const Connected = createWidget({
           getSearchParameters,
         });
 
+        const props = {
+          ...requiredPropsWithSearchClient,
+        };
+
         const App = () => (
-          <InstantSearch appId="app" apiKey="key" indexName="indexName">
+          <InstantSearch {...props}>
             <Connected />
           </InstantSearch>
         );
 
-        return findResultsState(App)
-          .then(() => {
-            getSearchParameters.mockClear();
-            return findResultsState(App);
-          })
-          .then(() => {
-            expect(getSearchParameters).toHaveBeenCalledTimes(2);
-          });
+        await findResultsState(App);
+
+        // It's called two times because of an issue we have inside
+        // `createConnector`. We register the widget inside the constructor it
+        // means that it's executed on the server. But on the server we already
+        // have the hook `onSearchParamters` that collect `getSearchParameters`
+        // on all the widgets. At the end both are executed it should be fixed
+        // once we move the registration inside `componentDidMount`.
+        expect(getSearchParameters).toHaveBeenCalledTimes(2);
+
+        getSearchParameters.mockClear();
+
+        await findResultsState(App);
+
+        expect(getSearchParameters).toHaveBeenCalledTimes(2);
       });
 
-      it('without search state', () => {
-        expect.assertions(3);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
+      it('without search state', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
 
         const Connected = createWidget();
 
+        const props = {
+          ...requiredPropsWithSearchClient,
+        };
+
         const App = () => (
-          <InstantSearch appId="app" apiKey="key" indexName="indexName">
+          <InstantSearch {...props}>
             <Connected />
           </InstantSearch>
         );
 
-        return findResultsState(App).then(data => {
-          expect(data._originalResponse).toBeDefined();
-          expect(data.content).toBeDefined();
-          expect(data.state.index).toBe('indexName');
-        });
+        const data = await findResultsState(App);
+
+        expect(data._originalResponse).toBeDefined();
+        expect(data.content).toBeDefined();
+        expect(data.state.index).toBe('indexName');
+        expect(data.state.query).toBe('Apple');
       });
 
-      it('with search state', () => {
-        expect.assertions(3);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
+      it('with search state', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
 
         const Connected = createWidget();
 
-        const App = props => (
-          <InstantSearch
-            appId="app"
-            apiKey="key"
-            indexName="name"
-            searchState={props.searchState}
-          >
+        const props = {
+          ...requiredPropsWithSearchClient,
+        };
+
+        const App = ({ searchState }) => (
+          <InstantSearch {...props} searchState={searchState}>
             <Connected />
           </InstantSearch>
         );
 
-        return findResultsState(App, {
-          searchState: { index: 'index search state' },
-        }).then(data => {
-          expect(data._originalResponse).toBeDefined();
-          expect(data.content).toBeDefined();
-          expect(data.state.index).toBe('index search state');
+        const data = await findResultsState(App, {
+          searchState: {
+            query: 'iPhone',
+          },
         });
+
+        expect(data._originalResponse).toBeDefined();
+        expect(data.content).toBeDefined();
+        expect(data.state.index).toBe('indexName');
+        expect(data.state.query).toBe('iPhone');
       });
     });
   });
@@ -274,25 +300,23 @@ describe('createInstantSearchServer', () => {
     const Index = createIndex({ Root: 'div' });
 
     it('results shoud be SearchResults from the helper', () => {
-      const { InstantSearch } = createInstantSearchServer(createAlgoliaClient);
+      const { InstantSearch } = createInstantSearchServer();
 
-      const wrapper = shallow(
-        <InstantSearch
-          appId="app"
-          apiKey="key"
-          indexName="name"
-          resultsState={[
-            {
-              _originalResponse: { results: [{ query: 'query1' }] },
-              state: new SearchParameters({ index: 'index1' }),
-            },
-            {
-              _originalResponse: { results: [{ query: 'query2' }] },
-              state: new SearchParameters({ index: 'index2' }),
-            },
-          ]}
-        />
-      );
+      const props = {
+        ...requiredPropsWithSearchClient,
+        resultsState: [
+          {
+            _originalResponse: { results: [{ query: 'query1' }] },
+            state: new SearchParameters({ index: 'index1' }),
+          },
+          {
+            _originalResponse: { results: [{ query: 'query2' }] },
+            state: new SearchParameters({ index: 'index2' }),
+          },
+        ],
+      };
+
+      const wrapper = shallow(<InstantSearch {...props} />);
 
       expect(wrapper.props().resultsState.index1.query).toBe('query1');
       expect(wrapper.props().resultsState.index1.getFacetByName).toBeDefined();
@@ -301,171 +325,205 @@ describe('createInstantSearchServer', () => {
     });
 
     describe('find results', () => {
-      it('searchParameters should be cleaned each time', () => {
-        expect.assertions(1);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
+      it('searchParameters should be cleaned each time', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
 
         const getSearchParameters = jest.fn();
         const Connected = createWidget({
           getSearchParameters,
         });
 
+        const props = {
+          ...requiredPropsWithSearchClient,
+        };
+
         const App = () => (
-          <InstantSearch appId="app" apiKey="key" indexName="indexName">
+          <InstantSearch {...props}>
             <Index indexName="index2">
               <Connected />
             </Index>
           </InstantSearch>
         );
 
-        return findResultsState(App)
-          .then(() => {
-            getSearchParameters.mockClear();
+        await findResultsState(App);
 
-            return findResultsState(App);
-          })
-          .then(() => {
-            expect(getSearchParameters).toHaveBeenCalledTimes(2);
-          });
+        // It's called two times because of an issue we have inside
+        // `createConnector`. We register the widget inside the constructor it
+        // means that it's executed on the server. But on the server we already
+        // have the hook `onSearchParamters` that collect `getSearchParameters`
+        // on all the widgets. At the end both are executed it should be fixed
+        // once we move the registration inside `componentDidMount`.
+        expect(getSearchParameters).toHaveBeenCalledTimes(2);
+
+        getSearchParameters.mockClear();
+
+        await findResultsState(App);
+
+        expect(getSearchParameters).toHaveBeenCalledTimes(2);
       });
 
-      it('without search state - first api', () => {
-        expect.assertions(3);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
+      it('without search state - first API', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
 
         const Connected = createWidget();
 
+        const props = {
+          ...requiredPropsWithSearchClient,
+          indexName: 'index1',
+        };
+
         const App = () => (
-          <InstantSearch appId="app" apiKey="key" indexName="index1">
-            <Index indexName="index2">
-              <Connected />
-            </Index>
+          <InstantSearch {...props}>
             <Index indexName="index1">
               <Connected />
             </Index>
+
+            <Index indexName="index2">
+              <Connected />
+            </Index>
           </InstantSearch>
         );
 
-        return findResultsState(App).then(data => {
-          expect(data).toHaveLength(2);
-          expect(data.find(d => d.state.index === 'index1')).toBeTruthy();
-          expect(data.find(d => d.state.index === 'index2')).toBeTruthy();
-        });
+        const data = await findResultsState(App);
+
+        expect(data).toHaveLength(2);
+
+        const [first] = data;
+
+        expect(first.state.index).toBe('index1');
+        expect(first.state.query).toBe('Apple');
+
+        const [, second] = data;
+
+        expect(second.state.index).toBe('index2');
+        expect(second.state.query).toBe('Apple');
       });
 
-      it('without search state - second api', () => {
-        expect.assertions(3);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
+      it('without search state - second API', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
 
         const Connected = createWidget();
+
+        const props = {
+          ...requiredPropsWithSearchClient,
+          indexName: 'index1',
+        };
 
         const App = () => (
-          <InstantSearch appId="app" apiKey="key" indexName="index1">
+          <InstantSearch {...props}>
+            <Connected />
+
             <Index indexName="index2">
               <Connected />
             </Index>
-            <Connected />
           </InstantSearch>
         );
 
-        return findResultsState(App).then(data => {
-          expect(data).toHaveLength(2);
-          expect(data.find(d => d.state.index === 'index1')).toBeTruthy();
-          expect(data.find(d => d.state.index === 'index2')).toBeTruthy();
-        });
+        const data = await findResultsState(App);
+
+        expect(data).toHaveLength(2);
+
+        const [first] = data;
+
+        expect(first.state.index).toBe('index1');
+        expect(first.state.query).toBe('Apple');
+
+        const [, second] = data;
+
+        expect(second.state.index).toBe('index2');
+        expect(second.state.query).toBe('Apple');
       });
 
-      it('with search state - first api', () => {
-        expect.assertions(3);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
+      it('with search state - first API', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
 
         const Connected = createWidget();
 
-        const App = props => (
-          <InstantSearch
-            appId="app"
-            apiKey="key"
-            indexName="index1"
-            searchState={props.searchState}
-          >
-            <Index indexName="index2">
-              <Connected />
-            </Index>
+        const props = {
+          ...requiredPropsWithSearchClient,
+          indexName: 'index1',
+        };
+
+        const App = ({ searchState }) => (
+          <InstantSearch {...props} searchState={searchState}>
             <Index indexName="index1">
               <Connected />
             </Index>
-          </InstantSearch>
-        );
 
-        return findResultsState(App, {
-          searchState: {
-            indices: {
-              index1: { index: 'index1 new name' },
-              index2: { index: 'index2 new name' },
-            },
-          },
-        }).then(data => {
-          expect(data).toHaveLength(2);
-          expect(
-            data.find(d => d.state.index === 'index1 new name')
-          ).toBeTruthy();
-          expect(
-            data.find(d => d.state.index === 'index2 new name')
-          ).toBeTruthy();
-        });
-      });
-
-      it('with search state - second api', () => {
-        expect.assertions(3);
-
-        const { InstantSearch, findResultsState } = createInstantSearchServer(
-          createAlgoliaClient
-        );
-
-        const Connected = createWidget();
-
-        const App = props => (
-          <InstantSearch
-            appId="app"
-            apiKey="key"
-            indexName="index1"
-            searchState={props.searchState}
-          >
             <Index indexName="index2">
               <Connected />
             </Index>
-            <Connected />
           </InstantSearch>
         );
 
-        return findResultsState(App, {
+        const data = await findResultsState(App, {
           searchState: {
             indices: {
-              index1: { index: 'index1 new name' },
-              index2: { index: 'index2 new name' },
+              index1: {
+                query: 'iPhone',
+              },
+              index2: {
+                query: 'iPad',
+              },
             },
           },
-        }).then(data => {
-          expect(data).toHaveLength(2);
-          expect(
-            data.find(d => d.state.index === 'index1 new name')
-          ).toBeTruthy();
-          expect(
-            data.find(d => d.state.index === 'index2 new name')
-          ).toBeTruthy();
         });
+
+        expect(data).toHaveLength(2);
+
+        const [first] = data;
+
+        expect(first.state.index).toBe('index1');
+        expect(first.state.query).toBe('iPhone');
+
+        const [, second] = data;
+
+        expect(second.state.index).toBe('index2');
+        expect(second.state.query).toBe('iPad');
+      });
+
+      it('with search state - second API', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
+
+        const Connected = createWidget();
+
+        const props = {
+          ...requiredPropsWithSearchClient,
+          indexName: 'index1',
+        };
+
+        const App = ({ searchState }) => (
+          <InstantSearch {...props} searchState={searchState}>
+            <Connected />
+
+            <Index indexName="index2">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
+
+        const data = await findResultsState(App, {
+          searchState: {
+            query: 'iPhone',
+            indices: {
+              index2: {
+                query: 'iPad',
+              },
+            },
+          },
+        });
+
+        expect(data).toHaveLength(2);
+
+        const [first] = data;
+
+        expect(first.state.index).toBe('index1');
+        expect(first.state.query).toBe('iPhone');
+
+        const [, second] = data;
+
+        expect(second.state.index).toBe('index2');
+        expect(second.state.query).toBe('iPad');
       });
     });
   });
