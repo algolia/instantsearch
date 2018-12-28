@@ -19,7 +19,8 @@ Steps to reproduce the behavior:
 4. See error
 
 A live example helps a lot!   We have a simple online template for you to use for your explanations:
-  https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js
+
+https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js
 
 **Expected behavior 💭**
 A clear and concise description of what you expected to happen.
