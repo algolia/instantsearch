@@ -47,6 +47,7 @@ const plugins = [
 const createConfiguration = ({ name, minify = false } = {}) => ({
   input: 'src/index.js',
   external: ['react', 'react-dom', 'react-instantsearch-dom'],
+  inlineDynamicImports: true,
   output: {
     file: `dist/umd/ReactInstantSearch${name}${minify ? '.min' : ''}.js`,
     name: `ReactInstantSearch${name}`,
