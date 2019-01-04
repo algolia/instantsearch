@@ -1,8 +1,20 @@
-import { omit, isEmpty, find } from 'lodash';
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import { omit } from 'lodash';
+import algoliasearchHelper from 'algoliasearch-helper';
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
 import { HIGHLIGHT_TAGS } from './highlight';
+import { hasMultipleIndices } from './indexUtils';
+
+const isMultiIndexContext = widget => hasMultipleIndices(widget.context);
+const isTargetedIndexEqualIndex = (widget, indexId) =>
+  widget.context.multiIndexContext.targetedIndex === indexId;
+
+// Relying on the `indexId` is a bit brittle to detect the `Index` widget.
+// Since it's a class we could rely on `instanceof` or similar. We never
+// had an issue though. Works for now.
+const isIndexWidget = widget => Boolean(widget.props.indexId);
+const isIndexWidgetEqualIndex = (widget, indexId) =>
+  widget.props.indexId === indexId;
 
 /**
  * Creates a new instance of the InstantSearchManager which controls the widgets and
@@ -20,21 +32,17 @@ export default function createInstantSearchManager({
   resultsState,
   stalledSearchDelay,
 }) {
-  const baseSP = new SearchParameters({
-    index: indexName,
+  const helper = algoliasearchHelper(searchClient, indexName, {
     ...HIGHLIGHT_TAGS,
   });
 
+  helper
+    .on('search', handleNewSearch)
+    .on('result', handleSearchSuccess({ indexId: indexName }))
+    .on('error', handleSearchError);
+
+  let skip = false;
   let stalledSearchTimer = null;
-
-  const helper = algoliasearchHelper(searchClient, indexName, baseSP);
-  helper.on('result', handleSearchSuccess);
-  helper.on('error', handleSearchError);
-  helper.on('search', handleNewSearch);
-
-  let derivedHelpers = {};
-  let indexMapping = {}; // keep track of the original index where the parameters applied when sortBy is used.
-
   let initialSearchParameters = helper.state;
 
   const widgetsManager = createWidgetsManager(onWidgetsUpdate);
@@ -48,8 +56,6 @@ export default function createInstantSearchManager({
     isSearchStalled: true,
     searchingForFacetValues: false,
   });
-
-  let skip = false;
 
   function skipSearch() {
     skip = true;
@@ -73,132 +79,159 @@ export default function createInstantSearchManager({
   }
 
   function getSearchParameters() {
-    indexMapping = {};
     const sharedParameters = widgetsManager
       .getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(
-        widget =>
-          !widget.context.multiIndexContext &&
-          (widget.props.indexName === indexName || !widget.props.indexName)
-      )
+      .filter(widget => !isMultiIndexContext(widget) && !isIndexWidget(widget))
       .reduce(
         (res, widget) => widget.getSearchParameters(res),
         initialSearchParameters
       );
-    indexMapping[sharedParameters.index] = indexName;
 
-    const derivatedWidgets = widgetsManager
+    const mainParameters = widgetsManager
       .getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(
-        widget =>
-          (widget.context.multiIndexContext &&
-            widget.context.multiIndexContext.targetedIndex !== indexName) ||
-          (widget.props.indexName && widget.props.indexName !== indexName)
-      )
-      .reduce((indices, widget) => {
-        const targetedIndex = widget.context.multiIndexContext
-          ? widget.context.multiIndexContext.targetedIndex
-          : widget.props.indexName;
-        const index = find(indices, i => i.targetedIndex === targetedIndex);
-        if (index) {
-          index.widgets.push(widget);
-        } else {
-          indices.push({ targetedIndex, widgets: [widget] });
-        }
-        return indices;
-      }, []);
+      .filter(widget => {
+        const targetedIndexEqualMainIndex =
+          isMultiIndexContext(widget) &&
+          isTargetedIndexEqualIndex(widget, indexName);
 
-    const mainIndexParameters = widgetsManager
-      .getWidgets()
-      .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(
-        widget =>
-          (widget.context.multiIndexContext &&
-            widget.context.multiIndexContext.targetedIndex === indexName) ||
-          (widget.props.indexName && widget.props.indexName === indexName)
-      )
+        const subIndexEqualMainIndex =
+          isIndexWidget(widget) && isIndexWidgetEqualIndex(widget, indexName);
+
+        return targetedIndexEqualMainIndex || subIndexEqualMainIndex;
+      })
       .reduce(
         (res, widget) => widget.getSearchParameters(res),
         sharedParameters
       );
 
-    indexMapping[mainIndexParameters.index] = indexName;
+    const derivedIndices = widgetsManager
+      .getWidgets()
+      .filter(widget => Boolean(widget.getSearchParameters))
+      .filter(widget => {
+        const targetedIndexNotEqualMainIndex =
+          isMultiIndexContext(widget) &&
+          !isTargetedIndexEqualIndex(widget, indexName);
 
-    return { sharedParameters, mainIndexParameters, derivatedWidgets };
+        const subIndexNotEqualMainIndex =
+          isIndexWidget(widget) && !isIndexWidgetEqualIndex(widget, indexName);
+
+        return targetedIndexNotEqualMainIndex || subIndexNotEqualMainIndex;
+      })
+      .reduce((indices, widget) => {
+        const indexId = isMultiIndexContext(widget)
+          ? widget.context.multiIndexContext.targetedIndex
+          : widget.props.indexId;
+
+        const widgets = indices[indexId] || [];
+
+        return {
+          ...indices,
+          [indexId]: widgets.concat(widget),
+        };
+      }, {});
+
+    const derivedParameters = Object.keys(derivedIndices).map(indexId => ({
+      parameters: derivedIndices[indexId].reduce(
+        (res, widget) => widget.getSearchParameters(res),
+        sharedParameters
+      ),
+      indexId,
+    }));
+
+    return {
+      mainParameters,
+      derivedParameters,
+    };
   }
 
   function search() {
     if (!skip) {
-      const {
-        sharedParameters,
-        mainIndexParameters,
-        derivatedWidgets,
-      } = getSearchParameters(helper.state);
-      Object.keys(derivedHelpers).forEach(key => derivedHelpers[key].detach());
-      derivedHelpers = {};
+      const { mainParameters, derivedParameters } = getSearchParameters(
+        helper.state
+      );
 
-      helper.setState(sharedParameters);
-
-      derivatedWidgets.forEach(derivatedSearchParameters => {
-        const index = derivatedSearchParameters.targetedIndex;
-        const derivedHelper = helper.derive(() => {
-          const parameters = derivatedSearchParameters.widgets.reduce(
-            (res, widget) => widget.getSearchParameters(res),
-            sharedParameters
-          );
-          indexMapping[parameters.index] = index;
-          return parameters;
-        });
-        derivedHelper.on('result', handleSearchSuccess);
-        derivedHelper.on('error', handleSearchError);
-        derivedHelpers[index] = derivedHelper;
+      // We have to call `slice` because the method `detach` on the derived
+      // helpers mutates the value `derivedHelpers`. The `forEach` loop does
+      // not iterate on each value and we're not able to correctly clear the
+      // previous derived helpers (memory leak + useless requests).
+      helper.derivedHelpers.slice().forEach(derivedHelper => {
+        // Since we detach the derived helpers on **every** new search they
+        // won't receive intermediate results in case of a stalled search.
+        // Only the last result is dispatched by the derived helper because
+        // they are not detached yet:
+        //
+        // - a -> main helper receives results
+        // - ap -> main helper receives results
+        // - app -> main helper + derived helpers receive results
+        //
+        // The quick fix is to avoid to detatch them on search but only once they
+        // received the results. But it means that in case of a stalled search
+        // all the derived helpers not detached yet register a new search inside
+        // the helper. The number grows fast in case of a bad network and it's
+        // not deterministic.
+        derivedHelper.detach();
       });
 
-      helper.setState(mainIndexParameters);
+      derivedParameters.forEach(({ indexId, parameters }) => {
+        const derivedHelper = helper.derive(() => parameters);
+
+        derivedHelper
+          .on('result', handleSearchSuccess({ indexId }))
+          .on('error', handleSearchError);
+      });
+
+      helper.setState(mainParameters);
 
       helper.search();
     }
   }
 
-  function handleSearchSuccess(content) {
-    const state = store.getState();
-    let results = state.results ? state.results : {};
+  function handleSearchSuccess({ indexId }) {
+    return content => {
+      const state = store.getState();
+      const isDerivedHelpersEmpty = !helper.derivedHelpers.length;
 
-    /* if switching from mono index to multi index and vice versa,
-    results needs to reset to {}*/
-    results = !isEmpty(derivedHelpers) && results.getFacetByName ? {} : results;
+      let results = state.results ? state.results : {};
 
-    if (!isEmpty(derivedHelpers)) {
-      results[indexMapping[content.index]] = content;
-    } else {
-      results = content;
-    }
+      // Switching from mono index to multi index and vice versa must reset the
+      // results to an empty object, otherwise we keep reference of stalled and
+      // unused results.
+      results = !isDerivedHelpersEmpty && results.getFacetByName ? {} : results;
 
-    const currentState = store.getState();
-    let nextIsSearchStalled = currentState.isSearchStalled;
-    if (!helper.hasPendingRequests()) {
-      clearTimeout(stalledSearchTimer);
-      stalledSearchTimer = null;
-      nextIsSearchStalled = false;
-    }
+      if (!isDerivedHelpersEmpty) {
+        results[indexId] = content;
+      } else {
+        results = content;
+      }
 
-    const nextState = omit(
-      {
-        ...currentState,
-        results,
-        isSearchStalled: nextIsSearchStalled,
-        searching: false,
-        error: null,
-      },
-      'resultsFacetValues'
-    );
-    store.setState(nextState);
+      const currentState = store.getState();
+      let nextIsSearchStalled = currentState.isSearchStalled;
+      if (!helper.hasPendingRequests()) {
+        clearTimeout(stalledSearchTimer);
+        stalledSearchTimer = null;
+        nextIsSearchStalled = false;
+      }
+
+      const nextState = omit(
+        {
+          ...currentState,
+          results,
+          isSearchStalled: nextIsSearchStalled,
+          searching: false,
+          error: null,
+        },
+        'resultsFacetValues'
+      );
+
+      store.setState(nextState);
+    };
   }
 
   function handleSearchError(error) {
     const currentState = store.getState();
+
     let nextIsSearchStalled = currentState.isSearchStalled;
     if (!helper.hasPendingRequests()) {
       clearTimeout(stalledSearchTimer);
@@ -214,6 +247,7 @@ export default function createInstantSearchManager({
       },
       'resultsFacetValues'
     );
+
     store.setState(nextState);
   }
 
@@ -227,6 +261,7 @@ export default function createInstantSearchManager({
           },
           'resultsFacetValues'
         );
+
         store.setState(nextState);
       }, stalledSearchDelay);
     }
@@ -249,6 +284,7 @@ export default function createInstantSearchManager({
 
   function transitionState(nextSearchState) {
     const searchState = store.getState().widgets;
+
     return widgetsManager
       .getWidgets()
       .filter(widget => Boolean(widget.transitionState))
@@ -334,9 +370,10 @@ export default function createInstantSearchManager({
     store,
     widgetsManager,
     getWidgetsIds,
+    getSearchParameters,
+    onSearchForFacetValues,
     onExternalStateUpdate,
     transitionState,
-    onSearchForFacetValues,
     updateClient,
     updateIndex,
     clearCache,

@@ -2,7 +2,7 @@ import { orderBy } from 'lodash';
 import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import {
-  getIndex,
+  getIndexId,
   cleanUpValue,
   refineValue,
   getCurrentRefinementValue,
@@ -222,7 +222,7 @@ export default createConnector({
     );
     return {
       id,
-      index: getIndex(this.context),
+      index: getIndexId(this.context),
       items:
         currentRefinement === null
           ? []

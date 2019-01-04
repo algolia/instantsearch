@@ -1,7 +1,6 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
 
-/* eslint valid-jsdoc: 0 */
 /**
  * @description
  * `<Index>` is the component that allows you to apply widgets to a dedicated index. It's
@@ -32,18 +31,17 @@ import PropTypes from 'prop-types';
  * );
  */
 class Index extends Component {
-  constructor(props, context) {
-    super(props);
-    const {
-      ais: { widgetsManager },
-    } = context;
+  constructor(...args) {
+    super(...args);
 
     /*
      we want <Index> to be seen as a regular widget.
      It means that with only <Index> present a new query will be sent to Algolia.
      That way you don't need a virtual hits widget to use the connectAutoComplete.
     */
-    this.unregisterWidget = widgetsManager.registerWidget(this);
+    this.unregisterWidget = this.context.ais.widgetsManager.registerWidget(
+      this
+    );
   }
 
   componentWillMount() {
@@ -67,7 +65,7 @@ class Index extends Component {
   getChildContext() {
     return {
       multiIndexContext: {
-        targetedIndex: this.props.indexName,
+        targetedIndex: this.props.indexId,
       },
     };
   }
@@ -89,6 +87,7 @@ class Index extends Component {
 Index.propTypes = {
   // @TODO: These props are currently constant.
   indexName: PropTypes.string.isRequired,
+  indexId: PropTypes.string.isRequired,
   children: PropTypes.node,
   root: PropTypes.shape({
     Root: PropTypes.oneOfType([

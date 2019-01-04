@@ -9,14 +9,16 @@ import Index from '../components/Index';
  * @return {object} a Index root
  */
 const createIndex = defaultRoot => {
-  const CreateIndex = ({ indexName, root, children }) => (
-    <Index indexName={indexName} root={root}>
+  const CreateIndex = ({ indexName, indexId, root, children }) => (
+    <Index indexName={indexName} indexId={indexId || indexName} root={root}>
       {children}
     </Index>
   );
 
   CreateIndex.propTypes = {
     indexName: PropTypes.string.isRequired,
+    // @MAJOR: indexId must be required
+    indexId: PropTypes.string,
     root: PropTypes.shape({
       Root: PropTypes.oneOfType([
         PropTypes.string,

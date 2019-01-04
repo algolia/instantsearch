@@ -6,7 +6,7 @@ import {
   refineValue,
   getCurrentRefinementValue,
   getResults,
-  getIndex,
+  getIndexId,
 } from '../core/indexUtils';
 
 function stringifyItem(item) {
@@ -209,7 +209,7 @@ export default createConnector({
     const id = getId(props);
     const value = getCurrentRefinement(props, searchState, this.context);
     const items = [];
-    const index = getIndex(this.context);
+    const index = getIndexId(this.context);
     if (value !== '') {
       const { label } = find(
         props.items,

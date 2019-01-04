@@ -16,7 +16,6 @@
  */
 export function findResultsState() {}
 
-/* eslint valid-jsdoc: 0 */
 /**
  * The `createInstantSearch` let's you create a server-side compatible `<InstantSearch>` component along with a `findResultsState` function tied to this component. You'll use this component on both the server and client.
  * @name createInstantSearch
