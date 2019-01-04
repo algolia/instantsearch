@@ -10,15 +10,18 @@ import createConnector from '../core/createConnector';
 export default createConnector({
   displayName: 'AlgoliaPoweredBy',
 
-  propTypes: {},
+  getProvidedProps() {
+    const isServer = typeof window === 'undefined';
 
-  getProvidedProps(props) {
     const url =
       'https://www.algolia.com/?' +
       'utm_source=react-instantsearch&' +
       'utm_medium=website&' +
-      `utm_content=${props.canRender ? location.hostname : ''}&` +
+      `utm_content=${!isServer ? window.location.hostname : ''}&` +
       'utm_campaign=poweredby';
-    return { url };
+
+    return {
+      url,
+    };
   },
 });

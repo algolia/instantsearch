@@ -6,7 +6,7 @@ describe('connectPoweredBy', () => {
   const { getProvidedProps } = connect;
 
   it('provides the correct props to the component', () => {
-    const props = getProvidedProps({ canRender: true });
+    const props = getProvidedProps();
 
     expect(props).toEqual({
       url:
