@@ -174,8 +174,9 @@ http://community.algolia.com/instantsearch.js/migration-guide
       );
     }
 
-    if (typeof widgetParams.radius !== 'undefined') {
-      warning(`
+    warning(
+      typeof widgetParams.radius === 'undefined',
+      `
 The option \`radius\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
@@ -188,11 +189,12 @@ search.addWidget(
 You can find more information inside the migration guide:
 
 http://community.algolia.com/instantsearch.js/migration-guide
-      `);
-    }
+      `
+    );
 
-    if (typeof widgetParams.precision !== 'undefined') {
-      warning(`
+    warning(
+      typeof widgetParams.radius === 'undefined',
+      `
 The option \`precision\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
@@ -205,8 +207,8 @@ search.addWidget(
 You can find more information inside the migration guide:
 
 http://community.algolia.com/instantsearch.js/migration-guide
-      `);
-    }
+      `
+    );
 
     const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
