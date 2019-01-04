@@ -30,7 +30,7 @@
     "escape-html": "1.0.3",
     "fs-extra": "7.0.1",
     "glob": "7.1.3",
-    "happypack": "5.0.0",
+    "happypack": "5.0.1",
     "hasha": "3.0.0",
     "instantsearch.css": "7.1.0",
     "jsdoc-parse": "1.2.7",
