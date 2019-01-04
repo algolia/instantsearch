@@ -1,24 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createIndex expect to create Index with a custom root props 1`] = `
+exports[`createIndex expects to create an Index 1`] = `
 <Index
-  indexName="name"
-  root={
-    Object {
-      "Root": "span",
-      "props": Object {
-        "style": Object {
-          "flex": 1,
-        },
-      },
-    }
-  }
-/>
-`;
-
-exports[`createIndex wraps Index 1`] = `
-<Index
-  indexName="name"
+  indexId="indexName"
+  indexName="indexName"
   root={
     Object {
       "Root": "div",

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
-  getIndex,
+  getIndexId,
   refineValue,
   getCurrentRefinementValue,
   getResults,
@@ -332,7 +332,7 @@ export default createConnector({
 
     return {
       id: getId(props),
-      index: getIndex(this.context),
+      index: getIndexId(this.context),
       items,
     };
   },

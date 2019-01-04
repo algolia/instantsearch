@@ -1,7 +1,7 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { SearchParameters } from 'algoliasearch-helper';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import {
   createIndex,
   createConnector,
@@ -23,8 +23,10 @@ describe('createInstantSearchServer', () => {
     createConnector({
       displayName: 'CoolConnector',
       getProvidedProps: () => null,
-      getSearchParameters(searchParameters, _, searchState) {
+      getSearchParameters(searchParameters, props, searchState) {
         getSearchParameters();
+
+        const fallback = props.defaultRefinement || 'Apple';
 
         if (this.context && this.context.multiIndexContext) {
           const index = this.context.multiIndexContext.targetedIndex;
@@ -33,10 +35,10 @@ describe('createInstantSearchServer', () => {
               ? searchState.indices[index]
               : {};
 
-          return searchParameters.setQuery(indexSearchState.query || 'Apple');
+          return searchParameters.setQuery(indexSearchState.query || fallback);
         }
 
-        return searchParameters.setQuery(searchState.query || 'Apple');
+        return searchParameters.setQuery(searchState.query || fallback);
       },
       getMetadata: () => null,
       getId: () => 'id',
@@ -191,24 +193,58 @@ describe('createInstantSearchServer', () => {
   });
 
   describe('single index', () => {
-    it('results shoud be SearchResults from the helper', () => {
+    it('results should be instance of SearchResults', () => {
       const { InstantSearch } = createInstantSearchServer();
 
       const props = {
         ...requiredPropsWithSearchClient,
         resultsState: {
-          _originalResponse: { results: [{ query: 'query' }] },
-          state: new SearchParameters(),
+          _originalResponse: {
+            results: [
+              {
+                index: 'indexName',
+                query: 'query',
+              },
+            ],
+          },
+          state: {
+            index: 'indexName',
+            query: 'query',
+          },
         },
       };
 
       const wrapper = shallow(<InstantSearch {...props} />);
 
-      expect(wrapper.props().resultsState.getFacetByName).toBeDefined();
+      expect(wrapper.props().resultsState).toBeInstanceOf(SearchResults);
       expect(wrapper.props().resultsState.query).toEqual('query');
     });
 
     describe('find results', () => {
+      it('results should be instance of SearchResults and SearchParameters', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
+
+        const getSearchParameters = jest.fn();
+        const Connected = createWidget({
+          getSearchParameters,
+        });
+
+        const props = {
+          ...requiredPropsWithSearchClient,
+        };
+
+        const App = () => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const results = await findResultsState(App);
+
+        expect(results.content).toBeInstanceOf(SearchResults);
+        expect(results.state).toBeInstanceOf(SearchParameters);
+      });
+
       it('searchParameters should be cleaned each time', async () => {
         const { InstantSearch, findResultsState } = createInstantSearchServer();
 
@@ -299,19 +335,41 @@ describe('createInstantSearchServer', () => {
   describe('multi index', () => {
     const Index = createIndex({ Root: 'div' });
 
-    it('results shoud be SearchResults from the helper', () => {
+    it('results should be instance of SearchResults', () => {
       const { InstantSearch } = createInstantSearchServer();
 
       const props = {
         ...requiredPropsWithSearchClient,
         resultsState: [
           {
-            _originalResponse: { results: [{ query: 'query1' }] },
-            state: new SearchParameters({ index: 'index1' }),
+            _internalIndexId: 'index1',
+            _originalResponse: {
+              results: [
+                {
+                  index: 'index1',
+                  query: 'query1',
+                },
+              ],
+            },
+            state: {
+              index: 'index1',
+              query: 'query1',
+            },
           },
           {
-            _originalResponse: { results: [{ query: 'query2' }] },
-            state: new SearchParameters({ index: 'index2' }),
+            _internalIndexId: 'index2',
+            _originalResponse: {
+              results: [
+                {
+                  index: 'index2',
+                  query: 'query2',
+                },
+              ],
+            },
+            state: {
+              index: 'index2',
+              query: 'query2',
+            },
           },
         ],
       };
@@ -319,12 +377,40 @@ describe('createInstantSearchServer', () => {
       const wrapper = shallow(<InstantSearch {...props} />);
 
       expect(wrapper.props().resultsState.index1.query).toBe('query1');
-      expect(wrapper.props().resultsState.index1.getFacetByName).toBeDefined();
+      expect(wrapper.props().resultsState.index1).toBeInstanceOf(SearchResults);
       expect(wrapper.props().resultsState.index2.query).toBe('query2');
-      expect(wrapper.props().resultsState.index2.getFacetByName).toBeDefined();
+      expect(wrapper.props().resultsState.index2).toBeInstanceOf(SearchResults);
     });
 
     describe('find results', () => {
+      it('results should be instance of SearchResults and SearchParameters', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
+
+        const getSearchParameters = jest.fn();
+        const Connected = createWidget({
+          getSearchParameters,
+        });
+
+        const props = {
+          ...requiredPropsWithSearchClient,
+        };
+
+        const App = () => (
+          <InstantSearch {...props}>
+            <Index indexName="index2">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
+
+        const results = await findResultsState(App);
+
+        results.forEach(result => {
+          expect(result.content).toBeInstanceOf(SearchResults);
+          expect(result.state).toBeInstanceOf(SearchParameters);
+        });
+      });
+
       it('searchParameters should be cleaned each time', async () => {
         const { InstantSearch, findResultsState } = createInstantSearchServer();
 
@@ -374,11 +460,11 @@ describe('createInstantSearchServer', () => {
 
         const App = () => (
           <InstantSearch {...props}>
-            <Index indexName="index1">
+            <Index indexId="index1" indexName="index1">
               <Connected />
             </Index>
 
-            <Index indexName="index2">
+            <Index indexId="index2" indexName="index2">
               <Connected />
             </Index>
           </InstantSearch>
@@ -390,11 +476,13 @@ describe('createInstantSearchServer', () => {
 
         const [first] = data;
 
+        expect(first._internalIndexId).toBe('index1');
         expect(first.state.index).toBe('index1');
         expect(first.state.query).toBe('Apple');
 
         const [, second] = data;
 
+        expect(second._internalIndexId).toBe('index2');
         expect(second.state.index).toBe('index2');
         expect(second.state.query).toBe('Apple');
       });
@@ -413,7 +501,7 @@ describe('createInstantSearchServer', () => {
           <InstantSearch {...props}>
             <Connected />
 
-            <Index indexName="index2">
+            <Index indexId="index2" indexName="index2">
               <Connected />
             </Index>
           </InstantSearch>
@@ -425,13 +513,52 @@ describe('createInstantSearchServer', () => {
 
         const [first] = data;
 
+        expect(first._internalIndexId).toBe('index1');
         expect(first.state.index).toBe('index1');
         expect(first.state.query).toBe('Apple');
 
         const [, second] = data;
 
+        expect(second._internalIndexId).toBe('index2');
         expect(second.state.index).toBe('index2');
         expect(second.state.query).toBe('Apple');
+      });
+
+      it('without search state - same index', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
+
+        const Connected = createWidget();
+
+        const props = {
+          ...requiredPropsWithSearchClient,
+          indexName: 'index1',
+        };
+
+        const App = () => (
+          <InstantSearch {...props}>
+            <Connected defaultRefinement="Apple" />
+
+            <Index indexId="index1_with_refinement" indexName="index1">
+              <Connected defaultRefinement="iWatch" />
+            </Index>
+          </InstantSearch>
+        );
+
+        const data = await findResultsState(App);
+
+        expect(data).toHaveLength(2);
+
+        const [first] = data;
+
+        expect(first._internalIndexId).toBe('index1');
+        expect(first.state.index).toBe('index1');
+        expect(first.state.query).toBe('Apple');
+
+        const [, second] = data;
+
+        expect(second._internalIndexId).toBe('index1_with_refinement');
+        expect(second.state.index).toBe('index1');
+        expect(second.state.query).toBe('iWatch');
       });
 
       it('with search state - first API', async () => {
@@ -446,11 +573,11 @@ describe('createInstantSearchServer', () => {
 
         const App = ({ searchState }) => (
           <InstantSearch {...props} searchState={searchState}>
-            <Index indexName="index1">
+            <Index indexId="index1" indexName="index1">
               <Connected />
             </Index>
 
-            <Index indexName="index2">
+            <Index indexId="index2" indexName="index2">
               <Connected />
             </Index>
           </InstantSearch>
@@ -473,11 +600,13 @@ describe('createInstantSearchServer', () => {
 
         const [first] = data;
 
+        expect(first._internalIndexId).toBe('index1');
         expect(first.state.index).toBe('index1');
         expect(first.state.query).toBe('iPhone');
 
         const [, second] = data;
 
+        expect(second._internalIndexId).toBe('index2');
         expect(second.state.index).toBe('index2');
         expect(second.state.query).toBe('iPad');
       });
@@ -496,7 +625,7 @@ describe('createInstantSearchServer', () => {
           <InstantSearch {...props} searchState={searchState}>
             <Connected />
 
-            <Index indexName="index2">
+            <Index indexId="index2" indexName="index2">
               <Connected />
             </Index>
           </InstantSearch>
@@ -517,12 +646,61 @@ describe('createInstantSearchServer', () => {
 
         const [first] = data;
 
+        expect(first._internalIndexId).toBe('index1');
         expect(first.state.index).toBe('index1');
         expect(first.state.query).toBe('iPhone');
 
         const [, second] = data;
 
+        expect(second._internalIndexId).toBe('index2');
         expect(second.state.index).toBe('index2');
+        expect(second.state.query).toBe('iPad');
+      });
+
+      it('with search state - same index', async () => {
+        const { InstantSearch, findResultsState } = createInstantSearchServer();
+
+        const Connected = createWidget();
+
+        const props = {
+          ...requiredPropsWithSearchClient,
+          indexName: 'index1',
+        };
+
+        const App = ({ searchState }) => (
+          <InstantSearch {...props} searchState={searchState}>
+            <Connected />
+
+            <Index indexId="index1_with_refinement" indexName="index1">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
+
+        const data = await findResultsState(App, {
+          searchState: {
+            query: 'iPhone',
+            indices: {
+              // eslint-disable-next-line camelcase
+              index1_with_refinement: {
+                query: 'iPad',
+              },
+            },
+          },
+        });
+
+        expect(data).toHaveLength(2);
+
+        const [first] = data;
+
+        expect(first._internalIndexId).toBe('index1');
+        expect(first.state.index).toBe('index1');
+        expect(first.state.query).toBe('iPhone');
+
+        const [, second] = data;
+
+        expect(second._internalIndexId).toBe('index1_with_refinement');
+        expect(second.state.index).toBe('index1');
         expect(second.state.query).toBe('iPad');
       });
     });

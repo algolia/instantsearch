@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
-  getIndex,
+  getIndexId,
   refineValue,
   getCurrentRefinementValue,
   getResults,
@@ -226,7 +226,7 @@ export default createConnector({
     const context = this.context;
     return {
       id,
-      index: getIndex(this.context),
+      index: getIndexId(this.context),
       items:
         getCurrentRefinement(props, searchState, context).length > 0
           ? [

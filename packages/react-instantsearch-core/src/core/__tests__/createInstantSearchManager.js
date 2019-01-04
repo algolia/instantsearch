@@ -49,7 +49,7 @@ describe('createInstantSearchManager', () => {
     expect(ism.getWidgetsIds()).toEqual([]);
   });
 
-  it('initialize with results', () => {
+  it('initializes with results', () => {
     const ism = createInstantSearchManager({
       indexName: 'index',
       resultsState: { some: 'results' },
@@ -147,6 +147,237 @@ describe('createInstantSearchManager', () => {
       await runAllMicroTasks();
 
       expect(ism.getWidgetsIds()).toEqual(['a', 'b', 'c', 'd']);
+    });
+  });
+
+  describe('getSearchParameters', () => {
+    it('expects a widget top level to be shared between main and derived parameters', () => {
+      // <InstantSearch indexName="index">
+      //   <SearchBox defaultRefinement="shared" />
+      //   <Index indexId="main" indexName="main" />
+      // </InstantSearch>
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+      });
+
+      // <SearchBox defaultRefinement="shared" />
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setQuery('shared');
+        },
+        context: {},
+        props: {},
+      });
+
+      // <Index indexId="main" indexName="main" />
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setIndex('main');
+        },
+        props: {
+          indexId: 'main',
+        },
+      });
+
+      const { mainParameters, derivedParameters } = ism.getSearchParameters();
+
+      expect(mainParameters).toEqual(
+        expect.objectContaining({
+          index: 'index',
+          query: 'shared',
+        })
+      );
+
+      expect(derivedParameters).toEqual([
+        {
+          indexId: 'main',
+          parameters: expect.objectContaining({
+            index: 'main',
+            query: 'shared',
+          }),
+        },
+      ]);
+    });
+
+    it('expects a widget with the same id than the indexName to be a main parameters', () => {
+      // <InstantSearch indexName="index">
+      //   <Index indexId="index" indexName="main" />
+      // </InstantSearch>
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+      });
+
+      // <Index indexId="index" indexName="main" />
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setIndex('main');
+        },
+        context: {},
+        props: {
+          indexId: 'index',
+        },
+      });
+
+      const { mainParameters, derivedParameters } = ism.getSearchParameters();
+
+      expect(mainParameters).toEqual(
+        expect.objectContaining({
+          index: 'main',
+        })
+      );
+
+      expect(derivedParameters).toEqual([]);
+    });
+
+    it('expects a widget with a different id than the indexName to be a derived parameters', () => {
+      // <InstantSearch indexName="index">
+      //   <Index indexId="index_main" indexName="main" />
+      // </InstantSearch>
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+      });
+
+      // <Index indexId="index_main" indexName="main" />
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setIndex('main');
+        },
+        context: {},
+        props: {
+          indexId: 'index_main',
+        },
+      });
+
+      const { mainParameters, derivedParameters } = ism.getSearchParameters();
+
+      expect(mainParameters).toEqual(
+        expect.objectContaining({
+          index: 'index',
+        })
+      );
+
+      expect(derivedParameters).toEqual([
+        {
+          indexId: 'index_main',
+          parameters: expect.objectContaining({
+            index: 'main',
+          }),
+        },
+      ]);
+    });
+
+    it('expects a widget within a mutli index context with the same id than the indexName to be a main parameters', () => {
+      // <InstantSearch indexName="index">
+      //   <Index indexId="index" indexName="index" />
+      //     <SearchBox defaultRefinement="main" />
+      //   </Index>
+      // </InstantSearch>
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+      });
+
+      // <Index indexId="index" indexName="index" />
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setIndex('index');
+        },
+        context: {},
+        props: {
+          indexId: 'index',
+        },
+      });
+
+      // <Index indexId="index" indexName="index" />
+      //   <SearchBox defaultRefinement="main" />
+      // </Index>
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setQuery('main');
+        },
+        context: {
+          multiIndexContext: {
+            targetedIndex: 'index',
+          },
+        },
+        props: {},
+      });
+
+      const { mainParameters, derivedParameters } = ism.getSearchParameters();
+
+      expect(mainParameters).toEqual(
+        expect.objectContaining({
+          index: 'index',
+          query: 'main',
+        })
+      );
+
+      expect(derivedParameters).toEqual([]);
+    });
+
+    it('expects a widget within a mutli index context with a different id than the indexName to be a derived parameters', () => {
+      // <InstantSearch indexName="index">
+      //   <Index indexId="index_with_refinement" indexName="index" />
+      //     <SearchBox defaultRefinement="dervied" />
+      //   </Index>
+      // </InstantSearch>
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+      });
+
+      // <Index indexId="index_with_refinement" indexName="index" />
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setIndex('index');
+        },
+        context: {},
+        props: {
+          indexId: 'index_with_refinement',
+        },
+      });
+
+      // <Index indexId="index_with_refinement" indexName="index" />
+      //   <SearchBox defaultRefinement="derived" />
+      // </Index>
+      ism.widgetsManager.registerWidget({
+        getSearchParameters(state) {
+          return state.setQuery('derived');
+        },
+        context: {
+          multiIndexContext: {
+            targetedIndex: 'index_with_refinement',
+          },
+        },
+        props: {},
+      });
+
+      const { mainParameters, derivedParameters } = ism.getSearchParameters();
+
+      expect(mainParameters).toEqual(
+        expect.objectContaining({
+          index: 'index',
+          query: '',
+        })
+      );
+
+      expect(derivedParameters).toEqual([
+        {
+          indexId: 'index_with_refinement',
+          parameters: expect.objectContaining({
+            index: 'index',
+            query: 'derived',
+          }),
+        },
+      ]);
     });
   });
 

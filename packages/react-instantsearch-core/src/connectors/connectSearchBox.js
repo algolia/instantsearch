@@ -4,7 +4,7 @@ import {
   cleanUpValue,
   refineValue,
   getCurrentRefinementValue,
-  getIndex,
+  getIndexId,
 } from '../core/indexUtils';
 
 function getId() {
@@ -86,7 +86,7 @@ export default createConnector({
     );
     return {
       id,
-      index: getIndex(this.context),
+      index: getIndexId(this.context),
       items:
         currentRefinement === null
           ? []

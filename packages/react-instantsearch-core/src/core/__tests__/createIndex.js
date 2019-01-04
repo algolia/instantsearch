@@ -9,26 +9,76 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('createIndex', () => {
   const CustomIndex = createIndex({ Root: 'div' });
 
-  it('wraps Index', () => {
-    const wrapper = shallow(<CustomIndex indexName="name" />);
+  const requiredProps = {
+    indexName: 'indexName',
+  };
+
+  it('expects to create an Index', () => {
+    const props = {
+      ...requiredProps,
+    };
+
+    const wrapper = shallow(<CustomIndex {...props} />);
+
     expect(wrapper.is(Index)).toBe(true);
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('expect to create Index with a custom root props', () => {
-    const root = {
+  it('expects to create an Index with the default root', () => {
+    const props = {
+      ...requiredProps,
+    };
+
+    const wrapper = shallow(<CustomIndex {...props} />);
+
+    expect(wrapper.props().root).toEqual({
+      Root: 'div',
+    });
+  });
+
+  it('expects to create an Index with a custom root props', () => {
+    const props = {
+      ...requiredProps,
+      root: {
+        Root: 'span',
+        props: {
+          style: {
+            flex: 1,
+          },
+        },
+      },
+    };
+
+    const wrapper = shallow(<CustomIndex {...props} />);
+
+    expect(wrapper.props().root).toEqual({
       Root: 'span',
       props: {
         style: {
           flex: 1,
         },
       },
+    });
+  });
+
+  it('expects to create an Index with an indexId when provided', () => {
+    const props = {
+      ...requiredProps,
+      indexId: 'indexId',
     };
 
-    const wrapper = shallow(<CustomIndex indexName="name" root={root} />);
+    const wrapper = shallow(<CustomIndex {...props} />);
 
-    expect(wrapper.is(Index)).toBe(true);
-    expect(wrapper.props().root).toEqual(root);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.props().indexId).toBe('indexId');
+  });
+
+  it("expects to create an Index with an indexId that fallback to indexName when it's not provided", () => {
+    const props = {
+      ...requiredProps,
+    };
+
+    const wrapper = shallow(<CustomIndex {...props} />);
+
+    expect(wrapper.props().indexId).toBe('indexName');
   });
 });

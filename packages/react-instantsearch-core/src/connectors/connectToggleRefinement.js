@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
-  getIndex,
+  getIndexId,
   getResults,
   refineValue,
   getCurrentRefinementValue,
@@ -149,7 +149,7 @@ export default createConnector({
     const id = getId(props);
     const checked = getCurrentRefinement(props, searchState, this.context);
     const items = [];
-    const index = getIndex(this.context);
+    const index = getIndexId(this.context);
 
     if (checked) {
       items.push({

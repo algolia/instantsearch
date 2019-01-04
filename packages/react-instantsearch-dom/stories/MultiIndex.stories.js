@@ -23,30 +23,49 @@ stories
     <InstantSearch
       appId="latency"
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="categories"
+      indexName="instant_search"
     >
       <SearchBox />
-      <div className="multi-index_content">
-        <div className="multi-index_categories-or-brands">
-          <Index indexName="categories">
-            <div>Categories: </div>
-            <Configure hitsPerPage={3} />
-            <CustomCategoriesOrBrands />
-          </Index>
-          <Index indexName="brands">
-            <div>Brand: </div>
-            <Configure hitsPerPage={3} />
-            <CustomCategoriesOrBrands />
-          </Index>
-        </div>
-        <div className="multi-index_products">
-          <Index indexName="products">
-            <div>Products: </div>
-            <Configure hitsPerPage={5} />
-            <CustomProducts />
-          </Index>
-        </div>
-      </div>
+
+      <Index indexName="bestbuy">
+        <h3>
+          index: <code>bestbuy</code>
+        </h3>
+        <Configure hitsPerPage={3} />
+        <CustomCategoriesOrBrands />
+      </Index>
+
+      <Index indexName="instant_search">
+        <h3>
+          index: <code>instant_search</code>
+        </h3>
+        <Configure hitsPerPage={3} />
+        <CustomCategoriesOrBrands />
+      </Index>
+
+      <Index indexId="instant_search_apple" indexName="instant_search">
+        <h3>
+          index: <code>instant_search</code> with <code>brand:Apple</code>
+        </h3>
+        <Configure hitsPerPage={3} filters="brand:Apple" />
+        <CustomCategoriesOrBrands />
+      </Index>
+
+      <Index indexId="instant_search_samsung" indexName="instant_search">
+        <h3>
+          index: <code>instant_search</code> with <code>brand:Samsung</code>
+        </h3>
+        <Configure hitsPerPage={3} filters="brand:Samsung" />
+        <CustomCategoriesOrBrands />
+      </Index>
+
+      <Index indexId="instant_search_microsoft" indexName="instant_search">
+        <h3>
+          index: <code>instant_search</code> with <code>brand:Microsoft</code>
+        </h3>
+        <Configure hitsPerPage={3} filters="brand:Microsoft" />
+        <CustomCategoriesOrBrands />
+      </Index>
     </InstantSearch>
   ))
   .add('AutoComplete', () => (

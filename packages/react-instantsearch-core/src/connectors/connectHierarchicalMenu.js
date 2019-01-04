@@ -3,7 +3,7 @@ import { SearchParameters } from 'algoliasearch-helper';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
-  getIndex,
+  getIndexId,
   refineValue,
   getCurrentRefinementValue,
   getResults,
@@ -270,7 +270,7 @@ export default createConnector({
 
     return {
       id,
-      index: getIndex(this.context),
+      index: getIndexId(this.context),
       items: !currentRefinement
         ? []
         : [

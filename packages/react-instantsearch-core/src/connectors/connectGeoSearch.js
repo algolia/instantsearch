@@ -3,7 +3,7 @@ import createConnector from '../core/createConnector';
 import {
   getResults,
   getCurrentRefinementValue,
-  getIndex,
+  getIndexId,
   refineValue,
   cleanUpValue,
 } from '../core/indexUtils';
@@ -205,7 +205,7 @@ export default createConnector({
   getMetadata(props, searchState) {
     const items = [];
     const id = getBoundingBoxId();
-    const index = getIndex(this.context);
+    const index = getIndexId(this.context);
     const nextRefinement = {};
     const currentRefinement = getCurrentRefinement(
       props,
