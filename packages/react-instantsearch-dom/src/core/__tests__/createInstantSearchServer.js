@@ -265,19 +265,13 @@ describe('createInstantSearchServer', () => {
 
         await findResultsState(App);
 
-        // It's called two times because of an issue we have inside
-        // `createConnector`. We register the widget inside the constructor it
-        // means that it's executed on the server. But on the server we already
-        // have the hook `onSearchParamters` that collect `getSearchParameters`
-        // on all the widgets. At the end both are executed it should be fixed
-        // once we move the registration inside `componentDidMount`.
-        expect(getSearchParameters).toHaveBeenCalledTimes(2);
+        expect(getSearchParameters).toHaveBeenCalledTimes(1);
 
         getSearchParameters.mockClear();
 
         await findResultsState(App);
 
-        expect(getSearchParameters).toHaveBeenCalledTimes(2);
+        expect(getSearchParameters).toHaveBeenCalledTimes(1);
       });
 
       it('without search state', async () => {
@@ -433,19 +427,13 @@ describe('createInstantSearchServer', () => {
 
         await findResultsState(App);
 
-        // It's called two times because of an issue we have inside
-        // `createConnector`. We register the widget inside the constructor it
-        // means that it's executed on the server. But on the server we already
-        // have the hook `onSearchParamters` that collect `getSearchParameters`
-        // on all the widgets. At the end both are executed it should be fixed
-        // once we move the registration inside `componentDidMount`.
-        expect(getSearchParameters).toHaveBeenCalledTimes(2);
+        expect(getSearchParameters).toHaveBeenCalledTimes(1);
 
         getSearchParameters.mockClear();
 
         await findResultsState(App);
 
-        expect(getSearchParameters).toHaveBeenCalledTimes(2);
+        expect(getSearchParameters).toHaveBeenCalledTimes(1);
       });
 
       it('without search state - first API', async () => {
