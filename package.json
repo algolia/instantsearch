@@ -176,6 +176,9 @@
     {
       "path": "./dist/instantsearch.production.min.js",
       "maxSize": "90 kB"
+    },
+    {
+      "path": "./dist/instantsearch.development.js"
     }
   ]
 }
