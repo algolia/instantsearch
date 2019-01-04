@@ -165,10 +165,8 @@ Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundLatLng: '${widgetParams &&
-      widgetParams.position &&
-      widgetParams.position.lat}, ${widgetParams &&
-        widgetParams.position &&
+    aroundLatLng: '${widgetParams.position &&
+      widgetParams.position.lat}, ${widgetParams.position &&
         widgetParams.position.lng}',
   })
 );
@@ -186,7 +184,7 @@ Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundRadius: ${widgetParams && widgetParams.radius},
+    aroundRadius: ${widgetParams.radius},
   })
 );
 
@@ -204,7 +202,7 @@ Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundPrecision: ${widgetParams && widgetParams.precision},
+    aroundPrecision: ${widgetParams.precision},
   })
 );
 
