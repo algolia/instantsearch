@@ -9422,10 +9422,10 @@ happo@5.0.0:
     happo-core "^5.0.0"
     happo-viewer "^5.0.0"
 
-happypack@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/happypack/-/happypack-5.0.0.tgz#59606b6161acfbd69e99072e5c63f5d165e48b0e"
-  integrity sha1-WWBrYWGs+9aemQcuXGP10WXkiw4=
+happypack@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/happypack/-/happypack-5.0.1.tgz#850839426d6205a520bf913e962349fbe523a07c"
+  integrity sha512-AzXVxLzX0mtv0T40Kic72rfcGK4Y2b/cDdtcyw+e+V/13ozl7x0+EZ4hvrL1rJ8MoefR9+FfUJQsK2irH0GWOw==
   dependencies:
     async "1.5.0"
     json-stringify-safe "5.0.1"
