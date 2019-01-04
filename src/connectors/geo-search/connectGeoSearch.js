@@ -155,10 +155,9 @@ http://community.algolia.com/instantsearch.js/migration-guide
         `
     );
 
-    if (typeof widgetParams.position !== 'undefined') {
-      warning(
-        false,
-        `
+    warning(
+      typeof widgetParams.radius === 'undefined',
+      `
 The option \`position\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
@@ -171,8 +170,7 @@ search.addWidget(
 You can find more information inside the migration guide:
 http://community.algolia.com/instantsearch.js/migration-guide
       `
-      );
-    }
+    );
 
     warning(
       typeof widgetParams.radius === 'undefined',
