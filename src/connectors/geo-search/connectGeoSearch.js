@@ -146,7 +146,9 @@ Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundLatLngViaIP: ${widgetParams.enableGeolocationWithIP || 'true'},
+    aroundLatLngViaIP: ${(widgetParams &&
+      widgetParams.enableGeolocationWithIP) ||
+      'true'},
   })
 );
 
@@ -156,14 +158,18 @@ http://community.algolia.com/instantsearch.js/migration-guide
     );
 
     warning(
-      typeof widgetParams.radius === 'undefined',
+      typeof widgetParams.position === 'undefined',
       `
 The option \`position\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundLatLng: '${widgetParams.position.lat}, ${widgetParams.position.lng}',
+    aroundLatLng: '${widgetParams &&
+      widgetParams.position &&
+      widgetParams.position.lat}, ${widgetParams &&
+        widgetParams.position &&
+        widgetParams.position.lng}',
   })
 );
 
@@ -180,7 +186,7 @@ Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundRadius: ${widgetParams.radius},
+    aroundRadius: ${widgetParams && widgetParams.radius},
   })
 );
 
@@ -191,14 +197,14 @@ http://community.algolia.com/instantsearch.js/migration-guide
     );
 
     warning(
-      typeof widgetParams.radius === 'undefined',
+      typeof widgetParams.precision === 'undefined',
       `
 The option \`precision\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundPrecision: ${widgetParams.precision},
+    aroundPrecision: ${widgetParams && widgetParams.precision},
   })
 );
 
