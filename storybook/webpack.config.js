@@ -112,6 +112,7 @@ module.exports = {
 
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) },
+      __DEV__: JSON.stringify(__DEV__),
     }),
 
     // Generate an `index.html` with all the scripts and styles included
