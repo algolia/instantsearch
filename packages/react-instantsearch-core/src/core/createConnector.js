@@ -62,12 +62,12 @@ export default function createConnector(connectorDesc) {
       mounted = false;
       unmounting = false;
 
-      constructor(props, context) {
-        super(props, context);
+      constructor(...args) {
+        super(...args);
 
         this.state = {
           props: this.getProvidedProps({
-            ...props,
+            ...this.props,
             // @MAJOR: We cannot drop this beacuse it's a breaking change. The
             // prop is provided to `createConnector.getProvidedProps`. All the
             // custom connectors are impacted by this change. It should be fine
@@ -108,39 +108,14 @@ export default function createConnector(connectorDesc) {
         }
       }
 
-      getMetadata(nextWidgetsState) {
-        if (hasMetadata) {
-          return connectorDesc.getMetadata.call(
-            this,
-            this.props,
-            nextWidgetsState
+      componentWillMount() {
+        if (connectorDesc.getSearchParameters) {
+          this.context.ais.onSearchParameters(
+            connectorDesc.getSearchParameters.bind(this),
+            this.context,
+            this.props
           );
         }
-        return {};
-      }
-
-      getSearchParameters(searchParameters) {
-        if (hasSearchParameters) {
-          return connectorDesc.getSearchParameters.call(
-            this,
-            searchParameters,
-            this.props,
-            this.context.ais.store.getState().widgets
-          );
-        }
-        return null;
-      }
-
-      transitionState(prevWidgetsState, nextWidgetsState) {
-        if (hasTransitionState) {
-          return connectorDesc.transitionState.call(
-            this,
-            this.props,
-            prevWidgetsState,
-            nextWidgetsState
-          );
-        }
-        return nextWidgetsState;
       }
 
       componentDidMount() {
@@ -165,16 +140,6 @@ export default function createConnector(connectorDesc) {
         }
       }
 
-      componentWillMount() {
-        if (connectorDesc.getSearchParameters) {
-          this.context.ais.onSearchParameters(
-            connectorDesc.getSearchParameters.bind(this),
-            this.context,
-            this.props
-          );
-        }
-      }
-
       componentWillReceiveProps(nextProps) {
         if (!isEqual(this.props, nextProps)) {
           this.setState({
@@ -186,9 +151,8 @@ export default function createConnector(connectorDesc) {
           });
 
           if (isWidget) {
-            // Since props might have changed, we need to re-run getSearchParameters
-            // and getMetadata with the new props.
             this.context.ais.widgetsManager.update();
+
             if (connectorDesc.transitionState) {
               this.context.ais.onSearchStateChange(
                 connectorDesc.transitionState.call(
@@ -199,33 +163,6 @@ export default function createConnector(connectorDesc) {
                 )
               );
             }
-          }
-        }
-      }
-
-      componentWillUnmount() {
-        this.unmounting = true;
-
-        if (this.unsubscribe) {
-          this.unsubscribe();
-        }
-
-        if (this.unregisterWidget) {
-          this.unregisterWidget(); // will schedule an update
-
-          if (hasCleanUp) {
-            const newState = connectorDesc.cleanUp.call(
-              this,
-              this.props,
-              this.context.ais.store.getState().widgets
-            );
-
-            this.context.ais.store.setState({
-              ...this.context.ais.store.getState(),
-              widgets: newState,
-            });
-
-            this.context.ais.onSearchStateChange(removeEmptyKey(newState));
           }
         }
       }
@@ -242,60 +179,119 @@ export default function createConnector(connectorDesc) {
         }
 
         const propsEqual = shallowEqual(this.props, nextProps);
+
         if (this.state.props === null || nextState.props === null) {
           if (this.state.props === nextState.props) {
             return !propsEqual;
           }
           return true;
         }
+
         return !propsEqual || !shallowEqual(this.state.props, nextState.props);
       }
 
-      getProvidedProps = props => {
+      componentWillUnmount() {
+        this.unmounting = true;
+
+        if (this.unsubscribe) {
+          this.unsubscribe();
+        }
+
+        if (this.unregisterWidget) {
+          this.unregisterWidget();
+
+          if (hasCleanUp) {
+            const nextState = connectorDesc.cleanUp.call(
+              this,
+              this.props,
+              this.context.ais.store.getState().widgets
+            );
+
+            this.context.ais.store.setState({
+              ...this.context.ais.store.getState(),
+              widgets: nextState,
+            });
+
+            this.context.ais.onSearchStateChange(removeEmptyKey(nextState));
+          }
+        }
+      }
+
+      getProvidedProps(props) {
         const {
-          ais: { store },
-        } = this.context;
-        const {
-          results,
-          searching,
-          error,
           widgets,
-          metadata,
+          results,
           resultsFacetValues,
+          searching,
           searchingForFacetValues,
           isSearchStalled,
-        } = store.getState();
+          metadata,
+          error,
+        } = this.context.ais.store.getState();
+
         const searchResults = {
           results,
           searching,
-          error,
           searchingForFacetValues,
           isSearchStalled,
+          error,
         };
+
         return connectorDesc.getProvidedProps.call(
           this,
           props,
           widgets,
           searchResults,
           metadata,
+          // @MAJOR: move this attribute on the `searchResults` it doesn't
+          // makes sense to have it into a separate argument. The search
+          // flags are on the object why not the resutls?
           resultsFacetValues
         );
-      };
+      }
+
+      getSearchParameters(searchParameters) {
+        if (hasSearchParameters) {
+          return connectorDesc.getSearchParameters.call(
+            this,
+            searchParameters,
+            this.props,
+            this.context.ais.store.getState().widgets
+          );
+        }
+
+        return null;
+      }
+
+      getMetadata(nextWidgetsState) {
+        if (hasMetadata) {
+          return connectorDesc.getMetadata.call(
+            this,
+            this.props,
+            nextWidgetsState
+          );
+        }
+
+        return {};
+      }
+
+      transitionState(prevWidgetsState, nextWidgetsState) {
+        if (hasTransitionState) {
+          return connectorDesc.transitionState.call(
+            this,
+            this.props,
+            prevWidgetsState,
+            nextWidgetsState
+          );
+        }
+
+        return nextWidgetsState;
+      }
 
       refine = (...args) => {
         this.context.ais.onInternalStateUpdate(
           connectorDesc.refine.call(
             this,
-            this.props,
-            this.context.ais.store.getState().widgets,
-            ...args
-          )
-        );
-      };
-
-      searchForFacetValues = (...args) => {
-        this.context.ais.onSearchForFacetValues(
-          connectorDesc.searchForFacetValues(
             this.props,
             this.context.ais.store.getState().widgets,
             ...args
@@ -313,7 +309,15 @@ export default function createConnector(connectorDesc) {
           )
         );
 
-      cleanUp = (...args) => connectorDesc.cleanUp.call(this, ...args);
+      searchForFacetValues = (...args) => {
+        this.context.ais.onSearchForFacetValues(
+          connectorDesc.searchForFacetValues(
+            this.props,
+            this.context.ais.store.getState().widgets,
+            ...args
+          )
+        );
+      };
 
       render() {
         if (this.state.props === null) {
