@@ -23,17 +23,7 @@ const plugins = [
     browser: true,
     preferBuiltins: false,
   }),
-  commonjs({
-    namedExports: {
-      'algoliasearch-helper': [
-        'version',
-        'AlgoliaSearchHelper',
-        'SearchParameters',
-        'SearchResults',
-        'url',
-      ],
-    },
-  }),
+  commonjs(),
   globals(),
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),

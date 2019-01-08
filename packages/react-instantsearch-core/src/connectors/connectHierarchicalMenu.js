@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
@@ -38,7 +38,7 @@ function getValue(path, props, searchState, context) {
   if (currentRefinement === null) {
     nextRefinement = path;
   } else {
-    const tmpSearchParameters = new SearchParameters({
+    const tmpSearchParameters = new algoliasearchHelper.SearchParameters({
       hierarchicalFacets: [
         {
           name: id,
