@@ -2,10 +2,7 @@ import { isEmpty, zipWith } from 'lodash';
 import React, { Component } from 'react';
 import { renderToString } from 'react-dom/server';
 import PropTypes from 'prop-types';
-import algoliasearchHelper, {
-  SearchResults,
-  SearchParameters,
-} from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createInstantSearch,
   version,
@@ -29,7 +26,7 @@ const getSearchParameters = (indexName, searchParameters) => {
           searchParameter.props,
           searchParameter.searchState
         ),
-      new SearchParameters({
+      new algoliasearchHelper.SearchParameters({
         ...HIGHLIGHT_TAGS,
         index: indexName,
       })
@@ -191,8 +188,8 @@ const createInstantSearchServer = algoliasearch => {
         return resultsState.reduce(
           (acc, result) => ({
             ...acc,
-            [result._internalIndexId]: new SearchResults(
-              new SearchParameters(result.state),
+            [result._internalIndexId]: new algoliasearchHelper.SearchResults(
+              new algoliasearchHelper.SearchParameters(result.state),
               result._originalResponse.results
             ),
           }),
@@ -200,8 +197,8 @@ const createInstantSearchServer = algoliasearch => {
         );
       }
 
-      return new SearchResults(
-        new SearchParameters(resultsState.state),
+      return new algoliasearchHelper.SearchResults(
+        new algoliasearchHelper.SearchParameters(resultsState.state),
         resultsState._originalResponse.results
       );
     }
