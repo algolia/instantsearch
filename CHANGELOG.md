@@ -1,3 +1,12 @@
+# [5.4.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v5.3.2...v5.4.0-beta.0) (2019-01-08)
+
+
+### Features
+
+* **Index:** introduce `indexId` prop ([#1833](https://github.com/algolia/react-instantsearch/issues/1833)) ([ec9e0fb](https://github.com/algolia/react-instantsearch/commit/ec9e0fb))
+
+
+
 <a name="5.3.2"></a>
 ## [5.3.2](https://github.com/algolia/react-instantsearch/compare/v5.3.1...v5.3.2) (2018-10-30)
 
