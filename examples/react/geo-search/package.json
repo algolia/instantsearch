@@ -16,8 +16,8 @@
   "dependencies": {
     "instantsearch.css": "7.1.0",
     "qs": "6.5.1",
-    "react": "16.2.0",
-    "react-dom": "16.2.0",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
     "react-instantsearch": "5.4.0-beta.0",
     "react-instantsearch-dom": "5.4.0-beta.0",
     "react-instantsearch-dom-maps": "5.4.0-beta.0"
