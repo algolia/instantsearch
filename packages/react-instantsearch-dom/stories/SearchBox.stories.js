@@ -1,139 +1,85 @@
 import React, { Component } from 'react';
-import { setAddon, storiesOf } from '@storybook/react';
+import { storiesOf } from '@storybook/react';
 import { object, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
-import JSXAddon from 'storybook-addon-jsx';
 import { Panel, SearchBox } from 'react-instantsearch-dom';
-import { displayName, filterProps, WrapWithHits } from './util';
-
-setAddon(JSXAddon);
+import { WrapWithHits } from './util';
 
 const stories = storiesOf('SearchBox', module);
 
 stories
-  .addWithJSX(
-    'default',
-    () => (
-      <WrapWithHits
-        searchBox={false}
-        hasPlayground={true}
-        linkedStoryGroup="SearchBox"
-      >
-        <SearchBox
-          showLoadingIndicator={boolean('showLoadingIndicator', true)}
-        />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with a default query',
-    () => (
-      <WrapWithHits
-        searchBox={false}
-        hasPlayground={true}
-        linkedStoryGroup="SearchBox"
-      >
-        <SearchBox defaultRefinement="battery" />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with submit and reset components',
-    () => (
-      <WrapWithHits
-        searchBox={false}
-        hasPlayground={true}
-        linkedStoryGroup="SearchBox"
-      >
-        <SearchBox
-          submit={<span>🔍</span>}
-          reset={
-            <svg viewBox="200 198 108 122">
-              <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
-            </svg>
-          }
-        />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'Display feedback when search is stalled (custom component)',
-    () => (
-      <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
-        <SearchBox
-          showLoadingIndicator={true}
-          loadingIndicator={<span>✨</span>}
-        />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'without search as you type',
-    () => (
-      <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
-        <SearchBox searchAsYouType={false} />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with Panel',
-    () => (
-      <WrapWithHits
-        searchBox={false}
-        hasPlayground={true}
-        linkedStoryGroup="SearchBox"
-      >
-        <Panel header="SearchBox" footer="Footer">
-          <SearchBox />
-        </Panel>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'playground',
-    () => (
-      <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
-        <SearchBox
-          focusShortcuts={['s']}
-          searchAsYouType={true}
-          autoFocus={true}
-          translations={object('translations', {
-            submitTitle: 'Submit your search query.',
-            resetTitle: 'Clear your search query.',
-            placeholder: 'Search your website.',
-          })}
-        />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  );
+  .add('default', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="SearchBox"
+    >
+      <SearchBox showLoadingIndicator={boolean('showLoadingIndicator', true)} />
+    </WrapWithHits>
+  ))
+  .add('with a default query', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="SearchBox"
+    >
+      <SearchBox defaultRefinement="battery" />
+    </WrapWithHits>
+  ))
+  .add('with submit and reset components', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="SearchBox"
+    >
+      <SearchBox
+        submit={<span>🔍</span>}
+        reset={
+          <svg viewBox="200 198 108 122">
+            <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
+          </svg>
+        }
+      />
+    </WrapWithHits>
+  ))
+  .add('Display feedback when search is stalled (custom component)', () => (
+    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
+      <SearchBox
+        showLoadingIndicator={true}
+        loadingIndicator={<span>✨</span>}
+      />
+    </WrapWithHits>
+  ))
+  .add('without search as you type', () => (
+    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
+      <SearchBox searchAsYouType={false} />
+    </WrapWithHits>
+  ))
+  .add('with Panel', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="SearchBox"
+    >
+      <Panel header="SearchBox" footer="Footer">
+        <SearchBox />
+      </Panel>
+    </WrapWithHits>
+  ))
+  .add('playground', () => (
+    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
+      <SearchBox
+        focusShortcuts={['s']}
+        searchAsYouType={true}
+        autoFocus={true}
+        translations={object('translations', {
+          submitTitle: 'Submit your search query.',
+          resetTitle: 'Clear your search query.',
+          placeholder: 'Search your website.',
+        })}
+      />
+    </WrapWithHits>
+  ));
 
 // with event listeners
 // --------------------

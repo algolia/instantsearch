@@ -1,46 +1,29 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { setAddon, storiesOf } from '@storybook/react';
+import PropTypes from 'prop-types';
+import { storiesOf } from '@storybook/react';
 import { Hits, Highlight, Panel, Snippet } from 'react-instantsearch-dom';
-import { displayName, filterProps, WrapWithHits } from './util';
-import JSXAddon from 'storybook-addon-jsx';
-
-setAddon(JSXAddon);
+import { WrapWithHits } from './util';
 
 const stories = storiesOf('Hits', module);
 
 stories
-  .addWithJSX(
-    'default',
-    () => (
-      <WrapWithHits linkedStoryGroup="Hits">
-        <Hits />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
+  .add('default', () => (
+    <WrapWithHits linkedStoryGroup="Hits">
+      <Hits />
+    </WrapWithHits>
+  ))
   .add('with custom rendering', () => (
     <WrapWithHits linkedStoryGroup="Hits">
       <Hits hitComponent={Product} />
     </WrapWithHits>
   ))
-  .addWithJSX(
-    'with Panel',
-    () => (
-      <WrapWithHits linkedStoryGroup="Hits">
-        <Panel header="Hits" footer="Footer">
-          <Hits />
-        </Panel>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  );
+  .add('with Panel', () => (
+    <WrapWithHits linkedStoryGroup="Hits">
+      <Panel header="Hits" footer="Footer">
+        <Hits />
+      </Panel>
+    </WrapWithHits>
+  ));
 
 function Product({ hit }) {
   return (

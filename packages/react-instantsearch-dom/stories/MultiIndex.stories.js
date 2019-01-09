@@ -14,7 +14,6 @@ import {
   connectAutoComplete,
   connectStateResults,
 } from 'react-instantsearch-dom';
-import { displayName, filterProps } from './util';
 
 const stories = storiesOf('<Index>', module);
 
@@ -185,37 +184,30 @@ stories
       </Index>
     </InstantSearch>
   ))
-  .addWithJSX(
-    'with custom root',
-    () => (
-      <InstantSearch
-        appId="latency"
-        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="instant_search"
-      >
-        <Configure hitsPerPage={5} />
+  .add('with custom root', () => (
+    <InstantSearch
+      appId="latency"
+      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+      indexName="instant_search"
+    >
+      <Configure hitsPerPage={5} />
 
-        <SearchBox />
-        <Index
-          indexName="products"
-          root={{
-            Root: 'div',
-            props: {
-              style: {
-                border: '1px solid red',
-              },
+      <SearchBox />
+      <Index
+        indexName="products"
+        root={{
+          Root: 'div',
+          props: {
+            style: {
+              border: '1px solid red',
             },
-          }}
-        >
-          <CustomProducts />
-        </Index>
-      </InstantSearch>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  );
+          },
+        }}
+      >
+        <CustomProducts />
+      </Index>
+    </InstantSearch>
+  ));
 
 const AutoComplete = connectAutoComplete(
   ({ hits, currentRefinement, refine }) => (

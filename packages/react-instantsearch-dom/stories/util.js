@@ -12,8 +12,6 @@ import {
 } from 'react-instantsearch-dom';
 import 'instantsearch.css/themes/algolia.css';
 
-export const filterProps = ['linkedStoryGroup', 'hasPlayground'];
-
 export const CustomHits = connectHits(({ hits }) => (
   <div className="hits">
     {hits.map(hit => (
@@ -157,57 +155,4 @@ WrapWithHits.defaultProps = {
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
-};
-
-// retrieves the displayName of the React Component
-const getReactElementDisplayName = element =>
-  element.type.displayName ||
-  element.type.name ||
-  (typeof element.type === 'function' // function without a name, provide one
-    ? 'No Display Name'
-    : element.type);
-
-// displays the right name for the JSX addon in Storybook
-export const displayName = element => {
-  const reactElementDisplayName = getReactElementDisplayName(element);
-  const isWrap = reactElementDisplayName === 'Wrap';
-  const isWrapWithHits = reactElementDisplayName === 'WrapWithHits';
-
-  // display 'InstantSearch' instead of 'WrapWithHits'
-  if (isWrap || isWrapWithHits) {
-    return 'InstantSearch';
-  }
-
-  // wrapped component: AlgoliaWidgetName(Translatable..)" => "WidgetName"
-  if (
-    React.Component.isPrototypeOf(element.type) &&
-    reactElementDisplayName.startsWith('Algolia')
-  ) {
-    const innerComponentRegex = /\(([^()]+)\)/;
-    const match = innerComponentRegex.exec(element.type.displayName);
-    const innerComponentName = match[1];
-    const rawName = element.type.displayName;
-    const widgetName = rawName.split('(')[0].replace('Algolia', '');
-
-    if (match) {
-      // when a VirtualWidget is used, Algolia returns 'UnknownComponent' as the displayName
-      if (innerComponentName === 'UnknownComponent') {
-        return widgetName;
-      }
-
-      // when a Configure widget is used, Algolia returns '_default' as the displayName
-      if (innerComponentName === '_default') {
-        return widgetName;
-      }
-
-      // when a RangeInput widget is used, Algolia returns 'RawRangeInput' as the displayName
-      if (innerComponentName === 'RawRangeInput') {
-        return 'RangeInput';
-      }
-
-      return innerComponentName;
-    }
-  }
-
-  return reactElementDisplayName;
 };
