@@ -58,19 +58,8 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:8.12.0-browsers@sha256:dc17d45c731dd31c3d727eb421cecff018e92c6c1967b19ad69aaec764fc3fae
-    environment:
-      FIREFOX_VERSION: '56.0'
     steps:
       - checkout
-      - run:
-          name: Install specific FF version
-          command: |
-            wget -O "/tmp/firefox-$FIREFOX_VERSION.tar.bz2" "https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"
-            tar -jxf "/tmp/firefox-$FIREFOX_VERSION.tar.bz2" -C "/tmp/"
-            sudo mv "/tmp/firefox" "/opt/firefox-$FIREFOX_VERSION"
-            sudo ln -sf "/opt/firefox-$FIREFOX_VERSION/firefox" "/usr/bin/firefox"
-            hash -r
-            firefox --version
       - run: *install_yarn_version
       - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install

@@ -1,51 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { setAddon, storiesOf } from '@storybook/react';
-import JSXAddon from 'storybook-addon-jsx';
+import { storiesOf } from '@storybook/react';
 import {
   InfiniteHits,
   Highlight,
   Panel,
   Snippet,
 } from 'react-instantsearch-dom';
-import { displayName, filterProps, WrapWithHits } from './util';
-
-setAddon(JSXAddon);
+import { WrapWithHits } from './util';
 
 const stories = storiesOf('InfiniteHits', module);
 
 stories
-  .addWithJSX(
-    'default',
-    () => (
-      <WrapWithHits linkedStoryGroup="InfiniteHits" pagination={false}>
-        <InfiniteHits />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
+  .add('default', () => (
+    <WrapWithHits linkedStoryGroup="InfiniteHits" pagination={false}>
+      <InfiniteHits />
+    </WrapWithHits>
+  ))
   .add('with custom rendering', () => (
     <WrapWithHits linkedStoryGroup="InfiniteHits">
       <InfiniteHits hitComponent={Product} />
     </WrapWithHits>
   ))
-  .addWithJSX(
-    'with Panel',
-    () => (
-      <WrapWithHits linkedStoryGroup="InfiniteHits" pagination={false}>
-        <Panel header="Infinite hits" footer="Footer">
-          <InfiniteHits />
-        </Panel>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  );
+  .add('with Panel', () => (
+    <WrapWithHits linkedStoryGroup="InfiniteHits" pagination={false}>
+      <Panel header="Infinite hits" footer="Footer">
+        <InfiniteHits />
+      </Panel>
+    </WrapWithHits>
+  ));
 
 function Product({ hit }) {
   return (

@@ -1,8 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
-import { setAddon, storiesOf } from '@storybook/react';
+import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import JSXAddon from 'storybook-addon-jsx';
 import { Configure, Highlight, connectHits } from 'react-instantsearch-dom';
 import {
   GoogleMapsLoader,
@@ -12,10 +11,8 @@ import {
   Redo,
   Control,
 } from 'react-instantsearch-dom-maps';
-import { displayName, filterProps, WrapWithHits } from './util';
+import { WrapWithHits } from './util';
 import Places from './places';
-
-setAddon(JSXAddon);
 
 const stories = storiesOf('GeoSearch', module);
 
@@ -36,421 +33,217 @@ const initialPosition = {
 };
 
 stories
-  .addWithJSX(
-    'default',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google}>
-                {({ hits }) => (
-                  <Fragment>
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with default refinement',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch
-                google={google}
-                defaultRefinement={{
-                  northEast: {
-                    lat: 48.871495114865986,
-                    lng: 2.398494434852978,
-                  },
-                  southWest: {
-                    lat: 48.8432595812564,
-                    lng: 2.326310825844189,
-                  },
-                }}
-              >
-                {({ hits }) => (
-                  <Fragment>
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with refine disabled',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch
-                google={google}
-                enableRefine={false}
-                zoomControl={false}
-                gestureHandling="none"
-              >
-                {({ hits }) => (
-                  <Fragment>
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  );
-
-// Only UI
-stories
-  .addWithJSX(
-    'with zoom & center',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch
-                google={google}
-                initialZoom={initialZoom}
-                initialPosition={initialPosition}
-              >
-                {({ hits }) => (
-                  <Fragment>
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with map options',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google} streetViewControl>
-                {({ hits }) => (
-                  <Fragment>
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with <Marker> options',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google}>
-                {({ hits }) => (
-                  <Fragment>
-                    {hits.map(hit => (
-                      <Marker
-                        key={hit.objectID}
-                        hit={hit}
-                        label={hit.price_formatted}
-                        onClick={() => {}}
-                      />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with <Marker> events',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google}>
-                {({ hits }) => (
-                  <Fragment>
-                    {hits.map(hit => (
-                      <Marker
-                        key={hit.objectID}
-                        hit={hit}
-                        onClick={action('click')}
-                      />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with <Redo> component',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google} enableRefineOnMapMove={false}>
-                {({ hits }) => (
-                  <Fragment>
-                    <Redo />
-
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with <Control> component',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google}>
-                {({ hits }) => (
-                  <Fragment>
-                    <Control />
-
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with <Control> component disabled',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google} enableRefineOnMapMove={false}>
-                {({ hits }) => (
-                  <Fragment>
-                    <Control />
-
-                    {hits.map(hit => (
-                      <Marker key={hit.objectID} hit={hit} />
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with <CustomMarker>',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google}>
-                {({ hits }) => (
-                  <Fragment>
-                    <Control />
-
-                    {hits.map(hit => (
-                      <Fragment key={hit.objectID}>
-                        <CustomMarker
-                          hit={hit}
-                          className="my-custom-marker"
-                          anchor={{ x: 0, y: 5 }}
-                        >
-                          {hit.price_formatted}
-                        </CustomMarker>
-                      </Fragment>
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with <CustomMarker> events',
-    () => (
-      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-        <Configure aroundLatLngViaIP hitsPerPage={20} />
-
-        <Container>
-          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
-            {google => (
-              <GeoSearch google={google}>
-                {({ hits }) => (
-                  <Fragment>
-                    <Control />
-
-                    {hits.map(hit => (
-                      <Fragment key={hit.objectID}>
-                        <CustomMarker
-                          hit={hit}
-                          className="my-custom-marker"
-                          anchor={{ x: 0, y: 5 }}
-                          onClick={action('click')}
-                        >
-                          <span>{hit.price_formatted}</span>
-                        </CustomMarker>
-                      </Fragment>
-                    ))}
-                  </Fragment>
-                )}
-              </GeoSearch>
-            )}
-          </GoogleMapsLoader>
-        </Container>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  );
-
-// With Places
-stories.addWithJSX(
-  'with Places',
-  () => (
+  .add('default', () => (
     <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-      <Configure hitsPerPage={20} aroundRadius={5000} />
-
-      <Places
-        defaultRefinement={{
-          lat: 37.7793,
-          lng: -122.419,
-        }}
-      />
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
         <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
           {google => (
-            <GeoSearch google={google} initialZoom={12}>
+            <GeoSearch google={google}>
+              {({ hits }) => (
+                <Fragment>
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with default refinement', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch
+              google={google}
+              defaultRefinement={{
+                northEast: {
+                  lat: 48.871495114865986,
+                  lng: 2.398494434852978,
+                },
+                southWest: {
+                  lat: 48.8432595812564,
+                  lng: 2.326310825844189,
+                },
+              }}
+            >
+              {({ hits }) => (
+                <Fragment>
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with refine disabled', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch
+              google={google}
+              enableRefine={false}
+              zoomControl={false}
+              gestureHandling="none"
+            >
+              {({ hits }) => (
+                <Fragment>
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ));
+
+// Only UI
+stories
+  .add('with zoom & center', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch
+              google={google}
+              initialZoom={initialZoom}
+              initialPosition={initialPosition}
+            >
+              {({ hits }) => (
+                <Fragment>
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with map options', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google} streetViewControl>
+              {({ hits }) => (
+                <Fragment>
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with <Marker> options', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google}>
+              {({ hits }) => (
+                <Fragment>
+                  {hits.map(hit => (
+                    <Marker
+                      key={hit.objectID}
+                      hit={hit}
+                      label={hit.price_formatted}
+                      onClick={() => {}}
+                    />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with <Marker> events', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google}>
+              {({ hits }) => (
+                <Fragment>
+                  {hits.map(hit => (
+                    <Marker
+                      key={hit.objectID}
+                      hit={hit}
+                      onClick={action('click')}
+                    />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with <Redo> component', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google} enableRefineOnMapMove={false}>
+              {({ hits }) => (
+                <Fragment>
+                  <Redo />
+
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with <Control> component', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google}>
               {({ hits }) => (
                 <Fragment>
                   <Control />
@@ -465,14 +258,127 @@ stories.addWithJSX(
         </GoogleMapsLoader>
       </Container>
     </WrapWithHits>
-  ),
-  {
-    displayName,
-    filterProps,
-  }
-);
+  ))
+  .add('with <Control> component disabled', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
 
-stories.addWithJSX('with InfoWindow', () => {
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google} enableRefineOnMapMove={false}>
+              {({ hits }) => (
+                <Fragment>
+                  <Control />
+
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with <CustomMarker>', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google}>
+              {({ hits }) => (
+                <Fragment>
+                  <Control />
+
+                  {hits.map(hit => (
+                    <Fragment key={hit.objectID}>
+                      <CustomMarker
+                        hit={hit}
+                        className="my-custom-marker"
+                        anchor={{ x: 0, y: 5 }}
+                      >
+                        {hit.price_formatted}
+                      </CustomMarker>
+                    </Fragment>
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ))
+  .add('with <CustomMarker> events', () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+          {google => (
+            <GeoSearch google={google}>
+              {({ hits }) => (
+                <Fragment>
+                  <Control />
+
+                  {hits.map(hit => (
+                    <Fragment key={hit.objectID}>
+                      <CustomMarker
+                        hit={hit}
+                        className="my-custom-marker"
+                        anchor={{ x: 0, y: 5 }}
+                        onClick={action('click')}
+                      >
+                        <span>{hit.price_formatted}</span>
+                      </CustomMarker>
+                    </Fragment>
+                  ))}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ));
+
+// With Places
+stories.add('with Places', () => (
+  <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <Configure hitsPerPage={20} aroundRadius={5000} />
+
+    <Places
+      defaultRefinement={{
+        lat: 37.7793,
+        lng: -122.419,
+      }}
+    />
+
+    <Container>
+      <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
+        {google => (
+          <GeoSearch google={google} initialZoom={12}>
+            {({ hits }) => (
+              <Fragment>
+                <Control />
+
+                {hits.map(hit => (
+                  <Marker key={hit.objectID} hit={hit} />
+                ))}
+              </Fragment>
+            )}
+          </GeoSearch>
+        )}
+      </GoogleMapsLoader>
+    </Container>
+  </WrapWithHits>
+));
+
+stories.add('with InfoWindow', () => {
   class Example extends Component {
     static propTypes = {
       google: PropTypes.object.isRequired,
@@ -528,7 +434,7 @@ stories.addWithJSX('with InfoWindow', () => {
   );
 });
 
-stories.addWithJSX('with hits communication (custom)', () => {
+stories.add('with hits communication (custom)', () => {
   const CustomHits = connectHits(({ hits, selectedHit, onHitOver }) => (
     <div className="hits">
       {hits.map(hit => {
@@ -626,7 +532,7 @@ stories.addWithJSX('with hits communication (custom)', () => {
   return <Example />;
 });
 
-stories.addWithJSX('with unmount', () => {
+stories.add('with unmount', () => {
   class Example extends Component {
     state = {
       visible: true,
