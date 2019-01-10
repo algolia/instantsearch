@@ -73,7 +73,7 @@
     "rollup-plugin-uglify": "6.0.0"
   },
   "peerDependencies": {
-    "react-instantsearch-dom": ">= 5.2.0-beta.2"
+    "react-instantsearch-dom": ">= 5.2.0"
   },
   "jest": {
     "snapshotSerializers": [
