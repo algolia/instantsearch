@@ -150,7 +150,7 @@ class App extends Component {
       >
         <Configure hitsPerPage={5} />
 
-        <span>{this.state.count} s elapsed since last refresh</span>
+        <span>The cache is refreshed every 5 seconds.</span>
 
         <SearchBox
           translations={{
