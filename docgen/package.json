@@ -1,6 +1,6 @@
 {
   "name": "docgen",
-  "version": "5.4.0-beta.0",
+  "version": "5.4.0-beta.1",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -54,8 +54,8 @@
     "react": "16.7.0",
     "react-dom": "16.7.0",
     "react-hot-loader": "4.6.3",
-    "react-instantsearch-dom": "^5.4.0-beta.0",
-    "react-instantsearch-dom-maps": "^5.4.0-beta.0",
+    "react-instantsearch-dom": "^5.4.0-beta.1",
+    "react-instantsearch-dom-maps": "^5.4.0-beta.1",
     "recursive-readdir": "2.2.2",
     "replace-in-file": "3.4.2",
     "rheostat": "2.2.0",

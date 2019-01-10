@@ -1,3 +1,13 @@
+# [5.4.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v5.4.0-beta.0...v5.4.0-beta.1) (2019-01-10)
+
+
+### Bug Fixes
+
+* **deps:** sync algoliasearch version ([#1879](https://github.com/algolia/react-instantsearch/issues/1879)) ([40f9c26](https://github.com/algolia/react-instantsearch/commit/40f9c26))
+* **maps:** use stable version for peer deps ([#1887](https://github.com/algolia/react-instantsearch/issues/1887)) ([9055167](https://github.com/algolia/react-instantsearch/commit/9055167))
+
+
+
 # [5.4.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v5.3.2...v5.4.0-beta.0) (2019-01-08)
 
 
