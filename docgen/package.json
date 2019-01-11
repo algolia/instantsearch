@@ -45,7 +45,7 @@
     "metalsmith-navigation": "0.2.9",
     "metalsmith-sass": "1.5.1",
     "ms-webpack": "2.0.0",
-    "postcss": "7.0.8",
+    "postcss": "7.0.9",
     "postcss-loader": "3.0.0",
     "postcss-scss": "2.0.0",
     "prop-types": "15.6.1",
