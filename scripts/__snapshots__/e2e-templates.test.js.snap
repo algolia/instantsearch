@@ -2746,8 +2746,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   <link rel=\\"manifest\\" href=\\"./manifest.webmanifest\\">
   <link rel=\\"shortcut icon\\" href=\\"./favicon.png\\">
 
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0/dist/instantsearch.min.css\\">
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0/dist/instantsearch-theme-algolia.min.css\\">
+  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
   <link rel=\\"stylesheet\\" href=\\"./src/index.css\\">
   <link rel=\\"stylesheet\\" href=\\"./src/app.css\\">
 
@@ -2783,6 +2782,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
     <div id=\\"pagination\\"></div>
   </div>
 
+  <script src=\\"https://cdn.jsdelivr.net/algoliasearch/3.32.0/algoliasearchLite.min.js\\"></script>
   <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
@@ -2824,12 +2824,7 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
 `;
 
 exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
-"em {
-  background: cyan;
-  font-style: normal;
-}
-
-.header {
+".header {
   display: flex;
   align-items: center;
   min-height: 50px;
@@ -2876,19 +2871,9 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
   flex: 3;
 }
 
-.ais-hits {
-  display: grid;
-  grid-template-columns: 47.5% 47.5%;
-  grid-gap: 1rem;
-}
-
-.ais-hits--item {
-  min-height: 100px;
-  padding: 1rem;
-  background: #fff;
-  border-radius: 4px;
-  border: 1px solid rgba(150, 150, 150, 0.16);
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16);
+.ais-Highlight-highlighted {
+  color: inherit;
+  font-size: inherit;
 }
 
 #searchbox {
@@ -2902,18 +2887,21 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
 `;
 
 exports[`Templates InstantSearch.js File content: src/app.js 1`] = `
-"/* global instantsearch */
+"/* global algoliasearch instantsearch */
+
+const searchClient = algoliasearch(
+  'appId',
+  'apiKey'
+);
 
 const search = instantsearch({
-  appId: 'appId',
-  apiKey: 'apiKey',
   indexName: 'indexName',
+  searchClient,
 });
 
 search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#searchbox',
-    autofocus: false,
     placeholder: 'Search placeholder',
   })
 );
@@ -2924,8 +2912,8 @@ search.addWidget(
     templates: {
       item: \`
         <article>
-          <h1>{{{_highlightResult.attribute1.value}}}</h1>
-          <p>{{{_highlightResult.attribute2.value}}}</p>
+          <h1>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute1\\" }{{/helpers.highlight}}</h1>
+          <p>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute2\\" }{{/helpers.highlight}}</p>
         </article>
       \`,
     },
@@ -2935,14 +2923,14 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#facet1-list',
-    attributeName: 'facet1',
+    attribute: 'facet1',
   })
 );
 
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#facet2-list',
-    attributeName: 'facet2',
+    attribute: 'facet2',
   })
 );
 

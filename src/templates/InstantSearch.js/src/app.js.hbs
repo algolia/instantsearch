@@ -1,15 +1,18 @@
-/* global instantsearch */
+/* global algoliasearch instantsearch */
+
+const searchClient = algoliasearch(
+  '{{appId}}',
+  '{{apiKey}}'
+);
 
 const search = instantsearch({
-  appId: '{{appId}}',
-  apiKey: '{{apiKey}}',
   indexName: '{{indexName}}',
+  searchClient,
 });
 
 search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#searchbox',
-    autofocus: false,
     {{#if searchPlaceholder}}
     placeholder: '{{searchPlaceholder}}',
     {{/if}}
@@ -23,10 +26,10 @@ search.addWidget(
     templates: {
       item: `
         <article>
-          <h1>\{{{_highlightResult.{{attributesToDisplay.[0]}}.value}}}</h1>
+          <h1>\{{#helpers.highlight}}{ "attribute": "{{attributesToDisplay.[0]}}" }\{{/helpers.highlight}}</h1>
           {{#each attributesToDisplay}}
           {{#unless @first}}
-          <p>\{{{_highlightResult.{{this}}.value}}}</p>
+          <p>\{{#helpers.highlight}}{ "attribute": "{{this}}" }\{{/helpers.highlight}}</p>
           {{/unless}}
           {{/each}}
         </article>
@@ -40,7 +43,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#{{this}}-list',
-    attributeName: '{{this}}',
+    attribute: '{{this}}',
   })
 );
 
