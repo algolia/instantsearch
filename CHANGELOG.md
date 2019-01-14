@@ -1,3 +1,19 @@
+# [4.2.0](https://github.com/algolia/create-instantsearch-app/compare/4.1.0...4.2.0) (2019-01-14)
+
+
+### Bug Fixes
+
+* **angular:** use instantsearch.css styles directly ([#347](https://github.com/algolia/create-instantsearch-app/issues/347)) ([4e410d5](https://github.com/algolia/create-instantsearch-app/commit/4e410d5))
+* **deps:** update dependency react-scripts to v2.1.1 ([20bbb6a](https://github.com/algolia/create-instantsearch-app/commit/20bbb6a))
+* **deps:** update react monorepo to v16.6.3 ([66fd398](https://github.com/algolia/create-instantsearch-app/commit/66fd398))
+
+
+### Features
+
+* **js:** migrate template to InstantSearch.js 3 ([#350](https://github.com/algolia/create-instantsearch-app/issues/350)) ([819b056](https://github.com/algolia/create-instantsearch-app/commit/819b056)), closes [#349](https://github.com/algolia/create-instantsearch-app/issues/349)
+
+
+
 <a name="4.1.0"></a>
 # [4.1.0](https://github.com/algolia/create-instantsearch-app/compare/4.0.0...4.1.0) (2018-10-29)
 
