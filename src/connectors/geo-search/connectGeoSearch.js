@@ -146,9 +146,7 @@ Please consider using the \`Configure\` widget instead:
 
 search.addWidget(
   configure({
-    aroundLatLngViaIP: ${(widgetParams &&
-      widgetParams.enableGeolocationWithIP) ||
-      'true'},
+    aroundLatLngViaIP: ${widgetParams.enableGeolocationWithIP || 'true'},
   })
 );
 
