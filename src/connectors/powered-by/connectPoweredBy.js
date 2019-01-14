@@ -1,16 +1,11 @@
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customPoweredBy = connectPoweredBy(function render(params, isFirstRendering) {
-  // params = {
-  //   url,
-  //   widgetParams,
-  // }
-});
-search.addWidget(customPoweredBy({
-  [ url ],
-}));
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPoweredBy.html`;
+const usage = createDocumentationMessageGenerator('powered-by', {
+  connector: true,
+})();
 
 /**
  * @typedef {Object} PoweredByWidgetOptions
