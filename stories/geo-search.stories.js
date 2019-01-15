@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import createInfoBox from '../.storybook/utils/create-info-box';
 import instantsearchPlacesWidget from 'places.js/instantsearchWidget';
