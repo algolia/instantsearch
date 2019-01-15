@@ -11,7 +11,7 @@ for example in website/examples/*; do
 done
 
 # Build storybook
-yarn run docs:storybook:build
+yarn run storybook:build
 
 # Move storybook to the website root
 mv storybook/dist website/stories
