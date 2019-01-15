@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Geo search by Algolia</title>
+
+    <link rel="stylesheet" href="main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.1.0/themes/reset-min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+      <header class="navbar navbar-static-top aisdemo-navbar">
+        <a
+          href="https://community.algolia.com/instantsearch.js/"
+          class="is-logo"
+        >
+          <img src="logo-is.png" width="40" />
+        </a>
+        <a href="./" class="logo">A</a> <i class="fa fa-search"></i>
+        <div id="search-box"></div>
+      </header>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-7 aisdemo--left-column">
+          <div class="aisdemo-filters">
+            <div class="row aisdemo-filter">
+              <div class="col-sm-2 aisdemo-filter-title">Dates</div>
+              <div class="col-sm-3">
+                <input class="date form-control" value="10/30/3015" disabled />
+              </div>
+              <div class="col-sm-3">
+                <input class="date form-control" value="10/30/3015" disabled />
+              </div>
+              <div class="col-sm-3"><div id="guests"></div></div>
+            </div>
+
+            <div class="row aisdemo-filter">
+              <div class="col-sm-2 aisdemo-filter-title">Room Type</div>
+              <div id="room_types"></div>
+            </div>
+
+            <div class="row aisdemo-filter">
+              <div class="col-sm-2 aisdemo-filter-title">Price Range</div>
+              <div class="col-sm-9" id="price"></div>
+            </div>
+          </div>
+
+          <div class="row"><div id="stats"></div></div>
+        </div>
+
+        <div class="col-sm-5 aisdemo--right-column"><div id="map"></div></div>
+      </div>
+    </div>
+
+    <div class="container-fluid" id="results">
+      <div class="row"><div id="hits"></div></div>
+      <div class="row">
+        <div id="pagination"></div>
+        <div class="thank-you">
+          Data from <a href="https://www.airbnb.com/">airbnb.com</a>, user pics
+          from <a href="https://randomuser.me/">randomuser.me</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/scriptjs@2.5.9/dist/script.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/algoliasearch@3.32.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0"></script>
+    <script src="search.js"></script>
+  </body>
+</html>
