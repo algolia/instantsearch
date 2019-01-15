@@ -9,27 +9,6 @@ import mapValues from 'lodash/mapValues';
 import curry from 'lodash/curry';
 import hogan from 'hogan.js';
 
-export {
-  capitalize,
-  getContainerNode,
-  bemHelper,
-  prepareTemplateProps,
-  renderTemplate,
-  isSpecialClick,
-  isDomElement,
-  getRefinements,
-  clearRefinements,
-  prefixKeys,
-  escapeRefinement,
-  unescapeRefinement,
-  checkRendering,
-  isReactElement,
-  deprecate,
-  warn,
-  aroundLatLngToPosition,
-  insideBoundingBoxToBoundingBox,
-};
-
 function capitalize(string) {
   return (
     string
@@ -387,36 +366,6 @@ function isReactElement(object) {
   );
 }
 
-function log(message) {
-  // eslint-disable-next-line no-console
-  console.warn(`[InstantSearch.js]: ${message.trim()}`);
-}
-
-function deprecate(fn, message) {
-  let hasAlreadyPrinted = false;
-
-  return function(...args) {
-    if (!hasAlreadyPrinted) {
-      hasAlreadyPrinted = true;
-
-      log(message);
-    }
-
-    return fn(...args);
-  };
-}
-
-warn.cache = {};
-function warn(message) {
-  const hasAlreadyPrinted = warn.cache[message];
-
-  if (!hasAlreadyPrinted) {
-    warn.cache[message] = true;
-
-    log(message);
-  }
-}
-
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
 function aroundLatLngToPosition(value) {
   const pattern = value.match(latLngRegExp);
@@ -431,12 +380,6 @@ function aroundLatLngToPosition(value) {
     lat: parseFloat(pattern[1]),
     lng: parseFloat(pattern[2]),
   };
-}
-
-export function getPropertyByPath(object, path) {
-  const parts = path.split('.');
-
-  return parts.reduce((current, key) => current && current[key], object);
 }
 
 function insideBoundingBoxArrayToBoundingBox(value) {
@@ -492,3 +435,77 @@ function insideBoundingBoxToBoundingBox(value) {
 
   return insideBoundingBoxStringToBoundingBox(value);
 }
+
+function getPropertyByPath(object, path) {
+  const parts = path.split('.');
+
+  return parts.reduce((current, key) => current && current[key], object);
+}
+
+let deprecate = () => {};
+
+/**
+ * Logs a warning if the condition is not met.
+ * This is used to log issues in development environment only.
+ *
+ * @return {undefined}
+ */
+let warning = () => {};
+
+if (__DEV__) {
+  const warn = message => {
+    // eslint-disable-next-line no-console
+    console.warn(`[InstantSearch.js]: ${message.trim()}`);
+  };
+
+  deprecate = (fn, message) => {
+    let hasAlreadyPrinted = false;
+
+    return function(...args) {
+      if (!hasAlreadyPrinted) {
+        hasAlreadyPrinted = true;
+
+        warn(message);
+      }
+
+      return fn(...args);
+    };
+  };
+
+  warning = (condition, message) => {
+    if (condition) {
+      return;
+    }
+
+    const hasAlreadyPrinted = warning.cache[message];
+
+    if (!hasAlreadyPrinted) {
+      warning.cache[message] = true;
+
+      warn(message);
+    }
+  };
+  warning.cache = {};
+}
+
+export {
+  capitalize,
+  getContainerNode,
+  bemHelper,
+  prepareTemplateProps,
+  renderTemplate,
+  isSpecialClick,
+  isDomElement,
+  getRefinements,
+  clearRefinements,
+  aroundLatLngToPosition,
+  insideBoundingBoxToBoundingBox,
+  getPropertyByPath,
+  prefixKeys,
+  escapeRefinement,
+  unescapeRefinement,
+  checkRendering,
+  isReactElement,
+  deprecate,
+  warning,
+};

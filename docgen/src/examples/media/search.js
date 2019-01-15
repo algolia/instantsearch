@@ -89,18 +89,17 @@ search.addWidget(
   })
 );
 
-// TODO: use panel once https://github.com/algolia/instantsearch.js/pull/3347 is merged
-// const ratingList = instantsearch.widgets.panel({
-//   templates: {
-//     header: '<i class="fa fa-chevron-right"></i> Ratings',
-//   },
-//   cssClasses: {
-//     header: 'panel-header',
-//   },
-// })(instantsearch.widgets.ratingMenu);
+const ratingList = instantsearch.widgets.panel({
+  templates: {
+    header: '<i class="fa fa-chevron-right"></i> Ratings',
+  },
+  cssClasses: {
+    header: 'panel-header',
+  },
+})(instantsearch.widgets.ratingMenu);
 
 search.addWidget(
-  instantsearch.widgets.ratingMenu({
+  ratingList({
     container: '#ratings',
     attribute: 'rating',
     cssClasses: {

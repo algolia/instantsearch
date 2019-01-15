@@ -1,6 +1,10 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import { getContainerNode, prepareTemplateProps, warn } from '../../lib/utils';
+import {
+  getContainerNode,
+  prepareTemplateProps,
+  warning,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
 
@@ -83,11 +87,10 @@ export default function panel({
   hidden = () => false,
   cssClasses: userCssClasses = {},
 } = {}) {
-  if (typeof hidden !== 'function') {
-    warn(
-      `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).`
-    );
-  }
+  warning(
+    typeof hidden === 'function',
+    `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).`
+  );
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),

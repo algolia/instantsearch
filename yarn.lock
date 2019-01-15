@@ -1320,7 +1320,28 @@ algoliasearch-helper@^2.26.0:
     qs "^6.5.1"
     util "^0.10.3"
 
-algoliasearch@3.30.0, algoliasearch@^3.27.1:
+algoliasearch@3.32.0:
+  version "3.32.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.32.0.tgz#5818168c26ff921bd0346a919071bac928b747ce"
+  integrity sha512-C8oQnPTf0wPuyD2jSZwtBAPvz+lHOE7zRIPpgXGBuNt6ZNcC4omsbytG26318rT77a8h4759vmIp6n9p8iw4NA==
+  dependencies:
+    agentkeepalive "^2.2.0"
+    debug "^2.6.8"
+    envify "^4.0.0"
+    es6-promise "^4.1.0"
+    events "^1.1.0"
+    foreach "^2.0.5"
+    global "^4.3.2"
+    inherits "^2.0.1"
+    isarray "^2.0.1"
+    load-script "^1.0.0"
+    object-keys "^1.0.11"
+    querystring-es3 "^0.2.1"
+    reduce "^1.0.1"
+    semver "^5.1.0"
+    tunnel-agent "^0.6.0"
+
+algoliasearch@^3.27.1:
   version "3.30.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.30.0.tgz#355585e49b672e5f71d45b9c2b371ecdff129cd1"
   dependencies:
@@ -11500,11 +11521,11 @@ semver-diff@^2.0.0:
   dependencies:
     semver "^5.0.3"
 
-"semver@2 || 3 || 4 || 5", semver@5.5.0, semver@^5.0.3, semver@^5.1.0, semver@^5.3.0, semver@^5.4.1, semver@^5.5.0:
+"semver@2 || 3 || 4 || 5", semver@^5.0.3, semver@^5.1.0, semver@^5.3.0, semver@^5.4.1, semver@^5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
-semver@^5.6.0:
+semver@5.6.0, semver@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
 
@@ -12541,10 +12562,6 @@ to-absolute-glob@^2.0.0:
 to-arraybuffer@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz#7d229b1fcc637e466ca081180836a7aabff83f43"
-
-to-factory@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/to-factory/-/to-factory-1.0.0.tgz#8738af8bd97120ad1d4047972ada5563bf9479b1"
 
 to-fast-properties@^1.0.3:
   version "1.0.3"
