@@ -1,6 +1,6 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-import { checkRendering, warn } from '../../lib/utils.js';
+import { checkRendering, warning } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {
@@ -78,14 +78,11 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
             ({ name }) => name === hierarchicalFacetName
           );
           if (isFacetSet) {
-            if (
-              !isEqual(isFacetSet.attributes, attributes) ||
-              isFacetSet.separator !== separator
-            ) {
-              warn(
-                'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
-              );
-            }
+            warning(
+              isEqual(isFacetSet.attributes, attributes) &&
+                isFacetSet.separator === separator,
+              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
+            );
             return {};
           }
         }

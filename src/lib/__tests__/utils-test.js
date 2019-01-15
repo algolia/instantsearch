@@ -936,35 +936,37 @@ describe('utils.deprecate', () => {
   });
 });
 
-describe('utils.warn', () => {
-  it('expect to print a warn message', () => {
-    const message = 'message';
-    const warn = jest.spyOn(global.console, 'warn');
+describe('utils.warning', () => {
+  let warn;
 
-    utils.warn(message);
-
-    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
-
-    warn.mockReset();
-    warn.mockRestore();
-    utils.warn.cache = {};
+  beforeEach(() => {
+    warn = jest.spyOn(global.console, 'warn');
   });
 
-  it('expect to print the same message only once', () => {
-    const message = 'message';
-    const warn = jest.spyOn(global.console, 'warn');
-
-    utils.warn(message);
-
-    expect(warn).toHaveBeenCalledTimes(1);
-
-    utils.warn(message);
-
-    expect(warn).toHaveBeenCalledTimes(1);
-
+  afterEach(() => {
     warn.mockReset();
     warn.mockRestore();
-    utils.warn.cache = {};
+    utils.warning.cache = {};
+  });
+
+  it('prints a warning message with a false condition', () => {
+    utils.warning(false, 'message');
+
+    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
+  });
+
+  it('does not print a warning message with a true condition', () => {
+    utils.warning(true, 'message');
+
+    expect(warn).toHaveBeenCalledTimes(0);
+  });
+
+  it('prints the same warning message only once', () => {
+    utils.warning(false, 'message');
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    utils.warning(false, 'message');
+    expect(warn).toHaveBeenCalledTimes(1);
   });
 });
 
