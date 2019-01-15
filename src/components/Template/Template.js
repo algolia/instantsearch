@@ -1,7 +1,7 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import { isReactElement, renderTemplate } from '../../lib/utils';
+import { renderTemplate } from '../../lib/utils';
 
 class Template extends Component {
   shouldComponentUpdate(nextProps) {
@@ -33,12 +33,6 @@ class Template extends Component {
       // Adds a noscript to the DOM but virtual DOM is null
       // See http://facebook.github.io/react/docs/component-specs.html#render
       return null;
-    }
-
-    if (isReactElement(content)) {
-      throw new Error(
-        'Support for templates as React elements has been removed, please use react-instantsearch'
-      );
     }
 
     return (

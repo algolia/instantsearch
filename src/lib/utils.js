@@ -351,21 +351,6 @@ function checkRendering(rendering, usage) {
   }
 }
 
-const REACT_ELEMENT_TYPE =
-  (typeof Symbol === 'function' &&
-    typeof Symbol.iterator === 'symbol' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-  0xeac7;
-
-function isReactElement(object) {
-  return (
-    typeof object === 'object' &&
-    object !== null &&
-    object.$$typeof === REACT_ELEMENT_TYPE
-  );
-}
-
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
 function aroundLatLngToPosition(value) {
   const pattern = value.match(latLngRegExp);
@@ -505,7 +490,6 @@ export {
   escapeRefinement,
   unescapeRefinement,
   checkRendering,
-  isReactElement,
   deprecate,
   warning,
 };
