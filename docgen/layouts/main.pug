@@ -1,8 +1,0 @@
-extends archetypes/content-with-menu.pug
-include mixins/nav.pug
-
-block navigation
-  +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
-
-block content
-  .content!=contents
