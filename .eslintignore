@@ -1,7 +1,5 @@
 /dist
 /cjs
 /es
-/docgen
-docs/
-docs.old/
+/website
 node_modules/
