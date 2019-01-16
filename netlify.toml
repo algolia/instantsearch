@@ -3,6 +3,6 @@
   command = "yarn docs:build-preview"
 
 [build.environment]
-  YARN_VERSION = "1.12.3"
+  YARN_VERSION = "1.13.0"
   YARN_FLAGS = "--production=false"
   NODE_ENV = "production"
