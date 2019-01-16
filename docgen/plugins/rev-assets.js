@@ -9,9 +9,7 @@ const DIST_PATH = path.resolve(config.docsDist);
 
 // HELPERS TO ADD REVISION HASH TO FILENAMES
 // -----------------------------------------
-function computeHashForFiles(
-  files: string[]
-): Promise<[{ file: string, hash: string }]> {
+function computeHashForFiles(files) {
   const promises = files.map(file =>
     hasha.fromFile(file, { algorithm: 'md5' }).then(hash => ({ file, hash }))
   );
@@ -19,9 +17,7 @@ function computeHashForFiles(
   return Promise.all(promises);
 }
 
-function renameFiles(
-  files: { file: string, hash: string }[]
-): { oldPath: string, newPath: string }[] {
+function renameFiles(files) {
   return files.map(({ file, hash }) => {
     const ext = path.extname(file);
     const newPath = `${file.replace(ext, `-${hash}`)}${ext}`;
@@ -38,10 +34,7 @@ function renameFiles(
   });
 }
 
-function renameReferences(
-  inFiles: string | string[],
-  files: { oldPath: string, newPath: string }[]
-) {
+function renameReferences(inFiles, files) {
   const { from, to } = files.reduce(
     (toRename, { oldPath, newPath }) => ({
       from: [
@@ -56,10 +49,7 @@ function renameReferences(
   return replace({ from, to, files: inFiles });
 }
 
-function computeFiles([filesGlob, replaceFilesGlob]: Array<
-  string,
-  string
->): Promise<*> {
+function computeFiles([filesGlob, replaceFilesGlob]) {
   const files = glob.sync(`${DIST_PATH}/${filesGlob}`);
   return computeHashForFiles(files)
     .then(renameFiles)
@@ -68,7 +58,7 @@ function computeFiles([filesGlob, replaceFilesGlob]: Array<
     );
 }
 
-export default function revAssets(): Promise<*> {
+export default function revAssets() {
   // 1. compute MD5 for images / json -> replace in CSS, JS, HTML
   // 2. compute MD5 for CSS -> replace in JS, HTML
   // 3. compute MD5 for JS -> replace in HTML

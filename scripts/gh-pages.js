@@ -1,24 +1,27 @@
-/* eslint-disable no-console */
+const path = require('path');
+const ghpages = require('gh-pages');
 
-import ghpages from 'gh-pages';
-import { join } from 'path';
+const websiteDir = path.join(
+  __dirname,
+  '../docgen/docs-production/react-instantsearch'
+);
 
 ghpages.clean();
 
-const site = join(__dirname, '../docgen/docs-production/react-instantsearch');
-const logger = msg => console.log(msg);
-const end = err => {
-  if (err) {
-    throw err;
+ghpages.publish(
+  websiteDir,
+  {
+    silent: true,
+    add: true,
+    logger(input) {
+      console.log(input);
+    },
+  },
+  err => {
+    if (err) {
+      throw err;
+    }
+
+    console.log('Website published');
   }
-
-  console.log('website published');
-};
-
-const defaultOptions = {
-  logger,
-  silent: true,
-  add: true,
-};
-
-ghpages.publish(site, defaultOptions, end);
+);

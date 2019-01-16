@@ -7,7 +7,7 @@ describe('react-router recipe', () => {
   it('App renders without crashing', () => {
     const RoutedApp = (
       <Router history={browserHistory}>
-        <Route path="blank" component={App} />
+        <Route path="/" component={App} />
       </Router>
     );
 

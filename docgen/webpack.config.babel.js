@@ -58,12 +58,30 @@ export default {
         /\/algolia-frontend-components\//.test(module.context),
     }),
     new HappyPack({
-      loaders: ['babel-loader?cacheDirectory=true'],
       id: 'babel',
+      loaders: [
+        {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            rootMode: 'upward',
+          },
+        },
+      ],
     }),
     new HappyPack({
-      loaders: ['style-loader?insertAt=top', 'css-loader'],
       id: 'style',
+      loaders: [
+        {
+          loader: 'style-loader',
+          options: {
+            insertAt: 'top',
+          },
+        },
+        {
+          loader: 'css-loader',
+        },
+      ],
     }),
   ],
 };

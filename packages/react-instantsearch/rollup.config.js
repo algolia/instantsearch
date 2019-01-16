@@ -17,7 +17,8 @@ const createLicence = () =>
 const plugins = [
   babel({
     exclude: ['../../node_modules/**', 'node_modules/**'],
-    plugins: ['external-helpers'],
+    rootMode: 'upward',
+    runtimeHelpers: true,
   }),
   resolve({
     browser: true,
