@@ -3,45 +3,45 @@
     "development": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
         ],
-        "react",
-        "stage-2"
+        "@babel/preset-react"
       ],
       "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-pure-class-to-function"
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-react-constant-elements",
+        "babel-plugin-transform-react-remove-prop-types",
+        "babel-plugin-transform-react-pure-class-to-function"
       ]
     },
     "production": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
         ],
-        "react",
-        "stage-2"
+        "@babel/preset-react"
       ],
       "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-pure-class-to-function"
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-react-constant-elements",
+        "babel-plugin-transform-react-remove-prop-types",
+        "babel-plugin-transform-react-pure-class-to-function"
       ]
     },
     "umd": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "modules": false,
             "targets": {
@@ -49,32 +49,32 @@
             }
           }
         ],
-        "react",
-        "stage-2"
+        "@babel/preset-react"
       ],
       "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-pure-class-to-function"
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-react-constant-elements",
+        "babel-plugin-transform-react-remove-prop-types",
+        "babel-plugin-transform-react-pure-class-to-function"
       ]
     },
     "cjs": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
         ],
-        "react",
-        "stage-2"
+        "@babel/preset-react"
       ],
       "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-pure-class-to-function",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-react-constant-elements",
+        "babel-plugin-transform-react-remove-prop-types",
+        "babel-plugin-transform-react-pure-class-to-function",
         [
           "inline-replace-variables",
           {
@@ -89,7 +89,7 @@
     "es": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "modules": false,
             "targets": {
@@ -97,13 +97,13 @@
             }
           }
         ],
-        "react",
-        "stage-2"
+        "@babel/preset-react"
       ],
       "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements",
-        "transform-react-pure-class-to-function",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-react-constant-elements",
+        "babel-plugin-transform-react-remove-prop-types",
+        "babel-plugin-transform-react-pure-class-to-function",
         [
           "inline-replace-variables",
           {
@@ -118,15 +118,14 @@
     "test": {
       "presets": [
         [
-          "env",
+          "@babel/preset-env",
           {
             "targets": {
               "node": "current"
             }
           }
         ],
-        "react",
-        "stage-2"
+        "@babel/preset-react"
       ],
       "plugins": [
         "rewire",
