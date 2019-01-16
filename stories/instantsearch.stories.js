@@ -1,8 +1,8 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Instantsearch', module).add(
-  'With searchfunction that prevent search',
+storiesOf('InstantSearch', module).add(
+  'with searchfunction to prevent search',
   withHits(() => {}, {
     searchFunction: helper => {
       const query = helper.state.query;
