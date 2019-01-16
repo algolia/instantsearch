@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
+const resolveTemplate = require('./resolve-template');
 const buildTask = require('../tasks/common/build');
 const cleanTask = require('../tasks/common/clean');
-
 const { checkAppName, checkAppPath, getAllTemplates } = require('../utils');
 
-const allTemplates = getAllTemplates();
+const supportedTemplates = getAllTemplates();
 
 const OPTIONS = {
   path: {
@@ -23,11 +23,12 @@ const OPTIONS = {
   template: {
     validate(input) {
       return (
-        allTemplates.includes(input) || fs.existsSync(`${input}/.template.js`)
+        supportedTemplates.includes(input) ||
+        fs.existsSync(`${input}/.template.js`)
       );
     },
     getErrorMessage() {
-      return `The template directory must contain a configuration file \`.template.js\` or must be one of those: ${allTemplates.join(
+      return `The template directory must contain a configuration file \`.template.js\` or must be one of those: ${supportedTemplates.join(
         ', '
       )}`;
     },
@@ -58,9 +59,7 @@ function noop() {}
 function createInstantSearchApp(appPath, options = {}, tasks = {}) {
   const config = {
     ...options,
-    template: allTemplates.includes(options.template)
-      ? path.resolve('src/templates', options.template)
-      : options.template,
+    template: resolveTemplate(options, { supportedTemplates }),
     name: options.name || path.basename(appPath),
     installation: options.installation !== false,
     silent: options.silent === true,

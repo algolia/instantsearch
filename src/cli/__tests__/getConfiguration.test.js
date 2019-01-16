@@ -68,7 +68,7 @@ test('without stable version available', async () => {
 test('with config file overrides all options', async () => {
   loadJsonFile.mockImplementationOnce(x => Promise.resolve(x));
   const ignoredOptions = {
-    libraryVersion: '2.0.0',
+    libraryVersion: '3.0.0',
   };
   const options = {
     config: {
