@@ -34,6 +34,7 @@ describe('Installation', () => {
         'Angular InstantSearch',
         'Autocomplete.js',
         'InstantSearch.js',
+        'InstantSearch.js 2',
         'JavaScript Client',
         'JavaScript Helper',
         'React InstantSearch',
