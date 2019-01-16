@@ -3,7 +3,7 @@ import { withHits } from '../.storybook/decorators';
 
 storiesOf('Panel', module)
   .add(
-    'with default',
+    'default',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.panel({
