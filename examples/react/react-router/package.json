@@ -6,12 +6,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest"
+    "test": "CI=true react-scripts test --env=jsdom"
   },
   "devDependencies": {
-    "history": "^4.7.2",
-    "identity-obj-proxy": "3.0.0",
-    "jest-environment-jsdom-11.0.0": "20.1.9",
+    "history": "4.7.2",
     "react-scripts": "1.1.0",
     "react-test-renderer": "16.2.0"
   },
@@ -24,10 +22,5 @@
     "react-dom": "16.7.0",
     "react-instantsearch": "5.4.0-beta.1",
     "react-router-dom": "4.2.2"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(css)$": "identity-obj-proxy"
-    }
   }
 }

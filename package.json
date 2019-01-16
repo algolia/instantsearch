@@ -25,7 +25,7 @@
     "test:size": "bundlesize",
     "docs:start": "cd docgen && yarn start",
     "docs:build": "(cd docgen && yarn build) && yarn docs:storybook-build-production",
-    "docs:deploy-production": "NODE_ENV=production yarn docs:build && babel-node scripts/gh-pages.js",
+    "docs:deploy-production": "NODE_ENV=production yarn docs:build && node scripts/gh-pages.js",
     "docs:build-preview": "./scripts/docs:build-preview.sh",
     "docs:deploy-preview": "NODE_ENV=production yarn docs:build-preview && rm -f preview.zip && zip -r -9 preview.zip docgen/docs-production/ && netlify deploy && rm preview.zip",
     "docs:storybook-start": "start-storybook -p 6006 -c ./storybook -s ./storybook/public",
@@ -33,6 +33,12 @@
     "docs:doctoc": "doctoc --maxlevel 1 README.md"
   },
   "devDependencies": {
+    "@babel/cli": "7.1.2",
+    "@babel/core": "7.1.2",
+    "@babel/plugin-proposal-class-properties": "7.1.0",
+    "@babel/plugin-transform-runtime": "7.2.0",
+    "@babel/preset-env": "7.1.0",
+    "@babel/preset-react": "7.0.0",
     "@storybook/addon-a11y": "4.1.6",
     "@storybook/addon-actions": "4.1.6",
     "@storybook/addon-knobs": "4.1.6",
@@ -42,14 +48,10 @@
     "@storybook/react": "4.1.6",
     "algoliasearch": "3.32.0",
     "argos-cli": "0.0.9",
-    "babel-cli": "6.26.0",
-    "babel-core": "6.26.0",
+    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.0.1",
-    "babel-loader": "7.1.5",
-    "babel-plugin-lodash": "3.3.4",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-react": "6.24.1",
-    "babel-preset-stage-2": "6.24.1",
+    "babel-jest": "23.6.0",
+    "babel-loader": "8.0.5",
     "bundlesize": "0.17.1",
     "conventional-changelog-cli": "2.0.11",
     "css-loader": "0.28.11",
@@ -102,7 +104,7 @@
   "bundlesize": [
     {
       "path": "packages/react-instantsearch/dist/umd/Core.min.js",
-      "maxSize": "8 kB"
+      "maxSize": "7.75 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Connectors.min.js",
@@ -110,19 +112,19 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "64 kB"
+      "maxSize": "63 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "40.75 kB"
+      "maxSize": "41 kB"
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
-      "maxSize": "64 kB"
+      "maxSize": "63 kB"
     },
     {
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",
-      "maxSize": "10.5 kB"
+      "maxSize": "10.75 kB"
     }
   ]
 }
