@@ -4,16 +4,6 @@ import Template from '../Template';
 import { mount } from 'enzyme';
 
 describe('Template', () => {
-  it('throws an error when templates as functions returning a React element', () => {
-    const props = getProps({
-      templates: {
-        test: templateData => <p>it doesnt works with {templateData.type}</p>,
-      }, // eslint-disable-line react/display-name
-      data: { type: 'functions' },
-    });
-    expect(() => mount(<Template {...props} />)).toThrow();
-  });
-
   it('can configure compilation options', () => {
     const props = getProps({
       templates: { test: 'it configures compilation <%options%>' },

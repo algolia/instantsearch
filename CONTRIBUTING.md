@@ -283,14 +283,6 @@ You can then inspect the status of tests from your dashboard. Check the browsers
 failing. If some are IE or Edge you can download a virtual machine image from the
 [Microsoft website](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/).
 
-Update the config of the dev server (instantsearch.js/scripts/dev.sh) so that you can access
-the test page with your VM. **Do not commit this change**
-
-```diff
-- webpack-dev-server --config storybook/webpack.dev.config.babel.js --hot --inline --no-info &
-+ webpack-dev-server --config storybook/webpack.dev.config.babel.js --hot --inline --no-info --public [your_ip] &
-```
-
 Then you should be able debug using the dev setup: `yarn run dev` and the virtual machine. You can also
 run the page used for function tests using `yarn run test:functional:dev:debug-server`
 
