@@ -19,9 +19,7 @@
             name="item"
             :item="item"
             :index="index"
-          >
-            objectID: {{ item.objectID }}, index: {{ index }}
-          </slot>
+          >objectID: {{ item.objectID }}, index: {{ index }}</slot>
         </li>
       </ol>
 
@@ -35,9 +33,7 @@
           :class="[suit('loadMore'), state.isLastPage && suit('loadMore', 'disabled')]"
           :disabled="state.isLastPage"
           @click="refine"
-        >
-          Show more results
-        </button>
+        >Show more results</button>
       </slot>
     </slot>
   </div>

@@ -87,9 +87,7 @@
         <slot
           name="showMoreLabel"
           :is-showing-more="state.isShowingMore"
-        >
-          Show {{ state.isShowingMore ? 'less' : 'more' }}
-        </slot>
+        >Show {{ state.isShowingMore ? 'less' : 'more' }}</slot>
       </button>
     </slot>
   </div>

@@ -14,9 +14,7 @@
         :disabled="!canRefine"
         @click.prevent="state.refine"
       >
-        <slot name="resetLabel">
-          Clear refinements
-        </slot>
+        <slot name="resetLabel">Clear refinements</slot>
       </button>
     </slot>
   </div>

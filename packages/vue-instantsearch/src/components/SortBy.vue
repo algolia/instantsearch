@@ -19,9 +19,7 @@
           :class="suit('option')"
           :value="item.value"
           :selected="item.value === state.currentRefinement"
-        >
-          {{ item.label }}
-        </option>
+        >{{ item.label }}</option>
       </select>
     </slot>
   </div>

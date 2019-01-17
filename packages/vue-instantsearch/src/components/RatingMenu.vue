@@ -68,9 +68,7 @@
             >
               <slot name="andUp">&amp; Up</slot>
             </span>
-            <span :class="suit('count')">
-              {{ item.count }}
-            </span>
+            <span :class="suit('count')">{{ item.count }}</span>
           </a>
         </li>
       </ul>

@@ -18,15 +18,11 @@
           :checked="state.value.isRefined"
           @change="state.refine(state.value)"
         >
-        <span :class="suit('labelText')">
-          {{ state.value.name }}
-        </span>
+        <span :class="suit('labelText')">{{ state.value.name }}</span>
         <span
           v-if="state.value.count !== null"
           :class="suit('count')"
-        >
-          {{ state.value.count.toLocaleString() }}
-        </span>
+        >{{ state.value.count.toLocaleString() }}</span>
       </label>
     </slot>
   </div>

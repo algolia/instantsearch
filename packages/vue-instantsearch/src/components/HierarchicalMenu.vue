@@ -32,9 +32,7 @@
         <slot
           name="showMoreLabel"
           :is-showing-more="isShowingMore"
-        >
-          {{ isShowingMore ? 'Show less' : 'Show more' }}
-        </slot>
+        >{{ isShowingMore ? 'Show less' : 'Show more' }}</slot>
       </button>
     </slot>
   </div>

@@ -39,12 +39,8 @@
             :href="state.createURL(item.value)"
             :class="suit('link')"
             @click.prevent="state.refine(item.value)"
-          >
-            {{ item.name }}
-          </a>
-          <span v-else>
-            {{ item.name }}
-          </span>
+          >{{ item.name }}</a>
+          <span v-else>{{ item.name }}</span>
         </li>
       </ul>
     </slot>

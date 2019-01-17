@@ -7,9 +7,7 @@
       v-bind="state"
       :results="state.instantSearchInstance.helper.lastResults"
     >
-      <span :class="suit('text')">
-        {{ state.nbHits.toLocaleString() }} results found in {{ state.processingTimeMS.toLocaleString() }}ms
-      </span>
+      <span :class="suit('text')">{{ state.nbHits.toLocaleString() }} results found in {{ state.processingTimeMS.toLocaleString() }}ms</span>
     </slot>
   </div>
 </template>

@@ -18,9 +18,7 @@
           :key="item.value"
           :class="suit('option')"
           :value="item.value"
-        >
-          {{ item.label }}
-        </option>
+        >{{ item.label }}</option>
       </select>
     </slot>
   </div>

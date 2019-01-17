@@ -24,9 +24,7 @@
               :checked="item.isRefined"
               @change="state.refine($event.target.value)"
             >
-            <span :class="suit('labelText')">
-              {{ item.label }}
-            </span>
+            <span :class="suit('labelText')">{{ item.label }}</span>
           </label>
         </li>
       </ul>

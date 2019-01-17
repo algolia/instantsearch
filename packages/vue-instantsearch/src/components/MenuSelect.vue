@@ -29,9 +29,7 @@
           <slot
             name="item"
             :item="item"
-          >
-            {{ item.label }} ({{ item.count }})
-          </slot>
+          >{{ item.label }} ({{ item.count }})</slot>
         </option>
       </select>
     </slot>

@@ -40,9 +40,7 @@
               <span
                 :class="suit('link')"
                 aria-label="First"
-              >
-                ‹‹
-              </span>
+              >‹‹</span>
             </template>
           </slot>
         </li>
@@ -66,17 +64,13 @@
                 aria-label="Previous"
                 :href="state.createURL(state.currentRefinement - 1)"
                 @click.prevent="refine(state.currentRefinement - 1)"
-              >
-                ‹
-              </a>
+              >‹</a>
             </template>
             <template v-else>
               <span
                 :class="suit('link')"
                 aria-label="Previous"
-              >
-                ‹
-              </span>
+              >‹</span>
             </template>
           </slot>
         </li>
@@ -101,9 +95,7 @@
               :class="suit('link')"
               :href="state.createURL(page)"
               @click.prevent="refine(page)"
-            >
-              {{ page + 1 }}
-            </a>
+            >{{ page + 1 }}</a>
           </slot>
         </li>
 
@@ -133,9 +125,7 @@
               <span
                 :class="suit('link')"
                 aria-label="Next"
-              >
-                ›
-              </span>
+              >›</span>
             </template>
           </slot>
         </li>
@@ -165,9 +155,7 @@
               <span
                 :class="suit('link')"
                 aria-label="Last"
-              >
-                ››
-              </span>
+              >››</span>
             </template>
           </slot>
         </li>
