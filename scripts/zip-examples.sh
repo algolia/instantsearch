@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
 set -e # exit when error
 
@@ -9,6 +9,3 @@ for example in website/examples/*; do
     (cd "$example" && zip -r "../$name.zip" ./*)
   fi
 done
-
-# Build storybook
-yarn run storybook:build

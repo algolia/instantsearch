@@ -28,7 +28,7 @@
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "storybook": "start-storybook -p 6006 --ci",
     "storybook:build": "build-storybook --output-dir website/stories",
-    "website:build": "./scripts/website/build.sh",
+    "website:build": "yarn run storybook:build && ./scripts/zip-examples.sh",
     "lint": "eslint .",
     "lint:fix": "eslint --fix -c .eslintrc.js .",
     "view-changelog": "conventional-changelog -p angular",
