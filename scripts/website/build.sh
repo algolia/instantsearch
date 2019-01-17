@@ -12,6 +12,3 @@ done
 
 # Build storybook
 yarn run storybook:build
-
-# Move storybook to the website root
-mv storybook/dist website/stories
