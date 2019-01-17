@@ -19,7 +19,8 @@
   "unpkg": "dist/instantsearch.production.min.js",
   "sideEffects": false,
   "scripts": {
-    "start": "yarn run docs:storybook",
+    "start": "yarn run dev",
+    "dev": "yarn run storybook",
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
     "build:umd": "BABEL_ENV=umd rollup --config scripts/rollup.config.js",
     "build:cjs": "BABEL_ENV=cjs babel src --out-dir cjs/ --ignore src/index.es.js,__tests__,__mocks__ --quiet",
