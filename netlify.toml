@@ -1,6 +1,6 @@
 [build]
-  command="npm run docs:build:dev"
-  publish="docs"
+  command="yarn run website:build"
+  publish="website"
 
 [build.environment]
-  YARN_VERSION = "1.10.1"
+  YARN_VERSION = "1.13.0"

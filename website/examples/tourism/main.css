@@ -1,0 +1,307 @@
+/* GENERAL
+// ------------------------- */
+body {
+  font-family: Roboto;
+  font-size: 16px;
+  color: #565a5c;
+}
+
+.aisdemo--left-column {
+  height: 400px;
+}
+
+.aisdemo--right-column {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+/* HEADER
+// ------------------------- */
+.aisdemo-navbar {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #dce0e0;
+  position: relative;
+}
+.aisdemo-navbar .is-logo {
+  display: inline-block;
+  position: relative;
+  top: -8px;
+  left: 16px;
+}
+.aisdemo-navbar .logo {
+  display: inline-block;
+  padding: 14px 22px;
+  font-size: 40px;
+  line-height: 1;
+  font-family: Courier;
+  color: #ff585b;
+  border-right: 1px solid #dce0e0;
+}
+.aisdemo-navbar .fa-search {
+  font-size: 30px;
+  position: absolute;
+  top: 17px;
+  left: 140px;
+  color: #dce0e0;
+}
+.aisdemo-navbar .ais-SearchBox {
+  position: absolute;
+  top: 0;
+  left: 180px;
+  height: 100%;
+  width: 33%;
+}
+.aisdemo-navbar .ais-SearchBox-form {
+  position: absolute;
+  top: 15px;
+  width: 300px;
+  height: 40px;
+  border: 0;
+  box-shadow: none;
+}
+.aisdemo-navbar .ais-SearchBox-input {
+  position: absolute;
+  border: 0;
+  box-shadow: none;
+}
+.aisdemo-navbar .ais-SearchBox-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+.aisdemo-navbar .ais-SearchBox-reset {
+  position: absolute;
+  top: calc(50% - 25px / 2);
+  right: 13px;
+  fill: #bfc7d8;
+}
+
+/* FILTERS
+// ------------------------- */
+.aisdemo-filters .aisdemo-filter {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #dce0e0;
+}
+
+.aisdemo-filters .aisdemo-filter-title {
+  font-size: 1em;
+  font-weight: normal;
+  padding-top: 9px;
+  padding-left: 30px;
+}
+
+.aisdemo-filters .date,
+.aisdemo-filters #guests select {
+  font-size: 0.8em;
+  padding: 8px 10px;
+  border: 1px solid #dce0e0;
+}
+
+.aisdemo-filters #guests select {
+  width: 100%;
+  padding-right: 20px;
+  border-radius: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.aisdemo-filters #guests select:focus {
+  outline: none;
+}
+
+.aisdemo-filters .guests-caret::before {
+  line-height: 1;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  width: 2em;
+  padding-top: 0.8em;
+  content: '\25bc';
+  text-align: center;
+  pointer-events: none;
+  color: #82888a;
+}
+
+.aisdemo-filters #room_types .ais-RefinementList-count {
+  display: none;
+}
+
+.aisdemo-filters #room_types .ais-RefinementList-item {
+  display: inline-block;
+  cursor: pointer;
+}
+.aisdemo-filters #room_types .ais-RefinementList-item label {
+  font-size: 0.8em;
+  font-weight: normal;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 9px 10px 7px;
+  background: #edefed;
+}
+
+.aisdemo-filters #room_types .ais-RefinementList-checkbox {
+  position: relative;
+  bottom: 3px;
+  float: right;
+  width: 1.25em;
+  height: 1.25em;
+  margin-left: 20px;
+  vertical-align: top;
+  border: 1px solid #dce0e0;
+  background: #ffffff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.aisdemo-filters #room_types .ais-RefinementList-checkbox:focus {
+  outline: none;
+}
+
+.aisdemo-filters
+  #room_types
+  .ais-RefinementList-item--selected
+  .ais-RefinementList-checkbox::before {
+  font-size: 0.85em;
+  position: absolute;
+  width: 1.25em;
+  content: '\2713';
+  text-align: center;
+  color: #ff5a5f;
+}
+
+.aisdemo-filters #price .ais-RangeSlider-target {
+  margin: 30px 9px 18px;
+}
+
+.aisdemo-filters #price .ais-RangeSlider-handle {
+  border-color: #ff585b;
+}
+
+.aisdemo-filters #price .rheostat-progress {
+  background-color: #ff585b !important;
+}
+
+.aisdemo-filters #price .rheostat-tooltip {
+  font-size: 0.8em;
+}
+
+/* STATS
+// ------------------------- */
+#stats {
+  font-size: 1em;
+  font-weight: normal;
+  position: absolute;
+  bottom: 0;
+  padding: 5px 15px;
+}
+
+/* MAP
+// ------------------------- */
+#map {
+  height: 400px;
+}
+
+.ais-GeoSearch,
+.ais-GeoSearch-map {
+  height: 100%;
+}
+
+.ais-GeoSearch-reset {
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  background-color: #ff585b;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+/* RESULTS
+// ------------------------- */
+#results {
+  padding: 40px 20px;
+  background: #edefed;
+}
+
+#hits .ais-Hits-list {
+  list-style: none;
+}
+#hits .ais-Hits-list .hit .pictures-wrapper {
+  position: relative;
+}
+#hits .ais-Hits-list .hit .pictures-wrapper .picture {
+  width: 100%;
+}
+#hits .ais-Hits-list .hit .pictures-wrapper .profile {
+  position: absolute;
+  bottom: -16px;
+  right: 12px;
+  width: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+}
+#hits .ais-Hits-list .hit .infos {
+  height: 90px;
+  padding: 16px 20px;
+}
+#hits .ais-Hits-list .hit .infos h4 {
+  font-size: 1em;
+  font-weight: normal;
+}
+#hits .ais-Hits-list .hit .infos p {
+  font-size: 0.8em;
+  color: #949697;
+}
+#hits .ais-Hits-list .hit .infos em {
+  font-style: normal;
+  color: #ff585b;
+}
+
+/* PAGINATION
+// ------------------------- */
+#pagination {
+  text-align: center;
+}
+#pagination .ais-Pagination-list {
+  justify-content: center;
+  margin: 20px 0;
+}
+#pagination .ais-Pagination-item {
+  display: inline-block;
+  margin: 1px;
+  padding: 3px;
+}
+#pagination .ais-Pagination-link {
+  color: #ff585b;
+  border-radius: 4px;
+  background: transparent;
+}
+#pagination .pagination > .active > a {
+  color: #ffffff;
+  border-color: #ff585b;
+  background: #ff585b;
+}
+#pagination .pagination > li > a:focus,
+#pagination .pagination > li > a:hover,
+#pagination .pagination > li > span:focus,
+#pagination .pagination > li > span:hover {
+  color: #ffffff;
+  border-color: #ff585b;
+  background: #ff585b;
+}
+
+.thank-you {
+  text-align: center;
+  font-size: 0.8em;
+}
+.thank-you a {
+  color: #ff585b;
+}
