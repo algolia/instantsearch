@@ -35,7 +35,7 @@ export default callback => {
   });
 
   rollupWatcher.on('END', () => {
-    console.log('Got webpack compilation event');
+    console.log('Got Rollup compilation event');
     callback();
   });
 };
