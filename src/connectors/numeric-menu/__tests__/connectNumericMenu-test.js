@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectNumericMenu from '../connectNumericMenu.js';
+import connectNumericMenu from '../connectNumericMenu';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));

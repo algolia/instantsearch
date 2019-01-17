@@ -1,5 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import infiniteHits from '../infinite-hits';
 
 describe('infiniteHits call', () => {

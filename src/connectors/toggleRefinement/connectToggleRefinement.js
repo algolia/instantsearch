@@ -2,7 +2,7 @@ import {
   checkRendering,
   escapeRefinement,
   unescapeRefinement,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 import find from 'lodash/find';
 

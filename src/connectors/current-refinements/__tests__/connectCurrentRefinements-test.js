@@ -1,5 +1,5 @@
 import jsHelper, { SearchResults } from 'algoliasearch-helper';
-import connectCurrentRefinements from '../connectCurrentRefinements.js';
+import connectCurrentRefinements from '../connectCurrentRefinements';
 
 describe('connectCurrentRefinements', () => {
   describe('Usage', () => {

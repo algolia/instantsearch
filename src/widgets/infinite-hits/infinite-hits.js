@@ -1,9 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import InfiniteHits from '../../components/InfiniteHits/InfiniteHits.js';
-import defaultTemplates from './defaultTemplates.js';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
+import defaultTemplates from './defaultTemplates';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('InfiniteHits');

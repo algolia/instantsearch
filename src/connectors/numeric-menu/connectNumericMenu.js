@@ -1,6 +1,6 @@
 import _isFinite from 'lodash/isFinite';
 
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customNumericMenu = connectNumericMenu(function renderFn(params, isFirstRendering) {

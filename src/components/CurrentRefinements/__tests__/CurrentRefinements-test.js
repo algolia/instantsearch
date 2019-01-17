@@ -1,5 +1,5 @@
 import React from 'react';
-import CurrentRefinements from '../CurrentRefinements.js';
+import CurrentRefinements from '../CurrentRefinements';
 import { mount } from 'enzyme';
 
 describe('CurrentRefinements', () => {

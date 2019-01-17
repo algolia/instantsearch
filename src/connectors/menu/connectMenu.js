@@ -1,4 +1,4 @@
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customMenu = connectMenu(function render(params, isFirstRendering) {

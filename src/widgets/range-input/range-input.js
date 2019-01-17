@@ -1,8 +1,8 @@
 import React, { render } from 'preact-compat';
 import cx from 'classnames';
-import RangeInput from '../../components/RangeInput/RangeInput.js';
-import connectRange from '../../connectors/range/connectRange.js';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import RangeInput from '../../components/RangeInput/RangeInput';
+import connectRange from '../../connectors/range/connectRange';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('RangeInput');

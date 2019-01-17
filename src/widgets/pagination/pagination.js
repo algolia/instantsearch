@@ -1,8 +1,8 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import Pagination from '../../components/Pagination/Pagination.js';
-import connectPagination from '../../connectors/pagination/connectPagination.js';
-import { getContainerNode } from '../../lib/utils.js';
+import Pagination from '../../components/Pagination/Pagination';
+import connectPagination from '../../connectors/pagination/connectPagination';
+import { getContainerNode } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('Pagination');

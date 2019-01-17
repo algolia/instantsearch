@@ -1,4 +1,4 @@
-import { getRefinements, checkRendering } from '../../lib/utils.js';
+import { getRefinements, checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customCurrentRefinements = connectCurrentRefinements(function renderFn(params, isFirstRendering) {

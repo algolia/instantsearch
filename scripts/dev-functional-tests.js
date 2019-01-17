@@ -2,7 +2,7 @@
 
 import { spawn } from 'child_process';
 import debounce from 'lodash/debounce';
-import watch from './dev-functional-tests-compile-watch.js';
+import watch from './dev-functional-tests-compile-watch';
 
 const REBUILD_TIMEOUT = 1500;
 let wdio;

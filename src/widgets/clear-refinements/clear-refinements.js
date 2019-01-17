@@ -1,9 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
-import ClearRefinements from '../../components/ClearRefinements/ClearRefinements.js';
+import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
 import cx from 'classnames';
-import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements.js';
-import defaultTemplates from './defaultTemplates.js';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
+import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
+import defaultTemplates from './defaultTemplates';
+import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('ClearRefinements');

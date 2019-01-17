@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import defaultsDeep from 'lodash/defaultsDeep';
 import cx from 'classnames';
 
-import PaginationLink from './PaginationLink.js';
-import { isSpecialClick } from '../../lib/utils.js';
+import PaginationLink from './PaginationLink';
+import { isSpecialClick } from '../../lib/utils';
 
 class Pagination extends Component {
   constructor(props) {

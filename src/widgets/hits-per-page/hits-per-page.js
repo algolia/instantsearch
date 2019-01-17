@@ -1,10 +1,10 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import find from 'lodash/find';
-import Selector from '../../components/Selector/Selector.js';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
-import { getContainerNode } from '../../lib/utils.js';
-import { component } from '../../lib/suit.js';
+import Selector from '../../components/Selector/Selector';
+import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
+import { getContainerNode } from '../../lib/utils';
+import { component } from '../../lib/suit';
 
 const suit = component('HitsPerPage');
 

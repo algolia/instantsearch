@@ -1,10 +1,10 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu.js';
-import defaultTemplates from './defaultTemplates.js';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
-import { component } from '../../lib/suit.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
+import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
+import defaultTemplates from './defaultTemplates';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import { component } from '../../lib/suit';
 
 const suit = component('NumericMenu');
 

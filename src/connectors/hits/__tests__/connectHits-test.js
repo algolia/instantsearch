@@ -1,8 +1,8 @@
 import jsHelper from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 const SearchResults = jsHelper.SearchResults;
 
-import connectHits from '../connectHits.js';
+import connectHits from '../connectHits';
 
 describe('connectHits', () => {
   it('Renders during init and render', () => {
