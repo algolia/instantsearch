@@ -223,7 +223,7 @@ If your editor support them, then you will see the errors directly there. You ca
 yarn lint
 ```
 
-JavaScript files are validated using a combination of [Prettier](https://github.com/prettier/prettier) (strict syntax form) and ESLint rules (for common mistakes and patterns).
+JavaScript files are validated using a combination of [Prettier](https://github.com/prettier/prettier) (strict syntax form) and [ESLint](https://github.com/eslint/eslint) rules (for common mistakes and patterns).
 
 ## Release
 
