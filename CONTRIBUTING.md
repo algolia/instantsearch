@@ -83,7 +83,7 @@ Finally if your work is based on an issue on GitHub, please add in the body of t
 Some examples of valid commit messages (first line):
 
 - fix(searchbox): make magnifying glass bigger
-- chore(deps): update dependency style-loader to v0.19.0
+- chore(deps): update dependency rollup-plugin-babel to v3.0.7
 - fix(connectRefinementList): set default value for limit
 - chore: reword contributions guides
 
