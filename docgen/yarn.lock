@@ -2613,11 +2613,6 @@ debug@3.1.0, debug@=3.1.0, debug@^3.1.0, debug@~3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-0.8.1.tgz#20ff4d26f5e422cb68a1bacbbb61039ad8c1c130"
-  integrity sha1-IP9NJvXkIstoobrLu2EDmtjBwTA=
-
 decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -5477,11 +5472,6 @@ lodash.sortby@^3.1.1:
     lodash.isarray "^3.0.0"
     lodash.keys "^3.0.0"
 
-lodash@^2.4.1, lodash@~2.4.1:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.2.tgz#fadd834b9683073da179b3eae6d9c0d15053f73e"
-  integrity sha1-+t2DS5aDBz2hebPq5tnA0VBT9z4=
-
 lodash@^3.3.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
@@ -5496,6 +5486,11 @@ lodash@^4.17.10:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
+
+lodash@~2.4.1:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.2.tgz#fadd834b9683073da179b3eae6d9c0d15053f73e"
+  integrity sha1-+t2DS5aDBz2hebPq5tnA0VBT9z4=
 
 log-symbols@^2.1.0:
   version "2.1.0"
@@ -5716,13 +5711,13 @@ merge@^1.1.3:
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.0.tgz#7531e39d4949c281a66b8c5a6e0265e8b05894da"
   integrity sha1-dTHjnUlJwoGma4xabgJl6LBYlNo=
 
-metalsmith-copy@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/metalsmith-copy/-/metalsmith-copy-0.4.0.tgz#ead35307ae6224d33d2c12a51d28ec1943218cd3"
-  integrity sha512-UwhXEiUGNw0gv77GTWTSwh5AbMSqR5CNETuxVJR0RyBkvh+jA53BodDEFEGSK/nCuISF8XzUMMXTpuEBHenL1g==
+metalsmith-copy@0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/metalsmith-copy/-/metalsmith-copy-0.4.1.tgz#6b6abdf0c1c27b406d53e825be80b946dc4af4d1"
+  integrity sha512-9Xs+gd/fH5G+6OEctPVPJa0kfZgB/iWzcnLW9TBByIC4uVIpV33c0h9/oJTQfHBNY0i0tf41s7tdaMPYsr1gfw==
   dependencies:
-    debug "^0.8.1"
-    lodash "^2.4.1"
+    debug "^3.1.0"
+    lodash "^4.17.10"
     minimatch "^3.0.2"
 
 metalsmith-headings@0.2.0:
