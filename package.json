@@ -122,7 +122,7 @@
     "json": "9.0.6",
     "mkdirp": "0.5.1",
     "mversion": "1.12.0",
-    "node-sass": "4.7.2",
+    "node-sass": "4.11.0",
     "places.js": "1.14.0",
     "postcss-loader": "2.1.6",
     "prettier": "1.14.3",
