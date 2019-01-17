@@ -3,6 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const walkSync = require('walk-sync');
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const { getEarliestLibraryVersion } = require('../src/utils');
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -23,7 +24,7 @@ describe('Templates', () => {
       let configFilePath;
       let generatedFiles;
 
-      beforeAll(() => {
+      beforeAll(async () => {
         temporaryDirectory = execSync(
           'mktemp -d 2>/dev/null || mktemp -d -t "appPath"'
         )
@@ -35,7 +36,12 @@ describe('Templates', () => {
         const config = {
           name: templateConfig.appName,
           template: templateName,
-          libraryVersion: '1.0.0',
+          // We fetch the earliest supported version in order to not change
+          // the test output everytime we release a new version of a library.
+          libraryVersion: await getEarliestLibraryVersion({
+            libraryName: templateConfig.libraryName,
+            supportedVersion: templateConfig.supportedVersion,
+          }),
           appId: 'appId',
           apiKey: 'apiKey',
           indexName: 'indexName',

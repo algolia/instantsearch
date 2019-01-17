@@ -1101,7 +1101,7 @@ exports[`Templates Autocomplete.js File content: package.json 1`] = `
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"partialDependencies\\": {
-    \\"autocomplete.js\\": \\"1.0.0\\"
+    \\"autocomplete.js\\": \\"0.0.1\\"
   }
 }"
 `;
@@ -2746,8 +2746,8 @@ exports[`Templates InstantSearch.js 2 File content: index.html 1`] = `
   <link rel=\\"manifest\\" href=\\"./manifest.webmanifest\\">
   <link rel=\\"shortcut icon\\" href=\\"./favicon.png\\">
 
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0/dist/instantsearch.min.css\\">
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0/dist/instantsearch-theme-algolia.min.css\\">
+  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0/dist/instantsearch.min.css\\">
+  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0/dist/instantsearch-theme-algolia.min.css\\">
   <link rel=\\"stylesheet\\" href=\\"./src/index.css\\">
   <link rel=\\"stylesheet\\" href=\\"./src/app.css\\">
 
@@ -2783,7 +2783,7 @@ exports[`Templates InstantSearch.js 2 File content: index.html 1`] = `
     <div id=\\"pagination\\"></div>
   </div>
 
-  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
 
@@ -3116,7 +3116,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   </div>
 
   <script src=\\"https://cdn.jsdelivr.net/algoliasearch/3.32.0/algoliasearchLite.min.js\\"></script>
-  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@3.0.0\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
 
@@ -3467,7 +3467,7 @@ exports[`Templates JavaScript Client File content: package.json 1`] = `
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"partialDependencies\\": {
-    \\"algoliasearch\\": \\"1.0.0\\"
+    \\"algoliasearch\\": \\"2.1.0\\"
   }
 }"
 `;
@@ -4017,7 +4017,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"not op_mini all\\"
   ],
   \\"partialDependencies\\": {
-    \\"react-instantsearch-dom\\": \\"1.0.0\\"
+    \\"react-instantsearch-dom\\": \\"5.2.0\\"
   }
 }"
 `;
@@ -4413,7 +4413,7 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch-native\\": \\"1.0.0\\"
+    \\"react-instantsearch-native\\": \\"5.2.0\\"
   }
 }"
 `;

@@ -1,8 +1,8 @@
 const path = require('path');
 const resolveTemplate = require('../resolve-template');
 
-describe('resolve-template', () => {
-  test('with unknown template', () => {
+describe('resolveTemplate', () => {
+  test('selects the template with unknown template', () => {
     expect(
       resolveTemplate(
         {
@@ -15,7 +15,7 @@ describe('resolve-template', () => {
     ).toBe('../unknown-template');
   });
 
-  test('with known template', () => {
+  test('selects the default template with known template', () => {
     expect(
       resolveTemplate(
         {
@@ -28,7 +28,7 @@ describe('resolve-template', () => {
     ).toBe(path.resolve('src/templates/InstantSearch.js'));
   });
 
-  test('with InstantSearch.js 2 template', () => {
+  test('selects the right template with InstantSearch.js template and version 2', () => {
     expect(
       resolveTemplate(
         {
@@ -40,5 +40,21 @@ describe('resolve-template', () => {
         }
       )
     ).toBe(path.resolve('src/templates/InstantSearch.js 2'));
+  });
+
+  test('throws with unsupported version', () => {
+    expect(() =>
+      resolveTemplate(
+        {
+          template: 'InstantSearch.js',
+          libraryVersion: '1.0.0',
+        },
+        {
+          supportedTemplates: ['InstantSearch.js'],
+        }
+      )
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"The template \\"InstantSearch.js\\" does not support the version 1.0.0."`
+    );
   });
 });

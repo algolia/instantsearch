@@ -14,9 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const chalk = require('chalk');
-const latestSemver = require('latest-semver');
-const { fetchLibraryVersions } = require('../src/utils');
-
+const { getLatestLibraryVersion } = require('../src/utils');
 const createInstantSearchApp = require('../');
 
 const GITHUB_REPOSITORY =
@@ -57,18 +55,19 @@ async function build() {
         templateName,
         libraryName,
         keywords,
+        supportedVersion,
       } = require(`${templatesFolder}/${templateTitle}/.template.js`);
       const appPath = `${BUILD_FOLDER}/${templateName}`;
 
       // Remove the old app
       execSync(`rm -rf ${appPath}`);
 
-      const app = createInstantSearchApp(appPath, {
+      const appConfig = {
         name: appName,
         template: templateTitle,
         libraryVersion:
           libraryName &&
-          (await fetchLibraryVersions(libraryName).then(latestSemver)),
+          (await getLatestLibraryVersion({ libraryName, supportedVersion })),
         appId: 'latency',
         apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
         indexName: 'instant_search',
@@ -76,7 +75,8 @@ async function build() {
         attributesForFaceting: ['brand'],
         installation: false,
         silent: true,
-      });
+      };
+      const app = createInstantSearchApp(appPath, appConfig);
 
       await app.create();
 

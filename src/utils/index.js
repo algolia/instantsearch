@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const chalk = require('chalk');
+const semver = require('semver');
 const validateProjectName = require('validate-npm-package-name');
 const algoliasearch = require('algoliasearch');
 
@@ -130,12 +131,30 @@ async function fetchLibraryVersions(libraryName) {
   return Object.keys(library.versions).reverse();
 }
 
+function getLibraryVersion({ libraryName, supportedVersion = '' }) {
+  return async getVersion => {
+    const versions = await fetchLibraryVersions(libraryName);
+
+    return getVersion(versions, supportedVersion);
+  };
+}
+
+async function getLatestLibraryVersion(...args) {
+  return await getLibraryVersion(...args)(semver.maxSatisfying);
+}
+
+async function getEarliestLibraryVersion(...args) {
+  return await getLibraryVersion(...args)(semver.minSatisfying);
+}
+
 module.exports = {
   checkAppName,
   checkAppPath,
   getAppTemplateConfig,
   isYarnAvailable,
   fetchLibraryVersions,
+  getLatestLibraryVersion,
+  getEarliestLibraryVersion,
   getAllTemplates,
   getTemplatePath,
   getTemplatesByCategory,
