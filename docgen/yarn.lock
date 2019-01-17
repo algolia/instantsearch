@@ -5732,10 +5732,10 @@ metalsmith-headings@0.2.0:
   dependencies:
     cheerio "^0.14.0"
 
-metalsmith-in-place@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/metalsmith-in-place/-/metalsmith-in-place-4.1.1.tgz#d36c6642818062202bdd26eae2c279c7efe7a5bc"
-  integrity sha512-IR1GYTfgJGv+v9O8skrJNQAHLPBkz+4/H2u+CnIUawGcSOmowZtvCfhDDrAYaVvYY2NaeakL4NP6wQHZ/g8heA==
+metalsmith-in-place@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/metalsmith-in-place/-/metalsmith-in-place-4.2.0.tgz#14361719b8c315d5d147f93a28d5777236b954d7"
+  integrity sha512-uaN4Zn+ethEdggUM1fXTzEXr0h9MrLUIaVcGc89+D6h+Ql/QAvheikdzSI6ekl+pJS+tnXo6eOkb1pVBA3H86g==
   dependencies:
     debug "^3.1.0"
     inputformat-to-jstransformer "^1.2.1"
