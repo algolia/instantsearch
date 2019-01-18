@@ -3,5 +3,16 @@
     "config:js-lib",
     ":automergeMinor",
     ":automergePr"
+  ],
+  "packageRules": [
+    {
+      "packagePatterns": [
+        "^@types"
+      ],
+      "depTypeList": [
+        "devDependencies"
+      ],
+      "rangeStrategy": "replace"
+    }
   ]
 }
