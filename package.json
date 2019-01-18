@@ -84,7 +84,7 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jest": "22.1.3",
     "eslint-plugin-prettier": "3.0.1",
-    "eslint-plugin-react": "7.11.1",
+    "eslint-plugin-react": "7.12.4",
     "gh-pages": "2.0.1",
     "glob": "7.1.3",
     "instantsearch.css": "7.1.0",
