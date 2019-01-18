@@ -1,4 +1,4 @@
-import defaultTemplates from '../defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates';
 
 describe('hits defaultTemplates', () => {
   it('has a `empty` default template', () => {

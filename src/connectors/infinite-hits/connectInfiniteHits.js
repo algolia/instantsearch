@@ -1,5 +1,5 @@
-import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight.js';
-import { checkRendering } from '../../lib/utils.js';
+import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {

@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectPagination from '../connectPagination.js';
+import connectPagination from '../connectPagination';
 
 describe('connectPagination', () => {
   it('connectPagination - Renders during init and render', () => {

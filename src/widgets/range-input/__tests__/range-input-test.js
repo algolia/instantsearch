@@ -1,6 +1,6 @@
 import ReactDOM from 'preact-compat';
 import AlgoliasearchHelper from 'algoliasearch-helper';
-import rangeInput from '../range-input.js';
+import rangeInput from '../range-input';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');

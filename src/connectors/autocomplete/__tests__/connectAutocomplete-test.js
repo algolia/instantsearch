@@ -1,6 +1,6 @@
 import jsHelper, { SearchResults } from 'algoliasearch-helper';
-import connectAutocomplete from '../connectAutocomplete.js';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
+import connectAutocomplete from '../connectAutocomplete';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 
 const fakeClient = { addAlgoliaAgent: () => {} };
 

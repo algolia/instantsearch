@@ -1,9 +1,9 @@
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 import {
   escapeFacets,
   TAG_PLACEHOLDER,
   TAG_REPLACEMENT,
-} from '../../lib/escape-highlight.js';
+} from '../../lib/escape-highlight';
 import isEqual from 'lodash/isEqual';
 
 const usage = `Usage:

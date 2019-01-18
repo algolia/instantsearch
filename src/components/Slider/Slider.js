@@ -5,7 +5,7 @@ import cx from 'classnames';
 import times from 'lodash/times';
 import range from 'lodash/range';
 import has from 'lodash/has';
-import Pit from './Pit.js';
+import Pit from './Pit';
 
 class Slider extends Component {
   static propTypes = {

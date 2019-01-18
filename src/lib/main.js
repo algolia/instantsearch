@@ -1,14 +1,14 @@
 /** @module module:instantsearch */
 
-import InstantSearch from './InstantSearch.js';
-import version from './version.js';
+import InstantSearch from './InstantSearch';
+import version from './version';
 
-import * as connectors from '../connectors/index.js';
-import * as widgets from '../widgets/index.js';
-import * as helpers from '../helpers/index.js';
+import * as connectors from '../connectors/index';
+import * as widgets from '../widgets/index';
+import * as helpers from '../helpers/index';
 
-import * as routers from './routers/index.js';
-import * as stateMappings from './stateMappings/index.js';
+import * as routers from './routers/index';
+import * as stateMappings from './stateMappings/index';
 
 /**
  * @external SearchParameters

@@ -1,10 +1,10 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement.js';
-import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement.js';
-import defaultTemplates from './defaultTemplates.js';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
-import { component } from '../../lib/suit.js';
+import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
+import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement';
+import defaultTemplates from './defaultTemplates';
+import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
+import { component } from '../../lib/suit';
 
 const suit = component('ToggleRefinement');
 

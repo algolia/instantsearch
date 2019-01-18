@@ -1,5 +1,5 @@
 import InstantSearch from './lib/InstantSearch';
-import version from './lib/version.js';
+import version from './lib/version';
 import { snippet, highlight } from './helpers';
 
 const instantsearch = options => new InstantSearch(options);

@@ -1,4 +1,4 @@
-import numericMenu from '../numeric-menu.js';
+import numericMenu from '../numeric-menu';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));

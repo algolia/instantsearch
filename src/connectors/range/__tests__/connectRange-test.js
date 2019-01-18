@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectRange from '../connectRange.js';
+import connectRange from '../connectRange';
 
 describe('connectRange', () => {
   it('Renders during init and render', () => {
