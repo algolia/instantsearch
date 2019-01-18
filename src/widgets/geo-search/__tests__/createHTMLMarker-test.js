@@ -27,7 +27,7 @@ describe('createHTMLMarker', () => {
     },
   });
 
-  const createFakeParams = ({ ...rest }) => ({
+  const createFakeParams = ({ ...rest } = {}) => ({
     __id: 123456789,
     position: {
       lat: 10,
