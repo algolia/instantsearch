@@ -1,7 +1,7 @@
 import noop from 'lodash/noop';
 import isPlainObject from 'lodash/isPlainObject';
 
-import { enhanceConfiguration } from '../../lib/InstantSearch.js';
+import { enhanceConfiguration } from '../../lib/InstantSearch';
 
 const usage = `Usage:
 var customConfigure = connectConfigure(

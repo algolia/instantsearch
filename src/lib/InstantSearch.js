@@ -5,11 +5,11 @@ import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
-import RoutingManager from './RoutingManager.js';
-import simpleMapping from './stateMappings/simple.js';
-import historyRouter from './routers/history.js';
-import version from './version.js';
-import createHelpers from './createHelpers.js';
+import RoutingManager from './RoutingManager';
+import simpleMapping from './stateMappings/simple';
+import historyRouter from './routers/history';
+import version from './version';
+import createHelpers from './createHelpers';
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),

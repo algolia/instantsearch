@@ -1,5 +1,5 @@
 import { SearchParameters } from 'algoliasearch-helper';
-import refinementList from '../refinement-list.js';
+import refinementList from '../refinement-list';
 
 const instantSearchInstance = { templatesConfig: {} };
 

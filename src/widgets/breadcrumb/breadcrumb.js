@@ -2,7 +2,7 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
-import defaultTemplates from './defaultTemplates.js';
+import defaultTemplates from './defaultTemplates';
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
 import { component } from '../../lib/suit';
 

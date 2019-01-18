@@ -1,5 +1,5 @@
 import jsHelper, { SearchResults } from 'algoliasearch-helper';
-import ratingMenu from '../rating-menu.js';
+import ratingMenu from '../rating-menu';
 
 describe('ratingMenu()', () => {
   const attribute = 'anAttrName';

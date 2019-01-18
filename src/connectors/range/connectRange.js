@@ -1,7 +1,7 @@
 import find from 'lodash/find';
 import _isFinite from 'lodash/isFinite';
 
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customRange = connectRange(function render(params, isFirstRendering) {

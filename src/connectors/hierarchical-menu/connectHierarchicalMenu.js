@@ -1,6 +1,6 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-import { checkRendering, warning } from '../../lib/utils.js';
+import { checkRendering, warning } from '../../lib/utils';
 
 const usage = `Usage:
 var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {

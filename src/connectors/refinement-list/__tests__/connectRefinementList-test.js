@@ -2,8 +2,8 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight.js';
-import connectRefinementList from '../connectRefinementList.js';
+import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
+import connectRefinementList from '../connectRefinementList';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {

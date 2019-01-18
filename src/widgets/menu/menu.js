@@ -1,9 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectMenu from '../../connectors/menu/connectMenu.js';
-import defaultTemplates from './defaultTemplates.js';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
+import connectMenu from '../../connectors/menu/connectMenu';
+import defaultTemplates from './defaultTemplates';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('Menu');

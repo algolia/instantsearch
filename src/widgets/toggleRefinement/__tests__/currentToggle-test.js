@@ -1,5 +1,5 @@
-import currentToggle from '../toggleRefinement.js';
-import RefinementList from '../../../components/RefinementList/RefinementList.js';
+import currentToggle from '../toggleRefinement';
+import RefinementList from '../../../components/RefinementList/RefinementList';
 
 import jsHelper from 'algoliasearch-helper';
 

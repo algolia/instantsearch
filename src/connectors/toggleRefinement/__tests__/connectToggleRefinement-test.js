@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectToggleRefinement from '../connectToggleRefinement.js';
+import connectToggleRefinement from '../connectToggleRefinement';
 
 describe('connectToggleRefinement', () => {
   it('Renders during init and render', () => {

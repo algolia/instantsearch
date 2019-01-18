@@ -1,3 +1,3 @@
-import instantsearch from './lib/main.js';
+import instantsearch from './lib/main';
 
 export default instantsearch;

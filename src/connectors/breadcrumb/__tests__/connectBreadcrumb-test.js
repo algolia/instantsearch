@@ -1,7 +1,7 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectBreadcrumb from '../connectBreadcrumb.js';
+import connectBreadcrumb from '../connectBreadcrumb';
 
 describe('connectBreadcrumb', () => {
   it('should compute getConfiguration() correctly', () => {

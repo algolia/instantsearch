@@ -1,6 +1,6 @@
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 
-import connectConfigure from '../connectConfigure.js';
+import connectConfigure from '../connectConfigure';
 
 const fakeClient = {
   search: jest.fn(() => Promise.resolve({ results: [{}] })),

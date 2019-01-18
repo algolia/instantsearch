@@ -1,8 +1,8 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import PoweredBy from '../../components/PoweredBy/PoweredBy';
-import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy.js';
-import { getContainerNode } from '../../lib/utils.js';
+import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
+import { getContainerNode } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('PoweredBy');

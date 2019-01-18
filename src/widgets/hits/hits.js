@@ -1,9 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import connectHits from '../../connectors/hits/connectHits.js';
-import Hits from '../../components/Hits/Hits.js';
-import defaultTemplates from './defaultTemplates.js';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import connectHits from '../../connectors/hits/connectHits';
+import Hits from '../../components/Hits/Hits';
+import defaultTemplates from './defaultTemplates';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('Hits');

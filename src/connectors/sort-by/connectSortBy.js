@@ -1,5 +1,5 @@
 import find from 'lodash/find';
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customSortBy = connectSortBy(function render(params, isFirstRendering) {

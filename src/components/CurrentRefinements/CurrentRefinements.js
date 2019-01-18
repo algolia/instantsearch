@@ -1,6 +1,6 @@
 import React from 'preact-compat';
 import PropTypes from 'prop-types';
-import { isSpecialClick, capitalize } from '../../lib/utils.js';
+import { isSpecialClick, capitalize } from '../../lib/utils';
 
 const createItemKey = ({ attribute, value, type, operator }) =>
   [attribute, type, value, operator]
