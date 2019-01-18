@@ -68,8 +68,6 @@
     "@babel/preset-env": "7.2.3",
     "@babel/preset-react": "7.0.0",
     "@babel/register": "7.0.0",
-    "@babel/template": "7.2.2",
-    "@babel/types": "7.2.2",
     "@storybook/addon-actions": "4.1.7",
     "@storybook/addon-options": "4.1.7",
     "@storybook/html": "4.1.7",
