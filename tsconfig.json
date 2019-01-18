@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "noEmit": true,
+    "strict": true,
+    // @TODO: It's mandatory to disable this strict check at the moment
+    // otherwise we have to type every import we do. The migration is an
+    // incremental process so it happens that we import JavaScript module
+    // from TypeScript one. The compiler always translates those imports
+    // as impliciy any.
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

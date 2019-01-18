@@ -51,8 +51,11 @@ jobs:
           name: Lint & Code styles
           command: yarn lint
       - run:
+          name: Type checking
+          command: yarn type-check
+      - run:
           name: Unit Tests
-          command: yarn test:ci
+          command: yarn test --maxWorkers=4
 
   test_e2e:
     <<: *defaults

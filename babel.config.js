@@ -23,6 +23,7 @@ module.exports = {
   overrides: [
     {
       test: 'packages/*',
+      presets: ['@babel/preset-typescript'],
       plugins: [
         [
           '@babel/plugin-transform-runtime',

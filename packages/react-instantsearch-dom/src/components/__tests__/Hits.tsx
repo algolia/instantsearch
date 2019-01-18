@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import renderer from 'react-test-renderer';
 import Hits from '../Hits';
 
 describe('Hits', () => {
-  const Hit = ({ hit }) => <div id={hit.objectID} />;
+  type Props = { hit: any };
 
-  Hit.propTypes = {
-    hit: PropTypes.object,
-  };
+  const Hit = ({ hit }: Props) => <div id={hit.objectID} />;
 
   it('accepts a hitComponent prop', () => {
     const hits = [{ objectID: 0 }, { objectID: 1 }, { objectID: 2 }];
