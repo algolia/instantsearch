@@ -17,12 +17,14 @@ const createLicence = name =>
 const plugins = [
   babel({
     exclude: ['../../node_modules/**', 'node_modules/**'],
+    extensions: ['.js', '.ts', '.tsx'],
     rootMode: 'upward',
     runtimeHelpers: true,
   }),
   resolve({
     browser: true,
     preferBuiltins: false,
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   }),
   commonjs(),
   globals(),

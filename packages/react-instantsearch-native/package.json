@@ -32,9 +32,8 @@
     "clean": "rm -rf dist",
     "watch": "yarn build:cjs --watch",
     "build": "yarn build:cjs && yarn build:es",
-    "build:cjs": "babel src --root-mode upward --out-dir dist/cjs --ignore '**/__tests__/**/*.js','**/__mocks__/**/*.js' --quiet",
-    "build:es": "BABEL_ENV=es babel src --root-mode upward --out-dir dist/es --ignore '**/__tests__/**/*.js','**/__mocks__/**/*.js' --quiet",
-    "test": "jest",
+    "build:cjs": "babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "release": "yarn clean && yarn build && yarn publish --non-interactive",
     "release:beta": "yarn clean && yarn build && yarn publish --tag beta --non-interactive"
   },
@@ -43,28 +42,8 @@
     "algoliasearch": "^3.27.1",
     "react-instantsearch-core": "^5.4.0-beta.1"
   },
-  "devDependencies": {
-    "@babel/cli": "7.1.2",
-    "@babel/core": "7.1.2",
-    "@babel/plugin-proposal-class-properties": "7.1.0",
-    "@babel/preset-env": "7.1.0",
-    "@babel/preset-react": "7.0.0",
-    "babel-plugin-lodash": "3.3.4",
-    "enzyme": "3.8.0",
-    "enzyme-adapter-react-16": "1.7.1",
-    "enzyme-to-json": "3.3.5",
-    "jest": "23.6.0",
-    "react": "16.7.0",
-    "react-dom": "16.7.0",
-    "react-test-renderer": "16.7.0"
-  },
   "peerDependencies": {
     "react": ">= 15.3.0 < 17",
     "react-native": ">= 0.32.0"
-  },
-  "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
   }
 }

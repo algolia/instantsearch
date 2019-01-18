@@ -28,10 +28,9 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn build:cjs && yarn build:es && yarn build:umd",
-    "build:cjs": "babel connectors.js dom.js index.js native.js server.js --root-mode upward --out-dir dist --quiet",
-    "build:es": "BABEL_ENV=es babel connectors.js dom.js index.js native.js server.js --root-mode upward --out-dir dist/es --quiet",
+    "build:cjs": "babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist --quiet",
+    "build:es": "BABEL_ENV=es babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
-    "test": "jest",
     "preparePackageFolder": "mkdir -p dist && cp {package.json,README.md} dist",
     "release": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish --non-interactive",
     "release:beta": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish --tag beta --non-interactive"
@@ -41,26 +40,5 @@
     "react-instantsearch-core": "^5.4.0-beta.1",
     "react-instantsearch-dom": "^5.4.0-beta.1",
     "react-instantsearch-native": "^5.4.0-beta.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "7.1.2",
-    "@babel/core": "7.1.2",
-    "@babel/plugin-proposal-class-properties": "7.1.0",
-    "@babel/preset-env": "7.1.0",
-    "@babel/preset-react": "7.0.0",
-    "babel-plugin-lodash": "3.3.4",
-    "rollup": "1.1.0",
-    "rollup-plugin-babel": "4.3.0",
-    "rollup-plugin-commonjs": "9.2.0",
-    "rollup-plugin-filesize": "6.0.0",
-    "rollup-plugin-node-globals": "1.4.0",
-    "rollup-plugin-node-resolve": "4.0.0",
-    "rollup-plugin-replace": "2.1.0",
-    "rollup-plugin-uglify": "6.0.1"
-  },
-  "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
   }
 }
