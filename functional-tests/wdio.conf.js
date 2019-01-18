@@ -1,2 +1,2 @@
-require('babel-register'); // eslint-disable-line
-exports.config = require('./config.js').default; // eslint-disable-line
+require('@babel/register');
+exports.config = require('./config.js').default;
