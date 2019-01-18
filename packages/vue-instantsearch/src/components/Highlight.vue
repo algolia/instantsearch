@@ -39,8 +39,8 @@ export default {
         warn(
           `The "${
             this.attribute
-          }" attribute might currently not be configured to be highlighted in Algolia.
-        See https://www.algolia.com/doc/api-reference/api-parameters/attributesToHighlight/.`
+          }" attribute might currently not be configured to be highlighted in Algolia.` +
+            'See https://www.algolia.com/doc/api-reference/api-parameters/attributesToHighlight/.'
         );
       }
       return attributeValue

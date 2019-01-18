@@ -37,8 +37,8 @@ export default {
         warn(
           `The "${
             this.attribute
-          }" attribute might currently not be configured to be snippeted in Algolia.
-        See https://www.algolia.com/doc/api-reference/api-parameters/attributesToSnippet/.`
+          }" attribute might currently not be configured to be snippeted in Algolia.` +
+            'See https://www.algolia.com/doc/api-reference/api-parameters/attributesToSnippet/.'
         );
       }
       return attributeValue
