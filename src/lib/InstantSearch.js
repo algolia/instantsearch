@@ -339,6 +339,7 @@ class InstantSearch extends EventEmitter {
    */
   dispose() {
     this.removeWidgets(this.widgets);
+    this.started = false;
   }
 
   createURL(params) {
