@@ -7605,6 +7605,13 @@ debug@^4.1.0:
   dependencies:
     ms "^2.1.1"
 
+debug@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
+  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
+  dependencies:
+    ms "^2.1.1"
+
 debuglog@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/debuglog/-/debuglog-1.0.1.tgz#aa24ffb9ac3df9a2351837cfb2d279360cd78492"
@@ -13976,10 +13983,10 @@ neo-async@^2.5.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.0.tgz#76b1c823130cca26acfbaccc8fbaf0a2fa33b18f"
   integrity sha512-nJmSswG4As/MkRq7QZFuH/sf/yuv8ODdMZrY4Bedjp77a5MK4A6s7YbBB64c9u79EBUOfXUXBvArmvzTD0X+6g==
 
-netlify-cli@2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.6.1.tgz#f67d75ed2ca91e9549b812facb60e3ea482f4d6b"
-  integrity sha512-UeAV8/nT1O+VoHP/ZPwoO5qWwqNrNbJdjBS9TF+Yz46hOpXlpR3iEW9U8a66Mem8KUBcWPw1DsdLUqcwO/ywuA==
+netlify-cli@2.6.3:
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/netlify-cli/-/netlify-cli-2.6.3.tgz#e919d38fc3c766376ee28a9714c635c5de290f22"
+  integrity sha512-LvdHzJevd7Y0b1CStWi5y+XBzI3rTeYU5m2GJ4VbUCGX4xaJyU2JHD18QGqSxaHIiumccnzrASLb10box/15NA==
   dependencies:
     "@iarna/toml" "^2.0.0"
     "@oclif/command" "^1"
@@ -14009,7 +14016,7 @@ netlify-cli@2.6.1:
     lodash.snakecase "^4.1.1"
     log-symbols "^2.2.0"
     make-dir "^1.3.0"
-    netlify "^2.2.1"
+    netlify "^2.2.3"
     node-fetch "^2.2.0"
     ora "^3.0.0"
     p-wait-for "^2.0.0"
@@ -14020,19 +14027,21 @@ netlify-cli@2.6.1:
     uuid "^3.3.2"
     write-file-atomic "^2.3.0"
 
-netlify@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/netlify/-/netlify-2.2.1.tgz#0f25e445540e66a49e433905e2783a4dc8d1ea54"
-  integrity sha512-Wafb7jZoSuzsRJP3l2eYbCwRkxUn8DbyuWQKpgPNuh6RDhDFOt9Mrv3sSbU0dREJBN8gUBFBAbaJ3+gotXSZrQ==
+netlify@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/netlify/-/netlify-2.2.3.tgz#27ef3b782ac126f8b84a4eb075ff2b30964d411b"
+  integrity sha512-mAoTYqfzcOfPBb57por/T0sEgv5/PpVCtlj1wsOxw6ZDXjWRXFhC7bgq1qMukq1VVtHjW8lsg9mtY8fS1mgdGw==
   dependencies:
     "@netlify/open-api" "^0.5.0"
     archiver "^3.0.0"
     backoff "^2.5.0"
     clean-deep "^3.0.2"
+    debug "^4.1.1"
     flush-write-stream "^1.0.3"
     folder-walker "^3.2.0"
     from2-array "0.0.4"
     hasha "^3.0.0"
+    is-stream "^1.1.0"
     lodash.camelcase "^4.3.0"
     lodash.flatten "^4.4.0"
     lodash.get "^4.4.2"
