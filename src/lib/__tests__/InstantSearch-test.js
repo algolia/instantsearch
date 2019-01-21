@@ -522,7 +522,7 @@ describe('dispose', () => {
   it('should set the helper to `null`', () => {
     const search = new InstantSearch({
       indexName: '',
-      searchClient: {},
+      searchClient: { async search() {} },
     });
 
     search.start();
