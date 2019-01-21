@@ -134,12 +134,7 @@ yarn
 yarn upgrade react-instantsearch-dom@$newVersion -D
 yarn upgrade react-instantsearch-dom-maps@$newVersion -D
 
-for example in examples/* ; do
-  (
-    cd $example
-    yarn upgrade react-instantsearch@$newVersion
-  )
-done
+node scripts/update-examples.js $newVersion
 
 commitMessage="chore(deps): update examples to react-instantsearch v$newVersion"
 git add examples package.json yarn.lock

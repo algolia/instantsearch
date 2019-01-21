@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Autosuggest from 'react-autosuggest';
 import {
   InstantSearch,
   Configure,
   Index,
   Highlight,
-} from 'react-instantsearch/dom';
-import { connectAutoComplete } from 'react-instantsearch/connectors';
-import Autosuggest from 'react-autosuggest';
+  connectAutoComplete,
+} from 'react-instantsearch-dom';
 
 const App = () => (
   <InstantSearch

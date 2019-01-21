@@ -7,7 +7,7 @@ import {
   Configure,
   Highlight,
   Pagination,
-} from 'react-instantsearch/dom';
+} from 'react-instantsearch-dom';
 import { InstantSearch } from './instantsearch';
 
 const HitComponent = ({ hit }) => (

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Mention from 'antd/lib/mention';
-import { InstantSearch } from 'react-instantsearch/dom';
-import { connectAutoComplete } from 'react-instantsearch/connectors';
+import { InstantSearch, connectAutoComplete } from 'react-instantsearch-dom';
 import 'antd/lib/mention/style/css';
 
 const AsyncMention = ({ hits, refine }) => (
