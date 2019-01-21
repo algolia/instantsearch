@@ -10,6 +10,7 @@
     "no-parameter-reassignment": false,
     "object-literal-sort-keys": false,
     "ordered-imports": false,
-    "prettier": true
+    "prettier": true,
+    "jsx-no-lambda": false
   }
 }
