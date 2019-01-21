@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstantSearch, Hits, SearchBox, Index } from 'react-instantsearch/dom';
+import { InstantSearch, Hits, SearchBox, Index } from 'react-instantsearch-dom';
 
 const App = () => (
   <InstantSearch

@@ -1,5 +1,8 @@
-import PropTypes from 'prop-types';
+import { isEqual } from 'lodash';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import qs from 'qs';
 import {
   InstantSearch,
   HierarchicalMenu,
@@ -11,10 +14,7 @@ import {
   RefinementList,
   SearchBox,
   ClearRefinements,
-} from 'react-instantsearch/dom';
-import { withRouter } from 'react-router';
-import qs from 'qs';
-import { isEqual } from 'lodash';
+} from 'react-instantsearch-dom';
 
 class App extends Component {
   constructor(props) {
