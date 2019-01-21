@@ -1,11 +1,13 @@
 language: node_js
-before_install: npm prune
-before_cache: npm prune
-install: npm install
+before_install: 
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+  - export PATH=$HOME/.yarn/bin:$PATH
+cache:
+  yarn: true
 script:
-- npm run test-ci
-- npm run doc
-- npm run test:perf
+- yarn test-ci
+- yarn doc
+- yarn test:perf
 branches:
   only:
   - master
