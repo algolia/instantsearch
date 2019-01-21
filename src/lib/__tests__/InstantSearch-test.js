@@ -516,6 +516,21 @@ describe('InstantSearch lifecycle', () => {
     expect(helperSearchSpy).toHaveBeenCalledTimes(1);
     expect(search.started).toBe(false);
   });
+
+  it('should set the helper to `null`', () => {
+    search = new InstantSearch({
+      indexName,
+      searchClient: algoliasearch(appId, apiKey),
+    });
+
+    search.start();
+
+    expect(search.helper).not.toBe(null);
+
+    search.dispose();
+
+    expect(search.helper).toBe(null);
+  });
 });
 
 it('Allows to start without widgets', () => {
