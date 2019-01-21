@@ -339,7 +339,9 @@ class InstantSearch extends EventEmitter {
    */
   dispose() {
     this.removeWidgets(this.widgets);
+    // allow to restart this instance
     this.started = false;
+    // start from a fresh state, not previously set refinements
     this.helper = null;
   }
 

@@ -516,11 +516,13 @@ describe('InstantSearch lifecycle', () => {
     expect(helperSearchSpy).toHaveBeenCalledTimes(1);
     expect(search.started).toBe(false);
   });
+});
 
+describe('dispose', () => {
   it('should set the helper to `null`', () => {
-    search = new InstantSearch({
-      indexName,
-      searchClient: algoliasearch(appId, apiKey),
+    const search = new InstantSearch({
+      indexName: '',
+      searchClient: {},
     });
 
     search.start();
@@ -530,6 +532,10 @@ describe('InstantSearch lifecycle', () => {
     search.dispose();
 
     expect(search.helper).toBe(null);
+
+    search.start();
+
+    expect(search.helper).not.toBe(null);
   });
 });
 
