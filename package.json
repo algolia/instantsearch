@@ -77,6 +77,8 @@
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "^23.3.12",
+    "@types/storybook__addon-actions": "^3.4.1",
+    "@types/storybook__addon-options": "^4.0.0",
     "algoliasearch": "3.32.0",
     "argos-cli": "0.0.9",
     "babel-core": "7.0.0-bridge.0",
