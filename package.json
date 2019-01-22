@@ -73,6 +73,7 @@
     "@storybook/addon-actions": "4.1.7",
     "@storybook/addon-options": "4.1.7",
     "@storybook/html": "4.1.7",
+    "@types/algoliasearch": "^3.30.1",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",

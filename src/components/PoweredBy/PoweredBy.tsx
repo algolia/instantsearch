@@ -1,18 +1,19 @@
 import React from 'preact-compat';
+import { Theme } from '../../widgets/powered-by/powered-by';
 
-type CSSClasses = {
+export type PoweredByCSSClasses = {
   root: string;
   link: string;
   logo: string;
 };
 
-type Props = {
+type PoweredByProps = {
   url: string;
-  theme: string;
-  cssClasses: CSSClasses;
+  theme: Theme;
+  cssClasses: PoweredByCSSClasses;
 };
 
-const PoweredBy = ({ url, theme, cssClasses }: Props) => (
+const PoweredBy = ({ url, theme, cssClasses }: PoweredByProps) => (
   <div className={cssClasses.root}>
     <a
       href={url}
