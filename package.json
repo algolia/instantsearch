@@ -89,7 +89,7 @@
     "glob": "7.1.3",
     "instantsearch.css": "7.1.0",
     "jest": "23.6.0",
-    "jest-watch-typeahead": "0.2.0",
+    "jest-watch-typeahead": "0.2.1",
     "json": "9.0.6",
     "lerna": "3.10.6",
     "lodash.orderby": "4.6.0",
