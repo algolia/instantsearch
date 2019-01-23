@@ -125,3 +125,42 @@ it('does not start too many times', async () => {
 
   expect(startSpy).toHaveBeenCalledTimes(1);
 });
+
+it('does not dispose if not yet started', async () => {
+  const { instantsearch: instance, rootMixin } = createInstantSearch({
+    indexName: 'bla',
+    searchClient: createFakeClient(),
+  });
+
+  const disposeSpy = jest.spyOn(instance, 'dispose');
+
+  const wrapper = mount(InstantSearchSsr, {
+    ...rootMixin,
+    components: {
+      AisSearchBox: SearchBox,
+    },
+    slots: {
+      default: SearchBox,
+    },
+  });
+
+  wrapper.destroy();
+
+  // does not yet call, since instance isn't started
+  expect(disposeSpy).toHaveBeenCalledTimes(0);
+
+  const wrapperTwo = mount(InstantSearchSsr, {
+    ...rootMixin,
+    components: {
+      AisSearchBox: SearchBox,
+    },
+    slots: {
+      default: SearchBox,
+    },
+  });
+  await Vue.nextTick();
+
+  wrapperTwo.destroy();
+
+  expect(disposeSpy).toHaveBeenCalledTimes(1);
+});
