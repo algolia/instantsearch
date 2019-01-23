@@ -5,7 +5,7 @@ import InstantSearchSsr from '../InstantSearchSsr';
 import SearchBox from '../SearchBox.vue';
 import { createSerializedState } from '../../util/testutils/helper';
 import { createInstantSearch } from '../../util/createInstantSearch';
-import { fakeClient } from '../../util/testutils/client';
+import { createFakeClient } from '../../util/testutils/client';
 
 jest.unmock('instantsearch.js/es');
 
@@ -21,7 +21,7 @@ it('renders correctly (empty)', () => {
       // eslint-disable-next-line camelcase
       $_ais: instantsearch({
         indexName: 'bla',
-        searchClient: fakeClient,
+        searchClient: createFakeClient(),
       }),
     }),
   });
@@ -35,7 +35,7 @@ it('renders correctly (with slot used)', () => {
       // eslint-disable-next-line camelcase
       $_ais: instantsearch({
         indexName: 'bla',
-        searchClient: fakeClient,
+        searchClient: createFakeClient(),
       }),
     }),
     slots: {
@@ -49,7 +49,7 @@ it('renders correctly (with slot used)', () => {
 it('does not call __forceRender on second start', () => {
   const { instantsearch: instance, rootMixin } = createInstantSearch({
     indexName: 'bla',
-    searchClient: fakeClient,
+    searchClient: createFakeClient(),
   });
   instance.hydrate(createSerializedState());
   const forceRenderSpy = jest.spyOn(instance, '__forceRender');
@@ -86,7 +86,7 @@ it('does not call __forceRender on second start', () => {
 it('does not start too many times', async () => {
   const { instantsearch: instance, rootMixin } = createInstantSearch({
     indexName: 'bla',
-    searchClient: fakeClient,
+    searchClient: createFakeClient(),
   });
 
   const startSpy = jest.spyOn(instance, 'start');
