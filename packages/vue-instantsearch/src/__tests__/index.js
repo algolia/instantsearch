@@ -28,6 +28,10 @@ it('should have `name` the same as the suit class name everywhere', () => {
 
   components.forEach(({ name, installedName, suitClass }) => {
     expect(installedName).toBe(name);
-    expect(suitClass).toBe(`ais-${name.substr(3)}`);
+    if (name === 'AisInstantSearchSsr') {
+      expect(suitClass).toBe(`ais-InstantSearch`);
+    } else {
+      expect(suitClass).toBe(`ais-${name.substr(3)}`);
+    }
   });
 });

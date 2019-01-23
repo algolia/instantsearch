@@ -1,0 +1,21 @@
+{
+  "name": "nuxt",
+  "version": "1.0.0",
+  "description": "Vue InstantSearch & Nuxt",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "algoliasearch": "^3.32.0",
+    "cross-env": "^5.2.0",
+    "nuxt": "^2.0.0",
+    "vue-instantsearch": "^2.0.0-beta.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

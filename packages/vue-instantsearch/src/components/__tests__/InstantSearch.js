@@ -1,50 +1,7 @@
 import Vue from 'vue';
 import { mount } from '@vue/test-utils';
 import instantsearch from 'instantsearch.js/es';
-import InstantSearch from '../InstantSearch.vue';
-
-jest.mock('instantsearch.js/es', () => {
-  const isPlainObject = require('lodash/isPlainObject');
-  const start = jest.fn();
-
-  class RoutingManager {
-    constructor(routing) {
-      this._routing = routing;
-    }
-  }
-  const fakeInstantSearch = jest.fn(
-    ({
-      indexName,
-      searchClient,
-      routing,
-      stalledSearchDelay,
-      searchFunction,
-    }) => {
-      if (!searchClient && !isPlainObject(searchClient)) {
-        throw new Error('need searchClient to be a plain object');
-      }
-      if (!indexName) {
-        throw new Error('need indexName to be a string');
-      }
-      return {
-        _stalledSearchDelay: stalledSearchDelay,
-        _searchFunction: searchFunction,
-        routing: new RoutingManager(routing),
-        helper: fakeInstantSearch.__helper,
-        start,
-      };
-    }
-  );
-  fakeInstantSearch.__startMock = start;
-  fakeInstantSearch._stalledSearchDelay = 200;
-  // note for the future: these tests would be better with a real helper instance
-  fakeInstantSearch.__helper = {
-    search: jest.fn(),
-    setClient: jest.fn(() => fakeInstantSearch.__helper),
-    setIndex: jest.fn(() => fakeInstantSearch.__helper),
-  };
-  return fakeInstantSearch;
-});
+import InstantSearch from '../InstantSearch';
 
 beforeEach(() => jest.clearAllMocks());
 
@@ -90,10 +47,10 @@ it('throws on usage of appId or apiKey', () => {
   });
 
   expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(`
-"Vue InstantSearch: You used the prop api-key or api-key.
+"Vue InstantSearch: You used the prop api-key or app-id.
 These have been replaced by search-client.
 
-See more info here: https://community.algolia.com/vue-instantsearch/components/InstantSearch.html#usage"
+See more info here: https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-search-client"
 `);
 
   expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
@@ -115,34 +72,16 @@ found in
 `);
 });
 
-it('calls `start` on the next tick', done => {
-  mount(InstantSearch, {
+it('calls `start` on the next tick', async () => {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'something',
     },
   });
 
-  Vue.nextTick(() => {
-    expect(instantsearch.__startMock).toHaveBeenCalledTimes(1);
-    done();
-  });
-});
-
-it('provides an InstantSearch instance', () => {
-  const wrapper = mount(InstantSearch, {
-    propsData: {
-      searchClient: {},
-      indexName: 'bla',
-    },
-  });
-
-  expect(wrapper.vm._provided).toEqual({
-    instantSearchInstance: expect.objectContaining({
-      // it's really InstantSearch, since it has the same spy as our custom mock
-      start: instantsearch.__startMock,
-    }),
-  });
+  await Vue.nextTick();
+  expect(wrapper.vm.instantSearchInstance.start).toHaveBeenCalledTimes(1);
 });
 
 it('renders correctly (empty)', () => {
@@ -182,9 +121,11 @@ it('Allows a change in `index-name`', () => {
     indexName: 'doggie_bowl',
   });
 
-  expect(instantsearch.__helper.setIndex).toHaveBeenCalledTimes(1);
-  expect(instantsearch.__helper.setIndex).toHaveBeenCalledWith('doggie_bowl');
-  expect(instantsearch.__helper.search).toHaveBeenCalledTimes(1);
+  const helper = wrapper.vm.instantSearchInstance.helper;
+
+  expect(helper.setIndex).toHaveBeenCalledTimes(1);
+  expect(helper.setIndex).toHaveBeenCalledWith('doggie_bowl');
+  expect(helper.search).toHaveBeenCalledTimes(1);
 });
 
 it('Allows a change in `search-client`', () => {
@@ -201,9 +142,11 @@ it('Allows a change in `search-client`', () => {
     searchClient: newClient,
   });
 
-  expect(instantsearch.__helper.setClient).toHaveBeenCalledTimes(1);
-  expect(instantsearch.__helper.setClient).toHaveBeenCalledWith(newClient);
-  expect(instantsearch.__helper.search).toHaveBeenCalledTimes(1);
+  const helper = wrapper.vm.instantSearchInstance.helper;
+
+  expect(helper.setClient).toHaveBeenCalledTimes(1);
+  expect(helper.setClient).toHaveBeenCalledWith(newClient);
+  expect(helper.search).toHaveBeenCalledTimes(1);
 });
 
 it('Allows a change in `search-function`', () => {
@@ -244,6 +187,31 @@ it('Allows a change in `stalled-search-delay`', () => {
   });
 
   expect(wrapper.vm.instantSearchInstance._stalledSearchDelay).toEqual(50);
+});
+
+it('does not allow `routing` to be a boolean', () => {
+  global.console.error = jest.fn();
+  global.console.warn = jest.fn();
+  mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      indexName: 'bla',
+      routing: true,
+    },
+  });
+
+  expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
+"[Vue warn]: Invalid prop: custom validator check failed for prop \\"routing\\".
+
+found in
+
+---> <AisInstantSearch>
+       <Root>"
+`);
+
+  expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(
+    `"routing should be an object, with \`router\` and \`stateMapping\`. See https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-routing"`
+  );
 });
 
 it('Does not allow a change in `routing`', () => {
@@ -292,4 +260,22 @@ it('will not call client.addAlgoliaAgent if not function (so nothing to assert)'
       },
     })
   ).not.toThrow();
+});
+
+it('disposes the instantsearch instance on unmount', async () => {
+  const wrapper = mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      indexName: 'something',
+    },
+  });
+
+  await Vue.nextTick();
+
+  expect(wrapper.vm.instantSearchInstance.started).toBe(true);
+
+  wrapper.destroy();
+
+  expect(wrapper.vm.instantSearchInstance.started).toBe(false);
+  expect(wrapper.vm.instantSearchInstance.dispose).toHaveBeenCalledTimes(1);
 });

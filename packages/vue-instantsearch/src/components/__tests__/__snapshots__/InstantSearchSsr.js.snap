@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly (empty) 1`] = `
+
+<div class="ais-InstantSearch ais-InstantSearch--ssr">
+</div>
+
+`;
+
+exports[`renders correctly (with slot used) 1`] = `
+
+<div class="ais-InstantSearch ais-InstantSearch--ssr">
+  <div>
+    Hi there, this is the main slot
+  </div>
+</div>
+
+`;

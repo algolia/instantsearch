@@ -9,13 +9,17 @@ cd $(dirname `which $0`)
 
 for dir in ./* ; do
   if [ -d "$dir" ]; then
-      name=$(basename "$dir")
-      echo "building example: $name"
-      cd $name
+    name=$(basename "$dir")
+    echo "building example: $name"
+    cd $name
+    if [[ "$name" != "nuxt" && "$name" != "ssr" ]]; then
       yarn
       yarn build
       cp -R dist ../../docs/dist/examples/$name
-      cd ..
+    else
+      echo "build of $name skipped"
+    fi
+    cd ..
   fi
 done
 
