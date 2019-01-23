@@ -13,28 +13,49 @@ describe('connectRefinementList', () => {
   };
 
   it('throws on bad usage', () => {
-    expect(connectRefinementList).toThrow(/Usage:/);
+    expect(connectRefinementList).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
+`);
 
     expect(() =>
       connectRefinementList({
         operator: 'and',
       })
-    ).toThrow(/Usage:/);
+    ).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"object\\").
 
-    expect(() => connectRefinementList(() => {})()).toThrow(/Usage:/);
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
+`);
+
+    expect(() => connectRefinementList(() => {})())
+      .toThrowErrorMatchingInlineSnapshot(`
+"The \`attribute\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
+`);
 
     expect(() =>
       connectRefinementList(() => {})({
         operator: 'and',
       })
-    ).toThrow(/Usage:/);
+    ).toThrowErrorMatchingInlineSnapshot(`
+"The \`attribute\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
+`);
 
     expect(() =>
       connectRefinementList(() => {})({
         attribute: 'company',
         operator: 'YUP',
       })
-    ).toThrow(/Usage:/);
+    ).toThrowErrorMatchingInlineSnapshot(`
+"The \`operator\` must one of: \`\\"and\\"\`, \`\\"or\\"\` (got \\"YUP\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
+`);
 
     expect(() =>
       connectRefinementList(() => {})({
@@ -43,9 +64,11 @@ describe('connectRefinementList', () => {
         showMore: true,
         showMoreLimit: 10,
       })
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"\`showMoreLimit\` should be greater than \`limit\`."`
-    );
+    ).toThrowErrorMatchingInlineSnapshot(`
+"\`showMoreLimit\` should be greater than \`limit\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
+`);
 
     expect(() =>
       connectRefinementList(() => {})({
@@ -54,9 +77,11 @@ describe('connectRefinementList', () => {
         showMore: true,
         showMoreLimit: 5,
       })
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"\`showMoreLimit\` should be greater than \`limit\`."`
-    );
+    ).toThrowErrorMatchingInlineSnapshot(`
+"\`showMoreLimit\` should be greater than \`limit\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
+`);
   });
 
   describe('options configuring the helper', () => {
