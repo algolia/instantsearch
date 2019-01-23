@@ -51,16 +51,18 @@ export const createInstantSearchComponent = component =>
         });
       },
       beforeDestroy() {
-        this.instantSearchInstance.dispose();
+        if (this.instantSearchInstance.started) {
+          this.instantSearchInstance.dispose();
 
-        // TODO: remove this once algolia/instantsearch.js#3399 is used
-        this.instantSearchInstance.started = false;
+          // TODO: remove this once algolia/instantsearch.js#3399 is used
+          this.instantSearchInstance.started = false;
 
-        // TODO: remove this once algolia/instantsearch.js#3415 is used
-        this.instantSearchInstance.helper = null;
+          // TODO: remove this once algolia/instantsearch.js#3415 is used
+          this.instantSearchInstance.helper = null;
 
-        // a hydrated instance will no longer be hydrated once disposed, and starts from scratch
-        this.instantSearchInstance.hydrated = false;
+          // a hydrated instance will no longer be hydrated once disposed, and starts from scratch
+          this.instantSearchInstance.hydrated = false;
+        }
       },
     },
     component
