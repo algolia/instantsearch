@@ -1,3 +1,20 @@
+<a name="2.0.0-beta.3"></a>
+# [2.0.0-beta.3](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2019-01-23)
+
+
+### Bug Fixes
+
+* **components:** remove faulty whitespace ([#606](https://github.com/algolia/vue-instantsearch/issues/606)) ([c7541b1](https://github.com/algolia/vue-instantsearch/commit/c7541b1))
+* **core:** hydrated always is false on dispose ([8851dec](https://github.com/algolia/vue-instantsearch/commit/8851dec))
+* **errors:** less whitespace ([1dbd177](https://github.com/algolia/vue-instantsearch/commit/1dbd177))
+
+
+### Features
+
+* server side rendering ([#596](https://github.com/algolia/vue-instantsearch/issues/596)) ([a875bd9](https://github.com/algolia/vue-instantsearch/commit/a875bd9)), closes [#603](https://github.com/algolia/vue-instantsearch/issues/603) [#605](https://github.com/algolia/vue-instantsearch/issues/605) [#607](https://github.com/algolia/vue-instantsearch/issues/607) [algolia/instantsearch.js#3415](https://github.com/algolia/instantsearch.js/issues/3415)
+
+
+
 <a name="2.0.0-beta.2"></a>
 # [2.0.0-beta.2](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2018-12-20)
 
