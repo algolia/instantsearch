@@ -508,11 +508,34 @@ describe('InstantSearch lifecycle', () => {
 
     expect(search.widgets).toHaveLength(5);
     expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+    expect(search.started).toBe(true);
 
     search.dispose();
 
     expect(search.widgets).toHaveLength(0);
     expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+    expect(search.started).toBe(false);
+  });
+});
+
+describe('dispose', () => {
+  it('should set the helper to `null`', () => {
+    const search = new InstantSearch({
+      indexName: '',
+      searchClient: { async search() {} },
+    });
+
+    search.start();
+
+    expect(search.helper).not.toBe(null);
+
+    search.dispose();
+
+    expect(search.helper).toBe(null);
+
+    search.start();
+
+    expect(search.helper).not.toBe(null);
   });
 });
 
