@@ -62,7 +62,7 @@ export default function poweredBy({
   theme = 'light',
 } = {}) {
   if (!container) {
-    throw new Error(withUsage('The "container" option is required.'));
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
