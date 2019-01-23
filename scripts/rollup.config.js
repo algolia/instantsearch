@@ -15,10 +15,11 @@ const plugins = [
   resolve({
     browser: true,
     preferBuiltins: false,
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   }),
   babel({
     exclude: 'node_modules/**',
-    plugins: ['external-helpers'],
+    extensions: ['.js', '.ts', '.tsx'],
   }),
   commonjs(),
   filesize({
