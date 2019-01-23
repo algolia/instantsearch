@@ -1,6 +1,16 @@
 import connectPoweredBy from '../connectPoweredBy';
 
 describe('connectPoweredBy', () => {
+  it('throws without rendering function', () => {
+    expect(() => {
+      connectPoweredBy();
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/js/#connector"
+`);
+  });
+
   it('renders during init and render', () => {
     const rendering = jest.fn();
     const makeWidget = connectPoweredBy(rendering);

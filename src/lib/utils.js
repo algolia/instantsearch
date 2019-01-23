@@ -347,7 +347,9 @@ function unescapeRefinement(value) {
 
 function checkRendering(rendering, usage) {
   if (rendering === undefined || typeof rendering !== 'function') {
-    throw new Error(usage);
+    throw new Error(`The render function is not valid (got type "${typeof rendering}").
+
+${usage}`);
   }
 }
 
@@ -473,6 +475,22 @@ if (__DEV__) {
   warning.cache = {};
 }
 
+function createDocumentationMessageGenerator(
+  widget,
+  { connector = false } = {}
+) {
+  const link = [
+    'https://www.algolia.com/doc/api-reference/widgets/',
+    widget,
+    '/js/',
+    connector ? '#connector' : '',
+  ].join('');
+
+  return function(message) {
+    return [message, `See documentation: ${link}`].filter(Boolean).join('\n\n');
+  };
+}
+
 export {
   capitalize,
   getContainerNode,
@@ -490,6 +508,7 @@ export {
   escapeRefinement,
   unescapeRefinement,
   checkRendering,
+  createDocumentationMessageGenerator,
   deprecate,
   warning,
 };

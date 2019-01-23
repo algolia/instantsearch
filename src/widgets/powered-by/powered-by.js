@@ -2,10 +2,14 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import PoweredBy from '../../components/PoweredBy/PoweredBy.tsx';
 import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
-import { getContainerNode } from '../../lib/utils';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
 const suit = component('PoweredBy');
+const withUsage = createDocumentationMessageGenerator('powered-by');
 
 const renderer = ({ containerNode, cssClasses }) => (
   { url, widgetParams },
@@ -22,12 +26,6 @@ const renderer = ({ containerNode, cssClasses }) => (
     return;
   }
 };
-
-const usage = `Usage:
-poweredBy({
-  container,
-  [ theme = 'light' ],
-})`;
 
 /**
  * @typedef {Object} PoweredByWidgetCssClasses
@@ -64,7 +62,7 @@ export default function poweredBy({
   theme = 'light',
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -84,13 +82,9 @@ export default function poweredBy({
     cssClasses,
   });
 
-  try {
-    const makeWidget = connectPoweredBy(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
+  const makeWidget = connectPoweredBy(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
 
-    return makeWidget({ theme });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  return makeWidget({ theme });
 }
