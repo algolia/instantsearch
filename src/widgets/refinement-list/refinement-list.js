@@ -67,24 +67,6 @@ const renderer = ({
   );
 };
 
-const usage = `Usage:
-refinementList({
-  container,
-  attribute,
-  [ operator='or' ],
-  [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-  [ limit = 10 ],
-  [ showMore = false],
-  [ showMoreLimit = 20 ],
-  [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
-  [ templates.{item, searchableNoResults, showMoreText} ],
-  [ searchable ],
-  [ searchablePlaceholder ],
-  [ searchableIsAlwaysActive = true ],
-  [ searchableEscapeFacetValues = true ],
-  [ transformItems ],
-})`;
-
 /**
  * @typedef {Object} RefinementListTemplates
  * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
