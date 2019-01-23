@@ -508,11 +508,13 @@ describe('InstantSearch lifecycle', () => {
 
     expect(search.widgets).toHaveLength(5);
     expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+    expect(search.started).toBe(true);
 
     search.dispose();
 
     expect(search.widgets).toHaveLength(0);
     expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+    expect(search.started).toBe(false);
   });
 });
 

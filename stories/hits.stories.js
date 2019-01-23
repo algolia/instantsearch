@@ -105,45 +105,4 @@ storiesOf('Hits', module)
         })
       );
     })
-  )
-  .add(
-    'with highlighted array',
-    withHits(
-      ({ search, container, instantsearch }) => {
-        search.addWidget(
-          instantsearch.widgets.hits({
-            container,
-            templates: {
-              item: `
-                  <div class="hit" id="hit-{{objectID}}">
-                    <div class="hit-content">
-                      <div>
-                        <span>{{{_highlightResult.name.value}}}</span>
-                        <span>\${{price}}</span>
-                        <span>{{rating}} stars</span>
-                      </div>
-                      <div class="hit-type">
-                        {{{_highlightResult.type.value}}}
-                      </div>
-                      <div class="hit-description">
-                        {{{_highlightResult.description.value}}}
-                      </div>
-                      <div class="hit-tags">
-                      {{#_highlightResult.tags}}
-                        <span>{{{value}}}</span>
-                      {{/_highlightResult.tags}}
-                      </div>
-                    </div>
-                  </div>
-                `,
-            },
-          })
-        );
-      },
-      {
-        indexName: 'highlight_array',
-        appId: 'KY4PR9ORUL',
-        apiKey: 'a5ca312adab3b79e14054154efa00b37',
-      }
-    )
   );
