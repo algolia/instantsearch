@@ -1,2 +1,2 @@
---compilers js:babel-register
+--compilers js:@babel/register
 @(src)/**/__tests__/**/*-test.js scripts/jsdom.js
