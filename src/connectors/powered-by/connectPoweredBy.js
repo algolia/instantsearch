@@ -3,9 +3,9 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const usage = createDocumentationMessageGenerator('powered-by', {
+const withUsage = createDocumentationMessageGenerator('powered-by', {
   connector: true,
-})();
+});
 
 /**
  * @typedef {Object} PoweredByWidgetOptions
@@ -28,7 +28,7 @@ const usage = createDocumentationMessageGenerator('powered-by', {
  * @return {function} Re-usable widget factory for a custom **PoweredBy** widget.
  */
 export default function connectPoweredBy(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   const defaultUrl =
     'https://www.algolia.com/?' +
