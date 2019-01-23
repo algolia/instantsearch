@@ -112,7 +112,7 @@
     "places.js": "1.14.0",
     "prettier": "1.14.3",
     "react-test-renderer": "16.7.0",
-    "rollup": "0.67.0",
+    "rollup": "0.68.2",
     "rollup-plugin-babel": "3.0.7",
     "rollup-plugin-commonjs": "9.2.0",
     "rollup-plugin-filesize": "5.0.1",
