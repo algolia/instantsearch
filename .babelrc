@@ -2,6 +2,8 @@
   "env": {
     "development": {
       "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react",
         [
           "@babel/preset-env",
           {
@@ -9,8 +11,7 @@
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
-        ],
-        "@babel/preset-react"
+        ]
       ],
       "plugins": [
         "@babel/plugin-proposal-class-properties",
@@ -21,6 +22,8 @@
     },
     "production": {
       "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react",
         [
           "@babel/preset-env",
           {
@@ -28,8 +31,7 @@
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
-        ],
-        "@babel/preset-react"
+        ]
       ],
       "plugins": [
         "@babel/plugin-proposal-class-properties",
@@ -40,6 +42,8 @@
     },
     "umd": {
       "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react",
         [
           "@babel/preset-env",
           {
@@ -48,8 +52,7 @@
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
-        ],
-        "@babel/preset-react"
+        ]
       ],
       "plugins": [
         "@babel/plugin-proposal-class-properties",
@@ -60,6 +63,8 @@
     },
     "cjs": {
       "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react",
         [
           "@babel/preset-env",
           {
@@ -67,8 +72,7 @@
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
-        ],
-        "@babel/preset-react"
+        ]
       ],
       "plugins": [
         "@babel/plugin-proposal-class-properties",
@@ -88,6 +92,8 @@
     },
     "es": {
       "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react",
         [
           "@babel/preset-env",
           {
@@ -96,8 +102,7 @@
               "browsers": ["last 2 versions", "ie >= 9"]
             }
           }
-        ],
-        "@babel/preset-react"
+        ]
       ],
       "plugins": [
         "@babel/plugin-proposal-class-properties",
@@ -117,6 +122,8 @@
     },
     "test": {
       "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react",
         [
           "@babel/preset-env",
           {
@@ -124,9 +131,7 @@
               "node": "current"
             }
           }
-        ],
-        "@babel/preset-react",
-        "@babel/preset-typescript"
+        ]
       ],
       "plugins": [
         "@babel/plugin-proposal-class-properties",
