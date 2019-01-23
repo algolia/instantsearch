@@ -25,7 +25,7 @@ Array [
         ],
         "results": Array [
           Object {
-            "isThrow": false,
+            "type": "return",
             "value": undefined,
           },
         ],
@@ -121,7 +121,7 @@ Array [
           ],
           "results": Array [
             Object {
-              "isThrow": false,
+              "type": "return",
               "value": undefined,
             },
           ],
@@ -225,7 +225,7 @@ Array [
             ],
             "results": Array [
               Object {
-                "isThrow": false,
+                "type": "return",
                 "value": Object {
                   "another": Object {
                     "different": "parameter",
@@ -261,7 +261,7 @@ Array [
                       ],
                       "results": Array [
                         Object {
-                          "isThrow": false,
+                          "type": "return",
                           "value": undefined,
                         },
                       ],
@@ -392,7 +392,7 @@ Array [
             ],
             "results": Array [
               Object {
-                "isThrow": false,
+                "type": "return",
                 "value": undefined,
               },
             ],
@@ -403,7 +403,7 @@ Array [
             ],
             "results": Array [
               Object {
-                "isThrow": false,
+                "type": "return",
                 "value": undefined,
               },
             ],
