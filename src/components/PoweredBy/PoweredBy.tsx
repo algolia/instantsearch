@@ -1,7 +1,18 @@
 import React from 'preact-compat';
-import PropTypes from 'prop-types';
 
-const PoweredBy = ({ url, theme, cssClasses }) => (
+type CSSClasses = {
+  root: string;
+  link: string;
+  logo: string;
+};
+
+type Props = {
+  url: string;
+  theme: string;
+  cssClasses: CSSClasses;
+};
+
+const PoweredBy = ({ url, theme, cssClasses }: Props) => (
   <div className={cssClasses.root}>
     <a
       href={url}
@@ -40,15 +51,5 @@ const PoweredBy = ({ url, theme, cssClasses }) => (
     </a>
   </div>
 );
-
-PoweredBy.propTypes = {
-  url: PropTypes.string.isRequired,
-  theme: PropTypes.string.isRequired,
-  cssClasses: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    logo: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default PoweredBy;
