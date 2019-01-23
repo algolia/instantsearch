@@ -339,7 +339,13 @@ class InstantSearch extends EventEmitter {
    */
   dispose() {
     this.removeWidgets(this.widgets);
+    // You can not start an instance two times, therefore a disposed instance needs to set started as false
+    // otherwise this can not be restarted at a later point.
     this.started = false;
+
+    // The helper needs to be reset to perform the next search from a fresh state.
+    // If not reset, it would use the state stored before calling `dispose()`.
+    this.helper = null;
   }
 
   createURL(params) {
