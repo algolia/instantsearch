@@ -522,7 +522,17 @@ describe('dispose', () => {
   it('should set the helper to `null`', () => {
     const search = new InstantSearch({
       indexName: '',
-      searchClient: { async search() {} },
+      searchClient: {
+        search() {
+          return Promise.resolve({
+            results: [
+              {
+                query: 'fake query',
+              },
+            ],
+          });
+        },
+      },
     });
 
     search.start();
@@ -536,6 +546,33 @@ describe('dispose', () => {
     search.start();
 
     expect(search.helper).not.toBe(null);
+  });
+
+  it('should remove the listeners on the helper', done => {
+    const search = new InstantSearch({
+      indexName: '',
+      searchClient: {
+        search() {
+          return Promise.resolve({
+            results: [
+              {
+                query: 'fake query',
+              },
+            ],
+          });
+        },
+      },
+    });
+
+    search.on('error', () => {
+      done.fail('InstantSearch should not throw an error.');
+    });
+
+    search.start();
+
+    search.dispose();
+
+    done();
   });
 });
 

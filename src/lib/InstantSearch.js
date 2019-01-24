@@ -345,6 +345,7 @@ class InstantSearch extends EventEmitter {
 
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
+    this.helper.removeAllListeners();
     this.helper = null;
   }
 
