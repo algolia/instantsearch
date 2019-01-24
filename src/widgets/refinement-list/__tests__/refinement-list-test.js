@@ -18,14 +18,15 @@ describe('refinementList()', () => {
 
   describe('instantiated with wrong parameters', () => {
     it('should fail if no container', () => {
-      // Given
       options = { container: undefined, attribute: 'foo' };
 
-      // Then
       expect(() => {
-        // When
         refinementList(options);
-      }).toThrow(/^Usage:/);
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/"
+`);
     });
   });
 

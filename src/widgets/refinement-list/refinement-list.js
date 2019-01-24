@@ -3,9 +3,14 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('refinement-list');
 const suit = component('RefinementList');
 
 const renderer = ({
@@ -61,24 +66,6 @@ const renderer = ({
     containerNode
   );
 };
-
-const usage = `Usage:
-refinementList({
-  container,
-  attribute,
-  [ operator='or' ],
-  [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-  [ limit = 10 ],
-  [ showMore = false],
-  [ showMoreLimit = 20 ],
-  [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
-  [ templates.{item, searchableNoResults, showMoreText} ],
-  [ searchable ],
-  [ searchablePlaceholder ],
-  [ searchableIsAlwaysActive = true ],
-  [ searchableEscapeFacetValues = true ],
-  [ transformItems ],
-})`;
 
 /**
  * @typedef {Object} RefinementListTemplates
@@ -187,7 +174,7 @@ export default function refinementList({
   transformItems,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const escapeFacetValues = searchable
@@ -244,21 +231,18 @@ export default function refinementList({
     showMore,
   });
 
-  try {
-    const makeWidget = connectRefinementList(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({
-      attribute,
-      operator,
-      limit,
-      showMore,
-      showMoreLimit,
-      sortBy,
-      escapeFacetValues,
-      transformItems,
-    });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectRefinementList(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({
+    attribute,
+    operator,
+    limit,
+    showMore,
+    showMoreLimit,
+    sortBy,
+    escapeFacetValues,
+    transformItems,
+  });
 }

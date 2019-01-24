@@ -1,4 +1,7 @@
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import {
   escapeFacets,
   TAG_PLACEHOLDER,
@@ -6,37 +9,9 @@ import {
 } from '../../lib/escape-highlight';
 import isEqual from 'lodash/isEqual';
 
-const usage = `Usage:
-var customRefinementList = connectRefinementList(function render(params) {
-  // params = {
-  //   isFromSearch,
-  //   createURL,
-  //   items,
-  //   refine,
-  //   searchForItems,
-  //   instantSearchInstance,
-  //   canRefine,
-  //   toggleShowMore,
-  //   isShowingMore,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('refinement-list', {
+  connector: true,
 });
-
-search.addWidget(
-  customRefinementList({
-    attribute,
-    [ operator = 'or' ],
-    [ limit = 10 ],
-    [ showMore = false ],
-    [ showMoreLimit = 20 ],
-    [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-    [ escapeFacetValues = true ],
-    [ transformItems ],
-  })
-);
-
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
-`;
 
 /**
  * @typedef {Object} RefinementListItem
@@ -138,7 +113,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectRefinementList(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const {
@@ -152,12 +127,22 @@ export default function connectRefinementList(renderFn, unmountFn) {
       transformItems = items => items,
     } = widgetParams;
 
-    if (!attribute || !/^(and|or)$/.test(operator)) {
-      throw new Error(usage);
+    if (!attribute) {
+      throw new Error(withUsage('The `attribute` option is required.'));
+    }
+
+    if (!/^(and|or)$/.test(operator)) {
+      throw new Error(
+        withUsage(
+          `The \`operator\` must one of: \`"and"\`, \`"or"\` (got "${operator}").`
+        )
+      );
     }
 
     if (showMore === true && showMoreLimit <= limit) {
-      throw new Error('`showMoreLimit` should be greater than `limit`.');
+      throw new Error(
+        withUsage('`showMoreLimit` should be greater than `limit`.')
+      );
     }
 
     const formatItems = ({ name: label, ...item }) => ({
