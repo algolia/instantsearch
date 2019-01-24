@@ -10156,7 +10156,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.0"
     tough-cookie ">=2.3.3"
 
-request@^2.65.0, request@^2.87.0:
+request@^2.65.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -12161,12 +12161,12 @@ wdio-mocha-framework@0.5.13:
     mocha "^5.0.0"
     wdio-sync "0.7.1"
 
-wdio-sauce-service@0.4.8:
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/wdio-sauce-service/-/wdio-sauce-service-0.4.8.tgz#df66304510d51b8a923a560e19ea5f3cac5cc708"
-  integrity sha512-39u3/WQNtbsflrH+CXPQmYpblk3We77VW7eRi+aFAoO4pKGXqh/7L/Qt6j2f1EHAZS6JmLVDYiuUcz5uLGONbA==
+wdio-sauce-service@0.4.14:
+  version "0.4.14"
+  resolved "https://registry.yarnpkg.com/wdio-sauce-service/-/wdio-sauce-service-0.4.14.tgz#7d342e7abae5734b662b1243bb9476d33d465797"
+  integrity sha512-LlnMHVzbuaF69CzcqzJiMAkJbdOTlsX3vRqD4cf3eE3UTC6rdRN9DhFCFBeQq6KW1L2bE1LbegFteo0V4Nilkw==
   dependencies:
-    request "~2.83.0"
+    request "^2.88.0"
     sauce-connect-launcher "~1.2.3"
 
 wdio-screenshot@^0.6.0:
