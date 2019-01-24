@@ -1,19 +1,27 @@
+import { render } from 'preact-compat';
 import { SearchParameters } from 'algoliasearch-helper';
 import hierarchicalMenu from '../hierarchical-menu';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('hierarchicalMenu()', () => {
   let container;
   let attributes;
   let options;
   let widget;
-  let ReactDOM;
 
   beforeEach(() => {
     container = document.createElement('div');
     attributes = ['hello', 'world'];
     options = {};
-    ReactDOM = { render: jest.fn() };
-    hierarchicalMenu.__Rewire__('render', ReactDOM.render);
+
+    render.mockClear();
   });
 
   describe('instantiated with wrong parameters', () => {
@@ -171,15 +179,15 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({ ...options, cssClasses: userCssClasses });
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
-    it('calls ReactDOM.render', () => {
+    it('calls render', () => {
       widget = hierarchicalMenu(options);
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('asks for results.getFacetValues', () => {
@@ -211,7 +219,7 @@ describe('hierarchicalMenu()', () => {
       });
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('has a transformItems options', () => {
@@ -224,7 +232,7 @@ describe('hierarchicalMenu()', () => {
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('sets facetValues to empty array when no results', () => {
@@ -232,7 +240,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu(options);
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('has a toggleRefinement method', () => {
@@ -240,7 +248,7 @@ describe('hierarchicalMenu()', () => {
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
       const elementToggleRefinement =
-        ReactDOM.render.mock.calls[0][0].props.toggleRefinement;
+        render.mock.calls[0][0].props.toggleRefinement;
       elementToggleRefinement('mom');
       expect(helper.toggleRefinement).toHaveBeenCalledTimes(1);
       expect(helper.toggleRefinement).toHaveBeenCalledWith('hello', 'mom');
@@ -280,13 +288,8 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({ ...options, limit: 3 });
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      const actualFacetValues =
-        ReactDOM.render.mock.calls[0][0].props.facetValues;
+      const actualFacetValues = render.mock.calls[0][0].props.facetValues;
       expect(actualFacetValues).toEqual(expectedFacetValues);
     });
-  });
-
-  afterEach(() => {
-    hierarchicalMenu.__ResetDependency__('render');
   });
 });
