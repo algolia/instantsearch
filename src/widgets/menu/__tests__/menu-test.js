@@ -1,4 +1,13 @@
+import { render } from 'preact-compat';
 import menu from '../menu';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('menu', () => {
   it('throws usage when no container', () => {
@@ -36,16 +45,12 @@ describe('menu', () => {
   });
 
   describe('render', () => {
-    let ReactDOM;
     let data;
     let results;
     let state;
     let helper;
 
     beforeEach(() => {
-      ReactDOM = { render: jest.fn() };
-      menu.__Rewire__('render', ReactDOM.render);
-
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
       state = { toggleRefinement: jest.fn() };
@@ -54,6 +59,8 @@ describe('menu', () => {
         search: jest.fn(),
         state,
       };
+
+      render.mockClear();
     });
 
     it('snapshot', () => {
@@ -69,7 +76,7 @@ describe('menu', () => {
       });
       widget.render({ results, state });
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('renders transformed items', () => {
@@ -87,11 +94,7 @@ describe('menu', () => {
       });
       widget.render({ results, state });
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    afterEach(() => {
-      menu.__ResetDependency__('render');
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 });
