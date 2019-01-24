@@ -40,7 +40,6 @@ describe('InstantSearch lifecycle', () => {
       another: { config: 'parameter' },
     };
 
-    InstantSearch.__Rewire__('algoliasearch', algoliasearch);
     InstantSearch.__Rewire__('algoliasearchHelper', helperStub);
 
     search = new InstantSearch({
@@ -51,7 +50,6 @@ describe('InstantSearch lifecycle', () => {
   });
 
   afterEach(() => {
-    InstantSearch.__ResetDependency__('algoliasearch');
     InstantSearch.__ResetDependency__('algoliasearchHelper');
   });
 
