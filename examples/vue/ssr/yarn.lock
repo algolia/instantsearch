@@ -1108,7 +1108,28 @@ algoliasearch-helper@^2.26.0, algoliasearch-helper@^2.26.1:
     qs "^6.5.1"
     util "^0.10.3"
 
-algoliasearch@^3.27.0, algoliasearch@^3.30.0:
+algoliasearch@^3.27.0:
+  version "3.32.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.32.0.tgz#5818168c26ff921bd0346a919071bac928b747ce"
+  integrity sha512-C8oQnPTf0wPuyD2jSZwtBAPvz+lHOE7zRIPpgXGBuNt6ZNcC4omsbytG26318rT77a8h4759vmIp6n9p8iw4NA==
+  dependencies:
+    agentkeepalive "^2.2.0"
+    debug "^2.6.8"
+    envify "^4.0.0"
+    es6-promise "^4.1.0"
+    events "^1.1.0"
+    foreach "^2.0.5"
+    global "^4.3.2"
+    inherits "^2.0.1"
+    isarray "^2.0.1"
+    load-script "^1.0.0"
+    object-keys "^1.0.11"
+    querystring-es3 "^0.2.1"
+    reduce "^1.0.1"
+    semver "^5.1.0"
+    tunnel-agent "^0.6.0"
+
+algoliasearch@^3.30.0:
   version "3.30.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.30.0.tgz#355585e49b672e5f71d45b9c2b371ecdff129cd1"
   integrity sha512-FuinyPgNn0MeAHm9pan6rLgY6driY3mcTo4AWNBMY1MUReeA5PQA8apV/3SNXqA5bbsuvMvmA0ZrVzrOmEeQTA==
@@ -4025,9 +4046,9 @@ ignore@^4.0.6:
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
 immutability-helper@^2.7.1:
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
-  integrity sha512-8AVB5EUpRBUdXqfe4cFsFECsOIZ9hX/Arl8B8S9/tmwpYv3UWvOsXUPOjkuZIMaVxfSWkxCzkng1rjmEoSWrxQ==
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.9.1.tgz#71c423ba387e67b6c6ceba0650572f2a2a6727df"
+  integrity sha512-r/RmRG8xO06s/k+PIaif2r5rGc3j4Yhc01jSBfwPCXDLYZwp/yxralI37Df1mwmuzcCsen/E/ITKcTEvc1PQmQ==
   dependencies:
     invariant "^2.2.0"
 
@@ -6139,9 +6160,9 @@ preact-transition-group@^1.1.1:
   integrity sha1-8KSTJ+pRXs406ivoZMSn0p5dbhA=
 
 preact@^8.2.5, preact@^8.2.7:
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-8.3.1.tgz#ed34f79d09edc5efd32a378a3416ef5dc531e3ac"
-  integrity sha512-s8H1Y8O9e+mOBo3UP1jvWqArPmjCba2lrrGLlq/0kN1XuIINUbYtf97iiXKxCuG3eYwmppPKnyW2DBrNj/TuTg==
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-8.4.2.tgz#1263b974a17d1ea80b66590e41ef786ced5d6a23"
+  integrity sha512-TsINETWiisfB6RTk0wh3/mvxbGRvx+ljeBccZ4Z6MPFKgu/KFGyf2Bmw3Z/jlXhL5JlNKY6QAbA9PVyzIy9//A==
 
 prelude-ls@~1.1.2:
   version "1.1.2"
@@ -6301,10 +6322,15 @@ q@^1.1.2:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qs@6.5.2, qs@^6.5.1, qs@~6.5.2:
+qs@6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+
+qs@^6.5.1:
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.6.0.tgz#a99c0f69a8d26bf7ef012f871cdabb0aee4424c2"
+  integrity sha512-KIJqT9jQJDQx5h5uAVPimw6yVg2SekOKu959OCtktD3FjzbpvaPr8i4zzg07DOMz+igA4W/aNM7OV8H37pFYfA==
 
 querystring-es3@^0.2.0, querystring-es3@^0.2.1:
   version "0.2.1"
@@ -7795,10 +7821,10 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.1.tgz#b2d3d95402a811602380783ea4f566eb875569a2"
   integrity sha512-AA86yKZ5uOKz87/q1UpngEXhbRkaYg1b7HMMVRobNV1IVKqZe8oLIzo6iMocVwZXnYitlGwf2k4ZRLOZlS8oPQ==
 
-vue-instantsearch@^2.0.0-beta.1:
-  version "2.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/vue-instantsearch/-/vue-instantsearch-2.0.0-beta.1.tgz#4b0117bf318b1ac79fb63afacaca0f99d1dbbd11"
-  integrity sha512-AQPGgGTejTklDxLCrLZQ8X/B2fyDQAlIDGtY1uOk02iIMDY2UAFHfokyLGuij5FkgYJMJdmyIIGOPjgUOVNScA==
+vue-instantsearch@^2.0.0-beta.3:
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/vue-instantsearch/-/vue-instantsearch-2.0.0-beta.3.tgz#c746b6cde59b79635a9c90b5cc193cd4841d32a8"
+  integrity sha512-mR3HE5PWJQxAK7siHUYEvKCzYC7rxC0HDm1DJa3Uo13WSdxTcEny+G07EOZRNsxeCrjzaw1XKj1KztNAvDICXw==
   dependencies:
     algoliasearch "^3.30.0"
     algoliasearch-helper "^2.26.1"

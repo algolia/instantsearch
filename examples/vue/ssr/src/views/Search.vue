@@ -37,7 +37,7 @@ import {
   AisSearchBox,
   AisStats,
   AisPagination,
-} from '../../../../src/instantsearch.js'; // TODO: move this to 'vue-instantsearch'
+} from 'vue-instantsearch';
 
 export default {
   asyncData({ instantsearch }) {

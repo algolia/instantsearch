@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import { createRouter } from './router';
-import { createInstantSearch } from '../../../src/instantsearch'; // TODO: move this to 'vue-instantsearch'
+import { createInstantSearch } from 'vue-instantsearch';
 import algoliasearch from 'algoliasearch/lite';
 
 const searchClient = algoliasearch(
@@ -16,7 +16,6 @@ export async function createApp({
   afterApp = () => {},
 } = {}) {
   const router = createRouter();
-
   const { instantsearch, rootMixin } = createInstantSearch({
     searchClient,
     indexName: 'movies',

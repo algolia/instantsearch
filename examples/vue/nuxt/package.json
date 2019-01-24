@@ -13,7 +13,7 @@
     "algoliasearch": "^3.32.0",
     "cross-env": "^5.2.0",
     "nuxt": "^2.0.0",
-    "vue-instantsearch": "^2.0.0-beta.2"
+    "vue-instantsearch": "^2.0.0-beta.3"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

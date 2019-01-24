@@ -38,7 +38,7 @@ import {
   AisStats,
   AisPagination,
   createInstantSearch,
-} from '../../../src/instantsearch'; // TODO: move this to 'vue-instantsearch'
+} from 'vue-instantsearch';
 import algoliasearch from 'algoliasearch/lite';
 
 const searchClient = algoliasearch(
