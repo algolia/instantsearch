@@ -51,7 +51,7 @@ describe('infiniteHits()', () => {
     widget.render({ results, state });
     widget.render({ results, state });
 
-    expect(render).toHaveBeenCalledTimes(2, 'render called twice');
+    expect(render).toHaveBeenCalledTimes(2);
     expect(render.mock.calls[0][0]).toMatchSnapshot();
     expect(render.mock.calls[0][1]).toEqual(container);
     expect(render.mock.calls[1][0]).toMatchSnapshot();
