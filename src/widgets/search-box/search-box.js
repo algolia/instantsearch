@@ -1,6 +1,11 @@
 import forEach from 'lodash/forEach';
 import cx from 'classnames';
-import { getContainerNode, renderTemplate } from '../../lib/utils';
+import {
+  getContainerNode,
+  renderTemplate,
+  warning,
+  createDocumentationLink,
+} from '../../lib/utils';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import defaultTemplates from './defaultTemplates';
 import { component } from '../../lib/suit';
@@ -217,25 +222,20 @@ export default function searchBox({
 
   const containerNode = getContainerNode(container);
 
-  if (containerNode.tagName === 'INPUT') {
-    // eslint-disable-next-line
-    // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
-    throw new Error(
-      `[InstantSearch.js] Since in version 3, \`container\` can not be an \`input\` anymore.
+  warning(
+    containerNode.tagName !== 'INPUT',
+    `The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
 
-Learn more in the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
-    );
-  }
+You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink(
+      'searchbox',
+      { connector: true }
+    )}.`
+  );
 
-  // eslint-disable-next-line
-  // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
-  if (typeof autofocus !== 'boolean') {
-    throw new Error(
-      `[InstantSearch.js] Since in version 3, \`autofocus\` only supports boolean values.
-
-Learn more in the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
-    );
-  }
+  warning(
+    typeof autofocus === 'boolean',
+    `The \`autofocus\` option only supports boolean values since InstantSearch.js 3.`
+  );
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
