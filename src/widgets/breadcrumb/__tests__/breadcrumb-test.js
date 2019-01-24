@@ -1,15 +1,23 @@
+import { render } from 'preact-compat';
 import breadcrumb from '../breadcrumb';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('breadcrumb()', () => {
   let container;
   let attributes;
-  let ReactDOM;
 
   beforeEach(() => {
     container = document.createElement('div');
     attributes = ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1'];
-    ReactDOM = { render: jest.fn() };
-    breadcrumb.__Rewire__('render', ReactDOM.render);
+
+    render.mockClear();
   });
 
   describe('render', () => {
@@ -87,11 +95,7 @@ describe('breadcrumb()', () => {
         instantSearchInstance: {},
       });
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    afterEach(() => {
-      breadcrumb.__ResetDependency__('render');
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 });
