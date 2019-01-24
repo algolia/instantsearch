@@ -8395,6 +8395,14 @@ node-version@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-version/-/node-version-1.2.0.tgz#34fde3ffa8e1149bd323983479dda620e1b5060d"
   integrity sha512-ma6oU4Sk0qOoKEAymVoTvk8EdXEobdS7m/mAGhDJ8Rouugho48crHBORAmy5BoOcv8wraPM6xumapQp5hl4iIQ==
 
+nodeclient-spectre@^1.0.3:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/nodeclient-spectre/-/nodeclient-spectre-1.0.5.tgz#dbef389c2adca2aa8d758028baceb32a32ca2810"
+  integrity sha512-bTVRrNgR8iIJrlj1c51JdRrp7eO5KIQzXjl0IuQPUI9THIOcsAwtO16kdr8r+Sp/ycXaFocyR3WfFNj7H8AocA==
+  dependencies:
+    request "^2.83.0"
+    request-promise-native "^1.0.5"
+
 noop-logger@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/noop-logger/-/noop-logger-0.1.1.tgz#94a2b1633c4f1317553007d8966fd0e841b6a4c2"
@@ -10156,7 +10164,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.0"
     tough-cookie ">=2.3.3"
 
-request@^2.65.0, request@^2.87.0, request@^2.88.0:
+request@^2.65.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -12193,16 +12201,17 @@ wdio-sync@0.7.1:
     fibers "~2.0.0"
     object.assign "^4.0.3"
 
-wdio-visual-regression-service@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/wdio-visual-regression-service/-/wdio-visual-regression-service-0.8.0.tgz#dce84f9bf07a0783b50c200df783346fcf4755a3"
-  integrity sha1-3OhPm/B6B4O1DCAN94M0b89HVaM=
+wdio-visual-regression-service@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/wdio-visual-regression-service/-/wdio-visual-regression-service-0.9.0.tgz#caca5507010f02a20a0b83d321f289e3ad565e5e"
+  integrity sha1-yspVBwEPAqIKC4PTIfKJ461WXl4=
   dependencies:
     babel-runtime "^6.9.0"
     debug "^2.2.0"
     fs-extra "^3.0.1"
     lodash "^4.13.1"
     node-resemble-js "0.0.5"
+    nodeclient-spectre "^1.0.3"
     platform "^1.3.1"
     wdio-screenshot "^0.6.0"
 
