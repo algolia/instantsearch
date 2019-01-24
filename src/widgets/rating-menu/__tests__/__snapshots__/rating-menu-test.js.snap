@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
+exports[`ratingMenu() calls twice render(<RefinementList props />, container) 1`] = `
 <RefinementList
   createURL={[Function]}
   cssClasses={
@@ -119,7 +119,7 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
 </RefinementList>
 `;
 
-exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
+exports[`ratingMenu() calls twice render(<RefinementList props />, container) 2`] = `
 <RefinementList
   createURL={[Function]}
   cssClasses={
