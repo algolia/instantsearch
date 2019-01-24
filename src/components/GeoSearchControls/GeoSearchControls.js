@@ -53,35 +53,29 @@ const GeoSearchControls = ({
         </div>
       )}
 
-      {!enableRefineControl &&
-        !isRefineOnMapMove && (
-          <div className={cssClasses.control}>
-            <GeoSearchButton
-              className={cx(cssClasses.redo, {
-                [cssClasses.disabledRedo]: !hasMapMoveSinceLastRefine,
-              })}
-              disabled={!hasMapMoveSinceLastRefine}
-              onClick={onRefineClick}
-            >
-              <Template
-                {...templateProps}
-                templateKey="redo"
-                rootTagName="span"
-              />
-            </GeoSearchButton>
-          </div>
-        )}
-
-      {enableClearMapRefinement &&
-        isRefinedWithMap && (
-          <GeoSearchButton className={cssClasses.reset} onClick={onClearClick}>
+      {!enableRefineControl && !isRefineOnMapMove && (
+        <div className={cssClasses.control}>
+          <GeoSearchButton
+            className={cx(cssClasses.redo, {
+              [cssClasses.disabledRedo]: !hasMapMoveSinceLastRefine,
+            })}
+            disabled={!hasMapMoveSinceLastRefine}
+            onClick={onRefineClick}
+          >
             <Template
               {...templateProps}
-              templateKey="reset"
+              templateKey="redo"
               rootTagName="span"
             />
           </GeoSearchButton>
-        )}
+        </div>
+      )}
+
+      {enableClearMapRefinement && isRefinedWithMap && (
+        <GeoSearchButton className={cssClasses.reset} onClick={onClearClick}>
+          <Template {...templateProps} templateKey="reset" rootTagName="span" />
+        </GeoSearchButton>
+      )}
     </div>
   );
 
