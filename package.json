@@ -150,7 +150,8 @@
       "maxSize": "80 kB"
     },
     {
-      "path": "./dist/instantsearch.development.js"
+      "path": "./dist/instantsearch.development.js",
+      "maxSize": "250 kB"
     }
   ]
 }
