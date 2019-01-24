@@ -1,9 +1,17 @@
-import clearRefinements from '../clear-refinements';
-import algoliasearchHelper from 'algoliasearch-helper';
+import { render } from 'preact-compat';
 import algoliasearch from 'algoliasearch';
+import algoliasearchHelper from 'algoliasearch-helper';
+import clearRefinements from '../clear-refinements';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('clearRefinements()', () => {
-  let ReactDOM;
   let container;
   let results;
   let client;
@@ -11,11 +19,7 @@ describe('clearRefinements()', () => {
   let createURL;
 
   beforeEach(() => {
-    ReactDOM = { render: jest.fn() };
     createURL = jest.fn().mockReturnValue('#all-cleared');
-
-    clearRefinements.__Rewire__('render', ReactDOM.render);
-
     container = document.createElement('div');
     results = {};
     client = algoliasearch('APP_ID', 'API_KEY');
@@ -26,6 +30,8 @@ describe('clearRefinements()', () => {
       },
       search: jest.fn(),
     };
+
+    render.mockClear();
   });
 
   describe('without refinements', () => {
@@ -33,7 +39,7 @@ describe('clearRefinements()', () => {
       helper.state.facetsRefinements = {};
     });
 
-    it('calls twice ReactDOM.render(<ClearRefinements props />, container)', () => {
+    it('calls twice render(<ClearRefinements props />, container)', () => {
       const widget = clearRefinements({
         container,
       });
@@ -60,13 +66,13 @@ describe('clearRefinements()', () => {
         instantSearchInstance: {},
       });
 
-      expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(2);
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][1]).toEqual(container);
 
-      expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+      expect(render.mock.calls[1][0]).toMatchSnapshot();
+      expect(render.mock.calls[1][1]).toEqual(container);
     });
   });
 
@@ -75,7 +81,7 @@ describe('clearRefinements()', () => {
       helper.state.facetsRefinements = ['something'];
     });
 
-    it('calls twice ReactDOM.render(<ClearAll props />, container)', () => {
+    it('calls twice render(<ClearAll props />, container)', () => {
       const widget = clearRefinements({
         container,
       });
@@ -89,13 +95,13 @@ describe('clearRefinements()', () => {
       widget.render({ results, helper, state: helper.state, createURL });
       widget.render({ results, helper, state: helper.state, createURL });
 
-      expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+      expect(render).toHaveBeenCalledTimes(2);
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][1]).toEqual(container);
 
-      expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+      expect(render.mock.calls[1][0]).toMatchSnapshot();
+      expect(render.mock.calls[1][1]).toEqual(container);
     });
   });
 
@@ -115,9 +121,7 @@ describe('clearRefinements()', () => {
       });
 
       widget.render({ results, helper, state: helper.state, createURL });
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.cssClasses
-      ).toMatchSnapshot();
+      expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
     });
 
     it('should allow overriding CSS classes', () => {
@@ -138,13 +142,7 @@ describe('clearRefinements()', () => {
       });
       widget.render({ results, helper, state: helper.state, createURL });
 
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.cssClasses
-      ).toMatchSnapshot();
+      expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
     });
-  });
-
-  afterEach(() => {
-    clearRefinements.__ResetDependency__('render');
   });
 });
