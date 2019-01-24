@@ -522,7 +522,17 @@ describe('dispose', () => {
   it('should set the helper to `null`', () => {
     const search = new InstantSearch({
       indexName: '',
-      searchClient: { async search() {} },
+      searchClient: {
+        search() {
+          return Promise.resolve({
+            results: [
+              {
+                query: 'fake query',
+              },
+            ],
+          });
+        },
+      },
     });
 
     search.start();
