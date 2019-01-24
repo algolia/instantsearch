@@ -281,7 +281,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     // test that rendering has been called during init with isFirstRendering = true
     expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering).lastCalledWith(expect.any(Object), true);
+    expect(rendering).toHaveBeenLastCalledWith(expect.any(Object), true);
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.canRefine).toBe(false);
@@ -299,7 +299,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering).toHaveBeenCalledTimes(2);
-    expect(rendering).lastCalledWith(expect.any(Object), false);
+    expect(rendering).toHaveBeenLastCalledWith(expect.any(Object), false);
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canRefine).toBe(false);
@@ -502,7 +502,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       createURL: () => '#',
     });
 
-    expect(rendering).lastCalledWith(
+    expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         canToggleShowMore: false,
       }),
@@ -554,7 +554,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       createURL: () => '#',
     });
 
-    expect(rendering).lastCalledWith(
+    expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         canToggleShowMore: false,
       }),
@@ -665,7 +665,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       createURL: () => '#',
     });
 
-    expect(rendering).lastCalledWith(
+    expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         canToggleShowMore: true,
         items: [
