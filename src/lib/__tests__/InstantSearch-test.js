@@ -534,7 +534,7 @@ describe('InstantSearch lifecycle', () => {
     expect(search.helper.search).toHaveBeenCalledTimes(1);
     expect(search.started).toBe(true);
 
-    // Dispose delete the refernce of the `helper`
+    // Calling `dispose()` deletes the reference of the `helper`
     const { helper } = search;
 
     search.dispose();
