@@ -609,6 +609,14 @@
     "@babel/helper-regex" "^7.0.0"
     regexpu-core "^4.1.3"
 
+"@babel/polyfill@^7.2.5":
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.2.5.tgz#6c54b964f71ad27edddc567d065e57e87ed7fa7d"
+  integrity sha512-8Y/t3MWThtMLYr0YNC/Q76tqN1w30+b0uQMeFUYauG2UGTR19zyUtFrAzT23zNtBxPp+LbE5E/nwV/q/r3y6ug==
+  dependencies:
+    core-js "^2.5.7"
+    regenerator-runtime "^0.12.0"
+
 "@babel/preset-env@7.2.3", "@babel/preset-env@^7.2.0":
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.2.3.tgz#948c8df4d4609c99c7e0130169f052ea6a7a8933"
@@ -1538,7 +1546,7 @@ algoliasearch-helper@^2.26.0:
     qs "^6.5.1"
     util "^0.10.3"
 
-algoliasearch@3.32.0, algoliasearch@^3.27.1:
+algoliasearch@3.32.0, algoliasearch@^3.31.0:
   version "3.32.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.32.0.tgz#5818168c26ff921bd0346a919071bac928b747ce"
   integrity sha512-C8oQnPTf0wPuyD2jSZwtBAPvz+lHOE7zRIPpgXGBuNt6ZNcC4omsbytG26318rT77a8h4759vmIp6n9p8iw4NA==
@@ -1926,10 +1934,10 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-autocomplete.js@^0.32.0:
-  version "0.32.0"
-  resolved "https://registry.yarnpkg.com/autocomplete.js/-/autocomplete.js-0.32.0.tgz#a00eab44dcb9e573ebd8bb3178e7fe67466cd4f1"
-  integrity sha512-GYGmOo0r2wLgUEYE5J9z9OSLb8e0SAicgDR1M1pHOvwQ0Hc1SLHR0EqjDhl+lhl01cYq2d7lLbsgRmaizgLqrA==
+autocomplete.js@^0.35.0:
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/autocomplete.js/-/autocomplete.js-0.35.0.tgz#d397c0c2261af1b556e0a3d8be2e6dd59418d411"
+  integrity sha512-JPtuW6wIYrNnY0RVsWuNTvli7VHSqS7Tg+3J3JrHA41Lod3cRqMkiTCwzznJwwSiqDhCl49adPBmpWJJ6CRsbA==
   dependencies:
     immediate "^3.2.3"
 
@@ -9063,14 +9071,15 @@ pkg-up@2.0.0, pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@1.14.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.14.0.tgz#95a745b2cc4a9ba0f57476d4e84404f4312a6494"
-  integrity sha512-3aiscIBkLu82Lx60ZroKCN/u2ats7r3kzygSqwG72C4TXpyVWXB/WrP0ljlPeFFl8ZKgblP3rEkhFujUZEm8Mg==
+places.js@1.15.4:
+  version "1.15.4"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.15.4.tgz#5b6518df0a7e1f74519968fbebaccfbfb6eedbe6"
+  integrity sha512-Xjrdu7vwzNFvkHG0S/mzNmdogN1jK9bSW+O3fAAvCWh0FwjyMZzW+1LhCqr0zuC9iqjsfPeVVULwLK5YFZJOBA==
   dependencies:
+    "@babel/polyfill" "^7.2.5"
     algolia-aerial "^1.5.3"
-    algoliasearch "^3.27.1"
-    autocomplete.js "^0.32.0"
+    algoliasearch "^3.31.0"
+    autocomplete.js "^0.35.0"
     events "^3.0.0"
     insert-css "^2.0.0"
 
