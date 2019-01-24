@@ -124,14 +124,16 @@ export default class RoutingManager {
 
   getAllUIStates({ searchParameters }) {
     const { widgets, helper } = this.instantSearchInstance;
-    const uiState = widgets.filter(w => Boolean(w.getWidgetState)).reduce(
-      (u, w) =>
-        w.getWidgetState(u, {
-          helper,
-          searchParameters,
-        }),
-      {}
-    );
+    const uiState = widgets
+      .filter(w => Boolean(w.getWidgetState))
+      .reduce(
+        (u, w) =>
+          w.getWidgetState(u, {
+            helper,
+            searchParameters,
+          }),
+        {}
+      );
 
     return uiState;
   }
