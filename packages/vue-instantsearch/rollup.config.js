@@ -18,7 +18,7 @@ export default [
     external: [
       'algoliasearch/lite',
       'algoliasearch-helper',
-      'instantsearch.js/es/',
+      'instantsearch.js/es',
       'instantsearch.js/es/connectors',
       'vue',
     ],
