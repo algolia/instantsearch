@@ -1,5 +1,3 @@
-// we use the full path to the lite build to solve a meteor.js issue:
-// https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
 import algoliasearchHelper from 'algoliasearch-helper';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
