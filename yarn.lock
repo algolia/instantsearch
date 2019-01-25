@@ -17687,10 +17687,10 @@ rollup-plugin-commonjs@9.2.0:
     resolve "^1.8.1"
     rollup-pluginutils "^2.3.3"
 
-rollup-plugin-filesize@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-filesize/-/rollup-plugin-filesize-6.0.0.tgz#6188769eff2ee6f4508e0f6de5cf64409e2a269d"
-  integrity sha512-yU1nNkB2RP1PwLpBFIzH9oIwLL+Si6AEuy0/hAhFW+68hy6x/W/MxhhsUe7bDhG7Gnei7FOGC4Ag4W9+CninMQ==
+rollup-plugin-filesize@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-filesize/-/rollup-plugin-filesize-6.0.1.tgz#71937b48a411374c76c4a7e6bbdb087780d8bd64"
+  integrity sha512-wtxHShJofSxJRuYGGxgwIJyxxW+Mgu/vGGcsOUJVN+US6jE+gQYphSS3H2PS2HCVfxDtERtL0gjptk1gYru9rA==
   dependencies:
     boxen "^2.0.0"
     brotli-size "0.0.3"
