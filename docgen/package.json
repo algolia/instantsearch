@@ -8,11 +8,11 @@
     "build": "babel-node --config-file ../babel.config.js build.js"
   },
   "devDependencies": {
-    "@babel/cli": "7.1.2",
-    "@babel/core": "7.1.2",
-    "@babel/node": "7.0.0",
-    "@babel/plugin-proposal-class-properties": "7.1.0",
-    "@babel/preset-env": "7.1.0",
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.2.2",
+    "@babel/node": "7.2.2",
+    "@babel/plugin-proposal-class-properties": "7.3.0",
+    "@babel/preset-env": "7.3.1",
     "@babel/preset-react": "7.0.0",
     "algolia-aerial": "1.5.3",
     "algolia-frontend-components": "0.0.35",
