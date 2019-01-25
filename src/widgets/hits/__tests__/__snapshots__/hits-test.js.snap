@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 1`] = `
+exports[`hits() calls twice render(<Hits props />, container) 1`] = `
 <Hits
   cssClasses={
     Object {
@@ -44,7 +44,7 @@ exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 1`] = `
 />
 `;
 
-exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 2`] = `
+exports[`hits() calls twice render(<Hits props />, container) 2`] = `
 <Hits
   cssClasses={
     Object {
