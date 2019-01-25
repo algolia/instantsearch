@@ -115,7 +115,7 @@
     "rollup-plugin-node-globals": "1.4.0",
     "rollup-plugin-node-resolve": "4.0.0",
     "rollup-plugin-replace": "2.1.0",
-    "rollup-plugin-uglify": "6.0.1",
+    "rollup-plugin-uglify": "6.0.2",
     "style-loader": "0.23.1",
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.17.0",
