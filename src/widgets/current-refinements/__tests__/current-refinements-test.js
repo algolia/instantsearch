@@ -1,6 +1,15 @@
+import { render } from 'preact-compat';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('currentRefinements()', () => {
   beforeEach(() => {
@@ -113,14 +122,10 @@ describe('currentRefinements()', () => {
   });
 
   describe('render()', () => {
-    let ReactDOM;
     let client;
     let helper;
 
     beforeEach(() => {
-      ReactDOM = { render: jest.fn() };
-      currentRefinements.__Rewire__('render', ReactDOM.render);
-
       client = algoliasearch('APP_ID', 'API_KEY');
       helper = algoliasearchHelper(client, 'index_name', {
         facets: ['facet', 'facetExclude', 'numericFacet', 'extraFacet'],
@@ -133,10 +138,8 @@ describe('currentRefinements()', () => {
           },
         ],
       });
-    });
 
-    afterEach(() => {
-      currentRefinements.__ResetDependency__('render');
+      render.mockClear();
     });
 
     it('should render twice <CurrentRefinements ... />', () => {
@@ -173,11 +176,11 @@ describe('currentRefinements()', () => {
       widget.render(renderParameters);
       widget.render(renderParameters);
 
-      expect(ReactDOM.render).toHaveBeenCalledTimes(2);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[0][1]).toBe(container);
-      expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
-      expect(ReactDOM.render.mock.calls[1][1]).toBe(container);
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][1]).toBe(container);
+      expect(render.mock.calls[1][0]).toMatchSnapshot();
+      expect(render.mock.calls[1][1]).toBe(container);
     });
 
     describe('options.container', () => {
@@ -203,9 +206,9 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        expect(ReactDOM.render.mock.calls[0][1]).toBe(container);
+        expect(render).toHaveBeenCalledTimes(1);
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][1]).toBe(container);
       });
 
       it('should render with a HTMLElement container', () => {
@@ -227,9 +230,9 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        expect(ReactDOM.render.mock.calls[0][1]).toBe(container);
+        expect(render).toHaveBeenCalledTimes(1);
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][1]).toBe(container);
       });
     });
 
@@ -297,7 +300,7 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        const renderedItems = ReactDOM.render.mock.calls[0][0].props.items;
+        const renderedItems = render.mock.calls[0][0].props.items;
         expect(renderedItems).toHaveLength(1);
 
         const [item] = renderedItems;
@@ -357,7 +360,7 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        const renderedItems = ReactDOM.render.mock.calls[0][0].props.items;
+        const renderedItems = render.mock.calls[0][0].props.items;
         expect(renderedItems).toHaveLength(0);
       });
     });
@@ -434,7 +437,7 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        const renderedItems = ReactDOM.render.mock.calls[0][0].props.items;
+        const renderedItems = render.mock.calls[0][0].props.items;
 
         expect(renderedItems[0].refinements[0].transformed).toBe(true);
         expect(renderedItems[0].refinements[1].transformed).toBe(true);
@@ -467,9 +470,9 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        expect(
-          ReactDOM.render.mock.calls[0][0].props.cssClasses.root
-        ).toContain('customRoot');
+        expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
+          'customRoot'
+        );
       });
 
       it('should work with an array', () => {
@@ -493,12 +496,13 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        expect(
-          ReactDOM.render.mock.calls[0][0].props.cssClasses.root
-        ).toContain('customRoot1');
-        expect(
-          ReactDOM.render.mock.calls[0][0].props.cssClasses.root
-        ).toContain('customRoot2');
+        expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
+          'customRoot1'
+        );
+
+        expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
+          'customRoot2'
+        );
       });
     });
 
@@ -611,7 +615,7 @@ describe('currentRefinements()', () => {
           instantSearchInstance: {},
         });
 
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
   });
