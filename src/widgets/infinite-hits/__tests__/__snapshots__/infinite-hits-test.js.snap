@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1`] = `
+exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
 <InfiniteHits
   cssClasses={
     Object {
@@ -50,7 +50,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
 />
 `;
 
-exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2`] = `
+exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
 <InfiniteHits
   cssClasses={
     Object {
