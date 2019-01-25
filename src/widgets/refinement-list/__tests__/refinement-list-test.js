@@ -1,5 +1,14 @@
+import { render } from 'preact-compat';
 import { SearchParameters } from 'algoliasearch-helper';
 import refinementList from '../refinement-list';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 const instantSearchInstance = { templatesConfig: {} };
 
@@ -7,13 +16,11 @@ describe('refinementList()', () => {
   let container;
   let options;
   let widget;
-  let ReactDOM;
 
   beforeEach(() => {
-    container = document.createElement('div');
+    render.mockClear();
 
-    ReactDOM = { render: jest.fn() };
-    refinementList.__Rewire__('render', ReactDOM.render);
+    container = document.createElement('div');
   });
 
   describe('instantiated with wrong parameters', () => {
@@ -55,7 +62,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     describe('cssClasses', () => {
       it('should call the component with the correct classes', () => {
-        // Given
         const cssClasses = {
           root: ['root', 'cx'],
           noRefinementRoot: 'noRefinementRoot',
@@ -72,11 +78,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           disabledShowMore: 'disabledShowMore',
         };
 
-        // When
         renderWidget({ cssClasses });
-        const actual = ReactDOM.render.mock.calls[0][0].props.cssClasses;
+        const actual = render.mock.calls[0][0].props.cssClasses;
 
-        // Then
         expect(actual.root).toMatchInlineSnapshot(
           `"ais-RefinementList root cx"`
         );
@@ -133,7 +137,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
       widget.render({ results, helper, state });
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 
