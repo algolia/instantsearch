@@ -1,4 +1,13 @@
+import { render } from 'preact-compat';
 import poweredBy from '../powered-by';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('poweredBy call', () => {
   it('throws an exception when no container', () => {
@@ -11,13 +20,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 });
 
 describe('poweredBy', () => {
-  let ReactDOM;
   let widget;
   let container;
 
   beforeEach(() => {
-    ReactDOM = { render: jest.fn() };
-    poweredBy.__Rewire__('render', ReactDOM.render);
+    render.mockClear();
 
     container = document.createElement('div');
     widget = poweredBy({
@@ -32,10 +39,6 @@ describe('poweredBy', () => {
     widget.init({});
   });
 
-  afterEach(() => {
-    poweredBy.__ResetDependency__('render');
-  });
-
   it('configures nothing', () => {
     expect(widget.getConfiguration).toEqual(undefined);
   });
@@ -43,8 +46,8 @@ describe('poweredBy', () => {
   it('renders only once at init', () => {
     widget.render({});
     widget.render({});
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][1]).toEqual(container);
   });
 });
