@@ -92,7 +92,7 @@ exports[`rangeSlider widget usage should render without results 1`] = `
 />
 `;
 
-exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] = `
+exports[`rangeSlider widget usage with results calls twice render 1`] = `
 <Slider
   cssClasses={
     Object {
@@ -115,7 +115,7 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] =
 />
 `;
 
-exports[`rangeSlider widget usage with results calls twice ReactDOM.render 2`] = `
+exports[`rangeSlider widget usage with results calls twice render 2`] = `
 <Slider
   cssClasses={
     Object {
