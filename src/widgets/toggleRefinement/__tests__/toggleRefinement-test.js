@@ -1,24 +1,29 @@
-import currentToggle from '../toggleRefinement';
+import { render } from 'preact-compat';
+import jsHelper from 'algoliasearch-helper';
+import toggleRefinement from '../toggleRefinement';
 import RefinementList from '../../../components/RefinementList/RefinementList';
 
-import jsHelper from 'algoliasearch-helper';
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
-describe('currentToggle()', () => {
-  describe('good usage', () => {
-    let ReactDOM;
+  module.render = jest.fn();
+
+  return module;
+});
+
+describe('toggleRefinement()', () => {
+  describe('right usage', () => {
     let containerNode;
     let widget;
     let attribute;
     let instantSearchInstance;
 
     beforeEach(() => {
-      ReactDOM = { render: jest.fn() };
-
-      currentToggle.__Rewire__('render', ReactDOM.render);
+      render.mockClear();
 
       containerNode = document.createElement('div');
       attribute = 'world!';
-      widget = currentToggle({
+      widget = toggleRefinement({
         container: containerNode,
         attribute,
       });
@@ -55,7 +60,7 @@ describe('currentToggle()', () => {
         widget.init({ state, helper, createURL, instantSearchInstance });
       });
 
-      it('calls twice ReactDOM.render', () => {
+      it('calls twice render', () => {
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
@@ -66,7 +71,7 @@ describe('currentToggle()', () => {
               { name: 'false', count: 1 },
             ]),
         };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
@@ -75,9 +80,9 @@ describe('currentToggle()', () => {
         widget.init({ helper, state, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
-        expect(ReactDOM.render).toHaveBeenCalledTimes(2);
-        expect(ReactDOM.render.mock.calls[0][1]).toEqual(containerNode);
-        expect(ReactDOM.render.mock.calls[1][1]).toEqual(containerNode);
+        expect(render).toHaveBeenCalledTimes(2);
+        expect(render.mock.calls[0][1]).toEqual(containerNode);
+        expect(render.mock.calls[1][1]).toEqual(containerNode);
       });
 
       it('understands cssClasses', () => {
@@ -91,7 +96,7 @@ describe('currentToggle()', () => {
               { name: 'false', count: 1, isRefined: false },
             ]),
         };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           cssClasses: {
@@ -106,7 +111,7 @@ describe('currentToggle()', () => {
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
       });
 
       it('with facet values', () => {
@@ -120,7 +125,7 @@ describe('currentToggle()', () => {
               { name: 'false', count: 1, isRefined: false },
             ]),
         };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
@@ -131,8 +136,8 @@ describe('currentToggle()', () => {
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
 
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[1][0]).toMatchSnapshot();
       });
 
       it('supports negative numeric off or on values', () => {
@@ -147,7 +152,7 @@ describe('currentToggle()', () => {
             ]),
         };
 
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           off: -2,
@@ -168,8 +173,8 @@ describe('currentToggle()', () => {
         widget.render({ results, helper: altHelper, state });
 
         // The first call is not the one expected, because of the new init rendering..
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[1][0]).toMatchSnapshot();
 
         widget.toggleRefinement({ isRefined: true });
 
@@ -187,7 +192,7 @@ describe('currentToggle()', () => {
           nbHits: 0,
           getFacetValues: jest.fn().mockReturnValue([]),
         };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
@@ -198,8 +203,8 @@ describe('currentToggle()', () => {
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
 
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[1][0]).toMatchSnapshot();
       });
 
       it('when refined', () => {
@@ -218,7 +223,7 @@ describe('currentToggle()', () => {
               { name: 'false', count: 1, isRefined: false },
             ]),
         };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
@@ -229,8 +234,8 @@ describe('currentToggle()', () => {
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
 
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[1][0]).toMatchSnapshot();
       });
 
       it('using props.refine', () => {
@@ -244,7 +249,7 @@ describe('currentToggle()', () => {
               { name: 'false', count: 1 },
             ]),
         };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           /* on: true, off: undefined */
@@ -253,7 +258,7 @@ describe('currentToggle()', () => {
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
-        const { refine } = ReactDOM.render.mock.calls[0][0].props;
+        const { refine } = render.mock.calls[0][0].props;
         expect(typeof refine).toEqual('function');
         refine();
         expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
@@ -286,7 +291,7 @@ describe('currentToggle()', () => {
       describe('default values', () => {
         it('toggle on should add filter to true', () => {
           // Given
-          widget = currentToggle({
+          widget = toggleRefinement({
             container: containerNode,
             attribute,
             /* on: true, off: undefined */
@@ -312,7 +317,7 @@ describe('currentToggle()', () => {
         });
         it('toggle off should remove all filters', () => {
           // Given
-          widget = currentToggle({
+          widget = toggleRefinement({
             container: containerNode,
             attribute,
             /* on: true, off: undefined */
@@ -339,7 +344,7 @@ describe('currentToggle()', () => {
         it('toggle on should change the refined value', () => {
           // Given
           const userValues = { on: 'on', off: 'off' };
-          widget = currentToggle({
+          widget = toggleRefinement({
             container: containerNode,
             attribute,
             ...userValues,
@@ -373,7 +378,7 @@ describe('currentToggle()', () => {
         it('toggle off should change the refined value', () => {
           // Given
           const userValues = { on: 'on', off: 'off' };
-          widget = currentToggle({
+          widget = toggleRefinement({
             container: containerNode,
             attribute,
             ...userValues,
@@ -406,7 +411,7 @@ describe('currentToggle()', () => {
       it('should add a refinement for custom off value on init', () => {
         // Given
         const userValues = { on: 'on', off: 'off' };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           ...userValues,
@@ -431,7 +436,7 @@ describe('currentToggle()', () => {
       it('should not add a refinement for custom off value on init if already checked', () => {
         // Given
         const userValues = { on: 'on', off: 'off' };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           ...userValues,
@@ -454,7 +459,7 @@ describe('currentToggle()', () => {
       it('should not add a refinement for no custom off value on init', () => {
         // Given
         const userValues = { on: 'on' };
-        widget = currentToggle({
+        widget = toggleRefinement({
           container: containerNode,
           attribute,
           ...userValues,
@@ -473,10 +478,6 @@ describe('currentToggle()', () => {
         // Then
         expect(helper.addDisjunctiveFacetRefinement).not.toHaveBeenCalled();
       });
-    });
-
-    afterEach(() => {
-      currentToggle.__ResetDependency__('render');
     });
   });
 });
