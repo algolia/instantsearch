@@ -34,12 +34,12 @@
     "docs:doctoc": "doctoc --maxlevel 1 README.md"
   },
   "devDependencies": {
-    "@babel/cli": "7.1.2",
-    "@babel/core": "7.1.2",
-    "@babel/plugin-proposal-class-properties": "7.1.0",
-    "@babel/plugin-syntax-dynamic-import": "7.0.0",
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.2.2",
+    "@babel/plugin-proposal-class-properties": "7.3.0",
+    "@babel/plugin-syntax-dynamic-import": "7.2.0",
     "@babel/plugin-transform-runtime": "7.2.0",
-    "@babel/preset-env": "7.1.0",
+    "@babel/preset-env": "7.3.1",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
     "@storybook/addon-a11y": "4.1.11",
