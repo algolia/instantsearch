@@ -1,4 +1,13 @@
+import { render } from 'preact-compat';
 import menuSelect from '../menu-select';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('menuSelect', () => {
   it('throws an exception when no attribute', () => {
@@ -12,16 +21,12 @@ describe('menuSelect', () => {
   });
 
   describe('render', () => {
-    let ReactDOM;
     let data;
     let results;
     let state;
     let helper;
 
     beforeEach(() => {
-      ReactDOM = { render: jest.fn() };
-      menuSelect.__Rewire__('render', ReactDOM.render);
-
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
       state = { toggleRefinement: jest.fn() };
@@ -30,6 +35,8 @@ describe('menuSelect', () => {
         search: jest.fn(),
         state,
       };
+
+      render.mockClear();
     });
 
     it('renders correctly', () => {
@@ -41,7 +48,7 @@ describe('menuSelect', () => {
       widget.init({ helper, createURL: () => '#', instantSearchInstance: {} });
       widget.render({ results, createURL: () => '#', state });
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('renders transformed items correctly', () => {
@@ -55,11 +62,7 @@ describe('menuSelect', () => {
       widget.init({ helper, createURL: () => '#', instantSearchInstance: {} });
       widget.render({ results, createURL: () => '#', state });
 
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    afterEach(() => {
-      menuSelect.__ResetDependency__('render');
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 });

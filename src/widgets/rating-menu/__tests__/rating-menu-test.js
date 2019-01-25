@@ -1,9 +1,17 @@
+import { render } from 'preact-compat';
 import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import ratingMenu from '../rating-menu';
 
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
+
 describe('ratingMenu()', () => {
   const attribute = 'anAttrName';
-  let ReactDOM;
   let container;
   let widget;
   let helper;
@@ -12,8 +20,7 @@ describe('ratingMenu()', () => {
   let results;
 
   beforeEach(() => {
-    ReactDOM = { render: jest.fn() };
-    ratingMenu.__Rewire__('render', ReactDOM.render);
+    render.mockClear();
 
     container = document.createElement('div');
     widget = ratingMenu({
@@ -47,15 +54,15 @@ describe('ratingMenu()', () => {
     });
   });
 
-  it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
+  it('calls twice render(<RefinementList props />, container)', () => {
     widget.render({ state, helper, results, createURL });
     widget.render({ state, helper, results, createURL });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
-    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][1]).toEqual(container);
+    expect(render.mock.calls[1][0]).toMatchSnapshot();
+    expect(render.mock.calls[1][1]).toEqual(container);
   });
 
   it('hide the count==0 when there is a refinement', () => {
@@ -70,8 +77,8 @@ describe('ratingMenu()', () => {
     ]);
 
     widget.render({ state, helper, results: _results, createURL });
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0].props.facetValues).toEqual([
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0].props.facetValues).toEqual([
       {
         count: 42,
         isRefined: true,
@@ -152,8 +159,7 @@ describe('ratingMenu()', () => {
     });
 
     expect(
-      ReactDOM.render.mock.calls[ReactDOM.render.mock.calls.length - 1][0].props
-        .facetValues
+      render.mock.calls[render.mock.calls.length - 1][0].props.facetValues
     ).toEqual([
       {
         count: 1000,
@@ -188,9 +194,5 @@ describe('ratingMenu()', () => {
         stars: [true, false, false, false, false],
       },
     ]);
-  });
-
-  afterEach(() => {
-    ratingMenu.__ResetDependency__('render');
   });
 });
