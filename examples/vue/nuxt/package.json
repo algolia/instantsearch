@@ -12,7 +12,7 @@
   "dependencies": {
     "algoliasearch": "^3.32.0",
     "cross-env": "^5.2.0",
-    "nuxt": "^2.0.0",
+    "nuxt-edge": "2.4.0-25806248.43ce8e97",
     "vue-instantsearch": "^2.0.0-beta.3"
   },
   "devDependencies": {
