@@ -3,31 +3,38 @@ import times from 'lodash/times';
 import algoliaSearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
 
+jest.mock('algoliasearch-helper', () => {
+  const module = require.requireActual('algoliasearch-helper');
+
+  return jest.fn((...args) => {
+    const helper = module(...args);
+
+    const mock = jest.fn();
+    helper.search = mock;
+
+    return helper;
+  });
+});
+
 describe('InstantSearch lifecycle', () => {
   let algoliasearch;
-  let helperStub;
   let client;
-  let helper;
   let appId;
   let apiKey;
   let indexName;
   let searchParameters;
   let search;
-  let helperSearchSpy;
 
   beforeEach(() => {
-    client = { search() {} };
-    helper = algoliaSearchHelper(client);
-
-    // when using searchFunction, we lose the reference to
-    // the original helper.search
-    const spy = jest.fn();
-
-    helper.search = spy;
-    helperSearchSpy = spy;
+    client = {
+      search(requests) {
+        return Promise.resolve({
+          results: requests.map(() => ({})),
+        });
+      },
+    };
 
     algoliasearch = jest.fn().mockReturnValue(client);
-    helperStub = jest.fn().mockReturnValue(helper);
 
     appId = 'appId';
     apiKey = 'apiKey';
@@ -40,9 +47,6 @@ describe('InstantSearch lifecycle', () => {
       another: { config: 'parameter' },
     };
 
-    InstantSearch.__Rewire__('algoliasearch', algoliasearch);
-    InstantSearch.__Rewire__('algoliasearchHelper', helperStub);
-
     search = new InstantSearch({
       indexName,
       searchClient: algoliasearch(appId, apiKey),
@@ -51,8 +55,7 @@ describe('InstantSearch lifecycle', () => {
   });
 
   afterEach(() => {
-    InstantSearch.__ResetDependency__('algoliasearch');
-    InstantSearch.__ResetDependency__('algoliasearchHelper');
+    algoliaSearchHelper.mockClear();
   });
 
   it('calls algoliasearch(appId, apiKey)', () => {
@@ -61,7 +64,7 @@ describe('InstantSearch lifecycle', () => {
   });
 
   it('does not call algoliasearchHelper', () => {
-    expect(helperStub).not.toHaveBeenCalled();
+    expect(algoliaSearchHelper).not.toHaveBeenCalled();
   });
 
   describe('when adding a widget without render and init', () => {
@@ -110,7 +113,7 @@ describe('InstantSearch lifecycle', () => {
           some: 'modified',
           another: { different: 'parameter' },
         }),
-        init: jest.fn(() => {
+        init: jest.fn(({ helper }) => {
           helper.state.sendMeToUrlSync = true;
         }),
         render: jest.fn(),
@@ -135,8 +138,8 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls algoliasearchHelper(client, indexName, searchParameters)', () => {
-        expect(helperStub).toHaveBeenCalledTimes(1);
-        expect(helperStub).toHaveBeenCalledWith(client, indexName, {
+        expect(algoliaSearchHelper).toHaveBeenCalledTimes(1);
+        expect(algoliaSearchHelper).toHaveBeenCalledWith(client, indexName, {
           some: 'modified',
           values: [-2, -1],
           index: indexName,
@@ -145,15 +148,15 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls helper.search()', () => {
-        expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+        expect(search.helper.search).toHaveBeenCalledTimes(1);
       });
 
       it('calls widget.init(helper.state, helper, templatesConfig)', () => {
         expect(widget.getConfiguration).toHaveBeenCalledTimes(1);
         expect(widget.init).toHaveBeenCalledTimes(1);
         const args = widget.init.mock.calls[0][0];
-        expect(args.state).toBe(helper.state);
-        expect(args.helper).toBe(helper);
+        expect(args.state).toBe(search.helper.state);
+        expect(args.helper).toBe(search.helper);
         expect(args.templatesConfig).toBe(search.templatesConfig);
         expect(args.onHistoryChange).toBe(search._onHistoryChange);
       });
@@ -167,7 +170,7 @@ describe('InstantSearch lifecycle', () => {
 
         beforeEach(() => {
           results = { some: 'data' };
-          helper.emit('result', results, helper.state);
+          search.helper.emit('result', results, search.helper.state);
         });
 
         it('calls widget.render({results, state, helper, templatesConfig, instantSearchInstance})', () => {
@@ -191,7 +194,7 @@ describe('InstantSearch lifecycle', () => {
     });
 
     it('recursively merges searchParameters.values array', () => {
-      expect(helperStub.mock.calls[0][2].values).toEqual([
+      expect(algoliaSearchHelper.mock.calls[0][2].values).toEqual([
         -2,
         -1,
         0,
@@ -221,12 +224,12 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      helper.emit('result', {}, helper.state);
+      search.helper.emit('result', {}, search.helper.state);
 
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      helper.emit('result', {}, helper.state);
+      search.helper.emit('result', {}, search.helper.state);
 
       expect(render).toHaveBeenCalledTimes(10);
       expect(onRender).toHaveBeenCalledTimes(2);
@@ -239,12 +242,12 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      helper.emit('result', {}, helper.state);
+      search.helper.emit('result', {}, search.helper.state);
 
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      helper.emit('result', {}, helper.state);
+      search.helper.emit('result', {}, search.helper.state);
 
       expect(render).toHaveBeenCalledTimes(10);
       expect(onRender).toHaveBeenCalledTimes(1);
@@ -358,13 +361,23 @@ describe('InstantSearch lifecycle', () => {
 
     it('should unmount a widget with numericRefinements configuration', () => {
       const widget1 = registerWidget(
-        { numericRefinements: { price: {} } },
+        {
+          numericRefinements: {
+            price: {
+              '=': [10],
+            },
+          },
+        },
         ({ state }) => state.removeNumericRefinement('price')
       );
       search.start();
 
       expect(search.widgets).toHaveLength(1);
-      expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
+      expect(search.searchParameters.numericRefinements).toEqual({
+        price: {
+          '=': [10],
+        },
+      });
 
       search.removeWidget(widget1);
 
@@ -376,7 +389,7 @@ describe('InstantSearch lifecycle', () => {
       const widget1 = registerWidget(undefined, ({ state }) =>
         state
           .removeFacet('categories')
-          .setQueryParameters('maxValuesPerFacet', undefined)
+          .setQueryParameter('maxValuesPerFacet', undefined)
       );
       search.start();
 
@@ -393,9 +406,16 @@ describe('InstantSearch lifecycle', () => {
 
     it('should unmount multiple widgets at once', () => {
       const widget1 = registerWidget(
-        { numericRefinements: { price: {} } },
+        {
+          numericRefinements: {
+            price: {
+              '=': [10],
+            },
+          },
+        },
         ({ state }) => state.removeNumericRefinement('price')
       );
+
       const widget2 = registerWidget(
         { disjunctiveFacets: ['price'] },
         ({ state }) => state.removeDisjunctiveFacet('price')
@@ -404,14 +424,18 @@ describe('InstantSearch lifecycle', () => {
       search.start();
 
       expect(search.widgets).toHaveLength(2);
-      expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
       expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
+      expect(search.searchParameters.numericRefinements).toEqual({
+        price: {
+          '=': [10],
+        },
+      });
 
       search.removeWidgets([widget1, widget2]);
 
       expect(search.widgets).toHaveLength(0);
-      expect(search.searchParameters.numericRefinements).toEqual({});
       expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+      expect(search.searchParameters.numericRefinements).toEqual({});
     });
   });
 
@@ -436,7 +460,7 @@ describe('InstantSearch lifecycle', () => {
 
     it('should add widgets after start', () => {
       search.start();
-      expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+      expect(search.helper.search).toHaveBeenCalledTimes(1);
 
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
@@ -444,14 +468,14 @@ describe('InstantSearch lifecycle', () => {
       const widget1 = registerWidget({ facets: ['price'] });
       search.addWidget(widget1);
 
-      expect(helperSearchSpy).toHaveBeenCalledTimes(2);
+      expect(search.helper.search).toHaveBeenCalledTimes(2);
       expect(widget1.init).toHaveBeenCalledTimes(1);
 
       const widget2 = registerWidget({ disjunctiveFacets: ['categories'] });
       search.addWidget(widget2);
 
       expect(widget2.init).toHaveBeenCalledTimes(1);
-      expect(helperSearchSpy).toHaveBeenCalledTimes(3);
+      expect(search.helper.search).toHaveBeenCalledTimes(3);
 
       expect(search.widgets).toHaveLength(2);
       expect(search.searchParameters.facets).toEqual(['price']);
@@ -461,7 +485,7 @@ describe('InstantSearch lifecycle', () => {
     it('should trigger only one search using `addWidgets()`', () => {
       search.start();
 
-      expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+      expect(search.helper.search).toHaveBeenCalledTimes(1);
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
 
@@ -470,7 +494,7 @@ describe('InstantSearch lifecycle', () => {
 
       search.addWidgets([widget1, widget2]);
 
-      expect(helperSearchSpy).toHaveBeenCalledTimes(2);
+      expect(search.helper.search).toHaveBeenCalledTimes(2);
       expect(search.searchParameters.facets).toEqual(['price']);
       expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
     });
@@ -478,19 +502,19 @@ describe('InstantSearch lifecycle', () => {
     it('should not trigger a search without widgets to add', () => {
       search.start();
 
-      expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+      expect(search.helper.search).toHaveBeenCalledTimes(1);
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
 
       search.addWidgets([]);
 
-      expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+      expect(search.helper.search).toHaveBeenCalledTimes(1);
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
     });
   });
 
-  it('should remove all widgets without triggering a search on dispose', () => {
+  it('should remove all widgets without triggering a search on dispose', done => {
     search = new InstantSearch({
       indexName,
       searchClient: algoliasearch(appId, apiKey),
@@ -507,14 +531,23 @@ describe('InstantSearch lifecycle', () => {
     search.start();
 
     expect(search.widgets).toHaveLength(5);
-    expect(helperSearchSpy).toHaveBeenCalledTimes(1);
+    expect(search.helper.search).toHaveBeenCalledTimes(1);
     expect(search.started).toBe(true);
+
+    // Calling `dispose()` deletes the reference of the `helper`
+    const { helper } = search;
 
     search.dispose();
 
-    expect(search.widgets).toHaveLength(0);
-    expect(helperSearchSpy).toHaveBeenCalledTimes(1);
-    expect(search.started).toBe(false);
+    setTimeout(() => {
+      // `removeWidgets` is batched. To actually test that the search is not
+      // called we have to wait for the timeout. Not the best solution but it
+      // works.
+      expect(search.widgets).toHaveLength(0);
+      expect(helper.search).toHaveBeenCalledTimes(1);
+      expect(search.started).toBe(false);
+      done();
+    }, 100);
   });
 });
 
