@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`sortBy() calls twice ReactDOM.render(<Selector props />, container) 1`] = `
+exports[`sortBy() calls twice render(<Selector props />, container) 1`] = `
 <div
   className="ais-SortBy custom-root cx"
 >
@@ -30,7 +30,7 @@ exports[`sortBy() calls twice ReactDOM.render(<Selector props />, container) 1`]
 </div>
 `;
 
-exports[`sortBy() calls twice ReactDOM.render(<Selector props />, container) 2`] = `
+exports[`sortBy() calls twice render(<Selector props />, container) 2`] = `
 <div
   className="ais-SortBy custom-root cx"
 >
