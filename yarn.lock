@@ -16713,10 +16713,10 @@ react-modal@^3.6.1:
     react-lifecycles-compat "^3.0.0"
     warning "^3.0.0"
 
-react-native@0.58.0:
-  version "0.58.0"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.58.0.tgz#a2f5840f482db7c7419abf40f9ffc08685774534"
-  integrity sha512-ItnNM5lZbhpteRVdO5xvCxgNMF0yekRFTwcROsmh1ztw9QkdqzEDAh9IUGfUF4IoY1epdmcNfAZNmRDNHMw0sg==
+react-native@0.58.1:
+  version "0.58.1"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.58.1.tgz#3cc0563d315d0fc605f6bae341fb952e119d31c3"
+  integrity sha512-8aD0PBTney5dKQ4MBOfBEcHmdm2OBCx/9gSbeT4OUXE54fNNmDfbkVnx7EZ1iwvEdOiAl+pEpWqgAb/tvhRwBA==
   dependencies:
     "@babel/runtime" "^7.0.0"
     absolute-path "^0.0.0"
