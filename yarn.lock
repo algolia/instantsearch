@@ -2044,15 +2044,7 @@ babel-helper-to-multiple-sequence-expressions@^0.5.0:
   resolved "https://registry.yarnpkg.com/babel-helper-to-multiple-sequence-expressions/-/babel-helper-to-multiple-sequence-expressions-0.5.0.tgz#a3f924e3561882d42fcf48907aa98f7979a4588d"
   integrity sha512-m2CvfDW4+1qfDdsrtf4dwOslQC3yhbgyBFptncp4wvtdrDHqueW7slsYv4gArie056phvQFhT2nRcGS4bnm6mA==
 
-babel-jest@24.0.0:
-  version "24.0.0"
-  resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-24.0.0.tgz#8a0c767f03f4a595fb921afdab13ff126edd00da"
-  integrity sha512-YGKRbZUjoRmNIAyG7x4wYxUyHvHPFpYXj6Mx1A5cslhaQOUgP/+LF3wtFgMuOQkIpjbVNBufmOnVY0QVwB5v9Q==
-  dependencies:
-    babel-plugin-istanbul "^5.1.0"
-    babel-preset-jest "^24.0.0"
-
-babel-jest@^24.0.0:
+babel-jest@24.0.0, babel-jest@^24.0.0:
   version "24.0.0"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-24.0.0.tgz#8a0c767f03f4a595fb921afdab13ff126edd00da"
   integrity sha512-YGKRbZUjoRmNIAyG7x4wYxUyHvHPFpYXj6Mx1A5cslhaQOUgP/+LF3wtFgMuOQkIpjbVNBufmOnVY0QVwB5v9Q==
@@ -2085,11 +2077,6 @@ babel-plugin-istanbul@^5.1.0:
     find-up "^3.0.0"
     istanbul-lib-instrument "^3.0.0"
     test-exclude "^5.0.0"
-
-babel-plugin-jest-hoist@^24.0.0:
-  version "24.0.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-jest-hoist/-/babel-plugin-jest-hoist-24.0.0.tgz#3adf030b6fd67e4311479a54b24077bdfc226ec9"
-  integrity sha512-ipefE7YWNyRNVaV/MonUb/I5nef53ZRFR74P9meMGmJxqt8s1BJmfhw11YeIMbcjXN4fxtWUaskZZe8yreXE1Q==
 
 babel-plugin-jest-hoist@^24.0.0:
   version "24.0.0"
@@ -2264,14 +2251,6 @@ babel-plugin-transform-undefined-to-void@^6.9.4:
   version "6.9.4"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-undefined-to-void/-/babel-plugin-transform-undefined-to-void-6.9.4.tgz#be241ca81404030678b748717322b89d0c8fe280"
   integrity sha1-viQcqBQEAwZ4t0hxcyK4nQyP4oA=
-
-babel-preset-jest@^24.0.0:
-  version "24.0.0"
-  resolved "https://registry.yarnpkg.com/babel-preset-jest/-/babel-preset-jest-24.0.0.tgz#d23782e5e036cff517859640a80960bd628bd82b"
-  integrity sha512-ECMMOLvNDCmsn3geBa3JkwzylcfpThMpAdfreONQm8EmXcs4tXUpXZDQPxiIMg7nMobTuAC2zDGIKrbrBXW2Vg==
-  dependencies:
-    "@babel/plugin-syntax-object-rest-spread" "^7.0.0"
-    babel-plugin-jest-hoist "^24.0.0"
 
 babel-preset-jest@^24.0.0:
   version "24.0.0"
@@ -10198,10 +10177,10 @@ rollup-plugin-commonjs@9.2.0:
     resolve "^1.8.1"
     rollup-pluginutils "^2.3.3"
 
-rollup-plugin-filesize@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-filesize/-/rollup-plugin-filesize-6.0.0.tgz#6188769eff2ee6f4508e0f6de5cf64409e2a269d"
-  integrity sha512-yU1nNkB2RP1PwLpBFIzH9oIwLL+Si6AEuy0/hAhFW+68hy6x/W/MxhhsUe7bDhG7Gnei7FOGC4Ag4W9+CninMQ==
+rollup-plugin-filesize@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-filesize/-/rollup-plugin-filesize-6.0.1.tgz#71937b48a411374c76c4a7e6bbdb087780d8bd64"
+  integrity sha512-wtxHShJofSxJRuYGGxgwIJyxxW+Mgu/vGGcsOUJVN+US6jE+gQYphSS3H2PS2HCVfxDtERtL0gjptk1gYru9rA==
   dependencies:
     boxen "^2.0.0"
     brotli-size "0.0.3"
