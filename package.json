@@ -78,7 +78,7 @@
     "enzyme": "3.8.0",
     "enzyme-adapter-react-16": "1.8.0",
     "enzyme-to-json": "3.3.5",
-    "eslint": "5.12.1",
+    "eslint": "5.13.0",
     "eslint-config-algolia": "13.2.3",
     "eslint-config-prettier": "4.0.0",
     "eslint-plugin-import": "2.16.0",
