@@ -307,7 +307,7 @@ Helper, as well as the mechanics involved.
 
 Here are some pointers on where to go next:
 
- - [the instantsearch tutorial](https://www.algolia.com/doc/search/instant-search/algoliahelperjs), for a more in-depth UI/UX oriented tutorial
+ - [the instantsearch tutorial](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/), for a more in-depth UI/UX oriented tutorial
  - [the reference documentation](reference.html), to see the whole possibilities of the Helper API
  - [the examples](examples.html), to see how to implement common patterns using the Helper
  - [the concepts](concepts.html), for a more high level presentation of the Helper API
