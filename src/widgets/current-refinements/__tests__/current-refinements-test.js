@@ -17,8 +17,16 @@ describe('currentRefinements()', () => {
   });
 
   describe('usage', () => {
-    it('throws usage when no options provided', () => {
-      expect(currentRefinements.bind(null, {})).toThrowErrorMatchingSnapshot();
+    it('throws without container', () => {
+      expect(() => {
+        currentRefinements({
+          container: undefined,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/"
+`);
     });
   });
 

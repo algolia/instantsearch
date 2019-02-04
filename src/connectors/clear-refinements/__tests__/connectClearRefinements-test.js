@@ -1,21 +1,31 @@
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
-
+import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import connectClearRefinements from '../connectClearRefinements';
 
 describe('connectClearRefinements', () => {
   describe('Usage', () => {
-    it('throws if given both `includedAttributes` and `excludedAttributes`', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectClearRefinements()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/#connector"
+`);
+    });
+
+    it('throws with both `includedAttributes` and `excludedAttributes`', () => {
       const customClearRefinements = connectClearRefinements(() => {});
 
-      expect(
-        customClearRefinements.bind(null, {
+      expect(() => {
+        customClearRefinements({
           includedAttributes: ['query'],
           excludedAttributes: ['brand'],
-        })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"\`includedAttributes\` and \`excludedAttributes\` cannot be used together."`
-      );
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The options \`includedAttributes\` and \`excludedAttributes\` cannot be used together.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/#connector"
+`);
     });
   });
 
