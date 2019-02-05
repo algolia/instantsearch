@@ -1,3 +1,12 @@
+# [5.4.0](https://github.com/algolia/react-instantsearch/compare/v5.4.0-beta.1...v5.4.0) (2019-02-05)
+
+
+### Bug Fixes
+
+* **DOMMaps:** set React & React DOM as peer deps ([#1922](https://github.com/algolia/react-instantsearch/issues/1922)) ([2f2cefd](https://github.com/algolia/react-instantsearch/commit/2f2cefd))
+
+
+
 # [5.4.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v5.4.0-beta.0...v5.4.0-beta.1) (2019-01-10)
 
 
