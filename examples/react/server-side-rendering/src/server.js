@@ -1,3 +1,4 @@
+import { join } from 'path';
 import express from 'express';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -6,7 +7,7 @@ import template from './template';
 
 const server = express();
 
-server.use('/assets', express.static('assets'));
+server.use('/assets', express.static(join(__dirname, 'assets')));
 
 server.get('/', async (req, res) => {
   const resultsState = await findResultsState(App);
