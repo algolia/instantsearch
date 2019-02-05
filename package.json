@@ -60,7 +60,7 @@
     "eslint-config-prettier": "3.3.0",
     "eslint-plugin-html": "4.0.6",
     "eslint-plugin-import": "2.14.0",
-    "eslint-plugin-jest": "22.0.0",
+    "eslint-plugin-jest": "22.2.2",
     "eslint-plugin-prettier": "3.0.0",
     "jest": "23.6.0",
     "jest-image-snapshot": "2.7.0",
