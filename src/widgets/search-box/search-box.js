@@ -262,15 +262,12 @@ You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink(
     showLoadingIndicator,
   });
 
-  try {
-    const makeWidget = connectSearchBox(
-      specializedRenderer,
-      disposer(containerNode)
-    );
-    return makeWidget({ queryHook });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectSearchBox(
+    specializedRenderer,
+    disposer(containerNode)
+  );
+
+  return makeWidget({ queryHook });
 }
 
 function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {

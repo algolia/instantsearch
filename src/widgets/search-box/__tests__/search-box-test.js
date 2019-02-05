@@ -23,11 +23,29 @@ describe('searchBox()', () => {
     };
   });
 
-  describe('bad usage', () => {
-    it('throws an error if container is not defined', () => {
+  describe('Usage', () => {
+    it('throws without container', () => {
       expect(() => {
-        searchBox({ container: null });
-      }).toThrow(/Usage:/);
+        searchBox({
+          container: undefined,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/"
+`);
+    });
+
+    it('throws with an `input` container', () => {
+      expect(() => {
+        searchBox({
+          container: document.createElement('input'),
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
+
+You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/api-reference/widgets/searchbox/js/#connector."
+`);
     });
   });
 
