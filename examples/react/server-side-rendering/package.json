@@ -4,7 +4,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "yarn build && cd dist && node server.js",
+    "start": "yarn build && nodemon dist/server.js",
+    "watch": "yarn build --watch",
     "build": "webpack",
     "test": "jest"
   },
@@ -17,6 +18,7 @@
     "babel-preset-stage-2": "6.24.1",
     "jest": "22.1.4",
     "json-loader": "0.5.7",
+    "nodemon": "1.18.9",
     "react-test-renderer": "16.2.0",
     "webpack": "3.10.0",
     "webpack-node-externals": "1.6.0"
