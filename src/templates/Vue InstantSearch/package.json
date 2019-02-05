@@ -9,7 +9,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "vue": "2.5.17",
+    "vue": "2.6.2",
     "vue-instantsearch": "{{libraryVersion}}"
   },
   "devDependencies": {
@@ -30,7 +30,7 @@
     "file-loader": "2.0.0",
     "prettier": "1.15.3",
     "vue-loader": "14.2.3",
-    "vue-template-compiler": "2.5.17",
+    "vue-template-compiler": "2.6.2",
     "webpack": "3.12.0",
     "webpack-dev-server": "2.11.3"
   }
