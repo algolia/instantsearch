@@ -17,6 +17,6 @@
     "prop-types": "15.6.0",
     "react": "16.7.0",
     "react-dom": "16.7.0",
-    "react-instantsearch-dom": "5.4.0-beta.1"
+    "react-instantsearch-dom": "5.4.0"
   }
 }

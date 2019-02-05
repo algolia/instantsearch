@@ -11,6 +11,13 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@babel/runtime@^7.1.2":
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.1.tgz#574b03e8e8a9898eaf4a872a92ea20b7846f6f2a"
+  integrity sha512-7jGW8ppV0ant637pIqAcFfQDDH1orEPGJb8aXfUozuCU3QqX7rX4DA8iwrbPrR1hcH0FTTHz47yQnk+bl5xHQA==
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 abab@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -4149,26 +4156,28 @@ react-dom@16.7.0:
     prop-types "^15.6.2"
     scheduler "^0.12.0"
 
-react-instantsearch-core@^5.4.0-beta.1:
-  version "5.4.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.4.0-beta.1.tgz#3e4798c6b43b9f9b1a3b09776674f54242d3b154"
-  integrity sha512-14Lbb37SnOBql88ugj7NsM53cVrW43FF93BuPammiRehaWrkiiQMzEXm6229q2KqDV99Y1r5z5yiwz2MWs3ZUw==
+react-instantsearch-core@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.4.0.tgz#d0b261f0faad5c2244b830be63565c4f9b6a21ce"
+  integrity sha512-nAY3ElSfYITNKLClcdxuB9/XAQN5Gwsfd0WPWym12IrTUE74gHg3gM7EolKAWV1Qx2Cdw7vdNgQqcgD4SH/2lA==
   dependencies:
+    "@babel/runtime" "^7.1.2"
     algoliasearch-helper "^2.26.0"
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
-react-instantsearch-dom@5.4.0-beta.1:
-  version "5.4.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.4.0-beta.1.tgz#75f466a215887a0c2ee1a649239a57602658e49d"
-  integrity sha512-v+rlVD8YRE+rMUhVJvvI5tJ7OzuZcLy5DPf6342BnSXIAEfaDMuwo9L0jXkChwJh1k+Hi7JWX9dz5ZqboON3Kw==
+react-instantsearch-dom@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.4.0.tgz#675f3c999ee18af3d5c1224b45ca9cac47f18ee5"
+  integrity sha512-FzbbIzF7BxpTfsXYFeX1rvJN1pv/VnokVE6ih42JncUABB/ESvi21sh6L33QWp68RjFIisdCr7ONu6Q5FUhjCw==
   dependencies:
+    "@babel/runtime" "^7.1.2"
     algoliasearch "^3.27.1"
     algoliasearch-helper "^2.26.0"
     classnames "^2.2.5"
     lodash "^4.17.4"
     prop-types "^15.5.10"
-    react-instantsearch-core "^5.4.0-beta.1"
+    react-instantsearch-core "^5.4.0"
 
 react-test-renderer@16.2.0:
   version "16.2.0"
@@ -4274,6 +4283,11 @@ regenerator-runtime@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.0.tgz#7e54fe5b5ccd5d6624ea6255c3473be090b802e1"
   integrity sha512-/aA0kLeRb5N9K0d4fw7ooEbI+xDe+DKD499EQqygGqeS8N3xto15p09uY2xj7ixP81sNPXvRLnAQIqdVStgb1A==
+
+regenerator-runtime@^0.12.0:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
+  integrity sha512-odxIc1/vDlo4iZcfXqRYFj0vpXFNoGdKMAUieAlFYO6m/nl5e9KR/beGf41z4a1FI+aQgtjhuaSlDxQ0hmkrHg==
 
 regenerator-transform@^0.10.0:
   version "0.10.1"
