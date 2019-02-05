@@ -1,6 +1,14 @@
+import { render } from 'preact-compat';
 import AlgoliasearchHelper from 'algoliasearch-helper';
-
 import rangeSlider from '../range-slider';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 const instantSearchInstance = { templatesConfig: undefined };
 
@@ -26,14 +34,12 @@ describe('rangeSlider', () => {
   describe('widget usage', () => {
     const attribute = 'aNumAttr';
 
-    let ReactDOM;
     let container;
     let helper;
     let widget;
 
     beforeEach(() => {
-      ReactDOM = { render: jest.fn() };
-      rangeSlider.__Rewire__('render', ReactDOM.render);
+      render.mockClear();
 
       container = document.createElement('div');
       helper = new AlgoliasearchHelper(
@@ -47,10 +53,6 @@ describe('rangeSlider', () => {
       );
     });
 
-    afterEach(() => {
-      rangeSlider.__ResetDependency__('render');
-    });
-
     it('should render without results', () => {
       widget = rangeSlider({
         container,
@@ -62,8 +64,8 @@ describe('rangeSlider', () => {
       widget.init({ helper, instantSearchInstance });
       widget.render({ results: [], helper });
 
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     describe('min option', () => {
@@ -131,8 +133,8 @@ describe('rangeSlider', () => {
         widget.init({ helper, instantSearchInstance });
         widget.render({ results: {}, helper });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render).toHaveBeenCalledTimes(1);
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
       });
 
       it('will use the results max when only min passed', () => {
@@ -159,9 +161,9 @@ describe('rangeSlider', () => {
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render.mock.calls[0][0].props.max).toEqual(5000);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render).toHaveBeenCalledTimes(1);
+        expect(render.mock.calls[0][0].props.max).toEqual(5000);
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
 
@@ -221,9 +223,9 @@ describe('rangeSlider', () => {
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.render.mock.calls[0][0].props.min).toEqual(1);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render).toHaveBeenCalledTimes(1);
+        expect(render.mock.calls[0][0].props.min).toEqual(1);
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
 
@@ -260,13 +262,13 @@ describe('rangeSlider', () => {
         });
       });
 
-      it('calls twice ReactDOM.render', () => {
+      it('calls twice render', () => {
         widget.render({ results, helper });
         widget.render({ results, helper });
 
-        expect(ReactDOM.render).toHaveBeenCalledTimes(2);
-        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+        expect(render).toHaveBeenCalledTimes(2);
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(render.mock.calls[1][0]).toMatchSnapshot();
       });
 
       it('does not call the refinement functions if not refined', () => {
@@ -335,7 +337,7 @@ describe('rangeSlider', () => {
 
         widget.render({ results, helper });
 
-        expect(ReactDOM.render.mock.calls[0][0].props.values[0]).toBe(5000);
+        expect(render.mock.calls[0][0].props.values[0]).toBe(5000);
       });
 
       it("expect to clamp the max value to the min range when it's lower than range", () => {
@@ -353,7 +355,7 @@ describe('rangeSlider', () => {
 
         widget.render({ results, helper });
 
-        expect(ReactDOM.render.mock.calls[0][0].props.values[1]).toBe(1);
+        expect(render.mock.calls[0][0].props.values[1]).toBe(1);
       });
     });
   });

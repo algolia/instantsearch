@@ -1,4 +1,23 @@
+import { render } from 'preact-compat';
+import { getContainerNode } from '../../../lib/utils';
 import pagination from '../pagination';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
+
+jest.mock('../../../lib/utils', () => {
+  const module = require.requireActual('../../../lib/utils');
+
+  const _getContainerNode = module.getContainerNode;
+  module.getContainerNode = jest.fn((...args) => _getContainerNode(...args));
+
+  return module;
+});
 
 describe('pagination call', () => {
   it('throws an exception when no container', () => {
@@ -7,7 +26,6 @@ describe('pagination call', () => {
 });
 
 describe('pagination()', () => {
-  let ReactDOM;
   let container;
   let widget;
   let results;
@@ -15,8 +33,8 @@ describe('pagination()', () => {
   let cssClasses;
 
   beforeEach(() => {
-    ReactDOM = { render: jest.fn() };
-    pagination.__Rewire__('render', ReactDOM.render);
+    render.mockClear();
+    getContainerNode.mockClear();
 
     container = document.createElement('div');
     cssClasses = {
@@ -58,15 +76,15 @@ describe('pagination()', () => {
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
-  it('calls twice ReactDOM.render(<Pagination props />, container)', () => {
+  it('calls twice render(<Pagination props />, container)', () => {
     widget.render({ results, helper, state: { page: 0 } });
     widget.render({ results, helper, state: { page: 0 } });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
-    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][1]).toEqual(container);
+    expect(render.mock.calls[1][0]).toMatchSnapshot();
+    expect(render.mock.calls[1][1]).toEqual(container);
   });
 
   describe('mocking getContainerNode', () => {
@@ -74,10 +92,6 @@ describe('pagination()', () => {
 
     beforeEach(() => {
       scrollIntoView = jest.fn();
-      const getContainerNode = jest.fn().mockReturnValue({
-        scrollIntoView,
-      });
-      pagination.__Rewire__('getContainerNode', getContainerNode);
     });
 
     it('should not scroll', () => {
@@ -88,28 +102,21 @@ describe('pagination()', () => {
     });
 
     it('should scroll to body', () => {
+      getContainerNode.mockImplementation(input =>
+        input === 'body' ? { scrollIntoView } : input
+      );
+
       widget = pagination({ container });
       widget.init({ helper });
       widget.render({ results, helper, state: { page: 0 } });
-      const {
-        props: { setCurrentPage },
-      } = ReactDOM.render.mock.calls[0][0];
-      setCurrentPage(2);
+      const { props } = render.mock.calls[0][0];
+      props.setCurrentPage(2);
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
     });
-
-    afterEach(() => {
-      pagination.__ResetDependency__('utils');
-    });
-  });
-
-  afterEach(() => {
-    pagination.__ResetDependency__('render');
   });
 });
 
 describe('pagination MaxPage', () => {
-  let ReactDOM;
   let container;
   let widget;
   let results;
@@ -117,9 +124,6 @@ describe('pagination MaxPage', () => {
   let paginationOptions;
 
   beforeEach(() => {
-    ReactDOM = { render: jest.fn() };
-    pagination.__Rewire__('render', ReactDOM.render);
-
     container = document.createElement('div');
     cssClasses = {
       root: 'root',

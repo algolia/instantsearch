@@ -80,7 +80,7 @@ describe('RangeInput', () => {
 
       expect(component).toMatchSnapshot();
 
-      component.instance().componentWillReceiveProps(nextProps);
+      component.setProps(nextProps);
 
       expect(component).toMatchSnapshot();
       expect(component.state()).toEqual({
@@ -108,7 +108,7 @@ describe('RangeInput', () => {
 
       expect(component).toMatchSnapshot();
 
-      component.instance().componentWillReceiveProps(nextProps);
+      component.setProps(nextProps);
 
       expect(component).toMatchSnapshot();
       expect(component.state()).toEqual({

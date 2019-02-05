@@ -16,7 +16,7 @@ Object {
 }
 `;
 
-exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearAll props />, container) 1`] = `
+exports[`clearRefinements() with refinements calls twice render(<ClearAll props />, container) 1`] = `
 <ClearRefinements
   cssClasses={
     Object {
@@ -41,7 +41,7 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
 />
 `;
 
-exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearAll props />, container) 2`] = `
+exports[`clearRefinements() with refinements calls twice render(<ClearAll props />, container) 2`] = `
 <ClearRefinements
   cssClasses={
     Object {
@@ -66,7 +66,7 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
 />
 `;
 
-exports[`clearRefinements() without refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 1`] = `
+exports[`clearRefinements() without refinements calls twice render(<ClearRefinements props />, container) 1`] = `
 <ClearRefinements
   cssClasses={
     Object {
@@ -91,7 +91,7 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
 />
 `;
 
-exports[`clearRefinements() without refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 2`] = `
+exports[`clearRefinements() without refinements calls twice render(<ClearRefinements props />, container) 2`] = `
 <ClearRefinements
   cssClasses={
     Object {

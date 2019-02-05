@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`pagination() calls twice ReactDOM.render(<Pagination props />, container) 1`] = `
+exports[`pagination() calls twice render(<Pagination props />, container) 1`] = `
 <Pagination
   createURL={[Function]}
   cssClasses={
@@ -51,7 +51,7 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
 />
 `;
 
-exports[`pagination() calls twice ReactDOM.render(<Pagination props />, container) 2`] = `
+exports[`pagination() calls twice render(<Pagination props />, container) 2`] = `
 <Pagination
   createURL={[Function]}
   cssClasses={

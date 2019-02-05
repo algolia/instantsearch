@@ -6,6 +6,6 @@ describe('configure', () => {
       () => configure(new Date()),
       () => configure(() => {}),
       () => configure(/ok/),
-    ].forEach(widget => expect(widget).toThrowError(/Usage/));
+    ].forEach(widget => expect(widget).toThrow(/Usage/));
   });
 });

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
+exports[`numericMenu() calls twice render(<RefinementList props />, container) 1`] = `
 <RefinementList
   attribute="price"
   createURL={[Function]}
@@ -64,7 +64,7 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
 />
 `;
 
-exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
+exports[`numericMenu() calls twice render(<RefinementList props />, container) 2`] = `
 <RefinementList
   attribute="price"
   createURL={[Function]}

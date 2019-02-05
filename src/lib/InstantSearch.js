@@ -1,5 +1,3 @@
-// we use the full path to the lite build to solve a meteor.js issue:
-// https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
 import algoliasearchHelper from 'algoliasearch-helper';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
@@ -345,6 +343,7 @@ class InstantSearch extends EventEmitter {
 
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
+    this.helper.removeAllListeners();
     this.helper = null;
   }
 

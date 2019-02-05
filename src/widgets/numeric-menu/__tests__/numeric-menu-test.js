@@ -1,4 +1,13 @@
+import { render } from 'preact-compat';
 import numericMenu from '../numeric-menu';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
@@ -24,7 +33,6 @@ describe('numericMenu call', () => {
 });
 
 describe('numericMenu()', () => {
-  let ReactDOM;
   let container;
   let widget;
   let helper;
@@ -35,8 +43,7 @@ describe('numericMenu()', () => {
   let state;
 
   beforeEach(() => {
-    ReactDOM = { render: jest.fn() };
-    numericMenu.__Rewire__('render', ReactDOM.render);
+    render.mockClear();
 
     items = [
       { label: 'All' },
@@ -76,15 +83,15 @@ describe('numericMenu()', () => {
     widget.init({ helper, instantSearchInstance: {} });
   });
 
-  it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
+  it('calls twice render(<RefinementList props />, container)', () => {
     widget.render({ state, results, createURL });
     widget.render({ state, results, createURL });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
-    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][1]).toEqual(container);
+    expect(render.mock.calls[1][0]).toMatchSnapshot();
+    expect(render.mock.calls[1][1]).toEqual(container);
   });
 
   it('renders with transformed items', () => {
@@ -99,7 +106,7 @@ describe('numericMenu()', () => {
     widget.init({ helper, instantSearchInstance: {} });
     widget.render({ state, results, createURL });
 
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it("doesn't call the refinement functions if not refined", () => {
@@ -219,9 +226,5 @@ describe('numericMenu()', () => {
 
     // Then
     expect(initialOptions).toEqual(initialOptionsClone);
-  });
-
-  afterEach(() => {
-    numericMenu.__ResetDependency__('render');
   });
 });

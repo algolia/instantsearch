@@ -1,4 +1,13 @@
+import { render } from 'preact-compat';
 import hitsPerPage from '../hits-per-page';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('hitsPerPage call', () => {
   it('throws an exception when no items', () => {
@@ -13,7 +22,6 @@ describe('hitsPerPage call', () => {
 });
 
 describe('hitsPerPage()', () => {
-  let ReactDOM;
   let container;
   let items;
   let cssClasses;
@@ -24,9 +32,6 @@ describe('hitsPerPage()', () => {
   let state;
 
   beforeEach(() => {
-    ReactDOM = { render: jest.fn() };
-
-    hitsPerPage.__Rewire__('render', ReactDOM.render);
     consoleWarn = jest.spyOn(window.console, 'warn');
 
     container = document.createElement('div');
@@ -54,6 +59,8 @@ describe('hitsPerPage()', () => {
       hits: [],
       nbHits: 0,
     };
+
+    render.mockClear();
   });
 
   it('does not configure the default hits per page if not specified', () => {
@@ -75,12 +82,12 @@ describe('hitsPerPage()', () => {
     });
   });
 
-  it('calls twice ReactDOM.render(<Selector props />, container)', () => {
+  it('calls twice render(<Selector props />, container)', () => {
     widget.init({ helper, state: helper.state });
     widget.render({ results, state });
     widget.render({ results, state });
-    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('renders transformed items', () => {
@@ -97,7 +104,7 @@ describe('hitsPerPage()', () => {
     widget.init({ helper, state: helper.state });
     widget.render({ results, state });
 
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('sets the underlying hitsPerPage', () => {
@@ -137,7 +144,6 @@ describe('hitsPerPage()', () => {
   });
 
   afterEach(() => {
-    hitsPerPage.__ResetDependency__('render');
     consoleWarn.mockRestore();
   });
 });
