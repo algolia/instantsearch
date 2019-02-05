@@ -2,7 +2,7 @@ import { createFakeGoogleReference } from '../../../test/mockGoogleMaps';
 import createHTMLMarker from '../createHTMLMarker';
 
 describe('createHTMLMarker', () => {
-  const createFakeParams = ({ ...rest }) => ({
+  const createFakeParams = ({ ...rest } = {}) => ({
     position: {
       lat: 10,
       lng: 12,
