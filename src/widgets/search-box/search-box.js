@@ -5,11 +5,13 @@ import {
   renderTemplate,
   warning,
   createDocumentationLink,
+  createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import defaultTemplates from './defaultTemplates';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('search-box');
 const suit = component('SearchBox');
 
 const renderer = ({
@@ -132,20 +134,6 @@ const disposer = containerNode => () => {
   range.deleteContents();
 };
 
-const usage = `Usage:
-searchBox({
-  container,
-  [ placeholder ],
-  [ cssClasses.{root, form, input, submit, submitIcon, reset, resetIcon, loadingIndicator, loadingIcon} ],
-  [ autofocus = false ],
-  [ searchAsYouType = true ],
-  [ showReset = true ],
-  [ showSubmit = true ],
-  [ showLoadingIndicator = true ],
-  [ queryHook ],
-  [ templates.{reset, submit, loadingIndicator} ],
-})`;
-
 /**
  * @typedef {Ojbect} SearchBoxTemplates
  * @property {function|string} submit Template used for displaying the submit. Can accept a function or a Hogan string.
@@ -217,20 +205,21 @@ export default function searchBox({
   templates,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
 
-  warning(
-    containerNode.tagName !== 'INPUT',
-    `The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
+  if (containerNode.tagName === 'INPUT') {
+    throw new Error(
+      `The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
 
 You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink(
-      'searchbox',
-      { connector: true }
-    )}.`
-  );
+        'searchbox',
+        { connector: true }
+      )}.`
+    );
+  }
 
   warning(
     typeof autofocus === 'boolean',
