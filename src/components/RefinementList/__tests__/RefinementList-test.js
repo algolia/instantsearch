@@ -263,6 +263,9 @@ describe('RefinementList', () => {
           templates: {
             item: item => item,
             searchableNoResults: x => x,
+            reset: x => x,
+            submit: x => x,
+            loadingIndicator: x => x,
           },
         },
         toggleRefinement: () => {},
@@ -397,6 +400,9 @@ describe('RefinementList', () => {
         templateProps: {
           templates: {
             item: item => item,
+            reset: x => x,
+            submit: x => x,
+            loadingIndicator: x => x,
           },
         },
         toggleRefinement: () => {},
