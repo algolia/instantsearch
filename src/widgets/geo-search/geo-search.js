@@ -1,36 +1,19 @@
 import cx from 'classnames';
 import noop from 'lodash/noop';
 import { unmountComponentAtNode } from 'preact-compat';
-import { getContainerNode, renderTemplate } from '../../lib/utils';
+import {
+  getContainerNode,
+  renderTemplate,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
 import createHTMLMarker from './createHTMLMarker';
 
+const withUsage = createDocumentationMessageGenerator('geo-search');
 const suit = component('GeoSearch');
-
-const usage = `Usage:
-
-geoSearch({
-  container,
-  googleReference,
-  [ initialZoom = 1 ],
-  [ initialPosition = { lat: 0, lng: 0 } ],
-  [ cssClasses.{root,map,control,label,selectedLabel,input,redo,disabledRedo,reset} = {} ],
-  [ templates.{reset,toggle,redo} ],
-  [ mapOptions ],
-  [ builtInMarker ],
-  [ customHTMLMarker = false ],
-  [ enableRefine = true ],
-  [ enableClearMapRefinement = true ],
-  [ enableRefineControl = true ],
-  [ enableRefineOnMapMove = true ],
-  [ transformItems ],
-});
-
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html
-`;
 
 /**
  * @typedef {object} HTMLMarkerOptions
@@ -147,11 +130,11 @@ const geoSearch = ({
   };
 
   if (!container) {
-    throw new Error(`Must provide a "container". ${usage}`);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   if (!googleReference) {
-    throw new Error(`Must provide a "googleReference". ${usage}`);
+    throw new Error(withUsage('The `googleReference` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -226,35 +209,29 @@ const geoSearch = ({
     ? builtInMarker
     : customHTMLMarker;
 
-  try {
-    const makeGeoSearch = connectGeoSearch(renderer, () => {
-      unmountComponentAtNode(
-        containerNode.querySelector(`.${cssClasses.tree}`)
-      );
+  const makeGeoSearch = connectGeoSearch(renderer, () => {
+    unmountComponentAtNode(containerNode.querySelector(`.${cssClasses.tree}`));
 
-      while (containerNode.firstChild) {
-        containerNode.removeChild(containerNode.firstChild);
-      }
-    });
+    while (containerNode.firstChild) {
+      containerNode.removeChild(containerNode.firstChild);
+    }
+  });
 
-    return makeGeoSearch({
-      ...widgetParams,
-      renderState: {},
-      container: containerNode,
-      googleReference,
-      initialZoom,
-      initialPosition,
-      templates,
-      cssClasses,
-      createMarker,
-      markerOptions,
-      enableRefine,
-      enableClearMapRefinement,
-      enableRefineControl,
-    });
-  } catch (e) {
-    throw new Error(`See usage. ${usage}`);
-  }
+  return makeGeoSearch({
+    ...widgetParams,
+    renderState: {},
+    container: containerNode,
+    googleReference,
+    initialZoom,
+    initialPosition,
+    templates,
+    cssClasses,
+    createMarker,
+    markerOptions,
+    enableRefine,
+    enableClearMapRefinement,
+    enableRefineControl,
+  });
 };
 
 export default geoSearch;

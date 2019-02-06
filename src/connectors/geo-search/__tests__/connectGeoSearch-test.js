@@ -38,6 +38,18 @@ describe('connectGeoSearch', () => {
   const firstRenderArgs = fn => first(fn.mock.calls)[0];
   const lastRenderArgs = fn => last(fn.mock.calls)[0];
 
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectGeoSearch()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/js/#connector"
+`);
+    });
+  });
+
   it('expect to be a widget', () => {
     const render = jest.fn();
     const unmount = jest.fn();
