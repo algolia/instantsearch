@@ -1,15 +1,15 @@
-import forEach from 'lodash/forEach';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import {
   getContainerNode,
-  renderTemplate,
   warning,
   createDocumentationLink,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
-import defaultTemplates from './defaultTemplates';
 import { component } from '../../lib/suit';
+import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import SearchBox from '../../components/SearchBox/SearchBox';
+import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');
@@ -24,108 +24,23 @@ const renderer = ({
   showReset,
   showSubmit,
   showLoadingIndicator,
-}) => (
-  { refine, clear, query, onHistoryChange, isSearchStalled },
-  isFirstRendering
-) => {
-  if (isFirstRendering) {
-    const input = document.createElement('input');
-    const wrappedInput = wrapInputFn(input, cssClasses);
-    containerNode.appendChild(wrappedInput);
-
-    if (showSubmit) {
-      addSubmit(input, cssClasses, templates);
-    }
-    if (showReset) {
-      addReset(input, cssClasses, templates, clear);
-    }
-    if (showLoadingIndicator) {
-      addLoadingIndicator(input, cssClasses, templates);
-    }
-
-    addDefaultAttributesToInput(placeholder, input, query, cssClasses);
-
-    // When the page is coming from BFCache
-    // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
-    // then we force the input value to be the current query
-    // Otherwise, this happens:
-    // - <input> autocomplete = off (default)
-    // - search $query
-    // - navigate away
-    // - use back button
-    // - input query is empty (because <input> autocomplete = off)
-    window.addEventListener('pageshow', () => {
-      input.value = query;
-    });
-
-    // Update value when query change outside of the input
-    onHistoryChange(fullState => {
-      input.value = fullState.query || '';
-    });
-
-    if (autofocus === true) {
-      input.focus();
-      input.setSelectionRange(query.length, query.length);
-    }
-
-    const form = input.parentElement;
-
-    if (searchAsYouType) {
-      input.addEventListener('input', event => {
-        refine(event.currentTarget.value);
-      });
-      form.addEventListener('submit', event => {
-        event.preventDefault();
-        input.blur();
-      });
-    } else {
-      input.addEventListener('input', event => {
-        refine(event.currentTarget.value, false);
-      });
-      form.addEventListener('submit', event => {
-        refine(input.value);
-        event.preventDefault();
-        input.blur();
-      });
-    }
-
-    return;
-  }
-
-  const input = containerNode.querySelector('input');
-  const isFocused = document.activeElement === input;
-
-  if (!isFocused && query !== input.value) {
-    input.value = query;
-  }
-
-  if (showLoadingIndicator) {
-    const loadingIndicatorElement = containerNode.querySelector(
-      `.${cssClasses.loadingIndicator}`
-    );
-
-    if (loadingIndicatorElement) {
-      if (isSearchStalled) {
-        loadingIndicatorElement.removeAttribute('hidden');
-      } else {
-        loadingIndicatorElement.setAttribute('hidden', '');
-      }
-    }
-  }
-
-  if (showReset) {
-    const resetElement = containerNode.querySelector(`.${cssClasses.reset}`);
-
-    if (resetElement) {
-      const isUserTyping = Boolean(query && query.trim());
-
-      if (isUserTyping && !isSearchStalled) {
-        resetElement.removeAttribute('hidden');
-      } else {
-        resetElement.setAttribute('hidden', '');
-      }
-    }
-  }
+}) => ({ refine, query, isSearchStalled }) => {
+  render(
+    <SearchBox
+      query={query}
+      placeholder={placeholder}
+      autofocus={autofocus}
+      refine={refine}
+      searchAsYouType={searchAsYouType}
+      templates={templates}
+      showSubmit={showSubmit}
+      showReset={showReset}
+      showLoadingIndicator={showLoadingIndicator}
+      isSearchStalled={isSearchStalled}
+      cssClasses={cssClasses}
+    />,
+    containerNode
+  );
 };
 
 const disposer = containerNode => () => {
@@ -268,127 +183,4 @@ You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink({
   );
 
   return makeWidget({ queryHook });
-}
-
-function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
-  const defaultAttributes = {
-    autocapitalize: 'off',
-    autocomplete: 'off',
-    autocorrect: 'off',
-    placeholder,
-    role: 'textbox',
-    spellcheck: 'false',
-    type: 'text',
-    value: query,
-  };
-
-  // Overrides attributes if not already set
-  forEach(defaultAttributes, (value, key) => {
-    if (input.hasAttribute(key)) {
-      return;
-    }
-    input.setAttribute(key, value);
-  });
-
-  // Add classes
-  input.className = cssClasses.input;
-}
-
-/**
- * Adds a reset element in the searchbox widget. When this reset element is clicked on
- * it should reset the query.
- * @private
- * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} cssClasses the object containing all the css classes
- * @param {object} templates the templates object
- * @param {function} clearFunction function called when the element is activated (clicked)
- * @returns {undefined} Modifies the input
- */
-function addReset(input, cssClasses, templates, clearFunction) {
-  const stringNode = renderTemplate({
-    templateKey: 'reset',
-    templates,
-    data: {
-      cssClasses,
-    },
-  });
-
-  const node = document.createElement('button');
-  node.className = cssClasses.reset;
-  node.setAttribute('hidden', '');
-  node.type = 'reset';
-  node.title = 'Clear the search query';
-  node.innerHTML = stringNode;
-
-  input.parentNode.appendChild(node);
-
-  node.addEventListener('click', () => {
-    input.focus();
-    clearFunction();
-  });
-}
-
-/**
- * Adds a button with a magnifying glass in the searchbox widget
- * @private
- * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} cssClasses the user options (cssClasses and template)
- * @param {object} templates the object containing all the templates
- * @returns {undefined} Modifies the input
- */
-function addSubmit(input, cssClasses, templates) {
-  const stringNode = renderTemplate({
-    templateKey: 'submit',
-    templates,
-    data: {
-      cssClasses,
-    },
-  });
-
-  const node = document.createElement('button');
-  node.className = cssClasses.submit;
-  node.type = 'submit';
-  node.title = 'Submit the search query';
-  node.innerHTML = stringNode;
-
-  input.parentNode.appendChild(node);
-}
-
-/**
- * Adds a loading indicator (spinner) to the search box
- * @param {DomElement} input DOM element where to add the loading indicator
- * @param {Object} cssClasses css classes definition
- * @param {Object} templates templates of the widget
- * @returns {undefined} Modifies the input
- */
-function addLoadingIndicator(input, cssClasses, templates) {
-  const stringNode = renderTemplate({
-    templateKey: 'loadingIndicator',
-    templates,
-    data: {
-      cssClasses,
-    },
-  });
-
-  const node = document.createElement('span');
-  node.setAttribute('hidden', '');
-  node.className = cssClasses.loadingIndicator;
-  node.innerHTML = stringNode;
-
-  input.parentNode.appendChild(node);
-}
-
-function wrapInputFn(input, cssClasses) {
-  const wrapper = document.createElement('div');
-  wrapper.className = cssClasses.root;
-
-  const form = document.createElement('form');
-  form.className = cssClasses.form;
-  form.noValidate = true;
-  form.action = ''; // show search button on iOS keyboard
-
-  form.appendChild(input);
-  wrapper.appendChild(form);
-
-  return wrapper;
 }
