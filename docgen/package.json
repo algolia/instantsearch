@@ -22,7 +22,7 @@
     "babel-plugin-inline-json-import": "0.2.1",
     "babel-plugin-lodash": "3.3.4",
     "browser-sync": "2.26.3",
-    "chokidar": "2.0.4",
+    "chokidar": "2.1.0",
     "clipboard": "2.0.4",
     "codemirror": "5.43.0",
     "collect-json": "1.0.8",
