@@ -11,9 +11,15 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
-describe('infiniteHits call', () => {
-  it('throws an exception when no container', () => {
-    expect(infiniteHits).toThrow();
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      infiniteHits({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/"
+`);
   });
 });
 
@@ -94,20 +100,6 @@ describe('infiniteHits()', () => {
     expect(render.mock.calls[0][1]).toEqual(container);
     expect(render.mock.calls[1][0]).toMatchSnapshot();
     expect(render.mock.calls[1][1]).toEqual(container);
-  });
-
-  it('does not accept allItems templates', () => {
-    expect(() =>
-      infiniteHits({ container, templates: { allItems: '' } })
-    ).toThrow();
-
-    expect(() =>
-      infiniteHits({ container, templates: { allItems: 'not empty' } })
-    ).toThrow();
-
-    expect(() =>
-      infiniteHits({ container, templates: { allItems: () => 'template' } })
-    ).toThrow();
   });
 
   it('updates the search state properly when showMore is called', () => {
