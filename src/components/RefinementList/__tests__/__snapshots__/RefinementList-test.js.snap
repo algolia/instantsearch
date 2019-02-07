@@ -276,10 +276,10 @@ exports[`RefinementList rendering with facets from search 1`] = `
           autoFocus={false}
           className="ais-SearchBox-input"
           disabled={false}
-          maxLength="512"
+          maxLength={512}
           onChange={[Function]}
           placeholder="Search"
-          spellCheck="false"
+          spellCheck={false}
           type="search"
           value=""
         />
@@ -457,10 +457,10 @@ exports[`RefinementList rendering without facets from search 1`] = `
           autoFocus={false}
           className="ais-SearchBox-input"
           disabled={false}
-          maxLength="512"
+          maxLength={512}
           onChange={[Function]}
           placeholder="Search"
-          spellCheck="false"
+          spellCheck={false}
           type="search"
           value=""
         />

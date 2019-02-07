@@ -19,10 +19,10 @@ exports[`SearchBox Rendering with custom templates 1`] = `
       autoFocus={false}
       className="input"
       disabled={false}
-      maxLength="512"
+      maxLength={512}
       onChange={[Function]}
       placeholder=""
-      spellCheck="false"
+      spellCheck={false}
       type="search"
       value=""
     />
@@ -80,10 +80,10 @@ exports[`SearchBox Rendering with default props 1`] = `
       autoFocus={false}
       className="input"
       disabled={false}
-      maxLength="512"
+      maxLength={512}
       onChange={[Function]}
       placeholder=""
-      spellCheck="false"
+      spellCheck={false}
       type="search"
       value=""
     />
