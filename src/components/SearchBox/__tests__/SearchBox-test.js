@@ -16,9 +16,9 @@ const defaultProps = {
     loadingIcon: 'loadingIcon',
   },
   templates: {
-    reset: x => x,
-    submit: x => x,
-    loadingIndicator: x => x,
+    reset: 'reset',
+    submit: 'submit',
+    loadingIndicator: 'loadingIndicator',
   },
 };
 

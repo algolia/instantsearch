@@ -91,19 +91,7 @@ exports[`SearchBox Rendering with default props 1`] = `
       className="submit"
       dangerouslySetInnerHTML={
         Object {
-          "__html": Object {
-            "cssClasses": Object {
-              "form": "form",
-              "input": "input",
-              "loadingIcon": "loadingIcon",
-              "loadingIndicator": "loadingIndicator",
-              "reset": "reset",
-              "resetIcon": "resetIcon",
-              "root": "root",
-              "submit": "submit",
-              "submitIcon": "submitIcon",
-            },
-          },
+          "__html": "submit",
         }
       }
       hidden={false}
@@ -114,19 +102,7 @@ exports[`SearchBox Rendering with default props 1`] = `
       className="reset"
       dangerouslySetInnerHTML={
         Object {
-          "__html": Object {
-            "cssClasses": Object {
-              "form": "form",
-              "input": "input",
-              "loadingIcon": "loadingIcon",
-              "loadingIndicator": "loadingIndicator",
-              "reset": "reset",
-              "resetIcon": "resetIcon",
-              "root": "root",
-              "submit": "submit",
-              "submitIcon": "submitIcon",
-            },
-          },
+          "__html": "reset",
         }
       }
       hidden={true}
@@ -137,19 +113,7 @@ exports[`SearchBox Rendering with default props 1`] = `
       className="loadingIndicator"
       dangerouslySetInnerHTML={
         Object {
-          "__html": Object {
-            "cssClasses": Object {
-              "form": "form",
-              "input": "input",
-              "loadingIcon": "loadingIcon",
-              "loadingIndicator": "loadingIndicator",
-              "reset": "reset",
-              "resetIcon": "resetIcon",
-              "root": "root",
-              "submit": "submit",
-              "submitIcon": "submitIcon",
-            },
-          },
+          "__html": "loadingIndicator",
         }
       }
       hidden={true}
