@@ -475,16 +475,17 @@ if (__DEV__) {
   warning.cache = {};
 }
 
-function createDocumentationMessageGenerator(
-  widget,
-  { connector = false } = {}
-) {
-  const link = [
+function createDocumentationLink(widget, { connector = false } = {}) {
+  return [
     'https://www.algolia.com/doc/api-reference/widgets/',
     widget,
     '/js/',
     connector ? '#connector' : '',
   ].join('');
+}
+
+function createDocumentationMessageGenerator(widget, { connector } = {}) {
+  const link = createDocumentationLink(widget, { connector });
 
   return function(message) {
     return [message, `See documentation: ${link}`].filter(Boolean).join('\n\n');
@@ -508,6 +509,7 @@ export {
   escapeRefinement,
   unescapeRefinement,
   checkRendering,
+  createDocumentationLink,
   createDocumentationMessageGenerator,
   deprecate,
   warning,

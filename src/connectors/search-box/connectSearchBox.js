@@ -1,23 +1,11 @@
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customSearchBox = connectSearchBox(function render(params, isFirstRendering) {
-  // params = {
-  //   query,
-  //   onHistoryChange,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  //   clear,
-  // }
+const withUsage = createDocumentationMessageGenerator('search-box', {
+  connector: true,
 });
-search.addWidget(
-  customSearchBox({
-    [ queryHook ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSearchBox.html
-`;
 
 /**
  * @typedef {Object} CustomSearchBoxWidgetOptions
@@ -76,7 +64,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectSearchBox(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { queryHook } = widgetParams;
