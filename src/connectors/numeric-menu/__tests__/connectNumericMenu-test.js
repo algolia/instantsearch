@@ -2,7 +2,6 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
 import connectNumericMenu from '../connectNumericMenu';
 
 const encodeValue = (start, end) =>
@@ -14,6 +13,41 @@ const mapOptionsToItems = ({ start, end, label }) => ({
 });
 
 describe('connectNumericMenu', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectNumericMenu()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector"
+`);
+    });
+
+    it('throws without attribute', () => {
+      expect(() => {
+        connectNumericMenu(() => {})({ attribute: undefined, items: [] });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attribute\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector"
+`);
+    });
+
+    it('throws without items', () => {
+      expect(() => {
+        connectNumericMenu(() => {})({
+          attribute: 'attribute',
+          items: undefined,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`items\` option expects an array of objects.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector"
+`);
+    });
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

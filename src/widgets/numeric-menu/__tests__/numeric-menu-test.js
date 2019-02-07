@@ -12,23 +12,15 @@ jest.mock('preact-compat', () => {
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
 
-describe('numericMenu call', () => {
-  it('throws an exception when no container', () => {
-    const attribute = '';
-    const items = [];
-    expect(numericMenu.bind(null, { attribute, items })).toThrow(/^Usage/);
-  });
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      numericMenu({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
 
-  it('throws an exception when no attribute', () => {
-    const container = document.createElement('div');
-    const items = [];
-    expect(numericMenu.bind(null, { container, items })).toThrow(/^Usage/);
-  });
-
-  it('throws an exception when no items', () => {
-    const container = document.createElement('div');
-    const attribute = '';
-    expect(numericMenu.bind(null, { attribute, container })).toThrow(/^Usage/);
+See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/"
+`);
   });
 });
 
