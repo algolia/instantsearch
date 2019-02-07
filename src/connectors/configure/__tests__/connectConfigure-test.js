@@ -15,8 +15,29 @@ describe('connectConfigure', () => {
 
   describe('Usage', () => {
     it('throws without searchParameters', () => {
-      const makeWidget = connectConfigure();
-      expect(() => makeWidget()).toThrow();
+      expect(() => connectConfigure()()).toThrowErrorMatchingInlineSnapshot(`
+"The \`searchParameters\` option expects an object.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector"
+`);
+    });
+
+    it('throws when you pass it a non-plain object', () => {
+      expect(() => {
+        connectConfigure()(new Date());
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`searchParameters\` option expects an object.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector"
+`);
+
+      expect(() => {
+        connectConfigure()(() => {});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`searchParameters\` option expects an object.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/js/#connector"
+`);
     });
 
     it('does not throw with a render function but without an unmount function', () => {

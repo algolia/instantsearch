@@ -1,26 +1,11 @@
 import noop from 'lodash/noop';
 import isPlainObject from 'lodash/isPlainObject';
-
+import { createDocumentationMessageGenerator } from '../../lib/utils';
 import { enhanceConfiguration } from '../../lib/InstantSearch';
 
-const usage = `Usage:
-var customConfigure = connectConfigure(
-  function renderFn(params, isFirstRendering) {
-    // params = {
-    //   refine,
-    //   widgetParams,
-    // }
-  }
-);
-search.addWidget(
-  customConfigure({
-    searchParameters: {
-      // any search parameter: https://www.algolia.com/doc/api-reference/search-api-parameters/
-    }
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectConfigure.html
-`;
+const withUsage = createDocumentationMessageGenerator('configure', {
+  connector: true,
+});
 
 /**
  * @typedef {Object} CustomConfigureWidgetOptions
@@ -45,7 +30,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 export default function connectConfigure(renderFn = noop, unmountFn = noop) {
   return (widgetParams = {}) => {
     if (!isPlainObject(widgetParams.searchParameters)) {
-      throw new Error(usage);
+      throw new Error(
+        withUsage('The `searchParameters` option expects an object.')
+      );
     }
 
     return {

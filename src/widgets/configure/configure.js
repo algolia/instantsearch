@@ -1,14 +1,5 @@
 import connectConfigure from '../../connectors/configure/connectConfigure';
 
-const usage = `Usage:
-search.addWidget(
-  instantsearch.widgets.configure({
-    // any search parameter: https://www.algolia.com/doc/api-reference/search-api-parameters/
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/configure.html
-`;
-
 /**
  * The **configure** widget is a headless widget that let you configure the
  * settings of your search using the parameters described by the
@@ -31,11 +22,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function configure(searchParameters) {
-  try {
-    // We do not have default renderFn && unmountFn for this widget
-    const makeWidget = connectConfigure();
-    return makeWidget({ searchParameters });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  // This is a renderless widget that falls back to the connector's
+  // noop render and unmount functions.
+  const makeWidget = connectConfigure();
+
+  return makeWidget({ searchParameters });
 }
