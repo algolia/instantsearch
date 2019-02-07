@@ -2,9 +2,13 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
 import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements';
-import { getContainerNode } from '../../lib/utils';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('current-refinements');
 const suit = component('CurrentRefinements');
 
 const renderer = ({ containerNode, cssClasses }) => (
@@ -20,15 +24,6 @@ const renderer = ({ containerNode, cssClasses }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-currentRefinements({
-  container,
-  [ includedAttributes ],
-  [ excludedAttributes = ['query'] ],
-  [ cssClasses.{root, list, item, label, category, categoryLabel, delete} ],
-  [ transformItems ]
-})`;
 
 /**
  * @typedef {Object} CurrentRefinementsCSSClasses
@@ -81,7 +76,7 @@ export default function currentRefinements({
   transformItems,
 }) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -103,17 +98,13 @@ export default function currentRefinements({
     cssClasses,
   });
 
-  try {
-    const makeWidget = connectCurrentRefinements(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
+  const makeWidget = connectCurrentRefinements(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
 
-    return makeWidget({
-      includedAttributes,
-      excludedAttributes,
-      transformItems,
-    });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  return makeWidget({
+    includedAttributes,
+    excludedAttributes,
+    transformItems,
+  });
 }

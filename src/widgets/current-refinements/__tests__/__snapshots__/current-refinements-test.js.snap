@@ -267,14 +267,3 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
   }
 />
 `;
-
-exports[`currentRefinements() usage throws usage when no options provided 1`] = `
-"Usage:
-currentRefinements({
-  container,
-  [ includedAttributes ],
-  [ excludedAttributes = ['query'] ],
-  [ cssClasses.{root, list, item, label, category, categoryLabel, delete} ],
-  [ transformItems ]
-})"
-`;

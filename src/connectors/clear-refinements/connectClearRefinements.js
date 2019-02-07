@@ -2,27 +2,12 @@ import {
   checkRendering,
   clearRefinements,
   getRefinements,
+  createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const usage = `Usage:
-var customClearRefinements = connectClearRefinements(function render(params, isFirstRendering) {
-  // params = {
-  //   refine,
-  //   hasRefinements,
-  //   createURL,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('clear-refinements', {
+  connector: true,
 });
-search.addWidget(
-  customClearRefinements({
-    [ includedAttributes = [] ],
-    [ excludedAttributes = ['query'] ],
-    [ transformItems ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearRefinements.html
-`;
 
 /**
  * @typedef {Object} CustomClearRefinementsWidgetOptions
@@ -82,12 +67,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectClearRefinements(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     if (widgetParams.includedAttributes && widgetParams.excludedAttributes) {
       throw new Error(
-        '`includedAttributes` and `excludedAttributes` cannot be used together.'
+        withUsage(
+          'The options `includedAttributes` and `excludedAttributes` cannot be used together.'
+        )
       );
     }
 
