@@ -3,9 +3,14 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectMenu from '../../connectors/menu/connectMenu';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('menu');
 const suit = component('Menu');
 
 const renderer = ({
@@ -55,19 +60,6 @@ const renderer = ({
     containerNode
   );
 };
-
-const usage = `Usage:
-menu({
-  container,
-  attribute,
-  [ sortBy = ['isRefined', 'name:asc'] ],
-  [ limit = 10 ],
-  [ showMore = false ],
-  [ showMoreLimit = 20 ],
-  [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, link, label, count, showMore, disabledShowMore} ],
-  [ templates.{item, showMoreText} ],
-  [ transformItems ]
-})`;
 
 /**
  * @typedef {Object} MenuCSSClasses
@@ -138,7 +130,7 @@ export default function menu({
   transformItems,
 }) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -173,19 +165,16 @@ export default function menu({
     showMore,
   });
 
-  try {
-    const makeWidget = connectMenu(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({
-      attribute,
-      limit,
-      showMore,
-      showMoreLimit,
-      sortBy,
-      transformItems,
-    });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectMenu(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({
+    attribute,
+    limit,
+    showMore,
+    showMoreLimit,
+    sortBy,
+    transformItems,
+  });
 }

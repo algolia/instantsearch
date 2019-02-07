@@ -8,21 +8,53 @@ import connectMenu from '../connectMenu';
 describe('connectMenu', () => {
   let rendering;
   let makeWidget;
+
   beforeEach(() => {
     rendering = jest.fn();
     makeWidget = connectMenu(rendering);
   });
 
-  it('throws on bad usage', () => {
-    expect(connectMenu).toThrow();
+  describe('Usage', () => {
+    it('throws with render function', () => {
+      expect(() => {
+        connectMenu()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
 
-    expect(() => connectMenu({})).toThrow();
+See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector"
+`);
+    });
 
-    expect(() => connectMenu(() => {})()).toThrow();
+    it('throws when showMoreLimit is equal to limit', () => {
+      expect(() => {
+        connectMenu(() => {})({
+          attribute: 'attribute',
+          limit: 20,
+          showMore: true,
+          showMoreLimit: 20,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`showMoreLimit\` option must be greater than \`limit\`.
 
-    expect(() => connectMenu({ limit: 10 })).toThrow();
+See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector"
+`);
+    });
 
-    expect(() => connectMenu(() => {})({ limit: 10 })).toThrow();
+    it('throws when showMoreLimit is lower than limit', () => {
+      const container = document.createElement('div');
+      expect(() => {
+        connectMenu(() => {})({
+          attribute: 'attribute',
+          limit: 20,
+          showMore: true,
+          showMoreLimit: 10,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`showMoreLimit\` option must be greater than \`limit\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector"
+`);
+    });
   });
 
   describe('options configuring the helper', () => {
