@@ -1,32 +1,14 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-import { checkRendering, warning } from '../../lib/utils';
+import {
+  checkRendering,
+  warning,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
-  // params = {
-  //   createURL,
-  //   items,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('hierarchical-menu', {
+  connector: true,
 });
-search.addWidget(
-  customHierarchicalMenu({
-    attributes,
-    [ separator = ' > ' ],
-    [ rootPath = null ],
-    [ showParentLevel = true ],
-    [ limit = 10 ],
-    [ showMore = false ],
-    [ showMoreLimit = 20 ],
-    [ sortBy = ['name:asc'] ],
-    [ transformItems ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html
-`;
 
 /**
  * @typedef {Object} HierarchicalMenuItem
@@ -77,7 +59,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
 export default function connectHierarchicalMenu(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const {
@@ -92,12 +74,16 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       transformItems = items => items,
     } = widgetParams;
 
-    if (!attributes || !attributes.length) {
-      throw new Error(usage);
+    if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
+      throw new Error(
+        withUsage('The `attributes` option expects an array of strings.')
+      );
     }
 
     if (showMore === true && showMoreLimit <= limit) {
-      throw new Error('`showMoreLimit` must be greater than `limit`.');
+      throw new Error(
+        withUsage('The `showMoreLimit` option must be greater than `limit`.')
+      );
     }
 
     // we need to provide a hierarchicalFacet name for the search state

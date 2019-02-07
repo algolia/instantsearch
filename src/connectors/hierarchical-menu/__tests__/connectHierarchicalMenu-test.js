@@ -5,6 +5,48 @@ import jsHelper, {
 import connectHierarchicalMenu from '../connectHierarchicalMenu';
 
 describe('connectHierarchicalMenu', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectHierarchicalMenu()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
+`);
+    });
+
+    it('throws without attributes', () => {
+      expect(() => {
+        connectHierarchicalMenu(() => {})({ attributes: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attributes\` option expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
+`);
+    });
+
+    it('throws with empty attributes', () => {
+      expect(() => {
+        connectHierarchicalMenu(() => {})({ attributes: [] });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attributes\` option expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
+`);
+    });
+
+    it('throws with non-array attributes', () => {
+      expect(() => {
+        connectHierarchicalMenu(() => {})({ attributes: 'attributes' });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attributes\` option expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
+`);
+    });
+  });
+
   describe('getConfiguration', () => {
     it('It should compute getConfiguration() correctly', () => {
       const rendering = jest.fn();
