@@ -3,9 +3,16 @@ import cx from 'classnames';
 import connectHits from '../../connectors/hits/connectHits';
 import Hits from '../../components/Hits/Hits';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  warning,
+  createDocumentationLink,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('hits');
 const suit = component('Hits');
 
 const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
@@ -31,14 +38,6 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-hits({
-  container,
-  [ transformItems ],
-  [ cssClasses.{root, emptyRoot, item} ],
-  [ templates.{empty, item} ],
-})`;
 
 /**
  * @typedef {Object} HitsCSSClasses
@@ -94,12 +93,18 @@ export default function hits({
   cssClasses: userCssClasses = {},
 }) {
   if (!container) {
-    throw new Error(`Must provide a container.${usage}`);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
-  if (templates.item && templates.allItems) {
-    throw new Error(`Must contain only allItems OR item template.${usage}`);
-  }
+  warning(
+    typeof templates.allItems === 'undefined',
+    `The template \`allItems\` does not exist since InstantSearch.js 3.
+
+You may want to migrate using \`connectHits\`: ${createDocumentationLink(
+      'hits',
+      { connector: true }
+    )}.`
+  );
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
@@ -116,12 +121,9 @@ export default function hits({
     templates,
   });
 
-  try {
-    const makeHits = connectHits(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeHits({ escapeHTML, transformItems });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeHits = connectHits(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeHits({ escapeHTML, transformItems });
 }
