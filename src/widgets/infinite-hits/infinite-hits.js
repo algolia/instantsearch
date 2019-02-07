@@ -3,9 +3,16 @@ import cx from 'classnames';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import defaultTemplates from './defaultTemplates';
 import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  warning,
+  createDocumentationLink,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('infinite-hits');
 const suit = component('InfiniteHits');
 
 const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
@@ -33,16 +40,6 @@ const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
     containerNode
   );
 };
-
-const usage = `
-Usage:
-infiniteHits({
-  container,
-  [ escapeHTML = true ],
-  [ transformItems ],
-  [ cssClasses.{root, emptyRoot, list, item, loadMore, disabledLoadMore} ],
-  [ templates.{empty, item, showMoreText} ],
-})`;
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
@@ -102,16 +99,20 @@ export default function infiniteHits({
   cssClasses: userCssClasses = {},
 } = {}) {
   if (!container) {
-    throw new Error(`Must provide a container.${usage}`);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
-  // We have this specific check because unlike the hits, infiniteHits does not support this template.
-  // This can be misleading as they are very similar.
-  if (templates.allItems !== undefined) {
-    throw new Error(
-      'allItems is not a valid template for the infiniteHits widget'
-    );
-  }
+  // We have this specific check because unlike `hits`, `infiniteHits` does not support
+  // the `allItems` template. This can be misleading as they are very similar.
+  warning(
+    typeof templates.allItems === 'undefined',
+    `The template \`allItems\` does not exist since InstantSearch.js 3.
+
+ You may want to migrate using \`connectInfiniteHits\`: ${createDocumentationLink(
+   'infinite-hits',
+   { connector: true }
+ )}.`
+  );
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
@@ -133,12 +134,9 @@ export default function infiniteHits({
     renderState: {},
   });
 
-  try {
-    const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeInfiniteHits({ escapeHTML, transformItems });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeInfiniteHits({ escapeHTML, transformItems });
 }

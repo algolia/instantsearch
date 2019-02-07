@@ -1,25 +1,12 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {
-  // params = {
-  //   hits,
-  //   results,
-  //   showMore,
-  //   isLastPage,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('infinite-hits', {
+  connector: true,
 });
-search.addWidget(
-  customInfiniteHits({
-    [ escapeHTML = true ],
-    [ transformItems ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html
-`;
 
 /**
  * @typedef {Object} InfiniteHitsRenderingOptions
@@ -77,7 +64,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectInfiniteHits(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { escapeHTML = true, transformItems = items => items } = widgetParams;
