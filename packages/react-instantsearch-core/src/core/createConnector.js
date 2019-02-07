@@ -100,9 +100,9 @@ export default function createConnector(connectorDesc) {
                 ' the `connectStateResults` connector that you should use instead. The `createConnector` API will be ' +
                 'soon deprecated and will break in future next major versions.' +
                 '\n\n' +
-                'See more at https://community.algolia.com/react-instantsearch/connectors/connectStateResults.html' +
+                'See more at https://www.algolia.com/doc/api-reference/widgets/state-results/react/' +
                 '\n' +
-                'and https://community.algolia.com/react-instantsearch/guide/Conditional_display.html'
+                'and https://www.algolia.com/doc/guides/building-search-ui/going-further/conditional-display/react/'
             );
           }
         }

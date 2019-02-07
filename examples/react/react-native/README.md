@@ -20,6 +20,6 @@ yarn run ios //to see the app running on the ios simulator
 yarn run android //to see the app running on the android emulator
 ```
 
-Read more about `react-instantsearch` [in our documentation](https://community.algolia.com/react-instantsearch/).
+Read more about `react-instantsearch` [in our documentation](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/).
 
 Read more about `react-native` and how to run projects in [their documentation](https://facebook.github.io/react-native/docs/getting-started.html).

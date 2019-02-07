@@ -194,7 +194,7 @@ This new version introduce a complete revamp of the naming and the HTML output o
 
 This release also introduces a new CSS naming convention which will be reused across all InstantSearch libraries. This will enable the possibility to develop cross-libraries CSS themes easily.
 
-You can find all the informations for the migration [in our documentation](https://community.algolia.com/react-instantsearch/guide/Migration_guide_v5.html).
+You can find all the informations for the migration [in our documentation](https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#upgrade-from-v4-to-v5).
 
 
 
@@ -254,7 +254,7 @@ This new version introduce a complete revamp of the naming and the HTML output o
 
 This release also introduces a new CSS naming convention which will be reused across all InstantSearch libraries. This will enable the possibility to develop cross-libraries CSS themes easily.
 
-You can find all the informations for the migration [in our documentation](https://community.algolia.com/react-instantsearch/guide/Migration_guide_v5.html).
+You can find all the informations for the migration [in our documentation](https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#upgrade-from-v4-to-v5).
 
 
 

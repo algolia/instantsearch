@@ -90,9 +90,9 @@ export default () => (
     <a
       target="_blank"
       rel="noopener noreferrer"
-      href="https://community.algolia.com/react-instantsearch/widgets/RangeSlider.html"
+      href="https://www.algolia.com/doc/api-reference/widgets/range-slider/react/"
     >
-      https://community.algolia.com/react-instantsearch/widgets/RangeSlider.html
+      https://www.algolia.com/doc/api-reference/widgets/range-slider/react/
     </a>
   </div>
 );

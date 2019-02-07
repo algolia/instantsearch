@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://community.algolia.com/react-instantsearch">
+  <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/">
     <img alt="React InstantSearch" src="./docgen/assets/img/InstantSearch-React-medal.svg" width="250">
   </a>
 
@@ -66,11 +66,11 @@ const App = () => (
   </a>
 </p>
 
-To learn more about the library, follow the [getting started guide](https://community.algolia.com/react-instantsearch/Getting_started.html).
+To learn more about the library, follow the [getting started guide][doc-getting-started].
 
 ## Documentation
 
-The documentation is available at [community.algolia.com/react-instantsearch][website].
+The documentation is available on [algolia.com/doc][doc].
 
 ## Demos
 
@@ -78,13 +78,13 @@ The documentation is available at [community.algolia.com/react-instantsearch][we
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <a href="https://community.algolia.com/react-instantsearch/examples/e-commerce/"><img src="./docgen/src/images/examples/e-commerce.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://community.algolia.com/react-instantsearch/examples/media/"><img src="./docgen/src/images/examples/media.png" width="250" alt="Media demo preview"></a> | <a href="https://community.algolia.com/react-instantsearch/examples/tourism/"><img src="./docgen/src/images/examples/tourism.png" width="250" alt="Tourism demo preview"></a> |
 
-See more examples [on the website](https://community.algolia.com/react-instantsearch/examples/Demos.html).
+See more examples [on the website][doc-demos].
 
 ## Playground
 
-You can get to know React InstantSearch on [this playground](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch).
+You can get to know React InstantSearch on [this playground][doc-playground].
 
-Start by [adding components](https://community.algolia.com/react-instantsearch/Getting_started.html#add-the-%3Cinstantsearch%3E-component) and tweaking the display. Once you get more familiar with the library, you can learn more advanced concepts in [our guides](https://community.algolia.com/react-instantsearch/guide/).
+Start by [adding components][doc-getting-started] and tweaking the display. Once you get more familiar with the library, you can learn more advanced concepts in [our guides][doc-guides].
 
 ## Contributing
 
@@ -96,7 +96,11 @@ React InstantSearch is [MIT licensed](LICENSE).
 
 <!-- Links -->
 
-[website]: https://community.algolia.com/react-instantsearch
+[doc]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/
+[doc-getting-started]: https://www.algolia.com/doc/guides/building-search-ui/getting-started/react/
+[doc-guides]: https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/react/
+[doc-demos]: https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react/
+[doc-playground]: https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch
 [algolia-website]: https://www.algolia.com/
 [instantsearch.js-github]: https://github.com/algolia/instantsearch.js
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android

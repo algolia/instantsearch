@@ -10,7 +10,7 @@ const clear = x => x.filter(Boolean);
 
 const version = process.env.VERSION || 'UNRELEASED';
 const algolia = '© Algolia, inc.';
-const link = 'https://community.algolia.com/react-instantsearch';
+const link = 'https://github.com/algolia/react-instantsearch';
 const createLicence = () =>
   `/*! React InstantSearch ${version} | ${algolia} | ${link} */`;
 
