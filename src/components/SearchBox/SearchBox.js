@@ -73,14 +73,6 @@ class SearchBox extends Component {
     this.setState({ query: '' });
   }
 
-  onInputRef = input => {
-    this.input = input;
-
-    if (this.props.autofocus) {
-      this.input.focus();
-    }
-  };
-
   onChange = event => {
     const { searchAsYouType, refine, onChange } = this.props;
     const query = event.target.value;
@@ -151,7 +143,7 @@ class SearchBox extends Component {
           onReset={this.onReset}
         >
           <input
-            ref={this.onInputRef}
+            ref={inputRef => (this.input = inputRef)}
             value={query}
             disabled={this.props.disabled}
             className={cssClasses.input}
