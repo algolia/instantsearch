@@ -2,9 +2,13 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import Pagination from '../../components/Pagination/Pagination';
 import connectPagination from '../../connectors/pagination/connectPagination';
-import { getContainerNode } from '../../lib/utils';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('pagination');
 const suit = component('Pagination');
 
 const defaultTemplates = {
@@ -68,20 +72,6 @@ const renderer = ({
     containerNode
   );
 };
-
-const usage = `Usage:
-pagination({
-  container,
-  [ totalPages ],
-  [ padding = 3 ],
-  [ showFirst = true ],
-  [ showLast = true ],
-  [ showPrevious = true ],
-  [ showNext = true ],
-  [ scrollTo = 'body' ]
-  [ templates.{previous, next, first, last} ],
-  [ cssClasses.{root, noRefinementRoot, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link} ],
-})`;
 
 /**
  * @typedef {Object} PaginationCSSClasses
@@ -162,7 +152,7 @@ export default function pagination({
   scrollTo: userScrollTo = 'body',
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -223,12 +213,9 @@ export default function pagination({
     scrollToNode,
   });
 
-  try {
-    const makeWidget = connectPagination(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ totalPages, padding });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectPagination(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({ totalPages, padding });
 }

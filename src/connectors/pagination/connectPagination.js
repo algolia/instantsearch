@@ -1,26 +1,12 @@
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import Paginator from './Paginator';
 
-const usage = `Usage:
-var customPagination = connectPagination(function render(params, isFirstRendering) {
-  // params = {
-  //   createURL,
-  //   currentRefinement,
-  //   nbHits,
-  //   nbPages,
-  //   pages,
-  //   refine,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('pagination', {
+  connector: true,
 });
-search.addWidget(
-  customPagination({
-    [ totalPages ]
-    [ padding ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html
-`;
 
 /**
  * @typedef {Object} CustomPaginationWidgetOptions
@@ -98,7 +84,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectPagination(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { totalPages, padding = 3 } = widgetParams;
