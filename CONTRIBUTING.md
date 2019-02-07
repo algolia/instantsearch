@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://community.algolia.com/react-instantsearch">
+  <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/">
     <img alt="React InstantSearch" src="./docgen/assets/img/InstantSearch-React-medal.svg" width="250">
   </a>
 </p>
@@ -13,15 +13,14 @@ To run this project, you will need:
 
 ## Development
 
-We use the [documentation website][website] as the main way to develop React InstantSearch.
+We use the [Storybook](https://storybook.js.org/) as the main way to develop React InstantSearch.
 
 ```sh
 yarn
 yarn start
 ```
 
-Go to <http://localhost:3000> for the documentation website.
-Go to <http://localhost:6006> for Storybook.
+Go to <http://localhost:6006>.
 
 The applications won't reload on code change. To enable the watch mode, run the following command in another tab.
 
@@ -84,7 +83,3 @@ yarn docs:deploy-preview
 ```
 
 This uses [netlify](https://www.netlify.com).
-
-<!-- Links -->
-
-[website]: https://community.algolia.com/react-instantsearch

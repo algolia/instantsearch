@@ -20,4 +20,4 @@ yarn start
 ```
 
 
-Read more about `react-instantsearch` [in our documentation](https://community.algolia.com/react-instantsearch/).
+Read more about `react-instantsearch` [in our documentation](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/).
