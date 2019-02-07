@@ -34,17 +34,10 @@ describe('SearchBox', () => {
         expect(
           wrapper.find('button[type="submit"]').hasClass('submit')
         ).toEqual(true);
-        // expect(
-        //   wrapper.find('button[type="submit"] svg').hasClass('submitIcon')
-        // ).toEqual(true);
         expect(wrapper.find('button[type="reset"]').hasClass('reset')).toEqual(
           true
         );
-        // expect(
-        //   wrapper.find('button[type="reset"] svg').hasClass('resetIcon')
-        // ).toEqual(true);
         expect(wrapper.find('span').hasClass('loadingIndicator')).toEqual(true);
-        // expect(wrapper.find('span svg').hasClass('loadingIcon')).toEqual(true);
       });
     });
 
