@@ -24,20 +24,15 @@ describe('hierarchicalMenu()', () => {
     render.mockClear();
   });
 
-  describe('instantiated with wrong parameters', () => {
-    it('should fail if no attributes', () => {
-      options = { container, attributes: undefined };
-      expect(() => hierarchicalMenu(options)).toThrow(/^Usage:/);
-    });
-
-    it('should fail if attributes empty', () => {
-      options = { container, attributes: [] };
-      expect(() => hierarchicalMenu(options)).toThrow(/^Usage:/);
-    });
-
-    it('should fail if no container', () => {
+  describe('Usage', () => {
+    it('throws without container', () => {
       options = { container: undefined, attributes };
-      expect(() => hierarchicalMenu(options)).toThrow(/^Usage:/);
+      expect(() => hierarchicalMenu(options))
+        .toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/"
+`);
     });
   });
 
