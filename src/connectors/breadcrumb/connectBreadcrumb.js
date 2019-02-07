@@ -1,26 +1,14 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
-import { checkRendering, warning } from '../../lib/utils';
+import {
+  checkRendering,
+  warning,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {
-  // params = {
-  //   createURL,
-  //   items,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('breadcrumb', {
+  connector: true,
 });
-search.addWidget(
-  customBreadcrumb({
-    attributes,
-    [ rootPath = null ],
-    [ transformItems ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectBreadcrumb.html
-`;
 
 /**
  * @typedef {Object} BreadcrumbItem
@@ -56,7 +44,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
  */
 export default function connectBreadcrumb(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
   return (widgetParams = {}) => {
     const {
       attributes,
@@ -64,11 +52,14 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
       rootPath = null,
       transformItems = items => items,
     } = widgetParams;
-    const [hierarchicalFacetName] = attributes;
 
     if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
-      throw new Error(usage);
+      throw new Error(
+        withUsage('The `attributes` option expects an array of strings.')
+      );
     }
+
+    const [hierarchicalFacetName] = attributes;
 
     return {
       getConfiguration: currentConfiguration => {

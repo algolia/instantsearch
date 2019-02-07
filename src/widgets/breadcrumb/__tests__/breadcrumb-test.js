@@ -20,6 +20,20 @@ describe('breadcrumb()', () => {
     render.mockClear();
   });
 
+  describe('Usage', () => {
+    it('throws without `container`', () => {
+      expect(() => {
+        breadcrumb({
+          container: undefined,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/"
+`);
+    });
+  });
+
   describe('render', () => {
     let results;
     let helper;
