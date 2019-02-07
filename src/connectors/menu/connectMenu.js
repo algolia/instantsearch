@@ -1,30 +1,11 @@
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customMenu = connectMenu(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   createURL,
-  //   refine,
-  //   instantSearchInstance,
-  //   canRefine,
-  //   widgetParams,
-  //   isShowingMore,
-  //   toggleShowMore
-  // }
+const withUsage = createDocumentationMessageGenerator('menu', {
+  connector: true,
 });
-search.addWidget(
-  customMenu({
-    attribute,
-    [ limit = 10 ],
-    [ showMore = false ],
-    [ showMoreLimit = 20 ],
-    [ sortBy = ['isRefined', 'name:asc'] ],
-    [ transformItems ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectMenu.html
-`;
 
 /**
  * @typedef {Object} MenuItem
@@ -109,7 +90,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectMenu(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const {
@@ -122,11 +103,13 @@ export default function connectMenu(renderFn, unmountFn) {
     } = widgetParams;
 
     if (!attribute) {
-      throw new Error(usage);
+      throw new Error(withUsage('The `attribute` option is required.'));
     }
 
     if (showMore === true && showMoreLimit <= limit) {
-      throw new Error('`showMoreLimit` should be greater than `limit`.');
+      throw new Error(
+        withUsage('The `showMoreLimit` option must be greater than `limit`.')
+      );
     }
 
     return {

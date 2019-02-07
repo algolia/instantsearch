@@ -10,38 +10,14 @@ jest.mock('preact-compat', () => {
 });
 
 describe('menu', () => {
-  it('throws usage when no container', () => {
-    expect(menu.bind(null, { attribute: '' })).toThrow(/^Usage/);
-  });
+  it('throws without container', () => {
+    expect(() => {
+      menu({ attribute: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
 
-  it('throws an exception when no attribute', () => {
-    const container = document.createElement('div');
-    expect(menu.bind(null, { container })).toThrow(/^Usage/);
-  });
-
-  it('throws an exception when showMoreLimit is equal to limit', () => {
-    expect(
-      menu.bind(null, {
-        attribute: 'attribute',
-        container: document.createElement('div'),
-        limit: 20,
-        showMore: true,
-        showMoreLimit: 20,
-      })
-    ).toThrow(/^Usage/);
-  });
-
-  it('throws an exception when showMoreLimit is lower than limit', () => {
-    const container = document.createElement('div');
-    expect(
-      menu.bind(null, {
-        attribute: 'attribute',
-        container,
-        limit: 20,
-        showMore: true,
-        showMoreLimit: 10,
-      })
-    ).toThrow(/^Usage/);
+See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
+`);
   });
 
   describe('render', () => {
