@@ -1,9 +1,43 @@
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
-
+import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import connectBreadcrumb from '../connectBreadcrumb';
 
 describe('connectBreadcrumb', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectBreadcrumb()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector"
+`);
+    });
+
+    it('throws with undefined `attributes`', () => {
+      expect(() => {
+        connectBreadcrumb(() => {})({
+          attributes: undefined,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attributes\` option expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector"
+`);
+    });
+
+    it('throws with empty `attributes`', () => {
+      expect(() => {
+        connectBreadcrumb(() => {})({
+          attributes: [],
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attributes\` option expects an array of strings.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/#connector"
+`);
+    });
+  });
+
   it('should compute getConfiguration() correctly', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);

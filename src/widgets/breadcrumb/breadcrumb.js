@@ -3,9 +3,14 @@ import cx from 'classnames';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
+import {
+  getContainerNode,
+  prepareTemplateProps,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('breadcrumb');
 const suit = component('Breadcrumb');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
@@ -34,17 +39,6 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-breadcrumb({
-  container,
-  attributes,
-  [ separator = ' > ' ],
-  [ rootPath = null ],
-  [ transformItems ],
-  [ templates.{home, separator}],
-  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
-})`;
 
 /**
  * @typedef {Object} BreadcrumbCSSClasses
@@ -138,7 +132,7 @@ export default function breadcrumb({
   cssClasses: userCssClasses = {},
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -169,12 +163,9 @@ export default function breadcrumb({
     templates,
   });
 
-  try {
-    const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeBreadcrumb({ attributes, separator, rootPath, transformItems });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeBreadcrumb({ attributes, separator, rootPath, transformItems });
 }
