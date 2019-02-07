@@ -1,10 +1,6 @@
-const usage = `Usage:
-analytics({
-  pushFunction,
-  [ delay=3000 ],
-  [ triggerOnUIInteraction=false ],
-  [ pushInitialSearch=true ]
-})`;
+import { createDocumentationMessageGenerator } from '../../lib/utils';
+
+const withUsage = createDocumentationMessageGenerator('analytics');
 
 /**
  * @typedef {Object} AnalyticsWidgetOptions
@@ -68,7 +64,7 @@ function analytics({
   pushPagination = false,
 } = {}) {
   if (!pushFunction) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `pushFunction` option is required.'));
   }
 
   let cachedState = null;
