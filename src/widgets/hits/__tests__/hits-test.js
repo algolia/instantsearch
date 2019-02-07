@@ -10,9 +10,15 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
-describe('hits call', () => {
-  it('throws an exception when no container', () => {
-    expect(hits).toThrow();
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      hits({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
+`);
   });
 });
 

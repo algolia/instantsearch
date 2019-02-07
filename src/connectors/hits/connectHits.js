@@ -1,23 +1,12 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customHits = connectHits(function render(params, isFirstRendering) {
-  // params = {
-  //   hits,
-  //   results,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('hits', {
+  connector: true,
 });
-search.addWidget(
-  customHits({
-    [ escapeHTML = true ],
-    [ transformItems ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html
-`;
 
 /**
  * @typedef {Object} HitsRenderingOptions
@@ -59,7 +48,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectHits(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { escapeHTML = true, transformItems = items => items } = widgetParams;

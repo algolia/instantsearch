@@ -1,10 +1,18 @@
-import jsHelper from 'algoliasearch-helper';
+import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
-const SearchResults = jsHelper.SearchResults;
-
 import connectHits from '../connectHits';
 
 describe('connectHits', () => {
+  it('throws without render function', () => {
+    expect(() => {
+      connectHits()({});
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#connector"
+`);
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
