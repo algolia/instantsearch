@@ -3,9 +3,14 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('hierarchical-menu');
 const suit = component('HierarchicalMenu');
 
 const renderer = ({
@@ -50,22 +55,6 @@ const renderer = ({
     containerNode
   );
 };
-
-const usage = `Usage:
-hierarchicalMenu({
-  container,
-  attributes,
-  [ separator = ' > ' ],
-  [ rootPath ],
-  [ showParentLevel = true ],
-  [ limit = 10 ],
-  [ showMore = false ],
-  [ showMoreLimit = 20 ],
-  [ sortBy = ['name:asc'] ],
-  [ cssClasses.{root, noRefinementRoot, list, childList, item, selectedItem, parentItem, link, label, count, showMore, disabledShowMore} ],
-  [ templates.{item, showMoreText} ],
-  [ transformItems ]
-})`;
 
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
@@ -193,8 +182,8 @@ export default function hierarchicalMenu({
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
 } = {}) {
-  if (!container || !attributes || !attributes.length) {
-    throw new Error(usage);
+  if (!container) {
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -237,24 +226,20 @@ export default function hierarchicalMenu({
     renderState: {},
   });
 
-  try {
-    const makeHierarchicalMenu = connectHierarchicalMenu(
-      specializedRenderer,
-      () => unmountComponentAtNode(containerNode)
-    );
+  const makeHierarchicalMenu = connectHierarchicalMenu(
+    specializedRenderer,
+    () => unmountComponentAtNode(containerNode)
+  );
 
-    return makeHierarchicalMenu({
-      attributes,
-      separator,
-      rootPath,
-      showParentLevel,
-      limit,
-      showMore,
-      showMoreLimit,
-      sortBy,
-      transformItems,
-    });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  return makeHierarchicalMenu({
+    attributes,
+    separator,
+    rootPath,
+    showParentLevel,
+    limit,
+    showMore,
+    showMoreLimit,
+    sortBy,
+    transformItems,
+  });
 }
