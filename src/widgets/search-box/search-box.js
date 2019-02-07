@@ -223,7 +223,7 @@ You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink(
 
   warning(
     typeof autofocus === 'boolean',
-    `The \`autofocus\` option only supports boolean values since InstantSearch.js 3.`
+    'The `autofocus` option only supports boolean values since InstantSearch.js 3.'
   );
 
   const cssClasses = {
