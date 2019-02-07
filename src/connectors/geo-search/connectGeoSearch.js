@@ -4,37 +4,12 @@ import {
   warning,
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
+  createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const usage = `Usage:
-
-var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   position,
-  //   currentRefinement,
-  //   refine,
-  //   clearMapRefinement,
-  //   isRefinedWithMap,
-  //   toggleRefineOnMapMove,
-  //   isRefineOnMapMove,
-  //   setMapMoveSinceLastRefine,
-  //   hasMapMoveSinceLastRefine,
-  //   hasMapMoveSinceLastRefine,
-  //   widgetParams,
-  //   instantSearchInstance,
-  // }
+const withUsage = createDocumentationMessageGenerator('geo-search', {
+  connector: true,
 });
-
-search.addWidget(
-  customGeoSearch({
-    [ enableRefineOnMapMove = true ],
-    [ transformItems ],
-  })
-);
-
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectGeoSearch.html
-`;
 
 /**
  * @typedef {Object} LatLng
@@ -127,7 +102,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 const connectGeoSearch = (renderFn, unmountFn) => {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const {

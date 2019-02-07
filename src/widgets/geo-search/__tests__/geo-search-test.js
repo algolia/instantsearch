@@ -132,6 +132,20 @@ describe('GeoSearch', () => {
     unmountComponentAtNode.mockClear();
   });
 
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        geoSearch({
+          container: undefined,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/js/"
+`);
+    });
+  });
+
   it('expect to render', () => {
     const container = createContainer();
     const instantSearchInstance = createFakeInstantSearch();
