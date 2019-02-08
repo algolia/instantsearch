@@ -1,29 +1,12 @@
 import _isFinite from 'lodash/isFinite';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-import { checkRendering } from '../../lib/utils';
-
-const usage = `Usage:
-var customNumericMenu = connectNumericMenu(function renderFn(params, isFirstRendering) {
-  // params = {
-  //   createURL,
-  //   items,
-  //   hasNoResults,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  //  }
+const withUsage = createDocumentationMessageGenerator('numeric-menu', {
+  connector: true,
 });
-
-search.addWidget(
-  customNumericMenu({
-    attribute,
-    items,
-    [ transformItems ],
-  })
-);
-
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericMenu.html
-`;
 
 /**
  * @typedef {Object} NumericMenuOption
@@ -114,13 +97,19 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectNumericMenu(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { attribute, items, transformItems = x => x } = widgetParams;
 
-    if (!attribute || !items) {
-      throw new Error(usage);
+    if (!attribute) {
+      throw new Error(withUsage('The `attribute` option is required.'));
+    }
+
+    if (!items) {
+      throw new Error(
+        withUsage('The `items` option expects an array of objects.')
+      );
     }
 
     return {

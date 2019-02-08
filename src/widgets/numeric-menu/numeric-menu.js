@@ -3,9 +3,14 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('numeric-menu');
 const suit = component('NumericMenu');
 
 const renderer = ({
@@ -39,16 +44,6 @@ const renderer = ({
     containerNode
   );
 };
-
-const usage = `Usage:
-numericMenu({
-  container,
-  attribute,
-  items,
-  [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, label, labelText, radio} ],
-  [ templates.{item} ],
-  [ transformItems ]
-})`;
 
 /**
  * @typedef {Object} NumericMenuCSSClasses
@@ -121,8 +116,8 @@ export default function numericMenu({
   templates = defaultTemplates,
   transformItems,
 } = {}) {
-  if (!container || !attribute || !items) {
-    throw new Error(usage);
+  if (!container) {
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -154,16 +149,14 @@ export default function numericMenu({
     renderState: {},
     templates,
   });
-  try {
-    const makeNumericMenu = connectNumericMenu(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeNumericMenu({
-      attribute,
-      items,
-      transformItems,
-    });
-  } catch (error) {
-    throw new Error(usage);
-  }
+
+  const makeNumericMenu = connectNumericMenu(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeNumericMenu({
+    attribute,
+    items,
+    transformItems,
+  });
 }
