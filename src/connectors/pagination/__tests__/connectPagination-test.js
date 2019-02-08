@@ -6,6 +6,18 @@ import jsHelper, {
 import connectPagination from '../connectPagination';
 
 describe('connectPagination', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectPagination()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/#connector"
+`);
+    });
+  });
+
   it('connectPagination - Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

@@ -19,9 +19,15 @@ jest.mock('../../../lib/utils', () => {
   return module;
 });
 
-describe('pagination call', () => {
-  it('throws an exception when no container', () => {
-    expect(pagination.bind(null)).toThrow(/^Usage/);
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      pagination({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/"
+`);
   });
 });
 
