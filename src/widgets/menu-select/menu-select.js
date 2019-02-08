@@ -3,9 +3,14 @@ import cx from 'classnames';
 import connectMenu from '../../connectors/menu/connectMenu';
 import MenuSelect from '../../components/MenuSelect/MenuSelect';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('menu-select');
 const suit = component('MenuSelect');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
@@ -32,17 +37,6 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-menuSelect({
-  container,
-  attribute,
-  [ sortBy=['name:asc'] ],
-  [ limit=10 ],
-  [ cssClasses.{root, noRefinementRoot, select, option} ]
-  [ templates.{item, defaultOption} ],
-  [ transformItems ]
-})`;
 
 /**
  * @typedef {Object} MenuSelectCSSClasses
@@ -96,8 +90,8 @@ export default function menuSelect({
   templates = defaultTemplates,
   transformItems,
 }) {
-  if (!container || !attribute) {
-    throw new Error(usage);
+  if (!container) {
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -118,10 +112,7 @@ export default function menuSelect({
     templates,
   });
 
-  try {
-    const makeWidget = connectMenu(specializedRenderer);
-    return makeWidget({ attribute, limit, sortBy, transformItems });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectMenu(specializedRenderer);
+
+  return makeWidget({ attribute, limit, sortBy, transformItems });
 }

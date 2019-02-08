@@ -10,14 +10,16 @@ jest.mock('preact-compat', () => {
 });
 
 describe('menuSelect', () => {
-  it('throws an exception when no attribute', () => {
-    const container = document.createElement('div');
-    expect(menuSelect.bind(null, { container })).toThrow(/^Usage/);
-  });
+  describe('Usage', () => {
+    it('throws without container ', () => {
+      expect(() => {
+        menuSelect({ container: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
 
-  it('throws an exception when no container', () => {
-    const attribute = 'categories';
-    expect(menuSelect.bind(null, { attribute })).toThrow(/^Usage/);
+See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select/js/"
+`);
+    });
   });
 
   describe('render', () => {
