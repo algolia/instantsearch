@@ -643,14 +643,6 @@
     "@babel/helper-regex" "^7.0.0"
     regexpu-core "^4.1.3"
 
-"@babel/polyfill@^7.2.5":
-  version "7.2.5"
-  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.2.5.tgz#6c54b964f71ad27edddc567d065e57e87ed7fa7d"
-  integrity sha512-8Y/t3MWThtMLYr0YNC/Q76tqN1w30+b0uQMeFUYauG2UGTR19zyUtFrAzT23zNtBxPp+LbE5E/nwV/q/r3y6ug==
-  dependencies:
-    core-js "^2.5.7"
-    regenerator-runtime "^0.12.0"
-
 "@babel/preset-env@7.3.1":
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.3.1.tgz#389e8ca6b17ae67aaf9a2111665030be923515db"
@@ -1310,10 +1302,10 @@
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.13.6.tgz#128d1685a7c34d31ed17010fc87d6a12c1de6976"
   integrity sha512-5Th3OsZ4gTRdr9Mho83BQ23cex4sRhOR4XTG+m+cJc0FhtUBK9Vn62hBJ+pnQYnSxoPOsKoAPOx6FcphxBC8ng==
 
-"@wdio/config@^5.4.14":
-  version "5.4.14"
-  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-5.4.14.tgz#dc1371d19d04afd8f8da1338ed456c4e7fb3ca14"
-  integrity sha512-5Jlw/wIuYiQQWLXHrx+b2/g9CCTV9dCUApoUwjFTAf427dngcb5ae8W/x5C9TD4O7EN9Hh214m18JBhPcUDwZw==
+"@wdio/config@^5.4.13":
+  version "5.4.13"
+  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-5.4.13.tgz#4b2c4255b388dd490920c2912d2160481d20d094"
+  integrity sha512-3jXVc1xy2TT9GENpvWlQ65IzM0xX/fXX/Mzz/HinGpFw1BZ9lb4zWj/rKl23bo7/tKCQhVz1549aVDmEnN6DGg==
   dependencies:
     "@wdio/logger" "^5.4.6"
     deepmerge "^2.0.1"
@@ -1329,12 +1321,12 @@
     loglevel-plugin-prefix "^0.5.3"
     strip-ansi "^4.0.0"
 
-"@wdio/repl@^5.4.14":
-  version "5.4.14"
-  resolved "https://registry.yarnpkg.com/@wdio/repl/-/repl-5.4.14.tgz#eb1ca3b7135f1385e24520f3ef13c9ab92f8e73c"
-  integrity sha512-3onzcQxHJ93AwV1l0ffTwXj5gwY8M/V1YPncK+Mwnj22ylkBra9307j0k7vkGiwYforNtbUAhTo/N0dAp3hz1Q==
+"@wdio/repl@^5.4.13":
+  version "5.4.13"
+  resolved "https://registry.yarnpkg.com/@wdio/repl/-/repl-5.4.13.tgz#66c5995aeb5d5d3b4f60acf259018424b55e9b4a"
+  integrity sha512-+yAfQIqg5wOsbV7qrbpnNpLp3gk9K6gP7W18OAqDSP/4PdlmvLCszn/d11KVlqQ6cf7N/S/Jlt2bHoLDmKw/Kw==
   dependencies:
-    "@wdio/config" "^5.4.14"
+    "@wdio/config" "^5.4.13"
 
 "@webassemblyjs/ast@1.7.11":
   version "1.7.11"
@@ -8919,12 +8911,11 @@ pkg-up@2.0.0, pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@1.15.4:
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.15.4.tgz#5b6518df0a7e1f74519968fbebaccfbfb6eedbe6"
-  integrity sha512-Xjrdu7vwzNFvkHG0S/mzNmdogN1jK9bSW+O3fAAvCWh0FwjyMZzW+1LhCqr0zuC9iqjsfPeVVULwLK5YFZJOBA==
+places.js@1.15.5:
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.15.5.tgz#d853a401b6a1bc2a7167c35e9dd1252c819ee1f2"
+  integrity sha512-yW9wGWuRfI0CWQs+n7JRwKZ5YZl6Y9nXzxFLvOCZUPNBl6QryOpWlQG/u6LqltxNoWtsqaFupGKGA3itl0YtbA==
   dependencies:
-    "@babel/polyfill" "^7.2.5"
     algolia-aerial "^1.5.3"
     algoliasearch "^3.31.0"
     autocomplete.js "^0.35.0"
@@ -11480,10 +11471,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.3.tgz#f1657fc7daa27e1a8930758ace9ae8da31403221"
-  integrity sha512-Y21Xqe54TBVp+VDSNbuDYdGw0BpoR/Q6wo/+35M8PAU0vipahnyduJWirxxdxjsAkS7hue53x2zp8gz7F05u0A==
+typescript@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.1.tgz#6de14e1db4b8a006ac535e482c8ba018c55f750b"
+  integrity sha512-cTmIDFW7O0IHbn1DPYjkiebHxwtCMU+eTy30ZtJNBPF9j2O1ITu5XH2YnBeVRKWHqF+3JQwWJv0Q0aUgX8W7IA==
 
 ua-parser-js@^0.7.18:
   version "0.7.19"
@@ -12023,32 +12014,32 @@ wdio-visual-regression-service@0.9.0:
     platform "^1.3.1"
     wdio-screenshot "^0.6.0"
 
-webdriver@^5.4.15:
-  version "5.4.15"
-  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-5.4.15.tgz#7eee37e09107f3b0cae6751e522700469b459629"
-  integrity sha512-1+cEBxDTmGSBGfYZ6rIk8AnyVUtQu4TrsLhnv2QkmieBlDj3eiqqjasRDZ4Mu35oAH1aqAq7S1wx6/eydwC44Q==
+webdriver@^5.4.13:
+  version "5.4.13"
+  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-5.4.13.tgz#bcd47c85862ecce7f184878796a3599635ff8352"
+  integrity sha512-ACg+u4yT79JSpAdAbRsWavJvUfvjfu/Mf6NVM95nv9LJF3D1hqYTPejmrMMdtCyKtRg6v/SZqTxmLU/p1aT7Ow==
   dependencies:
-    "@wdio/config" "^5.4.14"
+    "@wdio/config" "^5.4.13"
     "@wdio/logger" "^5.4.6"
     deepmerge "^2.0.1"
     lodash.merge "^4.6.1"
     request "^2.83.0"
 
-webdriverio@5.4.17:
-  version "5.4.17"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-5.4.17.tgz#9c752dd7ea5a1b7ae50d46dd80c6efb59157675a"
-  integrity sha512-rkp1qIz/Lcs8z+GlY0YL2v8D81yurqkScz0lAWmd6bl6RfqLGrMy3VI2xtibL60devbSxZiTYbI5WtuvKj4YUg==
+webdriverio@5.4.13:
+  version "5.4.13"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-5.4.13.tgz#45c1751dd8175ae493172c562ba1dd5067eea2de"
+  integrity sha512-jJqO0rpqn6oOhx/k/EBtsqUpO8ggDeyyRUMC2DsmKxG807DlL2/u5StG17PAFf7hdQfx77+tnLTQkUeKfn4t7Q==
   dependencies:
-    "@wdio/config" "^5.4.14"
+    "@wdio/config" "^5.4.13"
     "@wdio/logger" "^5.4.6"
-    "@wdio/repl" "^5.4.14"
+    "@wdio/repl" "^5.4.13"
     css-value "^0.0.1"
     grapheme-splitter "^1.0.2"
     lodash.merge "^4.6.1"
     lodash.zip "^4.2.0"
     rgb2hex "^0.1.0"
     serialize-error "^3.0.0"
-    webdriver "^5.4.15"
+    webdriver "^5.4.13"
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
