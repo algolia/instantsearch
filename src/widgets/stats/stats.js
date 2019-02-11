@@ -3,9 +3,14 @@ import cx from 'classnames';
 import Stats from '../../components/Stats/Stats';
 import connectStats from '../../connectors/stats/connectStats';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('stats');
 const suit = component('Stats');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
@@ -44,13 +49,6 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-stats({
-  container,
-  [ templates.{text} ],
-  [ cssClasses.{root, text} ],
-})`;
 
 /**
  * @typedef {Object} StatsWidgetTemplates
@@ -107,7 +105,7 @@ export default function stats({
   templates = defaultTemplates,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -124,12 +122,9 @@ export default function stats({
     templates,
   });
 
-  try {
-    const makeWidget = connectStats(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget();
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectStats(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget();
 }

@@ -1,20 +1,11 @@
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customStats = connectStats(function render(params, isFirstRendering) {
-  // params = {
-  //   instantSearchInstance,
-  //   hitsPerPage,
-  //   nbHits,
-  //   nbPages,
-  //   page,
-  //   processingTimeMS,
-  //   query,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('stats', {
+  connector: true,
 });
-search.addWidget(customStats());
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStats.html`;
 
 /**
  * @typedef {Object} StatsRenderingOptions
@@ -55,7 +46,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectStats(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => ({
     init({ helper, instantSearchInstance }) {
