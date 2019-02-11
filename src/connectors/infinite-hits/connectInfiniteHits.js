@@ -4,7 +4,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('infinite-hits', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'infinite-hits',
   connector: true,
 });
 

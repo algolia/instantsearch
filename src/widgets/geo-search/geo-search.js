@@ -12,7 +12,7 @@ import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
 import createHTMLMarker from './createHTMLMarker';
 
-const withUsage = createDocumentationMessageGenerator('geo-search');
+const withUsage = createDocumentationMessageGenerator({ name: 'geo-search' });
 const suit = component('GeoSearch');
 
 /**

@@ -8,7 +8,9 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('current-refinements');
+const withUsage = createDocumentationMessageGenerator({
+  name: 'current-refinements',
+});
 const suit = component('CurrentRefinements');
 
 const renderer = ({ containerNode, cssClasses }) => (

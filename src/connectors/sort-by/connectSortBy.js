@@ -4,7 +4,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('sort-by', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'sort-by',
   connector: true,
 });
 

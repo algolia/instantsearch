@@ -9,7 +9,8 @@ import {
 } from '../../lib/escape-highlight';
 import isEqual from 'lodash/isEqual';
 
-const withUsage = createDocumentationMessageGenerator('refinement-list', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'refinement-list',
   connector: true,
 });
 

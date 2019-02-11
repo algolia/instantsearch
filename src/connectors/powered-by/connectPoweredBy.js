@@ -3,7 +3,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('powered-by', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'powered-by',
   connector: true,
 });
 

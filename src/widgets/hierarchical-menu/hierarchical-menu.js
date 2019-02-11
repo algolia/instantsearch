@@ -10,7 +10,9 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('hierarchical-menu');
+const withUsage = createDocumentationMessageGenerator({
+  name: 'hierarchical-menu',
+});
 const suit = component('HierarchicalMenu');
 
 const renderer = ({

@@ -4,7 +4,8 @@ import {
 } from '../../lib/utils';
 import Paginator from './Paginator';
 
-const withUsage = createDocumentationMessageGenerator('pagination', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'pagination',
   connector: true,
 });
 

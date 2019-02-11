@@ -1,6 +1,6 @@
 import { createDocumentationMessageGenerator } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('analytics');
+const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
 /**
  * @typedef {Object} AnalyticsWidgetOptions

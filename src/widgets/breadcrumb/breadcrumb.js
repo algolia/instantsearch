@@ -10,7 +10,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('breadcrumb');
+const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (

@@ -4,7 +4,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('hits', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'hits',
   connector: true,
 });
 

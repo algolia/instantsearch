@@ -7,7 +7,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('geo-search', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'geo-search',
   connector: true,
 });
 

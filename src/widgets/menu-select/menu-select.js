@@ -10,7 +10,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('menu-select');
+const withUsage = createDocumentationMessageGenerator({ name: 'menu-select' });
 const suit = component('MenuSelect');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (

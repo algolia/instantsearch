@@ -6,7 +6,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('breadcrumb', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'breadcrumb',
   connector: true,
 });
 

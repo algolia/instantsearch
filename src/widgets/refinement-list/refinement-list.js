@@ -10,7 +10,9 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('refinement-list');
+const withUsage = createDocumentationMessageGenerator({
+  name: 'refinement-list',
+});
 const suit = component('RefinementList');
 
 const renderer = ({

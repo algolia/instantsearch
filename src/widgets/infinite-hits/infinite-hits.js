@@ -12,7 +12,9 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('infinite-hits');
+const withUsage = createDocumentationMessageGenerator({
+  name: 'infinite-hits',
+});
 const suit = component('InfiniteHits');
 
 const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
@@ -109,8 +111,7 @@ export default function infiniteHits({
     `The template \`allItems\` does not exist since InstantSearch.js 3.
 
  You may want to migrate using \`connectInfiniteHits\`: ${createDocumentationLink(
-   'infinite-hits',
-   { connector: true }
+   { name: 'infinite-hits', connector: true }
  )}.`
   );
 
