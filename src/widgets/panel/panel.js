@@ -116,41 +116,37 @@ export default function panel({
       templateProps,
     });
 
-    try {
-      const { bodyRef } = renderPanel({
-        options: {},
-        hidden: true,
-      });
+    const { bodyRef } = renderPanel({
+      options: {},
+      hidden: true,
+    });
 
-      const widget = widgetFactory({
-        ...widgetOptions,
-        container: getContainerNode(bodyRef),
-      });
+    const widget = widgetFactory({
+      ...widgetOptions,
+      container: getContainerNode(bodyRef),
+    });
 
-      return {
-        ...widget,
-        dispose(...args) {
-          unmountComponentAtNode(getContainerNode(container));
+    return {
+      ...widget,
+      dispose(...args) {
+        unmountComponentAtNode(getContainerNode(container));
 
-          if (typeof widget.dispose === 'function') {
-            widget.dispose.call(this, ...args);
-          }
-        },
-        render(...args) {
-          const [options] = args;
+        if (typeof widget.dispose === 'function') {
+          widget.dispose.call(this, ...args);
+        }
+      },
+      render(...args) {
+        const [options] = args;
 
-          renderPanel({
-            options,
-            hidden: Boolean(hidden(options)),
-          });
+        renderPanel({
+          options,
+          hidden: Boolean(hidden(options)),
+        });
 
-          if (typeof widget.render === 'function') {
-            widget.render.call(this, ...args);
-          }
-        },
-      };
-    } catch (error) {
-      throw new Error(withUsage('Bad usage of the `panel` widget.'));
-    }
+        if (typeof widget.render === 'function') {
+          widget.render.call(this, ...args);
+        }
+      },
+    };
   };
 }
