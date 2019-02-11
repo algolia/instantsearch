@@ -41,7 +41,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     it('throws when showMoreLimit is lower than limit', () => {
-      const container = document.createElement('div');
       expect(() => {
         connectMenu(() => {})({
           attribute: 'attribute',
