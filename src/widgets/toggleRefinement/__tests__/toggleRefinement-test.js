@@ -12,7 +12,19 @@ jest.mock('preact-compat', () => {
 });
 
 describe('toggleRefinement()', () => {
-  describe('right usage', () => {
+  describe('Usage', () => {
+    it('throws without container', () => {
+      expect(() => {
+        toggleRefinement({ container: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/"
+`);
+    });
+  });
+
+  describe('Lifecycle', () => {
     let containerNode;
     let widget;
     let attribute;

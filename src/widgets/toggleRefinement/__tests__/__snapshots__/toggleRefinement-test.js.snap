@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`toggleRefinement() right usage render supports negative numeric off or on values 1`] = `
+exports[`toggleRefinement() Lifecycle render supports negative numeric off or on values 1`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -41,7 +41,7 @@ exports[`toggleRefinement() right usage render supports negative numeric off or 
 />
 `;
 
-exports[`toggleRefinement() right usage render supports negative numeric off or on values 2`] = `
+exports[`toggleRefinement() Lifecycle render supports negative numeric off or on values 2`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -82,7 +82,7 @@ exports[`toggleRefinement() right usage render supports negative numeric off or 
 />
 `;
 
-exports[`toggleRefinement() right usage render understands cssClasses 1`] = `
+exports[`toggleRefinement() Lifecycle render understands cssClasses 1`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -123,7 +123,7 @@ exports[`toggleRefinement() right usage render understands cssClasses 1`] = `
 />
 `;
 
-exports[`toggleRefinement() right usage render when refined 1`] = `
+exports[`toggleRefinement() Lifecycle render when refined 1`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -164,7 +164,7 @@ exports[`toggleRefinement() right usage render when refined 1`] = `
 />
 `;
 
-exports[`toggleRefinement() right usage render when refined 2`] = `
+exports[`toggleRefinement() Lifecycle render when refined 2`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -205,7 +205,7 @@ exports[`toggleRefinement() right usage render when refined 2`] = `
 />
 `;
 
-exports[`toggleRefinement() right usage render with facet values 1`] = `
+exports[`toggleRefinement() Lifecycle render with facet values 1`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -246,7 +246,7 @@ exports[`toggleRefinement() right usage render with facet values 1`] = `
 />
 `;
 
-exports[`toggleRefinement() right usage render with facet values 2`] = `
+exports[`toggleRefinement() Lifecycle render with facet values 2`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -287,7 +287,7 @@ exports[`toggleRefinement() right usage render with facet values 2`] = `
 />
 `;
 
-exports[`toggleRefinement() right usage render without facet values 1`] = `
+exports[`toggleRefinement() Lifecycle render without facet values 1`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
@@ -328,7 +328,7 @@ exports[`toggleRefinement() right usage render without facet values 1`] = `
 />
 `;
 
-exports[`toggleRefinement() right usage render without facet values 2`] = `
+exports[`toggleRefinement() Lifecycle render without facet values 2`] = `
 <ToggleRefinement
   createURL={[Function]}
   cssClasses={
