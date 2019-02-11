@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rangeSlider widget usage max option will use the results min when only max is passed 1`] = `
+exports[`rangeSlider Lifecycle max option will use the results min when only max is passed 1`] = `
 <Slider
   cssClasses={
     Object {
@@ -23,7 +23,7 @@ exports[`rangeSlider widget usage max option will use the results min when only 
 />
 `;
 
-exports[`rangeSlider widget usage min option sets the right range 1`] = `
+exports[`rangeSlider Lifecycle min option sets the right range 1`] = `
 <Slider
   cssClasses={
     Object {
@@ -46,7 +46,7 @@ exports[`rangeSlider widget usage min option sets the right range 1`] = `
 />
 `;
 
-exports[`rangeSlider widget usage min option will use the results max when only min passed 1`] = `
+exports[`rangeSlider Lifecycle min option will use the results max when only min passed 1`] = `
 <Slider
   cssClasses={
     Object {
@@ -69,7 +69,7 @@ exports[`rangeSlider widget usage min option will use the results max when only 
 />
 `;
 
-exports[`rangeSlider widget usage should render without results 1`] = `
+exports[`rangeSlider Lifecycle should render without results 1`] = `
 <Slider
   cssClasses={
     Object {
@@ -92,7 +92,7 @@ exports[`rangeSlider widget usage should render without results 1`] = `
 />
 `;
 
-exports[`rangeSlider widget usage with results calls twice render 1`] = `
+exports[`rangeSlider Lifecycle with results calls twice render 1`] = `
 <Slider
   cssClasses={
     Object {
@@ -115,7 +115,7 @@ exports[`rangeSlider widget usage with results calls twice render 1`] = `
 />
 `;
 
-exports[`rangeSlider widget usage with results calls twice render 2`] = `
+exports[`rangeSlider Lifecycle with results calls twice render 2`] = `
 <Slider
   cssClasses={
     Object {
