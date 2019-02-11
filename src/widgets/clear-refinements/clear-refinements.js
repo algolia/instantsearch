@@ -3,9 +3,16 @@ import ClearRefinements from '../../components/ClearRefinements/ClearRefinements
 import cx from 'classnames';
 import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
 import defaultTemplates from './defaultTemplates';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
+import {
+  getContainerNode,
+  prepareTemplateProps,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator({
+  name: 'clear-refinements',
+});
 const suit = component('ClearRefinements');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
@@ -32,15 +39,6 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   );
 };
 
-const usage = `Usage:
-clearRefinements({
-  container,
-  [ includedAttributes = [] ],
-  [ excludedAttributes = ['query'] ],
-  [ transformItems ],
-  [ templates.{resetLabel} ],
-  [ cssClasses.{root, button, disabledButton} ],
-})`;
 /**
  * @typedef {Object} ClearRefinementsCSSClasses
  * @property {string|string[]} [root] CSS class to add to the wrapper element.
@@ -92,7 +90,7 @@ export default function clearRefinements({
   cssClasses: userCssClasses = {},
 }) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -113,16 +111,13 @@ export default function clearRefinements({
     templates,
   });
 
-  try {
-    const makeWidget = connectClearRefinements(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({
-      includedAttributes,
-      excludedAttributes,
-      transformItems,
-    });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectClearRefinements(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({
+    includedAttributes,
+    excludedAttributes,
+    transformItems,
+  });
 }
