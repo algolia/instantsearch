@@ -13,25 +13,18 @@ jest.mock('preact-compat', () => {
 const instantSearchInstance = { templatesConfig: undefined };
 
 describe('rangeSlider', () => {
-  it('throws an exception when no container', () => {
-    const attribute = '';
-    expect(() =>
-      rangeSlider({ attribute, step: 1, cssClasses: { root: '' } })
-    ).toThrow(/^Usage:/);
+  describe('Usage', () => {
+    it('throws without container', () => {
+      expect(() => rangeSlider({ container: undefined }))
+        .toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slider/js/"
+`);
+    });
   });
 
-  it('throws an exception when no attribute', () => {
-    const container = document.createElement('div');
-    expect(() =>
-      rangeSlider({
-        container,
-        step: 1,
-        cssClasses: { root: '' },
-      })
-    ).toThrow(/^Usage:/);
-  });
-
-  describe('widget usage', () => {
+  describe('Lifecycle', () => {
     const attribute = 'aNumAttr';
 
     let container;

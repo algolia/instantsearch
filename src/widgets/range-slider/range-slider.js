@@ -2,9 +2,13 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import Slider from '../../components/Slider/Slider';
 import connectRange from '../../connectors/range/connectRange';
-import { getContainerNode } from '../../lib/utils';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('range-slider');
 const suit = component('RangeSlider');
 
 const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
@@ -44,20 +48,6 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-rangeSlider({
-  container,
-  attribute,
-  [ min ],
-  [ max ],
-  [ pips = true ],
-  [ step = 1 ],
-  [ precision = 0 ],
-  [ tooltips = true ],
-  [ cssClasses.{root, disabledRoot} ]
-});
-`;
 
 /**
  * @typedef {Object} RangeSliderCssClasses
@@ -129,7 +119,7 @@ export default function rangeSlider({
   tooltips = true,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -150,12 +140,9 @@ export default function rangeSlider({
     cssClasses,
   });
 
-  try {
-    const makeWidget = connectRange(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ attribute, min, max, precision });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectRange(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({ attribute, min, max, precision });
 }

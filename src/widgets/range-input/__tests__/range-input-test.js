@@ -11,6 +11,17 @@ jest.mock('preact-compat', () => {
 });
 
 describe('rangeInput', () => {
+  describe('Usage', () => {
+    it('throws without container', () => {
+      expect(() => rangeInput({ container: undefined }))
+        .toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/"
+`);
+    });
+  });
+
   const attribute = 'aNumAttr';
   const createContainer = () => document.createElement('div');
   const instantSearchInstance = {};
@@ -296,20 +307,6 @@ describe('rangeInput', () => {
 
       expect(ReactDOM.render).toHaveBeenCalledTimes(1);
       expect(ReactDOM.render.mock.calls[0][0].props.step).toBe(0.1);
-    });
-  });
-
-  describe('throws', () => {
-    it('throws an exception when no container', () => {
-      expect(() => rangeInput({ attribute: '' })).toThrow(/^Usage:/);
-    });
-
-    it('throws an exception when no attribute', () => {
-      expect(() =>
-        rangeInput({
-          container: document.createElement('div'),
-        })
-      ).toThrow(/^Usage:/);
     });
   });
 });

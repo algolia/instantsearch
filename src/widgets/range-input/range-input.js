@@ -2,9 +2,14 @@ import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput';
 import connectRange from '../../connectors/range/connectRange';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('range-input');
 const suit = component('RangeInput');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
@@ -42,17 +47,6 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-rangeInput({
-  container,
-  attribute,
-  [ min ],
-  [ max ],
-  [ precision = 0 ],
-  [ templates.{separatorText, submitText} ],
-  [ cssClasses.{root, noRefinement, form, label, input, inputMin, inputMax, separator, submit} ],
-})`;
 
 /**
  * @typedef {Object} RangeInputClasses
@@ -120,7 +114,7 @@ export default function rangeInput({
   templates: userTemplates = {},
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -159,16 +153,12 @@ export default function rangeInput({
     renderState: {},
   });
 
-  try {
-    const makeWidget = connectRange(specializedRenderer);
+  const makeWidget = connectRange(specializedRenderer);
 
-    return makeWidget({
-      attribute,
-      min,
-      max,
-      precision,
-    });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  return makeWidget({
+    attribute,
+    min,
+    max,
+    precision,
+  });
 }

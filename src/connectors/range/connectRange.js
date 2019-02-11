@@ -1,29 +1,16 @@
 import find from 'lodash/find';
 import _isFinite from 'lodash/isFinite';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-import { checkRendering } from '../../lib/utils';
-
-const usage = `Usage:
-var customRange = connectRange(function render(params, isFirstRendering) {
-  // params = {
-  //   refine,
-  //   range,
-  //   start,
-  //   format,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
-});
-search.addWidget(
-  customRange({
-    attribute,
-    [ min ],
-    [ max ],
-    [ precision = 2 ],
-  })
+const withUsage = createDocumentationMessageGenerator(
+  ['range-input', 'range-slider'],
+  {
+    connector: true,
+  }
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRange.html
-`;
 
 /**
  * @typedef {Object} CustomRangeWidgetOptions
@@ -57,7 +44,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @return {function(CustomRangeWidgetOptions)} Re-usable widget factory for a custom **Range** widget.
  */
 export default function connectRange(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const {
@@ -68,7 +55,7 @@ export default function connectRange(renderFn, unmountFn) {
     } = widgetParams;
 
     if (!attribute) {
-      throw new Error(usage);
+      throw new Error(withUsage('The `attribute` option is required.'));
     }
 
     const hasMinBound = _isFinite(minBound);

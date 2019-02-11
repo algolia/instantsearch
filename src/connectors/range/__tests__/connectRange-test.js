@@ -2,10 +2,31 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
 import connectRange from '../connectRange';
 
 describe('connectRange', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectRange()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
+`);
+    });
+
+    it('throws without attribute', () => {
+      expect(() => {
+        connectRange(() => {})({ attribute: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attribute\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
+`);
+    });
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

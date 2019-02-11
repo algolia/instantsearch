@@ -484,11 +484,21 @@ function createDocumentationLink(widget, { connector = false } = {}) {
   ].join('');
 }
 
-function createDocumentationMessageGenerator(widget, { connector } = {}) {
-  const link = createDocumentationLink(widget, { connector });
+function createDocumentationMessageGenerator(
+  widgetOrWidgets,
+  { connector } = {}
+) {
+  const widgets = Array.isArray(widgetOrWidgets)
+    ? widgetOrWidgets
+    : [widgetOrWidgets];
+  const links = widgets
+    .map(widget => createDocumentationLink(widget, { connector }))
+    .join(', ');
 
   return function(message) {
-    return [message, `See documentation: ${link}`].filter(Boolean).join('\n\n');
+    return [message, `See documentation: ${links}`]
+      .filter(Boolean)
+      .join('\n\n');
   };
 }
 
