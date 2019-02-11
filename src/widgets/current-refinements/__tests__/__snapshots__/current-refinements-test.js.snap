@@ -17,6 +17,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     Array [
       Object {
         "attribute": "extraFacet",
+        "label": "extraFacet",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -31,6 +32,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "facet",
+        "label": "facet",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -53,6 +55,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "facetExclude",
+        "label": "facetExclude",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -71,6 +74,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "disjunctiveFacet",
+        "label": "disjunctiveFacet",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -93,6 +97,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "hierarchicalFacet",
+        "label": "hierarchicalFacet",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -107,6 +112,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "numericFacet",
+        "label": "numericFacet",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -127,6 +133,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "numericDisjunctiveFacet",
+        "label": "numericDisjunctiveFacet",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -147,6 +154,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "_tags",
+        "label": "_tags",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -219,6 +227,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
     Array [
       Object {
         "attribute": "facet",
+        "label": "facet",
         "refine": [Function],
         "refinements": Array [
           Object {
@@ -252,6 +261,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
     Array [
       Object {
         "attribute": "facet",
+        "label": "facet",
         "refine": [Function],
         "refinements": Array [
           Object {
