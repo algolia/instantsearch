@@ -175,7 +175,23 @@ describe('InstantSearch lifecycle', () => {
 
         it('calls widget.render({results, state, helper, templatesConfig, instantSearchInstance})', () => {
           expect(widget.render).toHaveBeenCalledTimes(1);
-          expect(widget.render.mock.calls[0]).toMatchSnapshot();
+          expect(widget.render.mock.calls[0][0]).toMatchSnapshot({
+            helper: expect.objectContaining({
+              state: expect.objectContaining({
+                another: {
+                  config: 'parameter',
+                  different: 'parameter',
+                },
+              }),
+            }),
+            instantSearchInstance: expect.any(InstantSearch),
+            state: expect.objectContaining({
+              another: {
+                config: 'parameter',
+                different: 'parameter',
+              },
+            }),
+          });
         });
       });
     });
