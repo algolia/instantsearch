@@ -1,25 +1,12 @@
 import find from 'lodash/find';
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customSortBy = connectSortBy(function render(params, isFirstRendering) {
-  // params = {
-  //   currentRefinement,
-  //   options,
-  //   refine,
-  //   hasNoResults,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('sort-by', {
+  connector: true,
 });
-search.addWidget(
-  customSortBy({
-    items,
-    [ transformItems ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBy.html
-`;
 
 /**
  * @typedef {Object} SortByItem
@@ -99,13 +86,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectSortBy(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { items, transformItems = x => x } = widgetParams;
 
     if (!items) {
-      throw new Error(usage);
+      throw new Error(
+        withUsage('The `items` option expects an array of objects.')
+      );
     }
 
     return {
