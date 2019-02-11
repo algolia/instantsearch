@@ -94,7 +94,7 @@
     "lerna": "3.11.0",
     "lodash.orderby": "4.6.0",
     "mversion": "1.13.0",
-    "netlify-cli": "2.6.6",
+    "netlify-cli": "2.7.0",
     "null-loader": "0.1.1",
     "places.js": "1.15.5",
     "prettier": "1.16.4",
