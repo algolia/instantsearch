@@ -4,10 +4,12 @@ import {
   getContainerNode,
   prepareTemplateProps,
   warning,
+  createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
 
+const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
 const renderer = ({ containerNode, cssClasses, templateProps }) => ({
@@ -29,15 +31,6 @@ const renderer = ({ containerNode, cssClasses, templateProps }) => ({
 
   return { bodyRef };
 };
-
-const usage = `Usage:
-const widgetWithHeaderFooter = panel({
-  [ templates.{header, footer} ],
-  [ hidden ],
-  [ cssClasses.{root, noRefinementRoot, body, header, footer} ],
-})(widget);
-
-const myWidget = widgetWithHeaderFooter(widgetOptions)`;
 
 /**
  * @typedef {Object} PanelWidgetCSSClasses
@@ -108,7 +101,9 @@ export default function panel({
 
     if (!container) {
       throw new Error(
-        `[InstantSearch.js] The \`container\` option is required in the widget within the panel.`
+        withUsage(
+          `The \`container\` option is required in the widget within the panel.`
+        )
       );
     }
 
@@ -155,7 +150,7 @@ export default function panel({
         },
       };
     } catch (error) {
-      throw new Error(usage);
+      throw new Error(withUsage('Bad usage of the `panel` widget.'));
     }
   };
 }

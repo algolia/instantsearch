@@ -1,6 +1,6 @@
 import panel from '../panel';
 
-describe('panel call', () => {
+describe('Usage', () => {
   test('without arguments does not throw', () => {
     expect(() => panel()).not.toThrow();
   });
@@ -39,8 +39,10 @@ describe('panel call', () => {
   test('with a widget without `container` throws', () => {
     const fakeWidget = () => {};
 
-    expect(() => panel()(fakeWidget)({})).toThrowErrorMatchingInlineSnapshot(
-      `"[InstantSearch.js] The \`container\` option is required in the widget within the panel."`
-    );
+    expect(() => panel()(fakeWidget)({})).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required in the widget within the panel.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/"
+`);
   });
 });
