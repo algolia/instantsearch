@@ -1,30 +1,14 @@
+import find from 'lodash/find';
 import {
   checkRendering,
   escapeRefinement,
   unescapeRefinement,
+  createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import find from 'lodash/find';
-
-const usage = `Usage:
-var customToggle = connectToggleRefinement(function render(params, isFirstRendering) {
-  // params = {
-  //   value,
-  //   createURL,
-  //   refine,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('toggle-refinement', {
+  connector: true,
 });
-search.addWidget(
-  customToggle({
-    attribute,
-    [on = true],
-    [off],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggleRefinement.html
-`;
 
 /**
  * @typedef {Object} ToggleValue
@@ -102,13 +86,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectToggleRefinement(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { attribute, on: userOn = true, off: userOff } = widgetParams;
 
     if (!attribute) {
-      throw new Error(usage);
+      throw new Error(withUsage('The `attribute` option is required.'));
     }
 
     const hasAnOffValue = userOff !== undefined;

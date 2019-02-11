@@ -3,9 +3,14 @@ import cx from 'classnames';
 import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
 import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement';
 import defaultTemplates from './defaultTemplates';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
+import {
+  getContainerNode,
+  prepareTemplateProps,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('toggle-refinement');
 const suit = component('ToggleRefinement');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
@@ -33,16 +38,6 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-toggleRefinement({
-  container,
-  attribute,
-  [ on = true ],
-  [ off = undefined ],
-  [ cssClasses.{root, label, labelText, checkbox} ],
-  [ templates.{labelText} ],
-})`;
 
 /**
  * @typedef {Object} ToggleWidgetCSSClasses
@@ -112,7 +107,7 @@ export default function toggleRefinement({
   off,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -134,12 +129,9 @@ export default function toggleRefinement({
     templates,
   });
 
-  try {
-    const makeWidget = connectToggleRefinement(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ attribute, on, off });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectToggleRefinement(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({ attribute, on, off });
 }
