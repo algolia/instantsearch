@@ -20,6 +20,7 @@ describe('CurrentRefinements', () => {
       items: [
         {
           attribute: 'facet',
+          label: 'facet',
           refine: () => {},
           refinements: [
             {
@@ -38,6 +39,7 @@ describe('CurrentRefinements', () => {
         },
         {
           attribute: 'facetExclude',
+          label: 'facetExclude',
           refine: () => {},
           refinements: [
             {
@@ -51,6 +53,7 @@ describe('CurrentRefinements', () => {
         },
         {
           attribute: 'disjunctive',
+          label: 'disjunctive',
           refine: () => {},
           refinements: [
             {
@@ -63,6 +66,7 @@ describe('CurrentRefinements', () => {
         },
         {
           attribute: 'hierarchical',
+          label: 'hierarchical',
           refine: () => {},
           refinements: [
             {
@@ -75,6 +79,7 @@ describe('CurrentRefinements', () => {
         },
         {
           attribute: 'numeric',
+          label: 'numeric',
           refine: () => {},
           refinements: [
             {
@@ -88,6 +93,7 @@ describe('CurrentRefinements', () => {
         },
         {
           attribute: 'tag',
+          label: 'tag',
           refine: () => {},
           refinements: [
             {
@@ -113,6 +119,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             attribute: 'customFacet',
+            label: 'customFacet',
             refine: () => {},
             refinements: [
               {
@@ -137,6 +144,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             attribute: 'customExcludeFacet',
+            label: 'customExcludeFacet',
             refine: () => {},
             refinements: [
               {
@@ -162,6 +170,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             attribute: 'customDisjunctiveFacet',
+            label: 'customDisjunctiveFacet',
             refine: () => {},
             refinements: [
               {
@@ -186,6 +195,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             attribute: 'customHierarchicalFacet',
+            label: 'customHierarchicalFacet',
             refine: () => {},
             refinements: [
               {
@@ -210,6 +220,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             attribute: 'customNumericFilter',
+            label: 'customNumericFilter',
             refine: () => {},
             refinements: [
               {
@@ -223,6 +234,7 @@ describe('CurrentRefinements', () => {
           },
           {
             attribute: 'customNumericFilter',
+            label: 'customNumericFilter',
             refine: () => {},
             refinements: [
               {
@@ -236,6 +248,7 @@ describe('CurrentRefinements', () => {
           },
           {
             attribute: 'customNumericFilter',
+            label: 'customNumericFilter',
             refine: () => {},
             refinements: [
               {
@@ -261,6 +274,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             attribute: '_tags',
+            label: '_tags',
             refine: () => {},
             refinements: [
               {
@@ -285,6 +299,7 @@ describe('CurrentRefinements', () => {
         items: [
           {
             attribute: 'query',
+            label: 'query',
             refine: () => {},
             refinements: [
               {
