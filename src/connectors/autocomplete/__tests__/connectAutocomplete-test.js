@@ -5,8 +5,14 @@ import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectAutocomplete', () => {
-  it('throws without `renderFn`', () => {
-    expect(() => connectAutocomplete()).toThrow();
+  it('throws without render function', () => {
+    expect(() => {
+      connectAutocomplete();
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplete/js/#connector"
+`);
   });
 
   it('renders during init and render', () => {
