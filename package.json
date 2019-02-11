@@ -116,7 +116,7 @@
     "jsdom-global": "3.0.2",
     "json": "9.0.6",
     "mversion": "1.13.0",
-    "places.js": "1.15.4",
+    "places.js": "1.15.5",
     "prettier": "1.16.4",
     "react-test-renderer": "16.8.1",
     "rollup": "1.1.2",
