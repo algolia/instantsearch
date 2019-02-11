@@ -10,15 +10,15 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
-describe('sortBy call', () => {
-  it('throws an exception when no options', () => {
-    const container = document.createElement('div');
-    expect(sortBy.bind(null, { container })).toThrow(/^Usage/);
-  });
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      sortBy({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
 
-  it('throws an exception when no items', () => {
-    const items = [];
-    expect(sortBy.bind(null, { items })).toThrow(/^Usage/);
+See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/"
+`);
   });
 });
 

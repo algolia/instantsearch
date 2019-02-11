@@ -2,9 +2,13 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectSortBy from '../../connectors/sort-by/connectSortBy';
-import { getContainerNode } from '../../lib/utils';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('sort-by');
 const suit = component('SortBy');
 
 const renderer = ({ containerNode, cssClasses }) => (
@@ -27,14 +31,6 @@ const renderer = ({ containerNode, cssClasses }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-sortBy({
-  container,
-  items,
-  [cssClasses.{root, select, option}],
-  [transformItems]
-})`;
 
 /**
  * @typedef {Object} SortByWidgetCssClasses
@@ -86,7 +82,7 @@ export default function sortBy({
   transformItems,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -102,12 +98,9 @@ export default function sortBy({
     cssClasses,
   });
 
-  try {
-    const makeWidget = connectSortBy(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ items, transformItems });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectSortBy(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({ items, transformItems });
 }
