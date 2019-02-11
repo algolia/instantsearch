@@ -3,9 +3,15 @@ import cx from 'classnames';
 import find from 'lodash/find';
 import Selector from '../../components/Selector/Selector';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
-import { getContainerNode } from '../../lib/utils';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator({
+  name: 'hits-per-page',
+});
 const suit = component('HitsPerPage');
 
 const renderer = ({ containerNode, cssClasses }) => (
@@ -29,14 +35,6 @@ const renderer = ({ containerNode, cssClasses }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-hitsPerPage({
-  container,
-  items,
-  [ cssClasses.{root, select, option} ],
-  [ transformItems ]
-})`;
 
 /**
  * @typedef {Object} HitsPerPageCSSClasses
@@ -89,7 +87,7 @@ export default function hitsPerPage({
   transformItems,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -105,12 +103,9 @@ export default function hitsPerPage({
     cssClasses,
   });
 
-  try {
-    const makeHitsPerPage = connectHitsPerPage(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeHitsPerPage({ items, transformItems });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeHitsPerPage = connectHitsPerPage(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeHitsPerPage({ items, transformItems });
 }
