@@ -1,24 +1,11 @@
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customStarRating = connectRatingMenu(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   createURL,
-  //   refine,
-  //   instantSearchInstance,
-  //   hasNoResults,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator('rating-menu', {
+  connector: true,
 });
-search.addWidget(
-  customStarRatingI({
-    attribute,
-    [ max=5 ],
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRatingMenu.html
-`;
 
 /**
  * @typedef {Object} StarRatingItems
@@ -105,13 +92,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectRatingMenu(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { attribute, max = 5 } = widgetParams;
 
     if (!attribute) {
-      throw new Error(usage);
+      throw new Error(withUsage('The `attribute` option is required.'));
     }
 
     return {

@@ -5,6 +5,28 @@ import jsHelper, {
 import connectRatingMenu from '../connectRatingMenu';
 
 describe('connectRatingMenu', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectRatingMenu()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector"
+`);
+    });
+
+    it('throws without attribute', () => {
+      expect(() => {
+        connectRatingMenu(() => {})({ attribute: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attribute\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector"
+`);
+    });
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

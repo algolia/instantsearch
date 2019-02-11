@@ -10,6 +10,18 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      ratingMenu({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/"
+`);
+  });
+});
+
 describe('ratingMenu()', () => {
   const attribute = 'anAttrName';
   let container;

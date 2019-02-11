@@ -11,9 +11,15 @@ jest.mock('preact-compat', () => {
 
 const instantSearchInstance = { templatesConfig: undefined };
 
-describe('stats call', () => {
-  it('should throw when called without container', () => {
-    expect(() => stats()).toThrow(/^Usage:/);
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      stats({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/"
+`);
   });
 });
 

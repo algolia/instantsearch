@@ -7,6 +7,28 @@ import connectSortBy from '../connectSortBy';
 import instantSearch from '../../../lib/main';
 
 describe('connectSortBy', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectSortBy()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
+`);
+    });
+
+    it('throws without items', () => {
+      expect(() => {
+        connectSortBy(() => {})({ items: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`items\` option expects an array of objects.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
+`);
+    });
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

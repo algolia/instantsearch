@@ -4,6 +4,18 @@ const SearchResults = jsHelper.SearchResults;
 import connectStats from '../connectStats';
 
 describe('connectStats', () => {
+  describe('Usage', () => {
+    it('throws without render function', () => {
+      expect(() => {
+        connectStats()({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The render function is not valid (got type \\"undefined\\").
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#connector"
+`);
+    });
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

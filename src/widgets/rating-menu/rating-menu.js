@@ -3,9 +3,14 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
 import defaultTemplates from './defaultTemplates';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 import { component } from '../../lib/suit';
 
+const withUsage = createDocumentationMessageGenerator('rating-menu');
 const suit = component('RatingMenu');
 
 const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
@@ -45,15 +50,6 @@ const renderer = ({ containerNode, cssClasses, templates, renderState }) => (
     containerNode
   );
 };
-
-const usage = `Usage:
-ratingMenu({
-  container,
-  attribute,
-  [ max = 5 ],
-  [ cssClasses.{root, list, item, selectedItem, disabledItem, link, starIcon, fullStarIcon, emptyStarIcon, label, count} ],
-  [ templates.{item} ],
-})`;
 
 /**
  * @typedef {Object} RatingMenuWidgetTemplates
@@ -119,7 +115,7 @@ export default function ratingMenu({
   templates = defaultTemplates,
 } = {}) {
   if (!container) {
-    throw new Error(usage);
+    throw new Error(withUsage('The `container` option is required.'));
   }
 
   const containerNode = getContainerNode(container);
@@ -161,12 +157,9 @@ export default function ratingMenu({
     templates,
   });
 
-  try {
-    const makeWidget = connectRatingMenu(specializedRenderer, () =>
-      unmountComponentAtNode(containerNode)
-    );
-    return makeWidget({ attribute, max });
-  } catch (error) {
-    throw new Error(usage);
-  }
+  const makeWidget = connectRatingMenu(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({ attribute, max });
 }
