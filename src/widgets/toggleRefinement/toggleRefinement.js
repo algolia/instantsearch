@@ -10,7 +10,9 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('toggle-refinement');
+const withUsage = createDocumentationMessageGenerator({
+  name: 'toggle-refinement',
+});
 const suit = component('ToggleRefinement');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (

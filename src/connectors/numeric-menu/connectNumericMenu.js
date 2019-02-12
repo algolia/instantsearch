@@ -4,7 +4,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('numeric-menu', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'numeric-menu',
   connector: true,
 });
 

@@ -10,7 +10,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('stats');
+const withUsage = createDocumentationMessageGenerator({ name: 'stats' });
 const suit = component('Stats');
 
 const renderer = ({ containerNode, cssClasses, renderState, templates }) => (

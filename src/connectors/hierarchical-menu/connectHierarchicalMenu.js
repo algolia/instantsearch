@@ -6,7 +6,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('hierarchical-menu', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'hierarchical-menu',
   connector: true,
 });
 

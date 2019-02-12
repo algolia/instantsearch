@@ -11,7 +11,7 @@ import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import defaultTemplates from './defaultTemplates';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('search-box');
+const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');
 
 const renderer = ({
@@ -214,10 +214,10 @@ export default function searchBox({
     throw new Error(
       `The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
 
-You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink(
-        'searchbox',
-        { connector: true }
-      )}.`
+You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink({
+        name: 'searchbox',
+        connector: true,
+      })}.`
     );
   }
 

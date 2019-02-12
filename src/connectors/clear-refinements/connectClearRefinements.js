@@ -5,7 +5,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('clear-refinements', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'clear-refinements',
   connector: true,
 });
 

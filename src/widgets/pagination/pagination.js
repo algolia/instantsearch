@@ -8,7 +8,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('pagination');
+const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });
 const suit = component('Pagination');
 
 const defaultTemplates = {

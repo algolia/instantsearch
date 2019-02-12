@@ -8,7 +8,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('sort-by');
+const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });
 const suit = component('SortBy');
 
 const renderer = ({ containerNode, cssClasses }) => (

@@ -475,20 +475,24 @@ if (__DEV__) {
   warning.cache = {};
 }
 
-function createDocumentationLink(widget, { connector = false } = {}) {
+function createDocumentationLink({ name, connector = false } = {}) {
   return [
     'https://www.algolia.com/doc/api-reference/widgets/',
-    widget,
+    name,
     '/js/',
     connector ? '#connector' : '',
   ].join('');
 }
 
-function createDocumentationMessageGenerator(widget, { connector } = {}) {
-  const link = createDocumentationLink(widget, { connector });
+function createDocumentationMessageGenerator(...widgets) {
+  const links = widgets
+    .map(widget => createDocumentationLink(widget))
+    .join(', ');
 
   return function(message) {
-    return [message, `See documentation: ${link}`].filter(Boolean).join('\n\n');
+    return [message, `See documentation: ${links}`]
+      .filter(Boolean)
+      .join('\n\n');
   };
 }
 

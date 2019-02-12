@@ -3,7 +3,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('search-box', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'search-box',
   connector: true,
 });
 

@@ -6,14 +6,16 @@ describe('connectCurrentRefinements', () => {
     it('throws if given both `includedAttributes` and `excludedAttributes`', () => {
       const customCurrentRefinements = connectCurrentRefinements(() => {});
 
-      expect(
-        customCurrentRefinements.bind(null, {
+      expect(() => {
+        customCurrentRefinements({
           includedAttributes: ['query'],
           excludedAttributes: ['brand'],
-        })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"\`includedAttributes\` and \`excludedAttributes\` cannot be used together."`
-      );
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The options \`includedAttributes\` and \`excludedAttributes\` cannot be used together.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/#connector"
+`);
     });
   });
 

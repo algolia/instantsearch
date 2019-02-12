@@ -1,20 +1,13 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
-import { checkRendering } from '../../lib/utils';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-const usage = `Usage:
-var customAutcomplete = connectAutocomplete(function render(params, isFirstRendering) {
-  // params = {
-  //   indices,
-  //   refine,
-  //   currentRefinement
-  // }
+const withUsage = createDocumentationMessageGenerator({
+  name: 'autocomplete',
+  connector: true,
 });
-search.addWiget(customAutcomplete({
-  [ indices ],
-  [ escapeHTML = true ],
-}));
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectAutocomplete.html
-`;
 
 /**
  * @typedef {Object} Index
@@ -48,14 +41,16 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @return {function(CustomAutocompleteWidgetOptions)} Re-usable widget factory for a custom **Autocomplete** widget.
  */
 export default function connectAutocomplete(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { escapeHTML = true, indices = [] } = widgetParams;
 
     // user passed a wrong `indices` option type
     if (!Array.isArray(indices)) {
-      throw new Error(usage);
+      throw new Error(
+        withUsage('The `indices` option expects an array of objects.')
+      );
     }
 
     return {

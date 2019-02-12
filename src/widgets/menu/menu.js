@@ -10,7 +10,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('menu');
+const withUsage = createDocumentationMessageGenerator({ name: 'menu' });
 const suit = component('Menu');
 
 const renderer = ({

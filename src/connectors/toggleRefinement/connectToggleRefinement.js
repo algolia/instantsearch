@@ -6,7 +6,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('toggle-refinement', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'toggle-refinement',
   connector: true,
 });
 

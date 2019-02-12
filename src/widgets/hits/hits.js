@@ -12,7 +12,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
-const withUsage = createDocumentationMessageGenerator('hits');
+const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
 
 const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
@@ -100,10 +100,10 @@ export default function hits({
     typeof templates.allItems === 'undefined',
     `The template \`allItems\` does not exist since InstantSearch.js 3.
 
-You may want to migrate using \`connectHits\`: ${createDocumentationLink(
-      'hits',
-      { connector: true }
-    )}.`
+You may want to migrate using \`connectHits\`: ${createDocumentationLink({
+      name: 'hits',
+      connector: true,
+    })}.`
   );
 
   const containerNode = getContainerNode(container);

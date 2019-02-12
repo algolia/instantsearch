@@ -1,31 +1,15 @@
 import some from 'lodash/some';
 import find from 'lodash/find';
+import {
+  checkRendering,
+  warning,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
 
-import { checkRendering, warning } from '../../lib/utils';
-
-const usage = `Usage:
-var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
-  // params = {
-  //   items,
-  //   createURL,
-  //   refine,
-  //   hasNoResults,
-  //   instantSearchInstance,
-  //   widgetParams,
-  // }
+const withUsage = createDocumentationMessageGenerator({
+  name: 'hits-per-page',
+  connector: true,
 });
-search.addWidget(
-  customHitsPerPage({
-    items: [
-      {value: 5, label: '5 results per page', default: true},
-      {value: 10, label: '10 results per page'},
-      {value: 42, label: '42 results per page'},
-    ],
-    [ transformItems ]
-  })
-);
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html
-`;
 
 /**
  * @typedef {Object} HitsPerPageRenderingOptionsItem
@@ -112,21 +96,22 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * );
  */
 export default function connectHitsPerPage(renderFn, unmountFn) {
-  checkRendering(renderFn, usage);
+  checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
     const { items: userItems, transformItems = items => items } = widgetParams;
     let items = userItems;
 
-    if (!items) {
-      throw new Error(usage);
+    if (!Array.isArray(items)) {
+      throw new Error(
+        withUsage('The `items` option expects an array of objects.')
+      );
     }
 
     const defaultValues = items.filter(item => item.default);
     if (defaultValues.length > 1) {
       throw new Error(
-        `[Error][hitsPerPage] more than one default value is specified in \`items[]\`
-The first one will be picked, you should probably set only one default value`
+        withUsage('More than one default value is specified in `items`.')
       );
     }
 

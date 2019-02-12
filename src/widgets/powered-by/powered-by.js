@@ -9,7 +9,7 @@ import {
 import { component } from '../../lib/suit';
 
 const suit = component('PoweredBy');
-const withUsage = createDocumentationMessageGenerator('powered-by');
+const withUsage = createDocumentationMessageGenerator({ name: 'powered-by' });
 
 const renderer = ({ containerNode, cssClasses }) => (
   { url, widgetParams },

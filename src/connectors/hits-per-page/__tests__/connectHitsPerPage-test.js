@@ -5,15 +5,33 @@ const SearchParameters = jsHelper.SearchParameters;
 import connectHitsPerPage from '../connectHitsPerPage';
 
 describe('connectHitsPerPage', () => {
-  it('should throw when there is two default items defined', () => {
-    expect(() => {
-      connectHitsPerPage(() => {})({
-        items: [
-          { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page', default: true },
-        ],
-      });
-    }).toThrow(/^\[Error\]/);
+  describe('Usage', () => {
+    it('throws without items', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: undefined,
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`items\` option expects an array of objects.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
+`);
+    });
+
+    it('throws with multiple default items', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: [
+            { value: 3, label: '3 items per page', default: true },
+            { value: 10, label: '10 items per page', default: true },
+          ],
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"More than one default value is specified in \`items\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
+`);
+    });
   });
 
   it('Renders during init and render', () => {

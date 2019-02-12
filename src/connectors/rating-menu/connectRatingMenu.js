@@ -3,7 +3,8 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-const withUsage = createDocumentationMessageGenerator('rating-menu', {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'rating-menu',
   connector: true,
 });
 
