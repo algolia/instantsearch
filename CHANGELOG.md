@@ -1,3 +1,19 @@
+<a name="3.1.0"></a>
+## [3.1.0](https://github.com/algolia/instantsearch.js/compare/v3.0.0...v3.1.0) (2018-12-20)
+
+### Features
+
+* **connectCurrentRefinements**: add a root label ([#3515](https://github.com/algolia/instantsearch.js/pull/3515)) ([b8f774f](https://github.com/algolia/instantsearch.js/commit/b8f774f))
+* Update error messages ([#3516](https://github.com/algolia/instantsearch.js/pull/3516))
+* **InstantSearch**: remove event listeners on dispose ([#3420](https://github.com/algolia/instantsearch.js/pull/3420))
+* **InstantSearch**: set helper to `null` on dispose ([#3415](https://github.com/algolia/instantsearch.js/pull/3415))
+* **utils**: warn only in development ([#3367](https://github.com/algolia/instantsearch.js/pull/3367))
+
+### Bug Fixes
+
+* **InstantSearch**: set helper to `null` on dispose ([#3415](https://github.com/algolia/instantsearch.js/pull/3415))
+* **utils**: warn only in development ([#3367](https://github.com/algolia/instantsearch.js/pull/3367))
+
 <a name="3.0.0"></a>
 ## [3.0.0](https://github.com/algolia/instantsearch.js/compare/v2.10.3...v3.0.0) (2018-12-20)
 
