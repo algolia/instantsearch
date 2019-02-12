@@ -22,9 +22,7 @@ const CurrentRefinements = ({ items, cssClasses }) => (
     <ul className={cssClasses.list}>
       {items.map((item, index) => (
         <li key={`${item.attribute}-${index}`} className={cssClasses.item}>
-          <span className={cssClasses.label}>
-            {capitalize(item.attribute)}:
-          </span>
+          <span className={cssClasses.label}>{capitalize(item.label)}:</span>
 
           {item.refinements.map(refinement => (
             <span

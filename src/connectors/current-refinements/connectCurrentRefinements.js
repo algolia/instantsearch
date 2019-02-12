@@ -273,6 +273,7 @@ function groupItemsByRefinements(items, helper) {
       ...results.filter(result => result.attribute !== currentItem.attribute),
       {
         attribute: currentItem.attribute,
+        label: currentItem.attribute,
         refinements: items
           .filter(result => result.attribute === currentItem.attribute)
           // We want to keep the order of refinements except the numeric ones.
