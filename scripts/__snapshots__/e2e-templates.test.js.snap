@@ -4179,7 +4179,12 @@ class App extends Component {
               </div>
 
               <div className=\\"search-panel__results\\">
-                <SearchBox className=\\"searchbox\\" placeholder=\\"Search placeholder\\" />
+                <SearchBox
+                  className=\\"searchbox\\"
+                  translations={{
+                    placeholder: 'Search placeholder',
+                  }}
+                />
                 <Hits hitComponent={Hit} />
 
                 <div className=\\"pagination\\">
