@@ -11,6 +11,18 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      clearRefinements({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/"
+`);
+  });
+});
+
 describe('clearRefinements()', () => {
   let container;
   let results;
