@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createClassNames, translatable } from 'react-instantsearch-dom';
 import { STATE_CONTEXT } from './Provider';
-import { GOOGLE_MAPS_CONTEXT } from './GoogleMaps';
+import withGoogleMaps from './withGoogleMaps';
 
 const cx = createClassNames('GeoSearch');
 
 export class Redo extends Component {
   static propTypes = {
+    googleMapsInstance: PropTypes.object.isRequired,
     translate: PropTypes.func.isRequired,
   };
 
@@ -16,22 +17,14 @@ export class Redo extends Component {
       hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
       refineWithInstance: PropTypes.func.isRequired,
     }).isRequired,
-    [GOOGLE_MAPS_CONTEXT]: PropTypes.shape({
-      instance: PropTypes.object.isRequired,
-    }).isRequired,
   };
 
   getStateContext() {
     return this.context[STATE_CONTEXT];
   }
 
-  getGoogleMapsContext() {
-    return this.context[GOOGLE_MAPS_CONTEXT];
-  }
-
   render() {
-    const { translate } = this.props;
-    const { instance } = this.getGoogleMapsContext();
+    const { googleMapsInstance, translate } = this.props;
     const {
       hasMapMoveSinceLastRefine,
       refineWithInstance,
@@ -42,7 +35,7 @@ export class Redo extends Component {
         <button
           className={cx('redo', !hasMapMoveSinceLastRefine && 'redo--disabled')}
           disabled={!hasMapMoveSinceLastRefine}
-          onClick={() => refineWithInstance(instance)}
+          onClick={() => refineWithInstance(googleMapsInstance)}
         >
           {translate('redo')}
         </button>
@@ -53,4 +46,4 @@ export class Redo extends Component {
 
 export default translatable({
   redo: 'Redo search here',
-})(Redo);
+})(withGoogleMaps(Redo));

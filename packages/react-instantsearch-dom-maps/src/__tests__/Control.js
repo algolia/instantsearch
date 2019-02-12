@@ -3,13 +3,13 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { createFakeMapInstance } from '../../test/mockGoogleMaps';
 import { STATE_CONTEXT } from '../Provider';
-import { GOOGLE_MAPS_CONTEXT } from '../GoogleMaps';
 import { Control } from '../Control';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Control', () => {
   const defaultProps = {
+    googleMapsInstance: createFakeMapInstance(),
     translate: x => x,
   };
 
@@ -20,13 +20,9 @@ describe('Control', () => {
       toggleRefineOnMapMove: () => {},
       refineWithInstance: () => {},
     },
-    [GOOGLE_MAPS_CONTEXT]: {
-      instance: createFakeMapInstance(),
-    },
   };
 
   const getStateContext = context => context[STATE_CONTEXT];
-  const getGoogleMapsContext = context => context[GOOGLE_MAPS_CONTEXT];
 
   it('expect to render correctly with refine on map move', () => {
     const props = {
@@ -116,10 +112,11 @@ describe('Control', () => {
   });
 
   it('expect to call refineWithInstance on button click', () => {
-    const instance = createFakeMapInstance();
+    const mapInstance = createFakeMapInstance();
 
     const props = {
       ...defaultProps,
+      googleMapsInstance: mapInstance,
     };
 
     const context = {
@@ -129,10 +126,6 @@ describe('Control', () => {
         isRefineOnMapMove: false,
         hasMapMoveSinceLastRefine: true,
         refineWithInstance: jest.fn(),
-      },
-      [GOOGLE_MAPS_CONTEXT]: {
-        ...getGoogleMapsContext(defaultContext),
-        instance,
       },
     };
 
@@ -147,6 +140,6 @@ describe('Control', () => {
     wrapper.find('button').simulate('click');
 
     expect(refineWithInstance).toHaveBeenCalledTimes(1);
-    expect(refineWithInstance).toHaveBeenCalledWith(instance);
+    expect(refineWithInstance).toHaveBeenCalledWith(mapInstance);
   });
 });

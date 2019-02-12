@@ -3,13 +3,13 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { createFakeMapInstance } from '../../test/mockGoogleMaps';
 import { STATE_CONTEXT } from '../Provider';
-import { GOOGLE_MAPS_CONTEXT } from '../GoogleMaps';
 import { Redo } from '../Redo';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Redo', () => {
   const defaultProps = {
+    googleMapsInstance: createFakeMapInstance(),
     translate: x => x,
   };
 
@@ -18,13 +18,9 @@ describe('Redo', () => {
       hasMapMoveSinceLastRefine: false,
       refineWithInstance: () => {},
     },
-    [GOOGLE_MAPS_CONTEXT]: {
-      instance: createFakeMapInstance(),
-    },
   };
 
   const getStateContext = context => context[STATE_CONTEXT];
-  const getGoogleMapsContext = context => context[GOOGLE_MAPS_CONTEXT];
 
   it('expect to render correctly', () => {
     const props = {
@@ -65,10 +61,11 @@ describe('Redo', () => {
   });
 
   it('expect to call refineWithInstance on button click', () => {
-    const instance = createFakeMapInstance();
+    const mapInstance = createFakeMapInstance();
 
     const props = {
       ...defaultProps,
+      googleMapsInstance: mapInstance,
     };
 
     const context = {
@@ -76,10 +73,6 @@ describe('Redo', () => {
       [STATE_CONTEXT]: {
         ...getStateContext(defaultContext),
         refineWithInstance: jest.fn(),
-      },
-      [GOOGLE_MAPS_CONTEXT]: {
-        ...getGoogleMapsContext(defaultContext),
-        instance,
       },
     };
 
@@ -94,6 +87,6 @@ describe('Redo', () => {
     wrapper.find('button').simulate('click');
 
     expect(refineWithInstance).toHaveBeenCalledTimes(1);
-    expect(refineWithInstance).toHaveBeenCalledWith(instance);
+    expect(refineWithInstance).toHaveBeenCalledWith(mapInstance);
   });
 });

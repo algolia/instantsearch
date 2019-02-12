@@ -9,8 +9,7 @@ import {
 } from '../../test/mockGoogleMaps';
 import createHTMLMarker from '../elements/createHTMLMarker';
 import * as utils from '../utils';
-import { GOOGLE_MAPS_CONTEXT } from '../GoogleMaps';
-import CustomMarker from '../CustomMarker';
+import Connected, { CustomMarker } from '../CustomMarker';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -49,20 +48,14 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       const wrapper = shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(createHTMLMarker).toHaveBeenCalledWith(google);
@@ -93,24 +86,18 @@ describe('CustomMarker', () => {
       const props = {
         ...defaultProps,
         className: 'my-marker',
+        googleMapsInstance: mapInstance,
         anchor: {
           x: 10,
           y: 10,
         },
+        google,
       };
 
       shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(factory).toHaveBeenCalledWith(
@@ -136,20 +123,14 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(utils.registerEvents).toHaveBeenCalledTimes(2); // cDM + cDU
@@ -177,20 +158,14 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(removeEventListeners).toHaveBeenCalledTimes(1);
@@ -208,20 +183,14 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(utils.registerEvents).toHaveBeenCalledTimes(2); // cDM + cDU
@@ -246,20 +215,14 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       const wrapper = shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       wrapper.unmount();
@@ -289,6 +252,8 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       // Use `mount` instead of `shallow` to trigger the render
@@ -296,15 +261,7 @@ describe('CustomMarker', () => {
       const wrapper = mount(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(wrapper).toMatchSnapshot();
@@ -323,6 +280,8 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       const wrapper = shallow(
@@ -331,12 +290,6 @@ describe('CustomMarker', () => {
         </CustomMarker>,
         {
           disableLifecycleMethods: true,
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
         }
       );
 
@@ -362,21 +315,15 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       // Use `mount` instead of `shallow` to trigger didUpdate
       const wrapper = mount(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(unstableRenderSubtreeIntoContainer).not.toHaveBeenCalled();
@@ -406,20 +353,14 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       const wrapper = shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       wrapper.unmount();
@@ -455,20 +396,14 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       const wrapper = mount(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(wrapper).toMatchSnapshot();
@@ -499,6 +434,8 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       const wrapper = shallow(
@@ -507,12 +444,6 @@ describe('CustomMarker', () => {
         </CustomMarker>,
         {
           disableLifecycleMethods: true,
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
         }
       );
 
@@ -545,21 +476,15 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       // Use `mount` instead of `shallow` to avoid issue with `unstable_renderSubtreeIntoContainer`
       const wrapper = mount(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       expect(unstableRenderSubtreeIntoContainer).toHaveBeenCalledTimes(1);
@@ -606,21 +531,15 @@ describe('CustomMarker', () => {
 
       const props = {
         ...defaultProps,
+        googleMapsInstance: mapInstance,
+        google,
       };
 
       // Use `mount` instead of `shallow` to avoid issue with `unstable_renderSubtreeIntoContainer`
       const wrapper = mount(
         <CustomMarker {...props}>
           <span>This is the children.</span>
-        </CustomMarker>,
-        {
-          context: {
-            [GOOGLE_MAPS_CONTEXT]: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        </CustomMarker>
       );
 
       wrapper.unmount();
@@ -632,6 +551,46 @@ describe('CustomMarker', () => {
 
       isReact16.mockReset();
       isReact16.mockRestore();
+    });
+  });
+
+  describe('Connected', () => {
+    it('expect to have access to Google Maps', () => {
+      const marker = createFakeHTMLMarkerInstance();
+      const factory = jest.fn(() => marker);
+      const mapInstance = createFakeMapInstance();
+      const google = createFakeGoogleReference({
+        mapInstance,
+      });
+
+      createHTMLMarker.mockImplementationOnce(() => factory);
+
+      const props = {
+        ...defaultProps,
+      };
+
+      mount(
+        <Connected {...props}>
+          <span>This is the children.</span>
+        </Connected>,
+        {
+          context: {
+            // eslint-disable-next-line camelcase
+            __ais_geo_search__google_maps__: {
+              instance: mapInstance,
+              google,
+            },
+          },
+        }
+      );
+
+      expect(createHTMLMarker).toHaveBeenCalledWith(google);
+
+      expect(factory).toHaveBeenCalledWith(
+        expect.objectContaining({
+          map: mapInstance,
+        })
+      );
     });
   });
 });
