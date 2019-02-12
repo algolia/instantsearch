@@ -23,7 +23,7 @@ const plugins = [
   }),
   commonjs(),
   filesize({
-    showMinifiedSize: false,
+    showMinifiedSize: true,
     showGzippedSize: true,
   }),
 ];
