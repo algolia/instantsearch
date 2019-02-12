@@ -111,7 +111,7 @@ export default {
       routing: {
         router: historyRouter(),
         stateMapping: simpleMapping(),
-      }
+      },
     };
   },
 };
