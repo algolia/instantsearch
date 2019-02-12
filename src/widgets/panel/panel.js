@@ -4,10 +4,12 @@ import {
   getContainerNode,
   prepareTemplateProps,
   warning,
+  createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
 
+const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
 const renderer = ({ containerNode, cssClasses, templateProps }) => ({
@@ -29,15 +31,6 @@ const renderer = ({ containerNode, cssClasses, templateProps }) => ({
 
   return { bodyRef };
 };
-
-const usage = `Usage:
-const widgetWithHeaderFooter = panel({
-  [ templates.{header, footer} ],
-  [ hidden ],
-  [ cssClasses.{root, noRefinementRoot, body, header, footer} ],
-})(widget);
-
-const myWidget = widgetWithHeaderFooter(widgetOptions)`;
 
 /**
  * @typedef {Object} PanelWidgetCSSClasses
@@ -108,7 +101,9 @@ export default function panel({
 
     if (!container) {
       throw new Error(
-        `[InstantSearch.js] The \`container\` option is required in the widget within the panel.`
+        withUsage(
+          `The \`container\` option is required in the widget within the panel.`
+        )
       );
     }
 
@@ -121,41 +116,37 @@ export default function panel({
       templateProps,
     });
 
-    try {
-      const { bodyRef } = renderPanel({
-        options: {},
-        hidden: true,
-      });
+    const { bodyRef } = renderPanel({
+      options: {},
+      hidden: true,
+    });
 
-      const widget = widgetFactory({
-        ...widgetOptions,
-        container: getContainerNode(bodyRef),
-      });
+    const widget = widgetFactory({
+      ...widgetOptions,
+      container: getContainerNode(bodyRef),
+    });
 
-      return {
-        ...widget,
-        dispose(...args) {
-          unmountComponentAtNode(getContainerNode(container));
+    return {
+      ...widget,
+      dispose(...args) {
+        unmountComponentAtNode(getContainerNode(container));
 
-          if (typeof widget.dispose === 'function') {
-            widget.dispose.call(this, ...args);
-          }
-        },
-        render(...args) {
-          const [options] = args;
+        if (typeof widget.dispose === 'function') {
+          widget.dispose.call(this, ...args);
+        }
+      },
+      render(...args) {
+        const [options] = args;
 
-          renderPanel({
-            options,
-            hidden: Boolean(hidden(options)),
-          });
+        renderPanel({
+          options,
+          hidden: Boolean(hidden(options)),
+        });
 
-          if (typeof widget.render === 'function') {
-            widget.render.call(this, ...args);
-          }
-        },
-      };
-    } catch (error) {
-      throw new Error(usage);
-    }
+        if (typeof widget.render === 'function') {
+          widget.render.call(this, ...args);
+        }
+      },
+    };
   };
 }
