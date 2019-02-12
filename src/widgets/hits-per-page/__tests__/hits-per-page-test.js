@@ -9,15 +9,15 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
-describe('hitsPerPage call', () => {
-  it('throws an exception when no items', () => {
-    const container = document.createElement('div');
-    expect(hitsPerPage.bind(null, { container })).toThrow(/^Usage:/);
-  });
+describe('Usage', () => {
+  it('throws without container', () => {
+    expect(() => {
+      hitsPerPage({ container: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
 
-  it('throws an exception when no container', () => {
-    const items = { a: { value: 'value', label: 'My value' } };
-    expect(hitsPerPage.bind(null, { items })).toThrow(/^Usage:/);
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/"
+`);
   });
 });
 
