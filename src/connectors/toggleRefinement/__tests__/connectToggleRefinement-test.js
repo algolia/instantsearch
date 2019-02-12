@@ -423,6 +423,83 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     }
   });
 
+  it('sets user-provided "off" value by default (falsy)', () => {
+    const makeWidget = connectToggleRefinement(() => {});
+    const widget = makeWidget({
+      attribute: 'whatever',
+      off: false,
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration());
+    widget.init({ helper, state: helper.state });
+
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual(
+      expect.objectContaining({
+        whatever: ['false'],
+      })
+    );
+  });
+
+  it('sets user-provided "off" value by default (truthy)', () => {
+    const makeWidget = connectToggleRefinement(() => {});
+    const widget = makeWidget({
+      attribute: 'whatever',
+      off: true,
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration());
+    widget.init({ helper, state: helper.state });
+
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual(
+      expect.objectContaining({
+        whatever: ['true'],
+      })
+    );
+  });
+
+  it('sets user-provided "on" value on refine (falsy)', () => {
+    let caughtRefine;
+    const makeWidget = connectToggleRefinement(({ refine }) => {
+      caughtRefine = refine;
+    });
+    const widget = makeWidget({
+      attribute: 'whatever',
+      on: false,
+    });
+
+    const helper = jsHelper({ search() {} }, '', widget.getConfiguration());
+    helper.search = jest.fn();
+
+    widget.init({ helper, state: helper.state });
+
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual({});
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            whatever: {
+              true: 45,
+              false: 40,
+            },
+          },
+          nbHits: 85,
+        },
+      ]),
+      state: helper.state,
+      helper,
+    });
+
+    // toggle the value
+    caughtRefine();
+
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual(
+      expect.objectContaining({
+        whatever: ['false'],
+      })
+    );
+  });
+
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
