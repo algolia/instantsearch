@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "3.1.0",
+  "version": "3.0.0",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "keywords": [
@@ -52,7 +52,7 @@
   "dependencies": {
     "algoliasearch-helper": "^2.26.0",
     "classnames": "^2.2.5",
-    "events": "^1.1.0",
+    "events": "^3.0.0",
     "hogan.js": "^3.0.2",
     "lodash": "^4.17.5",
     "preact": "^8.2.7",
