@@ -5,8 +5,6 @@ import { LatLngPropType, BoundingBoxPropType } from './propTypes';
 
 const cx = createClassNames('GeoSearch');
 
-export const GOOGLE_MAPS_CONTEXT = '__ais_geo_search__google_maps__';
-
 class GoogleMaps extends Component {
   static propTypes = {
     google: PropTypes.object.isRequired,
@@ -22,7 +20,8 @@ class GoogleMaps extends Component {
   };
 
   static childContextTypes = {
-    [GOOGLE_MAPS_CONTEXT]: PropTypes.shape({
+    // eslint-disable-next-line camelcase
+    __ais_geo_search__google_maps__: PropTypes.shape({
       google: PropTypes.object,
       instance: PropTypes.object,
     }),
@@ -40,7 +39,8 @@ class GoogleMaps extends Component {
     const { google } = this.props;
 
     return {
-      [GOOGLE_MAPS_CONTEXT]: {
+      // eslint-disable-next-line camelcase
+      __ais_geo_search__google_maps__: {
         instance: this.instance,
         google,
       },

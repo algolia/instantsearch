@@ -9,6 +9,35 @@ exports[`CustomMarker with portal expect to render correctly 1`] = `
     }
   }
   className=""
+  google={
+    Object {
+      "maps": Object {
+        "ControlPosition": Object {
+          "LEFT_TOP": "left:top",
+        },
+        "LatLng": [MockFunction],
+        "LatLngBounds": [MockFunction],
+        "Map": [MockFunction],
+        "Marker": [MockFunction],
+        "OverlayView": [Function],
+        "event": Object {
+          "addListenerOnce": [MockFunction],
+        },
+      },
+    }
+  }
+  googleMapsInstance={
+    Object {
+      "addListener": [MockFunction],
+      "fitBounds": [MockFunction],
+      "getBounds": [MockFunction],
+      "getCenter": [MockFunction],
+      "getProjection": [MockFunction],
+      "getZoom": [MockFunction],
+      "setCenter": [MockFunction],
+      "setZoom": [MockFunction],
+    }
+  }
   hit={
     Object {
       "_geoloc": Object {
@@ -43,6 +72,35 @@ exports[`CustomMarker with unstable_renderSubtreeIntoContainer expect to render 
     }
   }
   className=""
+  google={
+    Object {
+      "maps": Object {
+        "ControlPosition": Object {
+          "LEFT_TOP": "left:top",
+        },
+        "LatLng": [MockFunction],
+        "LatLngBounds": [MockFunction],
+        "Map": [MockFunction],
+        "Marker": [MockFunction],
+        "OverlayView": [Function],
+        "event": Object {
+          "addListenerOnce": [MockFunction],
+        },
+      },
+    }
+  }
+  googleMapsInstance={
+    Object {
+      "addListener": [MockFunction],
+      "fitBounds": [MockFunction],
+      "getBounds": [MockFunction],
+      "getCenter": [MockFunction],
+      "getProjection": [MockFunction],
+      "getZoom": [MockFunction],
+      "setCenter": [MockFunction],
+      "setZoom": [MockFunction],
+    }
+  }
   hit={
     Object {
       "_geoloc": Object {

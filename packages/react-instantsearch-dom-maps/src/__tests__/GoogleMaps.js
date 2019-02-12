@@ -5,7 +5,7 @@ import {
   createFakeGoogleReference,
   createFakeMapInstance,
 } from '../../test/mockGoogleMaps';
-import GoogleMaps, { GOOGLE_MAPS_CONTEXT } from '../GoogleMaps';
+import GoogleMaps from '../GoogleMaps';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -320,7 +320,8 @@ describe('GoogleMaps', () => {
       });
 
       expect(wrapper.instance().getChildContext()).toEqual({
-        [GOOGLE_MAPS_CONTEXT]: expect.objectContaining({
+        // eslint-disable-next-line camelcase
+        __ais_geo_search__google_maps__: expect.objectContaining({
           google,
         }),
       });
@@ -342,7 +343,8 @@ describe('GoogleMaps', () => {
       });
 
       expect(wrapper.instance().getChildContext()).toEqual({
-        [GOOGLE_MAPS_CONTEXT]: expect.objectContaining({
+        // eslint-disable-next-line camelcase
+        __ais_geo_search__google_maps__: expect.objectContaining({
           instance: undefined,
         }),
       });
@@ -351,7 +353,8 @@ describe('GoogleMaps', () => {
       wrapper.instance().componentDidMount();
 
       expect(wrapper.instance().getChildContext()).toEqual({
-        [GOOGLE_MAPS_CONTEXT]: expect.objectContaining({
+        // eslint-disable-next-line camelcase
+        __ais_geo_search__google_maps__: expect.objectContaining({
           instance: mapInstance,
         }),
       });

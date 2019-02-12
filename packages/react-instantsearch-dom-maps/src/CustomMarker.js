@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import createHTMLMarker from './elements/createHTMLMarker';
 import { registerEvents, createListenersPropTypes } from './utils';
 import { GeolocHitPropType } from './propTypes';
-import { GOOGLE_MAPS_CONTEXT } from './GoogleMaps';
+import withGoogleMaps from './withGoogleMaps';
 
 const eventTypes = {
   onClick: 'click',
@@ -18,22 +18,17 @@ const eventTypes = {
   onMouseUp: 'mouseup',
 };
 
-class CustomMarker extends Component {
+export class CustomMarker extends Component {
   static propTypes = {
     ...createListenersPropTypes(eventTypes),
     hit: GeolocHitPropType.isRequired,
     children: PropTypes.node.isRequired,
+    google: PropTypes.object.isRequired,
+    googleMapsInstance: PropTypes.object.isRequired,
     className: PropTypes.string,
     anchor: PropTypes.shape({
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired,
-    }),
-  };
-
-  static contextTypes = {
-    [GOOGLE_MAPS_CONTEXT]: PropTypes.shape({
-      google: PropTypes.object,
-      instance: PropTypes.object,
     }),
   };
 
@@ -54,15 +49,14 @@ class CustomMarker extends Component {
   };
 
   componentDidMount() {
-    const { hit, className, anchor } = this.props;
-    const { google, instance } = this.context[GOOGLE_MAPS_CONTEXT];
+    const { hit, google, googleMapsInstance, className, anchor } = this.props;
     // Not the best way to create the reference of the CustomMarker
     // but since the Google object is required didn't find another
     // solution. Ideas?
     const Marker = createHTMLMarker(google);
 
     const marker = new Marker({
-      map: instance,
+      map: googleMapsInstance,
       position: hit._geoloc,
       className,
       anchor,
@@ -114,4 +108,4 @@ class CustomMarker extends Component {
   }
 }
 
-export default CustomMarker;
+export default withGoogleMaps(CustomMarker);

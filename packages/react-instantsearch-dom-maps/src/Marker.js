@@ -6,7 +6,7 @@ import {
   createFilterProps,
 } from './utils';
 import { GeolocHitPropType } from './propTypes';
-import { GOOGLE_MAPS_CONTEXT } from './GoogleMaps';
+import withGoogleMaps from './withGoogleMaps';
 
 const eventTypes = {
   onClick: 'click',
@@ -20,26 +20,20 @@ const eventTypes = {
 const excludes = ['children'].concat(Object.keys(eventTypes));
 const filterProps = createFilterProps(excludes);
 
-class Marker extends Component {
+export class Marker extends Component {
   static propTypes = {
     ...createListenersPropTypes(eventTypes),
+    google: PropTypes.object.isRequired,
+    googleMapsInstance: PropTypes.object.isRequired,
     hit: GeolocHitPropType.isRequired,
   };
 
-  static contextTypes = {
-    [GOOGLE_MAPS_CONTEXT]: PropTypes.shape({
-      google: PropTypes.object,
-      instance: PropTypes.object,
-    }),
-  };
-
   componentDidMount() {
-    const { hit, ...props } = this.props;
-    const { google, instance } = this.context[GOOGLE_MAPS_CONTEXT];
+    const { google, googleMapsInstance, hit, ...props } = this.props;
 
     this.instance = new google.maps.Marker({
       ...filterProps(props),
-      map: instance,
+      map: googleMapsInstance,
       position: hit._geoloc,
     });
 
@@ -69,4 +63,4 @@ class Marker extends Component {
   }
 }
 
-export default Marker;
+export default withGoogleMaps(Marker);
