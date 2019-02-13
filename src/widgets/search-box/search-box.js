@@ -278,7 +278,7 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
     placeholder,
     role: 'textbox',
     spellcheck: 'false',
-    type: 'text',
+    type: 'search',
     value: query,
   };
 
