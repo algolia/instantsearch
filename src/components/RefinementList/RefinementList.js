@@ -198,6 +198,7 @@ class RefinementList extends Component {
           cssClasses={searchBoxCSSClasses}
           templates={this.props.templateProps.templates}
           onChange={event => this.props.searchFacetValues(event.target.value)}
+          onReset={() => this.props.searchFacetValues('')}
           onSubmit={() => this.refineFirstValue()}
           // This sets the search box to a controlled state because
           // we don't rely on the `refine` prop but on `onChange`.
