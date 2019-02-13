@@ -97,8 +97,9 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
     }
 
     const hasAnOffValue = userOff !== undefined;
-    const on = userOn ? escapeRefinement(userOn) : undefined;
-    const off = userOff ? escapeRefinement(userOff) : undefined;
+    const hasAnOnValue = userOn !== undefined;
+    const on = hasAnOnValue ? escapeRefinement(userOn) : undefined;
+    const off = hasAnOffValue ? escapeRefinement(userOff) : undefined;
 
     return {
       getConfiguration() {
