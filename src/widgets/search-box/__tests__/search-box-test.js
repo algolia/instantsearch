@@ -89,7 +89,7 @@ You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/
       expect(input.getAttribute('placeholder')).toEqual('');
       expect(input.getAttribute('role')).toEqual('textbox');
       expect(input.getAttribute('spellcheck')).toEqual('false');
-      expect(input.getAttribute('type')).toEqual('text');
+      expect(input.getAttribute('type')).toEqual('search');
     });
 
     it('supports cssClasses option', () => {
