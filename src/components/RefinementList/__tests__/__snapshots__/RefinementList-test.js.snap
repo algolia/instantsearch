@@ -287,19 +287,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           className="ais-SearchBox-submit"
           dangerouslySetInnerHTML={
             Object {
-              "__html": Object {
-                "cssClasses": Object {
-                  "form": "ais-SearchBox-form",
-                  "input": "ais-SearchBox-input",
-                  "loadingIcon": "ais-SearchBox-loadingIcon",
-                  "loadingIndicator": "ais-SearchBox-loadingIndicator",
-                  "reset": "ais-SearchBox-reset",
-                  "resetIcon": "ais-SearchBox-resetIcon",
-                  "root": "ais-SearchBox",
-                  "submit": "ais-SearchBox-submit",
-                  "submitIcon": "ais-SearchBox-submitIcon",
-                },
-              },
+              "__html": "searchableSubmit",
             }
           }
           hidden={false}
@@ -310,19 +298,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           className="ais-SearchBox-reset"
           dangerouslySetInnerHTML={
             Object {
-              "__html": Object {
-                "cssClasses": Object {
-                  "form": "ais-SearchBox-form",
-                  "input": "ais-SearchBox-input",
-                  "loadingIcon": "ais-SearchBox-loadingIcon",
-                  "loadingIndicator": "ais-SearchBox-loadingIndicator",
-                  "reset": "ais-SearchBox-reset",
-                  "resetIcon": "ais-SearchBox-resetIcon",
-                  "root": "ais-SearchBox",
-                  "submit": "ais-SearchBox-submit",
-                  "submitIcon": "ais-SearchBox-submitIcon",
-                },
-              },
+              "__html": "searchableReset",
             }
           }
           hidden={true}
@@ -333,19 +309,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           className="ais-SearchBox-loadingIndicator"
           dangerouslySetInnerHTML={
             Object {
-              "__html": Object {
-                "cssClasses": Object {
-                  "form": "ais-SearchBox-form",
-                  "input": "ais-SearchBox-input",
-                  "loadingIcon": "ais-SearchBox-loadingIcon",
-                  "loadingIndicator": "ais-SearchBox-loadingIndicator",
-                  "reset": "ais-SearchBox-reset",
-                  "resetIcon": "ais-SearchBox-resetIcon",
-                  "root": "ais-SearchBox",
-                  "submit": "ais-SearchBox-submit",
-                  "submitIcon": "ais-SearchBox-submitIcon",
-                },
-              },
+              "__html": "searchableLoadingIndicator",
             }
           }
           hidden={true}
@@ -468,19 +432,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           className="ais-SearchBox-submit"
           dangerouslySetInnerHTML={
             Object {
-              "__html": Object {
-                "cssClasses": Object {
-                  "form": "ais-SearchBox-form",
-                  "input": "ais-SearchBox-input",
-                  "loadingIcon": "ais-SearchBox-loadingIcon",
-                  "loadingIndicator": "ais-SearchBox-loadingIndicator",
-                  "reset": "ais-SearchBox-reset",
-                  "resetIcon": "ais-SearchBox-resetIcon",
-                  "root": "ais-SearchBox",
-                  "submit": "ais-SearchBox-submit",
-                  "submitIcon": "ais-SearchBox-submitIcon",
-                },
-              },
+              "__html": "searchableSubmit",
             }
           }
           hidden={false}
@@ -491,19 +443,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           className="ais-SearchBox-reset"
           dangerouslySetInnerHTML={
             Object {
-              "__html": Object {
-                "cssClasses": Object {
-                  "form": "ais-SearchBox-form",
-                  "input": "ais-SearchBox-input",
-                  "loadingIcon": "ais-SearchBox-loadingIcon",
-                  "loadingIndicator": "ais-SearchBox-loadingIndicator",
-                  "reset": "ais-SearchBox-reset",
-                  "resetIcon": "ais-SearchBox-resetIcon",
-                  "root": "ais-SearchBox",
-                  "submit": "ais-SearchBox-submit",
-                  "submitIcon": "ais-SearchBox-submitIcon",
-                },
-              },
+              "__html": "searchableReset",
             }
           }
           hidden={true}
@@ -514,19 +454,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           className="ais-SearchBox-loadingIndicator"
           dangerouslySetInnerHTML={
             Object {
-              "__html": Object {
-                "cssClasses": Object {
-                  "form": "ais-SearchBox-form",
-                  "input": "ais-SearchBox-input",
-                  "loadingIcon": "ais-SearchBox-loadingIcon",
-                  "loadingIndicator": "ais-SearchBox-loadingIndicator",
-                  "reset": "ais-SearchBox-reset",
-                  "resetIcon": "ais-SearchBox-resetIcon",
-                  "root": "ais-SearchBox",
-                  "submit": "ais-SearchBox-submit",
-                  "submitIcon": "ais-SearchBox-submitIcon",
-                },
-              },
+              "__html": "searchableLoadingIndicator",
             }
           }
           hidden={true}

@@ -3,7 +3,6 @@ import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
 import defaultTemplates from './defaultTemplates';
-import searchBoxTemplates from '../search-box/defaultTemplates';
 import {
   prepareTemplateProps,
   getContainerNode,
@@ -187,7 +186,6 @@ export default function refinementList({
   const allTemplates = {
     ...defaultTemplates,
     ...templates,
-    ...searchBoxTemplates,
   };
 
   const cssClasses = {

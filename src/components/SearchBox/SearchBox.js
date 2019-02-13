@@ -15,6 +15,31 @@ const SearchBoxCSSClasses = PropTypes.shape({
   loadingIcon: PropTypes.string.isRequired,
 });
 
+/**
+ * Gets the template key based on the given templates.
+ *
+ * The template keys differ if the component is used for
+ * the `searchbox` widget or the `refinementList` widget.
+ *
+ * @param {string} templateName The template to get the key from
+ * @param {object} templates The widget templates
+ * @returns {string} the template key
+ */
+function getTemplateKey(templateName, templates) {
+  switch (templateName) {
+    case 'reset':
+      return templates.searchableReset ? 'searchableReset' : 'reset';
+    case 'submit':
+      return templates.searchableSubmit ? 'searchableSubmit' : 'submit';
+    case 'loadingIndicator':
+      return templates.searchableLoadingIndicator
+        ? 'searchableLoadingIndicator'
+        : 'loadingIndicator';
+    default:
+      return templateName;
+  }
+}
+
 class SearchBox extends Component {
   static propTypes = {
     placeholder: PropTypes.string.isRequired,
@@ -159,7 +184,7 @@ class SearchBox extends Component {
           />
 
           <Template
-            templateKey="submit"
+            templateKey={getTemplateKey('submit', templates)}
             rootTagName="button"
             rootProps={{
               className: cssClasses.submit,
@@ -172,7 +197,7 @@ class SearchBox extends Component {
           />
 
           <Template
-            templateKey="reset"
+            templateKey={getTemplateKey('reset', templates)}
             rootTagName="button"
             rootProps={{
               className: cssClasses.reset,
@@ -186,7 +211,7 @@ class SearchBox extends Component {
 
           {showLoadingIndicator && (
             <Template
-              templateKey="loadingIndicator"
+              templateKey={getTemplateKey('loadingIndicator', templates)}
               rootTagName="span"
               rootProps={{
                 className: cssClasses.loadingIndicator,
