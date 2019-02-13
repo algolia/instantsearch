@@ -7,11 +7,11 @@ jest.mock('../../mixins/panel');
 
 const defaultItems = [
   {
-    name: 'TV & Home Theater',
+    label: 'TV & Home Theater',
     value: 'TV & Home Theater',
   },
   {
-    name: 'Streaming Media Players',
+    label: 'Streaming Media Players',
     value: 'TV & Home Theater > Streaming Media Players',
   },
 ];
@@ -217,13 +217,13 @@ describe('custom default render', () => {
     >
       <li
         v-for="(item, index) in items"
-        :key="item.name"
+        :key="item.label"
       >
         <a
           :href="createURL(item.value)"
           @click.prevent="refine(item.value)"
         >
-          {{ item.name }}
+          {{ item.label }}
         </a>
       </li>
     </ul>

@@ -191,10 +191,11 @@ export default {
     },
     widgetParams() {
       return {
-        attributeName: this.attribute,
+        attribute: this.attribute,
         operator: this.operator,
         limit: this.limit,
-        showMoreLimit: this.showMore ? this.showMoreLimit : undefined,
+        showMore: this.showMore,
+        showMoreLimit: this.showMoreLimit,
         sortBy: this.sortBy,
         escapeFacetValues: true,
         transformItems: this.transformItems,

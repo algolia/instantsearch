@@ -47,7 +47,7 @@ export default {
     widgetParams() {
       return {
         indices: this.indices,
-        escapeHits: this.escapeHTML,
+        escapeHTML: this.escapeHTML,
       };
     },
   },

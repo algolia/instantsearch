@@ -29,7 +29,7 @@ it('accepts an attribute prop', () => {
     propsData: defaultProps,
   });
 
-  expect(wrapper.vm.widgetParams.attributeName).toBe('free_shipping');
+  expect(wrapper.vm.widgetParams.attribute).toBe('free_shipping');
 });
 
 it('accepts a label prop', () => {
@@ -52,7 +52,7 @@ it('accepts an on prop', () => {
     },
   });
 
-  expect(wrapper.vm.widgetParams.values.on).toBe('somevalue');
+  expect(wrapper.vm.widgetParams.on).toBe('somevalue');
 });
 
 it('accepts an off prop', () => {
@@ -65,7 +65,7 @@ it('accepts an off prop', () => {
     },
   });
 
-  expect(wrapper.vm.widgetParams.values.off).toBe(false);
+  expect(wrapper.vm.widgetParams.off).toBe(false);
 });
 
 describe('default render', () => {

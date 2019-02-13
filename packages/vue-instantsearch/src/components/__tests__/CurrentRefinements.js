@@ -5,296 +5,289 @@ import { __setState } from '../../mixins/widget';
 jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');
 
-it('TransformItems happens after excludedAttributes', () => {
-  __setState({
-    refinements: [
-      { type: 'query', query: 'hi there everyone!' },
-      { type: 'disjunctive', attributeName: 'brand', value: 'Insignia™' },
-    ],
-  });
-
-  const transformItems = items => {
-    expect(items).toHaveLength(0);
-    return [
-      { type: 'query', attribute: 'query', query: 'dogs' },
-      { type: 'disjunctive', attribute: 'brand', value: 'Insignia™' },
-    ];
-  };
-
-  const wrapper = mount(CurrentRefinements, {
-    propsData: {
-      transformItems,
-      excludedAttributes: ['query', 'brand'],
-    },
-  });
-
-  expect(wrapper.vm.refinements).toHaveLength(2);
-  expect(wrapper.vm.refinements[0]).toEqual(
-    expect.objectContaining({
-      type: 'query',
-      attribute: 'query',
-      query: 'dogs',
-    })
-  );
-  expect(wrapper.vm.refinements[1]).toEqual(
-    expect.objectContaining({
-      type: 'disjunctive',
-      attribute: 'brand',
-      value: 'Insignia™',
-    })
-  );
-});
-
-it("transformItems happens after excludedAttributes (so it doesn't include query by default)", () => {
-  __setState({
-    refinements: [
-      { type: 'query', query: 'hi there everyone!' },
-      { type: 'disjunctive', attribute: 'brand', value: 'Insignia™' },
-    ],
-  });
-
-  const transformItems = items =>
-    items.filter(({ attribute }) => attribute === 'query');
-
-  const wrapper = mount(CurrentRefinements, {
-    propsData: {
-      transformItems,
-    },
-  });
-
-  expect(wrapper.vm.refinements).toHaveLength(0);
-});
-
 it('renders correctly (empty)', () => {
   __setState({
-    refinements: [],
+    items: [],
   });
   const wrapper = mount(CurrentRefinements);
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('renders correctly (with refinements)', () => {
-  __setState({
-    refinements: [
+describe.each([
+  [
+    'facet',
+    [
       {
-        computedLabel: 'some query',
-        name: 'some query',
-        query: 'some query',
-        type: 'query',
-      },
-      {
-        attributeName: 'brands',
-        computedLabel: 'apple',
-      },
-      {
-        attributeName: 'colors',
-        computedLabel: 'red',
-      },
-      {
-        attributeName: 'requirements',
-        computedLabel: 'free',
+        attribute: 'customFacet',
+        label: 'customFacet',
+        refinements: [
+          {
+            attribute: 'customFacet',
+            type: 'facet',
+            value: 'val1',
+            label: 'val1',
+          },
+        ],
       },
     ],
+  ],
+  [
+    'facet exclude',
+    [
+      {
+        attribute: 'customExcludeFacet',
+        label: 'customExcludeFacet',
+        refinements: [
+          {
+            attribute: 'customExcludeFacet',
+            type: 'exclude',
+            value: 'val1',
+            label: 'val1',
+            exclude: true,
+          },
+        ],
+      },
+    ],
+  ],
+  [
+    'disjunctive facet',
+    [
+      {
+        attribute: 'customDisjunctiveFacet',
+        label: 'customDisjunctiveFacet',
+        refinements: [
+          {
+            attribute: 'customDisjunctiveFacet',
+            type: 'disjunctive',
+            value: 'val1',
+            label: 'val1',
+          },
+        ],
+      },
+    ],
+  ],
+  [
+    'hierarchical facet',
+    [
+      {
+        attribute: 'customHierarchicalFacet',
+        label: 'customHierarchicalFacet',
+        refinements: [
+          {
+            attribute: 'customHierarchicalFacet',
+            type: 'hierarchical',
+            value: 'val1',
+            label: 'val1',
+          },
+        ],
+      },
+    ],
+  ],
+  [
+    'numeric filters',
+    [
+      {
+        attribute: 'customNumericFilter',
+        label: 'customNumericFilter',
+        refinements: [
+          {
+            attribute: 'customNumericFilter',
+            type: 'numeric',
+            operator: '=',
+            value: 'val1',
+            label: '= val1',
+          },
+          {
+            attribute: 'customNumericFilter',
+            type: 'numeric',
+            operator: '<=',
+            value: 'val2',
+            label: '≤ val2',
+          },
+          {
+            attribute: 'customNumericFilter',
+            type: 'numeric',
+            operator: '>=',
+            value: 'val3',
+            label: '≥ val3',
+          },
+        ],
+      },
+    ],
+  ],
+  [
+    'tag',
+    [
+      {
+        attribute: '_tags',
+        label: '_tags',
+        refinements: [
+          {
+            attribute: '_tags',
+            type: 'tag',
+            value: 'tag1',
+            label: 'tag1',
+          },
+        ],
+      },
+    ],
+  ],
+  [
+    'query',
+    [
+      {
+        attribute: 'query',
+        label: 'query',
+        refinements: [
+          {
+            attribute: 'query',
+            type: 'query',
+            value: 'search1',
+            label: 'search1',
+          },
+        ],
+      },
+    ],
+  ],
+])('%s', (name, items) => {
+  it('renders correct html', () => {
+    __setState({
+      items,
+    });
+
+    const wrapper = mount(CurrentRefinements);
+
+    if (name === 'query') {
+      expect(
+        wrapper.find('.ais-CurrentRefinements-categoryLabel').contains('q')
+      ).toBe(true);
+    }
+
+    expect(wrapper.html()).toMatchSnapshot();
   });
-  const wrapper = mount(CurrentRefinements);
-  expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('renders correctly (with duplicate refinements)', () => {
+it('calls `refine` with a refinement', () => {
+  const spies = [jest.fn(), jest.fn()];
+
   __setState({
-    refinements: [
+    items: [
       {
-        computedLabel: 'some query',
-        name: 'some query',
-        query: 'some query',
-        type: 'query',
+        attribute: 'brands',
+        label: 'brands',
+        refine: spies[0],
+        refinements: [
+          {
+            attribute: 'brands',
+            type: 'facet',
+            value: 'apple',
+            label: 'apple',
+          },
+        ],
       },
       {
-        attributeName: 'brands',
-        computedLabel: 'apple',
-      },
-      {
-        attributeName: 'brands',
-        computedLabel: 'samsung',
+        attribute: 'colors',
+        label: 'colors',
+        refine: spies[1],
+        refinements: [
+          {
+            attribute: 'colors',
+            type: 'facet',
+            value: 'green',
+            label: 'green',
+          },
+        ],
       },
     ],
   });
-  const wrapper = mount(CurrentRefinements);
-  expect(wrapper.html()).toMatchSnapshot();
-});
 
-it('renders correctly (with query)', () => {
-  __setState({
-    refinements: [
-      {
-        computedLabel: 'some query',
-        name: 'some query',
-        query: 'some query',
-        type: 'query',
-      },
-      {
-        attributeName: 'brands',
-        computedLabel: 'apple',
-      },
-      {
-        attributeName: 'colors',
-        computedLabel: 'red',
-      },
-      {
-        attributeName: 'requirements',
-        computedLabel: 'free',
-      },
-    ],
-  });
-  const wrapper = mount(CurrentRefinements, {
-    propsData: { excludedAttributes: [] },
-  });
-  expect(wrapper.html()).toMatchSnapshot();
-});
-
-it('default value of excludedAttributes is ["query"]', () => {
-  __setState({
-    refinements: [
-      {
-        computedLabel: 'some query',
-        name: 'some query',
-        query: 'some query',
-        type: 'query',
-      },
-    ],
-  });
-  const wrapper = mount(CurrentRefinements);
-  expect(wrapper.html()).toMatchSnapshot();
-
-  const labels = wrapper.findAll('.ais-CurrentRefinements-label');
-  expect(labels).toHaveLength(0);
-});
-
-it('includedAttributes overrides excludedAttributes (also for query)', () => {
-  __setState({
-    refinements: [
-      {
-        computedLabel: 'some query',
-        name: 'some query',
-        query: 'some query',
-        type: 'query',
-      },
-      {
-        attributeName: 'hi there',
-      },
-    ],
-  });
-  const wrapper = mount(CurrentRefinements, {
-    propsData: {
-      includedAttributes: ['query'],
-    },
-  });
-  expect(wrapper.html()).toMatchSnapshot();
-  const label = wrapper.find('.ais-CurrentRefinements-label');
-
-  expect(label.text()).toMatch(/Query/);
-});
-
-it('includedAttributes overrides excludedAttributes', () => {
-  __setState({
-    refinements: [
-      {
-        computedLabel: 'some query',
-        name: 'some query',
-        query: 'some query',
-        type: 'query',
-      },
-      {
-        attributeName: 'hi there',
-      },
-    ],
-  });
-  const wrapper = mount(CurrentRefinements, {
-    propsData: {
-      includedAttributes: ['hi there'],
-    },
-  });
-  expect(wrapper.html()).toMatchSnapshot();
-  const label = wrapper.find('.ais-CurrentRefinements-label');
-
-  expect(label.text()).toMatch(/Hi there/);
-});
-
-it('calls `refine` with an item', () => {
-  __setState({
-    refinements: [
-      {
-        attributeName: 'brands',
-        computedLabel: 'apple',
-      },
-      {
-        attributeName: 'colors',
-        computedLabel: 'red',
-      },
-      {
-        attributeName: 'requirements',
-        computedLabel: 'free',
-      },
-    ],
-    refine: jest.fn(),
-  });
   const wrapper = mount(CurrentRefinements);
   wrapper.find('.ais-CurrentRefinements-delete').trigger('click');
 
-  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith({
-    attributeName: 'brands',
-    computedLabel: 'apple',
+  expect(spies[0]).toHaveBeenLastCalledWith({
+    attribute: 'brands',
+    label: 'apple',
+    type: 'facet',
+    value: 'apple',
   });
+
+  expect(spies[1]).not.toHaveBeenCalled();
 });
 
 describe('custom render', () => {
   const defaultScopedSlot = `
-    <div slot-scope="{ items, createURL, refine }">
-      <div v-for="item in items" :key="item.attributeName">
-        <button
-          @click="refine(item.value)"
-        >
-          <a :href="createURL(item.value)">
-            url
-          </a>
-          <pre>{{item}}</pre>
-        </button>
-      </div>
+    <div slot-scope="{ refine, items, createURL }">
+      <ul>
+        <li
+          v-for="item in items"
+          :key="item.attribute"
+          >
+          {{item.label}}: 
+          <button
+            v-for="refinement in item.refinements"
+            @click="item.refine(refinement)"
+            :key="refinement.value"
+          >
+            {{refinement.label}} ╳
+          </button>
+        </li>
+      </ul>
     </div>
   `;
 
   const itemScopedSlot = `
-    <div slot-scope="{ item, createURL, refine }">
+    <div slot-scope="{ item, refine }">
+      {{item.label}}: 
       <button
-        @click="refine()"
+        v-for="refinement in item.refinements"
+        @click="item.refine(refinement)"
+        :key="refinement.value"
       >
-        <a :href="createURL()">
-          url
-        </a>
-        <pre>{{item}}</pre>
+        {{refinement.label}}
       </button>
     </div>
   `;
 
-  const refinements = [
+  const refinementScopedSlot = `
+    <div slot-scope="{ refinement, refine, createURL }">
+      <button
+        @click="refine(refinement)"
+      >
+        <pre>{{refinement}}</pre>
+      </button>
+    </div>
+  `;
+
+  const items = [
     {
-      attributeName: 'brands',
-      computedLabel: 'apple',
+      attribute: 'brands',
+      label: 'brands',
+      refinements: [
+        {
+          attribute: 'brands',
+          type: 'facet',
+          value: 'apple',
+          label: 'apple',
+        },
+      ],
     },
     {
-      attributeName: 'colors',
-      computedLabel: 'red',
-    },
-    {
-      attributeName: 'requirements',
-      computedLabel: 'free',
+      attribute: 'colors',
+      label: 'colors',
+      refinements: [
+        {
+          attribute: 'colors',
+          type: 'facet',
+          value: 'red',
+          label: 'red',
+        },
+      ],
     },
   ];
 
   it('gives all relevant info to scoped slot', () => {
     __setState({
-      refinements,
-      refine: jest.fn(),
+      items,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -312,8 +305,7 @@ describe('custom render', () => {
 
   it('has same amount of items', () => {
     __setState({
-      refinements,
-      refine: jest.fn(),
+      items,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -326,36 +318,12 @@ describe('custom render', () => {
       },
     });
 
-    expect(wrapper.findAll('button')).toHaveLength(refinements.length);
-  });
-
-  it('creates URLs', () => {
-    __setState({
-      refinements,
-      refine: jest.fn(),
-      createURL: jest.fn(
-        ({ attributeName, computedLabel }) =>
-          `?${attributeName}=${computedLabel}`
-      ),
-    });
-
-    const wrapper = mount(CurrentRefinements, {
-      scopedSlots: {
-        default: defaultScopedSlot,
-      },
-    });
-
-    expect(
-      wrapper
-        .findAll('button a')
-        .filter(link => Boolean(link.attributes('href')))
-    ).toHaveLength(refinements.length);
+    expect(wrapper.findAll('button')).toHaveLength(items.length);
   });
 
   it('item slot gives all relevant info to scoped slot', () => {
     __setState({
-      refinements,
-      refine: jest.fn(),
+      items,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -373,8 +341,7 @@ describe('custom render', () => {
 
   it('item slot has same amount of items', () => {
     __setState({
-      refinements,
-      refine: jest.fn(),
+      items,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -387,13 +354,12 @@ describe('custom render', () => {
       },
     });
 
-    expect(wrapper.findAll('button')).toHaveLength(refinements.length);
+    expect(wrapper.findAll('button')).toHaveLength(items.length);
   });
 
-  it('item slot has URLs', () => {
+  it('refinement slot has same amount of items', () => {
     __setState({
-      refinements,
-      refine: jest.fn(),
+      items,
       createURL: jest.fn(
         ({ attributeName, computedLabel }) =>
           `?${attributeName}=${computedLabel}`
@@ -402,14 +368,10 @@ describe('custom render', () => {
 
     const wrapper = mount(CurrentRefinements, {
       scopedSlots: {
-        item: itemScopedSlot,
+        refinement: refinementScopedSlot,
       },
     });
 
-    expect(
-      wrapper
-        .findAll('button a')
-        .filter(link => Boolean(link.attributes('href')))
-    ).toHaveLength(refinements.length);
+    expect(wrapper.findAll('button')).toHaveLength(items.length);
   });
 });

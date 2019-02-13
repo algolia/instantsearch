@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { connectSortBySelector } from 'instantsearch.js/es/connectors';
+import { connectSortBy } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -35,7 +35,7 @@ export default {
   name: 'AisSortBy',
   mixins: [
     createSuitMixin({ name: 'SortBy' }),
-    createWidgetMixin({ connector: connectSortBySelector }),
+    createWidgetMixin({ connector: connectSortBy }),
 
     createPanelConsumerMixin({
       mapStateToCanRefine: state => !state.hasNoResults,
@@ -56,8 +56,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        // TODO: In InstantSearch.js make this mapping unnecessary
-        indices: this.items.map(({ label, value }) => ({ label, name: value })),
+        items: this.items,
         transformItems: this.transformItems,
       };
     },

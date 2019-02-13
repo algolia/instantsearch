@@ -25,7 +25,7 @@
         </li>
         <li
           v-for="(item, index) in state.items"
-          :key="item.name"
+          :key="item.label"
           :class="[suit('item'), isLastItem(index) && suit('item', 'selected')]"
         >
           <span
@@ -39,8 +39,8 @@
             :href="state.createURL(item.value)"
             :class="suit('link')"
             @click.prevent="state.refine(item.value)"
-          >{{ item.name }}</a>
-          <span v-else>{{ item.name }}</span>
+          >{{ item.label }}</a>
+          <span v-else>{{ item.label }}</span>
         </li>
       </ul>
     </slot>

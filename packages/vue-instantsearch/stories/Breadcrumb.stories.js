@@ -55,7 +55,7 @@ storiesOf('ais-breadcrumb', module)
         :attributes="attributes"
         :transformItems="transformItems"
       >
-        <template slot="rootLabel" slot-scope="_">HOME</template>
+        <template slot="rootLabel">HOME</template>
       </ais-breadcrumb>
     `,
     data: () => ({
@@ -65,7 +65,7 @@ storiesOf('ais-breadcrumb', module)
       transformItems(items) {
         return items.map(item =>
           Object.assign({}, item, {
-            name: item.name.toUpperCase(),
+            label: item.label.toUpperCase(),
           })
         );
       },
@@ -75,16 +75,29 @@ storiesOf('ais-breadcrumb', module)
     template: `
       <ais-breadcrumb :attributes="attributes">
         <ul slot-scope="{ items, refine, createURL }">
+          <li>
+            <a
+              v-if="Boolean(items.length)"
+              :href="createURL()"
+              @click.prevent="refine()"
+            >
+              Home
+            </a>
+            <span v-else>
+              Home
+            </span>
+          </li>
           <li
             v-for="(item, index) in items"
-            :key="item.name"
-            :style="{ fontWeight: index === items.length -1 ? 600 : 400 }"
+            :key="item.label"
           >
             <a
               :href="createURL(item.value)"
               @click.prevent="refine(item.value)"
             >
-              {{ item.name }}
+              <component :is="index === items.length -1 ? 'strong' : 'span'">
+                {{ item.label }}
+              </component>
             </a>
           </li>
         </ul>

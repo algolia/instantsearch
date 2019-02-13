@@ -31,7 +31,7 @@ it('accepts an attribute prop', () => {
     },
   });
 
-  expect(wrapper.vm.widgetParams.attributeName).toBe('price');
+  expect(wrapper.vm.widgetParams.attribute).toBe('price');
 });
 
 it('accepts a min prop', () => {

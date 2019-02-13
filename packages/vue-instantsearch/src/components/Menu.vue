@@ -64,7 +64,7 @@ export default {
       type: String,
       required: true,
     },
-    // @TODO
+    // TODO: implement searchable in connector
     // searchable: {
     //   type: Boolean,
     //   default: false,
@@ -97,8 +97,9 @@ export default {
   computed: {
     widgetParams() {
       return {
-        attributeName: this.attribute,
+        attribute: this.attribute,
         limit: this.limit,
+        showMore: this.showMore,
         showMoreLimit: this.showMoreLimit,
         sortBy: this.sortBy,
         transformItems: this.transformItems,

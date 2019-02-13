@@ -40,7 +40,7 @@ it('accepts a totalPages prop', () => {
     },
   });
 
-  expect(wrapper.vm.widgetParams.maxPages).toBe(10);
+  expect(wrapper.vm.widgetParams.totalPages).toBe(10);
 });
 
 it('renders correctly first page', () => {

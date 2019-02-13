@@ -101,7 +101,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        attributeName: this.attribute,
+        attribute: this.attribute,
         min: this.min,
         max: this.max,
         precision: this.precision,

@@ -15,6 +15,7 @@ const defaultState = {
     },
   ],
 };
+
 it('renders correctly', () => {
   __setState({
     ...defaultState,

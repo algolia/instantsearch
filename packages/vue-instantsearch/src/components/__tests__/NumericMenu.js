@@ -66,7 +66,7 @@ it('accepts an attribute prop', () => {
     propsData: props,
   });
 
-  expect(wrapper.vm.widgetParams.attributeName).toBe('brand');
+  expect(wrapper.vm.widgetParams.attribute).toBe('brand');
 });
 
 it('accepts an items prop', () => {
@@ -80,12 +80,12 @@ it('accepts an items prop', () => {
     propsData: props,
   });
 
-  expect(wrapper.vm.widgetParams.options).toEqual([
-    { name: 'All' },
-    { name: '<= 10$', end: 10 },
-    { name: '10$ - 100$', start: 10, end: 100 },
-    { name: '100$ - 500$', start: 100, end: 500 },
-    { name: '>= 500$', start: 500 },
+  expect(wrapper.vm.widgetParams.items).toEqual([
+    { label: 'All' },
+    { label: '<= 10$', end: 10 },
+    { label: '10$ - 100$', start: 10, end: 100 },
+    { label: '100$ - 500$', start: 100, end: 500 },
+    { label: '>= 500$', start: 500 },
   ]);
 });
 

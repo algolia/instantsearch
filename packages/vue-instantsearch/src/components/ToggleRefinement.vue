@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { connectToggle } from 'instantsearch.js/es/connectors';
+import { connectToggleRefinement } from 'instantsearch.js/es/connectors';
 import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
@@ -40,7 +40,7 @@ export default {
   name: 'AisToggleRefinement',
   mixins: [
     createSuitMixin({ name: 'ToggleRefinement' }),
-    createWidgetMixin({ connector: connectToggle }),
+    createWidgetMixin({ connector: connectToggleRefinement }),
     createPanelConsumerMixin({
       mapStateToCanRefine,
     }),
@@ -70,12 +70,10 @@ export default {
   computed: {
     widgetParams() {
       return {
-        attributeName: this.attribute,
+        attribute: this.attribute,
         label: this.label,
-        values: {
-          on: this.on,
-          off: this.off,
-        },
+        on: this.on,
+        off: this.off,
       };
     },
     canRefine() {

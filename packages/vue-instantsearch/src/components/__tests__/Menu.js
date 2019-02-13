@@ -53,7 +53,7 @@ it('accepts an attribute prop', () => {
     propsData: props,
   });
 
-  expect(wrapper.vm.widgetParams.attributeName).toBe('brand');
+  expect(wrapper.vm.widgetParams.attribute).toBe('brand');
 });
 
 it('accepts a limit prop', () => {

@@ -22,36 +22,22 @@ it('accepts an excludedAttributes prop', () => {
     },
   });
 
-  expect(wrapper.vm.widgetParams.excludeAttributes).toEqual(['brand']);
+  expect(wrapper.vm.widgetParams.excludedAttributes).toEqual(['brand']);
 });
 
-it('query in excluded attributes sets clearsQuery', () => {
+it('accepts an includedAttributes prop', () => {
   __setState({
     ...defaultState,
   });
 
   const wrapper = mount(ClearRefinements, {
     propsData: {
-      excludedAttributes: ['query', 'brand'],
+      includedAttributes: ['brand'],
     },
   });
 
-  expect(wrapper.vm.widgetParams.excludeAttributes).toEqual(['brand']);
-  expect(wrapper.vm.widgetParams.clearsQuery).toEqual(false);
-});
-
-it('clears query by empty excluded attributes', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(ClearRefinements, {
-    propsData: {
-      excludedAttributes: [],
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.clearsQuery).toEqual(true);
+  expect(wrapper.vm.widgetParams.includedAttributes).toEqual(['brand']);
+  expect(wrapper.vm.widgetParams.excludedAttributes).toBeUndefined();
 });
 
 describe('default render', () => {

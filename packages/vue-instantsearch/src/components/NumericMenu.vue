@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { connectNumericRefinementList } from 'instantsearch.js/es/connectors';
+import { connectNumericMenu } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
@@ -41,7 +41,7 @@ import { createSuitMixin } from '../mixins/suit';
 export default {
   name: 'AisNumericMenu',
   mixins: [
-    createWidgetMixin({ connector: connectNumericRefinementList }),
+    createWidgetMixin({ connector: connectNumericMenu }),
     createSuitMixin({ name: 'NumericMenu' }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => !state.hasNoResults,
@@ -66,26 +66,9 @@ export default {
   computed: {
     widgetParams() {
       return {
-        attributeName: this.attribute,
+        attribute: this.attribute,
         transformItems: this.transformItems,
-        // @TODO: replace with spread operator
-        options: this.items.map(({ label, start, end }) => {
-          const next = {};
-
-          if (label) {
-            next.name = label;
-          }
-
-          if (start) {
-            next.start = start;
-          }
-
-          if (end) {
-            next.end = end;
-          }
-
-          return next;
-        }),
+        items: this.items,
       };
     },
     canRefine() {

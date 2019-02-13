@@ -114,6 +114,9 @@ const defaultState = {
   ],
   refine: () => {},
   createURL: () => {},
+  isShowingMore: false,
+  canToggleShowMore: true,
+  toggleShowMore: () => {},
 };
 
 const defaultProps = {
@@ -167,7 +170,7 @@ it('accepts a showMoreLimit prop (with showMore)', () => {
     },
   });
 
-  expect(wrapper.vm.widgetParams.limit).toBe(5);
+  expect(wrapper.vm.widgetParams.showMoreLimit).toBe(5);
 });
 
 it('accepts a separator prop', () => {
@@ -178,11 +181,11 @@ it('accepts a separator prop', () => {
   const wrapper = mount(HierarchicalMenu, {
     propsData: {
       ...defaultProps,
-      separator: ' > ',
+      separator: ' --> ',
     },
   });
 
-  expect(wrapper.vm.widgetParams.separator).toBe(' > ');
+  expect(wrapper.vm.widgetParams.separator).toBe(' --> ');
 });
 
 it('accepts a rootPath prop', () => {
@@ -352,46 +355,10 @@ describe('default render', () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('renders correctly with a limit', () => {
-    __setState({
-      ...defaultState,
-    });
-
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: {
-        ...defaultProps,
-        showMore: true,
-        limit: 1,
-      },
-    });
-
-    expect(wrapper.findAll('.ais-HierarchicalMenu-item')).toHaveLength(2); // 2 Apple (top + child)
-    expect(wrapper.html()).toMatchSnapshot();
-  });
-
-  it('renders correctly with a show more limit', () => {
-    __setState({
-      ...defaultState,
-    });
-
-    const wrapper = mount(HierarchicalMenu, {
-      propsData: {
-        ...defaultProps,
-        showMore: true,
-        limit: 1,
-        showMoreLimit: 2,
-      },
-    });
-
-    wrapper.find('button').trigger('click');
-
-    expect(wrapper.findAll('.ais-HierarchicalMenu-item')).toHaveLength(6); // 3 Apple + 3 Samsnug (top + child)
-    expect(wrapper.html()).toMatchSnapshot();
-  });
-
   it('renders correctly with show more disabled', () => {
     __setState({
       ...defaultState,
+      canToggleShowMore: false,
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -402,7 +369,6 @@ describe('default render', () => {
     });
 
     const button = wrapper.find('button');
-
     expect(button.attributes().disabled).toBe('disabled');
     expect(button.classes()).toContain(
       'ais-HierarchicalMenu-showMore--disabled'
@@ -423,8 +389,10 @@ describe('default render', () => {
       },
     });
 
-    expect(wrapper.find('button').text()).toBe('Show more');
-    expect(wrapper.html()).toMatchSnapshot();
+    const showMoreButton = wrapper.find('.ais-HierarchicalMenu-showMore');
+
+    expect(showMoreButton.text()).toBe('Show more');
+    expect(showMoreButton.html()).toMatchSnapshot();
   });
 
   it('renders correctly with show more label toggled', () => {
@@ -444,8 +412,14 @@ describe('default render', () => {
 
     button.trigger('click');
 
-    expect(wrapper.find('button').text()).toBe('Show less');
-    expect(wrapper.html()).toMatchSnapshot();
+    wrapper.setData({
+      state: {
+        isShowingMore: true,
+      },
+    });
+
+    expect(button.text()).toBe('Show less');
+    expect(button.html()).toMatchSnapshot();
   });
 
   it('calls refine on link click', () => {
@@ -471,8 +445,10 @@ describe('default render', () => {
   });
 
   it('calls toggleShowMore on button click', () => {
+    const toggleShowMore = jest.fn();
     __setState({
       ...defaultState,
+      toggleShowMore,
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -483,11 +459,9 @@ describe('default render', () => {
       },
     });
 
-    expect(wrapper.vm.isShowingMore).toBe(false);
-
     wrapper.find('button').trigger('click');
 
-    expect(wrapper.vm.isShowingMore).toBe(true);
+    expect(toggleShowMore).toHaveBeenCalledTimes(1);
   });
 
   it('calls the Panel mixin with `items.length`', () => {
@@ -585,7 +559,7 @@ describe('custom default render', () => {
   it('renders correctly with an URL for the href', () => {
     __setState({
       ...defaultState,
-      createURL: value => `/categories/${value}`,
+      createURL: value => `/categories/${value.replace(/ > /g, '/')}`,
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -619,6 +593,13 @@ describe('custom default render', () => {
   it('renders correctly with a show more button toggled', () => {
     __setState({
       ...defaultState,
+      toggleShowMore: () => {
+        wrapper.setData({
+          state: {
+            isShowingMore: true,
+          },
+        });
+      },
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -643,6 +624,7 @@ describe('custom default render', () => {
   it('renders correctly with a disabled show more button', () => {
     __setState({
       ...defaultState,
+      canToggleShowMore: false,
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -685,6 +667,9 @@ describe('custom default render', () => {
   it('calls toggleShowMore on button click', () => {
     __setState({
       ...defaultState,
+      toggleShowMore: () => {
+        wrapper.setData({ state: { isShowingMore: true } });
+      },
     });
 
     const wrapper = mount(HierarchicalMenu, {
@@ -698,11 +683,11 @@ describe('custom default render', () => {
       },
     });
 
-    expect(wrapper.vm.isShowingMore).toBe(false);
+    expect(wrapper.vm.state.isShowingMore).toBe(false);
 
     wrapper.find('button').trigger('click');
 
-    expect(wrapper.vm.isShowingMore).toBe(true);
+    expect(wrapper.vm.state.isShowingMore).toBe(true);
   });
 });
 
@@ -735,7 +720,10 @@ describe('custom showMoreLabel render', () => {
   });
 
   it('renders correctly with a custom show more label toggled', () => {
-    __setState({ ...defaultState });
+    __setState({
+      ...defaultState,
+      toggleShowMore: () => wrapper.setData({ state: { isShowingMore: true } }),
+    });
 
     const wrapper = mount(HierarchicalMenu, {
       propsData: {

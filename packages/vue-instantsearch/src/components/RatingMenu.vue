@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { connectStarRating } from 'instantsearch.js/es/connectors';
+import { connectRatingMenu } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
@@ -86,7 +86,7 @@ export default {
   name: 'AisRatingMenu',
   mixins: [
     createSuitMixin({ name: 'RatingMenu' }),
-    createWidgetMixin({ connector: connectStarRating }),
+    createWidgetMixin({ connector: connectRatingMenu }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => !state.hasNoResults,
     }),
@@ -104,7 +104,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        attributeName: this.attribute,
+        attribute: this.attribute,
         max: this.max,
       };
     },

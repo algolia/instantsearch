@@ -19,7 +19,7 @@ it('accepts an escapeHTML prop', () => {
     },
   });
 
-  expect(wrapper.vm.widgetParams.escapeHits).toBe(true);
+  expect(wrapper.vm.widgetParams.escapeHTML).toBe(true);
 });
 
 it('accepts a transformItems prop', () => {

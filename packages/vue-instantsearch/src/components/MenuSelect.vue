@@ -76,7 +76,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        attributeName: this.attribute,
+        attribute: this.attribute,
         limit: this.limit,
         sortBy: this.sortBy,
         transformItems: this.transformItems,

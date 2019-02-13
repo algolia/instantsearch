@@ -65,7 +65,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        escapeHits: this.escapeHTML,
+        escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
     },
