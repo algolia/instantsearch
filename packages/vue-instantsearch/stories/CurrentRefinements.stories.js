@@ -60,7 +60,7 @@ storiesOf('ais-current-refinements', module)
       transformItems(items) {
         return items.map(item =>
           Object.assign({}, item, {
-            attribute: item.label.toLocaleUpperCase(),
+            label: item.label.toLocaleUpperCase(),
             refinements: item.refinements.map(refinement =>
               Object.assign({}, refinement, {
                 label: refinement.label.toLocaleUpperCase(),
