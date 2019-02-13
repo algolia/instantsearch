@@ -17,7 +17,7 @@ exports[`searchBox() markup renders correctly 1`] = `
       placeholder=""
       role="textbox"
       spellcheck="false"
-      type="text"
+      type="search"
       value=""
     />
     <button
