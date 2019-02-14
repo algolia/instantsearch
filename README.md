@@ -146,7 +146,8 @@ app.create().then(() => console.log('App generated!'));
 
 You can use the web templates on CodeSandbox:
 
-- [InstantSearch.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
+- [InstantSearch.js 3](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
+- [InstantSearch.js 2](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js-2.x)
 - [React InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch)
 - [Vue InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/vue-instantsearch)
 - [Angular InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/angular-instantsearch)
