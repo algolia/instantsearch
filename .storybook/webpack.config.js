@@ -20,5 +20,7 @@ module.exports = (_baseConfig, environment, defaultConfig) => {
     })
   );
 
+  defaultConfig.resolve.extensions.push('.ts', '.tsx');
+
   return defaultConfig;
 };
