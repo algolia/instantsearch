@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "babel-node start.js",
-    "build:dev": "babel-node build.js && cd .. && yarn storybook:build && yarn examples:build",
+    "build:dev": "babel-node build.js && (cd .. && yarn storybook:build && yarn examples:build) && cp _redirects ./dist/",
     "build": "NODE_ENV='production' babel-node build.js && cd .. && yarn storybook:build && yarn examples:build",
     "deploy": "yarn run build && gh-pages -d dist"
   },
