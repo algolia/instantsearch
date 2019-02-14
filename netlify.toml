@@ -1,6 +1,6 @@
 [build]
-  publish = "docgen/docs-production"
-  command = "yarn docs:build-preview"
+  command = "yarn website:build"
+  publish = "website/dist"
 
 [build.environment]
   YARN_VERSION = "1.13.0"

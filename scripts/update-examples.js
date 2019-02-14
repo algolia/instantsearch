@@ -1,25 +1,31 @@
+const path = require('path');
 const glob = require('glob');
 const execSync = require('child_process').execSync;
 const [version] = process.argv.slice(2);
 
+const examplesPath = path.join(__dirname, '..', 'examples');
+
 {
   // Update React InstantSearch DOM
-  const packages = glob.sync('examples/!(react-native*)');
+  const examples = glob.sync(path.join(examplesPath, '!(react-native*)'));
 
-  packages.forEach(path => {
-    execSync(`cd ${path} && yarn upgrade react-instantsearch-dom@${version}`, {
-      stdio: 'inherit',
-    });
+  examples.forEach(example => {
+    execSync(
+      `cd ${example} && yarn upgrade react-instantsearch-dom@${version}`,
+      {
+        stdio: 'inherit',
+      }
+    );
   });
 }
 
 {
   // Update React InstantSearch Native
-  const packages = glob.sync('examples/+(react-native*)');
+  const examples = glob.sync(path.join(examplesPath, '+(react-native*)'));
 
-  packages.forEach(path => {
+  examples.forEach(example => {
     // @TODO: update to react-instantsearch-native
-    execSync(`cd ${path} && yarn upgrade react-instantsearch@${version}`, {
+    execSync(`cd ${example} && yarn upgrade react-instantsearch@${version}`, {
       stdio: 'inherit',
     });
   });
@@ -27,11 +33,11 @@ const [version] = process.argv.slice(2);
 
 {
   // Update React InstantSearch DOM Maps
-  const packages = glob.sync('examples/geo-search');
+  const examples = glob.sync(path.join(examplesPath, 'geo-search'));
 
-  packages.forEach(path => {
+  examples.forEach(example => {
     execSync(
-      `cd ${path} && yarn upgrade react-instantsearch-dom-maps@${version}`,
+      `cd ${example} && yarn upgrade react-instantsearch-dom-maps@${version}`,
       {
         stdio: 'inherit',
       }

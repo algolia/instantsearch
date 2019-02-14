@@ -2,7 +2,6 @@
 
 const isES = process.env.BABEL_ENV === 'es';
 const isRollup = process.env.BABEL_ENV === 'rollup';
-const isProduction = process.env.BABEL_ENV === 'production';
 
 const clean = x => x.filter(Boolean);
 
@@ -49,13 +48,6 @@ module.exports = api => {
         plugins: clean([
           '@babel/plugin-syntax-dynamic-import',
           !isRollup && 'babel-plugin-dynamic-import-node',
-        ]),
-      },
-      {
-        test: 'docgen',
-        plugins: clean([
-          'babel-plugin-inline-json-import',
-          !isProduction && 'react-hot-loader/babel',
         ]),
       },
     ],

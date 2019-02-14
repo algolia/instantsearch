@@ -97,13 +97,9 @@ printf "\nRelease: update changelog\n"
 changelog=`conventional-changelog -p angular`
 conventional-changelog --preset angular --infile CHANGELOG.md --same-file
 
-# regenerate readme TOC
-printf "\nRelease: generate TOCS\n"
-yarn doctoc
-
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add package.json lerna.json CHANGELOG.md README.md packages/ docgen/ yarn.lock
+git add package.json lerna.json CHANGELOG.md README.md packages/ yarn.lock
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 

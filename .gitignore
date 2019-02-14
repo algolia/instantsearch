@@ -1,4 +1,3 @@
-docgen/docs-*
 node_modules/
 dist/
 build/
