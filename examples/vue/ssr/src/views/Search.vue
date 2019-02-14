@@ -2,25 +2,23 @@
   <ais-instant-search-ssr>
     <ais-search-box />
     <ais-stats />
-    <ais-refinement-list attribute="genre" />
+    <ais-refinement-list attribute="brand" />
     <ais-hits>
       <template
         slot="item"
         slot-scope="{ item }"
       >
-        <ais-highlight
-          attribute="title"
-          :hit="item"
-        />
-        <p class="year">{{ item.year }}</p>
-        <p class="genre">
-          <span
-            v-for="genre in item.genre"
-            :key="genre"
-            class="badge"
-          >
-            {{ genre }}
-          </span>
+        <p>
+          <ais-highlight
+            attribute="name"
+            :hit="item"
+          />
+        </p>
+        <p>
+          <ais-highlight
+            attribute="brand"
+            :hit="item"
+          />
         </p>
       </template>
     </ais-hits>
@@ -44,8 +42,8 @@ export default {
     return instantsearch.findResultsState({
       query: 'hi',
       hitsPerPage: 5,
-      disjunctiveFacets: ['genre'],
-      disjunctiveFacetsRefinements: { genre: ['Comedy'] },
+      disjunctiveFacets: ['brand'],
+      disjunctiveFacetsRefinements: { brand: ['Apple'] },
     });
   },
   components: {
