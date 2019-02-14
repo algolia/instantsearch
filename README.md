@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/">
-    <img alt="React InstantSearch" src="./docgen/assets/img/InstantSearch-React-medal.svg" width="250">
+    <img alt="React InstantSearch" src="./website/assets/react-instantsearch.svg" width="250">
   </a>
 
   <p align="center">
@@ -76,7 +76,7 @@ The documentation is available on [algolia.com/doc][doc].
 
 | E-commerce                                                                                                                                                                             | Media                                                                                                                                                                   | Travel                                                                                                                                                                        |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="https://community.algolia.com/react-instantsearch/examples/e-commerce/"><img src="./docgen/src/images/examples/e-commerce.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://community.algolia.com/react-instantsearch/examples/media/"><img src="./docgen/src/images/examples/media.png" width="250" alt="Media demo preview"></a> | <a href="https://community.algolia.com/react-instantsearch/examples/tourism/"><img src="./docgen/src/images/examples/tourism.png" width="250" alt="Tourism demo preview"></a> |
+| <a href="https://community.algolia.com/react-instantsearch/examples/e-commerce/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/e-commerce-2d9e65f3.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://community.algolia.com/react-instantsearch/examples/media/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/media-24e1259b.png" width="250" alt="Media demo preview"></a> | <a href="https://community.algolia.com/react-instantsearch/examples/tourism/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/tourism-42193cf6.png" width="250" alt="Tourism demo preview"></a> |
 
 See more examples [on the website][doc-demos].
 
