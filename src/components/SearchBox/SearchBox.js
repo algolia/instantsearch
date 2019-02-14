@@ -78,15 +78,6 @@ class SearchBox extends Component {
     query: this.props.searchAsYouType ? '' : this.props.query,
   };
 
-  componentWillReceiveProps(nextProps) {
-    // This keeps track of the `searchParameters` and changes the query accordingly.
-    if (!nextProps.searchAsYouType && nextProps.query !== this.props.query) {
-      this.setState({
-        query: nextProps.query,
-      });
-    }
-  }
-
   /**
    * This public method is used in the RefinementList SFFV search box
    * to reset the input state when an item is selected.
