@@ -1,6 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import PoweredBy from '../../components/PoweredBy/PoweredBy.tsx';
+import PoweredBy from '../../components/PoweredBy/PoweredBy';
 import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
 import {
   getContainerNode,
