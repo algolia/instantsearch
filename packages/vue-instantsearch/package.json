@@ -44,15 +44,15 @@
     "release:publish": "scripts/release-publish.sh"
   },
   "dependencies": {
-    "algoliasearch": "^3.30.0",
     "algoliasearch-helper": "^2.26.1",
-    "instantsearch.js": "^3.1.0",
-    "lodash": "^4.17.11"
+    "instantsearch.js": "^3.1.0"
   },
   "peerDependencies": {
+    "algoliasearch": "^3.30.0",
     "vue": "^2.4.0"
   },
   "devDependencies": {
+    "lodash": "^4.17.11",
     "@storybook/addon-knobs": "3.4.11",
     "@storybook/addon-options": "3.4.11",
     "@storybook/vue": "3.4.11",

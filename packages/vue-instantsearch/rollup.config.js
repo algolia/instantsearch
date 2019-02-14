@@ -16,7 +16,6 @@ export default [
   {
     input: 'src/instantsearch.js',
     external: [
-      'algoliasearch/lite',
       'algoliasearch-helper',
       'instantsearch.js/es',
       'instantsearch.js/es/connectors',
