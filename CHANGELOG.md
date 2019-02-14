@@ -1,3 +1,21 @@
+# [4.3.0](https://github.com/algolia/create-instantsearch-app/compare/4.2.0...4.3.0) (2019-02-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency inquirer to v6.2.2 ([#340](https://github.com/algolia/create-instantsearch-app/issues/340)) ([40d7419](https://github.com/algolia/create-instantsearch-app/commit/40d7419))
+* **deps:** update vue monorepo to v2.6.2 ([#345](https://github.com/algolia/create-instantsearch-app/issues/345)) ([53cc4dc](https://github.com/algolia/create-instantsearch-app/commit/53cc4dc))
+* **React InstantSearch:** placeholder template ([#361](https://github.com/algolia/create-instantsearch-app/issues/361)) ([caf15a0](https://github.com/algolia/create-instantsearch-app/commit/caf15a0))
+* **templates:** remove community links ([#362](https://github.com/algolia/create-instantsearch-app/issues/362)) ([8709534](https://github.com/algolia/create-instantsearch-app/commit/8709534))
+
+
+### Features
+
+* **api:** add support for template versioning ([#351](https://github.com/algolia/create-instantsearch-app/issues/351)) ([e679daa](https://github.com/algolia/create-instantsearch-app/commit/e679daa))
+* **api:** throw when unsupported template version ([#354](https://github.com/algolia/create-instantsearch-app/issues/354)) ([f7a6a4e](https://github.com/algolia/create-instantsearch-app/commit/f7a6a4e))
+
+
+
 # [4.2.0](https://github.com/algolia/create-instantsearch-app/compare/4.1.0...4.2.0) (2019-01-14)
 
 
