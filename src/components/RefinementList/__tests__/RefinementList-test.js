@@ -277,9 +277,9 @@ describe('RefinementList', () => {
           templates: {
             item: item => item,
             searchableNoResults: x => x,
-            searchableReset: 'searchableReset',
-            searchableSubmit: 'searchableSubmit',
-            searchableLoadingIndicator: 'searchableLoadingIndicator',
+            reset: 'reset',
+            submit: 'submit',
+            loadingIndicator: 'loadingIndicator',
           },
         },
         toggleRefinement: () => {},
@@ -414,9 +414,9 @@ describe('RefinementList', () => {
         templateProps: {
           templates: {
             item: item => item,
-            searchableReset: 'searchableReset',
-            searchableSubmit: 'searchableSubmit',
-            searchableLoadingIndicator: 'searchableLoadingIndicator',
+            reset: 'reset',
+            submit: 'submit',
+            loadingIndicator: 'loadingIndicator',
           },
         },
         toggleRefinement: () => {},

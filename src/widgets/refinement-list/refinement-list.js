@@ -16,6 +16,32 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('RefinementList');
 const searchBoxSuit = component('SearchBox');
 
+/**
+ * Transforms the searchable templates by removing the `searchable` prefix.
+ *
+ * This makes them usable in the `SearchBox` component.
+ *
+ * @param {object} templates The widget templates
+ * @returns {object} the formatted templates
+ */
+function transformTemplates(templates) {
+  const allTemplates = {
+    ...templates,
+    submit: templates.searchableSubmit,
+    reset: templates.searchableReset,
+    loadingIndicator: templates.searchableLoadingIndicator,
+  };
+
+  const {
+    searchableReset,
+    searchableSubmit,
+    searchableLoadingIndicator,
+    ...transformedTemplates
+  } = allTemplates;
+
+  return transformedTemplates;
+}
+
 const renderer = ({
   containerNode,
   cssClasses,
@@ -42,7 +68,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
@@ -173,7 +198,7 @@ export default function refinementList({
   searchableEscapeFacetValues = true,
   searchableIsAlwaysActive = true,
   cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
+  templates: userTemplates = defaultTemplates,
   transformItems,
 } = {}) {
   if (!container) {
@@ -184,10 +209,10 @@ export default function refinementList({
     ? Boolean(searchableEscapeFacetValues)
     : false;
   const containerNode = getContainerNode(container);
-  const allTemplates = {
+  const templates = transformTemplates({
     ...defaultTemplates,
-    ...templates,
-  };
+    ...userTemplates,
+  });
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
@@ -261,7 +286,7 @@ export default function refinementList({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    templates: allTemplates,
+    templates,
     renderState: {},
     searchable,
     searchablePlaceholder,

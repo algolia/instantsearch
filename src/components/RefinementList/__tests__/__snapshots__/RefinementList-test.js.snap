@@ -353,7 +353,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           className="submit"
           dangerouslySetInnerHTML={
             Object {
-              "__html": "searchableSubmit",
+              "__html": "submit",
             }
           }
           hidden={false}
@@ -364,7 +364,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           className="reset"
           dangerouslySetInnerHTML={
             Object {
-              "__html": "searchableReset",
+              "__html": "reset",
             }
           }
           hidden={true}
@@ -375,7 +375,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           className="loadingIndicator"
           dangerouslySetInnerHTML={
             Object {
-              "__html": "searchableLoadingIndicator",
+              "__html": "loadingIndicator",
             }
           }
           hidden={true}
@@ -520,7 +520,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           className="submit"
           dangerouslySetInnerHTML={
             Object {
-              "__html": "searchableSubmit",
+              "__html": "submit",
             }
           }
           hidden={false}
@@ -531,7 +531,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           className="reset"
           dangerouslySetInnerHTML={
             Object {
-              "__html": "searchableReset",
+              "__html": "reset",
             }
           }
           hidden={true}
@@ -542,7 +542,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           className="loadingIndicator"
           dangerouslySetInnerHTML={
             Object {
-              "__html": "searchableLoadingIndicator",
+              "__html": "loadingIndicator",
             }
           }
           hidden={true}
