@@ -3,24 +3,9 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { isSpecialClick } from '../../lib/utils';
-import { component } from '../../lib/suit';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import SearchBox from '../SearchBox/SearchBox';
-
-const searchBoxSuit = component('SearchBox');
-
-const searchBoxCSSClasses = {
-  root: cx(searchBoxSuit()),
-  form: cx(searchBoxSuit({ descendantName: 'form' })),
-  input: cx(searchBoxSuit({ descendantName: 'input' })),
-  submit: cx(searchBoxSuit({ descendantName: 'submit' })),
-  submitIcon: cx(searchBoxSuit({ descendantName: 'submitIcon' })),
-  reset: cx(searchBoxSuit({ descendantName: 'reset' })),
-  resetIcon: cx(searchBoxSuit({ descendantName: 'resetIcon' })),
-  loadingIndicator: cx(searchBoxSuit({ descendantName: 'loadingIndicator' })),
-  loadingIcon: cx(searchBoxSuit({ descendantName: 'loadingIcon' })),
-};
 
 class RefinementList extends Component {
   constructor(props) {
@@ -195,7 +180,7 @@ class RefinementList extends Component {
           ref={searchBoxRef => (this.searchBox = searchBoxRef)}
           placeholder={this.props.searchPlaceholder}
           disabled={shouldDisableSearchBox}
-          cssClasses={searchBoxCSSClasses}
+          cssClasses={this.props.cssClasses.searchable}
           templates={this.props.templateProps.templates}
           onChange={event => this.props.searchFacetValues(event.target.value)}
           onReset={() => this.props.searchFacetValues('')}
@@ -266,6 +251,17 @@ RefinementList.propTypes = {
     showMore: PropTypes.string,
     disabledShowMore: PropTypes.string,
     disabledItem: PropTypes.string,
+    searchable: PropTypes.shape({
+      root: PropTypes.string,
+      form: PropTypes.string,
+      input: PropTypes.string,
+      submit: PropTypes.string,
+      submitIcon: PropTypes.string,
+      reset: PropTypes.string,
+      resetIcon: PropTypes.string,
+      loadingIndicator: PropTypes.string,
+      loadingIcon: PropTypes.string,
+    }),
   }).isRequired,
   depth: PropTypes.number,
   facetValues: PropTypes.array,

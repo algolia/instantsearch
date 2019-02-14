@@ -29,6 +29,17 @@ exports[`RefinementList rendering with facets 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -62,6 +73,17 @@ exports[`RefinementList rendering with facets 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -106,6 +128,17 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -139,6 +172,17 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -193,6 +237,17 @@ exports[`RefinementList rendering with facets and show more 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -226,6 +281,17 @@ exports[`RefinementList rendering with facets and show more 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -259,11 +325,11 @@ exports[`RefinementList rendering with facets from search 1`] = `
     className="searchBox"
   >
     <div
-      className="ais-SearchBox"
+      className="root"
     >
       <form
         action=""
-        className="ais-SearchBox-form"
+        className="form"
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
@@ -274,7 +340,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           autoComplete="off"
           autoCorrect="off"
           autoFocus={false}
-          className="ais-SearchBox-input"
+          className="input"
           disabled={false}
           maxLength={512}
           onChange={[Function]}
@@ -284,7 +350,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           value=""
         />
         <button
-          className="ais-SearchBox-submit"
+          className="submit"
           dangerouslySetInnerHTML={
             Object {
               "__html": "searchableSubmit",
@@ -295,7 +361,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           type="submit"
         />
         <button
-          className="ais-SearchBox-reset"
+          className="reset"
           dangerouslySetInnerHTML={
             Object {
               "__html": "searchableReset",
@@ -306,7 +372,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           type="reset"
         />
         <span
-          className="ais-SearchBox-loadingIndicator"
+          className="loadingIndicator"
           dangerouslySetInnerHTML={
             Object {
               "__html": "searchableLoadingIndicator",
@@ -342,6 +408,17 @@ exports[`RefinementList rendering with facets from search 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -375,6 +452,17 @@ exports[`RefinementList rendering with facets from search 1`] = `
                 "noResults": "noResults",
                 "root": "root",
                 "searchBox": "searchBox",
+                "searchable": Object {
+                  "form": "form",
+                  "input": "input",
+                  "loadingIcon": "loadingIcon",
+                  "loadingIndicator": "loadingIndicator",
+                  "reset": "reset",
+                  "resetIcon": "resetIcon",
+                  "root": "root",
+                  "submit": "submit",
+                  "submitIcon": "submitIcon",
+                },
                 "selectedItem": "selectedItem",
                 "showMore": "showMore",
               },
@@ -404,11 +492,11 @@ exports[`RefinementList rendering without facets from search 1`] = `
     className="searchBox"
   >
     <div
-      className="ais-SearchBox"
+      className="root"
     >
       <form
         action=""
-        className="ais-SearchBox-form"
+        className="form"
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
@@ -419,7 +507,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           autoComplete="off"
           autoCorrect="off"
           autoFocus={false}
-          className="ais-SearchBox-input"
+          className="input"
           disabled={false}
           maxLength={512}
           onChange={[Function]}
@@ -429,7 +517,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           value=""
         />
         <button
-          className="ais-SearchBox-submit"
+          className="submit"
           dangerouslySetInnerHTML={
             Object {
               "__html": "searchableSubmit",
@@ -440,7 +528,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           type="submit"
         />
         <button
-          className="ais-SearchBox-reset"
+          className="reset"
           dangerouslySetInnerHTML={
             Object {
               "__html": "searchableReset",
@@ -451,7 +539,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           type="reset"
         />
         <span
-          className="ais-SearchBox-loadingIndicator"
+          className="loadingIndicator"
           dangerouslySetInnerHTML={
             Object {
               "__html": "searchableLoadingIndicator",

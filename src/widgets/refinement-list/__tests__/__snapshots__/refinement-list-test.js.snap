@@ -17,6 +17,17 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
       "noResults": "ais-RefinementList-noResults",
       "root": "ais-RefinementList",
       "searchBox": "ais-RefinementList-searchBox",
+      "searchable": Object {
+        "form": "ais-SearchBox-form",
+        "input": "ais-SearchBox-input",
+        "loadingIcon": "ais-SearchBox-loadingIcon",
+        "loadingIndicator": "ais-SearchBox-loadingIndicator",
+        "reset": "ais-SearchBox-reset",
+        "resetIcon": "ais-SearchBox-resetIcon",
+        "root": "ais-SearchBox",
+        "submit": "ais-SearchBox-submit",
+        "submitIcon": "ais-SearchBox-submitIcon",
+      },
       "selectedItem": "ais-RefinementList-item--selected",
       "showMore": "ais-RefinementList-showMore",
     }

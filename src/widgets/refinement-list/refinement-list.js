@@ -14,6 +14,7 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
 });
 const suit = component('RefinementList');
+const searchBoxSuit = component('SearchBox');
 
 const renderer = ({
   containerNode,
@@ -220,6 +221,41 @@ export default function refinementList({
       suit({ descendantName: 'showMore', modifierName: 'disabled' }),
       userCssClasses.disabledShowMore
     ),
+    searchable: {
+      root: cx(searchBoxSuit(), userCssClasses.searchableRoot),
+      form: cx(
+        searchBoxSuit({ descendantName: 'form' }),
+        userCssClasses.searchableForm
+      ),
+      input: cx(
+        searchBoxSuit({ descendantName: 'input' }),
+        userCssClasses.searchableInput
+      ),
+      submit: cx(
+        searchBoxSuit({ descendantName: 'submit' }),
+        userCssClasses.searchableSubmit
+      ),
+      submitIcon: cx(
+        searchBoxSuit({ descendantName: 'submitIcon' }),
+        userCssClasses.searchableSubmitIcon
+      ),
+      reset: cx(
+        searchBoxSuit({ descendantName: 'reset' }),
+        userCssClasses.searchableReset
+      ),
+      resetIcon: cx(
+        searchBoxSuit({ descendantName: 'resetIcon' }),
+        userCssClasses.searchableResetIcon
+      ),
+      loadingIndicator: cx(
+        searchBoxSuit({ descendantName: 'loadingIndicator' }),
+        userCssClasses.searchableLoadingIndicator
+      ),
+      loadingIcon: cx(
+        searchBoxSuit({ descendantName: 'loadingIcon' }),
+        userCssClasses.searchableLoadingIcon
+      ),
+    },
   };
 
   const specializedRenderer = renderer({
