@@ -2,9 +2,9 @@ const path = require('path');
 const semver = require('semver');
 const { getAppTemplateConfig } = require('../utils');
 
-function getTemplateNameByLibraryVersion(templateName, libraryVersion = '') {
+function getTemplateNameByLibraryVersion({ template, libraryVersion = '' }) {
   if (
-    templateName === 'InstantSearch.js' &&
+    template === 'InstantSearch.js' &&
     semver.satisfies(libraryVersion, '>= 2.0.0 < 3.0.0', {
       includePrerelease: true,
     })
@@ -12,20 +12,16 @@ function getTemplateNameByLibraryVersion(templateName, libraryVersion = '') {
     return 'InstantSearch.js 2';
   }
 
-  return templateName;
+  return template;
 }
 
 module.exports = function resolveTemplate(options, { supportedTemplates }) {
-  const templateName = getTemplateNameByLibraryVersion(
-    path.basename(options.template || ''),
-    options.libraryVersion
-  );
+  const templateName = getTemplateNameByLibraryVersion(options);
+  const templatePath = path.resolve('src/templates', templateName || '');
   let supportedVersion;
 
   try {
-    const templateConfig = getAppTemplateConfig(
-      path.resolve('src/templates', templateName)
-    );
+    const templateConfig = getAppTemplateConfig(templatePath);
     supportedVersion = templateConfig.supportedVersion;
   } catch (error) {
     // The template doesn't provide a configuration file `.template.js`.
@@ -40,12 +36,12 @@ module.exports = function resolveTemplate(options, { supportedTemplates }) {
   ) {
     throw new Error(
       `The template "${path.basename(
-        options.template || ''
+        templateName || ''
       )}" does not support the version ${options.libraryVersion}.`
     );
   }
 
   return supportedTemplates.includes(templateName)
-    ? path.resolve('src/templates', templateName)
+    ? templatePath
     : options.template;
 };

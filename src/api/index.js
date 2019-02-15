@@ -13,7 +13,7 @@ function createInstantSearchApp(appPath, options = {}, tasks = {}) {
   const config = {
     ...options,
     template: resolveTemplate(options, { supportedTemplates }),
-    name: options.name || path.basename(appPath),
+    name: options.name || path.basename(appPath || ''),
     installation: options.installation !== false,
     silent: options.silent === true,
     path: appPath ? path.resolve(appPath) : '',

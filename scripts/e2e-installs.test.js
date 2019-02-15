@@ -106,16 +106,6 @@ describe('Installation', () => {
   });
 
   describe('Path', () => {
-    test('with relative paths does not throw', () => {
-      expect(() => {
-        execSync(
-          `yarn start ${appPath} \
-            --template "./src/templates/InstantSearch.js" \
-            --no-installation`
-        );
-      }).not.toThrow();
-    });
-
     test('without conflict generates files', () => {
       execSync(
         `yarn start ${appPath} \
