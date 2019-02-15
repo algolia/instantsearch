@@ -1,3 +1,12 @@
+## [4.3.2](https://github.com/algolia/create-instantsearch-app/compare/4.3.1...4.3.2) (2019-02-15)
+
+
+### Bug Fixes
+
+* **api:** fix template resolver ([1b0d2a1](https://github.com/algolia/create-instantsearch-app/commit/1b0d2a1))
+
+
+
 ## [4.3.1](https://github.com/algolia/create-instantsearch-app/compare/4.3.0...4.3.1) (2019-02-15)
 
 
