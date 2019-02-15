@@ -86,7 +86,7 @@
     "jest": "24.1.0",
     "jest-watch-typeahead": "0.2.1",
     "json": "9.0.6",
-    "lerna": "3.11.1",
+    "lerna": "3.13.0",
     "lodash.orderby": "4.6.0",
     "mversion": "1.13.0",
     "null-loader": "0.1.1",
