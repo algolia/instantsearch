@@ -61,7 +61,7 @@ function checkAppPath(appPath) {
 
 function getAppTemplateConfig(templatePath, { loadFileFn = require } = {}) {
   try {
-    return loadFileFn(`${templatePath}/.template.js`);
+    return loadFileFn(path.resolve(path.join(templatePath, '.template.js')));
   } catch (err) {
     throw new Error(
       `The template configuration file \`.template.js\` contains errors:

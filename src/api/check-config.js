@@ -1,3 +1,4 @@
+const path = require('path');
 const fs = require('fs');
 const { checkAppName, checkAppPath } = require('../utils');
 
@@ -17,10 +18,7 @@ function getOptions({ supportedTemplates }) {
     },
     template: {
       validate(input) {
-        return (
-          supportedTemplates.includes(input) ||
-          fs.existsSync(`${input}/.template.js`)
-        );
+        return fs.existsSync(path.join(input || '', '.template.js'));
       },
       getErrorMessage() {
         return `The template directory must contain a configuration file \`.template.js\` or must be one of those: ${supportedTemplates.join(
