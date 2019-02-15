@@ -1,3 +1,12 @@
+## [4.3.1](https://github.com/algolia/create-instantsearch-app/compare/4.3.0...4.3.1) (2019-02-15)
+
+
+### Bug Fixes
+
+* **api:** resolve relative paths ([#365](https://github.com/algolia/create-instantsearch-app/issues/365)) ([fc8c421](https://github.com/algolia/create-instantsearch-app/commit/fc8c421))
+
+
+
 # [4.3.0](https://github.com/algolia/create-instantsearch-app/compare/4.2.0...4.3.0) (2019-02-14)
 
 
