@@ -98,7 +98,7 @@
     "compression": "1.7.3",
     "conventional-changelog-cli": "2.0.12",
     "doctoc": "1.4.0",
-    "enzyme": "3.8.0",
+    "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.9.1",
     "enzyme-to-json": "3.3.5",
     "eslint": "5.14.0",
