@@ -166,10 +166,10 @@ algolia-frontend-components@0.0.35:
     webpack "^2.2.1"
     webpack-dev-server "^2.4.1"
 
-algoliasearch@3.27.1:
-  version "3.27.1"
-  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.27.1.tgz#e1af42b97dbf44a2dd3a8c907be99c0c34e48414"
-  integrity sha512-byJBhwwazBTt5/FV9s6Oe+x2bbBlho9Ts2MqKh5SNbec2uft8xwtPuvE1hkS0+4wjlw8WIiJPSOaD82FLW7doA==
+algoliasearch@3.32.0:
+  version "3.32.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.32.0.tgz#5818168c26ff921bd0346a919071bac928b747ce"
+  integrity sha512-C8oQnPTf0wPuyD2jSZwtBAPvz+lHOE7zRIPpgXGBuNt6ZNcC4omsbytG26318rT77a8h4759vmIp6n9p8iw4NA==
   dependencies:
     agentkeepalive "^2.2.0"
     debug "^2.6.8"
