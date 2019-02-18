@@ -87,7 +87,7 @@
     "metalsmith-watch": "1.0.3",
     "metalsmith-webpack": "1.0.3",
     "mkdirp": "0.5.1",
-    "mversion": "1.10.1",
+    "mversion": "1.13.0",
     "onchange": "3.2.1",
     "opn-cli": "3.1.0",
     "pretty-bytes-cli": "2.0.0",
