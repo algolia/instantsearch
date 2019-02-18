@@ -8,6 +8,11 @@ import simpleMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
+import { createDocumentationMessageGenerator } from './utils';
+
+const withUsage = createDocumentationMessageGenerator({
+  name: 'instantsearch',
+});
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
@@ -47,22 +52,27 @@ class InstantSearch extends EventEmitter {
       searchClient = null,
     } = options;
 
-    if (indexName === null || searchClient === null) {
-      throw new Error(`Usage: instantsearch({
-  indexName: 'indexName',
-  searchClient: algoliasearch('appId', 'apiKey')
-});`);
+    if (indexName === null) {
+      throw new Error(withUsage('The `indexName` option is required.'));
+    }
+
+    if (searchClient === null) {
+      throw new Error(withUsage('The `searchClient` option is required.'));
     }
 
     if (typeof options.urlSync !== 'undefined') {
       throw new Error(
-        'InstantSearch.js V3: `urlSync` option has been removed. You can now use the new `routing` option'
+        withUsage(
+          'The `urlSync` option was removed in InstantSearch.js 3. You may want to use the `routing` option.'
+        )
       );
     }
 
     if (typeof searchClient.search !== 'function') {
       throw new Error(
-        'The search client must implement a `search(requests)` method.'
+        `The \`searchClient\` must implement a \`search\` method.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/`
       );
     }
 
@@ -117,7 +127,9 @@ class InstantSearch extends EventEmitter {
   addWidgets(widgets) {
     if (!Array.isArray(widgets)) {
       throw new Error(
-        'You need to provide an array of widgets or call `addWidget()`'
+        withUsage(
+          'The `addWidgets` method expects an array of widgets. Please use `addWidget`.'
+        )
       );
     }
 
@@ -130,7 +142,9 @@ class InstantSearch extends EventEmitter {
     widgets.forEach(widget => {
       // Add the widget to the list of widget
       if (widget.render === undefined && widget.init === undefined) {
-        throw new Error('Widget definition missing render or init method');
+        throw new Error(`The widget definition expects a \`render\` and/or an \`init\` method.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/`);
       }
 
       this.widgets.push(widget);
@@ -185,7 +199,9 @@ class InstantSearch extends EventEmitter {
   removeWidgets(widgets) {
     if (!Array.isArray(widgets)) {
       throw new Error(
-        'You need to provide an array of widgets or call `removeWidget()`'
+        withUsage(
+          'The `removeWidgets` method expects an array of widgets. Please use `removeWidget`.'
+        )
       );
     }
 
@@ -195,7 +211,9 @@ class InstantSearch extends EventEmitter {
         typeof widget.dispose !== 'function'
       ) {
         throw new Error(
-          'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
+          `The \`dispose\` method is required to remove the widget.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/`
         );
       }
 
@@ -249,7 +267,9 @@ class InstantSearch extends EventEmitter {
    * @return {undefined} Does not return anything
    */
   start() {
-    if (this.started) throw new Error('start() has been already called once');
+    if (this.started) {
+      throw new Error(withUsage('The `start` method can only be called once.'));
+    }
 
     let searchParametersFromUrl;
 
@@ -349,7 +369,9 @@ class InstantSearch extends EventEmitter {
 
   createURL(params) {
     if (!this._createURL) {
-      throw new Error('You need to call start() before calling createURL()');
+      throw new Error(
+        'The `start` method needs to be called before `createURL`.'
+      );
     }
     return this._createURL(this.helper.state.setQueryParameters(params));
   }

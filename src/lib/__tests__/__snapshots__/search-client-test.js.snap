@@ -28,4 +28,8 @@ Array [
 ]
 `;
 
-exports[`InstantSearch Search Client Properties throws if no \`search()\` method 1`] = `"The search client must implement a \`search(requests)\` method."`;
+exports[`InstantSearch Search Client Properties throws if no \`search()\` method 1`] = `
+"The \`searchClient\` must implement a \`search\` method.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
+`;

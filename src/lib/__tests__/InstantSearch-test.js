@@ -16,6 +16,125 @@ jest.mock('algoliasearch-helper', () => {
   });
 });
 
+describe('Usage', () => {
+  it('throws without indexName', () => {
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({ indexName: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`indexName\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
+  });
+
+  it('throws without searchClient', () => {
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({ indexName: 'indexName', searchClient: undefined });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`searchClient\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
+  });
+
+  it('throws if searchClient does not implement a search method', () => {
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({ indexName: 'indexName', searchClient: {} });
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`searchClient\` must implement a \`search\` method.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
+`);
+  });
+
+  it('throws if addWidgets is called with a single widget', () => {
+    expect(() => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+      });
+      search.addWidgets({});
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`addWidgets\` method expects an array of widgets. Please use \`addWidget\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
+  });
+
+  it('throws if a widget without render or init method is added', () => {
+    const widgets = [{ render: undefined, init: undefined }];
+
+    expect(() => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+      });
+      search.addWidgets(widgets);
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The widget definition expects a \`render\` and/or an \`init\` method.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/"
+`);
+  });
+
+  it('does not throw with a widget having a init method', () => {
+    const widgets = [{ init: () => {} }];
+
+    expect(() => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+      });
+      search.addWidgets(widgets);
+    }).not.toThrow();
+  });
+
+  it('does not throw with a widget having a render method', () => {
+    const widgets = [{ render: () => {} }];
+
+    expect(() => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+      });
+      search.addWidgets(widgets);
+    }).not.toThrow();
+  });
+
+  it('throws if removeWidgets is called with a single widget', () => {
+    expect(() => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+      });
+      search.removeWidgets({});
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`removeWidgets\` method expects an array of widgets. Please use \`removeWidget\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
+  });
+
+  it('throws if a widget without dispose method is removed', () => {
+    const widgets = [{ init: () => {}, render: () => {}, dispose: undefined }];
+
+    expect(() => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+      });
+      search.removeWidgets(widgets);
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`dispose\` method is required to remove the widget.
+
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/"
+`);
+  });
+});
+
 describe('InstantSearch lifecycle', () => {
   let algoliasearch;
   let client;
@@ -65,20 +184,6 @@ describe('InstantSearch lifecycle', () => {
 
   it('does not call algoliasearchHelper', () => {
     expect(algoliaSearchHelper).not.toHaveBeenCalled();
-  });
-
-  describe('when adding a widget without render and init', () => {
-    let widget;
-
-    beforeEach(() => {
-      widget = {};
-    });
-
-    it('throw an error', () => {
-      expect(() => {
-        search.addWidget(widget);
-      }).toThrow('Widget definition missing render or init method');
-    });
   });
 
   it('does not fail when passing same references inside multiple searchParameters props', () => {
@@ -663,7 +768,9 @@ it('Does not allow to start twice', () => {
   expect(() => instance.start()).not.toThrow();
   expect(() => {
     instance.start();
-  }).toThrowErrorMatchingInlineSnapshot(
-    `"start() has been already called once"`
-  );
+  }).toThrowErrorMatchingInlineSnapshot(`
+"The \`start\` method can only be called once.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
 });
