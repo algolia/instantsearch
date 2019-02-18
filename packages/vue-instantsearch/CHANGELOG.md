@@ -1,3 +1,14 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-beta.3...v2.0.0) (2019-02-18)
+
+
+### Features
+
+* **core:** update to InstantSearch.js v3 ([#612](https://github.com/algolia/vue-instantsearch/issues/612)) ([fbf818e](https://github.com/algolia/vue-instantsearch/commit/fbf818e)), closes [#619](https://github.com/algolia/vue-instantsearch/issues/619)
+* **deps:** remove transitive dependencies ([6fa3169](https://github.com/algolia/vue-instantsearch/commit/6fa3169))
+
+
+
 <a name="2.0.0-beta.3"></a>
 
 # [2.0.0-beta.3](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2019-01-23)
