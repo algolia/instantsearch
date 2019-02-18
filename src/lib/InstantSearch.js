@@ -3,6 +3,7 @@ import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
+import { Index } from '../widgets/index/index';
 // import RoutingManager from './RoutingManager';
 // import simpleMapping from './stateMappings/simple';
 // import historyRouter from './routers/history';
@@ -17,6 +18,16 @@ import createHelpers from './createHelpers';
 function defaultCreateURL() {
   return '#';
 }
+
+const createChildHelper = ({ parent, client, index, parameters }) => {
+  const helper = algoliasearchHelper(client, index, parameters);
+
+  helper.search = () => {
+    parent.search();
+  };
+
+  return helper;
+};
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -91,27 +102,10 @@ class InstantSearch extends EventEmitter {
     //   };
   }
 
-  /**
-   * Adds a widget. This can be done before and after InstantSearch has been started. Adding a
-   * widget after InstantSearch started is considered **EXPERIMENTAL** and therefore
-   * it is possibly buggy, if you find anything please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20hot%20addWidget).
-   * @param  {Widget} widget The widget to add to InstantSearch. Widgets are simple objects
-   * that have methods that map the search life cycle in a UI perspective. Usually widgets are
-   * created by [widget factories](widgets.html) like the one provided with InstantSearch.js.
-   * @return {undefined} This method does not return anything
-   */
   addWidget(widget) {
     this.addWidgets([widget]);
   }
 
-  /**
-   * Adds multiple widgets. This can be done before and after the InstantSearch has been started. This feature
-   * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
-   * @param  {Widget[]} widgets The array of widgets to add to InstantSearch.
-   * @return {undefined} This method does not return anything
-   */
   addWidgets(widgets) {
     if (!Array.isArray(widgets)) {
       throw new Error(
@@ -126,21 +120,56 @@ class InstantSearch extends EventEmitter {
     // const lastWidget = this.widgets.pop();
 
     widgets.forEach(widget => {
-      // Add the widget to the list of widget
       if (widget.render === undefined && widget.init === undefined) {
         throw new Error('Widget definition missing render or init method');
       }
 
-      this.tree.helper.setState(
+      let current = this.tree;
+
+      if (widget instanceof Index) {
+        const node = {
+          // @TODO: resolve parent
+          parent: this.tree,
+          helper: createChildHelper({
+            parent: this.tree.helper,
+            client: this.client,
+            index: widget.indexName,
+            parameters: {
+              ...this.tree.helper.getState(),
+              index: widget.indexName,
+            },
+          }),
+          indices: [],
+          widgets: widget.widgets,
+        };
+
+        this.tree.indices.push(node);
+
+        // useful to trigger the N requets
+        const derivedHelper = this.tree.helper.derive(parameters => {
+          // @TODO: resolve the search parameters from the tree
+          // node.helper.getState() -> node.parent.helper.getState()
+          return algoliasearchHelper.SearchParameters.make({
+            ...parameters,
+            ...node.helper.getState(),
+          });
+        });
+
+        derivedHelper.on('result', this._render.bind(this, node.helper));
+
+        current = node;
+      }
+
+      current.helper.setState(
         enhanceConfiguration()(
           {
-            ...this.tree.helper.getState(),
+            ...current.helper.getState(),
           },
           widget
         )
       );
 
-      this.tree.widgets.push(widget);
+      current.widgets.push(widget);
     });
 
     // Second part of the fix for #3148
@@ -296,7 +325,7 @@ class InstantSearch extends EventEmitter {
     this._searchStalledTimer = null;
     this._isSearchStalled = true;
 
-    this._init(this.tree.helper.getState(), this.tree.helper);
+    this._init();
 
     this.tree.helper.on('search', () => {
       if (!this._isSearchStalled && !this._searchStalledTimer) {
@@ -347,22 +376,20 @@ class InstantSearch extends EventEmitter {
   //   return this._createURL(this.helper.state.setQueryParameters(params));
   // }
 
-  _init(state, helper) {
+  _init() {
     const walk = node => {
-      if (node.helper === helper) {
-        node.widgets.forEach(widget => {
-          if (widget.init) {
-            widget.init({
-              state,
-              helper,
-              templatesConfig: this.templatesConfig,
-              createURL: this._createAbsoluteURL,
-              onHistoryChange: this._onHistoryChange,
-              instantSearchInstance: this,
-            });
-          }
-        });
-      }
+      node.widgets.forEach(widget => {
+        if (widget.init) {
+          widget.init({
+            state: node.helper.getState(),
+            helper: node.helper,
+            templatesConfig: this.templatesConfig,
+            createURL: this._createAbsoluteURL,
+            onHistoryChange: this._onHistoryChange,
+            instantSearchInstance: this,
+          });
+        }
+      });
 
       return node.indices.forEach(inner => walk(inner));
     };
@@ -379,7 +406,7 @@ class InstantSearch extends EventEmitter {
               templatesConfig: this.templatesConfig,
               results,
               state,
-              helper,
+              helper: node.helper,
               createURL: this._createAbsoluteURL,
               instantSearchInstance: this,
               searchMetadata: {
