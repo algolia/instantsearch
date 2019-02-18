@@ -2,6 +2,7 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import connectHits from '../../connectors/hits/connectHits';
 import Hits from '../../components/Hits/Hits';
+import withClickAnalytics from '../../components/Hits/withClickAnalytics';
 import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
@@ -14,6 +15,7 @@ import { component } from '../../lib/suit';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
+const HitsWithClickAnalytics = withClickAnalytics(Hits);
 
 const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
   { hits: receivedHits, results, instantSearchInstance },
@@ -28,8 +30,11 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
     return;
   }
 
+  const hasClickAnalytics =
+    instantSearchInstance.searchParameters.clickAnalytics;
+  const _Hits = hasClickAnalytics ? HitsWithClickAnalytics : Hits;
   render(
-    <Hits
+    <_Hits
       cssClasses={cssClasses}
       hits={receivedHits}
       results={results}
