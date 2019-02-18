@@ -1199,7 +1199,7 @@ algoliasearch-helper@^2.26.0, algoliasearch-helper@^2.26.1:
     qs "^6.5.1"
     util "^0.10.3"
 
-algoliasearch@^3.27.0, algoliasearch@^3.30.0, algoliasearch@^3.32.0:
+algoliasearch@^3.32.0:
   version "3.32.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.32.0.tgz#5818168c26ff921bd0346a919071bac928b747ce"
   integrity sha512-C8oQnPTf0wPuyD2jSZwtBAPvz+lHOE7zRIPpgXGBuNt6ZNcC4omsbytG26318rT77a8h4759vmIp6n9p8iw4NA==
@@ -3605,12 +3605,11 @@ ini@^1.3.4, ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
 
-instantsearch.js@^2.10.2:
-  version "2.10.4"
-  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-2.10.4.tgz#446b1ce06eff52c86f195e761087950020cc7fee"
-  integrity sha512-hhGdYQJBejN4Xm1ElirNenD1BUsP6HE9HOoAII13psn1vXnKE89oQ7/3Z/fpVRBKM0P2KopXJZ5WVn2JFp7ZDQ==
+instantsearch.js@^3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-3.1.1.tgz#ab545da6b9b137ffdd90480b1610c8d09055a0ea"
+  integrity sha512-vQw84UX7sM5Tnv5L2cOngi98FafiweWASY+i56On5jiNR8sTnjcF1G+Xy30I3Bdh2LeWv9lCWKOt8AU9nkaltw==
   dependencies:
-    algoliasearch "^3.27.0"
     algoliasearch-helper "^2.26.0"
     classnames "^2.2.5"
     events "^1.1.0"
@@ -3621,7 +3620,6 @@ instantsearch.js@^2.10.2:
     preact-rheostat "^2.1.1"
     prop-types "^15.5.10"
     qs "^6.5.1"
-    to-factory "^1.0.0"
 
 invariant@^2.2.0, invariant@^2.2.2:
   version "2.2.4"
@@ -6676,11 +6674,6 @@ to-arraybuffer@^1.0.0:
   resolved "https://registry.yarnpkg.com/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz#7d229b1fcc637e466ca081180836a7aabff83f43"
   integrity sha1-fSKbH8xjfkZsoIEYCDanqr/4P0M=
 
-to-factory@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/to-factory/-/to-factory-1.0.0.tgz#8738af8bd97120ad1d4047972ada5563bf9479b1"
-  integrity sha1-hzivi9lxIK0dQEeXKtpVY7+UebE=
-
 to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"
@@ -7013,15 +7006,13 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.2.tgz#1fcc1495effe08a790909b46bf7b5c4cfeb6f21b"
   integrity sha512-NpznMQoe/DzMG7nJjPkJKT7FdEn9xXfnntG7POfTmqnSaza97ylaBf1luZDh4IgV+vgUoR//id5pf8Ru+Ym+0g==
 
-vue-instantsearch@^2.0.0-beta.3:
-  version "2.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/vue-instantsearch/-/vue-instantsearch-2.0.0-beta.3.tgz#c746b6cde59b79635a9c90b5cc193cd4841d32a8"
-  integrity sha512-mR3HE5PWJQxAK7siHUYEvKCzYC7rxC0HDm1DJa3Uo13WSdxTcEny+G07EOZRNsxeCrjzaw1XKj1KztNAvDICXw==
+vue-instantsearch@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/vue-instantsearch/-/vue-instantsearch-2.0.0.tgz#3dd9b694d1f60b7ec261a62eead1b2c2613a1ce2"
+  integrity sha512-Wt4tp38R8++8mJy4gbEooPro97ngY8wF4w8pvPdzRuKeaq6HbfHrCBFHBOcFklT7kIi/q5fUuVwn6YkfpPoMrw==
   dependencies:
-    algoliasearch "^3.30.0"
     algoliasearch-helper "^2.26.1"
-    instantsearch.js "^2.10.2"
-    lodash "^4.17.11"
+    instantsearch.js "^3.1.0"
 
 vue-loader@^15.6.2:
   version "15.6.2"
