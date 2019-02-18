@@ -36,8 +36,8 @@ import {
   AisStats,
   AisPagination,
   createInstantSearch,
-// for some reason eslint doesn't recognise this dependency, while it's in package.json
-// eslint-disable-next-line import/no-unresolved
+  // for some reason eslint doesn't recognise this dependency, while it's in package.json
+  // eslint-disable-next-line import/no-unresolved
 } from 'vue-instantsearch';
 import algoliasearch from 'algoliasearch/lite';
 
