@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "react-scripts": "1.1.1",
-    "react-test-renderer": "16.2.0"
+    "react-test-renderer": "16.8.2"
   },
   "dependencies": {
     "instantsearch.css": "7.1.0",
     "prop-types": "15.6.0",
-    "react": "16.7.0",
-    "react-dom": "16.7.0",
+    "react": "16.8.2",
+    "react-dom": "16.8.2",
     "react-instantsearch-dom": "5.4.0"
   }
 }

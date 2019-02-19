@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "algoliasearch": "3.32.0",
-    "react": "16.8.1",
-    "react-dom": "16.8.1",
+    "react": "16.8.2",
+    "react-dom": "16.8.2",
     "react-instantsearch-dom": "5.4.0"
   }
 }
