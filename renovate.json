@@ -4,6 +4,9 @@
     ":automergeMinor",
     ":automergePr"
   ],
+  "ignorePresets": [
+    ":ignoreModulesAndTests"
+  ],
   "packageRules": [
     {
       "packagePatterns": [
@@ -13,6 +16,14 @@
         "devDependencies"
       ],
       "rangeStrategy": "replace"
+    },
+    {
+      "paths": [
+        "examples/react-router-v3"
+      ],
+      "ignoreDeps": [
+        "react-router"
+      ]
     }
   ]
 }
