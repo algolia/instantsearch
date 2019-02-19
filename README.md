@@ -88,8 +88,6 @@ search.start();
 
 <p align="center">
   <a href="https://codesandbox.io/s/github/algolia/doc-code-samples/tree/master/InstantSearch.js/getting-started" title="Edit on CodeSandbox">
-    <img alt="Preview" src="https://user-images.githubusercontent.com/6137112/41590781-27c9d4ba-73b8-11e8-823b-6ae3748db48a.png">
-    <br>
     <img alt="Edit on CodeSandbox" src="https://codesandbox.io/static/img/play-codesandbox.svg">
   </a>
 </p>
@@ -106,7 +104,7 @@ yarn add instantsearch.js algoliasearch
 
 ## Documentation
 
-The documentation is available on the [Algolia documentation website](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/).
+The documentation is available on the [Algolia website](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/).
 
 ## Demos
 
@@ -126,16 +124,16 @@ Start by [adding widgets](https://www.algolia.com/doc/guides/building-search-ui/
 
 We support the **last two versions of major browsers** (Chrome, Edge, Firefox, Safari).
 
-To support [IE11](https://en.wikipedia.org/wiki/Internet_Explorer_11), we recommend loading [polyfill.io](https://polyfill.io) with the following URL `https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes`
+Please refer to the [browser support](https://www.algolia.com/doc/guides/building-search-ui/installation/js/#browser-support) section in the documentation to use InstantSearch.js on other browsers.
 
 ## Contributing
 
 We welcome all contributors, from casual to regular 💙
 
-* **Bug report**. Is something not working as expected? [Send a bug report](https://github.com/algolia/instantsearch.js/issues/new?template=Bug_report.md).
-* **Feature request**. Would you like to add something to the library? [Send a feature request](https://github.com/algolia/instantsearch.js/issues/new?template=Feature_request.md).
-* **Documentation**. Did you find a typo in the doc? Click on the `edit this page` button.
-* **Development**. If you don't know where to start, you can check the open issues that are [tagged easy](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A++++++%E2%9D%84%EF%B8%8F+easy%22), the [bugs](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9D%A4+Bug%22) or [chores](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9C%A8+Chore%22).
+- **Bug report**. Is something not working as expected? [Send a bug report](https://github.com/algolia/instantsearch.js/issues/new?template=Bug_report.md).
+- **Feature request**. Would you like to add something to the library? [Send a feature request](https://github.com/algolia/instantsearch.js/issues/new?template=Feature_request.md).
+- **Documentation**. Did you find a typo in the doc? [Open an issue](https://github.com/algolia/instantsearch.js/issues/new) and we'll take care of it.
+- **Development**. If you don't know where to start, you can check the open issues that are [tagged easy](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A++++++%E2%9D%84%EF%B8%8F+easy%22), the [bugs](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9D%A4+Bug%22) or [chores](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9C%A8+Chore%22).
 
 To start contributing to code, you need to:
 
