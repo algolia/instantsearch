@@ -24,7 +24,7 @@
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
-    "express": "4.16.2",
+    "express": "4.16.4",
     "prop-types": "15.6.0",
     "react": "16.8.2",
     "react-dom": "16.8.2",
