@@ -20,7 +20,7 @@
     "react-test-renderer": "16.8.2"
   },
   "dependencies": {
-    "expo": "25.0.0",
+    "expo": "25.1.2",
     "lodash": "4.17.10",
     "prop-types": "15.6.0",
     "react": "16.8.2",

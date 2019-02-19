@@ -2355,10 +2355,10 @@ expect@^21.2.1:
     jest-message-util "^21.2.1"
     jest-regex-util "^21.2.0"
 
-expo@25.0.0:
-  version "25.0.0"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-25.0.0.tgz#791d0052e159d56854a84d90540bf11c33abfe4d"
-  integrity sha512-6XoXrpVgVtjEQJvUqsV2z4Jhy9SzfsMhFCdw5Jcv03/EBu2KD7ef4rUXx8k6YJsZqBcPiupVy0PXRxmU6AmGQw==
+expo@25.1.2:
+  version "25.1.2"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-25.1.2.tgz#120d8bc867cfb1c556035b6ff386ffef95fa3ebb"
+  integrity sha512-9NiX0iDpiRsJ5ODx09vF05gf7BcgWLemOMFQkSlT+0SfYMmoSnRabMWZBqk8NxbIflwzhFXHNEKdkTb9fZkuOQ==
   dependencies:
     "@expo/vector-icons" "^6.2.0"
     babel-preset-expo "^4.0.0"
