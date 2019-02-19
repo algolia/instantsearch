@@ -19,15 +19,15 @@
     "jest": "22.1.4",
     "json-loader": "0.5.7",
     "nodemon": "1.18.9",
-    "react-test-renderer": "16.2.0",
+    "react-test-renderer": "16.8.2",
     "webpack": "3.10.0",
     "webpack-node-externals": "1.6.0"
   },
   "dependencies": {
     "express": "4.16.2",
     "prop-types": "15.6.0",
-    "react": "16.7.0",
-    "react-dom": "16.7.0",
+    "react": "16.8.2",
+    "react-dom": "16.8.2",
     "react-instantsearch-dom": "5.4.0"
   }
 }
