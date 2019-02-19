@@ -13,73 +13,81 @@
     </header>
 
     <div class="container">
-      <ais-instant-search
-        :search-client="searchClient"
+      <ais-index
+        app-id="{{appId}}"
+        api-key="{{apiKey}}"
         index-name="{{indexName}}"
       >
         <div class="search-panel">
           {{#if attributesForFaceting.length}}
           <div class="search-panel__filters">
             {{#each attributesForFaceting}}
-            <ais-refinement-list attribute="{{this}}" />
+            <ais-refinement-list attribute-name="{{this}}"></ais-refinement-list>
             {{/each}}
           </div>
 
           {{/if}}
           <div class="search-panel__results">
-            <ais-search-box placeholder="{{searchPlaceholder}}" />
+            <ais-search-box
+              placeholder="{{searchPlaceholder}}"
+              class="ais-SearchBox-form"
+              :class-names="{
+                'ais-search-box': 'ais-SearchBox',
+                'ais-input': 'ais-SearchBox-input',
+                'ais-clear': 'ais-SearchBox-reset',
+                'ais-clear--disabled': 'ais-SearchBox-reset--disabled',
+                'ais-search-box__submit': 'ais-SearchBox-submit',
+                'ais-search-box__loading-indicator': 'ais-SearchBox-loadingIndicator',
+              }"
+            />
+
             {{#if attributesToDisplay}}
-            <ais-hits>
-              <template slot="item" slot-scope="{ item }">
-                <article>
+            <ais-results class="ais-Hits-list">
+              <template slot-scope="{ result }">
+                <article class="ais-Hits-item">
                   <h1>
                     <ais-highlight
-                      :hit="item"
-                      attribute="{{attributesToDisplay.[0]}}"
+                      :result="result"
+                      attribute-name="{{attributesToDisplay.[0]}}"
                     />
                   </h1>
                   {{#each attributesToDisplay}}
                   {{#unless @first}}
                   <p>
                     <ais-highlight
-                      :hit="item"
-                      attribute="{{this}}"
+                      :result="result"
+                      attribute-name="{{this}}"
                     />
                   </p>
                   {{/unless}}
                   {{/each}}
                 </article>
               </template>
-            </ais-hits>
+            </ais-results>
             {{else}}
-            <ais-hits/>
+            <ais-results class="ais-Hits-list" />
             {{/if}}
 
             <div class="pagination">
-              <ais-pagination />
+              <ais-pagination
+                :class-names="{
+                  'ais-pagination': 'ais-Pagination-list',
+                  'ais-pagination__item': 'ais-Pagination-item',
+                  'ais-pagination__item--next': 'ais-Pagination-item--next',
+                  'ais-pagination__item--previous': 'ais-Pagination-item--previous',
+                  'ais-pagination__item--disabled': 'ais-Pagination-item--disabled',
+                  'ais-pagination__item--first': 'ais-Pagination-item--first',
+                  'ais-pagination__item--last': 'ais-Pagination-item--last',
+                  'ais-pagination__link': 'ais-Pagination-link',
+                }"
+              />
             </div>
           </div>
         </div>
-      </ais-instant-search>
+      </ais-index>
     </div>
   </div>
 </template>
-
-<script>
-import algoliasearch from 'algoliasearch/lite';
-
-export default {
-  data() {
-    return {
-      searchClient: algoliasearch(
-        '{{appId}}',
-        '{{apiKey}}'
-      ),
-    };
-  },
-};
-</script>
-
 
 <style>
 body,

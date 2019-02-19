@@ -9,7 +9,6 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "algoliasearch": "3.32.0",
     "vue": "2.6.2",
     "vue-instantsearch": "{{libraryVersion}}"
   },

@@ -2,9 +2,14 @@ const path = require('path');
 const semver = require('semver');
 const { getAppTemplateConfig } = require('../utils');
 
-function getTemplateNameByLibraryVersion({ template, libraryVersion = '' }) {
+function getTemplateNameByLibraryVersion({
+  template = '',
+  libraryVersion = '',
+}) {
+  const templateName = path.basename(template);
+
   if (
-    template === 'InstantSearch.js' &&
+    templateName === 'InstantSearch.js' &&
     semver.satisfies(libraryVersion, '>= 2.0.0 < 3.0.0', {
       includePrerelease: true,
     })
@@ -12,7 +17,16 @@ function getTemplateNameByLibraryVersion({ template, libraryVersion = '' }) {
     return 'InstantSearch.js 2';
   }
 
-  return template;
+  if (
+    templateName === 'Vue InstantSearch' &&
+    semver.satisfies(libraryVersion, '>= 1.0.0 < 2.0.0', {
+      includePrerelease: true,
+    })
+  ) {
+    return 'Vue InstantSearch 1';
+  }
+
+  return templateName;
 }
 
 module.exports = function resolveTemplate(options, { supportedTemplates }) {

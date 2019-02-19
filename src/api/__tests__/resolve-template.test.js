@@ -42,6 +42,20 @@ describe('resolveTemplate', () => {
     ).toBe(path.resolve('src/templates/InstantSearch.js 2'));
   });
 
+  test('selects the selected template for Vue v1', () => {
+    expect(
+      resolveTemplate(
+        {
+          template: 'Vue InstantSearch',
+          libraryVersion: '1.7.0',
+        },
+        {
+          supportedTemplates: ['Vue InstantSearch', 'Vue InstantSearch 1'],
+        }
+      )
+    ).toBe(path.resolve('src/templates/Vue InstantSearch 1'));
+  });
+
   test('throws with unsupported version', () => {
     expect(() =>
       resolveTemplate(
@@ -56,5 +70,18 @@ describe('resolveTemplate', () => {
     ).toThrowErrorMatchingInlineSnapshot(
       `"The template \\"InstantSearch.js\\" does not support the version 1.0.0."`
     );
+  });
+
+  test('should work with full path for template', () => {
+    expect(
+      resolveTemplate(
+        {
+          template: './src/templates/InstantSearch.js',
+        },
+        {
+          supportedTemplates: ['InstantSearch.js'],
+        }
+      )
+    ).toBe(path.resolve('src/templates/InstantSearch.js'));
   });
 });
