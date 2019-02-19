@@ -978,11 +978,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   it('can search in facet values and then show more values', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
-      attributeName: 'category',
+      attribute: 'category',
       limit: 2,
-      showMore: {
-        limit: 10,
-      },
+      showMore: true,
+      showMoreLimit: 10,
+      escapeFacetValues: false,
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -993,12 +993,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         facetHits: [
           {
             count: 33,
-            highlighted: 'Salvador <em>Da</em>li',
+            highlighted: 'Salvador <mark>Da</mark>li',
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: '<em>Da</em>vidoff',
+            highlighted: '<mark>Da</mark>vidoff',
             value: 'Davidoff',
           },
         ],
@@ -1066,8 +1066,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual({
-      highlightPreTag: undefined,
-      highlightPostTag: undefined,
+      highlightPreTag: '<mark>',
+      highlightPostTag: '</mark>',
     });
 
     return Promise.resolve().then(() => {
@@ -1076,13 +1076,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       expect(rendering.mock.calls[3][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <em>Da</em>li',
+          highlighted: 'Salvador <mark>Da</mark>li',
           label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
-          highlighted: '<em>Da</em>vidoff',
+          highlighted: '<mark>Da</mark>vidoff',
           label: 'Davidoff',
           value: 'Davidoff',
         },

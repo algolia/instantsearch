@@ -89,6 +89,7 @@ storiesOf('RefinementList', module)
           container,
           attribute: 'brand',
           limit: 3,
+          showMore: true,
           showMoreLimit: 10,
           searchable: true,
         })
