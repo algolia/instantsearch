@@ -711,6 +711,86 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     ]);
   });
 
+  it('show more should toggle between two limits after search', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      limit: 1,
+      showMore: true,
+      showMoreLimit: 2,
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        facetHits: [],
+      })
+    );
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const renderingOptions2 = rendering.mock.calls[1][0];
+    expect(renderingOptions2.items).toHaveLength(1);
+
+    // `searchForItems` triggers a new render
+    renderingOptions2.searchForItems('query triggering no results');
+
+    return Promise.resolve().then(() => {
+      expect(rendering).toHaveBeenCalledTimes(3);
+      const renderingOptions3 = rendering.mock.calls[2][0];
+
+      // `searchForItems` triggers a new render
+      renderingOptions3.searchForItems('');
+
+      return Promise.resolve().then(() => {
+        expect(rendering).toHaveBeenCalledTimes(4);
+        const renderingOptions4 = rendering.mock.calls[3][0];
+        expect(renderingOptions4.toggleShowMore).toBeDefined();
+
+        // `toggleShowMore` triggers a new render
+        renderingOptions4.toggleShowMore();
+
+        expect(rendering).toHaveBeenCalledTimes(5);
+        const renderingOptions5 = rendering.mock.calls[4][0];
+        expect(renderingOptions5.items).toHaveLength(2);
+      });
+    });
+  });
+
   it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
@@ -972,138 +1052,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           value: 'Davidoff',
         },
       ]);
-    });
-  });
-
-  it('can search in facet values and then show more values', () => {
-    const { makeWidget, rendering } = createWidgetFactory();
-    const widget = makeWidget({
-      attribute: 'category',
-      limit: 2,
-      showMore: true,
-      showMoreLimit: 10,
-      escapeFacetValues: false,
-    });
-
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
-    helper.search = jest.fn();
-    helper.searchForFacetValues = jest.fn().mockReturnValue(
-      Promise.resolve({
-        exhaustiveFacetsCount: true,
-        facetHits: [
-          {
-            count: 33,
-            highlighted: 'Salvador <mark>Da</mark>li',
-            value: 'Salvador Dali',
-          },
-          {
-            count: 9,
-            highlighted: '<mark>Da</mark>vidoff',
-            value: 'Davidoff',
-          },
-        ],
-        processingTimeMS: 1,
-      })
-    );
-
-    // Simulate the lifecycle
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-    });
-
-    widget.render({
-      results: new SearchResults(helper.state, [
-        {
-          hits: [],
-          facets: {
-            category: {
-              c1: 880,
-            },
-          },
-        },
-        {
-          facets: {
-            category: {
-              c1: 880,
-            },
-          },
-        },
-      ]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
-    expect(rendering).toHaveBeenCalledTimes(2);
-    // Simulation end
-
-    // The test implement the following scenario:
-    // - toggle show more (internal state for show more: showing more)
-    // - search (show more is not active)
-    // - go back to empty string in search -> show more values
-    // - toggle show more again -> showing less values
-
-    const {
-      items: showLessItems,
-      searchForItems: search,
-      toggleShowMore,
-    } = rendering.mock.calls[1][0];
-    toggleShowMore();
-    const { items: showMoreItems } = rendering.mock.calls[2][0];
-
-    search('da');
-
-    const [
-      sffvFacet,
-      sffvQuery,
-      maxNbItems,
-      paramOverride,
-    ] = helper.searchForFacetValues.mock.calls[0];
-
-    expect(sffvQuery).toBe('da');
-    expect(sffvFacet).toBe('category');
-    expect(maxNbItems).toBe(2);
-    expect(paramOverride).toEqual({
-      highlightPreTag: '<mark>',
-      highlightPostTag: '</mark>',
-    });
-
-    return Promise.resolve().then(() => {
-      expect(rendering).toHaveBeenCalledTimes(4);
-      expect(rendering.mock.calls[3][0].isFromSearch).toBe(true);
-      expect(rendering.mock.calls[3][0].items).toEqual([
-        {
-          count: 33,
-          highlighted: 'Salvador <mark>Da</mark>li',
-          label: 'Salvador Dali',
-          value: 'Salvador Dali',
-        },
-        {
-          count: 9,
-          highlighted: '<mark>Da</mark>vidoff',
-          label: 'Davidoff',
-          value: 'Davidoff',
-        },
-      ]);
-
-      // when the search is empty we should simulate the search as if it was from an actual search
-      search('');
-      return Promise.resolve().then(() => {
-        expect(rendering).toHaveBeenCalledTimes(5);
-        const {
-          isFromSearch,
-          items: newShowMoreItems,
-        } = rendering.mock.calls[4][0];
-        expect(newShowMoreItems).toEqual(showMoreItems);
-        expect(isFromSearch).toBe(false);
-
-        toggleShowMore();
-
-        const { items: newShowLessItems } = rendering.mock.calls[5][0];
-        expect(newShowLessItems).toEqual(showLessItems);
-      });
     });
   });
 
