@@ -21,7 +21,7 @@
     "nodemon": "1.18.10",
     "react-test-renderer": "16.8.2",
     "webpack": "3.10.0",
-    "webpack-node-externals": "1.6.0"
+    "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
     "express": "4.16.2",
