@@ -3,10 +3,19 @@ type IndexArgs = {
   indexId?: string;
 };
 
+type Node = {
+  instance: any;
+  parent: Node | null;
+  indices: any[];
+  widgets: any[];
+  helper: any;
+};
+
 export class Index {
   public indexName: string;
   public indexId: string;
   public widgets: any[];
+  public node?: Node;
 
   constructor({ indexName, indexId = indexName }: IndexArgs) {
     this.indexName = indexName;
@@ -15,7 +24,11 @@ export class Index {
   }
 
   public addWidgets(widgets: any[]) {
-    this.widgets = this.widgets.concat(widgets);
+    if (this.node) {
+      this.node.instance.addWidgets(widgets, this.node);
+    } else {
+      this.widgets = this.widgets.concat(widgets);
+    }
 
     return this;
   }

@@ -20,12 +20,26 @@ function defaultCreateURL() {
 }
 
 // Issues:
-// - addWidgets: create N times the same index with same name (should re-use it)
-// - the merge of the search parameters is complex because of the default value
-// - render could be faster (have to test):
+// - 1. addWidgets: create N times the same index with same name (should re-use it)
+// - 2. we currently only merge the parent with the current node for the SP but we
+//   should bubble up in the tree until no parent is found. The merge of the SP
+//   is complex because of the default values
+// - 3. render could be faster (have to test):
 //   - render full tree on each result with branch on helper (current)
 //   - render part of the tree from the current node on each result
 //   - render full tree only once we have all the results
+// - 4. dynamicly added widgets we have to call init recursively only on the one that
+//   have been added. How to know that on a recusrive tree? Maybe the solution is
+//   to call `init` immediately after adding them? Other solutions?
+// - 5. right now every time we add a widget to an instance that is started it does
+//   N search based on the numbers of index that the widgets contains. We have to
+//   limit the search to only one call
+// - 6. the `index.widgets` and `node.widgets` are not sync after the start since we
+//   append the widgets directly rather than wait for the node to be created. See
+//   how we can get rid of the duplication.
+
+// Nice to have:
+// - 1. Use a Symbol to indentify which kind of wiget it is
 
 const createChildHelper = ({ parent, client, index, parameters }) => {
   const helper = algoliasearchHelper(client, index, parameters);
@@ -82,6 +96,7 @@ class InstantSearch extends EventEmitter {
     this.client = searchClient;
 
     this.tree = {
+      instance: this,
       parent: null,
       indices: [],
       widgets: [],
@@ -153,7 +168,8 @@ class InstantSearch extends EventEmitter {
     widgets
       .filter(widget => widget instanceof Index)
       .forEach(index => {
-        const inner = {
+        const innerNode = {
+          instance: this,
           parent: current,
           indices: [],
           widgets: [],
@@ -168,7 +184,9 @@ class InstantSearch extends EventEmitter {
           }),
         };
 
-        current.indices.push(inner);
+        current.indices.push(innerNode);
+
+        index.node = innerNode;
 
         // useful to trigger the N requets only the top level owns the search
         const derivedHelper = this.tree.helper.derive(parameters => {
@@ -177,46 +195,45 @@ class InstantSearch extends EventEmitter {
 
           console.log('derive:');
           console.log({ ...parameters });
-          console.log({ ...inner.helper.getState() });
+          console.log({ ...innerNode.helper.getState() });
           console.log('--');
 
           return algoliasearchHelper.SearchParameters.make({
             ...parameters,
-            ...inner.helper.getState(),
+            ...innerNode.helper.getState(),
           });
         });
 
-        derivedHelper.on('result', this._render.bind(this, inner.helper));
+        derivedHelper.on('result', this._render.bind(this, innerNode.helper));
 
-        this.addWidgets(index.widgets, inner);
+        // recursive call to add widgets on the tree
+        this.addWidgets(index.widgets, innerNode);
       });
 
     // Second part of the fix for #3148
     // if (lastWidget) this.widgets.push(lastWidget);
 
     // Init the widget directly if instantsearch has been already started
-    // if (this.started && Boolean(widgets.length)) {
-    //   this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
-    //     ...this.helper.state,
-    //   });
+    if (this.started && Boolean(widgets.length)) {
+      widgets.forEach(widget => {
+        if (widget.init) {
+          widget.init({
+            state: node.helper.state,
+            helper: node.helper,
+            templatesConfig: this.templatesConfig,
+            createURL: this._createAbsoluteURL,
+            onHistoryChange: this._onHistoryChange,
+            instantSearchInstance: this,
+          });
+        }
+      });
 
-    //   this.helper.setState(this.searchParameters);
+      this.tree.helper.search();
 
-    //   widgets.forEach(widget => {
-    //     if (widget.init) {
-    //       widget.init({
-    //         state: this.helper.state,
-    //         helper: this.helper,
-    //         templatesConfig: this.templatesConfig,
-    //         createURL: this._createAbsoluteURL,
-    //         onHistoryChange: this._onHistoryChange,
-    //         instantSearchInstance: this,
-    //       });
-    //     }
-    //   });
-
-    //   this.helper.search();
-    // }
+      console.log('search for widgets added:');
+      console.log(this.tree);
+      console.log('--');
+    }
   }
 
   // /**
