@@ -8645,10 +8645,10 @@ insert-css@^2.0.0:
   resolved "https://registry.yarnpkg.com/insert-css/-/insert-css-2.0.0.tgz#eb5d1097b7542f4c79ea3060d3aee07d053880f4"
   integrity sha1-610Ql7dUL0x56jBg067gfQU4gPQ=
 
-instantsearch.css@7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.1.0.tgz#49264d2bdc3d6c1f6395812ce9422ed1e987fccb"
-  integrity sha512-QL3iJTYG5NAP4LiZCojPg/m3dOELTNipq2FZ1IHFNZBTOsZCYQpFdI1UFB70oLijsHoq5WMBIG3ETbIzhcoDPQ==
+instantsearch.css@7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.1.1.tgz#64fa9f07ff39ab088b00cd3f0fa3ea697d2215f7"
+  integrity sha512-8+2FLbZk9uK+VRFJ4tXByMNX9KTsPOrY/nkw4oe+8HH+jcHoVMQkUdxbFu7mSUHUdZjh5kK9Xk8IQau1Sy+VKw==
 
 interpret@^1.0.0:
   version "1.1.0"
