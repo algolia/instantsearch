@@ -1,3 +1,12 @@
+# [4.4.0](https://github.com/algolia/create-instantsearch-app/compare/4.3.2...4.4.0) (2019-02-20)
+
+
+### Features
+
+* **vue:** add template for Vue v2 ([#370](https://github.com/algolia/create-instantsearch-app/issues/370)) ([ec43d28](https://github.com/algolia/create-instantsearch-app/commit/ec43d28))
+
+
+
 ## [4.3.2](https://github.com/algolia/create-instantsearch-app/compare/4.3.1...4.3.2) (2019-02-15)
 
 
