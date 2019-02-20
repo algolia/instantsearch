@@ -69,7 +69,7 @@
     "bundlesize": "0.17.1",
     "conventional-changelog-cli": "2.0.12",
     "copy-webpack-plugin": "4.6.0",
-    "css-loader": "0.28.11",
+    "css-loader": "2.1.0",
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.9.1",
     "enzyme-to-json": "3.3.5",
