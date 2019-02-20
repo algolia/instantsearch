@@ -20,7 +20,7 @@
     "react-test-renderer": "16.8.2"
   },
   "dependencies": {
-    "@ptomasroos/react-native-multi-slider": "0.0.11",
+    "@ptomasroos/react-native-multi-slider": "1.0.0",
     "expo": "25.1.2",
     "lodash": "4.17.11",
     "prop-types": "15.6.0",
