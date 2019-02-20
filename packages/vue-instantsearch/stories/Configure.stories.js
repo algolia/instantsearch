@@ -3,7 +3,11 @@ import { previewWrapper } from './utils';
 import { withKnobs, object } from '@storybook/addon-knobs/vue';
 
 storiesOf('ais-configure', module)
-  .addDecorator(previewWrapper())
+  .addDecorator(
+    previewWrapper({
+      filters: '<ais-refinement-list attribute="brand" />',
+    })
+  )
   .addDecorator(withKnobs)
   .add('default', () => ({
     template: `
@@ -13,6 +17,11 @@ storiesOf('ais-configure', module)
   .add('with 1 hit per page', () => ({
     template: `
       <ais-configure :hitsPerPage="1" />
+    `,
+  }))
+  .add('with 1 hit per page (kebab)', () => ({
+    template: `
+      <ais-configure :hits-per-page.camel="1" />
     `,
   }))
   .add('external toggler', () => ({

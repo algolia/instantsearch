@@ -29,6 +29,7 @@ export const previewWrapper = ({
   `,
   filters = `
     <ais-refinement-list attribute="brand" />
+    <ais-configure :hitsPerPage="3" />
   `,
 } = {}) => () => ({
   template: `
@@ -36,7 +37,6 @@ export const previewWrapper = ({
       :search-client="searchClient"
       index-name="${indexName}"
     >
-      <ais-configure :hitsPerPage="3" />
       <div class="vis-container vis-container-preview">
         <story />
       </div>
