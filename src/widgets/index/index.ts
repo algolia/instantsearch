@@ -15,7 +15,7 @@ export class Index {
   }
 
   public addWidgets(widgets: any[]) {
-    this.widgets = widgets;
+    this.widgets = this.widgets.concat(widgets);
 
     return this;
   }

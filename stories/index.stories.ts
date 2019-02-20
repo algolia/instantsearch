@@ -25,8 +25,24 @@ storiesOf('Index', module).add(
     container.appendChild(bestbuySearchBox);
     container.appendChild(bestbuyHits);
 
+    const instantSearchIndex = index({
+      indexName: 'instant_search',
+    });
+
+    const bestbuyIndex = index({
+      indexName: 'bestbuy',
+    });
+
     search.addWidgets([
-      index({ indexName: 'instant_search' }).addWidgets([
+      instantsearch.widgets.configure({
+        hitsPerPage: 3,
+      }),
+
+      instantSearchIndex.addWidgets([
+        instantsearch.widgets.configure({
+          hitsPerPage: 2,
+        }),
+
         instantsearch.widgets.searchBox({
           container: instantSearchSearchBox,
         }),
@@ -38,21 +54,35 @@ storiesOf('Index', module).add(
               '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
           },
         }),
-      ]),
 
-      index({ indexName: 'bestbuy' }).addWidgets([
-        instantsearch.widgets.searchBox({
-          container: bestbuySearchBox,
-        }),
+        bestbuyIndex.addWidgets([
+          instantsearch.widgets.configure({
+            hitsPerPage: 1,
+          }),
 
-        instantsearch.widgets.hits({
-          container: bestbuyHits,
-          templates: {
-            item:
-              '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
-          },
-        }),
+          instantsearch.widgets.searchBox({
+            container: bestbuySearchBox,
+          }),
+
+          instantsearch.widgets.hits({
+            container: bestbuyHits,
+            templates: {
+              item:
+                '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+            },
+          }),
+        ]),
       ]),
     ]);
+
+    // bestbuyIndex.addWidgets([
+    //   instantsearch.widgets.hits({
+    //     container: bestbuyHits,
+    //     templates: {
+    //       item:
+    //         '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+    //     },
+    //   }),
+    // ]);
   })
 );

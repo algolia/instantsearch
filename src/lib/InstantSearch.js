@@ -19,6 +19,14 @@ function defaultCreateURL() {
   return '#';
 }
 
+// Issues:
+// - addWidgets: create N times the same index with same name (should re-use it)
+// - the merge of the search parameters is complex because of the default value
+// - render could be faster (have to test):
+//   - render full tree on each result with branch on helper (current)
+//   - render part of the tree from the current node on each result
+//   - render full tree only once we have all the results
+
 const createChildHelper = ({ parent, client, index, parameters }) => {
   const helper = algoliasearchHelper(client, index, parameters);
 
@@ -75,12 +83,12 @@ class InstantSearch extends EventEmitter {
 
     this.tree = {
       parent: null,
+      indices: [],
+      widgets: [],
       helper: algoliasearchHelper(this.client, indexName, {
         ...searchParameters,
         index: indexName,
       }),
-      indices: [],
-      widgets: [],
     };
 
     this.templatesConfig = {
@@ -106,7 +114,7 @@ class InstantSearch extends EventEmitter {
     this.addWidgets([widget]);
   }
 
-  addWidgets(widgets) {
+  addWidgets(widgets, node) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         'You need to provide an array of widgets or call `addWidget()`'
@@ -119,58 +127,69 @@ class InstantSearch extends EventEmitter {
     // fixes #3148
     // const lastWidget = this.widgets.pop();
 
-    widgets.forEach(widget => {
-      if (widget.render === undefined && widget.init === undefined) {
-        throw new Error('Widget definition missing render or init method');
-      }
+    const current = node || this.tree;
 
-      let current = this.tree;
+    // Widgets
+    widgets
+      .filter(widget => !(widget instanceof Index))
+      .forEach(widget => {
+        if (widget.render === undefined && widget.init === undefined) {
+          throw new Error('Widget definition missing render or init method');
+        }
 
-      if (widget instanceof Index) {
-        const node = {
-          // @TODO: resolve parent
-          parent: this.tree,
+        current.helper.setState(
+          enhanceConfiguration()(
+            {
+              ...current.helper.getState(),
+            },
+            widget
+          )
+        );
+
+        current.widgets.push(widget);
+      });
+
+    // Indices
+    widgets
+      .filter(widget => widget instanceof Index)
+      .forEach(index => {
+        const inner = {
+          parent: current,
+          indices: [],
+          widgets: [],
           helper: createChildHelper({
-            parent: this.tree.helper,
+            parent: current.helper,
             client: this.client,
-            index: widget.indexName,
+            index: index.indexName,
             parameters: {
-              ...this.tree.helper.getState(),
-              index: widget.indexName,
+              ...current.helper.getState(),
+              index: index.indexName,
             },
           }),
-          indices: [],
-          widgets: widget.widgets,
         };
 
-        this.tree.indices.push(node);
+        current.indices.push(inner);
 
-        // useful to trigger the N requets
+        // useful to trigger the N requets only the top level owns the search
         const derivedHelper = this.tree.helper.derive(parameters => {
           // @TODO: resolve the search parameters from the tree
           // node.helper.getState() -> node.parent.helper.getState()
+
+          console.log('derive:');
+          console.log({ ...parameters });
+          console.log({ ...inner.helper.getState() });
+          console.log('--');
+
           return algoliasearchHelper.SearchParameters.make({
             ...parameters,
-            ...node.helper.getState(),
+            ...inner.helper.getState(),
           });
         });
 
-        derivedHelper.on('result', this._render.bind(this, node.helper));
+        derivedHelper.on('result', this._render.bind(this, inner.helper));
 
-        current = node;
-      }
-
-      current.helper.setState(
-        enhanceConfiguration()(
-          {
-            ...current.helper.getState(),
-          },
-          widget
-        )
-      );
-
-      current.widgets.push(widget);
-    });
+        this.addWidgets(index.widgets, inner);
+      });
 
     // Second part of the fix for #3148
     // if (lastWidget) this.widgets.push(lastWidget);
@@ -322,6 +341,10 @@ class InstantSearch extends EventEmitter {
     //   };
     // }
 
+    console.log('Start');
+    console.log(this.tree);
+    console.log('--');
+
     this._searchStalledTimer = null;
     this._isSearchStalled = true;
 
@@ -391,7 +414,7 @@ class InstantSearch extends EventEmitter {
         }
       });
 
-      return node.indices.forEach(inner => walk(inner));
+      node.indices.forEach(inner => walk(inner));
     };
 
     walk(this.tree);
@@ -417,7 +440,7 @@ class InstantSearch extends EventEmitter {
         });
       }
 
-      return node.indices.forEach(inner => walk(inner));
+      node.indices.forEach(inner => walk(inner));
     };
 
     if (!this.tree.helper.hasPendingRequests()) {
