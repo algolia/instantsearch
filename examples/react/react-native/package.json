@@ -30,7 +30,7 @@
     "react-native": "0.52.0",
     "react-native-modal-dropdown": "0.6.2",
     "react-native-router-flux": "4.0.0-beta.28",
-    "react-native-star-rating": "1.0.8",
+    "react-native-star-rating": "1.1.0",
     "react-native-vector-icons": "4.6.0"
   },
   "jest": {
