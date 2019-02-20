@@ -5514,10 +5514,12 @@ react-native-maps@0.19.0:
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.19.0.tgz#ce94fad1cf360e335cb4338a68c95f791e869074"
   integrity sha512-1THgPVHh8/NL/kLIyPWIsfTpjncT94O92xW+NOt+VQrdMMLX2mynyKnD/we02H29urAtYBXO8ZmVTrZ4ITn8mg==
 
-react-native-modal-dropdown@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.6.0.tgz#dbe01b069dcb24bf937eaa7900469c5b387cef33"
-  integrity sha512-sLIuTIPpFThvC/ITCV5++fWX3XOufUR8S7m/oYmkG4oFYDuYc36AGELaXGw7mTI84XWA9FqUZsHK58/hvi8XHQ==
+react-native-modal-dropdown@0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.6.2.tgz#da6027b3546d2031fbce46242bffc95561e13599"
+  integrity sha512-1jzByA+ME+q0mZJ2rZrLsf6jVwJhNxNHdg7I50xYZ9oYJsmmKwF9r/ks95tZxxks4Zvd7/FnaveNtyd+uevXAw==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-native-router-flux@4.0.0-beta.28:
   version "4.0.0-beta.28"
