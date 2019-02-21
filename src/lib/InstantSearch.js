@@ -72,7 +72,7 @@ class InstantSearch extends EventEmitter {
       throw new Error(
         `The \`searchClient\` must implement a \`search\` method.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/`
+See: http://alg.li/isjs-backend`
       );
     }
 
@@ -144,7 +144,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       if (widget.render === undefined && widget.init === undefined) {
         throw new Error(`The widget definition expects a \`render\` and/or an \`init\` method.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/`);
+See: http://alg.li/isjs-custom-widgets`);
       }
 
       this.widgets.push(widget);
@@ -213,7 +213,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
         throw new Error(
           `The \`dispose\` method is required to remove the widget.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/`
+See: http://alg.li/isjs-widget-lifecycle`
         );
       }
 
@@ -268,7 +268,9 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
    */
   start() {
     if (this.started) {
-      throw new Error(withUsage('The `start` method can only be called once.'));
+      throw new Error(
+        withUsage('The `start` method has already been called once.')
+      );
     }
 
     let searchParametersFromUrl;

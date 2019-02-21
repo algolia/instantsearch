@@ -46,7 +46,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchClient\` must implement a \`search\` method.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
+See: http://alg.li/isjs-backend"
 `);
   });
 
@@ -76,7 +76,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     }).toThrowErrorMatchingInlineSnapshot(`
 "The widget definition expects a \`render\` and/or an \`init\` method.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/"
+See: http://alg.li/isjs-custom-widgets"
 `);
   });
 
@@ -130,7 +130,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`dispose\` method is required to remove the widget.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/"
+See: http://alg.li/isjs-widget-lifecycle"
 `);
   });
 });
@@ -769,7 +769,7 @@ it('Does not allow to start twice', () => {
   expect(() => {
     instance.start();
   }).toThrowErrorMatchingInlineSnapshot(`
-"The \`start\` method can only be called once.
+"The \`start\` method has already been called once.
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
