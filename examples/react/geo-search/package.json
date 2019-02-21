@@ -6,10 +6,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "CI=true react-scripts test --env=jsdom"
+    "test": "CI=true react-scripts test"
   },
   "devDependencies": {
-    "react-scripts": "1.1.5",
+    "react-scripts": "2.1.5",
     "react-test-renderer": "16.8.2"
   },
   "dependencies": {
@@ -19,5 +19,11 @@
     "react-dom": "16.8.2",
     "react-instantsearch-dom": "5.4.0",
     "react-instantsearch-dom-maps": "5.4.0"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
