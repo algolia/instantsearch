@@ -37,6 +37,11 @@ function defaultCreateURL() {
 // - 6. the `index.widgets` and `node.widgets` are not sync after the start since we
 //   append the widgets directly rather than wait for the node to be created. See
 //   how we can get rid of the duplication.
+// - 7. the removeWidget function removes correctly the current widget but it does not
+//   compute the state for the complete tree. Only the current level is recreated but
+//   we should probably do it for the rest of the tree below? Do we really have to do
+//   it on each iteration though? Could we remove all the widgets and compute the state
+//   at the end? Not sure since we use the `nextState` we can reduce it I think.
 
 // Nice to have:
 // - 1. Use a Symbol to indentify which kind of wiget it is
@@ -94,6 +99,7 @@ class InstantSearch extends EventEmitter {
     //     }
 
     this.client = searchClient;
+    this.searchParameters = searchParameters;
 
     this.tree = {
       instance: this,
@@ -236,70 +242,52 @@ class InstantSearch extends EventEmitter {
     }
   }
 
-  // /**
-  //  * Removes a widget. This can be done after the InstantSearch has been started. This feature
-  //  * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
-  //  * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20removeWidget).
-  //  * @param  {Widget} widget The widget instance to remove from InstantSearch. This widget must implement a `dispose()` method in order to be gracefully removed.
-  //  * @return {undefined} This method does not return anything
-  //  */
-  // removeWidget(widget) {
-  //   this.removeWidgets([widget]);
-  // }
+  removeWidgets(widgets, node) {
+    if (!Array.isArray(widgets)) {
+      throw new Error(
+        'You need to provide an array of widgets or call `removeWidget()`'
+      );
+    }
 
-  // /**
-  //  * Removes multiple widgets. This can be done only after the InstantSearch has been started. This feature
-  //  * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
-  //  * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
-  //  * @param  {Widget[]} widgets Array of widgets instances to remove from InstantSearch.
-  //  * @return {undefined} This method does not return anything
-  //  */
-  // removeWidgets(widgets) {
-  //   if (!Array.isArray(widgets)) {
-  //     throw new Error(
-  //       'You need to provide an array of widgets or call `removeWidget()`'
-  //     );
-  //   }
+    const current = node || this.tree;
 
-  //   widgets.forEach(widget => {
-  //     if (
-  //       !this.widgets.includes(widget) ||
-  //       typeof widget.dispose !== 'function'
-  //     ) {
-  //       throw new Error(
-  //         'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
-  //       );
-  //     }
+    // Widgets
+    widgets
+      .filter(widget => !(widget instanceof Index))
+      .forEach(widget => {
+        if (
+          !current.widgets.includes(widget) ||
+          typeof widget.dispose !== 'function'
+        ) {
+          throw new Error(
+            'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
+          );
+        }
 
-  //     this.widgets = this.widgets.filter(w => w !== widget);
+        current.widgets = current.widgets.filter(w => w !== widget);
 
-  //     const nextState = widget.dispose({
-  //       helper: this.helper,
-  //       state: this.helper.getState(),
-  //     });
+        const nextState = widget.dispose({
+          helper: current.helper,
+          state: current.helper.getState(),
+        });
 
-  //     // re-compute remaining widgets to the state
-  //     // in a case two widgets were using the same configuration but we removed one
-  //     if (nextState) {
-  //       this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
-  //         ...nextState,
-  //       });
+        if (nextState) {
+          current.helper.setState(
+            current.widgets.reduce(enhanceConfiguration({}), {
+              ...this.searchParameters,
+              ...nextState,
+            })
+          );
+        }
+      });
 
-  //       this.helper.setState(this.searchParameters);
-  //     }
-  //   });
+    // Indices
 
-  //   // If there's multiple call to `removeWidget()` let's wait until they are all made
-  //   // and then check for widgets.length & make a search on next tick
-  //   //
-  //   // This solves an issue where you unmount a page and removing widget by widget
-  //   setTimeout(() => {
-  //     // no need to trigger a search if we don't have any widgets left
-  //     if (this.widgets.length > 0) {
-  //       this.helper.search();
-  //     }
-  //   }, 0);
-  // }
+    setTimeout(() => {
+      // if (this.widgets.length > 0) {}
+      this.tree.helper.search();
+    }, 0);
+  }
 
   // /**
   //  * Clears the cached answers from Algolia and triggers a new search.
