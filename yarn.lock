@@ -3710,10 +3710,10 @@ atob@^2.0.0:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.0.tgz#ab2b150e51d7b122b9efc8d7340c06b6c41076bc"
   integrity sha512-SuiKH8vbsOyCALjA/+EINmt/Kdl+TQPrtFgW7XZZcwtryFu9e5kQoX3bjCW6mIvGH1fbeAZZuvwGR5IlBRznGw==
 
-autocomplete.js@^0.35.0:
-  version "0.35.0"
-  resolved "https://registry.yarnpkg.com/autocomplete.js/-/autocomplete.js-0.35.0.tgz#d397c0c2261af1b556e0a3d8be2e6dd59418d411"
-  integrity sha512-JPtuW6wIYrNnY0RVsWuNTvli7VHSqS7Tg+3J3JrHA41Lod3cRqMkiTCwzznJwwSiqDhCl49adPBmpWJJ6CRsbA==
+autocomplete.js@^0.36.0:
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/autocomplete.js/-/autocomplete.js-0.36.0.tgz#94fe775fe64b6cd42e622d076dc7fd26bedd837b"
+  integrity sha512-jEwUXnVMeCHHutUt10i/8ZiRaCb0Wo+ZyKxeGsYwBDtw6EJHqEeDrq4UwZRD8YBSvp3g6klP678il2eeiVXN2Q==
   dependencies:
     immediate "^3.2.3"
 
@@ -12133,14 +12133,14 @@ pkg-up@2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@1.15.5:
-  version "1.15.5"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.15.5.tgz#d853a401b6a1bc2a7167c35e9dd1252c819ee1f2"
-  integrity sha512-yW9wGWuRfI0CWQs+n7JRwKZ5YZl6Y9nXzxFLvOCZUPNBl6QryOpWlQG/u6LqltxNoWtsqaFupGKGA3itl0YtbA==
+places.js@1.16.1:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.16.1.tgz#5e62a917bb17fb44633adf944dd3cb3497393c7f"
+  integrity sha512-r6qB/SZi7cp6IQP6V6LPkaMEZCGLw3bzKXS01Uf+cKbQWNDmjbM8UA3TnD2pwfydetZa7mI7yDZZdVubB4BhQg==
   dependencies:
     algolia-aerial "^1.5.3"
     algoliasearch "^3.31.0"
-    autocomplete.js "^0.35.0"
+    autocomplete.js "^0.36.0"
     events "^3.0.0"
     insert-css "^2.0.0"
 
