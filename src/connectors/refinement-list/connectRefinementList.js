@@ -242,7 +242,12 @@ export default function connectRefinementList(renderFn, unmountFn) {
         };
 
         helper
-          .searchForFacetValues(attribute, query, limit, tags)
+          .searchForFacetValues(
+            attribute,
+            query,
+            isShowingMore ? showMoreLimit : limit,
+            tags
+          )
           .then(results => {
             const facetValues = escapeFacetValues
               ? escapeFacets(results.facetHits)
