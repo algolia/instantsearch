@@ -72,7 +72,7 @@ class InstantSearch extends EventEmitter {
       throw new Error(
         `The \`searchClient\` must implement a \`search\` method.
 
-See: http://alg.li/isjs-backend`
+See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/`
       );
     }
 
@@ -144,7 +144,7 @@ See: http://alg.li/isjs-backend`
       if (widget.render === undefined && widget.init === undefined) {
         throw new Error(`The widget definition expects a \`render\` and/or an \`init\` method.
 
-See: http://alg.li/isjs-custom-widgets`);
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/`);
       }
 
       this.widgets.push(widget);
@@ -213,7 +213,7 @@ See: http://alg.li/isjs-custom-widgets`);
         throw new Error(
           `The \`dispose\` method is required to remove the widget.
 
-See: http://alg.li/isjs-widget-lifecycle`
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/#the-widget-lifecycle-and-api`
         );
       }
 

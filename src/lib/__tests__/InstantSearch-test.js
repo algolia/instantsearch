@@ -46,7 +46,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchClient\` must implement a \`search\` method.
 
-See: http://alg.li/isjs-backend"
+See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
 `);
   });
 
@@ -76,7 +76,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     }).toThrowErrorMatchingInlineSnapshot(`
 "The widget definition expects a \`render\` and/or an \`init\` method.
 
-See: http://alg.li/isjs-custom-widgets"
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/"
 `);
   });
 
@@ -130,7 +130,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`dispose\` method is required to remove the widget.
 
-See: http://alg.li/isjs-widget-lifecycle"
+See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/#the-widget-lifecycle-and-api"
 `);
   });
 });
