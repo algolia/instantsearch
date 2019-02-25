@@ -97,23 +97,25 @@ storiesOf('Index', module).add(
       instantSearchIndex.addWidgets([instantSearchSearchHits]),
     ]);
 
+    instantSearchIndex.addWidgets([
+      bestbuyIndex.addWidgets([bestbuySearchBox, bestbuyHits]),
+    ]);
+
     // Add widgets dynamically
     $buttonAddWidgets.addEventListener('click', () => {
-      instantSearchIndex.addWidgets([
-        bestbuyIndex.addWidgets([bestbuySearchBox, bestbuyHits]),
-      ]);
+      instantSearchIndex.addWidgets([bestbuyIndex]);
     });
 
     // Remove widgets dynamically
     $buttonRemoveidgets.addEventListener('click', () => {
       // remove a top level widget
-      search.removeWidgets([topLevelConfigure]);
+      // search.removeWidgets([topLevelConfigure]);
 
       // remove a widget of an index
       // instantSearchIndex.removeWidgets([instantSearchConfigure]);
 
       // remove an index
-      // remove bestbuyIndex -> drop bestby queries
+      instantSearchIndex.removeWidgets([bestbuyIndex]);
     });
   })
 );

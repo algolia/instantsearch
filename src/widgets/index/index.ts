@@ -33,6 +33,18 @@ export class Index {
     return this;
   }
 
+  public removeWidgets(widgets: any[]) {
+    if (this.node) {
+      this.node.instance.removeWidgets(widgets, this.node);
+    } else {
+      widgets.forEach(widget => {
+        this.widgets = this.widgets.filter(w => w !== widget);
+      });
+    }
+
+    return this;
+  }
+
   public render() {
     // avoid to throw
   }

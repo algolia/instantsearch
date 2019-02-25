@@ -36,12 +36,32 @@ function defaultCreateURL() {
 //   limit the search to only one call
 // - 6. the `index.widgets` and `node.widgets` are not sync after the start since we
 //   append the widgets directly rather than wait for the node to be created. See
-//   how we can get rid of the duplication.
+//   how we can get rid of the duplication. Leads to issue with the lyfecycle since it
+//   is not sync when add -> remove -> add -> remove it's not indepotent. We have to
+//   keep them sync or review the structure to avoid this. Huge memory leak on the index
+//   widget since we don't clear the `node` on it. The reference of the derivedHelper is
+//   kept.
 // - 7. the removeWidget function removes correctly the current widget but it does not
 //   compute the state for the complete tree. Only the current level is recreated but
 //   we should probably do it for the rest of the tree below? Do we really have to do
 //   it on each iteration though? Could we remove all the widgets and compute the state
 //   at the end? Not sure since we use the `nextState` we can reduce it I think.
+// - 8. the removeWidget function does not resolve the tree to recreate the state. Do we
+//   have to do it? The tree is already resolved inside the derive function. We do it in
+//   the POC to avoid the issue with `this.searchParamters`. But we could maybe avoid it?
+//   Note that the `this.searchParameters` are only applied on the top level widgets then
+//   inherited for the tree.
+// - 9. the removeWidgets method triggers N calls to search with the recursive approach
+//   we took. We should avoid them since only on a useful onnce the state is ready. This
+//   issue is linked to the two above.
+// - 10. Find a better name or structure for the node it's really confusing to have the
+//   index widget + indices that are not widget but node. For the remove it feels a bit
+//   confusing.
+// - 11. Take a decision on how removeWidget behaves. Once we remove an index from the
+//   tree: its widgets also removed? its widgets are kept? The first solution means that
+//   we have to add them back if we add the same index again. The second approch means
+//   that the index + its widgets are added back. See at the usage with Vanilla, Vue +
+//   SEs feedback.
 
 // Nice to have:
 // - 1. Use a Symbol to indentify which kind of wiget it is
@@ -104,6 +124,7 @@ class InstantSearch extends EventEmitter {
     this.tree = {
       instance: this,
       parent: null,
+      derivedHelper: null,
       indices: [],
       widgets: [],
       helper: algoliasearchHelper(this.client, indexName, {
@@ -174,25 +195,15 @@ class InstantSearch extends EventEmitter {
     widgets
       .filter(widget => widget instanceof Index)
       .forEach(index => {
-        const innerNode = {
-          instance: this,
-          parent: current,
-          indices: [],
-          widgets: [],
-          helper: createChildHelper({
-            parent: current.helper,
-            client: this.client,
+        const helper = createChildHelper({
+          parent: current.helper,
+          client: this.client,
+          index: index.indexName,
+          parameters: {
+            ...current.helper.getState(),
             index: index.indexName,
-            parameters: {
-              ...current.helper.getState(),
-              index: index.indexName,
-            },
-          }),
-        };
-
-        current.indices.push(innerNode);
-
-        index.node = innerNode;
+          },
+        });
 
         // useful to trigger the N requets only the top level owns the search
         const derivedHelper = this.tree.helper.derive(parameters => {
@@ -201,16 +212,29 @@ class InstantSearch extends EventEmitter {
 
           console.log('derive:');
           console.log({ ...parameters });
-          console.log({ ...innerNode.helper.getState() });
+          console.log({ ...helper.getState() });
           console.log('--');
 
           return algoliasearchHelper.SearchParameters.make({
             ...parameters,
-            ...innerNode.helper.getState(),
+            ...helper.getState(),
           });
         });
 
-        derivedHelper.on('result', this._render.bind(this, innerNode.helper));
+        derivedHelper.on('result', this._render.bind(this, helper));
+
+        const innerNode = {
+          instance: this,
+          parent: current,
+          indices: [],
+          widgets: [],
+          helper,
+          derivedHelper,
+        };
+
+        current.indices.push(innerNode);
+
+        index.node = innerNode;
 
         // recursive call to add widgets on the tree
         this.addWidgets(index.widgets, innerNode);
@@ -273,19 +297,39 @@ class InstantSearch extends EventEmitter {
 
         if (nextState) {
           current.helper.setState(
+            // @TODO: resolve the search parameters from the tree
+            // node.helper.getState() -> node.parent.helper.getState()
             current.widgets.reduce(enhanceConfiguration({}), {
               ...this.searchParameters,
+              ...current.parent.helper.getState(),
               ...nextState,
             })
           );
         }
       });
 
-    // Indices
+    // Widget indices
+    widgets
+      .filter(widget => widget instanceof Index)
+      .forEach(index => {
+        current.indices = current.indices.filter(n => n !== index.node);
+
+        index.node.derivedHelper.detach();
+        this.removeWidgets(index.widgets, index.node);
+
+        index.node.indices.forEach(innerNode => {
+          innerNode.derivedHelper.detach();
+          this.removeWidgets(innerNode.widgets, innerNode);
+          delete innerNode.parent.node;
+        });
+
+        delete index.node;
+      });
 
     setTimeout(() => {
       // if (this.widgets.length > 0) {}
       this.tree.helper.search();
+      console.log('------');
     }, 0);
   }
 
@@ -373,6 +417,8 @@ class InstantSearch extends EventEmitter {
     this.tree.helper.on('error', e => this.emit('error', e));
 
     this.tree.helper.search();
+
+    console.log('------');
 
     // track we started the search if we add more widgets,
     // to init them directly after add
