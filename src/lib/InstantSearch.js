@@ -19,53 +19,6 @@ function defaultCreateURL() {
   return '#';
 }
 
-// Issues:
-// - 1. addWidgets: create N times the same index with same name (should re-use it)
-// - 2. we currently only merge the parent with the current node for the SP but we
-//   should bubble up in the tree until no parent is found. The merge of the SP
-//   is complex because of the default values
-// - 3. render could be faster (have to test):
-//   - render full tree on each result with branch on helper (current)
-//   - render part of the tree from the current node on each result
-//   - render full tree only once we have all the results
-// - 4. dynamicly added widgets we have to call init recursively only on the one that
-//   have been added. How to know that on a recusrive tree? Maybe the solution is
-//   to call `init` immediately after adding them? Other solutions?
-// - 5. right now every time we add a widget to an instance that is started it does
-//   N search based on the numbers of index that the widgets contains. We have to
-//   limit the search to only one call
-// - 6. the `index.widgets` and `node.widgets` are not sync after the start since we
-//   append the widgets directly rather than wait for the node to be created. See
-//   how we can get rid of the duplication. Leads to issue with the lyfecycle since it
-//   is not sync when add -> remove -> add -> remove it's not indepotent. We have to
-//   keep them sync or review the structure to avoid this. Huge memory leak on the index
-//   widget since we don't clear the `node` on it. The reference of the derivedHelper is
-//   kept.
-// - 7. the removeWidget function removes correctly the current widget but it does not
-//   compute the state for the complete tree. Only the current level is recreated but
-//   we should probably do it for the rest of the tree below? Do we really have to do
-//   it on each iteration though? Could we remove all the widgets and compute the state
-//   at the end? Not sure since we use the `nextState` we can reduce it I think.
-// - 8. the removeWidget function does not resolve the tree to recreate the state. Do we
-//   have to do it? The tree is already resolved inside the derive function. We do it in
-//   the POC to avoid the issue with `this.searchParamters`. But we could maybe avoid it?
-//   Note that the `this.searchParameters` are only applied on the top level widgets then
-//   inherited for the tree.
-// - 9. the removeWidgets method triggers N calls to search with the recursive approach
-//   we took. We should avoid them since only on a useful onnce the state is ready. This
-//   issue is linked to the two above.
-// - 10. Find a better name or structure for the node it's really confusing to have the
-//   index widget + indices that are not widget but node. For the remove it feels a bit
-//   confusing.
-// - 11. Take a decision on how removeWidget behaves. Once we remove an index from the
-//   tree: its widgets also removed? its widgets are kept? The first solution means that
-//   we have to add them back if we add the same index again. The second approch means
-//   that the index + its widgets are added back. See at the usage with Vanilla, Vue +
-//   SEs feedback.
-
-// Nice to have:
-// - 1. Use a Symbol to indentify which kind of wiget it is
-
 const createChildHelper = ({ parent, client, index, parameters }) => {
   const helper = algoliasearchHelper(client, index, parameters);
 
