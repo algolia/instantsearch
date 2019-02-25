@@ -63,7 +63,7 @@ storiesOf('RefinementList', module)
     })
   )
   .add(
-    'with search inside items (using a custom searchableNoResults template)',
+    'with search inside items (using custom templates)',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.refinementList({
@@ -73,6 +73,9 @@ storiesOf('RefinementList', module)
           searchablePlaceholder: 'Find other brands...',
           templates: {
             searchableNoResults: 'No results found',
+            searchableSubmit: 'Go',
+            searchableReset: 'x',
+            searchableLoadingIndicator: '•',
           },
         })
       );

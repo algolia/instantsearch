@@ -20,7 +20,6 @@ const withUsage = createDocumentationMessageGenerator({
 /**
  * @typedef {Object} SearchBoxRenderingOptions
  * @property {string} query The query from the last search.
- * @property {function(SearchParameters)} onHistoryChange Registers a callback when the browser history changes.
  * @property {function(string)} refine Sets a new query and searches.
  * @property {function()} clear Remove the query and perform search.
  * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
@@ -83,7 +82,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
         this._clear();
       },
 
-      init({ helper, onHistoryChange, instantSearchInstance }) {
+      init({ helper, instantSearchInstance }) {
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
 
@@ -104,12 +103,9 @@ export default function connectSearchBox(renderFn, unmountFn) {
             : setQueryAndSearch;
         })();
 
-        this._onHistoryChange = onHistoryChange;
-
         renderFn(
           {
             query: helper.state.query,
-            onHistoryChange: this._onHistoryChange,
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -125,7 +121,6 @@ export default function connectSearchBox(renderFn, unmountFn) {
         renderFn(
           {
             query: helper.state.query,
-            onHistoryChange: this._onHistoryChange,
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,

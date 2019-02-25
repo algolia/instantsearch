@@ -14,6 +14,33 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
 });
 const suit = component('RefinementList');
+const searchBoxSuit = component('SearchBox');
+
+/**
+ * Transforms the searchable templates by removing the `searchable` prefix.
+ *
+ * This makes them usable in the `SearchBox` component.
+ *
+ * @param {object} templates The widget templates
+ * @returns {object} the formatted templates
+ */
+function transformTemplates(templates) {
+  const allTemplates = {
+    ...templates,
+    submit: templates.searchableSubmit,
+    reset: templates.searchableReset,
+    loadingIndicator: templates.searchableLoadingIndicator,
+  };
+
+  const {
+    searchableReset,
+    searchableSubmit,
+    searchableLoadingIndicator,
+    ...transformedTemplates
+  } = allTemplates;
+
+  return transformedTemplates;
+}
 
 const renderer = ({
   containerNode,
@@ -41,7 +68,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
@@ -172,7 +198,7 @@ export default function refinementList({
   searchableEscapeFacetValues = true,
   searchableIsAlwaysActive = true,
   cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
+  templates: userTemplates = defaultTemplates,
   transformItems,
 } = {}) {
   if (!container) {
@@ -183,10 +209,10 @@ export default function refinementList({
     ? Boolean(searchableEscapeFacetValues)
     : false;
   const containerNode = getContainerNode(container);
-  const allTemplates = {
+  const templates = transformTemplates({
     ...defaultTemplates,
-    ...templates,
-  };
+    ...userTemplates,
+  });
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
@@ -220,12 +246,47 @@ export default function refinementList({
       suit({ descendantName: 'showMore', modifierName: 'disabled' }),
       userCssClasses.disabledShowMore
     ),
+    searchable: {
+      root: cx(searchBoxSuit(), userCssClasses.searchableRoot),
+      form: cx(
+        searchBoxSuit({ descendantName: 'form' }),
+        userCssClasses.searchableForm
+      ),
+      input: cx(
+        searchBoxSuit({ descendantName: 'input' }),
+        userCssClasses.searchableInput
+      ),
+      submit: cx(
+        searchBoxSuit({ descendantName: 'submit' }),
+        userCssClasses.searchableSubmit
+      ),
+      submitIcon: cx(
+        searchBoxSuit({ descendantName: 'submitIcon' }),
+        userCssClasses.searchableSubmitIcon
+      ),
+      reset: cx(
+        searchBoxSuit({ descendantName: 'reset' }),
+        userCssClasses.searchableReset
+      ),
+      resetIcon: cx(
+        searchBoxSuit({ descendantName: 'resetIcon' }),
+        userCssClasses.searchableResetIcon
+      ),
+      loadingIndicator: cx(
+        searchBoxSuit({ descendantName: 'loadingIndicator' }),
+        userCssClasses.searchableLoadingIndicator
+      ),
+      loadingIcon: cx(
+        searchBoxSuit({ descendantName: 'loadingIcon' }),
+        userCssClasses.searchableLoadingIcon
+      ),
+    },
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    templates: allTemplates,
+    templates,
     renderState: {},
     searchable,
     searchablePlaceholder,

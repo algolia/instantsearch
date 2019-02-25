@@ -28,6 +28,7 @@ describe('RefinementList', () => {
         ...defaultProps,
         cssClasses: {
           root: 'root',
+          searchable: {},
         },
       };
 
@@ -41,6 +42,7 @@ describe('RefinementList', () => {
         ...defaultProps,
         cssClasses: {
           item: 'item',
+          searchable: {},
         },
         facetValues: [{ value: 'foo', isRefined: true }],
       };
@@ -55,6 +57,7 @@ describe('RefinementList', () => {
         ...defaultProps,
         cssClasses: {
           selectedItem: 'active',
+          searchable: {},
         },
         facetValues: [
           { value: 'foo', isRefined: true },
@@ -232,6 +235,17 @@ describe('RefinementList', () => {
       noResults: 'noResults',
       showMore: 'showMore',
       disabledShowMore: 'disabledShowMore',
+      searchable: {
+        root: 'root',
+        form: 'form',
+        input: 'input',
+        submit: 'submit',
+        submitIcon: 'submitIcon',
+        reset: 'reset',
+        resetIcon: 'resetIcon',
+        loadingIndicator: 'loadingIndicator',
+        loadingIcon: 'loadingIcon',
+      },
     };
 
     it('without facets', () => {
@@ -263,6 +277,9 @@ describe('RefinementList', () => {
           templates: {
             item: item => item,
             searchableNoResults: x => x,
+            reset: 'reset',
+            submit: 'submit',
+            loadingIndicator: 'loadingIndicator',
           },
         },
         toggleRefinement: () => {},
@@ -397,6 +414,9 @@ describe('RefinementList', () => {
         templateProps: {
           templates: {
             item: item => item,
+            reset: 'reset',
+            submit: 'submit',
+            loadingIndicator: 'loadingIndicator',
           },
         },
         toggleRefinement: () => {},

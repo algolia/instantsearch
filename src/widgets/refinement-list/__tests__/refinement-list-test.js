@@ -76,6 +76,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           noResults: 'noResults',
           showMore: 'showMore',
           disabledShowMore: 'disabledShowMore',
+          searchableRoot: 'searchableRoot',
+          searchableForm: 'searchableForm',
+          searchableInput: 'searchableInput',
+          searchableSubmit: 'searchableSubmit',
+          searchableSubmitIcon: 'searchableSubmitIcon',
+          searchableReset: 'searchableReset',
+          searchableResetIcon: 'searchableResetIcon',
+          searchableLoadingIndicator: 'searchableLoadingIndicator',
+          searchableLoadingIcon: 'searchableLoadingIcon',
         };
 
         renderWidget({ cssClasses });
@@ -119,6 +128,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         );
         expect(actual.disabledShowMore).toMatchInlineSnapshot(
           `"ais-RefinementList-showMore--disabled disabledShowMore"`
+        );
+        expect(actual.searchable.root).toMatchInlineSnapshot(
+          `"ais-SearchBox searchableRoot"`
+        );
+        expect(actual.searchable.form).toMatchInlineSnapshot(
+          `"ais-SearchBox-form searchableForm"`
+        );
+        expect(actual.searchable.input).toMatchInlineSnapshot(
+          `"ais-SearchBox-input searchableInput"`
+        );
+        expect(actual.searchable.submit).toMatchInlineSnapshot(
+          `"ais-SearchBox-submit searchableSubmit"`
+        );
+        expect(actual.searchable.submitIcon).toMatchInlineSnapshot(
+          `"ais-SearchBox-submitIcon searchableSubmitIcon"`
+        );
+        expect(actual.searchable.reset).toMatchInlineSnapshot(
+          `"ais-SearchBox-reset searchableReset"`
+        );
+        expect(actual.searchable.resetIcon).toMatchInlineSnapshot(
+          `"ais-SearchBox-resetIcon searchableResetIcon"`
+        );
+        expect(actual.searchable.loadingIndicator).toMatchInlineSnapshot(
+          `"ais-SearchBox-loadingIndicator searchableLoadingIndicator"`
+        );
+        expect(actual.searchable.loadingIcon).toMatchInlineSnapshot(
+          `"ais-SearchBox-loadingIcon searchableLoadingIcon"`
         );
       });
     });

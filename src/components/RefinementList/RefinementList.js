@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual';
 import { isSpecialClick } from '../../lib/utils';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
-import SearchBox from '../SearchBox/Searchbox';
+import SearchBox from '../SearchBox/SearchBox';
 
 class RefinementList extends Component {
   constructor(props) {
@@ -129,8 +129,8 @@ class RefinementList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.searchbox && !nextProps.isFromSearch) {
-      this.searchbox.clearInput();
+    if (this.searchBox && !nextProps.isFromSearch) {
+      this.searchBox.resetInput();
     }
   }
 
@@ -177,13 +177,17 @@ class RefinementList extends Component {
     const searchBox = this.props.searchFacetValues && (
       <div className={this.props.cssClasses.searchBox}>
         <SearchBox
-          ref={i => {
-            this.searchbox = i;
-          }}
+          ref={searchBoxRef => (this.searchBox = searchBoxRef)}
           placeholder={this.props.searchPlaceholder}
-          onChange={this.props.searchFacetValues}
-          onValidate={() => this.refineFirstValue()}
           disabled={shouldDisableSearchBox}
+          cssClasses={this.props.cssClasses.searchable}
+          templates={this.props.templateProps.templates}
+          onChange={event => this.props.searchFacetValues(event.target.value)}
+          onReset={() => this.props.searchFacetValues('')}
+          onSubmit={() => this.refineFirstValue()}
+          // This sets the search box to a controlled state because
+          // we don't rely on the `refine` prop but on `onChange`.
+          searchAsYouType={false}
         />
       </div>
     );
@@ -247,6 +251,17 @@ RefinementList.propTypes = {
     showMore: PropTypes.string,
     disabledShowMore: PropTypes.string,
     disabledItem: PropTypes.string,
+    searchable: PropTypes.shape({
+      root: PropTypes.string,
+      form: PropTypes.string,
+      input: PropTypes.string,
+      submit: PropTypes.string,
+      submitIcon: PropTypes.string,
+      reset: PropTypes.string,
+      resetIcon: PropTypes.string,
+      loadingIndicator: PropTypes.string,
+      loadingIcon: PropTypes.string,
+    }),
   }).isRequired,
   depth: PropTypes.number,
   facetValues: PropTypes.array,
