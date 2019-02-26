@@ -1,3 +1,12 @@
+## [4.4.1](https://github.com/algolia/create-instantsearch-app/compare/4.4.0...4.4.1) (2019-02-26)
+
+
+### Bug Fixes
+
+* **api:** resolve template path ([375212b](https://github.com/algolia/create-instantsearch-app/commit/375212b))
+
+
+
 # [4.4.0](https://github.com/algolia/create-instantsearch-app/compare/4.3.2...4.4.0) (2019-02-20)
 
 
