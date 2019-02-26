@@ -26,7 +26,7 @@ function getTemplateNameByLibraryVersion({
     return 'Vue InstantSearch 1';
   }
 
-  return templateName;
+  return template;
 }
 
 module.exports = function resolveTemplate(options, { supportedTemplates }) {

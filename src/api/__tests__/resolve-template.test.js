@@ -72,16 +72,16 @@ describe('resolveTemplate', () => {
     );
   });
 
-  test('should work with full path for template', () => {
+  test('selects the selected template with complete path', () => {
     expect(
       resolveTemplate(
         {
-          template: './src/templates/InstantSearch.js',
+          template: path.resolve('./src/templates/InstantSearch.js'),
         },
         {
           supportedTemplates: ['InstantSearch.js'],
         }
       )
-    ).toBe(path.resolve('src/templates/InstantSearch.js'));
+    ).toBe(path.resolve('./src/templates/InstantSearch.js'));
   });
 });
