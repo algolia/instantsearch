@@ -713,11 +713,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
   it('show more should toggle between two limits after search', () => {
     const { makeWidget, rendering } = createWidgetFactory();
+    const limit = 1;
+    const showMoreLimit = 2;
     const widget = makeWidget({
       attribute: 'category',
-      limit: 1,
+      limit,
       showMore: true,
-      showMoreLimit: 2,
+      showMoreLimit,
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -768,6 +770,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     // `searchForItems` triggers a new render
     renderingOptions2.searchForItems('query triggering no results');
+    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      limit,
+      expect.anything()
+    );
 
     return Promise.resolve().then(() => {
       expect(rendering).toHaveBeenCalledTimes(3);
@@ -787,6 +795,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         expect(rendering).toHaveBeenCalledTimes(5);
         const renderingOptions5 = rendering.mock.calls[4][0];
         expect(renderingOptions5.items).toHaveLength(2);
+
+        renderingOptions5.searchForItems('new search');
+        expect(helper.searchForFacetValues).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.anything(),
+          showMoreLimit,
+          expect.anything()
+        );
       });
     });
   });
