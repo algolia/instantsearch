@@ -18,7 +18,7 @@ const suit = component('Hits');
 const HitsWithClickAnalytics = withClickAnalytics(Hits);
 
 const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
-  { hits: receivedHits, results, instantSearchInstance },
+  { hits: receivedHits, results, instantSearchInstance, analytics },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -30,18 +30,24 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
     return;
   }
 
+  const hitsProps = {
+    cssClasses,
+    hits: receivedHits,
+    results,
+    templateProps: renderState.templateProps,
+  };
+
   const hasClickAnalytics =
     instantSearchInstance.searchParameters.clickAnalytics;
-  const _Hits = hasClickAnalytics ? HitsWithClickAnalytics : Hits;
-  render(
-    <_Hits
-      cssClasses={cssClasses}
-      hits={receivedHits}
-      results={results}
-      templateProps={renderState.templateProps}
-    />,
-    containerNode
-  );
+
+  if (hasClickAnalytics) {
+    render(
+      <HitsWithClickAnalytics {...hitsProps} analytics={analytics} />,
+      containerNode
+    );
+  } else {
+    render(<Hits {...hitsProps} />, containerNode);
+  }
 };
 
 /**

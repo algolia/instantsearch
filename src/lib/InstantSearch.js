@@ -45,6 +45,8 @@ class InstantSearch extends EventEmitter {
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
+      // TODO: check the version number and output error message if < 1.0.0
+      insightsClient = null,
     } = options;
 
     if (indexName === null || searchClient === null) {
@@ -72,6 +74,7 @@ class InstantSearch extends EventEmitter {
 
     this.client = searchClient;
     this.helper = null;
+    this.insightsClient = insightsClient;
     this.indexName = indexName;
     this.searchParameters = { ...searchParameters, index: indexName };
     this.widgets = [];

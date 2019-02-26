@@ -1,6 +1,7 @@
 import reduce from 'lodash/reduce';
 import forEach from 'lodash/forEach';
 import find from 'lodash/find';
+import findIndex from 'lodash/findIndex';
 import get from 'lodash/get';
 import keys from 'lodash/keys';
 import uniq from 'lodash/uniq';
@@ -8,6 +9,7 @@ import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
 import curry from 'lodash/curry';
 import hogan from 'hogan.js';
+import isEqual from '../index';
 
 function capitalize(string) {
   return (
@@ -496,6 +498,58 @@ function createDocumentationMessageGenerator(...widgets) {
   };
 }
 
+function createAnalyticsHelpers(instantSearchInstance, results) {
+  const { insightsClient } = instantSearchInstance;
+
+  if (typeof insightsClient === 'undefined') {
+    throw new Error(
+      'expected `insightsClient` passed to InstantSearch instance'
+    );
+  }
+
+  function _getAnalyticsData(objectID) {
+    const { hits, index, queryID, hitsPerPage, page } = results;
+    const position = findIndex(hits, hit => hit.objectID === objectID);
+    return {
+      index,
+      queryID,
+      objectIDs: [objectID],
+      positions: [hitsPerPage * page + position + 1],
+    };
+  }
+
+  function _mergeData(data, analyticsData) {
+    let payload;
+    if (typeof data === 'string') {
+      payload = { ...analyticsData, eventName: data };
+    } else {
+      payload = { ...analyticsData, ...data };
+    }
+    return payload;
+  }
+
+  return {
+    _getAnalyticsData,
+    clickedObjectIDsAfterSearch: (objectID, data) => {
+      // clickedObjectIDsAfterSearch("1", "Add to cart")
+      // clickedObjectIDsAfterSearch("1", { eventName: "Add to cart", userToken: "xxx"})
+      const { index, queryID, objectIDs, positions } = _getAnalyticsData(
+        objectID
+      );
+      const payload = _mergeData(
+        { index, queryID, objectIDs, positions },
+        data
+      );
+      insightsClient('clickedObjectIDsAfterSearch', payload);
+    },
+    convertedObjectIDsAfterSearch: (objectID, data) => {
+      const { index, queryID, objectIDs } = _getAnalyticsData(objectID);
+      const payload = _mergeData({ index, queryID, objectIDs }, data);
+      insightsClient('convertedObjectIDsAfterSearch', payload);
+    },
+  };
+}
+
 export {
   capitalize,
   getContainerNode,
@@ -517,4 +571,5 @@ export {
   createDocumentationMessageGenerator,
   deprecate,
   warning,
+  createAnalyticsHelpers,
 };

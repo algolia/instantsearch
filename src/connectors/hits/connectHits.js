@@ -2,6 +2,7 @@ import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createAnalyticsHelpers,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -66,6 +67,7 @@ export default function connectHits(renderFn, unmountFn) {
             results: undefined,
             instantSearchInstance,
             widgetParams,
+            analytics: undefined,
           },
           true
         );
@@ -76,6 +78,16 @@ export default function connectHits(renderFn, unmountFn) {
           results.hits = escapeHits(results.hits);
         }
 
+        // should we expose this only if instantSearchInstance contains clickAnalytics: true?
+        const analyticsHelpers = createAnalyticsHelpers(
+          instantSearchInstance,
+          results
+        );
+        results.hits = results.hits.map(hit => ({
+          ...hit,
+          __analytics: analyticsHelpers._getAnalyticsData(hit.objectID),
+        }));
+
         results.hits = transformItems(results.hits);
 
         renderFn(
@@ -84,6 +96,7 @@ export default function connectHits(renderFn, unmountFn) {
             results,
             instantSearchInstance,
             widgetParams,
+            analytics: analyticsHelpers, // expose helpers to be used by other flavours or custom components
           },
           false
         );

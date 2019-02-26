@@ -1,4 +1,9 @@
-import { highlight, snippet } from '../helpers';
+import {
+  highlight,
+  snippet,
+  clickedObjectIDsAfterSearch,
+  convertedObjectIDsAfterSearch,
+} from '../helpers';
 
 export default function({ numberLocale }) {
   return {
@@ -36,6 +41,23 @@ The highlight helper expects a JSON object of the format:
 The snippet helper expects a JSON object of the format:
 { "attribute": "name", "highlightedTagName": "mark" }`);
       }
+    },
+    // did not namespace theses for now because it overcomplicates the code
+    clickedObjectIDsAfterSearch(payload, render) {
+      return render(
+        clickedObjectIDsAfterSearch({
+          objectID: this.objectID,
+          payload,
+        })
+      );
+    },
+    convertedObjectIDsAfterSearch(payload, render) {
+      return render(
+        convertedObjectIDsAfterSearch({
+          objectID: this.objectID,
+          payload,
+        })
+      );
     },
   };
 }
