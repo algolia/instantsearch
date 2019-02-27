@@ -5,6 +5,7 @@ import Panel from '../Panel';
 describe('Panel', () => {
   test('should render component with default props', () => {
     const props = {
+      bodyElement: document.createElement('div'),
       cssClasses: {
         root: 'root',
         noRefinementRoot: 'noRefinementRoot',
@@ -24,11 +25,11 @@ describe('Panel', () => {
 
     const wrapper = mount(<Panel {...props} />);
 
-    expect(wrapper.find('.root')).toHaveLength(1);
-    expect(wrapper.find('.noRefinementRoot')).toHaveLength(0);
-    expect(wrapper.find('.body')).toHaveLength(1);
-    expect(wrapper.find('.header')).toHaveLength(1);
-    expect(wrapper.find('.footer')).toHaveLength(1);
+    expect(wrapper.find('.root').exists()).toBe(true);
+    expect(wrapper.find('.noRefinementRoot').exists()).toBe(false);
+    expect(wrapper.find('.body').exists()).toBe(true);
+    expect(wrapper.find('.header').exists()).toBe(true);
+    expect(wrapper.find('.footer').exists()).toBe(true);
     expect(wrapper.find('.header').text()).toBe('Header');
     expect(wrapper.find('.footer').text()).toBe('Footer');
     expect(wrapper).toMatchSnapshot();
@@ -36,6 +37,7 @@ describe('Panel', () => {
 
   test('should render component with `hidden` prop', () => {
     const props = {
+      bodyElement: document.createElement('div'),
       cssClasses: {
         root: 'root',
         noRefinementRoot: 'noRefinementRoot',
@@ -55,11 +57,11 @@ describe('Panel', () => {
 
     const wrapper = mount(<Panel {...props} />);
 
-    expect(wrapper.find('.root')).toHaveLength(1);
-    expect(wrapper.find('.noRefinementRoot')).toHaveLength(1);
-    expect(wrapper.find('.body')).toHaveLength(1);
-    expect(wrapper.find('.header')).toHaveLength(1);
-    expect(wrapper.find('.footer')).toHaveLength(1);
+    expect(wrapper.find('.root').exists()).toBe(true);
+    expect(wrapper.find('.noRefinementRoot').exists()).toBe(true);
+    expect(wrapper.find('.body').exists()).toBe(true);
+    expect(wrapper.find('.header').exists()).toBe(true);
+    expect(wrapper.find('.footer').exists()).toBe(true);
     expect(wrapper.props().hidden).toBe(true);
     expect(wrapper).toMatchSnapshot();
   });
