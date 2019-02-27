@@ -35,7 +35,7 @@ function writeData({ method, objectID, payload }) {
      data-analytics-payload='${serializedPayload}'`;
 }
 export function hasData(domElement) {
-  return !!domElement.getAttribute('data-analytics-method');
+  return domElement.hasAttribute('data-analytics-method');
 }
 export function readData(domElement) {
   const method = domElement.getAttribute('data-analytics-method');
