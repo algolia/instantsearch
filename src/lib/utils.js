@@ -9,7 +9,6 @@ import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
 import curry from 'lodash/curry';
 import hogan from 'hogan.js';
-import isEqual from '../index';
 
 function capitalize(string) {
   return (
