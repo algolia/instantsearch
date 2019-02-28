@@ -23,6 +23,9 @@ export { default as connectRange } from './range/connectRange';
 export {
   default as connectRefinementList,
 } from './refinement-list/connectRefinementList';
+export {
+  default as connectRefinementListWithSearchParameters,
+} from './refinement-list/connectRefinementListWithSearchParameters';
 export { default as connectSearchBox } from './search-box/connectSearchBox';
 export { default as connectSortBy } from './sort-by/connectSortBy';
 export { default as connectRatingMenu } from './rating-menu/connectRatingMenu';
