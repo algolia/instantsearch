@@ -21,17 +21,16 @@ storiesOf('Panel', module)
     })
   )
   .add(
-    'with ratingMenu',
+    'with range input',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.panel({
           templates: {
-            header: ({ results }) =>
-              `Header ${results ? `| ${results.nbHits} results` : ''}`,
+            header: 'Price',
             footer: 'Footer',
           },
           hidden: ({ results }) => results.nbHits === 0,
-        })(instantsearch.widgets.ratingMenu)({
+        })(instantsearch.widgets.rangeInput)({
           container,
           attribute: 'price',
         })
@@ -39,19 +38,23 @@ storiesOf('Panel', module)
     })
   )
   .add(
-    'with menu',
+    'with range slider',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.panel({
           templates: {
-            header: ({ results }) =>
-              `Header ${results ? `| ${results.nbHits} results` : ''}`,
+            header: 'Price',
             footer: 'Footer',
           },
           hidden: ({ results }) => results.nbHits === 0,
-        })(instantsearch.widgets.menu)({
+        })(instantsearch.widgets.rangeSlider)({
           container,
-          attribute: 'brand',
+          attribute: 'price',
+          tooltips: {
+            format(rawValue) {
+              return `$${Math.round(rawValue).toLocaleString()}`;
+            },
+          },
         })
       );
     })
