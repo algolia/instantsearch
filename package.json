@@ -57,7 +57,7 @@
     "doctoc": "1.4.0",
     "eslint": "5.7.0",
     "eslint-config-algolia": "13.2.3",
-    "eslint-config-prettier": "3.3.0",
+    "eslint-config-prettier": "3.6.0",
     "eslint-plugin-html": "4.0.6",
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-jest": "22.3.0",
