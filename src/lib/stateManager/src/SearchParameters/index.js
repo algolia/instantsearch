@@ -95,7 +95,7 @@ function SearchParameters(newParameters) {
    * Targeted index. This parameter is mandatory.
    * @member {string}
    */
-  this.index = params.index || '';
+  this.index = params.index;
 
   // Query
   /**
@@ -103,7 +103,7 @@ function SearchParameters(newParameters) {
    * @member {string}
    * @see https://www.algolia.com/doc/rest#param-query
    */
-  this.query = params.query || '';
+  this.query = params.query;
 
   // Facets
   /**
@@ -256,7 +256,7 @@ function SearchParameters(newParameters) {
    * @member {number}
    * @see https://www.algolia.com/doc/rest#param-page
    */
-  this.page = params.page || 0;
+  this.page = params.page;
   /**
    * How the query should be treated by the search engine.
    * Possible values: prefixAll, prefixLast, prefixNone

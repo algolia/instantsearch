@@ -26,7 +26,7 @@ algoliasearchHelper.AlgoliaSearchHelper = AlgoliaSearchHelper;
  * @member module:algoliasearchHelper.SearchParameters
  * @type {SearchParameters}
  */
-algoliasearchHelper.SearchParameters = SearchParameters;
+algoliasearchHelper.SearchParametersWithoutDefaults = SearchParameters;
 
 /**
  * Constructor for the object containing the results of the search.
