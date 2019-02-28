@@ -1,26 +1,11 @@
 /* eslint-disable import/no-commonjs */
-const webpack = require('webpack');
-const nodeExternals = require('webpack-node-externals');
+
 const path = require('path');
-
-const isProduction = process.env.NODE_ENV === 'production';
-const productionPluginDefine = isProduction
-  ? [
-      new webpack.DefinePlugin({
-        'process.env': { NODE_ENV: JSON.stringify('production') },
-      }),
-    ]
-  : [];
-
-const commonLoaders = [
-  {
-    test: /\.json$/,
-    loader: 'json-loader',
-  },
-];
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = [
   {
+    mode: 'development',
     entry: ['babel-polyfill', './src/server.js'],
     output: {
       path: path.join(__dirname, 'dist'),
@@ -38,17 +23,22 @@ module.exports = [
       __dirname: false,
     },
     externals: nodeExternals(),
-    plugins: productionPluginDefine,
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.js$/,
-          loader: 'babel-loader',
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+            },
+          ],
         },
-      ].concat(commonLoaders),
+      ],
     },
   },
   {
+    mode: 'development',
     entry: ['babel-polyfill', './src/app/browser.js'],
     output: {
       path: path.join(__dirname, 'dist/assets'),
@@ -56,11 +46,15 @@ module.exports = [
       filename: 'bundle.js',
     },
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          loader: 'babel-loader',
+          use: [
+            {
+              loader: 'babel-loader',
+            },
+          ],
         },
       ],
     },
