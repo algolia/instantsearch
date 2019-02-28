@@ -1,6 +1,8 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import * as connectors from '../../connectors';
+import { SearchParametersWithoutDefaults } from '../stateManager';
 import { resolveSingleLeafWidgetDriven } from '../resolveSearchParametersWidgetDriven';
+import { resolveSingleLeafMerge } from '../resolveSearchParametersWithMerge';
 
 const configure = widgetParams => ({
   getWidgetState(uiState) {
@@ -24,236 +26,248 @@ const refinementListWithSearchParameters = connectors.connectRefinementListWithS
   () => {}
 );
 
-[resolveSingleLeafWidgetDriven].forEach(resolver => {
+[
+  // { name: 'WidgetDriven', resolver: resolveSingleLeafWidgetDriven },
+  { name: 'Merge', resolver: resolveSingleLeafMerge },
+].forEach(({ name, resolver }) => {
   const innerRefinementList =
     resolver === resolveSingleLeafWidgetDriven
       ? refinementListWithSearchParameters
       : refinementList;
 
-  it('correctly resolve a new instance of SP', () => {
-    const level0 = {
-      widgets: [searchBox()],
-      state: new SearchParameters(),
-    };
+  const InnerSearchParamters =
+    resolver === resolveSingleLeafMerge
+      ? SearchParametersWithoutDefaults
+      : SearchParameters;
 
-    const level1 = {
-      widgets: [hits()],
-      state: new SearchParameters(),
-    };
-
-    const actual = resolver(level0, level1);
-
-    expect(actual).toEqual(expect.any(SearchParameters));
-  });
-
-  it('correctly merge SP without default value', () => {
-    const level0 = {
-      widgets: [configure({ hitsPerPage: 5 }), searchBox()],
-      state: new SearchParameters(),
-    };
-
-    const level1 = {
-      widgets: [configure({ hitsPerPage: 10 }), hits()],
-      state: new SearchParameters(),
-    };
-
-    const level2 = {
-      widgets: [configure({ hitsPerPage: 15 }), hits()],
-      state: new SearchParameters(),
-    };
-
-    const actual = resolver(level0, level1, level2);
-
-    expect(actual).toEqual(
-      new SearchParameters({
-        hitsPerPage: 15,
-      })
-    );
-  });
-
-  if (resolver === resolveSingleLeafWidgetDriven) {
-    // Test case for the widget driven approach
-    it('ignores SP sets directly with the helper', () => {
+  describe(`- ${name}`, () => {
+    it('correctly resolve a new instance of SP', () => {
       const level0 = {
         widgets: [searchBox()],
-        state: new SearchParameters({
-          hitsPerPage: 5,
-        }),
+        state: new InnerSearchParamters(),
       };
 
       const level1 = {
         widgets: [hits()],
-        state: new SearchParameters({
-          hitsPerPage: 10,
-        }),
+        state: new InnerSearchParamters(),
+      };
+
+      const actual = resolver(level0, level1);
+
+      expect(actual).toEqual(expect.any(SearchParameters));
+    });
+
+    it('correctly merge SP without default value', () => {
+      const level0 = {
+        widgets: [configure({ hitsPerPage: 5 }), searchBox()],
+        state: new InnerSearchParamters(),
+      };
+
+      const level1 = {
+        widgets: [configure({ hitsPerPage: 10 }), hits()],
+        state: new InnerSearchParamters(),
       };
 
       const level2 = {
-        widgets: [hits()],
-        state: new SearchParameters({
+        widgets: [configure({ hitsPerPage: 15 }), hits()],
+        state: new InnerSearchParamters(),
+      };
+
+      const actual = resolver(level0, level1, level2);
+
+      expect(actual).toEqual(
+        new InnerSearchParamters({
           hitsPerPage: 15,
-        }),
-      };
-
-      const actual = resolver(level0, level1, level2);
-
-      expect(actual).toEqual(
-        new SearchParameters({
-          hitsPerPage: undefined,
-        })
-      );
-    });
-  }
-
-  // if () {
-
-  // }
-
-  describe('correctly merge SP with default value', () => {
-    it('with value inherit from the top level', () => {
-      const level0 = {
-        widgets: [searchBox()],
-        state: new SearchParameters().setQuery('Hello world'),
-      };
-
-      const level1 = {
-        widgets: [hits()],
-        state: new SearchParameters(),
-      };
-
-      const level2 = {
-        widgets: [hits()],
-        state: new SearchParameters(),
-      };
-
-      const actual = resolver(level0, level1, level2);
-
-      expect(actual).toEqual(new SearchParameters().setQuery('Hello world'));
-    });
-
-    it('with value override by the sub level', () => {
-      const level0 = {
-        widgets: [searchBox()],
-        state: new SearchParameters().setQuery('Hello'),
-      };
-
-      const level1 = {
-        widgets: [searchBox(), hits()],
-        state: new SearchParameters().setQuery('Hello world'),
-      };
-
-      const level2 = {
-        widgets: [searchBox(), hits()],
-        state: new SearchParameters().setQuery('Hello world !!!'),
-      };
-
-      const actual = resolver(level0, level1, level2);
-
-      expect(actual).toEqual(
-        new SearchParameters().setQuery('Hello world !!!')
-      );
-    });
-  });
-
-  describe('correctly merge SP with complex structure', () => {
-    it('with value inherit from the top level', () => {
-      const categories = innerRefinementList({ attribute: 'categories' });
-      const brands = innerRefinementList({ attribute: 'brands' });
-
-      const level0 = {
-        widgets: [searchBox(), categories],
-        state: new SearchParameters({
-          query: 'Hello world',
-          // maxValuesPerFacet: 10,
-          disjunctiveFacets: ['categories'],
-          disjunctiveFacetsRefinements: {
-            categories: ['iPhone'],
-          },
-        }),
-      };
-
-      const level1 = {
-        widgets: [hits()],
-        state: new SearchParameters({}),
-      };
-
-      const level2 = {
-        widgets: [hits(), brands],
-        state: new SearchParameters({
-          disjunctiveFacets: ['brands'],
-          disjunctiveFacetsRefinements: {
-            brands: ['Apple'],
-          },
-        }),
-      };
-
-      const actual = resolver(level0, level1, level2);
-
-      expect(actual).toEqual(
-        new SearchParameters({
-          query: 'Hello world',
-          maxValuesPerFacet: 10,
-          disjunctiveFacets: ['categories', 'brands'],
-          disjunctiveFacetsRefinements: {
-            categories: ['iPhone'],
-            brands: ['Apple'],
-          },
         })
       );
     });
 
-    it('with value override by the sub level', () => {
-      const categories = innerRefinementList({ attribute: 'categories' });
-      const brands = innerRefinementList({ attribute: 'brands', limit: 50 });
-      const colors = innerRefinementList({ attribute: 'colors' });
+    if (resolver === resolveSingleLeafWidgetDriven) {
+      // Test case for the widget driven approach
+      it('ignores SP sets directly with the helper', () => {
+        const level0 = {
+          widgets: [searchBox()],
+          state: new InnerSearchParamters({
+            hitsPerPage: 5,
+          }),
+        };
 
-      const level0 = {
-        widgets: [searchBox(), categories],
-        state: new SearchParameters({
-          query: 'Hello',
-          disjunctiveFacets: ['categories'],
-          disjunctiveFacetsRefinements: {
-            categories: ['iPhone'],
-          },
-        }),
-      };
+        const level1 = {
+          widgets: [hits()],
+          state: new InnerSearchParamters({
+            hitsPerPage: 10,
+          }),
+        };
 
-      const level1 = {
-        widgets: [hits(), brands],
-        state: new SearchParameters({
-          // maxValuesPerFacet: 50,
-          disjunctiveFacets: ['brands'],
-          disjunctiveFacetsRefinements: {
-            brands: ['Apple'],
-          },
-        }),
-      };
+        const level2 = {
+          widgets: [hits()],
+          state: new InnerSearchParamters({
+            hitsPerPage: 15,
+          }),
+        };
 
-      const level2 = {
-        widgets: [searchBox(), hits(), colors],
-        state: new SearchParameters({
-          query: 'Hello world',
-          disjunctiveFacets: ['colors'],
-          disjunctiveFacetsRefinements: {
-            colors: ['Blue'],
-          },
-        }),
-      };
+        const actual = resolver(level0, level1, level2);
 
-      const actual = resolver(level0, level1, level2);
+        expect(actual).toEqual(
+          new InnerSearchParamters({
+            hitsPerPage: undefined,
+          })
+        );
+      });
+    }
 
-      expect(actual).toEqual(
-        new SearchParameters({
-          query: 'Hello world',
-          maxValuesPerFacet: 50,
-          disjunctiveFacets: ['categories', 'brands', 'colors'],
-          disjunctiveFacetsRefinements: {
-            categories: ['iPhone'],
-            brands: ['Apple'],
-            colors: ['Blue'],
-          },
-        })
-      );
+    // if () {
+
+    // }
+
+    describe('correctly merge SP with default value', () => {
+      it('with value inherit from the top level', () => {
+        const level0 = {
+          widgets: [searchBox()],
+          state: new InnerSearchParamters().setQuery('Hello world'),
+        };
+
+        const level1 = {
+          widgets: [hits()],
+          state: new InnerSearchParamters(),
+        };
+
+        const level2 = {
+          widgets: [hits()],
+          state: new InnerSearchParamters(),
+        };
+
+        const actual = resolver(level0, level1, level2);
+
+        expect(actual).toEqual(
+          new InnerSearchParamters().setQuery('Hello world')
+        );
+      });
+
+      it('with value override by the sub level', () => {
+        const level0 = {
+          widgets: [searchBox()],
+          state: new InnerSearchParamters().setQuery('Hello'),
+        };
+
+        const level1 = {
+          widgets: [searchBox(), hits()],
+          state: new InnerSearchParamters().setQuery('Hello world'),
+        };
+
+        const level2 = {
+          widgets: [searchBox(), hits()],
+          state: new InnerSearchParamters().setQuery('Hello world !!!'),
+        };
+
+        const actual = resolver(level0, level1, level2);
+
+        expect(actual).toEqual(
+          new InnerSearchParamters().setQuery('Hello world !!!')
+        );
+      });
+    });
+
+    describe('correctly merge SP with complex structure', () => {
+      it('with value inherit from the top level', () => {
+        const categories = innerRefinementList({ attribute: 'categories' });
+        const brands = innerRefinementList({ attribute: 'brands' });
+
+        const level0 = {
+          widgets: [searchBox(), categories],
+          state: new InnerSearchParamters({
+            query: 'Hello world',
+            // maxValuesPerFacet: 10,
+            disjunctiveFacets: ['categories'],
+            disjunctiveFacetsRefinements: {
+              categories: ['iPhone'],
+            },
+          }),
+        };
+
+        const level1 = {
+          widgets: [hits()],
+          state: new InnerSearchParamters({}),
+        };
+
+        const level2 = {
+          widgets: [hits(), brands],
+          state: new InnerSearchParamters({
+            disjunctiveFacets: ['brands'],
+            disjunctiveFacetsRefinements: {
+              brands: ['Apple'],
+            },
+          }),
+        };
+
+        const actual = resolver(level0, level1, level2);
+
+        expect(actual).toEqual(
+          new InnerSearchParamters({
+            query: 'Hello world',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['categories', 'brands'],
+            disjunctiveFacetsRefinements: {
+              categories: ['iPhone'],
+              brands: ['Apple'],
+            },
+          })
+        );
+      });
+
+      it('with value override by the sub level', () => {
+        const categories = innerRefinementList({ attribute: 'categories' });
+        const brands = innerRefinementList({ attribute: 'brands', limit: 50 });
+        const colors = innerRefinementList({ attribute: 'colors' });
+
+        const level0 = {
+          widgets: [searchBox(), categories],
+          state: new InnerSearchParamters({
+            query: 'Hello',
+            disjunctiveFacets: ['categories'],
+            disjunctiveFacetsRefinements: {
+              categories: ['iPhone'],
+            },
+          }),
+        };
+
+        const level1 = {
+          widgets: [hits(), brands],
+          state: new InnerSearchParamters({
+            // maxValuesPerFacet: 50,
+            disjunctiveFacets: ['brands'],
+            disjunctiveFacetsRefinements: {
+              brands: ['Apple'],
+            },
+          }),
+        };
+
+        const level2 = {
+          widgets: [searchBox(), hits(), colors],
+          state: new InnerSearchParamters({
+            query: 'Hello world',
+            disjunctiveFacets: ['colors'],
+            disjunctiveFacetsRefinements: {
+              colors: ['Blue'],
+            },
+          }),
+        };
+
+        const actual = resolver(level0, level1, level2);
+
+        expect(actual).toEqual(
+          new InnerSearchParamters({
+            query: 'Hello world',
+            maxValuesPerFacet: 50,
+            disjunctiveFacets: ['categories', 'brands', 'colors'],
+            disjunctiveFacetsRefinements: {
+              categories: ['iPhone'],
+              brands: ['Apple'],
+              colors: ['Blue'],
+            },
+          })
+        );
+      });
     });
   });
 });
