@@ -17,11 +17,13 @@ const renderer = ({
   bodyContainerNode,
   cssClasses,
   templateProps,
-}) => ({ options, hidden }) => {
+}) => ({ options, hidden, collapsible, collapsed }) => {
   render(
     <Panel
       cssClasses={cssClasses}
       hidden={hidden}
+      collapsible={collapsible}
+      collapsed={collapsed}
       templateProps={templateProps}
       data={options}
       bodyElement={bodyContainerNode}
@@ -76,11 +78,17 @@ const renderer = ({
 export default function panel({
   templates = {},
   hidden = () => false,
+  collapsed,
   cssClasses: userCssClasses = {},
 } = {}) {
   warning(
     typeof hidden === 'function',
     `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).`
+  );
+
+  warning(
+    typeof collapsed === 'undefined' || typeof collapsed === 'function',
+    `The \`collapsed\` option in the "panel" widget expects a function returning a boolean (received "${typeof collapsed}" type).`
   );
 
   const bodyContainerNode = document.createElement('div');
@@ -90,9 +98,21 @@ export default function panel({
       suit({ modifierName: 'noRefinement' }),
       userCssClasses.noRefinementRoot
     ),
+    collapsibleRoot: cx(
+      suit({ modifierName: 'collapsible' }),
+      userCssClasses.collapsibleRoot
+    ),
+    collapsedRoot: cx(
+      suit({ modifierName: 'collapsed' }),
+      userCssClasses.collapsedRoot
+    ),
     body: cx(suit({ descendantName: 'body' }), userCssClasses.body),
     header: cx(suit({ descendantName: 'header' }), userCssClasses.header),
     footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
+    collapseButton: cx(
+      suit({ descendantName: 'collapseButton' }),
+      userCssClasses.collapseButton
+    ),
   };
 
   return widgetFactory => (widgetOptions = {}) => {
@@ -119,6 +139,8 @@ export default function panel({
     renderPanel({
       options: {},
       hidden: true,
+      collapsible: Boolean(collapsed),
+      collapsed: false,
     });
 
     const widget = widgetFactory({
@@ -141,6 +163,11 @@ export default function panel({
         renderPanel({
           options,
           hidden: Boolean(hidden(options)),
+          collapsible: Boolean(collapsed),
+          collapsed:
+            typeof collapsed === 'function'
+              ? Boolean(collapsed(options))
+              : false,
         });
 
         if (typeof widget.render === 'function') {

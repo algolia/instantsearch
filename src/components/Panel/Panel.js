@@ -4,17 +4,34 @@ import cx from 'classnames';
 import Template from '../Template/Template';
 
 class Panel extends Component {
+  state = {
+    collapsed: this.props.collapsed,
+    controlled: false,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.controlled && nextProps.collapsed !== prevState.collapsed) {
+      return {
+        collapsed: nextProps.collapsed,
+      };
+    }
+
+    return null;
+  }
+
   componentDidMount() {
     this.bodyRef.appendChild(this.props.bodyElement);
   }
 
   render() {
-    const { cssClasses, hidden, templateProps, data } = this.props;
+    const { cssClasses, hidden, collapsible, templateProps, data } = this.props;
 
     return (
       <div
         className={cx(cssClasses.root, {
           [cssClasses.noRefinementRoot]: hidden,
+          [cssClasses.collapsibleRoot]: collapsible,
+          [cssClasses.collapsedRoot]: this.state.collapsed,
         })}
         hidden={hidden}
       >
@@ -27,6 +44,21 @@ class Panel extends Component {
             }}
             data={data}
           />
+        )}
+
+        {collapsible && (
+          <button
+            className={cssClasses.collapseButton}
+            aria-expanded={!this.state.collapsed}
+            onClick={() => {
+              this.setState(previousState => ({
+                controlled: true,
+                collapsed: !previousState.collapsed,
+              }));
+            }}
+          >
+            {this.state.collapsed ? '➕' : '➖'}
+          </button>
         )}
 
         <div className={cssClasses.body} ref={node => (this.bodyRef = node)} />
@@ -51,6 +83,9 @@ Panel.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string.isRequired,
     noRefinementRoot: PropTypes.string.isRequired,
+    collapsibleRoot: PropTypes.string.isRequired,
+    collapsedRoot: PropTypes.string.isRequired,
+    collapseButton: PropTypes.string.isRequired,
     body: PropTypes.string.isRequired,
     header: PropTypes.string.isRequired,
     footer: PropTypes.string.isRequired,
@@ -59,6 +94,8 @@ Panel.propTypes = {
     templates: PropTypes.object.isRequired,
   }).isRequired,
   hidden: PropTypes.bool.isRequired,
+  collapsed: PropTypes.bool.isRequired,
+  collapsible: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
 };
 

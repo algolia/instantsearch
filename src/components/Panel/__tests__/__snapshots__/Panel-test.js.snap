@@ -1,9 +1,77 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Panel should render component with \`hidden\` prop 1`] = `
+exports[`Panel collapsible should render component with \`collapsible\` and \`collapsed\` props 1`] = `
 <div
-  className="root noRefinementRoot"
-  hidden={true}
+  className="root collapsibleRoot collapsedRoot"
+  hidden={false}
+>
+  <div
+    className="header"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Header",
+      }
+    }
+  />
+  <button
+    aria-expanded={false}
+    className="collapseButton"
+    onClick={[Function]}
+  >
+    ➕
+  </button>
+  <div
+    className="body"
+  />
+  <div
+    className="footer"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Footer",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`Panel collapsible should render component with \`collapsible\` prop 1`] = `
+<div
+  className="root collapsibleRoot"
+  hidden={false}
+>
+  <div
+    className="header"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Header",
+      }
+    }
+  />
+  <button
+    aria-expanded={true}
+    className="collapseButton"
+    onClick={[Function]}
+  >
+    ➖
+  </button>
+  <div
+    className="body"
+  />
+  <div
+    className="footer"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Footer",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`Panel default should render component with default props 1`] = `
+<div
+  className="root"
+  hidden={false}
 >
   <div
     className="header"
@@ -27,10 +95,10 @@ exports[`Panel should render component with \`hidden\` prop 1`] = `
 </div>
 `;
 
-exports[`Panel should render component with default props 1`] = `
+exports[`Panel hidden should render component with \`hidden\` prop 1`] = `
 <div
-  className="root"
-  hidden={false}
+  className="root noRefinementRoot"
+  hidden={true}
 >
   <div
     className="header"
