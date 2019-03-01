@@ -5,7 +5,7 @@
       index-name="instant_search"
       :routing="routing"
     >
-      <ais-configure :hitsPerPage="16" />
+      <ais-configure :hits-per-page.camel="16" />
 
       <header class="navbar">
         <img src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png" width="40">

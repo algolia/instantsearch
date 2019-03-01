@@ -150,8 +150,8 @@ describe('__forceRender', () => {
   const renderArgs = widget.render.mock.calls[0][0];
 
   it('calls init & render on widget', () => {
-    expect(widget.init).toBeCalledTimes(1);
-    expect(widget.render).toBeCalledTimes(1);
+    expect(widget.init).toHaveBeenCalledTimes(1);
+    expect(widget.render).toHaveBeenCalledTimes(1);
 
     expect(initArgs).toMatchInlineSnapshot(
       {
@@ -210,8 +210,8 @@ Object {
 
     instantsearch.__forceRender(widget);
 
-    expect(widget.init).toBeCalledTimes(1);
-    expect(widget.render).toBeCalledTimes(1);
+    expect(widget.init).toHaveBeenCalledTimes(1);
+    expect(widget.render).toHaveBeenCalledTimes(1);
     expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(
       `"\`instantsearch.findResultsState()\` needs to be called when using \`ais-instant-search-ssr\`."`
     );

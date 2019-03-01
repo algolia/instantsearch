@@ -55,7 +55,7 @@ export default {
   asyncData() {
     return instantsearch
       .findResultsState({
-        query: 'hi',
+        query: 'iphone',
         hitsPerPage: 5,
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: { brand: ['Apple'] },

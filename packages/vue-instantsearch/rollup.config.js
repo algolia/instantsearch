@@ -33,6 +33,7 @@ export default [
       },
     ],
     plugins: [
+      commonjs(),
       vue({ compileTemplate: true, css: false }),
       json(),
       buble({
