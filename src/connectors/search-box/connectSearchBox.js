@@ -83,6 +83,12 @@ export default function connectSearchBox(renderFn, unmountFn) {
         this._clear();
       },
 
+      getConfiguration() {
+        return {
+          query: '',
+        };
+      },
+
       init({ helper, onHistoryChange, instantSearchInstance }) {
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
@@ -95,8 +101,14 @@ export default function connectSearchBox(renderFn, unmountFn) {
               previousQuery = helper.state.query;
               helper.setQuery(q);
             }
-            if (doSearch && previousQuery !== undefined && previousQuery !== q)
+
+            if (
+              doSearch &&
+              // previousQuery !== undefined &&
+              previousQuery !== q
+            ) {
               helper.search();
+            }
           };
 
           return queryHook
@@ -108,7 +120,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             onHistoryChange: this._onHistoryChange,
             refine: this._refine,
             clear: this._cachedClear,
@@ -124,7 +136,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             onHistoryChange: this._onHistoryChange,
             refine: this._refine,
             clear: this._cachedClear,
