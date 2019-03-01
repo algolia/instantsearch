@@ -465,7 +465,7 @@ describe('- Merge', () => {
       );
     });
 
-    it('with value override by the sub level', () => {
+    it('with refined value override by the sub level', () => {
       const level0 = {
         widgets: [],
         state: new SearchParametersWithoutDefaults({
@@ -492,6 +492,37 @@ describe('- Merge', () => {
       expect(actual).toEqual(
         new SearchParametersWithoutDefaults({
           query: 'Hello world !!!',
+        })
+      );
+    });
+
+    it('with default value override by the sub level', () => {
+      const level0 = {
+        widgets: [], // SearchBox with value
+        state: new SearchParametersWithoutDefaults({
+          // Does it breaks? Not sure.
+          query: 'Hello',
+        }),
+      };
+
+      const level1 = {
+        widgets: [],
+        state: new SearchParametersWithoutDefaults(),
+      };
+
+      const level2 = {
+        widgets: [], // SearchBox without value
+        state: new SearchParametersWithoutDefaults({
+          // Simulate the `getConfiguration` to fill a default value
+          query: '',
+        }),
+      };
+
+      const actual = resolveSingleLeafMerge(level0, level1, level2);
+
+      expect(actual).toEqual(
+        new SearchParametersWithoutDefaults({
+          query: '',
         })
       );
     });
