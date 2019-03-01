@@ -205,7 +205,7 @@ describe('- WidgetDriven', () => {
       );
     });
 
-    it('with value override by the sub level', () => {
+    it('with refined value override by the sub level', () => {
       const categories = refinementListWithSearchParameters({
         attribute: 'categories',
       });
@@ -232,10 +232,76 @@ describe('- WidgetDriven', () => {
       };
 
       const level1 = {
-        widgets: [hits(), brands],
+        widgets: [hits(), categories, brands],
         state: new SearchParameters({
           // Simulate the `getConfiguration`
-          disjunctiveFacets: ['brands'],
+          disjunctiveFacets: ['categories', 'brands'],
+          disjunctiveFacetsRefinements: {
+            categories: ['iPad'],
+            brands: ['Apple'],
+          },
+        }),
+      };
+
+      const level2 = {
+        widgets: [searchBox(), hits(), colors],
+        state: new SearchParameters({
+          query: 'Hello world',
+          // Simulate the `getConfiguration`
+          disjunctiveFacets: ['colors'],
+          disjunctiveFacetsRefinements: {
+            colors: ['Blue'],
+          },
+        }),
+      };
+
+      const actual = resolveSingleLeafWidgetDriven(level0, level1, level2);
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          query: 'Hello world',
+          maxValuesPerFacet: 50,
+          disjunctiveFacets: ['categories', 'brands', 'colors'],
+          disjunctiveFacetsRefinements: {
+            categories: ['iPad'],
+            brands: ['Apple'],
+            colors: ['Blue'],
+          },
+        })
+      );
+    });
+
+    it('with default value override by the sub level', () => {
+      const categories = refinementListWithSearchParameters({
+        attribute: 'categories',
+      });
+
+      const brands = refinementListWithSearchParameters({
+        attribute: 'brands',
+        limit: 50,
+      });
+
+      const colors = refinementListWithSearchParameters({
+        attribute: 'colors',
+      });
+
+      const level0 = {
+        widgets: [searchBox(), categories],
+        state: new SearchParameters({
+          query: 'Hello',
+          // Simulate the `getConfiguration`
+          disjunctiveFacets: ['categories'],
+          disjunctiveFacetsRefinements: {
+            categories: ['iPhone'],
+          },
+        }),
+      };
+
+      const level1 = {
+        widgets: [hits(), brands, categories],
+        state: new SearchParameters({
+          // Simulate the `getConfiguration`
+          disjunctiveFacets: ['brands', 'categories'],
           disjunctiveFacetsRefinements: {
             brands: ['Apple'],
           },
@@ -262,7 +328,6 @@ describe('- WidgetDriven', () => {
           maxValuesPerFacet: 50,
           disjunctiveFacets: ['categories', 'brands', 'colors'],
           disjunctiveFacetsRefinements: {
-            categories: ['iPhone'],
             brands: ['Apple'],
             colors: ['Blue'],
           },

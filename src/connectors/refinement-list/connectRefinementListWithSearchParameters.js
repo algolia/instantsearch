@@ -396,9 +396,8 @@ export default function connectRefinementList(renderFn, unmountFn) {
             : searchParameters.getConjunctiveRefinements(attribute);
 
         if (
-          values.length === 0 ||
-          (uiState.refinementList &&
-            isEqual(values, uiState.refinementList[attribute]))
+          uiState.refinementList &&
+          isEqual(values, uiState.refinementList[attribute])
         ) {
           return uiState;
         }
