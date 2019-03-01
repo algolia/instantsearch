@@ -130,7 +130,7 @@ export default function connectPagination(renderFn, unmountFn) {
 
       render({ results, state, instantSearchInstance }) {
         const nbPages = this.getMaxPage(results);
-        pager.currentPage = state.page;
+        pager.currentPage = state.page || 0;
         pager.total = nbPages;
 
         renderFn(
