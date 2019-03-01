@@ -7,18 +7,15 @@ const uniq = input =>
 
 const dedupe = (left, right) => uniq(concat(left, right));
 
-const mergeObject = fn => (left, right) =>
-  Object.entries(right).reduce(
-    (acc, [key, value]) => ({
+const mergeDisjunctiveFacetRefinements = (attributes, left, right) =>
+  attributes.reduce(
+    (acc, attribute) => ({
       ...acc,
-      [key]: fn(acc[key], value),
+      // Right takes over left for the same attribute
+      [attribute]: right[attribute],
     }),
     left
   );
-
-const mergeDisjunctiveFacetRefinements = mergeObject((l = [], r = []) =>
-  dedupe(l, r)
-);
 
 const filterObject = fn => input =>
   Object.keys(input)
@@ -43,7 +40,9 @@ const mergeSearchParameters = (left, right) =>
     ...filterObjectWithUndefinedValues(right),
     // Merge the complex attributes
     disjunctiveFacets: dedupe(left.disjunctiveFacets, right.disjunctiveFacets),
+    // Takes the right attributes
     disjunctiveFacetsRefinements: mergeDisjunctiveFacetRefinements(
+      right.disjunctiveFacets,
       left.disjunctiveFacetsRefinements,
       right.disjunctiveFacetsRefinements
     ),

@@ -514,7 +514,7 @@ describe('- Merge', () => {
       );
     });
 
-    it('with value override by the sub level', () => {
+    it('with refined value override by the sub level', () => {
       const level0 = {
         widgets: [],
         state: new SearchParametersWithoutDefaults({
@@ -530,7 +530,58 @@ describe('- Merge', () => {
         widgets: [],
         state: new SearchParametersWithoutDefaults({
           maxValuesPerFacet: 50,
-          disjunctiveFacets: ['brands'],
+          disjunctiveFacets: ['categories', 'brands'],
+          disjunctiveFacetsRefinements: {
+            categories: ['iPad'],
+            brands: ['Apple'],
+          },
+        }),
+      };
+
+      const level2 = {
+        widgets: [],
+        state: new SearchParametersWithoutDefaults({
+          query: 'Hello world',
+          disjunctiveFacets: ['colors'],
+          disjunctiveFacetsRefinements: {
+            colors: ['Blue'],
+          },
+        }),
+      };
+
+      const actual = resolveSingleLeafMerge(level0, level1, level2);
+
+      expect(actual).toEqual(
+        new SearchParametersWithoutDefaults({
+          query: 'Hello world',
+          maxValuesPerFacet: 50,
+          disjunctiveFacets: ['categories', 'brands', 'colors'],
+          disjunctiveFacetsRefinements: {
+            categories: ['iPad'],
+            brands: ['Apple'],
+            colors: ['Blue'],
+          },
+        })
+      );
+    });
+
+    it('with default value override by the sub level', () => {
+      const level0 = {
+        widgets: [],
+        state: new SearchParametersWithoutDefaults({
+          query: 'Hello',
+          disjunctiveFacets: ['categories'],
+          disjunctiveFacetsRefinements: {
+            categories: ['iPhone'],
+          },
+        }),
+      };
+
+      const level1 = {
+        widgets: [],
+        state: new SearchParametersWithoutDefaults({
+          maxValuesPerFacet: 50,
+          disjunctiveFacets: ['categories', 'brands'],
           disjunctiveFacetsRefinements: {
             brands: ['Apple'],
           },
@@ -556,7 +607,6 @@ describe('- Merge', () => {
           maxValuesPerFacet: 50,
           disjunctiveFacets: ['categories', 'brands', 'colors'],
           disjunctiveFacetsRefinements: {
-            categories: ['iPhone'],
             brands: ['Apple'],
             colors: ['Blue'],
           },
