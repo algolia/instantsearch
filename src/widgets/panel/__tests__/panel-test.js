@@ -1,4 +1,14 @@
+import { render, unmountComponentAtNode } from 'preact-compat';
 import panel from '../panel';
+
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+  module.unmountComponentAtNode = jest.fn();
+
+  return module;
+});
 
 describe('Usage', () => {
   test('without arguments does not throw', () => {
@@ -39,5 +49,33 @@ describe('Usage', () => {
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/"
 `);
+  });
+});
+
+describe('Lifecycle', () => {
+  beforeEach(() => {
+    render.mockClear();
+    unmountComponentAtNode.mockClear();
+  });
+
+  test('calls the inner widget lifecycle', () => {
+    const widget = {
+      init: jest.fn(),
+      render: jest.fn(),
+      dispose: jest.fn(),
+    };
+    const widgetFactory = () => widget;
+
+    const widgetWithPanel = panel()(widgetFactory)({
+      container: document.createElement('div'),
+    });
+
+    widgetWithPanel.init({});
+    widgetWithPanel.render({});
+    widgetWithPanel.dispose({});
+
+    expect(widget.init).toHaveBeenCalledTimes(1);
+    expect(widget.render).toHaveBeenCalledTimes(1);
+    expect(widget.dispose).toHaveBeenCalledTimes(1);
   });
 });
