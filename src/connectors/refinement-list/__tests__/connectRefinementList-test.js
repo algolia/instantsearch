@@ -711,7 +711,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     ]);
   });
 
-  it('show more should toggle between two limits after search', () => {
+  it('show more should toggle between two limits after search', async () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const limit = 1;
     const showMoreLimit = 2;
@@ -770,6 +770,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     // `searchForItems` triggers a new render
     renderingOptions2.searchForItems('query triggering no results');
+    await Promise.resolve();
+
     expect(helper.searchForFacetValues).toHaveBeenCalledWith(
       expect.anything(),
       expect.anything(),
@@ -777,34 +779,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       expect.anything()
     );
 
-    return Promise.resolve().then(() => {
-      expect(rendering).toHaveBeenCalledTimes(3);
-      const renderingOptions3 = rendering.mock.calls[2][0];
+    expect(rendering).toHaveBeenCalledTimes(3);
+    const renderingOptions3 = rendering.mock.calls[2][0];
 
-      // `searchForItems` triggers a new render
-      renderingOptions3.searchForItems('');
+    // `searchForItems` triggers a new render
+    renderingOptions3.searchForItems('');
+    await Promise.resolve();
 
-      return Promise.resolve().then(() => {
-        expect(rendering).toHaveBeenCalledTimes(4);
-        const renderingOptions4 = rendering.mock.calls[3][0];
-        expect(renderingOptions4.toggleShowMore).toBeDefined();
+    expect(rendering).toHaveBeenCalledTimes(4);
+    const renderingOptions4 = rendering.mock.calls[3][0];
+    expect(renderingOptions4.toggleShowMore).toBeDefined();
 
-        // `toggleShowMore` triggers a new render
-        renderingOptions4.toggleShowMore();
+    // `toggleShowMore` triggers a new render
+    renderingOptions4.toggleShowMore();
 
-        expect(rendering).toHaveBeenCalledTimes(5);
-        const renderingOptions5 = rendering.mock.calls[4][0];
-        expect(renderingOptions5.items).toHaveLength(2);
+    expect(rendering).toHaveBeenCalledTimes(5);
+    const renderingOptions5 = rendering.mock.calls[4][0];
+    expect(renderingOptions5.items).toHaveLength(2);
 
-        renderingOptions5.searchForItems('new search');
-        expect(helper.searchForFacetValues).toHaveBeenCalledWith(
-          expect.anything(),
-          expect.anything(),
-          showMoreLimit,
-          expect.anything()
-        );
-      });
-    });
+    renderingOptions5.searchForItems('new search');
+    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      showMoreLimit,
+      expect.anything()
+    );
   });
 
   it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
