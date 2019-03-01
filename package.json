@@ -120,7 +120,7 @@
     "webpack-cli": "3.2.3"
   },
   "engines": {
-    "node": "8.15.0",
+    "node": "8.15.1",
     "yarn": "1.13.0"
   },
   "bundlesize": [
