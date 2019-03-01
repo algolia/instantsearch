@@ -40,7 +40,7 @@ storiesOf('Index', module).add(
       hitsPerPage: 3,
     });
 
-    // InstantSearch
+    // instant_search
     const instantSearchIndex = index({
       indexName: 'instant_search',
     });
@@ -62,11 +62,12 @@ storiesOf('Index', module).add(
     });
 
     instantSearchIndex.addWidgets([
+      // Avoid collapsed line
       instantSearchConfigure,
       instantSearchSearchBox,
     ]);
 
-    // BestBuy
+    // bestbuy
     const bestbuyIndex = index({
       indexName: 'bestbuy',
     });
@@ -98,7 +99,11 @@ storiesOf('Index', module).add(
     ]);
 
     instantSearchIndex.addWidgets([
-      bestbuyIndex.addWidgets([bestbuySearchBox, bestbuyHits]),
+      bestbuyIndex.addWidgets([
+        // Avoid collapsed line
+        bestbuySearchBox,
+        bestbuyHits,
+      ]),
     ]);
 
     // Add widgets dynamically

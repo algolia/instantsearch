@@ -1,4 +1,4 @@
-import algoliasearchHelper from 'algoliasearch-helper';
+// import algoliasearchHelper from 'algoliasearch-helper';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
@@ -8,6 +8,8 @@ import { Index } from '../widgets/index/index';
 // import simpleMapping from './stateMappings/simple';
 // import historyRouter from './routers/history';
 // import version from './version';
+import algoliasearchHelper from './stateManager';
+import { resolveSingleLeafMerge } from './resolveSearchParametersWithMerge';
 import createHelpers from './createHelpers';
 
 // const ROUTING_DEFAULT_OPTIONS = {
@@ -27,6 +29,18 @@ const createChildHelper = ({ parent, client, index, parameters }) => {
   };
 
   return helper;
+};
+
+const resolveRootNode = node => {
+  const resolveParentNode = (innerNode, nodes) => {
+    const next = [innerNode].concat(nodes);
+
+    return innerNode.parent !== null
+      ? resolveParentNode(innerNode.parent, next)
+      : next;
+  };
+
+  return resolveParentNode(node, []);
 };
 
 /**
@@ -152,26 +166,21 @@ class InstantSearch extends EventEmitter {
           parent: current.helper,
           client: this.client,
           index: index.indexName,
-          parameters: {
-            ...current.helper.getState(),
-            index: index.indexName,
-          },
+          // parameters: {
+          //   ...current.helper.getState(),
+          //   index: index.indexName,
+          // },
         });
 
         // useful to trigger the N requets only the top level owns the search
-        const derivedHelper = this.tree.helper.derive(parameters => {
-          // @TODO: resolve the search parameters from the tree
-          // node.helper.getState() -> node.parent.helper.getState()
+        const derivedHelper = this.tree.helper.derive(() => {
+          // eslint-disable-next-line no-use-before-define
+          const nodes = resolveRootNode(innerNode);
 
-          console.log('derive:');
-          console.log({ ...parameters });
-          console.log({ ...helper.getState() });
-          console.log('--');
-
-          return algoliasearchHelper.SearchParameters.make({
-            ...parameters,
-            ...helper.getState(),
-          });
+          return resolveSingleLeafMerge(
+            // Tweaks for the input of the resolve function
+            ...nodes.map(_ => ({ state: _.helper.getState() }))
+          );
         });
 
         derivedHelper.on('result', this._render.bind(this, helper));
