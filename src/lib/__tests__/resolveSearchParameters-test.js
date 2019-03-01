@@ -122,7 +122,7 @@ describe('- WidgetDriven', () => {
       expect(actual).toEqual(new SearchParameters().setQuery('Hello world'));
     });
 
-    it('with value override by the sub level', () => {
+    it('with refined value override by the sub level', () => {
       const level0 = {
         widgets: [searchBox()],
         state: new SearchParameters({
@@ -148,6 +148,33 @@ describe('- WidgetDriven', () => {
 
       expect(actual).toEqual(
         new SearchParameters().setQuery('Hello world !!!')
+      );
+    });
+
+    it('with default value override by the sub level', () => {
+      const level0 = {
+        widgets: [searchBox()],
+        state: new SearchParameters({
+          query: 'Hello',
+        }),
+      };
+
+      const level1 = {
+        widgets: [searchBox(), hits()],
+        state: new SearchParameters(),
+      };
+
+      const level2 = {
+        widgets: [searchBox(), hits()],
+        state: new SearchParameters(),
+      };
+
+      const actual = resolveSingleLeafMerge(level0, level1, level2);
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          query: '',
+        })
       );
     });
   });
