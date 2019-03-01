@@ -17,27 +17,29 @@ const mergeDisjunctiveFacetRefinements = (attributes, left, right) =>
     left
   );
 
-const filterObject = fn => input =>
-  Object.keys(input)
-    .filter(key => fn(key, input))
-    .reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: input[key],
-      }),
-      {}
-    );
+// const filterObject = fn => input =>
+//   Object.keys(input)
+//     .filter(key => fn(key, input))
+//     .reduce(
+//       (acc, key) => ({
+//         ...acc,
+//         [key]: input[key],
+//       }),
+//       {}
+//     );
 
-const filterObjectWithUndefinedValues = filterObject(
-  (key, input) => typeof input[key] !== 'undefined'
-);
+// const filterObjectWithUndefinedValues = filterObject(
+//   (key, input) => typeof input[key] !== 'undefined'
+// );
 
 const mergeSearchParameters = (left, right) =>
   new SearchParametersWithoutDefaults({
     // Inherit from the parent
-    ...filterObjectWithUndefinedValues(left),
+    // ...filterObjectWithUndefinedValues(left),
+    ...left,
     // Take the value of the child
-    ...filterObjectWithUndefinedValues(right),
+    // ...filterObjectWithUndefinedValues(right),
+    ...right,
     // Merge the complex attributes
     disjunctiveFacets: dedupe(left.disjunctiveFacets, right.disjunctiveFacets),
     // Takes the right attributes
