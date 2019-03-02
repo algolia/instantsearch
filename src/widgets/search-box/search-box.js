@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import {
   getContainerNode,
@@ -41,12 +41,6 @@ const renderer = ({
     />,
     containerNode
   );
-};
-
-const disposer = containerNode => () => {
-  const range = document.createRange(); // IE10+
-  range.selectNodeContents(containerNode);
-  range.deleteContents();
 };
 
 /**
@@ -177,9 +171,8 @@ You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink({
     showLoadingIndicator,
   });
 
-  const makeWidget = connectSearchBox(
-    specializedRenderer,
-    disposer(containerNode)
+  const makeWidget = connectSearchBox(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
   );
 
   return makeWidget({ queryHook });
