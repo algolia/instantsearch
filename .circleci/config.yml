@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/react-instantsearch
   docker:
-    - image: circleci/node:8.15.1@sha256:4e3855baeafdff49416839a4f4c3bf06020275838402b707a46f835c7e626781
+    - image: circleci/node:8.15.1@sha256:10eff404a90d47210be7a7daeadd94c09aaac9ad07f4ecf1d8c4617a3e9b4ca3
 
 version: 2
 jobs:
