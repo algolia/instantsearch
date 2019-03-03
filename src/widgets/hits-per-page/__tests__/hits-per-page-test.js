@@ -28,12 +28,9 @@ describe('hitsPerPage()', () => {
   let widget;
   let helper;
   let results;
-  let consoleWarn;
   let state;
 
   beforeEach(() => {
-    consoleWarn = jest.spyOn(window.console, 'warn');
-
     container = document.createElement('div');
     items = [
       { value: 10, label: '10 results' },
@@ -117,22 +114,24 @@ describe('hitsPerPage()', () => {
     expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
-  it('should throw if there is no name attribute in a passed object', () => {
+  it('should warn without name attribute in a passed item', () => {
     items.length = 0;
     items.push({ label: 'Label without a value' });
-    widget.init({ state: helper.state, helper });
-    expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
-    expect(consoleWarn.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"[InstantSearch.js]: No items in HitsPerPage \`items\` with \`value: hitsPerPage\` (hitsPerPage: 20)"`
+
+    expect(() => {
+      widget.init({ state: helper.state, helper });
+    }).toWarnDev(
+      '[InstantSearch.js]: No items in HitsPerPage `items` with `value: hitsPerPage` (hitsPerPage: 20)'
     );
   });
 
   it('must include the current hitsPerPage at initialization time', () => {
     helper.state.hitsPerPage = -1;
-    widget.init({ state: helper.state, helper });
-    expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
-    expect(consoleWarn.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"[InstantSearch.js]: No items in HitsPerPage \`items\` with \`value: hitsPerPage\` (hitsPerPage: -1)"`
+
+    expect(() => {
+      widget.init({ state: helper.state, helper });
+    }).toWarnDev(
+      '[InstantSearch.js]: No items in HitsPerPage `items` with `value: hitsPerPage` (hitsPerPage: -1)'
     );
   });
 
@@ -141,9 +140,5 @@ describe('hitsPerPage()', () => {
     expect(() => {
       widget.init({ state: helper.state, helper });
     }).not.toThrow(/No item in `items`/);
-  });
-
-  afterEach(() => {
-    consoleWarn.mockRestore();
   });
 });
