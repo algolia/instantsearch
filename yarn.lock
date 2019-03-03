@@ -1375,6 +1375,11 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+"@types/jest-diff@^20.0.1":
+  version "20.0.1"
+  resolved "https://registry.yarnpkg.com/@types/jest-diff/-/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
+  integrity sha512-yALhelO3i0hqZwhjtcr6dYyaLoCHbAMshwtj6cGxTvHZAKXHsYGdff6E8EPw3xLKY0ELUTQ69Q1rQiJENnccMA==
+
 "@types/jest@^24.0.0":
   version "24.0.1"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.1.tgz#8945411140e7cdfd5ea76380e5f5fa7bf17646ea"
@@ -7028,7 +7033,7 @@ jest-config@^24.1.0:
     pretty-format "^24.0.0"
     realpath-native "^1.0.2"
 
-jest-diff@^24.0.0:
+jest-diff@24.0.0, jest-diff@^24.0.0:
   version "24.0.0"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-24.0.0.tgz#a3e5f573dbac482f7d9513ac9cfa21644d3d6b34"
   integrity sha512-XY5wMpRaTsuMoU+1/B2zQSKQ9RdE9gsLkGydx3nvApeyPijLA8GtEvIcPwISRCer+VDf9W1mStTYYq6fPt8ryA==

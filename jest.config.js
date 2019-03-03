@@ -6,7 +6,7 @@ module.exports = {
     '<rootDir>/dist*',
     '<rootDir>/functional-tests',
   ],
-  setupFilesAfterEnv: ['./scripts/jestInit.js'],
+  setupFilesAfterEnv: ['./scripts/jest/init.js'],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
