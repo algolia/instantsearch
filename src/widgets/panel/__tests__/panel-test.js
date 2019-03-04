@@ -10,6 +10,10 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
+beforeEach(() => {
+  render.mockClear();
+});
+
 describe('Usage', () => {
   test('without arguments does not throw', () => {
     expect(() => {
@@ -71,6 +75,68 @@ describe('Usage', () => {
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/"
 `);
+  });
+});
+
+describe('Templates', () => {
+  test('with header template', () => {
+    const widget = {
+      init: jest.fn(),
+      render: jest.fn(),
+    };
+    const widgetFactory = () => widget;
+
+    panel({
+      templates: {
+        header: 'Custom header',
+      },
+    })(widgetFactory)({
+      container: document.createElement('div'),
+    });
+
+    expect(render.mock.calls[0][0].props.templateProps.templates.header).toBe(
+      'Custom header'
+    );
+  });
+
+  test('with footer template', () => {
+    const widget = {
+      init: jest.fn(),
+      render: jest.fn(),
+    };
+    const widgetFactory = () => widget;
+
+    panel({
+      templates: {
+        footer: 'Custom footer',
+      },
+    })(widgetFactory)({
+      container: document.createElement('div'),
+    });
+
+    expect(render.mock.calls[0][0].props.templateProps.templates.footer).toBe(
+      'Custom footer'
+    );
+  });
+
+  test('with collapseButtonText template', () => {
+    const widget = {
+      init: jest.fn(),
+      render: jest.fn(),
+    };
+    const widgetFactory = () => widget;
+
+    panel({
+      templates: {
+        collapseButtonText: 'Custom collapseButtonText',
+      },
+    })(widgetFactory)({
+      container: document.createElement('div'),
+    });
+
+    expect(
+      render.mock.calls[0][0].props.templateProps.templates.collapseButtonText
+    ).toBe('Custom collapseButtonText');
   });
 });
 
