@@ -92,6 +92,8 @@ export default function panel({
   );
 
   const bodyContainerNode = document.createElement('div');
+  const collapsible = Boolean(collapsed);
+  const collapsedFn = typeof collapsed === 'function' ? collapsed : () => false;
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
     noRefinementRoot: cx(
@@ -139,7 +141,7 @@ export default function panel({
     renderPanel({
       options: {},
       hidden: true,
-      collapsible: Boolean(collapsed),
+      collapsible,
       collapsed: false,
     });
 
@@ -163,11 +165,8 @@ export default function panel({
         renderPanel({
           options,
           hidden: Boolean(hidden(options)),
-          collapsible: Boolean(collapsed),
-          collapsed:
-            typeof collapsed === 'function'
-              ? Boolean(collapsed(options))
-              : false,
+          collapsible,
+          collapsed: collapsedFn(options),
         });
 
         if (typeof widget.render === 'function') {
