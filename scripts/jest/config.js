@@ -1,12 +1,13 @@
 /* eslint-disable import/no-commonjs */
 
 module.exports = {
+  rootDir: process.cwd(),
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/dist*',
     '<rootDir>/functional-tests',
   ],
-  setupFilesAfterEnv: ['./scripts/jest/init.js'],
+  setupFilesAfterEnv: ['./scripts/jest/setupTests.js'],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
