@@ -8,6 +8,3 @@ yarn run build
 
 # push the generated screenshots to Argos-CI.
 yarn run test:argos
-
-# check if the next size of the bundle is inside the threshold
-yarn run test:size
