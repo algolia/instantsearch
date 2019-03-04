@@ -20,6 +20,7 @@ examples: [{
 examplesEndpoint: examples
 editable: true
 githubSource: docgen/src/examples.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
 ---
 
 ## Demos

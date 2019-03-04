@@ -7,6 +7,7 @@ withHeadings: true
 navWeight: 100
 editable: true
 githubSource: docgen/src/connectors.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/
 ---
 
 ## Introduction to connectors
