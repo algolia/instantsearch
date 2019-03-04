@@ -175,6 +175,7 @@ hierarchicalMenu({
  * ```
  * @type {WidgetFactory}
  * @devNovel HierarchicalMenu
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/
  * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.

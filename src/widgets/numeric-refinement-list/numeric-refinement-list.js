@@ -119,6 +119,7 @@ numericRefinementList({
  *
  * @type {WidgetFactory}
  * @devNovel NumericRefinementList
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/
  * @category filter
  * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget options
  * @return {Widget} Creates a new instance of the NumericRefinementList widget.

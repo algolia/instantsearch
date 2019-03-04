@@ -145,6 +145,7 @@ rangeSlider({
  *
  * @type {WidgetFactory}
  * @devNovel RangeSlider
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/range-slider/js/
  * @category filter
  * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.

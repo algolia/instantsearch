@@ -95,6 +95,7 @@ clearAll({
  * The current refined values widget can display a button that has the same behavior.
  * @type {WidgetFactory}
  * @devNovel ClearAll
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/
  * @category clear-filter
  * @param {ClearAllWidgetOptions} $0 The ClearAll widget options.
  * @returns {Widget} A new instance of the ClearAll widget.

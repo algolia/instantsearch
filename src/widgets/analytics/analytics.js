@@ -26,6 +26,7 @@ analytics({
  * UI.
  * @type {WidgetFactory}
  * @devNovel Analytics
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/analytics/js/
  * @category analytics
  * @param {AnalyticsWidgetOptions} $0 The Analytics widget options.
  * @return {Widget} A new instance of the Analytics widget.

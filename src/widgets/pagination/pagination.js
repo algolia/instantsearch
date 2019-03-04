@@ -127,6 +127,7 @@ pagination({
  *
  * @type {WidgetFactory}
  * @devNovel Pagination
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/pagination/js/
  * @category navigation
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.

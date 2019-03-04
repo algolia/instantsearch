@@ -137,6 +137,7 @@ toggle({
  *
  * @type {WidgetFactory}
  * @devNovel Toggle
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/
  * @category filter
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
  * @return {Widget} A new instance of the Toggle widget
