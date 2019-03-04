@@ -18,7 +18,13 @@ exports[`Panel collapsible should render component with \`collapsible\` and \`co
     className="collapseButton"
     onClick={[Function]}
   >
-    ➕
+    <span
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "More",
+        }
+      }
+    />
   </button>
   <div
     className="body"
@@ -52,7 +58,13 @@ exports[`Panel collapsible should render component with \`collapsible\` prop 1`]
     className="collapseButton"
     onClick={[Function]}
   >
-    ➖
+    <span
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Less",
+        }
+      }
+    />
   </button>
   <div
     className="body"

@@ -24,6 +24,8 @@ const getDefaultProps = () => ({
     templates: {
       header: 'Header',
       footer: 'Footer',
+      collapseButtonMore: 'More',
+      collapseButtonLess: 'Less',
     },
   },
 });
@@ -102,6 +104,7 @@ describe('Panel', () => {
       );
       expect(wrapper.find(`.${cssClasses.collapsedRoot}`).exists()).toBe(false);
       expect(wrapper.find(`.${cssClasses.collapseButton}`).exists()).toBe(true);
+      expect(wrapper.find(`.${cssClasses.collapseButton}`).text()).toBe('Less');
       expect(
         wrapper.find(`.${cssClasses.collapseButton}`).prop('aria-expanded')
       ).toBe(true);
@@ -127,6 +130,7 @@ describe('Panel', () => {
       );
       expect(wrapper.find(`.${cssClasses.collapsedRoot}`).exists()).toBe(true);
       expect(wrapper.find(`.${cssClasses.collapseButton}`).exists()).toBe(true);
+      expect(wrapper.find(`.${cssClasses.collapseButton}`).text()).toBe('More');
       expect(
         wrapper.find(`.${cssClasses.collapseButton}`).prop('aria-expanded')
       ).toBe(false);
@@ -149,6 +153,7 @@ describe('Panel', () => {
 
       // Default state
       expect(wrapper.find(`.${cssClasses.collapsedRoot}`).exists()).toBe(false);
+      expect(wrapper.find(`.${cssClasses.collapseButton}`).text()).toBe('Less');
       expect(
         wrapper.find(`.${cssClasses.collapseButton}`).prop('aria-expanded')
       ).toBe(true);
@@ -158,6 +163,7 @@ describe('Panel', () => {
 
       // Collapsed state
       expect(wrapper.find(`.${cssClasses.collapsedRoot}`).exists()).toBe(true);
+      expect(wrapper.find(`.${cssClasses.collapseButton}`).text()).toBe('More');
       expect(
         wrapper.find(`.${cssClasses.collapseButton}`).prop('aria-expanded')
       ).toBe(false);
@@ -167,6 +173,7 @@ describe('Panel', () => {
 
       // Back to default state
       expect(wrapper.find(`.${cssClasses.collapsedRoot}`).exists()).toBe(false);
+      expect(wrapper.find(`.${cssClasses.collapseButton}`).text()).toBe('Less');
       expect(
         wrapper.find(`.${cssClasses.collapseButton}`).prop('aria-expanded')
       ).toBe(true);

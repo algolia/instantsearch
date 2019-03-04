@@ -128,7 +128,12 @@ export default function panel({
       );
     }
 
-    const defaultTemplates = { header: '', footer: '' };
+    const defaultTemplates = {
+      header: '',
+      footer: '',
+      collapseButtonMore: '➕',
+      collapseButtonLess: '➖',
+    };
     const templateProps = prepareTemplateProps({ defaultTemplates, templates });
 
     const renderPanel = renderer({

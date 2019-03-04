@@ -77,4 +77,25 @@ storiesOf('Panel', module)
         })
       );
     })
+  )
+  .add(
+    'with collapsed and templates',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidget(
+        instantsearch.widgets.panel({
+          collapsed: options => {
+            return options && options.state && options.state.query.length === 0;
+          },
+          templates: {
+            header: 'Collapsible panel',
+            footer: 'Footer',
+            collapseButtonMore: 'More',
+            collapseButtonLess: 'Less',
+          },
+        })(instantsearch.widgets.refinementList)({
+          container,
+          attribute: 'brand',
+        })
+      );
+    })
   );
