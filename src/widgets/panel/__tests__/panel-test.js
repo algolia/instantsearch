@@ -52,18 +52,13 @@ describe('Usage', () => {
   });
 
   test('with `collapsed` as boolean warns', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    panel({
-      collapsed: true,
-    });
-
-    expect(warn).toHaveBeenCalledWith(
+    expect(() => {
+      panel({
+        collapsed: true,
+      });
+    }).toWarnDev(
       '[InstantSearch.js]: The `collapsed` option in the "panel" widget expects a function returning a boolean (received "boolean" type).'
     );
-
-    warn.mockRestore();
   });
 
   test('with a widget without `container` throws', () => {
