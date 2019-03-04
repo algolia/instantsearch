@@ -235,6 +235,7 @@ searchBox({
  *
  * @type {WidgetFactory}
  * @devNovel SearchBox
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/search-box/js/
  * @category basic
  * @param {SearchBoxWidgetOptions} $0 Options used to configure a SearchBox widget.
  * @return {Widget} Creates a new instance of the SearchBox widget.

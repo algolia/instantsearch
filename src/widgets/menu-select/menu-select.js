@@ -103,6 +103,7 @@ menuSelect({
  * Create a menu select out of a facet
  * @type {WidgetFactory}
  * @category filter
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/menu-select/js/
  * @param {MenuSelectWidgetOptions} $0 The Menu select widget options.
  * @return {Widget} Creates a new instance of the Menu select widget.
  * @example

@@ -65,6 +65,7 @@ sortBySelector({
  * For the users it is like they are selecting a new sort order.
  * @type {WidgetFactory}
  * @devNovel SortBySelector
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
  * @category sort
  * @param {SortByWidgetOptions} $0 Options for the SortBySelector widget
  * @return {Widget} Creates a new instance of the SortBySelector widget.

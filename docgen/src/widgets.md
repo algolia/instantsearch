@@ -7,6 +7,7 @@ withHeadings: true
 navWeight: 100
 editable: true
 githubSource: docgen/src/widgets.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/widgets/showcase/js/
 ---
 
 ## Introduction to widgets

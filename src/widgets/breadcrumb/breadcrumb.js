@@ -135,6 +135,7 @@ breadcrumb({
  * ```
  * @type {WidgetFactory}
  * @devNovel Breadcrumb
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/
  * @category navigation
  * @param {BreadcrumbWidgetOptions} $0 The Breadcrumb widget options.
  * @return {Widget} A new Breadcrumb widget instance.

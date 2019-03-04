@@ -100,6 +100,7 @@ infiniteHits({
  * handy on mobile implementations.
  * @type {WidgetFactory}
  * @devNovel InfiniteHits
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/
  * @category basic
  * @param {InfiniteHitsWidgetOptions} $0 The options for the InfiniteHits widget.
  * @return {Widget} Creates a new instance of the InfiniteHits widget.

@@ -41,6 +41,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * This connector provides a `InfiniteHitsRenderingOptions.showMore()` function to load next page of matched results.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/
  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn Rendering function for the custom **InfiniteHits** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomInfiniteHitsWidgetOptions)} Re-usable widget factory for a custom **InfiniteHits** widget.

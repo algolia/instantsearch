@@ -66,6 +66,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/menu/js/
  * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.

@@ -46,6 +46,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * THere's a complete example available on how to write a custom **Autocomplete** widget:
  * [autocomplete.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/autocomplete.js)
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/autocomplete/js/
  * @param {function(AutocompleteRenderingOptions, boolean)} renderFn Rendering function for the custom **Autocomplete** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomAutocompleteWidgetOptions)} Re-usable widget factory for a custom **Autocomplete** widget.

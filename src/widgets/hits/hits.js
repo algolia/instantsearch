@@ -92,6 +92,7 @@ hits({
  * beyond the first page.
  * @type {WidgetFactory}
  * @devNovel Hits
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits/js/
  * @category basic
  * @param {HitsWidgetOptions} $0 Options of the Hits widget.
  * @return {Widget} A new instance of Hits widget.

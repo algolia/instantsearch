@@ -49,6 +49,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/pagination/js/
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.

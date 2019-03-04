@@ -131,6 +131,7 @@ starRating({
  *
  * @type {WidgetFactory}
  * @devNovel StarRating
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/
  * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.
  * @return {Widget} A new StarRating widget instance.

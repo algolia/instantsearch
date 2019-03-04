@@ -83,6 +83,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/geo-search/js/
  * @param {function(GeoSearchRenderingOptions, boolean)} renderFn Rendering function for the custom **GeoSearch** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomGeoSearchWidgetOptions)} Re-usable widget factory for a custom **GeoSearch** widget.

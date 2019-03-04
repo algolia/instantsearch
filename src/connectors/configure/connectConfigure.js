@@ -31,6 +31,7 @@ var customConfigureWidget = connectConfigure(
  * that will give you ability to override or force some search parameters sent to Algolia API.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/configure/js/
  * @param {function(ConfigureRenderingOptions)} renderFn Rendering function for the custom **Configure** Widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomConfigureWidgetOptions)} Re-usable widget factory for a custom **Configure** widget.

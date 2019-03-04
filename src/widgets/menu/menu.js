@@ -150,6 +150,7 @@ menu({
  * in your Algolia settings.
  * @type {WidgetFactory}
  * @devNovel Menu
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/menu/js/
  * @category filter
  * @param {MenuWidgetOptions} $0 The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.

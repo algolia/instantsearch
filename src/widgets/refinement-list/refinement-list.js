@@ -211,6 +211,7 @@ refinementList({
  *
  * @type {WidgetFactory}
  * @devNovel RefinementList
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/
  * @category filter
  * @param {RefinementListWidgetOptions} $0 The RefinementList widget options that you use to customize the widget.
  * @return {Widget} Creates a new instance of the RefinementList widget.

@@ -52,6 +52,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * This connectors provides a `refine()` function that accepts bounds. It will also provide
  * information about the min and max bounds for the current result set.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/range-input/js/
  * @param {function(RangeRenderingOptions, boolean)} renderFn Rendering function for the custom **Range** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRangeWidgetOptions)} Re-usable widget factory for a custom **Range** widget.

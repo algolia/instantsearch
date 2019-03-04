@@ -7,6 +7,7 @@ withHeadings: true
 navWeight: 10
 editable: true
 githubSource: docgen/src/guides/migration.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/
 ---
 
 ## The searchBox widget has new default options

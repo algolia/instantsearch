@@ -8,6 +8,7 @@ withHeadings: true
 navWeight: 20
 editable: true
 githubSource: docgen/src/guides/custom-widget.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/
 ---
 
 ## Creating new widgets

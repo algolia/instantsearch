@@ -122,6 +122,7 @@ stats({
  * results inside the engine.
  * @type {WidgetFactory}
  * @devNovel Stats
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/stats/js/
  * @category metadata
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new stats widget instance

@@ -60,6 +60,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * This connector provides a `refine()` function to change the hits per page configuration and trigger a new search.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/
  * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn Rendering function for the custom **HitsPerPage** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(HitsPerPageWidgetOptions)} Re-usable widget factory for a custom **HitsPerPage** widget.

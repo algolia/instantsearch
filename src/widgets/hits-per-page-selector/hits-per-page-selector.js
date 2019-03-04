@@ -70,6 +70,7 @@ hitsPerPageSelector({
  * You can specify the default hits per page using a boolean in the items[] array. If none is specified, this first hits per page option will be picked.
  * @type {WidgetFactory}
  * @devNovel HitsPerPageSelector
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/
  * @category basic
  * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the HitPerPageSelector widget.
  * @return {Widget} A new instance of the HitPerPageSelector widget.

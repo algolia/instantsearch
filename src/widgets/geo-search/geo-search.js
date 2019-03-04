@@ -130,6 +130,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * @type {WidgetFactory}
  * @devNovel GeoSearch
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/geo-search/js/
  * @param {GeoSearchWidgetOptions} $0 Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
  * @staticExample

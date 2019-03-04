@@ -8,6 +8,7 @@ navWeight: 5
 withHeadings: true
 editable: true
 githubSource: docgen/src/guides/routing.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/going-further/routing-urls/js/
 ---
 
 Via the `routing` option, InstantSearch provides the necessary API entries to allow you to synchronize the state of your search UI (which widget were refined, what is the current search query ..) with any kind of storage. And most probably you want that storage to be the browser url bar.

@@ -52,6 +52,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * `options` that are the values that can be selected. `refine` should be used
  * with `options.value`.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
  * @param {function(SortBySelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBySelector** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomSortBySelectorWidgetOptions)} Re-usable widget factory for a custom **SortBySelector** widget.

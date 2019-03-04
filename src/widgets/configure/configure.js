@@ -19,6 +19,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * @type {WidgetFactory}
  * @category filter
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/configure/js/
  * @param {SearchParameters} searchParameters The Configure widget options are search parameters
  * @returns {Object} A new Configure widget instance.
  * @example
