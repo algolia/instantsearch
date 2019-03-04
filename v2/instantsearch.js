@@ -5700,6 +5700,7 @@ var usage = 'Usage:\nvar customRange = connectRange(function render(params, isFi
  * This connectors provides a `refine()` function that accepts bounds. It will also provide
  * information about the min and max bounds for the current result set.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/range-input/js/
  * @param {function(RangeRenderingOptions, boolean)} renderFn Rendering function for the custom **Range** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRangeWidgetOptions)} Re-usable widget factory for a custom **Range** widget.
@@ -9240,6 +9241,7 @@ var usage = 'Usage:\nvar customMenu = connectMenu(function render(params, isFirs
  *
  * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/menu/js/
  * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.
@@ -14416,6 +14418,7 @@ var usage = 'Usage:\nvar customClearAll = connectClearAll(function render(params
  * prevent certain attributes from being cleared.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/
  * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the custom **ClearAll** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a custom **ClearAll** widget.
@@ -14626,6 +14629,7 @@ var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValue
  * function to clear all the filters. Those functions can see their behaviour change based on
  * the widget options used.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomCurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
@@ -14986,6 +14990,7 @@ var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(functi
  * There's a complete example available on how to write a custom **HierarchicalMenu**:
  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/jquery/widgets/hierarchicalMenu.js)
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/
  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
@@ -15190,6 +15195,7 @@ var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirs
 /**
  * **Hits** connector provides the logic to create custom widgets that will render the results retrieved from Algolia.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits/js/
  * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHitsWidgetOptions)} Re-usable widget factory for a custom **Hits** widget.
@@ -15327,6 +15333,7 @@ var usage = 'Usage:\nvar customHitsPerPage = connectHitsPerPage(function render(
  *
  * This connector provides a `refine()` function to change the hits per page configuration and trigger a new search.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/
  * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn Rendering function for the custom **HitsPerPage** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(HitsPerPageWidgetOptions)} Re-usable widget factory for a custom **HitsPerPage** widget.
@@ -15538,6 +15545,7 @@ var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function rende
  *
  * This connector provides a `InfiniteHitsRenderingOptions.showMore()` function to load next page of matched results.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/
  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn Rendering function for the custom **InfiniteHits** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomInfiniteHitsWidgetOptions)} Re-usable widget factory for a custom **InfiniteHits** widget.
@@ -15717,6 +15725,7 @@ var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementL
  * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  * @function connectNumericRefinementList
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/
  * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericRefinementList** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomNumericRefinementListWidgetOptions)} Re-usable widget factory for a custom **NumericRefinementList** widget.
@@ -16246,6 +16255,7 @@ var usage = 'Usage:\nvar customPagination = connectPagination(function render(pa
  * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/pagination/js/
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.
@@ -16825,6 +16835,7 @@ var checkUsage = exports.checkUsage = function checkUsage(_ref) {
  * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
  * function to select an item.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.
@@ -17201,6 +17212,7 @@ var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(para
  * The connector provides to the rendering: `refine()` to set the query. The behaviour of this function
  * may be impacted by the `queryHook` widget parameter.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/search-box/js/
  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomSearchBoxWidgetOptions)} Re-usable widget factory for a custom **SearchBox** widget.
@@ -17388,6 +17400,7 @@ var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function r
  * `options` that are the values that can be selected. `refine` should be used
  * with `options.value`.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
  * @param {function(SortBySelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBySelector** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomSortBySelectorWidgetOptions)} Re-usable widget factory for a custom **SortBySelector** widget.
@@ -17586,6 +17599,7 @@ var usage = 'Usage:\nvar customStarRating = connectStarRating(function render(pa
  * `items` that are the values that can be selected. `refine` should be used
  * with `items.value`.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/
  * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomStarRatingWidgetOptions)} Re-usable widget factory for a custom **StarRating** widget.
@@ -17817,6 +17831,7 @@ var usage = 'Usage:\nvar customStats = connectStats(function render(params, isFi
  * search statistics (hits number and processing time).
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/stats/js/
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function} Re-usable widget factory for a custom **Stats** widget.
@@ -17942,6 +17957,7 @@ var usage = 'Usage:\nvar customToggle = connectToggle(function render(params, is
  *  - switch between two values.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/
  * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.
@@ -18243,6 +18259,7 @@ var usage = 'Usage:\nvar customBreadcrumb = connectBreadcrumb(function renderFn(
  *
  * This is commonly used in websites that have a large amount of content organized in a hierarchical manner (usually e-commerce websites).
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/
  * @param {function(BreadcrumbRenderingOptions, boolean)} renderFn Rendering function for the custom **Breadcrumb* widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
@@ -18450,6 +18467,7 @@ var usage = 'Usage:\n\nvar customGeoSearch = connectGeoSearch(function render(pa
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/geo-search/js/
  * @param {function(GeoSearchRenderingOptions, boolean)} renderFn Rendering function for the custom **GeoSearch** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomGeoSearchWidgetOptions)} Re-usable widget factory for a custom **GeoSearch** widget.
@@ -18760,6 +18778,7 @@ var usage = 'Usage:\nvar customConfigureWidget = connectConfigure(\n  function r
  * that will give you ability to override or force some search parameters sent to Algolia API.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/configure/js/
  * @param {function(ConfigureRenderingOptions)} renderFn Rendering function for the custom **Configure** Widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomConfigureWidgetOptions)} Re-usable widget factory for a custom **Configure** widget.
@@ -19361,6 +19380,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * look at the [getting started](getting-started.html).
  *
  * @function instantsearch
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/
  * @param {InstantSearchOptions} $0 The options
  * @return {InstantSearch} the instantsearch instance
  */
@@ -32784,6 +32804,7 @@ var usage = 'Usage:\nvar customAutcomplete = connectAutocomplete(function render
  * THere's a complete example available on how to write a custom **Autocomplete** widget:
  * [autocomplete.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/autocomplete.js)
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/autocomplete/js/
  * @param {function(AutocompleteRenderingOptions, boolean)} renderFn Rendering function for the custom **Autocomplete** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomAutocompleteWidgetOptions)} Re-usable widget factory for a custom **Autocomplete** widget.
@@ -33255,6 +33276,7 @@ var usage = 'Usage:\nclearAll({\n  container,\n  [ cssClasses.{root,header,body,
  * The current refined values widget can display a button that has the same behavior.
  * @type {WidgetFactory}
  * @devNovel ClearAll
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/
  * @category clear-filter
  * @param {ClearAllWidgetOptions} $0 The ClearAll widget options.
  * @returns {Widget} A new instance of the ClearAll widget.
@@ -33739,6 +33761,7 @@ var usage = 'Usage:\nsearch.addWidget(\n  instantsearch.widgets.configure({\n   
  *
  * @type {WidgetFactory}
  * @category filter
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/configure/js/
  * @param {SearchParameters} searchParameters The Configure widget options are search parameters
  * @returns {Object} A new Configure widget instance.
  * @example
@@ -33946,6 +33969,7 @@ var usage = 'Usage:\ncurrentRefinedValues({\n  container,\n  [ attributes: [{nam
  * This widget is usually in the top part of the search UI.
  * @type {WidgetFactory}
  * @devNovel CurrentRefinedValues
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/
  * @category clear-filter
  * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinedValues widget options.
  * @returns {Object} A new CurrentRefinedValues widget instance.
@@ -34414,6 +34438,7 @@ var usage = 'Usage:\n\ngeoSearch({\n  container,\n  googleReference,\n  [ initia
  *
  * @type {WidgetFactory}
  * @devNovel GeoSearch
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/geo-search/js/
  * @param {GeoSearchWidgetOptions} $0 Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
  * @staticExample
@@ -35326,6 +35351,7 @@ var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separa
  * ```
  * @type {WidgetFactory}
  * @devNovel HierarchicalMenu
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/
  * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.
@@ -35794,6 +35820,7 @@ var usage = 'Usage:\nhits({\n  container,\n  [ transformItems ],\n  [ cssClasses
  * beyond the first page.
  * @type {WidgetFactory}
  * @devNovel Hits
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits/js/
  * @category basic
  * @param {HitsWidgetOptions} $0 Options of the Hits widget.
  * @return {Widget} A new instance of Hits widget.
@@ -35993,6 +36020,7 @@ var usage = 'Usage:\nhitsPerPageSelector({\n  container,\n  items,\n  [ cssClass
  * You can specify the default hits per page using a boolean in the items[] array. If none is specified, this first hits per page option will be picked.
  * @type {WidgetFactory}
  * @devNovel HitsPerPageSelector
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/
  * @category basic
  * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the HitPerPageSelector widget.
  * @return {Widget} A new instance of the HitPerPageSelector widget.
@@ -36164,6 +36192,7 @@ var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n
  * handy on mobile implementations.
  * @type {WidgetFactory}
  * @devNovel InfiniteHits
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/
  * @category basic
  * @param {InfiniteHitsWidgetOptions} $0 The options for the InfiniteHits widget.
  * @return {Widget} Creates a new instance of the InfiniteHits widget.
@@ -36498,6 +36527,7 @@ var usage = 'Usage:\nmenu({\n  container,\n  attributeName,\n  [ sortBy=[\'name:
  * in your Algolia settings.
  * @type {WidgetFactory}
  * @devNovel Menu
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/menu/js/
  * @category filter
  * @param {MenuWidgetOptions} $0 The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
@@ -36843,6 +36873,7 @@ var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ opera
  *
  * @type {WidgetFactory}
  * @devNovel RefinementList
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/
  * @category filter
  * @param {RefinementListWidgetOptions} $0 The RefinementList widget options that you use to customize the widget.
  * @return {Widget} Creates a new instance of the RefinementList widget.
@@ -37107,6 +37138,7 @@ var usage = 'Usage:\nnumericRefinementList({\n  container,\n  attributeName,\n  
  *
  * @type {WidgetFactory}
  * @devNovel NumericRefinementList
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/
  * @category filter
  * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget options
  * @return {Widget} Creates a new instance of the NumericRefinementList widget.
@@ -37501,6 +37533,7 @@ var usage = 'Usage:\npagination({\n  container,\n  [ cssClasses.{root,item,page,
  *
  * @type {WidgetFactory}
  * @devNovel Pagination
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/pagination/js/
  * @category navigation
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.
@@ -38664,6 +38697,7 @@ var usage = 'Usage:\nrangeInput({\n  container,\n  attributeName,\n  [ min ],\n 
  * The values inside this attribute must be JavaScript numbers (not strings).
  * @type {WidgetFactory}
  * @devNovel RangeInput
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/range-input/js/
  * @category filter
  * @param {RangeInputWidgetOptions} $0 The RangeInput widget options.
  * @return {Widget} A new instance of RangeInput widget.
@@ -39165,6 +39199,7 @@ var usage = 'Usage:\nsearchBox({\n  container,\n  [ placeholder ],\n  [ cssClass
  *
  * @type {WidgetFactory}
  * @devNovel SearchBox
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/search-box/js/
  * @category basic
  * @param {SearchBoxWidgetOptions} $0 Options used to configure a SearchBox widget.
  * @return {Widget} Creates a new instance of the SearchBox widget.
@@ -39649,6 +39684,7 @@ var usage = 'Usage:\nrangeSlider({\n  container,\n  attributeName,\n  [ min ],\n
  *
  * @type {WidgetFactory}
  * @devNovel RangeSlider
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/range-slider/js/
  * @category filter
  * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
@@ -42813,6 +42849,7 @@ var usage = 'Usage:\nsortBySelector({\n  container,\n  indices,\n  [cssClasses.{
  * For the users it is like they are selecting a new sort order.
  * @type {WidgetFactory}
  * @devNovel SortBySelector
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
  * @category sort
  * @param {SortByWidgetOptions} $0 Options for the SortBySelector widget
  * @return {Widget} Creates a new instance of the SortBySelector widget.
@@ -43022,6 +43059,7 @@ var usage = 'Usage:\nstarRating({\n  container,\n  attributeName,\n  [ max=5 ],\
  *
  * @type {WidgetFactory}
  * @devNovel StarRating
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/
  * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.
  * @return {Widget} A new StarRating widget instance.
@@ -43263,6 +43301,7 @@ var usage = 'Usage:\nstats({\n  container,\n  [ templates.{header, body, footer}
  * results inside the engine.
  * @type {WidgetFactory}
  * @devNovel Stats
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/stats/js/
  * @category metadata
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new stats widget instance
@@ -43566,6 +43605,7 @@ var usage = 'Usage:\ntoggle({\n  container,\n  attributeName,\n  label,\n  [ val
  *
  * @type {WidgetFactory}
  * @devNovel Toggle
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/
  * @category filter
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
  * @return {Widget} A new instance of the Toggle widget
@@ -43691,6 +43731,7 @@ var usage = 'Usage:\nanalytics({\n  pushFunction,\n  [ delay=3000 ],\n  [ trigge
  * UI.
  * @type {WidgetFactory}
  * @devNovel Analytics
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/analytics/js/
  * @category analytics
  * @param {AnalyticsWidgetOptions} $0 The Analytics widget options.
  * @return {Widget} A new instance of the Analytics widget.
@@ -44019,6 +44060,7 @@ var usage = 'Usage:\nbreadcrumb({\n  container,\n  attributes,\n  [ autoHideCont
  * ```
  * @type {WidgetFactory}
  * @devNovel Breadcrumb
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/
  * @category navigation
  * @param {BreadcrumbWidgetOptions} $0 The Breadcrumb widget options.
  * @return {Widget} A new Breadcrumb widget instance.
@@ -44334,6 +44376,7 @@ var usage = 'Usage:\nmenuSelect({\n  container,\n  attributeName,\n  [ sortBy=[\
  * Create a menu select out of a facet
  * @type {WidgetFactory}
  * @category filter
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/menu-select/js/
  * @param {MenuSelectWidgetOptions} $0 The Menu select widget options.
  * @return {Widget} Creates a new instance of the Menu select widget.
  * @example
