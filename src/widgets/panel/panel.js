@@ -44,6 +44,8 @@ const renderer = ({
  * @typedef {Object} PanelTemplates
  * @property {string|function} [header = ''] Template to use for the header.
  * @property {string|function} [footer = ''] Template to use for the footer.
+ * @property {string|function} [collapseButtonMore = '➕'] Template to use for collapse button when not expanded.
+ * @property {string|function} [collapseButtonLess = '➖'] Template to use for collapse button when expanded.
  */
 
 /**
