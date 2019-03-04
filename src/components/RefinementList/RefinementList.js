@@ -2,6 +2,7 @@ import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
+import noop from 'lodash/noop';
 import { isSpecialClick } from '../../lib/utils';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
@@ -162,7 +163,9 @@ class RefinementList extends Component {
         rootTagName="button"
         rootProps={{
           className: showMoreButtonClassName,
-          onClick: this.props.toggleShowMore,
+          onClick: this.props.canToggleShowMore
+            ? this.props.toggleShowMore
+            : noop,
         }}
         data={{
           isShowingMore: this.props.isShowingMore,

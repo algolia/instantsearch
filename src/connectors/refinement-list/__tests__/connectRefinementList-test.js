@@ -614,7 +614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     secondRenderingOptions.toggleShowMore();
 
     const thirdRenderingOptions = rendering.mock.calls[2][0];
-    expect(thirdRenderingOptions.canToggleShowMore).toBe(true);
+    expect(thirdRenderingOptions.canToggleShowMore).toBe(false);
   });
 
   it('Show more should toggle between two limits', () => {

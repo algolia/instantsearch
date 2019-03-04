@@ -204,6 +204,7 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
         },
       }
     }
+    onClick={[Function]}
   />
 </div>
 `;

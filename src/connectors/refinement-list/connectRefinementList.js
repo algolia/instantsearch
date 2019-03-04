@@ -152,6 +152,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
       value: label,
       highlighted: label,
     });
+    const getLimit = isShowingMore => (isShowingMore ? showMoreLimit : limit);
 
     const render = ({
       items,
@@ -194,8 +195,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
           canRefine: isFromSearch || items.length > 0,
           widgetParams,
           isShowingMore,
-          canToggleShowMore:
-            showMore && !isFromSearch && (isShowingMore || !hasExhaustiveItems),
+          canToggleShowMore: showMore && !isFromSearch && !hasExhaustiveItems,
           toggleShowMore,
           hasExhaustiveItems,
         },
@@ -242,12 +242,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         };
 
         helper
-          .searchForFacetValues(
-            attribute,
-            query,
-            isShowingMore ? showMoreLimit : limit,
-            tags
-          )
+          .searchForFacetValues(attribute, query, getLimit(isShowingMore), tags)
           .then(results => {
             const facetValues = escapeFacetValues
               ? escapeFacets(results.facetHits)
@@ -296,7 +291,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
       },
 
       getLimit() {
-        return this.isShowingMore ? showMoreLimit : limit;
+        return getLimit(this.isShowingMore);
       },
 
       getConfiguration: (configuration = {}) => {
