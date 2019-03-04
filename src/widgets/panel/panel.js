@@ -44,7 +44,7 @@ const renderer = ({
  * @typedef {Object} PanelTemplates
  * @property {string|function} [header = ''] Template to use for the header.
  * @property {string|function} [footer = ''] Template to use for the footer.
- * @property {string|function} [collapseButton] Template to use for collapse button. It is given the collapsed state.
+ * @property {string|function} [collapseButtonText] Template to use for collapse button. It is given the collapsed state.
  */
 
 /**
@@ -132,7 +132,7 @@ export default function panel({
     const defaultTemplates = {
       header: '',
       footer: '',
-      collapseButton: collapsed ? '➕' : '➖',
+      collapseButtonText: collapsed ? '➕' : '➖',
     };
     const templateProps = prepareTemplateProps({ defaultTemplates, templates });
 

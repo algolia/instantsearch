@@ -89,7 +89,8 @@ storiesOf('Panel', module)
           templates: {
             header: 'Collapsible panel',
             footer: 'Footer',
-            collapseButton: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
+            collapseButtonText: ({ collapsed }) =>
+              collapsed ? 'More' : 'Less',
           },
         })(instantsearch.widgets.refinementList)({
           container,

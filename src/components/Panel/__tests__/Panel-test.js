@@ -24,7 +24,7 @@ const getDefaultProps = () => ({
     templates: {
       header: 'Header',
       footer: 'Footer',
-      collapseButton: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
+      collapseButtonText: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
     },
   },
 });
