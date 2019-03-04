@@ -50,7 +50,9 @@ class Panel extends Component {
           <button
             className={cssClasses.collapseButton}
             aria-expanded={!this.state.collapsed}
-            onClick={() => {
+            onClick={event => {
+              event.preventDefault();
+
               this.setState(previousState => ({
                 controlled: true,
                 collapsed: !previousState.collapsed,
