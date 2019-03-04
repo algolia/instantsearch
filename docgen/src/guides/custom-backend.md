@@ -7,6 +7,7 @@ withHeadings: true
 navWeight: 21
 editable: true
 githubSource: docgen/src/guides/custom-backend.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/
 ---
 
 > This guide is compatible with InstantSearch.js ≥ 2.8.0.

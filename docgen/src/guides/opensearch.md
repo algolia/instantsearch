@@ -7,6 +7,7 @@ withHeadings: true
 navWeight: 10
 editable: true
 githubSource: docgen/src/guides/opensearch.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/resources/ui-and-ux-patterns/in-depth/opensearch/js/
 ---
 
 OpenSearch is web standard that makes browsers aware of an underlying search

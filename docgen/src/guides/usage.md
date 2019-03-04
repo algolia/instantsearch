@@ -8,6 +8,7 @@ withHeadings: true
 navWeight: 30
 editable: true
 githubSource: docgen/src/guides/usage.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/installation/js/
 ---
 
 ## Use InstantSearch.js

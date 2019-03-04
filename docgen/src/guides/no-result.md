@@ -7,6 +7,7 @@ withHeadings: true
 navWeight: 10
 editable: true
 githubSource: docgen/src/guides/no-result.md
+canonical: https://www.algolia.com/doc/guides/building-search-ui/going-further/conditional-display/js/
 ---
 ## Designing the no results page
 
