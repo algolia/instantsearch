@@ -94,6 +94,8 @@ function groupSymbolsByCategories(symbols) {
 function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files) {
   const fileName = 'instantsearch.html';
 
+  const canonical = instantsearchFactory.tags.find(t => t.title === 'canonical') || false;
+
   files[fileName] = {
     mode: '0764',
     contents: '',
@@ -112,6 +114,7 @@ function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files)
     withHeadings: true,
     editable: true,
     githubSource: getGithubSource(InstantSearch),
+    canonical: createCanonicalURL(canonical),
   };
 }
 
