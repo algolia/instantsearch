@@ -122,6 +122,7 @@ function mapConnectors(connectors, symbols, files) {
     const relatedTypes = findRelatedTypes(symbol, symbols);
     const staticExamples = symbol.tags.filter(t => t.title === 'staticExample');
     const requirements = symbol.tags.find(t => t.title === 'requirements') || { description: '' };
+    const canonical = symbol.tags.find(t => t.title === 'canonical') || false;
 
     const symbolWithRelatedType = {
       ...symbol,
@@ -142,6 +143,7 @@ function mapConnectors(connectors, symbols, files) {
       withHeadings: true,
       editable: true,
       githubSource: getGithubSource(symbolWithRelatedType),
+      canonical: createCanonicalURL(canonical),
     };
   });
 }
