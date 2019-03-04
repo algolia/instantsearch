@@ -2,25 +2,31 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Panel from '../Panel';
 
+const defaultCSSClasses = {
+  root: 'root',
+  noRefinementRoot: 'noRefinementRoot',
+  body: 'body',
+  header: 'header',
+  footer: 'footer',
+};
+
+const getDefaultProps = () => ({
+  bodyElement: document.createElement('div'),
+  cssClasses: defaultCSSClasses,
+  hidden: false,
+  data: {},
+  templateProps: {
+    templates: {
+      header: 'Header',
+      footer: 'Footer',
+    },
+  },
+});
+
 describe('Panel', () => {
   test('should render component with default props', () => {
     const props = {
-      bodyElement: document.createElement('div'),
-      cssClasses: {
-        root: 'root',
-        noRefinementRoot: 'noRefinementRoot',
-        body: 'body',
-        header: 'header',
-        footer: 'footer',
-      },
-      hidden: false,
-      data: {},
-      templateProps: {
-        templates: {
-          header: 'Header',
-          footer: 'Footer',
-        },
-      },
+      ...getDefaultProps(),
     };
 
     const wrapper = mount(<Panel {...props} />);
@@ -37,22 +43,8 @@ describe('Panel', () => {
 
   test('should render component with `hidden` prop', () => {
     const props = {
-      bodyElement: document.createElement('div'),
-      cssClasses: {
-        root: 'root',
-        noRefinementRoot: 'noRefinementRoot',
-        body: 'body',
-        header: 'header',
-        footer: 'footer',
-      },
+      ...getDefaultProps(),
       hidden: true,
-      data: {},
-      templateProps: {
-        templates: {
-          header: 'Header',
-          footer: 'Footer',
-        },
-      },
     };
 
     const wrapper = mount(<Panel {...props} />);
