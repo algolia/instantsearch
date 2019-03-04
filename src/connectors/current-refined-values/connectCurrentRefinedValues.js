@@ -88,6 +88,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * function to clear all the filters. Those functions can see their behaviour change based on
  * the widget options used.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomCurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.

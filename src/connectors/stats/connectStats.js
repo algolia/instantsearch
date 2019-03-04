@@ -32,6 +32,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * search statistics (hits number and processing time).
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/stats/js/
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function} Re-usable widget factory for a custom **Stats** widget.

@@ -54,6 +54,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * `items` that are the values that can be selected. `refine` should be used
  * with `items.value`.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/
  * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomStarRatingWidgetOptions)} Re-usable widget factory for a custom **StarRating** widget.

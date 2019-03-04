@@ -48,6 +48,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * prevent certain attributes from being cleared.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/
  * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the custom **ClearAll** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a custom **ClearAll** widget.

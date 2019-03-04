@@ -95,6 +95,7 @@ export const checkUsage = ({
  * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
  * function to select an item.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.

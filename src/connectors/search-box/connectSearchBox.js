@@ -46,6 +46,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * The connector provides to the rendering: `refine()` to set the query. The behaviour of this function
  * may be impacted by the `queryHook` widget parameter.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/search-box/js/
  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomSearchBoxWidgetOptions)} Re-usable widget factory for a custom **SearchBox** widget.

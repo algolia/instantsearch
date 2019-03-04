@@ -35,6 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * **Hits** connector provides the logic to create custom widgets that will render the results retrieved from Algolia.
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hits/js/
  * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHitsWidgetOptions)} Re-usable widget factory for a custom **Hits** widget.

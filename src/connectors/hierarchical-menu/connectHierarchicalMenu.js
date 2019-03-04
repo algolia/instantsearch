@@ -69,6 +69,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * There's a complete example available on how to write a custom **HierarchicalMenu**:
  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/jquery/widgets/hierarchicalMenu.js)
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/
  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.

@@ -59,6 +59,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *  - switch between two values.
  *
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/
  * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.

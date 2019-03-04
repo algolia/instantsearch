@@ -63,6 +63,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  * @function connectNumericRefinementList
  * @type {Connector}
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/
  * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericRefinementList** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomNumericRefinementListWidgetOptions)} Re-usable widget factory for a custom **NumericRefinementList** widget.
