@@ -154,6 +154,7 @@ function mapWidgets(widgets, symbols, files) {
     const staticExamples = symbol.tags.filter(t => t.title === 'staticExample');
     const requirements = symbol.tags.find(t => t.title === 'requirements') || { description: '' };
     const devNovel = symbol.tags.find(t => t.title === 'devNovel') || false;
+    const canonical = symbol.tags.find(t => t.title === 'canonical') || false;
 
     const symbolWithRelatedType = {
       ...symbol,
@@ -175,6 +176,7 @@ function mapWidgets(widgets, symbols, files) {
       withHeadings: true,
       editable: true,
       githubSource: getGithubSource(symbolWithRelatedType),
+      canonical: createCanonicalURL(canonical),
     };
   });
 }
@@ -235,4 +237,8 @@ function isCustomType(name) {
 
 function createDevNovelURL(devNovel) {
   return devNovel ? `dev-novel?selectedStory=${devNovel.description}.default` : '';
+}
+
+function createCanonicalURL(canonical) {
+  return canonical && canonical.description ? canonical.description : '';
 }
