@@ -59,19 +59,12 @@ class Panel extends Component {
               }));
             }}
           >
-            {this.state.collapsed ? (
-              <Template
-                {...templateProps}
-                templateKey="collapseButtonMore"
-                rootTagName="span"
-              />
-            ) : (
-              <Template
-                {...templateProps}
-                templateKey="collapseButtonLess"
-                rootTagName="span"
-              />
-            )}
+            <Template
+              {...templateProps}
+              templateKey="collapseButton"
+              rootTagName="span"
+              data={{ collapsed: this.state.collapsed }}
+            />
           </button>
         )}
 
