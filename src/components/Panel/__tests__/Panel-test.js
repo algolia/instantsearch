@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Panel from '../Panel';
 
-const defaultCSSClasses = {
+const cssClasses = {
   root: 'root',
   noRefinementRoot: 'noRefinementRoot',
   body: 'body',
@@ -12,7 +12,7 @@ const defaultCSSClasses = {
 
 const getDefaultProps = () => ({
   bodyElement: document.createElement('div'),
-  cssClasses: defaultCSSClasses,
+  cssClasses,
   hidden: false,
   data: {},
   templateProps: {
@@ -31,13 +31,15 @@ describe('Panel', () => {
 
     const wrapper = mount(<Panel {...props} />);
 
-    expect(wrapper.find('.root').exists()).toBe(true);
-    expect(wrapper.find('.noRefinementRoot').exists()).toBe(false);
-    expect(wrapper.find('.body').exists()).toBe(true);
-    expect(wrapper.find('.header').exists()).toBe(true);
-    expect(wrapper.find('.footer').exists()).toBe(true);
-    expect(wrapper.find('.header').text()).toBe('Header');
-    expect(wrapper.find('.footer').text()).toBe('Footer');
+    expect(wrapper.find(`.${cssClasses.root}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.noRefinementRoot}`).exists()).toBe(
+      false
+    );
+    expect(wrapper.find(`.${cssClasses.body}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.header}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.footer}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.header}`).text()).toBe('Header');
+    expect(wrapper.find(`.${cssClasses.footer}`).text()).toBe('Footer');
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -49,11 +51,11 @@ describe('Panel', () => {
 
     const wrapper = mount(<Panel {...props} />);
 
-    expect(wrapper.find('.root').exists()).toBe(true);
-    expect(wrapper.find('.noRefinementRoot').exists()).toBe(true);
-    expect(wrapper.find('.body').exists()).toBe(true);
-    expect(wrapper.find('.header').exists()).toBe(true);
-    expect(wrapper.find('.footer').exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.root}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.noRefinementRoot}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.body}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.header}`).exists()).toBe(true);
+    expect(wrapper.find(`.${cssClasses.footer}`).exists()).toBe(true);
     expect(wrapper.props().hidden).toBe(true);
     expect(wrapper).toMatchSnapshot();
   });
