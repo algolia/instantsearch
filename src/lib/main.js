@@ -167,6 +167,7 @@ import * as stateMappings from './stateMappings/index.js';
  * look at the [getting started](getting-started.html).
  *
  * @function instantsearch
+ * @canonical https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/
  * @param {InstantSearchOptions} $0 The options
  * @return {InstantSearch} the instantsearch instance
  */
