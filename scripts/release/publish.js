@@ -3,11 +3,10 @@
 /* eslint-disable no-process-exit */
 /* eslint-disable import/no-commonjs */
 const childProcess = require('child_process');
-
 const colors = require('colors/safe');
 const inquirer = require('inquirer');
-
 const shell = require('shelljs');
+
 shell.fatal = true;
 
 // Read CLI flags
@@ -17,7 +16,7 @@ const {
   updateChangelog,
   getChangelog,
   showChangelog,
-} = require('./conventionalChangelog.js');
+} = require('./conventional-changelog.js');
 
 // check if user can publish new version to npm
 const ownersFound = parseFloat(
@@ -158,7 +157,7 @@ inquirer
         // bump new version
         shell.echo(colors.blue(`Bump version to "${newVersion}"`));
         shell.exec(
-          `VERSION=${newVersion} babel-node ./scripts/bump-package-version.js`
+          `VERSION=${newVersion} babel-node ./scripts/release/bump-package-version.js`
         );
 
         // build library new version

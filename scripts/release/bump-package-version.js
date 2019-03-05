@@ -2,11 +2,9 @@
 
 import fs from 'fs';
 import path from 'path';
-
 import mversion from 'mversion';
-
 import semver from 'semver';
-import currentVersion from '../src/lib/version';
+import currentVersion from '../../src/lib/version';
 
 if (!process.env.VERSION) {
   throw new Error(
@@ -30,7 +28,7 @@ console.log(`Releasing ${newVersion}`);
 
 console.log('..Updating src/lib/version.js');
 
-const versionFile = path.join(__dirname, '../src/lib/version.js');
+const versionFile = path.join(__dirname, '../../src/lib/version.js');
 const newContent = `export default '${newVersion}';\n`;
 fs.writeFileSync(versionFile, newContent);
 

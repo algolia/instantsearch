@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import testServer from '../functional-tests/testServer';
-import watch from './dev-functional-tests-compile-watch';
+import testServer from '../../functional-tests/testServer';
+import watch from './compile-watch';
 
 watch(() => {});
 
