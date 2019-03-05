@@ -4,7 +4,7 @@ import index from '../src/widgets/index/index';
 
 storiesOf('Index', module)
   .add(
-    'with two indices',
+    'with three indices',
     withHits(({ search, container, instantsearch }) => {
       const $buttonAddWidgets = document.createElement('button');
       $buttonAddWidgets.textContent = 'Add widgets';
@@ -14,7 +14,7 @@ storiesOf('Index', module)
       $buttonRemoveidgets.textContent = 'Remove widgets';
 
       const $instantSearchTitle = document.createElement('h2');
-      $instantSearchTitle.innerHTML = '<code>instant_search</code>';
+      $instantSearchTitle.innerHTML = '<code>instant_search_price_desc</code>';
       const $instantSearchSearchBox = document.createElement('div');
       $instantSearchSearchBox.style.marginBottom = '15px';
       const $instantSearchHits = document.createElement('div');
@@ -43,7 +43,7 @@ storiesOf('Index', module)
 
       // instant_search
       const instantSearchIndex = index({
-        indexName: 'instant_search',
+        indexName: 'instant_search_price_desc',
       });
 
       const instantSearchConfigure = instantsearch.widgets.configure({
@@ -183,7 +183,7 @@ storiesOf('Index', module)
 
       // Top level
       const topLevelConfigure = instantsearch.widgets.configure({
-        hitsPerPage: 3,
+        hitsPerPage: 4, // -> overriden by instantSearchConfigure
       });
 
       // instant_search
@@ -192,7 +192,7 @@ storiesOf('Index', module)
       });
 
       const instantSearchConfigure = instantsearch.widgets.configure({
-        hitsPerPage: 4,
+        hitsPerPage: 3,
       });
 
       const instantSearchHits = instantsearch.widgets.hits({
@@ -212,11 +212,11 @@ storiesOf('Index', module)
       // instant_search_apple
       const instantSearchAppleIndex = index({
         indexName: 'instant_search',
-        // Really mandatory?
         indexId: 'instant_search_apple',
       });
 
       const instantSearchAppleConfigure = instantsearch.widgets.configure({
+        hitsPerPage: 2, // overriden by instantSearchAppleDeepConfigure
         filters: 'brand:Apple',
       });
 
@@ -236,11 +236,11 @@ storiesOf('Index', module)
       // instant_search_samsung
       const instantSearchSamsungIndex = index({
         indexName: 'instant_search',
-        // Really mandatory?
         indexId: 'instant_search_samsung',
       });
 
       const instantSearchSamsungConfigure = instantsearch.widgets.configure({
+        hitsPerPage: 2,
         filters: 'brand:Samsung',
       });
 
@@ -261,12 +261,11 @@ storiesOf('Index', module)
       // instant_search_apple
       const instantSearchAppleDeepIndex = index({
         indexName: 'instant_search',
-        // Really mandatory?
         indexId: 'instant_search_apple',
       });
 
       const instantSearchAppleDeepConfigure = instantsearch.widgets.configure({
-        hitsPerPage: 2,
+        hitsPerPage: 1,
       });
 
       const instantSearchAppleDeepHits = instantsearch.widgets.hits({
@@ -290,7 +289,7 @@ storiesOf('Index', module)
         instantSearchAppleIndex,
         instantSearchSamsungIndex.addWidgets([
           // Avoid to collapse the line
-          // instantSearchAppleDeepIndex,
+          instantSearchAppleDeepIndex,
         ]),
       ]);
     })
