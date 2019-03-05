@@ -21,16 +21,6 @@ function defaultCreateURL() {
   return '#';
 }
 
-const createChildHelper = ({ parent, client, index, parameters }) => {
-  const helper = algoliasearchHelper(client, index, parameters);
-
-  helper.search = () => {
-    parent.search();
-  };
-
-  return helper;
-};
-
 const resolveRootNode = node => {
   const resolveParentNode = (innerNode, nodes) => {
     const next = [innerNode].concat(nodes);
@@ -41,6 +31,48 @@ const resolveRootNode = node => {
   };
 
   return resolveParentNode(node, []);
+};
+
+const createMainHelper = ({ client, index, parameters, nodesByIndexId }) => {
+  const helper = algoliasearchHelper(client, index, parameters);
+  const mainSearchFunction = helper.search.bind(helper);
+
+  helper.search = () => {
+    const innerSearchParameters = nodesByIndexId[index].nodes.map(n =>
+      // Resolve the search paramerters for each node that share the same
+      // index identifer than this derived helper. We merge them based on
+      // the order they have been added to the tree.
+      resolveSingleLeafMerge(
+        // Resolve the root node for each node that share the same index
+        // identifer than this derived helper. We merge them based on
+        // the order they have been added to the tree.
+        ...resolveRootNode(n)
+          // Tweaks for the input of the resolve function
+          .map(_ => ({ state: _.helper.getState() }))
+      )
+    );
+
+    const nextSearchParameters = resolveSingleLeafMerge(
+      ...[{ state: helper.getState() }].concat(
+        // Tweaks for the input of the resolve function
+        innerSearchParameters.map(_ => ({ state: _ }))
+      )
+    );
+
+    mainSearchFunction(nextSearchParameters);
+  };
+
+  return helper;
+};
+
+const createChildHelper = ({ parent, client, index, parameters }) => {
+  const helper = algoliasearchHelper(client, index, parameters);
+
+  helper.search = () => {
+    parent.search();
+  };
+
+  return helper;
 };
 
 /**
@@ -87,6 +119,7 @@ class InstantSearch extends EventEmitter {
 
     this.client = searchClient;
     this.searchParameters = searchParameters;
+    this.nodesByIndexId = {};
 
     this.tree = {
       instance: this,
@@ -94,20 +127,23 @@ class InstantSearch extends EventEmitter {
       derivedHelper: null,
       indices: [],
       widgets: [],
-      // create a wrapper around the helper to manage the
-      // be able to control the state on it. Like we do for
-      // the derived.
-      helper: algoliasearchHelper(this.client, indexName, {
-        ...searchParameters,
+      helper: createMainHelper({
+        // Avoid the circular reference for the `nodesByIndexId`. Could be solve
+        // with a structure more appropritate than two different structures. See
+        // how we can improve the structure to support this.
+        nodesByIndexId: this.nodesByIndexId,
+        client: this.client,
         index: indexName,
+        parameters: {
+          ...searchParameters,
+          index: indexName,
+        },
       }),
     };
 
-    this.nodesByIndexId = {
-      [indexName]: {
-        helper: this.tree.helper,
-        nodes: [],
-      },
+    this.nodesByIndexId[indexName] = {
+      helper: this.tree.helper,
+      nodes: [],
     };
 
     this.templatesConfig = {
