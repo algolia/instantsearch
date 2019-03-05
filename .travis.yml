@@ -21,6 +21,7 @@ env:
     - SCRIPT=yarn run test
     - SCRIPT=yarn run lint
     - SCRIPT=yarn run type-check
+    - SCRIPT=yarn run test:size
   global:
     - CXX=g++-4.8
     - SAUCE_USERNAME=isjs
