@@ -94,10 +94,20 @@ class InstantSearch extends EventEmitter {
       derivedHelper: null,
       indices: [],
       widgets: [],
+      // create a wrapper around the helper to manage the
+      // be able to control the state on it. Like we do for
+      // the derived.
       helper: algoliasearchHelper(this.client, indexName, {
         ...searchParameters,
         index: indexName,
       }),
+    };
+
+    this.nodesByIndexId = {
+      [indexName]: {
+        helper: this.tree.helper,
+        nodes: [],
+      },
     };
 
     this.templatesConfig = {
@@ -162,6 +172,10 @@ class InstantSearch extends EventEmitter {
     widgets
       .filter(widget => widget instanceof Index)
       .forEach(index => {
+        const isIndexIdAlreadyExist = Boolean(
+          this.nodesByIndexId[index.indexId]
+        );
+
         const helper = createChildHelper({
           parent: current.helper,
           client: this.client,
@@ -172,27 +186,67 @@ class InstantSearch extends EventEmitter {
           // },
         });
 
-        // useful to trigger the N requets only the top level owns the search
-        const derivedHelper = this.tree.helper.derive(() => {
-          // eslint-disable-next-line no-use-before-define
-          const nodes = resolveRootNode(innerNode);
-
-          return resolveSingleLeafMerge(
-            // Tweaks for the input of the resolve function
-            ...nodes.map(_ => ({ state: _.helper.getState() }))
-          );
-        });
-
-        derivedHelper.on('result', this._render.bind(this, helper));
-
         const innerNode = {
           instance: this,
           parent: current,
           indices: [],
           widgets: [],
+          derivedHelper: null,
           helper,
-          derivedHelper,
         };
+
+        if (!isIndexIdAlreadyExist) {
+          const derivedHelper = this.tree.helper.derive(() => {
+            const innerSearchParameters = this.nodesByIndexId[
+              index.indexId
+            ].nodes.map(n =>
+              // Resolve the search paramerters for each node that share the same
+              // index identifer than this derived helper. We merge them based on
+              // the order they have been added to the tree.
+              resolveSingleLeafMerge(
+                // Resolve the root node for each node that share the same index
+                // identifer than this derived helper. We merge them based on
+                // the order they have been added to the tree.
+                ...resolveRootNode(n)
+                  // Tweaks for the input of the resolve function
+                  .map(_ => ({ state: _.helper.getState() }))
+              )
+            );
+
+            const nodes = resolveRootNode(innerNode);
+            const searchParameters = resolveSingleLeafMerge(
+              ...nodes
+                // Tweaks for the input of the resolve function
+                .map(_ => ({ state: _.helper.getState() }))
+            );
+
+            return resolveSingleLeafMerge(
+              ...[{ state: searchParameters }].concat(
+                // Tweaks for the input of the resolve function
+                innerSearchParameters.map(_ => ({ state: _ }))
+              )
+            );
+          });
+
+          innerNode.derivedHelper = derivedHelper;
+
+          // register the index
+          this.nodesByIndexId = {
+            ...this.nodesByIndexId,
+            [index.indexId]: {
+              helper: derivedHelper,
+              nodes: [],
+            },
+          };
+        } else {
+          this.nodesByIndexId[index.indexId].nodes.push(innerNode);
+        }
+
+        // attach the render callback with the helper node
+        this.nodesByIndexId[index.indexId].helper.on(
+          'result',
+          this._render.bind(this, helper)
+        );
 
         current.indices.push(innerNode);
 
@@ -365,6 +419,9 @@ class InstantSearch extends EventEmitter {
       if (!this._isSearchStalled && !this._searchStalledTimer) {
         this._searchStalledTimer = setTimeout(() => {
           this._isSearchStalled = true;
+          // This render does not work, it only render the top level widgets
+          // since it trigger a render with only the top level helper. We
+          // branch inside `render`.
           this._render(
             this.tree.helper,
             this.tree.helper.lastResults,
