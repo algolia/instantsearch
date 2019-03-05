@@ -55,6 +55,8 @@ export default function connectHits(renderFn, unmountFn) {
     const { escapeHTML = true, transformItems = items => items } = widgetParams;
 
     return {
+      $$type: Symbol.for('ais.hits'),
+
       getConfiguration() {
         return escapeHTML ? TAG_PLACEHOLDER : undefined;
       },

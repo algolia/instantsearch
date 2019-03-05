@@ -37,6 +37,8 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
     }
 
     return {
+      $$type: Symbol.for('ais.configure'),
+
       getConfiguration() {
         return widgetParams.searchParameters;
       },

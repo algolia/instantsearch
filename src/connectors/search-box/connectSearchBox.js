@@ -78,10 +78,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
     }
 
     return {
-      _clear() {},
-      _cachedClear() {
-        this._clear();
-      },
+      $$type: Symbol.for('ais.searchBox'),
 
       getConfiguration() {
         return {
@@ -168,6 +165,11 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQuery(uiState.query || '');
+      },
+
+      _clear() {},
+      _cachedClear() {
+        this._clear();
       },
     };
   };
