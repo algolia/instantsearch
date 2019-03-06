@@ -7,30 +7,32 @@ const uniq = input =>
 
 const dedupe = (left, right) => uniq(concat(left, right));
 
+const filterObject = fn => input =>
+  Object.keys(input)
+    .filter(key => fn(key, input))
+    .reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: input[key],
+      }),
+      {}
+    );
+
+const filterObjectWithUndefinedValues = filterObject(
+  (key, input) => typeof input[key] !== 'undefined'
+);
+
 const mergeDisjunctiveFacetRefinements = (attributes, left, right) =>
-  attributes.reduce(
-    (acc, attribute) => ({
-      ...acc,
-      // Right takes over left for the same attribute
-      [attribute]: right[attribute],
-    }),
-    left
+  filterObjectWithUndefinedValues(
+    attributes.reduce(
+      (acc, attribute) => ({
+        ...acc,
+        // Right takes over left for the same attribute
+        [attribute]: right[attribute],
+      }),
+      left
+    )
   );
-
-// const filterObject = fn => input =>
-//   Object.keys(input)
-//     .filter(key => fn(key, input))
-//     .reduce(
-//       (acc, key) => ({
-//         ...acc,
-//         [key]: input[key],
-//       }),
-//       {}
-//     );
-
-// const filterObjectWithUndefinedValues = filterObject(
-//   (key, input) => typeof input[key] !== 'undefined'
-// );
 
 const mergeSearchParameters = (left, right) =>
   new SearchParametersWithoutDefaults({
