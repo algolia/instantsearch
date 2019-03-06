@@ -135,9 +135,11 @@ storiesOf('Index', module)
       const $instantSearchTitle = document.createElement('h2');
       $instantSearchTitle.innerHTML = '<code>instant_search</code>';
       const $instantSearchHits = document.createElement('div');
+      const $instantSearchRefinementList = document.createElement('div');
 
       $instantSearchDiv.appendChild($instantSearchTitle);
       $instantSearchDiv.appendChild($instantSearchHits);
+      $instantSearchDiv.appendChild($instantSearchRefinementList);
 
       const $instantSearchAppleDiv = document.createElement('div');
       $instantSearchAppleDiv.style.padding = '10px';
@@ -203,10 +205,16 @@ storiesOf('Index', module)
         },
       });
 
+      // const instantSearchRefinementList = instantsearch.widgets.refinementList({
+      //   container: $instantSearchRefinementList,
+      //   attribute: 'brand',
+      // });
+
       instantSearchIndex.addWidgets([
         // Avoid to collapse the line
         instantSearchConfigure,
         instantSearchHits,
+        // instantSearchRefinementList,
       ]);
 
       // instant_search_apple
@@ -289,7 +297,7 @@ storiesOf('Index', module)
         instantSearchAppleIndex,
         instantSearchSamsungIndex.addWidgets([
           // Avoid to collapse the line
-          instantSearchAppleDeepIndex,
+          // instantSearchAppleDeepIndex,
         ]),
       ]);
     })
