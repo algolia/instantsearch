@@ -145,8 +145,8 @@ util.inherits(AlgoliaSearchHelper, events.EventEmitter);
  * @fires error
  * @chainable
  */
-AlgoliaSearchHelper.prototype.search = function() {
-  this._search();
+AlgoliaSearchHelper.prototype.search = function(state) {
+  this._search(state);
   return this;
 };
 
@@ -1253,8 +1253,8 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(
  * @fires result
  * @fires error
  */
-AlgoliaSearchHelper.prototype._search = function() {
-  const state = this.state;
+AlgoliaSearchHelper.prototype._search = function(nextState) {
+  const state = nextState || this.state;
   const mainQueries = requestBuilder._getQueries(state.index, state);
 
   const states = [
@@ -1265,9 +1265,11 @@ AlgoliaSearchHelper.prototype._search = function() {
     },
   ];
 
+  // Have to define which state we use here internal or controlled?
   this.emit('search', state, this.lastResults);
 
   const derivedQueries = map(this.derivedHelpers, function(derivedHelper) {
+    // Have to define which state we use here internal or controlled?
     const derivedState = derivedHelper.getModifiedState(state);
     const queries = requestBuilder._getQueries(
       derivedState.index,
