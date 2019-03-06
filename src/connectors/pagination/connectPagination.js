@@ -97,6 +97,8 @@ export default function connectPagination(renderFn, unmountFn) {
     });
 
     return {
+      $$type: Symbol.for('ais.pagination'),
+
       init({ helper, createURL, instantSearchInstance }) {
         this.refine = page => {
           helper.setPage(page);

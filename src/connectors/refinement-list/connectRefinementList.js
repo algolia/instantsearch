@@ -266,6 +266,8 @@ export default function connectRefinementList(renderFn, unmountFn) {
     };
 
     return {
+      $$type: Symbol.for('ais.refinementList'),
+
       isShowingMore: false,
 
       // Provide the same function to the `renderFn` so that way the user

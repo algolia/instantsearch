@@ -50,6 +50,8 @@ export default function connectStats(renderFn, unmountFn) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => ({
+    $$type: Symbol.for('ais.stats'),
+
     init({ helper, instantSearchInstance }) {
       renderFn(
         {
