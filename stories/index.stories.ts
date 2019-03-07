@@ -9,32 +9,46 @@ storiesOf('Index', module)
       const $buttonAddWidgets = document.createElement('button');
       $buttonAddWidgets.textContent = 'Add widgets';
       $buttonAddWidgets.style.marginRight = '10px';
+      $buttonAddWidgets.style.marginBottom = '15px';
 
       const $buttonRemoveidgets = document.createElement('button');
       $buttonRemoveidgets.textContent = 'Remove widgets';
 
+      const $instantSearchDiv = document.createElement('div');
+      $instantSearchDiv.style.padding = '10px';
+      $instantSearchDiv.style.border = '1px solid black';
+      $instantSearchDiv.style.marginBottom = '15px';
       const $instantSearchTitle = document.createElement('h2');
       $instantSearchTitle.innerHTML = '<code>instant_search_price_desc</code>';
       const $instantSearchSearchBox = document.createElement('div');
       $instantSearchSearchBox.style.marginBottom = '15px';
       const $instantSearchHits = document.createElement('div');
+      $instantSearchHits.style.marginBottom = '15px';
 
+      $instantSearchDiv.appendChild($instantSearchTitle);
+      $instantSearchDiv.appendChild($instantSearchSearchBox);
+      $instantSearchDiv.appendChild($instantSearchHits);
+
+      const $bestBuyDiv = document.createElement('div');
+      $bestBuyDiv.style.padding = '10px';
+      $bestBuyDiv.style.border = '1px solid black';
+      $bestBuyDiv.style.marginBottom = '15px';
       const $bestbuyTitle = document.createElement('h2');
       $bestbuyTitle.innerHTML = '<code>bestbuy</code>';
       const $bestbuySearchBox = document.createElement('div');
       $bestbuySearchBox.style.marginBottom = '15px';
       const $bestbuyHits = document.createElement('div');
 
+      $bestBuyDiv.appendChild($bestbuyTitle);
+      $bestBuyDiv.appendChild($bestbuySearchBox);
+      $bestBuyDiv.appendChild($bestbuyHits);
+
+      $instantSearchDiv.appendChild($bestBuyDiv);
+
       container.appendChild($buttonAddWidgets);
       container.appendChild($buttonRemoveidgets);
 
-      container.appendChild($instantSearchTitle);
-      container.appendChild($instantSearchSearchBox);
-      container.appendChild($instantSearchHits);
-
-      container.appendChild($bestbuyTitle);
-      container.appendChild($bestbuySearchBox);
-      container.appendChild($bestbuyHits);
+      container.appendChild($instantSearchDiv);
 
       // Top level
       const topLevelConfigure = instantsearch.widgets.configure({
@@ -110,6 +124,7 @@ storiesOf('Index', module)
       // Add widgets dynamically
       $buttonAddWidgets.addEventListener('click', () => {
         instantSearchIndex.addWidgets([bestbuyIndex]);
+        // search.addWidgets([instantSearchIndex]);
       });
 
       // Remove widgets dynamically
@@ -122,6 +137,7 @@ storiesOf('Index', module)
 
         // remove an index
         instantSearchIndex.removeWidgets([bestbuyIndex]);
+        // search.removeWidgets([instantSearchIndex]);
       });
     })
   )
