@@ -344,6 +344,7 @@ class InstantSearch extends EventEmitter {
     // Widgets
     widgets
       .filter(widget => !(widget instanceof Index))
+      .map(i => console.log(i) || i)
       .forEach(widget => {
         if (
           !current.widgets.includes(widget) ||
@@ -377,6 +378,7 @@ class InstantSearch extends EventEmitter {
     // Widget indices
     widgets
       .filter(widget => widget instanceof Index)
+      .map(i => console.log(i) || i)
       .forEach(index => {
         // remove the subscription on the derviedHelper
         index.node.unsubscribe();
@@ -417,6 +419,9 @@ class InstantSearch extends EventEmitter {
     setTimeout(() => {
       // if (this.widgets.length > 0) {}
       this.tree.helper.search();
+
+      console.log('search for widgets removed:');
+      console.log(this.tree);
       console.log('------');
     }, 0);
   }
