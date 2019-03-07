@@ -1,5 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import * as utils from '../utils';
+import * as utils from '../';
 
 describe('capitalize', () => {
   it('should capitalize the first character only', () => {
