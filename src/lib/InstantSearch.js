@@ -96,6 +96,14 @@ const createChildHelper = ({ parent, client, index, parameters }) => {
   return helper;
 };
 
+const createHelperSubscription = ({ helper, event, callback }) => {
+  helper.on(event, callback);
+
+  return () => {
+    helper.off(event, callback);
+  };
+};
+
 /**
  * The actual implementation of the InstantSearch. This is
  * created using the `instantsearch` factory function.
@@ -160,7 +168,6 @@ class InstantSearch extends EventEmitter {
       parent: null,
       indices: [],
       widgets: [],
-      derivedHelper,
       helper,
       // helper: createMainHelper({
       //   // Avoid the circular reference for the `nodesByIndexId`. Could be solve
@@ -262,7 +269,6 @@ class InstantSearch extends EventEmitter {
           parent: current,
           indices: [],
           widgets: [],
-          derivedHelper: null,
           helper,
         };
 
@@ -272,8 +278,6 @@ class InstantSearch extends EventEmitter {
               this.nodesByIndexId[index.indexId].nodes
             );
           });
-
-          innerNode.derivedHelper = derivedHelper;
 
           // register the index
           this.nodesByIndexId = {
@@ -288,10 +292,11 @@ class InstantSearch extends EventEmitter {
         }
 
         // attach the render callback with the helper node
-        this.nodesByIndexId[index.indexId].helper.on(
-          'result',
-          this._render.bind(this, helper)
-        );
+        innerNode.unsubscribe = createHelperSubscription({
+          helper: this.nodesByIndexId[index.indexId].helper,
+          event: 'result',
+          callback: this._render.bind(this, helper),
+        });
 
         current.indices.push(innerNode);
 
@@ -373,16 +378,38 @@ class InstantSearch extends EventEmitter {
     widgets
       .filter(widget => widget instanceof Index)
       .forEach(index => {
+        // remove the subscription on the derviedHelper
+        index.node.unsubscribe();
+
+        // remove the node from the current node
         current.indices = current.indices.filter(n => n !== index.node);
 
-        index.node.derivedHelper.detach();
-        this.removeWidgets(index.widgets, index.node);
+        // remove the node from the nodes that share the same index identifier
+        this.nodesByIndexId = {
+          ...this.nodesByIndexId,
+          [index.indexId]: {
+            ...this.nodesByIndexId[index.indexId],
+            nodes: this.nodesByIndexId[index.indexId].nodes.filter(
+              n => n !== index.node
+            ),
+          },
+        };
 
-        index.node.indices.forEach(innerNode => {
-          innerNode.derivedHelper.detach();
-          this.removeWidgets(innerNode.widgets, innerNode);
-          delete innerNode.parent.node;
-        });
+        // remove the derivedHelper when no nodes are present
+        if (!this.nodesByIndexId[index.indexId].nodes.length) {
+          const { [index.indexId]: innerNode, ...rest } = this.nodesByIndexId;
+
+          innerNode.helper.detach();
+
+          this.nodesByIndexId = {
+            ...rest,
+          };
+        }
+
+        // It does not work on recursive index tree but we should fix it with a
+        // better data structure with widgets <> indices. Keep it for the next
+        // task.
+        this.removeWidgets(index.widgets, index.node);
 
         delete index.node;
       });
