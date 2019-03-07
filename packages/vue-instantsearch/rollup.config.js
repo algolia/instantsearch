@@ -47,12 +47,16 @@ export default [
   },
   {
     input: 'src/instantsearch.umd.js',
+    external: ['vue'],
     output: [
       {
         file: `dist/vue-instantsearch.js`,
         format: 'umd',
         name: 'VueInstantSearch',
         exports: 'named',
+        globals: {
+          vue: 'Vue',
+        },
       },
     ],
     plugins: [
