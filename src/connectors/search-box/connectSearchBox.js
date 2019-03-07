@@ -147,7 +147,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
       dispose({ state }) {
         unmountFn();
-        return state.setQuery('');
+        return state.setQuery();
       },
 
       getWidgetState(uiState, { searchParameters }) {
