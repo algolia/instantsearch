@@ -171,7 +171,7 @@ export default function panel({
           options,
           hidden: Boolean(hidden(options)),
           collapsible,
-          collapsed: collapsedFn(options),
+          collapsed: Boolean(collapsedFn(options)),
         });
 
         if (typeof widget.render === 'function') {
