@@ -67,9 +67,10 @@ describe('Usage', () => {
 
   test('with a widget without `container` throws', () => {
     const fakeWidget = () => {};
+    const fakeWithWithPanel = panel()(fakeWidget);
 
     expect(() => {
-      panel()(fakeWidget)({});
+      fakeWithWithPanel({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required in the widget within the panel.
 
@@ -79,64 +80,79 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/"
 });
 
 describe('Templates', () => {
-  test('with header template', () => {
+  let widgetFactory;
+
+  beforeEach(() => {
     const widget = {
       init: jest.fn(),
       render: jest.fn(),
+      dispose: jest.fn(),
     };
-    const widgetFactory = () => widget;
+    widgetFactory = () => widget;
+  });
 
-    panel({
+  test('with default templates', () => {
+    const widgetWithPanel = panel({})(widgetFactory);
+
+    widgetWithPanel({
+      container: document.createElement('div'),
+    });
+
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates).toEqual({
+      header: '',
+      footer: '',
+      collapseButtonText: expect.any(Function),
+    });
+  });
+
+  test('with header template', () => {
+    const widgetWithPanel = panel({
       templates: {
         header: 'Custom header',
       },
-    })(widgetFactory)({
+    })(widgetFactory);
+
+    widgetWithPanel({
       container: document.createElement('div'),
     });
 
-    expect(render.mock.calls[0][0].props.templateProps.templates.header).toBe(
-      'Custom header'
-    );
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates.header).toBe('Custom header');
   });
 
   test('with footer template', () => {
-    const widget = {
-      init: jest.fn(),
-      render: jest.fn(),
-    };
-    const widgetFactory = () => widget;
-
-    panel({
+    const widgetWithPanel = panel({
       templates: {
         footer: 'Custom footer',
       },
-    })(widgetFactory)({
+    })(widgetFactory);
+
+    widgetWithPanel({
       container: document.createElement('div'),
     });
 
-    expect(render.mock.calls[0][0].props.templateProps.templates.footer).toBe(
-      'Custom footer'
-    );
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates.footer).toBe('Custom footer');
   });
 
   test('with collapseButtonText template', () => {
-    const widget = {
-      init: jest.fn(),
-      render: jest.fn(),
-    };
-    const widgetFactory = () => widget;
-
-    panel({
+    const widgetWithPanel = panel({
       templates: {
         collapseButtonText: 'Custom collapseButtonText',
       },
-    })(widgetFactory)({
+    })(widgetFactory);
+
+    widgetWithPanel({
       container: document.createElement('div'),
     });
 
-    expect(
-      render.mock.calls[0][0].props.templateProps.templates.collapseButtonText
-    ).toBe('Custom collapseButtonText');
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates.collapseButtonText).toBe('Custom collapseButtonText');
   });
 });
 
