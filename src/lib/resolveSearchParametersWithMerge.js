@@ -37,11 +37,9 @@ const mergeDisjunctiveFacetRefinements = (attributes, left, right) =>
 const mergeSearchParameters = (left, right) =>
   new SearchParametersWithoutDefaults({
     // Inherit from the parent
-    // ...filterObjectWithUndefinedValues(left),
-    ...left,
+    ...filterObjectWithUndefinedValues(left),
     // Take the value of the child
-    // ...filterObjectWithUndefinedValues(right),
-    ...right,
+    ...filterObjectWithUndefinedValues(right),
     // Merge the complex attributes
     disjunctiveFacets: dedupe(left.disjunctiveFacets, right.disjunctiveFacets),
     // Takes the right attributes
