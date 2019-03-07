@@ -33,6 +33,27 @@ const resolveRootNode = node => {
   return resolveParentNode(node, []);
 };
 
+const resolveSearchParameters = nodes => {
+  const innerSearchParameters = nodes.map(n =>
+    // Resolve the search paramerters for each node that share the same
+    // index identifer than this derived helper. We merge them based on
+    // the order they have been added to the tree.
+    resolveSingleLeafMerge(
+      // Resolve the root node for each node that share the same index
+      // identifer than this derived helper. We merge them based on
+      // the order they have been added to the tree.
+      ...resolveRootNode(n)
+        // Tweaks for the input of the resolve function
+        .map(_ => ({ state: _.helper.getState() }))
+    )
+  );
+
+  return resolveSingleLeafMerge(
+    // Tweaks for the input of the resolve function
+    ...innerSearchParameters.map(_ => ({ state: _ }))
+  );
+};
+
 // const createMainHelper = ({ client, index, parameters, nodesByIndexId }) => {
 //   const helper = algoliasearchHelper(client, index, parameters);
 //   const mainSearchFunction = helper.search.bind(helper);
@@ -127,27 +148,7 @@ class InstantSearch extends EventEmitter {
     });
 
     const derivedHelper = helper.derive(() => {
-      const innerSearchParameters = this.nodesByIndexId[indexName].nodes.map(
-        n =>
-          // Resolve the search paramerters for each node that share the same
-          // index identifer than this derived helper. We merge them based on
-          // the order they have been added to the tree.
-          resolveSingleLeafMerge(
-            // Resolve the root node for each node that share the same index
-            // identifer than this derived helper. We merge them based on
-            // the order they have been added to the tree.
-            ...resolveRootNode(n)
-              // Tweaks for the input of the resolve function
-              .map(_ => ({ state: _.helper.getState() }))
-          )
-      );
-
-      return resolveSingleLeafMerge(
-        ...[{ state: this.tree.helper.getState() }].concat(
-          // Tweaks for the input of the resolve function
-          innerSearchParameters.map(_ => ({ state: _ }))
-        )
-      );
+      return resolveSearchParameters(this.nodesByIndexId[indexName].nodes);
     });
 
     derivedHelper.on('result', this._render.bind(this, helper));
@@ -177,7 +178,7 @@ class InstantSearch extends EventEmitter {
 
     this.nodesByIndexId[indexName] = {
       helper: derivedHelper,
-      nodes: [],
+      nodes: [this.tree],
     };
 
     this.templatesConfig = {
@@ -267,34 +268,8 @@ class InstantSearch extends EventEmitter {
 
         if (!isIndexIdAlreadyExist) {
           const derivedHelper = this.tree.helper.derive(() => {
-            const innerSearchParameters = this.nodesByIndexId[
-              index.indexId
-            ].nodes.map(n =>
-              // Resolve the search paramerters for each node that share the same
-              // index identifer than this derived helper. We merge them based on
-              // the order they have been added to the tree.
-              resolveSingleLeafMerge(
-                // Resolve the root node for each node that share the same index
-                // identifer than this derived helper. We merge them based on
-                // the order they have been added to the tree.
-                ...resolveRootNode(n)
-                  // Tweaks for the input of the resolve function
-                  .map(_ => ({ state: _.helper.getState() }))
-              )
-            );
-
-            const nodes = resolveRootNode(innerNode);
-            const searchParameters = resolveSingleLeafMerge(
-              ...nodes
-                // Tweaks for the input of the resolve function
-                .map(_ => ({ state: _.helper.getState() }))
-            );
-
-            return resolveSingleLeafMerge(
-              ...[{ state: searchParameters }].concat(
-                // Tweaks for the input of the resolve function
-                innerSearchParameters.map(_ => ({ state: _ }))
-              )
+            return resolveSearchParameters(
+              this.nodesByIndexId[index.indexId].nodes
             );
           });
 
@@ -305,7 +280,7 @@ class InstantSearch extends EventEmitter {
             ...this.nodesByIndexId,
             [index.indexId]: {
               helper: derivedHelper,
-              nodes: [],
+              nodes: [innerNode],
             },
           };
         } else {
