@@ -32,7 +32,8 @@
     "docs:build:dev": "cd docs && yarn && yarn build:dev",
     "docs:watch": "cd docs && yarn && yarn dev",
     "docs:deploy": "cd docs && yarn && yarn deploy",
-    "test": "jest --coverage && yarn run lint",
+    "test": "jest --coverage && yarn run lint && yarn run test:size",
+    "test:size": "yarn build && bundlesize",
     "test:update": "jest --updateSnapshot",
     "test:watch": "jest --watch",
     "lint": "eslint --ext .js,.vue .",
@@ -60,6 +61,7 @@
     "babel-eslint": "10.0.1",
     "babel-jest": "23.6.0",
     "babel-preset-es2015": "6.24.1",
+    "bundlesize": "0.17.1",
     "concurrently": "4.1.0",
     "conventional-changelog-cli": "2.0.12",
     "eslint": "5.14.1",
@@ -95,6 +97,20 @@
     "vue-template-compiler": "2.5.17",
     "vuetify": "1.5.3"
   },
+  "bundlesize": [
+    {
+      "path": "./dist/vue-instantsearch.js",
+      "maxSize": "60 kB"
+    },
+    {
+      "path": "./dist/vue-instantsearch.esm.js",
+      "maxSize": "14 kB"
+    },
+    {
+      "path": "./dist/vue-instantsearch.common.js",
+      "maxSize": "14 kB"
+    }
+  ],
   "jest": {
     "setupFiles": [
       "<rootDir>/jest.setup.js"
