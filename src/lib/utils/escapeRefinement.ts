@@ -1,4 +1,4 @@
-function escapeRefinement(value) {
+function escapeRefinement(value: any) {
   if (typeof value === 'number' && value < 0) {
     value = String(value).replace(/^-/, '\\-');
   }

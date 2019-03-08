@@ -1,46 +1,23 @@
-import capitalize from './capitalize';
-import isDomElement from './isDomElement';
-import getContainerNode from './getContainerNode';
-import isSpecialClick from './isSpecialClick';
-import bemHelper from './bemHelper';
-import prepareTemplateProps from './prepareTemplateProps';
-import renderTemplate from './renderTemplate';
-import getRefinements from './getRefinements';
-import clearRefinements from './clearRefinements';
-import prefixKeys from './prefixKeys';
-import escapeRefinement from './escapeRefinement';
-import unescapeRefinement from './unescapeRefinement';
-import checkRendering from './checkRendering';
-import getPropertyByPath from './getPropertyByPath';
-import { warning, deprecate } from './log';
-import {
+export { default as capitalize } from './capitalize';
+export { default as isDomElement } from './isDomElement';
+export { default as getContainerNode } from './getContainerNode';
+export { default as isSpecialClick } from './isSpecialClick';
+export { default as bemHelper } from './bemHelper';
+export { default as prepareTemplateProps } from './prepareTemplateProps';
+export { default as renderTemplate } from './renderTemplate';
+export { default as getRefinements } from './getRefinements';
+export { default as clearRefinements } from './clearRefinements';
+export { default as prefixKeys } from './prefixKeys';
+export { default as escapeRefinement } from './escapeRefinement';
+export { default as unescapeRefinement } from './unescapeRefinement';
+export { default as checkRendering } from './checkRendering';
+export { default as getPropertyByPath } from './getPropertyByPath';
+export { warning, deprecate } from './logger';
+export {
   createDocumentationLink,
   createDocumentationMessageGenerator,
 } from './documentation';
-import {
+export {
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
 } from './geo-search';
-
-export {
-  capitalize,
-  getContainerNode,
-  bemHelper,
-  prepareTemplateProps,
-  renderTemplate,
-  isSpecialClick,
-  isDomElement,
-  getRefinements,
-  clearRefinements,
-  aroundLatLngToPosition,
-  insideBoundingBoxToBoundingBox,
-  getPropertyByPath,
-  prefixKeys,
-  escapeRefinement,
-  unescapeRefinement,
-  checkRendering,
-  createDocumentationLink,
-  createDocumentationMessageGenerator,
-  deprecate,
-  warning,
-};
