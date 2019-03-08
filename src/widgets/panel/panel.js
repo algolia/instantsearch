@@ -132,7 +132,8 @@ export default function panel({
     const defaultTemplates = {
       header: '',
       footer: '',
-      collapseButtonText: isPanelCollased => (isPanelCollased ? '➕' : '➖'),
+      collapseButtonText: ({ collapsed: isCollapsed }) =>
+        isCollapsed ? '➕' : '➖',
     };
     const templateProps = prepareTemplateProps({ defaultTemplates, templates });
 
