@@ -12,6 +12,7 @@ type Node = {
 };
 
 export class Index {
+  public $$type = Symbol.for('ais.index');
   public indexName: string;
   public indexId: string;
   public widgets: any[];

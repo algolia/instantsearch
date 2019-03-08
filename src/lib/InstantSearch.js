@@ -21,6 +21,9 @@ function defaultCreateURL() {
   return '#';
 }
 
+const isIndexWidget = _ => _.$$type === Symbol.for('ais.index');
+const isIndexWidgetLinked = _ => isIndexWidget(_) && Boolean(_.node);
+
 const resolveRootNode = node => {
   const resolveParentNode = (innerNode, nodes) => {
     const next = [innerNode].concat(nodes);
@@ -52,6 +55,34 @@ const resolveSearchParameters = nodes => {
     // Tweaks for the input of the resolve function
     ...innerSearchParameters.map(_ => ({ state: _ }))
   );
+};
+
+const resolveNodesFromIndexId = (node, indexId) => {
+  const loop = (acc, innerNode) => {
+    const nextAcc = innerNode.indexId === indexId ? acc.concat(innerNode) : acc;
+
+    return innerNode.widgets
+      .filter(isIndexWidget)
+      .map(_ => _.node)
+      .reduce((innerAcc, _) => loop(innerAcc, _), nextAcc);
+  };
+
+  return loop([], node);
+};
+
+const resolveNodeFromIndexId = (node, indexId) => {
+  const loop = innerNode => {
+    if (innerNode.indexId === indexId) {
+      return innerNode;
+    }
+
+    // It's a bit kacky would be better to find an alternaive solution
+    return innerNode.widgets.filter(isIndexWidgetLinked).forEach(widget => {
+      loop(widget.node);
+    });
+  };
+
+  return loop(node);
 };
 
 // const createMainHelper = ({ client, index, parameters, nodesByIndexId }) => {
@@ -94,6 +125,12 @@ const createChildHelper = ({ parent, client, index, parameters }) => {
   };
 
   return helper;
+};
+
+const createDerivedHelper = (helper, node, indexId) => {
+  return helper.derive(() => {
+    return resolveSearchParameters(resolveNodesFromIndexId(node, indexId));
+  });
 };
 
 const createHelperSubscription = ({ helper, event, callback }) => {
@@ -148,45 +185,58 @@ class InstantSearch extends EventEmitter {
 
     this.client = searchClient;
     this.searchParameters = searchParameters;
-    this.nodesByIndexId = {};
+    // We use the ref to create the derived helper before we create the
+    // actual node which cause an issue because the scope is captued with
+    // the incorrect data.
+    this.tree = {};
+    // this.nodesByIndexId = {};
 
     const helper = algoliasearchHelper(this.client, indexName, {
       ...searchParameters,
       index: indexName,
     });
 
-    const derivedHelper = helper.derive(() => {
-      return resolveSearchParameters(this.nodesByIndexId[indexName].nodes);
-    });
+    const derivedHelper = createDerivedHelper(helper, this.tree, indexName);
 
     derivedHelper.on('result', this._render.bind(this, helper));
 
     derivedHelper.on('error', e => this.emit('error', e));
 
-    this.tree = {
-      instance: this,
-      parent: null,
-      indices: [],
-      widgets: [],
-      helper,
-      // helper: createMainHelper({
-      //   // Avoid the circular reference for the `nodesByIndexId`. Could be solve
-      //   // with a structure more appropritate than two different structures. See
-      //   // how we can improve the structure to support this.
-      //   nodesByIndexId: this.nodesByIndexId,
-      //   client: this.client,
-      //   index: indexName,
-      //   parameters: {
-      //     ...searchParameters,
-      //     index: indexName,
-      //   },
-      // }),
-    };
+    this.tree.instance = this;
+    this.tree.parent = null;
+    this.tree.indexId = indexName;
+    this.tree.widgets = [];
+    this.tree.helper = helper;
+    this.tree.derivedHelper = derivedHelper;
+    this.tree.unsubscribeDerivedHelper = () => {};
 
-    this.nodesByIndexId[indexName] = {
-      helper: derivedHelper,
-      nodes: [this.tree],
-    };
+    // this.tree = {
+    //   instance: this,
+    //   parent: null,
+    //   indexId: indexName,
+    //   widgets: [],
+    //   helper,
+    //   derivedHelper,
+    //   unsubscribeDerivedHelper() {},
+    //   //
+    //   // helper: createMainHelper({
+    //   //   // Avoid the circular reference for the `nodesByIndexId`. Could be solve
+    //   //   // with a structure more appropritate than two different structures. See
+    //   //   // how we can improve the structure to support this.
+    //   //   nodesByIndexId: this.nodesByIndexId,
+    //   //   client: this.client,
+    //   //   index: indexName,
+    //   //   parameters: {
+    //   //     ...searchParameters,
+    //   //     index: indexName,
+    //   //   },
+    //   // }),
+    // };
+
+    // this.nodesByIndexId[indexName] = {
+    //   helper: derivedHelper,
+    //   nodes: [this.tree],
+    // };
 
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
@@ -228,7 +278,7 @@ class InstantSearch extends EventEmitter {
 
     // Widgets
     widgets
-      .filter(widget => !(widget instanceof Index))
+      // .filter(widget => !isIndexWidget(widget))
       .forEach(widget => {
         if (widget.render === undefined && widget.init === undefined) {
           throw new Error('Widget definition missing render or init method');
@@ -247,64 +297,84 @@ class InstantSearch extends EventEmitter {
       });
 
     // Indices
-    widgets
-      .filter(widget => widget instanceof Index)
-      .forEach(index => {
-        const isIndexIdAlreadyExist = Boolean(
-          this.nodesByIndexId[index.indexId]
-        );
+    widgets.filter(isIndexWidget).forEach(index => {
+      // const isIndexIdAlreadyExist = Boolean(
+      //   this.nodesByIndexId[index.indexId]
+      // );
 
-        const helper = createChildHelper({
-          parent: current.helper,
-          client: this.client,
-          index: index.indexName,
-          // parameters: {
-          //   ...current.helper.getState(),
-          //   index: index.indexName,
-          // },
-        });
+      const nodeForIndexId = resolveNodeFromIndexId(this.tree, index.indexId);
 
-        const innerNode = {
-          instance: this,
-          parent: current,
-          indices: [],
-          widgets: [],
-          helper,
-        };
-
-        if (!isIndexIdAlreadyExist) {
-          const derivedHelper = this.tree.helper.derive(() => {
-            return resolveSearchParameters(
-              this.nodesByIndexId[index.indexId].nodes
-            );
-          });
-
-          // register the index
-          this.nodesByIndexId = {
-            ...this.nodesByIndexId,
-            [index.indexId]: {
-              helper: derivedHelper,
-              nodes: [innerNode],
-            },
-          };
-        } else {
-          this.nodesByIndexId[index.indexId].nodes.push(innerNode);
-        }
-
-        // attach the render callback with the helper node
-        innerNode.unsubscribe = createHelperSubscription({
-          helper: this.nodesByIndexId[index.indexId].helper,
-          event: 'result',
-          callback: this._render.bind(this, helper),
-        });
-
-        current.indices.push(innerNode);
-
-        index.node = innerNode;
-
-        // recursive call to add widgets on the tree
-        this.addWidgets(index.widgets, innerNode);
+      const helper = createChildHelper({
+        parent: current.helper,
+        client: this.client,
+        index: index.indexName,
+        // parameters: {
+        //   ...current.helper.getState(),
+        //   index: index.indexName,
+        // },
       });
+
+      const derivedHelper = !nodeForIndexId
+        ? createDerivedHelper(this.tree.helper, this.tree, index.indexId)
+        : nodeForIndexId.derivedHelper;
+
+      const unsubscribeDerivedHelper = createHelperSubscription({
+        helper: derivedHelper,
+        event: 'result',
+        callback: this._render.bind(this, helper),
+      });
+
+      const innerNode = {
+        instance: this,
+        parent: current,
+        indexId: index.indexId,
+        widgets: [],
+        helper,
+        derivedHelper,
+        unsubscribeDerivedHelper,
+      };
+
+      // const innerNode = {
+      //   instance: this,
+      //   parent: current,
+      //   widgets: [],
+      //   helper,
+      // };
+
+      // if (!isIndexIdAlreadyExist) {
+      //   const derivedHelper = this.tree.helper.derive(() => {
+      //     return resolveSearchParameters(
+      //       this.nodesByIndexId[index.indexId].nodes
+      //     );
+      //   });
+
+      //   // register the index
+      //   this.nodesByIndexId = {
+      //     ...this.nodesByIndexId,
+      //     [index.indexId]: {
+      //       helper: derivedHelper,
+      //       nodes: [innerNode],
+      //     },
+      //   };
+      // } else {
+      //   this.nodesByIndexId[index.indexId].nodes.push(innerNode);
+      // }
+
+      // attach the render callback with the helper node
+      // innerNode.unsubscribe = createHelperSubscription({
+      //   helper: this.nodesByIndexId[index.indexId].helper,
+      //   event: 'result',
+      //   callback: this._render.bind(this, helper),
+      // });
+
+      // current.indices.push(innerNode);
+
+      // register the node on the index
+      index.node = innerNode;
+
+      // recursive call to add widgets on the tree
+      this.addWidgets(index.widgets, innerNode);
+    });
 
     // Second part of the fix for #3148
     // if (lastWidget) this.widgets.push(lastWidget);
@@ -559,9 +629,13 @@ class InstantSearch extends EventEmitter {
             instantSearchInstance: this,
           });
         }
+
+        if (widget.node) {
+          walk(widget.node);
+        }
       });
 
-      node.indices.forEach(inner => walk(inner));
+      // node.indices.forEach(inner => walk(inner));
     };
 
     walk(this.tree);
@@ -569,25 +643,29 @@ class InstantSearch extends EventEmitter {
 
   _render(helper, results, state) {
     const walk = node => {
-      if (node.helper === helper) {
-        node.widgets.forEach(widget => {
-          if (widget.render) {
-            widget.render({
-              templatesConfig: this.templatesConfig,
-              results,
-              state,
-              helper: node.helper,
-              createURL: this._createAbsoluteURL,
-              instantSearchInstance: this,
-              searchMetadata: {
-                isSearchStalled: this._isSearchStalled,
-              },
-            });
-          }
-        });
-      }
+      // if (node.helper === helper) {
+      node.widgets.forEach(widget => {
+        if (node.helper === helper && widget.render) {
+          widget.render({
+            templatesConfig: this.templatesConfig,
+            results,
+            state,
+            helper: node.helper,
+            createURL: this._createAbsoluteURL,
+            instantSearchInstance: this,
+            searchMetadata: {
+              isSearchStalled: this._isSearchStalled,
+            },
+          });
+        }
 
-      node.indices.forEach(inner => walk(inner));
+        if (widget.node) {
+          walk(widget.node);
+        }
+      });
+      // }
+
+      // node.indices.forEach(inner => walk(inner));
     };
 
     if (!this.tree.helper.hasPendingRequests()) {
