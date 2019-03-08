@@ -50,36 +50,6 @@ describe('utils.isDomElement', () => {
   });
 });
 
-describe('utils.bemHelper', () => {
-  it('should return a function', () => {
-    expect(utils.bemHelper('block')).toEqual(expect.any(Function));
-  });
-
-  describe('returned function', () => {
-    const returnedFunction = utils.bemHelper('block');
-
-    it('should create a block class when invoked without parameters', () => {
-      const className = returnedFunction();
-      expect(className).toBe('block');
-    });
-
-    it('should create a block with element class when invoked with one parameter', () => {
-      const className = returnedFunction('element');
-      expect(className).toBe('block--element');
-    });
-
-    it('should create a block with element and modifier class when invoked with 2 parameters', () => {
-      const className = returnedFunction('element', 'modifier');
-      expect(className).toBe('block--element__modifier');
-    });
-
-    it('should create a block with a modifier class when invoked with null for element', () => {
-      const className = returnedFunction(null, 'modifier');
-      expect(className).toBe('block__modifier');
-    });
-  });
-});
-
 describe('utils.prepareTemplateProps', () => {
   const defaultTemplates = {
     foo: 'toto',

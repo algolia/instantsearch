@@ -2,7 +2,6 @@ export { default as capitalize } from './capitalize';
 export { default as isDomElement } from './isDomElement';
 export { default as getContainerNode } from './getContainerNode';
 export { default as isSpecialClick } from './isSpecialClick';
-export { default as bemHelper } from './bemHelper';
 export { default as prepareTemplateProps } from './prepareTemplateProps';
 export { default as renderTemplate } from './renderTemplate';
 export { default as getRefinements } from './getRefinements';
