@@ -1,12 +1,15 @@
-import { addDecorator, configure } from '@storybook/html';
-import { withOptions } from '@storybook/addon-options';
+import { addParameters, configure } from '@storybook/html';
+import { create } from '@storybook/theming';
 
-addDecorator(
-  withOptions({
-    name: 'instantsearch.js',
-    url: 'https://github.com/algolia/instantsearch.js',
-  })
-);
+addParameters({
+  options: {
+    theme: create({
+      base: 'light',
+      brandTitle: 'InstantSearch.js',
+      brandUrl: 'https://github.com/algolia/instantsearch.js',
+    }),
+  },
+});
 
 const req = require.context('../stories', true, /.stories.(js|ts|tsx)$/);
 
