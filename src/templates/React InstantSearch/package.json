@@ -23,7 +23,7 @@
     "eslint-plugin-prettier": "3.0.1",
     "eslint-plugin-react": "7.11.1",
     "prettier": "1.16.4",
-    "prop-types": "15.6.2"
+    "prop-types": "15.7.2"
   },
   "browserslist": [
     ">0.2%",
