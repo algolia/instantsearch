@@ -6,9 +6,11 @@ type IndexArgs = {
 type Node = {
   instance: any;
   parent: Node | null;
-  indices: any[];
+  indexId: string;
   widgets: any[];
   helper: any;
+  derivedHelper: any;
+  unsubscribeDerivedHelper: () => void;
 };
 
 export class Index {
@@ -16,7 +18,7 @@ export class Index {
   public indexName: string;
   public indexId: string;
   public widgets: any[];
-  public node?: Node;
+  public node: Node | null = null;
 
   constructor({ indexName, indexId = indexName }: IndexArgs) {
     this.indexName = indexName;
@@ -25,28 +27,30 @@ export class Index {
   }
 
   public addWidgets(widgets: any[]) {
-    if (this.node) {
+    this.widgets = this.widgets.concat(widgets);
+
+    if (this.node !== null) {
       this.node.instance.addWidgets(widgets, this.node);
-    } else {
-      this.widgets = this.widgets.concat(widgets);
     }
 
     return this;
   }
 
   public removeWidgets(widgets: any[]) {
-    if (this.node) {
+    this.widgets = this.widgets.filter(w => !widgets.includes(w));
+
+    if (this.node !== null) {
       this.node.instance.removeWidgets(widgets, this.node);
-    } else {
-      widgets.forEach(widget => {
-        this.widgets = this.widgets.filter(w => w !== widget);
-      });
     }
 
     return this;
   }
 
   public render() {
+    // avoid to throw
+  }
+
+  public dispose() {
     // avoid to throw
   }
 }
