@@ -35,20 +35,27 @@ const mergeDisjunctiveFacetRefinements = (attributes, left, right) =>
   );
 
 const mergeSearchParameters = (left, right) =>
-  new SearchParametersWithoutDefaults({
-    // Inherit from the parent
-    ...filterObjectWithUndefinedValues(left),
-    // Take the value of the child
-    ...filterObjectWithUndefinedValues(right),
-    // Merge the complex attributes
-    disjunctiveFacets: dedupe(left.disjunctiveFacets, right.disjunctiveFacets),
-    // Takes the right attributes
-    disjunctiveFacetsRefinements: mergeDisjunctiveFacetRefinements(
-      right.disjunctiveFacets,
-      left.disjunctiveFacetsRefinements,
-      right.disjunctiveFacetsRefinements
-    ),
-  });
+  new SearchParametersWithoutDefaults(
+    filterObjectWithUndefinedValues({
+      // Inherit from the parent
+      // ...filterObjectWithUndefinedValues(left),
+      ...left,
+      // Take the value of the child
+      // ...filterObjectWithUndefinedValues(right),
+      ...right,
+      // Merge the complex attributes
+      disjunctiveFacets: dedupe(
+        left.disjunctiveFacets,
+        right.disjunctiveFacets
+      ),
+      // Takes the right attributes
+      disjunctiveFacetsRefinements: mergeDisjunctiveFacetRefinements(
+        right.disjunctiveFacets,
+        left.disjunctiveFacetsRefinements,
+        right.disjunctiveFacetsRefinements
+      ),
+    })
+  );
 
 export const resolveSingleLeafMerge = (...nodes) => {
   return nodes
