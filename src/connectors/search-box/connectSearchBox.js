@@ -80,9 +80,9 @@ export default function connectSearchBox(renderFn, unmountFn) {
     return {
       $$type: Symbol.for('ais.searchBox'),
 
-      getConfiguration() {
+      getConfiguration({ query = '' }) {
         return {
-          query: '',
+          query,
         };
       },
 
