@@ -311,35 +311,36 @@ class InstantSearch extends EventEmitter {
 
     const current = node || this.tree;
 
-    // Widgets
-    widgets.forEach(widget => {
-      if (
-        !current.widgets.includes(widget) ||
-        typeof widget.dispose !== 'function'
-      ) {
-        throw new Error(
-          'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
-        );
-      }
+    // Filter out widgets from the node
+    current.widgets = current.widgets.filter(w => !widgets.includes(w));
 
-      current.widgets = current.widgets.filter(w => w !== widget);
+    // Next search parameters from disposed widgets
+    const nextSearchParameters = widgets
+      .filter(_ => typeof _.dispose === 'function')
+      .map(widget =>
+        widget.dispose({
+          helper: current.helper,
+          state: current.helper.getState(),
+        })
+      )
+      .filter(Boolean);
 
-      const nextState = widget.dispose({
-        helper: current.helper,
-        state: current.helper.getState(),
-      });
-
-      if (nextState) {
-        current.helper.setState(
-          // @TODO: replace the `enhanceConfiguration`
-          current.widgets.reduce(enhanceConfiguration({}), {
-            // apply the root parameters only on the top level node
-            ...(current.parent === null && this.searchParameters),
-            ...nextState,
-          })
-        );
-      }
-    });
+    // get the initial configuration search parameters for the rest of the
+    // widgets e.g. two widgets were using the same configuration but we
+    // removed one.
+    current.helper.setState(
+      // @TODO: replace the `enhanceConfiguration`
+      current.widgets.reduce(enhanceConfiguration({}), {
+        // apply the root parameters only on the top level node
+        ...(current.parent === null && this.searchParameters),
+        ...resolveSingleLeafMerge(
+          // take the current state of the node
+          { state: current.helper.getState() },
+          // apply each disposed state to the node
+          ...nextSearchParameters.map(_ => ({ state: _ }))
+        ),
+      })
+    );
 
     // Widget indices
     widgets.filter(isIndexWidget).forEach(index => {
