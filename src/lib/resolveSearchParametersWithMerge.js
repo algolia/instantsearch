@@ -60,7 +60,9 @@ const mergeSearchParameters = (left, right) =>
 export const resolveSingleLeafMerge = (...nodes) => {
   return nodes
     .map(node => node.state)
-    .reduce((prevState, currentState) =>
-      mergeSearchParameters(prevState, currentState)
+    .reduce(
+      (prevState, currentState) =>
+        mergeSearchParameters(prevState, currentState),
+      new SearchParametersWithoutDefaults()
     );
 };
