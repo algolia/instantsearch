@@ -1,4 +1,4 @@
-import { SearchParametersWithoutDefaults } from './stateManager';
+import algoliasearchHelper from './stateManager';
 
 const concat = (...args) => [].concat(...args);
 
@@ -35,7 +35,7 @@ const mergeDisjunctiveFacetRefinements = (attributes, left, right) =>
   );
 
 const mergeSearchParameters = (left, right) =>
-  new SearchParametersWithoutDefaults(
+  new algoliasearchHelper.SearchParametersWithoutDefaults(
     filterObjectWithUndefinedValues({
       // Inherit from the parent
       // ...filterObjectWithUndefinedValues(left),
@@ -63,6 +63,6 @@ export const resolveSingleLeafMerge = (...nodes) => {
     .reduce(
       (prevState, currentState) =>
         mergeSearchParameters(prevState, currentState),
-      new SearchParametersWithoutDefaults()
+      new algoliasearchHelper.SearchParametersWithoutDefaults()
     );
 };
