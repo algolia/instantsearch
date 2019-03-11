@@ -75,10 +75,11 @@ const resolveNodeFromIndexId = (node, indexId) => {
       return innerNode;
     }
 
-    // It's a bit kacky would be better to find an alternaive solution
-    return innerNode.widgets.filter(isIndexWidgetLinked).forEach(widget => {
-      loop(widget.node);
-    });
+    // Find an alternaive solution
+    return innerNode.widgets
+      .filter(isIndexWidgetLinked)
+      .map(_ => _.node)
+      .find(_ => loop(_));
   };
 
   return loop(node);
