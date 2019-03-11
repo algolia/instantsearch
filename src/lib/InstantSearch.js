@@ -235,6 +235,8 @@ class InstantSearch extends EventEmitter {
           throw new Error('Widget definition missing render or init method');
         }
 
+        current.widgets.push(widget);
+
         current.helper.setState(
           // @TODO: replace the `enhanceConfiguration`
           enhanceConfiguration()(
@@ -245,12 +247,7 @@ class InstantSearch extends EventEmitter {
           )
         );
 
-        current.widgets.push(widget);
-      });
-
-    if (this.started) {
-      widgets.forEach(widget => {
-        if (widget.init) {
+        if (this.started && widget.init) {
           widget.init({
             state: current.helper.state,
             helper: current.helper,
@@ -261,7 +258,6 @@ class InstantSearch extends EventEmitter {
           });
         }
       });
-    }
 
     // Indices
     widgets.filter(isIndexWidget).forEach(index => {
