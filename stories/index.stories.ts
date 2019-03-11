@@ -351,4 +351,84 @@ storiesOf('Index', module)
         ]);
       });
     })
+  )
+  .add(
+    'with SortBy',
+    withHits(({ search, container, instantsearch }) => {
+      const $buttonAddWidgets = document.createElement('button');
+      $buttonAddWidgets.textContent = 'Add widgets';
+      $buttonAddWidgets.style.marginRight = '10px';
+      $buttonAddWidgets.style.marginBottom = '15px';
+
+      const $buttonRemoveidgets = document.createElement('button');
+      $buttonRemoveidgets.textContent = 'Remove widgets';
+
+      const $bestBuyDiv = document.createElement('div');
+      $bestBuyDiv.style.padding = '10px';
+      $bestBuyDiv.style.border = '1px solid black';
+      $bestBuyDiv.style.marginBottom = '15px';
+      const $bestbuyTitle = document.createElement('h2');
+      $bestbuyTitle.innerHTML = '<code>bestbuy</code>';
+      const $bestbuySortBy = document.createElement('div');
+      $bestbuySortBy.style.marginBottom = '15px';
+      const $bestbuyHits = document.createElement('div');
+
+      $bestBuyDiv.appendChild($bestbuyTitle);
+      $bestBuyDiv.appendChild($bestbuySortBy);
+      $bestBuyDiv.appendChild($bestbuyHits);
+
+      container.appendChild($buttonAddWidgets);
+      container.appendChild($buttonRemoveidgets);
+
+      container.appendChild($bestBuyDiv);
+
+      // Top level
+      const topLevelConfigure = instantsearch.widgets.configure({
+        hitsPerPage: 3,
+      });
+
+      // bestbuy
+      const bestbuyIndex = index({
+        indexName: 'bestbuy',
+      });
+
+      const bestbuySortBy = instantsearch.widgets.sortBy({
+        container: $bestbuySortBy,
+        items: [
+          { value: 'bestbuy', label: 'Most relevant' },
+          { value: 'instant_search_price_asc', label: 'Lowest price' },
+          { value: 'instant_search_price_desc', label: 'Highest price' },
+        ],
+      });
+
+      const bestbuyHits = instantsearch.widgets.hits({
+        container: $bestbuyHits,
+        escapeHTML: true,
+        templates: {
+          item:
+            '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+        },
+      });
+
+      // Search
+      search.addWidgets([
+        topLevelConfigure,
+
+        bestbuyIndex.addWidgets([
+          // Avoid collapsed line
+          bestbuySortBy,
+          bestbuyHits,
+        ]),
+      ]);
+
+      // Add widgets dynamically
+      $buttonAddWidgets.addEventListener('click', () => {
+        // Avoid collapsed line
+      });
+
+      // Remove widgets dynamically
+      $buttonRemoveidgets.addEventListener('click', () => {
+        // Avoid collapsed line
+      });
+    })
   );
