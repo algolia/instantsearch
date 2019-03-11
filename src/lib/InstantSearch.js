@@ -3,7 +3,6 @@ import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
-import { Index } from '../widgets/index/index';
 // import RoutingManager from './RoutingManager';
 // import simpleMapping from './stateMappings/simple';
 // import historyRouter from './routers/history';
@@ -285,6 +284,7 @@ class InstantSearch extends EventEmitter {
         }
 
         current.helper.setState(
+          // @TODO: replace the `enhanceConfiguration`
           enhanceConfiguration()(
             {
               ...current.helper.getState(),
@@ -384,8 +384,8 @@ class InstantSearch extends EventEmitter {
       widgets.forEach(widget => {
         if (widget.init) {
           widget.init({
-            state: node.helper.state,
-            helper: node.helper,
+            state: current.helper.state,
+            helper: current.helper,
             templatesConfig: this.templatesConfig,
             createURL: this._createAbsoluteURL,
             onHistoryChange: this._onHistoryChange,
@@ -412,79 +412,76 @@ class InstantSearch extends EventEmitter {
     const current = node || this.tree;
 
     // Widgets
-    widgets
-      .filter(widget => !(widget instanceof Index))
-      .map(i => console.log(i) || i)
-      .forEach(widget => {
-        if (
-          !current.widgets.includes(widget) ||
-          typeof widget.dispose !== 'function'
-        ) {
-          throw new Error(
-            'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
-          );
-        }
+    widgets.forEach(widget => {
+      if (
+        !current.widgets.includes(widget) ||
+        typeof widget.dispose !== 'function'
+      ) {
+        throw new Error(
+          'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
+        );
+      }
 
-        current.widgets = current.widgets.filter(w => w !== widget);
+      current.widgets = current.widgets.filter(w => w !== widget);
 
-        const nextState = widget.dispose({
-          helper: current.helper,
-          state: current.helper.getState(),
-        });
-
-        if (nextState) {
-          current.helper.setState(
-            // @TODO: resolve the search parameters from the tree
-            // node.helper.getState() -> node.parent.helper.getState()
-            current.widgets.reduce(enhanceConfiguration({}), {
-              ...this.searchParameters,
-              ...current.parent.helper.getState(),
-              ...nextState,
-            })
-          );
-        }
+      const nextState = widget.dispose({
+        helper: current.helper,
+        state: current.helper.getState(),
       });
+
+      if (nextState) {
+        current.helper.setState(
+          // @TODO: replace the `enhanceConfiguration`
+          current.widgets.reduce(enhanceConfiguration({}), {
+            // apply the root parameters only on the top level node
+            ...(current.parent === null && this.searchParameters),
+            ...nextState,
+          })
+        );
+      }
+    });
 
     // Widget indices
-    widgets
-      .filter(widget => widget instanceof Index)
-      .map(i => console.log(i) || i)
-      .forEach(index => {
-        // remove the subscription on the derviedHelper
-        index.node.unsubscribe();
+    widgets.filter(isIndexWidget).forEach(index => {
+      // remove the subscription on the derviedHelper
+      // index.node.unsubscribe();
+      index.node.unsubscribeDerivedHelper();
 
-        // remove the node from the current node
-        current.indices = current.indices.filter(n => n !== index.node);
+      const nodeForIndexId = resolveNodeFromIndexId(this.tree, index.indexId);
 
-        // remove the node from the nodes that share the same index identifier
-        this.nodesByIndexId = {
-          ...this.nodesByIndexId,
-          [index.indexId]: {
-            ...this.nodesByIndexId[index.indexId],
-            nodes: this.nodesByIndexId[index.indexId].nodes.filter(
-              n => n !== index.node
-            ),
-          },
-        };
+      if (!nodeForIndexId) {
+        index.node.derivedHelper.detach();
+      }
 
-        // remove the derivedHelper when no nodes are present
-        if (!this.nodesByIndexId[index.indexId].nodes.length) {
-          const { [index.indexId]: innerNode, ...rest } = this.nodesByIndexId;
+      // remove the node from the current node
+      // current.widgets = current.widgets.filter(w => w !== index);
 
-          innerNode.helper.detach();
+      // remove the node from the nodes that share the same index identifier
+      // this.nodesByIndexId = {
+      //   ...this.nodesByIndexId,
+      //   [index.indexId]: {
+      //     ...this.nodesByIndexId[index.indexId],
+      //     nodes: this.nodesByIndexId[index.indexId].nodes.filter(
+      //       n => n !== index.node
+      //     ),
+      //   },
+      // };
 
-          this.nodesByIndexId = {
-            ...rest,
-          };
-        }
+      // remove the derivedHelper when no nodes are present
+      // if (!this.nodesByIndexId[index.indexId].nodes.length) {
+      //   const { [index.indexId]: innerNode, ...rest } = this.nodesByIndexId;
 
-        // It does not work on recursive index tree but we should fix it with a
-        // better data structure with widgets <> indices. Keep it for the next
-        // task.
-        this.removeWidgets(index.widgets, index.node);
+      //   innerNode.helper.detach();
 
-        delete index.node;
-      });
+      //   this.nodesByIndexId = {
+      //     ...rest,
+      //   };
+      // }
+
+      this.removeWidgets(index.widgets, index.node);
+
+      index.node = null;
+    });
 
     setTimeout(() => {
       // if (this.widgets.length > 0) {}
