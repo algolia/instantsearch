@@ -207,6 +207,18 @@ class InstantSearch extends EventEmitter {
       );
     }
 
+    this.addWidgetsToNode(widgets, node);
+
+    if (this.started && Boolean(widgets.length)) {
+      this.tree.helper.search();
+
+      console.log('search for widgets added:');
+      console.log(this.tree);
+      console.log('------');
+    }
+  }
+
+  addWidgetsToNode(widgets, node) {
     // The routing manager widget is always added manually at the last position.
     // By removing it from the last position and adding it back after, we ensure
     // it keeps this position.
@@ -235,6 +247,21 @@ class InstantSearch extends EventEmitter {
 
         current.widgets.push(widget);
       });
+
+    if (this.started) {
+      widgets.forEach(widget => {
+        if (widget.init) {
+          widget.init({
+            state: current.helper.state,
+            helper: current.helper,
+            templatesConfig: this.templatesConfig,
+            createURL: this._createAbsoluteURL,
+            onHistoryChange: this._onHistoryChange,
+            instantSearchInstance: this,
+          });
+        }
+      });
+    }
 
     // Indices
     widgets.filter(isIndexWidget).forEach(index => {
@@ -274,32 +301,11 @@ class InstantSearch extends EventEmitter {
       index.node = innerNode;
 
       // recursive call to add widgets on the tree
-      this.addWidgets(index.widgets, innerNode);
+      this.addWidgetsToNode(index.widgets, innerNode);
     });
 
     // Second part of the fix for #3148
     // if (lastWidget) this.widgets.push(lastWidget);
-
-    if (this.started && Boolean(widgets.length)) {
-      widgets.forEach(widget => {
-        if (widget.init) {
-          widget.init({
-            state: current.helper.state,
-            helper: current.helper,
-            templatesConfig: this.templatesConfig,
-            createURL: this._createAbsoluteURL,
-            onHistoryChange: this._onHistoryChange,
-            instantSearchInstance: this,
-          });
-        }
-      });
-
-      this.tree.helper.search();
-
-      console.log('search for widgets added:');
-      console.log(this.tree);
-      console.log('--');
-    }
   }
 
   removeWidgets(widgets, node) {
@@ -309,6 +315,20 @@ class InstantSearch extends EventEmitter {
       );
     }
 
+    this.removeWidgetsFromNode(widgets, node);
+
+    setTimeout(() => {
+      if (this.tree.widgets.length > 0) {
+        this.tree.helper.search();
+
+        console.log('search for widgets removed:');
+        console.log(this.tree);
+        console.log('------');
+      }
+    }, 0);
+  }
+
+  removeWidgetsFromNode(widgets, node) {
     const current = node || this.tree;
 
     // Filter out widgets from the node
@@ -353,19 +373,10 @@ class InstantSearch extends EventEmitter {
       }
 
       // recursive call to dispose widgets on the tree
-      this.removeWidgets(index.widgets, index.node);
+      this.removeWidgetsFromNode(index.widgets, index.node);
 
       index.node = null;
     });
-
-    setTimeout(() => {
-      // if (this.widgets.length > 0) {}
-      this.tree.helper.search();
-
-      console.log('search for widgets removed:');
-      console.log(this.tree);
-      console.log('------');
-    }, 0);
   }
 
   // /**
@@ -427,7 +438,6 @@ class InstantSearch extends EventEmitter {
 
     console.log('Start');
     console.log(this.tree);
-    console.log('--');
 
     this._searchStalledTimer = null;
     this._isSearchStalled = true;
