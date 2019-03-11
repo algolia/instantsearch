@@ -85,38 +85,6 @@ const resolveNodeFromIndexId = (node, indexId) => {
   return loop(node);
 };
 
-// const createMainHelper = ({ client, index, parameters, nodesByIndexId }) => {
-//   const helper = algoliasearchHelper(client, index, parameters);
-//   const mainSearchFunction = helper.search.bind(helper);
-
-//   helper.search = () => {
-//     const innerSearchParameters = nodesByIndexId[index].nodes.map(n =>
-//       // Resolve the search paramerters for each node that share the same
-//       // index identifer than this derived helper. We merge them based on
-//       // the order they have been added to the tree.
-//       resolveSingleLeafMerge(
-//         // Resolve the root node for each node that share the same index
-//         // identifer than this derived helper. We merge them based on
-//         // the order they have been added to the tree.
-//         ...resolveRootNode(n)
-//           // Tweaks for the input of the resolve function
-//           .map(_ => ({ state: _.helper.getState() }))
-//       )
-//     );
-
-//     const nextSearchParameters = resolveSingleLeafMerge(
-//       ...[{ state: helper.getState() }].concat(
-//         // Tweaks for the input of the resolve function
-//         innerSearchParameters.map(_ => ({ state: _ }))
-//       )
-//     );
-
-//     mainSearchFunction(nextSearchParameters);
-//   };
-
-//   return helper;
-// };
-
 const createChildHelper = ({ parent, client, index, parameters }) => {
   const helper = algoliasearchHelper(client, index, parameters);
 
@@ -189,7 +157,6 @@ class InstantSearch extends EventEmitter {
     // actual node which cause an issue because the scope is captued with
     // the incorrect data.
     this.tree = {};
-    // this.nodesByIndexId = {};
 
     const helper = algoliasearchHelper(this.client, indexName, {
       ...searchParameters,
@@ -209,34 +176,6 @@ class InstantSearch extends EventEmitter {
     this.tree.helper = helper;
     this.tree.derivedHelper = derivedHelper;
     this.tree.unsubscribeDerivedHelper = () => {};
-
-    // this.tree = {
-    //   instance: this,
-    //   parent: null,
-    //   indexId: indexName,
-    //   widgets: [],
-    //   helper,
-    //   derivedHelper,
-    //   unsubscribeDerivedHelper() {},
-    //   //
-    //   // helper: createMainHelper({
-    //   //   // Avoid the circular reference for the `nodesByIndexId`. Could be solve
-    //   //   // with a structure more appropritate than two different structures. See
-    //   //   // how we can improve the structure to support this.
-    //   //   nodesByIndexId: this.nodesByIndexId,
-    //   //   client: this.client,
-    //   //   index: indexName,
-    //   //   parameters: {
-    //   //     ...searchParameters,
-    //   //     index: indexName,
-    //   //   },
-    //   // }),
-    // };
-
-    // this.nodesByIndexId[indexName] = {
-    //   helper: derivedHelper,
-    //   nodes: [this.tree],
-    // };
 
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
@@ -299,10 +238,6 @@ class InstantSearch extends EventEmitter {
 
     // Indices
     widgets.filter(isIndexWidget).forEach(index => {
-      // const isIndexIdAlreadyExist = Boolean(
-      //   this.nodesByIndexId[index.indexId]
-      // );
-
       const nodeForIndexId = resolveNodeFromIndexId(this.tree, index.indexId);
 
       const helper = createChildHelper({
@@ -335,41 +270,6 @@ class InstantSearch extends EventEmitter {
         unsubscribeDerivedHelper,
       };
 
-      // const innerNode = {
-      //   instance: this,
-      //   parent: current,
-      //   widgets: [],
-      //   helper,
-      // };
-
-      // if (!isIndexIdAlreadyExist) {
-      //   const derivedHelper = this.tree.helper.derive(() => {
-      //     return resolveSearchParameters(
-      //       this.nodesByIndexId[index.indexId].nodes
-      //     );
-      //   });
-
-      //   // register the index
-      //   this.nodesByIndexId = {
-      //     ...this.nodesByIndexId,
-      //     [index.indexId]: {
-      //       helper: derivedHelper,
-      //       nodes: [innerNode],
-      //     },
-      //   };
-      // } else {
-      //   this.nodesByIndexId[index.indexId].nodes.push(innerNode);
-      // }
-
-      // attach the render callback with the helper node
-      // innerNode.unsubscribe = createHelperSubscription({
-      //   helper: this.nodesByIndexId[index.indexId].helper,
-      //   event: 'result',
-      //   callback: this._render.bind(this, helper),
-      // });
-
-      // current.indices.push(innerNode);
-
       // register the node on the index
       index.node = innerNode;
 
@@ -380,7 +280,6 @@ class InstantSearch extends EventEmitter {
     // Second part of the fix for #3148
     // if (lastWidget) this.widgets.push(lastWidget);
 
-    // Init the widget directly if instantsearch has been already started
     if (this.started && Boolean(widgets.length)) {
       widgets.forEach(widget => {
         if (widget.init) {
@@ -445,40 +344,14 @@ class InstantSearch extends EventEmitter {
     // Widget indices
     widgets.filter(isIndexWidget).forEach(index => {
       // remove the subscription on the derviedHelper
-      // index.node.unsubscribe();
       index.node.unsubscribeDerivedHelper();
 
-      const nodeForIndexId = resolveNodeFromIndexId(this.tree, index.indexId);
-
-      if (!nodeForIndexId) {
+      // remove the derivedHelper when no nodes are present
+      if (!resolveNodeFromIndexId(this.tree, index.indexId)) {
         index.node.derivedHelper.detach();
       }
 
-      // remove the node from the current node
-      // current.widgets = current.widgets.filter(w => w !== index);
-
-      // remove the node from the nodes that share the same index identifier
-      // this.nodesByIndexId = {
-      //   ...this.nodesByIndexId,
-      //   [index.indexId]: {
-      //     ...this.nodesByIndexId[index.indexId],
-      //     nodes: this.nodesByIndexId[index.indexId].nodes.filter(
-      //       n => n !== index.node
-      //     ),
-      //   },
-      // };
-
-      // remove the derivedHelper when no nodes are present
-      // if (!this.nodesByIndexId[index.indexId].nodes.length) {
-      //   const { [index.indexId]: innerNode, ...rest } = this.nodesByIndexId;
-
-      //   innerNode.helper.detach();
-
-      //   this.nodesByIndexId = {
-      //     ...rest,
-      //   };
-      // }
-
+      // recursive call to dispose widgets on the tree
       this.removeWidgets(index.widgets, index.node);
 
       index.node = null;
