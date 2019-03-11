@@ -123,6 +123,13 @@ storiesOf('Index', module)
 
       // Add widgets dynamically
       $buttonAddWidgets.addEventListener('click', () => {
+        // add a top level widget
+        // search.addWidgets([topLevelConfigure]);
+
+        // add a widget of an index
+        // instantSearchIndex.addWidgets([instantSearchConfigure]);
+
+        // add an index
         instantSearchIndex.addWidgets([bestbuyIndex]);
         // search.addWidgets([instantSearchIndex]);
       });
