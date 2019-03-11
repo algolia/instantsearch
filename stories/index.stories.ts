@@ -151,6 +151,14 @@ storiesOf('Index', module)
   .add(
     'with same indices',
     withHits(({ search, container, instantsearch }) => {
+      const $buttonAddWidgets = document.createElement('button');
+      $buttonAddWidgets.textContent = 'Add widgets';
+      $buttonAddWidgets.style.marginRight = '10px';
+      $buttonAddWidgets.style.marginBottom = '15px';
+
+      const $buttonRemoveidgets = document.createElement('button');
+      $buttonRemoveidgets.textContent = 'Remove widgets';
+
       const $instantSearchDiv = document.createElement('div');
       $instantSearchDiv.style.padding = '10px';
       $instantSearchDiv.style.border = '1px solid black';
@@ -201,6 +209,9 @@ storiesOf('Index', module)
       $instantSearchAppleDeepDiv.appendChild($instantSearchAppleDeepHits);
 
       $instantSearchSamsungDiv.appendChild($instantSearchAppleDeepDiv);
+
+      container.appendChild($buttonAddWidgets);
+      container.appendChild($buttonRemoveidgets);
 
       container.appendChild($instantSearchDiv);
       container.appendChild($instantSearchAppleDiv);
@@ -323,5 +334,21 @@ storiesOf('Index', module)
           // instantSearchAppleDeepIndex,
         ]),
       ]);
+
+      // Add widgets dynamically
+      $buttonAddWidgets.addEventListener('click', () => {
+        search.addWidgets([
+          // Avoid to collapse the line
+          instantSearchIndex,
+        ]);
+      });
+
+      // Remove widgets dynamically
+      $buttonRemoveidgets.addEventListener('click', () => {
+        search.removeWidgets([
+          // Avoid to collapse the line
+          instantSearchIndex,
+        ]);
+      });
     })
   );
