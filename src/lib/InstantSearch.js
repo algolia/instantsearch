@@ -469,23 +469,22 @@ class InstantSearch extends EventEmitter {
     this.started = true;
   }
 
-  // /**
-  //  * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
-  //  * if you find an issue with it, please
-  //  * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20dispose).
-  //  * @return {undefined} This method does not return anything
-  //  */
-  // dispose() {
-  //   this.removeWidgets(this.widgets);
-  //   // You can not start an instance two times, therefore a disposed instance needs to set started as false
-  //   // otherwise this can not be restarted at a later point.
-  //   this.started = false;
-
-  //   // The helper needs to be reset to perform the next search from a fresh state.
-  //   // If not reset, it would use the state stored before calling `dispose()`.
-  //   this.helper.removeAllListeners();
-  //   this.helper = null;
-  // }
+  /**
+   * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
+   * if you find an issue with it, please
+   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20dispose).
+   * @return {undefined} This method does not return anything
+   */
+  dispose() {
+    // this.removeWidgets(this.widgets);
+    // You can not start an instance two times, therefore a disposed instance needs to set started as false
+    // otherwise this can not be restarted at a later point.
+    // this.started = false;
+    // The helper needs to be reset to perform the next search from a fresh state.
+    // If not reset, it would use the state stored before calling `dispose()`.
+    // this.helper.removeAllListeners();
+    // this.helper = null;
+  }
 
   // createURL(params) {
   //   if (!this._createURL) {
