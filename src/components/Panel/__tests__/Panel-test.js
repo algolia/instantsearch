@@ -22,9 +22,9 @@ const getDefaultProps = () => ({
   data: {},
   templateProps: {
     templates: {
-      header: 'Header',
-      footer: 'Footer',
-      collapseButtonText: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
+      header: '',
+      footer: '',
+      collapseButtonText: '',
     },
   },
 });
@@ -50,9 +50,48 @@ describe('Panel', () => {
         false
       );
       expect(wrapper.find(`.${cssClasses.body}`).exists()).toBe(true);
+      expect(wrapper.find(`.${cssClasses.header}`).exists()).toBe(false);
+      expect(wrapper.find(`.${cssClasses.footer}`).exists()).toBe(false);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
+
+  describe('templates', () => {
+    test('should render component with custom templates', () => {
+      const props = {
+        ...getDefaultProps(),
+        templateProps: {
+          templates: {
+            header: 'Header',
+            footer: 'Footer',
+            collapseButtonText: 'Toggle',
+          },
+        },
+      };
+
+      const wrapper = mount(<Panel {...props} />);
+
+      expect(wrapper.find(`.${cssClasses.root}`).exists()).toBe(true);
+      expect(wrapper.find(`.${cssClasses.noRefinementRoot}`).exists()).toBe(
+        false
+      );
+      expect(wrapper.find(`.${cssClasses.collapsibleRoot}`).exists()).toBe(
+        false
+      );
+      expect(wrapper.find(`.${cssClasses.collapsedRoot}`).exists()).toBe(false);
+      expect(wrapper.find(`.${cssClasses.collapseButton}`).exists()).toBe(
+        false
+      );
+      expect(wrapper.find(`.${cssClasses.body}`).exists()).toBe(true);
       expect(wrapper.find(`.${cssClasses.header}`).exists()).toBe(true);
       expect(wrapper.find(`.${cssClasses.footer}`).exists()).toBe(true);
-      expect(wrapper.find(`.${cssClasses.header}`).text()).toBe('Header');
+      expect(
+        wrapper
+          .find(`.${cssClasses.header} span`)
+          .first()
+          .text()
+      ).toBe('Header');
       expect(wrapper.find(`.${cssClasses.footer}`).text()).toBe('Footer');
 
       expect(wrapper).toMatchSnapshot();
@@ -64,6 +103,13 @@ describe('Panel', () => {
       const props = {
         ...getDefaultProps(),
         hidden: true,
+        templateProps: {
+          templates: {
+            header: 'Header',
+            footer: 'Footer',
+            collapseButtonText: 'Toggle',
+          },
+        },
       };
 
       const wrapper = mount(<Panel {...props} />);
@@ -92,6 +138,14 @@ describe('Panel', () => {
     test('should render component with `collapsible` prop', () => {
       const props = {
         ...getDefaultProps(),
+        templateProps: {
+          templates: {
+            header: 'Header',
+            footer: 'Footer',
+            collapseButtonText: ({ collapsed }) =>
+              collapsed ? 'More' : 'Less',
+          },
+        },
         collapsible: true,
       };
 
@@ -119,6 +173,14 @@ describe('Panel', () => {
         ...getDefaultProps(),
         collapsible: true,
         collapsed: true,
+        templateProps: {
+          templates: {
+            header: 'Header',
+            footer: 'Footer',
+            collapseButtonText: ({ collapsed }) =>
+              collapsed ? 'More' : 'Less',
+          },
+        },
       };
 
       const wrapper = mount(<Panel {...props} />);
@@ -145,6 +207,14 @@ describe('Panel', () => {
         ...getDefaultProps(),
         collapsible: true,
         collapsed: false,
+        templateProps: {
+          templates: {
+            header: 'Header',
+            footer: 'Footer',
+            collapseButtonText: ({ collapsed }) =>
+              collapsed ? 'More' : 'Less',
+          },
+        },
       };
 
       const wrapper = mount(<Panel {...props} />);

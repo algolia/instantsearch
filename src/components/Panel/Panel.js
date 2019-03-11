@@ -36,36 +36,36 @@ class Panel extends Component {
         hidden={hidden}
       >
         {templateProps.templates.header && (
-          <Template
-            {...templateProps}
-            templateKey="header"
-            rootProps={{
-              className: cssClasses.header,
-            }}
-            data={data}
-          />
-        )}
-
-        {collapsible && (
-          <button
-            className={cssClasses.collapseButton}
-            aria-expanded={!this.state.collapsed}
-            onClick={event => {
-              event.preventDefault();
-
-              this.setState(previousState => ({
-                controlled: true,
-                collapsed: !previousState.collapsed,
-              }));
-            }}
-          >
+          <div className={cssClasses.header}>
             <Template
               {...templateProps}
-              templateKey="collapseButtonText"
+              templateKey="header"
               rootTagName="span"
-              data={{ collapsed: this.state.collapsed }}
+              data={data}
             />
-          </button>
+
+            {collapsible && (
+              <button
+                className={cssClasses.collapseButton}
+                aria-expanded={!this.state.collapsed}
+                onClick={event => {
+                  event.preventDefault();
+
+                  this.setState(previousState => ({
+                    controlled: true,
+                    collapsed: !previousState.collapsed,
+                  }));
+                }}
+              >
+                <Template
+                  {...templateProps}
+                  templateKey="collapseButtonText"
+                  rootTagName="span"
+                  data={{ collapsed: this.state.collapsed }}
+                />
+              </button>
+            )}
+          </div>
         )}
 
         <div className={cssClasses.body} ref={node => (this.bodyRef = node)} />

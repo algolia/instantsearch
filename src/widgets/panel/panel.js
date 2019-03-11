@@ -36,6 +36,10 @@ const renderer = ({
  * @typedef {Object} PanelWidgetCSSClasses
  * @property  {string|string[]} [root] CSS classes added to the root element of the widget.
  * @property  {string|string[]} [noRefinementRoot] CSS classes added to the root element of the widget when there's no refinements.
+ * @property  {string|string[]} [collapsibleRoot] CSS classes added to the root element when collapsible.
+ * @property  {string|string[]} [collapsedRoot] CSS classes added to the root element when collapsed.
+ * @property  {string|string[]} [collapseButton] CSS classes added to the collapse button element.
+ * @property  {string|string[]} [collapseIcon] CSS classes added to the collapse icon of the button.
  * @property  {string|string[]} [header] CSS class to add to the header.
  * @property  {string|string[]} [footer] CSS class to add to the SVG footer.
  */
@@ -109,13 +113,17 @@ export default function panel({
       suit({ modifierName: 'collapsed' }),
       userCssClasses.collapsedRoot
     ),
-    body: cx(suit({ descendantName: 'body' }), userCssClasses.body),
-    header: cx(suit({ descendantName: 'header' }), userCssClasses.header),
-    footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
     collapseButton: cx(
       suit({ descendantName: 'collapseButton' }),
       userCssClasses.collapseButton
     ),
+    collapseIcon: cx(
+      suit({ descendantName: 'collapseIcon' }),
+      userCssClasses.collapseIcon
+    ),
+    body: cx(suit({ descendantName: 'body' }), userCssClasses.body),
+    header: cx(suit({ descendantName: 'header' }), userCssClasses.header),
+    footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
   };
 
   return widgetFactory => (widgetOptions = {}) => {
@@ -133,7 +141,16 @@ export default function panel({
       header: '',
       footer: '',
       collapseButtonText: ({ collapsed: isCollapsed }) =>
-        isCollapsed ? '➕' : '➖',
+        `<svg
+          class="${cssClasses.collapseIcon}"
+          width="1em"
+          height="1em"
+          viewBox="0 0 500 500"
+        >
+        <path d="${
+          isCollapsed ? 'M100 250l300-150v300z' : 'M250 400l150-300H100z'
+        }" fill="currentColor" />
+        </svg>`,
     };
     const templateProps = prepareTemplateProps({ defaultTemplates, templates });
 

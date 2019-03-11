@@ -7,25 +7,28 @@ exports[`Panel collapsible should render component with \`collapsible\` and \`co
 >
   <div
     className="header"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Header",
-      }
-    }
-  />
-  <button
-    aria-expanded={false}
-    className="collapseButton"
-    onClick={[Function]}
   >
     <span
       dangerouslySetInnerHTML={
         Object {
-          "__html": "More",
+          "__html": "Header",
         }
       }
     />
-  </button>
+    <button
+      aria-expanded={false}
+      className="collapseButton"
+      onClick={[Function]}
+    >
+      <span
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "More",
+          }
+        }
+      />
+    </button>
+  </div>
   <div
     className="body"
   />
@@ -47,25 +50,28 @@ exports[`Panel collapsible should render component with \`collapsible\` prop 1`]
 >
   <div
     className="header"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Header",
-      }
-    }
-  />
-  <button
-    aria-expanded={true}
-    className="collapseButton"
-    onClick={[Function]}
   >
     <span
       dangerouslySetInnerHTML={
         Object {
-          "__html": "Less",
+          "__html": "Header",
         }
       }
     />
-  </button>
+    <button
+      aria-expanded={true}
+      className="collapseButton"
+      onClick={[Function]}
+    >
+      <span
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "Less",
+          }
+        }
+      />
+    </button>
+  </div>
   <div
     className="body"
   />
@@ -86,13 +92,27 @@ exports[`Panel default should render component with default props 1`] = `
   hidden={false}
 >
   <div
-    className="header"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Header",
-      }
-    }
+    className="body"
   />
+</div>
+`;
+
+exports[`Panel hidden should render component with \`hidden\` prop 1`] = `
+<div
+  className="root noRefinementRoot"
+  hidden={true}
+>
+  <div
+    className="header"
+  >
+    <span
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Header",
+        }
+      }
+    />
+  </div>
   <div
     className="body"
   />
@@ -107,19 +127,22 @@ exports[`Panel default should render component with default props 1`] = `
 </div>
 `;
 
-exports[`Panel hidden should render component with \`hidden\` prop 1`] = `
+exports[`Panel templates should render component with custom templates 1`] = `
 <div
-  className="root noRefinementRoot"
-  hidden={true}
+  className="root"
+  hidden={false}
 >
   <div
     className="header"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Header",
+  >
+    <span
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "Header",
+        }
       }
-    }
-  />
+    />
+  </div>
   <div
     className="body"
   />
