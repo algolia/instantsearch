@@ -67,10 +67,10 @@ describe('Usage', () => {
 
   test('with a widget without `container` throws', () => {
     const fakeWidget = () => {};
-    const fakeWithWithPanel = panel()(fakeWidget);
+    const fakeWithPanel = panel()(fakeWidget);
 
     expect(() => {
-      fakeWithWithPanel({});
+      fakeWithPanel({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required in the widget within the panel.
 

@@ -70,7 +70,7 @@ storiesOf('Panel', module)
       const priceList = instantsearch.widgets.panel({
         templates: {
           header: 'Price',
-          footer: 'Footer',
+          footer: 'The panel is hidden when there are no results.',
         },
         hidden: ({ results }) => results.nbHits === 0,
       })(instantsearch.widgets.rangeInput);
@@ -121,7 +121,12 @@ storiesOf('Panel', module)
       search.addWidget(
         brandList({
           container,
-          attribute: 'brand',
+          attribute: 'price',
+          tooltips: {
+            format(rawValue) {
+              return `$${Math.round(rawValue).toLocaleString()}`;
+            },
+          },
         })
       );
     })
