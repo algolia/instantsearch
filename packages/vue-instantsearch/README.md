@@ -17,7 +17,7 @@ This repository holds the code for the Vue InstantSearch project.
 
 ## Documentation
 
-There's a dedicated documentation available at [community.algolia.com/vue-instantsearch][website].
+There's a dedicated documentation available at [www.algolia.com/doc/guides/building-search-ui/getting-started/vue][website].
 
 ## Installation
 
@@ -31,16 +31,17 @@ npm install --save vue-instantsearch
 yarn add vue-instantsearch
 ```
 
-To learn more about the usage, follow our [getting started guide](https://community.algolia.com/vue-instantsearch/getting-started/getting-started.html).
+To learn more about the usage, follow our [getting started guide][getting-started-guide].
 
 ## Contributing, dev, release
 
 We welcome all contributors, from casual to regular. You are only
 one command away to start the developer environment,
-[read our CONTRIBUTING guide](CONTRIBUTING.md).
+[read our CONTRIBUTING guide](.github/CONTRIBUTING.md).
 
 [logo]: https://raw.githubusercontent.com/algolia/vue-instantsearch/master/vue-instantsearch-readme.png
-[website]: https://www.algolia.com/doc/guides/building-search-ui/getting-started/vue/
+[website]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/
+[getting-started-guide]: https://www.algolia.com/doc/guides/building-search-ui/getting-started/vue/
 [algolia-website]: https://www.algolia.com/
 [instantsearch.js-github]: https://github.com/algolia/instantsearch.js
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch
