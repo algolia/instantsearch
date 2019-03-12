@@ -34,7 +34,9 @@ export interface QueryRulesRenderOptions<T> extends RenderOptions<T> {
   userData: object[];
 }
 
-export type QueryRulesRenderer<T> = Renderer<QueryRulesRenderOptions<T>>;
+export type QueryRulesRenderer<T> = Renderer<
+  QueryRulesRenderOptions<QueryRulesConnectorParams & T>
+>;
 
 export type QueryRulesWidgetFactory<T> = WidgetFactory<
   QueryRulesConnectorParams & T
@@ -60,8 +62,8 @@ function getRuleContextsFromTrackedFilters({
   helper: Helper;
   trackedFilters: ParamTrackedFilters;
 }) {
-  const ruleContexts = Object.keys(trackedFilters).reduce(
-    (facets: string[], facetName) => {
+  const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
+    (facets, facetName) => {
       const getFacetValues = trackedFilters[facetName];
       const facetRefinements: string[] = helper
         .getRefinements(facetName)
@@ -71,12 +73,7 @@ function getRuleContextsFromTrackedFilters({
       return [
         ...facets,
         ...facetRefinements
-          .filter(
-            facetRefinement =>
-              facetValues.findIndex(
-                facetValue => facetValue === facetRefinement
-              ) !== -1
-          )
+          .filter(facetRefinement => facetValues.includes(facetRefinement))
           .map(facetValue =>
             escapeRuleContext(`ais-${facetName}-${facetValue}`)
           ),
@@ -147,9 +144,11 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       }
     });
 
+    const hasTrackedFilters = Object.keys(trackedFilters).length > 0;
+
     return {
       init({ helper, state, instantSearchInstance }) {
-        if (Object.keys(trackedFilters).length > 0) {
+        if (hasTrackedFilters) {
           initialRuleContexts = state.ruleContexts || [];
 
           // The helper's method `getQueryParameter` doesn't work on unset attributes.
@@ -189,7 +188,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         const { userData: rawUserData = [] } = results;
         const userData = transformItems(rawUserData);
 
-        if (Object.keys(trackedFilters).length > 0) {
+        if (hasTrackedFilters) {
           const newRuleContexts = getRuleContextsFromTrackedFilters({
             helper,
             trackedFilters,
@@ -220,7 +219,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       dispose({ state }) {
         unmount();
 
-        if (Object.keys(trackedFilters).length > 0) {
+        if (hasTrackedFilters) {
           const reinitRuleContexts = state
             .getQueryParameter('ruleContexts')
             .filter((rule: string) => !addedRuleContexts.includes(rule));
