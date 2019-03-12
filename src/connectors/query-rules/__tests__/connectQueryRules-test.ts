@@ -142,9 +142,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
-    test('calls the unmount function on dispose with trackedFilters', () => {
+    test('calls the unmount function even when returning early in the dispose step', () => {
       const helper = createFakeHelper();
       const widget = makeWidget({
+        // `trackedFilter` creates another path in the code that returns the
+        // next helper state early. We make sure that we call the `unmount` function
+        // even with this option set.
         trackedFilters: {
           brand: values => values,
         },
