@@ -757,7 +757,7 @@ AlgoliaSearchHelper.prototype.toggleTag = function(tag) {
  * // returns 1
  */
 AlgoliaSearchHelper.prototype.nextPage = function() {
-  return this.setPage(this.state.page + 1);
+  return this.setPage(this.getPage() + 1);
 };
 
 /**
@@ -770,7 +770,7 @@ AlgoliaSearchHelper.prototype.nextPage = function() {
  * // returns 0
  */
 AlgoliaSearchHelper.prototype.previousPage = function() {
-  return this.setPage(this.state.page - 1);
+  return this.setPage(this.getPage() - 1);
 };
 
 /**
@@ -780,6 +780,7 @@ function setCurrentPage(page) {
   if (page < 0) throw new Error('Page requested below 0.');
 
   this._change(this.state.setPage(page));
+
   return this;
 }
 
@@ -1085,7 +1086,7 @@ AlgoliaSearchHelper.prototype.getIndex = function() {
 };
 
 function getCurrentPage() {
-  return this.state.page;
+  return this.state.page || 0;
 }
 
 /**
