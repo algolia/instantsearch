@@ -40,6 +40,8 @@ althtml2: |
 classes:
   - name: .ais-Panel
     description: the root div of the Panel
+  - name: .ais-Panel--noRefinement
+    description: the root div of the Panel with no refinements
   - name: .ais-Panel--collapsible
     description: the root div of the collapsible Panel
   - name: .ais-Panel--collapsed
@@ -59,6 +61,8 @@ options:
     description: Text to put before the widget
   - name: footer
     description: Text to put after the widget
-  - name: collapsible
-    description: Makes the panel collapsible
+  - name: hidden
+    description: Function that is called on each render to determine if the panel has to be hidden. It returns a boolean based on the render options. The returned boolean determine if the panel is hidden.
+  - name: collapsed
+    description: Function that makes the panel collapsible when defined. It returns a boolean based on the render options. The returned boolean determine if the panel is collapsed. Once the user interacts with the collapse button, this function isn't taken into account anymore.
 ---
