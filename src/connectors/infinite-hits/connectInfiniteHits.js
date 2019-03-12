@@ -75,8 +75,11 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
     const getShowMore = helper => () => helper.nextPage().search();
 
     return {
-      getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
+      getConfiguration({ page = 0 }) {
+        return {
+          ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+          page,
+        };
       },
 
       init({ instantSearchInstance, helper }) {
@@ -96,7 +99,9 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       render({ results, state, instantSearchInstance }) {
-        if (state.page === 0) {
+        const page = state.page || 0;
+
+        if (page === 0) {
           hitsCache = [];
           lastReceivedPage = -1;
         }
@@ -107,9 +112,9 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
         results.hits = transformItems(results.hits);
 
-        if (lastReceivedPage < state.page) {
+        if (lastReceivedPage < page) {
           hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = state.page;
+          lastReceivedPage = page;
         }
 
         const isLastPage = results.nbPages <= results.page + 1;
@@ -127,8 +132,10 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setPage();
       },
     };
   };
