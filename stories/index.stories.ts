@@ -29,21 +29,21 @@ storiesOf('Index', module)
       $instantSearchDiv.appendChild($instantSearchSearchBox);
       $instantSearchDiv.appendChild($instantSearchHits);
 
-      const $bestBuyDiv = document.createElement('div');
-      $bestBuyDiv.style.padding = '10px';
-      $bestBuyDiv.style.border = '1px solid black';
-      $bestBuyDiv.style.marginBottom = '15px';
+      const $bestbuyDiv = document.createElement('div');
+      $bestbuyDiv.style.padding = '10px';
+      $bestbuyDiv.style.border = '1px solid black';
+      $bestbuyDiv.style.marginBottom = '15px';
       const $bestbuyTitle = document.createElement('h2');
       $bestbuyTitle.innerHTML = '<code>bestbuy</code>';
       const $bestbuySearchBox = document.createElement('div');
       $bestbuySearchBox.style.marginBottom = '15px';
       const $bestbuyHits = document.createElement('div');
 
-      $bestBuyDiv.appendChild($bestbuyTitle);
-      $bestBuyDiv.appendChild($bestbuySearchBox);
-      $bestBuyDiv.appendChild($bestbuyHits);
+      $bestbuyDiv.appendChild($bestbuyTitle);
+      $bestbuyDiv.appendChild($bestbuySearchBox);
+      $bestbuyDiv.appendChild($bestbuyHits);
 
-      $instantSearchDiv.appendChild($bestBuyDiv);
+      $instantSearchDiv.appendChild($bestbuyDiv);
 
       container.appendChild($buttonAddWidgets);
       container.appendChild($buttonRemoveidgets);
@@ -55,7 +55,7 @@ storiesOf('Index', module)
         hitsPerPage: 3,
       });
 
-      // instant_search
+      // instant_search_price_desc
       const instantSearchIndex = index({
         indexName: 'instant_search_price_desc',
       });
@@ -363,24 +363,24 @@ storiesOf('Index', module)
       const $buttonRemoveidgets = document.createElement('button');
       $buttonRemoveidgets.textContent = 'Remove widgets';
 
-      const $bestBuyDiv = document.createElement('div');
-      $bestBuyDiv.style.padding = '10px';
-      $bestBuyDiv.style.border = '1px solid black';
-      $bestBuyDiv.style.marginBottom = '15px';
+      const $bestbuyDiv = document.createElement('div');
+      $bestbuyDiv.style.padding = '10px';
+      $bestbuyDiv.style.border = '1px solid black';
+      $bestbuyDiv.style.marginBottom = '15px';
       const $bestbuyTitle = document.createElement('h2');
       $bestbuyTitle.innerHTML = '<code>bestbuy</code>';
       const $bestbuySortBy = document.createElement('div');
       $bestbuySortBy.style.marginBottom = '15px';
       const $bestbuyHits = document.createElement('div');
 
-      $bestBuyDiv.appendChild($bestbuyTitle);
-      $bestBuyDiv.appendChild($bestbuySortBy);
-      $bestBuyDiv.appendChild($bestbuyHits);
+      $bestbuyDiv.appendChild($bestbuyTitle);
+      $bestbuyDiv.appendChild($bestbuySortBy);
+      $bestbuyDiv.appendChild($bestbuyHits);
 
       container.appendChild($buttonAddWidgets);
       container.appendChild($buttonRemoveidgets);
 
-      container.appendChild($bestBuyDiv);
+      container.appendChild($bestbuyDiv);
 
       // Top level
       const topLevelConfigure = instantsearch.widgets.configure({
@@ -417,6 +417,118 @@ storiesOf('Index', module)
         bestbuyIndex.addWidgets([
           // Avoid collapsed line
           bestbuySortBy,
+          bestbuyHits,
+        ]),
+      ]);
+
+      // Add widgets dynamically
+      $buttonAddWidgets.addEventListener('click', () => {
+        // Avoid collapsed line
+      });
+
+      // Remove widgets dynamically
+      $buttonRemoveidgets.addEventListener('click', () => {
+        // Avoid collapsed line
+      });
+    })
+  )
+  .add(
+    'with Pagination',
+    withHits(({ search, container, instantsearch }) => {
+      const $buttonAddWidgets = document.createElement('button');
+      $buttonAddWidgets.textContent = 'Add widgets';
+      $buttonAddWidgets.style.marginRight = '10px';
+      $buttonAddWidgets.style.marginBottom = '15px';
+
+      const $buttonRemoveidgets = document.createElement('button');
+      $buttonRemoveidgets.textContent = 'Remove widgets';
+
+      const $instantSearchDiv = document.createElement('div');
+      $instantSearchDiv.style.padding = '10px';
+      $instantSearchDiv.style.border = '1px solid black';
+      $instantSearchDiv.style.marginBottom = '15px';
+      const $instantSearchTitle = document.createElement('h2');
+      $instantSearchTitle.innerHTML = '<code>instant_search_price_desc</code>';
+      const $instantSearchHits = document.createElement('div');
+      $instantSearchHits.style.marginBottom = '15px';
+      const $instantSearchPagination = document.createElement('div');
+
+      $instantSearchDiv.appendChild($instantSearchTitle);
+      $instantSearchDiv.appendChild($instantSearchHits);
+      $instantSearchDiv.appendChild($instantSearchPagination);
+
+      const $bestbuyDiv = document.createElement('div');
+      $bestbuyDiv.style.padding = '10px';
+      $bestbuyDiv.style.border = '1px solid black';
+      $bestbuyDiv.style.marginBottom = '15px';
+      const $bestbuyTitle = document.createElement('h2');
+      $bestbuyTitle.innerHTML = '<code>bestbuy</code>';
+      const $bestbuyHits = document.createElement('div');
+      $bestbuyHits.style.marginBottom = '15px';
+      const $bestbuyPagination = document.createElement('div');
+
+      $bestbuyDiv.appendChild($bestbuyTitle);
+      $bestbuyDiv.appendChild($bestbuyHits);
+      $bestbuyDiv.appendChild($bestbuyPagination);
+
+      container.appendChild($buttonAddWidgets);
+      container.appendChild($buttonRemoveidgets);
+
+      container.appendChild($instantSearchDiv);
+      container.appendChild($bestbuyDiv);
+
+      // Top level
+      const topLevelConfigure = instantsearch.widgets.configure({
+        hitsPerPage: 3,
+      });
+
+      // instant_search_pr
+      const instantSearchIndex = index({
+        indexName: 'instant_search_price_desc',
+      });
+
+      const instantSearchPagination = instantsearch.widgets.pagination({
+        container: $instantSearchPagination,
+      });
+
+      const instantSearchHits = instantsearch.widgets.hits({
+        container: $instantSearchHits,
+        templates: {
+          item:
+            '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+        },
+      });
+
+      // bestbuy
+      const bestbuyIndex = index({
+        indexName: 'bestbuy',
+      });
+
+      const bestbuyPagination = instantsearch.widgets.pagination({
+        container: $bestbuyPagination,
+      });
+
+      const bestbuyHits = instantsearch.widgets.hits({
+        container: $bestbuyHits,
+        templates: {
+          item:
+            '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+        },
+      });
+
+      // Search
+      search.addWidgets([
+        topLevelConfigure,
+
+        instantSearchIndex.addWidgets([
+          // Avoid collapsed line
+          instantSearchPagination,
+          instantSearchHits,
+        ]),
+
+        bestbuyIndex.addWidgets([
+          // Avoid collapsed line
+          bestbuyPagination,
           bestbuyHits,
         ]),
       ]);
