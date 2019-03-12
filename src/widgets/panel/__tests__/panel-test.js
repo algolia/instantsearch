@@ -10,6 +10,10 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
+beforeEach(() => {
+  render.mockClear();
+});
+
 describe('Usage', () => {
   test('without arguments does not throw', () => {
     expect(() => {
@@ -33,6 +37,14 @@ describe('Usage', () => {
     }).not.toThrow();
   });
 
+  test('with `collapsed` as function does not throw', () => {
+    expect(() =>
+      panel({
+        collapsed: () => true,
+      })
+    ).not.toThrow();
+  });
+
   test('with `hidden` as boolean warns', () => {
     expect(() => {
       panel({
@@ -43,16 +55,104 @@ describe('Usage', () => {
     );
   });
 
+  test('with `collapsed` as boolean warns', () => {
+    expect(() => {
+      panel({
+        collapsed: true,
+      });
+    }).toWarnDev(
+      '[InstantSearch.js]: The `collapsed` option in the "panel" widget expects a function returning a boolean (received "boolean" type).'
+    );
+  });
+
   test('with a widget without `container` throws', () => {
     const fakeWidget = () => {};
+    const fakeWithPanel = panel()(fakeWidget);
 
     expect(() => {
-      panel()(fakeWidget)({});
+      fakeWithPanel({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required in the widget within the panel.
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/panel/js/"
 `);
+  });
+});
+
+describe('Templates', () => {
+  let widgetFactory;
+
+  beforeEach(() => {
+    const widget = {
+      init: jest.fn(),
+      render: jest.fn(),
+      dispose: jest.fn(),
+    };
+    widgetFactory = () => widget;
+  });
+
+  test('with default templates', () => {
+    const widgetWithPanel = panel({})(widgetFactory);
+
+    widgetWithPanel({
+      container: document.createElement('div'),
+    });
+
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates).toEqual({
+      header: '',
+      footer: '',
+      collapseButtonText: expect.any(Function),
+    });
+  });
+
+  test('with header template', () => {
+    const widgetWithPanel = panel({
+      templates: {
+        header: 'Custom header',
+      },
+    })(widgetFactory);
+
+    widgetWithPanel({
+      container: document.createElement('div'),
+    });
+
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates.header).toBe('Custom header');
+  });
+
+  test('with footer template', () => {
+    const widgetWithPanel = panel({
+      templates: {
+        footer: 'Custom footer',
+      },
+    })(widgetFactory);
+
+    widgetWithPanel({
+      container: document.createElement('div'),
+    });
+
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates.footer).toBe('Custom footer');
+  });
+
+  test('with collapseButtonText template', () => {
+    const widgetWithPanel = panel({
+      templates: {
+        collapseButtonText: 'Custom collapseButtonText',
+      },
+    })(widgetFactory);
+
+    widgetWithPanel({
+      container: document.createElement('div'),
+    });
+
+    const { templates } = render.mock.calls[0][0].props.templateProps;
+
+    expect(templates.collapseButtonText).toBe('Custom collapseButtonText');
   });
 });
 
