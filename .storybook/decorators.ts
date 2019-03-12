@@ -1,7 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../src/index';
-import moviesPlayground from './playgrounds/movies';
 import defaultPlayground from './playgrounds/default';
 
 export const withHits = (
@@ -21,7 +20,7 @@ export const withHits = (
     apiKey = '6be0576ff61c053d5f9a3225e2a90f76',
     indexName = 'instant_search',
     searchParameters = {},
-    playground = 'default',
+    playground = defaultPlayground,
     ...instantsearchOptions
   } = searchOptions || {};
 
@@ -68,23 +67,11 @@ export const withHits = (
   rightPanelPlaygroundElement.classList.add('panel-right');
   playgroundElement.appendChild(rightPanelPlaygroundElement);
 
-  switch (playground) {
-    case 'movies': {
-      moviesPlayground({
-        search,
-        leftPanel: leftPanelPlaygroundElement,
-        rightPanel: rightPanelPlaygroundElement,
-      });
-      break;
-    }
-    default: {
-      defaultPlayground({
-        search,
-        leftPanel: leftPanelPlaygroundElement,
-        rightPanel: rightPanelPlaygroundElement,
-      });
-    }
-  }
+  playground({
+    search,
+    leftPanel: leftPanelPlaygroundElement,
+    rightPanel: rightPanelPlaygroundElement,
+  });
 
   storyFn({
     container: previewElement,
