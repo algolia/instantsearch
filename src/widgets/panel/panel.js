@@ -12,24 +12,22 @@ import Panel from '../../components/Panel/Panel';
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
 
-const renderer = ({ containerNode, cssClasses, templateProps }) => ({
-  options,
-  hidden,
-}) => {
-  let bodyRef = null;
-
+const renderer = ({
+  containerNode,
+  bodyContainerNode,
+  cssClasses,
+  templateProps,
+}) => ({ options, hidden }) => {
   render(
     <Panel
       cssClasses={cssClasses}
       hidden={hidden}
       templateProps={templateProps}
       data={options}
-      onRef={ref => (bodyRef = ref)}
+      bodyElement={bodyContainerNode}
     />,
     containerNode
   );
-
-  return { bodyRef };
 };
 
 /**
@@ -85,6 +83,7 @@ export default function panel({
     `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).`
   );
 
+  const bodyContainerNode = document.createElement('div');
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
     noRefinementRoot: cx(
@@ -112,18 +111,19 @@ export default function panel({
 
     const renderPanel = renderer({
       containerNode: getContainerNode(container),
+      bodyContainerNode,
       cssClasses,
       templateProps,
     });
 
-    const { bodyRef } = renderPanel({
+    renderPanel({
       options: {},
       hidden: true,
     });
 
     const widget = widgetFactory({
       ...widgetOptions,
-      container: getContainerNode(bodyRef),
+      container: bodyContainerNode,
     });
 
     return {
