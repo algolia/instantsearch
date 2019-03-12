@@ -45,7 +45,10 @@ class Template extends Component {
 }
 
 Template.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.object),
+  ]),
   rootProps: PropTypes.object,
   rootTagName: PropTypes.string,
   templateKey: PropTypes.string,
