@@ -40,7 +40,7 @@ one command away to start the developer environment,
 [read our CONTRIBUTING guide](CONTRIBUTING.md).
 
 [logo]: https://raw.githubusercontent.com/algolia/vue-instantsearch/master/vue-instantsearch-readme.png
-[website]: https://community.algolia.com/vue-instantsearch
+[website]: https://www.algolia.com/doc/guides/building-search-ui/getting-started/vue/
 [algolia-website]: https://www.algolia.com/
 [instantsearch.js-github]: https://github.com/algolia/instantsearch.js
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch
