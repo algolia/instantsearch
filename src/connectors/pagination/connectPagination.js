@@ -99,6 +99,12 @@ export default function connectPagination(renderFn, unmountFn) {
     return {
       $$type: Symbol.for('ais.pagination'),
 
+      getConfiguration({ page = 0 }) {
+        return {
+          page,
+        };
+      },
+
       init({ helper, createURL, instantSearchInstance }) {
         this.refine = page => {
           helper.setPage(page);
@@ -152,8 +158,10 @@ export default function connectPagination(renderFn, unmountFn) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setPage();
       },
 
       getWidgetState(uiState, { searchParameters }) {
