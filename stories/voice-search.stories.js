@@ -99,7 +99,7 @@ storiesOf('VoiceSearch', module)
               if (isSpeechFinal) {
                 return `Final Transcript: ${transcript}`;
               } else {
-                return `Interim Transcript: ${transcript}`;
+                return `Not done yet`;
               }
             },
           },
