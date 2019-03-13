@@ -94,7 +94,6 @@ class VoiceSearch extends Component {
     this.recognition.onerror = e => {
       this.setState({ errorCode: e.error });
     };
-    // this.recognition.onnomatch = e => console.log('onnomatch', e);
     this.recognition.onresult = e => {
       this.setState({
         status: STATUS_GETTING_INPUTS,
@@ -127,7 +126,7 @@ class VoiceSearch extends Component {
 
   render() {
     const { cssClasses, templates } = this.props;
-    const { status, transcript, isSpeechFinal } = this.state;
+    const { status, transcript, isSpeechFinal, errorCode } = this.state;
     const isStarted = status !== STATUS_INITIAL && status !== STATUS_FINISHED;
     return (
       this.isSupportedBrowser && (
@@ -144,6 +143,7 @@ class VoiceSearch extends Component {
             }}
             data={{
               status,
+              errorCode,
               isStarted,
               transcript,
               isSpeechFinal,
@@ -158,6 +158,7 @@ class VoiceSearch extends Component {
             }}
             data={{
               status,
+              errorCode,
               isStarted,
               transcript,
               isSpeechFinal,
