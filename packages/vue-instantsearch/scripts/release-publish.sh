@@ -17,11 +17,6 @@ if ! git diff-index --quiet HEAD --; then
   exit 1
 fi
 
-if ! yarn run build; then
-  echo "Failed to build dist files, aborting..."
-  exit 1
-fi
-
 if ! yarn run test; then
   echo "Tests failed, aborting..."
   exit 1
