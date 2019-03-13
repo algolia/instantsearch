@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/algolia/vue-instantsearch/compare/v2.0.0...v2.0.1) (2019-03-13)
+
+
+### Bug Fixes
+
+* **umd:** prevent inclusion of Vue in bundle ([#635](https://github.com/algolia/vue-instantsearch/issues/635)) ([a90cbce](https://github.com/algolia/vue-instantsearch/commit/a90cbce))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-beta.3...v2.0.0) (2019-02-18)
 
