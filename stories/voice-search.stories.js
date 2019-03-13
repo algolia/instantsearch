@@ -146,13 +146,12 @@ storiesOf('VoiceSearch', module)
           left: 0;
           right: 0;
           z-index: 2;
-          display: flex;
           align-items: center;
           justify-content: center;
           display: none;
         }`,
         `.voice-search-transcript .layer.started-true {
-          display: block;
+          display: flex;
         }`,
         `.voice-search-transcript .layer span {
           font-size: 2rem;
