@@ -11,6 +11,6 @@ export type SearchParameters = any;
 export type SearchResults = any;
 
 export type FacetRefinement = {
-  value: string;
+  value: string | number[];
   type: string;
 };

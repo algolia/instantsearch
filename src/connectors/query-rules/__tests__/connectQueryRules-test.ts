@@ -189,7 +189,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     });
 
     describe('trackedFilters', () => {
-      test('adds all ruleContexts to search parameters', () => {
+      test('adds ruleContexts to search parameters from facets refinements', () => {
         const brandFilterSpy = jest.fn(() => ['Samsung']);
         const helper = createFakeHelper();
         const widget = makeWidget({
@@ -250,6 +250,51 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         ]);
         expect(brandFilterSpy).toHaveBeenCalledTimes(3);
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung', 'Apple']);
+      });
+
+      test('adds ruleContexts to search parameters from numeric refinements', () => {
+        const priceFilterSpy = jest.fn(() => [500]);
+        const helper = createFakeHelper();
+        const widget = makeWidget({
+          trackedFilters: {
+            price: priceFilterSpy,
+          },
+        });
+
+        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+
+        expect(helper.getQueryParameter('ruleContexts')).toEqual([]);
+        expect(priceFilterSpy).toHaveBeenCalledTimes(1);
+        expect(priceFilterSpy).toHaveBeenCalledWith([]);
+
+        widget.render({
+          helper,
+          results: new SearchResults(helper.getState(), [{}, {}]),
+          instantSearchInstance: {},
+        });
+
+        expect(helper.getQueryParameter('ruleContexts')).toEqual([]);
+        expect(priceFilterSpy).toHaveBeenCalledTimes(2);
+        expect(priceFilterSpy).toHaveBeenCalledWith([]);
+
+        helper.setQueryParameter('numericRefinements', {
+          price: {
+            '<=': [500, 400],
+            '>=': [100],
+          },
+        });
+
+        widget.render({
+          helper,
+          results: new SearchResults(helper.getState(), [{}, {}]),
+          instantSearchInstance: {},
+        });
+
+        expect(helper.getQueryParameter('ruleContexts')).toEqual([
+          'ais-price-500',
+        ]);
+        expect(priceFilterSpy).toHaveBeenCalledTimes(3);
+        expect(priceFilterSpy).toHaveBeenCalledWith([500, 400, 100]);
       });
 
       test('escapes all ruleContexts before passing them to search parameters', () => {

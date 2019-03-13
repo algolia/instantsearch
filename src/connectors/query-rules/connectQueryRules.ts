@@ -19,7 +19,9 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 type ParamTrackedFilters = {
-  [facetName: string]: (facetValues: string[]) => string[];
+  [facetName: string]: (
+    facetValues: (string | number)[]
+  ) => (string | number)[];
 };
 type ParamTransformRuleContexts = (ruleContexts: string[]) => string[];
 type ParamTransformItems = (items: object[]) => any;
@@ -64,16 +66,25 @@ function getRuleContextsFromTrackedFilters({
 }) {
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
-      const getFacetValues = trackedFilters[facetName];
-      const facetRefinements: string[] = helper
+      const getTrackedFacetValues = trackedFilters[facetName];
+      const facetRefinements: (string | number)[] = helper
         .getRefinements(facetName)
-        .map((refinement: FacetRefinement) => refinement.value);
-      const facetValues = getFacetValues(facetRefinements);
+        .map((refinement: FacetRefinement) => refinement.value)
+        // We need to flatten the array because numeric refinements follow the format
+        // `[[400, 500], [100]]` which translates to 100 <= x <= (400 OR 500)
+        .reduce(
+          (refinements: (string | number)[], refinement: string | number) =>
+            refinements.concat(refinement),
+          []
+        );
+      const trackedFacetValues = getTrackedFacetValues(facetRefinements);
 
       return [
         ...facets,
         ...facetRefinements
-          .filter(facetRefinement => facetValues.includes(facetRefinement))
+          .filter(facetRefinement =>
+            trackedFacetValues.includes(facetRefinement)
+          )
           .map(facetValue =>
             escapeRuleContext(`ais-${facetName}-${facetValue}`)
           ),
