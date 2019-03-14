@@ -28,6 +28,28 @@ describe('queryRuleCustomData', () => {
   });
 
   describe('Usage', () => {
+    test('throws container error without options', () => {
+      expect(() => {
+        // @ts-ignore
+        queryRuleCustomData();
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/"
+`);
+    });
+
+    test('throws container error with empty options', () => {
+      expect(() => {
+        // @ts-ignore
+        queryRuleCustomData({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/"
+`);
+    });
+
     test('throws without container', () => {
       expect(() => {
         queryRuleCustomData({
