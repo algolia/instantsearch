@@ -1,3 +1,23 @@
+# [3.2.0](https://github.com/algolia/instantsearch.js/compare/v3.1.0...v3.2.0) (2019-03-14)
+
+
+### Bug Fixes
+
+* **connectToggleRefinement:** keep user provided, but falsy values ([#3526](https://github.com/algolia/instantsearch.js/issues/3526)) ([958a151](https://github.com/algolia/instantsearch.js/commit/958a151))
+* **instantsearch:** update usage errors ([#3543](https://github.com/algolia/instantsearch.js/issues/3543)) ([a2a800b](https://github.com/algolia/instantsearch.js/commit/a2a800b))
+* **panel:** append panel body as a child element ([#3561](https://github.com/algolia/instantsearch.js/issues/3561)) ([3de59a3](https://github.com/algolia/instantsearch.js/commit/3de59a3))
+* **poweredBy:** remove TypeScript extension in import ([#3530](https://github.com/algolia/instantsearch.js/issues/3530)) ([99ecc0b](https://github.com/algolia/instantsearch.js/commit/99ecc0b)), closes [#3528](https://github.com/algolia/instantsearch.js/issues/3528)
+* **release:** update doctoc script ([e07c654](https://github.com/algolia/instantsearch.js/commit/e07c654))
+* **searchbox:** unmount component on dispose ([#3563](https://github.com/algolia/instantsearch.js/issues/3563)) ([c3f0435](https://github.com/algolia/instantsearch.js/commit/c3f0435))
+* **searchBox:** add reusable SearchBox component ([#3489](https://github.com/algolia/instantsearch.js/issues/3489)) ([c073a9a](https://github.com/algolia/instantsearch.js/commit/c073a9a))
+
+
+### Features
+
+* **panel:** implement collapsed feature ([#3575](https://github.com/algolia/instantsearch.js/issues/3575)) ([e84b02b](https://github.com/algolia/instantsearch.js/commit/e84b02b))
+
+
+
 <a name="3.1.1"></a>
 ## [3.1.1](https://github.com/algolia/instantsearch.js/compare/v3.1.0...v3.1.1) (2019-02-14)
 
