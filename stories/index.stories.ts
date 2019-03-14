@@ -543,4 +543,100 @@ storiesOf('Index', module)
         // Avoid collapsed line
       });
     })
+  )
+  .add(
+    'with App',
+    withHits(({ search, container, instantsearch }) => {
+      const $root = document.createElement('div');
+      $root.style.display = 'flex';
+
+      const $left = document.createElement('div');
+      $left.className = 'panel-left';
+
+      const $refinementList = document.createElement('div');
+
+      const $right = document.createElement('div');
+      $right.className = 'panel-right';
+
+      const $searchBox = document.createElement('div');
+      $searchBox.style.marginBottom = '15px';
+
+      const $suggestionHits = document.createElement('div');
+
+      const $titleRegularHits = document.createElement('h3');
+      $titleRegularHits.textContent = 'instant_search';
+      const $regularHits = document.createElement('div');
+
+      const $titlemostRecentHits = document.createElement('h3');
+      $titlemostRecentHits.textContent = 'instant_search_price_desc';
+      const $mostRecentHits = document.createElement('div');
+
+      $left.appendChild($refinementList);
+
+      $right.appendChild($searchBox);
+      $right.appendChild($suggestionHits);
+
+      $right.appendChild($titleRegularHits);
+      $right.appendChild($regularHits);
+
+      $right.appendChild($titlemostRecentHits);
+      $right.appendChild($mostRecentHits);
+
+      $root.appendChild($left);
+      $root.appendChild($right);
+
+      container.appendChild($root);
+
+      search.addWidgets([
+        instantsearch.widgets.configure({
+          hitsPerPage: 2,
+        }),
+
+        instantsearch.widgets.searchBox({
+          container: $searchBox,
+        }),
+
+        index({
+          indexName: 'instant_search_demo_query_suggestions',
+        }).addWidgets([
+          instantsearch.widgets.configure({
+            hitsPerPage: 3,
+          }),
+          instantsearch.widgets.hits({
+            container: $suggestionHits,
+            templates: {
+              item:
+                '{{#helpers.highlight}}{ "attribute": "query" }{{/helpers.highlight}}',
+            },
+          }),
+        ]),
+
+        index({ indexName: 'instant_search' }).addWidgets([
+          instantsearch.widgets.hits({
+            container: $regularHits,
+            templates: {
+              item:
+                '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+            },
+          }),
+
+          index({ indexName: 'instant_search_price_desc' }).addWidgets([
+            instantsearch.widgets.hits({
+              container: $mostRecentHits,
+              templates: {
+                item:
+                  '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+              },
+            }),
+          ]),
+        ]),
+
+        index({ indexName: 'instant_search' }).addWidgets([
+          instantsearch.widgets.refinementList({
+            container: $refinementList,
+            attribute: 'brand',
+          }),
+        ]),
+      ]);
+    })
   );
