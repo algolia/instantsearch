@@ -127,7 +127,7 @@ class VoiceSearch extends Component {
   render() {
     const { cssClasses, templates } = this.props;
     const { status, transcript, isSpeechFinal, errorCode } = this.state;
-    const isStarted = status !== STATUS_INITIAL && status !== STATUS_FINISHED;
+    const isListening = status !== STATUS_INITIAL && status !== STATUS_FINISHED;
     return (
       this.isSupportedBrowser && (
         <div className={cssClasses.root}>
@@ -144,7 +144,7 @@ class VoiceSearch extends Component {
             data={{
               status,
               errorCode,
-              isStarted,
+              isListening,
               transcript,
               isSpeechFinal,
             }}
@@ -159,7 +159,7 @@ class VoiceSearch extends Component {
             data={{
               status,
               errorCode,
-              isStarted,
+              isListening,
               transcript,
               isSpeechFinal,
             }}
@@ -173,7 +173,7 @@ class VoiceSearch extends Component {
             }}
             data={{
               status,
-              isStarted,
+              isListening,
               transcript,
               isSpeechFinal,
             }}

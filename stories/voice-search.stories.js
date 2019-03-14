@@ -39,8 +39,8 @@ storiesOf('VoiceSearch', module)
         instantsearch.widgets.voiceSearch({
           container,
           templates: {
-            buttonText({ isStarted }) {
-              if (isStarted) {
+            buttonText({ isListening }) {
+              if (isListening) {
                 return 'Click to Stop';
               } else {
                 return 'Click to Speak';
@@ -60,7 +60,7 @@ storiesOf('VoiceSearch', module)
           templates: {
             status: `
               <p>status: {{status}}</p>
-              <p>isStarted: {{isStarted}}</p>
+              <p>isListening: {{isListening}}</p>
             `,
           },
         })
@@ -94,7 +94,7 @@ storiesOf('VoiceSearch', module)
           container,
           searchAsYouSpeak: false,
           templates: {
-            status: `isStarted: {{isStarted}}`,
+            status: `isListening: {{isListening}}`,
             transcript({ transcript, isSpeechFinal }) {
               if (isSpeechFinal) {
                 return `Final Transcript: ${transcript}`;
@@ -132,10 +132,10 @@ storiesOf('VoiceSearch', module)
         `.voice-search-button:hover {
           cursor: pointer;
         }`,
-        `.voice-search-button:hover .started-false svg {
+        `.voice-search-button:hover .listening-false svg {
           fill: #444;
         }`,
-        `.voice-search-button .started-true svg {
+        `.voice-search-button .listening-true svg {
           fill: #d83636;
         }`,
         `.voice-search-transcript .layer {
@@ -150,7 +150,7 @@ storiesOf('VoiceSearch', module)
           justify-content: center;
           display: none;
         }`,
-        `.voice-search-transcript .layer.started-true {
+        `.voice-search-transcript .layer.listening-true {
           display: flex;
         }`,
         `.voice-search-transcript .layer span {
@@ -168,13 +168,13 @@ storiesOf('VoiceSearch', module)
           },
           templates: {
             buttonText: `
-              <span class="started-{{isStarted}}">
+              <span class="listening-{{isListening}}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
               </span>
             `,
-            transcript({ isStarted, transcript }) {
+            transcript({ isListening, transcript }) {
               return `
-                <div class="layer started-${isStarted}">
+                <div class="layer listening-${isListening}">
                   <span>${transcript}</span>
                 </div>
               `;
