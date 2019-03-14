@@ -56,6 +56,21 @@ const resolveSearchParameters = nodes => {
   );
 };
 
+const resolveNodesFromNode = node => {
+  const loop = (acc, innerNode) => {
+    return innerNode.widgets
+      .filter(isIndexWidget)
+      .map(_ => _.node)
+      .reduce(
+        (innerAcc, currentNode) =>
+          loop(innerAcc.concat(currentNode), currentNode),
+        acc
+      );
+  };
+
+  return loop([], node);
+};
+
 const resolveNodesFromIndexId = (node, indexId) => {
   const loop = (acc, innerNode) => {
     const nextAcc = innerNode.indexId === indexId ? acc.concat(innerNode) : acc;
@@ -107,6 +122,26 @@ const createHelperSubscription = ({ helper, event, callback }) => {
   return () => {
     helper.off(event, callback);
   };
+};
+
+const createHelperPagination = ({ helper, node }) => {
+  helper.on('change', (_, __, reset) => {
+    if (reset) {
+      const nodes = resolveNodesFromNode(node);
+
+      nodes.forEach(innerNode => {
+        const { page, ...rest } = innerNode.helper.getState();
+
+        if (typeof page !== 'undefined') {
+          // This is brittle, another solution would be welcome.
+          innerNode.helper.overrideStateWithoutTriggeringChangeEvent({
+            ...rest,
+            page: 0,
+          });
+        }
+      });
+    }
+  });
 };
 
 /**
@@ -161,6 +196,11 @@ class InstantSearch extends EventEmitter {
     const helper = algoliasearchHelper(this.client, indexName, {
       ...searchParameters,
       index: indexName,
+    });
+
+    createHelperPagination({
+      node: this.tree,
+      helper,
     });
 
     const derivedHelper = createDerivedHelper(helper, this.tree, indexName);
@@ -293,6 +333,11 @@ class InstantSearch extends EventEmitter {
         unsubscribeDerivedHelper,
       };
 
+      createHelperPagination({
+        node: innerNode,
+        helper,
+      });
+
       // register the node on the index
       index.node = innerNode;
 
@@ -341,27 +386,33 @@ class InstantSearch extends EventEmitter {
       )
       .filter(Boolean);
 
-    // get the initial configuration search parameters for the rest of the
-    // widgets e.g. two widgets were using the same configuration but we
-    // removed one.
-    current.helper.setState(
-      // @TODO: replace the `enhanceConfiguration`
-      current.widgets.reduce(enhanceConfiguration({}), {
-        // apply the root parameters only on the top level node
-        ...(current.parent === null && this.searchParameters),
-        ...resolveSingleLeafMerge(
-          // take the current state of the node
-          { state: current.helper.getState() },
-          // apply each disposed state to the node
-          ...nextSearchParameters.map(_ => ({ state: _ }))
-        ),
-      })
-    );
+    if (nextSearchParameters.length) {
+      // get the initial configuration search parameters for the rest of the
+      // widgets e.g. two widgets were using the same configuration but we
+      // removed one.
+      current.helper.setState(
+        // @TODO: replace the `enhanceConfiguration`
+        current.widgets.reduce(enhanceConfiguration({}), {
+          // apply the root parameters only on the top level node
+          ...(current.parent === null && this.searchParameters),
+          ...resolveSingleLeafMerge(
+            // we can't take the current state of the node because
+            // its not up to date with the state that was crafted
+            // for the request. It's the state for this index but
+            // only this index. Sure?
+            // { state: current.helper.getState() },
+            // apply each disposed state to the node
+            ...nextSearchParameters.map(_ => ({ state: _ }))
+          ),
+        })
+      );
+    }
 
     // Widget indices
     widgets.filter(isIndexWidget).forEach(index => {
       // remove the subscription on the derviedHelper
       index.node.unsubscribeDerivedHelper();
+      index.node.helper.removeAllListeners();
 
       // remove the derivedHelper when no nodes are present
       if (!resolveNodeFromIndexId(this.tree, index.indexId)) {
