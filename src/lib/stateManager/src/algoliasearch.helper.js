@@ -341,7 +341,9 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(
  * @chainable
  */
 AlgoliaSearchHelper.prototype.setQuery = function(q) {
-  this._change(this.state.setPage().setQuery(q));
+  // this._change(this.state.setPage().setQuery(q));
+  this._change(this.state.resetPage().setQuery(q), true);
+
   return this;
 };
 
@@ -1383,10 +1385,10 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function(facet) {
   );
 };
 
-AlgoliaSearchHelper.prototype._change = function(newState) {
+AlgoliaSearchHelper.prototype._change = function(newState, reset = false) {
   if (newState !== this.state) {
     this.state = newState;
-    this.emit('change', this.state, this.lastResults);
+    this.emit('change', this.state, this.lastResults, reset);
   }
 };
 
