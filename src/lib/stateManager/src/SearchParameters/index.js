@@ -1786,7 +1786,11 @@ SearchParameters.prototype = {
       const ks = keys(params);
 
       forEach(ks, function(k) {
-        newInstance[k] = parsedParams[k];
+        if (typeof parsedParams[k] !== 'undefined') {
+          newInstance[k] = parsedParams[k];
+        } else {
+          delete newInstance[k];
+        }
       });
 
       return newInstance;
@@ -1815,6 +1819,7 @@ SearchParameters.prototype = {
     const newState = new this.constructor(this);
 
     fn(newState, this);
+
     return newState;
   },
 
