@@ -733,6 +733,14 @@ SearchParameters.prototype = {
       page: newPage,
     });
   },
+
+  resetPage: function resetPage() {
+    return this.setQueryParameters({
+      // reset page to 0 if the previous value is a number
+      page: typeof this.page !== 'undefined' ? 0 : undefined,
+    });
+  },
+
   /**
    * Facets setter
    * The facets are the simple facets, used for conjunctive (and) faceting.
