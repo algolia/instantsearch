@@ -1,3 +1,18 @@
+# [3.2.0](https://github.com/algolia/instantsearch.js/compare/v3.1.0...v3.2.0) (2019-03-14)
+
+
+### Bug Fixes
+
+* **instantsearch:** update usage errors ([#3543](https://github.com/algolia/instantsearch.js/issues/3543)) ([a2a800b](https://github.com/algolia/instantsearch.js/commit/a2a800b))
+* **searchBox:** add reusable SearchBox component ([#3489](https://github.com/algolia/instantsearch.js/issues/3489)) ([c073a9a](https://github.com/algolia/instantsearch.js/commit/c073a9a))
+
+
+### Features
+
+* **panel:** implement collapsed feature ([#3575](https://github.com/algolia/instantsearch.js/issues/3575)) ([e84b02b](https://github.com/algolia/instantsearch.js/commit/e84b02b))
+
+
+
 <a name="3.1.1"></a>
 ## [3.1.1](https://github.com/algolia/instantsearch.js/compare/v3.1.0...v3.1.1) (2019-02-14)
 
