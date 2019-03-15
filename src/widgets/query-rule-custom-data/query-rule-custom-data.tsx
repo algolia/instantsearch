@@ -1,7 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import {
   getContainerNode,
-  prepareTemplateProps,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { WidgetFactory } from '../../types';
@@ -23,6 +22,7 @@ type QueryRuleCustomDataWidgetParams = {
 interface QueryRuleCustomDataConnectorWidgetParams
   extends QueryRuleCustomDataWidgetParams {
   container: HTMLElement;
+  templates: QueryRuleCustomDataTemplates;
 }
 
 type QueryRuleCustomData = WidgetFactory<QueryRuleCustomDataWidgetParams>;
@@ -33,18 +33,10 @@ const withUsage = createDocumentationMessageGenerator({
 
 const renderer: QueryRulesRenderer<
   QueryRuleCustomDataConnectorWidgetParams
-> = ({ userData, instantSearchInstance, widgetParams }) => {
+> = ({ userData, widgetParams }) => {
   const { container, templates } = widgetParams;
 
-  const templateProps = prepareTemplateProps({
-    templates,
-    templatesConfig: instantSearchInstance.templatesConfig,
-  });
-
-  render(
-    <CustomData templateProps={templateProps} items={userData} />,
-    container
-  );
+  render(<CustomData templates={templates} items={userData} />, container);
 };
 
 const queryRuleCustomData: QueryRuleCustomData = (
@@ -65,11 +57,11 @@ const queryRuleCustomData: QueryRuleCustomData = (
   };
 
   const containerNode = getContainerNode(container);
-  const makeContextualHits = connectQueryRules(renderer, () => {
+  const makeQueryRuleCustomData = connectQueryRules(renderer, () => {
     unmountComponentAtNode(containerNode);
   });
 
-  return makeContextualHits({
+  return makeQueryRuleCustomData({
     container: containerNode,
     templates,
     transformItems,

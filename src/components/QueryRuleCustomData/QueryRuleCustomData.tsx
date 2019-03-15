@@ -3,17 +3,15 @@ import { QueryRuleCustomDataTemplates } from '../../widgets/query-rule-custom-da
 import Template from '../Template/Template';
 
 type QueryRuleCustomDataProps = {
-  templateProps: {
-    templates: QueryRuleCustomDataTemplates;
-  };
+  templates: QueryRuleCustomDataTemplates;
   items: object[];
 };
 
 const QueryRuleCustomData = ({
-  templateProps,
+  templates,
   items,
 }: QueryRuleCustomDataProps) => (
-  <Template {...templateProps} templateKey="default" data={items} />
+  <Template templateKey="default" templates={templates} data={items} />
 );
 
 export default QueryRuleCustomData;

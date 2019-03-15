@@ -49,19 +49,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/"
 `);
     });
-
-    test('throws without container', () => {
-      expect(() => {
-        queryRuleCustomData({
-          // @ts-ignore
-          container: undefined,
-        });
-      }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/"
-`);
-    });
   });
 
   describe('Options', () => {

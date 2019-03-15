@@ -7,10 +7,8 @@ describe('QueryRuleCustomData', () => {
     const items = [];
     const props = {
       items,
-      templateProps: {
-        templates: {
-          default: 'default',
-        },
+      templates: {
+        default: 'default',
       },
     };
 
@@ -24,10 +22,8 @@ describe('QueryRuleCustomData', () => {
     const items = [{ banner: 'image-1.png' }, { banner: 'image-2.png' }];
     const props = {
       items,
-      templateProps: {
-        templates: {
-          default: 'default',
-        },
+      templates: {
+        default: 'default',
       },
     };
 
