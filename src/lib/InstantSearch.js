@@ -23,39 +23,6 @@ function defaultCreateURL() {
 const isIndexWidget = _ => _.$$type === Symbol.for('ais.index');
 const isIndexWidgetLinked = _ => isIndexWidget(_) && Boolean(_.node);
 
-const resolveRootNode = node => {
-  const resolveParentNode = (innerNode, nodes) => {
-    const next = [innerNode].concat(nodes);
-
-    return innerNode.parent !== null
-      ? resolveParentNode(innerNode.parent, next)
-      : next;
-  };
-
-  return resolveParentNode(node, []);
-};
-
-const resolveSearchParameters = nodes => {
-  const innerSearchParameters = nodes.map(n =>
-    // Resolve the search paramerters for each node that share the same
-    // index identifer than this derived helper. We merge them based on
-    // the order they have been added to the tree.
-    resolveSingleLeafMerge(
-      // Resolve the root node for each node that share the same index
-      // identifer than this derived helper. We merge them based on
-      // the order they have been added to the tree.
-      ...resolveRootNode(n)
-        // Tweaks for the input of the resolve function
-        .map(_ => ({ state: _.helper.getState() }))
-    )
-  );
-
-  return resolveSingleLeafMerge(
-    // Tweaks for the input of the resolve function
-    ...innerSearchParameters.map(_ => ({ state: _ }))
-  );
-};
-
 const resolveNodesFromNode = node => {
   const loop = (acc, innerNode) => {
     return innerNode.widgets
@@ -100,6 +67,45 @@ const resolveNodeFromIndexId = (node, indexId) => {
   return loop(node);
 };
 
+const resolveRoot = node => {
+  const resolveParentNode = innerNode => {
+    return innerNode.parent !== null
+      ? resolveParentNode(innerNode.parent)
+      : innerNode;
+  };
+
+  return resolveParentNode(node);
+};
+
+const resolveRootNodes = (root, node) => {
+  const resolveParentNode = (innerNode, nodes) => {
+    const nodesForIndexId = resolveNodesFromIndexId(root, innerNode.indexId);
+    const next = [nodesForIndexId].concat(nodes);
+
+    return innerNode.parent !== null
+      ? resolveParentNode(innerNode.parent, next)
+      : next;
+  };
+
+  return resolveParentNode(node, []);
+};
+
+const resolveSearchParameters = node => {
+  const rootNode = resolveRoot(node);
+  const nodeSearchParemeters = resolveRootNodes(rootNode, node).map(nodes =>
+    resolveSingleLeafMerge(
+      ...nodes
+        // Tweaks for the input of the resolve function
+        .map(_ => ({ state: _.helper.getState() }))
+    )
+  );
+
+  return resolveSingleLeafMerge(
+    // Tweaks for the input of the resolve function
+    ...nodeSearchParemeters.map(_ => ({ state: _ }))
+  );
+};
+
 const createChildHelper = ({ parent, client, index, parameters }) => {
   const helper = algoliasearchHelper(client, index, parameters);
 
@@ -112,7 +118,7 @@ const createChildHelper = ({ parent, client, index, parameters }) => {
 
 const createDerivedHelper = (helper, node, indexId) => {
   return helper.derive(() => {
-    return resolveSearchParameters(resolveNodesFromIndexId(node, indexId));
+    return resolveSearchParameters(node, indexId);
   });
 };
 
@@ -313,8 +319,19 @@ class InstantSearch extends EventEmitter {
         // },
       });
 
+      const innerNode = {
+        instance: this,
+        parent: current,
+        indexId: index.indexId,
+        widgets: [],
+        helper,
+        // derivedHelper,
+        // unsubscribeDerivedHelper,
+      };
+
       const derivedHelper = !nodeForIndexId
-        ? createDerivedHelper(this.tree.helper, this.tree, index.indexId)
+        ? // @TODO: find a better solution to avoid the node mutation
+          createDerivedHelper(this.tree.helper, innerNode, index.indexId)
         : nodeForIndexId.derivedHelper;
 
       const unsubscribeDerivedHelper = createHelperSubscription({
@@ -323,15 +340,8 @@ class InstantSearch extends EventEmitter {
         callback: this._render.bind(this, helper),
       });
 
-      const innerNode = {
-        instance: this,
-        parent: current,
-        indexId: index.indexId,
-        widgets: [],
-        helper,
-        derivedHelper,
-        unsubscribeDerivedHelper,
-      };
+      innerNode.derivedHelper = derivedHelper;
+      innerNode.unsubscribeDerivedHelper = unsubscribeDerivedHelper;
 
       createHelperPagination({
         node: innerNode,
@@ -475,6 +485,7 @@ class InstantSearch extends EventEmitter {
 
     console.log('Start');
     console.log(this.tree);
+    console.log('--');
 
     this._searchStalledTimer = null;
     this._isSearchStalled = true;
