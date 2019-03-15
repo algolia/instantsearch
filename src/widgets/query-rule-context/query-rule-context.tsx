@@ -1,20 +1,29 @@
 import noop from 'lodash/noop';
 import { WidgetFactory } from '../../types';
+import { createDocumentationMessageGenerator } from '../../lib/utils';
 import connectQueryRules, {
-  QueryRulesConnectorParams,
+  ParamTrackedFilters,
+  ParamTransformRuleContexts,
 } from '../../connectors/query-rules/connectQueryRules';
 
-type QueryRulesWidgetParams = Pick<
-  QueryRulesConnectorParams,
-  'trackedFilters' | 'transformRuleContexts'
->;
+type QueryRulesWidgetParams = {
+  trackedFilters: ParamTrackedFilters;
+  transformRuleContexts?: ParamTransformRuleContexts;
+};
 
 type QueryRuleContext = WidgetFactory<QueryRulesWidgetParams>;
 
-const queryRuleContext: QueryRuleContext = ({
-  trackedFilters,
-  transformRuleContexts,
-} = {}) => {
+const withUsage = createDocumentationMessageGenerator({
+  name: 'query-rule-context',
+});
+
+const queryRuleContext: QueryRuleContext = (
+  { trackedFilters, transformRuleContexts } = {} as QueryRulesWidgetParams
+) => {
+  if (!trackedFilters) {
+    throw new Error(withUsage('The `trackedFilters` option is required.'));
+  }
+
   return connectQueryRules(noop)({
     trackedFilters,
     transformRuleContexts,

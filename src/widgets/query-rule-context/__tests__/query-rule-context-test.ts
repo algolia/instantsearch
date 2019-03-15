@@ -2,17 +2,26 @@ import queryRuleContext from '../query-rule-context';
 
 describe('queryRuleContext', () => {
   describe('Usage', () => {
-    test('does not throw without options', () => {
+    test('throws trackedFilters error without options', () => {
       expect(() => {
         // @ts-ignore
         queryRuleContext();
-      }).not.toThrow();
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`trackedFilters\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-context/js/"
+`);
     });
 
-    test('does not throw with empty options', () => {
+    test('throws trackedFilters error with empty options', () => {
       expect(() => {
+        // @ts-ignore
         queryRuleContext({});
-      }).not.toThrow();
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`trackedFilters\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-context/js/"
+`);
     });
   });
 });
