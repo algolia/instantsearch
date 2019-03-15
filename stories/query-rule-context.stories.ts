@@ -31,7 +31,6 @@ storiesOf('QueryRuleContext', module).add(
 
     search.addWidget(
       instantsearch.widgets.queryRuleContext({
-        container,
         trackedFilters: {
           genre: () => ['Thriller', 'Drama'],
         },
