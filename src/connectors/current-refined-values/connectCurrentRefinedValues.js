@@ -127,8 +127,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *         + refinement.computedLabel + ' ' + refinement.count + '</a></li>';
  *     });
  *
- *     CurrentRefinedValuesRenderingOptions.find('ul').html(list);
- *     CurrentRefinedValuesRenderingOptions.find('li > a').each(function(index) {
+ *     CurrentRefinedValuesRenderingOptions.containerNode.find('ul').html(list);
+ *     CurrentRefinedValuesRenderingOptions.containerNode.find('li > a').each(function(index) {
  *       $(this).on('click', function(event) {
  *         event.preventDefault();
  *
