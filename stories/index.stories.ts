@@ -502,8 +502,13 @@ storiesOf('Index', module)
       const instantSearchStats = instantsearch.widgets.stats({
         container: $instantSearchStats,
         templates: {
-          text({ page }) {
-            return `<code>page: ${page + 1}</code>`;
+          text({ query, page }) {
+            return `
+              <p>
+                <code>query: ${query}</code><br />
+                <code>page: ${page + 1}</code>
+              </p>
+            `;
           },
         },
       });
@@ -536,8 +541,13 @@ storiesOf('Index', module)
       const bestbuyStats = instantsearch.widgets.stats({
         container: $bestbuyStats,
         templates: {
-          text({ page }) {
-            return `<code>page: ${page + 1}</code>`;
+          text({ query, page }) {
+            return `
+              <p>
+                <code>query: ${query}</code><br />
+                <code>page: ${page + 1}</code>
+              </p>
+            `;
           },
         },
       });
