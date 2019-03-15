@@ -12,12 +12,12 @@ export type SearchResults = any;
 
 export type FacetRefinement = {
   value: string;
-  type: string;
+  type: 'conjunctive' | 'disjunctive' | 'exclude';
 };
 
 export type NumericRefinement = {
   value: number[];
-  type: string;
+  type: 'numeric';
   operator: string;
 };
 
