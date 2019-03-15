@@ -672,7 +672,10 @@ storiesOf('Index', module)
           }),
         ]),
 
-        index({ indexName: 'instant_search' }).addWidgets([
+        index({
+          indexName: 'instant_search',
+          indexId: 'main',
+        }).addWidgets([
           instantsearch.widgets.hits({
             container: $regularHits,
             templates: {
@@ -692,7 +695,10 @@ storiesOf('Index', module)
           ]),
         ]),
 
-        index({ indexName: 'instant_search' }).addWidgets([
+        index({
+          indexName: 'instant_search',
+          indexId: 'main',
+        }).addWidgets([
           instantsearch.widgets.refinementList({
             container: $refinementList,
             attribute: 'brand',
