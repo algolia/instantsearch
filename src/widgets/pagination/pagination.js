@@ -79,11 +79,11 @@ const renderer = ({
  * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element of the widget if there are no refinements.
  * @property  {string|string[]} [list] CSS classes added to the wrapping `<ul>`.
  * @property  {string|string[]} [item] CSS classes added to each `<li>`.
- * @property  {string|string[]} [itemFirstPage] CSS classes added to the first `<li>`.
- * @property  {string|string[]} [itemLastPage] CSS classes added to the last `<li>`.
- * @property  {string|string[]} [itemPreviousPage] CSS classes added to the previous `<li>`.
- * @property  {string|string[]} [itemNextPage] CSS classes added to the next `<li>`.
- * @property  {string|string[]} [itemPage] CSS classes added to page `<li>`.
+ * @property  {string|string[]} [firstPageItem] CSS classes added to the first `<li>`.
+ * @property  {string|string[]} [lastPageItem] CSS classes added to the last `<li>`.
+ * @property  {string|string[]} [previousPageItem] CSS classes added to the previous `<li>`.
+ * @property  {string|string[]} [nextPageItem] CSS classes added to the next `<li>`.
+ * @property  {string|string[]} [pageItem] CSS classes added to page `<li>`.
  * @property  {string|string[]} [selectedItem] CSS classes added to the selected `<li>`.
  * @property  {string|string[]} [disabledItem] CSS classes added to the disabled `<li>`.
  * @property  {string|string[]} [link] CSS classes added to each link.
