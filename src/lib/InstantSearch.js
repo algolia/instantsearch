@@ -375,38 +375,28 @@ class InstantSearch extends EventEmitter {
     // Filter out widgets from the node
     current.widgets = current.widgets.filter(w => !widgets.includes(w));
 
-    // Next search parameters from disposed widgets
-    const nextSearchParameters = widgets
+    widgets
       .filter(_ => typeof _.dispose === 'function')
-      .map(widget =>
-        widget.dispose({
-          helper: current.helper,
+      .forEach(widget => {
+        const nextState = widget.dispose({
           state: current.helper.getState(),
-        })
-      )
-      .filter(Boolean);
+          helper: current.helper,
+        });
 
-    if (nextSearchParameters.length) {
-      // get the initial configuration search parameters for the rest of the
-      // widgets e.g. two widgets were using the same configuration but we
-      // removed one.
-      current.helper.setState(
-        // @TODO: replace the `enhanceConfiguration`
-        current.widgets.reduce(enhanceConfiguration({}), {
-          // apply the root parameters only on the top level node
-          ...(current.parent === null && this.searchParameters),
-          ...resolveSingleLeafMerge(
-            // we can't take the current state of the node because
-            // its not up to date with the state that was crafted
-            // for the request. It's the state for this index but
-            // only this index. Sure?
-            // { state: current.helper.getState() },
-            // apply each disposed state to the node
-            ...nextSearchParameters.map(_ => ({ state: _ }))
-          ),
-        })
-      );
-    }
+        if (nextState) {
+          // get the initial configuration search parameters for the rest of the
+          // widgets e.g. two widgets were using the same configuration but we
+          // removed one.
+          current.helper.setState(
+            // @TODO: replace the `enhanceConfiguration`
+            current.widgets.reduce(enhanceConfiguration({}), {
+              // apply the root parameters only on the top level node
+              ...(current.parent === null && this.searchParameters),
+              ...nextState,
+            })
+          );
+        }
+      });
 
     // Widget indices
     widgets.filter(isIndexWidget).forEach(index => {
