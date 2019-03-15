@@ -5,7 +5,7 @@ import {
   RenderOptions,
   WidgetFactory,
   Helper,
-  FacetRefinement,
+  Refinement,
 } from '../../types';
 import {
   checkRendering,
@@ -69,7 +69,7 @@ function getRuleContextsFromTrackedFilters({
       const getTrackedFacetValues = trackedFilters[facetName];
       const facetRefinements: (string | number)[] = helper
         .getRefinements(facetName)
-        .map((refinement: FacetRefinement) => refinement.value)
+        .map((refinement: Refinement) => refinement.value)
         // We need to flatten the array because numeric refinements follow the format
         // `[[400, 500], [100]]` which translates to 100 <= x <= (400 OR 500)
         .reduce(
