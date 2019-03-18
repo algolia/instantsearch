@@ -606,7 +606,7 @@ storiesOf('Index', module)
     })
   )
   .add(
-    'with App',
+    'with suggestions & products',
     withHits(({ search, container, instantsearch }) => {
       const $root = document.createElement('div');
       $root.style.display = 'flex';
