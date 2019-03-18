@@ -48,7 +48,7 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
     recognition.interimResults = searchAsYouSpeak;
     recognition.onend = () => {
       if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
-        onQueryChange(this.state.transcript);
+        onQueryChange(state.transcript);
       }
       setState({ status: STATUS_FINISHED });
     };
