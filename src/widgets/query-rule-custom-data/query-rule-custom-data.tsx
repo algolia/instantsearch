@@ -19,7 +19,7 @@ type QueryRuleCustomDataWidgetParams = {
   transformItems?: (items: object[]) => any;
 };
 
-interface QueryRuleCustomDataConnectorWidgetParams
+interface QueryRuleCustomDataRendererWidgetParams
   extends QueryRuleCustomDataWidgetParams {
   container: HTMLElement;
   templates: QueryRuleCustomDataTemplates;
@@ -31,9 +31,10 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-custom-data',
 });
 
-const renderer: QueryRulesRenderer<
-  QueryRuleCustomDataConnectorWidgetParams
-> = ({ userData, widgetParams }) => {
+const renderer: QueryRulesRenderer<QueryRuleCustomDataRendererWidgetParams> = ({
+  userData,
+  widgetParams,
+}) => {
   const { container, templates } = widgetParams;
 
   render(<CustomData templates={templates} items={userData} />, container);
