@@ -23,7 +23,7 @@ function getContainerNode(selectorOrHTMLElement: string | HTMLElement) {
     throw new Error(errorMessage);
   }
 
-  return domElement as HTMLElement;
+  return domElement;
 }
 
 export default getContainerNode;
