@@ -1,9 +1,9 @@
-function capitalize(string: string) {
+function capitalize(text: string) {
   return (
-    string
+    text
       .toString()
       .charAt(0)
-      .toUpperCase() + string.toString().slice(1)
+      .toUpperCase() + text.toString().slice(1)
   );
 }
 
