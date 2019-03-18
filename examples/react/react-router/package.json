@@ -21,7 +21,7 @@
     "react": "16.8.4",
     "react-dom": "16.8.4",
     "react-instantsearch-dom": "5.4.0",
-    "react-router-dom": "4.4.0"
+    "react-router-dom": "4.4.0-beta.8"
   },
   "browserslist": [
     ">0.2%",
