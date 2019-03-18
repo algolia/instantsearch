@@ -88,13 +88,13 @@
     "rollup-plugin-terser": "4.0.4",
     "rollup-plugin-vue": "3.0.0",
     "rollup-watch": "4.3.1",
-    "vue": "2.5.17",
+    "vue": "2.5.18",
     "vue-autosuggest": "1.8.1",
     "vue-jest": "2.6.0",
     "vue-json-tree": "0.3.3",
     "vue-loader": "14.2.2",
-    "vue-slider-component": "2.8.13",
-    "vue-template-compiler": "2.5.17",
+    "vue-slider-component": "3.0.15",
+    "vue-template-compiler": "2.5.18",
     "vuetify": "1.5.3"
   },
   "bundlesize": [

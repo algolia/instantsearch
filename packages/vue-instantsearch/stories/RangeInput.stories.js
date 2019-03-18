@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
 import VueSlider from 'vue-slider-component';
+import 'vue-slider-component/theme/default.css';
 
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.css';
@@ -88,7 +89,7 @@ storiesOf('ais-range-input', module)
               minValue !== null ? minValue : minRange,
               maxValue !== null ? maxValue : maxRange,
             ]"
-            @input="refine({ min: $event[0], max: $event[1] })"
+            @change="refine({ min: $event[0], max: $event[1] })"
           />
         </template>
       </ais-range-input>
