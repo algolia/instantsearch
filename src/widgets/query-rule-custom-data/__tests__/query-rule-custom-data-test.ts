@@ -61,7 +61,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
         widget.init({ helper, state: helper.state, instantSearchInstance: {} });
 
-        const { templates } = render.mock.calls[0][0].props.templateProps;
+        const { templates } = render.mock.calls[0][0].props;
 
         expect(templates).toEqual({
           default: '',
@@ -79,7 +79,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
         widget.init({ helper, state: helper.state, instantSearchInstance: {} });
 
-        const { templates } = render.mock.calls[0][0].props.templateProps;
+        const { templates } = render.mock.calls[0][0].props;
 
         expect(templates).toEqual({
           default: 'default',
