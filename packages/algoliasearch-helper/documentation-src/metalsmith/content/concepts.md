@@ -151,7 +151,7 @@ hierarchy of facet values.
 ```
 
 Since this is a feature built on top of the Algolia API, we expect the dataset to
-follow a hierachical notation ([see the configuration](reference.html#hierarchical-facets)).
+follow a hierarchical notation ([see the configuration](reference.html#hierarchical-facets)).
 
 ## Special capabilities
 
