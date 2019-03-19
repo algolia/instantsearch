@@ -1,5 +1,5 @@
 export default {
-  buttonText: `Search by voice`,
+  buttonText: `Voice Search`,
   status: ``,
   transcript: ``,
 };
