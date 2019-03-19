@@ -60,7 +60,7 @@ jobs:
   test_e2e:
     <<: *defaults
     docker:
-      - image: circleci/node:8.15.1-browsers@sha256:b0559d8af9620b5168aff33c72fa457f9a2900e05dce522b7e697996486f7557
+      - image: circleci/node:8.15.1-browsers@sha256:ef4798d5d549be262cd70721e7b4261ae1ab8193aa9e346a98a7eb516c4cdc31
     steps:
       - checkout
       - run: *install_yarn_version
