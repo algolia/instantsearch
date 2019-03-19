@@ -2991,10 +2991,12 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
 
-"@types/storybook__addon-a11y@^3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@types/storybook__addon-a11y/-/storybook__addon-a11y-3.3.1.tgz#7b22a8d6636aba9e4f0e158aea410ed4f8090716"
-  integrity sha512-pmRviAq4uXuE9wIGuiG7fHsS82KN+CVHG670SsSwefc2Sbvi3G3rNov+KRd0/A2ppAgO40SRiecZ6UK3kgrhsA==
+"@types/storybook__addon-a11y@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/storybook__addon-a11y/-/storybook__addon-a11y-5.0.0.tgz#fcad4669ffd6c47defc41d28c49a6e1388c7549c"
+  integrity sha512-9DCRXG/10yXCV/4J4wW2anJUOvmxuwtEsSjDTroQYzoT4fctc64LYEqBeNbQl5v1NzslKCZsItzi1cR5V5Sk7w==
+  dependencies:
+    "@types/storybook__react" "*"
 
 "@types/storybook__addon-actions@^3.4.1":
   version "3.4.1"
