@@ -59,7 +59,7 @@
     "@types/storybook__addon-links": "^3.3.3",
     "@types/storybook__addon-options": "^4.0.0",
     "@types/storybook__react": "^4.0.0",
-    "algoliasearch": "3.32.0",
+    "algoliasearch": "3.32.1",
     "argos-cli": "0.1.1",
     "babel-eslint": "10.0.1",
     "babel-jest": "24.5.0",
