@@ -2,7 +2,7 @@ const STATUS_INITIAL = 'initial';
 const STATUS_ASKING_PERMISSION = 'askingPermission';
 const STATUS_WAITING_FOR_AUDIO = 'waitingForAudio';
 const STATUS_WAITING_FOR_VOICE = 'waitingForVoice';
-const STATUS_GETTING_INPUTS = 'gettingInputs';
+const STATUS_RECOGNIZING = 'recognizing';
 const STATUS_FINISHED = 'finished';
 
 export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
@@ -54,7 +54,7 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
     };
     recognition.onresult = e => {
       setState({
-        status: STATUS_GETTING_INPUTS,
+        status: STATUS_RECOGNIZING,
         transcript: e.results[0][0].transcript,
         isSpeechFinal: e.results[0].isFinal,
       });
