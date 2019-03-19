@@ -38,9 +38,6 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
     resetState();
   };
 
-  const canStart = () =>
-    state.status === STATUS_INITIAL || state.status === STATUS_FINISHED;
-
   const start = searchAsYouSpeak => {
     resetState(STATUS_ASKING_PERMISSION);
     recognition = new window.SpeechRecognition();
@@ -80,7 +77,6 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
   return {
     isSupportedBrowser,
     isListening,
-    canStart,
     start,
     stop,
   };

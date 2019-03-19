@@ -1,8 +1,6 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
 import Template from '../Template/Template';
-import voiceSearchHelper from '../../lib/voiceSearchHelper';
 
 const VoiceSearchCSSClasses = PropTypes.shape({
   root: PropTypes.string.isRequired,
@@ -14,46 +12,45 @@ const VoiceSearchCSSClasses = PropTypes.shape({
 class VoiceSearch extends Component {
   static propTypes = {
     cssClasses: VoiceSearchCSSClasses.isRequired,
+    isSupportedBrowser: PropTypes.func.isRequired,
+    isListening: PropTypes.func.isRequired,
+    toggleListening: PropTypes.func.isRequired,
+    voiceListeningState: PropTypes.object.isRequired,
     searchAsYouSpeak: PropTypes.bool,
-    refine: PropTypes.func,
     query: PropTypes.string,
     templates: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     searchAsYouSpeak: true,
-    refine: noop,
     query: '',
   };
 
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-    this.helper = voiceSearchHelper({
-      onQueryChange: query => this.props.refine(query),
-      onStateChange: state => this.setState(state),
-    });
-    window.SpeechRecognition =
-      window.webkitSpeechRecognition || window.SpeechRecognition;
-    this.isSupportedBrowser = 'SpeechRecognition' in window;
   }
 
   handleClick() {
     this.button.blur();
-    const { canStart, start, stop } = this.helper;
-    const { searchAsYouSpeak } = this.props;
-    if (canStart()) {
-      start(searchAsYouSpeak);
-    } else {
-      stop();
-    }
+    const { toggleListening, searchAsYouSpeak } = this.props;
+    toggleListening(searchAsYouSpeak);
   }
 
   render() {
-    const { cssClasses, templates } = this.props;
-    const { status, transcript, isSpeechFinal, errorCode } = this.state;
-    const { isSupportedBrowser } = this.helper;
-    const isListening = this.helper.isListening();
+    const {
+      cssClasses,
+      templates,
+      isSupportedBrowser,
+      voiceListeningState,
+    } = this.props;
+    const isListening = this.props.isListening();
+    const {
+      status,
+      transcript,
+      isSpeechFinal,
+      errorCode,
+    } = voiceListeningState;
     return (
       isSupportedBrowser() && (
         <div className={cssClasses.root}>

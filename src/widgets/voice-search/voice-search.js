@@ -17,13 +17,22 @@ const renderer = ({
   cssClasses,
   templates,
   searchAsYouSpeak,
-}) => ({ refine, query }) => {
+}) => ({
+  query,
+  isSupportedBrowser,
+  isListening,
+  toggleListening,
+  voiceListeningState,
+}) => {
   render(
     <VoiceSearch
-      refine={refine}
       cssClasses={cssClasses}
       query={query}
       templates={templates}
+      isSupportedBrowser={isSupportedBrowser}
+      isListening={isListening}
+      toggleListening={toggleListening}
+      voiceListeningState={voiceListeningState}
       searchAsYouSpeak={searchAsYouSpeak}
     />,
     containerNode

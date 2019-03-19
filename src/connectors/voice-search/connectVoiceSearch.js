@@ -2,6 +2,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import voiceSearchHelper from '../../lib/voiceSearchHelper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',
@@ -28,20 +29,50 @@ export default function connectVoiceSearch(renderFn, unmountFn) {
 
           return setQueryAndSearch;
         })();
+
+        this._rerender = () => {};
+
+        this._voiceSearchHelper = voiceSearchHelper({
+          onQueryChange: query => this._refine(query),
+          onStateChange: state => {
+            this._voiceListeningState = state;
+            this._rerender();
+          },
+        });
+
+        this._toggleListening = searchAsYouSpeak => {
+          const { isListening, start, stop } = this._voiceSearchHelper;
+          if (isListening()) {
+            stop();
+          } else {
+            start(searchAsYouSpeak);
+          }
+        };
+
         renderFn(
           {
             query: helper.state.query,
-            refine: this._refine,
+            isSupportedBrowser: this._voiceSearchHelper.isSupportedBrowser,
+            isListening: this._voiceSearchHelper.isListening,
+            toggleListening: this._toggleListening,
+            voiceListeningState: this._voiceListeningState,
             widgetParams,
           },
           true
         );
       },
       render({ helper }) {
+        this._rerender = () => {
+          this.render({ helper });
+        };
+
         renderFn(
           {
             query: helper.state.query,
-            refine: this._refine,
+            isSupportedBrowser: this._voiceSearchHelper.isSupportedBrowser,
+            isListening: this._voiceSearchHelper.isListening,
+            toggleListening: this._toggleListening,
+            voiceListeningState: this._voiceListeningState,
             widgetParams,
           },
           false
