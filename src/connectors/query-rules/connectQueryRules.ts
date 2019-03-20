@@ -20,8 +20,8 @@ const withUsage = createDocumentationMessageGenerator({
 
 type ParamTrackedFilters = {
   [facetName: string]: (
-    facetValues: (string | number)[]
-  ) => (string | number)[];
+    facetValues: Array<string | number>
+  ) => Array<string | number>;
 };
 type ParamTransformRuleContexts = (ruleContexts: string[]) => string[];
 type ParamTransformItems = (items: object[]) => any;
@@ -44,12 +44,10 @@ export type QueryRulesWidgetFactory<T> = WidgetFactory<
   QueryRulesConnectorParams & T
 >;
 
-export type QueryRulesConnector = {
-  <T>(
-    render: QueryRulesRenderer<T>,
-    unmount?: () => void
-  ): QueryRulesWidgetFactory<T>;
-};
+export type QueryRulesConnector = <T>(
+  render: QueryRulesRenderer<T>,
+  unmount?: () => void
+) => QueryRulesWidgetFactory<T>;
 
 // A context rule must consist only of alphanumeric characters, hyphens, and underscores.
 // See https://www.algolia.com/doc/guides/managing-results/refine-results/merchandising-and-promoting/in-depth/implementing-query-rules/#context
@@ -67,13 +65,13 @@ function getRuleContextsFromTrackedFilters({
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const getTrackedFacetValues = trackedFilters[facetName];
-      const facetRefinements: (string | number)[] = helper
+      const facetRefinements: Array<string | number> = helper
         .getRefinements(facetName)
         .map((refinement: Refinement) => refinement.value)
         // We need to flatten the array because numeric refinements follow the format
         // `[[400, 500], [100]]` which translates to 100 <= x <= (400 OR 500)
         .reduce(
-          (refinements: (string | number)[], refinement: string | number) =>
+          (refinements: Array<string | number>, refinement: string | number) =>
             refinements.concat(refinement),
           []
         );
