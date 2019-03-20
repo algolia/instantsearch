@@ -6,12 +6,13 @@ const STATUS_RECOGNIZING = 'recognizing';
 const STATUS_FINISHED = 'finished';
 
 export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
-  window.SpeechRecognition =
+  const SpeechRecognition =
     window.webkitSpeechRecognition || window.SpeechRecognition;
   let state = {};
   let recognition;
 
-  const isSupportedBrowser = () => 'SpeechRecognition' in window;
+  const isSupportedBrowser = () =>
+    'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
 
   const isListening = () =>
     state.status !== STATUS_INITIAL && state.status !== STATUS_FINISHED;
@@ -40,8 +41,7 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
 
   const start = searchAsYouSpeak => {
     resetState(STATUS_ASKING_PERMISSION);
-    recognition = new window.SpeechRecognition();
-    // recognition.continuous = true;
+    recognition = new SpeechRecognition();
     recognition.interimResults = searchAsYouSpeak;
     recognition.onend = () => {
       if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
