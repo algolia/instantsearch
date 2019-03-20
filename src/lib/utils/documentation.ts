@@ -3,26 +3,28 @@ type WidgetParam = {
   connector?: boolean;
 };
 
-export function createDocumentationLink({
+export const createDocumentationLink = ({
   name,
   connector = false,
-}: WidgetParam) {
+}: WidgetParam) => {
   return [
     'https://www.algolia.com/doc/api-reference/widgets/',
     name,
     '/js/',
     connector ? '#connector' : '',
   ].join('');
-}
+};
 
-export function createDocumentationMessageGenerator(...widgets: WidgetParam[]) {
+export const createDocumentationMessageGenerator = (
+  ...widgets: WidgetParam[]
+) => {
   const links = widgets
     .map(widget => createDocumentationLink(widget))
     .join(', ');
 
-  return function(message: string) {
+  return (message: string) => {
     return [message, `See documentation: ${links}`]
       .filter(Boolean)
       .join('\n\n');
   };
-}
+};
