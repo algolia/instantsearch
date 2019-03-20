@@ -28,8 +28,8 @@ class VoiceSearch extends Component {
     query: '',
   };
 
-  handleClick = () => {
-    this.button.blur();
+  handleClick = event => {
+    event.currentTarget.blur();
     const { toggleListening, searchAsYouSpeak } = this.props;
     toggleListening(searchAsYouSpeak);
   };
@@ -54,7 +54,6 @@ class VoiceSearch extends Component {
       show && (
         <div className={cssClasses.root}>
           <Template
-            ref={buttonRef => (this.button = buttonRef.base)}
             templateKey="buttonText"
             rootTagName="button"
             rootProps={{
