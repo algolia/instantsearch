@@ -108,6 +108,27 @@ storiesOf('VoiceSearch', module)
     })
   )
   .add(
+    'disabled by default on unsupported browser',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidget(
+        instantsearch.widgets.voiceSearch({
+          container,
+        })
+      );
+    })
+  )
+  .add(
+    'hide on unsupported browser',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidget(
+        instantsearch.widgets.voiceSearch({
+          container,
+          hideOnUnsupportedBrowser: true,
+        })
+      );
+    })
+  )
+  .add(
     'example of dynamic UI working with SearchBox',
     withHits(({ search, container, instantsearch }) => {
       const subContainer1 = document.createElement('div');

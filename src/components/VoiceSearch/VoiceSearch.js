@@ -17,12 +17,14 @@ class VoiceSearch extends Component {
     toggleListening: PropTypes.func.isRequired,
     voiceListeningState: PropTypes.object.isRequired,
     searchAsYouSpeak: PropTypes.bool,
+    hideOnUnsupportedBrowser: PropTypes.bool,
     query: PropTypes.string,
     templates: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     searchAsYouSpeak: true,
+    hideOnUnsupportedBrowser: false,
     query: '',
   };
 
@@ -43,6 +45,7 @@ class VoiceSearch extends Component {
       templates,
       isSupportedBrowser,
       voiceListeningState,
+      hideOnUnsupportedBrowser,
     } = this.props;
     const isListening = this.props.isListening();
     const {
@@ -51,58 +54,61 @@ class VoiceSearch extends Component {
       isSpeechFinal,
       errorCode,
     } = voiceListeningState;
+    const show = isSupportedBrowser() || !hideOnUnsupportedBrowser;
     return (
-      <div className={cssClasses.root}>
-        <Template
-          ref={buttonRef => (this.button = buttonRef.base)}
-          templateKey="buttonText"
-          rootTagName="button"
-          rootProps={{
-            className: cssClasses.button,
-            type: 'button',
-            title: 'Search by voice',
-            onClick: this.handleClick,
-            disabled: !isSupportedBrowser(),
-          }}
-          data={{
-            status,
-            errorCode,
-            isListening,
-            transcript,
-            isSpeechFinal,
-          }}
-          templates={templates}
-        />
-        <Template
-          templateKey="status"
-          rootTagName="div"
-          rootProps={{
-            className: cssClasses.status,
-          }}
-          data={{
-            status,
-            errorCode,
-            isListening,
-            transcript,
-            isSpeechFinal,
-          }}
-          templates={templates}
-        />
-        <Template
-          templateKey="transcript"
-          rootTagName="div"
-          rootProps={{
-            className: cssClasses.transcript,
-          }}
-          data={{
-            status,
-            isListening,
-            transcript,
-            isSpeechFinal,
-          }}
-          templates={templates}
-        />
-      </div>
+      show && (
+        <div className={cssClasses.root}>
+          <Template
+            ref={buttonRef => (this.button = buttonRef.base)}
+            templateKey="buttonText"
+            rootTagName="button"
+            rootProps={{
+              className: cssClasses.button,
+              type: 'button',
+              title: 'Search by voice',
+              onClick: this.handleClick,
+              disabled: !isSupportedBrowser(),
+            }}
+            data={{
+              status,
+              errorCode,
+              isListening,
+              transcript,
+              isSpeechFinal,
+            }}
+            templates={templates}
+          />
+          <Template
+            templateKey="status"
+            rootTagName="div"
+            rootProps={{
+              className: cssClasses.status,
+            }}
+            data={{
+              status,
+              errorCode,
+              isListening,
+              transcript,
+              isSpeechFinal,
+            }}
+            templates={templates}
+          />
+          <Template
+            templateKey="transcript"
+            rootTagName="div"
+            rootProps={{
+              className: cssClasses.transcript,
+            }}
+            data={{
+              status,
+              isListening,
+              transcript,
+              isSpeechFinal,
+            }}
+            templates={templates}
+          />
+        </div>
+      )
     );
   }
 }

@@ -17,6 +17,7 @@ const renderer = ({
   cssClasses,
   templates,
   searchAsYouSpeak,
+  hideOnUnsupportedBrowser,
 }) => ({
   query,
   isSupportedBrowser,
@@ -34,6 +35,7 @@ const renderer = ({
       toggleListening={toggleListening}
       voiceListeningState={voiceListeningState}
       searchAsYouSpeak={searchAsYouSpeak}
+      hideOnUnsupportedBrowser={hideOnUnsupportedBrowser}
     />,
     containerNode
   );
@@ -44,6 +46,7 @@ export default function voiceSearch({
   cssClasses: userCssClasses = {},
   templates,
   searchAsYouSpeak,
+  hideOnUnsupportedBrowser,
 } = {}) {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -66,6 +69,7 @@ export default function voiceSearch({
     cssClasses,
     templates: { ...defaultTemplates, ...templates },
     searchAsYouSpeak,
+    hideOnUnsupportedBrowser,
   });
 
   const makeWidget = connectVoiceSearch(specializedRenderer, () =>
