@@ -52,58 +52,57 @@ class VoiceSearch extends Component {
       errorCode,
     } = voiceListeningState;
     return (
-      isSupportedBrowser() && (
-        <div className={cssClasses.root}>
-          <Template
-            ref={buttonRef => (this.button = buttonRef.base)}
-            templateKey="buttonText"
-            rootTagName="button"
-            rootProps={{
-              className: cssClasses.button,
-              type: 'button',
-              title: 'Search by voice',
-              onClick: this.handleClick,
-            }}
-            data={{
-              status,
-              errorCode,
-              isListening,
-              transcript,
-              isSpeechFinal,
-            }}
-            templates={templates}
-          />
-          <Template
-            templateKey="status"
-            rootTagName="div"
-            rootProps={{
-              className: cssClasses.status,
-            }}
-            data={{
-              status,
-              errorCode,
-              isListening,
-              transcript,
-              isSpeechFinal,
-            }}
-            templates={templates}
-          />
-          <Template
-            templateKey="transcript"
-            rootTagName="div"
-            rootProps={{
-              className: cssClasses.transcript,
-            }}
-            data={{
-              status,
-              isListening,
-              transcript,
-              isSpeechFinal,
-            }}
-            templates={templates}
-          />
-        </div>
-      )
+      <div className={cssClasses.root}>
+        <Template
+          ref={buttonRef => (this.button = buttonRef.base)}
+          templateKey="buttonText"
+          rootTagName="button"
+          rootProps={{
+            className: cssClasses.button,
+            type: 'button',
+            title: 'Search by voice',
+            onClick: this.handleClick,
+            disabled: !isSupportedBrowser(),
+          }}
+          data={{
+            status,
+            errorCode,
+            isListening,
+            transcript,
+            isSpeechFinal,
+          }}
+          templates={templates}
+        />
+        <Template
+          templateKey="status"
+          rootTagName="div"
+          rootProps={{
+            className: cssClasses.status,
+          }}
+          data={{
+            status,
+            errorCode,
+            isListening,
+            transcript,
+            isSpeechFinal,
+          }}
+          templates={templates}
+        />
+        <Template
+          templateKey="transcript"
+          rootTagName="div"
+          rootProps={{
+            className: cssClasses.transcript,
+          }}
+          data={{
+            status,
+            isListening,
+            transcript,
+            isSpeechFinal,
+          }}
+          templates={templates}
+        />
+      </div>
     );
   }
 }
