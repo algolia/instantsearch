@@ -28,16 +28,11 @@ class VoiceSearch extends Component {
     query: '',
   };
 
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
+  handleClick = () => {
     this.button.blur();
     const { toggleListening, searchAsYouSpeak } = this.props;
     toggleListening(searchAsYouSpeak);
-  }
+  };
 
   render() {
     const {
