@@ -22,7 +22,10 @@ export default function connectVoiceSearch(renderFn, unmountFn) {
               previousQuery = helper.state.query;
               helper.setQuery(query);
             }
-            if (previousQuery !== undefined && previousQuery !== query) {
+            if (
+              typeof previousQuery !== 'undefined' &&
+              previousQuery !== query
+            ) {
               helper.search();
             }
           };
