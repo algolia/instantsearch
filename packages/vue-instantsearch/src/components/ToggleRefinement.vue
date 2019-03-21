@@ -18,7 +18,7 @@
           :checked="state.value.isRefined"
           @change="state.refine(state.value)"
         >
-        <span :class="suit('labelText')">{{ state.value.name }}</span>
+        <span :class="suit('labelText')">{{ label }}</span>
         <span
           v-if="state.value.count !== null"
           :class="suit('count')"

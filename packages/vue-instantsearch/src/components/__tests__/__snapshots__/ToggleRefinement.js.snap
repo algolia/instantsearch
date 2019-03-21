@@ -5,7 +5,7 @@ exports[`custom default render renders correctly 1`] = `
 <div class="ais-ToggleRefinement">
   <a class>
     <span>
-      Free Shipping
+      free_shipping
     </span>
     <span>
       (is disabled)
@@ -22,7 +22,7 @@ exports[`custom default render renders correctly with a URL for the href 1`] = `
      class
   >
     <span>
-      Free Shipping
+      free_shipping
     </span>
     <span>
       (is disabled)
@@ -37,7 +37,7 @@ exports[`custom default render renders correctly with the value selected 1`] = `
 <div class="ais-ToggleRefinement">
   <a class>
     <span>
-      Free Shipping
+      free_shipping
     </span>
     <span>
       (is enabled)
@@ -52,7 +52,7 @@ exports[`custom default render renders correctly without refinement 1`] = `
 <div class="ais-ToggleRefinement ais-ToggleRefinement--noRefinement">
   <a class="noRefinement">
     <span>
-      Free Shipping
+      free_shipping
     </span>
     <span>
       (is disabled)
@@ -67,7 +67,7 @@ exports[`default render renders correctly 1`] = `
 <div class="ais-ToggleRefinement">
   <label class="ais-ToggleRefinement-label">
     <input type="checkbox"
-           name="Free Shipping"
+           name="free_shipping"
            class="ais-ToggleRefinement-checkbox"
            value="true"
     >
@@ -87,7 +87,7 @@ exports[`default render renders correctly without refinement (with 0) 1`] = `
 <div class="ais-ToggleRefinement ais-ToggleRefinement--noRefinement">
   <label class="ais-ToggleRefinement-label">
     <input type="checkbox"
-           name="Free Shipping"
+           name="free_shipping"
            class="ais-ToggleRefinement-checkbox"
            value="true"
     >
@@ -107,7 +107,7 @@ exports[`default render renders correctly without refinement (with null) 1`] = `
 <div class="ais-ToggleRefinement ais-ToggleRefinement--noRefinement">
   <label class="ais-ToggleRefinement-label">
     <input type="checkbox"
-           name="Free Shipping"
+           name="free_shipping"
            class="ais-ToggleRefinement-checkbox"
            value="true"
     >

@@ -6,7 +6,7 @@ jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');
 
 const defaultValue = {
-  name: 'Free Shipping',
+  name: 'free_shipping',
   count: 100,
   isRefined: false,
 };
