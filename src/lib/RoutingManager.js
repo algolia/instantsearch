@@ -13,13 +13,16 @@ export default class RoutingManager {
     this.originalUIState = this.stateMapping.routeToState(this.router.read());
   }
 
-  init({ state }) {
+  init() {
+    // init({ state }) {
     // store the initial state from the storage
     // so that we can compare it with the state after the first render
     // in case the searchFunction has modifyied it.
-    this.initState = this.getAllUIStates({
-      searchParameters: state,
-    });
+    // this.initState = this.getAllUIStates({ searchParameters: state });
+    // `state` is provided to the init step with `helper.getState()` which
+    // means that we can access the tree directly since nothing can change
+    // it the meantime.
+    this.initState = this.getAllUIStates();
   }
 
   getConfiguration(currentConfiguration) {
@@ -49,17 +52,19 @@ export default class RoutingManager {
 
   setupRouting(state) {
     const { helper } = this.instantSearchInstance;
+
     this.router.onUpdate(route => {
       const uiState = this.stateMapping.routeToState(route);
-      const currentUIState = this.getAllUIStates({
-        searchParameters: helper.state,
-      });
+      // const currentUIState = this.getAllUIStates({ searchParameters: helper.state });
+      // `helper.state` should be equivalent that looking though the tree, in that case
+      // it should be fine.
+      const currentUIState = this.getAllUIStates();
 
       if (isEqual(uiState, currentUIState)) return;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: state,
-        instantSearchInstance: this.instantSearchInstance,
+        // instantSearchInstance: this.instantSearchInstance,
         uiState,
       });
 
@@ -75,10 +80,12 @@ export default class RoutingManager {
         .search();
     });
 
-    this.renderURLFromState = searchParameters => {
-      const uiState = this.getAllUIStates({
-        searchParameters,
-      });
+    this.renderURLFromState = () => {
+      // this.renderURLFromState = searchParameters => {
+      // const uiState = this.getAllUIStates({ searchParameters });
+      // `searchParameters` is provided from the `change` event emitted by the
+      // helper. The state on the tree should be equal to the one that we emit.
+      const uiState = this.getAllUIStates();
       const route = this.stateMapping.stateToRoute(uiState);
       this.router.write(route);
     };
@@ -87,9 +94,13 @@ export default class RoutingManager {
     // Compare initial state and post first render state, in order
     // to see if the query has been changed by a searchFunction
 
-    const firstRenderState = this.getAllUIStates({
-      searchParameters: state,
-    });
+    // const firstRenderState = this.getAllUIStates({ searchParameters: state });
+    // Here we change the initial behaviour since the `state` provided to the
+    // render function is not iso with the one we get from the tree. The one
+    // we get from the argument is the state of the derivation. We don't care
+    // about this one inside the URL. We only want to sync each part of the
+    // tree. In that case that state should be what we want.
+    const firstRenderState = this.getAllUIStates();
 
     if (!isEqual(this.initState, firstRenderState)) {
       // force update the URL, if the state has changed since the initial URL read
@@ -108,11 +119,12 @@ export default class RoutingManager {
         this.renderURLFromState
       );
     }
+
     this.router.dispose();
   }
 
   getAllSearchParameters({ currentSearchParameters, uiState }) {
-    const { widgets } = this.instantSearchInstance;
+    const { widgets = [] } = this.instantSearchInstance;
     const searchParameters = widgets.reduce((sp, w) => {
       if (!w.getWidgetSearchParameters) return sp;
       return w.getWidgetSearchParameters(sp, {
@@ -122,20 +134,42 @@ export default class RoutingManager {
     return searchParameters;
   }
 
-  getAllUIStates({ searchParameters }) {
-    const { widgets, helper } = this.instantSearchInstance;
-    const uiState = widgets
-      .filter(w => Boolean(w.getWidgetState))
-      .reduce(
-        (u, w) =>
-          w.getWidgetState(u, {
-            helper,
-            searchParameters,
-          }),
-        {}
-      );
+  getAllUIStates() {
+    // Filter out empty object?
+    const loop = (uiState, node) =>
+      node.widgets
+        .filter(w => Boolean(w.getWidgetState))
+        .reduce((innerUiState, w) => {
+          if (w.$$type === Symbol.for('ais.index')) {
+            return loop(innerUiState, w.node);
+          }
 
-    return uiState;
+          if (node.parent === null) {
+            return w.getWidgetState(innerUiState, {
+              helper: node.helper,
+              searchParameters: node.helper.getState(),
+            });
+          }
+
+          // Could be avoided with algorithm that scope the uiState to the
+          // correct node. It would avoid some `if` and it maybe simplify
+          // a bit the logic.
+          const nodeUiState =
+            (innerUiState.indices && innerUiState.indices[node.indexId]) || {};
+
+          return {
+            ...innerUiState,
+            indices: {
+              ...innerUiState.indices,
+              [node.indexId]: w.getWidgetState(nodeUiState, {
+                helper: node.helper,
+                searchParameters: node.helper.getState(),
+              }),
+            },
+          };
+        }, uiState);
+
+    return loop({}, this.instantSearchInstance.tree);
   }
 
   // External API's
@@ -150,17 +184,19 @@ export default class RoutingManager {
 
   onHistoryChange(fn) {
     const { helper } = this.instantSearchInstance;
+
     this.router.onUpdate(route => {
       const uiState = this.stateMapping.routeToState(route);
-      const currentUIState = this.getAllUIStates({
-        searchParameters: helper.state,
-      });
+      // const currentUIState = this.getAllUIStates({ searchParameters: helper.state });
+      // `helper.state` should be equivalent that looking though the tree, in that case
+      // it should be fine.
+      const currentUIState = this.getAllUIStates();
 
       if (isEqual(uiState, currentUIState)) return;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: helper.state,
-        instantSearchInstance: this.instantSearchInstance,
+        // instantSearchInstance: this.instantSearchInstance,
         uiState,
       });
 
@@ -171,6 +207,5 @@ export default class RoutingManager {
 
       fn(fullSearchParameters);
     });
-    return;
   }
 }
