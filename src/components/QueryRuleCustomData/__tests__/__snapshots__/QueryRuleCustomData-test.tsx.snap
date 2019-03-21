@@ -3,6 +3,11 @@
 exports[`QueryRuleCustomData renders with empty items 1`] = `
 <Template
   data={Array []}
+  rootProps={
+    Object {
+      "className": "root",
+    }
+  }
   rootTagName="div"
   templateKey="default"
   templates={
@@ -26,6 +31,11 @@ exports[`QueryRuleCustomData renders with items 1`] = `
         "banner": "image-2.png",
       },
     ]
+  }
+  rootProps={
+    Object {
+      "className": "root",
+    }
   }
   rootTagName="div"
   templateKey="default"

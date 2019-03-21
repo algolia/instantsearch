@@ -1,13 +1,19 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
+import cx from 'classnames';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { component } from '../../lib/suit';
 import { WidgetFactory } from '../../types';
 import connectQueryRules, {
   QueryRulesRenderer,
 } from '../../connectors/query-rules/connectQueryRules';
 import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
+
+export type QueryRuleCustomDataCSSClasses = {
+  root: string;
+};
 
 export type QueryRuleCustomDataTemplates = {
   default: string | ((items: object[]) => string);
@@ -15,6 +21,7 @@ export type QueryRuleCustomDataTemplates = {
 
 type QueryRuleCustomDataWidgetParams = {
   container: string | HTMLElement;
+  cssClasses?: QueryRuleCustomDataCSSClasses;
   templates?: QueryRuleCustomDataTemplates;
   transformItems?: (items: object[]) => any;
 };
@@ -22,6 +29,7 @@ type QueryRuleCustomDataWidgetParams = {
 interface QueryRuleCustomDataRendererWidgetParams
   extends QueryRuleCustomDataWidgetParams {
   container: HTMLElement;
+  cssClasses: QueryRuleCustomDataCSSClasses;
   templates: QueryRuleCustomDataTemplates;
 }
 
@@ -31,18 +39,28 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-custom-data',
 });
 
+const suit = component('QueryRuleCustomData');
+
 const renderer: QueryRulesRenderer<QueryRuleCustomDataRendererWidgetParams> = ({
   userData,
   widgetParams,
 }) => {
-  const { container, templates } = widgetParams;
+  const { container, cssClasses, templates } = widgetParams;
 
-  render(<CustomData templates={templates} items={userData} />, container);
+  render(
+    <CustomData
+      cssClasses={cssClasses}
+      templates={templates}
+      items={userData}
+    />,
+    container
+  );
 };
 
 const queryRuleCustomData: QueryRuleCustomData = (
   {
     container,
+    cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,
     templates: userTemplates = {},
     transformItems = items => items,
   } = {} as QueryRuleCustomDataWidgetParams
@@ -50,6 +68,10 @@ const queryRuleCustomData: QueryRuleCustomData = (
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
+
+  const cssClasses = {
+    root: cx(suit(), userCssClasses.root),
+  };
 
   const defaultTemplates = { default: '' };
   const templates: QueryRuleCustomDataTemplates = {
@@ -64,6 +86,7 @@ const queryRuleCustomData: QueryRuleCustomData = (
 
   return makeQueryRuleCustomData({
     container: containerNode,
+    cssClasses,
     templates,
     transformItems,
   });

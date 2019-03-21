@@ -52,6 +52,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
   });
 
   describe('Options', () => {
+    describe('cssClasses', () => {
+      test('applies default CSS classes', () => {
+        const helper = createFakeHelper();
+        const widget = queryRuleCustomData({
+          container: document.createElement('div'),
+        });
+
+        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+
+        const { cssClasses } = render.mock.calls[0][0].props;
+
+        expect(cssClasses).toEqual({
+          root: 'ais-QueryRuleCustomData',
+        });
+      });
+
+      test('applies custom CSS classes', () => {
+        const helper = createFakeHelper();
+        const widget = queryRuleCustomData({
+          container: document.createElement('div'),
+          cssClasses: {
+            root: 'CustomRoot',
+          },
+        });
+
+        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+
+        const { cssClasses } = render.mock.calls[0][0].props;
+
+        expect(cssClasses).toEqual({
+          root: 'ais-QueryRuleCustomData CustomRoot',
+        });
+      });
+    });
+
     describe('templates', () => {
       test('applies default template', () => {
         const helper = createFakeHelper();
