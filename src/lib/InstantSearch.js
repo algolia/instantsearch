@@ -204,6 +204,10 @@ class InstantSearch extends EventEmitter {
       index: indexName,
     });
 
+    // We use the ref of the Helper in multiple places, expose it avoid to
+    // break implementation that rely on this behaviour (routing included).
+    this.helper = helper;
+
     createHelperPagination({
       node: this.tree,
       helper,
