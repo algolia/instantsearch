@@ -3,18 +3,18 @@ import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
-// import RoutingManager from './RoutingManager';
-// import simpleMapping from './stateMappings/simple';
-// import historyRouter from './routers/history';
+import RoutingManager from './RoutingManager';
+import simpleMapping from './stateMappings/simple';
+import historyRouter from './routers/history';
 // import version from './version';
 import algoliasearchHelper from './stateManager';
 import { resolveSingleLeafMerge } from './resolveSearchParametersWithMerge';
 import createHelpers from './createHelpers';
 
-// const ROUTING_DEFAULT_OPTIONS = {
-//   stateMapping: simpleMapping(),
-//   router: historyRouter(),
-// };
+const ROUTING_DEFAULT_OPTIONS = {
+  stateMapping: simpleMapping(),
+  router: historyRouter(),
+};
 
 function defaultCreateURL() {
   return '#';
@@ -163,7 +163,7 @@ class InstantSearch extends EventEmitter {
       indexName = null,
       numberLocale,
       searchParameters = {},
-      // routing = null,
+      routing = null,
       // searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
@@ -234,12 +234,12 @@ class InstantSearch extends EventEmitter {
     //   this._searchFunction = searchFunction;
     // }
 
-    // if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
-    // else if (isPlainObject(routing))
-    //   this.routing = {
-    //     ...ROUTING_DEFAULT_OPTIONS,
-    //     ...routing,
-    //   };
+    if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
+    else if (isPlainObject(routing))
+      this.routing = {
+        ...ROUTING_DEFAULT_OPTIONS,
+        ...routing,
+      };
   }
 
   addWidget(widget) {
@@ -253,7 +253,18 @@ class InstantSearch extends EventEmitter {
       );
     }
 
+    // The routing manager widget is always added manually at the last position.
+    // By removing it from the last position and adding it back after, we ensure
+    // it keeps this position.
+    // fixes #3148
+    const lastWidget = this.tree.widgets.pop();
+
     this.addWidgetsToNode(widgets, node);
+
+    // Second part of the fix for #3148
+    if (lastWidget) {
+      this.tree.widgets.push(lastWidget);
+    }
 
     if (this.started && Boolean(widgets.length)) {
       this.tree.helper.search();
@@ -265,12 +276,6 @@ class InstantSearch extends EventEmitter {
   }
 
   addWidgetsToNode(widgets, node) {
-    // The routing manager widget is always added manually at the last position.
-    // By removing it from the last position and adding it back after, we ensure
-    // it keeps this position.
-    // fixes #3148
-    // const lastWidget = this.widgets.pop();
-
     const current = node || this.tree;
 
     // Widgets
@@ -354,9 +359,6 @@ class InstantSearch extends EventEmitter {
       // recursive call to add widgets on the tree
       this.addWidgetsToNode(index.widgets, innerNode);
     });
-
-    // Second part of the fix for #3148
-    // if (lastWidget) this.widgets.push(lastWidget);
   }
 
   removeWidgets(widgets, node) {
@@ -448,22 +450,22 @@ class InstantSearch extends EventEmitter {
   start() {
     if (this.started) throw new Error('start() has been already called once');
 
-    // if (this.routing) {
-    //   const routingManager = new RoutingManager({
-    //     ...this.routing,
-    //     instantSearchInstance: this,
-    //   });
-    //   // this._onHistoryChange = routingManager.onHistoryChange.bind(
-    //   //   routingManager
-    //   // );
-    //   this._createURL = routingManager.createURL.bind(routingManager);
-    //   this._createAbsoluteURL = this._createURL;
-    //   this.tree.widgets.push(routingManager);
-    // } else {
-    this._createURL = defaultCreateURL;
-    this._createAbsoluteURL = defaultCreateURL;
-    this._onHistoryChange = function() {};
-    // }
+    if (this.routing) {
+      const routingManager = new RoutingManager({
+        ...this.routing,
+        instantSearchInstance: this,
+      });
+      this._onHistoryChange = routingManager.onHistoryChange.bind(
+        routingManager
+      );
+      this._createURL = routingManager.createURL.bind(routingManager);
+      this._createAbsoluteURL = this._createURL;
+      this.tree.widgets.push(routingManager);
+    } else {
+      this._createURL = defaultCreateURL;
+      this._createAbsoluteURL = defaultCreateURL;
+      this._onHistoryChange = function() {};
+    }
 
     // if (this._searchFunction) {
     //   this._mainHelperSearch = helper.search.bind(helper);
@@ -538,12 +540,12 @@ class InstantSearch extends EventEmitter {
     // this.helper = null;
   }
 
-  // createURL(params) {
-  //   if (!this._createURL) {
-  //     throw new Error('You need to call start() before calling createURL()');
-  //   }
-  //   return this._createURL(this.helper.state.setQueryParameters(params));
-  // }
+  createURL(params) {
+    if (!this._createURL) {
+      throw new Error('You need to call start() before calling createURL()');
+    }
+    return this._createURL(this.helper.state.setQueryParameters(params));
+  }
 
   _init() {
     const walk = node => {
