@@ -544,10 +544,18 @@ class InstantSearch extends EventEmitter {
     // this.helper = null;
   }
 
+  // This method is not documented neither used inside Magento + Shopify (I checked)
+  // on GitHub but worth asking to the integration team. The hard part for this one
+  // is to infer on which node we want to alter the state. We can by default update
+  // the root but do we really want to provide this functionnality?
   createURL(params) {
+    // Won't be able to compute since we don't know on which node we want to
+    // alter the state. See the usage of this API. First step would be to make
+    // the function provided to the render part functional.
     if (!this._createURL) {
       throw new Error('You need to call start() before calling createURL()');
     }
+
     return this._createURL(this.helper.state.setQueryParameters(params));
   }
 
