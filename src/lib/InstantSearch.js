@@ -584,6 +584,9 @@ class InstantSearch extends EventEmitter {
           widget.render({
             templatesConfig: this.templatesConfig,
             results,
+            // At this stage the `state` provided to `_render` is not the one
+            // of `node.helper.state` but the one from the derivation. What
+            // are the impact... Complicated to see all of them...
             state,
             helper: node.helper,
             createURL: this._createAbsoluteURL,
