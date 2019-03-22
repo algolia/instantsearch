@@ -18,14 +18,12 @@ class VoiceSearch extends Component {
     voiceListeningState: PropTypes.object.isRequired,
     searchAsYouSpeak: PropTypes.bool,
     hideOnUnsupportedBrowser: PropTypes.bool,
-    query: PropTypes.string,
     templates: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
     searchAsYouSpeak: true,
     hideOnUnsupportedBrowser: false,
-    query: '',
   };
 
   handleClick = event => {

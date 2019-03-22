@@ -8,7 +8,13 @@ const STATUS_FINISHED = 'finished';
 export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
   const SpeechRecognition =
     window.webkitSpeechRecognition || window.SpeechRecognition;
-  let state = {};
+  const defaultState = status => ({
+    status,
+    transcript: '',
+    isSpeechFinal: undefined,
+    errorCode: undefined,
+  });
+  let state = defaultState(STATUS_INITIAL);
   let recognition;
 
   const isSupportedBrowser = () =>
@@ -19,16 +25,13 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
 
   const setState = (newState = {}) => {
     state = { ...state, ...newState };
-    onStateChange(state);
+    onStateChange();
   };
 
+  const getState = () => state;
+
   const resetState = (status = STATUS_INITIAL) => {
-    setState({
-      status,
-      transcript: '',
-      isSpeechFinal: undefined,
-      errorCode: undefined,
-    });
+    setState(defaultState(status));
   };
 
   const stop = () => {
@@ -73,11 +76,18 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
     recognition.start();
   };
 
-  resetState();
+  const toggle = searchAsYouSpeak => {
+    if (isListening()) {
+      stop();
+    } else {
+      start(searchAsYouSpeak);
+    }
+  };
+
   return {
+    getState,
     isSupportedBrowser,
     isListening,
-    start,
-    stop,
+    toggle,
   };
 }

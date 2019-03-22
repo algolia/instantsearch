@@ -13,6 +13,22 @@ export default function connectVoiceSearch(renderFn, unmountFn) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
+    const render = ({
+      isFirstRendering,
+      voiceSearchHelper: { isSupportedBrowser, isListening, toggle, getState },
+    }) => {
+      renderFn(
+        {
+          isSupportedBrowser,
+          isListening,
+          toggleListening: toggle,
+          voiceListeningState: getState(),
+          widgetParams,
+        },
+        isFirstRendering
+      );
+    };
+
     return {
       init({ helper }) {
         this._refine = (() => {
@@ -33,53 +49,26 @@ export default function connectVoiceSearch(renderFn, unmountFn) {
           return setQueryAndSearch;
         })();
 
-        this._rerender = () => {};
-
         this._voiceSearchHelper = voiceSearchHelper({
           onQueryChange: query => this._refine(query),
-          onStateChange: state => {
-            this._voiceListeningState = state;
-            this._rerender();
+          onStateChange: () => {
+            render({
+              isFirstRendering: false,
+              voiceSearchHelper: this._voiceSearchHelper,
+            });
           },
         });
 
-        this._toggleListening = searchAsYouSpeak => {
-          const { isListening, start, stop } = this._voiceSearchHelper;
-          if (isListening()) {
-            stop();
-          } else {
-            start(searchAsYouSpeak);
-          }
-        };
-
-        renderFn(
-          {
-            query: helper.state.query,
-            isSupportedBrowser: this._voiceSearchHelper.isSupportedBrowser,
-            isListening: this._voiceSearchHelper.isListening,
-            toggleListening: this._toggleListening,
-            voiceListeningState: this._voiceListeningState,
-            widgetParams,
-          },
-          true
-        );
+        render({
+          isFirstRendering: true,
+          voiceSearchHelper: this._voiceSearchHelper,
+        });
       },
-      render({ helper }) {
-        this._rerender = () => {
-          this.render({ helper });
-        };
-
-        renderFn(
-          {
-            query: helper.state.query,
-            isSupportedBrowser: this._voiceSearchHelper.isSupportedBrowser,
-            isListening: this._voiceSearchHelper.isListening,
-            toggleListening: this._toggleListening,
-            voiceListeningState: this._voiceListeningState,
-            widgetParams,
-          },
-          false
-        );
+      render() {
+        render({
+          isFirstRendering: false,
+          voiceSearchHelper: this._voiceSearchHelper,
+        });
       },
       dispose({ state }) {
         unmountFn();

@@ -19,7 +19,6 @@ const renderer = ({
   searchAsYouSpeak,
   hideOnUnsupportedBrowser,
 }) => ({
-  query,
   isSupportedBrowser,
   isListening,
   toggleListening,
@@ -28,7 +27,6 @@ const renderer = ({
   render(
     <VoiceSearch
       cssClasses={cssClasses}
-      query={query}
       templates={templates}
       isSupportedBrowser={isSupportedBrowser}
       isListening={isListening}
