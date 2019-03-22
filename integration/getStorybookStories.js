@@ -5,6 +5,7 @@
 // `getStorybook` function.
 
 const { configure, getStorybook } = require('@storybook/react');
+const { toId } = require('@storybook/router/utils');
 
 const req = require.context(
   '../stories',
@@ -26,12 +27,7 @@ const normalize = input => input.replace(/[ -/]/g, '_');
 const createStoryURL = ({ host, port, query }) =>
   `http://${host}:${port}/iframe.html${query}`;
 
-const createStoryQueryParameters = (kind, name) => {
-  const safeKind = encodeURIComponent(kind);
-  const safeName = encodeURIComponent(name);
-
-  return `?selectedKind=${safeKind}&selectedStory=${safeName}`;
-};
+const createStoryQueryParameters = (kind, name) => `?id=${toId(kind, name)}`;
 
 const getStorybookStories = ({ host, port }) =>
   getStorybook().reduce(

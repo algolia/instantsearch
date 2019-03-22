@@ -1,22 +1,21 @@
-import { configure, addDecorator } from '@storybook/react';
+import { configure, addDecorator, addParameters } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { checkA11y } from '@storybook/addon-a11y';
-import { withOptions } from '@storybook/addon-options';
+import { withA11y } from '@storybook/addon-a11y';
+import { create } from '@storybook/theming';
 
-addDecorator(
-  withOptions({
-    name: 'react-instantsearch',
-    url: 'https://github.com/algolia/react-instantsearch',
-    goFullScreen: false,
-    showStoriesPanel: true,
-    showAddonPanel: true,
-    showSearchBox: false,
-    addonPanelInRight: true,
-  })
-);
+addParameters({
+  options: {
+    panelPosition: 'right',
+    theme: create({
+      base: 'light',
+      brandTitle: 'react-instantsearch',
+      brandUrl: 'https://github.com/algolia/react-instantsearch',
+    }),
+  },
+});
 
 addDecorator(withKnobs);
-addDecorator(checkA11y);
+addDecorator(withA11y);
 
 const req = require.context('../stories', true, /\.stories\.(js|ts|tsx)$/);
 
