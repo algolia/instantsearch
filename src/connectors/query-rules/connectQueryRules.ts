@@ -141,7 +141,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         if (hasTrackedFilters) {
           // The helper's `ruleContexts` value is by default `undefined`.
           // We want to set it to an empty array to process the same
-          // data type both internal and externally (= when passing the
+          // data type both internally and externally (= when passing the
           // `ruleContexts` to the option `transformRuleContexts`).
           if (initialRuleContexts.length === 0) {
             helper.overrideStateWithoutTriggeringChangeEvent({
