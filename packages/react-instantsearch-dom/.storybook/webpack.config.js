@@ -1,7 +1,9 @@
 /* eslint-disable import/no-commonjs */
 
-module.exports = {
+module.exports = ({ config }) => ({
+  ...config,
   module: {
+    ...config.module,
     rules: [
       {
         test: /\.(js|ts|tsx)$/,
@@ -21,4 +23,4 @@ module.exports = {
       },
     ],
   },
-};
+});
