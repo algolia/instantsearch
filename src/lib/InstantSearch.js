@@ -77,7 +77,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     if (typeof searchClient.addAlgoliaAgent === 'function') {
-      searchClient.addAlgoliaAgent(`instantsearch.js ${version}`);
+      searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
     }
 
     this.client = searchClient;
