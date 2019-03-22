@@ -42,17 +42,13 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('QueryRuleCustomData');
 
 const renderer: QueryRulesRenderer<QueryRuleCustomDataRendererWidgetParams> = ({
-  userData,
+  items,
   widgetParams,
 }) => {
   const { container, cssClasses, templates } = widgetParams;
 
   render(
-    <CustomData
-      cssClasses={cssClasses}
-      templates={templates}
-      items={userData}
-    />,
+    <CustomData cssClasses={cssClasses} templates={templates} items={items} />,
     container
   );
 };
