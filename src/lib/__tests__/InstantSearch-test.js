@@ -187,7 +187,9 @@ describe('InstantSearch lifecycle', () => {
 
   it('calls addAlgoliaAgent', () => {
     expect(client.addAlgoliaAgent).toHaveBeenCalledTimes(1);
-    expect(client.addAlgoliaAgent).toHaveBeenCalledWith(`instantsearch.js (${version})`);
+    expect(client.addAlgoliaAgent).toHaveBeenCalledWith(
+      `instantsearch.js (${version})`
+    );
   });
 
   it('does not call algoliasearchHelper', () => {
