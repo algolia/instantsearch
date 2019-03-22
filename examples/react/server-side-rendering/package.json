@@ -19,7 +19,7 @@
     "jest": "22.4.4",
     "json-loader": "0.5.7",
     "nodemon": "1.18.10",
-    "react-test-renderer": "16.8.4",
+    "react-test-renderer": "16.8.5",
     "webpack": "4.29.6",
     "webpack-cli": "3.3.0",
     "webpack-node-externals": "1.7.2"
@@ -27,8 +27,8 @@
   "dependencies": {
     "express": "4.16.4",
     "prop-types": "15.6.0",
-    "react": "16.8.4",
-    "react-dom": "16.8.4",
+    "react": "16.8.5",
+    "react-dom": "16.8.5",
     "react-instantsearch-dom": "5.4.0"
   }
 }
