@@ -1,8 +1,6 @@
 function isDomElement(object: any): object is HTMLElement {
   return (
-    // @ts-ignore
-    object instanceof window.HTMLElement ||
-    (Boolean(object) && object.nodeType > 0)
+    object instanceof HTMLElement || (Boolean(object) && object.nodeType > 0)
   );
 }
 
