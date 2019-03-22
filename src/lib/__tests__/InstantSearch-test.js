@@ -2,7 +2,7 @@ import range from 'lodash/range';
 import times from 'lodash/times';
 import algoliaSearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
-import version from '../version'
+import version from '../version';
 
 jest.mock('algoliasearch-helper', () => {
   const module = require.requireActual('algoliasearch-helper');
@@ -152,7 +152,7 @@ describe('InstantSearch lifecycle', () => {
           results: requests.map(() => ({})),
         });
       },
-      addAlgoliaAgent: jest.fn()
+      addAlgoliaAgent: jest.fn(),
     };
 
     algoliasearch = jest.fn().mockReturnValue(client);
