@@ -120,7 +120,7 @@ var version = require('./version');
  */
 function AlgoliaSearchHelper(client, index, options) {
   if (client.addAlgoliaAgent && !doesClientAgentContainsHelper(client)) {
-    client.addAlgoliaAgent('JS Helper ' + version);
+    client.addAlgoliaAgent('JS Helper (' + version + ')');
   }
 
   this.setClient(client);
@@ -1331,7 +1331,9 @@ AlgoliaSearchHelper.prototype.clearCache = function() {
 AlgoliaSearchHelper.prototype.setClient = function(newClient) {
   if (this.client === newClient) return this;
 
-  if (newClient.addAlgoliaAgent && !doesClientAgentContainsHelper(newClient)) newClient.addAlgoliaAgent('JS Helper ' + version);
+  if (newClient.addAlgoliaAgent && !doesClientAgentContainsHelper(newClient)) {
+    newClient.addAlgoliaAgent('JS Helper (' + version + ')');
+  }
   this.client = newClient;
 
   return this;

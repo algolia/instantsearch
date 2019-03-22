@@ -68,7 +68,7 @@ test('setting the agent once', function(t) {
   algoliaSearchHelper(client, 'IndexName', {});
   algoliaSearchHelper(client, 'IndexName2', {});
 
-  t.equal(client._ua, originalUA + ';JS Helper ' + version);
+  t.equal(client._ua, originalUA + ';JS Helper (' + version + ')');
 
   t.end();
 });
@@ -84,7 +84,7 @@ test('getClient / setClient', function(t) {
 
   t.equal(helper.getClient(), client0, 'getClient should return the instance defined with the Helper factory');
 
-  t.equal(client0._ua, originalUA + ';JS Helper ' + version, 'sets the helper agent, client 0');
+  t.equal(client0._ua, originalUA + ';JS Helper (' + version + ')', 'sets the helper agent, client 0');
 
   var client1 = makeFakeClient();
   helper.setClient(client1);
@@ -96,10 +96,10 @@ test('getClient / setClient', function(t) {
   t.equal(client1.search.callCount, 1, 'the new client should have been called');
   t.equal(client0.search.callCount, 1, 'the old client should not have been called if it is not set anymore');
 
-  t.equal(client1._ua, originalUA + ';JS Helper ' + version, 'sets the helper agent, client 1');
+  t.equal(client1._ua, originalUA + ';JS Helper (' + version + ')', 'sets the helper agent, client 1');
 
   helper.setClient(client1);
-  t.equal(client1._ua, originalUA + ';JS Helper ' + version, 'does not set the helper agent twice, client 1');
+  t.equal(client1._ua, originalUA + ';JS Helper (' + version + ')', 'does not set the helper agent twice, client 1');
 
   t.end();
 });
