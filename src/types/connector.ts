@@ -5,7 +5,7 @@ export type RenderOptions<T = unknown> = {
   instantSearchInstance: InstantSearch;
 };
 
-export type Renderer<T extends RenderOptions> = (
+export type Renderer<T extends RenderOptions = any> = (
   renderOptions: T,
   isFirstRender: boolean
 ) => void;

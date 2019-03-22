@@ -22,9 +22,6 @@ export const createDocumentationMessageGenerator = (
     .map(widget => createDocumentationLink(widget))
     .join(', ');
 
-  return (message: string) => {
-    return [message, `See documentation: ${links}`]
-      .filter(Boolean)
-      .join('\n\n');
-  };
+  return (message?: string) =>
+    [message, `See documentation: ${links}`].filter(Boolean).join('\n\n');
 };

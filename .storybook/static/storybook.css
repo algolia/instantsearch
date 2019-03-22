@@ -35,6 +35,10 @@ body {
   border-radius: 4px 0 0;
 }
 
+.container-preview img {
+  max-width: 100%;
+}
+
 /* Playground */
 
 .container-playground {
