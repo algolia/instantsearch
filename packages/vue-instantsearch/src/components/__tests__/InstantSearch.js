@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { mount } from '@vue/test-utils';
 import instantsearch from 'instantsearch.js/es';
 import InstantSearch from '../InstantSearch';
+import { version } from '../../../package.json';
 
 beforeEach(() => jest.clearAllMocks());
 
@@ -245,9 +246,10 @@ it('will call client.addAlgoliaAgent if present', () => {
     },
   });
 
-  expect(client.addAlgoliaAgent).toHaveBeenCalledTimes(1);
-  expect(client.addAlgoliaAgent.mock.calls[0][0]).toMatch(
-    /Vue InstantSearch \([a-z0-9.-]+\)/
+  expect(client.addAlgoliaAgent).toHaveBeenCalledTimes(2);
+  expect(client.addAlgoliaAgent).toHaveBeenCalledWith(`Vue (${Vue.version})`);
+  expect(client.addAlgoliaAgent).toHaveBeenCalledWith(
+    `Vue InstantSearch (${version})`
   );
 });
 
