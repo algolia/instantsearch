@@ -205,7 +205,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         widget.init({ helper, state: helper.state, instantSearchInstance: {} });
 
         // There's no results yet, so no `ruleContexts` should be set.
-        expect(helper.getState().ruleContexts).toEqual([]);
+        expect(helper.getState().ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
@@ -228,7 +228,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         // There are some results with the facets that we track in the
         // widget but the query parameters are not set in the helper.
         // Therefore, no `ruleContexts` should be set.
-        expect(helper.getState().ruleContexts).toEqual([]);
+        expect(helper.getState().ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
@@ -290,7 +290,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.init({ helper, state: helper.state, instantSearchInstance: {} });
 
-        expect(helper.getState().ruleContexts).toEqual([]);
+        expect(helper.getState().ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
 
         widget.render({
@@ -309,7 +309,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual([]);
+        expect(helper.getState().ruleContexts).toEqual(undefined);
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
 
         helper.setState({
@@ -350,7 +350,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.init({ helper, state: helper.state, instantSearchInstance: {} });
 
-        expect(helper.getState().ruleContexts).toEqual([]);
+        expect(helper.getState().ruleContexts).toEqual(undefined);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
         widget.render({
@@ -359,7 +359,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual([]);
+        expect(helper.getState().ruleContexts).toEqual(undefined);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
         helper.setState({
