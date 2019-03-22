@@ -69,7 +69,8 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
         });
 
       if (typeof this.client.addAlgoliaAgent === 'function') {
-        this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
+        this.client.addAlgoliaAgent(`react (${React.version})`);
+        this.client.addAlgoliaAgent(`react-instantsearch (${version})`);
       }
     }
 
@@ -88,7 +89,8 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       }
 
       if (typeof this.client.addAlgoliaAgent === 'function') {
-        this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
+        this.client.addAlgoliaAgent(`react (${React.version})`);
+        this.client.addAlgoliaAgent(`react-instantsearch (${version})`);
       }
     }
 

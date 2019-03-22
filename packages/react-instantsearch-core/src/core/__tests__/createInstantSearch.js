@@ -44,9 +44,12 @@ describe('createInstantSearch', () => {
       _useRequestCache: true,
     });
 
-    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
     expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(
-      `react-instantsearch ${version}`
+      `react-instantsearch (${version})`
+    );
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(
+      `react (${React.version})`
     );
   });
 
@@ -108,7 +111,7 @@ describe('createInstantSearch', () => {
     );
 
     expect(algoliaClientFactory).toHaveBeenCalledTimes(0);
-    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
     expect(wrapper.props().searchClient).toBe(algoliaClient);
   });
 
@@ -118,7 +121,7 @@ describe('createInstantSearch', () => {
     );
 
     expect(algoliaClientFactory).toHaveBeenCalledTimes(0);
-    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
     expect(wrapper.props().algoliaClient).toBe(algoliaClient);
   });
 
@@ -147,14 +150,14 @@ describe('createInstantSearch', () => {
       <CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />
     );
 
-    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
 
     wrapper.setProps({
       algoliaClient: newAlgoliaClient,
     });
 
     expect(wrapper.props().algoliaClient).toBe(newAlgoliaClient);
-    expect(newAlgoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(newAlgoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
   });
 
   it('updates the searchClient when provided searchClient is passed down', () => {
@@ -166,14 +169,14 @@ describe('createInstantSearch', () => {
       <CustomInstantSearch searchClient={algoliaClient} indexName="name" />
     );
 
-    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
 
     wrapper.setProps({
       searchClient: newAlgoliaClient,
     });
 
     expect(wrapper.props().searchClient).toBe(newAlgoliaClient);
-    expect(newAlgoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(newAlgoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
   });
 
   it('does not throw when algoliaClient gets updated and does not have a `addAlgoliaAgent()` method', () => {

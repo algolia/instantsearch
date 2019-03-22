@@ -78,9 +78,12 @@ describe('createInstantSearchServer', () => {
 
       expect(createSearchClientMock).toHaveBeenCalledTimes(1);
       expect(createSearchClientMock).toHaveBeenCalledWith('appId', 'apiKey');
-      expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+      expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
       expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
-        `react-instantsearch ${version}`
+        `react (${React.version})`
+      );
+      expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react-instantsearch (${version})`
       );
     });
 
@@ -114,7 +117,13 @@ describe('createInstantSearchServer', () => {
 
       const wrapper = shallow(<InstantSearch {...props} />);
 
-      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
+      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react (${React.version})`
+      );
+      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react-instantsearch (${version})`
+      );
       expect(wrapper.props().algoliaClient).toBe(algoliaClient);
     });
 
