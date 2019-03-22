@@ -20,15 +20,18 @@ export interface FacetRefinement {
 }
 
 export interface QueryRefinement extends FacetRefinement {
+  type: 'query';
   query: string;
 }
 
 export interface NumericRefinement extends FacetRefinement {
+  type: 'numeric';
   numericValue: number;
   operator: '<' | '<=' | '=' | '>=' | '>';
 }
 
 export interface FacetExcludeRefinement extends FacetRefinement {
+  type: 'exclude';
   exclude: boolean;
 }
 
