@@ -133,7 +133,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       test('is applied to items', () => {
         const helper = createFakeHelper();
         const widget = makeWidget({
-          transformItems: items => items[0],
+          transformItems: customItems => customItems[0],
         });
 
         widget.init({ helper, state: helper.state, instantSearchInstance: {} });
