@@ -55,12 +55,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       expect(isFirstRender).toBe(true);
 
       const {
-        userData,
+        items,
         instantSearchInstance,
         widgetParams,
       } = renderingParameters;
 
-      expect(userData).toEqual([]);
+      expect(items).toEqual([]);
       expect(instantSearchInstance).toEqual({});
       expect(widgetParams).toEqual({});
     });
@@ -82,12 +82,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(isFirstRender).toBe(false);
 
         const {
-          userData,
+          items,
           instantSearchInstance,
           widgetParams,
         } = renderingParameters;
 
-        expect(userData).toEqual([]);
+        expect(items).toEqual([]);
         expect(instantSearchInstance).toEqual({});
         expect(widgetParams).toEqual({});
       }
@@ -106,12 +106,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(isFirstRender).toBe(false);
 
         const {
-          userData,
+          items,
           instantSearchInstance,
           widgetParams,
         } = renderingParameters;
 
-        expect(userData).toEqual([{ banner: 'image.png' }]);
+        expect(items).toEqual([{ banner: 'image.png' }]);
         expect(instantSearchInstance).toEqual({});
         expect(widgetParams).toEqual({});
       }
@@ -130,7 +130,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
   describe('options', () => {
     describe('transformItems', () => {
-      test('is applied to userData', () => {
+      test('is applied to items', () => {
         const helper = createFakeHelper();
         const widget = makeWidget({
           transformItems: items => items[0],
@@ -150,9 +150,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         const [renderingParameters] = renderFn.mock.calls[1];
 
-        const { userData } = renderingParameters;
+        const { items } = renderingParameters;
 
-        expect(userData).toEqual({ banner: 'image1.png' });
+        expect(items).toEqual({ banner: 'image1.png' });
       });
     });
   });

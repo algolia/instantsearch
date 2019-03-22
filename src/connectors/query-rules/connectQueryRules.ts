@@ -17,7 +17,7 @@ export type QueryRulesConnectorParams = {
 };
 
 export interface QueryRulesRenderOptions<T> extends RenderOptions<T> {
-  userData: object[];
+  items: object[];
 }
 
 export type QueryRulesRenderer<T> = Renderer<
@@ -44,7 +44,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       init({ instantSearchInstance }) {
         render(
           {
-            userData: [],
+            items: [],
             instantSearchInstance,
             widgetParams,
           },
@@ -53,12 +53,12 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       },
 
       render({ results, instantSearchInstance }) {
-        const { userData: rawUserData = [] } = results;
-        const userData = transformItems(rawUserData);
+        const { userData = [] } = results;
+        const items = transformItems(userData);
 
         render(
           {
-            userData,
+            items,
             instantSearchInstance,
             widgetParams,
           },
