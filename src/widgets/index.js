@@ -37,3 +37,6 @@ export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as menuSelect } from './menu-select/menu-select';
 export { default as poweredBy } from './powered-by/powered-by';
 export { default as panel } from './panel/panel';
+export {
+  default as queryRuleCustomData,
+} from './query-rule-custom-data/query-rule-custom-data';
