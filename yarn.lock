@@ -4960,6 +4960,11 @@ estree-walker@^0.5.2:
   resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-0.5.2.tgz#d3850be7529c9580d815600b53126515e146dd39"
   integrity sha512-XpCnW/AE10ws/kDAs37cngSkvgIR8aN3G0MS85m7dUpuK2EREo9VJ00uvw6Dg/hXEpfsE1I1TvJOJr+Z+TL+ig==
 
+estree-walker@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-0.6.0.tgz#5d865327c44a618dde5699f763891ae31f257dae"
+  integrity sha512-peq1RfVAVzr3PU/jL31RaOjUKLoZJpObQWJJ+LgfcxDUifyLZ1RjPQZTl0pzj2uJ45b7A7XpyppXvxdEqzo4rw==
+
 esutils@^2.0.0, esutils@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
@@ -8021,7 +8026,7 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-magic-string@^0.25.1:
+magic-string@^0.25.1, magic-string@^0.25.2:
   version "0.25.2"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.2.tgz#139c3a729515ec55e96e69e82a11fe890a293ad9"
   integrity sha512-iLs9mPjh9IuTtRsqqhNGYcZXGei0Nh/A4xirrsqW7c+QhKVFL2vm7U09ru6cHRD22azaP/wMDgI+HCqbETMTtg==
@@ -8336,7 +8341,7 @@ minimalistic-crypto-utils@^1.0.0, minimalistic-crypto-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
   integrity sha1-9sAMHAsIIkblxNmd+4x8CDsrWCo=
 
-minimatch@3.0.4, minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4:
+minimatch@3.0.4, minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
@@ -10808,14 +10813,13 @@ rollup-plugin-node-resolve@4.0.1:
     is-module "^1.0.0"
     resolve "^1.10.0"
 
-rollup-plugin-replace@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-replace/-/rollup-plugin-replace-2.1.0.tgz#f9c07a4a89a2f8be912ee54b3f0f68d91e9ed0ae"
-  integrity sha512-SxrAIgpH/B5/W4SeULgreOemxcpEgKs2gcD42zXw50bhqGWmcnlXneVInQpAqzA/cIly4bJrOpeelmB9p4YXSQ==
+rollup-plugin-replace@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-replace/-/rollup-plugin-replace-2.1.1.tgz#e49cb8d07d6f91a7bf28b90b66692f2c8c0b9bba"
+  integrity sha512-IS5ZYBb3px0UfbDCYzKaKxelLd5dbPHhfplEXbymfvGlz9Ok44At4AjTOWe2qEax73bE8+pnMZN9C7PcVpFNlw==
   dependencies:
-    magic-string "^0.25.1"
-    minimatch "^3.0.2"
-    rollup-pluginutils "^2.0.1"
+    magic-string "^0.25.2"
+    rollup-pluginutils "^2.4.1"
 
 rollup-plugin-uglify@6.0.2:
   version "6.0.2"
@@ -10827,13 +10831,21 @@ rollup-plugin-uglify@6.0.2:
     serialize-javascript "^1.6.1"
     uglify-js "^3.4.9"
 
-rollup-pluginutils@^2.0.1, rollup-pluginutils@^2.3.0, rollup-pluginutils@^2.3.3:
+rollup-pluginutils@^2.3.0, rollup-pluginutils@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/rollup-pluginutils/-/rollup-pluginutils-2.3.3.tgz#3aad9b1eb3e7fe8262820818840bf091e5ae6794"
   integrity sha512-2XZwja7b6P5q4RZ5FhyX1+f46xi1Z3qBKigLRZ6VTZjwbN0K1IFGMlwm06Uu0Emcre2Z63l77nq/pzn+KxIEoA==
   dependencies:
     estree-walker "^0.5.2"
     micromatch "^2.3.11"
+
+rollup-pluginutils@^2.4.1:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/rollup-pluginutils/-/rollup-pluginutils-2.5.0.tgz#23be0f05ac3972ea7b08fc7870cb91fde5b23a09"
+  integrity sha512-9Muh1H+XB5f5ONmKMayUoTYR1EZwHbwJJ9oZLrKT5yuTf/RLIQ5mYIGsrERquVucJmjmaAW0Y7+6Qo1Ep+5w3Q==
+  dependencies:
+    estree-walker "^0.6.0"
+    micromatch "^3.1.10"
 
 rollup@1.6.0:
   version "1.6.0"
