@@ -135,7 +135,7 @@
     "tslint-config-prettier": "1.18.0",
     "tslint-plugin-prettier": "2.0.1",
     "tslint-react": "3.6.0",
-    "typescript": "3.3.3333",
+    "typescript": "3.3.4000",
     "watch": "1.0.2",
     "wdio-dot-reporter": "0.0.10",
     "wdio-mocha-framework": "0.6.4",
