@@ -1,5 +1,6 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import isEqual from 'lodash/isEqual';
+import zip from 'lodash/zip';
 
 export default class RoutingManager {
   constructor({ instantSearchInstance, router, stateMapping } = {}) {
@@ -212,6 +213,25 @@ export default class RoutingManager {
     });
     const route = this.stateMapping.stateToRoute(uiState);
     return this.router.createURL(route);
+  }
+
+  applySearchParameters(parameters) {
+    const loop = (treeNode, stateNode) => {
+      treeNode.helper.overrideStateWithoutTriggeringChangeEvent(
+        stateNode.state
+      );
+
+      zip(
+        treeNode.widgets
+          .filter(w => w.$$type === Symbol.for('ais.index'))
+          .map(_ => _.node),
+        stateNode.children
+      ).forEach(([innerTreeNode, innerStateNode]) => {
+        loop(innerTreeNode, innerStateNode);
+      });
+    };
+
+    return loop(this.instantSearchInstance.tree, parameters);
   }
 
   // This lifecycle is not used anymore in the codebase. The place
