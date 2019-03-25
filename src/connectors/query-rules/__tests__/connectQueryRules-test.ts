@@ -172,7 +172,46 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     });
 
     describe('trackedFilters', () => {
-      test('adds all ruleContexts to search parameters from facets and numeric refinements', () => {
+      test('adds ruleContexts to search parameters from initial facet and numeric refinements', () => {
+        const helper = createFakeHelper({
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung', 'Apple'],
+          },
+          numericRefinements: {
+            price: {
+              '<=': [500, 400],
+              '>=': [100],
+            },
+          },
+        });
+        const brandFilterSpy = jest.fn(values => values);
+        const priceFilterSpy = jest.fn(values => values);
+        const widget = makeWidget({
+          trackedFilters: {
+            brand: brandFilterSpy,
+            price: priceFilterSpy,
+          },
+        });
+
+        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+
+        // Query parameters are initially set in the helper.
+        // Therefore, `ruleContexts` should be set.
+        expect(helper.getState().ruleContexts).toEqual([
+          'ais-brand-Samsung',
+          'ais-brand-Apple',
+          'ais-price-500',
+          'ais-price-400',
+          'ais-price-100',
+        ]);
+        expect(brandFilterSpy).toHaveBeenCalledTimes(1);
+        expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung', 'Apple']);
+        expect(priceFilterSpy).toHaveBeenCalledTimes(1);
+        expect(priceFilterSpy).toHaveBeenCalledWith([500, 400, 100]);
+      });
+
+      test('adds all ruleContexts to search parameters from dynamically added facet and numeric refinements', () => {
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
         });
