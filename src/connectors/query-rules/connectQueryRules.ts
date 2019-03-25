@@ -105,15 +105,50 @@ function getRuleContextsFromTrackedFilters({
   return ruleContexts;
 }
 
+function onHelperChange(
+  this: {
+    helper: Helper;
+    initialRuleContexts: string[];
+    trackedFilters: ParamTrackedFilters;
+    transformRuleContexts: ParamTransformRuleContexts;
+  },
+  sharedHelperState: HelperState
+) {
+  const {
+    helper,
+    initialRuleContexts,
+    trackedFilters,
+    transformRuleContexts,
+  } = this;
+
+  const previousRuleContexts: string[] = sharedHelperState.ruleContexts || [];
+  const newRuleContexts = getRuleContextsFromTrackedFilters({
+    helper,
+    sharedHelperState,
+    trackedFilters,
+  });
+  const nextRuleContexts = [...initialRuleContexts, ...newRuleContexts];
+
+  warning(
+    nextRuleContexts.length <= 10,
+    `
+The maximum number of \`ruleContexts\` is 10. They have been sliced to that limit.
+Consider using \`transformRuleContexts\` to minimize the number of rules sent to Algolia.
+`
+  );
+
+  const ruleContexts = transformRuleContexts(nextRuleContexts).slice(0, 10);
+
+  if (!isEqual(previousRuleContexts, ruleContexts)) {
+    helper.overrideStateWithoutTriggeringChangeEvent({
+      ...sharedHelperState,
+      ruleContexts,
+    });
+  }
+}
+
 const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
   checkRendering(render, withUsage());
-
-  // We store the initial rule contexts applied before creating the widget
-  // so that we do not override them with the rules created from `trackedFilters`.
-  let initialRuleContexts: string[] = [];
-
-  // We track the added rule contexts to remove them when the widget is disposed.
-  let addedRuleContexts: string[] = [];
 
   return widgetParams => {
     const {
@@ -134,45 +169,24 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
 
     const hasTrackedFilters = Object.keys(trackedFilters).length > 0;
 
+    // We store the initial rule contexts applied before creating the widget
+    // so that we do not override them with the rules created from `trackedFilters`.
+    let initialRuleContexts: string[] = [];
+
     return {
       init({ helper, state, instantSearchInstance }) {
         initialRuleContexts = state.ruleContexts || [];
 
         if (hasTrackedFilters) {
-          helper.on('change', (sharedHelperState: HelperState) => {
-            const previousRuleContexts = sharedHelperState.ruleContexts;
-            const nextRuleContexts = getRuleContextsFromTrackedFilters({
+          helper.on(
+            'change',
+            onHelperChange.bind({
               helper,
-              sharedHelperState,
+              initialRuleContexts,
               trackedFilters,
-            });
-            const newRuleContexts = [
-              ...initialRuleContexts,
-              ...nextRuleContexts,
-            ];
-
-            warning(
-              newRuleContexts.length <= 10,
-              `
-The maximum number of \`ruleContexts\` is 10. They have been sliced to that limit.
-Consider using \`transformRuleContexts\` to minimize the number of rules sent to Algolia.
-`
-            );
-
-            const ruleContexts = transformRuleContexts(newRuleContexts).slice(
-              0,
-              10
-            );
-
-            if (!isEqual(previousRuleContexts, ruleContexts)) {
-              helper.overrideStateWithoutTriggeringChangeEvent({
-                ...sharedHelperState,
-                ruleContexts,
-              });
-            }
-
-            addedRuleContexts = nextRuleContexts;
-          });
+              transformRuleContexts,
+            })
+          );
         }
 
         render(
@@ -199,19 +213,13 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         );
       },
 
-      dispose({ state }) {
+      dispose({ helper, state }) {
         unmount();
 
-        if (
-          hasTrackedFilters &&
-          state.ruleContexts &&
-          state.ruleContexts.length > 0
-        ) {
-          const reinitRuleContexts = state.ruleContexts.filter(
-            (rule: string) => !addedRuleContexts.includes(rule)
-          );
+        if (hasTrackedFilters) {
+          helper.removeListener('change', onHelperChange);
 
-          return state.setQueryParameter('ruleContexts', reinitRuleContexts);
+          return state.setQueryParameter('ruleContexts', initialRuleContexts);
         }
 
         return state;

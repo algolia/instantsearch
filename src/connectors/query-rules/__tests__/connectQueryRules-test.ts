@@ -137,24 +137,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       const widget = makeWidget({});
 
       widget.init({ helper, state: helper.state, instantSearchInstance: {} });
-      widget.dispose({ state: helper.getState() });
-
-      expect(unmountFn).toHaveBeenCalledTimes(1);
-    });
-
-    test('calls the unmount function even when returning early in the dispose step', () => {
-      const helper = createFakeHelper();
-      const widget = makeWidget({
-        // `trackedFilter` creates another path in the code that returns the
-        // next helper state early. We make sure that we call the `unmount` function
-        // even with this option set.
-        trackedFilters: {
-          brand: values => values,
-        },
-      });
-
-      widget.init({ helper, state: helper.state, instantSearchInstance: {} });
-      widget.dispose({ state: helper.getState() });
+      widget.dispose({ helper, state: helper.getState() });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -545,7 +528,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           'ais-brand-Apple',
         ]);
 
-        const nextState = widget.dispose({ state: helper.getState() });
+        const nextState = widget.dispose({ helper, state: helper.getState() });
 
         expect(nextState.ruleContexts).toEqual(['initial-rule']);
       });
