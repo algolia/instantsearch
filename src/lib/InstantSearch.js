@@ -459,9 +459,10 @@ class InstantSearch extends EventEmitter {
         ...this.routing,
         instantSearchInstance: this,
       });
-      this._onHistoryChange = routingManager.onHistoryChange.bind(
-        routingManager
-      );
+      this._onHistoryChange = function() {};
+      // this._onHistoryChange = routingManager.onHistoryChange.bind(
+      //   routingManager
+      // );
       this._createURL = routingManager.createURL.bind(routingManager);
       this._createAbsoluteURL = this._createURL;
       this.tree.widgets.push(routingManager);

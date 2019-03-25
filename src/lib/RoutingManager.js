@@ -214,30 +214,37 @@ export default class RoutingManager {
     return this.router.createURL(route);
   }
 
-  onHistoryChange(fn) {
-    const { helper } = this.instantSearchInstance;
+  // This lifecycle is not used anymore in the codebase. The place
+  // where it was used has been dropped with the re-write of the
+  // SearchBox. Do we manage to reproduce an issue that this API could
+  // solve? Yes we keep, no we dropped.
+  // onHistoryChange(fn) {
+  //   const { helper } = this.instantSearchInstance;
 
-    this.router.onUpdate(route => {
-      const uiState = this.stateMapping.routeToState(route);
-      // const currentUIState = this.getAllUIStates({ searchParameters: helper.state });
-      // `helper.state` should be equivalent that looking though the tree, in that case
-      // it should be fine.
-      const currentUIState = this.getAllUIStates();
+  //   this.router.onUpdate(route => {
+  //     const uiState = this.stateMapping.routeToState(route);
+  //     // const currentUIState = this.getAllUIStates({ searchParameters: helper.state });
+  //     // `helper.state` should be equivalent that looking though the tree, in that case
+  //     // it should be fine.
+  //     const currentUIState = this.getAllUIStates();
 
-      if (isEqual(uiState, currentUIState)) return;
+  //     if (isEqual(uiState, currentUIState)) return;
 
-      const searchParameters = this.getAllSearchParameters({
-        currentSearchParameters: helper.state,
-        // instantSearchInstance: this.instantSearchInstance,
-        uiState,
-      });
+  //     const searchParameters = this.getAllSearchParameters({
+  //       // The behaviour inside `router.onUpdate` should be the same than
+  //       // this one. Otherwise we have inconsistencies in the API. Whatever
+  //       // solution we pick it should be iso.
+  //       currentSearchParameters: helper.state,
+  //       // instantSearchInstance: this.instantSearchInstance,
+  //       uiState,
+  //     });
 
-      const fullSearchParameters = {
-        ...this.originalConfig,
-        ...searchParameters,
-      };
+  //     const fullSearchParameters = {
+  //       ...this.originalConfig,
+  //       ...searchParameters,
+  //     };
 
-      fn(fullSearchParameters);
-    });
-  }
+  //     fn(fullSearchParameters);
+  //   });
+  // }
 }
