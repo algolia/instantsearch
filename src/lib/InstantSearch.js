@@ -465,7 +465,18 @@ class InstantSearch extends EventEmitter {
       // );
       this._createURL = routingManager.createURL.bind(routingManager);
       this._createAbsoluteURL = this._createURL;
+
       this.tree.widgets.push(routingManager);
+
+      // Get the UI state from the router
+      const uiState = routingManager.getUiStateFromRouter();
+      // Get the SearchParamters from the uiState
+      const parameters = routingManager.getAllSearchParameters({
+        uiState,
+      });
+
+      // Apply the SearchParamters on the instance
+      routingManager.applySearchParameters(parameters);
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;

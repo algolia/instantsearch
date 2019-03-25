@@ -11,7 +11,8 @@ export default class RoutingManager {
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
 
-    this.originalUIState = this.stateMapping.routeToState(this.router.read());
+    // It never updates
+    // this.originalUIState = this.stateMapping.routeToState(this.router.read());
   }
 
   init() {
@@ -51,7 +52,8 @@ export default class RoutingManager {
     }
   }
 
-  setupRouting(state) {
+  setupRouting() {
+    // setupRouting(state) {
     const { helper } = this.instantSearchInstance;
 
     this.router.onUpdate(route => {
@@ -63,22 +65,42 @@ export default class RoutingManager {
 
       if (isEqual(uiState, currentUIState)) return;
 
-      const searchParameters = this.getAllSearchParameters({
-        currentSearchParameters: state,
+      const parameters = this.getAllSearchParameters({
+        // Here we use the state of the render which is in our case the state of the derived
+        // helper. Not even sure it's correct since it always refer the state of the initial
+        // render rather than the latest updated state. The weird part is that below the fn
+        // `onHistoryChange` is reading from `helper.state`. It's probably better to keep the
+        // usage iso. Keep in mind that either `state` or `helper.state` is not fully correct.
+        // For the following interation with the UI:
+        //   -> query (Apple) -> configure (4 -> 8) -> query (Apple watch)
+        //   1. with state: the back button restore the page to Apple + 4
+        //   2. with helper.state: the back button restore the page to Apple + 8 but never come
+        //      back to 4 since we lost the information.
+        // To avoid this behaviour we have to sync the full state in the URL.
+        // currentSearchParameters: state, <-- initial render state
+        // currentSearchParameters: helper.state,
         // instantSearchInstance: this.instantSearchInstance,
         uiState,
       });
 
-      const fullHelperState = {
-        ...this.originalConfig,
-        ...searchParameters,
-      };
+      // It might be only a optimization to avoid an extra render, but since we don't have a POJO
+      // anymore the diff is a bit harder to compute. We can bypass it for now, see how it goes
+      // and restore it if required.
+      // const fullHelperState = {
+      //   ...this.originalConfig,
+      //   ...searchParameters,
+      // };
 
-      if (isEqual(fullHelperState, searchParameters)) return;
+      // if (isEqual(fullHelperState, searchParameters)) return;
 
-      helper
-        .overrideStateWithoutTriggeringChangeEvent(searchParameters)
-        .search();
+      // Alter the current tree with searchParamters
+      this.applySearchParameters(parameters);
+
+      // helper
+      //   .overrideStateWithoutTriggeringChangeEvent(searchParameters)
+      //   .search();
+
+      helper.search();
     });
 
     this.renderURLFromState = () => {
@@ -216,12 +238,8 @@ export default class RoutingManager {
 
   // External API's
 
-  createURL(state) {
-    const uiState = this.getAllUIStates({
-      searchParameters: state,
-    });
-    const route = this.stateMapping.stateToRoute(uiState);
-    return this.router.createURL(route);
+  getUiStateFromRouter() {
+    return this.stateMapping.routeToState(this.router.read());
   }
 
   applySearchParameters(parameters) {
