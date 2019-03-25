@@ -53,6 +53,10 @@ export class Index {
   public dispose() {
     // avoid to throw
   }
+
+  public getWidgetState() {
+    // avoid to throw
+  }
 }
 
 const createIndex = (args: IndexArgs) => new Index(args);
