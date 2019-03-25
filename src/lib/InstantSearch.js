@@ -577,8 +577,6 @@ class InstantSearch extends EventEmitter {
           walk(widget.node);
         }
       });
-
-      // node.indices.forEach(inner => walk(inner));
     };
 
     walk(this.tree);
@@ -586,7 +584,6 @@ class InstantSearch extends EventEmitter {
 
   _render(helper, results, state) {
     const walk = node => {
-      // if (node.helper === helper) {
       node.widgets.forEach(widget => {
         if (node.helper === helper && widget.render) {
           widget.render({
@@ -609,9 +606,6 @@ class InstantSearch extends EventEmitter {
           walk(widget.node);
         }
       });
-      // }
-
-      // node.indices.forEach(inner => walk(inner));
     };
 
     if (!this.tree.helper.hasPendingRequests()) {
