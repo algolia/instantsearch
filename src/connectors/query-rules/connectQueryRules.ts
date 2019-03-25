@@ -18,11 +18,6 @@ import {
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';
 
-const withUsage = createDocumentationMessageGenerator({
-  name: 'query-rules',
-  connector: true,
-});
-
 export type ParamTrackedFilters = {
   [facetName: string]: (
     facetValues: Array<string | number>
@@ -53,6 +48,25 @@ export type QueryRulesConnector = <T>(
   render: QueryRulesRenderer<T>,
   unmount?: () => void
 ) => QueryRulesWidgetFactory<T>;
+
+const withUsage = createDocumentationMessageGenerator({
+  name: 'query-rules',
+  connector: true,
+});
+
+function hasStateRefinements({
+  disjunctiveFacetsRefinements,
+  facetsRefinements,
+  hierarchicalFacetsRefinements,
+  numericRefinements,
+}) {
+  return [
+    disjunctiveFacetsRefinements,
+    facetsRefinements,
+    hierarchicalFacetsRefinements,
+    numericRefinements,
+  ].some(refinement => Object.keys(refinement).length > 0);
+}
 
 // A context rule must consist only of alphanumeric characters, hyphens, and underscores.
 // See https://www.algolia.com/doc/guides/managing-results/refine-results/merchandising-and-promoting/in-depth/implementing-query-rules/#context
@@ -105,7 +119,7 @@ function getRuleContextsFromTrackedFilters({
   return ruleContexts;
 }
 
-function onHelperChange(
+function applyRuleContexts(
   this: {
     helper: Helper;
     initialRuleContexts: string[];
@@ -178,9 +192,25 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         initialRuleContexts = state.ruleContexts || [];
 
         if (hasTrackedFilters) {
+          if (hasStateRefinements(state)) {
+            // If some filters are applied on the first load (e.g. using `configure`),
+            // we need to apply the `ruleContexts` based on the `trackedFilters`.
+            applyRuleContexts.call(
+              {
+                helper,
+                initialRuleContexts,
+                trackedFilters,
+                transformRuleContexts,
+              },
+              state
+            );
+          }
+
+          // We track every change in the helper to override its state and add
+          // any `ruleContexts` needed based on the `trackedFilters`.
           helper.on(
             'change',
-            onHelperChange.bind({
+            applyRuleContexts.bind({
               helper,
               initialRuleContexts,
               trackedFilters,
@@ -217,7 +247,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         unmount();
 
         if (hasTrackedFilters) {
-          helper.removeListener('change', onHelperChange);
+          helper.removeListener('change', applyRuleContexts);
 
           return state.setQueryParameter('ruleContexts', initialRuleContexts);
         }
