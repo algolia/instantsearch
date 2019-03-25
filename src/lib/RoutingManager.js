@@ -1,4 +1,4 @@
-import algoliasearchHelper from 'algoliasearch-helper';
+// import algoliasearchHelper from 'algoliasearch-helper';
 import isEqual from 'lodash/isEqual';
 import zip from 'lodash/zip';
 
@@ -27,23 +27,48 @@ export default class RoutingManager {
     this.initState = this.getAllUIStates();
   }
 
-  getConfiguration(currentConfiguration) {
-    // we need to create a REAL helper to then get its state. Because some parameters
-    // like hierarchicalFacet.rootPath are then triggering a default refinement that would
-    // be not present if it was not going trough the SearchParameters constructor
-    this.originalConfig = algoliasearchHelper(
-      {},
-      currentConfiguration.index,
-      currentConfiguration
-    ).state;
-    // The content of getAllSearchParameters is destructured to return a plain object
-    return {
-      ...this.getAllSearchParameters({
-        currentSearchParameters: this.originalConfig,
-        uiState: this.originalUIState,
-      }),
-    };
-  }
+  // Useful?
+  // getConfiguration(currentConfiguration) {
+  //   // we need to create a REAL helper to then get its state. Because some parameters
+  //   // like hierarchicalFacet.rootPath are then triggering a default refinement that would
+  //   // be not present if it was not going trough the SearchParameters constructor
+  //   this.originalConfig = algoliasearchHelper(
+  //     {},
+  //     currentConfiguration.index,
+  //     currentConfiguration
+  //   ).state;
+
+  //   // Here we have a huge difference between the previous implementation. This lifecyle
+  //   // was called on start and each add/remove operations. The call on start was used to
+  //   // restore the SearchParameters from the uiState. The helper was created on start with
+  //   // those crafted parameters. Now it's not the case, each node has it own instance of
+  //   // an helper that is created either on the InstantSearch creation or index creation.
+  //   // We can compute the initial search parameters for each nodes right before the search
+  //   // happen. It will mimic the previous implementation. For each node we call the method
+  //   // `getWidgetSearchParameters` with the correct slice of the `uiState`. The question is
+  //   // where to implement such logic?
+  //   //   - 1. loop over the nodes inside the `RoutingManager`. Which means that we mutate
+  //   //   the helper of the node from the manager. We can expose a method on the manager
+  //   //   that perform those operations. Whhich means that we can call it for the rest of
+  //   //   the lifcecyles add/remove. Which means that we get rid of the `getConfiguration`
+  //   //   lifecyle for this widget.
+  //   //   - 2. loop over the nodes inside the `RoutingManager` like the above solution, but
+  //   //   create the next tree. Then we can replace it easily inside the instance. Which
+  //   //   means that we copy widgets, etc... Is it the correct structure? Not sure maybe we
+  //   //   can think of an alternative model that could split? Or even another model to make
+  //   //   the routing? This solution might be the better.
+  //   //   - 3. loop over the nodes from InstantSearch and mutate the helper node from the
+  //   //   instance. The manager only compute the parameters for the given node/uiState. We
+  //   //   have to expose the internal state of the manager to the instance. How we make it
+  //   //   works with the other lifecycles add/remove.
+
+  //   return {
+  //     ...this.getAllSearchParameters({
+  //       currentSearchParameters: this.originalConfig,
+  //       uiState: this.originalUIState,
+  //     }),
+  //   };
+  // }
 
   render({ state }) {
     if (this.firstRender) {
