@@ -123,15 +123,47 @@ export default class RoutingManager {
     this.router.dispose();
   }
 
-  getAllSearchParameters({ currentSearchParameters, uiState }) {
-    const { widgets = [] } = this.instantSearchInstance;
-    const searchParameters = widgets.reduce((sp, w) => {
-      if (!w.getWidgetSearchParameters) return sp;
-      return w.getWidgetSearchParameters(sp, {
-        uiState,
-      });
-    }, currentSearchParameters);
-    return searchParameters;
+  getAllSearchParameters({ uiState }) {
+    const loop = (states, node) => {
+      return node.widgets
+        .filter(w => Boolean(w.getWidgetState))
+        .reduce((innerStates, w) => {
+          if (w.$$type === Symbol.for('ais.index')) {
+            return {
+              ...innerStates,
+              children: [
+                ...innerStates.children,
+                loop({ children: [] }, w.node),
+              ],
+            };
+          }
+
+          if (node.parent === null) {
+            const nodeState = innerStates.state || node.helper.getState();
+
+            return {
+              ...innerStates,
+              state: w.getWidgetSearchParameters(nodeState, {
+                uiState,
+              }),
+            };
+          }
+
+          const nodeState = innerStates.state || node.helper.getState();
+          const nodeUiState =
+            // Avoid the `indices` always self-contained
+            (uiState.indices && uiState.indices[node.indexId]) || {};
+
+          return {
+            ...innerStates,
+            state: w.getWidgetSearchParameters(nodeState, {
+              uiState: nodeUiState,
+            }),
+          };
+        }, states);
+    };
+
+    return loop({ children: [] }, this.instantSearchInstance.tree);
   }
 
   getAllUIStates() {
