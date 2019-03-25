@@ -134,37 +134,46 @@ export default class RoutingManager {
               ...innerStates,
               children: [
                 ...innerStates.children,
-                loop({ children: [] }, w.node),
+                loop(
+                  {
+                    state: w.node.helper.getState(),
+                    children: [],
+                  },
+                  w.node
+                ),
               ],
             };
           }
 
           if (node.parent === null) {
-            const nodeState = innerStates.state || node.helper.getState();
-
             return {
               ...innerStates,
-              state: w.getWidgetSearchParameters(nodeState, {
+              state: w.getWidgetSearchParameters(innerStates.state, {
                 uiState,
               }),
             };
           }
 
-          const nodeState = innerStates.state || node.helper.getState();
           const nodeUiState =
             // Avoid the `indices` always self-contained
             (uiState.indices && uiState.indices[node.indexId]) || {};
 
           return {
             ...innerStates,
-            state: w.getWidgetSearchParameters(nodeState, {
+            state: w.getWidgetSearchParameters(innerStates.state, {
               uiState: nodeUiState,
             }),
           };
         }, states);
     };
 
-    return loop({ children: [] }, this.instantSearchInstance.tree);
+    return loop(
+      {
+        state: this.instantSearchInstance.tree.helper.getState(),
+        children: [],
+      },
+      this.instantSearchInstance.tree
+    );
   }
 
   getAllUIStates() {
