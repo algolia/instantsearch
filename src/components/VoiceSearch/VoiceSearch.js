@@ -21,7 +21,7 @@ class VoiceSearch extends Component {
   };
 
   static defaultProps = {
-    searchAsYouSpeak: true,
+    searchAsYouSpeak: false,
     hideOnUnsupportedBrowser: false,
   };
 
