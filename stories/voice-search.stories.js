@@ -60,6 +60,7 @@ storiesOf('VoiceSearch', module)
           templates: {
             status: `
               <p>status: {{status}}</p>
+              <p>errorCode: {{errorCode}}</p>
               <p>isListening: {{isListening}}</p>
               <p>transcript: {{transcript}}</p>
               <p>isSpeechFinal: {{isSpeechFinal}}</p>
@@ -70,18 +71,20 @@ storiesOf('VoiceSearch', module)
     })
   )
   .add(
-    'search after speech is finished',
+    'search as you speak',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.voiceSearch({
           container,
-          searchAsYouSpeak: false,
+          searchAsYouSpeak: true,
           templates: {
             status: `
+              <p>status: {{status}}</p>
+              <p>errorCode: {{errorCode}}</p>
               <p>isListening: {{isListening}}</p>
               <p>transcript: {{transcript}}</p>
               <p>isSpeechFinal: {{isSpeechFinal}}</p>
-            `,
+          `,
           },
         })
       );

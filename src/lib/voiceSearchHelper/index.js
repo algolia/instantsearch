@@ -45,7 +45,7 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
   const start = searchAsYouSpeak => {
     resetState(STATUS_ASKING_PERMISSION);
     recognition = new SpeechRecognition();
-    recognition.interimResults = searchAsYouSpeak;
+    recognition.interimResults = true;
     recognition.onend = () => {
       if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
         onQueryChange(state.transcript);
@@ -61,7 +61,7 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
         transcript: e.results[0][0].transcript,
         isSpeechFinal: e.results[0].isFinal,
       });
-      if (searchAsYouSpeak) {
+      if (searchAsYouSpeak && state.transcript) {
         onQueryChange(state.transcript);
       }
     };
