@@ -13,6 +13,20 @@ storiesOf('VoiceSearch', module)
     })
   )
   .add(
+    'without status',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidget(
+        instantsearch.widgets.voiceSearch({
+          container,
+          templates: {
+            status: ``,
+          },
+        })
+      );
+    })
+  )
+
+  .add(
     'with a SearchBox',
     withHits(({ search, container, instantsearch }) => {
       const subContainer1 = document.createElement('div');

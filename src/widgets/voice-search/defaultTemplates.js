@@ -1,4 +1,4 @@
 export default {
   buttonText: `Voice Search`,
-  status: ``,
+  status: `<p>{{transcript}}</p>`,
 };
