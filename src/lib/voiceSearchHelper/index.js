@@ -21,7 +21,9 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
     'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
 
   const isListening = () =>
-    state.status !== STATUS_INITIAL && state.status !== STATUS_FINISHED;
+    state.status === STATUS_ASKING_PERMISSION ||
+    state.status === STATUS_WAITING ||
+    state.status === STATUS_RECOGNIZING;
 
   const setState = (newState = {}) => {
     state = { ...state, ...newState };
