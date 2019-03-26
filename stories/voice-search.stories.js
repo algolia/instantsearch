@@ -91,22 +91,11 @@ storiesOf('VoiceSearch', module)
     })
   )
   .add(
-    'disabled by default on unsupported browser',
+    'disabled by default on unsupported browser (open this in Safari, Firefox, ...)',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.voiceSearch({
           container,
-        })
-      );
-    })
-  )
-  .add(
-    'hide on unsupported browser',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.voiceSearch({
-          container,
-          hideOnUnsupportedBrowser: true,
         })
       );
     })
