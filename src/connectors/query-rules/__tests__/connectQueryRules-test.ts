@@ -571,6 +571,40 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 
         expect(nextState.ruleContexts).toEqual(['initial-rule']);
       });
+
+      test('stops tracking filters after dispose', () => {
+        const helper = createFakeHelper({
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung'],
+          },
+        });
+        const brandFilterSpy = jest.fn(values => values);
+        const widget = makeWidget({
+          trackedFilters: {
+            brand: brandFilterSpy,
+          },
+        });
+
+        expect(helper.getState().ruleContexts).toEqual(undefined);
+
+        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+
+        expect(helper.getState().ruleContexts).toEqual(['ais-brand-Samsung']);
+        expect(brandFilterSpy).toHaveBeenCalledTimes(1);
+        expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung']);
+
+        widget.dispose({ helper, state: helper.state });
+
+        helper.setState({
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung', 'Apple'],
+          },
+        });
+
+        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect(brandFilterSpy).toHaveBeenCalledTimes(1);
+      });
     });
 
     describe('transformRuleContexts', () => {
