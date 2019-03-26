@@ -19,7 +19,8 @@ export interface FacetRefinement {
   exhaustive?: boolean;
 }
 
-export interface QueryRefinement extends FacetRefinement {
+export interface QueryRefinement
+  extends Pick<FacetRefinement, 'type' | 'attributeName' | 'name'> {
   type: 'query';
   query: string;
 }
@@ -47,7 +48,7 @@ function getRefinement(
   attributeName: Refinement['attributeName'],
   name: Refinement['name'],
   resultsFacets: string[]
-) {
+): Refinement {
   const res: Refinement = { type, attributeName, name };
   let facet: any = find(resultsFacets, { name: attributeName });
   let count: number;
@@ -82,7 +83,7 @@ function getRefinements(
   results: SearchResults,
   state: HelperState,
   clearsQuery: boolean = false
-) {
+): Refinement[] {
   const res: Refinement[] = [];
 
   forEach(state.facetsRefinements, (refinements, attributeName) => {

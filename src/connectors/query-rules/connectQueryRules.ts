@@ -202,15 +202,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
           if (hasStateRefinements(state)) {
             // If some filters are applied on the first load (e.g. using `configure`),
             // we need to apply the `ruleContexts` based on the `trackedFilters`.
-            applyRuleContexts.call(
-              {
-                helper,
-                initialRuleContexts,
-                trackedFilters,
-                transformRuleContexts,
-              },
-              state
-            );
+            onHelperChange(state);
           }
 
           // We track every change in the helper to override its state and add
