@@ -187,9 +187,19 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
 
+    // This callback function is attached to helper and stored because
+    // it needs to be removed on `dipose`.
+    let onHelperChange: (state: HelperState) => void;
+
     return {
       init({ helper, state, instantSearchInstance }) {
         initialRuleContexts = state.ruleContexts || [];
+        onHelperChange = applyRuleContexts.bind({
+          helper,
+          initialRuleContexts,
+          trackedFilters,
+          transformRuleContexts,
+        });
 
         if (hasTrackedFilters) {
           if (hasStateRefinements(state)) {
@@ -208,15 +218,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
 
           // We track every change in the helper to override its state and add
           // any `ruleContexts` needed based on the `trackedFilters`.
-          helper.on(
-            'change',
-            applyRuleContexts.bind({
-              helper,
-              initialRuleContexts,
-              trackedFilters,
-              transformRuleContexts,
-            })
-          );
+          helper.on('change', onHelperChange);
         }
 
         render(
@@ -247,7 +249,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         unmount();
 
         if (hasTrackedFilters) {
-          helper.removeListener('change', applyRuleContexts);
+          helper.removeListener('change', onHelperChange);
 
           return state.setQueryParameter('ruleContexts', initialRuleContexts);
         }
