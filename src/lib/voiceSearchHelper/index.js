@@ -1,9 +1,9 @@
 const STATUS_INITIAL = 'initial';
 const STATUS_ASKING_PERMISSION = 'askingPermission';
-const STATUS_WAITING_FOR_AUDIO = 'waitingForAudio';
-const STATUS_WAITING_FOR_VOICE = 'waitingForVoice';
+const STATUS_WAITING = 'waiting';
 const STATUS_RECOGNIZING = 'recognizing';
 const STATUS_FINISHED = 'finished';
+const STATUS_ERROR = 'error';
 
 export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
   const SpeechRecognition =
@@ -50,10 +50,12 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
       if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
         onQueryChange(state.transcript);
       }
-      setState({ status: STATUS_FINISHED });
+      if (state.status !== STATUS_ERROR) {
+        setState({ status: STATUS_FINISHED });
+      }
     };
     recognition.onerror = e => {
-      setState({ errorCode: e.error });
+      setState({ status: STATUS_ERROR, errorCode: e.error });
     };
     recognition.onresult = e => {
       setState({
@@ -65,14 +67,29 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
         onQueryChange(state.transcript);
       }
     };
-    recognition.onsoundstart = () => {
-      setState({ status: STATUS_WAITING_FOR_VOICE });
-    };
     recognition.onstart = () => {
       setState({
-        status: STATUS_WAITING_FOR_AUDIO,
+        status: STATUS_WAITING,
       });
     };
+
+    // [
+    //   'audiostart',
+    //   'soundstart',
+    //   'speechstart',
+    //   'speechend',
+    //   'soundend',
+    //   'audioend',
+    //   'result',
+    //   'nomatch',
+    //   'error',
+    //   'start',
+    //   'end',
+    // ].forEach(event => {
+    //   recognition.addEventListener(event, e => {
+    //     console.log(`# ${event}`, e);
+    //   });
+    // });
     recognition.start();
   };
 
