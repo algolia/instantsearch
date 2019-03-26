@@ -55,10 +55,6 @@ export default function voiceSearch({
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
     button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
-    transcript: cx(
-      suit({ descendantName: 'transcript' }),
-      userCssClasses.transcript
-    ),
     status: cx(suit({ descendantName: 'status' }), userCssClasses.status),
   };
 

@@ -61,26 +61,9 @@ storiesOf('VoiceSearch', module)
             status: `
               <p>status: {{status}}</p>
               <p>isListening: {{isListening}}</p>
+              <p>transcript: {{transcript}}</p>
+              <p>isSpeechFinal: {{isSpeechFinal}}</p>
             `,
-          },
-        })
-      );
-    })
-  )
-  .add(
-    'display transcript',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.voiceSearch({
-          container,
-          templates: {
-            transcript({ transcript, isSpeechFinal }) {
-              if (isSpeechFinal) {
-                return `Final Transcript: ${transcript}`;
-              } else {
-                return `Interim Transcript: ${transcript}`;
-              }
-            },
           },
         })
       );
@@ -94,14 +77,11 @@ storiesOf('VoiceSearch', module)
           container,
           searchAsYouSpeak: false,
           templates: {
-            status: `isListening: {{isListening}}`,
-            transcript({ transcript, isSpeechFinal }) {
-              if (isSpeechFinal) {
-                return `Final Transcript: ${transcript}`;
-              } else {
-                return `Not done yet`;
-              }
-            },
+            status: `
+              <p>isListening: {{isListening}}</p>
+              <p>transcript: {{transcript}}</p>
+              <p>isSpeechFinal: {{isSpeechFinal}}</p>
+            `,
           },
         })
       );
@@ -159,7 +139,7 @@ storiesOf('VoiceSearch', module)
         `.voice-search-button .listening-true svg {
           fill: #d83636;
         }`,
-        `.voice-search-transcript .layer {
+        `.voice-search-status .layer {
           position: absolute;
           background: rgba(255, 255, 255, 0.95);
           top: 0;
@@ -171,10 +151,10 @@ storiesOf('VoiceSearch', module)
           justify-content: center;
           display: none;
         }`,
-        `.voice-search-transcript .layer.listening-true {
+        `.voice-search-status .layer.listening-true {
           display: flex;
         }`,
-        `.voice-search-transcript .layer span {
+        `.voice-search-status .layer span {
           font-size: 2rem;
           color: #555;
         }`,
@@ -185,7 +165,7 @@ storiesOf('VoiceSearch', module)
           container: subContainer1,
           cssClasses: {
             button: 'voice-search-button',
-            transcript: 'voice-search-transcript',
+            status: 'voice-search-status',
           },
           templates: {
             buttonText: `
@@ -193,7 +173,7 @@ storiesOf('VoiceSearch', module)
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
               </span>
             `,
-            transcript({ isListening, transcript }) {
+            status({ isListening, transcript }) {
               return `
                 <div class="layer listening-${isListening}">
                   <span>${transcript}</span>

@@ -6,7 +6,6 @@ const VoiceSearchCSSClasses = PropTypes.shape({
   root: PropTypes.string.isRequired,
   button: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
-  transcript: PropTypes.string.isRequired,
 });
 
 class VoiceSearch extends Component {
@@ -79,20 +78,6 @@ class VoiceSearch extends Component {
             data={{
               status,
               errorCode,
-              isListening,
-              transcript,
-              isSpeechFinal,
-            }}
-            templates={templates}
-          />
-          <Template
-            templateKey="transcript"
-            rootTagName="div"
-            rootProps={{
-              className: cssClasses.transcript,
-            }}
-            data={{
-              status,
               isListening,
               transcript,
               isSpeechFinal,
