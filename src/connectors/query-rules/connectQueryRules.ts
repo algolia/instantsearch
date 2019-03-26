@@ -186,9 +186,6 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-
-    // This callback function is attached to helper and stored because
-    // it needs to be removed on `dipose`.
     let onHelperChange: (state: HelperState) => void;
 
     return {
