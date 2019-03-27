@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceSearch Rendering with default props 1`] = `
+<div
+  className="root"
+>
+  <button
+    className="button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "button",
+      }
+    }
+    disabled={false}
+    onClick={[Function]}
+    title="Search by voice"
+    type="button"
+  />
+  <div
+    className="status"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "status",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`VoiceSearch Rendering with full props and custom templates 1`] = `
+<div
+  className="root"
+>
+  <button
+    className="button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Stop",
+      }
+    }
+    disabled={false}
+    onClick={[Function]}
+    title="Search by voice"
+    type="button"
+  />
+  <div
+    className="status"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>status: recognizing</p> <p>errorCode: </p> <p>isListening: true</p> <p>transcript: Hello</p> <p>isSpeechFinal: false</p>",
+      }
+    }
+  />
+</div>
+`;
