@@ -1,5 +1,7 @@
 {
   "expo": {
-    "sdkVersion": "30.0.1"
+    "name": "{{name}}",
+    "slug": "{{name}}",
+    "sdkVersion": "32.0.0"
   }
 }

@@ -4259,17 +4259,6 @@ Array [
 ]
 `;
 
-exports[`Templates React InstantSearch Native File content: .babelrc 1`] = `
-"{
-  \\"presets\\": [\\"babel-preset-expo\\"],
-  \\"env\\": {
-    \\"development\\": {
-      \\"plugins\\": [\\"transform-react-jsx-source\\"]
-    }
-  }
-}"
-`;
-
 exports[`Templates React InstantSearch Native File content: .editorconfig 1`] = `
 "root = true
 
@@ -4399,9 +4388,20 @@ yarn start
 exports[`Templates React InstantSearch Native File content: app.json 1`] = `
 "{
   \\"expo\\": {
-    \\"sdkVersion\\": \\"30.0.1\\"
+    \\"name\\": \\"react-instantsearch-native-app\\",
+    \\"slug\\": \\"react-instantsearch-native-app\\",
+    \\"sdkVersion\\": \\"32.0.0\\"
   }
 }"
+`;
+
+exports[`Templates React InstantSearch Native File content: babel.config.js 1`] = `
+"module.exports = function(api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+  };
+};"
 `;
 
 exports[`Templates React InstantSearch Native File content: package.json 1`] = `
@@ -4409,13 +4409,12 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
   \\"name\\": \\"react-instantsearch-native-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
-  \\"main\\": \\"./node_modules/react-native-scripts/build/bin/crna-entry.js\\",
+  \\"main\\": \\"node_modules/expo/AppEntry.js\\",
   \\"scripts\\": {
-    \\"start\\": \\"react-native-scripts start\\",
-    \\"android\\": \\"react-native-scripts android\\",
-    \\"ios\\": \\"react-native-scripts ios\\",
-    \\"lint\\": \\"eslint .\\",
-    \\"lint:fix\\": \\"npm run lint -- --fix\\"
+    \\"start\\": \\"expo start\\",
+    \\"android\\": \\"expo start --android\\",
+    \\"ios\\": \\"expo start --ios\\",
+    \\"eject\\": \\"expo eject\\"
   },
   \\"partialDependencies\\": {
     \\"react-instantsearch-native\\": \\"5.2.0\\"
@@ -4557,7 +4556,6 @@ export default connectSearchBox(SearchBox);"
 
 exports[`Templates React InstantSearch Native Folder structure: contains the right files 1`] = `
 Array [
-  ".babelrc",
   ".editorconfig",
   ".eslintrc.js",
   ".gitignore",
@@ -4566,6 +4564,7 @@ Array [
   "App.js",
   "README.md",
   "app.json",
+  "babel.config.js",
   "package.json",
   "src/Highlight.js",
   "src/InfiniteHits.js",

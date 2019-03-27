@@ -2,30 +2,30 @@
   "name": "{{name}}",
   "version": "1.0.0",
   "private": true,
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "react-native-scripts start",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
   },
   "dependencies": {
-    "algoliasearch": "3.30.0",
-    "expo": "30.0.1",
+    "algoliasearch": "3.32.1",
+    "expo": "32.0.0",
     "prop-types": "15.7.2",
-    "react": "16.6.3",
+    "react": "16.5.0",
     "react-instantsearch-native": "{{libraryVersion}}",
-    "react-native": "0.55.4"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
   },
   "devDependencies": {
+    "babel-preset-expo": "5.0.0",
     "eslint": "5.7.0",
     "eslint-config-algolia": "13.2.3",
     "eslint-config-prettier": "3.6.0",
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-prettier": "3.0.1",
     "eslint-plugin-react": "7.11.1",
-    "prettier": "1.16.4",
-    "react-native-scripts": "1.14.1"
+    "expo-cli": "2.13.0",
+    "prettier": "1.16.4"
   }
 }
