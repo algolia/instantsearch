@@ -1,18 +1,18 @@
-import algoliasearch from 'algoliasearch';
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
 import simpleMapping from '../stateMappings/simple';
 
-const fakeAlgoliaClient = {
+const createFakeSearchClient = () => ({
   search: () => Promise.resolve({ results: [{}] }),
-};
+});
 
 describe('RoutingManager', () => {
   describe('getAllUIStates', () => {
     test('reads the state of widgets with a getWidgetState implementation', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       const widgetState = {
@@ -54,9 +54,10 @@ describe('RoutingManager', () => {
     });
 
     test('Does not read UI state from widgets without an implementation of getWidgetState', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       search.addWidget({
@@ -86,9 +87,10 @@ describe('RoutingManager', () => {
 
   describe('getAllSearchParameters', () => {
     test('should get searchParameters from widget that implements getWidgetSearchParameters', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       const widget = {
@@ -127,9 +129,10 @@ describe('RoutingManager', () => {
     });
 
     test('should not change the searchParameters if no widget has a getWidgetSearchParameters', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       const widget = {
@@ -157,20 +160,17 @@ describe('RoutingManager', () => {
 
   describe('within instantsearch', () => {
     test('should write in the router on searchParameters change', done => {
-      let onUpdateCallback; // eslint-disable-line
+      const searchClient = createFakeSearchClient();
+
       const router = {
         write: jest.fn(),
         read: jest.fn(),
-        onUpdate: fn => {
-          onUpdateCallback = fn;
-        },
+        onUpdate: () => {},
       };
+
       const search = instantsearch({
         indexName: 'instant_search',
-        searchClient: algoliasearch(
-          'latency',
-          '6be0576ff61c053d5f9a3225e2a90f76'
-        ),
+        searchClient,
         routing: {
           router,
         },
@@ -207,6 +207,8 @@ describe('RoutingManager', () => {
     });
 
     test('should update the searchParameters on router state update', done => {
+      const searchClient = createFakeSearchClient();
+
       let onRouterUpdateCallback;
       const router = {
         write: jest.fn(),
@@ -215,12 +217,10 @@ describe('RoutingManager', () => {
           onRouterUpdateCallback = fn;
         },
       };
+
       const search = instantsearch({
         indexName: 'instant_search',
-        searchClient: algoliasearch(
-          'latency',
-          '6be0576ff61c053d5f9a3225e2a90f76'
-        ),
+        searchClient,
         routing: {
           router,
         },
@@ -256,11 +256,14 @@ describe('RoutingManager', () => {
     });
 
     test('should apply state mapping on differences after searchfunction', done => {
+      const searchClient = createFakeSearchClient();
+
       const router = {
         write: jest.fn(),
         read: jest.fn(() => ({})),
         onUpdate: jest.fn(),
       };
+
       const stateMapping = {
         stateToRoute(uiState) {
           return {
@@ -271,18 +274,16 @@ describe('RoutingManager', () => {
           return routeState;
         },
       };
+
       const search = instantsearch({
         indexName: 'instant_search',
-        searchClient: algoliasearch(
-          'latency',
-          '6be0576ff61c053d5f9a3225e2a90f76'
-        ),
-        routing: {
-          router,
-          stateMapping,
-        },
         searchFunction: helper => {
           helper.setQuery('test').search();
+        },
+        searchClient,
+        routing: {
+          stateMapping,
+          router,
         },
       });
 
