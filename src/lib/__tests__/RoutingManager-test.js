@@ -414,5 +414,52 @@ describe('RoutingManager', () => {
         query: 'Apple',
       });
     });
+
+    test('should keep the UI state up to date on first render', async () => {
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const router = createFakeRouter({
+        write: jest.fn(),
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchFunction(helper) {
+          // Force the value of the query
+          helper.setQuery('Apple iPhone').search();
+        },
+        searchClient,
+        routing: {
+          router,
+          stateMapping,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
+
+      search.addWidget(fakeSearchBox);
+      search.addWidget(fakeHitsPerPage);
+
+      // Trigger the call to `searchFunction` -> Apple iPhone
+      search.start();
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple iPhone',
+      });
+
+      // Trigger getConfigurartion
+      search.removeWidget(fakeHitsPerPage);
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(2);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple iPhone',
+      });
+    });
   });
 });

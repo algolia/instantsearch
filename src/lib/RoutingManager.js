@@ -76,19 +76,22 @@ export default class RoutingManager {
 
     helper.on('change', this.renderURLFromState);
 
-    // Compare initial state and post first render state, in order
-    // to see if the query has been changed by a searchFunction
+    // Compare initial state and first render state, in order to see if the
+    // query has been changed by a `searchFunction`. It's required because the
+    // helper of the `searchFunction` does not trigger change event (not the
+    // same instance).
 
-    const firstRenderState = this.getAllUIStates({
+    this.currentUIState = this.getAllUIStates({
       searchParameters: state,
     });
 
-    if (!isEqual(this.initState, firstRenderState)) {
-      // force update the URL, if the state has changed since the initial URL read
-      // We do this in order to make a URL update when there is search function
-      // that prevent the search of the initial rendering
+    if (!isEqual(this.initState, this.currentUIState)) {
+      // Force update the URL, if the state has changed since the initial read.
+      // We do this in order to make the URL update when there is `searchFunction`
+      // that prevent the search of the initial rendering.
       // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-      const route = this.stateMapping.stateToRoute(firstRenderState);
+      const route = this.stateMapping.stateToRoute(this.currentUIState);
+
       this.router.write(route);
     }
   }
