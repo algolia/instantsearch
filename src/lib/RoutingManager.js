@@ -157,12 +157,7 @@ export default class RoutingManager {
         uiState,
       });
 
-      const fullSearchParameters = {
-        ...this.originalConfig,
-        ...searchParameters,
-      };
-
-      fn(fullSearchParameters);
+      fn({ ...searchParameters });
     });
     return;
   }
