@@ -211,6 +211,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(priceFilterSpy).toHaveBeenCalledWith([500, 400, 100]);
       });
 
+      test('adds ruleContexts to search parameters if transformRuleContexts is provided', () => {
+        const helper = createFakeHelper({
+          disjunctiveFacets: ['brand'],
+        });
+        const brandFilterSpy = jest.fn(values => values);
+        const widget = makeWidget({
+          trackedFilters: {
+            brand: brandFilterSpy,
+          },
+          transformRuleContexts: () => ['overriden-rule'],
+        });
+
+        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+
+        expect(helper.getState().ruleContexts).toEqual(['overriden-rule']);
+        expect(brandFilterSpy).toHaveBeenCalledTimes(1);
+        expect(brandFilterSpy).toHaveBeenCalledWith([]);
+      });
+
       test('adds all ruleContexts to search parameters from dynamically added facet and numeric refinements', () => {
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
@@ -611,6 +630,9 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
       test('transform all rule contexts before passing them to search parameters, except the initial ones', () => {
         const helper = createFakeHelper({
           disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung', 'Apple'],
+          },
           ruleContexts: ['initial-rule'],
         });
         const transformRuleContextsSpy = jest.fn((rules: string[]) =>
@@ -624,12 +646,6 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         });
 
         widget.init({ helper, state: helper.state, instantSearchInstance: {} });
-
-        helper.setState({
-          disjunctiveFacetsRefinements: {
-            brand: ['Samsung', 'Apple'],
-          },
-        });
 
         widget.render({
           helper,

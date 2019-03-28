@@ -199,9 +199,14 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         });
 
         if (hasTrackedFilters) {
-          if (hasStateRefinements(state)) {
-            // If some filters are applied on the first load (e.g. using `configure`),
-            // we need to apply the `ruleContexts` based on the `trackedFilters`.
+          // We need to apply the `ruleContexts` based on the `trackedFilters`
+          // before the helper changes state in some cases:
+          //   - Some filters are applied on the first load (e.g. using `configure`)
+          //   - The `transformRuleContexts` option sets initial `ruleContexts`.
+          if (
+            hasStateRefinements(state) ||
+            Boolean(widgetParams.transformRuleContexts)
+          ) {
             onHelperChange(state);
           }
 
