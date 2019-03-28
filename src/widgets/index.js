@@ -38,3 +38,6 @@ export { default as menuSelect } from './menu-select/menu-select';
 export { default as poweredBy } from './powered-by/powered-by';
 export { default as panel } from './panel/panel';
 export { default as voiceSearch } from './voice-search/voice-search';
+export {
+  default as queryRuleCustomData,
+} from './query-rule-custom-data/query-rule-custom-data';

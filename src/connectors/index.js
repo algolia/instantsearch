@@ -37,3 +37,4 @@ export { default as connectConfigure } from './configure/connectConfigure';
 export {
   default as connectAutocomplete,
 } from './autocomplete/connectAutocomplete';
+export { default as connectQueryRules } from './query-rules/connectQueryRules';

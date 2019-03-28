@@ -121,7 +121,7 @@ inquirer
     shell.exec('yarn cache clean');
     shell.exec('yarn');
 
-    const { version: currentVersion } = require('../package.json');
+    const { version: currentVersion } = require('../../package.json');
     shell.echo(
       colors.blue(`
       - Current version is "${currentVersion}"
