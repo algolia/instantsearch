@@ -2,8 +2,62 @@ import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
 import simpleMapping from '../stateMappings/simple';
 
+const runAllMicroTasks = () => new Promise(setImmediate);
+
 const createFakeSearchClient = () => ({
   search: () => Promise.resolve({ results: [{}] }),
+});
+
+const createFakeRouter = (args = {}) => ({
+  onUpdate() {},
+  write() {},
+  read() {
+    return {};
+  },
+  ...args,
+});
+
+const createFakeStateMapping = (args = {}) => ({
+  stateToRoute(uiState) {
+    return uiState;
+  },
+  routeToState(routeState) {
+    return routeState;
+  },
+  ...args,
+});
+
+const createFakeSearchBox = () => ({
+  render({ helper }) {
+    this.refine = value => {
+      helper.setQuery(value).search();
+    };
+  },
+  dispose({ state }) {
+    return state.setQuery();
+  },
+  getWidgetSearchParameters(searchParameters, { uiState }) {
+    return searchParameters.setQuery(uiState.query || '');
+  },
+  getWidgetState(uiState, { searchParameters }) {
+    return {
+      ...uiState,
+      query: searchParameters.query,
+    };
+  },
+});
+
+const createFakeHitsPerPage = () => ({
+  render() {},
+  dispose({ state }) {
+    return state;
+  },
+  getWidgetSearchParameters(parameters) {
+    return parameters;
+  },
+  getWidgetState(uiState) {
+    return uiState;
+  },
 });
 
 describe('RoutingManager', () => {
@@ -311,6 +365,53 @@ describe('RoutingManager', () => {
         });
 
         done();
+      });
+    });
+
+    test('should keep the UI state up to date on state changes', async () => {
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const router = createFakeRouter({
+        write: jest.fn(),
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient,
+        routing: {
+          stateMapping,
+          router,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
+
+      search.addWidget(fakeSearchBox);
+      search.addWidget(fakeHitsPerPage);
+
+      search.start();
+
+      await runAllMicroTasks();
+
+      // Trigger an update - push a change
+      fakeSearchBox.refine('Apple');
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
+      });
+
+      await runAllMicroTasks();
+
+      // Trigger getConfigurartion
+      search.removeWidget(fakeHitsPerPage);
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(2);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
       });
     });
   });

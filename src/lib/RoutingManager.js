@@ -9,7 +9,7 @@ export default class RoutingManager {
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
 
-    this.originalUIState = this.stateMapping.routeToState(this.router.read());
+    this.currentUIState = this.stateMapping.routeToState(this.router.read());
   }
 
   init({ state }) {
@@ -30,7 +30,7 @@ export default class RoutingManager {
 
     return {
       ...this.getAllSearchParameters({
-        uiState: this.originalUIState,
+        uiState: this.currentUIState,
         currentSearchParameters,
       }),
     };
@@ -65,12 +65,15 @@ export default class RoutingManager {
     });
 
     this.renderURLFromState = searchParameters => {
-      const uiState = this.getAllUIStates({
+      this.currentUIState = this.getAllUIStates({
         searchParameters,
       });
-      const route = this.stateMapping.stateToRoute(uiState);
+
+      const route = this.stateMapping.stateToRoute(this.currentUIState);
+
       this.router.write(route);
     };
+
     helper.on('change', this.renderURLFromState);
 
     // Compare initial state and post first render state, in order
