@@ -1,6 +1,5 @@
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
-import simpleMapping from '../stateMappings/simple';
 
 const runAllMicroTasks = () => new Promise(setImmediate);
 
@@ -112,7 +111,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => actualInitialState,
         },
@@ -152,7 +151,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => actualInitialState,
         },
@@ -187,7 +186,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => actualInitialState,
         },
@@ -224,7 +223,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => {},
         },
@@ -337,16 +336,13 @@ describe('RoutingManager', () => {
         write: jest.fn(),
       });
 
-      const stateMapping = {
+      const stateMapping = createFakeStateMapping({
         stateToRoute(uiState) {
           return {
             query: uiState.query && uiState.query.toUpperCase(),
           };
         },
-        routeToState(routeState) {
-          return routeState;
-        },
-      };
+      });
 
       const search = instantsearch({
         indexName: 'instant_search',
