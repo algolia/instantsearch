@@ -47,13 +47,15 @@ export default class RoutingManager {
     const { helper } = this.instantSearchInstance;
 
     this.router.onUpdate(route => {
-      this.currentUIState = this.stateMapping.routeToState(route);
+      const nextUiState = this.stateMapping.routeToState(route);
 
       const widgetsUIState = this.getAllUIStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(this.currentUIState, widgetsUIState)) return;
+      if (isEqual(nextUiState, widgetsUIState)) return;
+
+      this.currentUIState = nextUiState;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: state,
@@ -83,15 +85,17 @@ export default class RoutingManager {
     // helper of the `searchFunction` does not trigger change event (not the
     // same instance).
 
-    this.currentUIState = this.getAllUIStates({
+    const firstRenderState = this.getAllUIStates({
       searchParameters: state,
     });
 
-    if (!isEqual(this.initState, this.currentUIState)) {
+    if (!isEqual(this.initState, firstRenderState)) {
       // Force update the URL, if the state has changed since the initial read.
       // We do this in order to make the URL update when there is `searchFunction`
       // that prevent the search of the initial rendering.
       // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
+      this.currentUIState = firstRenderState;
+
       const route = this.stateMapping.stateToRoute(this.currentUIState);
 
       this.router.write(route);
@@ -149,13 +153,15 @@ export default class RoutingManager {
     const { helper } = this.instantSearchInstance;
 
     this.router.onUpdate(route => {
-      this.currentUIState = this.stateMapping.routeToState(route);
+      const nextUiState = this.stateMapping.routeToState(route);
 
       const widgetsUIState = this.getAllUIStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(this.currentUIState, widgetsUIState)) return;
+      if (isEqual(nextUiState, widgetsUIState)) return;
+
+      this.currentUIState = nextUiState;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: helper.state,
