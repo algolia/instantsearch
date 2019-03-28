@@ -63,13 +63,6 @@ export default class RoutingManager {
         uiState,
       });
 
-      const fullHelperState = {
-        ...this.originalConfig,
-        ...searchParameters,
-      };
-
-      if (isEqual(fullHelperState, searchParameters)) return;
-
       helper
         .overrideStateWithoutTriggeringChangeEvent(searchParameters)
         .search();
