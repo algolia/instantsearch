@@ -3,7 +3,6 @@ import isEqual from 'lodash/isEqual';
 
 export default class RoutingManager {
   constructor({ instantSearchInstance, router, stateMapping } = {}) {
-    this.originalConfig = null;
     this.firstRender = true;
 
     this.router = router;
@@ -23,19 +22,16 @@ export default class RoutingManager {
   }
 
   getConfiguration(currentConfiguration) {
-    // we need to create a REAL helper to then get its state. Because some parameters
-    // like hierarchicalFacet.rootPath are then triggering a default refinement that would
-    // be not present if it was not going trough the SearchParameters constructor
-    this.originalConfig = algoliasearchHelper(
-      {},
-      currentConfiguration.index,
+    // We have to create a `SearchParameters` because `getAllSearchParameters`
+    // expect an instance of `SearchParameters` and not a plain object.
+    const currentSearchParameters = algoliasearchHelper.SearchParameters.make(
       currentConfiguration
-    ).state;
-    // The content of getAllSearchParameters is destructured to return a plain object
+    );
+
     return {
       ...this.getAllSearchParameters({
-        currentSearchParameters: this.originalConfig,
         uiState: this.originalUIState,
+        currentSearchParameters,
       }),
     };
   }
