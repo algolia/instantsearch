@@ -155,7 +155,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
 
     // Init the widget directly if instantsearch has been already started
     if (this.started && Boolean(widgets.length)) {
-      this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+      this.searchParameters = this.widgets.reduce(enhanceConfiguration(), {
         ...this.helper.state,
       });
 
@@ -227,7 +227,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+        this.searchParameters = this.widgets.reduce(enhanceConfiguration(), {
           ...nextState,
         });
 
@@ -273,8 +273,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       );
     }
 
-    let searchParametersFromUrl;
-
     if (this.routing) {
       const routingManager = new RoutingManager({
         ...this.routing,
@@ -293,7 +291,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     }
 
     this.searchParameters = this.widgets.reduce(
-      enhanceConfiguration(searchParametersFromUrl),
+      enhanceConfiguration(),
       this.searchParameters
     );
 
@@ -426,14 +424,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
   }
 }
 
-export function enhanceConfiguration(searchParametersFromUrl) {
+export function enhanceConfiguration() {
   return (configuration, widgetDefinition) => {
     if (!widgetDefinition.getConfiguration) return configuration;
 
     // Get the relevant partial configuration asked by the widget
     const partialConfiguration = widgetDefinition.getConfiguration(
-      configuration,
-      searchParametersFromUrl
+      configuration
     );
 
     const customizer = (a, b) => {

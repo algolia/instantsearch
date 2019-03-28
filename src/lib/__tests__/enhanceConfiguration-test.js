@@ -33,14 +33,11 @@ describe('enhanceConfiguration', () => {
     const widget = { getConfiguration: jest.fn() };
 
     const configuration = {};
-    const searchParametersFromUrl = {};
-    enhanceConfiguration(searchParametersFromUrl)(configuration, widget);
+
+    enhanceConfiguration()(configuration, widget);
 
     expect(widget.getConfiguration).toHaveBeenCalled();
-    expect(widget.getConfiguration).toHaveBeenCalledWith(
-      configuration,
-      searchParametersFromUrl
-    );
+    expect(widget.getConfiguration).toHaveBeenCalledWith(configuration);
   });
 
   it('should replace boolean values', () => {
