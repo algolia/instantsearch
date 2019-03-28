@@ -27,6 +27,32 @@ const createFakeStateMapping = (args = {}) => ({
   ...args,
 });
 
+const createFakeHistory = ({
+  index = -1,
+  entries = [],
+  listeners = [],
+} = {}) => {
+  const state = {
+    index,
+    entries,
+    listeners,
+  };
+
+  return {
+    subscribe(listener) {
+      state.listeners.push(listener);
+    },
+    push(value) {
+      state.entries.push(value);
+      state.index++;
+    },
+    back() {
+      state.index--;
+      listeners.forEach(listener => listener(state.entries[state.index]));
+    },
+  };
+};
+
 const createFakeSearchBox = () => ({
   render({ helper }) {
     this.refine = value => {
@@ -459,6 +485,74 @@ describe('RoutingManager', () => {
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
         query: 'Apple iPhone',
+      });
+    });
+
+    test('should keep the UI state up to date on router.update', async () => {
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const history = createFakeHistory();
+      const router = createFakeRouter({
+        onUpdate(fn) {
+          history.subscribe(state => {
+            fn(state);
+          });
+        },
+        write: jest.fn(state => {
+          history.push(state);
+        }),
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient,
+        routing: {
+          router,
+          stateMapping,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
+
+      search.addWidget(fakeSearchBox);
+      search.addWidget(fakeHitsPerPage);
+
+      search.start();
+
+      await runAllMicroTasks();
+
+      // Trigger an update - push a change
+      fakeSearchBox.refine('Apple');
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
+      });
+
+      // Trigger an update - push a change
+      fakeSearchBox.refine('Apple iPhone');
+
+      expect(router.write).toHaveBeenCalledTimes(2);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple iPhone',
+      });
+
+      await runAllMicroTasks();
+
+      // Trigger an update - Apple iPhone → Apple
+      history.back();
+
+      await runAllMicroTasks();
+
+      // Trigger getConfigurartion
+      search.removeWidget(fakeHitsPerPage);
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(3);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
       });
     });
   });
