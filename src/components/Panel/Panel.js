@@ -1,47 +1,98 @@
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';
 
-const Panel = ({ cssClasses, hidden, templateProps, data, onRef }) => (
-  <div
-    className={cx(cssClasses.root, {
-      [cssClasses.noRefinementRoot]: hidden,
-    })}
-    hidden={hidden}
-  >
-    {templateProps.templates.header && (
-      <Template
-        {...templateProps}
-        templateKey="header"
-        rootProps={{
-          className: cssClasses.header,
-        }}
-        data={data}
-      />
-    )}
+class Panel extends Component {
+  state = {
+    collapsed: this.props.collapsed,
+    controlled: false,
+  };
 
-    <div className={cssClasses.body} ref={onRef} />
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.controlled && nextProps.collapsed !== prevState.collapsed) {
+      return {
+        collapsed: nextProps.collapsed,
+      };
+    }
 
-    {templateProps.templates.footer && (
-      <Template
-        {...templateProps}
-        templateKey="footer"
-        rootProps={{
-          className: cssClasses.footer,
-        }}
-        data={data}
-      />
-    )}
-  </div>
-);
+    return null;
+  }
+
+  componentDidMount() {
+    this.bodyRef.appendChild(this.props.bodyElement);
+  }
+
+  render() {
+    const { cssClasses, hidden, collapsible, templateProps, data } = this.props;
+
+    return (
+      <div
+        className={cx(cssClasses.root, {
+          [cssClasses.noRefinementRoot]: hidden,
+          [cssClasses.collapsibleRoot]: collapsible,
+          [cssClasses.collapsedRoot]: this.state.collapsed,
+        })}
+        hidden={hidden}
+      >
+        {templateProps.templates.header && (
+          <div className={cssClasses.header}>
+            <Template
+              {...templateProps}
+              templateKey="header"
+              rootTagName="span"
+              data={data}
+            />
+
+            {collapsible && (
+              <button
+                className={cssClasses.collapseButton}
+                aria-expanded={!this.state.collapsed}
+                onClick={event => {
+                  event.preventDefault();
+
+                  this.setState(previousState => ({
+                    controlled: true,
+                    collapsed: !previousState.collapsed,
+                  }));
+                }}
+              >
+                <Template
+                  {...templateProps}
+                  templateKey="collapseButtonText"
+                  rootTagName="span"
+                  data={{ collapsed: this.state.collapsed }}
+                />
+              </button>
+            )}
+          </div>
+        )}
+
+        <div className={cssClasses.body} ref={node => (this.bodyRef = node)} />
+
+        {templateProps.templates.footer && (
+          <Template
+            {...templateProps}
+            templateKey="footer"
+            rootProps={{
+              className: cssClasses.footer,
+            }}
+            data={data}
+          />
+        )}
+      </div>
+    );
+  }
+}
 
 Panel.propTypes = {
-  // Prop to get the panel body reference to insert the widget
-  onRef: PropTypes.func,
+  bodyElement: PropTypes.instanceOf(Element).isRequired,
   cssClasses: PropTypes.shape({
     root: PropTypes.string.isRequired,
     noRefinementRoot: PropTypes.string.isRequired,
+    collapsibleRoot: PropTypes.string.isRequired,
+    collapsedRoot: PropTypes.string.isRequired,
+    collapseButton: PropTypes.string.isRequired,
     body: PropTypes.string.isRequired,
     header: PropTypes.string.isRequired,
     footer: PropTypes.string.isRequired,
@@ -50,6 +101,8 @@ Panel.propTypes = {
     templates: PropTypes.object.isRequired,
   }).isRequired,
   hidden: PropTypes.bool.isRequired,
+  collapsed: PropTypes.bool.isRequired,
+  collapsible: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
 };
 
