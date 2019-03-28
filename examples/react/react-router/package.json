@@ -11,15 +11,15 @@
   "devDependencies": {
     "history": "4.9.0",
     "react-scripts": "2.1.8",
-    "react-test-renderer": "16.8.5"
+    "react-test-renderer": "16.8.6"
   },
   "dependencies": {
     "instantsearch.css": "7.1.1",
     "lodash": "4.17.11",
     "prop-types": "15.6.0",
     "qs": "6.7.0",
-    "react": "16.8.5",
-    "react-dom": "16.8.5",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "react-instantsearch-dom": "5.4.0",
     "react-router-dom": "5.0.0"
   },

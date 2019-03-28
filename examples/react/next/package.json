@@ -14,15 +14,15 @@
     "babel-jest": "23.6.0",
     "css-loader": "2.1.1",
     "jest": "23.6.0",
-    "react-test-renderer": "16.8.5",
+    "react-test-renderer": "16.8.6",
     "style-loader": "0.23.1"
   },
   "dependencies": {
     "next": "8.0.3",
     "prop-types": "15.6.2",
     "qs": "6.7.0",
-    "react": "16.8.5",
-    "react-dom": "16.8.5",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "react-instantsearch-dom": "5.4.0"
   }
 }
