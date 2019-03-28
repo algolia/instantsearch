@@ -241,12 +241,9 @@ describe('RoutingManager', () => {
   describe('within instantsearch', () => {
     test('should write in the router on searchParameters change', done => {
       const searchClient = createFakeSearchClient();
-
-      const router = {
+      const router = createFakeRouter({
         write: jest.fn(),
-        read: jest.fn(),
-        onUpdate: () => {},
-      };
+      });
 
       const search = instantsearch({
         indexName: 'instant_search',
@@ -290,13 +287,11 @@ describe('RoutingManager', () => {
       const searchClient = createFakeSearchClient();
 
       let onRouterUpdateCallback;
-      const router = {
-        write: jest.fn(),
-        read: jest.fn(() => ({})),
+      const router = createFakeRouter({
         onUpdate: fn => {
           onRouterUpdateCallback = fn;
         },
-      };
+      });
 
       const search = instantsearch({
         indexName: 'instant_search',
@@ -338,11 +333,9 @@ describe('RoutingManager', () => {
     test('should apply state mapping on differences after searchfunction', done => {
       const searchClient = createFakeSearchClient();
 
-      const router = {
+      const router = createFakeRouter({
         write: jest.fn(),
-        read: jest.fn(() => ({})),
-        onUpdate: jest.fn(),
-      };
+      });
 
       const stateMapping = {
         stateToRoute(uiState) {
