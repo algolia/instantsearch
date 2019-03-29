@@ -84,23 +84,6 @@ export default function voiceSearchHelper({
       });
     };
 
-    // [
-    //   'audiostart',
-    //   'soundstart',
-    //   'speechstart',
-    //   'speechend',
-    //   'soundend',
-    //   'audioend',
-    //   'result',
-    //   'nomatch',
-    //   'error',
-    //   'start',
-    //   'end',
-    // ].forEach(event => {
-    //   recognition.addEventListener(event, e => {
-    //     console.log(`# ${event}`, e);
-    //   });
-    // });
     recognition.start();
   };
 
