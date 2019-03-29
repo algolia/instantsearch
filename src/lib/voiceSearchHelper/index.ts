@@ -5,17 +5,26 @@ const STATUS_RECOGNIZING = 'recognizing';
 const STATUS_FINISHED = 'finished';
 const STATUS_ERROR = 'error';
 
-export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
+type VoiceSearchHelperParams = {
+  onQueryChange: (query: string) => any;
+  onStateChange: () => any;
+};
+
+export default function voiceSearchHelper({
+  onQueryChange,
+  onStateChange,
+}: VoiceSearchHelperParams) {
   const SpeechRecognition =
-    window.webkitSpeechRecognition || window.SpeechRecognition;
-  const defaultState = status => ({
+    (window as any).webkitSpeechRecognition ||
+    (window as any).SpeechRecognition;
+  const defaultState = (status: string) => ({
     status,
     transcript: '',
     isSpeechFinal: undefined,
     errorCode: undefined,
   });
   let state = defaultState(STATUS_INITIAL);
-  let recognition;
+  let recognition: any;
 
   const isSupportedBrowser = () =>
     'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
@@ -44,7 +53,7 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
     resetState();
   };
 
-  const start = searchAsYouSpeak => {
+  const start = (searchAsYouSpeak: boolean) => {
     resetState(STATUS_ASKING_PERMISSION);
     recognition = new SpeechRecognition();
     recognition.interimResults = true;
@@ -56,10 +65,10 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
         setState({ status: STATUS_FINISHED });
       }
     };
-    recognition.onerror = e => {
+    recognition.onerror = (e: any) => {
       setState({ status: STATUS_ERROR, errorCode: e.error });
     };
-    recognition.onresult = e => {
+    recognition.onresult = (e: any) => {
       setState({
         status: STATUS_RECOGNIZING,
         transcript: e.results[0][0].transcript,
@@ -95,7 +104,7 @@ export default function voiceSearchHelper({ onQueryChange, onStateChange }) {
     recognition.start();
   };
 
-  const toggle = searchAsYouSpeak => {
+  const toggle = (searchAsYouSpeak: boolean) => {
     if (isListening()) {
       stop();
     } else {

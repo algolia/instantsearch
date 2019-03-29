@@ -12,17 +12,49 @@ import defaultTemplates from './defaultTemplates';
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
 
+export type VoiceSearchCSSClasses = {
+  root: string;
+  button: string;
+  status: string;
+};
+
+export type VoiceSearchTemplates = {
+  buttonText: string | Function;
+  status: string | Function;
+};
+
+export type VoiceListeningState = {
+  status: string;
+  transcript?: string;
+  isSpeechFinal?: boolean;
+  errorCode?: string;
+};
+
+type VoiceSearchWidgetParams = {
+  container: string | HTMLElement;
+  cssClasses: VoiceSearchCSSClasses;
+  templates: VoiceSearchTemplates;
+  searchAsYouSpeak?: boolean;
+};
+
+type VoiceSearchWidgetRenderParams = {
+  isSupportedBrowser: Function;
+  isListening: Function;
+  toggleListening: Function;
+  voiceListeningState: VoiceListeningState;
+};
+
 const renderer = ({
-  containerNode,
+  container,
   cssClasses,
   templates,
   searchAsYouSpeak,
-}) => ({
+}: VoiceSearchWidgetParams) => ({
   isSupportedBrowser,
   isListening,
   toggleListening,
   voiceListeningState,
-}) => {
+}: VoiceSearchWidgetRenderParams) => {
   render(
     <VoiceSearch
       cssClasses={cssClasses}
@@ -33,16 +65,18 @@ const renderer = ({
       voiceListeningState={voiceListeningState}
       searchAsYouSpeak={searchAsYouSpeak}
     />,
-    containerNode
+    container
   );
 };
 
-export default function voiceSearch({
-  container,
-  cssClasses: userCssClasses = {},
-  templates,
-  searchAsYouSpeak,
-} = {}) {
+export default function voiceSearch(
+  {
+    container,
+    cssClasses: userCssClasses = {} as VoiceSearchCSSClasses,
+    templates,
+    searchAsYouSpeak,
+  } = {} as VoiceSearchWidgetParams
+) {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -56,7 +90,7 @@ export default function voiceSearch({
   };
 
   const specializedRenderer = renderer({
-    containerNode,
+    container: containerNode,
     cssClasses,
     templates: { ...defaultTemplates, ...templates },
     searchAsYouSpeak,
@@ -66,5 +100,5 @@ export default function voiceSearch({
     unmountComponentAtNode(containerNode)
   );
 
-  return makeWidget();
+  return makeWidget({});
 }

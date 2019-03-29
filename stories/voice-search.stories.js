@@ -66,7 +66,7 @@ storiesOf('VoiceSearch', module)
     })
   )
   .add(
-    'display status',
+    'with full status',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.voiceSearch({
