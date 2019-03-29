@@ -155,7 +155,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
 
     // Init the widget directly if instantsearch has been already started
     if (this.started && Boolean(widgets.length)) {
-      this.searchParameters = this.widgets.reduce(enhanceConfiguration(), {
+      this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
         ...this.helper.state,
       });
 
@@ -227,7 +227,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        this.searchParameters = this.widgets.reduce(enhanceConfiguration(), {
+        this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
           ...nextState,
         });
 
@@ -291,7 +291,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     }
 
     this.searchParameters = this.widgets.reduce(
-      enhanceConfiguration(),
+      enhanceConfiguration,
       this.searchParameters
     );
 
@@ -424,31 +424,29 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
   }
 }
 
-export function enhanceConfiguration() {
-  return (configuration, widgetDefinition) => {
-    if (!widgetDefinition.getConfiguration) return configuration;
+export function enhanceConfiguration(configuration, widgetDefinition) {
+  if (!widgetDefinition.getConfiguration) {
+    return configuration;
+  }
 
-    // Get the relevant partial configuration asked by the widget
-    const partialConfiguration = widgetDefinition.getConfiguration(
-      configuration
-    );
+  // Get the relevant partial configuration asked by the widget
+  const partialConfiguration = widgetDefinition.getConfiguration(configuration);
 
-    const customizer = (a, b) => {
-      // always create a unified array for facets refinements
-      if (Array.isArray(a)) {
-        return union(a, b);
-      }
+  const customizer = (a, b) => {
+    // always create a unified array for facets refinements
+    if (Array.isArray(a)) {
+      return union(a, b);
+    }
 
-      // avoid mutating objects
-      if (isPlainObject(a)) {
-        return mergeWith({}, a, b, customizer);
-      }
+    // avoid mutating objects
+    if (isPlainObject(a)) {
+      return mergeWith({}, a, b, customizer);
+    }
 
-      return undefined;
-    };
-
-    return mergeWith({}, configuration, partialConfiguration, customizer);
+    return undefined;
   };
+
+  return mergeWith({}, configuration, partialConfiguration, customizer);
 }
 
 export default InstantSearch;
