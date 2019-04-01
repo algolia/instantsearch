@@ -57,6 +57,10 @@ export class Index {
   public getWidgetState() {
     // avoid to throw
   }
+
+  public getWidgetSearchParameters() {
+    // avoid to throw
+  }
 }
 
 const createIndex = (args: IndexArgs) => new Index(args);

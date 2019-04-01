@@ -174,7 +174,7 @@ export default class RoutingManager {
   getAllSearchParameters({ uiState }) {
     const loop = (states, node) => {
       return node.widgets
-        .filter(w => Boolean(w.getWidgetState))
+        .filter(w => Boolean(w.getWidgetSearchParameters))
         .reduce((innerStates, w) => {
           if (w.$$type === Symbol.for('ais.index')) {
             return {
