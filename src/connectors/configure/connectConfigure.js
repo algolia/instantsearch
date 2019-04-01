@@ -39,9 +39,9 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
     return {
       $$type: Symbol.for('ais.configure'),
 
-      getConfiguration() {
-        return widgetParams.searchParameters;
-      },
+      // getConfiguration() {
+      //   return widgetParams.searchParameters;
+      // },
 
       init({ helper }) {
         this._refine = this.refine(helper);
@@ -98,6 +98,12 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
             delete mutableState[key];
           });
         });
+      },
+
+      getWidgetSearchParameters(searchParameters) {
+        return searchParameters.setQueryParameters(
+          widgetParams.searchParameters
+        );
       },
     };
   };
