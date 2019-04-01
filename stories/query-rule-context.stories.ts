@@ -22,8 +22,8 @@ storiesOf('QueryRuleContext', module)
       const widgetContainer = document.createElement('div');
       const description = document.createElement('ul');
       description.innerHTML = `
-        <li>Select the "Drama" category and The Shawshank Redemption appears</li>
-        <li>Select the "Thriller" category and Pulp Fiction appears</li>
+        <li>On empty query, select the "Drama" category and The Shawshank Redemption appears</li>
+        <li>On empty query, select the "Thriller" category and Pulp Fiction appears</li>
         <li>Type <q>music</q> and a banner will appear.</li>
       `;
 
