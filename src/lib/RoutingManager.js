@@ -137,6 +137,8 @@ export default class RoutingManager {
       const route = this.stateMapping.stateToRoute(uiState);
       this.router.write(route);
     };
+
+    // Register the callback on the full tree???
     helper.on('change', this.renderURLFromState);
 
     // Compare initial state and post first render state, in order
@@ -244,6 +246,7 @@ export default class RoutingManager {
           // correct node. It would avoid some `if` and it maybe simplify
           // a bit the logic.
           const nodeUiState =
+            // Avoid the `indices` always self-contained
             (innerUiState.indices && innerUiState.indices[node.indexId]) || {};
 
           return {
@@ -314,6 +317,17 @@ export default class RoutingManager {
     };
 
     return loop(this.instantSearchInstance.tree, parameters);
+  }
+
+  createURL(state) {
+    // We can get the node to apply the state on it. The tricky part
+    // is to not mutate the tree. Which means that we have to create
+    // an alternative tree for this.... Not the best option but that
+    // would work.
+    const uiState = this.getAllUIStates({ searchParameters: state });
+    const route = this.stateMapping.stateToRoute(uiState);
+
+    return this.router.createURL(route);
   }
 
   // This lifecycle is not used anymore in the codebase. The place

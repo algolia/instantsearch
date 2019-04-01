@@ -612,6 +612,10 @@ class InstantSearch extends EventEmitter {
             state: node.helper.getState(),
             helper: node.helper,
             templatesConfig: this.templatesConfig,
+            // We can wrap the createURL function with the node at this level
+            // which means that inside the router we're able to find which node
+            // is impacted. That last part is to avoid to mutate the current
+            // tree.
             createURL: this._createAbsoluteURL,
             onHistoryChange: this._onHistoryChange,
             instantSearchInstance: this,
