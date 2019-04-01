@@ -80,11 +80,11 @@ export default function connectSearchBox(renderFn, unmountFn) {
     return {
       $$type: Symbol.for('ais.searchBox'),
 
-      getConfiguration({ query = '' }) {
-        return {
-          query,
-        };
-      },
+      // getConfiguration({ query = '' }) {
+      //   return {
+      //     query,
+      //   };
+      // },
 
       init({ helper, onHistoryChange, instantSearchInstance }) {
         this._cachedClear = this._cachedClear.bind(this);
@@ -164,7 +164,11 @@ export default function connectSearchBox(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
+        // return searchParameters.setQuery(uiState.query || '');
+
+        return searchParameters.setQuery(
+          searchParameters.query || uiState.query || ''
+        );
       },
 
       _clear() {},
