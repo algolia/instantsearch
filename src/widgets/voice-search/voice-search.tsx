@@ -8,6 +8,7 @@ import { component } from '../../lib/suit';
 import connectVoiceSearch from '../../connectors/voice-search/connectVoiceSearch';
 import VoiceSearch from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
+import { Template } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
@@ -19,8 +20,8 @@ export type VoiceSearchCSSClasses = {
 };
 
 export type VoiceSearchTemplates = {
-  buttonText: string | Function;
-  status: string | Function;
+  buttonText: Template;
+  status: Template;
 };
 
 export type VoiceListeningState = {
@@ -38,9 +39,9 @@ type VoiceSearchWidgetParams = {
 };
 
 type VoiceSearchWidgetRenderParams = {
-  isSupportedBrowser: Function;
-  isListening: Function;
-  toggleListening: Function;
+  isSupportedBrowser: () => boolean;
+  isListening: () => boolean;
+  toggleListening: (searchAsYouSpeak: boolean) => void;
   voiceListeningState: VoiceListeningState;
 };
 

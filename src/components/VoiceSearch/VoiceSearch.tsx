@@ -10,11 +10,11 @@ import {
 
 type VoiceSearchProps = {
   cssClasses: VoiceSearchCSSClasses;
-  isSupportedBrowser: Function;
-  isListening: Function;
-  toggleListening: Function;
+  isSupportedBrowser: () => boolean;
+  isListening: () => boolean;
+  toggleListening: (searchAsYouSpeak: boolean) => void;
   voiceListeningState: VoiceListeningState;
-  searchAsYouSpeak?: boolean;
+  searchAsYouSpeak: boolean;
   templates: VoiceSearchTemplates;
 };
 
@@ -32,7 +32,7 @@ const VoiceSearch = ({
     toggleListening(searchAsYouSpeak);
   };
 
-  const _isListening = isListening();
+  const listening = isListening();
   const { status, transcript, isSpeechFinal, errorCode } = voiceListeningState;
   return (
     <div className={cssClasses.root}>
@@ -49,7 +49,7 @@ const VoiceSearch = ({
         data={{
           status,
           errorCode,
-          isListening: _isListening,
+          isListening: listening,
           transcript,
           isSpeechFinal,
         }}
@@ -64,7 +64,7 @@ const VoiceSearch = ({
         data={{
           status,
           errorCode,
-          isListening: _isListening,
+          isListening: listening,
           transcript,
           isSpeechFinal,
         }}

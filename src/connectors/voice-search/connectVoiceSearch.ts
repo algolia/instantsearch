@@ -13,9 +13,9 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export interface VoiceSearchRenderOptions extends RenderOptions {
-  isSupportedBrowser: Function;
-  isListening: Function;
-  toggleListening: Function;
+  isSupportedBrowser: () => boolean;
+  isListening: () => boolean;
+  toggleListening: (searchAsYouSpeak: boolean) => void;
   voiceListeningState: VoiceListeningState;
 }
 
