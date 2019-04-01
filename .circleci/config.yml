@@ -66,7 +66,7 @@ jobs:
       - save_cache: *save_yarn_cache
       - run:
           name: Unit tests
-          command: yarn run test
+          command: yarn run test --maxWorkers=4
 
   test_functional:
     <<: *defaults
