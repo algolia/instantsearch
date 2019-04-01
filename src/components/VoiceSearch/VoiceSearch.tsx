@@ -33,6 +33,7 @@ const VoiceSearch = ({
   };
 
   const listening = isListening();
+  const supportedBrowser = isSupportedBrowser();
   const { status, transcript, isSpeechFinal, errorCode } = voiceListeningState;
   return (
     <div className={cssClasses.root}>
@@ -44,7 +45,7 @@ const VoiceSearch = ({
           type: 'button',
           title: 'Search by voice',
           onClick: handleClick,
-          disabled: !isSupportedBrowser(),
+          disabled: !supportedBrowser,
         }}
         data={{
           status,
@@ -52,6 +53,7 @@ const VoiceSearch = ({
           isListening: listening,
           transcript,
           isSpeechFinal,
+          isSupportedBrowser: supportedBrowser,
         }}
         templates={templates}
       />
@@ -67,6 +69,7 @@ const VoiceSearch = ({
           isListening: listening,
           transcript,
           isSpeechFinal,
+          isSupportedBrowser: supportedBrowser,
         }}
         templates={templates}
       />

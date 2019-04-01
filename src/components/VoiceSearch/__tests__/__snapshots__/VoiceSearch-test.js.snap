@@ -47,7 +47,7 @@ exports[`VoiceSearch Rendering with full props and custom templates 1`] = `
     className="status"
     dangerouslySetInnerHTML={
       Object {
-        "__html": "<p>status: recognizing</p> <p>errorCode: </p> <p>isListening: true</p> <p>transcript: Hello</p> <p>isSpeechFinal: false</p>",
+        "__html": "<p>status: recognizing</p> <p>errorCode: </p> <p>isListening: true</p> <p>transcript: Hello</p> <p>isSpeechFinal: false</p> <p>isSupportedBrowser: true</p>",
       }
     }
   />

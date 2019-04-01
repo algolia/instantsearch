@@ -78,6 +78,7 @@ storiesOf('VoiceSearch', module)
               <p>isListening: {{isListening}}</p>
               <p>transcript: {{transcript}}</p>
               <p>isSpeechFinal: {{isSpeechFinal}}</p>
+              <p>isSupportedBrowser: {{isSupportedBrowser}}</p>
             `,
           },
         })
@@ -98,6 +99,7 @@ storiesOf('VoiceSearch', module)
               <p>isListening: {{isListening}}</p>
               <p>transcript: {{transcript}}</p>
               <p>isSpeechFinal: {{isSpeechFinal}}</p>
+              <p>isSupportedBrowser: {{isSupportedBrowser}}</p>
           `,
           },
         })
