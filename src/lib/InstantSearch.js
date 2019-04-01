@@ -244,6 +244,29 @@ class InstantSearch extends EventEmitter {
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
+
+    if (this.routing) {
+      this.routingManager = new RoutingManager({
+        ...this.routing,
+        instantSearchInstance: this,
+      });
+
+      this._onHistoryChange = function() {};
+      // this._onHistoryChange = routingManager.onHistoryChange.bind(
+      //   routingManager
+      // );
+      this._createURL = this.routingManager.createURL.bind(this.routingManager);
+      this._createAbsoluteURL = this._createURL;
+
+      this.tree.widgets.push(this.routingManager);
+
+      // Get the UI state from the router
+      this.uiState = this.routingManager.getUiStateFromRouter();
+    } else {
+      this._createURL = defaultCreateURL;
+      this._createAbsoluteURL = defaultCreateURL;
+      this._onHistoryChange = function() {};
+    }
   }
 
   addWidget(widget) {
@@ -292,14 +315,23 @@ class InstantSearch extends EventEmitter {
 
         current.widgets.push(widget);
 
+        const previousState = current.helper.getState();
+        const nextState =
+          widget.getWidgetSearchParameters(previousState, {
+            uiState:
+              (this.uiState.indices && this.uiState.indices[current.indexId]) ||
+              this.uiState,
+          }) || previousState;
+
         current.helper.setState(
           // @TODO: replace the `enhanceConfiguration`
-          enhanceConfiguration()(
-            {
-              ...current.helper.getState(),
-            },
-            widget
-          )
+          // enhanceConfiguration()(
+          //   {
+          //     ...current.helper.getState(),
+          //   },
+          //   widget
+          // )
+          nextState
         );
 
         if (this.started && widget.init) {
@@ -485,36 +517,36 @@ class InstantSearch extends EventEmitter {
   start() {
     if (this.started) throw new Error('start() has been already called once');
 
-    if (this.routing) {
-      this.routingManager = new RoutingManager({
-        ...this.routing,
-        instantSearchInstance: this,
-      });
+    // if (this.routing) {
+    //   this.routingManager = new RoutingManager({
+    //     ...this.routing,
+    //     instantSearchInstance: this,
+    //   });
 
-      this._onHistoryChange = function() {};
-      // this._onHistoryChange = routingManager.onHistoryChange.bind(
-      //   routingManager
-      // );
-      this._createURL = this.routingManager.createURL.bind(this.routingManager);
-      this._createAbsoluteURL = this._createURL;
+    //   this._onHistoryChange = function() {};
+    //   // this._onHistoryChange = routingManager.onHistoryChange.bind(
+    //   //   routingManager
+    //   // );
+    //   this._createURL = this.routingManager.createURL.bind(this.routingManager);
+    //   this._createAbsoluteURL = this._createURL;
 
-      this.tree.widgets.push(this.routingManager);
+    //   this.tree.widgets.push(this.routingManager);
 
-      // Get the UI state from the router
-      const uiState = this.routingManager.getUiStateFromRouter();
+    //   // Get the UI state from the router
+    //   const uiState = this.routingManager.getUiStateFromRouter();
 
-      // Get the SearchParamters from the uiState
-      const parameters = this.routingManager.getAllSearchParameters({
-        uiState,
-      });
+    //   // Get the SearchParamters from the uiState
+    //   const parameters = this.routingManager.getAllSearchParameters({
+    //     uiState,
+    //   });
 
-      // Apply the SearchParamters on the instance
-      this.routingManager.applySearchParameters(parameters);
-    } else {
-      this._createURL = defaultCreateURL;
-      this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = function() {};
-    }
+    //   // Apply the SearchParamters on the instance
+    //   this.routingManager.applySearchParameters(parameters);
+    // } else {
+    //   this._createURL = defaultCreateURL;
+    //   this._createAbsoluteURL = defaultCreateURL;
+    //   this._onHistoryChange = function() {};
+    // }
 
     // if (this._searchFunction) {
     //   this._mainHelperSearch = helper.search.bind(helper);

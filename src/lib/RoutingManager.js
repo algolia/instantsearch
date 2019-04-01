@@ -1,4 +1,5 @@
 // import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper from './stateManager';
 import isEqual from 'lodash/isEqual';
 import zip from 'lodash/zip';
 
@@ -185,7 +186,9 @@ export default class RoutingManager {
                 ...innerStates.children,
                 loop(
                   {
-                    state: w.node.helper.getState(),
+                    state: new algoliasearchHelper.SearchParameters({
+                      index: w.node.helper.state.index,
+                    }),
                     children: [],
                   },
                   w.node
@@ -218,7 +221,9 @@ export default class RoutingManager {
 
     return loop(
       {
-        state: this.instantSearchInstance.tree.helper.getState(),
+        state: new algoliasearchHelper.SearchParameters({
+          index: this.instantSearchInstance.tree.helper.state.index,
+        }),
         children: [],
       },
       this.instantSearchInstance.tree
