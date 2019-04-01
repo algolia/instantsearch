@@ -10,7 +10,9 @@
 
 ---
 
-[![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url]
+[![Version][version-svg]][package-url]
+[![License][license-image]][license-url]
+[![Build Status][ci-svg]][ci-url]
 
 InstantSearch.js is a vanilla JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
 
