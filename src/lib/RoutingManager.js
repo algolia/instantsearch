@@ -23,7 +23,7 @@ export default class RoutingManager {
 
   getConfiguration(currentConfiguration) {
     // We have to create a `SearchParameters` because `getAllSearchParameters`
-    // expect an instance of `SearchParameters` and not a plain object.
+    // expects an instance of `SearchParameters` and not a plain object.
     const currentSearchParameters = algoliasearchHelper.SearchParameters.make(
       currentConfiguration
     );
