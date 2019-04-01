@@ -21,7 +21,7 @@ aliases:
     command: yarn install
 
 defaults: &defaults
-  working_directory: ~/vue-instantsearch
+  working_directory: ~/instantsearch.js
   docker:
     - image: circleci/node:8.15.1@sha256:3d32b8457083c33c04eb60fac02c0e39de5bd28de4b95393d7dcb5aa37b20af7
 
