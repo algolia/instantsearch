@@ -1,12 +1,57 @@
 import find from 'lodash/find';
 import get from 'lodash/get';
 import forEach from 'lodash/forEach';
+import { HelperState, SearchResults } from '../../types';
 import unescapeRefinement from './unescapeRefinement';
 
-function getRefinement(state, type, attributeName, name, resultsFacets) {
-  const res = { type, attributeName, name };
-  let facet = find(resultsFacets, { name: attributeName });
-  let count;
+export interface FacetRefinement {
+  type:
+    | 'facet'
+    | 'exclude'
+    | 'disjunctive'
+    | 'hierarchical'
+    | 'numeric'
+    | 'tag'
+    | 'query';
+  attributeName: string;
+  name: string;
+  count?: number;
+  exhaustive?: boolean;
+}
+
+export interface QueryRefinement
+  extends Pick<FacetRefinement, 'type' | 'attributeName' | 'name'> {
+  type: 'query';
+  query: string;
+}
+
+export interface NumericRefinement extends FacetRefinement {
+  type: 'numeric';
+  numericValue: number;
+  operator: '<' | '<=' | '=' | '>=' | '>';
+}
+
+export interface FacetExcludeRefinement extends FacetRefinement {
+  type: 'exclude';
+  exclude: boolean;
+}
+
+export type Refinement =
+  | FacetRefinement
+  | QueryRefinement
+  | NumericRefinement
+  | FacetExcludeRefinement;
+
+function getRefinement(
+  state: HelperState,
+  type: Refinement['type'],
+  attributeName: Refinement['attributeName'],
+  name: Refinement['name'],
+  resultsFacets: string[]
+): Refinement {
+  const res: Refinement = { type, attributeName, name };
+  let facet: any = find(resultsFacets, { name: attributeName });
+  let count: number;
 
   if (type === 'hierarchical') {
     const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
@@ -34,8 +79,12 @@ function getRefinement(state, type, attributeName, name, resultsFacets) {
   return res;
 }
 
-function getRefinements(results, state, clearsQuery) {
-  const res = [];
+function getRefinements(
+  results: SearchResults,
+  state: HelperState,
+  clearsQuery: boolean = false
+): Refinement[] {
+  const res: Refinement[] = [];
 
   forEach(state.facetsRefinements, (refinements, attributeName) => {
     forEach(refinements, name => {

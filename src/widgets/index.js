@@ -40,3 +40,6 @@ export { default as panel } from './panel/panel';
 export {
   default as queryRuleCustomData,
 } from './query-rule-custom-data/query-rule-custom-data';
+export {
+  default as queryRuleContext,
+} from './query-rule-context/query-rule-context';
