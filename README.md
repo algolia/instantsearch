@@ -155,7 +155,7 @@ InstantSearch.js is [MIT licensed][license-url].
 
 [version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.js
-[ci-svg]: https://circleci.com/gh/algolia/instantsearch.js.svg?style=svg
+[ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.js.svg?style=flat-square
 [ci-url]: https://circleci.com/gh/algolia/instantsearch.js
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
