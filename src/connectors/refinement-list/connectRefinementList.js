@@ -288,20 +288,20 @@ export default function connectRefinementList(renderFn, unmountFn) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      getConfiguration: (configuration = {}) => {
-        const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
-        };
+      // getConfiguration: (configuration = {}) => {
+      //   const widgetConfiguration = {
+      //     [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
+      //   };
 
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      //   const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
 
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
+      //   widgetConfiguration.maxValuesPerFacet = Math.max(
+      //     currentMaxValuesPerFacet,
+      //     showMore ? showMoreLimit : limit
+      //   );
 
-        return widgetConfiguration;
-      },
+      //   return widgetConfiguration;
+      // },
 
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
@@ -408,16 +408,46 @@ export default function connectRefinementList(renderFn, unmountFn) {
         };
       },
 
+      // getConfiguration: (configuration = {}) => {
+      //   const widgetConfiguration = {
+      //     [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
+      //   };
+
+      //   const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+
+      //   widgetConfiguration.maxValuesPerFacet = Math.max(
+      //     currentMaxValuesPerFacet,
+      //     showMore ? showMoreLimit : limit
+      //   );
+
+      //   return widgetConfiguration;
+      // },
+
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        const isDisjunctiveFacet = operator === 'or';
+        const searchParametersWithFacet = isDisjunctiveFacet
+          ? searchParameters.addDisjunctiveFacet(attribute)
+          : searchParameters.addFacet(attribute);
+
+        const maxValuesPerFacet = searchParameters.maxValuesPerFacet || 0;
+        const searchParametersWithMaxValuesPerPacet = searchParametersWithFacet.setQueryParameter(
+          'maxValuesPerFacet',
+          Math.max(maxValuesPerFacet, showMore ? showMoreLimit : limit)
+        );
+
         const values =
           uiState.refinementList && uiState.refinementList[attribute];
-        if (values === undefined) return searchParameters;
+
+        if (!values) {
+          return searchParametersWithMaxValuesPerPacet;
+        }
+
         return values.reduce(
-          (sp, v) =>
-            operator === 'or'
-              ? sp.addDisjunctiveFacetRefinement(attribute, v)
-              : sp.addFacetRefinement(attribute, v),
-          searchParameters.clearRefinements(attribute)
+          (parameters, v) =>
+            isDisjunctiveFacet
+              ? parameters.addDisjunctiveFacetRefinement(attribute, v)
+              : parameters.addFacetRefinement(attribute, v),
+          searchParametersWithMaxValuesPerPacet
         );
       },
     };
