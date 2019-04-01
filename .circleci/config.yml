@@ -68,22 +68,6 @@ jobs:
           name: Unit tests
           command: yarn run test --maxWorkers=4
 
-  test_functional:
-    <<: *defaults
-    steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
-      - run:
-          name: Functional tests
-          command: |
-            # TODO: reactivate this test (temporary disabled during `feat/3.0` development)
-            # INDEX_PAGE=index yarn run test:functional
-            yarn run test:argos
-
-
 workflows:
   version: 2
   ci:
@@ -91,4 +75,3 @@ workflows:
       - test_build
       - test_unit
       - test_lint
-      - test_functional
