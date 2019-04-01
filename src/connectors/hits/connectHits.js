@@ -57,9 +57,9 @@ export default function connectHits(renderFn, unmountFn) {
     return {
       $$type: Symbol.for('ais.hits'),
 
-      getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
-      },
+      // getConfiguration() {
+      //   return escapeHTML ? TAG_PLACEHOLDER : undefined;
+      // },
 
       init({ instantSearchInstance }) {
         renderFn(
@@ -93,6 +93,14 @@ export default function connectHits(renderFn, unmountFn) {
 
       dispose() {
         unmountFn();
+      },
+
+      getWidgetSearchParameters(searchParameters) {
+        if (!escapeHTML) {
+          return searchParameters;
+        }
+
+        return searchParameters.setQueryParameters(TAG_PLACEHOLDER);
       },
     };
   };
