@@ -5,6 +5,7 @@ addDecorator(
   withOptions({
     name: 'instantsearch.js',
     url: 'https://github.com/algolia/instantsearch.js',
+    showAddonPanel: false,
   })
 );
 
