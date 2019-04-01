@@ -403,14 +403,45 @@ class InstantSearch extends EventEmitter {
           // get the initial configuration search parameters for the rest of the
           // widgets e.g. two widgets were using the same configuration but we
           // removed one.
-          current.helper.setState(
+
+          // This function is useless in real life. We only use it at the moment
+          // to get the `uiState` of the node right before the the remove, since
+          // we don't store it on the `RoutingManager` in this branch.
+          const previousUiState = this.routing
+            ? this.routingManager.getUIStateForNode(current)
+            : {};
+
+          const nextWidgetsState = current.widgets.reduce(
             // @TODO: replace the `enhanceConfiguration`
-            current.widgets.reduce(enhanceConfiguration({}), {
+            enhanceConfiguration({}),
+            {
               // apply the root parameters only on the top level node
               ...(current.parent === null && this.searchParameters),
               ...nextState,
-            })
+            }
           );
+
+          let nextWidgetsStateWithRouting = nextWidgetsState;
+
+          if (this.routing) {
+            // Inside the `routing` widget we don't have the `getConfiguration`
+            // hook anymore, which means that we have to manually recreate the
+            // state on add/remove.
+            nextWidgetsStateWithRouting = this.routingManager.getSearchParametersForWidgets(
+              {
+                widgets: current.widgets,
+                parameters: algoliasearchHelper.SearchParametersWithoutDefaults.make(
+                  nextWidgetsState
+                ),
+                // This argument is useless in real life. The `routingManager`
+                // should contain the current uiState. It's not the case on
+                // that branch.
+                uiState: previousUiState,
+              }
+            );
+          }
+
+          current.helper.setState(nextWidgetsStateWithRouting);
         }
       });
 
@@ -455,28 +486,30 @@ class InstantSearch extends EventEmitter {
     if (this.started) throw new Error('start() has been already called once');
 
     if (this.routing) {
-      const routingManager = new RoutingManager({
+      this.routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
       });
+
       this._onHistoryChange = function() {};
       // this._onHistoryChange = routingManager.onHistoryChange.bind(
       //   routingManager
       // );
-      this._createURL = routingManager.createURL.bind(routingManager);
+      this._createURL = this.routingManager.createURL.bind(this.routingManager);
       this._createAbsoluteURL = this._createURL;
 
-      this.tree.widgets.push(routingManager);
+      this.tree.widgets.push(this.routingManager);
 
       // Get the UI state from the router
-      const uiState = routingManager.getUiStateFromRouter();
+      const uiState = this.routingManager.getUiStateFromRouter();
+
       // Get the SearchParamters from the uiState
-      const parameters = routingManager.getAllSearchParameters({
+      const parameters = this.routingManager.getAllSearchParameters({
         uiState,
       });
 
       // Apply the SearchParamters on the instance
-      routingManager.applySearchParameters(parameters);
+      this.routingManager.applySearchParameters(parameters);
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;

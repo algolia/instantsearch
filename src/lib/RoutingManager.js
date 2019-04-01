@@ -267,6 +267,36 @@ export default class RoutingManager {
     return this.stateMapping.routeToState(this.router.read());
   }
 
+  getSearchParametersForWidgets({ widgets, parameters, uiState }) {
+    return widgets
+      .filter(w => w.$$type !== Symbol.for('ais.index'))
+      .filter(w => Boolean(w.getWidgetSearchParameters))
+      .reduce(
+        (acc, w) =>
+          w.getWidgetSearchParameters(acc, {
+            uiState,
+          }),
+        parameters
+      );
+  }
+
+  // This function is useless in real life. We only use it at the moment to
+  // get the `uiState` of the node right before the the remove, since we don't
+  // store it on the `RoutingManager` in this branch.
+  getUIStateForNode(node) {
+    return node.widgets
+      .filter(w => w.$$type !== Symbol.for('ais.index'))
+      .filter(w => Boolean(w.getWidgetState))
+      .reduce(
+        (acc, w) =>
+          w.getWidgetState(acc, {
+            helper: node.helper,
+            searchParameters: node.helper.getState(),
+          }),
+        {}
+      );
+  }
+
   applySearchParameters(parameters) {
     const loop = (treeNode, stateNode) => {
       treeNode.helper.overrideStateWithoutTriggeringChangeEvent(
