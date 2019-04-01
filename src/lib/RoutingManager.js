@@ -9,7 +9,7 @@ export default class RoutingManager {
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
 
-    this.originalUIState = this.stateMapping.routeToState(this.router.read());
+    this.currentUIState = this.stateMapping.routeToState(this.router.read());
   }
 
   init({ state }) {
@@ -30,7 +30,7 @@ export default class RoutingManager {
 
     return {
       ...this.getAllSearchParameters({
-        uiState: this.originalUIState,
+        uiState: this.currentUIState,
         currentSearchParameters,
       }),
     };
@@ -45,18 +45,22 @@ export default class RoutingManager {
 
   setupRouting(state) {
     const { helper } = this.instantSearchInstance;
+
     this.router.onUpdate(route => {
-      const uiState = this.stateMapping.routeToState(route);
-      const currentUIState = this.getAllUIStates({
+      const nextUiState = this.stateMapping.routeToState(route);
+
+      const widgetsUIState = this.getAllUIStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(uiState, currentUIState)) return;
+      if (isEqual(nextUiState, widgetsUIState)) return;
+
+      this.currentUIState = nextUiState;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: state,
         instantSearchInstance: this.instantSearchInstance,
-        uiState,
+        uiState: this.currentUIState,
       });
 
       helper
@@ -65,27 +69,35 @@ export default class RoutingManager {
     });
 
     this.renderURLFromState = searchParameters => {
-      const uiState = this.getAllUIStates({
+      this.currentUIState = this.getAllUIStates({
         searchParameters,
       });
-      const route = this.stateMapping.stateToRoute(uiState);
+
+      const route = this.stateMapping.stateToRoute(this.currentUIState);
+
       this.router.write(route);
     };
+
     helper.on('change', this.renderURLFromState);
 
-    // Compare initial state and post first render state, in order
-    // to see if the query has been changed by a searchFunction
+    // Compare initial state and first render state, in order to see if the
+    // query has been changed by a `searchFunction`. It's required because the
+    // helper of the `searchFunction` does not trigger change event (not the
+    // same instance).
 
     const firstRenderState = this.getAllUIStates({
       searchParameters: state,
     });
 
     if (!isEqual(this.initState, firstRenderState)) {
-      // force update the URL, if the state has changed since the initial URL read
-      // We do this in order to make a URL update when there is search function
-      // that prevent the search of the initial rendering
+      // Force update the URL, if the state has changed since the initial read.
+      // We do this in order to make the URL update when there is `searchFunction`
+      // that prevent the search of the initial rendering.
       // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-      const route = this.stateMapping.stateToRoute(firstRenderState);
+      this.currentUIState = firstRenderState;
+
+      const route = this.stateMapping.stateToRoute(this.currentUIState);
+
       this.router.write(route);
     }
   }
@@ -139,22 +151,25 @@ export default class RoutingManager {
 
   onHistoryChange(fn) {
     const { helper } = this.instantSearchInstance;
+
     this.router.onUpdate(route => {
-      const uiState = this.stateMapping.routeToState(route);
-      const currentUIState = this.getAllUIStates({
+      const nextUiState = this.stateMapping.routeToState(route);
+
+      const widgetsUIState = this.getAllUIStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(uiState, currentUIState)) return;
+      if (isEqual(nextUiState, widgetsUIState)) return;
+
+      this.currentUIState = nextUiState;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: helper.state,
         instantSearchInstance: this.instantSearchInstance,
-        uiState,
+        uiState: this.currentUIState,
       });
 
       fn({ ...searchParameters });
     });
-    return;
   }
 }
