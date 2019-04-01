@@ -22,7 +22,6 @@ If this guide does not contain what you are looking for and thus prevents you fr
   - [The source folder](#the-source-folder)
 - [Tests](#tests)
   - [Unit tests](#unit-tests)
-  - [Functional tests](#functional-tests)
 - [Linting](#linting)
 - [Release](#release)
   - [Main version](#main-version)
@@ -126,7 +125,6 @@ Here are the main files and folders of the project.
 
 ```
 ▸ .storybook/         << the storybook configuration source
-▸ functional-tests/   << the functional tests
 ▸ scripts/            << the scripts for maintaining the project
 ▸ src/                << the source of the library
 ▸ stories/            << the widget stories
@@ -166,52 +164,6 @@ To run the test continuously based on what you changed (useful when developing o
 ```sh
 yarn test --watch
 ```
-
-### Functional tests
-
-We have one functional test ensuring that when we instantiate a full app with a `searchBox`, we are able to use it and get different hits than initially.
-
-Functional tests are built with [webdriver.io](http://webdriver.io/), a wrapper around [WebDriver API](https://www.w3.org/TR/2013/WD-webdriver-20130117/) (Selenium). On travis they will run on different browsers using [Sauce Labs](https://saucelabs.com/).
-
-#### Local setup
-
-Locally it will use a docker image bundling Selenium and browsers.
-
-```sh
-docker pull elgalu/selenium
-# this helps in loading the host website from the container,
-# comes from https://docs.docker.com/docker-for-mac/networking/#known-limitations-use-cases-and-workarounds
-docker run -d --name=grid -p 4444:24444 -p 6080:26080 -p 5900:25900 \
-    -e TZ="US/Pacific" -e NOVNC=true -v /dev/shm:/dev/shm --privileged elgalu/selenium
-```
-
-#### Running locally
-
-```sh
-# We want to access the host machine from the container (to reach the test app web server).
-# Needed once per session, this is not persistent:
-sudo ifconfig lo0 alias 10.200.10.1/24
-npm run test:functional
-# npm run test:functional:dev will reload tests when file changes
-# npm run test:functional:dev:debug will load the test website locally for you to open it
-# if something goes wrong: docker restart grid && killall node
-```
-
-Locally you can inspect (view) the browser doing the test here: http://localhost:6080/.
-
-#### Debugging
-
-In order to check the status of the functional tests on all the platforms we use sauce labs. The first here is to [get the credentials](https://saucelabs.com/beta/user-settings) of your sauce labs account.
-
-Running the functional tests on sauce labs:
-
-```sh
-SAUCE_USERNAME=[your login] SAUCE_ACCESS_KEY=[your api key] CI=true yarn run test:functional
-```
-
-You can then inspect the status of tests from your dashboard. Check the browsers for which tests are failing. If some are IE or Edge you can download a virtual machine image from the [Microsoft website](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/).
-
-Then you should be able debug using the dev setup: `yarn run dev` and the virtual machine. You can also run the page used for function tests using `yarn run test:functional:dev:debug-server`
 
 ## Linting
 
