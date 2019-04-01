@@ -419,7 +419,7 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      // Trigger getConfigurartion
+      // Trigger getConfiguration
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
@@ -466,7 +466,7 @@ describe('RoutingManager', () => {
         query: 'Apple iPhone',
       });
 
-      // Trigger getConfigurartion
+      // Trigger getConfiguration
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
@@ -534,7 +534,7 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      // Trigger getConfigurartion
+      // Trigger getConfiguration
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
