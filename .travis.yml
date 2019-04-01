@@ -18,9 +18,6 @@ script:
 env:
   matrix:
     - SCRIPT='./scripts/ci/functional-test.sh'
-    - SCRIPT='yarn run test'
-    - SCRIPT='yarn run lint'
-    - SCRIPT='yarn run type-check'
   global:
     - CXX=g++-4.8
     - SAUCE_USERNAME=isjs
