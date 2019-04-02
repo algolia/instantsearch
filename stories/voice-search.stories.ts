@@ -152,7 +152,7 @@ storiesOf('VoiceSearch', module)
           font-size: 2rem;
           color: #555;
         }`,
-      ].forEach(rule => (style!.sheet! as CSSStyleSheet).insertRule(rule));
+      ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
 
       search.addWidget(
         instantsearch.widgets.voiceSearch({
