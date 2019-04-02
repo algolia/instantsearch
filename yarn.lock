@@ -10165,28 +10165,19 @@ jest-validate@^24.6.0:
     leven "^2.1.0"
     pretty-format "^24.6.0"
 
-jest-watch-typeahead@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/jest-watch-typeahead/-/jest-watch-typeahead-0.2.1.tgz#6c40f232996ca6c39977e929e9f79b189e7d87e4"
-  integrity sha512-xdhEtKSj0gmnkDQbPTIHvcMmXNUDzYpHLEJ5TFqlaI+schi2NI96xhWiZk9QoesAS7oBmKwWWsHazTrYl2ORgg==
+jest-watch-typeahead@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/jest-watch-typeahead/-/jest-watch-typeahead-0.3.0.tgz#f56d9ee17ea71ecbf8253fed213df3185a1584c9"
+  integrity sha512-+uOtlppt9ysST6k6ZTqsPI0WNz2HLa8bowiZylZoQCQaAVn7XsVmHhZREkz73FhKelrFrpne4hQQjdq42nFEmA==
   dependencies:
     ansi-escapes "^3.0.0"
     chalk "^2.4.1"
-    jest-watcher "^23.1.0"
+    jest-watcher "^24.3.0"
     slash "^2.0.0"
     string-length "^2.0.0"
     strip-ansi "^5.0.0"
 
-jest-watcher@^23.1.0:
-  version "23.2.0"
-  resolved "https://registry.yarnpkg.com/jest-watcher/-/jest-watcher-23.2.0.tgz#678e852896e919e9d9a0eb4b8baf1ae279620ea9"
-  integrity sha1-Z46FKJbpGenZoOtLi68a4nliDqk=
-  dependencies:
-    ansi-escapes "^3.0.0"
-    chalk "^2.0.1"
-    string-length "^2.0.0"
-
-jest-watcher@^24.6.0:
+jest-watcher@^24.3.0, jest-watcher@^24.6.0:
   version "24.6.0"
   resolved "https://registry.yarnpkg.com/jest-watcher/-/jest-watcher-24.6.0.tgz#f66a49a4c89f60626730121d74e36dc006c53c2f"
   integrity sha512-u9YFF8VjGh8vRwuNpuVUAwZFZno+lZuqayITjXkwEsWumuUNx0s9/6+DvB/AiQx/FxcpbXlMDNAflFa7vs7UHg==
