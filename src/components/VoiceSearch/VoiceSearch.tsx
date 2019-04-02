@@ -27,7 +27,7 @@ const VoiceSearch = ({
   searchAsYouSpeak,
   templates,
 }: VoiceSearchProps) => {
-  const handleClick = (event: any) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     event.currentTarget.blur();
     toggleListening(searchAsYouSpeak);
   };
