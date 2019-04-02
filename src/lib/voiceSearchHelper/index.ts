@@ -27,7 +27,7 @@ export default function voiceSearchHelper({
   let recognition: any;
 
   const isSupportedBrowser = () =>
-    'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+    Boolean(SpeechRecognition)
 
   const isListening = () =>
     state.status === STATUS_ASKING_PERMISSION ||
