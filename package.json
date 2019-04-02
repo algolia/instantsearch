@@ -83,7 +83,7 @@
     "html-webpack-plugin": "3.2.0",
     "instantsearch.css": "7.1.1",
     "jest": "24.6.0",
-    "jest-watch-typeahead": "0.2.1",
+    "jest-watch-typeahead": "0.3.0",
     "json": "9.0.6",
     "lerna": "3.13.1",
     "lodash.orderby": "4.6.0",
