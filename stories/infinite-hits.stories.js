@@ -1,3 +1,4 @@
+import qs from 'qs';
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
@@ -68,4 +69,34 @@ storiesOf('InfiniteHits', module)
         })
       );
     })
+  )
+  .add(
+    'with previous button enabled',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            showPrevious: true,
+            templates: {
+              item: '{{name}}',
+            },
+          })
+        );
+      },
+      {
+        routing: {
+          stateMapping: {
+            stateToRoute(uiState) {
+              const query = qs.parse(location.search.slice(1));
+              return {
+                ...query,
+                page: uiState.page,
+              };
+            },
+            routeToState: routeState => routeState,
+          },
+        },
+      }
+    )
   );

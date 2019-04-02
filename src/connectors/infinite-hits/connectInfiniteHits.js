@@ -70,9 +70,20 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const { escapeHTML = true, transformItems = items => items } = widgetParams;
     let hitsCache = [];
+    let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
 
-    const getShowMore = helper => () => helper.nextPage().search();
+    const getShowPrevious = helper => () => {
+      helper
+        .overrideStateWithoutTriggeringChangeEvent({
+          ...helper.state,
+          page: firstReceivedPage - 1,
+        })
+        .search();
+    };
+    const getShowMore = helper => () => {
+      helper.setPage(lastReceivedPage + 1).search();
+    };
 
     return {
       getConfiguration() {
@@ -80,13 +91,18 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       init({ instantSearchInstance, helper }) {
+        this.showPrevious = getShowPrevious(helper);
         this.showMore = getShowMore(helper);
+        firstReceivedPage = helper.state.page;
+        lastReceivedPage = helper.state.page;
 
         renderFn(
           {
             hits: hitsCache,
             results: undefined,
+            showPrevious: this.showPrevious,
             showMore: this.showMore,
+            isFirstPage: true,
             isLastPage: true,
             instantSearchInstance,
             widgetParams,
@@ -96,29 +112,30 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       render({ results, state, instantSearchInstance }) {
-        if (state.page === 0) {
-          hitsCache = [];
-          lastReceivedPage = -1;
-        }
-
         if (escapeHTML && results.hits && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
 
         results.hits = transformItems(results.hits);
 
-        if (lastReceivedPage < state.page) {
+        if (lastReceivedPage < state.page || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
           lastReceivedPage = state.page;
+        } else if (firstReceivedPage > state.page) {
+          hitsCache = [...results.hits, ...hitsCache];
+          firstReceivedPage = state.page;
         }
 
+        const isFirstPage = firstReceivedPage === 0;
         const isLastPage = results.nbPages <= results.page + 1;
 
         renderFn(
           {
             hits: hitsCache,
             results,
+            showPrevious: this.showPrevious,
             showMore: this.showMore,
+            isFirstPage,
             isLastPage,
             instantSearchInstance,
             widgetParams,
@@ -129,6 +146,22 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
       dispose() {
         unmountFn();
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const page = searchParameters.page;
+        if (page === 0 || page + 1 === uiState.page) return uiState;
+        return {
+          ...uiState,
+          page: page + 1,
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const uiPage = uiState.page;
+        if (uiPage)
+          return searchParameters.setQueryParameter('page', uiState.page - 1);
+        return searchParameters.setQueryParameter('page', 0);
       },
     };
   };
