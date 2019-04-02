@@ -86,7 +86,11 @@ export default function voiceSearchHelper({
     recognition.start();
   };
 
-  const toggle = ({ searchAsYouSpeak }: { searchAsYouSpeak: boolean }) => {
+  const toggleListening = ({
+    searchAsYouSpeak,
+  }: {
+    searchAsYouSpeak: boolean;
+  }) => {
     if (isListening()) {
       stop();
     } else {
@@ -98,6 +102,6 @@ export default function voiceSearchHelper({
     getState,
     isSupportedBrowser,
     isListening,
-    toggle,
+    toggleListening,
   };
 }

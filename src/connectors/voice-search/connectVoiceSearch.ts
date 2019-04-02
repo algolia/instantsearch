@@ -38,13 +38,18 @@ const connectVoiceSearch: VoiceSearchConnector = (
     const render = ({
       isFirstRendering,
       instantSearchInstance,
-      voiceSearchHelper: { isSupportedBrowser, isListening, toggle, getState },
+      voiceSearchHelper: {
+        isSupportedBrowser,
+        isListening,
+        toggleListening,
+        getState,
+      },
     }) => {
       renderFn(
         {
           isSupportedBrowser,
           isListening,
-          toggleListening: toggle,
+          toggleListening,
           voiceListeningState: getState(),
           widgetParams,
           instantSearchInstance,
