@@ -26,8 +26,7 @@ export default function voiceSearchHelper({
   let state = getDefaultState(STATUS_INITIAL);
   let recognition: any;
 
-  const isSupportedBrowser = () =>
-    Boolean(SpeechRecognition)
+  const isSupportedBrowser = () => Boolean(SpeechRecognition);
 
   const isListening = () =>
     state.status === STATUS_ASKING_PERMISSION ||
@@ -53,7 +52,7 @@ export default function voiceSearchHelper({
     resetState();
   };
 
-  const start = (searchAsYouSpeak: boolean) => {
+  const start = ({ searchAsYouSpeak }: { searchAsYouSpeak: boolean }) => {
     resetState(STATUS_ASKING_PERMISSION);
     recognition = new SpeechRecognition();
     recognition.interimResults = true;
@@ -87,11 +86,11 @@ export default function voiceSearchHelper({
     recognition.start();
   };
 
-  const toggle = (searchAsYouSpeak: boolean) => {
+  const toggle = ({ searchAsYouSpeak }: { searchAsYouSpeak: boolean }) => {
     if (isListening()) {
       stop();
     } else {
-      start(searchAsYouSpeak);
+      start({ searchAsYouSpeak });
     }
   };
 

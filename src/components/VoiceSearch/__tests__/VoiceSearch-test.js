@@ -33,9 +33,9 @@ describe('VoiceSearch', () => {
       };
       const wrapper = mount(<VoiceSearch {...props} />);
       wrapper.find('button').simulate('click');
-      expect(props.toggleListening).toHaveBeenCalledWith(
-        props.searchAsYouSpeak
-      );
+      expect(props.toggleListening).toHaveBeenCalledWith({
+        searchAsYouSpeak: props.searchAsYouSpeak,
+      });
     });
   });
 

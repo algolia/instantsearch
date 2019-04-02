@@ -12,7 +12,7 @@ type VoiceSearchProps = {
   cssClasses: VoiceSearchCSSClasses;
   isSupportedBrowser: () => boolean;
   isListening: () => boolean;
-  toggleListening: (searchAsYouSpeak: boolean) => void;
+  toggleListening: ({ searchAsYouSpeak: boolean }) => void;
   voiceListeningState: VoiceListeningState;
   searchAsYouSpeak: boolean;
   templates: VoiceSearchTemplates;
@@ -29,7 +29,7 @@ const VoiceSearch = ({
 }: VoiceSearchProps) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     event.currentTarget.blur();
-    toggleListening(searchAsYouSpeak);
+    toggleListening({ searchAsYouSpeak });
   };
 
   const listening = isListening();

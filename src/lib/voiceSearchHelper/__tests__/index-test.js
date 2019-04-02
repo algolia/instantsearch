@@ -59,7 +59,7 @@ describe('VoiceSearchHelper', () => {
       onStateChange,
     });
     const { getState } = helper;
-    helper.toggle(false);
+    helper.toggle({ searchAsYouSpeak: false });
     expect(onStateChange).toHaveBeenCalled();
     expect(getState().status).toEqual('askingPermission');
     that.onstart();
@@ -100,7 +100,7 @@ describe('VoiceSearchHelper', () => {
       onStateChange,
     });
     const { getState } = helper;
-    helper.toggle(true);
+    helper.toggle({ searchAsYouSpeak: true });
     expect(onStateChange).toHaveBeenCalled();
     expect(getState().status).toEqual('askingPermission');
     that.onstart();
@@ -141,7 +141,7 @@ describe('VoiceSearchHelper', () => {
       onStateChange,
     });
     const { getState } = helper;
-    helper.toggle(true);
+    helper.toggle({ searchAsYouSpeak: true });
     expect(getState().status).toEqual('askingPermission');
     that.onerror({
       error: 'not-allowed',
