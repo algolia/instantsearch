@@ -5,9 +5,17 @@ storiesOf('VoiceSearch', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
+      const descContainer = document.createElement('div');
+      const realContainer = document.createElement('div');
+      container.appendChild(descContainer);
+      container.appendChild(realContainer);
+      descContainer.innerHTML = `
+        <p>To see this button disabled, test it on unsupported browsers like Safari, Firefox, etc.</p>
+      `;
+
       search.addWidget(
         instantsearch.widgets.voiceSearch({
-          container,
+          container: realContainer,
         })
       );
     })
@@ -102,16 +110,6 @@ storiesOf('VoiceSearch', module)
               <p>isSupportedBrowser: {{isSupportedBrowser}}</p>
           `,
           },
-        })
-      );
-    })
-  )
-  .add(
-    'disabled by default on unsupported browser (open this in Safari, Firefox, ...)',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.voiceSearch({
-          container,
         })
       );
     })
