@@ -80,6 +80,7 @@ a[class^='ais-'] {
 .ais-GeoSearch-redo,
 .ais-GeoSearch-reset,
 .ais-HierarchicalMenu-showMore,
+.ais-InfiniteHits-loadPrevious,
 .ais-InfiniteHits-loadMore,
 .ais-InfiniteResults-loadMore,
 .ais-Menu-showMore,
@@ -113,6 +114,10 @@ a[class^='ais-'] {
   &:focus {
     background-color: $algolia-blue;
   }
+}
+
+.ais-InfiniteHits-loadPrevious--disabled {
+  display: none;
 }
 
 .ais-CurrentRefinements {
@@ -302,6 +307,10 @@ a[class^='ais-'] {
 .ais-InfiniteHits-loadMore,
 .ais-InfiniteResults-loadMore {
   margin-top: 1rem;
+}
+
+.ais-InfiniteHits-loadPrevious {
+  margin-bottom: 1rem;
 }
 
 .ais-MenuSelect-select,

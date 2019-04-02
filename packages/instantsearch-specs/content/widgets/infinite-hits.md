@@ -31,9 +31,42 @@ html: |
     </ol>
     <button class="ais-InfiniteHits-loadMore">Show more results</button>
   </div>
-alt1: Show more disabled
+alt1: Show previous enabled
 althtml1: |
   <div class="ais-InfiniteHits">
+    <button class="ais-InfiniteHits-loadPrevious">Show previous results</button>
+    <ul class="ais-InfiniteHits-list">
+      <li class="ais-InfiniteHits-item">
+        Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+      </li>
+      <li class="ais-InfiniteHits-item">
+        Hit 4397400: Google - Chromecast - Black
+      </li>
+      <li class="ais-InfiniteHits-item">
+        Hit 4397400: Google - Chromecast - Black
+      </li>
+      <li class="ais-InfiniteHits-item">
+        Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+      </li>
+      <li class="ais-InfiniteHits-item">
+        Hit 4397400: Google - Chromecast - Black
+      </li>
+      <li class="ais-InfiniteHits-item">
+        Hit 4397400: Google - Chromecast - Black
+      </li>
+      <li class="ais-InfiniteHits-item">
+        Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+      </li>
+      <li class="ais-InfiniteHits-item">
+        Hit 4397400: Google - Chromecast - Black
+      </li>
+    </ul>
+    <button class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled" disabled>Show more results</button>
+  </div>
+alt2: Show previous and show more disabled
+althtml2: |
+  <div class="ais-InfiniteHits">
+    <button class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled" disabled>Show previous results</button>
     <ul class="ais-InfiniteHits-list">
       <li class="ais-InfiniteHits-item">
         Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
@@ -69,6 +102,10 @@ classes:
     description: the list of hits
   - name: .ais-InfiniteHits-item
     description: the hit list item
+  - name: .ais-InfiniteHits-loadPrevious
+    description: the button used to display previous results
+  - name: .ais-InfiniteHits-loadPrevious--disabled
+    description: the disabled button used to display previous results
   - name: .ais-InfiniteHits-loadMore
     description: the button used to display more results
   - name: .ais-InfiniteHits-loadMore--disabled
