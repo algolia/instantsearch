@@ -5,6 +5,7 @@ export { connectCurrentRefinements } from 'react-instantsearch-core';
 export { connectGeoSearch } from 'react-instantsearch-core';
 export { connectHierarchicalMenu } from 'react-instantsearch-core';
 export { connectHighlight } from 'react-instantsearch-core';
+export { connectHitInsights } from 'react-instantsearch-core';
 export { connectHits } from 'react-instantsearch-core';
 export { connectHitsPerPage } from 'react-instantsearch-core';
 export { connectInfiniteHits } from 'react-instantsearch-core';

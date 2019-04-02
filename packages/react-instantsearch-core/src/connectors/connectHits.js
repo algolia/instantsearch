@@ -1,5 +1,6 @@
 import createConnector from '../core/createConnector';
 import { getResults } from '../core/indexUtils';
+import { addAbsolutePositions, addQueryID } from '../core/utils';
 
 /**
  * connectHits connector provides the logic to create connected
@@ -45,9 +46,19 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const results = getResults(searchResults, this.context);
-    const hits = results ? results.hits : [];
-
-    return { hits };
+    if (!results) {
+      return { hits: [] };
+    }
+    const hitsWithPositions = addAbsolutePositions(
+      results.hits,
+      results.hitsPerPage,
+      results.page
+    );
+    const hitsWithPositionsAndQueryID = addQueryID(
+      hitsWithPositions,
+      results.queryID
+    );
+    return { hits: hitsWithPositionsAndQueryID };
   },
 
   /* Hits needs to be considered as a widget to trigger a search if no others widgets are used.
