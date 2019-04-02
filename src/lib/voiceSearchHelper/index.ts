@@ -17,13 +17,13 @@ export default function voiceSearchHelper({
   const SpeechRecognition =
     (window as any).webkitSpeechRecognition ||
     (window as any).SpeechRecognition;
-  const defaultState = (status: string) => ({
+  const getDefaultState = (status: string) => ({
     status,
     transcript: '',
     isSpeechFinal: undefined,
     errorCode: undefined,
   });
-  let state = defaultState(STATUS_INITIAL);
+  let state = getDefaultState(STATUS_INITIAL);
   let recognition: any;
 
   const isSupportedBrowser = () =>
@@ -42,7 +42,7 @@ export default function voiceSearchHelper({
   const getState = () => state;
 
   const resetState = (status = STATUS_INITIAL) => {
-    setState(defaultState(status));
+    setState(getDefaultState(status));
   };
 
   const stop = () => {
