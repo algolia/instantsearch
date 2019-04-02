@@ -10,8 +10,8 @@ import {
 
 type VoiceSearchProps = {
   cssClasses: VoiceSearchCSSClasses;
-  isSupportedBrowser: () => boolean;
-  isListening: () => boolean;
+  isSupportedBrowser: boolean;
+  isListening: boolean;
   toggleListening: ({ searchAsYouSpeak: boolean }) => void;
   voiceListeningState: VoiceListeningState;
   searchAsYouSpeak: boolean;
@@ -32,8 +32,6 @@ const VoiceSearch = ({
     toggleListening({ searchAsYouSpeak });
   };
 
-  const listening = isListening();
-  const supportedBrowser = isSupportedBrowser();
   const { status, transcript, isSpeechFinal, errorCode } = voiceListeningState;
   return (
     <div className={cssClasses.root}>
@@ -45,15 +43,15 @@ const VoiceSearch = ({
           type: 'button',
           title: 'Search by voice',
           onClick: handleClick,
-          disabled: !supportedBrowser,
+          disabled: !isSupportedBrowser,
         }}
         data={{
           status,
           errorCode,
-          isListening: listening,
+          isListening,
           transcript,
           isSpeechFinal,
-          isSupportedBrowser: supportedBrowser,
+          isSupportedBrowser,
         }}
         templates={templates}
       />
@@ -66,10 +64,10 @@ const VoiceSearch = ({
         data={{
           status,
           errorCode,
-          isListening: listening,
+          isListening,
           transcript,
           isSpeechFinal,
-          isSupportedBrowser: supportedBrowser,
+          isSupportedBrowser,
         }}
         templates={templates}
       />
@@ -83,8 +81,8 @@ VoiceSearch.propTypes = {
     button: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
   }).isRequired,
-  isSupportedBrowser: PropTypes.func.isRequired,
-  isListening: PropTypes.func.isRequired,
+  isSupportedBrowser: PropTypes.bool.isRequired,
+  isListening: PropTypes.bool.isRequired,
   toggleListening: PropTypes.func.isRequired,
   voiceListeningState: PropTypes.object.isRequired,
   searchAsYouSpeak: PropTypes.bool,

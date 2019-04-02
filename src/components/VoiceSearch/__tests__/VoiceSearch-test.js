@@ -9,8 +9,8 @@ const defaultProps = {
     status: 'status',
   },
   searchAsYouSpeak: false,
-  isSupportedBrowser: () => true,
-  isListening: () => false,
+  isSupportedBrowser: true,
+  isListening: false,
   toggleListening: () => {},
   voiceListeningState: {
     status: 'initial',
@@ -47,7 +47,7 @@ describe('VoiceSearch', () => {
     it('button disabled in unsupported browser', () => {
       const props = {
         ...defaultProps,
-        isSupportedBrowser: () => false,
+        isSupportedBrowser: false,
       };
       const wrapper = mount(<VoiceSearch {...props} />);
       expect(wrapper.find('button').props().disabled).toBeTruthy();
@@ -56,7 +56,7 @@ describe('VoiceSearch', () => {
     it('with full props and custom templates', () => {
       const props = {
         ...defaultProps,
-        isListening: () => true,
+        isListening: true,
         voiceListeningState: {
           status: 'recognizing',
           transcript: 'Hello',

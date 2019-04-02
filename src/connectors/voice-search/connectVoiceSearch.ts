@@ -13,8 +13,8 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export interface VoiceSearchRenderOptions extends RenderOptions {
-  isSupportedBrowser: () => boolean;
-  isListening: () => boolean;
+  isSupportedBrowser: boolean;
+  isListening: boolean;
   toggleListening: ({ searchAsYouSpeak: boolean }) => void;
   voiceListeningState: VoiceListeningState;
 }
@@ -47,8 +47,8 @@ const connectVoiceSearch: VoiceSearchConnector = (
     }) => {
       renderFn(
         {
-          isSupportedBrowser,
-          isListening,
+          isSupportedBrowser: isSupportedBrowser(),
+          isListening: isListening(),
           toggleListening,
           voiceListeningState: getState(),
           widgetParams,

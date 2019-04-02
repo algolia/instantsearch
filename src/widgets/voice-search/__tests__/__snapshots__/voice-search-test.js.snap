@@ -9,8 +9,8 @@ exports[`voiceSearch() Rendering renders during init() 1`] = `
       "status": "ais-VoiceSearch-status",
     }
   }
-  isListening={[Function]}
-  isSupportedBrowser={[Function]}
+  isListening={false}
+  isSupportedBrowser={false}
   searchAsYouSpeak={false}
   templates={
     Object {
@@ -39,8 +39,8 @@ exports[`voiceSearch() Rendering renders during render() 1`] = `
       "status": "ais-VoiceSearch-status",
     }
   }
-  isListening={[Function]}
-  isSupportedBrowser={[Function]}
+  isListening={false}
+  isSupportedBrowser={false}
   searchAsYouSpeak={false}
   templates={
     Object {
@@ -69,8 +69,8 @@ exports[`voiceSearch() Rendering renders during render() 2`] = `
       "status": "ais-VoiceSearch-status",
     }
   }
-  isListening={[Function]}
-  isSupportedBrowser={[Function]}
+  isListening={false}
+  isSupportedBrowser={false}
   searchAsYouSpeak={false}
   templates={
     Object {
