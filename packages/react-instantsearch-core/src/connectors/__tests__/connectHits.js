@@ -11,9 +11,31 @@ describe('connectHits', () => {
     it('provides the current hits to the component', () => {
       const hits = [{}];
       const props = getProvidedProps(null, null, {
-        results: { hits },
+        results: { hits, hitsPerPage: 2, page: 2 },
       });
-      expect(props).toEqual({ hits });
+      expect(props).toEqual({
+        hits: hits.map(hit => expect.objectContaining(hit)),
+      });
+    });
+
+    it('adds positions to the hits provided to the component', () => {
+      const hits = [{}];
+      const props = getProvidedProps(null, null, {
+        results: { hits, hitsPerPage: 2, page: 2 },
+      });
+      expect(props).toEqual({
+        hits: [{ __position: 5 }],
+      });
+    });
+
+    it('adds queryID to the hits provided to the component', () => {
+      const hits = [{}];
+      const props = getProvidedProps(null, null, {
+        results: { hits, hitsPerPage: 2, page: 2, queryID: 'theQueryID' },
+      });
+      expect(props).toEqual({
+        hits: [expect.objectContaining({ __queryID: 'theQueryID' })],
+      });
     });
 
     it("doesn't render when no hits are available", () => {
@@ -37,9 +59,33 @@ describe('connectHits', () => {
     it('provides the current hits to the component', () => {
       const hits = [{}];
       const props = getProvidedProps(null, null, {
-        results: { second: { hits } },
+        results: { second: { hits, hitsPerPage: 2, page: 2 } },
       });
-      expect(props).toEqual({ hits });
+      expect(props).toEqual({
+        hits: hits.map(hit => expect.objectContaining(hit)),
+      });
+    });
+
+    it('adds positions to the hits provided to the component', () => {
+      const hits = [{}];
+      const props = getProvidedProps(null, null, {
+        results: { second: { hits, hitsPerPage: 2, page: 2 } },
+      });
+      expect(props).toEqual({
+        hits: [{ __position: 5 }],
+      });
+    });
+
+    it('adds queryID to the hits provided to the component', () => {
+      const hits = [{}];
+      const props = getProvidedProps(null, null, {
+        results: {
+          second: { hits, hitsPerPage: 2, page: 2, queryID: 'theQueryID' },
+        },
+      });
+      expect(props).toEqual({
+        hits: [expect.objectContaining({ __queryID: 'theQueryID' })],
+      });
     });
 
     it("doesn't render when no hits are available", () => {

@@ -99,4 +99,42 @@ describe('utils', () => {
       });
     });
   });
+
+  describe('addAbsolutePositions', () => {
+    const allHits = [
+      { objectID: '1' },
+      { objectID: '2' },
+      { objectID: '3' },
+      { objectID: '4' },
+      { objectID: '5' },
+      { objectID: '6' },
+    ];
+    const hitsPerPage = 2;
+    it('should add __positions 1 and 2 on page 0', () => {
+      const hits = allHits.slice(0, 2);
+      const page = 0;
+      expect(utils.addAbsolutePositions(hits, hitsPerPage, page)).toEqual([
+        { objectID: '1', __position: 1 },
+        { objectID: '2', __position: 2 },
+      ]);
+    });
+    it('should add __positions 5 and 6 on page 2', () => {
+      const hits = allHits.slice(4, 6);
+      const page = 2;
+      expect(utils.addAbsolutePositions(hits, hitsPerPage, page)).toEqual([
+        { objectID: '5', __position: 5 },
+        { objectID: '6', __position: 6 },
+      ]);
+    });
+  });
+
+  describe('addQueryID', () => {
+    const hits = [{ objectID: '1' }, { objectID: '2' }];
+    it('should passed __queryID to hits', () => {
+      expect(utils.addQueryID(hits, 'theQueryID')).toEqual([
+        { objectID: '1', __queryID: 'theQueryID' },
+        { objectID: '2', __queryID: 'theQueryID' },
+      ]);
+    });
+  });
 });

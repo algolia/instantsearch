@@ -44,3 +44,20 @@ export const removeEmptyKey = obj => {
 
   return obj;
 };
+
+export function addAbsolutePositions(hits, hitsPerPage, page) {
+  return hits.map((hit, index) => ({
+    ...hit,
+    __position: hitsPerPage * page + index + 1,
+  }));
+}
+
+export function addQueryID(hits, queryID) {
+  if (!queryID) {
+    return hits;
+  }
+  return hits.map(hit => ({
+    ...hit,
+    __queryID: queryID,
+  }));
+}

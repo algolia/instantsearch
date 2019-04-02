@@ -4,6 +4,7 @@ import {
   refineValue,
   getResults,
 } from '../core/indexUtils';
+import { addAbsolutePositions, addQueryID } from '../core/utils';
 
 function getId() {
   return 'page';
@@ -53,14 +54,20 @@ export default createConnector({
       };
     }
 
-    const { hits, page, nbPages } = results;
+    const { hits, hitsPerPage, page, nbPages } = results;
+
+    const hitsWithPositions = addAbsolutePositions(hits, hitsPerPage, page);
+    const hitsWithPositionsAndQueryID = addQueryID(
+      hitsWithPositions,
+      results.queryID
+    );
 
     if (page === 0) {
-      this._allResults = hits;
+      this._allResults = hitsWithPositionsAndQueryID;
     } else if (page > this._previousPage) {
-      this._allResults = [...this._allResults, ...hits];
+      this._allResults = [...this._allResults, ...hitsWithPositionsAndQueryID];
     } else if (page < this._previousPage) {
-      this._allResults = hits;
+      this._allResults = hitsWithPositionsAndQueryID;
     }
 
     const lastPageIndex = nbPages - 1;
