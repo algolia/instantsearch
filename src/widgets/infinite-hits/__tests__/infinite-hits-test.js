@@ -110,4 +110,38 @@ describe('infiniteHits()', () => {
     expect(helper.state.page).toBe(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
+
+  it('if it is the first page, then the props should contain isFirstPage true', () => {
+    const state = { page: 0 };
+    widget.render({
+      results: { ...results, page: 0, nbPages: 2 },
+      state,
+    });
+    widget.render({
+      results: { ...results, page: 1, nbPages: 2 },
+      state,
+    });
+
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][1]).toEqual(container);
+    expect(render.mock.calls[1][0]).toMatchSnapshot();
+    expect(render.mock.calls[1][1]).toEqual(container);
+  });
+
+  it('if it is not the first page, then the props should contain isFirstPage false', () => {
+    // Init widget at page 1
+    helper.setPage(1);
+    widget.init({ helper, instantSearchInstance: {} });
+
+    const state = { page: 1 };
+    widget.render({
+      results: { ...results, page: 1, nbPages: 2 },
+      state,
+    });
+
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][1]).toEqual(container);
+  });
 });
