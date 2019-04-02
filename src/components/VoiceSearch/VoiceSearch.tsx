@@ -1,5 +1,4 @@
 import React from 'preact-compat';
-import PropTypes from 'prop-types';
 import Template from '../Template/Template';
 
 import {
@@ -12,9 +11,11 @@ type VoiceSearchProps = {
   cssClasses: VoiceSearchCSSClasses;
   isSupportedBrowser: boolean;
   isListening: boolean;
-  toggleListening: ({ searchAsYouSpeak: boolean }) => void;
+  toggleListening: (toggleListeningParams: {
+    searchAsYouSpeak: boolean;
+  }) => void;
   voiceListeningState: VoiceListeningState;
-  searchAsYouSpeak: boolean;
+  searchAsYouSpeak?: boolean;
   templates: VoiceSearchTemplates;
 };
 
@@ -24,7 +25,7 @@ const VoiceSearch = ({
   isListening,
   toggleListening,
   voiceListeningState,
-  searchAsYouSpeak,
+  searchAsYouSpeak = false,
   templates,
 }: VoiceSearchProps) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -73,24 +74,6 @@ const VoiceSearch = ({
       />
     </div>
   );
-};
-
-VoiceSearch.propTypes = {
-  cssClasses: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    button: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-  }).isRequired,
-  isSupportedBrowser: PropTypes.bool.isRequired,
-  isListening: PropTypes.bool.isRequired,
-  toggleListening: PropTypes.func.isRequired,
-  voiceListeningState: PropTypes.object.isRequired,
-  searchAsYouSpeak: PropTypes.bool,
-  templates: PropTypes.object.isRequired,
-};
-
-VoiceSearch.defaultProps = {
-  searchAsYouSpeak: false,
 };
 
 export default VoiceSearch;

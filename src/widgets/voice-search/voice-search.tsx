@@ -41,7 +41,9 @@ type VoiceSearchWidgetParams = {
 type VoiceSearchWidgetRenderParams = {
   isSupportedBrowser: boolean;
   isListening: boolean;
-  toggleListening: ({ searchAsYouSpeak: boolean }) => void;
+  toggleListening: (toggleListeningParams: {
+    searchAsYouSpeak: boolean;
+  }) => void;
   voiceListeningState: VoiceListeningState;
 };
 
