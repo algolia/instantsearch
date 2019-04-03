@@ -81,7 +81,7 @@
     "eslint-plugin-react": "7.12.4",
     "glob": "7.1.3",
     "html-webpack-plugin": "3.2.0",
-    "instantsearch.css": "7.1.1",
+    "instantsearch.css": "7.2.0",
     "jest": "24.7.0",
     "jest-watch-typeahead": "0.3.0",
     "json": "9.0.6",
