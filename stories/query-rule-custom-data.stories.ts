@@ -100,7 +100,7 @@ storiesOf('QueryRuleCustomData', module)
       search.addWidget(
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-          transformItems: (items: CustomDataItem[]) => {
+          transformItems: (items: CustomDataItem[]): CustomDataItem[] => {
             if (items.length > 0) {
               return items.filter(item => typeof item.banner !== 'undefined');
             }
@@ -115,9 +115,9 @@ storiesOf('QueryRuleCustomData', module)
             ];
           },
           templates: {
-            default(items: CustomDataItem[]) {
+            default(items: CustomDataItem[]): string {
               if (items.length === 0) {
-                return;
+                return '';
               }
 
               const { title, banner, link } = items[0];

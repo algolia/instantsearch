@@ -8,7 +8,7 @@ function demoQueryRulesPlayground({
   search: any;
   leftPanel: HTMLElement;
   rightPanel: HTMLElement;
-}) {
+}): void {
   const refinementList = document.createElement('div');
   leftPanel.appendChild(refinementList);
 

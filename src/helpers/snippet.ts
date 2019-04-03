@@ -1,16 +1,24 @@
+import { Hit } from '../types';
 import { getPropertyByPath } from '../lib/utils';
 import { TAG_REPLACEMENT } from '../lib/escape-highlight';
 import { component } from '../lib/suit';
 
-const suit = component('Highlight');
+export type SnippetOptions = {
+  attribute: string;
+  highlightedTagName?: string;
+  hit: Partial<Hit>;
+};
 
-export default function highlight({
+const suit = component('Snippet');
+
+export default function snippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
-} = {}) {
+}: SnippetOptions): string {
   const attributeValue =
-    getPropertyByPath(hit, `_highlightResult.${attribute}.value`) || '';
+    (getPropertyByPath(hit, `_snippetResult.${attribute}.value`) as string) ||
+    '';
 
   const className = suit({
     descendantName: 'highlighted',

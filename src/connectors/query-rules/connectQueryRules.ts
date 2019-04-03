@@ -61,7 +61,7 @@ function hasStateRefinements({
   facetsRefinements,
   hierarchicalFacetsRefinements,
   numericRefinements,
-}) {
+}): boolean {
   return [
     disjunctiveFacetsRefinements,
     facetsRefinements,
@@ -72,7 +72,7 @@ function hasStateRefinements({
 
 // A context rule must consist only of alphanumeric characters, hyphens, and underscores.
 // See https://www.algolia.com/doc/guides/managing-results/refine-results/merchandising-and-promoting/in-depth/implementing-query-rules/#context
-function escapeRuleContext(ruleName: string) {
+function escapeRuleContext(ruleName: string): string {
   return ruleName.replace(/[^a-z0-9-_]+/gi, '_');
 }
 
@@ -84,7 +84,7 @@ function getRuleContextsFromTrackedFilters({
   helper: Helper;
   sharedHelperState: HelperState;
   trackedFilters: ParamTrackedFilters;
-}) {
+}): string[] {
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const facetRefinements: TrackedFilterRefinement[] = getRefinements(
@@ -129,7 +129,7 @@ function applyRuleContexts(
     transformRuleContexts: ParamTransformRuleContexts;
   },
   sharedHelperState: HelperState
-) {
+): void {
   const {
     helper,
     initialRuleContexts,
@@ -191,7 +191,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     let onHelperChange: (state: HelperState) => void;
 
     return {
-      init({ helper, state, instantSearchInstance }) {
+      init({ helper, state, instantSearchInstance }): void {
         initialRuleContexts = state.ruleContexts || [];
         onHelperChange = applyRuleContexts.bind({
           helper,
@@ -227,7 +227,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      render({ results, instantSearchInstance }) {
+      render({ results, instantSearchInstance }): void {
         const { userData = [] } = results;
         const items = transformItems(userData);
 
@@ -241,7 +241,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      dispose({ helper, state }) {
+      dispose({ helper, state }): void {
         unmount();
 
         if (hasTrackedFilters) {
