@@ -2,7 +2,11 @@
 
 exports[`QueryRuleCustomData renders with empty items 1`] = `
 <Template
-  data={Array []}
+  data={
+    Object {
+      "items": Array [],
+    }
+  }
   rootProps={
     Object {
       "className": "root",
@@ -23,14 +27,16 @@ exports[`QueryRuleCustomData renders with empty items 1`] = `
 exports[`QueryRuleCustomData renders with items 1`] = `
 <Template
   data={
-    Array [
-      Object {
-        "banner": "image-1.png",
-      },
-      Object {
-        "banner": "image-2.png",
-      },
-    ]
+    Object {
+      "items": Array [
+        Object {
+          "banner": "image-1.png",
+        },
+        Object {
+          "banner": "image-2.png",
+        },
+      ],
+    }
   }
   rootProps={
     Object {
