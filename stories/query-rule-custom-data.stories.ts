@@ -29,19 +29,26 @@ storiesOf('QueryRuleCustomData', module)
       search.addWidget(
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-          transformItems: (items: CustomDataItem[]) => items[0],
           templates: {
-            default({ title, banner, link }: CustomDataItem) {
+            default(items: CustomDataItem[]) {
+              if (items.length === 0) {
+                return;
+              }
+
+              const { title, banner, link } = items[0];
+
               if (!banner) {
-                return '';
+                return;
               }
 
               return `
-                <h2>${title}</h2>
+                <section>
+                  <h2>${title}</h2>
 
-                <a href="${link}">
-                  <img src="${banner}" alt="${title}">
-                </a>
+                  <a href="${link}">
+                    <img src="${banner}" alt="${title}">
+                  </a>
+                </section>
               `;
             },
           },
@@ -65,20 +72,25 @@ storiesOf('QueryRuleCustomData', module)
           container: widgetContainer,
           transformItems: (items: CustomDataItem[]) => {
             if (items.length > 0) {
-              return items[0];
+              return items.filter(item => typeof item.banner !== 'undefined');
             }
 
-            return {
-              title: 'Kill Bill',
-              banner: 'http://static.bobatv.net/IMovie/mv_2352/poster_2352.jpg',
-              link: 'https://www.netflix.com/title/60031236',
-            };
+            return [
+              {
+                title: 'Kill Bill',
+                banner:
+                  'http://static.bobatv.net/IMovie/mv_2352/poster_2352.jpg',
+                link: 'https://www.netflix.com/title/60031236',
+              },
+            ];
           },
           templates: {
-            default({ title, banner, link }: CustomDataItem) {
-              if (!banner) {
-                return '';
+            default(items: CustomDataItem[]) {
+              if (items.length === 0) {
+                return;
               }
+
+              const { title, banner, link } = items[0];
 
               return `
                 <h2>${title}</h2>

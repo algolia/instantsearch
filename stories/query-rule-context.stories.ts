@@ -41,20 +41,26 @@ storiesOf('QueryRuleContext', module)
       search.addWidget(
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-          transformItems: (items: CustomDataItem[]) => items[0],
+          transformItems(items: CustomDataItem[]) {
+            return items.filter(item => typeof item.banner !== 'undefined');
+          },
           templates: {
-            default({ title, banner, link }: CustomDataItem) {
-              if (!banner) {
-                return '';
+            default(items: CustomDataItem[]) {
+              if (items.length === 0) {
+                return;
               }
 
-              return `
-              <h2>${title}</h2>
+              const { title, banner, link } = items[0];
 
-              <a href="${link}">
-                <img src="${banner}" alt="${title}">
-              </a>
-            `;
+              return `
+                <section>
+                  <h2>${title}</h2>
+
+                  <a href="${link}">
+                    <img src="${banner}" alt="${title}">
+                  </a>
+                </section>
+              `;
             },
           },
         })
@@ -94,20 +100,26 @@ storiesOf('QueryRuleContext', module)
       search.addWidget(
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-          transformItems: (items: CustomDataItem[]) => items[0],
+          transformItems(items: CustomDataItem[]) {
+            return items.filter(item => typeof item.banner !== 'undefined');
+          },
           templates: {
-            default({ title, banner, link }: CustomDataItem) {
-              if (!banner) {
-                return '';
+            default(items: CustomDataItem[]) {
+              if (items.length === 0) {
+                return;
               }
 
-              return `
-              <h2>${title}</h2>
+              const { title, banner, link } = items[0];
 
-              <a href="${link}">
-                <img src="${banner}" alt="${title}">
-              </a>
-            `;
+              return `
+                <section>
+                  <h2>${title}</h2>
+
+                  <a href="${link}">
+                    <img src="${banner}" alt="${title}">
+                  </a>
+                </section>
+              `;
             },
           },
         })
