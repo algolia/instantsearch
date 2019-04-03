@@ -4981,10 +4981,10 @@ inquirer@^6.1.0:
     strip-ansi "^5.0.0"
     through "^2.3.6"
 
-instantsearch.css@7.1.1:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.1.1.tgz#64fa9f07ff39ab088b00cd3f0fa3ea697d2215f7"
-  integrity sha512-8+2FLbZk9uK+VRFJ4tXByMNX9KTsPOrY/nkw4oe+8HH+jcHoVMQkUdxbFu7mSUHUdZjh5kK9Xk8IQau1Sy+VKw==
+instantsearch.css@7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.2.0.tgz#53c0e327aff92a0e5c7a3530399dffd0b605c226"
+  integrity sha512-tafDpE1tIvYmytoLnqP/YEGr2HXerQ9MVrnaEMW1WZiCuUsoJjKV5TpY4TMA3XWhw64GTZi0DdliHDbPLn9quA==
 
 internal-ip@^3.0.1:
   version "3.0.1"
