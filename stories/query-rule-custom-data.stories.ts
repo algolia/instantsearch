@@ -29,28 +29,65 @@ storiesOf('QueryRuleCustomData', module)
       search.addWidget(
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-          transformItems: (items: CustomDataItem[]) => items[0],
           templates: {
-            default({ title, banner, link }: CustomDataItem) {
-              if (!banner) {
-                return '';
-              }
+            default: ({ items }: { items: CustomDataItem[] }) =>
+              items
+                .map(item => {
+                  const { title, banner, link } = item;
 
-              return `
-                <h2>${title}</h2>
+                  if (!banner) {
+                    return;
+                  }
 
-                <a href="${link}">
-                  <img src="${banner}" alt="${title}">
-                </a>
-              `;
-            },
+                  return `
+                    <section>
+                      <h2>${title}</h2>
+
+                      <a href="${link}">
+                        <img src="${banner}" alt="${title}">
+                      </a>
+                    </section>
+                  `;
+                })
+                .join(''),
           },
         })
       );
     }, searchOptions)
   )
   .add(
-    'with default banner',
+    'with Hogan',
+    withHits(({ search, container, instantsearch }) => {
+      const widgetContainer = document.createElement('div');
+      const description = document.createElement('p');
+      description.innerHTML = 'Type <q>music</q> and a banner will appear.';
+
+      container.appendChild(description);
+      container.appendChild(widgetContainer);
+
+      search.addWidget(
+        instantsearch.widgets.queryRuleCustomData({
+          container: widgetContainer,
+          templates: {
+            default: `
+              {{#items}}
+                {{#banner}}
+                  <section>
+                    <h2>{{title}}</h2>
+
+                    <a href="{{link}}">
+                      <img src="{{banner}}" alt="{{title}}">
+                    </a>
+                  </section>
+                {{/banner}}
+              {{/items}}`,
+          },
+        })
+      );
+    }, searchOptions)
+  )
+  .add(
+    'with default and single banner',
     withHits(({ search, container, instantsearch }) => {
       const widgetContainer = document.createElement('div');
       const description = document.createElement('p');
@@ -65,20 +102,25 @@ storiesOf('QueryRuleCustomData', module)
           container: widgetContainer,
           transformItems: (items: CustomDataItem[]) => {
             if (items.length > 0) {
-              return items[0];
+              return items.filter(item => typeof item.banner !== 'undefined');
             }
 
-            return {
-              title: 'Kill Bill',
-              banner: 'http://static.bobatv.net/IMovie/mv_2352/poster_2352.jpg',
-              link: 'https://www.netflix.com/title/60031236',
-            };
+            return [
+              {
+                title: 'Kill Bill',
+                banner:
+                  'http://static.bobatv.net/IMovie/mv_2352/poster_2352.jpg',
+                link: 'https://www.netflix.com/title/60031236',
+              },
+            ];
           },
           templates: {
-            default({ title, banner, link }: CustomDataItem) {
-              if (!banner) {
-                return '';
+            default(items: CustomDataItem[]) {
+              if (items.length === 0) {
+                return;
               }
+
+              const { title, banner, link } = items[0];
 
               return `
                 <h2>${title}</h2>
