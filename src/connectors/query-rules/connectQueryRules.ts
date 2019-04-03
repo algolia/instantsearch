@@ -18,10 +18,12 @@ import {
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';
 
+type TrackedFilterRefinement = string | number | boolean;
+
 export type ParamTrackedFilters = {
   [facetName: string]: (
-    facetValues: Array<string | number>
-  ) => Array<string | number>;
+    facetValues: TrackedFilterRefinement[]
+  ) => TrackedFilterRefinement[];
 };
 export type ParamTransformRuleContexts = (ruleContexts: string[]) => string[];
 type ParamTransformItems = (items: object[]) => any;
@@ -85,7 +87,7 @@ function getRuleContextsFromTrackedFilters({
 }) {
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
-      const facetRefinements: Array<string | number> = getRefinements(
+      const facetRefinements: TrackedFilterRefinement[] = getRefinements(
         helper.lastResults || {},
         sharedHelperState
       )
