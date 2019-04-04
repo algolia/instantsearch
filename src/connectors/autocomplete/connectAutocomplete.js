@@ -54,8 +54,11 @@ export default function connectAutocomplete(renderFn, unmountFn) {
     }
 
     return {
-      getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
+      getConfiguration({ query = '' }) {
+        return {
+          ...(escapeHTML && TAG_PLACEHOLDER),
+          query,
+        };
       },
 
       init({ instantSearchInstance, helper }) {
