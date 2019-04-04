@@ -71,7 +71,7 @@ export default function voiceSearchHelper({
       setState({
         status: STATUS_RECOGNIZING,
         transcript: event.results[0][0].transcript,
-        isSpeechFinal: e.results[0].isFinal,
+        isSpeechFinal: event.results[0].isFinal,
       });
       if (searchAsYouSpeak && state.transcript) {
         onQueryChange(state.transcript);
