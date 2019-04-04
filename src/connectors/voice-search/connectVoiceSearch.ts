@@ -79,7 +79,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
           return setQueryAndSearch;
         })();
         (this as any)._voiceSearchHelper = voiceSearchHelper({
-          onQueryChange: (query: string) => (this as any)._refine(query),
+          onQueryChange: query => (this as any)._refine(query),
           onStateChange: () => {
             render({
               isFirstRendering: false,
