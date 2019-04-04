@@ -606,6 +606,75 @@ storiesOf('Index', module)
     })
   )
   .add(
+    'with Autocomplete',
+    withHits(({ search, container, instantsearch }) => {
+      const $autocomplete = document.createElement('div');
+      $autocomplete.style.marginBottom = '15px';
+
+      container.appendChild($autocomplete);
+
+      const renderIndexListItem = ({ label, hits }) => `
+      <li>
+        Index: ${label}
+        <ol>
+          ${hits
+            .map(
+              hit =>
+                `<li>${instantsearch.highlight({
+                  attribute: 'name',
+                  hit,
+                })}</li>`
+            )
+            .join('')}
+        </ol>
+      </li>
+      `;
+
+      const renderAutocomplete = (renderOptions, isFirstRender) => {
+        const {
+          indices,
+          currentRefinement,
+          refine,
+          widgetParams,
+        } = renderOptions;
+
+        if (isFirstRender) {
+          const input = document.createElement('input');
+          const ul = document.createElement('ul');
+
+          input.addEventListener('input', event => {
+            refine((event.currentTarget as HTMLInputElement).value);
+          });
+
+          widgetParams.container.appendChild(input);
+          widgetParams.container.appendChild(ul);
+        }
+
+        widgetParams.container.querySelector('input').value = currentRefinement;
+        widgetParams.container.querySelector('ul').innerHTML = indices
+          .map(renderIndexListItem)
+          .join('');
+      };
+
+      const autocomplete = instantsearch.connectors.connectAutocomplete(
+        renderAutocomplete
+      );
+
+      search.addWidgets([
+        instantsearch.widgets.configure({
+          hitsPerPage: 2,
+        }),
+
+        autocomplete({
+          container: $autocomplete,
+        }),
+
+        index({ indexName: 'bestbuy' }),
+        index({ indexName: 'instant_search_price_desc' }),
+      ]);
+    })
+  )
+  .add(
     'with suggestions & products',
     withHits(({ search, container, instantsearch }) => {
       const $root = document.createElement('div');
