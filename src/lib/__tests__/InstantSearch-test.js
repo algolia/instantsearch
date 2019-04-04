@@ -246,10 +246,7 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls widget.getConfiguration(searchParameters)', () => {
-        expect(widget.getConfiguration).toHaveBeenCalledWith(
-          searchParameters,
-          undefined
-        );
+        expect(widget.getConfiguration).toHaveBeenCalledWith(searchParameters);
       });
 
       it('calls algoliasearchHelper(client, indexName, searchParameters)', () => {

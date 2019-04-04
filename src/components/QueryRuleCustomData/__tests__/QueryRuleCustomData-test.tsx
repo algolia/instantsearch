@@ -17,7 +17,7 @@ describe('QueryRuleCustomData', () => {
 
     const wrapper = shallow(<QueryRuleCustomData {...props} />);
 
-    expect(wrapper.props().data).toEqual(items);
+    expect(wrapper.props().data).toEqual({ items });
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -35,7 +35,7 @@ describe('QueryRuleCustomData', () => {
 
     const wrapper = shallow(<QueryRuleCustomData {...props} />);
 
-    expect(wrapper.props().data).toEqual(items);
+    expect(wrapper.props().data).toEqual({ items });
     expect(wrapper).toMatchSnapshot();
   });
 });
