@@ -109,6 +109,7 @@ export default function connectSortBy(renderFn, unmountFn) {
           );
         }
 
+        // It have to be compute from the parent node.
         this.initialIndex = instantSearchInstance.indexName;
         this.setIndex = indexName => helper.setIndex(indexName).search();
 
@@ -161,7 +162,10 @@ export default function connectSortBy(renderFn, unmountFn) {
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameter(
           'index',
-          uiState.sortBy || this.initialIndex
+          // This is not correct but it works - note that the `initialIndex`
+          // doesn't work. It's computed from the `instantSearchInstance` not
+          // the index.
+          uiState.sortBy || searchParameters.index || this.initialIndex
         );
       },
     };
