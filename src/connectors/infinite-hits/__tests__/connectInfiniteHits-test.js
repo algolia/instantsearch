@@ -103,7 +103,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
   });
 
-  it('Provides the hits and accumulate results on next page', () => {
+  it('Provides the hits and accumulates results on next page', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget();
