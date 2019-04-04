@@ -70,7 +70,7 @@ export default function voiceSearchHelper({
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       setState({
         status: STATUS_RECOGNIZING,
-        transcript: e.results[0][0].transcript,
+        transcript: event.results[0][0].transcript,
         isSpeechFinal: e.results[0].isFinal,
       });
       if (searchAsYouSpeak && state.transcript) {
