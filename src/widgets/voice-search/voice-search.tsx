@@ -5,7 +5,9 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import connectVoiceSearch from '../../connectors/voice-search/connectVoiceSearch';
+import connectVoiceSearch, {
+  VoiceSearchRenderer,
+} from '../../connectors/voice-search/connectVoiceSearch';
 import VoiceSearch from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
 import { Template } from '../../types';
@@ -45,19 +47,18 @@ type VoiceSearchWidgetRenderParams = {
     searchAsYouSpeak: boolean;
   }) => void;
   voiceListeningState: VoiceListeningState;
+  widgetParams: VoiceSearchWidgetParams;
 };
 
-const renderer = ({
-  container,
-  cssClasses,
-  templates,
-  searchAsYouSpeak,
-}: VoiceSearchWidgetParams) => ({
+const renderer: VoiceSearchRenderer<VoiceSearchWidgetParams> = ({
   isSupportedBrowser,
   isListening,
   toggleListening,
   voiceListeningState,
+  widgetParams,
 }: VoiceSearchWidgetRenderParams) => {
+  const { container, cssClasses, templates, searchAsYouSpeak } = widgetParams;
+
   render(
     <VoiceSearch
       cssClasses={cssClasses}
@@ -92,16 +93,14 @@ export default function voiceSearch(
     status: cx(suit({ descendantName: 'status' }), userCssClasses.status),
   };
 
-  const specializedRenderer = renderer({
+  const makeWidget = connectVoiceSearch(renderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
+
+  return makeWidget({
     container: containerNode,
     cssClasses,
     templates: { ...defaultTemplates, ...templates },
     searchAsYouSpeak,
   });
-
-  const makeWidget = connectVoiceSearch(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
-  );
-
-  return makeWidget({});
 }

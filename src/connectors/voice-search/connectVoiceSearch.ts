@@ -12,7 +12,7 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export interface VoiceSearchRenderOptions extends RenderOptions {
+export interface VoiceSearchRenderOptions<T> extends RenderOptions<T> {
   isSupportedBrowser: boolean;
   isListening: boolean;
   toggleListening: (toggleListeningParams: {
@@ -21,14 +21,14 @@ export interface VoiceSearchRenderOptions extends RenderOptions {
   voiceListeningState: VoiceListeningState;
 }
 
-export type VoiceSearchRenderer = Renderer<VoiceSearchRenderOptions>;
+export type VoiceSearchRenderer<T> = Renderer<VoiceSearchRenderOptions<T>>;
 
-export type VoiceSearchWidgetFactory = WidgetFactory<any>;
+export type VoiceSearchWidgetFactory<T> = WidgetFactory<T>;
 
-export type VoiceSearchConnector = (
-  renderFn: VoiceSearchRenderer,
+export type VoiceSearchConnector = <T>(
+  renderFn: VoiceSearchRenderer<T>,
   unmountFn?: () => void
-) => VoiceSearchWidgetFactory;
+) => VoiceSearchWidgetFactory<T>;
 
 const connectVoiceSearch: VoiceSearchConnector = (
   renderFn,
