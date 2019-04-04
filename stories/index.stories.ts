@@ -613,21 +613,19 @@ storiesOf('Index', module)
 
       container.appendChild($autocomplete);
 
+      const highlight = hit =>
+        instantsearch.highlight({
+          attribute: 'name',
+          hit,
+        });
+
       const renderIndexListItem = ({ label, hits }) => `
-      <li>
-        Index: ${label}
-        <ol>
-          ${hits
-            .map(
-              hit =>
-                `<li>${instantsearch.highlight({
-                  attribute: 'name',
-                  hit,
-                })}</li>`
-            )
-            .join('')}
-        </ol>
-      </li>
+        <li>
+          <h3>index: ${label}</h3>
+          <ol>
+            ${hits.map(hit => `<li>${highlight(hit)}</li>`).join('')}
+          </ol>
+        </li>
       `;
 
       const renderAutocomplete = (renderOptions, isFirstRender) => {
@@ -662,15 +660,24 @@ storiesOf('Index', module)
 
       search.addWidgets([
         instantsearch.widgets.configure({
-          hitsPerPage: 2,
+          hitsPerPage: 3,
         }),
 
         autocomplete({
           container: $autocomplete,
         }),
 
-        index({ indexName: 'bestbuy' }),
-        index({ indexName: 'instant_search_price_desc' }),
+        index({ indexName: 'bestbuy' }).addWidgets([
+          instantsearch.widgets.configure({
+            hitsPerPage: 2,
+          }),
+        ]),
+
+        index({ indexName: 'instant_search_price_desc' }).addWidgets([
+          instantsearch.widgets.configure({
+            hitsPerPage: 1,
+          }),
+        ]),
       ]);
     })
   )
