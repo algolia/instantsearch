@@ -67,14 +67,14 @@ export default function voiceSearchHelper({
         setState({ status: STATUS_FINISHED });
       }
     };
-    recognition.onerror = (e: any) => {
-      setState({ status: STATUS_ERROR, errorCode: e.error });
+    recognition.onerror = (event: SpeechRecognitionError) => {
+      setState({ status: STATUS_ERROR, errorCode: event.error });
     };
-    recognition.onresult = (e: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       setState({
         status: STATUS_RECOGNIZING,
-        transcript: e.results[0][0].transcript,
-        isSpeechFinal: e.results[0].isFinal,
+        transcript: event.results[0][0].transcript,
+        isSpeechFinal: event.results[0].isFinal,
       });
       if (searchAsYouSpeak && state.transcript) {
         onQueryChange(state.transcript);
