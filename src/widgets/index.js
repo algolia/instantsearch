@@ -41,3 +41,6 @@ export { default as voiceSearch } from './voice-search/voice-search';
 export {
   default as queryRuleCustomData,
 } from './query-rule-custom-data/query-rule-custom-data';
+export {
+  default as queryRuleContext,
+} from './query-rule-context/query-rule-context';

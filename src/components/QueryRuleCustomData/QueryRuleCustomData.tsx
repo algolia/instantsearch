@@ -20,7 +20,7 @@ const QueryRuleCustomData = ({
     templateKey="default"
     templates={templates}
     rootProps={{ className: cssClasses.root }}
-    data={items}
+    data={{ items }}
   />
 );
 

@@ -6,8 +6,8 @@ const STATUS_FINISHED = 'finished';
 const STATUS_ERROR = 'error';
 
 type VoiceSearchHelperParams = {
-  onQueryChange: (query: string) => any;
-  onStateChange: () => any;
+  onQueryChange: (query: string) => void;
+  onStateChange: () => void;
 };
 
 export default function voiceSearchHelper({

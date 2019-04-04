@@ -1,18 +1,97 @@
-import algoliasearch from 'algoliasearch';
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
-import simpleMapping from '../stateMappings/simple';
 
-const fakeAlgoliaClient = {
+const runAllMicroTasks = () => new Promise(setImmediate);
+
+const createFakeSearchClient = () => ({
   search: () => Promise.resolve({ results: [{}] }),
+});
+
+const createFakeRouter = (args = {}) => ({
+  onUpdate() {},
+  write() {},
+  read() {
+    return {};
+  },
+  ...args,
+});
+
+const createFakeStateMapping = (args = {}) => ({
+  stateToRoute(uiState) {
+    return uiState;
+  },
+  routeToState(routeState) {
+    return routeState;
+  },
+  ...args,
+});
+
+const createFakeHistory = ({
+  index = -1,
+  entries = [],
+  listeners = [],
+} = {}) => {
+  const state = {
+    index,
+    entries,
+    listeners,
+  };
+
+  return {
+    subscribe(listener) {
+      state.listeners.push(listener);
+    },
+    push(value) {
+      state.entries.push(value);
+      state.index++;
+    },
+    back() {
+      state.index--;
+      listeners.forEach(listener => listener(state.entries[state.index]));
+    },
+  };
 };
+
+const createFakeSearchBox = () => ({
+  render({ helper }) {
+    this.refine = value => {
+      helper.setQuery(value).search();
+    };
+  },
+  dispose({ state }) {
+    return state.setQuery();
+  },
+  getWidgetSearchParameters(searchParameters, { uiState }) {
+    return searchParameters.setQuery(uiState.query || '');
+  },
+  getWidgetState(uiState, { searchParameters }) {
+    return {
+      ...uiState,
+      query: searchParameters.query,
+    };
+  },
+});
+
+const createFakeHitsPerPage = () => ({
+  render() {},
+  dispose({ state }) {
+    return state;
+  },
+  getWidgetSearchParameters(parameters) {
+    return parameters;
+  },
+  getWidgetState(uiState) {
+    return uiState;
+  },
+});
 
 describe('RoutingManager', () => {
   describe('getAllUIStates', () => {
     test('reads the state of widgets with a getWidgetState implementation', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       const widgetState = {
@@ -32,7 +111,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => actualInitialState,
         },
@@ -54,9 +133,10 @@ describe('RoutingManager', () => {
     });
 
     test('Does not read UI state from widgets without an implementation of getWidgetState', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       search.addWidget({
@@ -71,7 +151,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => actualInitialState,
         },
@@ -86,9 +166,10 @@ describe('RoutingManager', () => {
 
   describe('getAllSearchParameters', () => {
     test('should get searchParameters from widget that implements getWidgetSearchParameters', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       const widget = {
@@ -105,7 +186,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => actualInitialState,
         },
@@ -127,9 +208,10 @@ describe('RoutingManager', () => {
     });
 
     test('should not change the searchParameters if no widget has a getWidgetSearchParameters', () => {
+      const searchClient = createFakeSearchClient();
       const search = instantsearch({
         indexName: '',
-        searchClient: fakeAlgoliaClient,
+        searchClient,
       });
 
       const widget = {
@@ -141,7 +223,7 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: simpleMapping(),
+        stateMapping: createFakeStateMapping(),
         router: {
           read: () => {},
         },
@@ -157,20 +239,14 @@ describe('RoutingManager', () => {
 
   describe('within instantsearch', () => {
     test('should write in the router on searchParameters change', done => {
-      let onUpdateCallback; // eslint-disable-line
-      const router = {
+      const searchClient = createFakeSearchClient();
+      const router = createFakeRouter({
         write: jest.fn(),
-        read: jest.fn(),
-        onUpdate: fn => {
-          onUpdateCallback = fn;
-        },
-      };
+      });
+
       const search = instantsearch({
         indexName: 'instant_search',
-        searchClient: algoliasearch(
-          'latency',
-          '6be0576ff61c053d5f9a3225e2a90f76'
-        ),
+        searchClient,
         routing: {
           router,
         },
@@ -207,20 +283,18 @@ describe('RoutingManager', () => {
     });
 
     test('should update the searchParameters on router state update', done => {
+      const searchClient = createFakeSearchClient();
+
       let onRouterUpdateCallback;
-      const router = {
-        write: jest.fn(),
-        read: jest.fn(() => ({})),
+      const router = createFakeRouter({
         onUpdate: fn => {
           onRouterUpdateCallback = fn;
         },
-      };
+      });
+
       const search = instantsearch({
         indexName: 'instant_search',
-        searchClient: algoliasearch(
-          'latency',
-          '6be0576ff61c053d5f9a3225e2a90f76'
-        ),
+        searchClient,
         routing: {
           router,
         },
@@ -256,33 +330,29 @@ describe('RoutingManager', () => {
     });
 
     test('should apply state mapping on differences after searchfunction', done => {
-      const router = {
+      const searchClient = createFakeSearchClient();
+
+      const router = createFakeRouter({
         write: jest.fn(),
-        read: jest.fn(() => ({})),
-        onUpdate: jest.fn(),
-      };
-      const stateMapping = {
+      });
+
+      const stateMapping = createFakeStateMapping({
         stateToRoute(uiState) {
           return {
             query: uiState.query && uiState.query.toUpperCase(),
           };
         },
-        routeToState(routeState) {
-          return routeState;
-        },
-      };
+      });
+
       const search = instantsearch({
         indexName: 'instant_search',
-        searchClient: algoliasearch(
-          'latency',
-          '6be0576ff61c053d5f9a3225e2a90f76'
-        ),
-        routing: {
-          router,
-          stateMapping,
-        },
         searchFunction: helper => {
           helper.setQuery('test').search();
+        },
+        searchClient,
+        routing: {
+          stateMapping,
+          router,
         },
       });
 
@@ -310,6 +380,168 @@ describe('RoutingManager', () => {
         });
 
         done();
+      });
+    });
+
+    test('should keep the UI state up to date on state changes', async () => {
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const router = createFakeRouter({
+        write: jest.fn(),
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient,
+        routing: {
+          stateMapping,
+          router,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
+
+      search.addWidget(fakeSearchBox);
+      search.addWidget(fakeHitsPerPage);
+
+      search.start();
+
+      await runAllMicroTasks();
+
+      // Trigger an update - push a change
+      fakeSearchBox.refine('Apple');
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
+      });
+
+      await runAllMicroTasks();
+
+      // Trigger getConfiguration
+      search.removeWidget(fakeHitsPerPage);
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(2);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
+      });
+    });
+
+    test('should keep the UI state up to date on first render', async () => {
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const router = createFakeRouter({
+        write: jest.fn(),
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchFunction(helper) {
+          // Force the value of the query
+          helper.setQuery('Apple iPhone').search();
+        },
+        searchClient,
+        routing: {
+          router,
+          stateMapping,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
+
+      search.addWidget(fakeSearchBox);
+      search.addWidget(fakeHitsPerPage);
+
+      // Trigger the call to `searchFunction` -> Apple iPhone
+      search.start();
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple iPhone',
+      });
+
+      // Trigger getConfiguration
+      search.removeWidget(fakeHitsPerPage);
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(2);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple iPhone',
+      });
+    });
+
+    test('should keep the UI state up to date on router.update', async () => {
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const history = createFakeHistory();
+      const router = createFakeRouter({
+        onUpdate(fn) {
+          history.subscribe(state => {
+            fn(state);
+          });
+        },
+        write: jest.fn(state => {
+          history.push(state);
+        }),
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient,
+        routing: {
+          router,
+          stateMapping,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
+
+      search.addWidget(fakeSearchBox);
+      search.addWidget(fakeHitsPerPage);
+
+      search.start();
+
+      await runAllMicroTasks();
+
+      // Trigger an update - push a change
+      fakeSearchBox.refine('Apple');
+
+      expect(router.write).toHaveBeenCalledTimes(1);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
+      });
+
+      // Trigger an update - push a change
+      fakeSearchBox.refine('Apple iPhone');
+
+      expect(router.write).toHaveBeenCalledTimes(2);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple iPhone',
+      });
+
+      await runAllMicroTasks();
+
+      // Trigger an update - Apple iPhone → Apple
+      history.back();
+
+      await runAllMicroTasks();
+
+      // Trigger getConfiguration
+      search.removeWidget(fakeHitsPerPage);
+
+      await runAllMicroTasks();
+
+      expect(router.write).toHaveBeenCalledTimes(3);
+      expect(router.write).toHaveBeenLastCalledWith({
+        query: 'Apple',
       });
     });
   });
