@@ -58,7 +58,6 @@ const VoiceSearch = ({
       />
       <Template
         templateKey="status"
-        rootTagName="div"
         rootProps={{
           className: cssClasses.status,
         }}
