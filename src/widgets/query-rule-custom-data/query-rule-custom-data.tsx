@@ -16,7 +16,7 @@ export type QueryRuleCustomDataCSSClasses = {
 };
 
 export type QueryRuleCustomDataTemplates = {
-  default: string | ((items: object[]) => string);
+  default: string | (({ items }: { items: object[] }) => string);
 };
 
 type QueryRuleCustomDataWidgetParams = {
@@ -69,7 +69,9 @@ const queryRuleCustomData: QueryRuleCustomData = (
     root: cx(suit(), userCssClasses.root),
   };
 
-  const defaultTemplates = { default: '' };
+  const defaultTemplates = {
+    default: ({ items }) => JSON.stringify(items, null, 2),
+  };
   const templates: QueryRuleCustomDataTemplates = {
     ...defaultTemplates,
     ...userTemplates,
