@@ -69,6 +69,22 @@ const resolveNodeFromIndexId = (node, indexId) => {
   return loop(node);
 };
 
+const resolveNodesResultsFromNode = node => {
+  const loop = (acc, innerNode) => {
+    const nextAcc = acc.concat({
+      indexId: innerNode.indexId,
+      results: innerNode.derivedHelper.lastResults,
+    });
+
+    return innerNode.widgets
+      .filter(isIndexWidget)
+      .map(_ => _.node)
+      .reduce((innerAcc, _) => loop(innerAcc, _), nextAcc);
+  };
+
+  return loop([], node);
+};
+
 const resolveRoot = node => {
   const resolveParentNode = innerNode => {
     return innerNode.parent !== null
@@ -650,11 +666,13 @@ class InstantSearch extends EventEmitter {
 
   _render() {
     const walk = node => {
+      const scoped = resolveNodesResultsFromNode(node);
+
       node.widgets.forEach(widget => {
         if (widget.render) {
           widget.render({
             templatesConfig: this.templatesConfig,
-            scope: [],
+            scoped,
             results: node.derivedHelper.lastResults,
             // At this stage the `state` provided to `_render` is not the one
             // of `node.helper.state` but the one from the derivation. What
