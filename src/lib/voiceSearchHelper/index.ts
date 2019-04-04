@@ -6,7 +6,7 @@ const STATUS_FINISHED = 'finished';
 const STATUS_ERROR = 'error';
 
 type VoiceSearchHelperParams = {
-  onQueryChange: (query: string) => any;
+  onQueryChange: (query: string) => void;
   onStateChange: () => any;
 };
 
