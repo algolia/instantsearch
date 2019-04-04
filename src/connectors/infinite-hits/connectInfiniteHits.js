@@ -160,7 +160,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const uiPage = uiState.page;
         if (uiPage)
-          return searchParameters.setQueryParameter('page', uiState.page - 1);
+          return searchParameters.setQueryParameter('page', uiPage - 1);
         return searchParameters.setQueryParameter('page', 0);
       },
     };
