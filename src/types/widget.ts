@@ -21,3 +21,7 @@ export interface Widget {
 }
 
 export type WidgetFactory<T> = (widgetParams: T) => Widget;
+
+export type Template<TTemplateItem> =
+  | string
+  | ((item: TTemplateItem) => string);

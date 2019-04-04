@@ -20,8 +20,8 @@ export type VoiceSearchCSSClasses = {
 };
 
 export type VoiceSearchTemplates = {
-  buttonText: Template;
-  status: Template;
+  buttonText: Template<object>;
+  status: Template<object>;
 };
 
 export type VoiceListeningState = {
