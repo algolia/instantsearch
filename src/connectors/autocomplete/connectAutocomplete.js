@@ -61,87 +61,123 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         };
       },
 
-      init({ instantSearchInstance, helper }) {
+      init({ helper }) {
+        // init({ instantSearchInstance, helper }) {
         this._refine = this.refine(helper);
 
-        this.indices = [
-          {
-            helper,
-            label: 'primary',
-            index: helper.getIndex(),
-            results: undefined,
-            hits: [],
-          },
-        ];
+        // this.indices = [
+        //   {
+        //     helper,
+        //     label: 'primary',
+        //     index: helper.getIndex(),
+        //     results: undefined,
+        //     hits: [],
+        //   },
+        // ];
 
-        // add additionnal indices into `this.indices`
-        indices.forEach(({ label, value }) => {
-          const derivedHelper = helper.derive(searchParameters =>
-            searchParameters.setIndex(value)
-          );
+        // // add additionnal indices into `this.indices`
+        // indices.forEach(({ label, value }) => {
+        //   const derivedHelper = helper.derive(searchParameters =>
+        //     searchParameters.setIndex(value)
+        //   );
 
-          this.indices.push({
-            label,
-            index: value,
-            helper: derivedHelper,
-            results: undefined,
-            hits: [],
-          });
+        //   this.indices.push({
+        //     label,
+        //     index: value,
+        //     helper: derivedHelper,
+        //     results: undefined,
+        //     hits: [],
+        //   });
 
-          // update results then trigger render after a search from any helper
-          derivedHelper.on('result', results =>
-            this.saveResults({ results, label })
-          );
+        //   // update results then trigger render after a search from any helper
+        //   derivedHelper.on('result', results =>
+        //     this.saveResults({ results, label })
+        //   );
+        // });
+
+        // this.instantSearchInstance = instantSearchInstance;
+        this.renderWithAllIndices({
+          isFirstRendering: true,
+          scoped: [],
+          helper,
         });
-
-        this.instantSearchInstance = instantSearchInstance;
-        this.renderWithAllIndices({ isFirstRendering: true });
       },
 
-      saveResults({ results, label }) {
-        const derivedIndex = this.indices.find(i => i.label === label);
+      // saveResults({ results, label }) {
+      //   const derivedIndex = this.indices.find(i => i.label === label);
 
-        if (escapeHTML && results && results.hits && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
-        }
+      // if (escapeHTML && results && results.hits && results.hits.length > 0) {
+      //   results.hits = escapeHits(results.hits);
+      // }
 
-        derivedIndex.results = results;
-        derivedIndex.hits =
-          results && results.hits && Array.isArray(results.hits)
-            ? results.hits
-            : [];
+      //   derivedIndex.results = results;
+      //   derivedIndex.hits =
+      //     results && results.hits && Array.isArray(results.hits)
+      //       ? results.hits
+      //       : [];
 
-        this.renderWithAllIndices();
-      },
+      //   this.renderWithAllIndices();
+      // },
 
       refine(helper) {
         return query => helper.setQuery(query).search();
       },
 
-      render({ results }) {
-        this.saveResults({ results, label: this.indices[0].label });
+      render({ helper, scoped }) {
+        this.renderWithAllIndices({ helper, scoped });
       },
 
-      renderWithAllIndices({ isFirstRendering = false } = {}) {
-        const currentRefinement = this.indices[0].helper.state.query;
+      renderWithAllIndices({ helper, scoped, isFirstRendering } = {}) {
+        const currentRefinement = helper.state.query;
 
         renderFn(
           {
             widgetParams,
             currentRefinement,
-            // we do not want to provide the `helper` to the end-user
-            indices: this.indices.map(({ index, label, hits, results }) => ({
-              index,
-              label,
-              hits,
-              results,
-            })),
+            indices: scoped.map(({ indexId, results }) => {
+              if (
+                escapeHTML &&
+                results &&
+                results.hits &&
+                results.hits.length > 0
+              ) {
+                results.hits = escapeHits(results.hits);
+              }
+
+              return {
+                index: indexId,
+                label: indexId,
+                hits: results.hits,
+                results,
+              };
+            }),
             instantSearchInstance: this.instantSearchInstance,
             refine: this._refine,
           },
           isFirstRendering
         );
       },
+
+      // renderWithAllIndices({  isFirstRendering = false } = {}) {
+      //   const currentRefinement = this.indices[0].helper.state.query;
+
+      //   renderFn(
+      //     {
+      //       widgetParams,
+      //       currentRefinement,
+      //       // we do not want to provide the `helper` to the end-user
+      //       indices: this.indices.map(({ index, label, hits, results }) => ({
+      //         index,
+      //         label,
+      //         hits,
+      //         results,
+      //       })),
+      //       instantSearchInstance: this.instantSearchInstance,
+      //       refine: this._refine,
+      //     },
+      //     isFirstRendering
+      //   );
+      // },
 
       dispose() {
         // detach every derived indices from the main helper instance
