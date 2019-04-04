@@ -67,7 +67,7 @@ export default function voiceSearchHelper({
     recognition.onerror = (event: SpeechRecognitionError) => {
       setState({ status: STATUS_ERROR, errorCode: event.error });
     };
-    recognition.onresult = (e: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       setState({
         status: STATUS_RECOGNIZING,
         transcript: e.results[0][0].transcript,
