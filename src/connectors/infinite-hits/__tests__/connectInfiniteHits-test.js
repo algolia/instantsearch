@@ -157,7 +157,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(thirdRenderingOptions.results).toEqual(otherResults);
   });
 
-  it('Provides the hits and prepend results on previous page', () => {
+  it('Provides the hits and prepends results on previous page', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget();
