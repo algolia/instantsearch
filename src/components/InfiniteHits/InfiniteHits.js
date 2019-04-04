@@ -81,6 +81,8 @@ InfiniteHits.propTypes = {
     emptyRoot: PropTypes.string.isRequired,
     list: PropTypes.string.isRequired,
     item: PropTypes.string.isRequired,
+    loadPrevious: PropTypes.string.isRequired,
+    disabledLoadPrevious: PropTypes.string.isRequired,
     loadMore: PropTypes.string.isRequired,
     disabledLoadMore: PropTypes.string.isRequired,
   }).isRequired,
