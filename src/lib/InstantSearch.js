@@ -11,6 +11,8 @@ import algoliasearchHelper from './stateManager';
 import { resolveSingleLeafMerge } from './resolveSearchParametersWithMerge';
 import createHelpers from './createHelpers';
 
+const _defer = Promise.resolve();
+
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
   router: historyRouter(),
@@ -215,7 +217,8 @@ class InstantSearch extends EventEmitter {
 
     const derivedHelper = createDerivedHelper(helper, this.tree, indexName);
 
-    derivedHelper.on('result', this._render.bind(this, helper));
+    derivedHelper.on('result', this._batch.bind(this, helper));
+    // derivedHelper.on('result', this._render.bind(this, helper));
 
     derivedHelper.on('error', e => this.emit('error', e));
 
@@ -346,7 +349,8 @@ class InstantSearch extends EventEmitter {
       const unsubscribeDerivedHelper = createHelperSubscription({
         helper: derivedHelper,
         event: 'result',
-        callback: this._render.bind(this, helper),
+        callback: this._batch.bind(this, helper),
+        // callback: this._render.bind(this, helper),
       });
 
       innerNode.derivedHelper = derivedHelper;
@@ -631,17 +635,31 @@ class InstantSearch extends EventEmitter {
     walk(this.tree);
   }
 
-  _render(helper, results, state) {
+  _batch() {
+    if (this.isPending) {
+      return;
+    }
+
+    this.isPending = true;
+
+    _defer.then(() => {
+      this.isPending = false;
+      this._render();
+    });
+  }
+
+  _render() {
     const walk = node => {
       node.widgets.forEach(widget => {
-        if (node.helper === helper && widget.render) {
+        if (widget.render) {
           widget.render({
             templatesConfig: this.templatesConfig,
-            results,
+            scope: [],
+            results: node.derivedHelper.lastResults,
             // At this stage the `state` provided to `_render` is not the one
             // of `node.helper.state` but the one from the derivation. What
             // are the impact... Complicated to see all of them...
-            state,
+            state: node.derivedHelper.lastResults._state,
             helper: node.helper,
             createURL: this._createAbsoluteURL,
             instantSearchInstance: this,
@@ -667,6 +685,44 @@ class InstantSearch extends EventEmitter {
 
     this.emit('render');
   }
+
+  // _render(helper, results, state) {
+  //   const walk = node => {
+  //     node.widgets.forEach(widget => {
+  //       if (node.helper === helper && widget.render) {
+  //         widget.render({
+  //           templatesConfig: this.templatesConfig,
+  //           scope: [],
+  //           results,
+  //           // At this stage the `state` provided to `_render` is not the one
+  //           // of `node.helper.state` but the one from the derivation. What
+  //           // are the impact... Complicated to see all of them...
+  //           state,
+  //           helper: node.helper,
+  //           createURL: this._createAbsoluteURL,
+  //           instantSearchInstance: this,
+  //           searchMetadata: {
+  //             isSearchStalled: this._isSearchStalled,
+  //           },
+  //         });
+  //       }
+
+  //       if (widget.node) {
+  //         walk(widget.node);
+  //       }
+  //     });
+  //   };
+
+  //   if (!this.tree.helper.hasPendingRequests()) {
+  //     clearTimeout(this._searchStalledTimer);
+  //     this._searchStalledTimer = null;
+  //     this._isSearchStalled = false;
+  //   }
+
+  //   walk(this.tree);
+
+  //   this.emit('render');
+  // }
 }
 
 export function enhanceConfiguration(searchParametersFromUrl) {
