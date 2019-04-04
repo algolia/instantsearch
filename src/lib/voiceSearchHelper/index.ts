@@ -7,7 +7,7 @@ const STATUS_ERROR = 'error';
 
 type VoiceSearchHelperParams = {
   onQueryChange: (query: string) => void;
-  onStateChange: () => any;
+  onStateChange: () => void;
 };
 
 export default function voiceSearchHelper({
