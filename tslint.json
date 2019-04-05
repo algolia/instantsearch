@@ -12,7 +12,6 @@
     "ordered-imports": false,
     "prettier": true,
     "jsx-no-lambda": false,
-    "no-empty": false,
-    "typedef": [true, "call-signature", "property-declaration"]
+    "no-empty": false
   }
 }

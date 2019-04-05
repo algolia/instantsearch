@@ -1708,6 +1708,18 @@
     traverse "^0.6.6"
     unified "^6.1.6"
 
+"@types/algoliasearch-helper@2.26.0":
+  version "2.26.0"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch-helper/-/algoliasearch-helper-2.26.0.tgz#314849c4b14e2c495fd38e239758b37633dcba16"
+  integrity sha512-X+5sSx5Pc+cDVO3s8FTgYSxtS+oDiXZxolW6MJdzGhzEx/69Kn5YhLDBYpZOMUGvc8nccEy3ahfgGN/sLa7AsA==
+  dependencies:
+    "@types/algoliasearch" "*"
+
+"@types/algoliasearch@*":
+  version "3.30.7"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.30.7.tgz#9c7df87b49565b979c36f19317fa5318e483c06b"
+  integrity sha512-ABsx6/j8LSf2lsX39WciYSzweUb/q8gUyHe85YLnqMLcjASzcSOwGESE63HwQguV8n2GoZbJ7OPcHyotzym9Ug==
+
 "@types/babel__core@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.0.tgz#710f2487dda4dcfd010ca6abb2b4dc7394365c51"

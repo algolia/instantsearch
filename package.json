@@ -70,6 +70,7 @@
     "@storybook/addon-actions": "5.0.6",
     "@storybook/html": "5.0.6",
     "@storybook/theming": "5.0.6",
+    "@types/algoliasearch-helper": "2.26.0",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
