@@ -44,7 +44,7 @@ storiesOf('QueryRuleContext', module)
       search.addWidget(
         queryRuleCustomData({
           container: widgetContainer,
-          transformItems(items: CustomDataItem[]) {
+          transformItems(items: CustomDataItem[]): CustomDataItem[] {
             return items.filter(item => typeof item.banner !== 'undefined');
           },
           templates: {
@@ -102,7 +102,7 @@ storiesOf('QueryRuleContext', module)
       search.addWidget(
         queryRuleCustomData({
           container: widgetContainer,
-          transformItems(items: CustomDataItem[]) {
+          transformItems(items: CustomDataItem[]): CustomDataItem[] {
             return items.filter(item => typeof item.banner !== 'undefined');
           },
           templates: {

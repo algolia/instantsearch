@@ -101,7 +101,7 @@ storiesOf('QueryRuleCustomData', module)
       search.addWidget(
         queryRuleCustomData({
           container: widgetContainer,
-          transformItems: (items: CustomDataItem[]) => {
+          transformItems: (items: CustomDataItem[]): CustomDataItem[] => {
             if (items.length > 0) {
               return items.filter(item => typeof item.banner !== 'undefined');
             }
