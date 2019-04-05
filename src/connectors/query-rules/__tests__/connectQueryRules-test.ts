@@ -1,4 +1,5 @@
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import { Client, Helper, SearchParameters } from '../../../types';
 import connectQueryRules, {
   QueryRulesWidgetFactory,
 } from '../connectQueryRules';
@@ -8,8 +9,12 @@ describe('connectQueryRules', () => {
   let unmountFn = jest.fn();
   let makeWidget: QueryRulesWidgetFactory<{}>;
 
-  const createFakeHelper = (state = {}) => {
-    const client = {};
+  const createFakeClient = (options = {}): Client => {
+    return options as Client;
+  };
+
+  const createFakeHelper = (state = {}): Helper => {
+    const client = createFakeClient();
     const indexName = '';
     const helper = algoliasearchHelper(client, indexName, state);
 
@@ -63,7 +68,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       const helper = createFakeHelper();
       const widget = makeWidget({});
 
-      widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+      widget.init!({ helper, state: helper.state, instantSearchInstance: {} });
 
       const [renderingParameters, isFirstRender] = renderFn.mock.calls[0];
 
@@ -84,8 +89,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       const helper = createFakeHelper();
       const widget = makeWidget({});
 
-      widget.init({ helper, state: helper.state, instantSearchInstance: {} });
-      widget.render({
+      widget.init!({ helper, state: helper.state, instantSearchInstance: {} });
+      widget.render!({
         helper,
         results: new SearchResults(helper.getState(), [{ hits: [] }]),
         instantSearchInstance: {},
@@ -107,7 +112,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(widgetParams).toEqual({});
       }
 
-      widget.render({
+      widget.render!({
         helper,
         results: new SearchResults(helper.getState(), [
           { hits: [], userData: [{ banner: 'image.png' }] },
@@ -136,8 +141,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       const helper = createFakeHelper();
       const widget = makeWidget({});
 
-      widget.init({ helper, state: helper.state, instantSearchInstance: {} });
-      widget.dispose({ helper, state: helper.getState() });
+      widget.init!({ helper, state: helper.state, instantSearchInstance: {} });
+      widget.dispose!({ helper, state: helper.getState() });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -151,8 +156,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           transformItems: customItems => customItems[0],
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
-        widget.render({
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {
@@ -194,11 +203,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
         // Query parameters are initially set in the helper.
         // Therefore, `ruleContexts` should be set.
-        expect(helper.getState().ruleContexts).toEqual([
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
           'ais-brand-Samsung',
           'ais-brand-Apple',
           'ais-price-500',
@@ -223,9 +236,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           transformRuleContexts: () => ['overriden-rule'],
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
-        expect(helper.getState().ruleContexts).toEqual(['overriden-rule']);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
+          'overriden-rule',
+        ]);
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith([]);
       });
@@ -243,14 +262,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
         // There's no results yet, so no `ruleContexts` should be set.
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -269,7 +294,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         // There are some results with the facets that we track in the
         // widget but the query parameters are not set in the helper.
         // Therefore, no `ruleContexts` should be set.
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
@@ -287,7 +314,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -305,7 +332,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         // The search state contains the facets that we track,
         // therefore the `ruleContexts` should finally be set.
-        expect(helper.getState().ruleContexts).toEqual([
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
           'ais-brand-Samsung',
           'ais-brand-Apple',
           'ais-price-500',
@@ -329,12 +356,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -350,7 +383,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
 
         helper.setState({
@@ -359,7 +394,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -375,7 +410,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual(['ais-brand-Samsung']);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
+          'ais-brand-Samsung',
+        ]);
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung', 'Apple']);
       });
@@ -389,18 +426,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [{}, {}]),
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
         helper.setState({
@@ -412,13 +457,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [{}, {}]),
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual(['ais-price-500']);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
+          'ais-price-500',
+        ]);
         expect(priceFilterSpy).toHaveBeenCalledTimes(1);
         expect(priceFilterSpy).toHaveBeenCalledWith([500, 400, 100]);
       });
@@ -433,7 +480,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
         helper.setState({
           disjunctiveFacetsRefinements: {
@@ -441,7 +492,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -457,7 +508,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual([
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
           'ais-brand-Insignia_',
           'ais-brand-_Apple',
         ]);
@@ -489,7 +540,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           },
         });
 
-        widget.init({
+        widget.init!({
           helper,
           state: helper.state,
           instantSearchInstance: {},
@@ -505,7 +556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           .toWarnDev(`[InstantSearch.js]: The maximum number of \`ruleContexts\` is 10. They have been sliced to that limit.
 Consider using \`transformRuleContexts\` to minimize the number of rules sent to Algolia.`);
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -530,8 +581,10 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toHaveLength(10);
-        expect(helper.getState().ruleContexts).toEqual([
+        expect(
+          (helper.getState() as SearchParameters).ruleContexts
+        ).toHaveLength(10);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
           'ais-brand-Insignia',
           'ais-brand-Canon',
           'ais-brand-Dynex',
@@ -556,7 +609,11 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
         helper.setState({
           disjunctiveFacetsRefinements: {
@@ -564,7 +621,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
         });
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -580,15 +637,17 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           instantSearchInstance: {},
         });
 
-        expect(helper.getState().ruleContexts).toEqual([
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
           'initial-rule',
           'ais-brand-Samsung',
           'ais-brand-Apple',
         ]);
 
-        const nextState = widget.dispose({ helper, state: helper.getState() });
+        const nextState = widget.dispose!({ helper, state: helper.getState() });
 
-        expect(nextState.ruleContexts).toEqual(['initial-rule']);
+        expect((nextState as SearchParameters).ruleContexts).toEqual([
+          'initial-rule',
+        ]);
       });
 
       test('stops tracking filters after dispose', () => {
@@ -605,15 +664,23 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
         });
 
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
-        expect(helper.getState().ruleContexts).toEqual(['ais-brand-Samsung']);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
+          'ais-brand-Samsung',
+        ]);
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
         expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung']);
 
-        widget.dispose({ helper, state: helper.state });
+        widget.dispose!({ helper, state: helper.state });
 
         helper.setState({
           disjunctiveFacetsRefinements: {
@@ -621,7 +688,9 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           },
         });
 
-        expect(helper.getState().ruleContexts).toEqual(undefined);
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
+          undefined
+        );
         expect(brandFilterSpy).toHaveBeenCalledTimes(1);
       });
     });
@@ -645,9 +714,13 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           transformRuleContexts: transformRuleContextsSpy,
         });
 
-        widget.init({ helper, state: helper.state, instantSearchInstance: {} });
+        widget.init!({
+          helper,
+          state: helper.state,
+          instantSearchInstance: {},
+        });
 
-        widget.render({
+        widget.render!({
           helper,
           results: new SearchResults(helper.getState(), [
             {},
@@ -669,7 +742,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           'ais-brand-Samsung',
           'ais-brand-Apple',
         ]);
-        expect(helper.getState().ruleContexts).toEqual([
+        expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
           'initial-rule',
           'transformed-brand-Samsung',
           'transformed-brand-Apple',

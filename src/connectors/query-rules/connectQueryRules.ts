@@ -6,6 +6,8 @@ import {
   WidgetFactory,
   Helper,
   HelperState,
+  SearchResults,
+  InstantSearch,
 } from '../../types';
 import {
   checkRendering,
@@ -56,18 +58,15 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-function hasStateRefinements({
-  disjunctiveFacetsRefinements,
-  facetsRefinements,
-  hierarchicalFacetsRefinements,
-  numericRefinements,
-}): boolean {
+function hasStateRefinements(state: HelperState): boolean {
   return [
-    disjunctiveFacetsRefinements,
-    facetsRefinements,
-    hierarchicalFacetsRefinements,
-    numericRefinements,
-  ].some(refinement => Object.keys(refinement).length > 0);
+    state.disjunctiveFacetsRefinements,
+    state.facetsRefinements,
+    state.hierarchicalFacetsRefinements,
+    state.numericRefinements,
+  ].some(refinement =>
+    Boolean(refinement && Object.keys(refinement).length > 0)
+  );
 }
 
 // A context rule must consist only of alphanumeric characters, hyphens, and underscores.
@@ -191,7 +190,15 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     let onHelperChange: (state: HelperState) => void;
 
     return {
-      init({ helper, state, instantSearchInstance }): void {
+      init({
+        helper,
+        state,
+        instantSearchInstance,
+      }: {
+        helper: Helper;
+        state: HelperState;
+        instantSearchInstance: InstantSearch;
+      }) {
         initialRuleContexts = state.ruleContexts || [];
         onHelperChange = applyRuleContexts.bind({
           helper,
@@ -227,7 +234,13 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      render({ results, instantSearchInstance }): void {
+      render({
+        results,
+        instantSearchInstance,
+      }: {
+        results: SearchResults;
+        instantSearchInstance: InstantSearch;
+      }) {
         const { userData = [] } = results;
         const items = transformItems(userData);
 
@@ -241,7 +254,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      dispose({ helper, state }): void {
+      dispose({ helper, state }: { helper: Helper; state: HelperState }) {
         unmount();
 
         if (hasTrackedFilters) {

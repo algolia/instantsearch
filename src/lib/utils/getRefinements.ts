@@ -28,7 +28,7 @@ export interface QueryRefinement
 export interface NumericRefinement extends FacetRefinement {
   type: 'numeric';
   numericValue: number;
-  operator: '<' | '<=' | '=' | '>=' | '>';
+  operator: '<' | '<=' | '=' | '!=' | '>=' | '>';
 }
 
 export interface FacetExcludeRefinement extends FacetRefinement {
@@ -47,7 +47,7 @@ function getRefinement(
   type: Refinement['type'],
   attributeName: Refinement['attributeName'],
   name: Refinement['name'],
-  resultsFacets: string[]
+  resultsFacets: SearchResults['facets' | 'hierarchicalFacets']
 ): Refinement {
   const res: Refinement = { type, attributeName, name };
   let facet: any = find(resultsFacets, { name: attributeName });
