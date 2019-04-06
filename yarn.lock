@@ -9357,10 +9357,10 @@ pkg-up@2.0.0, pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@1.16.1:
-  version "1.16.1"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.16.1.tgz#5e62a917bb17fb44633adf944dd3cb3497393c7f"
-  integrity sha512-r6qB/SZi7cp6IQP6V6LPkaMEZCGLw3bzKXS01Uf+cKbQWNDmjbM8UA3TnD2pwfydetZa7mI7yDZZdVubB4BhQg==
+places.js@1.16.3:
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.16.3.tgz#1fd4f80f04c3bbfc0c03dcbfb3d5c3fa6a49c9fd"
+  integrity sha512-sSJm7l+0gtIdpW4tsy9Ik5S906fsumFBGaIR+pDYaCse76t3FrdB49AYSwHKVSqgQsumLRvUz0znYNRwYTtdUA==
   dependencies:
     algolia-aerial "^1.5.3"
     algoliasearch "^3.31.0"
