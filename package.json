@@ -93,7 +93,7 @@
     "conventional-changelog-cli": "2.0.12",
     "doctoc": "1.4.0",
     "enzyme": "3.9.0",
-    "enzyme-adapter-react-16": "1.11.2",
+    "enzyme-adapter-react-16": "1.12.1",
     "enzyme-to-json": "3.3.5",
     "eslint": "5.16.0",
     "eslint-config-algolia": "13.2.3",
