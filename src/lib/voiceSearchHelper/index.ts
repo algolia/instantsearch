@@ -26,7 +26,7 @@ export default function voiceSearchHelper({
     (window as any).SpeechRecognition;
   const getDefaultState = (status: string): VoiceListeningState => ({
     status,
-    transcript: '',
+    transcript: undefined,
     isSpeechFinal: undefined,
     errorCode: undefined,
   });

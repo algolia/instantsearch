@@ -24,7 +24,7 @@ exports[`voiceSearch() Rendering renders during init() 1`] = `
       "errorCode": undefined,
       "isSpeechFinal": undefined,
       "status": "initial",
-      "transcript": "",
+      "transcript": undefined,
     }
   }
 />
@@ -54,7 +54,7 @@ exports[`voiceSearch() Rendering renders during render() 1`] = `
       "errorCode": undefined,
       "isSpeechFinal": undefined,
       "status": "initial",
-      "transcript": "",
+      "transcript": undefined,
     }
   }
 />
@@ -84,7 +84,7 @@ exports[`voiceSearch() Rendering renders during render() 2`] = `
       "errorCode": undefined,
       "isSpeechFinal": undefined,
       "status": "initial",
-      "transcript": "",
+      "transcript": undefined,
     }
   }
 />
