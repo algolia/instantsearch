@@ -68,7 +68,11 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
-    const { escapeHTML = true, transformItems = items => items } = widgetParams;
+    const {
+      escapeHTML = true,
+      transformItems = items => items,
+      showPrevious,
+    } = widgetParams;
     let hitsCache = [];
     let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
@@ -154,7 +158,9 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page;
-        if (page === 0 || page + 1 === uiState.page) return uiState;
+        if (!showPrevious || page === 0 || page + 1 === uiState.page) {
+          return uiState;
+        }
         return {
           ...uiState,
           page: page + 1,
@@ -162,6 +168,9 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        if (!showPrevious) {
+          return searchParameters;
+        }
         const uiPage = uiState.page;
         if (uiPage)
           return searchParameters.setQueryParameter('page', uiPage - 1);

@@ -166,5 +166,5 @@ export default function infiniteHits({
     unmountComponentAtNode(containerNode)
   );
 
-  return makeInfiniteHits({ escapeHTML, transformItems });
+  return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });
 }
