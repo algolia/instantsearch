@@ -549,26 +549,12 @@ describe('RoutingManager', () => {
   });
 
   describe('windowTitle', () => {
-    let setWindowTitle = jest.fn();
-
-    Object.defineProperty(window.document, 'title', {
-      get() {
-        return '';
-      },
-      set(value) {
-        setWindowTitle(value);
-      },
-    });
-
-    beforeEach(() => {
-      setWindowTitle = jest.fn();
-    });
-
     test('should update the window title with URL query params on first render', async () => {
       jsdom.reconfigure({
         url: 'https://website.com/?query=query',
       });
 
+      const setWindowTitle = jest.spyOn(window.document, 'title', 'set');
       const searchClient = createFakeSearchClient();
       const stateMapping = createFakeStateMapping();
       const router = historyRouter({
@@ -595,6 +581,8 @@ describe('RoutingManager', () => {
 
       expect(setWindowTitle).toHaveBeenCalledTimes(1);
       expect(setWindowTitle).toHaveBeenLastCalledWith('Searching for "query"');
+
+      setWindowTitle.mockRestore();
     });
   });
 });
