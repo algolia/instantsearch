@@ -1,5 +1,86 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`VoiceSearch Rendering with custom template for buttonText (1) 1`] = `
+<div
+  className="root"
+>
+  <button
+    className="button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Stop",
+      }
+    }
+    disabled={false}
+    onClick={[Function]}
+    title="Search by voice"
+    type="button"
+  />
+  <div
+    className="status"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`VoiceSearch Rendering with custom template for buttonText (2) 1`] = `
+<div
+  className="root"
+>
+  <button
+    className="button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "Start",
+      }
+    }
+    disabled={false}
+    onClick={[Function]}
+    title="Search by voice"
+    type="button"
+  />
+  <div
+    className="status"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`VoiceSearch Rendering with custom template for status 1`] = `
+<div
+  className="root"
+>
+  <button
+    className="button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+    disabled={false}
+    onClick={[Function]}
+    title="Search by voice"
+    type="button"
+  />
+  <div
+    className="status"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>status: recognizing</p> <p>errorCode: </p> <p>isListening: false</p> <p>transcript: Hello</p> <p>isSpeechFinal: false</p> <p>isSupportedBrowser: true</p>",
+      }
+    }
+  />
+</div>
+`;
+
 exports[`VoiceSearch Rendering with default props 1`] = `
 <div
   className="root"
@@ -21,33 +102,6 @@ exports[`VoiceSearch Rendering with default props 1`] = `
     dangerouslySetInnerHTML={
       Object {
         "__html": "status",
-      }
-    }
-  />
-</div>
-`;
-
-exports[`VoiceSearch Rendering with full props and custom templates 1`] = `
-<div
-  className="root"
->
-  <button
-    className="button"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Stop",
-      }
-    }
-    disabled={false}
-    onClick={[Function]}
-    title="Search by voice"
-    type="button"
-  />
-  <div
-    className="status"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "<p>status: recognizing</p> <p>errorCode: </p> <p>isListening: true</p> <p>transcript: Hello</p> <p>isSpeechFinal: false</p> <p>isSupportedBrowser: true</p>",
       }
     }
   />

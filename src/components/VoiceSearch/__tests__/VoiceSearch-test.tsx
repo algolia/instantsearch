@@ -14,9 +14,6 @@ const defaultProps = {
   toggleListening: () => {},
   voiceListeningState: {
     status: 'initial',
-    transcript: undefined,
-    isSpeechFinal: undefined,
-    errorCode: undefined,
   },
   templates: {
     buttonText: 'button',
@@ -53,10 +50,33 @@ describe('VoiceSearch', () => {
       expect(wrapper.find('button').props().disabled).toBe(true);
     });
 
-    it('with full props and custom templates', () => {
+    it('with custom template for buttonText (1)', () => {
       const props = {
         ...defaultProps,
         isListening: true,
+        templates: {
+          buttonText: ({ isListening }) => (isListening ? 'Stop' : 'Start'),
+          status: ``,
+        },
+      };
+      expect(mount(<VoiceSearch {...props} />)).toMatchSnapshot();
+    });
+
+    it('with custom template for buttonText (2)', () => {
+      const props = {
+        ...defaultProps,
+        isListening: false,
+        templates: {
+          buttonText: ({ isListening }) => (isListening ? 'Stop' : 'Start'),
+          status: ``,
+        },
+      };
+      expect(mount(<VoiceSearch {...props} />)).toMatchSnapshot();
+    });
+
+    it('with custom template for status', () => {
+      const props = {
+        ...defaultProps,
         voiceListeningState: {
           status: 'recognizing',
           transcript: 'Hello',
@@ -64,7 +84,7 @@ describe('VoiceSearch', () => {
           errorCode: undefined,
         },
         templates: {
-          buttonText: ({ isListening }) => (isListening ? 'Stop' : 'Start'),
+          buttonText: ``,
           status: `
             <p>status: {{status}}</p>
             <p>errorCode: {{errorCode}}</p>
