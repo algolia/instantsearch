@@ -24,6 +24,8 @@ describe('hits defaultTemplates', () => {
   });
 
   it('has a `showPreviousText` default template', () => {
-    expect(defaultTemplates.showPreviousText).toBe('Show previous results');
+    expect(defaultTemplates.showPreviousText).toMatchInlineSnapshot(
+      `"Show previous results"`
+    );
   });
 });
