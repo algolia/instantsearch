@@ -682,6 +682,71 @@ storiesOf('Index', module)
     })
   )
   .add(
+    'with searchFunction',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        const $searchBox = document.createElement('div');
+        $searchBox.style.marginBottom = '15px';
+
+        const $instantSearchPriceDescTitle = document.createElement('h3');
+        $instantSearchPriceDescTitle.textContent = 'instant_search_price_desc';
+        const $instantSearchPriceDescHits = document.createElement('div');
+
+        const $bestbuyTitle = document.createElement('h3');
+        $bestbuyTitle.textContent = 'instant_search_price_desc';
+        const $bestbuyHits = document.createElement('div');
+
+        container.appendChild($searchBox);
+
+        container.appendChild($instantSearchPriceDescTitle);
+        container.appendChild($instantSearchPriceDescHits);
+
+        container.appendChild($bestbuyTitle);
+        container.appendChild($bestbuyHits);
+
+        search.addWidgets([
+          instantsearch.widgets.configure({
+            hitsPerPage: 2,
+          }),
+
+          instantsearch.widgets.searchBox({
+            container: $searchBox,
+          }),
+
+          index({
+            indexName: 'instant_search_price_desc',
+          }).addWidgets([
+            instantsearch.widgets.configure({
+              hitsPerPage: 3,
+            }),
+            instantsearch.widgets.hits({
+              container: $instantSearchPriceDescHits,
+              templates: {
+                item:
+                  '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+              },
+            }),
+          ]),
+
+          index({ indexName: 'bestbuy' }).addWidgets([
+            instantsearch.widgets.hits({
+              container: $bestbuyHits,
+              templates: {
+                item:
+                  '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+              },
+            }),
+          ]),
+        ]);
+      },
+      {
+        searchFunction(mainHelper) {
+          mainHelper.search();
+        },
+      }
+    )
+  )
+  .add(
     'with suggestions & products',
     withHits(({ search, container, instantsearch }) => {
       const $root = document.createElement('div');

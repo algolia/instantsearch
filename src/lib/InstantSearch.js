@@ -182,7 +182,7 @@ class InstantSearch extends EventEmitter {
       numberLocale,
       searchParameters = {},
       routing = null,
-      // searchFunction,
+      searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
     } = options;
@@ -253,9 +253,9 @@ class InstantSearch extends EventEmitter {
 
     this._stalledSearchDelay = stalledSearchDelay;
 
-    // if (searchFunction) {
-    //   this._searchFunction = searchFunction;
-    // }
+    if (searchFunction) {
+      this._searchFunction = searchFunction;
+    }
 
     if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
     else if (isPlainObject(routing))
@@ -536,23 +536,23 @@ class InstantSearch extends EventEmitter {
       this._onHistoryChange = function() {};
     }
 
-    // if (this._searchFunction) {
-    //   this._mainHelperSearch = helper.search.bind(helper);
-    //   helper.search = () => {
-    //     const helperSearchFunction = algoliasearchHelper(
-    //       {
-    //         search: () => new Promise(() => {}),
-    //       },
-    //       helper.state.index,
-    //       helper.state
-    //     );
-    //     helperSearchFunction.once('search', state => {
-    //       helper.overrideStateWithoutTriggeringChangeEvent(state);
-    //       this._mainHelperSearch();
-    //     });
-    //     this._searchFunction(helperSearchFunction);
-    //   };
-    // }
+    if (this._searchFunction) {
+      this._mainHelperSearch = this.helper.search.bind(this.helper);
+      this.helper.search = () => {
+        const helperSearchFunction = algoliasearchHelper(
+          {
+            search: () => new Promise(() => {}),
+          },
+          this.helper.state.index,
+          this.helper.state
+        );
+        helperSearchFunction.once('search', state => {
+          this.helper.overrideStateWithoutTriggeringChangeEvent(state);
+          this._mainHelperSearch();
+        });
+        this._searchFunction(helperSearchFunction);
+      };
+    }
 
     console.log('Start');
     console.log(this.tree);
