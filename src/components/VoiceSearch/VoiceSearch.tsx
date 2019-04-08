@@ -15,7 +15,7 @@ type VoiceSearchProps = {
     searchAsYouSpeak: boolean;
   }) => void;
   voiceListeningState: VoiceListeningState;
-  searchAsYouSpeak?: boolean;
+  searchAsYouSpeak: boolean;
   templates: VoiceSearchTemplates;
 };
 
@@ -25,7 +25,7 @@ const VoiceSearch = ({
   isListening,
   toggleListening,
   voiceListeningState,
-  searchAsYouSpeak = false,
+  searchAsYouSpeak,
   templates,
 }: VoiceSearchProps) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
