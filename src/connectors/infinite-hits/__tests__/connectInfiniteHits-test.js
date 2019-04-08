@@ -165,6 +165,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const helper = jsHelper({}, '', {});
     helper.setPage(1);
     helper.search = jest.fn();
+    helper.emit = jest.fn();
 
     widget.init({
       helper,
@@ -196,6 +197,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(secondRenderingOptions.results).toEqual(results);
     showPrevious();
     expect(helper.getPage()).toBe(0);
+    expect(helper.emit).not.toHaveBeenCalled();
     expect(helper.search).toHaveBeenCalledTimes(1);
 
     // the results should be prepended if there is an decrement in page
