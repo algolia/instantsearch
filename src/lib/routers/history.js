@@ -51,11 +51,8 @@ class BrowserHistory {
     this._createURL = createURL;
     this.parseURL = parseURL;
 
-    const routeState = this.parseURL({
-      qsModule: qs,
-      location: window.location,
-    });
-    const title = this.windowTitle && this.windowTitle(routeState);
+    const title = this.windowTitle && this.windowTitle(this.read());
+
     setWindowTitle(title);
   }
 
