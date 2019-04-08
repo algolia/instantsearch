@@ -14,10 +14,6 @@ describe('VoiceSearchHelper', () => {
     delete window.SpeechRecognition;
   });
 
-  it('test nothing', () => {
-    expect(true).toBeTruthy();
-  });
-
   it('has initial state correctly', () => {
     const helper = getHelper();
     expect(helper.getState()).toMatchSnapshot();
