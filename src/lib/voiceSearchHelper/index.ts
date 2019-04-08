@@ -70,13 +70,10 @@ export default function voiceSearchHelper({
     }
     resetState(STATUS_ASKING_PERMISSION);
     recognition.interimResults = true;
-    recognition.onend = () => {
-      if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
-        onQueryChange(state.transcript);
-      }
-      if (state.status !== STATUS_ERROR) {
-        setState({ status: STATUS_FINISHED });
-      }
+    recognition.onstart = () => {
+      setState({
+        status: STATUS_WAITING,
+      });
     };
     recognition.onerror = (event: SpeechRecognitionError) => {
       setState({ status: STATUS_ERROR, errorCode: event.error });
@@ -94,10 +91,13 @@ export default function voiceSearchHelper({
         onQueryChange(state.transcript);
       }
     };
-    recognition.onstart = () => {
-      setState({
-        status: STATUS_WAITING,
-      });
+    recognition.onend = () => {
+      if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
+        onQueryChange(state.transcript);
+      }
+      if (state.status !== STATUS_ERROR) {
+        setState({ status: STATUS_FINISHED });
+      }
     };
 
     recognition.start();
