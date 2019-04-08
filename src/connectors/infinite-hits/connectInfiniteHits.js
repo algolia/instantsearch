@@ -110,7 +110,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
             results: undefined,
             showPrevious: this.showPrevious,
             showMore: this.showMore,
-            isFirstPage: true,
+            isFirstPage: firstReceivedPage === 0,
             isLastPage: true,
             instantSearchInstance,
             widgetParams,
