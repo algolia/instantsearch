@@ -195,25 +195,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(secondRenderingOptions.hits).toEqual(hits);
     expect(secondRenderingOptions.results).toEqual(results);
     showPrevious();
+    expect(helper.getPage()).toBe(0);
     expect(helper.search).toHaveBeenCalledTimes(1);
 
     // the results should be prepended if there is an decrement in page
-    const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
-    const otherResults = new SearchResults(helper.state, [
+    const previousHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const previousResults = new SearchResults(helper.state, [
       {
-        hits: otherHits,
+        hits: previousHits,
       },
     ]);
     widget.render({
-      results: otherResults,
+      results: previousResults,
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
     const thirdRenderingOptions = rendering.mock.calls[2][0];
-    expect(thirdRenderingOptions.hits).toEqual([...otherHits, ...hits]);
-    expect(thirdRenderingOptions.results).toEqual(otherResults);
+    expect(thirdRenderingOptions.hits).toEqual([...previousHits, ...hits]);
+    expect(thirdRenderingOptions.results).toEqual(previousResults);
   });
 
   it('escape highlight properties if requested', () => {
