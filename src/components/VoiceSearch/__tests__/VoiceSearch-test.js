@@ -50,7 +50,7 @@ describe('VoiceSearch', () => {
         isSupportedBrowser: false,
       };
       const wrapper = mount(<VoiceSearch {...props} />);
-      expect(wrapper.find('button').props().disabled).toBeTruthy();
+      expect(wrapper.find('button').props().disabled).toBe(true);
     });
 
     it('with full props and custom templates', () => {
