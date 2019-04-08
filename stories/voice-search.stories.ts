@@ -1,10 +1,11 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
+import voiceSearch from '../src/widgets/voice-search/voice-search';
 
 storiesOf('VoiceSearch', module)
   .add(
     'default',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       const descContainer = document.createElement('div');
       const realContainer = document.createElement('div');
       container.appendChild(descContainer);
@@ -14,7 +15,7 @@ storiesOf('VoiceSearch', module)
       `;
 
       search.addWidget(
-        instantsearch.widgets.voiceSearch({
+        voiceSearch({
           container: realContainer,
         })
       );
@@ -22,9 +23,9 @@ storiesOf('VoiceSearch', module)
   )
   .add(
     'without status',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidget(
-        instantsearch.widgets.voiceSearch({
+        voiceSearch({
           container,
           templates: {
             status: ``,
@@ -43,7 +44,7 @@ storiesOf('VoiceSearch', module)
       container.appendChild(subContainer2);
 
       search.addWidget(
-        instantsearch.widgets.voiceSearch({
+        voiceSearch({
           container: subContainer1,
         })
       );
@@ -56,9 +57,9 @@ storiesOf('VoiceSearch', module)
   )
   .add(
     'with a custom button text',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidget(
-        instantsearch.widgets.voiceSearch({
+        voiceSearch({
           container,
           templates: {
             buttonText({ isListening }) {
@@ -75,9 +76,9 @@ storiesOf('VoiceSearch', module)
   )
   .add(
     'with full status',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidget(
-        instantsearch.widgets.voiceSearch({
+        voiceSearch({
           container,
           templates: {
             status: `
@@ -95,9 +96,9 @@ storiesOf('VoiceSearch', module)
   )
   .add(
     'search as you speak',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidget(
-        instantsearch.widgets.voiceSearch({
+        voiceSearch({
           container,
           searchAsYouSpeak: true,
           templates: {
@@ -158,7 +159,7 @@ storiesOf('VoiceSearch', module)
       ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
 
       search.addWidget(
-        instantsearch.widgets.voiceSearch({
+        voiceSearch({
           container: subContainer1,
           cssClasses: {
             button: 'voice-search-button',
