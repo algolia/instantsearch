@@ -77,7 +77,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous"
   className="root"
 >
   <button
-    className="undefined"
+    className="loadPrevious disabledLoadPrevious"
     dangerouslySetInnerHTML={
       Object {
         "__html": "showPreviousText",
@@ -122,7 +122,7 @@ exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous"
   className="root"
 >
   <button
-    className=""
+    className="loadPrevious"
     dangerouslySetInnerHTML={
       Object {
         "__html": "showPreviousText",
