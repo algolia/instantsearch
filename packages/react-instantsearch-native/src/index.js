@@ -5,6 +5,7 @@ export { translatable } from 'react-instantsearch-core';
 
 // Widget
 export { Configure } from 'react-instantsearch-core';
+export { QueryRuleContext } from 'react-instantsearch-core';
 
 // Connectors
 export { connectAutoComplete } from 'react-instantsearch-core';
@@ -22,6 +23,7 @@ export { connectMenu } from 'react-instantsearch-core';
 export { connectNumericMenu } from 'react-instantsearch-core';
 export { connectPagination } from 'react-instantsearch-core';
 export { connectPoweredBy } from 'react-instantsearch-core';
+export { connectQueryRules } from 'react-instantsearch-core';
 export { connectRange } from 'react-instantsearch-core';
 export { connectRefinementList } from 'react-instantsearch-core';
 export { connectScrollTo } from 'react-instantsearch-core';

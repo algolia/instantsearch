@@ -10,6 +10,7 @@ export { default as translatable } from './core/translatable';
 
 // Widgets
 export { default as Configure } from './widgets/Configure';
+export { default as QueryRuleContext } from './widgets/QueryRuleContext';
 
 // Connectors
 export {
@@ -34,6 +35,7 @@ export { default as connectMenu } from './connectors/connectMenu';
 export { default as connectNumericMenu } from './connectors/connectNumericMenu';
 export { default as connectPagination } from './connectors/connectPagination';
 export { default as connectPoweredBy } from './connectors/connectPoweredBy';
+export { default as connectQueryRules } from './connectors/connectQueryRules';
 export { default as connectRange } from './connectors/connectRange';
 export {
   default as connectRefinementList,
