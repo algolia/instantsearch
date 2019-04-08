@@ -155,6 +155,11 @@ describe('InfiniteHits', () => {
 
       const tree = mount(<InfiniteHits {...props} />);
 
+      const previousButton = tree.find('.loadPrevious');
+
+      expect(previousButton.exists()).toEqual(true);
+      expect(previousButton.hasClass('disabledLoadPrevious')).toEqual(true);
+      expect(previousButton.props().disabled).toEqual(true);
       expect(tree).toMatchSnapshot();
     });
 
@@ -188,6 +193,10 @@ describe('InfiniteHits', () => {
 
       const tree = mount(<InfiniteHits {...props} />);
 
+      const previousButton = tree.find('.loadPrevious');
+
+      expect(previousButton.exists()).toEqual(true);
+      expect(previousButton.props().disabled).toEqual(false);
       expect(tree).toMatchSnapshot();
     });
   });
