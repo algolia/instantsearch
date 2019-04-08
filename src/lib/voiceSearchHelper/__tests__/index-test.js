@@ -56,7 +56,7 @@ describe('VoiceSearchHelper', () => {
     });
     const { getState } = helper;
     helper.toggleListening({ searchAsYouSpeak: false });
-    expect(onStateChange).toHaveBeenCalled();
+    expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(getState().status).toEqual('askingPermission');
     that.onstart();
     expect(getState().status).toEqual('waiting');
@@ -76,7 +76,7 @@ describe('VoiceSearchHelper', () => {
     expect(getState().status).toEqual('recognizing');
     expect(getState().transcript).toEqual('Hello World');
     expect(getState().isSpeechFinal).toBe(true);
-    expect(onQueryChange).not.toHaveBeenCalled();
+    expect(onQueryChange).toHaveBeenCalledTimes(0);
     that.onend();
     expect(onQueryChange).toHaveBeenCalledWith('Hello World');
     expect(getState().status).toEqual('finished');
@@ -97,7 +97,7 @@ describe('VoiceSearchHelper', () => {
     });
     const { getState } = helper;
     helper.toggleListening({ searchAsYouSpeak: true });
-    expect(onStateChange).toHaveBeenCalled();
+    expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(getState().status).toEqual('askingPermission');
     that.onstart();
     expect(getState().status).toEqual('waiting');
@@ -145,6 +145,6 @@ describe('VoiceSearchHelper', () => {
     expect(getState().status).toEqual('error');
     expect(getState().errorCode).toEqual('not-allowed');
     that.onend();
-    expect(onQueryChange).not.toHaveBeenCalled();
+    expect(onQueryChange).toHaveBeenCalledTimes(0);
   });
 });
