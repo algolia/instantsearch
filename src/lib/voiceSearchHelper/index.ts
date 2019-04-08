@@ -84,8 +84,11 @@ export default function voiceSearchHelper({
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       setState({
         status: STATUS_RECOGNIZING,
-        transcript: event.results[0][0].transcript,
-        isSpeechFinal: event.results[0].isFinal,
+        transcript:
+          event.results[0] &&
+          event.results[0][0] &&
+          event.results[0][0].transcript,
+        isSpeechFinal: event.results[0] && event.results[0].isFinal,
       });
       if (searchAsYouSpeak && state.transcript) {
         onQueryChange(state.transcript);
