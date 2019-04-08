@@ -567,14 +567,7 @@ class InstantSearch extends EventEmitter {
       if (!this._isSearchStalled && !this._searchStalledTimer) {
         this._searchStalledTimer = setTimeout(() => {
           this._isSearchStalled = true;
-          // This render does not work, it only render the top level widgets
-          // since it trigger a render with only the top level helper. We
-          // branch inside `render`.
-          this._render(
-            this.tree.helper,
-            this.tree.helper.lastResults,
-            this.tree.helper.lastResults._state
-          );
+          this._render();
         }, this._stalledSearchDelay);
       }
     });
