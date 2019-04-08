@@ -8,6 +8,8 @@ describe('InfiniteHits', () => {
     emptyRoot: 'emptyRoot',
     item: 'item',
     list: 'list',
+    loadPrevious: 'loadPrevious',
+    disabledLoadPrevious: 'disabledLoadPrevious',
     loadMore: 'loadMore',
     disabledLoadMore: 'disabledLoadMore',
   };
