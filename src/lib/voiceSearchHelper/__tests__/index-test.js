@@ -16,7 +16,12 @@ describe('VoiceSearchHelper', () => {
 
   it('has initial state correctly', () => {
     const helper = getHelper();
-    expect(helper.getState()).toMatchSnapshot();
+    expect(helper.getState()).toEqual({
+      errorCode: undefined,
+      isSpeechFinal: undefined,
+      status: 'initial',
+      transcript: '',
+    });
   });
 
   it('is not supported', () => {
