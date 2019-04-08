@@ -486,7 +486,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       it('should give back the object unmodified if the default value is selected', () => {
         const rendering = jest.fn();
         const makeWidget = connectInfiniteHits(rendering);
-        const widget = makeWidget();
+        const widget = makeWidget({ showPrevious: true });
 
         const helper = jsHelper({}, '', {});
         helper.search = jest.fn();
@@ -510,7 +510,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       it('should add an entry equal to the refinement', () => {
         const rendering = jest.fn();
         const makeWidget = connectInfiniteHits(rendering);
-        const widget = makeWidget();
+        const widget = makeWidget({ showPrevious: true });
 
         const helper = jsHelper({}, '', {});
         helper.search = jest.fn();
@@ -540,7 +540,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       it('should return the same SP if there are no refinements in the UI state', () => {
         const rendering = jest.fn();
         const makeWidget = connectInfiniteHits(rendering);
-        const widget = makeWidget();
+        const widget = makeWidget({ showPrevious: true });
 
         const helper = jsHelper({}, '', {});
         helper.search = jest.fn();
@@ -567,7 +567,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       it('should enforce the default value if no value is in the UI State', () => {
         const rendering = jest.fn();
         const makeWidget = connectInfiniteHits(rendering);
-        const widget = makeWidget();
+        const widget = makeWidget({ showPrevious: true });
 
         const helper = jsHelper({}, '', {});
         helper.search = jest.fn();
@@ -601,7 +601,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         global.window = { location: { pathname: null } };
         const rendering = jest.fn();
         const makeWidget = connectInfiniteHits(rendering);
-        const widget = makeWidget();
+        const widget = makeWidget({ showPrevious: true });
 
         const helper = jsHelper({}, '', {});
         helper.search = jest.fn();
