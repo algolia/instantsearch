@@ -37,8 +37,8 @@ export type VoiceSearchTemplates = {
 
 type VoiceSearchWidgetParams = {
   container: string | HTMLElement;
-  cssClasses?: VoiceSearchCSSClasses;
-  templates?: VoiceSearchTemplates;
+  cssClasses?: Partial<VoiceSearchCSSClasses>;
+  templates?: Partial<VoiceSearchTemplates>;
   searchAsYouSpeak?: boolean;
 };
 
