@@ -134,4 +134,21 @@ storiesOf('QueryRuleCustomData', module)
         })
       );
     }, searchOptions)
+  )
+  .add(
+    'without template',
+    withHits(({ search, container, instantsearch }) => {
+      const widgetContainer = document.createElement('div');
+      const description = document.createElement('p');
+      description.innerHTML = 'Type <q>music</q> and a banner will appear.';
+
+      container.appendChild(description);
+      container.appendChild(widgetContainer);
+
+      search.addWidget(
+        instantsearch.widgets.queryRuleCustomData({
+          container: widgetContainer,
+        })
+      );
+    }, searchOptions)
   );

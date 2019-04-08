@@ -99,8 +99,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         const { templates } = render.mock.calls[0][0].props;
 
         expect(templates).toEqual({
-          default: '',
+          default: expect.any(Function),
         });
+        expect(
+          templates.default({
+            items: [{ banner: '1.jpg' }, { banner: '2.jpg' }],
+          })
+        ).toMatchInlineSnapshot(`
+"[
+  {
+    \\"banner\\": \\"1.jpg\\"
+  },
+  {
+    \\"banner\\": \\"2.jpg\\"
+  }
+]"
+`);
       });
 
       test('applies custom template', () => {
