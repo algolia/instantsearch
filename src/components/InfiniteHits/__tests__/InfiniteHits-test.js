@@ -196,6 +196,7 @@ describe('InfiniteHits', () => {
       const previousButton = tree.find('.loadPrevious');
 
       expect(previousButton.exists()).toEqual(true);
+      expect(previousButton.hasClass('disabledLoadPrevious')).toEqual(false);
       expect(previousButton.props().disabled).toEqual(false);
       expect(tree).toMatchSnapshot();
     });
