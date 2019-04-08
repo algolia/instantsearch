@@ -32,6 +32,7 @@ describe('voiceSearch()', () => {
     it('throws without container', () => {
       expect(() => {
         voiceSearch({
+          // @ts-ignore
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -46,7 +47,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     test('renders during init()', () => {
       const { widget } = defaultSetup();
 
-      widget.init({ helper });
+      widget.init({ helper, instantSearchInstance: {} });
 
       expect(render).toHaveBeenCalledTimes(1);
       expect(render.mock.calls[0][0]).toMatchSnapshot();
@@ -55,8 +56,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     test('renders during render()', () => {
       const { container, widget } = defaultSetup();
 
-      widget.init({ helper });
-      widget.render({ helper });
+      widget.init({ helper, instantSearchInstance: {} });
+      widget.render({ helper, instantSearchInstance: {} });
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[0][0]).toMatchSnapshot();
@@ -68,7 +69,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     test('sets the correct CSS classes', () => {
       const { widget } = defaultSetup();
 
-      widget.init({ helper });
+      widget.init({ helper, instantSearchInstance: {} });
 
       expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
     });
@@ -76,8 +77,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     test('sets searchAsYouSpeak', () => {
       const { widget } = defaultSetup({ searchAsYouSpeak: true });
 
-      widget.init({ helper });
-      widget.render({ helper });
+      widget.init({ helper, instantSearchInstance: {} });
+      widget.render({ helper, instantSearchInstance: {} });
       expect(render.mock.calls[1][0].props.searchAsYouSpeak).toBe(true);
     });
   });

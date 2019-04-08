@@ -11,6 +11,7 @@ exports[`voiceSearch() Rendering renders during init() 1`] = `
   }
   isListening={false}
   isSupportedBrowser={false}
+  searchAsYouSpeak={false}
   templates={
     Object {
       "buttonText": [Function],
@@ -40,6 +41,7 @@ exports[`voiceSearch() Rendering renders during render() 1`] = `
   }
   isListening={false}
   isSupportedBrowser={false}
+  searchAsYouSpeak={false}
   templates={
     Object {
       "buttonText": [Function],
@@ -69,6 +71,7 @@ exports[`voiceSearch() Rendering renders during render() 2`] = `
   }
   isListening={false}
   isSupportedBrowser={false}
+  searchAsYouSpeak={false}
   templates={
     Object {
       "buttonText": [Function],

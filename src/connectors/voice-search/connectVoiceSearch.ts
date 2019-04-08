@@ -12,6 +12,10 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type VoiceSearchConnectorParams = {
+  searchAsYouSpeak?: boolean;
+};
+
 export interface VoiceSearchRenderOptions<T> extends RenderOptions<T> {
   isSupportedBrowser: boolean;
   isListening: boolean;
@@ -21,9 +25,13 @@ export interface VoiceSearchRenderOptions<T> extends RenderOptions<T> {
   voiceListeningState: VoiceListeningState;
 }
 
-export type VoiceSearchRenderer<T> = Renderer<VoiceSearchRenderOptions<T>>;
+export type VoiceSearchRenderer<T> = Renderer<
+  VoiceSearchRenderOptions<VoiceSearchConnectorParams & T>
+>;
 
-export type VoiceSearchWidgetFactory<T> = WidgetFactory<T>;
+export type VoiceSearchWidgetFactory<T> = WidgetFactory<
+  VoiceSearchConnectorParams & T
+>;
 
 export type VoiceSearchConnector = <T>(
   renderFn: VoiceSearchRenderer<T>,
@@ -36,7 +44,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
 ) => {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
     const render = ({
       isFirstRendering,
       instantSearchInstance,

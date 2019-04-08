@@ -10,7 +10,7 @@ import connectVoiceSearch, {
 } from '../../connectors/voice-search/connectVoiceSearch';
 import VoiceSearch from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
-import { Template } from '../../types';
+import { WidgetFactory, Template } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
@@ -21,9 +21,18 @@ export type VoiceSearchCSSClasses = {
   status: string;
 };
 
+type VoiceSearchTemplateProps = {
+  status: string;
+  errorCode: string;
+  isListening: boolean;
+  transcript: string;
+  isSpeechFinal: boolean;
+  isSupportedBrowser: boolean;
+};
+
 export type VoiceSearchTemplates = {
-  buttonText: Template<object>;
-  status: Template<object>;
+  buttonText: Template<VoiceSearchTemplateProps>;
+  status: Template<VoiceSearchTemplateProps>;
 };
 
 export type VoiceListeningState = {
@@ -35,28 +44,27 @@ export type VoiceListeningState = {
 
 type VoiceSearchWidgetParams = {
   container: string | HTMLElement;
-  cssClasses: VoiceSearchCSSClasses;
-  templates: VoiceSearchTemplates;
+  cssClasses?: VoiceSearchCSSClasses;
+  templates?: VoiceSearchTemplates;
   searchAsYouSpeak?: boolean;
 };
 
-type VoiceSearchWidgetRenderParams = {
-  isSupportedBrowser: boolean;
-  isListening: boolean;
-  toggleListening: (toggleListeningParams: {
-    searchAsYouSpeak: boolean;
-  }) => void;
-  voiceListeningState: VoiceListeningState;
-  widgetParams: VoiceSearchWidgetParams;
-};
+interface VoiceSearchRendererWidgetParams extends VoiceSearchWidgetParams {
+  container: HTMLElement;
+  cssClasses: VoiceSearchCSSClasses;
+  templates: VoiceSearchTemplates;
+  searchAsYouSpeak: boolean;
+}
 
-const renderer: VoiceSearchRenderer<VoiceSearchWidgetParams> = ({
+type VoiceSearch = WidgetFactory<VoiceSearchWidgetParams>;
+
+const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
   isSupportedBrowser,
   isListening,
   toggleListening,
   voiceListeningState,
   widgetParams,
-}: VoiceSearchWidgetRenderParams) => {
+}) => {
   const { container, cssClasses, templates, searchAsYouSpeak } = widgetParams;
 
   render(
@@ -73,14 +81,14 @@ const renderer: VoiceSearchRenderer<VoiceSearchWidgetParams> = ({
   );
 };
 
-export default function voiceSearch(
+const voiceSearch: VoiceSearch = (
   {
     container,
     cssClasses: userCssClasses = {} as VoiceSearchCSSClasses,
     templates,
-    searchAsYouSpeak,
+    searchAsYouSpeak = false,
   } = {} as VoiceSearchWidgetParams
-) {
+) => {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -103,4 +111,6 @@ export default function voiceSearch(
     templates: { ...defaultTemplates, ...templates },
     searchAsYouSpeak,
   });
-}
+};
+
+export default voiceSearch;

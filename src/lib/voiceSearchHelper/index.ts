@@ -5,7 +5,7 @@ const STATUS_RECOGNIZING = 'recognizing';
 const STATUS_FINISHED = 'finished';
 const STATUS_ERROR = 'error';
 
-type VoiceSearchHelperParams = {
+export type VoiceSearchHelperParams = {
   onQueryChange: (query: string) => void;
   onStateChange: () => void;
 };

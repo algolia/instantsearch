@@ -1,12 +1,20 @@
-import VoiceSearchHelper from '../';
+import VoiceSearchHelper, { VoiceSearchHelperParams } from '..';
 
-const getHelper = opts =>
-  new VoiceSearchHelper(
+const getHelper = (opts?: VoiceSearchHelperParams) =>
+  VoiceSearchHelper(
     opts || {
       onQueryChange: () => {},
       onStateChange: () => {},
     }
   );
+
+type DummySpeechRecognition = () => void;
+declare global {
+  interface Window {
+    webkitSpeechRecognition?: SpeechRecognition | DummySpeechRecognition;
+    SpeechRecognition?: SpeechRecognition | DummySpeechRecognition;
+  }
+}
 
 describe('VoiceSearchHelper', () => {
   beforeEach(() => {
@@ -74,7 +82,7 @@ describe('VoiceSearchHelper', () => {
               transcript: 'Hello World',
             },
           ];
-          obj.isFinal = true;
+          (obj as any).isFinal = true;
           return obj;
         })(),
       ],
@@ -116,7 +124,7 @@ describe('VoiceSearchHelper', () => {
               transcript: 'Hello World',
             },
           ];
-          obj.isFinal = true;
+          (obj as any).isFinal = true;
           return obj;
         })(),
       ],
