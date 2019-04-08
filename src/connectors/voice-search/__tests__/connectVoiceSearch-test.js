@@ -17,12 +17,14 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
 
 function defaultSetup() {
   const renderFn = jest.fn();
-  const makeWidget = connectVoiceSearch(renderFn);
+  const unmountFn = jest.fn();
+  const makeWidget = connectVoiceSearch(renderFn, unmountFn);
   const widget = makeWidget();
   const helper = jsHelper({});
 
   return {
     renderFn,
+    unmountFn,
     widget,
     helper,
   };
@@ -41,22 +43,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
   });
 
-  it('calls renderFn during init and render', () => {
-    const { renderFn, widget, helper } = defaultSetup();
-    widget.init({ helper });
-    expect(renderFn).toHaveBeenCalled();
-    expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({}),
-      true
-    );
-    widget.render({
-      helper,
+  describe('lifecycle', () => {
+    it('calls renderFn during init and render', () => {
+      const { renderFn, widget, helper } = defaultSetup();
+      widget.init({ helper });
+      expect(renderFn).toHaveBeenCalled();
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({}),
+        true
+      );
+      widget.render({
+        helper,
+      });
+      expect(renderFn).toHaveBeenCalledTimes(2);
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({}),
+        false
+      );
     });
-    expect(renderFn).toHaveBeenCalledTimes(2);
-    expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({}),
-      false
-    );
+
+    it('calls unmount on dispose', () => {
+      const { unmountFn, widget, helper } = defaultSetup();
+      widget.init({ helper });
+      widget.dispose({ helper, state: helper.getState() });
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('render triggered when state changes', () => {
