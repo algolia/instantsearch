@@ -4,7 +4,7 @@ var test = require('tape');
 
 var algoliasearchHelper = require('../../../../index.js');
 
-test('[Derivated helper] detach a derivative helper', function(t) {
+test('[derived helper] detach a derived helper', function(t) {
   var client = {
     search: searchTest
   };
@@ -23,7 +23,7 @@ test('[Derivated helper] detach a derivative helper', function(t) {
       t.equal(
         requests.length,
         2,
-        'the helper generates a two queries'
+        'the helper generates two queries'
       );
       t.deepEqual(
         requests[0],
@@ -40,7 +40,7 @@ test('[Derivated helper] detach a derivative helper', function(t) {
       t.equal(
         requests.length,
         1,
-        'the helper generates a two queries'
+        'the helper generates two queries'
       );
       t.equal(
         derivedHelper.listeners('result').length,

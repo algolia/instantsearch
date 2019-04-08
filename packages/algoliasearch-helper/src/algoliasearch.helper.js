@@ -5,8 +5,8 @@ var SearchResults = require('./SearchResults');
 var DerivedHelper = require('./DerivedHelper');
 var requestBuilder = require('./requestBuilder');
 
-var util = require('util');
 var events = require('events');
+var inherits = require('./functions/inherits');
 
 var flatten = require('lodash/flatten');
 var forEach = require('lodash/forEach');
@@ -134,7 +134,7 @@ function AlgoliaSearchHelper(client, index, options) {
   this._currentNbQueries = 0;
 }
 
-util.inherits(AlgoliaSearchHelper, events.EventEmitter);
+inherits(AlgoliaSearchHelper, events.EventEmitter);
 
 /**
  * Start the search with the parameters set in the state. When the

@@ -4,7 +4,7 @@ var test = require('tape');
 
 var algoliasearchHelper = require('../../../../index.js');
 
-test('[Derivated helper] no derivatives', function(t) {
+test('[Derived helper] no derived helpers', function(t) {
   t.plan(1);
   var client = {
     search: searchTest
@@ -16,14 +16,14 @@ test('[Derivated helper] no derivatives', function(t) {
     t.equal(
       requests.length,
       1,
-      'Without the derivatives and no filters, the helper generates a single query'
+      'Without the derived helpers and no filters, the helper generates a single query'
     );
 
     return new Promise(function() {});
   }
 });
 
-test('[Derivated helper] 1 derivatives, no modifications', function(t) {
+test('[Derived helper] 1 derived helpers, no modifications', function(t) {
   t.plan(2);
   var client = {
     search: searchTest
@@ -48,7 +48,7 @@ test('[Derivated helper] 1 derivatives, no modifications', function(t) {
   }
 });
 
-test('[Derivated helper] no derivatives, modification', function(t) {
+test('[Derived helper] no derived helpers, modification', function(t) {
   t.plan(4);
   var client = {
     search: searchTest

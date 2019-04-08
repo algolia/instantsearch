@@ -1,6 +1,7 @@
 'use strict';
-var util = require('util');
+
 var events = require('events');
+var inherits = require('../functions/inherits');
 
 /**
  * A DerivedHelper is a way to create sub requests to
@@ -18,7 +19,7 @@ function DerivedHelper(mainHelper, fn) {
   this.lastResults = null;
 }
 
-util.inherits(DerivedHelper, events.EventEmitter);
+inherits(DerivedHelper, events.EventEmitter);
 
 /**
  * Detach this helper from the main helper
