@@ -123,9 +123,11 @@ describe('infiniteHits()', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+
+    expect(render.mock.calls[0][0].props.isFirstPage).toEqual(true);
     expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
+
+    expect(render.mock.calls[0][0].props.isFirstPage).toEqual(true);
     expect(render.mock.calls[1][1]).toEqual(container);
   });
 
@@ -141,7 +143,8 @@ describe('infiniteHits()', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+
+    expect(render.mock.calls[0][0].props.isFirstPage).toEqual(false);
     expect(render.mock.calls[0][1]).toEqual(container);
   });
 });
