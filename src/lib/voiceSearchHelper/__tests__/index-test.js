@@ -21,24 +21,24 @@ describe('VoiceSearchHelper', () => {
 
   it('is not supported', () => {
     const helper = getHelper();
-    expect(helper.isSupportedBrowser()).toBeFalsy();
+    expect(helper.isSupportedBrowser()).toBe(false);
   });
 
   it('is not listening', () => {
     const helper = getHelper();
-    expect(helper.isListening()).toBeFalsy();
+    expect(helper.isListening()).toBe(false);
   });
 
   it('is supported with webkitSpeechRecognition', () => {
     window.webkitSpeechRecognition = () => {};
     const helper = getHelper();
-    expect(helper.isSupportedBrowser()).toBeTruthy();
+    expect(helper.isSupportedBrowser()).toBe(true);
   });
 
   it('is supported with SpeechRecognition', () => {
     window.SpeechRecognition = () => {};
     const helper = getHelper();
-    expect(helper.isSupportedBrowser()).toBeTruthy();
+    expect(helper.isSupportedBrowser()).toBe(true);
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:false)', () => {
@@ -75,7 +75,7 @@ describe('VoiceSearchHelper', () => {
     });
     expect(getState().status).toEqual('recognizing');
     expect(getState().transcript).toEqual('Hello World');
-    expect(getState().isSpeechFinal).toBeTruthy();
+    expect(getState().isSpeechFinal).toBe(true);
     expect(onQueryChange).not.toHaveBeenCalled();
     that.onend();
     expect(onQueryChange).toHaveBeenCalledWith('Hello World');
@@ -116,7 +116,7 @@ describe('VoiceSearchHelper', () => {
     });
     expect(getState().status).toEqual('recognizing');
     expect(getState().transcript).toEqual('Hello World');
-    expect(getState().isSpeechFinal).toBeTruthy();
+    expect(getState().isSpeechFinal).toBe(true);
     expect(onQueryChange).toHaveBeenCalledWith('Hello World');
     that.onend();
     expect(onQueryChange).toHaveBeenCalledTimes(1);
