@@ -1,14 +1,13 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import VoiceSearch from '../VoiceSearch';
+import VoiceSearch, { VoiceSearchProps } from '../VoiceSearch';
 
-const defaultProps = {
+const defaultProps: VoiceSearchProps = {
   cssClasses: {
     root: 'root',
     button: 'button',
     status: 'status',
   },
-  searchAsYouSpeak: false,
   isSupportedBrowser: true,
   isListening: false,
   toggleListening: () => {},
@@ -30,9 +29,7 @@ describe('VoiceSearch', () => {
       };
       const wrapper = mount(<VoiceSearch {...props} />);
       wrapper.find('button').simulate('click');
-      expect(props.toggleListening).toHaveBeenCalledWith({
-        searchAsYouSpeak: props.searchAsYouSpeak,
-      });
+      expect(props.toggleListening).toHaveBeenCalledTimes(1);
     });
   });
 

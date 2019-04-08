@@ -19,7 +19,7 @@ function defaultSetup() {
   const renderFn = jest.fn();
   const unmountFn = jest.fn();
   const makeWidget = connectVoiceSearch(renderFn, unmountFn);
-  const widget = makeWidget();
+  const widget = makeWidget({});
   const helper = jsHelper({});
 
   return {

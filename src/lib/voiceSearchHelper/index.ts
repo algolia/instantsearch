@@ -6,6 +6,7 @@ const STATUS_FINISHED = 'finished';
 const STATUS_ERROR = 'error';
 
 export type VoiceSearchHelperParams = {
+  searchAsYouSpeak: boolean;
   onQueryChange: (query: string) => void;
   onStateChange: () => void;
 };
@@ -17,7 +18,10 @@ export type VoiceListeningState = {
   errorCode?: string;
 };
 
+export type ToggleListening = () => void;
+
 export default function voiceSearchHelper({
+  searchAsYouSpeak,
   onQueryChange,
   onStateChange,
 }: VoiceSearchHelperParams) {
@@ -59,7 +63,7 @@ export default function voiceSearchHelper({
     resetState();
   };
 
-  const start = ({ searchAsYouSpeak }: { searchAsYouSpeak: boolean }) => {
+  const start = () => {
     recognition = new SpeechRecognition();
     if (!recognition) {
       return;
@@ -96,15 +100,11 @@ export default function voiceSearchHelper({
     recognition.start();
   };
 
-  const toggleListening = ({
-    searchAsYouSpeak,
-  }: {
-    searchAsYouSpeak: boolean;
-  }) => {
+  const toggleListening = () => {
     if (isListening()) {
       stop();
     } else {
-      start({ searchAsYouSpeak });
+      start();
     }
   };
 

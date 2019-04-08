@@ -6,17 +6,17 @@ import {
   VoiceSearchTemplates,
 } from '../../widgets/voice-search/voice-search';
 
-import { VoiceListeningState } from '../../lib/voiceSearchHelper';
+import {
+  VoiceListeningState,
+  ToggleListening,
+} from '../../lib/voiceSearchHelper';
 
-type VoiceSearchProps = {
+export type VoiceSearchProps = {
   cssClasses: VoiceSearchCSSClasses;
   isSupportedBrowser: boolean;
   isListening: boolean;
-  toggleListening: (toggleListeningParams: {
-    searchAsYouSpeak: boolean;
-  }) => void;
+  toggleListening: ToggleListening;
   voiceListeningState: VoiceListeningState;
-  searchAsYouSpeak: boolean;
   templates: VoiceSearchTemplates;
 };
 
@@ -26,12 +26,11 @@ const VoiceSearch = ({
   isListening,
   toggleListening,
   voiceListeningState,
-  searchAsYouSpeak,
   templates,
 }: VoiceSearchProps) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     event.currentTarget.blur();
-    toggleListening({ searchAsYouSpeak });
+    toggleListening();
   };
 
   const { status, transcript, isSpeechFinal, errorCode } = voiceListeningState;

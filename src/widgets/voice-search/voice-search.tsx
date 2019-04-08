@@ -46,7 +46,6 @@ interface VoiceSearchRendererWidgetParams extends VoiceSearchWidgetParams {
   container: HTMLElement;
   cssClasses: VoiceSearchCSSClasses;
   templates: VoiceSearchTemplates;
-  searchAsYouSpeak: boolean;
 }
 
 type VoiceSearch = WidgetFactory<VoiceSearchWidgetParams>;
@@ -58,7 +57,7 @@ const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
   voiceListeningState,
   widgetParams,
 }) => {
-  const { container, cssClasses, templates, searchAsYouSpeak } = widgetParams;
+  const { container, cssClasses, templates } = widgetParams;
 
   render(
     <VoiceSearch
@@ -68,7 +67,6 @@ const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
       isListening={isListening}
       toggleListening={toggleListening}
       voiceListeningState={voiceListeningState}
-      searchAsYouSpeak={searchAsYouSpeak}
     />,
     container
   );

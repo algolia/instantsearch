@@ -5,7 +5,10 @@ import {
 } from '../../lib/utils';
 import { Renderer, RenderOptions, WidgetFactory } from '../../types';
 import voiceSearchHelper from '../../lib/voiceSearchHelper';
-import { VoiceListeningState } from '../../lib/voiceSearchHelper';
+import {
+  VoiceListeningState,
+  ToggleListening,
+} from '../../lib/voiceSearchHelper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',
@@ -13,15 +16,13 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type VoiceSearchConnectorParams = {
-  searchAsYouSpeak?: boolean;
+  searchAsYouSpeak: boolean;
 };
 
 export interface VoiceSearchRenderOptions<T> extends RenderOptions<T> {
   isSupportedBrowser: boolean;
   isListening: boolean;
-  toggleListening: (toggleListeningParams: {
-    searchAsYouSpeak: boolean;
-  }) => void;
+  toggleListening: ToggleListening;
   voiceListeningState: VoiceListeningState;
 }
 
@@ -68,6 +69,8 @@ const connectVoiceSearch: VoiceSearchConnector = (
       );
     };
 
+    const { searchAsYouSpeak } = widgetParams;
+
     return {
       init({ helper, instantSearchInstance }) {
         (this as any)._refine = (() => {
@@ -87,6 +90,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
           return setQueryAndSearch;
         })();
         (this as any)._voiceSearchHelper = voiceSearchHelper({
+          searchAsYouSpeak,
           onQueryChange: query => (this as any)._refine(query),
           onStateChange: () => {
             render({

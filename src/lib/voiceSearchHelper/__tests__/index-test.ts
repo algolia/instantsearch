@@ -3,6 +3,7 @@ import VoiceSearchHelper, { VoiceSearchHelperParams } from '..';
 const getHelper = (opts?: VoiceSearchHelperParams) =>
   VoiceSearchHelper(
     opts || {
+      searchAsYouSpeak: false,
       onQueryChange: () => {},
       onStateChange: () => {},
     }
@@ -65,11 +66,12 @@ describe('VoiceSearchHelper', () => {
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
     const helper = getHelper({
+      searchAsYouSpeak: false,
       onQueryChange,
       onStateChange,
     });
     const { getState } = helper;
-    helper.toggleListening({ searchAsYouSpeak: false });
+    helper.toggleListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(getState().status).toEqual('askingPermission');
     recognition.onstart();
@@ -107,11 +109,12 @@ describe('VoiceSearchHelper', () => {
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
     const helper = getHelper({
+      searchAsYouSpeak: true,
       onQueryChange,
       onStateChange,
     });
     const { getState } = helper;
-    helper.toggleListening({ searchAsYouSpeak: true });
+    helper.toggleListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(getState().status).toEqual('askingPermission');
     recognition.onstart();
@@ -149,11 +152,12 @@ describe('VoiceSearchHelper', () => {
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
     const helper = getHelper({
+      searchAsYouSpeak: true,
       onQueryChange,
       onStateChange,
     });
     const { getState } = helper;
-    helper.toggleListening({ searchAsYouSpeak: true });
+    helper.toggleListening();
     expect(getState().status).toEqual('askingPermission');
     recognition.onerror({
       error: 'not-allowed',

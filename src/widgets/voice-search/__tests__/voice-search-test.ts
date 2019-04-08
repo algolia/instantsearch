@@ -73,13 +73,5 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
     });
-
-    test('sets searchAsYouSpeak', () => {
-      const { widget } = defaultSetup({ searchAsYouSpeak: true });
-
-      widget.init({ helper, instantSearchInstance: {} });
-      widget.render({ helper, instantSearchInstance: {} });
-      expect(render.mock.calls[1][0].props.searchAsYouSpeak).toBe(true);
-    });
   });
 });
