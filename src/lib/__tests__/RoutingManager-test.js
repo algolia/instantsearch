@@ -1,5 +1,7 @@
+/* globals jsdom */
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
+import historyRouter from '../routers/history';
 
 const runAllMicroTasks = () => new Promise(setImmediate);
 
@@ -543,6 +545,56 @@ describe('RoutingManager', () => {
       expect(router.write).toHaveBeenLastCalledWith({
         query: 'Apple',
       });
+    });
+  });
+
+  describe('windowTitle', () => {
+    let setWindowTitle = jest.fn();
+
+    Object.defineProperty(window.document, 'title', {
+      get() {
+        return '';
+      },
+      set(value) {
+        setWindowTitle(value);
+      },
+    });
+
+    beforeEach(() => {
+      setWindowTitle = jest.fn();
+    });
+
+    test('should update the window title with URL query params on first render', async () => {
+      jsdom.reconfigure({
+        url: 'https://website.com/?query=query',
+      });
+
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const router = historyRouter({
+        windowTitle(routeState) {
+          return `Searching for "${routeState.query}"`;
+        },
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient,
+        routing: {
+          router,
+          stateMapping,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+
+      search.addWidget(fakeSearchBox);
+      search.start();
+
+      await runAllMicroTasks();
+
+      expect(setWindowTitle).toHaveBeenCalledTimes(1);
+      expect(setWindowTitle).toHaveBeenLastCalledWith('Searching for "query"');
     });
   });
 });
