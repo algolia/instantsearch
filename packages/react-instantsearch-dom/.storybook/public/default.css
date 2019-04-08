@@ -8,3 +8,7 @@ a {
   color: #3e82f7;
   text-decoration: none;
 }
+
+#root img {
+  max-width: 100%;
+}
