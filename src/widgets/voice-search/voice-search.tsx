@@ -35,13 +35,6 @@ export type VoiceSearchTemplates = {
   status: Template<VoiceSearchTemplateProps>;
 };
 
-export type VoiceListeningState = {
-  status: string;
-  transcript?: string;
-  isSpeechFinal?: boolean;
-  errorCode?: string;
-};
-
 type VoiceSearchWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: VoiceSearchCSSClasses;

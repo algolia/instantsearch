@@ -5,7 +5,7 @@ import {
 } from '../../lib/utils';
 import { Renderer, RenderOptions, WidgetFactory } from '../../types';
 import voiceSearchHelper from '../../lib/voiceSearchHelper';
-import { VoiceListeningState } from '../../widgets/voice-search/voice-search';
+import { VoiceListeningState } from '../../lib/voiceSearchHelper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',

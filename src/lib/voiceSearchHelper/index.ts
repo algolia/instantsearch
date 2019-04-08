@@ -10,6 +10,13 @@ export type VoiceSearchHelperParams = {
   onStateChange: () => void;
 };
 
+export type VoiceListeningState = {
+  status: string;
+  transcript?: string;
+  isSpeechFinal?: boolean;
+  errorCode?: string;
+};
+
 export default function voiceSearchHelper({
   onQueryChange,
   onStateChange,
@@ -17,13 +24,13 @@ export default function voiceSearchHelper({
   const SpeechRecognition: SpeechRecognition =
     (window as any).webkitSpeechRecognition ||
     (window as any).SpeechRecognition;
-  const getDefaultState = (status: string) => ({
+  const getDefaultState = (status: string): VoiceListeningState => ({
     status,
     transcript: '',
     isSpeechFinal: undefined,
     errorCode: undefined,
   });
-  let state = getDefaultState(STATUS_INITIAL);
+  let state: VoiceListeningState = getDefaultState(STATUS_INITIAL);
   let recognition: SpeechRecognition | undefined;
 
   const isSupportedBrowser = () => Boolean(SpeechRecognition);
@@ -38,7 +45,7 @@ export default function voiceSearchHelper({
     onStateChange();
   };
 
-  const getState = () => state;
+  const getState = (): VoiceListeningState => state;
 
   const resetState = (status = STATUS_INITIAL) => {
     setState(getDefaultState(status));

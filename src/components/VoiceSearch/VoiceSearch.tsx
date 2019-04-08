@@ -4,8 +4,9 @@ import Template from '../Template/Template';
 import {
   VoiceSearchCSSClasses,
   VoiceSearchTemplates,
-  VoiceListeningState,
 } from '../../widgets/voice-search/voice-search';
+
+import { VoiceListeningState } from '../../lib/voiceSearchHelper';
 
 type VoiceSearchProps = {
   cssClasses: VoiceSearchCSSClasses;
