@@ -2,6 +2,7 @@
 
 module.exports = {
   rootDir: process.cwd(),
+  testEnvironment: 'jest-environment-jsdom-global',
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/dist*',

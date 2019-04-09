@@ -15,6 +15,12 @@ function defaultParseURL({ qsModule, location }) {
   return qsModule.parse(location.search.slice(1));
 }
 
+function setWindowTitle(title) {
+  if (title) {
+    window.document.title = title;
+  }
+}
+
 class BrowserHistory {
   /**
    * Initializes a new storage provider that will sync the search state in the URL
@@ -44,6 +50,10 @@ class BrowserHistory {
     this.writeDelay = writeDelay;
     this._createURL = createURL;
     this.parseURL = parseURL;
+
+    const title = this.windowTitle && this.windowTitle(this.read());
+
+    setWindowTitle(title);
   }
 
   /**
@@ -60,7 +70,8 @@ class BrowserHistory {
     }
 
     this.writeTimer = setTimeout(() => {
-      if (title) window.document.title = title;
+      setWindowTitle(title);
+
       window.history.pushState(routeState, title || '', url);
       this.writeTimer = undefined;
     }, this.writeDelay);
