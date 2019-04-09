@@ -39,7 +39,7 @@ export interface Widget {
   render?(options: RenderOptions): void;
   dispose?(options: DisposeOptions): SearchParameters | undefined;
   getConfiguration?(
-    previousConfiguration?: SearchParameters
+    previousConfiguration?: Partial<SearchParameters>
   ): Partial<SearchParameters>;
   getWidgetState?(
     uiState: UiState,
