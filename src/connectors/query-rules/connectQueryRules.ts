@@ -191,7 +191,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     let onHelperChange: (state: HelperState) => void;
 
     return {
-      init({ helper, state, instantSearchInstance }): void {
+      init({ helper, state, instantSearchInstance }) {
         initialRuleContexts = state.ruleContexts || [];
         onHelperChange = applyRuleContexts.bind({
           helper,
@@ -227,7 +227,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      render({ results, instantSearchInstance }): void {
+      render({ results, instantSearchInstance }) {
         const { userData = [] } = results;
         const items = transformItems(userData);
 
@@ -241,7 +241,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      dispose({ helper, state }): void {
+      dispose({ helper, state }) {
         unmount();
 
         if (hasTrackedFilters) {

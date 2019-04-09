@@ -41,7 +41,7 @@ storiesOf('QueryRuleContext', module)
       search.addWidget(
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-          transformItems(items: CustomDataItem[]): CustomDataItem[] {
+          transformItems(items: CustomDataItem[]) {
             return items.filter(item => typeof item.banner !== 'undefined');
           },
           templates: {
@@ -99,7 +99,7 @@ storiesOf('QueryRuleContext', module)
       search.addWidget(
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-          transformItems(items: CustomDataItem[]): CustomDataItem[] {
+          transformItems(items: CustomDataItem[]) {
             return items.filter(item => typeof item.banner !== 'undefined');
           },
           templates: {
