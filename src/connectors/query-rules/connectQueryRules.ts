@@ -6,8 +6,6 @@ import {
   WidgetFactory,
   Helper,
   SearchParameters,
-  SearchResults,
-  InstantSearch,
 } from '../../types';
 import {
   checkRendering,
@@ -190,15 +188,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     let onHelperChange: (state: SearchParameters) => void;
 
     return {
-      init({
-        helper,
-        state,
-        instantSearchInstance,
-      }: {
-        helper: Helper;
-        state: SearchParameters;
-        instantSearchInstance: InstantSearch;
-      }) {
+      init({ helper, state, instantSearchInstance }) {
         initialRuleContexts = state.ruleContexts || [];
         onHelperChange = applyRuleContexts.bind({
           helper,
@@ -234,13 +224,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      render({
-        results,
-        instantSearchInstance,
-      }: {
-        results: SearchResults;
-        instantSearchInstance: InstantSearch;
-      }) {
+      render({ results, instantSearchInstance }) {
         const { userData = [] } = results;
         const items = transformItems(userData);
 
@@ -254,7 +238,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      dispose({ helper, state }: { helper: Helper; state: SearchParameters }) {
+      dispose({ helper, state }) {
         unmount();
 
         if (hasTrackedFilters) {
