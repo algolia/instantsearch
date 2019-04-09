@@ -5,6 +5,8 @@ import {
   SearchResults as AlgoliaSearchHelperSearchResults,
 } from 'algoliasearch-helper';
 
+export type InstantSearchOptions = any;
+
 // That's a proxy to avoid manipulating the original `algoliasearch-helper` SearchParameters
 // typings and to add newer search parameters not yet documented.
 export type SearchParameters = AlgoliaSearchHelperSearchParameters & {
