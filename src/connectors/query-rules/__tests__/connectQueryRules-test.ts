@@ -9,6 +9,19 @@ describe('connectQueryRules', () => {
   let unmountFn = jest.fn();
   let makeWidget: QueryRulesWidgetFactory<{}>;
 
+  const defaultInitOptions = {
+    instantSearchInstance: {},
+    templatesConfig: {},
+    createURL: () => '#',
+  };
+
+  const defaultRenderOptions = {
+    instantSearchInstance: {},
+    templatesConfig: {},
+    searchMetadata: { isSearchStalled: false },
+    createURL: () => '#',
+  };
+
   const createFakeClient = (options = {}): Client => {
     return options as Client;
   };
@@ -69,11 +82,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       const widget = makeWidget({});
 
       widget.init!({
+        ...defaultInitOptions,
         helper,
         state: helper.state,
-        instantSearchInstance: {},
-        templatesConfig: {},
-        createURL: () => '#',
       });
 
       const [renderingParameters, isFirstRender] = renderFn.mock.calls[0];
@@ -96,19 +107,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       const widget = makeWidget({});
 
       widget.init!({
+        ...defaultInitOptions,
         helper,
         state: helper.state,
-        instantSearchInstance: {},
-        templatesConfig: {},
-        createURL: () => '#',
       });
       widget.render!({
+        ...defaultRenderOptions,
         helper,
         state: helper.getState(),
-        instantSearchInstance: {},
-        templatesConfig: {},
-        searchMetadata: { isSearchStalled: false },
-        createURL: () => '#',
         results: new SearchResults(helper.getState(), [{ hits: [] }]),
       });
 
@@ -129,12 +135,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       }
 
       widget.render!({
+        ...defaultRenderOptions,
         helper,
         state: helper.getState(),
-        instantSearchInstance: {},
-        templatesConfig: {},
-        searchMetadata: { isSearchStalled: false },
-        createURL: () => '#',
         results: new SearchResults(helper.getState(), [
           { hits: [], userData: [{ banner: 'image.png' }] },
         ]),
@@ -162,11 +165,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       const widget = makeWidget({});
 
       widget.init!({
+        ...defaultInitOptions,
         helper,
         state: helper.state,
-        instantSearchInstance: {},
-        templatesConfig: {},
-        createURL: () => '#',
       });
       widget.dispose!({ helper, state: helper.getState() });
 
@@ -183,19 +184,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {
               hits: [],
@@ -236,11 +232,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         // Query parameters are initially set in the helper.
@@ -271,11 +265,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
@@ -299,11 +291,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         // There's no results yet, so no `ruleContexts` should be set.
@@ -314,12 +304,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -357,12 +344,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -403,11 +387,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
@@ -416,12 +398,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(brandFilterSpy).toHaveBeenCalledTimes(0);
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -447,12 +426,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -483,11 +459,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
@@ -496,12 +470,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(priceFilterSpy).toHaveBeenCalledTimes(0);
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [{}, {}]),
         });
 
@@ -520,12 +491,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [{}, {}]),
         });
 
@@ -547,11 +515,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         helper.setState({
@@ -561,12 +527,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -613,11 +576,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         expect(() => {
@@ -631,12 +592,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 Consider using \`transformRuleContexts\` to minimize the number of rules sent to Algolia.`);
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -688,11 +646,9 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         helper.setState({
@@ -702,12 +658,9 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         });
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -753,11 +706,9 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         );
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
@@ -801,20 +752,15 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         widget.render!({
+          ...defaultRenderOptions,
           helper,
           state: helper.getState(),
-          instantSearchInstance: {},
-          templatesConfig: {},
-          searchMetadata: { isSearchStalled: false },
-          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
