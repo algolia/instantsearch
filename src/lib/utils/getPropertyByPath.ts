@@ -1,4 +1,4 @@
-function getPropertyByPath(object: object, path: string): any {
+function getPropertyByPath(object: object, path: string) {
   const parts = path.split('.');
 
   return parts.reduce((current, key) => current && current[key], object);

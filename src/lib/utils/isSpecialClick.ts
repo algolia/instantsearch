@@ -1,4 +1,4 @@
-function isSpecialClick(event: MouseEvent): boolean {
+function isSpecialClick(event: MouseEvent) {
   const isMiddleClick = event.button === 1;
 
   return (

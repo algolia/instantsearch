@@ -101,7 +101,7 @@ storiesOf('QueryRuleCustomData', module)
       search.addWidget(
         queryRuleCustomData({
           container: widgetContainer,
-          transformItems: (items: CustomDataItem[]): CustomDataItem[] => {
+          transformItems: (items: CustomDataItem[]) => {
             if (items.length > 0) {
               return items.filter(item => typeof item.banner !== 'undefined');
             }
@@ -118,7 +118,7 @@ storiesOf('QueryRuleCustomData', module)
           templates: {
             default({ items }: { items: CustomDataItem[] }) {
               if (items.length === 0) {
-                return '';
+                return;
               }
 
               const { title, banner, link } = items[0];

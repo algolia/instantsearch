@@ -1,4 +1,4 @@
-function unescapeRefinement(value: string | number): string {
+function unescapeRefinement(value: string | number) {
   return String(value).replace(/^\\-/, '-');
 }
 
