@@ -88,10 +88,6 @@ export type Client = AlgoliaSearchClient;
 
 export type Helper = AlgoliaSearchHelper;
 
-// We complete the original helper state with the custom SearchParameters
-// not yet typed in the original `algoliasearch-helper`.
-export type HelperState = AlgoliaSearchHelper['state'] & SearchParameters;
-
 export type InstantSearch = {
   templatesConfig?: object;
 };

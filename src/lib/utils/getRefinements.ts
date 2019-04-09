@@ -1,7 +1,7 @@
 import find from 'lodash/find';
 import get from 'lodash/get';
 import forEach from 'lodash/forEach';
-import { HelperState, SearchResults } from '../../types';
+import { SearchParameters, SearchResults } from '../../types';
 import unescapeRefinement from './unescapeRefinement';
 
 export interface FacetRefinement {
@@ -43,7 +43,7 @@ export type Refinement =
   | FacetExcludeRefinement;
 
 function getRefinement(
-  state: HelperState,
+  state: SearchParameters,
   type: Refinement['type'],
   attributeName: Refinement['attributeName'],
   name: Refinement['name'],
@@ -81,7 +81,7 @@ function getRefinement(
 
 function getRefinements(
   results: SearchResults,
-  state: HelperState,
+  state: SearchParameters,
   clearsQuery: boolean = false
 ): Refinement[] {
   const res: Refinement[] = [];

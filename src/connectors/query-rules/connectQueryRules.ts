@@ -5,7 +5,7 @@ import {
   RenderOptions,
   WidgetFactory,
   Helper,
-  HelperState,
+  SearchParameters,
   SearchResults,
   InstantSearch,
 } from '../../types';
@@ -58,7 +58,7 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-function hasStateRefinements(state: HelperState): boolean {
+function hasStateRefinements(state: SearchParameters): boolean {
   return [
     state.disjunctiveFacetsRefinements,
     state.facetsRefinements,
@@ -81,7 +81,7 @@ function getRuleContextsFromTrackedFilters({
   trackedFilters,
 }: {
   helper: Helper;
-  sharedHelperState: HelperState;
+  sharedHelperState: SearchParameters;
   trackedFilters: ParamTrackedFilters;
 }): string[] {
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
@@ -127,7 +127,7 @@ function applyRuleContexts(
     trackedFilters: ParamTrackedFilters;
     transformRuleContexts: ParamTransformRuleContexts;
   },
-  sharedHelperState: HelperState
+  sharedHelperState: SearchParameters
 ): void {
   const {
     helper,
@@ -187,7 +187,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-    let onHelperChange: (state: HelperState) => void;
+    let onHelperChange: (state: SearchParameters) => void;
 
     return {
       init({
@@ -196,7 +196,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         instantSearchInstance,
       }: {
         helper: Helper;
-        state: HelperState;
+        state: SearchParameters;
         instantSearchInstance: InstantSearch;
       }) {
         initialRuleContexts = state.ruleContexts || [];
@@ -254,7 +254,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
         );
       },
 
-      dispose({ helper, state }: { helper: Helper; state: HelperState }) {
+      dispose({ helper, state }: { helper: Helper; state: SearchParameters }) {
         unmount();
 
         if (hasTrackedFilters) {

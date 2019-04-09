@@ -1,6 +1,5 @@
 import {
   Helper,
-  HelperState,
   SearchResults,
   InstantSearch,
   SearchParameters,
@@ -8,27 +7,27 @@ import {
 
 interface InitOptions {
   instantSearchInstance: InstantSearch;
-  state?: HelperState;
+  state?: SearchParameters;
   helper?: Helper;
   templatesConfig?: object;
-  createURL?(state: HelperState): string;
+  createURL?(state: SearchParameters): string;
 }
 
 interface RenderOptions {
   instantSearchInstance: InstantSearch;
   templatesConfig?: object;
   results?: SearchResults;
-  state?: HelperState;
+  state?: SearchParameters;
   helper?: Helper;
   searchMetadata?: {
     isSearchStalled: boolean;
   };
-  createURL?(state: HelperState): string;
+  createURL?(state: SearchParameters): string;
 }
 
 interface DisposeOptions {
   helper?: Helper;
-  state: HelperState;
+  state: SearchParameters;
 }
 
 type UiState = {
@@ -38,19 +37,19 @@ type UiState = {
 export interface Widget {
   init?(options: InitOptions): void;
   render?(options: RenderOptions): void;
-  dispose?(options: DisposeOptions): HelperState;
+  dispose?(options: DisposeOptions): SearchParameters;
   getConfiguration?(
     previousConfiguration?: SearchParameters
   ): Partial<SearchParameters>;
   getWidgetState?(
     uiState: UiState,
     widgetStateOptions: {
-      state: HelperState;
+      state: SearchParameters;
       helper: Helper;
     }
   ): UiState;
   getWidgetSearchParameters?(
-    state: HelperState,
+    state: SearchParameters,
     widgetSearchParametersOptions: {
       uiState: UiState;
     }
