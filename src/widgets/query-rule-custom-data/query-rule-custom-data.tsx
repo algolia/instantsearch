@@ -16,14 +16,14 @@ export type QueryRuleCustomDataCSSClasses = {
 };
 
 export type QueryRuleCustomDataTemplates = {
-  default: string | (({ items }: { items: object[] }) => string);
+  default?: string | (({ items }: { items: any }) => string);
 };
 
 type QueryRuleCustomDataWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: QueryRuleCustomDataCSSClasses;
   templates?: QueryRuleCustomDataTemplates;
-  transformItems?: (items: object[]) => any;
+  transformItems?: (items: any[]) => any;
 };
 
 interface QueryRuleCustomDataRendererWidgetParams

@@ -1,6 +1,9 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import moviesPlayground from '../.storybook/playgrounds/movies';
+import configure from '../src/widgets/configure/configure';
+import queryRuleCustomData from '../src/widgets/query-rule-custom-data/query-rule-custom-data';
+import queryRuleContext from '../src/widgets/query-rule-context/query-rule-context';
 
 type CustomDataItem = {
   title: string;
@@ -18,7 +21,7 @@ const searchOptions = {
 storiesOf('QueryRuleContext', module)
   .add(
     'default',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       const widgetContainer = document.createElement('div');
       const description = document.createElement('ul');
       description.innerHTML = `
@@ -31,7 +34,7 @@ storiesOf('QueryRuleContext', module)
       container.appendChild(widgetContainer);
 
       search.addWidget(
-        instantsearch.widgets.queryRuleContext({
+        queryRuleContext({
           trackedFilters: {
             genre: () => ['Thriller', 'Drama'],
           },
@@ -39,7 +42,7 @@ storiesOf('QueryRuleContext', module)
       );
 
       search.addWidget(
-        instantsearch.widgets.queryRuleCustomData({
+        queryRuleCustomData({
           container: widgetContainer,
           transformItems(items: CustomDataItem[]) {
             return items.filter(item => typeof item.banner !== 'undefined');
@@ -68,7 +71,7 @@ storiesOf('QueryRuleContext', module)
   )
   .add(
     'with initial filter',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       const widgetContainer = document.createElement('div');
       const description = document.createElement('ul');
       description.innerHTML = `
@@ -81,7 +84,7 @@ storiesOf('QueryRuleContext', module)
       container.appendChild(widgetContainer);
 
       search.addWidget(
-        instantsearch.widgets.configure({
+        configure({
           disjunctiveFacetsRefinements: {
             genre: ['Drama'],
           },
@@ -89,7 +92,7 @@ storiesOf('QueryRuleContext', module)
       );
 
       search.addWidget(
-        instantsearch.widgets.queryRuleContext({
+        queryRuleContext({
           trackedFilters: {
             genre: () => ['Thriller', 'Drama'],
           },
@@ -97,17 +100,18 @@ storiesOf('QueryRuleContext', module)
       );
 
       search.addWidget(
-        instantsearch.widgets.queryRuleCustomData({
+        queryRuleCustomData({
           container: widgetContainer,
           transformItems(items: CustomDataItem[]) {
             return items.filter(item => typeof item.banner !== 'undefined');
           },
           templates: {
             default: ({ items }: { items: CustomDataItem[] }) =>
-              items.map(item => {
-                const { title, banner, link } = item;
+              items
+                .map(item => {
+                  const { title, banner, link } = item;
 
-                return `
+                  return `
                   <section>
                     <h2>${title}</h2>
 
@@ -116,7 +120,8 @@ storiesOf('QueryRuleContext', module)
                     </a>
                   </section>
                 `;
-              }),
+                })
+                .join(''),
           },
         })
       );

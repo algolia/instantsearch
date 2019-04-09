@@ -2,6 +2,7 @@ import reduce from 'lodash/reduce';
 import escape from 'lodash/escape';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
+import { Hit, FacetHit } from '../types';
 
 export const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
@@ -13,7 +14,7 @@ export const TAG_REPLACEMENT = {
   highlightPostTag: '</mark>',
 };
 
-function replaceTagsAndEscape(value) {
+function replaceTagsAndEscape(value: string): string {
   return escape(value)
     .replace(
       new RegExp(TAG_PLACEHOLDER.highlightPreTag, 'g'),
@@ -25,7 +26,7 @@ function replaceTagsAndEscape(value) {
     );
 }
 
-function recursiveEscape(input) {
+function recursiveEscape(input: any): any {
   if (isPlainObject(input) && typeof input.value !== 'string') {
     return reduce(
       input,
@@ -47,8 +48,8 @@ function recursiveEscape(input) {
   };
 }
 
-export default function escapeHits(hits) {
-  if (hits.__escaped === undefined) {
+export default function escapeHits(hits: Hit[]): Hit[] {
+  if ((hits as any).__escaped === undefined) {
     hits = hits.map(hit => {
       if (hit._highlightResult) {
         hit._highlightResult = recursiveEscape(hit._highlightResult);
@@ -60,13 +61,14 @@ export default function escapeHits(hits) {
 
       return hit;
     });
-    hits.__escaped = true;
+
+    (hits as any).__escaped = true;
   }
 
   return hits;
 }
 
-export function escapeFacets(facetHits) {
+export function escapeFacets(facetHits: FacetHit[]): FacetHit[] {
   return facetHits.map(h => ({
     ...h,
     highlighted: replaceTagsAndEscape(h.highlighted),

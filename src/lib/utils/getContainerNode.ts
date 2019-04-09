@@ -7,7 +7,9 @@ import isDomElement from './isDomElement';
  *
  * @throws Error when the type is not correct
  */
-function getContainerNode(selectorOrHTMLElement: string | HTMLElement) {
+function getContainerNode(
+  selectorOrHTMLElement: string | HTMLElement
+): HTMLElement {
   const isSelectorString = typeof selectorOrHTMLElement === 'string';
   const domElement = isSelectorString
     ? document.querySelector(selectorOrHTMLElement as string)

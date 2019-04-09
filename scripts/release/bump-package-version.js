@@ -26,9 +26,9 @@ if (semver.gte(currentVersion, newVersion)) {
 
 console.log(`Releasing ${newVersion}`);
 
-console.log('..Updating src/lib/version.js');
+console.log('..Updating src/lib/version.ts');
 
-const versionFile = path.join(__dirname, '../../src/lib/version.js');
+const versionFile = path.join(__dirname, '../../src/lib/version.ts');
 const newContent = `export default '${newVersion}';\n`;
 fs.writeFileSync(versionFile, newContent);
 
