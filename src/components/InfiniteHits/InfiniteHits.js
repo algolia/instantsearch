@@ -43,6 +43,7 @@ const InfiniteHits = ({
           }}
         />
       )}
+
       <ol className={cssClasses.list}>
         {hits.map((hit, position) => (
           <Template
