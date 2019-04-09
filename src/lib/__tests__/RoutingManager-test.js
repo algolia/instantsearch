@@ -1,4 +1,5 @@
 /* globals jsdom */
+import qs from 'qs';
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
 import historyRouter from '../routers/history';
@@ -583,6 +584,69 @@ describe('RoutingManager', () => {
       expect(setWindowTitle).toHaveBeenLastCalledWith('Searching for "query"');
 
       setWindowTitle.mockRestore();
+    });
+  });
+
+  describe('parseURL', () => {
+    const createFakeUrl = ({ length }) =>
+      [
+        'https://website.com/',
+        Array.from(
+          { length },
+          (_v, i) => `refinementList[brand][${i}]=brand-${i}`
+        ).join('&'),
+      ].join('?');
+
+    test('should parse refinements with more than 20 filters per category as array', () => {
+      const router = historyRouter();
+      const url = createFakeUrl({ length: 22 });
+      const parsedUrl = router.parseURL({
+        qsModule: qs,
+        location: new URL(url),
+      });
+
+      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
+      expect(parsedUrl).toMatchInlineSnapshot(`
+        Object {
+          "refinementList": Object {
+            "brand": Array [
+              "brand-0",
+              "brand-1",
+              "brand-2",
+              "brand-3",
+              "brand-4",
+              "brand-5",
+              "brand-6",
+              "brand-7",
+              "brand-8",
+              "brand-9",
+              "brand-10",
+              "brand-11",
+              "brand-12",
+              "brand-13",
+              "brand-14",
+              "brand-15",
+              "brand-16",
+              "brand-17",
+              "brand-18",
+              "brand-19",
+              "brand-20",
+              "brand-21",
+            ],
+          },
+        }
+      `);
+    });
+
+    test('should support returning 100 refinements as array', () => {
+      const router = historyRouter();
+      const url = createFakeUrl({ length: 100 });
+      const parsedUrl = router.parseURL({
+        qsModule: qs,
+        location: new URL(url),
+      });
+
+      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
     });
   });
 });
