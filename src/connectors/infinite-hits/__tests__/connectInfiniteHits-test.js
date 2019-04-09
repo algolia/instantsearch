@@ -534,6 +534,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
         expect(uiStateAfter).toMatchSnapshot();
       });
+
+      it('should give back the object unmodified if showPrevious is disabled', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectInfiniteHits(rendering);
+        const widget = makeWidget({ showPrevious: false });
+
+        const helper = jsHelper({}, '', {});
+        helper.search = jest.fn();
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+        });
+
+        const { showMore } = rendering.mock.calls[0][0];
+
+        showMore();
+
+        const uiStateBefore = { page: 1 };
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
     });
 
     describe('getWidgetSearchParameters', () => {
@@ -632,6 +660,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         expect(searchParametersAfter).toMatchSnapshot();
         expect(searchParametersAfter.page).toBe(1);
       });
+    });
+
+    it('should return the same SP if showPrevious is disabled', () => {
+      global.window = { location: { pathname: null } };
+      const rendering = jest.fn();
+      const makeWidget = connectInfiniteHits(rendering);
+      const widget = makeWidget({ showPrevious: false });
+
+      const helper = jsHelper({}, '', {});
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { showMore } = rendering.mock.calls[0][0];
+
+      // The user presses back (browser), and the URL contains some parameters
+      const uiState = {
+        page: 4,
+      };
+      // The current state is set to next page
+      showMore();
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        {
+          uiState,
+        }
+      );
+      expect(searchParametersAfter).toBe(searchParametersBefore);
     });
   });
 });
