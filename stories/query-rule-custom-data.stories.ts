@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import moviesPlayground from '../.storybook/playgrounds/movies';
-import { queryRuleCustomData } from '../src/widgets';
+import queryRuleCustomData from '../src/widgets/query-rule-custom-data/query-rule-custom-data';
 
 type CustomDataItem = {
   title: string;
@@ -116,9 +116,9 @@ storiesOf('QueryRuleCustomData', module)
             ];
           },
           templates: {
-            default(items: CustomDataItem[]) {
+            default({ items }: { items: CustomDataItem[] }) {
               if (items.length === 0) {
-                return;
+                return '';
               }
 
               const { title, banner, link } = items[0];
