@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import moviesPlayground from '../.storybook/playgrounds/movies';
+import { queryRuleCustomData } from '../src/widgets';
 
 type CustomDataItem = {
   title: string;
@@ -18,7 +19,7 @@ const searchOptions = {
 storiesOf('QueryRuleCustomData', module)
   .add(
     'default',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       const widgetContainer = document.createElement('div');
       const description = document.createElement('p');
       description.innerHTML = 'Type <q>music</q> and a banner will appear.';
@@ -27,7 +28,7 @@ storiesOf('QueryRuleCustomData', module)
       container.appendChild(widgetContainer);
 
       search.addWidget(
-        instantsearch.widgets.queryRuleCustomData({
+        queryRuleCustomData({
           container: widgetContainer,
           templates: {
             default: ({ items }: { items: CustomDataItem[] }) =>
@@ -88,7 +89,7 @@ storiesOf('QueryRuleCustomData', module)
   )
   .add(
     'with default and single banner',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       const widgetContainer = document.createElement('div');
       const description = document.createElement('p');
       description.innerHTML =
@@ -98,7 +99,7 @@ storiesOf('QueryRuleCustomData', module)
       container.appendChild(widgetContainer);
 
       search.addWidget(
-        instantsearch.widgets.queryRuleCustomData({
+        queryRuleCustomData({
           container: widgetContainer,
           transformItems: (items: CustomDataItem[]) => {
             if (items.length > 0) {
