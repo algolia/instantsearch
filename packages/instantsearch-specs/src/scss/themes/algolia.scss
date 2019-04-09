@@ -633,3 +633,33 @@ a[class^='ais-'] {
   width: 16px;
   height: 16px;
 }
+
+.ais-VoiceSearch-button {
+  border: none;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border-radius: 50%;
+  color: $port-gore;
+  background-color: transparent;
+}
+
+.ais-VoiceSearch-button svg {
+  color: currentColor;
+}
+
+.ais-VoiceSearch-button:hover {
+  cursor: pointer;
+  background-color: lighten($port-gore, 40%);
+  color: #ffffff;
+}
+
+.ais-VoiceSearch-button:disabled {
+  color: lighten($port-gore, 40%);
+}
+
+.ais-VoiceSearch-button:disabled:hover {
+  color: lighten($port-gore, 40%);
+  cursor: not-allowed;
+  background: inherit;
+}
