@@ -118,7 +118,7 @@ storiesOf('QueryRuleCustomData', module)
           templates: {
             default({ items }: { items: CustomDataItem[] }) {
               if (items.length === 0) {
-                return;
+                return '';
               }
 
               const { title, banner, link } = items[0];

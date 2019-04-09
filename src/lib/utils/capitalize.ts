@@ -1,4 +1,4 @@
-function capitalize(text: string): string {
+function capitalize(text: string) {
   return (
     text
       .toString()
