@@ -1,16 +1,19 @@
-export type InstantSearch = {
-  templatesConfig?: object;
-};
+import { Client as AlgoliaSearchClient } from 'algoliasearch';
+import {
+  AlgoliaSearchHelper,
+  SearchParameters as AlgoliaSearchHelperSearchParameters,
+  SearchResults as AlgoliaSearchHelperSearchResults,
+} from 'algoliasearch-helper';
 
 export type InstantSearchOptions = any;
 
-export type Helper = any;
+// That's a proxy to avoid manipulating the original `algoliasearch-helper` SearchParameters
+// typings and to add newer search parameters not yet documented.
+export type SearchParameters = AlgoliaSearchHelperSearchParameters & {
+  ruleContexts?: string[];
+};
 
-export type HelperState = any;
-
-export type SearchParameters = any;
-
-export type SearchResults = any;
+export type SearchResults = AlgoliaSearchHelperSearchResults;
 
 type HitAttributeHighlightResult = {
   value: string;
@@ -82,3 +85,11 @@ export type NumericRefinement = {
 };
 
 export type Refinement = FacetRefinement | NumericRefinement;
+
+export type Client = AlgoliaSearchClient;
+
+export type Helper = AlgoliaSearchHelper;
+
+export type InstantSearch = {
+  templatesConfig?: object;
+};

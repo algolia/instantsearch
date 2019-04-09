@@ -5,7 +5,7 @@ import {
   RenderOptions,
   WidgetFactory,
   Helper,
-  HelperState,
+  SearchParameters,
 } from '../../types';
 import {
   checkRendering,
@@ -56,23 +56,20 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-function hasStateRefinements({
-  disjunctiveFacetsRefinements,
-  facetsRefinements,
-  hierarchicalFacetsRefinements,
-  numericRefinements,
-}) {
+function hasStateRefinements(state: SearchParameters): boolean {
   return [
-    disjunctiveFacetsRefinements,
-    facetsRefinements,
-    hierarchicalFacetsRefinements,
-    numericRefinements,
-  ].some(refinement => Object.keys(refinement).length > 0);
+    state.disjunctiveFacetsRefinements,
+    state.facetsRefinements,
+    state.hierarchicalFacetsRefinements,
+    state.numericRefinements,
+  ].some(refinement =>
+    Boolean(refinement && Object.keys(refinement).length > 0)
+  );
 }
 
 // A context rule must consist only of alphanumeric characters, hyphens, and underscores.
 // See https://www.algolia.com/doc/guides/managing-results/refine-results/merchandising-and-promoting/in-depth/implementing-query-rules/#context
-function escapeRuleContext(ruleName: string) {
+function escapeRuleContext(ruleName: string): string {
   return ruleName.replace(/[^a-z0-9-_]+/gi, '_');
 }
 
@@ -82,9 +79,9 @@ function getRuleContextsFromTrackedFilters({
   trackedFilters,
 }: {
   helper: Helper;
-  sharedHelperState: HelperState;
+  sharedHelperState: SearchParameters;
   trackedFilters: ParamTrackedFilters;
-}) {
+}): string[] {
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const facetRefinements: TrackedFilterRefinement[] = getRefinements(
@@ -128,8 +125,8 @@ function applyRuleContexts(
     trackedFilters: ParamTrackedFilters;
     transformRuleContexts: ParamTransformRuleContexts;
   },
-  sharedHelperState: HelperState
-) {
+  sharedHelperState: SearchParameters
+): void {
   const {
     helper,
     initialRuleContexts,
@@ -188,7 +185,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-    let onHelperChange: (state: HelperState) => void;
+    let onHelperChange: (state: SearchParameters) => void;
 
     return {
       init({ helper, state, instantSearchInstance }) {
