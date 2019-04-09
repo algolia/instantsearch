@@ -15,14 +15,14 @@ interface InitOptions {
 
 interface RenderOptions {
   instantSearchInstance: InstantSearch;
-  templatesConfig?: object;
-  results?: SearchResults;
-  state?: SearchParameters;
-  helper?: Helper;
-  searchMetadata?: {
+  templatesConfig: object;
+  results: SearchResults;
+  state: SearchParameters;
+  helper: Helper;
+  searchMetadata: {
     isSearchStalled: boolean;
   };
-  createURL?(state: SearchParameters): string;
+  createURL(state: SearchParameters): string;
 }
 
 interface DisposeOptions {

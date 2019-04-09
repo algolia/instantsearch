@@ -104,8 +104,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       });
       widget.render!({
         helper,
-        results: new SearchResults(helper.getState(), [{ hits: [] }]),
+        state: helper.getState(),
         instantSearchInstance: {},
+        templatesConfig: {},
+        searchMetadata: { isSearchStalled: false },
+        createURL: () => '#',
+        results: new SearchResults(helper.getState(), [{ hits: [] }]),
       });
 
       {
@@ -126,10 +130,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
       widget.render!({
         helper,
+        state: helper.getState(),
+        instantSearchInstance: {},
+        templatesConfig: {},
+        searchMetadata: { isSearchStalled: false },
+        createURL: () => '#',
         results: new SearchResults(helper.getState(), [
           { hits: [], userData: [{ banner: 'image.png' }] },
         ]),
-        instantSearchInstance: {},
       });
 
       {
@@ -183,13 +191,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         });
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {
               hits: [],
               userData: [{ banner: 'image1.png' }, { banner: 'image2.png' }],
             },
           ]),
-          instantSearchInstance: {},
         });
 
         const [renderingParameters] = renderFn.mock.calls[1];
@@ -303,6 +315,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -314,7 +331,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         // There are some results with the facets that we track in the
@@ -342,6 +358,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -353,7 +374,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         // The search state contains the facets that we track,
@@ -397,6 +417,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -408,7 +433,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
@@ -424,6 +448,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -435,7 +464,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
@@ -469,8 +497,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.render!({
           helper,
-          results: new SearchResults(helper.getState(), [{}, {}]),
+          state: helper.getState(),
           instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
+          results: new SearchResults(helper.getState(), [{}, {}]),
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual(
@@ -489,8 +521,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.render!({
           helper,
-          results: new SearchResults(helper.getState(), [{}, {}]),
+          state: helper.getState(),
           instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
+          results: new SearchResults(helper.getState(), [{}, {}]),
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
@@ -526,6 +562,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -537,7 +578,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
@@ -592,6 +632,11 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -612,7 +657,6 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         expect(
@@ -659,6 +703,11 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -670,7 +719,6 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         expect((helper.getState() as SearchParameters).ruleContexts).toEqual([
@@ -762,6 +810,11 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 
         widget.render!({
           helper,
+          state: helper.getState(),
+          instantSearchInstance: {},
+          templatesConfig: {},
+          searchMetadata: { isSearchStalled: false },
+          createURL: () => '#',
           results: new SearchResults(helper.getState(), [
             {},
             {
@@ -773,7 +826,6 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
               },
             },
           ]),
-          instantSearchInstance: {},
         });
 
         expect(transformRuleContextsSpy).toHaveBeenCalledTimes(1);
