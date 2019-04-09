@@ -6,19 +6,19 @@ import connectQueryRules, {
   ParamTransformRuleContexts,
 } from '../../connectors/query-rules/connectQueryRules';
 
-type QueryRulesWidgetParams = {
+type QueryRuleContextWidgetParams = {
   trackedFilters: ParamTrackedFilters;
   transformRuleContexts?: ParamTransformRuleContexts;
 };
 
-type QueryRuleContext = WidgetFactory<QueryRulesWidgetParams>;
+type QueryRuleContext = WidgetFactory<QueryRuleContextWidgetParams>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-context',
 });
 
 const queryRuleContext: QueryRuleContext = (
-  { trackedFilters, transformRuleContexts } = {} as QueryRulesWidgetParams
+  { trackedFilters, transformRuleContexts } = {} as QueryRuleContextWidgetParams
 ) => {
   if (!trackedFilters) {
     throw new Error(withUsage('The `trackedFilters` option is required.'));

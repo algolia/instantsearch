@@ -8,7 +8,7 @@ import Template from '../Template/Template';
 type QueryRuleCustomDataProps = {
   cssClasses: QueryRuleCustomDataCSSClasses;
   templates: QueryRuleCustomDataTemplates;
-  items: object[];
+  items: any[];
 };
 
 const QueryRuleCustomData = ({

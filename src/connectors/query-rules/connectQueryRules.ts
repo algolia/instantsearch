@@ -26,7 +26,7 @@ export type ParamTrackedFilters = {
   ) => TrackedFilterRefinement[];
 };
 export type ParamTransformRuleContexts = (ruleContexts: string[]) => string[];
-type ParamTransformItems = (items: object[]) => any;
+type ParamTransformItems = (items: any[]) => any;
 
 export type QueryRulesConnectorParams = {
   trackedFilters?: ParamTrackedFilters;
@@ -35,7 +35,7 @@ export type QueryRulesConnectorParams = {
 };
 
 export interface QueryRulesRenderOptions<T> extends RenderOptions<T> {
-  items: object[];
+  items: any[];
 }
 
 export type QueryRulesRenderer<T> = Renderer<
