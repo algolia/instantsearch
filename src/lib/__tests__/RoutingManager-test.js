@@ -588,7 +588,7 @@ describe('RoutingManager', () => {
   });
 
   describe('parseURL', () => {
-    const createFakeUrl = ({ length }) =>
+    const createFakeUrlWithRefinements = ({ length }) =>
       [
         'https://website.com/',
         Array.from(
@@ -598,11 +598,14 @@ describe('RoutingManager', () => {
       ].join('?');
 
     test('should parse refinements with more than 20 filters per category as array', () => {
+      jsdom.reconfigure({
+        url: createFakeUrlWithRefinements({ length: 22 }),
+      });
+
       const router = historyRouter();
-      const url = createFakeUrl({ length: 22 });
       const parsedUrl = router.parseURL({
         qsModule: qs,
-        location: new URL(url),
+        location: window.location,
       });
 
       expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
@@ -639,11 +642,14 @@ describe('RoutingManager', () => {
     });
 
     test('should support returning 100 refinements as array', () => {
+      jsdom.reconfigure({
+        url: createFakeUrlWithRefinements({ length: 100 }),
+      });
+
       const router = historyRouter();
-      const url = createFakeUrl({ length: 100 });
       const parsedUrl = router.parseURL({
         qsModule: qs,
-        location: new URL(url),
+        location: window.location,
       });
 
       expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
