@@ -116,7 +116,7 @@ export default function infiniteHits({
   transformItems,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
-  showPrevious = false,
+  showPrevious,
 } = {}) {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));

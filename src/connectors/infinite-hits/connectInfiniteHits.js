@@ -71,7 +71,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
     const {
       escapeHTML = true,
       transformItems = items => items,
-      showPrevious,
+      showPrevious = false,
     } = widgetParams;
     let hitsCache = [];
     let firstReceivedPage = Infinity;
