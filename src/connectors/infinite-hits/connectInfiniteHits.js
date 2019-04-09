@@ -80,7 +80,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
     const getShowPrevious = helper => () => {
       /*
        * Override the current state without triggering a change event
-       * Avoid updating the browser URL when the user display the previous page
+       * Avoid updating the browser URL when the user displays the previous page
        */
       helper
         .overrideStateWithoutTriggeringChangeEvent({
