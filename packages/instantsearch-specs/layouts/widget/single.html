@@ -13,7 +13,7 @@
 
     <h2 id="{{ lower .Page.Title }}">{{ .Page.Title }}</h2>
 
-    {{ if .Params.info }}<p class="info">{{ .Params.info }}</p>{{ end }}
+    {{ if .Params.info }}<p class="info">{{ .Params.info | safeHTML }}</p>{{ end }}
 
     <h3 id="widget-example">Widget example</h3>
 
