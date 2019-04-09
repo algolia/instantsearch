@@ -176,13 +176,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
-        widget.dispose!({ state: helper.getState() });
+        widget.dispose!({
+          helper,
+          state: helper.getState(),
+        });
 
         expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
       });

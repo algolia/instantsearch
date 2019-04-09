@@ -26,7 +26,7 @@ interface RenderOptions {
 }
 
 interface DisposeOptions {
-  helper?: Helper;
+  helper: Helper;
   state: SearchParameters;
 }
 
