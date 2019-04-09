@@ -37,7 +37,7 @@ export default function voiceSearchHelper({
   let state: VoiceListeningState = getDefaultState(STATUS_INITIAL);
   let recognition: SpeechRecognition | undefined;
 
-  const isBrowserSupported = () => Boolean(SpeechRecognitionClass);
+  const isBrowserSupported = () => Boolean(SpeechRecognitionAPI);
 
   const isListening = () =>
     state.status === STATUS_ASKING_PERMISSION ||
