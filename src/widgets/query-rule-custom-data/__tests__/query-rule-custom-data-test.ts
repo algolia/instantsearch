@@ -68,6 +68,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           helper,
           state: helper.state,
           instantSearchInstance: {},
+          templatesConfig: {},
+          createURL: () => '#',
         });
 
         const { cssClasses } = render.mock.calls[0][0].props;
@@ -90,6 +92,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           helper,
           state: helper.state,
           instantSearchInstance: {},
+          templatesConfig: {},
+          createURL: () => '#',
         });
 
         const { cssClasses } = render.mock.calls[0][0].props;
@@ -111,6 +115,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           helper,
           state: helper.state,
           instantSearchInstance: {},
+          templatesConfig: {},
+          createURL: () => '#',
         });
 
         const { templates } = render.mock.calls[0][0].props;
@@ -147,6 +153,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           helper,
           state: helper.state,
           instantSearchInstance: {},
+          templatesConfig: {},
+          createURL: () => '#',
         });
 
         const { templates } = render.mock.calls[0][0].props;
@@ -171,6 +179,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           helper,
           state: helper.state,
           instantSearchInstance: {},
+          templatesConfig: {},
+          createURL: () => '#',
         });
         widget.dispose!({ state: helper.getState() });
 

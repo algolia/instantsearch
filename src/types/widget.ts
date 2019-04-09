@@ -7,10 +7,10 @@ import {
 
 interface InitOptions {
   instantSearchInstance: InstantSearch;
-  state?: SearchParameters;
-  helper?: Helper;
-  templatesConfig?: object;
-  createURL?(state: SearchParameters): string;
+  state: SearchParameters;
+  helper: Helper;
+  templatesConfig: object;
+  createURL(state: SearchParameters): string;
 }
 
 interface RenderOptions {
