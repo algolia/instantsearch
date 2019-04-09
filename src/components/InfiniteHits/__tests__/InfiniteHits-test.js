@@ -29,6 +29,8 @@ describe('InfiniteHits', () => {
 
       const props = {
         hasShowPrevious: false,
+        showPrevious: () => {},
+        showMore: () => {},
         results: { hits },
         hits,
         isFirstPage: true,
@@ -61,6 +63,8 @@ describe('InfiniteHits', () => {
 
       const props = {
         hasShowPrevious: false,
+        showPrevious: () => {},
+        showMore: () => {},
         results: { hits },
         hits,
         isFirstPage: false,
@@ -84,6 +88,8 @@ describe('InfiniteHits', () => {
 
       const props = {
         hasShowPrevious: false,
+        showPrevious: () => {},
+        showMore: () => {},
         results: { hits },
         hits,
         isFirstPage: true,
@@ -107,6 +113,8 @@ describe('InfiniteHits', () => {
 
       const props = {
         hasShowPrevious: false,
+        showPrevious: () => {},
+        showMore: () => {},
         results: { hits },
         hits,
         isFirstPage: false,
@@ -139,6 +147,8 @@ describe('InfiniteHits', () => {
 
       const props = {
         hasShowPrevious: true,
+        showPrevious: () => {},
+        showMore: () => {},
         results: { hits },
         hits,
         isFirstPage: true,
@@ -177,6 +187,8 @@ describe('InfiniteHits', () => {
 
       const props = {
         hasShowPrevious: true,
+        showPrevious: () => {},
+        showMore: () => {},
         results: { hits },
         hits,
         isFirstPage: false,
