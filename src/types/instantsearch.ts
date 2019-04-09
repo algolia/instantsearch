@@ -12,23 +12,37 @@ export type SearchParameters = any;
 
 export type SearchResults = any;
 
+type HitAttributeHighlightResult = {
+  value: string;
+  matchLevel: 'none' | 'partial' | 'full';
+  matchedWords: string[];
+  fullyHighlighted?: boolean;
+};
+
+type HitHighlightResult = {
+  [attribute: string]:
+    | HitAttributeHighlightResult
+    | HitAttributeHighlightResult[]
+    | HitHighlightResult;
+};
+
+type HitAttributeSnippetResult = Pick<
+  HitAttributeHighlightResult,
+  'value' | 'matchLevel'
+>;
+
+type HitSnippetResult = {
+  [attribute: string]:
+    | HitAttributeSnippetResult
+    | HitAttributeSnippetResult[]
+    | HitSnippetResult;
+};
+
 export type Hit = {
   [attribute: string]: any;
   objectID: string;
-  _highlightResult?: {
-    [attribute: string]: {
-      value: string;
-      matchLevel: 'none' | 'partial' | 'full';
-      matchedWords: string[];
-      fullyHighlighted?: boolean;
-    };
-  };
-  _snippetResult?: {
-    [attribute: string]: {
-      value: string;
-      matchLevel: 'none' | 'partial' | 'full';
-    };
-  };
+  _highlightResult?: HitHighlightResult;
+  _snippetResult?: HitSnippetResult;
   _rankingInfo?: {
     promoted: boolean;
     nbTypos: number;
