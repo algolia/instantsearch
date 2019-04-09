@@ -1,4 +1,3 @@
-import qs from 'qs';
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import { MemoryRouter } from '../.storybook/MemoryRouter';
@@ -88,16 +87,6 @@ storiesOf('InfiniteHits', module)
       {
         routing: {
           router: new MemoryRouter({ page: 3 }),
-          stateMapping: {
-            stateToRoute(uiState) {
-              const query = qs.parse(location.search.slice(1));
-              return {
-                ...query,
-                page: uiState.page,
-              };
-            },
-            routeToState: routeState => routeState,
-          },
         },
       }
     )
