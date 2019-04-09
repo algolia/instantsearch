@@ -13,7 +13,7 @@ import {
 
 export type VoiceSearchProps = {
   cssClasses: VoiceSearchCSSClasses;
-  isSupportedBrowser: boolean;
+  isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: ToggleListening;
   voiceListeningState: VoiceListeningState;
@@ -22,7 +22,7 @@ export type VoiceSearchProps = {
 
 const VoiceSearch = ({
   cssClasses,
-  isSupportedBrowser,
+  isBrowserSupported,
   isListening,
   toggleListening,
   voiceListeningState,
@@ -44,7 +44,7 @@ const VoiceSearch = ({
           type: 'button',
           title: 'Search by voice',
           onClick: handleClick,
-          disabled: !isSupportedBrowser,
+          disabled: !isBrowserSupported,
         }}
         data={{
           status,
@@ -52,7 +52,7 @@ const VoiceSearch = ({
           isListening,
           transcript,
           isSpeechFinal,
-          isSupportedBrowser,
+          isBrowserSupported,
         }}
         templates={templates}
       />
@@ -67,7 +67,7 @@ const VoiceSearch = ({
           isListening,
           transcript,
           isSpeechFinal,
-          isSupportedBrowser,
+          isBrowserSupported,
         }}
         templates={templates}
       />

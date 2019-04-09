@@ -27,7 +27,7 @@ type VoiceSearchTemplateProps = {
   isListening: boolean;
   transcript: string;
   isSpeechFinal: boolean;
-  isSupportedBrowser: boolean;
+  isBrowserSupported: boolean;
 };
 
 export type VoiceSearchTemplates = {
@@ -51,7 +51,7 @@ interface VoiceSearchRendererWidgetParams extends VoiceSearchWidgetParams {
 type VoiceSearch = WidgetFactory<VoiceSearchWidgetParams>;
 
 const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
-  isSupportedBrowser,
+  isBrowserSupported,
   isListening,
   toggleListening,
   voiceListeningState,
@@ -63,7 +63,7 @@ const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
     <VoiceSearch
       cssClasses={cssClasses}
       templates={templates}
-      isSupportedBrowser={isSupportedBrowser}
+      isBrowserSupported={isBrowserSupported}
       isListening={isListening}
       toggleListening={toggleListening}
       voiceListeningState={voiceListeningState}

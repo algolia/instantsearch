@@ -5,7 +5,7 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
   return ({ onStateChange, onQueryChange }) => {
     return {
       getState: () => {},
-      isSupportedBrowser: () => true,
+      isBrowserSupported: () => true,
       isListening: () => false,
       toggleListening: () => {},
       // ⬇️ for test

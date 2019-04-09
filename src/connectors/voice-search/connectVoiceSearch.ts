@@ -20,7 +20,7 @@ export type VoiceSearchConnectorParams = {
 };
 
 export interface VoiceSearchRenderOptions<T> extends RenderOptions<T> {
-  isSupportedBrowser: boolean;
+  isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: ToggleListening;
   voiceListeningState: VoiceListeningState;
@@ -50,7 +50,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       isFirstRendering,
       instantSearchInstance,
       voiceSearchHelper: {
-        isSupportedBrowser,
+        isBrowserSupported,
         isListening,
         toggleListening,
         getState,
@@ -58,7 +58,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
     }) => {
       renderFn(
         {
-          isSupportedBrowser: isSupportedBrowser(),
+          isBrowserSupported: isBrowserSupported(),
           isListening: isListening(),
           toggleListening,
           voiceListeningState: getState(),

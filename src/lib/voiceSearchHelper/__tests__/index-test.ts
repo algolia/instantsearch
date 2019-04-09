@@ -35,7 +35,7 @@ describe('VoiceSearchHelper', () => {
 
   it('is not supported', () => {
     const helper = getHelper();
-    expect(helper.isSupportedBrowser()).toBe(false);
+    expect(helper.isBrowserSupported()).toBe(false);
   });
 
   it('is not listening', () => {
@@ -46,13 +46,13 @@ describe('VoiceSearchHelper', () => {
   it('is supported with webkitSpeechRecognition', () => {
     window.webkitSpeechRecognition = () => {};
     const helper = getHelper();
-    expect(helper.isSupportedBrowser()).toBe(true);
+    expect(helper.isBrowserSupported()).toBe(true);
   });
 
   it('is supported with SpeechRecognition', () => {
     window.SpeechRecognition = () => {};
     const helper = getHelper();
-    expect(helper.isSupportedBrowser()).toBe(true);
+    expect(helper.isBrowserSupported()).toBe(true);
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:false)', () => {
