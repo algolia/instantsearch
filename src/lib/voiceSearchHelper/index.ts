@@ -104,6 +104,9 @@ export default function voiceSearchHelper({
   };
 
   const toggleListening = () => {
+    if (!isSupportedBrowser()) {
+      return;
+    }
     if (isListening()) {
       stop();
     } else {
