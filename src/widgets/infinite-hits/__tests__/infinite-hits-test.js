@@ -40,6 +40,7 @@ describe('infiniteHits()', () => {
       container,
       escapeHTML: true,
       cssClasses: { root: ['root', 'cx'] },
+      showPrevious: false,
     });
     widget.init({ helper, instantSearchInstance: {} });
     results = { hits: [{ first: 'hit', second: 'hit' }] };
@@ -71,6 +72,7 @@ describe('infiniteHits()', () => {
       container,
       transformItems: items =>
         items.map(item => ({ ...item, transformed: true })),
+      showPrevious: false,
     });
 
     widget.init({ helper, instantSearchInstance: {} });
