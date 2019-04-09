@@ -25,7 +25,7 @@ export default function voiceSearchHelper({
   onQueryChange,
   onStateChange,
 }: VoiceSearchHelperParams) {
-  const SpeechRecognitionClass: SpeechRecognition =
+  const SpeechRecognitionAPI: SpeechRecognition =
     (window as any).webkitSpeechRecognition ||
     (window as any).SpeechRecognition;
   const getDefaultState = (status: string): VoiceListeningState => ({
