@@ -18,7 +18,7 @@
     "babel-preset-stage-2": "6.24.1",
     "jest": "22.4.4",
     "json-loader": "0.5.7",
-    "nodemon": "1.18.10",
+    "nodemon": "1.18.11",
     "react-test-renderer": "16.8.6",
     "webpack": "4.29.6",
     "webpack-cli": "3.3.0",
