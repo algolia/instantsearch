@@ -126,11 +126,6 @@ storiesOf('VoiceSearch', module)
       const style = window.document.createElement('style');
       window.document.head.appendChild(style);
       [
-        `.ais-VoiceSearch-button{border:none;width:24px;height:24px;padding:4px;border-radius:50%;color:#3a4570;background-color:transparent}`,
-        `.ais-VoiceSearch-button svg{color:currentColor}`,
-        `.ais-VoiceSearch-button:hover{cursor:pointer;background-color:#a5aed1;color:#fff}`,
-        `.ais-VoiceSearch-button:disabled{color:#a5aed1}`,
-        `.ais-VoiceSearch-button:disabled:hover{color:#a5aed1;cursor:not-allowed;background:inherit}`,
         `.voice-search-button {
           position: absolute;
           right: 43px;
