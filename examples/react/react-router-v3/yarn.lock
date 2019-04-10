@@ -5018,10 +5018,10 @@ inquirer@^6.1.0:
     strip-ansi "^5.0.0"
     through "^2.3.6"
 
-instantsearch.css@7.3.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.3.0.tgz#f23b05adf0155e65ff7407179eb03318fe904706"
-  integrity sha512-yNBzm35iwvIRfcP+Qsm9maL6cw+4XCc39dZNexWefwNsY0E8tILOvRVfetmO86aYfaf1+OoaS+dHCLj4VBLxMw==
+instantsearch.css@7.3.1:
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.3.1.tgz#7ab74a8f355091ae040947a9cf5438f379026622"
+  integrity sha512-/kaMDna5D+Q9mImNBHEhb9HgHATDOFKYii7N1Iwvrj+lmD9gBJLqVhUw67gftq2O0QI330pFza+CRscIwB1wQQ==
 
 internal-ip@^3.0.1:
   version "3.0.1"
