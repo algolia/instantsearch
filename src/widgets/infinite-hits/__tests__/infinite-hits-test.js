@@ -126,11 +126,16 @@ describe('infiniteHits()', () => {
 
     expect(render).toHaveBeenCalledTimes(2);
 
-    expect(render.mock.calls[0][0].props.isFirstPage).toEqual(true);
-    expect(render.mock.calls[0][1]).toEqual(container);
+    const [
+      firstRenderingParameters,
+      secondRenderingParameters,
+    ] = render.mock.calls;
 
-    expect(render.mock.calls[1][0].props.isFirstPage).toEqual(true);
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRenderingParameters[0].props.isFirstPage).toEqual(true);
+    expect(firstRenderingParameters[1]).toEqual(container);
+
+    expect(secondRenderingParameters[0].props.isFirstPage).toEqual(true);
+    expect(secondRenderingParameters[1]).toEqual(container);
   });
 
   it('if it is not the first page, then the props should contain isFirstPage false', () => {
