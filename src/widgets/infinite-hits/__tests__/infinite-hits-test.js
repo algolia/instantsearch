@@ -129,7 +129,7 @@ describe('infiniteHits()', () => {
     expect(render.mock.calls[0][0].props.isFirstPage).toEqual(true);
     expect(render.mock.calls[0][1]).toEqual(container);
 
-    expect(render.mock.calls[0][0].props.isFirstPage).toEqual(true);
+    expect(render.mock.calls[1][0].props.isFirstPage).toEqual(true);
     expect(render.mock.calls[1][1]).toEqual(container);
   });
 
