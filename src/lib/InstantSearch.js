@@ -26,6 +26,20 @@ function defaultCreateURL() {
 const isIndexWidget = _ => _.$$type === Symbol.for('ais.index');
 // const isIndexWidgetLinked = _ => isIndexWidget(_) && Boolean(_.node);
 
+const renderWalk = (node, fn) => {
+  fn(node);
+
+  if (node.child !== null) {
+    return renderWalk(node.child, fn);
+  }
+
+  if (node.next !== null) {
+    return renderWalk(node.next, fn);
+  }
+
+  return _nothing;
+};
+
 const resolveNodesFromNode = (node, acc = []) => {
   if (node.child !== null) {
     return resolveNodesFromNode(node.child, acc.concat(node.child));
@@ -622,9 +636,9 @@ class InstantSearch extends EventEmitter {
   }
 
   _init() {
-    const walk = node => {
+    renderWalk(this.tree, node => {
       node.widgets.forEach(widget => {
-        if (widget.init) {
+        if (typeof widget.init === 'function') {
           widget.init({
             state: node.helper.getState(),
             helper: node.helper,
@@ -638,14 +652,8 @@ class InstantSearch extends EventEmitter {
             instantSearchInstance: this,
           });
         }
-
-        if (widget.node) {
-          walk(widget.node);
-        }
       });
-    };
-
-    walk(this.tree);
+    });
   }
 
   _batch() {
@@ -662,11 +670,17 @@ class InstantSearch extends EventEmitter {
   }
 
   _render() {
-    const walk = node => {
+    if (!this.tree.helper.hasPendingRequests()) {
+      clearTimeout(this._searchStalledTimer);
+      this._searchStalledTimer = null;
+      this._isSearchStalled = false;
+    }
+
+    renderWalk(this.tree, node => {
       const scoped = resolveNodesResultsFromNode(node);
 
       node.widgets.forEach(widget => {
-        if (widget.render) {
+        if (typeof widget.render === 'function') {
           widget.render({
             templatesConfig: this.templatesConfig,
             scoped,
@@ -683,20 +697,8 @@ class InstantSearch extends EventEmitter {
             },
           });
         }
-
-        if (widget.node) {
-          walk(widget.node);
-        }
       });
-    };
-
-    if (!this.tree.helper.hasPendingRequests()) {
-      clearTimeout(this._searchStalledTimer);
-      this._searchStalledTimer = null;
-      this._isSearchStalled = false;
-    }
-
-    walk(this.tree);
+    });
 
     this.emit('render');
   }
