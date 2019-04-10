@@ -4,7 +4,7 @@ type IndexArgs = {
 };
 
 type Node = {
-  instance: any;
+  instantSearchInstance: any;
   parent: Node | null;
   indexId: string;
   widgets: any[];
@@ -30,7 +30,7 @@ export class Index {
     this.widgets = this.widgets.concat(widgets);
 
     if (this.node !== null) {
-      this.node.instance.addWidgets(widgets, this.node);
+      this.node.instantSearchInstance.addWidgets(widgets, this.node);
     }
 
     return this;
@@ -40,7 +40,7 @@ export class Index {
     this.widgets = this.widgets.filter(w => !widgets.includes(w));
 
     if (this.node !== null) {
-      this.node.instance.removeWidgets(widgets, this.node);
+      this.node.instantSearchInstance.removeWidgets(widgets, this.node);
     }
 
     return this;

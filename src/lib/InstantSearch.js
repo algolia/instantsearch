@@ -12,6 +12,7 @@ import { resolveSingleLeafMerge } from './resolveSearchParametersWithMerge';
 import createHelpers from './createHelpers';
 
 const _defer = Promise.resolve();
+const _nothing = undefined;
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),
@@ -23,94 +24,81 @@ function defaultCreateURL() {
 }
 
 const isIndexWidget = _ => _.$$type === Symbol.for('ais.index');
-const isIndexWidgetLinked = _ => isIndexWidget(_) && Boolean(_.node);
+// const isIndexWidgetLinked = _ => isIndexWidget(_) && Boolean(_.node);
 
-const resolveNodesFromNode = node => {
-  const loop = (acc, innerNode) => {
-    return innerNode.widgets
-      .filter(isIndexWidget)
-      .map(_ => _.node)
-      .reduce(
-        (innerAcc, currentNode) =>
-          loop(innerAcc.concat(currentNode), currentNode),
-        acc
-      );
-  };
+const resolveNodesFromNode = (node, acc = []) => {
+  if (node.child !== null) {
+    return resolveNodesFromNode(node.child, acc.concat(node.child));
+  }
 
-  return loop([], node);
-};
+  if (node.next !== null) {
+    return resolveNodesFromNode(node.next, acc.concat(node.next));
+  }
 
-const resolveNodesFromIndexId = (node, indexId) => {
-  const loop = (acc, innerNode) => {
-    const nextAcc = innerNode.indexId === indexId ? acc.concat(innerNode) : acc;
-
-    return innerNode.widgets
-      .filter(isIndexWidget)
-      .map(_ => _.node)
-      .reduce((innerAcc, _) => loop(innerAcc, _), nextAcc);
-  };
-
-  return loop([], node);
+  return acc;
 };
 
 const resolveNodeFromIndexId = (node, indexId) => {
-  const loop = innerNode => {
-    if (innerNode.indexId === indexId) {
-      return innerNode;
-    }
+  if (node.indexId === indexId) {
+    return node;
+  }
 
-    // Find an alternaive solution
-    return innerNode.widgets
-      .filter(isIndexWidgetLinked)
-      .map(_ => _.node)
-      .find(_ => loop(_));
-  };
+  if (node.child !== null) {
+    return resolveNodeFromIndexId(node.child);
+  }
 
-  return loop(node);
+  if (node.next !== null) {
+    return resolveNodeFromIndexId(node.next);
+  }
+
+  return _nothing;
 };
 
-const resolveNodesResultsFromNode = node => {
-  const loop = (acc, innerNode) => {
-    const nextAcc = acc.concat({
-      indexId: innerNode.indexId,
-      results: innerNode.derivedHelper.lastResults,
-    });
+const resolveNodesResultsFromNode = (node, acc = []) => {
+  const next = acc.concat({
+    indexId: node.indexId,
+    results: node.derivedHelper.lastResults,
+  });
 
-    return innerNode.widgets
-      .filter(isIndexWidget)
-      .map(_ => _.node)
-      .reduce((innerAcc, _) => loop(innerAcc, _), nextAcc);
-  };
+  if (node.child !== null) {
+    return resolveNodesResultsFromNode(node.child, next);
+  }
 
-  return loop([], node);
+  if (node.next !== null) {
+    return resolveNodesResultsFromNode(node.next, next);
+  }
+
+  return next;
 };
 
-const resolveRoot = node => {
-  const resolveParentNode = innerNode => {
-    return innerNode.parent !== null
-      ? resolveParentNode(innerNode.parent)
-      : innerNode;
-  };
+const __resolveRoot = node =>
+  node.parent !== null ? __resolveRoot(node.parent) : node;
 
-  return resolveParentNode(node);
+const __resolveNodesFromIndexId = (node, indexId, acc = []) => {
+  const next = node.indexId === indexId ? acc.concat(node) : acc;
+
+  if (node.child !== null) {
+    return __resolveNodesFromIndexId(node.child, indexId, next);
+  }
+
+  if (node.next !== null) {
+    return __resolveNodesFromIndexId(node.next, indexId, next);
+  }
+
+  return next;
 };
 
-const resolveRootNodes = (root, node) => {
-  const resolveParentNode = (innerNode, nodes) => {
-    const nodesForIndexId = resolveNodesFromIndexId(root, innerNode.indexId);
-    const next = [nodesForIndexId].concat(nodes);
+const __resolveRootNodes = (root, node, acc = []) => {
+  const next = [__resolveNodesFromIndexId(root, node.indexId)].concat(acc);
 
-    return innerNode.parent !== null
-      ? resolveParentNode(innerNode.parent, next)
-      : next;
-  };
-
-  return resolveParentNode(node, []);
+  return node.parent !== null
+    ? __resolveRootNodes(root, node.parent, next)
+    : next;
 };
 
 const resolveSearchParameters = node => {
-  const rootNode = resolveRoot(node);
-  const nodeSearchParemeters = resolveRootNodes(rootNode, node).map(nodes =>
+  const root = __resolveRoot(node);
+  const nodeSearchParemeters = __resolveRootNodes(root, node).map(nodes =>
     resolveSingleLeafMerge(
       ...nodes
         // Tweaks for the input of the resolve function
@@ -212,6 +200,7 @@ class InstantSearch extends EventEmitter {
 
     this.client = searchClient;
     this.searchParameters = searchParameters;
+
     // We use the ref to create the derived helper before we create the
     // actual node which cause an issue because the scope is captued with
     // the incorrect data.
@@ -238,8 +227,10 @@ class InstantSearch extends EventEmitter {
 
     derivedHelper.on('error', e => this.emit('error', e));
 
-    this.tree.instance = this;
+    this.tree.instantSearchInstance = this;
     this.tree.parent = null;
+    this.tree.child = null;
+    this.tree.next = null;
     this.tree.indexId = indexName;
     this.tree.widgets = [];
     this.tree.helper = helper;
@@ -302,36 +293,37 @@ class InstantSearch extends EventEmitter {
     const current = node || this.tree;
 
     // Widgets
-    widgets
-      // .filter(widget => !isIndexWidget(widget))
-      .forEach(widget => {
-        if (widget.render === undefined && widget.init === undefined) {
-          throw new Error('Widget definition missing render or init method');
-        }
+    widgets.forEach(widget => {
+      if (widget.render === undefined && widget.init === undefined) {
+        throw new Error('Widget definition missing render or init method');
+      }
 
-        current.widgets.push(widget);
+      current.widgets.push(widget);
 
-        current.helper.setState(
-          // @TODO: replace the `enhanceConfiguration`
-          enhanceConfiguration()(
-            {
-              ...current.helper.getState(),
-            },
-            widget
-          )
-        );
+      current.helper.setState(
+        // @TODO: replace the `enhanceConfiguration`
+        enhanceConfiguration()(
+          {
+            ...current.helper.getState(),
+          },
+          widget
+        )
+      );
 
-        if (this.started && widget.init) {
-          widget.init({
-            state: current.helper.state,
-            helper: current.helper,
-            templatesConfig: this.templatesConfig,
-            createURL: this._createAbsoluteURL,
-            onHistoryChange: this._onHistoryChange,
-            instantSearchInstance: this,
-          });
-        }
-      });
+      if (this.started && widget.init) {
+        widget.init({
+          state: current.helper.state,
+          helper: current.helper,
+          templatesConfig: this.templatesConfig,
+          createURL: this._createAbsoluteURL,
+          onHistoryChange: this._onHistoryChange,
+          instantSearchInstance: this,
+        });
+      }
+    });
+
+    // Track the last node
+    let previous = null;
 
     // Indices
     widgets.filter(isIndexWidget).forEach(index => {
@@ -348,8 +340,10 @@ class InstantSearch extends EventEmitter {
       });
 
       const innerNode = {
-        instance: this,
+        instantSearchInstance: this,
         parent: current,
+        child: null,
+        next: null,
         indexId: index.indexId,
         widgets: [],
         helper,
@@ -378,7 +372,17 @@ class InstantSearch extends EventEmitter {
       });
 
       // register the node on the index
+      // How to disable this?
       index.node = innerNode;
+      // ----
+
+      if (!previous) {
+        current.child = innerNode;
+      } else {
+        previous.next = innerNode;
+      }
+
+      previous = innerNode;
 
       // recursive call to add widgets on the tree
       this.addWidgetsToNode(index.widgets, innerNode);
