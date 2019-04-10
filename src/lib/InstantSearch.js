@@ -312,7 +312,7 @@ class InstantSearch extends EventEmitter {
         throw new Error('Widget definition missing render or init method');
       }
 
-      current.widgets.push(widget);
+      current.widgets = current.widgets.concat(widget);
 
       current.helper.setState(
         // @TODO: replace the `enhanceConfiguration`
