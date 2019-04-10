@@ -5,13 +5,16 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
   cssClasses={
     Object {
       "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
+      "loadPrevious": "ais-InfiniteHits-loadPrevious",
       "root": "ais-InfiniteHits root cx",
     }
   }
+  hasShowPrevious={false}
   hits={
     Array [
       Object {
@@ -20,6 +23,7 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
       },
     ]
   }
+  isFirstPage={true}
   isLastPage={false}
   results={
     Object {
@@ -32,18 +36,21 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
     }
   }
   showMore={[Function]}
+  showPrevious={[Function]}
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
         "showMoreText": "Show more results",
+        "showPreviousText": "Show previous results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
         "showMoreText": false,
+        "showPreviousText": false,
       },
     }
   }
@@ -55,13 +62,16 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
   cssClasses={
     Object {
       "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
+      "loadPrevious": "ais-InfiniteHits-loadPrevious",
       "root": "ais-InfiniteHits root cx",
     }
   }
+  hasShowPrevious={false}
   hits={
     Array [
       Object {
@@ -70,6 +80,7 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
       },
     ]
   }
+  isFirstPage={true}
   isLastPage={false}
   results={
     Object {
@@ -82,18 +93,21 @@ exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
     }
   }
   showMore={[Function]}
+  showPrevious={[Function]}
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
         "showMoreText": "Show more results",
+        "showPreviousText": "Show previous results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
         "showMoreText": false,
+        "showPreviousText": false,
       },
     }
   }
@@ -105,13 +119,16 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
   cssClasses={
     Object {
       "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
+      "loadPrevious": "ais-InfiniteHits-loadPrevious",
       "root": "ais-InfiniteHits root cx",
     }
   }
+  hasShowPrevious={false}
   hits={
     Array [
       Object {
@@ -120,6 +137,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       },
     ]
   }
+  isFirstPage={true}
   isLastPage={false}
   results={
     Object {
@@ -134,18 +152,21 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     }
   }
   showMore={[Function]}
+  showPrevious={[Function]}
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
         "showMoreText": "Show more results",
+        "showPreviousText": "Show previous results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
         "showMoreText": false,
+        "showPreviousText": false,
       },
     }
   }
@@ -157,13 +178,16 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
   cssClasses={
     Object {
       "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
+      "loadPrevious": "ais-InfiniteHits-loadPrevious",
       "root": "ais-InfiniteHits root cx",
     }
   }
+  hasShowPrevious={false}
   hits={
     Array [
       Object {
@@ -172,6 +196,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       },
     ]
   }
+  isFirstPage={true}
   isLastPage={true}
   results={
     Object {
@@ -186,18 +211,21 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     }
   }
   showMore={[Function]}
+  showPrevious={[Function]}
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
         "showMoreText": "Show more results",
+        "showPreviousText": "Show previous results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
         "showMoreText": false,
+        "showPreviousText": false,
       },
     }
   }
@@ -209,13 +237,16 @@ exports[`infiniteHits() renders transformed items 1`] = `
   cssClasses={
     Object {
       "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
       "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
+      "loadPrevious": "ais-InfiniteHits-loadPrevious",
       "root": "ais-InfiniteHits",
     }
   }
+  hasShowPrevious={false}
   hits={
     Array [
       Object {
@@ -225,6 +256,7 @@ exports[`infiniteHits() renders transformed items 1`] = `
       },
     ]
   }
+  isFirstPage={true}
   isLastPage={false}
   results={
     Object {
@@ -238,18 +270,21 @@ exports[`infiniteHits() renders transformed items 1`] = `
     }
   }
   showMore={[Function]}
+  showPrevious={[Function]}
   templateProps={
     Object {
       "templates": Object {
         "empty": "No results",
         "item": [Function],
         "showMoreText": "Show more results",
+        "showPreviousText": "Show previous results",
       },
       "templatesConfig": undefined,
       "useCustomCompileOptions": Object {
         "empty": false,
         "item": false,
         "showMoreText": false,
+        "showPreviousText": false,
       },
     }
   }
