@@ -94,7 +94,7 @@ describe('Templates', () => {
 
               expect(image).toMatchImageSnapshot({
                 customSnapshotsDir: path.resolve(
-                  `./scripts/__image_snapshots__/${
+                  `./e2e/__image_snapshots__/${
                     templateConfig.templateName
                   }/${path.dirname(filePath)}`
                 ),

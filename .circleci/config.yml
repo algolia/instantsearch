@@ -1,0 +1,159 @@
+version: 2.1
+
+aliases:
+  - &install_yarn_version
+    name: Install specific Yarn version
+    command: |
+      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+      echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> $BASH_ENV
+
+  - &restore_yarn_cache
+    name: Restore Yarn cache
+    keys:
+      - yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+
+  - &save_yarn_cache
+    name: Save Yarn cache
+    key: yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+    paths:
+      - ~/.cache/yarn
+
+  - &run_yarn_install
+    name: Install dependencies
+    command: yarn install
+
+defaults: &defaults
+  working_directory: ~/create-instantsearch-app
+  docker:
+    - image: circleci/node:8
+
+executors:
+  node8:
+    docker:
+      - image: circleci/node:8
+  node10:
+    docker:
+      - image: circleci/node:10
+
+commands:
+  build_app:
+    description: 'Building an application'
+    parameters:
+      template:
+        type: string
+        default: ''
+      app:
+        type: string
+        default: ''
+    steps:
+      - run:
+          name: 'Building << parameters.template >> app'
+          command: |
+            node scripts/build-app.js "/tmp/<< parameters.app >>" "<< parameters.template >>"
+
+jobs:
+  test_unit:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Unit tests
+          command: yarn run test --maxWorkers=4
+
+  test_lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Lint & Code styles
+          command: yarn run lint
+
+  test_e2e_templates:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: End-to-end templates tests
+          command: yarn run test:e2e:templates --maxWorkers=4
+
+  test_apps_node_8:
+    executor: node8
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - build_app:
+          template: 'Angular InstantSearch'
+          app: 'angular-instantsearch'
+      - build_app:
+          template: 'Autocomplete.js'
+          app: 'autocomplete.js'
+      - build_app:
+          template: 'InstantSearch.js'
+          app: 'instantsearch.js'
+      - build_app:
+          template: 'JavaScript Client'
+          app: 'javascript-client'
+      - build_app:
+          template: 'JavaScript Helper'
+          app: 'javascript-helper'
+      - build_app:
+          template: 'React InstantSearch'
+          app: 'react-instantsearch'
+      - build_app:
+          template: 'Vue InstantSearch'
+          app: 'vue-instantsearch'
+
+  test_apps_node_10:
+    executor: node10
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - build_app:
+          template: 'Angular InstantSearch'
+          app: 'angular-instantsearch'
+      - build_app:
+          template: 'Autocomplete.js'
+          app: 'autocomplete.js'
+      - build_app:
+          template: 'InstantSearch.js'
+          app: 'instantsearch.js'
+      - build_app:
+          template: 'JavaScript Client'
+          app: 'javascript-client'
+      - build_app:
+          template: 'JavaScript Helper'
+          app: 'javascript-helper'
+      - build_app:
+          template: 'React InstantSearch'
+          app: 'react-instantsearch'
+      - build_app:
+          template: 'Vue InstantSearch'
+          app: 'vue-instantsearch'
+
+workflows:
+  version: 2.1
+  ci:
+    jobs:
+      - test_lint
+      - test_unit
+      - test_e2e_templates
+      - test_apps_node_8
+      - test_apps_node_10

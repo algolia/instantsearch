@@ -1,11 +1,11 @@
 {
   "requireUpstream": false,
   "increment": "conventional:angular",
-  "buildCommand": "npm run changelog && git add CHANGELOG.md",
+  "buildCommand": "yarn run changelog && git add CHANGELOG.md",
   "src": {
     "commitMessage": "chore(release): %s",
-    "beforeStartCommand": "npm run lint && npm run test -- --colors && npm run test:e2e -- --colors",
-    "afterReleaseCommand": "npm run release-templates"
+    "beforeStartCommand": "yarn run lint && yarn run test --colors && yarn run test:e2e",
+    "afterReleaseCommand": "yarn run release-templates"
   },
   "github": {
     "release": true,

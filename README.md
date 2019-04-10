@@ -1,8 +1,8 @@
 # Create InstantSearch App
 
-> ⚡️ Build InstantSearch apps at the speed of thoughts
+> ⚡️ Build InstantSearch apps at the speed of thought.
 
-[![Build Status][travis-svg]][travis-url] [![Version][version-svg]][package-url] [![License][license-image]][license-url]
+[![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url]
 
 `create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github], [Angular InstantSearch][angular-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
 
@@ -13,10 +13,8 @@
 <details>
   <summary><strong>Contents</strong></summary>
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Get started](#get-started)
 - [Usage](#usage)
@@ -163,8 +161,10 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 
 [version-svg]: https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square
 [package-url]: https://npmjs.org/package/create-instantsearch-app
-[travis-svg]: https://img.shields.io/travis/algolia/create-instantsearch-app/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/algolia/create-instantsearch-app
+[ci-svg]: https://img.shields.io/travis/algolia/create-instantsearch-app/master.svg?style=flat-square
+[ci-url]: https://travis-ci.org/algolia/create-instantsearch-app
+[ci-svg]: https://img.shields.io/circleci/project/github/algolia/create-instantsearch-app.svg?style=flat-square
+[ci-url]: https://circleci.com/gh/algolia/create-instantsearch-app
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 
