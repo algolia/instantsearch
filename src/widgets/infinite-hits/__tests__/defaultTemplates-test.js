@@ -22,4 +22,10 @@ describe('hits defaultTemplates', () => {
 
     expect(defaultTemplates.item(item)).toBe(expected);
   });
+
+  it('has a `showPreviousText` default template', () => {
+    expect(defaultTemplates.showPreviousText).toMatchInlineSnapshot(
+      `"Show previous results"`
+    );
+  });
 });
