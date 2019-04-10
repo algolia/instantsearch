@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "build": "./scripts/build.sh",
-    "dev": "gulp & hugo server & wait"
+    "dev": "gulp & hugo server & wait",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.0",
