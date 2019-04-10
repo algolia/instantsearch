@@ -385,9 +385,12 @@ class InstantSearch extends EventEmitter {
         helper,
       });
 
-      // register the node on the index
-      // How to disable this?
-      index.node = innerNode;
+      // The only reason we attach the node on the widget is because it's eager,
+      // we can't delay the moment where we create the widget. It means that once
+      // the widget is attached to the instance we have to replicate the operations
+      // directly on the node. Otherwise the widgets are only added to the widget
+      // but not on the instance.
+      index.$$node = innerNode;
       // ----
 
       if (!previous) {
@@ -486,18 +489,18 @@ class InstantSearch extends EventEmitter {
     // Widget indices
     widgets.filter(isIndexWidget).forEach(index => {
       // remove the subscription on the derviedHelper
-      index.node.unsubscribeDerivedHelper();
-      index.node.helper.removeAllListeners();
+      index.$$node.unsubscribeDerivedHelper();
+      index.$$node.helper.removeAllListeners();
 
       // remove the derivedHelper when no nodes are present
       if (!resolveNodeFromIndexId(this.tree, index.indexId)) {
-        index.node.derivedHelper.detach();
+        index.$$node.derivedHelper.detach();
       }
 
       // recursive call to dispose widgets on the tree
-      this.removeWidgetsFromNode(index.widgets, index.node);
+      this.removeWidgetsFromNode(index.widgets, index.$$node);
 
-      index.node = null;
+      index.$$node = null;
     });
   }
 

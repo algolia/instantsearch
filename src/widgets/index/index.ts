@@ -15,10 +15,10 @@ type Node = {
 
 export class Index {
   public $$type = Symbol.for('ais.index');
+  public $$node: Node | null = null;
   public indexName: string;
   public indexId: string;
   public widgets: any[];
-  public node: Node | null = null;
 
   constructor({ indexName, indexId = indexName }: IndexArgs) {
     this.indexName = indexName;
@@ -29,8 +29,8 @@ export class Index {
   public addWidgets(widgets: any[]) {
     this.widgets = this.widgets.concat(widgets);
 
-    if (this.node !== null) {
-      this.node.instantSearchInstance.addWidgets(widgets, this.node);
+    if (this.$$node !== null) {
+      this.$$node.instantSearchInstance.addWidgets(widgets, this.$$node);
     }
 
     return this;
@@ -39,8 +39,8 @@ export class Index {
   public removeWidgets(widgets: any[]) {
     this.widgets = this.widgets.filter(w => !widgets.includes(w));
 
-    if (this.node !== null) {
-      this.node.instantSearchInstance.removeWidgets(widgets, this.node);
+    if (this.$$node !== null) {
+      this.$$node.instantSearchInstance.removeWidgets(widgets, this.$$node);
     }
 
     return this;
