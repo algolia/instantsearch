@@ -156,9 +156,11 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page;
+
         if (!showPrevious || page === 0 || page + 1 === uiState.page) {
           return uiState;
         }
+
         return {
           ...uiState,
           page: page + 1,
@@ -170,8 +172,9 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           return searchParameters;
         }
         const uiPage = uiState.page;
-        if (uiPage)
+        if (uiPage) {
           return searchParameters.setQueryParameter('page', uiPage - 1);
+        }
         return searchParameters.setQueryParameter('page', 0);
       },
     };
