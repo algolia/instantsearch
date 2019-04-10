@@ -219,6 +219,54 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(thirdRenderingOptions.results).toEqual(previousResults);
   });
 
+  it('Provides the hits and flush hists cache on query changes', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget();
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.hits).toEqual(hits);
+    expect(secondRenderingOptions.results).toEqual(results);
+
+    helper.setQuery('data');
+
+    // If the query changes, the hits cache should be flushed
+    const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const otherResults = new SearchResults(helper.state, [{ hits: otherHits }]);
+    widget.render({
+      results: otherResults,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
+    expect(thirdRenderingOptions.hits).toEqual(otherHits);
+    expect(thirdRenderingOptions.results).toEqual(otherResults);
+  });
+
   it('escape highlight properties if requested', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);

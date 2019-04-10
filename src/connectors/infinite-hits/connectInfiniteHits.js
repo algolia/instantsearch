@@ -76,6 +76,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
     let hitsCache = [];
     let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
+    let prevState;
 
     const getShowPrevious = helper => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
@@ -118,18 +119,33 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       render({ results, state, instantSearchInstance }) {
+        // Reset cache and received pages if anything changes in the
+        // search state, except for the page.
+        //
+        // We're doing this to "reset" the widget if a refinement or the
+        // query changes between renders, but we want to keep it as is
+        // if we only change pages.
+        const { page, ...stateWithoutPage } = state;
+        const currentState = JSON.stringify(stateWithoutPage);
+        if (currentState !== prevState) {
+          hitsCache = [];
+          firstReceivedPage = page;
+          lastReceivedPage = page;
+        }
+        prevState = currentState;
+
         if (escapeHTML && results.hits && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
 
         results.hits = transformItems(results.hits);
 
-        if (lastReceivedPage < state.page || !hitsCache.length) {
+        if (lastReceivedPage < page || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = state.page;
-        } else if (firstReceivedPage > state.page) {
+          lastReceivedPage = page;
+        } else if (firstReceivedPage > page) {
           hitsCache = [...results.hits, ...hitsCache];
-          firstReceivedPage = state.page;
+          firstReceivedPage = page;
         }
 
         const isFirstPage = firstReceivedPage === 0;
