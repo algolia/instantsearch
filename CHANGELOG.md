@@ -1,3 +1,14 @@
+## [4.4.2](https://github.com/algolia/create-instantsearch-app/compare/4.4.1...4.4.2) (2019-04-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency chalk to v2.4.2 ([#385](https://github.com/algolia/create-instantsearch-app/issues/385)) ([1bb0e23](https://github.com/algolia/create-instantsearch-app/commit/1bb0e23))
+* **deps:** update dependency load-json-file to v5.2.0 ([#387](https://github.com/algolia/create-instantsearch-app/issues/387)) ([2b5f396](https://github.com/algolia/create-instantsearch-app/commit/2b5f396))
+* **templates:** use expo for react-native ([#392](https://github.com/algolia/create-instantsearch-app/issues/392)) ([e7de93c](https://github.com/algolia/create-instantsearch-app/commit/e7de93c))
+
+
+
 ## [4.4.1](https://github.com/algolia/create-instantsearch-app/compare/4.4.0...4.4.1) (2019-02-26)
 
 
