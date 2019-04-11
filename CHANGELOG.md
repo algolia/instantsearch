@@ -1,3 +1,33 @@
+# [3.3.0](https://github.com/algolia/instantsearch.js/compare/v3.2.1...v3.3.0) (2019-04-11)
+
+
+### Bug Fixes
+
+* **connectQueryRules:** improve tracked refinement type ([#3648](https://github.com/algolia/instantsearch.js/issues/3648)) ([e16ad57](https://github.com/algolia/instantsearch.js/commit/e16ad57))
+* **currentRefinements:** don't rely on `_objectSpread` ([#3672](https://github.com/algolia/instantsearch.js/issues/3672)) ([cd64bcf](https://github.com/algolia/instantsearch.js/commit/cd64bcf))
+* **queryRuleCustomData:** add default template ([#3650](https://github.com/algolia/instantsearch.js/issues/3650)) ([83e9eaa](https://github.com/algolia/instantsearch.js/commit/83e9eaa))
+* **QueryRuleCustomData:** pass data as object to templates ([#3647](https://github.com/algolia/instantsearch.js/issues/3647)) ([b8f8b4e](https://github.com/algolia/instantsearch.js/commit/b8f8b4e))
+* **queryRules:** fix types and stories ([#3670](https://github.com/algolia/instantsearch.js/issues/3670)) ([ba6e2e6](https://github.com/algolia/instantsearch.js/commit/ba6e2e6))
+* **routing:** apply windowTitle on first load ([#3669](https://github.com/algolia/instantsearch.js/issues/3669)) ([d553502](https://github.com/algolia/instantsearch.js/commit/d553502)), closes [#3667](https://github.com/algolia/instantsearch.js/issues/3667)
+* **routing:** support parsing URLs with up to 100 refinements ([#3671](https://github.com/algolia/instantsearch.js/issues/3671)) ([6ddcfb6](https://github.com/algolia/instantsearch.js/commit/6ddcfb6))
+* **RoutingManager:** avoid stale uiState ([#3630](https://github.com/algolia/instantsearch.js/issues/3630)) ([e1588aa](https://github.com/algolia/instantsearch.js/commit/e1588aa))
+* **types:** improve InstantSearch types ([#3651](https://github.com/algolia/instantsearch.js/issues/3651)) ([db9b91e](https://github.com/algolia/instantsearch.js/commit/db9b91e))
+* **ua:** Update the User-Agent to use the new format ([#3616](https://github.com/algolia/instantsearch.js/issues/3616)) ([ab84c57](https://github.com/algolia/instantsearch.js/commit/ab84c57))
+
+
+### Features
+
+* **infiniteHits:** add previous button ([#3645](https://github.com/algolia/instantsearch.js/issues/3645)) ([2c9e38d](https://github.com/algolia/instantsearch.js/commit/2c9e38d))
+* **queryRules:** add connectQueryRules connector ([#3597](https://github.com/algolia/instantsearch.js/issues/3597)) ([924cd99](https://github.com/algolia/instantsearch.js/commit/924cd99)), closes [#3599](https://github.com/algolia/instantsearch.js/issues/3599) [#3600](https://github.com/algolia/instantsearch.js/issues/3600)
+* **queryRules:** add context features to Query Rules ([#3617](https://github.com/algolia/instantsearch.js/issues/3617)) ([922879e](https://github.com/algolia/instantsearch.js/commit/922879e)), closes [#3602](https://github.com/algolia/instantsearch.js/issues/3602)
+
+
+### Reverts
+
+* feat(infiniteHits): add previous button ([214c0fc](https://github.com/algolia/instantsearch.js/commit/214c0fc))
+
+
+
 ## [3.2.1](https://github.com/algolia/instantsearch.js/compare/v3.1.0...v3.2.1) (2019-03-18)
 
 
