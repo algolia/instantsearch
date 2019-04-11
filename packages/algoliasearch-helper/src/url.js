@@ -17,7 +17,6 @@ var pick = require('lodash/pick');
 var map = require('lodash/map');
 var mapKeys = require('lodash/mapKeys');
 var mapValues = require('lodash/mapValues');
-var isString = require('lodash/isString');
 var isPlainObject = require('lodash/isPlainObject');
 var isEmpty = require('lodash/isEmpty');
 var invert = require('lodash/invert');
@@ -31,7 +30,7 @@ function recursiveEncode(input) {
   if (Array.isArray(input)) {
     return map(input, recursiveEncode);
   }
-  if (isString(input)) {
+  if (typeof input === 'string') {
     return encode(input);
   }
   return input;

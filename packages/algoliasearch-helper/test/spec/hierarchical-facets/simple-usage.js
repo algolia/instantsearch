@@ -29,6 +29,7 @@ test('hierarchical facets: simple usage', function(done) {
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
+      'exhaustiveFacetsCount': true,
       'facets': {
         'categories.lvl0': {'beers': 3, 'sales': 3},
         'categories.lvl1': {'beers > IPA': 3, 'sales > IPA': 3},
@@ -70,27 +71,32 @@ test('hierarchical facets: simple usage', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
       'count': 9,
       'isRefined': true,
+      'exhaustive': true,
       'data': [{
         'name': 'IPA',
         'path': 'beers > IPA',
         'count': 9,
         'isRefined': true,
+        'exhaustive': true,
         'data': [{
           'name': 'Flying dog',
           'path': 'beers > IPA > Flying dog',
           'count': 3,
           'isRefined': true,
+          'exhaustive': true,
           'data': null
         }, {
           'name': 'Brewdog punk IPA',
           'path': 'beers > IPA > Brewdog punk IPA',
           'count': 6,
           'isRefined': false,
+          'exhaustive': true,
           'data': null
         }]
       }]
@@ -99,12 +105,14 @@ test('hierarchical facets: simple usage', function(done) {
       'path': 'fruits',
       'count': 5,
       'isRefined': false,
+      'exhaustive': true,
       'data': null
     }, {
       'name': 'sales',
       'path': 'sales',
       'count': 20,
       'isRefined': false,
+      'exhaustive': true,
       'data': null
     }]
   }];

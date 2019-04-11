@@ -30,6 +30,7 @@ test('hierarchical facets: show parent level', function(done) {
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
+      'exhaustiveFacetsCount': true,
       'facets': {
         'categories.lvl0': {'beers': 2},
         'categories.lvl1': {'beers | IPA': 2}
@@ -65,22 +66,26 @@ test('hierarchical facets: show parent level', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
       'count': 3,
       'isRefined': true,
+      'exhaustive': true,
       'data': [{
         'name': 'IPA',
         'path': 'beers | IPA',
         'count': 2,
         'isRefined': true,
+        'exhaustive': true,
         'data': null
       }, {
         'name': 'Belgian',
         'path': 'beers | Belgian',
         'count': 1,
         'isRefined': false,
+        'exhaustive': true,
         'data': null
       }]
     }]

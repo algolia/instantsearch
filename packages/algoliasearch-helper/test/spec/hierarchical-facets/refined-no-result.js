@@ -28,6 +28,7 @@ test('hierarchical facets: no results', function(done) {
       'page': 0,
       'nbPages': 0,
       'hitsPerPage': 6,
+      'exhaustiveFacetsCount': true,
       'facets': {}
     }, {
       'query': 'badquery',
@@ -67,6 +68,7 @@ test('hierarchical facets: no results', function(done) {
         count: null,
         isRefined: true,
         path: null,
+        exhaustive: true,
         data: null
       }
     ]);

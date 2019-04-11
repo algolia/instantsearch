@@ -101,8 +101,8 @@ test(
     expect(refinements).toEqual([
       {
         attributeName: 'hierarchicalCategories',
-        count: 0,
-        exhaustive: false,
+        count: 17,
+        exhaustive: true,
         name: 'Best Buy Gift Cards > Entertainment Gift Cards',
         type: 'hierarchical'
       }

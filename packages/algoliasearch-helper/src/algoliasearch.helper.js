@@ -11,7 +11,6 @@ var inherits = require('./functions/inherits');
 var flatten = require('lodash/flatten');
 var forEach = require('lodash/forEach');
 var isEmpty = require('lodash/isEmpty');
-var map = require('lodash/map');
 
 var url = require('./url');
 var version = require('./version');
@@ -1211,7 +1210,7 @@ AlgoliaSearchHelper.prototype._search = function() {
 
   this.emit('search', state, this.lastResults);
 
-  var derivedQueries = map(this.derivedHelpers, function(derivedHelper) {
+  var derivedQueries = this.derivedHelpers.map(function(derivedHelper) {
     var derivedState = derivedHelper.getModifiedState(state);
     var queries = requestBuilder._getQueries(derivedState.index, derivedState);
     states.push({

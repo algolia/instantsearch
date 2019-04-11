@@ -13,7 +13,6 @@
  */
 
 var isUndefined = require('lodash/isUndefined');
-var isString = require('lodash/isString');
 var isFunction = require('lodash/isFunction');
 var isEmpty = require('lodash/isEmpty');
 var defaults = require('lodash/defaults');
@@ -98,7 +97,7 @@ var lib = {
     if (isUndefined(attribute)) {
       if (isEmpty(refinementList)) return refinementList;
       return {};
-    } else if (isString(attribute)) {
+    } else if (typeof attribute === 'string') {
       if (isEmpty(refinementList[attribute])) return refinementList;
       return omit(refinementList, attribute);
     } else if (isFunction(attribute)) {
@@ -132,8 +131,6 @@ var lib = {
    * @return {boolean}
    */
   isRefined: function isRefined(refinementList, attribute, refinementValue) {
-    var indexOf = require('lodash/indexOf');
-
     var containsRefinements = !!refinementList[attribute] &&
       refinementList[attribute].length > 0;
 
@@ -143,7 +140,7 @@ var lib = {
 
     var refinementValueAsString = '' + refinementValue;
 
-    return indexOf(refinementList[attribute], refinementValueAsString) !== -1;
+    return refinementList[attribute].indexOf(refinementValueAsString) !== -1;
   }
 };
 
