@@ -10,10 +10,10 @@ module.exports = api => {
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};
 
-  if (!isTest) {
-    targets.browsers = ['last 2 versions', 'ie >= 9'];
-  } else {
+  if (isTest) {
     targets.node = true;
+  } else {
+    targets.browsers = ['last 2 versions', 'ie >= 9'];
   }
 
   const testPlugins = [
