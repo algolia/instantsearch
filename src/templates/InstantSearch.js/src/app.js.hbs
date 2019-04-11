@@ -25,15 +25,15 @@ search.addWidget(
     {{#if attributesToDisplay}}
     templates: {
       item: `
-        <article>
-          <h1>\{{#helpers.highlight}}{ "attribute": "{{attributesToDisplay.[0]}}" }\{{/helpers.highlight}}</h1>
-          {{#each attributesToDisplay}}
-          {{#unless @first}}
-          <p>\{{#helpers.highlight}}{ "attribute": "{{this}}" }\{{/helpers.highlight}}</p>
-          {{/unless}}
-          {{/each}}
-        </article>
-      `,
+<article>
+  <h1>\{{#helpers.highlight}}{ "attribute": "{{attributesToDisplay.[0]}}" }\{{/helpers.highlight}}</h1>
+  {{#each attributesToDisplay}}
+  {{#unless @first}}
+  <p>\{{#helpers.highlight}}{ "attribute": "{{this}}" }\{{/helpers.highlight}}</p>
+  {{/unless}}
+  {{/each}}
+</article>
+`,
     },
     {{/if}}
   })

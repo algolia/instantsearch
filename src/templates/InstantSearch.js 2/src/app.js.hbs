@@ -22,15 +22,15 @@ search.addWidget(
     {{#if attributesToDisplay}}
     templates: {
       item: `
-        <article>
-          <h1>\{{{_highlightResult.{{attributesToDisplay.[0]}}.value}}}</h1>
-          {{#each attributesToDisplay}}
-          {{#unless @first}}
-          <p>\{{{_highlightResult.{{this}}.value}}}</p>
-          {{/unless}}
-          {{/each}}
-        </article>
-      `,
+<article>
+  <h1>\{{{_highlightResult.{{attributesToDisplay.[0]}}.value}}}</h1>
+  {{#each attributesToDisplay}}
+  {{#unless @first}}
+  <p>\{{{_highlightResult.{{this}}.value}}}</p>
+  {{/unless}}
+  {{/each}}
+</article>
+`,
     },
     {{/if}}
   })

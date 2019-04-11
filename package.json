@@ -48,6 +48,7 @@
     "metalsmith-ignore": "1.0.0",
     "metalsmith-in-place": "4.2.0",
     "metalsmith-rename": "1.0.0",
+    "prettier": "1.16.4",
     "semver": "6.0.0",
     "validate-npm-package-name": "3.0.0"
   },
@@ -64,7 +65,6 @@
     "eslint-plugin-prettier": "3.0.1",
     "jest": "24.7.1",
     "jest-image-snapshot": "2.8.1",
-    "prettier": "1.16.4",
     "release-it": "7.6.3",
     "walk-sync": "1.1.3"
   },

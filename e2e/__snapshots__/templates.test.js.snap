@@ -2923,11 +2923,11 @@ search.addWidget(
     container: '#hits',
     templates: {
       item: \`
-        <article>
-          <h1>{{{_highlightResult.attribute1.value}}}</h1>
-          <p>{{{_highlightResult.attribute2.value}}}</p>
-        </article>
-      \`,
+<article>
+  <h1>{{{_highlightResult.attribute1.value}}}</h1>
+  <p>{{{_highlightResult.attribute2.value}}}</p>
+</article>
+\`,
     },
   })
 );
@@ -3222,10 +3222,7 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
 exports[`Templates InstantSearch.js File content: src/app.js 1`] = `
 "/* global algoliasearch instantsearch */
 
-const searchClient = algoliasearch(
-  'appId',
-  'apiKey'
-);
+const searchClient = algoliasearch('appId', 'apiKey');
 
 const search = instantsearch({
   indexName: 'indexName',
@@ -3244,11 +3241,11 @@ search.addWidget(
     container: '#hits',
     templates: {
       item: \`
-        <article>
-          <h1>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute1\\" }{{/helpers.highlight}}</h1>
-          <p>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute2\\" }{{/helpers.highlight}}</p>
-        </article>
-      \`,
+<article>
+  <h1>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute1\\" }{{/helpers.highlight}}</h1>
+  <p>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute2\\" }{{/helpers.highlight}}</p>
+</article>
+\`,
     },
   })
 );
@@ -3517,7 +3514,7 @@ exports[`Templates JavaScript Client File content: src/app.css 1`] = `
   display: grid;
 }
 
-#searchBox input[type=\\"search\\"] {
+#searchBox input[type='search'] {
   width: 100%;
   padding: 12px;
   font: inherit;
@@ -3825,7 +3822,7 @@ exports[`Templates JavaScript Helper File content: src/app.css 1`] = `
   display: grid;
 }
 
-#searchBox input[type=\\"search\\"] {
+#searchBox input[type='search'] {
   width: 100%;
   padding: 12px;
   font: inherit;
@@ -4149,10 +4146,7 @@ import {
 import PropTypes from 'prop-types';
 import './App.css';
 
-const searchClient = algoliasearch(
-  'appId',
-  'apiKey'
-);
+const searchClient = algoliasearch('appId', 'apiKey');
 
 class App extends Component {
   render() {

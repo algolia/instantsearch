@@ -42,7 +42,7 @@ em {
   display: grid;
 }
 
-#searchBox input[type="search"] {
+#searchBox input[type='search'] {
   width: 100%;
   padding: 12px;
   font: inherit;
