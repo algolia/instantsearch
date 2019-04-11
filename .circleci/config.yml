@@ -76,7 +76,7 @@ jobs:
           name: Lint & Code styles
           command: yarn run lint
 
-  test_e2e_templates:
+  test_e2e:
     <<: *defaults
     steps:
       - checkout
@@ -85,8 +85,8 @@ jobs:
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
       - run:
-          name: End-to-end templates tests
-          command: yarn run test:e2e:templates --maxWorkers=4
+          name: End-to-end tests
+          command: yarn run test:e2e --maxWorkers=4
 
   test_apps_node_8:
     executor: node8
@@ -154,6 +154,6 @@ workflows:
     jobs:
       - test_lint
       - test_unit
-      - test_e2e_templates
+      - test_e2e
       - test_apps_node_8
       - test_apps_node_10
