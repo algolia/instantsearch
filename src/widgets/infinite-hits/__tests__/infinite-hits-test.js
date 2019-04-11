@@ -40,7 +40,6 @@ describe('infiniteHits()', () => {
       container,
       escapeHTML: true,
       cssClasses: { root: ['root', 'cx'] },
-      showPrevious: false,
     });
     widget.init({ helper, instantSearchInstance: {} });
     results = { hits: [{ first: 'hit', second: 'hit' }] };
@@ -72,7 +71,6 @@ describe('infiniteHits()', () => {
       container,
       transformItems: items =>
         items.map(item => ({ ...item, transformed: true })),
-      showPrevious: false,
     });
 
     widget.init({ helper, instantSearchInstance: {} });
@@ -111,47 +109,5 @@ describe('infiniteHits()', () => {
 
     expect(helper.state.page).toBe(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
-  });
-
-  it('if it is the first page, then the props should contain isFirstPage true', () => {
-    const state = { page: 0 };
-    widget.render({
-      results: { ...results, page: 0, nbPages: 2 },
-      state,
-    });
-    widget.render({
-      results: { ...results, page: 1, nbPages: 2 },
-      state,
-    });
-
-    expect(render).toHaveBeenCalledTimes(2);
-
-    const [
-      firstRenderingParameters,
-      secondRenderingParameters,
-    ] = render.mock.calls;
-
-    expect(firstRenderingParameters[0].props.isFirstPage).toEqual(true);
-    expect(firstRenderingParameters[1]).toEqual(container);
-
-    expect(secondRenderingParameters[0].props.isFirstPage).toEqual(true);
-    expect(secondRenderingParameters[1]).toEqual(container);
-  });
-
-  it('if it is not the first page, then the props should contain isFirstPage false', () => {
-    // Init widget at page 1
-    helper.setPage(1);
-    widget.init({ helper, instantSearchInstance: {} });
-
-    const state = { page: 1 };
-    widget.render({
-      results: { ...results, page: 1, nbPages: 2 },
-      state,
-    });
-
-    expect(render).toHaveBeenCalledTimes(1);
-
-    expect(render.mock.calls[0][0].props.isFirstPage).toEqual(false);
-    expect(render.mock.calls[0][1]).toEqual(container);
   });
 });

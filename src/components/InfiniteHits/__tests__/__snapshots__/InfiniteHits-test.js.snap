@@ -32,7 +32,6 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = 
       }
     }
     disabled={false}
-    onClick={[Function]}
   />
 </div>
 `;
@@ -69,101 +68,6 @@ exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
       }
     }
     disabled={true}
-    onClick={[Function]}
-  />
-</div>
-`;
-
-exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on first page 1`] = `
-<div
-  className="root"
->
-  <button
-    className="loadPrevious disabledLoadPrevious"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showPreviousText",
-      }
-    }
-    disabled={true}
-    onClick={[Function]}
-  />
-  <ol
-    className="list"
-  >
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
-        }
-      }
-    />
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
-        }
-      }
-    />
-  </ol>
-  <button
-    className="loadMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showMoreText",
-      }
-    }
-    disabled={false}
-    onClick={[Function]}
-  />
-</div>
-`;
-
-exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on last page 1`] = `
-<div
-  className="root"
->
-  <button
-    className="loadPrevious"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showPreviousText",
-      }
-    }
-    disabled={false}
-    onClick={[Function]}
-  />
-  <ol
-    className="list"
-  >
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
-        }
-      }
-    />
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
-        }
-      }
-    />
-  </ol>
-  <button
-    className="loadMore disabledLoadMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showMoreText",
-      }
-    }
-    disabled={true}
-    onClick={[Function]}
   />
 </div>
 `;
