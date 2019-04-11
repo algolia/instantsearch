@@ -1,6 +1,5 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { MemoryRouter } from '../.storybook/MemoryRouter';
 
 storiesOf('InfiniteHits', module)
   .add(
@@ -69,25 +68,4 @@ storiesOf('InfiniteHits', module)
         })
       );
     })
-  )
-  .add(
-    'with previous button enabled',
-    withHits(
-      ({ search, container, instantsearch }) => {
-        search.addWidget(
-          instantsearch.widgets.infiniteHits({
-            container,
-            showPrevious: true,
-            templates: {
-              item: '{{name}}',
-            },
-          })
-        );
-      },
-      {
-        routing: {
-          router: new MemoryRouter({ page: 3 }),
-        },
-      }
-    )
   );
