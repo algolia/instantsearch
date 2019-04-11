@@ -1,11 +1,13 @@
 {
-  "requireUpstream": false,
   "increment": "conventional:angular",
-  "buildCommand": "yarn run changelog && git add CHANGELOG.md",
-  "src": {
-    "commitMessage": "chore(release): %s",
-    "beforeStartCommand": "yarn run lint && yarn run test --colors && yarn run test:e2e",
-    "afterReleaseCommand": "yarn run release-templates"
+  "scripts": {
+    "beforeStart": "yarn run lint && yarn run test --colors && yarn run test:e2e",
+    "afterRelease": "yarn run release-templates",
+    "changelog": "yarn run changelog"
+  },
+  "git": {
+    "requireCleanWorkingDir": false,
+    "commitMessage": "chore(release): %s"
   },
   "github": {
     "release": true,
