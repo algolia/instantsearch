@@ -25,7 +25,7 @@ describe('connectHitsWithInsights', () => {
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(typeof firstRenderingOptions.insights).toBe('function');
+    expect(firstRenderingOptions.insights).toBeUndefined();
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
