@@ -7,9 +7,7 @@
 This module is the companion of the [algolia/algoliasearch-client-js](https://github.com/algolia/algoliasearch-client-js). It helps you keep
 track of the search parameters and provides a higher level API.
 
-This is the library you will need to easily build a good search UX like our [instant search demo](http://demos.algolia.com/instant-search-demo/).
-
-[See the helper in action](http://algolia.github.io/algoliasearch-helper-js/)
+[See the helper in action](https://community.algolia.com/algoliasearch-helper-js/)
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url] [![jsDelivr Hits][jsdelivr-badge]][jsdelivr-hits]
 
