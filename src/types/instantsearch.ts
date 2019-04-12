@@ -97,5 +97,5 @@ export type Helper = AlgoliaSearchHelper;
 
 export type InstantSearch = {
   templatesConfig?: object;
-  insightsClient?: AlgoliaInsightsClient
+  insightsClient?: AlgoliaInsightsClient;
 };
