@@ -9,11 +9,17 @@ export {
 } from './hierarchical-menu/connectHierarchicalMenu';
 export { default as connectHits } from './hits/connectHits';
 export {
+  default as connectHitsWithInsights,
+} from './hits/connectHitsWithInsights';
+export {
   default as connectHitsPerPage,
 } from './hits-per-page/connectHitsPerPage';
 export {
   default as connectInfiniteHits,
 } from './infinite-hits/connectInfiniteHits';
+export {
+  default as connectInfiniteHitsWithInsights,
+} from './infinite-hits/connectInfiniteHitsWithInsights';
 export { default as connectMenu } from './menu/connectMenu';
 export {
   default as connectNumericMenu,
