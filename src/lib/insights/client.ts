@@ -8,7 +8,7 @@ import {
   RenderOptions,
   Unmounter,
   WidgetFactory,
-  Without,
+  Omit,
 } from '../../types';
 import find from 'lodash/find';
 import uniq from 'lodash/uniq';
@@ -54,7 +54,7 @@ export const inferPayload = ({
   results: RenderOptions['results'];
   hits: Hits;
   objectIDs: string[];
-}): Without<InsightsClientPayload, 'eventName'> => {
+}): Omit<InsightsClientPayload, 'eventName'> => {
   const { index } = results;
   const selectedHits = getSelectedHits(hits, objectIDs);
   const queryID = getQueryID(selectedHits);
