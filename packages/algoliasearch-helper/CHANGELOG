@@ -1,3 +1,28 @@
+2.27.0 - 2019-04-12
+ * chore(deps): update dependency algolia-frontend-components to v0.0.35 (#605) https://github.com/algolia/algoliasearch-helper-js/commit/41043af49af79752cb9414dcbbc33af7bb98c4a6
+ * chore(deps): update dependency algoliasearch to v3.32.0 (#628) https://github.com/algolia/algoliasearch-helper-js/commit/e5cab52b1d925fc706d3754c0441dc6bc292ff8c
+ * chore(deps): update dependency babel-core to v6.26.3 (#581) https://github.com/algolia/algoliasearch-helper-js/commit/051075c2d0512502d0dd5db12f646d075ea18174
+ * chore(deps): update dependency browserify to v14.5.0 (#582) https://github.com/algolia/algoliasearch-helper-js/commit/66e2a79971bee4cc748e5c897c469736e779ad3d
+ * chore(deps): update dependency handlebars to v4.1.0 (#589) https://github.com/algolia/algoliasearch-helper-js/commit/bf1c4936b125d526fd57ea0fed9fd29413891d82
+ * chore(deps): update dependency http-server to v0.11.1 (#590) https://github.com/algolia/algoliasearch-helper-js/commit/673ee5f2b0688ae30731b5bcb615ebb5849d6c8a
+ * chore(deps): update dependency mversion to v1.13.0 (#630) https://github.com/algolia/algoliasearch-helper-js/commit/1304f198cc2f4df6dc2a3b9cd74c1b2f493689b1
+ * chore(deps): update dependency rimraf to v2.6.3 (#596) https://github.com/algolia/algoliasearch-helper-js/commit/5e178300f8cfb9d1c12643412f2f74a151f5b033
+ * chore: use only yarn (no more npm 👩‍🚒) (#637) https://github.com/algolia/algoliasearch-helper-js/commit/dba85a0485aad0507622ae13eecb981d3071bd91
+ * chore(deps): update st (#625) https://github.com/algolia/algoliasearch-helper-js/commit/5d7d915331c3b8782114be393171268e5489c6c7
+ * chore(docs): change jade to pug (#615) https://github.com/algolia/algoliasearch-helper-js/commit/80a20dcb232bc7139b41161fdf300b87c21e0746, closes https://github.com/algolia/algoliasearch-helper-js/issues/613
+ * chore(docs): fix interpolation https://github.com/algolia/algoliasearch-helper-js/commit/dd888f28eb0c89d5e9e77941ca97f2a6483e4461
+ * chore(docs): remove folder in `develop` (#616) https://github.com/algolia/algoliasearch-helper-js/commit/7bfc9719bd002b3d2af4f2afbfdc1da7fcfd8d0e
+ * docs(init): use toggleFacetRefinement instead (#622) https://github.com/algolia/algoliasearch-helper-js/commit/2461ffe106c2f71018dcb52b6c0b29c6016a35ef
+ * docs(instantiate): use existing signature of toggleRefine (#621) https://github.com/algolia/algoliasearch-helper-js/commit/6be5ec14e4b1696aad3a8e8bc4740b88e336bb9b
+ * docs: fix InstantSearch link (#640) https://github.com/algolia/algoliasearch-helper-js/commit/2c97a716e32e2b2b7cac0f366346bbe9691f2cf9, closes https://github.com/algolia/algoliasearch-helper-js/issues/640
+ * docs: fix typo on hierarchical facets (#646) https://github.com/algolia/algoliasearch-helper-js/commit/ee5b3b40b96290fcd93e36f088309299f30c96b0, closes https://github.com/algolia/algoliasearch-helper-js/issues/646
+ * feat(sffv): throw an error if it's called and the client doesn't have the functions (#623) https://github.com/algolia/algoliasearch-helper-js/commit/dd61360cabd24f1baf33e242f4337c0e2245e9fd
+ * fix(results): remove lodash looping over objects (#648) https://github.com/algolia/algoliasearch-helper-js/commit/c1f540f1b2b1c24bdd75be61dc7135b07f4ca349, closes https://github.com/algolia/algoliasearch-helper-js/issues/258
+ * fix(ua): change the User-Agent to use the new specs lib (version) (#647) https://github.com/algolia/algoliasearch-helper-js/commit/eafd4cfd3e78b49bb5425784bab413f0702cbc04
+ * refactor(events): replace util.inherits by inline (#653) https://github.com/algolia/algoliasearch-helper-js/commit/16459aea5e73d7d76f65b2f62567eacdc79c75d7
+ * test(client): update index name (#619) https://github.com/algolia/algoliasearch-helper-js/commit/356427456e46b7efeee6a7c143ebb2b0faacc40e
+ * Update README.md https://github.com/algolia/algoliasearch-helper-js/commit/ace477e3878e083c5cba20a4bb0c76f265f9c025
+
 2.26.1 - 2018-06-19
  * build: Configure Renovate (#579) https://github.com/algolia/algoliasearch-helper-js/commit/95fa18d14b63d70957be49538893aef7d0f93b77
  * chore(deps): update dependency algolia-frontend-components to v0.0.34 (#580) https://github.com/algolia/algoliasearch-helper-js/commit/27470e2868374f7035340974f8e7ddc2c90f80d6
