@@ -1,3 +1,6 @@
+import find from 'lodash/find';
+import uniq from 'lodash/uniq';
+
 import {
   Hits,
   InsightsClient,
@@ -11,8 +14,6 @@ import {
   Omit,
   SearchResults,
 } from '../../types';
-import find from 'lodash/find';
-import uniq from 'lodash/uniq';
 
 const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]) => {
   return selectedObjectIDs.map(objectID => {
