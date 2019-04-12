@@ -5,7 +5,6 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: hits => hits,
 }));
 
-
 describe('connectHitsWithInsights', () => {
   it('should expose `insights` props', () => {
     const rendering = jest.fn();
