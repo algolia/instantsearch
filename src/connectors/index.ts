@@ -8,7 +8,9 @@ export {
   default as connectHierarchicalMenu,
 } from './hierarchical-menu/connectHierarchicalMenu';
 export { default as connectHits } from './hits/connectHits';
-export { default as connectHitsWithInsights } from './hits/connectHitsWithInsights.js';
+export {
+  default as connectHitsWithInsights,
+} from './hits/connectHitsWithInsights';
 export {
   default as connectHitsPerPage,
 } from './hits-per-page/connectHitsPerPage';
