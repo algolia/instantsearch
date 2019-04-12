@@ -40,6 +40,6 @@ describe('connectHitsWithInsights', () => {
     });
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(typeof secondRenderingOptions.insights).toBe('function');
+    expect(secondRenderingOptions.insights).toBeInstanceOf(Function);
   });
 });
