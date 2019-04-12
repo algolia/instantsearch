@@ -92,7 +92,7 @@ Class name | Description
 `ais-RangeInput--noRefinement` | Class added on the container when there are no refinements possible
 `ais-RangeInput-form` | The form wrapper around the inputs and the submit button
 `ais-RangeInput-separator` | The separator between the min and the max
-`ais-RangeInput-button` | The button that triggers the submission of the form submission of the form
+`ais-RangeInput-submit` | The button that triggers the submission of the form submission of the form
 `ais-RangeInput-label` | Enclosing label of an input
 `ais-RangeInput-input` | An input
 `ais-RangeInput-input--min` | The minimum bound of the range
