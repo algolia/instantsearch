@@ -43,4 +43,39 @@ describe('connectInfiniteHitsWithInsights', () => {
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.insights).toBeInstanceOf(Function);
   });
+
+  it('should preserve props exposed by connectInfiniteHits', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHitsWithInsights(rendering, jest.fn());
+    const widget: any = makeWidget({});
+
+    const helper = jsHelper({} as Client, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+      instantSearchInstance: {
+        insightsClient: jest.fn(),
+      },
+    });
+
+    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+      instantSearchInstance: {
+        insightsClient: jest.fn(),
+      },
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.hits).toEqual(expect.objectContaining(hits));
+    expect(secondRenderingOptions.results).toEqual(results);
+  });
 });
