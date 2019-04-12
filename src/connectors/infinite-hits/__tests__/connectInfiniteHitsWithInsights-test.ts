@@ -1,6 +1,6 @@
 import jsHelper, { SearchResults } from 'algoliasearch-helper';
-
 import connectInfiniteHitsWithInsights from '../connectInfiniteHitsWithInsights';
+import { Client } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: hits => hits,
@@ -9,10 +9,10 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
 describe('connectInfiniteHitsWithInsights', () => {
   it('should expose `insights` props', () => {
     const rendering = jest.fn();
-    const makeWidget = connectInfiniteHitsWithInsights(rendering);
-    const widget = makeWidget();
+    const makeWidget = connectInfiniteHitsWithInsights(rendering, jest.fn());
+    const widget: any = makeWidget({});
 
-    const helper = jsHelper({}, '', {});
+    const helper = jsHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init({
