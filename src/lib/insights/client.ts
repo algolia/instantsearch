@@ -9,6 +9,7 @@ import {
   Unmounter,
   WidgetFactory,
   Omit,
+  SearchResults,
 } from '../../types';
 import find from 'lodash/find';
 import uniq from 'lodash/uniq';
@@ -51,7 +52,7 @@ export const inferPayload = ({
   objectIDs,
 }: {
   method: InsightsClientMethod;
-  results: RenderOptions['results'];
+  results: SearchResults;
   hits: Hits;
   objectIDs: string[];
 }): Omit<InsightsClientPayload, 'eventName'> => {
@@ -75,7 +76,7 @@ export const inferPayload = ({
 
 const wrapInsightsClient = (
   aa: InsightsClient,
-  results: RenderOptions['results'],
+  results: SearchResults,
   hits: Hits
 ): InsightsClientWrapper => (
   method: InsightsClientMethod,
@@ -107,8 +108,9 @@ export default function withInsights(
     renderOptions: RenderOptions,
     isFirstRender: boolean
   ) => {
-    const { results, instantSearchInstance, hits } = renderOptions;
+    const { results, hits, instantSearchInstance } = renderOptions;
     if (
+      results &&
       hits &&
       instantSearchInstance &&
       instantSearchInstance.insightsClient /* providing the insightsClient is optional */

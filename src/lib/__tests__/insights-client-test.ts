@@ -296,7 +296,7 @@ describe('inferInsightsPayload', () => {
     { objectID: '3', __queryID: 'theQueryID', __position: 11 },
     { objectID: '4', __queryID: 'theQueryID', __position: 12 },
   ];
-  const results = {
+  const results: any = {
     index: 'theIndex',
     hits,
   };
