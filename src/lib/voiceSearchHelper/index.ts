@@ -20,16 +20,12 @@ export type VoiceListeningState = {
 
 export type ToggleListening = () => void;
 
-interface SpeechRecognitionAPI {
-  new (): SpeechRecognition;
-}
-
 export default function voiceSearchHelper({
   searchAsYouSpeak,
   onQueryChange,
   onStateChange,
 }: VoiceSearchHelperParams) {
-  const SpeechRecognitionAPI: SpeechRecognitionAPI =
+  const SpeechRecognitionAPI: new () => SpeechRecognition =
     (window as any).webkitSpeechRecognition ||
     (window as any).SpeechRecognition;
   const getDefaultState = (status: string): VoiceListeningState => ({
