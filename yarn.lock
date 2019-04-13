@@ -5006,11 +5006,12 @@ eslint-module-utils@^2.3.0:
     debug "^2.6.8"
     pkg-dir "^2.0.0"
 
-eslint-plugin-import@2.16.0:
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.16.0.tgz#97ac3e75d0791c4fac0e15ef388510217be7f66f"
-  integrity sha512-z6oqWlf1x5GkHIFgrSvtmudnqM6Q60KM4KvpWi5ubonMjycLjndvd5+8VAZIsTlHC03djdgJuyKG6XO577px6A==
+eslint-plugin-import@2.17.0:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.17.0.tgz#bdf6598aded839a27454d824b0758fd46f80eb72"
+  integrity sha512-JCsOtNwPYUoeZPlSr8t0+uCU5OVlHh+dIBn8Rw7FiOPjCECG+QzDIKDqshbyJE6CYoj9wpcstEl8vUY7rXkqVA==
   dependencies:
+    array-includes "^3.0.3"
     contains-path "^0.1.0"
     debug "^2.6.9"
     doctrine "1.5.0"
@@ -5020,7 +5021,7 @@ eslint-plugin-import@2.16.0:
     lodash "^4.17.11"
     minimatch "^3.0.4"
     read-pkg-up "^2.0.0"
-    resolve "^1.9.0"
+    resolve "^1.10.0"
 
 eslint-plugin-jasmine@2.10.1:
   version "2.10.1"
