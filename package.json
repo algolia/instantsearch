@@ -105,7 +105,7 @@
     "eslint-plugin-jest": "22.4.1",
     "eslint-plugin-prettier": "3.0.1",
     "eslint-plugin-react": "7.12.4",
-    "inquirer": "6.2.2",
+    "inquirer": "6.3.1",
     "jest": "24.7.1",
     "jest-diff": "24.7.0",
     "jest-environment-jsdom": "24.7.1",
