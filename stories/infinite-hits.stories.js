@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
+import { MemoryRouter } from '../.storybook/MemoryRouter';
 import insights from '../src/helpers/insights';
 
 storiesOf('InfiniteHits', module)
@@ -101,6 +102,27 @@ storiesOf('InfiniteHits', module)
       {
         insightsClient: (method, payload) =>
           action(`[InsightsClient] sent "${method}" with payload`)(payload),
+      }
+    )
+  )
+  .add(
+    'with previous button enabled',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            showPrevious: true,
+            templates: {
+              item: '{{name}}',
+            },
+          })
+        );
+      },
+      {
+        routing: {
+          router: new MemoryRouter({ page: 3 }),
+        },
       }
     )
   );

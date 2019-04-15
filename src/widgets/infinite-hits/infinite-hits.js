@@ -19,8 +19,23 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('InfiniteHits');
 const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
-const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
-  { hits, results, showMore, isLastPage, instantSearchInstance, insights },
+const renderer = ({
+  cssClasses,
+  containerNode,
+  renderState,
+  templates,
+  showPrevious: hasShowPrevious,
+}) => (
+  {
+    hits,
+    results,
+    showMore,
+    showPrevious,
+    isFirstPage,
+    isLastPage,
+    instantSearchInstance,
+    insights,
+  },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -37,8 +52,11 @@ const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
       cssClasses={cssClasses}
       hits={hits}
       results={results}
+      hasShowPrevious={hasShowPrevious}
+      showPrevious={showPrevious}
       showMore={showMore}
       templateProps={renderState.templateProps}
+      isFirstPage={isFirstPage}
       isLastPage={isLastPage}
       insights={insights}
     />,
@@ -102,6 +120,7 @@ export default function infiniteHits({
   transformItems,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
+  showPrevious,
 } = {}) {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -124,6 +143,14 @@ export default function infiniteHits({
     emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    loadPrevious: cx(
+      suit({ descendantName: 'loadPrevious' }),
+      userCssClasses.loadPrevious
+    ),
+    disabledLoadPrevious: cx(
+      suit({ descendantName: 'loadPrevious', modifierName: 'disabled' }),
+      userCssClasses.disabledLoadPrevious
+    ),
     loadMore: cx(suit({ descendantName: 'loadMore' }), userCssClasses.loadMore),
     disabledLoadMore: cx(
       suit({ descendantName: 'loadMore', modifierName: 'disabled' }),
@@ -135,6 +162,7 @@ export default function infiniteHits({
     containerNode,
     cssClasses,
     templates,
+    showPrevious,
     renderState: {},
   });
 
@@ -143,5 +171,5 @@ export default function infiniteHits({
     () => unmountComponentAtNode(containerNode)
   );
 
-  return makeInfiniteHits({ escapeHTML, transformItems });
+  return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });
 }
