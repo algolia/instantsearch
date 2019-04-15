@@ -16,14 +16,14 @@ export type QueryRuleCustomDataCSSClasses = {
 };
 
 export type QueryRuleCustomDataTemplates = {
-  default: string | ((items: object[]) => string);
+  default?: string | (({ items }: { items: any }) => string);
 };
 
 type QueryRuleCustomDataWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: QueryRuleCustomDataCSSClasses;
   templates?: QueryRuleCustomDataTemplates;
-  transformItems?: (items: object[]) => any;
+  transformItems?: (items: any[]) => any;
 };
 
 interface QueryRuleCustomDataRendererWidgetParams
@@ -69,7 +69,9 @@ const queryRuleCustomData: QueryRuleCustomData = (
     root: cx(suit(), userCssClasses.root),
   };
 
-  const defaultTemplates = { default: '' };
+  const defaultTemplates = {
+    default: ({ items }) => JSON.stringify(items, null, 2),
+  };
   const templates: QueryRuleCustomDataTemplates = {
     ...defaultTemplates,
     ...userTemplates,

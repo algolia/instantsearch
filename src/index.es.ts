@@ -1,8 +1,10 @@
+import { InstantSearchOptions } from './types';
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 import { snippet, highlight } from './helpers';
 
-const instantsearch = options => new InstantSearch(options);
+const instantsearch = (options: InstantSearchOptions) =>
+  new InstantSearch(options);
 
 instantsearch.version = version;
 instantsearch.snippet = snippet;

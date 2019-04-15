@@ -1,10 +1,3 @@
-/** @module module:instantsearch.widgets */
-
-/**
- * @external HTMLElement
- * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
- */
-
 export {
   default as clearRefinements,
 } from './clear-refinements/clear-refinements';

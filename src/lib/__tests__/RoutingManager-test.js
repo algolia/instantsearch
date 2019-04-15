@@ -1,5 +1,8 @@
+/* globals jsdom */
+import qs from 'qs';
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
+import historyRouter from '../routers/history';
 
 const runAllMicroTasks = () => new Promise(setImmediate);
 
@@ -543,6 +546,113 @@ describe('RoutingManager', () => {
       expect(router.write).toHaveBeenLastCalledWith({
         query: 'Apple',
       });
+    });
+  });
+
+  describe('windowTitle', () => {
+    test('should update the window title with URL query params on first render', async () => {
+      jsdom.reconfigure({
+        url: 'https://website.com/?query=query',
+      });
+
+      const setWindowTitle = jest.spyOn(window.document, 'title', 'set');
+      const searchClient = createFakeSearchClient();
+      const stateMapping = createFakeStateMapping();
+      const router = historyRouter({
+        windowTitle(routeState) {
+          return `Searching for "${routeState.query}"`;
+        },
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient,
+        routing: {
+          router,
+          stateMapping,
+        },
+      });
+
+      const fakeSearchBox = createFakeSearchBox();
+
+      search.addWidget(fakeSearchBox);
+      search.start();
+
+      await runAllMicroTasks();
+
+      expect(setWindowTitle).toHaveBeenCalledTimes(1);
+      expect(setWindowTitle).toHaveBeenLastCalledWith('Searching for "query"');
+
+      setWindowTitle.mockRestore();
+    });
+  });
+
+  describe('parseURL', () => {
+    const createFakeUrlWithRefinements = ({ length }) =>
+      [
+        'https://website.com/',
+        Array.from(
+          { length },
+          (_v, i) => `refinementList[brand][${i}]=brand-${i}`
+        ).join('&'),
+      ].join('?');
+
+    test('should parse refinements with more than 20 filters per category as array', () => {
+      jsdom.reconfigure({
+        url: createFakeUrlWithRefinements({ length: 22 }),
+      });
+
+      const router = historyRouter();
+      const parsedUrl = router.parseURL({
+        qsModule: qs,
+        location: window.location,
+      });
+
+      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
+      expect(parsedUrl).toMatchInlineSnapshot(`
+        Object {
+          "refinementList": Object {
+            "brand": Array [
+              "brand-0",
+              "brand-1",
+              "brand-2",
+              "brand-3",
+              "brand-4",
+              "brand-5",
+              "brand-6",
+              "brand-7",
+              "brand-8",
+              "brand-9",
+              "brand-10",
+              "brand-11",
+              "brand-12",
+              "brand-13",
+              "brand-14",
+              "brand-15",
+              "brand-16",
+              "brand-17",
+              "brand-18",
+              "brand-19",
+              "brand-20",
+              "brand-21",
+            ],
+          },
+        }
+      `);
+    });
+
+    test('should support returning 100 refinements as array', () => {
+      jsdom.reconfigure({
+        url: createFakeUrlWithRefinements({ length: 100 }),
+      });
+
+      const router = historyRouter();
+      const parsedUrl = router.parseURL({
+        qsModule: qs,
+        location: window.location,
+      });
+
+      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
     });
   });
 });

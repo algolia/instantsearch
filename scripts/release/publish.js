@@ -183,7 +183,7 @@ inquirer
         // git add and tag
         const commitMessage = `v${newVersion}\n\n${changelog}`;
         shell.exec(
-          'git add src/lib/version.js yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md'
+          'git add src/lib/version.ts yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md'
         );
         shell.exec(`git commit -m "${commitMessage}"`);
         // if tagged, it is not possible to generate a nice changelog without manual updates
