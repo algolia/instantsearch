@@ -74,6 +74,7 @@ describe('VoiceSearch', () => {
     it('with custom template for status', () => {
       const props = {
         ...defaultProps,
+        isListening: true,
         voiceListeningState: {
           status: 'recognizing',
           transcript: 'Hello',
