@@ -1,3 +1,5 @@
+import isEqual from 'lodash/isEqual';
+
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
@@ -125,9 +127,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         // We're doing this to "reset" the widget if a refinement or the
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
-        const { page, ...stateWithoutPage } = state;
-        const currentState = JSON.stringify(stateWithoutPage);
-        if (currentState !== prevState) {
+        const { page, ...currentState } = state;
+        if (!isEqual(currentState, prevState)) {
           hitsCache = [];
           firstReceivedPage = page;
           lastReceivedPage = page;
