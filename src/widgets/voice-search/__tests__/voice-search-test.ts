@@ -10,7 +10,36 @@ jest.mock('preact-compat', () => {
 function defaultSetup(opts = {}) {
   const container = document.createElement('div');
   const widget = voiceSearch({ container, ...opts });
-  return { container, widget };
+  const init = helper => {
+    if (!widget.init) {
+      throw new Error('VoiceSearch widget has no init method.');
+    }
+    widget.init({
+      helper,
+      instantSearchInstance: {},
+      state: {},
+      templatesConfig: {},
+      createURL: () => '',
+    });
+  };
+  const render = helper => {
+    if (!widget.render) {
+      throw new Error('VoiceSearch widget has no render method.');
+    }
+    widget.render({
+      helper,
+      instantSearchInstance: {},
+      templatesConfig: {},
+      results: {},
+      state: {},
+      searchMetadata: {
+        isSearchStalled: false,
+      },
+      createURL: () => '',
+    });
+  };
+
+  return { container, widget, init, render };
 }
 
 describe('voiceSearch()', () => {
@@ -45,19 +74,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
   describe('Rendering', () => {
     test('renders during init()', () => {
-      const { widget } = defaultSetup();
-
-      widget.init({ helper, instantSearchInstance: {} });
+      const { init } = defaultSetup();
+      init(helper);
 
       expect(render).toHaveBeenCalledTimes(1);
       expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     test('renders during render()', () => {
-      const { container, widget } = defaultSetup();
-
-      widget.init({ helper, instantSearchInstance: {} });
-      widget.render({ helper, instantSearchInstance: {} });
+      const { container, init, render: widgetRender } = defaultSetup();
+      init(helper);
+      widgetRender(helper);
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[0][0]).toMatchSnapshot();
@@ -67,9 +94,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
 
     test('sets the correct CSS classes', () => {
-      const { widget } = defaultSetup();
+      const { init } = defaultSetup();
 
-      widget.init({ helper, instantSearchInstance: {} });
+      init(helper);
 
       expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
     });
