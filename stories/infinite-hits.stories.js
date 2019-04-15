@@ -1,6 +1,8 @@
 import { storiesOf } from '@storybook/html';
+import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import { MemoryRouter } from '../.storybook/MemoryRouter';
+import insights from '../src/helpers/insights';
 
 storiesOf('InfiniteHits', module)
   .add(
@@ -69,6 +71,39 @@ storiesOf('InfiniteHits', module)
         })
       );
     })
+  )
+  .add(
+    'with insights helper',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        search.addWidget(
+          instantsearch.widgets.configure({
+            attributesToSnippet: ['name', 'description'],
+            clickAnalytics: true,
+          })
+        );
+
+        search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            templates: {
+              item: item => `
+            <h4>${item.name}</h4>
+            <button
+              ${insights('clickedObjectIDsAfterSearch', {
+                objectIDs: [item.objectID],
+                eventName: 'Add to cart',
+              })} >Add to cart</button>
+            `,
+            },
+          })
+        );
+      },
+      {
+        insightsClient: (method, payload) =>
+          action(`[InsightsClient] sent "${method}" with payload`)(payload),
+      }
+    )
   )
   .add(
     'with previous button enabled',

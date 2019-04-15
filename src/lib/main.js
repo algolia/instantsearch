@@ -129,5 +129,6 @@ instantsearch.widgets = widgets;
 instantsearch.version = version;
 instantsearch.highlight = helpers.highlight;
 instantsearch.snippet = helpers.snippet;
+instantsearch.insights = helpers.insights;
 
 export default instantsearch;

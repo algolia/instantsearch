@@ -4,6 +4,8 @@ import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  addAbsolutePosition,
+  addQueryID,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -138,6 +140,14 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         if (escapeHTML && results.hits && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
+
+        results.hits = addAbsolutePosition(
+          results.hits,
+          results.page,
+          results.hitsPerPage
+        );
+
+        results.hits = addQueryID(results.hits, results.queryID);
 
         results.hits = transformItems(results.hits);
 

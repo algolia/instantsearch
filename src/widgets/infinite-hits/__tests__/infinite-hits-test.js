@@ -43,7 +43,11 @@ describe('infiniteHits()', () => {
       showPrevious: false,
     });
     widget.init({ helper, instantSearchInstance: {} });
-    results = { hits: [{ first: 'hit', second: 'hit' }] };
+    results = {
+      hits: [{ first: 'hit', second: 'hit' }],
+      hitsPerPage: 2,
+      page: 1,
+    };
   });
 
   it('It does have a specific configuration', () => {
@@ -111,6 +115,13 @@ describe('infiniteHits()', () => {
 
     expect(helper.state.page).toBe(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
+  });
+
+  it('should add __position key with absolute position', () => {
+    results = { ...results, page: 4, hitsPerPage: 10 };
+    const state = { page: results.page };
+    widget.render({ results, state });
+    expect(results.hits[0].__position).toEqual(41);
   });
 
   it('if it is the first page, then the props should contain isFirstPage true', () => {

@@ -6,6 +6,10 @@ import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 
 import connectInfiniteHits from '../connectInfiniteHits';
 
+jest.mock('../../../lib/utils/hits-absolute-position', () => ({
+  addAbsolutePosition: hits => hits,
+}));
+
 describe('connectInfiniteHits', () => {
   it('throws without render function', () => {
     expect(() => {
@@ -453,6 +457,58 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         results,
       }),
       expect.anything()
+    );
+  });
+
+  it('adds queryID if provided to results', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({});
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const hits = [
+      {
+        name: 'name 1',
+      },
+      {
+        name: 'name 2',
+      },
+    ];
+
+    const results = new SearchResults(helper.state, [
+      { hits, queryID: 'theQueryID' },
+    ]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        hits: [
+          {
+            name: 'name 1',
+            __queryID: 'theQueryID',
+          },
+          {
+            name: 'name 2',
+            __queryID: 'theQueryID',
+          },
+        ],
+      }),
+      false
     );
   });
 

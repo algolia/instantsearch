@@ -56,4 +56,6 @@ export interface Widget {
   ): SearchParameters;
 }
 
-export type WidgetFactory<T> = (widgetParams: T) => Widget;
+export type WidgetFactory<TWidgetParams> = (
+  widgetParams: TWidgetParams
+) => Widget;
