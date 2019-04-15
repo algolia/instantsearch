@@ -132,8 +132,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           hitsCache = [];
           firstReceivedPage = page;
           lastReceivedPage = page;
+          prevState = currentState;
         }
-        prevState = currentState;
 
         if (escapeHTML && results.hits && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
