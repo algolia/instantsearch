@@ -1,4 +1,5 @@
 import { render } from 'preact-compat';
+import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import voiceSearch from '../voice-search';
 
 jest.mock('preact-compat', () => {
@@ -10,19 +11,19 @@ jest.mock('preact-compat', () => {
 function defaultSetup(opts = {}) {
   const container = document.createElement('div');
   const widget = voiceSearch({ container, ...opts });
-  const init = helper => {
+  const widgetInit = helper => {
     if (!widget.init) {
       throw new Error('VoiceSearch widget has no init method.');
     }
     widget.init({
       helper,
       instantSearchInstance: {},
-      state: {},
+      state: helper.state,
       templatesConfig: {},
       createURL: () => '',
     });
   };
-  const render = helper => {
+  const widgetRender = helper => {
     if (!widget.render) {
       throw new Error('VoiceSearch widget has no render method.');
     }
@@ -30,8 +31,8 @@ function defaultSetup(opts = {}) {
       helper,
       instantSearchInstance: {},
       templatesConfig: {},
-      results: {},
-      state: {},
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
       searchMetadata: {
         isSearchStalled: false,
       },
@@ -39,7 +40,7 @@ function defaultSetup(opts = {}) {
     });
   };
 
-  return { container, widget, init, render };
+  return { container, widget, widgetInit, widgetRender };
 }
 
 describe('voiceSearch()', () => {
@@ -51,9 +52,7 @@ describe('voiceSearch()', () => {
     helper = {
       setQuery: jest.fn(),
       search: jest.fn(),
-      state: {
-        query: '',
-      },
+      state: new SearchParameters({ query: '' }),
     };
   });
 
@@ -74,16 +73,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
   describe('Rendering', () => {
     test('renders during init()', () => {
-      const { init } = defaultSetup();
-      init(helper);
+      const { widgetInit } = defaultSetup();
+      widgetInit(helper);
 
       expect(render).toHaveBeenCalledTimes(1);
       expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     test('renders during render()', () => {
-      const { container, init, render: widgetRender } = defaultSetup();
-      init(helper);
+      const { container, widgetInit, widgetRender } = defaultSetup();
+      widgetInit(helper);
       widgetRender(helper);
 
       expect(render).toHaveBeenCalledTimes(2);
@@ -94,9 +93,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
 
     test('sets the correct CSS classes', () => {
-      const { init } = defaultSetup();
+      const { widgetInit } = defaultSetup();
 
-      init(helper);
+      widgetInit(helper);
 
       expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
     });
