@@ -1,4 +1,5 @@
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
+import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import {
   AlgoliaSearchHelper,
   SearchParameters as AlgoliaSearchHelperSearchParameters,
@@ -64,7 +65,11 @@ export type Hit = {
     };
   };
   _distinctSeqID?: number;
+  __position: number;
+  __queryID?: number;
 };
+
+export type Hits = Hit[];
 
 export type FacetHit = {
   value: string;
@@ -92,4 +97,5 @@ export type Helper = AlgoliaSearchHelper;
 
 export type InstantSearch = {
   templatesConfig?: object;
+  insightsClient?: AlgoliaInsightsClient;
 };

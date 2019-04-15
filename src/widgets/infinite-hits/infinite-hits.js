@@ -11,14 +11,16 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { withInsights, withInsightsListener } from '../../lib/insights';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
 });
 const suit = component('InfiniteHits');
+const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
 const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
-  { hits, results, showMore, isLastPage, instantSearchInstance },
+  { hits, results, showMore, isLastPage, instantSearchInstance, insights },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -31,13 +33,14 @@ const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
   }
 
   render(
-    <InfiniteHits
+    <InfiniteHitsWithInsightsListener
       cssClasses={cssClasses}
       hits={hits}
       results={results}
       showMore={showMore}
       templateProps={renderState.templateProps}
       isLastPage={isLastPage}
+      insights={insights}
     />,
     containerNode
   );
@@ -135,8 +138,9 @@ export default function infiniteHits({
     renderState: {},
   });
 
-  const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+  const makeInfiniteHits = withInsights(connectInfiniteHits)(
+    specializedRenderer,
+    () => unmountComponentAtNode(containerNode)
   );
 
   return makeInfiniteHits({ escapeHTML, transformItems });
