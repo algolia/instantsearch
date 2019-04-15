@@ -74,7 +74,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
     return {
       init({ helper, instantSearchInstance }) {
         (this as any)._refine = (() => {
-          let previousQuery: string;
+          let previousQuery: string | undefined;
           const setQueryAndSearch = (query: string) => {
             if (query !== helper.state.query) {
               previousQuery = helper.state.query;
