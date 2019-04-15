@@ -44,7 +44,7 @@ export interface Widget {
   getWidgetState?(
     uiState: UiState,
     widgetStateOptions: {
-      state: SearchParameters;
+      searchParameters: SearchParameters;
       helper: Helper;
     }
   ): UiState;
