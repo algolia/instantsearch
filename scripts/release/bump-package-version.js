@@ -1,10 +1,10 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console, import/no-commonjs */
 
-import fs from 'fs';
-import path from 'path';
-import mversion from 'mversion';
-import semver from 'semver';
-import { version as currentVersion } from '../../package.json';
+const fs = require('fs');
+const path = require('path');
+const mversion = require('mversion');
+const semver = require('semver');
+const { version: currentVersion } = require('../../package.json');
 
 if (!process.env.VERSION) {
   throw new Error(
