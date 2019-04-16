@@ -42,7 +42,9 @@ const VoiceSearch = ({
         rootProps={{
           className: cssClasses.button,
           type: 'button',
-          title: 'Search by voice',
+          title:
+            'Search by voice' +
+            (!isBrowserSupported ? ' (not supported on this browser)' : ''),
           onClick: handleClick,
           disabled: !isBrowserSupported,
         }}
