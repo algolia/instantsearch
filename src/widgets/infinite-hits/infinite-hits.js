@@ -11,14 +11,31 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { withInsights, withInsightsListener } from '../../lib/insights';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
 });
 const suit = component('InfiniteHits');
+const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
-const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
-  { hits, results, showMore, isLastPage, instantSearchInstance },
+const renderer = ({
+  cssClasses,
+  containerNode,
+  renderState,
+  templates,
+  showPrevious: hasShowPrevious,
+}) => (
+  {
+    hits,
+    results,
+    showMore,
+    showPrevious,
+    isFirstPage,
+    isLastPage,
+    instantSearchInstance,
+    insights,
+  },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -31,13 +48,17 @@ const renderer = ({ cssClasses, containerNode, renderState, templates }) => (
   }
 
   render(
-    <InfiniteHits
+    <InfiniteHitsWithInsightsListener
       cssClasses={cssClasses}
       hits={hits}
       results={results}
+      hasShowPrevious={hasShowPrevious}
+      showPrevious={showPrevious}
       showMore={showMore}
       templateProps={renderState.templateProps}
+      isFirstPage={isFirstPage}
       isLastPage={isLastPage}
+      insights={insights}
     />,
     containerNode
   );
@@ -99,6 +120,7 @@ export default function infiniteHits({
   transformItems,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
+  showPrevious,
 } = {}) {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -121,6 +143,14 @@ export default function infiniteHits({
     emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    loadPrevious: cx(
+      suit({ descendantName: 'loadPrevious' }),
+      userCssClasses.loadPrevious
+    ),
+    disabledLoadPrevious: cx(
+      suit({ descendantName: 'loadPrevious', modifierName: 'disabled' }),
+      userCssClasses.disabledLoadPrevious
+    ),
     loadMore: cx(suit({ descendantName: 'loadMore' }), userCssClasses.loadMore),
     disabledLoadMore: cx(
       suit({ descendantName: 'loadMore', modifierName: 'disabled' }),
@@ -132,12 +162,14 @@ export default function infiniteHits({
     containerNode,
     cssClasses,
     templates,
+    showPrevious,
     renderState: {},
   });
 
-  const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+  const makeInfiniteHits = withInsights(connectInfiniteHits)(
+    specializedRenderer,
+    () => unmountComponentAtNode(containerNode)
   );
 
-  return makeInfiniteHits({ escapeHTML, transformItems });
+  return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });
 }

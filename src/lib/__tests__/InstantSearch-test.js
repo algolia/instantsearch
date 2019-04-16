@@ -51,6 +51,29 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 `);
   });
 
+  it('throws with invalid insightsClient', () => {
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+        insightsClient: 'insights',
+      });
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"The provided \`insightsClient\` must be a function."`
+    );
+  });
+
+  it('stores insightsClient on instance', () => {
+    const insightsClient = jest.fn();
+    const instance = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: { search: () => {} },
+      insightsClient,
+    });
+    expect(instance.insightsClient).toEqual(insightsClient);
+  });
+
   it('throws if addWidgets is called with a single widget', () => {
     expect(() => {
       const search = new InstantSearch({
