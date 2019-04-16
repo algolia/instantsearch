@@ -58,17 +58,24 @@ storiesOf('VoiceSearch', module)
   .add(
     'with a custom button text',
     withHits(({ search, container }) => {
+      const style = window.document.createElement('style');
+      window.document.head.appendChild(style);
+      [
+        `.ais-VoiceSearch-button.custom-button:hover {
+        background: inherit;
+      }`,
+      ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
+
       search.addWidget(
         voiceSearch({
           container,
           templates: {
             buttonText({ isListening }) {
-              if (isListening) {
-                return 'Click to Stop';
-              } else {
-                return 'Click to Speak';
-              }
+              return isListening ? '⏹' : '🎙';
             },
+          },
+          cssClasses: {
+            button: 'custom-button',
           },
         })
       );
