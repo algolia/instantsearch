@@ -11,12 +11,14 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { withInsights, withInsightsListener } from '../../lib/insights';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
+const HitsWithInsightsListener = withInsightsListener(Hits);
 
 const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
-  { hits: receivedHits, results, instantSearchInstance },
+  { hits: receivedHits, results, instantSearchInstance, insights },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -29,11 +31,12 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
   }
 
   render(
-    <Hits
+    <HitsWithInsightsListener
       cssClasses={cssClasses}
       hits={receivedHits}
       results={results}
       templateProps={renderState.templateProps}
+      insights={insights}
     />,
     containerNode
   );
@@ -121,7 +124,7 @@ You may want to migrate using \`connectHits\`: ${createDocumentationLink({
     templates,
   });
 
-  const makeHits = connectHits(specializedRenderer, () =>
+  const makeHits = withInsights(connectHits)(specializedRenderer, () =>
     unmountComponentAtNode(containerNode)
   );
 

@@ -39,7 +39,11 @@ describe('hits()', () => {
     };
     widget = hits({ container, cssClasses: { root: ['root', 'cx'] } });
     widget.init({ instantSearchInstance: { templateProps } });
-    results = { hits: [{ first: 'hit', second: 'hit' }] };
+    results = {
+      hits: [{ first: 'hit', second: 'hit' }],
+      hitsPerPage: 4,
+      page: 2,
+    };
   });
 
   it('calls twice render(<Hits props />, container)', () => {
@@ -70,5 +74,12 @@ describe('hits()', () => {
     expect(
       hits.bind({ container, templates: { item: '', allItems: '' } })
     ).toThrow();
+  });
+
+  it('should add __position key with absolute position', () => {
+    results = { ...results, page: 4, hitsPerPage: 10 };
+    const state = { page: results.page };
+    widget.render({ results, state });
+    expect(results.hits[0].__position).toEqual(41);
   });
 });

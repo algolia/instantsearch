@@ -50,6 +50,7 @@ class InstantSearch extends EventEmitter {
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
+      insightsClient = null,
     } = options;
 
     if (indexName === null) {
@@ -80,7 +81,12 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
     }
 
+    if (insightsClient && typeof insightsClient !== 'function') {
+      throw new Error('The provided `insightsClient` must be a function.');
+    }
+
     this.client = searchClient;
+    this.insightsClient = insightsClient;
     this.helper = null;
     this.indexName = indexName;
     this.searchParameters = { ...searchParameters, index: indexName };
