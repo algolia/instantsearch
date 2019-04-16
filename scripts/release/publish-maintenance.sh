@@ -40,7 +40,7 @@ conventional-changelog --preset angular --output-unreleased | less
 # printf "\n\nRelease: Please enter the new chosen version > "
 printf "\n=> Release: please type the new chosen version > "
 read -e newVersion
-VERSION=$newVersion babel-node ./scripts/release/bump-package-version.js
+VERSION=$newVersion node ./scripts/release/bump-package-version.js
 
 # build new version
 NODE_ENV=production VERSION=$newVersion npm run build

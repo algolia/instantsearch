@@ -157,7 +157,7 @@ inquirer
         // bump new version
         shell.echo(colors.blue(`Bump version to "${newVersion}"`));
         shell.exec(
-          `VERSION=${newVersion} babel-node ./scripts/release/bump-package-version.js`
+          `VERSION=${newVersion} node ./scripts/release/bump-package-version.js`
         );
 
         // build library new version
