@@ -31,7 +31,7 @@ module.exports = api => {
   const buildPlugins = clean([
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-transform-react-constant-elements',
-    'babel-plugin-transform-react-remove-prop-types',
+    ['babel-plugin-transform-react-remove-prop-types', { removeImport: true }],
     'babel-plugin-transform-react-pure-class-to-function',
     (isCJS || isES) && [
       'inline-replace-variables',
