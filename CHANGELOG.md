@@ -1,3 +1,21 @@
+# [3.4.0](https://github.com/algolia/instantsearch.js/compare/v3.3.0...v3.4.0) (2019-04-17)
+
+
+### Bug Fixes
+
+* **storybook:** fix Hierarchical menu separator in Breadcrumb story ([#3695](https://github.com/algolia/instantsearch.js/issues/3695)) ([b3bf8ac](https://github.com/algolia/instantsearch.js/commit/b3bf8ac))
+* **tools:** use commonjs in bump-package-version.js ([#3699](https://github.com/algolia/instantsearch.js/issues/3699)) ([6a6dbe1](https://github.com/algolia/instantsearch.js/commit/6a6dbe1))
+* **types:** fix wrong typing in getWidgetState ([#3693](https://github.com/algolia/instantsearch.js/issues/3693)) ([b3c2154](https://github.com/algolia/instantsearch.js/commit/b3c2154))
+* **types:** remove unused Without type ([#3694](https://github.com/algolia/instantsearch.js/issues/3694)) ([656d000](https://github.com/algolia/instantsearch.js/commit/656d000))
+
+
+### Features
+
+* **infiniteHits:** add previous button ([#3675](https://github.com/algolia/instantsearch.js/issues/3675)) ([2e6137b](https://github.com/algolia/instantsearch.js/commit/2e6137b))
+* **Insights:** Insights inside Instantsearch ([#3598](https://github.com/algolia/instantsearch.js/issues/3598)) ([387f41f](https://github.com/algolia/instantsearch.js/commit/387f41f))
+
+
+
 # [3.3.0](https://github.com/algolia/instantsearch.js/compare/v3.2.1...v3.3.0) (2019-04-11)
 
 

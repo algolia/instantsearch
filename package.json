@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "keywords": [
@@ -61,7 +61,6 @@
   "devDependencies": {
     "@babel/cli": "7.4.3",
     "@babel/core": "7.4.3",
-    "@babel/node": "7.2.2",
     "@babel/plugin-proposal-class-properties": "7.4.0",
     "@babel/plugin-transform-react-constant-elements": "7.2.0",
     "@babel/preset-env": "7.4.3",

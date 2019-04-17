@@ -135,7 +135,6 @@ storiesOf('Breadcrumb', module)
       search.addWidget(
         instantsearch.widgets.breadcrumb({
           container: breadcrumb,
-          separator: ' / ',
           attributes: [
             'hierarchicalCategories.lvl0',
             'hierarchicalCategories.lvl1',
