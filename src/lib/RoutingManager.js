@@ -174,26 +174,11 @@ export default class RoutingManager {
   }
 
   getAllSearchParameters({ uiState }) {
+    // MAKE IT TAIL CALL
     const loop = (states, node) => {
-      return node.widgets
+      const next = node.widgets
         .filter(w => Boolean(w.getWidgetSearchParameters))
         .reduce((innerStates, w) => {
-          if (w.$$type === Symbol.for('ais.index')) {
-            return {
-              ...innerStates,
-              children: [
-                ...innerStates.children,
-                loop(
-                  {
-                    state: w.node.helper.getState(),
-                    children: [],
-                  },
-                  w.node
-                ),
-              ],
-            };
-          }
-
           if (node.parent === null) {
             return {
               ...innerStates,
@@ -214,6 +199,40 @@ export default class RoutingManager {
             }),
           };
         }, states);
+
+      if (node.child !== null) {
+        return {
+          ...next,
+          children: [
+            ...next.children,
+            loop(
+              {
+                state: node.child.helper.getState(),
+                children: [],
+              },
+              node.child
+            ),
+          ],
+        };
+      }
+
+      if (node.next !== null) {
+        return {
+          ...next,
+          children: [
+            ...next.children,
+            loop(
+              {
+                state: node.next.helper.getState(),
+                children: [],
+              },
+              node.next
+            ),
+          ],
+        };
+      }
+
+      return next;
     };
 
     return loop(
@@ -301,6 +320,8 @@ export default class RoutingManager {
   }
 
   applySearchParameters(parameters) {
+    console.log(parameters);
+    console.log('--');
     const loop = (treeNode, stateNode) => {
       treeNode.helper.overrideStateWithoutTriggeringChangeEvent(
         stateNode.state

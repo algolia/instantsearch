@@ -331,7 +331,7 @@ storiesOf('Index', module)
         instantSearchAppleIndex,
         instantSearchSamsungIndex.addWidgets([
           // Avoid to collapse the line
-          // instantSearchAppleDeepIndex,
+          instantSearchAppleDeepIndex,
         ]),
       ]);
 
@@ -339,7 +339,9 @@ storiesOf('Index', module)
       $buttonAddWidgets.addEventListener('click', () => {
         search.addWidgets([
           // Avoid to collapse the line
-          instantSearchIndex,
+          // instantSearchIndex,
+          instantSearchSamsungIndex,
+          // instantSearchAppleIndex,
         ]);
       });
 
@@ -347,7 +349,9 @@ storiesOf('Index', module)
       $buttonRemoveidgets.addEventListener('click', () => {
         search.removeWidgets([
           // Avoid to collapse the line
-          instantSearchIndex,
+          // instantSearchIndex,
+          instantSearchSamsungIndex,
+          // instantSearchAppleIndex,
         ]);
       });
     })

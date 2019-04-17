@@ -30,23 +30,68 @@ const renderWalk = (node, fn) => {
   fn(node);
 
   if (node.child !== null) {
-    return renderWalk(node.child, fn);
+    renderWalk(node.child, fn);
   }
 
   if (node.next !== null) {
-    return renderWalk(node.next, fn);
+    renderWalk(node.next, fn);
   }
 
   return _nothing;
 };
 
+const __resolvePreviousNode = node => {
+  const walk = current => {
+    if (current === null) {
+      return _nothing;
+    }
+
+    if (current.next === null) {
+      return _nothing;
+    }
+
+    if (current.next === node) {
+      return current;
+    }
+
+    return walk(current.next);
+  };
+
+  if (node.parent === null) {
+    return _nothing;
+  }
+
+  return walk(node.parent.child);
+};
+
+const detachNode = current => {
+  const previous = __resolvePreviousNode(current);
+  const isLast = current.next === null;
+
+  if (previous && !isLast) {
+    // previous -> node -> next
+    previous.next = current.next;
+  } else if (previous) {
+    // previous -> node -> None
+    previous.next = null;
+  } else if (!isLast) {
+    // parent
+    // node -> next
+    current.parent.child = current.next;
+  } else {
+    // parent
+    // node -> None
+    current.parent.child = null;
+  }
+};
+
 const resolveNodesFromNode = (node, acc = []) => {
   if (node.child !== null) {
-    return resolveNodesFromNode(node.child, acc.concat(node.child));
+    resolveNodesFromNode(node.child, acc.concat(node.child));
   }
 
   if (node.next !== null) {
-    return resolveNodesFromNode(node.next, acc.concat(node.next));
+    resolveNodesFromNode(node.next, acc.concat(node.next));
   }
 
   return acc;
@@ -58,48 +103,50 @@ const resolveNodeFromIndexId = (node, indexId) => {
   }
 
   if (node.child !== null) {
-    return resolveNodeFromIndexId(node.child);
+    resolveNodeFromIndexId(node.child);
   }
 
   if (node.next !== null) {
-    return resolveNodeFromIndexId(node.next);
+    resolveNodeFromIndexId(node.next);
   }
 
   return _nothing;
 };
 
 const resolveNodesResultsFromNode = (node, acc = []) => {
-  const next = acc.concat({
+  acc.push({
     indexId: node.indexId,
     results: node.derivedHelper.lastResults,
   });
 
   if (node.child !== null) {
-    return resolveNodesResultsFromNode(node.child, next);
+    resolveNodesResultsFromNode(node.child, acc);
   }
 
   if (node.next !== null) {
-    return resolveNodesResultsFromNode(node.next, next);
+    resolveNodesResultsFromNode(node.next, acc);
   }
 
-  return next;
+  return acc;
 };
 
 const __resolveRoot = node =>
   node.parent !== null ? __resolveRoot(node.parent) : node;
 
 const __resolveNodesFromIndexId = (node, indexId, acc = []) => {
-  const next = node.indexId === indexId ? acc.concat(node) : acc;
+  if (node.indexId === indexId) {
+    acc.push(node);
+  }
 
   if (node.child !== null) {
-    return __resolveNodesFromIndexId(node.child, indexId, next);
+    __resolveNodesFromIndexId(node.child, indexId, acc);
   }
 
   if (node.next !== null) {
-    return __resolveNodesFromIndexId(node.next, indexId, next);
+    __resolveNodesFromIndexId(node.next, indexId, acc);
   }
 
-  return next;
+  return acc;
 };
 
 const __resolveRootNodes = (root, node, acc = []) => {
@@ -112,7 +159,9 @@ const __resolveRootNodes = (root, node, acc = []) => {
 
 const resolveSearchParameters = node => {
   const root = __resolveRoot(node);
-  const nodeSearchParemeters = __resolveRootNodes(root, node).map(nodes =>
+  const __ = __resolveRootNodes(root, node);
+  console.log(__);
+  const nodeSearchParemeters = __.map(nodes =>
     resolveSingleLeafMerge(
       ...nodes
         // Tweaks for the input of the resolve function
@@ -488,17 +537,21 @@ class InstantSearch extends EventEmitter {
 
     // Widget indices
     widgets.filter(isIndexWidget).forEach(index => {
+      const currrentNode = index.$$node;
+
+      detachNode(currrentNode);
+
       // remove the subscription on the derviedHelper
-      index.$$node.unsubscribeDerivedHelper();
-      index.$$node.helper.removeAllListeners();
+      currrentNode.unsubscribeDerivedHelper();
+      currrentNode.helper.removeAllListeners();
 
       // remove the derivedHelper when no nodes are present
       if (!resolveNodeFromIndexId(this.tree, index.indexId)) {
-        index.$$node.derivedHelper.detach();
+        currrentNode.derivedHelper.detach();
       }
 
       // recursive call to dispose widgets on the tree
-      this.removeWidgetsFromNode(index.widgets, index.$$node);
+      this.removeWidgetsFromNode(index.widgets, currrentNode);
 
       index.$$node = null;
     });

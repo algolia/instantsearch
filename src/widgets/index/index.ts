@@ -54,13 +54,13 @@ export class Index {
     // avoid to throw
   }
 
-  public getWidgetState() {
-    // avoid to throw
-  }
+  // public getWidgetState() {
+  //   // avoid to throw
+  // }
 
-  public getWidgetSearchParameters() {
-    // avoid to throw
-  }
+  // public getWidgetSearchParameters() {
+  //   // avoid to throw
+  // }
 }
 
 const createIndex = (args: IndexArgs) => new Index(args);

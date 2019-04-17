@@ -159,16 +159,16 @@ export const withHits = (storyFn, searchOptions = {}) => () => {
       snippetEllipsisText: '[…]',
       ...searchParameters,
     },
-    routing: {
-      router: {
-        write: routeState => {
-          urlLogger(JSON.stringify(routeState, null, 2));
-        },
-        read: () => ({}),
-        createURL: () => '',
-        onUpdate: () => {},
-      },
-    },
+    // routing: {
+    //   router: {
+    //     write: routeState => {
+    //       urlLogger(JSON.stringify(routeState, null, 2));
+    //     },
+    //     read: () => ({}),
+    //     createURL: () => '',
+    //     onUpdate: () => {},
+    //   },
+    // },
     ...instantsearchOptions,
   });
 
