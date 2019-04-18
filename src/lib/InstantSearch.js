@@ -8,7 +8,7 @@ import simpleMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
-import { createDocumentationMessageGenerator } from './utils';
+import { createDocumentationMessageGenerator, noop } from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -312,7 +312,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            search: () => new Promise(() => {}),
+            search: () => new Promise(noop),
           },
           helper.state.index,
           helper.state
