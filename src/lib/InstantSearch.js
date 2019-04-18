@@ -293,7 +293,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = function() {};
+      this._onHistoryChange = noop;
     }
 
     this.searchParameters = this.widgets.reduce(
