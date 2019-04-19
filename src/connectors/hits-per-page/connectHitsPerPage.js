@@ -1,4 +1,3 @@
-import some from 'lodash/some';
 import find from 'lodash/find';
 import {
   checkRendering,
@@ -125,8 +124,7 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
       },
 
       init({ helper, createURL, state, instantSearchInstance }) {
-        const isCurrentInOptions = some(
-          items,
+        const isCurrentInOptions = items.some(
           item => Number(state.hitsPerPage) === Number(item.value)
         );
 
