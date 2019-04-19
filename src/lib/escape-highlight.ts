@@ -1,6 +1,5 @@
 import reduce from 'lodash/reduce';
 import escape from 'lodash/escape';
-import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 import { Hit, FacetHit } from '../types';
 
@@ -38,7 +37,7 @@ function recursiveEscape(input: any): any {
     );
   }
 
-  if (isArray(input)) {
+  if (Array.isArray(input)) {
     return input.map(recursiveEscape);
   }
 
