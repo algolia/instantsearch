@@ -1,5 +1,4 @@
 import find from 'lodash/find';
-import _isFinite from 'lodash/isFinite';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -56,8 +55,8 @@ export default function connectRange(renderFn, unmountFn) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    const hasMinBound = _isFinite(minBound);
-    const hasMaxBound = _isFinite(maxBound);
+    const hasMinBound = Number.isFinite(minBound);
+    const hasMaxBound = Number.isFinite(maxBound);
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -73,7 +72,7 @@ export default function connectRange(renderFn, unmountFn) {
         let min;
         if (hasMinBound) {
           min = minBound;
-        } else if (_isFinite(stats.min)) {
+        } else if (Number.isFinite(stats.min)) {
           min = stats.min;
         } else {
           min = 0;
@@ -82,7 +81,7 @@ export default function connectRange(renderFn, unmountFn) {
         let max;
         if (hasMaxBound) {
           max = maxBound;
-        } else if (_isFinite(stats.max)) {
+        } else if (Number.isFinite(stats.max)) {
           max = stats.max;
         } else {
           max = 0;
@@ -99,8 +98,8 @@ export default function connectRange(renderFn, unmountFn) {
 
         const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
 
-        const min = _isFinite(minValue) ? minValue : -Infinity;
-        const max = _isFinite(maxValue) ? maxValue : Infinity;
+        const min = Number.isFinite(minValue) ? minValue : -Infinity;
+        const max = Number.isFinite(maxValue) ? maxValue : Infinity;
 
         return [min, max];
       },
@@ -138,8 +137,8 @@ export default function connectRange(renderFn, unmountFn) {
           }
 
           const isResetNewNextMin = newNextMin === undefined;
-          const isValidNewNextMin = _isFinite(newNextMin);
-          const isValidMinCurrentRange = _isFinite(currentRangeMin);
+          const isValidNewNextMin = Number.isFinite(newNextMin);
+          const isValidMinCurrentRange = Number.isFinite(currentRangeMin);
           const isGreaterThanCurrentRange =
             isValidMinCurrentRange && currentRangeMin <= newNextMin;
           const isMinValid =
@@ -148,8 +147,8 @@ export default function connectRange(renderFn, unmountFn) {
               (!isValidMinCurrentRange || isGreaterThanCurrentRange));
 
           const isResetNewNextMax = newNextMax === undefined;
-          const isValidNewNextMax = _isFinite(newNextMax);
-          const isValidMaxCurrentRange = _isFinite(currentRangeMax);
+          const isValidNewNextMax = Number.isFinite(newNextMax);
+          const isValidMaxCurrentRange = Number.isFinite(currentRangeMax);
           const isLowerThanRange =
             isValidMaxCurrentRange && currentRangeMax >= newNextMax;
           const isMaxValid =
@@ -196,8 +195,8 @@ export default function connectRange(renderFn, unmountFn) {
           currentConfiguration.numericRefinements &&
           currentConfiguration.numericRefinements[attribute] !== undefined;
 
-        const isMinBoundValid = _isFinite(minBound);
-        const isMaxBoundValid = _isFinite(maxBound);
+        const isMinBoundValid = Number.isFinite(minBound);
+        const isMaxBoundValid = Number.isFinite(maxBound);
         const isAbleToRefine =
           isMinBoundValid && isMaxBoundValid
             ? minBound < maxBound
@@ -321,7 +320,7 @@ export default function connectRange(renderFn, unmountFn) {
           return searchParameters;
         }
 
-        if (_isFinite(lowerBound)) {
+        if (Number.isFinite(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '>=',
@@ -329,7 +328,7 @@ export default function connectRange(renderFn, unmountFn) {
           );
         }
 
-        if (_isFinite(upperBound)) {
+        if (Number.isFinite(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '<=',
