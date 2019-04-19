@@ -7,8 +7,10 @@ type WithInsightsListenerProps = {
 };
 
 export default (BaseComponent: React.ComponentType<any>) => {
-  function WithInsightsListener(props: WithInsightsListenerProps) {
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  function WithInsightsListener(
+    props: WithInsightsListenerProps
+  ): React.ReactNode {
+    const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
       if (!hasDataAttributes(event.target)) {
         return;
       }

@@ -3,7 +3,7 @@ import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 import { snippet, highlight } from './helpers';
 
-const instantsearch = (options: InstantSearchOptions) =>
+const instantsearch = (options: InstantSearchOptions): InstantSearch =>
   new InstantSearch(options);
 
 instantsearch.version = version;

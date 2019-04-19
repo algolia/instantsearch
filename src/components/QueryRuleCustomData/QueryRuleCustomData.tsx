@@ -15,7 +15,7 @@ const QueryRuleCustomData = ({
   cssClasses,
   templates,
   items,
-}: QueryRuleCustomDataProps) => (
+}: QueryRuleCustomDataProps): React.ReactNode => (
   <Template
     templateKey="default"
     templates={templates}
