@@ -1,6 +1,5 @@
 import find from 'lodash/find';
 import get from 'lodash/get';
-import forEach from 'lodash/forEach';
 import { SearchParameters, SearchResults } from '../../types';
 import unescapeRefinement from './unescapeRefinement';
 
@@ -85,23 +84,37 @@ function getRefinements(
   clearsQuery: boolean = false
 ): Refinement[] {
   const res: Refinement[] = [];
+  const {
+    facetsRefinements = {},
+    facetsExcludes = {},
+    disjunctiveFacetsRefinements = {},
+    hierarchicalFacetsRefinements = {},
+    numericRefinements = {},
+    tagRefinements = [],
+  } = state;
 
-  forEach(state.facetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, name => {
+  Object.keys(facetsRefinements).forEach(attributeName => {
+    const refinements = facetsRefinements[attributeName];
+
+    refinements.forEach(name => {
       res.push(
         getRefinement(state, 'facet', attributeName, name, results.facets)
       );
     });
   });
 
-  forEach(state.facetsExcludes, (refinements, attributeName) => {
-    forEach(refinements, name => {
+  Object.keys(facetsExcludes).forEach(attributeName => {
+    const refinements = facetsExcludes[attributeName];
+
+    refinements.forEach(name => {
       res.push({ type: 'exclude', attributeName, name, exclude: true });
     });
   });
 
-  forEach(state.disjunctiveFacetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, name => {
+  Object.keys(disjunctiveFacetsRefinements).forEach(attributeName => {
+    const refinements = disjunctiveFacetsRefinements[attributeName];
+
+    refinements.forEach(refinement => {
       res.push(
         getRefinement(
           state,
@@ -109,42 +122,51 @@ function getRefinements(
           attributeName,
           // we unescapeRefinement any disjunctive refined value since they can be escaped
           // when negative numeric values search `escapeRefinement` usage in code
-          unescapeRefinement(name),
+          unescapeRefinement(refinement),
           results.disjunctiveFacets
         )
       );
     });
   });
 
-  forEach(state.hierarchicalFacetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, name => {
+  Object.keys(hierarchicalFacetsRefinements).forEach(attributeName => {
+    const refinements = hierarchicalFacetsRefinements[attributeName];
+
+    refinements.forEach(refinement => {
       res.push(
         getRefinement(
           state,
           'hierarchical',
           attributeName,
-          name,
+          refinement,
           results.hierarchicalFacets
         )
       );
     });
   });
 
-  forEach(state.numericRefinements, (operators, attributeName) => {
-    forEach(operators, (values, operator) => {
-      forEach(values, value => {
+  Object.keys(numericRefinements).forEach(attributeName => {
+    const operators = numericRefinements[attributeName];
+
+    Object.keys(operators).forEach(operator => {
+      const valueOrValues = operators[operator];
+      const refinements = Array.isArray(valueOrValues)
+        ? valueOrValues
+        : [valueOrValues];
+
+      refinements.forEach(refinement => {
         res.push({
           type: 'numeric',
           attributeName,
-          name: `${value}`,
-          numericValue: value,
+          name: `${refinement}`,
+          numericValue: refinement,
           operator,
         });
       });
     });
   });
 
-  forEach(state.tagRefinements, name => {
+  tagRefinements.forEach(name => {
     res.push({ type: 'tag', attributeName: '_tags', name });
   });
 
