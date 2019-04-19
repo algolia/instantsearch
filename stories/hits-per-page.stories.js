@@ -10,6 +10,7 @@ storiesOf('HitsPerPage', module)
           container,
           items: [
             { value: 3, label: '3 per page' },
+            { value: 4, label: '4 per page' },
             { value: 5, label: '5 per page' },
             { value: 10, label: '10 per page' },
           ],
@@ -39,7 +40,7 @@ storiesOf('HitsPerPage', module)
         instantsearch.widgets.hitsPerPage({
           container,
           items: [
-            { value: 3, label: '3 per page' },
+            { value: 3, label: '3 per page', default: true },
             { value: 5, label: '5 per page' },
             { value: 10, label: '10 per page' },
           ],
