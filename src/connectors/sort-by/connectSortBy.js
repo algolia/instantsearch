@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -101,7 +100,7 @@ export default function connectSortBy(renderFn, unmountFn) {
     return {
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.getIndex();
-        const isIndexInList = find(items, item => item.value === currentIndex);
+        const isIndexInList = items.find(item => item.value === currentIndex);
 
         if (!isIndexInList) {
           throw new Error(

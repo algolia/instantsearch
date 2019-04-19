@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   escapeRefinement,
@@ -192,8 +191,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         const offValue = off === undefined ? false : off;
         const allFacetValues = results.getFacetValues(attribute);
 
-        const onData = find(
-          allFacetValues,
+        const onData = allFacetValues.find(
           ({ name }) => name === unescapeRefinement(on)
         );
         const onFacetValue = {
@@ -202,8 +200,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         };
 
         const offData = hasAnOffValue
-          ? find(
-              allFacetValues,
+          ? allFacetValues.find(
               ({ name }) => name === unescapeRefinement(offValue)
             )
           : undefined;

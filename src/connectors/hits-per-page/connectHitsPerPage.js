@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   warning,
@@ -114,7 +113,7 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
       );
     }
 
-    const defaultValue = find(userItems, item => item.default === true);
+    const defaultValue = userItems.find(item => item.default === true);
 
     return {
       getConfiguration() {

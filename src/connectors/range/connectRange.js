@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -244,7 +243,9 @@ export default function connectRange(renderFn, unmountFn) {
 
       render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = find(facetsFromResults, { name: attribute });
+        const facet = facetsFromResults.find(
+          facetResult => facetResult.name === attribute
+        );
         const stats = (facet && facet.stats) || {};
 
         const currentRange = this._getCurrentRange(stats);

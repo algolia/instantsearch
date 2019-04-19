@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   warning,
@@ -65,8 +64,7 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
     return {
       getConfiguration: currentConfiguration => {
         if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = find(
-            currentConfiguration.hierarchicalFacets,
+          const isFacetSet = currentConfiguration.hierarchicalFacets.find(
             ({ name }) => name === hierarchicalFacetName
           );
           if (isFacetSet) {

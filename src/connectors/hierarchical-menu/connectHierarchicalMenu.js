@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   warning,
@@ -115,8 +114,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
       getConfiguration(currentConfiguration) {
         if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = find(
-            currentConfiguration.hierarchicalFacets,
+          const isFacetSet = currentConfiguration.hierarchicalFacets.find(
             ({ name }) => name === hierarchicalFacetName
           );
           if (

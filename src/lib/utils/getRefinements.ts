@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import { SearchParameters, SearchResults } from '../../types';
 import unescapeRefinement from './unescapeRefinement';
 
@@ -45,18 +44,22 @@ function getRefinement(
   type: Refinement['type'],
   attributeName: Refinement['attributeName'],
   name: Refinement['name'],
-  resultsFacets: SearchResults['facets' | 'hierarchicalFacets']
+  resultsFacets: SearchResults['facets' | 'hierarchicalFacets'] = []
 ): Refinement {
   const res: Refinement = { type, attributeName, name };
-  let facet: any = find(resultsFacets, { name: attributeName });
+  let facet: any = (resultsFacets as Array<{ name: string }>).find(
+    resultsFacet => resultsFacet.name === attributeName
+  );
   let count: number;
 
   if (type === 'hierarchical') {
     const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
-    const split = name.split(facetDeclaration.separator);
+    const nameParts = name.split(facetDeclaration.separator);
 
-    for (let i = 0; facet !== undefined && i < split.length; ++i) {
-      facet = find(facet.data, { name: split[i] });
+    for (let i = 0; facet !== undefined && i < nameParts.length; ++i) {
+      facet = Object.keys(facet.data)
+        .map(refinementKey => facet.data[refinementKey])
+        .find(refinement => refinement.name === nameParts[i]);
     }
 
     count = facet && facet.count;
