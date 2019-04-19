@@ -4566,15 +4566,6 @@ Array [
 ]
 `;
 
-exports[`Templates Vue InstantSearch 1 File content: .babelrc 1`] = `
-"{
-  \\"presets\\": [
-    [\\"env\\", { \\"modules\\": false }],
-    \\"stage-3\\"
-  ]
-}"
-`;
-
 exports[`Templates Vue InstantSearch 1 File content: .editorconfig 1`] = `
 "root = true
 
@@ -4589,19 +4580,46 @@ trim_trailing_whitespace = true"
 
 exports[`Templates Vue InstantSearch 1 File content: .eslintrc.js 1`] = `
 "module.exports = {
-  extends: 'algolia/vue',
+  // extends from 'prettier/vue' until we update the Algolia configuration
+  extends: ['algolia/vue', 'prettier/vue'],
   rules: {
     'import/no-commonjs': 'off',
+    // enable the rule until we update the Algolia configuration
+    'vue/component-name-in-template-casing': ['error', 'kebab-case'],
   },
 };"
 `;
 
 exports[`Templates Vue InstantSearch 1 File content: .gitignore 1`] = `
-"node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-dist/"
+".DS_Store
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?"
+`;
+
+exports[`Templates Vue InstantSearch 1 File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
 `;
 
 exports[`Templates Vue InstantSearch 1 File content: README.md 1`] = `
@@ -4628,56 +4646,10 @@ yarn start
 Open http://localhost:3000 to see your app."
 `;
 
-exports[`Templates Vue InstantSearch 1 File content: index.html 1`] = `
-"<!DOCTYPE html>
-<html lang=\\"en\\">
-
-<head>
-  <meta charset=\\"utf-8\\">
-  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, shrink-to-fit=no\\">
-  <meta name=\\"theme-color\\" content=\\"#000000\\">
-
-  <link rel=\\"manifest\\" href=\\"manifest.json\\">
-  <link rel=\\"shortcut icon\\" href=\\"favicon.png\\">
-
-  <!--
-    Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
-    https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
-  -->
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
-
-  <title>vue-instantsearch-app</title>
-</head>
-
-<body>
-  <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
-
-  <div id=\\"app\\"></div>
-
-  <script src=\\"/dist/build.js\\"></script>
-</body>
-
-</html>"
-`;
-
-exports[`Templates Vue InstantSearch 1 File content: manifest.json 1`] = `
-"{
-  \\"short_name\\": \\"vue-instantsearch-app\\",
-  \\"name\\": \\"vue-instantsearch-app Sample\\",
-  \\"icons\\": [
-    {
-      \\"src\\": \\"favicon.png\\",
-      \\"sizes\\": \\"64x64 32x32 24x24 16x16\\",
-      \\"type\\": \\"image/x-icon\\"
-    }
-  ],
-  \\"start_url\\": \\"./index.html\\",
-  \\"display\\": \\"standalone\\",
-  \\"theme_color\\": \\"#000000\\",
-  \\"background_color\\": \\"#ffffff\\"
-}"
+exports[`Templates Vue InstantSearch 1 File content: babel.config.js 1`] = `
+"module.exports = {
+  presets: ['@vue/app'],
+};"
 `;
 
 exports[`Templates Vue InstantSearch 1 File content: package.json 1`] = `
@@ -4686,15 +4658,45 @@ exports[`Templates Vue InstantSearch 1 File content: package.json 1`] = `
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
   \\"scripts\\": {
-    \\"start\\": \\"cross-env NODE_ENV=development webpack-dev-server --port 3000 --hot\\",
-    \\"build\\": \\"cross-env NODE_ENV=production webpack --progress --hide-modules\\",
-    \\"lint\\": \\"eslint --ext .js,.vue .\\",
+    \\"start\\": \\"vue-cli-service serve --port 3000\\",
+    \\"build\\": \\"vue-cli-service build\\",
+    \\"lint\\": \\"vue-cli-service lint\\",
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
+  \\"browserslist\\": [
+    \\"> 1%\\",
+    \\"last 2 versions\\",
+    \\"not ie <= 8\\"
+  ],
   \\"partialDependencies\\": {
     \\"vue-instantsearch\\": \\"1.0.0\\"
   }
 }"
+`;
+
+exports[`Templates Vue InstantSearch 1 File content: public/index.html 1`] = `
+"<!DOCTYPE html>
+<html lang=\\"en\\">
+  <head>
+    <meta charset=\\"utf-8\\">
+    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"IE=edge\\">
+    <meta name=\\"viewport\\" content=\\"width=device-width,initial-scale=1.0\\">
+    <link rel=\\"icon\\" href=\\"<%= BASE_URL %>favicon.png\\">
+     <!--
+      Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
+      https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
+    -->
+    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
+    <title>vue-instantsearch-app</title>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but vue-instantsearch-app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id=\\"app\\"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>"
 `;
 
 exports[`Templates Vue InstantSearch 1 File content: src/App.vue 1`] = `
@@ -4713,11 +4715,7 @@ exports[`Templates Vue InstantSearch 1 File content: src/App.vue 1`] = `
     </header>
 
     <div class=\\"container\\">
-      <ais-index
-        app-id=\\"appId\\"
-        api-key=\\"apiKey\\"
-        index-name=\\"indexName\\"
-      >
+      <ais-index app-id=\\"appId\\" api-key=\\"apiKey\\" index-name=\\"indexName\\">
         <div class=\\"search-panel\\">
           <div class=\\"search-panel__filters\\">
             <ais-refinement-list attribute-name=\\"facet1\\"></ais-refinement-list>
@@ -4725,18 +4723,21 @@ exports[`Templates Vue InstantSearch 1 File content: src/App.vue 1`] = `
           </div>
 
           <div class=\\"search-panel__results\\">
-            <ais-search-box
-              placeholder=\\"Search placeholder\\"
-              class=\\"ais-SearchBox-form\\"
-              :class-names=\\"{
-                'ais-search-box': 'ais-SearchBox',
-                'ais-input': 'ais-SearchBox-input',
-                'ais-clear': 'ais-SearchBox-reset',
-                'ais-clear--disabled': 'ais-SearchBox-reset--disabled',
-                'ais-search-box__submit': 'ais-SearchBox-submit',
-                'ais-search-box__loading-indicator': 'ais-SearchBox-loadingIndicator',
-              }\\"
-            />
+            <div class=\\"searchbox\\">
+              <ais-search-box
+                placeholder=\\"Search placeholder\\"
+                class=\\"ais-SearchBox-form\\"
+                :class-names=\\"{
+                  'ais-search-box': 'ais-SearchBox',
+                  'ais-input': 'ais-SearchBox-input',
+                  'ais-clear': 'ais-SearchBox-reset',
+                  'ais-clear--disabled': 'ais-SearchBox-reset--disabled',
+                  'ais-search-box__submit': 'ais-SearchBox-submit',
+                  'ais-search-box__loading-indicator':
+                    'ais-SearchBox-loadingIndicator',
+                }\\"
+              />
+            </div>
 
             <ais-results class=\\"ais-Hits-list\\">
               <template slot-scope=\\"{ result }\\">
@@ -4762,9 +4763,13 @@ exports[`Templates Vue InstantSearch 1 File content: src/App.vue 1`] = `
                 :class-names=\\"{
                   'ais-pagination': 'ais-Pagination-list',
                   'ais-pagination__item': 'ais-Pagination-item',
+                  'ais-pagination__item--active':
+                    'ais-Pagination-item--selected',
                   'ais-pagination__item--next': 'ais-Pagination-item--next',
-                  'ais-pagination__item--previous': 'ais-Pagination-item--previous',
-                  'ais-pagination__item--disabled': 'ais-Pagination-item--disabled',
+                  'ais-pagination__item--previous':
+                    'ais-Pagination-item--previous',
+                  'ais-pagination__item--disabled':
+                    'ais-Pagination-item--disabled',
                   'ais-pagination__item--first': 'ais-Pagination-item--first',
                   'ais-pagination__item--last': 'ais-Pagination-item--last',
                   'ais-pagination__link': 'ais-Pagination-link',
@@ -4855,111 +4860,31 @@ em {
 
 exports[`Templates Vue InstantSearch 1 File content: src/main.js 1`] = `
 "import Vue from 'vue';
-import App from './App.vue';
 import InstantSearch from 'vue-instantsearch';
+import App from './App.vue';
+
+Vue.config.productionTip = false;
 
 Vue.use(InstantSearch);
 
-// eslint-disable-next-line no-new
 new Vue({
-  el: '#app',
   render: h => h(App),
-});"
-`;
-
-exports[`Templates Vue InstantSearch 1 File content: webpack.config.js 1`] = `
-"const path = require('path');
-const webpack = require('webpack');
-
-module.exports = {
-  entry: './src/main.js',
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'build.js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\\\\.css$/,
-        use: ['vue-style-loader', 'css-loader'],
-      },
-      {
-        test: /\\\\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {},
-          // other vue-loader options go here
-        },
-      },
-      {
-        test: /\\\\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\\\\.(png|jpg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]',
-        },
-      },
-    ],
-  },
-  resolve: {
-    alias: {
-      vue$: 'vue/dist/vue.esm.js',
-    },
-    extensions: ['*', '.js', '.vue', '.json'],
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-    overlay: true,
-    port: 3000,
-  },
-  performance: {
-    hints: false,
-  },
-  devtool: '#eval-source-map',
-};
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map';
-  // http://vue-loader.vuejs.org/en/workflow/production.html
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '\\"production\\"',
-      },
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false,
-      },
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-    }),
-  ]);
-}"
+}).$mount('#app');"
 `;
 
 exports[`Templates Vue InstantSearch 1 Folder structure: contains the right files 1`] = `
 Array [
-  ".babelrc",
   ".editorconfig",
   ".eslintrc.js",
   ".gitignore",
+  ".prettierrc",
   "README.md",
-  "favicon.png",
-  "index.html",
-  "manifest.json",
+  "babel.config.js",
   "package.json",
+  "public/favicon.png",
+  "public/index.html",
   "src/App.vue",
   "src/main.js",
-  "webpack.config.js",
 ]
 `;
 

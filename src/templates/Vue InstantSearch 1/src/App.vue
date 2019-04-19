@@ -28,18 +28,20 @@
 
           {{/if}}
           <div class="search-panel__results">
-            <ais-search-box
-              placeholder="{{searchPlaceholder}}"
-              class="ais-SearchBox-form"
-              :class-names="{
-                'ais-search-box': 'ais-SearchBox',
-                'ais-input': 'ais-SearchBox-input',
-                'ais-clear': 'ais-SearchBox-reset',
-                'ais-clear--disabled': 'ais-SearchBox-reset--disabled',
-                'ais-search-box__submit': 'ais-SearchBox-submit',
-                'ais-search-box__loading-indicator': 'ais-SearchBox-loadingIndicator',
-              }"
-            />
+            <div class="searchbox">
+              <ais-search-box
+                placeholder="{{searchPlaceholder}}"
+                class="ais-SearchBox-form"
+                :class-names="{
+                  'ais-search-box': 'ais-SearchBox',
+                  'ais-input': 'ais-SearchBox-input',
+                  'ais-clear': 'ais-SearchBox-reset',
+                  'ais-clear--disabled': 'ais-SearchBox-reset--disabled',
+                  'ais-search-box__submit': 'ais-SearchBox-submit',
+                  'ais-search-box__loading-indicator': 'ais-SearchBox-loadingIndicator',
+                }"
+              />
+            </div>
 
             {{#if attributesToDisplay}}
             <ais-results class="ais-Hits-list">
@@ -73,6 +75,7 @@
                 :class-names="{
                   'ais-pagination': 'ais-Pagination-list',
                   'ais-pagination__item': 'ais-Pagination-item',
+                  'ais-pagination__item--active': 'ais-Pagination-item--selected',
                   'ais-pagination__item--next': 'ais-Pagination-item--next',
                   'ais-pagination__item--previous': 'ais-Pagination-item--previous',
                   'ais-pagination__item--disabled': 'ais-Pagination-item--disabled',
