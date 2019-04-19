@@ -121,7 +121,7 @@ describe('hitsPerPage()', () => {
     expect(() => {
       widget.init({ state: helper.state, helper });
     }).toWarnDev(
-      `[InstantSearch.js]: The \`hitsPerPage\` widget \`items\` option does not contain the "hits per page" value coming from the state: 20.
+      `[InstantSearch.js]: The \`items\` option of \`hitsPerPage\` does not contain the "hits per page" value coming from the state: 20.
 
 You may want to add another entry to the \`items\` option with this value.`
     );
@@ -133,7 +133,7 @@ You may want to add another entry to the \`items\` option with this value.`
     expect(() => {
       widget.init({ state: helper.state, helper });
     }).toWarnDev(
-      `[InstantSearch.js]: The \`hitsPerPage\` widget \`items\` option does not contain the "hits per page" value coming from the state: -1.
+      `[InstantSearch.js]: The \`items\` option of \`hitsPerPage\` does not contain the "hits per page" value coming from the state: -1.
 
 You may want to add another entry to the \`items\` option with this value.`
     );

@@ -144,7 +144,7 @@ Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.
           warning(
             false,
             `
-The \`hitsPerPage\` widget \`items\` option does not contain the "hits per page" value coming from the state: ${
+The \`items\` option of \`hitsPerPage\` does not contain the "hits per page" value coming from the state: ${
               state.hitsPerPage
             }.
 
