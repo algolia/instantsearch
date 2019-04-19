@@ -55,7 +55,7 @@
     "@types/react-test-renderer": "^16.0.3",
     "@types/storybook__addon-a11y": "^5.0.0",
     "@types/storybook__addon-actions": "^3.4.1",
-    "@types/storybook__addon-knobs": "^4.0.0",
+    "@types/storybook__addon-knobs": "^5.0.0",
     "@types/storybook__addon-links": "^3.3.3",
     "@types/storybook__react": "^4.0.0",
     "algoliasearch": "3.32.1",
