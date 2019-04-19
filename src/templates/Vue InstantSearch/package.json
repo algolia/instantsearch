@@ -3,36 +3,34 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --port 3000 --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "lint": "eslint --ext .js,.vue .",
+    "start": "vue-cli-service serve --port 3000",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "algoliasearch": "3.32.0",
-    "vue": "2.6.2",
+    "core-js": "2.6.5",
+    "vue": "2.6.10",
     "vue-instantsearch": "{{libraryVersion}}"
   },
   "devDependencies": {
-    "babel-core": "6.26.3",
+    "@vue/cli-plugin-babel": "3.6.0",
+    "@vue/cli-plugin-eslint": "3.6.0",
+    "@vue/cli-service": "3.6.0",
     "babel-eslint": "10.0.1",
-    "babel-loader": "7.1.5",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-stage-3": "6.24.1",
-    "cross-env": "5.2.0",
-    "css-loader": "0.28.11",
-    "eslint": "5.7.0",
+    "eslint": "5.16.0",
     "eslint-config-algolia": "13.2.3",
-    "eslint-config-prettier": "3.6.0",
-    "eslint-plugin-html": "4.0.6",
+    "eslint-config-prettier": "4.1.0",
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-prettier": "3.0.1",
-    "eslint-plugin-vue": "4.7.1",
-    "file-loader": "2.0.0",
+    "eslint-plugin-vue": "5.2.2",
     "prettier": "1.16.4",
-    "vue-loader": "14.2.4",
-    "vue-template-compiler": "2.6.2",
-    "webpack": "3.12.0",
-    "webpack-dev-server": "2.11.3"
-  }
+    "vue-template-compiler": "2.6.10"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }

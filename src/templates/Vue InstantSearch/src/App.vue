@@ -2,7 +2,9 @@
   <div>
     <header class="header">
       <h1 class="header-title">
-        <a href="/">{{name}}</a>
+        <a href="/">
+          {{name}}
+        </a>
       </h1>
       <p class="header-subtitle">
         using
@@ -27,7 +29,9 @@
 
           {{/if}}
           <div class="search-panel__results">
-            <ais-search-box placeholder="{{searchPlaceholder}}" />
+            <div class="searchbox">
+              <ais-search-box placeholder="{{searchPlaceholder}}" />
+            </div>
             {{#if attributesToDisplay}}
             <ais-hits>
               <template slot="item" slot-scope="{ item }">
@@ -79,7 +83,6 @@ export default {
   },
 };
 </script>
-
 
 <style>
 body,
