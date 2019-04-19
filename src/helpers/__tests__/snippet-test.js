@@ -1,6 +1,6 @@
 import snippet from '../snippet';
 
-/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/camelcase */
 const hit = {
   name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
   description:
