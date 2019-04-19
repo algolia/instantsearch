@@ -95,10 +95,10 @@ const wrapInsightsClient = (
   aa(method, { ...inferredPayload, ...payload } as any);
 };
 
-type Connector<WidgetParams> = (
-  renderFn: Renderer<RenderOptions<WidgetParams>>,
+type Connector<TWidgetParams> = (
+  renderFn: Renderer<RenderOptions<TWidgetParams>>,
   unmountFn: Unmounter
-) => WidgetFactory<WidgetParams>;
+) => WidgetFactory<TWidgetParams>;
 
 export default function withInsights(
   connector: Connector<unknown>
