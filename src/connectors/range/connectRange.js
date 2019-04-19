@@ -2,6 +2,7 @@ import find from 'lodash/find';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  isFiniteNumber,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator(
@@ -55,8 +56,8 @@ export default function connectRange(renderFn, unmountFn) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    const hasMinBound = Number.isFinite(minBound);
-    const hasMaxBound = Number.isFinite(maxBound);
+    const hasMinBound = isFiniteNumber(minBound);
+    const hasMaxBound = isFiniteNumber(maxBound);
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -72,7 +73,7 @@ export default function connectRange(renderFn, unmountFn) {
         let min;
         if (hasMinBound) {
           min = minBound;
-        } else if (Number.isFinite(stats.min)) {
+        } else if (isFiniteNumber(stats.min)) {
           min = stats.min;
         } else {
           min = 0;
@@ -81,7 +82,7 @@ export default function connectRange(renderFn, unmountFn) {
         let max;
         if (hasMaxBound) {
           max = maxBound;
-        } else if (Number.isFinite(stats.max)) {
+        } else if (isFiniteNumber(stats.max)) {
           max = stats.max;
         } else {
           max = 0;
@@ -98,8 +99,8 @@ export default function connectRange(renderFn, unmountFn) {
 
         const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
 
-        const min = Number.isFinite(minValue) ? minValue : -Infinity;
-        const max = Number.isFinite(maxValue) ? maxValue : Infinity;
+        const min = isFiniteNumber(minValue) ? minValue : -Infinity;
+        const max = isFiniteNumber(maxValue) ? maxValue : Infinity;
 
         return [min, max];
       },
@@ -137,8 +138,8 @@ export default function connectRange(renderFn, unmountFn) {
           }
 
           const isResetNewNextMin = newNextMin === undefined;
-          const isValidNewNextMin = Number.isFinite(newNextMin);
-          const isValidMinCurrentRange = Number.isFinite(currentRangeMin);
+          const isValidNewNextMin = isFiniteNumber(newNextMin);
+          const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
           const isGreaterThanCurrentRange =
             isValidMinCurrentRange && currentRangeMin <= newNextMin;
           const isMinValid =
@@ -147,8 +148,8 @@ export default function connectRange(renderFn, unmountFn) {
               (!isValidMinCurrentRange || isGreaterThanCurrentRange));
 
           const isResetNewNextMax = newNextMax === undefined;
-          const isValidNewNextMax = Number.isFinite(newNextMax);
-          const isValidMaxCurrentRange = Number.isFinite(currentRangeMax);
+          const isValidNewNextMax = isFiniteNumber(newNextMax);
+          const isValidMaxCurrentRange = isFiniteNumber(currentRangeMax);
           const isLowerThanRange =
             isValidMaxCurrentRange && currentRangeMax >= newNextMax;
           const isMaxValid =
@@ -195,8 +196,8 @@ export default function connectRange(renderFn, unmountFn) {
           currentConfiguration.numericRefinements &&
           currentConfiguration.numericRefinements[attribute] !== undefined;
 
-        const isMinBoundValid = Number.isFinite(minBound);
-        const isMaxBoundValid = Number.isFinite(maxBound);
+        const isMinBoundValid = isFiniteNumber(minBound);
+        const isMaxBoundValid = isFiniteNumber(maxBound);
         const isAbleToRefine =
           isMinBoundValid && isMaxBoundValid
             ? minBound < maxBound
@@ -320,7 +321,7 @@ export default function connectRange(renderFn, unmountFn) {
           return searchParameters;
         }
 
-        if (Number.isFinite(lowerBound)) {
+        if (isFiniteNumber(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '>=',
@@ -328,7 +329,7 @@ export default function connectRange(renderFn, unmountFn) {
           );
         }
 
-        if (Number.isFinite(upperBound)) {
+        if (isFiniteNumber(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '<=',
