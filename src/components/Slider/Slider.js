@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import times from 'lodash/times';
 import range from 'lodash/range';
-import has from 'lodash/has';
 import Pit from './Pit';
 
 class Slider extends Component {
@@ -58,12 +57,13 @@ class Slider extends Component {
 
   createHandleComponent = tooltips => props => {
     // display only two decimals after comma,
-    // and apply `tooltips.format()` if any`
+    // and apply `tooltips.format()` if any
     const roundedValue =
       Math.round(parseFloat(props['aria-valuenow']) * 100) / 100;
-    const value = has(tooltips, 'format')
-      ? tooltips.format(roundedValue)
-      : roundedValue;
+    const value =
+      tooltips && tooltips.format
+        ? tooltips.format(roundedValue)
+        : roundedValue;
 
     const className = cx(props.className, {
       'rheostat-handle-lower': props['data-handle-key'] === 0,
