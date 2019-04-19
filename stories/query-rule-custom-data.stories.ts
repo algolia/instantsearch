@@ -37,7 +37,7 @@ storiesOf('QueryRuleCustomData', module)
                   const { title, banner, link } = item;
 
                   if (!banner) {
-                    return;
+                    return undefined;
                   }
 
                   return `
