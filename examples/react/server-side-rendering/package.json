@@ -21,7 +21,7 @@
     "nodemon": "1.18.11",
     "react-test-renderer": "16.8.6",
     "webpack": "4.30.0",
-    "webpack-cli": "3.3.0",
+    "webpack-cli": "3.3.1",
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {

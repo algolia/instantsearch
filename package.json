@@ -117,7 +117,7 @@
     "tslint-react": "4.0.0",
     "typescript": "3.4.4",
     "webpack": "4.30.0",
-    "webpack-cli": "3.3.0"
+    "webpack-cli": "3.3.1"
   },
   "engines": {
     "node": "8.15.1",
