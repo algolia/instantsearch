@@ -19,7 +19,7 @@
     "react": "16.8.6",
     "react-autosuggest": "9.4.3",
     "react-dom": "16.8.6",
-    "react-instantsearch-dom": "5.4.0"
+    "react-instantsearch-dom": "5.5.0"
   },
   "browserslist": [
     ">0.2%",
