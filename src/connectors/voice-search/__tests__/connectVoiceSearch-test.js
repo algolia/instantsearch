@@ -169,7 +169,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         { uiState }
       );
       expect(searchParametersAfter.query).toEqual(uiState.query);
-      expect(searchParametersAfter).toMatchSnapshot();
     });
 
     it('should enforce the default value if the ui state is empty', () => {
@@ -182,7 +181,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         { uiState }
       );
       expect(searchParametersAfter.query).toBe('');
-      expect(searchParametersAfter).toMatchSnapshot();
     });
   });
 });

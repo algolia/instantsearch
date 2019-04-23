@@ -1,6 +1,7 @@
 import { render } from 'preact-compat';
 import { SearchResults, SearchParameters } from 'algoliasearch-helper';
 import voiceSearch from '../voice-search';
+import { Helper } from '../../../types';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
@@ -44,7 +45,7 @@ function defaultSetup(opts = {}) {
 }
 
 describe('voiceSearch()', () => {
-  let helper;
+  let helper: Partial<Helper>;
 
   beforeEach(() => {
     render.mockClear();
