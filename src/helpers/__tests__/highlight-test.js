@@ -65,7 +65,7 @@ const hit = {
     },
   },
 };
-/* eslint-enable camelcase */
+/* eslint-enable @typescript-eslint/camelcase */
 
 describe('highlight', () => {
   test('with default tag name', () => {
