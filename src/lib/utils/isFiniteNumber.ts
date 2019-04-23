@@ -1,5 +1,5 @@
 function isFiniteNumber(value: any): value is number {
-  return isFinite(value) && !isNaN(parseFloat(value));
+  return typeof value === 'number' && isFinite(value);
 }
 
 export default isFiniteNumber;
