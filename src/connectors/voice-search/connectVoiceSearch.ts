@@ -4,8 +4,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { Renderer, RenderOptions, WidgetFactory } from '../../types';
-import voiceSearchHelper from '../../lib/voiceSearchHelper';
-import {
+import voiceSearchHelper, {
   VoiceListeningState,
   ToggleListening,
 } from '../../lib/voiceSearchHelper';
