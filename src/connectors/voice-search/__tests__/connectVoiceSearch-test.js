@@ -88,7 +88,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   it('render triggered when state changes', () => {
     const { renderFn, widget, helper } = getDefaultSetup();
     widget.init({ helper });
-    expect(renderFn).toHaveBeenCalled();
+    expect(renderFn).toHaveBeenCalledTimes(1);
     widget._voiceSearchHelper.changeState();
     expect(renderFn).toHaveBeenCalledTimes(2);
     widget._voiceSearchHelper.changeState();
