@@ -8,10 +8,12 @@ beforeEach(() => jest.clearAllMocks());
 
 it('passes props to InstantSearch.js', () => {
   const searchClient = {};
+  const insightsClient = jest.fn();
   const searchFunction = helper => helper.search();
   mount(InstantSearch, {
     propsData: {
       searchClient,
+      insightsClient,
       indexName: 'something',
       routing: {
         router: {},
@@ -29,6 +31,7 @@ it('passes props to InstantSearch.js', () => {
       stateMapping: {},
     },
     searchClient,
+    insightsClient,
     searchFunction,
     stalledSearchDelay: 250,
   });

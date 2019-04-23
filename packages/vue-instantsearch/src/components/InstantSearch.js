@@ -14,6 +14,10 @@ export default createInstantSearchComponent({
       type: Object,
       required: true,
     },
+    insightsClient: {
+      type: Function,
+      required: false,
+    },
     indexName: {
       type: String,
       required: true,
@@ -68,6 +72,7 @@ export default createInstantSearchComponent({
     return {
       instantSearchInstance: instantsearch({
         searchClient: this.searchClient,
+        insightsClient: this.insightsClient,
         indexName: this.indexName,
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,

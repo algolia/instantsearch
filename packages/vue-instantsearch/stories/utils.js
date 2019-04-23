@@ -2,6 +2,7 @@ import algoliasearch from 'algoliasearch/lite';
 
 export const previewWrapper = ({
   searchClient = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
+  insightsClient,
   indexName = 'instant_search',
   hits = `
     <ol
@@ -36,6 +37,7 @@ export const previewWrapper = ({
     <ais-instant-search
       :search-client="searchClient"
       index-name="${indexName}"
+      :insights-client="insightsClient"
     >
       <div class="vis-container vis-container-preview">
         <story />
@@ -59,6 +61,7 @@ export const previewWrapper = ({
   data() {
     return {
       searchClient,
+      insightsClient,
     };
   },
 });
