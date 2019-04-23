@@ -56,7 +56,8 @@ describe('VoiceSearch', () => {
           status: ``,
         },
       };
-      expect(mount(<VoiceSearch {...props} />)).toMatchSnapshot();
+      const wrapper = mount(<VoiceSearch {...props} />);
+      expect(wrapper.find('button').text()).toBe('Stop');
     });
 
     it('with custom template for buttonText (2)', () => {
@@ -68,7 +69,8 @@ describe('VoiceSearch', () => {
           status: ``,
         },
       };
-      expect(mount(<VoiceSearch {...props} />)).toMatchSnapshot();
+      const wrapper = mount(<VoiceSearch {...props} />);
+      expect(wrapper.find('button').text()).toBe('Start');
     });
 
     it('with custom template for status', () => {
@@ -93,7 +95,8 @@ describe('VoiceSearch', () => {
           `,
         },
       };
-      expect(mount(<VoiceSearch {...props} />)).toMatchSnapshot();
+      const wrapper = mount(<VoiceSearch {...props} />);
+      expect(wrapper.find('.status')).toMatchSnapshot();
     });
   });
 });
