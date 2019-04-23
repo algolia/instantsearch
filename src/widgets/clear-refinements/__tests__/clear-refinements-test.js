@@ -90,7 +90,7 @@ describe('clearRefinements()', () => {
 
   describe('with refinements', () => {
     beforeEach(() => {
-      helper.state.facetsRefinements = ['something'];
+      helper.state.facetsRefinements = { something: ['something'] };
     });
 
     it('calls twice render(<ClearAll props />, container)', () => {
