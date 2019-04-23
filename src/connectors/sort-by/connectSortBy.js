@@ -91,7 +91,7 @@ export default function connectSortBy(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const { items, transformItems = x => x } = widgetParams;
 
-    if (!items) {
+    if (!Array.isArray(items)) {
       throw new Error(
         withUsage('The `items` option expects an array of objects.')
       );
