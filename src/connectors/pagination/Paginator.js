@@ -14,7 +14,7 @@ class Paginator {
 
     const totalDisplayedPages = this.nbPagesDisplayed(padding, total);
     if (totalDisplayedPages === total) {
-      return range({ start: 0, end: total });
+      return range({ end: total });
     }
 
     const paddingLeft = this.calculatePaddingLeft(
