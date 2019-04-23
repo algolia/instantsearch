@@ -1,5 +1,3 @@
-import last from 'lodash/last';
-import first from 'lodash/first';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
@@ -35,8 +33,8 @@ describe('connectGeoSearch', () => {
     return [widget, helper, refine];
   };
 
-  const firstRenderArgs = fn => first(fn.mock.calls)[0];
-  const lastRenderArgs = fn => last(fn.mock.calls)[0];
+  const firstRenderArgs = fn => fn.mock.calls[0][0];
+  const lastRenderArgs = fn => fn.mock.calls[fn.mock.calls.length - 1][0];
 
   describe('Usage', () => {
     it('throws without render function', () => {
