@@ -62,7 +62,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     it('calls renderFn during init and render', () => {
       const { renderFn, widget, helper } = getDefaultSetup();
       widget.init({ helper });
-      expect(renderFn).toHaveBeenCalled();
+      expect(renderFn).toHaveBeenCalledTimes(1);
       expect(renderFn).toHaveBeenLastCalledWith(
         expect.objectContaining({}),
         true
