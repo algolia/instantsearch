@@ -1,5 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from './utils';
 
 export default class RoutingManager {
   constructor({ instantSearchInstance, router, stateMapping } = {}) {
