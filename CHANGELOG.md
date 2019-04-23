@@ -1,3 +1,19 @@
+# [5.5.0](https://github.com/algolia/react-instantsearch/compare/v5.4.0...v5.5.0) (2019-04-23)
+
+
+### Bug Fixes
+
+* **createInstantSearch:** change the User-Agent to use the new specs ([#2209](https://github.com/algolia/react-instantsearch/issues/2209)) ([642ba0b](https://github.com/algolia/react-instantsearch/commit/642ba0b))
+
+
+### Features
+
+* **DOMMaps:** expose withGoogleMaps HOC [PART-1] ([#2000](https://github.com/algolia/react-instantsearch/issues/2000)) ([2ae1dea](https://github.com/algolia/react-instantsearch/commit/2ae1dea))
+* **queryRules:** add Query Rules features ([#2286](https://github.com/algolia/react-instantsearch/issues/2286)) ([3ae9c01](https://github.com/algolia/react-instantsearch/commit/3ae9c01))
+* **insights:** add insights features ([#2215](https://github.com/algolia/react-instantsearch/pull/2215)) ([961e7a7](https://github.com/algolia/react-instantsearch/commit/961e7a7))
+
+
+
 # [5.4.0](https://github.com/algolia/react-instantsearch/compare/v5.4.0-beta.1...v5.4.0) (2019-02-05)
 
 
