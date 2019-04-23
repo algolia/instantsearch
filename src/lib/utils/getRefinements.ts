@@ -96,9 +96,9 @@ function getRefinements(
   Object.keys(facetsRefinements).forEach(attributeName => {
     const refinements = facetsRefinements[attributeName];
 
-    refinements.forEach(name => {
+    refinements.forEach(refinement => {
       res.push(
-        getRefinement(state, 'facet', attributeName, name, results.facets)
+        getRefinement(state, 'facet', attributeName, refinement, results.facets)
       );
     });
   });
@@ -106,8 +106,13 @@ function getRefinements(
   Object.keys(facetsExcludes).forEach(attributeName => {
     const refinements = facetsExcludes[attributeName];
 
-    refinements.forEach(name => {
-      res.push({ type: 'exclude', attributeName, name, exclude: true });
+    refinements.forEach(refinement => {
+      res.push({
+        type: 'exclude',
+        attributeName,
+        name: refinement,
+        exclude: true,
+      });
     });
   });
 
@@ -120,8 +125,8 @@ function getRefinements(
           state,
           'disjunctive',
           attributeName,
-          // we unescapeRefinement any disjunctive refined value since they can be escaped
-          // when negative numeric values search `escapeRefinement` usage in code
+          // We unescape any disjunctive refined values with `unescapeRefinement` because
+          // they can be escaped on negative numeric values with `escapeRefinement`.
           unescapeRefinement(refinement),
           results.disjunctiveFacets
         )
@@ -166,8 +171,8 @@ function getRefinements(
     });
   });
 
-  tagRefinements.forEach(name => {
-    res.push({ type: 'tag', attributeName: '_tags', name });
+  tagRefinements.forEach(refinement => {
+    res.push({ type: 'tag', attributeName: '_tags', name: refinement });
   });
 
   if (clearsQuery && state.query && state.query.trim()) {
