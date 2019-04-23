@@ -1,6 +1,5 @@
-import noop from 'lodash/noop';
 import { WidgetFactory } from '../../types';
-import { createDocumentationMessageGenerator } from '../../lib/utils';
+import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 import connectQueryRules, {
   ParamTrackedFilters,
   ParamTransformRuleContexts,

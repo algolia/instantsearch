@@ -1,6 +1,5 @@
-import noop from 'lodash/noop';
 import isPlainObject from 'lodash/isPlainObject';
-import { createDocumentationMessageGenerator } from '../../lib/utils';
+import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 import { enhanceConfiguration } from '../../lib/InstantSearch';
 
 const withUsage = createDocumentationMessageGenerator({

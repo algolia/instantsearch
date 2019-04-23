@@ -1,10 +1,10 @@
-import noop from 'lodash/noop';
 import {
   checkRendering,
   warning,
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
   createDocumentationMessageGenerator,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
