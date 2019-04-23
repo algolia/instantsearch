@@ -15,11 +15,8 @@ function range({ start = 0, end, step = 1 }: RangeOptions): number[] {
   //   => Array length = (5000 - 1) / 500 = 9.998
   const arrayLength = Math.round((end - start) / limitStep);
 
-  return Array.apply(null, Array(arrayLength)).map((_, current) =>
-    // If the step is 0, the values shouldn't get incremented.
-    // Example:
-    //   range({ start: 1, end: 4, step: 0 }) => [1, 1, 1]
-    step === 0 ? start : (start + current) * step
+  return Array.apply(null, Array(arrayLength)).map(
+    (_, current) => (start + current) * step
   );
 }
 
