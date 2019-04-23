@@ -57,9 +57,11 @@ function getRefinement(
     const nameParts = name.split(facetDeclaration.separator);
 
     for (let i = 0; facet !== undefined && i < nameParts.length; ++i) {
-      facet = Object.keys(facet.data)
-        .map(refinementKey => facet.data[refinementKey])
-        .find(refinement => refinement.name === nameParts[i]);
+      facet =
+        facet.data &&
+        Object.keys(facet.data)
+          .map(refinementKey => facet.data[refinementKey])
+          .find(refinement => refinement.name === nameParts[i]);
     }
 
     count = facet && facet.count;
