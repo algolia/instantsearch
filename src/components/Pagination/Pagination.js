@@ -1,17 +1,11 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import defaultsDeep from 'lodash/defaultsDeep';
 import cx from 'classnames';
 
 import PaginationLink from './PaginationLink';
 import { isSpecialClick } from '../../lib/utils';
 
 class Pagination extends Component {
-  constructor(props) {
-    super(defaultsDeep(props, Pagination.defaultProps));
-    this.handleClick = this.handleClick.bind(this);
-  }
-
   pageLink({
     label,
     ariaLabel,
@@ -105,7 +99,7 @@ class Pagination extends Component {
     );
   }
 
-  handleClick(pageNumber, event) {
+  handleClick = (pageNumber, event) => {
     if (isSpecialClick(event)) {
       // do not alter the default browser behavior
       // if one special key is down
@@ -113,7 +107,7 @@ class Pagination extends Component {
     }
     event.preventDefault();
     this.props.setCurrentPage(pageNumber);
-  }
+  };
 
   render() {
     return (
