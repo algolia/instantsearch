@@ -85,7 +85,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
   });
 
-  it('render triggered when state changes', () => {
+  it('triggers render when state changes', () => {
     const { renderFn, widget, helper } = getDefaultSetup();
     widget.init({ helper });
     expect(renderFn).toHaveBeenCalledTimes(1);
