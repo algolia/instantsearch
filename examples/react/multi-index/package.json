@@ -17,7 +17,7 @@
     "prop-types": "15.6.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "react-instantsearch-dom": "5.4.0"
+    "react-instantsearch-dom": "5.5.0"
   },
   "browserslist": [
     ">0.2%",
