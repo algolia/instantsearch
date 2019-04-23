@@ -89,7 +89,7 @@
     "lerna": "3.13.3",
     "lodash.orderby": "4.6.0",
     "mversion": "1.13.0",
-    "null-loader": "0.1.1",
+    "null-loader": "1.0.0",
     "places.js": "1.16.4",
     "prettier": "1.17.0",
     "prop-types": "15.6.2",
