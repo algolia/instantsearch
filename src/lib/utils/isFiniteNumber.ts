@@ -1,4 +1,4 @@
-function isFiniteNumber(value: any): boolean {
+function isFiniteNumber(value: any): value is number {
   return isFinite(value) && !isNaN(parseFloat(value));
 }
 
