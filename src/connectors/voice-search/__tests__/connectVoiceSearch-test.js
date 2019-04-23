@@ -62,7 +62,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     it('calls renderFn during init and render', () => {
       const { renderFn, widget, helper } = getDefaultSetup();
       widget.init({ helper });
-      expect(renderFn).toHaveBeenCalled();
+      expect(renderFn).toHaveBeenCalledTimes(1);
       expect(renderFn).toHaveBeenLastCalledWith(
         expect.objectContaining({}),
         true
@@ -85,10 +85,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
   });
 
-  it('render triggered when state changes', () => {
+  it('triggers render when state changes', () => {
     const { renderFn, widget, helper } = getDefaultSetup();
     widget.init({ helper });
-    expect(renderFn).toHaveBeenCalled();
+    expect(renderFn).toHaveBeenCalledTimes(1);
     widget._voiceSearchHelper.changeState();
     expect(renderFn).toHaveBeenCalledTimes(2);
     widget._voiceSearchHelper.changeState();
