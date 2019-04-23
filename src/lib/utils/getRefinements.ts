@@ -56,12 +56,10 @@ function getRefinement(
     const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
     const nameParts = name.split(facetDeclaration.separator);
 
-    if (facet) {
-      nameParts.forEach(namePart => {
-        facet = Object.keys(facet.data)
-          .map(refinementKey => facet.data[refinementKey])
-          .find(refinement => refinement.name === namePart);
-      });
+    for (let i = 0; facet !== undefined && i < nameParts.length; ++i) {
+      facet = Object.keys(facet.data)
+        .map(refinementKey => facet.data[refinementKey])
+        .find(refinement => refinement.name === nameParts[i]);
     }
 
     count = facet && facet.count;
