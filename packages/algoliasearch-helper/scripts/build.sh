@@ -12,12 +12,20 @@ bundle='algoliasearch.helper'
 
 echo "Build"
 
-browserify index.js -s algoliasearchHelper -o dist/algoliasearch.helper.js
+browserify index.js \
+  --standalone algoliasearchHelper \
+  --debug | \
+  exorcist dist/algoliasearch.helper.js.map > dist/algoliasearch.helper.js
 
 echo "..Minify"
 
-uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js
+uglifyjs dist/algoliasearch.helper.js \
+  --mangle \
+  --compress=warnings=false \
+  --in-source-map "dist/algoliasearch.helper.js.map" \
+  --source-map "dist/algoliasearch.helper.min.js.map" \
+  --output dist/algoliasearch.helper.min.js
 
 echo '..Gzipped file size'
 
-echo "${bundle}.min.js gzipped will weight" $(cat dist/"${bundle}".min.js | gzip -9 | wc -c | pretty-bytes)
+echo "${bundle}.min.js gzipped will weigh" $(cat dist/"${bundle}".min.js | gzip -9 | wc -c | pretty-bytes)
