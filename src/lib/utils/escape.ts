@@ -1,6 +1,6 @@
 /**
  * This implementation is taken from Lodash implementation.
- * See: https://github.com/lodash/lodash/blob/master/escape.js
+ * See: https://github.com/lodash/lodash/blob/4.17.11-npm/escape.js
  */
 
 // Used to map characters to HTML entities.
