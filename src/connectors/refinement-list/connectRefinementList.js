@@ -1,13 +1,13 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  isEqual,
 } from '../../lib/utils';
 import {
   escapeFacets,
   TAG_PLACEHOLDER,
   TAG_REPLACEMENT,
 } from '../../lib/escape-highlight';
-import isEqual from 'lodash/isEqual';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',

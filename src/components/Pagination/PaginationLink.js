@@ -1,6 +1,6 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from '../../lib/utils';
 
 class PaginationLink extends Component {
   componentWillMount() {

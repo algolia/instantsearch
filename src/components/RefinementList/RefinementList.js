@@ -1,8 +1,7 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import isEqual from 'lodash/isEqual';
-import { isSpecialClick } from '../../lib/utils';
+import { isSpecialClick, isEqual } from '../../lib/utils';
 import Template from '../Template/Template';
 import RefinementListItem from './RefinementListItem';
 import SearchBox from '../SearchBox/SearchBox';
