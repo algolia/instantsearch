@@ -115,7 +115,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{}]),
+      results: new SearchResults(helper.state, [
+        {
+          nbPages: 250,
+        },
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',

@@ -1,5 +1,3 @@
-import range from 'lodash/range';
-import times from 'lodash/times';
 import algoliaSearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
@@ -336,7 +334,7 @@ describe('InstantSearch lifecycle', () => {
     let widgets;
 
     beforeEach(() => {
-      widgets = range(5).map((widget, widgetIndex) => ({
+      widgets = Array.from({ length: 5 }, (_widget, widgetIndex) => ({
         init() {},
         getConfiguration: jest.fn().mockReturnValue({ values: [widgetIndex] }),
       }));
@@ -361,7 +359,7 @@ describe('InstantSearch lifecycle', () => {
     const render = jest.fn();
     beforeEach(() => {
       render.mockReset();
-      const widgets = range(5).map(() => ({ render }));
+      const widgets = Array.from({ length: 5 }, () => ({ render }));
 
       widgets.forEach(search.addWidget, search);
 
@@ -671,7 +669,7 @@ describe('InstantSearch lifecycle', () => {
       searchClient: algoliasearch(appId, apiKey),
     });
 
-    const widgets = times(5, () => ({
+    const widgets = Array.from({ length: 5 }, () => ({
       getConfiguration: () => ({}),
       init: jest.fn(),
       render: jest.fn(),
