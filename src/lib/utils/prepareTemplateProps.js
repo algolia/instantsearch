@@ -1,12 +1,10 @@
-import reduce from 'lodash/reduce';
 import keys from 'lodash/keys';
 import uniq from 'lodash/uniq';
 
 function prepareTemplates(defaultTemplates = {}, templates = {}) {
   const allKeys = uniq([...keys(defaultTemplates), ...keys(templates)]);
 
-  return reduce(
-    allKeys,
+  return allKeys.reduce(
     (config, key) => {
       const defaultTemplate = defaultTemplates[key];
       const customTemplate = templates[key];
