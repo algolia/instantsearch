@@ -73,6 +73,22 @@ describe('isEqual', () => {
     });
   });
 
+  describe('with functions', () => {
+    test('with same functions should be true', () => {
+      const first = function a() {};
+      const second = first;
+
+      expect(isEqual(first, second)).toBe(true);
+    });
+
+    test('with different functions should be false', () => {
+      const first = function a() {};
+      const second = function a() {};
+
+      expect(isEqual(first, second)).toBe(false);
+    });
+  });
+
   describe('with arrays', () => {
     test('with same array values should be true', () => {
       const first = ['Alphonse', 'Fred'];

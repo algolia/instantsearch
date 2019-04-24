@@ -7,7 +7,12 @@ function isEqual(first: any, second: any): boolean {
     return true;
   }
 
-  if (isPrimitive(first) || isPrimitive(second)) {
+  if (
+    isPrimitive(first) ||
+    isPrimitive(second) ||
+    typeof first === 'function' ||
+    typeof second === 'function'
+  ) {
     return first === second;
   }
 
