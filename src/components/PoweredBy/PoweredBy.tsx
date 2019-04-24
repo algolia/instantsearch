@@ -12,7 +12,7 @@ type Props = {
   cssClasses: CSSClasses;
 };
 
-const PoweredBy = ({ url, theme, cssClasses }: Props) => (
+const PoweredBy = ({ url, theme, cssClasses }: Props): React.ReactNode => (
   <div className={cssClasses.root}>
     <a
       href={url}

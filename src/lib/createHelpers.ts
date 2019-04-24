@@ -8,16 +8,22 @@ import {
 
 type HoganRenderer = (value: any) => string;
 
+interface HoganHelpers {
+  formatNumber: (value: number, render: HoganRenderer) => string;
+  highlight: (options: string, render: HoganRenderer) => string;
+  snippet: (options: string, render: HoganRenderer) => string;
+}
+
 export default function hoganHelpers({
   numberLocale,
 }: {
   numberLocale: string;
-}) {
+}): HoganHelpers {
   return {
-    formatNumber(value: number, render: HoganRenderer): string {
+    formatNumber(value, render) {
       return Number(render(value)).toLocaleString(numberLocale);
     },
-    highlight(options: string, render: HoganRenderer): string {
+    highlight(options, render) {
       try {
         const highlightOptions: Omit<HighlightOptions, 'hit'> = JSON.parse(
           options
@@ -35,7 +41,7 @@ The highlight helper expects a JSON object of the format:
 { "attribute": "name", "highlightedTagName": "mark" }`);
       }
     },
-    snippet(options: string, render: HoganRenderer): string {
+    snippet(options, render) {
       try {
         const snippetOptions: Omit<SnippetOptions, 'hit'> = JSON.parse(options);
 

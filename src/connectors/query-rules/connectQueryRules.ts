@@ -34,22 +34,23 @@ export type QueryRulesConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-export interface QueryRulesRenderOptions<T> extends RenderOptions<T> {
+export interface QueryRulesRenderOptions<TQueryRulesWidgetParams>
+  extends RenderOptions<TQueryRulesWidgetParams> {
   items: any[];
 }
 
-export type QueryRulesRenderer<T> = Renderer<
-  QueryRulesRenderOptions<QueryRulesConnectorParams & T>
+export type QueryRulesRenderer<TQueryRulesWidgetParams> = Renderer<
+  QueryRulesRenderOptions<QueryRulesConnectorParams & TQueryRulesWidgetParams>
 >;
 
-export type QueryRulesWidgetFactory<T> = WidgetFactory<
-  QueryRulesConnectorParams & T
+export type QueryRulesWidgetFactory<TQueryRulesWidgetParams> = WidgetFactory<
+  QueryRulesConnectorParams & TQueryRulesWidgetParams
 >;
 
-export type QueryRulesConnector = <T>(
-  render: QueryRulesRenderer<T>,
+export type QueryRulesConnector = <TQueryRulesWidgetParams>(
+  render: QueryRulesRenderer<TQueryRulesWidgetParams>,
   unmount?: () => void
-) => QueryRulesWidgetFactory<T>;
+) => QueryRulesWidgetFactory<TQueryRulesWidgetParams>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'query-rules',

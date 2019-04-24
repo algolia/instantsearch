@@ -77,7 +77,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
-          // eslint-disable-next-line camelcase
+          // eslint-disable-next-line @typescript-eslint/camelcase
           facets_stats: {
             price: {
               avg: 20,
@@ -185,7 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
-          // eslint-disable-next-line camelcase
+          // eslint-disable-next-line @typescript-eslint/camelcase
           facets_stats: {
             price: {
               avg: 20,
