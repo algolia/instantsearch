@@ -1,5 +1,4 @@
 import find from 'lodash/find';
-import get from 'lodash/get';
 import { SearchParameters, SearchResults } from '../../types';
 import unescapeRefinement from './unescapeRefinement';
 
@@ -60,12 +59,12 @@ function getRefinement(
       facet = find(facet.data, { name: split[i] });
     }
 
-    count = get(facet, 'count');
+    count = facet && facet.count;
   } else {
-    count = get(facet, `data["${res.name}"]`);
+    count = facet && facet.data && facet.data[res.name];
   }
 
-  const exhaustive = get(facet, 'exhaustive');
+  const exhaustive = facet && facet.exhaustive;
 
   if (count !== undefined) {
     res.count = count;
