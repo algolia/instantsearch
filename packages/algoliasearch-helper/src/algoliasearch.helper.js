@@ -118,7 +118,7 @@ var version = require('./version');
  * just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper(client, index, options) {
-  if (client.addAlgoliaAgent && !doesClientAgentContainsHelper(client)) {
+  if (typeof client.addAlgoliaAgent === 'function') {
     client.addAlgoliaAgent('JS Helper (' + version + ')');
   }
 
@@ -1330,7 +1330,7 @@ AlgoliaSearchHelper.prototype.clearCache = function() {
 AlgoliaSearchHelper.prototype.setClient = function(newClient) {
   if (this.client === newClient) return this;
 
-  if (newClient.addAlgoliaAgent && !doesClientAgentContainsHelper(newClient)) {
+  if (typeof newClient.addAlgoliaAgent === 'function') {
     newClient.addAlgoliaAgent('JS Helper (' + version + ')');
   }
   this.client = newClient;
@@ -1407,17 +1407,5 @@ AlgoliaSearchHelper.prototype.hasPendingRequests = function() {
  * @property {string} value the string use to filter the attribute
  * @property {string} type the type of filter: 'conjunctive', 'disjunctive', 'exclude'
  */
-
-
-/*
- * This function tests if the _ua parameter of the client
- * already contains the JS Helper UA
- */
-function doesClientAgentContainsHelper(client) {
-  // this relies on JS Client internal variable, this might break if implementation changes
-  var currentAgent = client._ua;
-  return !currentAgent ? false :
-    currentAgent.indexOf('JS Helper') !== -1;
-}
 
 module.exports = AlgoliaSearchHelper;
