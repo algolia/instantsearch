@@ -2,6 +2,20 @@ import find from '../find';
 
 describe('find', () => {
   describe('with native array method', () => {
+    test('with empty array', () => {
+      const items = [];
+      const actual = find(items, item => item === 'hello');
+
+      expect(actual).toEqual(undefined);
+    });
+
+    test('with unknown item in array', () => {
+      const items = ['hey'];
+      const actual = find(items, item => item === 'hello');
+
+      expect(actual).toEqual(undefined);
+    });
+
     test('with an array of strings', () => {
       const items = ['hello', 'goodbye'];
       const actual = find(items, item => item === 'hello');
@@ -26,6 +40,20 @@ describe('find', () => {
 
     afterAll(() => {
       Array.prototype.find = originalArrayFind;
+    });
+
+    test('with empty array', () => {
+      const items = [];
+      const actual = find(items, item => item === 'hello');
+
+      expect(actual).toEqual(undefined);
+    });
+
+    test('with unknown item in array', () => {
+      const items = ['hey'];
+      const actual = find(items, item => item === 'hello');
+
+      expect(actual).toEqual(undefined);
     });
 
     test('with an array of strings', () => {
