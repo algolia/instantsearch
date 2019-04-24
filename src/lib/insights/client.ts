@@ -1,6 +1,5 @@
 import find from 'lodash/find';
-import uniq from 'lodash/uniq';
-
+import { uniq } from '../utils';
 import {
   Hits,
   InsightsClient,
