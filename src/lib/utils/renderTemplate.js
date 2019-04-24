@@ -1,4 +1,3 @@
-import curry from 'lodash/curry';
 import hogan from 'hogan.js';
 
 // We add all our template helper methods to the template as lambdas. Note
@@ -9,12 +8,14 @@ function transformHelpersToHogan(helpers = {}, compileOptions, data) {
   return Object.keys(helpers).reduce(
     (acc, helperKey) => ({
       ...acc,
-      [helperKey]: curry(function(text) {
-        const render = value =>
-          hogan.compile(value, compileOptions).render(this);
+      [helperKey]() {
+        return text => {
+          const render = value =>
+            hogan.compile(value, compileOptions).render(this);
 
-        return helpers[helperKey].call(data, text, render);
-      }),
+          return helpers[helperKey].call(data, text, render);
+        };
+      },
     }),
     {}
   );
