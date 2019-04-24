@@ -12,6 +12,7 @@ export { default as checkRendering } from './checkRendering';
 export { default as getPropertyByPath } from './getPropertyByPath';
 export { default as noop } from './noop';
 export { default as isFiniteNumber } from './isFiniteNumber';
+export { default as isPlainObject } from './isPlainObject';
 export { warning, deprecate } from './logger';
 export {
   createDocumentationLink,
