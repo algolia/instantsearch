@@ -1,14 +1,17 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
-import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
 import RoutingManager from './RoutingManager';
 import simpleMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
-import { createDocumentationMessageGenerator, noop } from './utils';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+  isPlainObject,
+} from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
