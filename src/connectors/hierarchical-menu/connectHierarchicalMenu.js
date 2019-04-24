@@ -3,6 +3,7 @@ import {
   warning,
   createDocumentationMessageGenerator,
   isEqual,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -114,7 +115,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
       getConfiguration(currentConfiguration) {
         if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = currentConfiguration.hierarchicalFacets.find(
+          const isFacetSet = find(
+            currentConfiguration.hierarchicalFacets,
             ({ name }) => name === hierarchicalFacetName
           );
           if (

@@ -1,4 +1,4 @@
-import { uniq } from '../utils';
+import { uniq, find } from '../utils';
 import {
   Hits,
   InsightsClient,
@@ -15,7 +15,7 @@ import {
 
 const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]) => {
   return selectedObjectIDs.map(objectID => {
-    const hit = hits.find(h => h.objectID === objectID);
+    const hit = find(hits, h => h.objectID === objectID);
     if (typeof hit === 'undefined') {
       throw new Error(
         `Could not find objectID "${objectID}" passed to \`clickedObjectIDsAfterSearch\` in the returned hits. This is necessary to infer the absolute position and the query ID.`

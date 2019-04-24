@@ -5,6 +5,7 @@ import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPag
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 
@@ -20,7 +21,7 @@ const renderer = ({ containerNode, cssClasses }) => (
   if (isFirstRendering) return;
 
   const { value: currentValue } =
-    items.find(({ isRefined }) => isRefined) || {};
+    find(items, ({ isRefined }) => isRefined) || {};
 
   render(
     <div className={cssClasses.root}>

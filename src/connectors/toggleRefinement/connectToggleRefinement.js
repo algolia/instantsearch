@@ -3,6 +3,7 @@ import {
   escapeRefinement,
   unescapeRefinement,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -191,7 +192,8 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         const offValue = off === undefined ? false : off;
         const allFacetValues = results.getFacetValues(attribute);
 
-        const onData = allFacetValues.find(
+        const onData = find(
+          allFacetValues,
           ({ name }) => name === unescapeRefinement(on)
         );
         const onFacetValue = {
@@ -200,7 +202,8 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         };
 
         const offData = hasAnOffValue
-          ? allFacetValues.find(
+          ? find(
+              allFacetValues,
               ({ name }) => name === unescapeRefinement(offValue)
             )
           : undefined;

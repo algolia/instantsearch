@@ -2,6 +2,7 @@ import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -113,7 +114,7 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
       );
     }
 
-    const defaultValue = userItems.find(item => item.default === true);
+    const defaultValue = find(userItems, item => item.default === true);
 
     return {
       getConfiguration() {

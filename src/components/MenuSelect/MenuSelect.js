@@ -1,6 +1,7 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { find } from '../../lib/utils';
 import Template from '../Template/Template';
 
 class MenuSelect extends Component {
@@ -21,7 +22,7 @@ class MenuSelect extends Component {
 
   render() {
     const { cssClasses, templateProps, items } = this.props;
-    const { value: selectedValue } = items.find(item => item.isRefined) || {
+    const { value: selectedValue } = find(items, item => item.isRefined) || {
       value: '',
     };
 

@@ -2,6 +2,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   isFiniteNumber,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator(
@@ -243,7 +244,8 @@ export default function connectRange(renderFn, unmountFn) {
 
       render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = facetsFromResults.find(
+        const facet = find(
+          facetsFromResults,
           facetResult => facetResult.name === attribute
         );
         const stats = (facet && facet.stats) || {};

@@ -1,4 +1,5 @@
 import { SearchParameters, SearchResults } from '../../types';
+import find from './find';
 import unescapeRefinement from './unescapeRefinement';
 
 export interface FacetRefinement {
@@ -47,7 +48,8 @@ function getRefinement(
   resultsFacets: SearchResults['facets' | 'hierarchicalFacets'] = []
 ): Refinement {
   const res: Refinement = { type, attributeName, name };
-  let facet: any = (resultsFacets as Array<{ name: string }>).find(
+  let facet: any = find(
+    resultsFacets as Array<{ name: string }>,
     resultsFacet => resultsFacet.name === attributeName
   );
   let count: number;
@@ -59,9 +61,12 @@ function getRefinement(
     for (let i = 0; facet !== undefined && i < nameParts.length; ++i) {
       facet =
         facet.data &&
-        Object.keys(facet.data)
-          .map(refinementKey => facet.data[refinementKey])
-          .find(refinement => refinement.name === nameParts[i]);
+        find(
+          Object.keys(facet.data).map(
+            refinementKey => facet.data[refinementKey]
+          ),
+          refinement => refinement.name === nameParts[i]
+        );
     }
 
     count = facet && facet.count;
