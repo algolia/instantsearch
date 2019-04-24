@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -100,7 +101,7 @@ export default function connectSortBy(renderFn, unmountFn) {
     return {
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.getIndex();
-        const isIndexInList = items.find(item => item.value === currentIndex);
+        const isIndexInList = find(items, item => item.value === currentIndex);
 
         if (!isIndexInList) {
           throw new Error(
