@@ -1,7 +1,7 @@
 import reduce from 'lodash/reduce';
 import escape from 'lodash/escape';
-import isPlainObject from 'lodash/isPlainObject';
 import { Hit, FacetHit } from '../types';
+import { isPlainObject } from '../lib/utils';
 
 export const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
