@@ -1,5 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
+import { MemoryRouter } from './MemoryRouter';
+import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
 storiesOf('ais-infinite-hits', module)
   .addDecorator(previewWrapper())
@@ -84,4 +86,41 @@ storiesOf('ais-infinite-hits', module)
         <template slot="footer">Footer</template>
       </ais-panel>
     `,
+  }));
+
+storiesOf('ais-infinite-hits', module)
+  .addDecorator(
+    previewWrapper({
+      routing: {
+        router: new MemoryRouter({ page: 3 }),
+        stateMapping: simple(),
+      },
+    })
+  )
+  .add('with show previous enabled', () => ({
+    template: `
+      <ais-infinite-hits :show-previous="true"></ais-infinite-hits>`,
+  }));
+
+storiesOf('ais-infinite-hits', module)
+  .addDecorator(
+    previewWrapper({
+      routing: {
+        router: new MemoryRouter({ page: 3 }),
+        stateMapping: simple(),
+      },
+    })
+  )
+  .add('with a custom show previous render', () => ({
+    template: `
+      <ais-infinite-hits :show-previous="true">
+        <div slot="loadPrevious" slot-scope="{ refinePrevious, isFirstPage }">
+          <button
+            :disabled="isFirstPage"
+            @click="refinePrevious"
+          >
+            Gimme {{ isFirstPage ? "nothing anymore" : "previous page" }}!
+          </button>
+        </div>
+      </ais-infinite-hits>`,
   }));

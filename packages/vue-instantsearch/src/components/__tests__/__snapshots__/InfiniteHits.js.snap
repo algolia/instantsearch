@@ -27,6 +27,38 @@ exports[`renders correctly 1`] = `
 
 `;
 
+exports[`renders correctly on the first page 1`] = `
+
+<div class="ais-InfiniteHits">
+  <button disabled="disabled"
+          class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+  >
+    Show previous results
+  </button>
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
+</div>
+
+`;
+
 exports[`renders correctly on the last page 1`] = `
 
 <div class="ais-InfiniteHits">
@@ -50,6 +82,36 @@ exports[`renders correctly on the last page 1`] = `
   <button disabled="disabled"
           class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
   >
+    Show more results
+  </button>
+</div>
+
+`;
+
+exports[`renders correctly when not on the first page 1`] = `
+
+<div class="ais-InfiniteHits">
+  <button class="ais-InfiniteHits-loadPrevious">
+    Show previous results
+  </button>
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
     Show more results
   </button>
 </div>

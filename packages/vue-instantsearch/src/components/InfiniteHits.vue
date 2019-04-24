@@ -3,11 +3,28 @@
     v-if="state"
     :class="suit()"
   >
+
+    <slot
+      v-if="showPrevious"
+      name="loadPrevious"
+      :refine-previous="refinePrevious"
+      :page="state.results.page"
+      :is-first-page="state.isFirstPage"
+    >
+      <button
+        :class="[suit('loadPrevious'), state.isFirstPage && suit('loadPrevious', 'disabled')]"
+        :disabled="state.isFirstPage"
+        @click="refinePrevious()"
+      >Show previous results</button>
+    </slot>
+
     <slot
       :items="items"
       :results="state.results"
       :is-last-page="state.isLastPage"
-      :refine="refine"
+      :refine-previous="refinePrevious"
+      :refine-next="refineNext"
+      :refine="refineNext"
     >
       <ol :class="suit('list')">
         <li
@@ -25,14 +42,15 @@
 
       <slot
         name="loadMore"
-        :refine="refine"
+        :refine-next="refineNext"
+        :refine="refineNext"
         :page="state.results.page"
         :is-last-page="state.isLastPage"
       >
         <button
           :class="[suit('loadMore'), state.isLastPage && suit('loadMore', 'disabled')]"
           :disabled="state.isLastPage"
-          @click="refine"
+          @click="refineNext()"
         >Show more results</button>
       </slot>
     </slot>
@@ -51,6 +69,10 @@ export default {
     createSuitMixin({ name: 'InfiniteHits' }),
   ],
   props: {
+    showPrevious: {
+      type: Boolean,
+      default: false,
+    },
     escapeHTML: {
       type: Boolean,
       default: true,
@@ -65,6 +87,7 @@ export default {
   computed: {
     widgetParams() {
       return {
+        showPrevious: this.showPrevious,
         escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
@@ -76,9 +99,10 @@ export default {
     },
   },
   methods: {
-    refine() {
-      // Fixes InstantSearch.js connectors API: every function
-      // that trigger a search must be called `refine`
+    refinePrevious() {
+      this.state.showPrevious();
+    },
+    refineNext() {
       this.state.showMore();
     },
   },
