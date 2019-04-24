@@ -16,6 +16,7 @@ export { default as isPlainObject } from './isPlainObject';
 export { default as uniq } from './uniq';
 export { default as range } from './range';
 export { default as isEqual } from './isEqual';
+export { default as escape } from './escape';
 export { warning, deprecate } from './logger';
 export {
   createDocumentationLink,
