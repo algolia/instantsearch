@@ -74,7 +74,7 @@ describe('isEqual', () => {
   });
 
   describe('with arrays', () => {
-    test('with same array values should be false', () => {
+    test('with same array values should be true', () => {
       const first = ['Alphonse', 'Fred'];
       const second = ['Alphonse', 'Fred'];
 
