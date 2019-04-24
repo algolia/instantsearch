@@ -68,7 +68,7 @@
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
     "bundlesize": "0.17.1",
     "conventional-changelog-cli": "2.0.12",
-    "copy-webpack-plugin": "5.0.2",
+    "copy-webpack-plugin": "5.0.3",
     "css-loader": "2.1.1",
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.12.1",
