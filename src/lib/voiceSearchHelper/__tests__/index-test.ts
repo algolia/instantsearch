@@ -1,7 +1,10 @@
-import VoiceSearchHelper, { VoiceSearchHelperParams } from '..';
+import voiceSearchHelper, {
+  VoiceSearchHelper,
+  VoiceSearchHelperParams,
+} from '..';
 
-const getHelper = (opts?: VoiceSearchHelperParams) =>
-  VoiceSearchHelper(
+const getHelper = (opts?: VoiceSearchHelperParams): VoiceSearchHelper =>
+  voiceSearchHelper(
     opts || {
       searchAsYouSpeak: false,
       onQueryChange: () => {},

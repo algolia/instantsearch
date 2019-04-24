@@ -27,8 +27,8 @@ const VoiceSearch = ({
   toggleListening,
   voiceListeningState,
   templates,
-}: VoiceSearchProps) => {
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+}: VoiceSearchProps): React.ReactNode => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     event.currentTarget.blur();
     toggleListening();
   };
@@ -42,9 +42,9 @@ const VoiceSearch = ({
         rootProps={{
           className: cssClasses.button,
           type: 'button',
-          title:
-            'Search by voice' +
-            (!isBrowserSupported ? ' (not supported on this browser)' : ''),
+          title: `Search by voice${
+            isBrowserSupported ? '' : ' (not supported on this browser)'
+          }`,
           onClick: handleClick,
           disabled: !isBrowserSupported,
         }}
