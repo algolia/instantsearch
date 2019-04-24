@@ -1,5 +1,5 @@
 import keys from 'lodash/keys';
-import uniq from 'lodash/uniq';
+import uniq from './uniq';
 
 function prepareTemplates(defaultTemplates = {}, templates = {}) {
   const allKeys = uniq([...keys(defaultTemplates), ...keys(templates)]);
