@@ -1,6 +1,9 @@
 import { withInsights, inferInsightsPayload } from '../insights';
+import { Widget, WidgetFactory } from '../../types';
 
-const connectHits = (renderFn: any, unmountFn: any) => (widgetParams = {}) => ({
+const connectHits = (renderFn: any, unmountFn: any): WidgetFactory<unknown> => (
+  widgetParams = {}
+): Widget => ({
   init() {},
   render({ results, instantSearchInstance }) {
     const hits = results.hits;
@@ -15,7 +18,7 @@ const createWidgetWithInsights = ({
   renderFn,
   instantSearchInstance,
   results,
-}) => {
+}): Widget => {
   const connectHitsWithInsights = withInsights(connectHits as any);
   const widget = connectHitsWithInsights(renderFn, jest.fn())({});
   (widget as any).render({ results, instantSearchInstance } as any);

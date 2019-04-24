@@ -6,7 +6,7 @@ type WidgetParam = {
 export const createDocumentationLink = ({
   name,
   connector = false,
-}: WidgetParam) => {
+}: WidgetParam): string => {
   return [
     'https://www.algolia.com/doc/api-reference/widgets/',
     name,
@@ -15,9 +15,11 @@ export const createDocumentationLink = ({
   ].join('');
 };
 
+type DocumentationMessageGenerator = (message?: string) => string;
+
 export const createDocumentationMessageGenerator = (
   ...widgets: WidgetParam[]
-) => {
+): DocumentationMessageGenerator => {
   const links = widgets
     .map(widget => createDocumentationLink(widget))
     .join(', ');

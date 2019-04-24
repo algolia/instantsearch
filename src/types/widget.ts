@@ -37,7 +37,7 @@ type UiState = {
 export interface Widget {
   init?(options: InitOptions): void;
   render?(options: RenderOptions): void;
-  dispose?(options: DisposeOptions): SearchParameters | undefined;
+  dispose?(options: DisposeOptions): SearchParameters | void;
   getConfiguration?(
     previousConfiguration?: Partial<SearchParameters>
   ): Partial<SearchParameters>;

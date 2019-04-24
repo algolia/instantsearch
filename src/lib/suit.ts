@@ -1,12 +1,16 @@
 const NAMESPACE = 'ais';
 
-export const component = (componentName: string) => ({
-  descendantName,
-  modifierName,
-}: {
+interface SuitOptions {
   descendantName?: string;
   modifierName?: string;
-} = {}) => {
+}
+
+type SuitSelector = (names?: SuitOptions) => string;
+
+export const component = (componentName: string): SuitSelector => ({
+  descendantName,
+  modifierName,
+}: SuitOptions = {}) => {
   const descendent = descendantName ? `-${descendantName}` : '';
   const modifier = modifierName ? `--${modifierName}` : '';
 

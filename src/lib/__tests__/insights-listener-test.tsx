@@ -8,7 +8,7 @@ describe('withInsightsListener', () => {
       JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
     );
 
-    const Hits = () => (
+    const Hits = (): React.ReactNode => (
       <div>
         <button
           data-insights-method="clickedObjectIDsAfterSearch"
@@ -62,7 +62,7 @@ describe('withInsightsListener', () => {
       JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
     );
 
-    const Hits = () => (
+    const Hits = (): React.ReactNode => (
       <div>
         <button data-insights-payload={payload}>Add to Cart</button>
       </div>

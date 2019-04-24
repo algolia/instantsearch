@@ -5,6 +5,8 @@ import isDomElement from './isDomElement';
  * css selector and retrieves the first matching element. Otherwise
  * test if it validates that it's a correct DOMElement.
  *
+ * @param {string|HTMLElement} selectorOrHTMLElement CSS Selector or container node.
+ * @return {HTMLElement} Container node
  * @throws Error when the type is not correct
  */
 function getContainerNode(

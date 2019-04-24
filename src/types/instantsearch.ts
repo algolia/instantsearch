@@ -66,7 +66,7 @@ export type Hit = {
   };
   _distinctSeqID?: number;
   __position: number;
-  __queryID?: number;
+  __queryID?: string;
 };
 
 export type Hits = Hit[];

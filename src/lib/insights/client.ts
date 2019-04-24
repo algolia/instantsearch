@@ -15,7 +15,7 @@ import {
   SearchResults,
 } from '../../types';
 
-const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]) => {
+const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
   return selectedObjectIDs.map(objectID => {
     const hit = find(hits, h => h.objectID === objectID);
     if (typeof hit === 'undefined') {
@@ -27,7 +27,7 @@ const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]) => {
   });
 };
 
-const getQueryID = (selectedHits: Hits) => {
+const getQueryID = (selectedHits: Hits): string => {
   const queryIDs = uniq(selectedHits.map(hit => hit.__queryID));
   if (queryIDs.length > 1) {
     throw new Error(
@@ -43,7 +43,7 @@ const getQueryID = (selectedHits: Hits) => {
   return queryID;
 };
 
-const getPositions = (selectedHits: Hits) =>
+const getPositions = (selectedHits: Hits): number[] =>
   selectedHits.map(hit => hit.__position);
 
 export const inferPayload = ({
@@ -95,10 +95,10 @@ const wrapInsightsClient = (
   aa(method, { ...inferredPayload, ...payload } as any);
 };
 
-type Connector<WidgetParams> = (
-  renderFn: Renderer<RenderOptions<WidgetParams>>,
+type Connector<TWidgetParams> = (
+  renderFn: Renderer<RenderOptions<TWidgetParams>>,
   unmountFn: Unmounter
-) => WidgetFactory<WidgetParams>;
+) => WidgetFactory<TWidgetParams>;
 
 export default function withInsights(
   connector: Connector<unknown>
