@@ -17,6 +17,7 @@ export { default as uniq } from './uniq';
 export { default as range } from './range';
 export { default as isEqual } from './isEqual';
 export { default as escape } from './escape';
+export { default as find } from './find';
 export { warning, deprecate } from './logger';
 export {
   createDocumentationLink,

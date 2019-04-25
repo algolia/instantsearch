@@ -27,6 +27,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
 `);
     });
+
+    it('throws with non-array items', () => {
+      expect(() => {
+        connectSortBy(() => {})({ items: 'items' });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`items\` option expects an array of objects.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
+`);
+    });
   });
 
   it('Renders during init and render', () => {

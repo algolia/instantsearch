@@ -1,8 +1,8 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
