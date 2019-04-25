@@ -1,5 +1,4 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import mergeWith from 'lodash/mergeWith';
 import EventEmitter from 'events';
 import RoutingManager from './RoutingManager';
 import simpleMapping from './stateMappings/simple';
@@ -10,7 +9,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
   isPlainObject,
-  uniq,
+  mergeDeep,
 } from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -441,21 +440,7 @@ export function enhanceConfiguration(configuration, widgetDefinition) {
   // Get the relevant partial configuration asked by the widget
   const partialConfiguration = widgetDefinition.getConfiguration(configuration);
 
-  const customizer = (a, b) => {
-    // always create a unified array for facets refinements
-    if (Array.isArray(a)) {
-      return uniq([...a, ...b]);
-    }
-
-    // avoid mutating objects
-    if (isPlainObject(a)) {
-      return mergeWith({}, a, b, customizer);
-    }
-
-    return undefined;
-  };
-
-  return mergeWith({}, configuration, partialConfiguration, customizer);
+  return mergeDeep(configuration, partialConfiguration);
 }
 
 export default InstantSearch;
