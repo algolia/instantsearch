@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 import createConnector from '../core/createConnector';
 import {
   getCurrentRefinementValue,
@@ -45,16 +47,26 @@ export default createConnector({
     const results = getResults(searchResults, this.context);
 
     this._allResults = this._allResults || [];
-    this._previousPage = this._previousPage || 0;
+    this._prevState = this._prevState || {};
 
     if (!results) {
       return {
         hits: [],
+        hasPrevious: false,
         hasMore: false,
+        refine: () => {},
+        refinePrevious: () => {},
+        refineNext: () => {},
       };
     }
 
-    const { hits, hitsPerPage, page, nbPages } = results;
+    const {
+      page,
+      hits,
+      hitsPerPage,
+      nbPages,
+      _state: { page: p, ...currentState } = {},
+    } = results;
 
     const hitsWithPositions = addAbsolutePositions(hits, hitsPerPage, page);
     const hitsWithPositionsAndQueryID = addQueryID(
@@ -62,22 +74,36 @@ export default createConnector({
       results.queryID
     );
 
-    if (page === 0) {
-      this._allResults = hitsWithPositionsAndQueryID;
-    } else if (page > this._previousPage) {
+    if (
+      this._firstReceivedPage === undefined ||
+      !isEqual(currentState, this._prevState)
+    ) {
+      this._allResults = [...hitsWithPositionsAndQueryID];
+      this._firstReceivedPage = page;
+      this._lastReceivedPage = page;
+    } else if (this._lastReceivedPage < page) {
       this._allResults = [...this._allResults, ...hitsWithPositionsAndQueryID];
-    } else if (page < this._previousPage) {
-      this._allResults = hitsWithPositionsAndQueryID;
+      this._lastReceivedPage = page;
+    } else if (this._firstReceivedPage > page) {
+      this._allResults = [...hitsWithPositionsAndQueryID, ...this._allResults];
+      this._firstReceivedPage = page;
     }
 
+    this._prevState = currentState;
+
+    const hasPrevious = this._firstReceivedPage > 0;
     const lastPageIndex = nbPages - 1;
     const hasMore = page < lastPageIndex;
-
-    this._previousPage = page;
+    const refinePrevious = event =>
+      this.refine(event, this._firstReceivedPage - 1);
+    const refineNext = event => this.refine(event, this._lastReceivedPage + 1);
 
     return {
       hits: this._allResults,
+      hasPrevious,
       hasMore,
+      refinePrevious,
+      refineNext,
     };
   },
 
@@ -87,10 +113,14 @@ export default createConnector({
     });
   },
 
-  refine(props, searchState) {
+  refine(props, searchState, event, index) {
+    if (index === undefined && this._lastReceivedPage !== undefined) {
+      index = this._lastReceivedPage + 1;
+    } else if (index === undefined) {
+      index = getCurrentRefinement(props, searchState, this.context);
+    }
     const id = getId();
-    const nextPage = getCurrentRefinement(props, searchState, this.context) + 1;
-    const nextValue = { [id]: nextPage };
+    const nextValue = { [id]: index + 1 }; // `index` is indexed from 0 but page number is indexed from 1
     const resetPage = false;
     return refineValue(searchState, nextValue, this.context, resetPage);
   },

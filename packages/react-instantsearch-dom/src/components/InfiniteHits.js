@@ -11,14 +11,29 @@ class InfiniteHits extends Component {
     const {
       hitComponent: HitComponent,
       hits,
+      showPrevious,
+      hasPrevious,
       hasMore,
-      refine,
+      refinePrevious,
+      refineNext,
       translate,
       className,
     } = this.props;
 
     return (
       <div className={classNames(cx(''), className)}>
+        {showPrevious && (
+          <button
+            className={cx(
+              'loadPrevious',
+              !hasPrevious && 'loadPrevious--disabled'
+            )}
+            onClick={() => refinePrevious()}
+            disabled={!hasPrevious}
+          >
+            {translate('loadPrevious')}
+          </button>
+        )}
         <ul className={cx('list')}>
           {hits.map(hit => (
             <li key={hit.objectID} className={cx('item')}>
@@ -28,7 +43,7 @@ class InfiniteHits extends Component {
         </ul>
         <button
           className={cx('loadMore', !hasMore && 'loadMore--disabled')}
-          onClick={() => refine()}
+          onClick={() => refineNext()}
           disabled={!hasMore}
         >
           {translate('loadMore')}
@@ -40,8 +55,11 @@ class InfiniteHits extends Component {
 
 InfiniteHits.propTypes = {
   hits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  showPrevious: PropTypes.bool.isRequired,
+  hasPrevious: PropTypes.bool.isRequired,
   hasMore: PropTypes.bool.isRequired,
-  refine: PropTypes.func.isRequired,
+  refinePrevious: PropTypes.func.isRequired,
+  refineNext: PropTypes.func.isRequired,
   translate: PropTypes.func.isRequired,
   className: PropTypes.string,
   hitComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
@@ -49,6 +67,7 @@ InfiniteHits.propTypes = {
 
 InfiniteHits.defaultProps = {
   className: '',
+  showPrevious: false,
   hitComponent: hit => (
     <div
       style={{
@@ -65,5 +84,6 @@ InfiniteHits.defaultProps = {
 };
 
 export default translatable({
+  loadPrevious: 'Load previous',
   loadMore: 'Load more',
 })(InfiniteHits);

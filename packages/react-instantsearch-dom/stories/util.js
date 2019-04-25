@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { linkTo } from '@storybook/addon-links';
 import {
@@ -73,6 +73,8 @@ export const WrapWithHits = ({
   apiKey,
   indexName,
   hitsElement,
+  initialSearchState,
+  onSearchStateChange,
 }) => {
   const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}.stories.js`;
   const playgroundLink = hasPlayground ? (
@@ -105,8 +107,22 @@ export const WrapWithHits = ({
     ...askedSearchParameters,
   };
 
+  const [searchState, setSearchState] = useState(initialSearchState);
+
+  const setNextSearchState = nextSearchState => {
+    setSearchState(nextSearchState);
+    onSearchStateChange(nextSearchState);
+  };
+
   return (
-    <InstantSearch appId={appId} apiKey={apiKey} indexName={indexName}>
+    <InstantSearch
+      appId={appId}
+      apiKey={apiKey}
+      indexName={indexName}
+      searchState={searchState}
+      onSearchStateChange={setNextSearchState}
+      createURL={() => ''}
+    >
       <Configure {...searchParameters} />
       <div>
         <div className="container widget-container">{children}</div>
@@ -148,6 +164,8 @@ WrapWithHits.propTypes = {
   pagination: PropTypes.bool,
   searchParameters: PropTypes.object,
   hitsElement: PropTypes.element,
+  initialSearchState: PropTypes.object,
+  onSearchStateChange: PropTypes.func,
 };
 
 // defaultProps added so that they're displayed in the JSX addon
@@ -155,4 +173,6 @@ WrapWithHits.defaultProps = {
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
+  initialSearchState: {},
+  onSearchStateChange: () => {},
 };
