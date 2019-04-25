@@ -1,9 +1,9 @@
-import find from 'lodash/find';
 import {
   checkRendering,
   escapeRefinement,
   unescapeRefinement,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
