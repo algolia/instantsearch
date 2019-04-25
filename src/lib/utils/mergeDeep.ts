@@ -7,7 +7,7 @@ import isPlainObject from './isPlainObject';
  * - Primitive values are replaced
  * - Arrays a concatenated and their values are made unique
  */
-function mergeDeep(...values: any[]): object {
+function mergeDeep(...values: object[]): object {
   return values.reduce((acc, source = {}) => {
     Object.keys(source).forEach(key => {
       const previousValue = acc[key];
