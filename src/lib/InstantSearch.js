@@ -1,6 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import mergeWith from 'lodash/mergeWith';
-import union from 'lodash/union';
 import EventEmitter from 'events';
 import RoutingManager from './RoutingManager';
 import simpleMapping from './stateMappings/simple';
@@ -11,6 +10,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
   isPlainObject,
+  uniq,
 } from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -444,7 +444,7 @@ export function enhanceConfiguration(configuration, widgetDefinition) {
   const customizer = (a, b) => {
     // always create a unified array for facets refinements
     if (Array.isArray(a)) {
-      return union(a, b);
+      return uniq([...a, ...b]);
     }
 
     // avoid mutating objects
