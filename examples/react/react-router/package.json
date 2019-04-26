@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "history": "4.9.0",
-    "react-scripts": "2.1.8",
+    "react-scripts": "3.0.0",
     "react-test-renderer": "16.8.6"
   },
   "dependencies": {
