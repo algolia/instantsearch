@@ -18,6 +18,7 @@ export { default as range } from './range';
 export { default as isEqual } from './isEqual';
 export { default as escape } from './escape';
 export { default as find } from './find';
+export { default as mergeDeep } from './mergeDeep';
 export { warning, deprecate } from './logger';
 export {
   createDocumentationLink,
