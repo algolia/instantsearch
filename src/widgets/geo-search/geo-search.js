@@ -1,10 +1,10 @@
 import cx from 'classnames';
-import noop from 'lodash/noop';
 import { unmountComponentAtNode } from 'preact-compat';
 import {
   getContainerNode,
   renderTemplate,
   createDocumentationMessageGenerator,
+  noop,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';

@@ -1,11 +1,11 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-import find from 'lodash/find';
 import Selector from '../../components/Selector/Selector';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 

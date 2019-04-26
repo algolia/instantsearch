@@ -2,6 +2,7 @@ import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -96,7 +97,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       },
 
       saveResults({ results, label }) {
-        const derivedIndex = this.indices.find(i => i.label === label);
+        const derivedIndex = find(this.indices, i => i.label === label);
 
         if (escapeHTML && results && results.hits && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);

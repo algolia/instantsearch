@@ -1,17 +1,23 @@
-import mapValues from 'lodash/mapValues';
-import curry from 'lodash/curry';
 import hogan from 'hogan.js';
 
 // We add all our template helper methods to the template as lambdas. Note
 // that lambdas in Mustache are supposed to accept a second argument of
 // `render` to get the rendered value, not the literal `{{value}}`. But
 // this is currently broken (see https://github.com/twitter/hogan.js/issues/222).
-function transformHelpersToHogan(helpers, compileOptions, data) {
-  return mapValues(helpers, method =>
-    curry(function(text) {
-      const render = value => hogan.compile(value, compileOptions).render(this);
-      return method.call(data, text, render);
-    })
+function transformHelpersToHogan(helpers = {}, compileOptions, data) {
+  return Object.keys(helpers).reduce(
+    (acc, helperKey) => ({
+      ...acc,
+      [helperKey]() {
+        return text => {
+          const render = value =>
+            hogan.compile(value, compileOptions).render(this);
+
+          return helpers[helperKey].call(data, text, render);
+        };
+      },
+    }),
+    {}
   );
 }
 

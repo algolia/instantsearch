@@ -1,9 +1,8 @@
-import isEqual from 'lodash/isEqual';
-
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  isEqual,
   addAbsolutePosition,
   addQueryID,
 } from '../../lib/utils';

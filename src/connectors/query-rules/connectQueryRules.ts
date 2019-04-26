@@ -1,5 +1,3 @@
-import noop from 'lodash/noop';
-import isEqual from 'lodash/isEqual';
 import {
   Renderer,
   RenderOptions,
@@ -12,6 +10,8 @@ import {
   createDocumentationMessageGenerator,
   warning,
   getRefinements,
+  isEqual,
+  noop,
 } from '../../lib/utils';
 import {
   Refinement as InternalRefinement,

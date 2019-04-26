@@ -1,8 +1,5 @@
-import reduce from 'lodash/reduce';
-import escape from 'lodash/escape';
-import isArray from 'lodash/isArray';
-import isPlainObject from 'lodash/isPlainObject';
 import { Hit, FacetHit } from '../types';
+import { isPlainObject, escape } from '../lib/utils';
 
 export const TAG_PLACEHOLDER = {
   highlightPreTag: '__ais-highlight__',
@@ -28,17 +25,16 @@ function replaceTagsAndEscape(value: string): string {
 
 function recursiveEscape(input: any): any {
   if (isPlainObject(input) && typeof input.value !== 'string') {
-    return reduce(
-      input,
-      (acc, item, key) => ({
+    return Object.keys(input).reduce(
+      (acc, key) => ({
         ...acc,
-        [key]: recursiveEscape(item),
+        [key]: recursiveEscape(input[key]),
       }),
       {}
     );
   }
 
-  if (isArray(input)) {
+  if (Array.isArray(input)) {
     return input.map(recursiveEscape);
   }
 

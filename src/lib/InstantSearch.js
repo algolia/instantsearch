@@ -1,14 +1,16 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import mergeWith from 'lodash/mergeWith';
-import union from 'lodash/union';
-import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
 import RoutingManager from './RoutingManager';
 import simpleMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
-import { createDocumentationMessageGenerator } from './utils';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+  isPlainObject,
+  mergeDeep,
+} from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -293,7 +295,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = function() {};
+      this._onHistoryChange = noop;
     }
 
     this.searchParameters = this.widgets.reduce(
@@ -312,7 +314,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            search: () => new Promise(() => {}),
+            search: () => new Promise(noop),
           },
           helper.state.index,
           helper.state
@@ -438,21 +440,7 @@ export function enhanceConfiguration(configuration, widgetDefinition) {
   // Get the relevant partial configuration asked by the widget
   const partialConfiguration = widgetDefinition.getConfiguration(configuration);
 
-  const customizer = (a, b) => {
-    // always create a unified array for facets refinements
-    if (Array.isArray(a)) {
-      return union(a, b);
-    }
-
-    // avoid mutating objects
-    if (isPlainObject(a)) {
-      return mergeWith({}, a, b, customizer);
-    }
-
-    return undefined;
-  };
-
-  return mergeWith({}, configuration, partialConfiguration, customizer);
+  return mergeDeep(configuration, partialConfiguration);
 }
 
 export default InstantSearch;
