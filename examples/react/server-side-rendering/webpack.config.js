@@ -6,7 +6,7 @@ const nodeExternals = require('webpack-node-externals');
 module.exports = [
   {
     mode: 'development',
-    entry: ['babel-polyfill', './src/server.js'],
+    entry: ['@babel/polyfill', './src/server.js'],
     output: {
       path: path.join(__dirname, 'dist'),
       filename: 'server.js',
@@ -39,7 +39,7 @@ module.exports = [
   },
   {
     mode: 'development',
-    entry: ['babel-polyfill', './src/app/browser.js'],
+    entry: ['@babel/polyfill', './src/app/browser.js'],
     output: {
       path: path.join(__dirname, 'dist/assets'),
       publicPath: '/',
