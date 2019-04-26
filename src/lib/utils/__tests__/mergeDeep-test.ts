@@ -99,4 +99,18 @@ describe('mergeDeep', () => {
       });
     });
   });
+
+  describe('with different types', () => {
+    test('overrides object with previous boolean value', () => {
+      const actual = mergeDeep({ routing: {} }, { routing: true });
+
+      expect(actual).toEqual({ routing: true });
+    });
+
+    test('overrides array with previous string value', () => {
+      const actual = mergeDeep({ facets: ['brand'] }, { facets: 'brand' });
+
+      expect(actual).toEqual({ facets: 'brand' });
+    });
+  });
 });
