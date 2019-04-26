@@ -25,6 +25,7 @@
       :refine-previous="refinePrevious"
       :refine-next="refineNext"
       :refine="refineNext"
+      :insights="state.insights"
     >
       <ol :class="suit('list')">
         <li
@@ -36,6 +37,7 @@
             name="item"
             :item="item"
             :index="index"
+            :insights="state.insights"
           >objectID: {{ item.objectID }}, index: {{ index }}</slot>
         </li>
       </ol>
@@ -59,13 +61,13 @@
 
 <script>
 import { createWidgetMixin } from '../mixins/widget';
-import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
+import { connectInfiniteHitsWithInsights } from 'instantsearch.js/es/connectors';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
   name: 'AisInfiniteHits',
   mixins: [
-    createWidgetMixin({ connector: connectInfiniteHits }),
+    createWidgetMixin({ connector: connectInfiniteHitsWithInsights }),
     createSuitMixin({ name: 'InfiniteHits' }),
   ],
   props: {

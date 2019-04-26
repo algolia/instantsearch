@@ -1,7 +1,8 @@
 import { storiesOf } from '@storybook/vue';
+import { action } from '@storybook/addon-actions';
+import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { previewWrapper } from './utils';
 import { MemoryRouter } from './MemoryRouter';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
 storiesOf('ais-infinite-hits', module)
   .addDecorator(previewWrapper())
@@ -123,4 +124,49 @@ storiesOf('ais-infinite-hits', module)
           </button>
         </div>
       </ais-infinite-hits>`,
+  }));
+
+storiesOf('ais-infinite-hits', module)
+  .addDecorator(
+    previewWrapper({
+      insightsClient: (method, payload) =>
+        action(`[InsightsClient] sent ${method} with payload`)(payload),
+    })
+  )
+  .add('with insights on default slot', () => ({
+    template: `
+      <div>
+        <ais-configure :clickAnalytics="true" />
+        <ais-infinite-hits>
+          <div slot-scope="{ items, refine, isLastPage, insights }">
+            <div
+              v-for="item in items"
+              :key="item.objectID"
+            >
+              custom objectID: {{item.objectID}}
+              <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+            </div>
+            <button
+              :disabled="isLastPage"
+              @click="refine"
+            >
+              Load more
+            </button>
+          </div>
+        </ais-infinite-hits>
+      </div>
+    `,
+  }))
+  .add('with insights on item slot', () => ({
+    template: `
+      <div>
+        <ais-configure :clickAnalytics="true" />
+        <ais-infinite-hits>
+          <div slot="item" slot-scope="{ item, insights }">
+            custom objectID: {{item.objectID}}
+            <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+          </div>
+        </ais-infinite-hits>
+      </div>
+    `,
   }));
