@@ -94,7 +94,7 @@ export type Refinement = FacetRefinement | NumericRefinement;
 
 export type Router = {
   onUpdate(callback: (route: string) => void): void;
-  read(): object;
+  read(): UiState;
   write(route: string): void;
   createURL(state: Partial<SearchParameters>): string;
   dispose(): Widget['dispose'];

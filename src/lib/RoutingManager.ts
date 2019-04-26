@@ -6,18 +6,19 @@ import {
   SearchParameters,
   Router,
   StateMapping,
+  Widget,
 } from '../types';
 
-type RoutingProps = {
+type RoutingManagerProps = {
   instantSearchInstance: InstantSearch;
   router: Router;
   stateMapping: StateMapping;
 };
 
-class RoutingManager {
-  private readonly instantSearchInstance: RoutingProps['instantSearchInstance'];
-  private readonly router: RoutingProps['router'];
-  private readonly stateMapping: RoutingProps['stateMapping'];
+class RoutingManager implements Widget {
+  private readonly instantSearchInstance: RoutingManagerProps['instantSearchInstance'];
+  private readonly router: RoutingManagerProps['router'];
+  private readonly stateMapping: RoutingManagerProps['stateMapping'];
 
   private firstRender: boolean;
   private currentUIState: UiState;
@@ -25,16 +26,35 @@ class RoutingManager {
   private renderURLFromState?: (searchParameters: SearchParameters) => void;
 
   public constructor({
-    instantSearchInstance,
     router,
     stateMapping,
-  }: RoutingProps) {
+    instantSearchInstance,
+  }: RoutingManagerProps) {
     this.router = router;
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
 
     this.firstRender = true;
     this.currentUIState = this.stateMapping.routeToState(this.router.read());
+  }
+
+  private getAllSearchParameters({
+    currentSearchParameters,
+    uiState,
+  }): Partial<SearchParameters> {
+    const widgets = this.instantSearchInstance.widgets!;
+
+    const searchParameters = widgets.reduce((parameters, widget) => {
+      if (!widget.getWidgetSearchParameters) {
+        return parameters;
+      }
+
+      return widget.getWidgetSearchParameters(parameters, {
+        uiState,
+      });
+    }, currentSearchParameters);
+
+    return searchParameters;
   }
 
   private getAllUIStates({
@@ -62,7 +82,7 @@ class RoutingManager {
   private setupRouting(state: SearchParameters): void {
     const helper = this.instantSearchInstance.helper!;
 
-    this.router.onUpdate((route: string) => {
+    this.router.onUpdate(route => {
       const nextUiState = this.stateMapping.routeToState(route);
       const widgetsUIState = this.getAllUIStates({
         searchParameters: helper.state,
@@ -116,7 +136,7 @@ class RoutingManager {
     }
   }
 
-  protected init({ state }: { state: SearchParameters }): void {
+  public init({ state }: { state: SearchParameters }): void {
     // Store the initial state from the storage to compare it with the state on next renders
     // in case the `searchFunction` has modified it.
     this.initState = this.getAllUIStates({
@@ -124,7 +144,7 @@ class RoutingManager {
     });
   }
 
-  protected getConfiguration(
+  public getConfiguration(
     currentConfiguration: Partial<SearchParameters>
   ): Partial<SearchParameters> {
     // We have to create a `SearchParameters` because `getAllSearchParameters`
@@ -141,14 +161,14 @@ class RoutingManager {
     };
   }
 
-  protected render({ state }: { state: SearchParameters }): void {
+  public render({ state }: { state: SearchParameters }): void {
     if (this.firstRender) {
       this.firstRender = false;
       this.setupRouting(state);
     }
   }
 
-  protected dispose(): void {
+  public dispose(): void {
     if (this.renderURLFromState) {
       this.instantSearchInstance.helper!.removeListener(
         'change',
@@ -157,25 +177,6 @@ class RoutingManager {
     }
 
     this.router.dispose();
-  }
-
-  protected getAllSearchParameters({
-    currentSearchParameters,
-    uiState,
-  }): Partial<SearchParameters> {
-    const widgets = this.instantSearchInstance.widgets!;
-
-    const searchParameters = widgets.reduce((parameters, widget) => {
-      if (!widget.getWidgetSearchParameters) {
-        return parameters;
-      }
-
-      return widget.getWidgetSearchParameters(parameters, {
-        uiState,
-      });
-    }, currentSearchParameters);
-
-    return searchParameters;
   }
 
   public createURL(state: SearchParameters): string {
@@ -187,10 +188,12 @@ class RoutingManager {
     return this.router.createURL(route);
   }
 
-  public onHistoryChange(fn: (state: Partial<SearchParameters>) => void): void {
+  public onHistoryChange(
+    callback: (state: Partial<SearchParameters>) => void
+  ): void {
     const helper = this.instantSearchInstance.helper!;
 
-    this.router.onUpdate((route: string) => {
+    this.router.onUpdate(route => {
       const nextUiState = this.stateMapping.routeToState(route);
 
       const widgetsUIState = this.getAllUIStates({
@@ -208,7 +211,7 @@ class RoutingManager {
         uiState: this.currentUIState,
       });
 
-      fn({ ...searchParameters });
+      callback({ ...searchParameters });
     });
   }
 }
