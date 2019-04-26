@@ -14,7 +14,10 @@ jest.mock('preact-compat', () => {
 
 describe('queryRuleCustomData', () => {
   const defaultInitOptions = {
-    instantSearchInstance: {},
+    instantSearchInstance: {
+      helper: null,
+      widgets: [],
+    },
     templatesConfig: {},
     createURL: () => '#',
   };
@@ -93,11 +96,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         });
 
         widget.init!({
+          ...defaultInitOptions,
           helper,
           state: helper.state,
-          instantSearchInstance: {},
-          templatesConfig: {},
-          createURL: () => '#',
         });
 
         const { cssClasses } = render.mock.calls[0][0].props;
