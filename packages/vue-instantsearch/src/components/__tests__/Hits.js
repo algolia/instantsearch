@@ -47,3 +47,56 @@ it('renders correctly', () => {
 
   expect(wrapper.html()).toMatchSnapshot();
 });
+
+it('exposes insights prop to the default slot', () => {
+  const insights = jest.fn();
+  __setState({
+    ...defaultState,
+    insights,
+  });
+
+  const wrapper = mount(Hits, {
+    scopedSlots: {
+      default: `
+        <ul slot-scope="{ items, insights }">
+          <li v-for="(item, itemIndex) in items" >
+          
+            <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
+              Add to cart
+            </button>
+          </li>
+        </ul>
+      `,
+    },
+  });
+  wrapper.find('#add-to-cart-two').trigger('click');
+  expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
+    eventName: 'Add to cart',
+    objectIDs: ['two'],
+  });
+});
+
+it('exposes insights prop to the item slot', () => {
+  const insights = jest.fn();
+  __setState({
+    ...defaultState,
+    insights,
+  });
+
+  const wrapper = mount(Hits, {
+    scopedSlots: {
+      item: `
+        <div slot-scope="{ item, insights }">
+          <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
+            Add to cart
+          </button>
+        </div>
+      `,
+    },
+  });
+  wrapper.find('#add-to-cart-two').trigger('click');
+  expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
+    eventName: 'Add to cart',
+    objectIDs: ['two'],
+  });
+});

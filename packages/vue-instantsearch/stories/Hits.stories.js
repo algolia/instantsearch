@@ -1,5 +1,6 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
+import { action } from '@storybook/addon-actions';
 
 storiesOf('ais-hits', module)
   .addDecorator(previewWrapper())
@@ -56,5 +57,44 @@ storiesOf('ais-hits', module)
         <ais-hits />
         <template slot="footer">Footer</template>
       </ais-panel>
+    `,
+  }));
+
+storiesOf('ais-hits', module)
+  .addDecorator(
+    previewWrapper({
+      insightsClient: (method, payload) =>
+        action(`[InsightsClient] sent ${method} with payload`)(payload),
+    })
+  )
+  .add('with insights default slot', () => ({
+    template: `
+      <div>
+        <ais-configure :clickAnalytics="true" />
+        <ais-hits>
+          <div slot-scope="{ items, insights }">
+            <div
+              v-for="item in items"
+              :key="item.objectID"
+            >
+              custom objectID: {{item.objectID}}
+              <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+            </div>
+          </div>
+        </ais-hits>
+      </div>
+    `,
+  }))
+  .add('with insights with item slot', () => ({
+    template: `
+      <div>
+        <ais-configure :clickAnalytics="true" />
+        <ais-hits>
+          <div slot="item" slot-scope="{ item, insights }">
+            custom objectID: {{item.objectID}}
+            <button @click="insights('clickedObjectIDsAfterSearch', { eventName: 'Add to cart', objectIDs: [item.objectID] })">Add to cart</button>
+          </div>
+        </ais-hits>
+      </div>
     `,
   }));

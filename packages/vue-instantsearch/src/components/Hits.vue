@@ -3,7 +3,10 @@
     v-if="state"
     :class="suit()"
   >
-    <slot :items="items">
+    <slot
+      :items="items"
+      :insights="state.insights"
+    >
       <ol :class="suit('list')">
         <li
           v-for="(item, itemIndex) in items"
@@ -14,6 +17,7 @@
             name="item"
             :item="item"
             :index="itemIndex"
+            :insights="state.insights"
           >objectID: {{ item.objectID }}, index: {{ itemIndex }}</slot>
         </li>
       </ol>
@@ -22,14 +26,14 @@
 </template>
 
 <script>
-import { connectHits } from 'instantsearch.js/es/connectors';
+import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
 import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
   name: 'AisHits',
   mixins: [
-    createWidgetMixin({ connector: connectHits }),
+    createWidgetMixin({ connector: connectHitsWithInsights }),
     createSuitMixin({ name: 'Hits' }),
   ],
   props: {
