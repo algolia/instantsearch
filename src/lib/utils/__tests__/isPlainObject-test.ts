@@ -20,7 +20,7 @@ describe('isPlainObject', () => {
   });
 
   test('with constructor should be false', () => {
-    function Foo() {}
+    function Foo(): void {}
 
     const actual = isPlainObject(new Foo());
 

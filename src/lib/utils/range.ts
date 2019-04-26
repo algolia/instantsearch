@@ -15,7 +15,7 @@ function range({ start = 0, end, step = 1 }: RangeOptions): number[] {
   //   => Array length = (5000 - 1) / 500 = 9.998
   const arrayLength = Math.round((end - start) / limitStep);
 
-  return Array.apply(null, Array(arrayLength)).map(
+  return [...Array(arrayLength)].map(
     (_, current) => (start + current) * limitStep
   );
 }

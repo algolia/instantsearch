@@ -1,3 +1,3 @@
-function noop(..._0: any[]): void {}
+function noop(..._args: any[]): void {}
 
 export default noop;

@@ -75,15 +75,15 @@ describe('isEqual', () => {
 
   describe('with functions', () => {
     test('with same functions should be true', () => {
-      const first = function a() {};
+      const first = function a(): void {};
       const second = first;
 
       expect(isEqual(first, second)).toBe(true);
     });
 
     test('with different functions should be false', () => {
-      const first = function a() {};
-      const second = function a() {};
+      const first = function a(): void {};
+      const second = function a(): void {};
 
       expect(isEqual(first, second)).toBe(false);
     });

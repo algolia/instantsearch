@@ -39,6 +39,7 @@ describe('find', () => {
     });
 
     afterAll(() => {
+      // eslint-disable-next-line no-extend-native
       Array.prototype.find = originalArrayFind;
     });
 
