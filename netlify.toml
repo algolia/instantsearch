@@ -3,6 +3,6 @@
   publish = "website/dist"
 
 [build.environment]
-  YARN_VERSION = "1.13.0"
+  YARN_VERSION = "1.15.2"
   YARN_FLAGS = "--production=false"
   NODE_ENV = "production"
