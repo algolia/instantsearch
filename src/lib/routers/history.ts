@@ -34,9 +34,9 @@ const defaultCreateURL: BrowserHistoryProps['createURL'] = ({
   // IE <= 11 has no proper `location.origin` so we cannot rely on it.
   if (!routeState || Object.keys(routeState).length === 0) {
     return `${protocol}//${hostname}${portWithPrefix}${pathname}${hash}`;
-  } else {
-    return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
   }
+
+  return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
 };
 
 const defaultParseURL: BrowserHistoryProps['parseURL'] = ({
