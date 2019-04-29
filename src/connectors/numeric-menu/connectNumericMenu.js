@@ -1,7 +1,7 @@
-import _isFinite from 'lodash/isFinite';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  isFiniteNumber,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -224,7 +224,7 @@ export default function connectNumericMenu(renderFn, unmountFn) {
 
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
-        if (_isFinite(lowerBound)) {
+        if (isFiniteNumber(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '>=',
@@ -232,7 +232,7 @@ export default function connectNumericMenu(renderFn, unmountFn) {
           );
         }
 
-        if (_isFinite(upperBound)) {
+        if (isFiniteNumber(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '<=',

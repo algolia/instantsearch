@@ -13,7 +13,7 @@ export const withHits = (
     instantsearch: any;
     search: any;
   }) => void,
-  searchOptions: any
+  searchOptions?: any
 ) => () => {
   const {
     appId = 'latency',

@@ -59,3 +59,7 @@ export interface Widget {
 export type WidgetFactory<TWidgetParams> = (
   widgetParams: TWidgetParams
 ) => Widget;
+
+export type Template<TTemplateItem> =
+  | string
+  | ((item: TTemplateItem) => string);

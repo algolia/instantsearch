@@ -1,5 +1,7 @@
-let deprecate = () => {};
-let warn = () => {};
+import noop from './noop';
+
+let deprecate = noop;
+let warn = noop;
 
 /**
  * Logs a warning if the condition is not met.
@@ -7,7 +9,7 @@ let warn = () => {};
  *
  * @returns {undefined}
  */
-let warning = () => {};
+let warning = noop;
 
 if (__DEV__) {
   warn = message => {
