@@ -19,7 +19,7 @@ var defaults = require('lodash/defaults');
 
 var reduce = require('lodash/reduce');
 var filter = require('lodash/filter');
-var omit = require('lodash/omit');
+var omit = require('../functions/omit');
 
 var lib = {
   /**

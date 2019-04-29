@@ -7,7 +7,6 @@ var forEach = require('lodash/forEach');
 var filter = require('lodash/filter');
 var map = require('lodash/map');
 var reduce = require('lodash/reduce');
-var omit = require('lodash/omit');
 var isNaN = require('lodash/isNaN');
 var isEmpty = require('lodash/isEmpty');
 var isEqual = require('lodash/isEqual');
@@ -20,6 +19,7 @@ var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
 
 var valToNumber = require('../functions/valToNumber');
+var omit = require('../functions/omit');
 
 var filterState = require('./filterState');
 
