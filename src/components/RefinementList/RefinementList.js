@@ -103,7 +103,7 @@ class RefinementList extends Component {
       originalEvent.target.matches('input[type="radio"]:checked') &&
       isRefined
     ) {
-      // Prevent refinement for being reset if the user click on an already checked radio button
+      // Prevent refinement for being reset if the user clicks on an already checked radio button
       return;
     }
 
@@ -136,7 +136,7 @@ class RefinementList extends Component {
       originalEvent.target.querySelector('input[type="radio"]:checked') &&
       isRefined
     ) {
-      // Prevent refinement for being reset if the user click on an already checked radio button
+      // Prevent refinement for being reset if the user clicks on an already checked radio button
       return;
     }
 
