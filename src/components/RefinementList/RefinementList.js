@@ -100,6 +100,14 @@ class RefinementList extends Component {
       return;
     }
 
+    if (
+      originalEvent.target.matches('input[type="radio"]:checked') &&
+      isRefined
+    ) {
+      // Prevent refinement for being reset if the user click on an already checked radio button
+      return;
+    }
+
     if (originalEvent.target.tagName === 'INPUT') {
       this.refine(facetValueToRefine, isRefined);
       return;
@@ -124,6 +132,14 @@ class RefinementList extends Component {
     }
 
     originalEvent.stopPropagation();
+
+    if (
+      originalEvent.target.querySelector('input[type="radio"]:checked') &&
+      isRefined
+    ) {
+      // Prevent refinement for being reset if the user click on an already checked radio button
+      return;
+    }
 
     this.refine(facetValueToRefine, isRefined);
   }
