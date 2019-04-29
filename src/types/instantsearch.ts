@@ -99,3 +99,7 @@ export type InstantSearch = {
   templatesConfig?: object;
   insightsClient?: AlgoliaInsightsClient;
 };
+
+export type RouteState = {
+  [stateKey: string]: any;
+};

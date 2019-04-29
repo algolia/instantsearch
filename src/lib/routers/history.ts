@@ -1,8 +1,8 @@
 import qs from 'qs';
-import { UiState } from '../../types';
+import { RouteState } from '../../types';
 
 type BrowserHistoryProps = {
-  windowTitle?: (state: UiState) => string;
+  windowTitle?: (routeState: RouteState) => string;
   writeDelay: number;
   createURL({
     qsModule,
@@ -10,7 +10,7 @@ type BrowserHistoryProps = {
     location,
   }: {
     qsModule: typeof qs;
-    routeState: UiState;
+    routeState: RouteState;
     location: Location;
   }): string;
   parseURL({
@@ -19,7 +19,7 @@ type BrowserHistoryProps = {
   }: {
     qsModule: typeof qs;
     location: Location;
-  }): UiState;
+  }): RouteState;
 };
 
 const defaultCreateURL: BrowserHistoryProps['createURL'] = ({
@@ -42,7 +42,7 @@ const defaultCreateURL: BrowserHistoryProps['createURL'] = ({
 const defaultParseURL: BrowserHistoryProps['parseURL'] = ({
   qsModule,
   location,
-}): UiState => {
+}): RouteState => {
   // `qs` by default converts arrays with more than 20 items to an object.
   // We want to avoid this because the data structure manipulated can therefore vary.
   // Setting the limit to `100` seems a good number because the engine's default is 100
@@ -115,14 +115,14 @@ class BrowserHistory {
   /**
    * Reads the URL and returns a syncable UI search state.
    */
-  private read(): UiState {
+  private read(): RouteState {
     return this.parseURL({ qsModule: qs, location: window.location });
   }
 
   /**
    * Pushes a search state into the URL.
    */
-  private write(routeState: UiState): void {
+  private write(routeState: RouteState): void {
     const url = this.createURL(routeState);
     const title = this.windowTitle && this.windowTitle(routeState);
 
@@ -142,7 +142,7 @@ class BrowserHistory {
    * Sets a callback on the `onpopstate` event of the history API of the current page.
    * It enables the URL sync to keep track of the changes.
    */
-  public onUpdate(callback: (routeState: UiState) => void): void {
+  public onUpdate(callback: (routeState: RouteState) => void): void {
     this._onPopState = event => {
       if (this.writeTimer) {
         window.clearTimeout(this.writeTimer);
@@ -171,7 +171,7 @@ class BrowserHistory {
    * This allows to handle cases like using a <base href>.
    * See: https://github.com/algolia/instantsearch.js/issues/790
    */
-  public createURL(routeState: UiState): string {
+  public createURL(routeState: RouteState): string {
     return this._createURL({
       qsModule: qs,
       routeState,
