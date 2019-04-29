@@ -1,8 +1,6 @@
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: throw on unknown facet', function(t) {
+test('hierarchical facets: throw on unknown facet', function() {
   var bind = require('lodash/bind');
   var algoliasearch = require('algoliasearch');
 
@@ -20,10 +18,5 @@ test('hierarchical facets: throw on unknown facet', function(t) {
     }]
   });
 
-  t.throws(
-    bind(helper.toggleRefine, helper, 'unknownFacet', 'beers'),
-    'Refine on an unknown hierarchical facet throws'
-  );
-
-  t.end();
+  expect(bind(helper.toggleRefine, helper, 'unknownFacet', 'beers')).toThrow();
 });

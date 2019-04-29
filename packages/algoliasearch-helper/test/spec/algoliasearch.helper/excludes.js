@@ -1,11 +1,10 @@
 'use strict';
 
-var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
 var fakeClient = {};
 
-test('addExclude should add an exclusion', function(t) {
+test('addExclude should add an exclusion', function() {
   var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facet']
   });
@@ -15,15 +14,13 @@ test('addExclude should add an exclusion', function(t) {
   var facetName = 'facet';
   var facetValueToExclude = 'brand';
 
-  t.notOk(helper.state.facetsExcludes[facetName], 'initialy empty');
+  expect(helper.state.facetsExcludes[facetName]).toBeFalsy();
   helper.addExclude(facetName, facetValueToExclude);
-  t.ok(helper.state.facetsExcludes[facetName], 'not empty');
-  t.ok(helper.state.facetsExcludes[facetName][0] === facetValueToExclude, 'with the correct value');
-
-  t.end();
+  expect(helper.state.facetsExcludes[facetName]).toBeTruthy();
+  expect(helper.state.facetsExcludes[facetName][0] === facetValueToExclude).toBeTruthy();
 });
 
-test('removeExclude should remove an exclusion', function(t) {
+test('removeExclude should remove an exclusion', function(done) {
   var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facet']
   });
@@ -34,20 +31,20 @@ test('removeExclude should remove an exclusion', function(t) {
   var facetValueToExclude = 'brand';
 
   helper.addExclude(facetName, facetValueToExclude);
-  t.ok(helper.state.facetsExcludes[facetName].length === 1, 'not empty at first');
+  expect(helper.state.facetsExcludes[facetName].length === 1).toBeTruthy();
   helper.removeExclude(facetName, facetValueToExclude);
-  t.ok(!helper.state.facetsExcludes[facetName], 'then empty');
+  expect(!helper.state.facetsExcludes[facetName]).toBeTruthy();
 
   try {
     helper.removeExclude(facetName, facetValueToExclude);
   } catch (e) {
-    t.fail('Removing unset exclusions should be ok...');
+    done.fail('Removing unset exclusions should be ok...');
   }
 
-  t.end();
+  done();
 });
 
-test('isExcluded should allow to omit the value', function(t) {
+test('isExcluded should allow to omit the value', function() {
   var facetName = 'foo';
   var facetValueToExclude = 'brand';
   var facetValueNotExcluded = 'bar';
@@ -56,20 +53,16 @@ test('isExcluded should allow to omit the value', function(t) {
     facets: [facetName]
   });
 
-  t.notOk(helper.isExcluded(facetName, facetValueToExclude), 'before, the value to exclude is not excluded');
-  t.notOk(helper.isExcluded(facetName, facetValueNotExcluded),
-          'before, the value to exclude is not excluded');
-  t.notOk(helper.isExcluded(facetName), 'before, no facet for the attribute');
+  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeFalsy();
+  expect(helper.isExcluded(facetName, facetValueNotExcluded)).toBeFalsy();
+  expect(helper.isExcluded(facetName)).toBeFalsy();
   helper.addExclude(facetName, facetValueToExclude);
-  t.ok(helper.isExcluded(facetName, facetValueToExclude), 'after, the value to exclude is excluded');
-  t.notOk(helper.isExcluded(facetName, facetValueNotExcluded),
-          'after, the value not to excluded is not excluded');
-  t.ok(helper.isExcluded(facetName), 'after, the attribute contains exclusions');
-
-  t.end();
+  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeTruthy();
+  expect(helper.isExcluded(facetName, facetValueNotExcluded)).toBeFalsy();
+  expect(helper.isExcluded(facetName)).toBeTruthy();
 });
 
-test('isExcluded should report exclusion correctly', function(t) {
+test('isExcluded should report exclusion correctly', function() {
   var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facet']
   });
@@ -79,11 +72,9 @@ test('isExcluded should report exclusion correctly', function(t) {
   var facetName = 'facet';
   var facetValueToExclude = 'brand';
 
-  t.notOk(helper.isExcluded(facetName, facetValueToExclude), 'value not excluded at first');
+  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeFalsy();
   helper.addExclude(facetName, facetValueToExclude);
-  t.ok(helper.isExcluded(facetName, facetValueToExclude), 'value is excluded');
+  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeTruthy();
   helper.removeExclude(facetName, facetValueToExclude);
-  t.notOk(helper.isExcluded(facetName, facetValueToExclude), 'value is not excluded anymore');
-
-  t.end();
+  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeFalsy();
 });

@@ -5,23 +5,20 @@ var setup = utils.setup;
 
 var algoliasearchHelper = require('../../');
 
-var test = require('tape');
-var bind = require('lodash/bind');
 var random = require('lodash/random');
 
 if (!utils.shouldRun) {
   test = test.skip;
 }
-var indexName = '_travis-algoliasearch-helper-js-' +
-  (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
-  'helper_searchonce' + random(0, 5000);
 
 test(
   '[INT][DERIVE] Query the same index twice with different query',
-  function(t) {
-    t.plan(5);
+  function() {
+    var indexName = '_travis-algoliasearch-helper-js-' +
+      (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
+      'helper_distinct.facet' + random(0, 5000);
 
-    setup(indexName, function(client, index) {
+    return setup(indexName, function(client, index) {
       return index.addObjects([
         {objectID: '0', content: 'tata'},
         {objectID: '1', content: 'toto'}
@@ -32,7 +29,7 @@ test(
         return client;
       });
     }).then(function(client) {
-      var helper = algoliasearchHelper(
+      var mainHelper = algoliasearchHelper(
         client,
         indexName,
         {
@@ -44,21 +41,42 @@ test(
           }]
         }
       );
-      var helper2 = helper.derive(function(state) {
+
+      var derivedHelper = mainHelper.derive(function(state) {
         return state.setQuery('toto');
       });
 
-      helper.on('result', function(results, state) {
-        t.equal(state.query, '', 'No query should be used for this query');
-        t.equal(results.hits.length, 2, 'Should retrieve all the records');
+      var mainResponse = new Promise(function(resolve) {
+        mainHelper.on('result', function(results, state) {
+          resolve({
+            results: results,
+            state: state
+          });
+        });
       });
 
-      helper2.on('result', function(results, state) {
-        t.equal(state.query, 'toto', 'The query `toto` should be used');
-        t.equal(results.hits.length, 1, 'Should retrieve one record');
-        t.equal(results.hits[0].objectID, '1', 'And it should be the record `1`');
+      var derivedResponse = new Promise(function(resolve) {
+        derivedHelper.on('result', function(results, state) {
+          resolve({
+            results: results,
+            state: state
+          });
+        });
       });
 
-      helper.search();
-    }).then(null, bind(t.error, t));
+      mainHelper.search();
+
+      return Promise.all([mainResponse, derivedResponse]);
+    }).then(function(responses) {
+      var mainResponse = responses[0];
+
+      expect(mainResponse.state.query).toBe('');
+      expect(mainResponse.results.hits.length).toBe(2);
+
+      var derivedResponse = responses[1];
+
+      expect(derivedResponse.state.query).toBe('toto');
+      expect(derivedResponse.results.hits.length).toBe(1);
+      expect(derivedResponse.results.hits[0].objectID).toBe('1');
+    });
   });

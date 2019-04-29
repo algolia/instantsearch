@@ -2,11 +2,8 @@
 // different order than the declared attributes order at the helper initialization
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: attributes order', function(t) {
+test('hierarchical facets: attributes order', function(done) {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -90,16 +87,16 @@ test('hierarchical facets: attributes order', function(t) {
     }]
   }];
 
-  client.search = sinon
-    .stub()
-    .resolves(algoliaResponse);
+  client.search = jest.fn(function() {
+    return Promise.resolve(algoliaResponse);
+  });
 
   helper.setQuery('a').search();
 
   helper.once('result', function(content) {
-    t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);
-    t.deepEqual(content.getFacetByName('categories'), expectedHelperResponse[0]);
+    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    expect(content.getFacetByName('categories')).toEqual(expectedHelperResponse[0]);
 
-    t.end();
+    done();
   });
 });

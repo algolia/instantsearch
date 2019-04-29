@@ -1,113 +1,102 @@
 'use strict';
 
-var test = require('tape');
-var sinon = require('sinon');
 var algoliaSearchHelper = require('../../../index.js');
 var version = require('../../../src/version');
 var algoliasearch = require('algoliasearch');
 
 function makeFakeClient() {
   var client = algoliasearch('what', 'wait', {});
-  client.search = sinon.stub().returns(new Promise(function() {}));
+
+  client.search = jest.fn(function() {
+    return new Promise(function() {});
+  });
+
   return client;
 }
 
-test("client without addAlgoliaAgent() doesn't throw on instanciation", function(t) {
+test("client without addAlgoliaAgent() doesn't throw on instanciation", function() {
   var client = {};
 
-  t.doesNotThrow(function() {
+  expect(function() {
     algoliaSearchHelper(client);
-  });
-
-  t.end();
+  }).not.toThrow();
 });
 
-test('addAlgoliaAgent gets called if exists', function(t) {
+test('addAlgoliaAgent gets called if exists', function() {
   var client = {
-    addAlgoliaAgent: sinon.stub()
+    addAlgoliaAgent: jest.fn()
   };
 
-  t.notOk(client.addAlgoliaAgent.called);
+  expect(client.addAlgoliaAgent).not.toHaveBeenCalled();
 
   algoliaSearchHelper(client);
 
-  t.ok(client.addAlgoliaAgent.called);
-
-  t.end();
+  expect(client.addAlgoliaAgent).toHaveBeenCalled();
 });
 
-test("client without clearCache() doesn't throw when clearing cache", function(t) {
+test("client without clearCache() doesn't throw when clearing cache", function() {
   var client = {};
   var helper = algoliaSearchHelper(client);
 
-  t.doesNotThrow(function() {
+  expect(function() {
     helper.clearCache();
-  });
-
-  t.end();
+  }).not.toThrow();
 });
 
-test('clearCache gets called if exists', function(t) {
+test('clearCache gets called if exists', function() {
   var client = {
-    clearCache: sinon.stub()
+    clearCache: jest.fn()
   };
   var helper = algoliaSearchHelper(client);
 
-  t.notOk(client.clearCache.called);
+  expect(client.clearCache).toHaveBeenCalledTimes(0);
 
   helper.clearCache();
 
-  t.ok(client.clearCache.called);
-
-  t.end();
+  expect(client.clearCache).toHaveBeenCalledTimes(1);
 });
 
-test('setting the agent once', function(t) {
+test('setting the agent once', function() {
   var client = algoliasearch('what', 'wait', {});
   var originalUA = client._ua;
   algoliaSearchHelper(client, 'IndexName', {});
   algoliaSearchHelper(client, 'IndexName2', {});
 
-  t.equal(client._ua, originalUA + ';JS Helper (' + version + ')');
-
-  t.end();
+  expect(client._ua).toBe(originalUA + ';JS Helper (' + version + ')');
 });
 
-test('getClient / setClient', function(t) {
+test('getClient / setClient', function() {
   var client0 = makeFakeClient();
   var originalUA = client0._ua;
   var helper = algoliaSearchHelper(client0, 'IndexName', {});
 
-  t.equal(client0.search.callCount, 0, 'before any search the client should not have been called');
+  expect(client0.search).toHaveBeenCalledTimes(0);
   helper.search();
-  t.equal(client0.search.callCount, 1, 'after a single search, the client must have been strictly one time');
+  expect(client0.search).toHaveBeenCalledTimes(1);
 
-  t.equal(helper.getClient(), client0, 'getClient should return the instance defined with the Helper factory');
+  expect(helper.getClient()).toBe(client0);
 
-  t.equal(client0._ua, originalUA + ';JS Helper (' + version + ')', 'sets the helper agent, client 0');
+  expect(client0._ua).toBe(originalUA + ';JS Helper (' + version + ')');
 
   var client1 = makeFakeClient();
   helper.setClient(client1);
 
-  t.equal(helper.getClient(), client1);
+  expect(helper.getClient()).toBe(client1);
 
-  t.equal(client1.search.callCount, 0, 'the new client should not have been called before any search');
+  expect(client1.search).toHaveBeenCalledTimes(0);
   helper.search();
-  t.equal(client1.search.callCount, 1, 'the new client should have been called');
-  t.equal(client0.search.callCount, 1, 'the old client should not have been called if it is not set anymore');
+  expect(client1.search).toHaveBeenCalledTimes(1);
+  expect(client0.search).toHaveBeenCalledTimes(1);
 
-  t.equal(client1._ua, originalUA + ';JS Helper (' + version + ')', 'sets the helper agent, client 1');
+  expect(client1._ua).toBe(originalUA + ';JS Helper (' + version + ')');
 
   helper.setClient(client1);
-  t.equal(client1._ua, originalUA + ';JS Helper (' + version + ')', 'does not set the helper agent twice, client 1');
-
-  t.end();
+  expect(client1._ua).toBe(originalUA + ';JS Helper (' + version + ')');
 });
 
-test('initial client === getClient', function(t) {
-  t.plan(1);
+test('initial client === getClient', function() {
   var client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
   var helper = algoliaSearchHelper(client, 'instant_search', {});
   helper.setQuery('blah').search();
-  t.equal(client, helper.getClient());
+  expect(client).toBe(helper.getClient());
 });

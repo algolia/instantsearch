@@ -1,11 +1,10 @@
 'use strict';
 
-var test = require('tape');
 var algoliaSearchHelper = require('../../../index.js');
 
 var fakeClient = {};
 
-test('getQuery', function(t) {
+test('getQuery', function() {
   var helper = algoliaSearchHelper(fakeClient, 'IndexName', {
     disjunctiveFacets: ['df1', 'df2', 'df3'],
     disjunctiveFacetsRefinements: {
@@ -21,7 +20,7 @@ test('getQuery', function(t) {
     ignorePlurals: true
   });
 
-  t.deepEqual(helper.getQuery(), {
+  expect(helper.getQuery()).toEqual({
     query: '',
     page: 0,
     minWordSizefor1Typo: 8,
@@ -35,6 +34,4 @@ test('getQuery', function(t) {
       ['df2:DF2-VAL-1', 'df2:DF2-VAL-2']
     ]
   });
-
-  t.end();
 });

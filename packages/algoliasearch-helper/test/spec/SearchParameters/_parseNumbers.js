@@ -1,9 +1,8 @@
 'use strict';
 
-var test = require('tape');
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('_parseNumbers should convert to number all specified root keys (that are parseable)', function(t) {
+test('_parseNumbers should convert to number all specified root keys (that are parseable)', function() {
   var partialState = {
     aroundPrecision: '42',
     aroundRadius: '42',
@@ -20,56 +19,48 @@ test('_parseNumbers should convert to number all specified root keys (that are p
   };
   var actual = SearchParameters._parseNumbers(partialState);
 
-  t.equal(actual.aroundPrecision, 42, 'aroundPrecision should be converted to number');
-  t.equal(actual.aroundRadius, 42, 'aroundRadius should be converted to number');
-  t.equal(actual.getRankingInfo, 42, 'getRankingInfo should be converted to number');
-  t.deepEqual(actual.insideBoundingBox, [[51.1241999, 9.662499900000057, 41.3253001, -5.559099999999944]], 'insideBoundingBox should be converted to number');
-  t.equal(actual.minWordSizefor2Typos, 42, 'minWordSizeFor2Typos should be converted to number');
-  t.equal(actual.minWordSizefor1Typo, 42, 'minWordSizeFor1Typo should be converted to number');
-  t.equal(actual.page, 42, 'page should be converted to number');
-  t.equal(actual.maxValuesPerFacet, 42, 'maxValuesPerFacet should be converted to number');
-  t.equal(actual.distinct, 42, 'distinct should be converted to number');
-  t.equal(actual.minimumAroundRadius, 42, 'minimumAroundRadius should be converted to number');
-  t.equal(actual.hitsPerPage, 42, 'hitsPerPage should be converted to number');
-  t.equal(actual.minProximity, 42, 'minProximity should be converted to number');
-
-  t.end();
+  expect(actual.aroundPrecision).toBe(42);
+  expect(actual.aroundRadius).toBe(42);
+  expect(actual.getRankingInfo).toBe(42);
+  expect(actual.insideBoundingBox).toEqual([[51.1241999, 9.662499900000057, 41.3253001, -5.559099999999944]]);
+  expect(actual.minWordSizefor2Typos).toBe(42);
+  expect(actual.minWordSizefor1Typo).toBe(42);
+  expect(actual.page).toBe(42);
+  expect(actual.maxValuesPerFacet).toBe(42);
+  expect(actual.distinct).toBe(42);
+  expect(actual.minimumAroundRadius).toBe(42);
+  expect(actual.hitsPerPage).toBe(42);
+  expect(actual.minProximity).toBe(42);
 });
 
-test('_parseNumbers should not convert undefined to NaN', function(t) {
+test('_parseNumbers should not convert undefined to NaN', function() {
   var partialState = {
     aroundPrecision: undefined
   };
   var actual = SearchParameters._parseNumbers(partialState);
 
-  t.equal(actual.aroundPrecision, undefined);
-
-  t.end();
+  expect(actual.aroundPrecision).toBe(undefined);
 });
 
-test('_parseNumbers should not convert insideBoundingBox if it\'s a string', function(t) {
+test('_parseNumbers should not convert insideBoundingBox if it\'s a string', function() {
   var partialState = {
     insideBoundingBox: '5,4,5,4'
   };
   var actual = SearchParameters._parseNumbers(partialState);
 
-  t.equal(actual.insideBoundingBox, '5,4,5,4');
-
-  t.end();
+  expect(actual.insideBoundingBox).toBe('5,4,5,4');
 });
 
-test('_parseNumbers should not convert unparseable strings', function(t) {
+test('_parseNumbers should not convert unparseable strings', function() {
   var partialState = {
     aroundRadius: 'all'
   };
   var actual = SearchParameters._parseNumbers(partialState);
 
-  t.equal(actual.aroundRadius, 'all');
-
-  t.end();
+  expect(actual.aroundRadius).toBe('all');
 });
 
-test('_parseNumbers should convert numericRefinements values', function(t) {
+test('_parseNumbers should convert numericRefinements values', function() {
   var partialState = {
     numericRefinements: {
       foo: {
@@ -80,13 +71,11 @@ test('_parseNumbers should convert numericRefinements values', function(t) {
   };
   var actual = SearchParameters._parseNumbers(partialState);
 
-  t.deepEqual(actual.numericRefinements.foo['>='], [4.8, 15.16], 'should convert foo >=');
-  t.deepEqual(actual.numericRefinements.foo['='], [23.42], 'should convert foo =');
-
-  t.end();
+  expect(actual.numericRefinements.foo['>=']).toEqual([4.8, 15.16]);
+  expect(actual.numericRefinements.foo['=']).toEqual([23.42]);
 });
 
-test('_parseNumbers should convert nested numericRefinements values', function(t) {
+test('_parseNumbers should convert nested numericRefinements values', function() {
   var partialState = {
     numericRefinements: {
       foo: {
@@ -99,10 +88,8 @@ test('_parseNumbers should convert nested numericRefinements values', function(t
   };
   var actual = SearchParameters._parseNumbers(partialState);
 
-  t.deepEqual(actual.numericRefinements.foo['>='], [
+  expect(actual.numericRefinements.foo['>=']).toEqual([
     [4.8], 15.16
-  ], 'should convert foo >=');
-  t.deepEqual(actual.numericRefinements.foo['='], [23.42], 'should convert foo =');
-
-  t.end();
+  ]);
+  expect(actual.numericRefinements.foo['=']).toEqual([23.42]);
 });

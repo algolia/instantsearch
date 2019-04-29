@@ -5,7 +5,6 @@ var setup = utils.setupSimple;
 
 var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
 
-var test = require('tape');
 var random = require('lodash/random');
 
 if (!utils.shouldRun) {
@@ -26,14 +25,14 @@ var config = {};
 
 test(
   '[INT][GEO-SEARCH] search inside a single polygon with a string',
-  function(t) {
+  function(done) {
     setup(indexName, dataset, config).
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
       helper.on('result', function(content) {
-        t.equal(content.hits.length, 1);
-        t.equal(content.hits[0].objectID, '1');
-        t.end();
+        expect(content.hits.length).toBe(1);
+        expect(content.hits[0].objectID).toBe('1');
+        done();
       });
 
       helper.setQueryParameter('insidePolygon', '0,0,1.1,0,1.1,1.1,0,1.1').search();
@@ -43,14 +42,14 @@ test(
 
 test(
   '[INT][GEO-SEARCH] search inside a single polygon with an array',
-  function(t) {
+  function(done) {
     setup(indexName, dataset, config).
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
       helper.on('result', function(content) {
-        t.equal(content.hits.length, 1);
-        t.equal(content.hits[0].objectID, '1');
-        t.end();
+        expect(content.hits.length).toBe(1);
+        expect(content.hits[0].objectID).toBe('1');
+        done();
       });
 
       helper.setQueryParameter('insidePolygon', [[0, 0, 1.1, 0, 1.1, 1.1, 0, 1.1]]).search();
@@ -60,17 +59,17 @@ test(
 
 test(
   '[INT][GEO-SEARCH] search inside two polygons with an array',
-  function(t) {
+  function(done) {
     setup(indexName, dataset, config).
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
 
       helper.on('result', function(content) {
-        t.equal(content.hits.length, 2);
+        expect(content.hits.length).toBe(2);
         var sortedHits = content.hits.sort(function(a, b) { return a.objectID.localeCompare(b.objectID); });
-        t.equal(sortedHits[0].objectID, '1');
-        t.equal(sortedHits[1].objectID, '4');
-        t.end();
+        expect(sortedHits[0].objectID).toBe('1');
+        expect(sortedHits[1].objectID).toBe('4');
+        done();
       });
 
       helper.setQueryParameter(

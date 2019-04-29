@@ -1,10 +1,7 @@
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: pagination', function(t) {
+test('hierarchical facets: pagination', function(done) {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
   var isArray = require('lodash/isArray');
 
   var algoliasearchHelper = require('../../../');
@@ -68,9 +65,9 @@ test('hierarchical facets: pagination', function(t) {
     }]
   };
 
-  client.search = sinon
-    .stub()
-    .resolves(algoliaResponse);
+  client.search = jest.fn(function() {
+    return Promise.resolve(algoliaResponse);
+  });
 
   helper.setQuery('');
   helper.setCurrentPage(1);
@@ -78,19 +75,15 @@ test('hierarchical facets: pagination', function(t) {
   helper.search();
 
   helper.once('result', function() {
-    var call = client.search.getCall(0);
-    var queries = call.args[0];
+    var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
 
-    t.equal(hitsQuery.params.page, 0, 'Page is reset to 0');
+    expect(hitsQuery.params.page).toBe(0);
 
     // we do not yet support multiple values for hierarchicalFacetsRefinements
     // but at some point we may want to open multiple leafs of a hierarchical menu
     // So we set this as an array so that we do not have to bump major to handle it
-    t.ok(
-      isArray(helper.state.hierarchicalFacetsRefinements.categories),
-      'state.hierarchicalFacetsRefinements is an array'
-    );
-    t.end();
+    expect(isArray(helper.state.hierarchicalFacetsRefinements.categories)).toBeTruthy();
+    done();
   });
 });

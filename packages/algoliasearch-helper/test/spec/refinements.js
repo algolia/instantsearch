@@ -1,12 +1,11 @@
 'use strict';
 
-var test = require('tape');
 var _ = require('lodash');
 var algoliasearchHelper = require('../../index');
 
 var emptyClient = {};
 
-test('Adding refinments should add an entry to the refinments attribute', function(t) {
+test('Adding refinements should add an entry to the refinements attribute', function() {
   var facetName = 'facet1';
   var facetValue = '42';
 
@@ -14,82 +13,73 @@ test('Adding refinments should add an entry to the refinments attribute', functi
     facets: [facetName]
   });
 
-  t.ok(_.isEmpty(helper.state.facetsRefinements), 'should be empty at first');
+  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
   helper.addRefine(facetName, facetValue);
-  t.ok(_.size(helper.state.facetsRefinements) === 1, 'when adding a refinment, should have one');
-  t.deepEqual(helper.state.facetsRefinements.facet1, [facetValue]);
+  expect(_.size(helper.state.facetsRefinements) === 1).toBeTruthy();
+  expect(helper.state.facetsRefinements.facet1).toEqual([facetValue]);
   helper.addRefine(facetName, facetValue);
-  t.ok(_.size(helper.state.facetsRefinements) === 1, 'when adding the same, should still be one');
+  expect(_.size(helper.state.facetsRefinements) === 1).toBeTruthy();
   helper.removeRefine(facetName, facetValue);
-  t.ok(_.size(helper.state.facetsRefinements) === 0, 'Then empty ');
-  t.end();
+  expect(_.size(helper.state.facetsRefinements) === 0).toBeTruthy();
 });
 
-test('Adding several refinements for a single attribute should be handled', function(t) {
+test('Adding several refinements for a single attribute should be handled', function() {
   var facetName = 'facet';
 
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: [facetName]
   });
 
-  t.ok(_.isEmpty(helper.state.facetsRefinements), 'empty');
+  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
   helper.addRefine(facetName, 'value1');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 1, 'Adding one refinement, should have one');
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 1).toBeTruthy();
   helper.addRefine(facetName, 'value2');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 2, 'Adding another refinement, should have two');
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
   helper.addRefine(facetName, 'value1');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 2, 'Adding same refinement as the first, should have two');
-
-  t.end();
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
 });
 
-test('Toggling several refinements for a single attribute should be handled', function(t) {
+test('Toggling several refinements for a single attribute should be handled', function() {
   var facetName = 'facet';
 
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: [facetName]
   });
 
-  t.ok(_.isEmpty(helper.state.facetsRefinements), 'empty');
+  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
   helper.toggleRefine(facetName, 'value1');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 1, 'Adding one refinement, should have one');
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 1).toBeTruthy();
   helper.toggleRefine(facetName, 'value2');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 2, 'Adding another refinement, should have two');
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
   helper.toggleRefine(facetName, 'value1');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 1, 'Adding same refinement as the first, should have two');
-  t.deepEqual(helper.state.facetsRefinements[facetName], ['value2'], 'should contain value2');
-
-  t.end();
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 1).toBeTruthy();
+  expect(helper.state.facetsRefinements[facetName]).toEqual(['value2']);
 });
 
-test('Using toggleRefine on a non specified facet should throw an exception', function(t) {
+test('Using toggleRefine on a non specified facet should throw an exception', function() {
   var helper = algoliasearchHelper(emptyClient, null, {});
 
-  t.throws(_.partial(helper.toggleRefine, 'unknown', 'value'));
-
-  t.end();
+  expect(_.partial(helper.toggleRefine, 'unknown', 'value')).toThrow();
 });
 
-test('Removing several refinements for a single attribute should be handled', function(t) {
+test('Removing several refinements for a single attribute should be handled', function() {
   var facetName = 'facet';
 
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: [facetName]
   });
 
-  t.ok(_.isEmpty(helper.state.facetsRefinements), 'empty');
+  expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
   helper.addRefine(facetName, 'value1');
   helper.addRefine(facetName, 'value2');
   helper.addRefine(facetName, 'value3');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 3, 'Adding another refinement, should have two');
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 3).toBeTruthy();
   helper.removeRefine(facetName, 'value2');
-  t.ok(_.size(helper.state.facetsRefinements[facetName]) === 2, 'Adding same refinement as the first, should have two');
-  t.deepEqual(helper.state.facetsRefinements[facetName], ['value1', 'value3'], 'should contain value1 and value3');
-
-  t.end();
+  expect(_.size(helper.state.facetsRefinements[facetName]) === 2).toBeTruthy();
+  expect(helper.state.facetsRefinements[facetName]).toEqual(['value1', 'value3']);
 });
 
-test('isDisjunctiveRefined', function(t) {
+test('isDisjunctiveRefined', function() {
   var facet = 'MyFacet';
 
   var helper = algoliasearchHelper(emptyClient, null, {
@@ -98,58 +88,50 @@ test('isDisjunctiveRefined', function(t) {
 
   var value = 'MyValue';
 
-  t.equal(helper.isDisjunctiveRefined(facet, value), false,
-    'isDisjunctiveRefined should return false for when no refinement for facet');
+  expect(helper.isDisjunctiveRefined(facet, value)).toBe(false);
 
   helper.addDisjunctiveRefine(facet, value);
-  t.equal(helper.isDisjunctiveRefined(facet, value), true,
-    'isDisjunctiveRefined should be true when facet is refined');
+  expect(helper.isDisjunctiveRefined(facet, value)).toBe(true);
 
   helper.removeDisjunctiveRefine(facet, value);
-  t.equal(helper.isDisjunctiveRefined(facet, value), false,
-    'isDisjunctiveRefined should return false when refinement was removed');
-  t.end();
+  expect(helper.isDisjunctiveRefined(facet, value)).toBe(false);
 });
 
-test('IsRefined should return true if the (facet, value ) is refined.', function(t) {
+test('IsRefined should return true if the (facet, value ) is refined.', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1']
   });
 
   helper.addRefine('facet1', 'boom');
 
-  t.equal(helper.isRefined('facet1', 'boom'), true, 'the facet + value is refined >> true');
+  expect(helper.isRefined('facet1', 'boom')).toBe(true);
 
-  t.equal(helper.isRefined('facet1', 'booohh'), false, 'value not refined but is a facet');
-  t.throws(_.bind(helper.isRefined, helper, 'notAFacet', 'maoooh'), 'should throw as it is not a facet');
-  t.throws(_.bind(helper.isRefined, helper, null, null), 'not valid values');
-
-  t.end();
+  expect(helper.isRefined('facet1', 'booohh')).toBe(false);
+  expect(_.bind(helper.isRefined, helper, 'notAFacet', 'maoooh')).toThrow();
+  expect(_.bind(helper.isRefined, helper, null, null)).toThrow();
 });
 
-test('isRefined(facet)/hasRefinements should return true if the facet is refined.', function(t) {
+test('isRefined(facet)/hasRefinements should return true if the facet is refined.', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1']
   });
 
-  t.equal(helper.isRefined('facet1'), false, 'the facet is not refined yet >> false');
-  t.equal(helper.hasRefinements('facet1'), false, 'the facet is not refined yet >> false');
+  expect(helper.isRefined('facet1')).toBe(false);
+  expect(helper.hasRefinements('facet1')).toBe(false);
 
   helper.addRefine('facet1', 'boom');
 
-  t.equal(helper.isRefined('facet1'), true, 'the facet is refined >> true');
-  t.equal(helper.hasRefinements('facet1'), true, 'the facet is refined >> true');
+  expect(helper.isRefined('facet1')).toBe(true);
+  expect(helper.hasRefinements('facet1')).toBe(true);
 
-  t.throws(_.bind(helper.isRefined, helper, 'notAFacet'), 'not a facet');
+  expect(_.bind(helper.isRefined, helper, 'notAFacet')).toThrow();
   // in complete honesty we should be able to detect numeric facets but we can't
   // t.throws(helper.hasRefinements.bind(helper, 'notAFacet'), 'not a facet');
-  t.throws(_.bind(helper.isRefined, null), 'not even valid values');
-  t.throws(_.bind(helper.hasRefinements, null), 'not even valid values');
-
-  t.end();
+  expect(_.bind(helper.isRefined, null)).toThrow();
+  expect(_.bind(helper.hasRefinements, null)).toThrow();
 });
 
-test('getRefinements should return all the refinements for a given facet', function(t) {
+test('getRefinements should return all the refinements for a given facet', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2', 'sales']
@@ -167,107 +149,91 @@ test('getRefinements should return all the refinements for a given facet', funct
   helper.addNumericRefinement('sales', '>', '3')
     .addNumericRefinement('sales', '<', '9');
 
-  t.deepEqual(helper.getRefinements('facet1'),
-    [
-      {value: 'val1', type: 'conjunctive'},
-      {value: 'val2', type: 'conjunctive'},
-      {value: 'val3', type: 'conjunctive'},
-      {value: 'val-1', type: 'exclude'}
-    ],
-    '');
+  expect(helper.getRefinements('facet1')).toEqual([
+    {value: 'val1', type: 'conjunctive'},
+    {value: 'val2', type: 'conjunctive'},
+    {value: 'val3', type: 'conjunctive'},
+    {value: 'val-1', type: 'exclude'}
+  ]);
 
-  t.deepEqual(helper.getRefinements('facet2'),
-    [
-      {value: 'val4', type: 'disjunctive'},
-      {value: 'val5', type: 'disjunctive'},
-      {value: 'val6', type: 'disjunctive'}
-    ],
-    '');
+  expect(helper.getRefinements('facet2')).toEqual([
+    {value: 'val4', type: 'disjunctive'},
+    {value: 'val5', type: 'disjunctive'},
+    {value: 'val6', type: 'disjunctive'}
+  ]);
 
-  t.deepEqual(helper.getRefinements('sales'),
-    [
-      {value: [3], operator: '>', type: 'numeric'},
-      {value: [9], operator: '<', type: 'numeric'}
-    ],
-    '');
-
-  t.end();
+  expect(helper.getRefinements('sales')).toEqual([
+    {value: [3], operator: '>', type: 'numeric'},
+    {value: [9], operator: '<', type: 'numeric'}
+  ]);
 });
 
-test('getRefinements should return an empty array if the facet has no refinement', function(t) {
+test('getRefinements should return an empty array if the facet has no refinement', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });
 
-  t.deepEqual(helper.getRefinements('facet1'), [], '');
-  t.deepEqual(helper.getRefinements('facet2'), [], '');
-
-  t.end();
+  expect(helper.getRefinements('facet1')).toEqual([]);
+  expect(helper.getRefinements('facet2')).toEqual([]);
 });
 
-test('[Conjunctive] Facets should be resilient to user attempt to use numbers', function(t) {
+test('[Conjunctive] Facets should be resilient to user attempt to use numbers', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });
 
   helper.addRefine('facet1', 42);
-  t.equal(helper.isRefined('facet1', 42), true, '[facet][number] should be refined');
-  t.equal(helper.isRefined('facet1', '42'), true, '[facet][string] should be refined');
+  expect(helper.isRefined('facet1', 42)).toBe(true);
+  expect(helper.isRefined('facet1', '42')).toBe(true);
 
   var stateWithFacet1and42 = helper.state;
 
   helper.removeRefine('facet1', '42');
-  t.equal(helper.isRefined('facet1', '42'), false, '[facet][string] should not be refined');
+  expect(helper.isRefined('facet1', '42')).toBe(false);
 
   helper.setState(stateWithFacet1and42);
   helper.removeRefine('facet1', 42);
-  t.equal(helper.isRefined('facet1', 42), false, '[facet][number] should not be refined');
-
-  t.end();
+  expect(helper.isRefined('facet1', 42)).toBe(false);
 });
 
-test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function(t) {
+test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });
 
   helper.addExclude('facet1', 42);
-  t.equal(helper.isExcluded('facet1', 42), true, '[facet][number] should be refined');
-  t.equal(helper.isExcluded('facet1', '42'), true, '[facet][string] should be refined');
+  expect(helper.isExcluded('facet1', 42)).toBe(true);
+  expect(helper.isExcluded('facet1', '42')).toBe(true);
 
   var stateWithFacet1Without42 = helper.state;
 
   helper.removeExclude('facet1', '42');
-  t.equal(helper.isExcluded('facet1', '42'), false, '[facet][string] should not be refined');
+  expect(helper.isExcluded('facet1', '42')).toBe(false);
 
   helper.setState(stateWithFacet1Without42);
   helper.removeExclude('facet1', 42);
-  t.equal(helper.isExcluded('facet1', 42), false, '[facet][number] should not be refined');
-
-  t.end();
+  expect(helper.isExcluded('facet1', 42)).toBe(false);
 });
 
-test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function(t) {
+test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });
 
   helper.addDisjunctiveRefine('facet2', 42);
-  t.equal(helper.isDisjunctiveRefined('facet2', 42), true, '[facet][number] should be refined');
-  t.equal(helper.isDisjunctiveRefined('facet2', '42'), true, '[facet][string] should be refined');
+  expect(helper.isDisjunctiveRefined('facet2', 42)).toBe(true);
+  expect(helper.isDisjunctiveRefined('facet2', '42')).toBe(true);
 
   var stateWithFacet2and42 = helper.state;
 
   helper.removeDisjunctiveRefine('facet2', '42');
-  t.equal(helper.isDisjunctiveRefined('facet2', '42'), false, '[facet][string] should not be refined');
+  expect(helper.isDisjunctiveRefined('facet2', '42')).toBe(false);
   helper.setState(stateWithFacet2and42);
 
   helper.removeDisjunctiveRefine('facet2', 42);
-  t.equal(helper.isDisjunctiveRefined('facet2', 42), false, '[facet][number] should not be refined');
-
-  t.end();
+  expect(helper.isDisjunctiveRefined('facet2', 42)).toBe(false);
 });

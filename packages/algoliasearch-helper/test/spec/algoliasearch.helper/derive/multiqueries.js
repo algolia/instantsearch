@@ -1,11 +1,9 @@
 'use strict';
 
-var test = require('tape');
-
 var algoliasearchHelper = require('../../../../index.js');
 
-test('[Derived helper] no derived helpers', function(t) {
-  t.plan(1);
+test('[Derived helper] no derived helpers', function() {
+  expect.assertions(1);
   var client = {
     search: searchTest
   };
@@ -13,18 +11,14 @@ test('[Derived helper] no derived helpers', function(t) {
   helper.search();
 
   function searchTest(requests) {
-    t.equal(
-      requests.length,
-      1,
-      'Without the derived helpers and no filters, the helper generates a single query'
-    );
+    expect(requests.length).toBe(1);
 
     return new Promise(function() {});
   }
 });
 
-test('[Derived helper] 1 derived helpers, no modifications', function(t) {
-  t.plan(2);
+test('[Derived helper] 1 derived helpers, no modifications', function() {
+  expect.assertions(2);
   var client = {
     search: searchTest
   };
@@ -33,23 +27,15 @@ test('[Derived helper] 1 derived helpers, no modifications', function(t) {
   helper.search();
 
   function searchTest(requests) {
-    t.equal(
-      requests.length,
-      2,
-      'the helper generates a two queries'
-    );
-    t.deepEqual(
-      requests[0],
-      requests[1],
-      'the helper generates the same query twice'
-    );
+    expect(requests.length).toBe(2);
+    expect(requests[0]).toEqual(requests[1]);
 
     return new Promise(function() {});
   }
 });
 
-test('[Derived helper] no derived helpers, modification', function(t) {
-  t.plan(4);
+test('[Derived helper] no derived helpers, modification', function() {
+  expect.assertions(4);
   var client = {
     search: searchTest
   };
@@ -58,22 +44,14 @@ test('[Derived helper] no derived helpers, modification', function(t) {
   helper.search();
 
   function searchTest(requests) {
-    t.equal(
-      requests.length,
-      2,
-      'the helper generates a two queries'
-    );
-    t.equal(requests[0].params.query, '', 'the first query is empty');
-    t.equal(requests[1].params.query, 'otherQuery', 'the other query contains `otherQuery`');
+    expect(requests.length).toBe(2);
+    expect(requests[0].params.query).toBe('');
+    expect(requests[1].params.query).toBe('otherQuery');
 
     delete requests[0].params.query;
     delete requests[1].params.query;
 
-    t.deepEqual(
-      requests[0],
-      requests[1],
-      'Without the query the other parameters are identical'
-    );
+    expect(requests[0]).toEqual(requests[1]);
 
     return new Promise(function() {});
   }

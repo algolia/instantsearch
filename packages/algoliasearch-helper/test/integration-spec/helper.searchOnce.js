@@ -5,9 +5,7 @@ var setup = utils.setup;
 
 var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
 
-var test = require('tape');
 var find = require('lodash/find');
-var bind = require('lodash/bind');
 var random = require('lodash/random');
 
 if (!utils.shouldRun) {
@@ -19,7 +17,7 @@ var indexName = '_travis-algoliasearch-helper-js-' +
 
 test(
   '[INT][SEARCHONCE] Should be able to search once with custom parameters without changing main search state',
-  function(t) {
+  function(done) {
     setup(indexName, function(client, index) {
       return index.addObjects([
         {objectID: '1', facet: ['f1', 'f2']},
@@ -41,40 +39,39 @@ test(
 
       var calls = 1;
       helper.on('error', function(err) {
-        t.fail(err);
-        t.end();
+        done.fail(err);
       });
 
       helper.on('result', function(content) {
         if (calls === 3) {
-          t.equal(content.hits.length, 3, 'results should contain two items');
-          t.end();
+          expect(content.hits.length).toBe(3);
+          done();
         } else {
-          t.fail('Should not trigger the result event until the third call');
+          done.fail('Should not trigger the result event until the third call');
         }
       });
 
       var state1 = state0.setFacets(['facet']).addFacetRefinement('facet', 'f1');
       helper.searchOnce(state1).then(function(res) {
-        t.equal(helper.state, state0, 'initial state must not be modified');
-        t.deepEqual(res.state, state1);
-        t.equal(res.content.hits.length, 2, 'results should contain two items');
-        t.ok(find(res.content.hits, {objectID: '2'}));
-        t.ok(find(res.content.hits, {objectID: '1'}));
+        expect(helper.state).toBe(state0);
+        expect(res.state).toEqual(state1);
+        expect(res.content.hits.length).toBe(2);
+        expect(find(res.content.hits, {objectID: '2'})).toBeTruthy();
+        expect(find(res.content.hits, {objectID: '1'})).toBeTruthy();
         calls++;
         var state2 = state0.setFacets(['facet']).addFacetRefinement('facet', 'f2');
         helper.searchOnce(
           state2,
           function(err, c, s) {
-            t.equal(err, null);
-            t.equal(helper.state, state0, 'initial state should not be modified');
-            t.deepEqual(s, state2);
-            t.equal(c.hits.length, 2, 'results should contain two items');
-            t.ok(find(c.hits, {objectID: '1'}));
-            t.ok(find(c.hits, {objectID: '3'}));
+            expect(err).toBe(null);
+            expect(helper.state).toBe(state0);
+            expect(s).toEqual(state2);
+            expect(c.hits.length).toBe(2);
+            expect(find(c.hits, {objectID: '1'})).toBeTruthy();
+            expect(find(c.hits, {objectID: '3'})).toBeTruthy();
             calls++;
             helper.search();
           });
       });
-    }).then(null, bind(t.error, t));
+    });
   });

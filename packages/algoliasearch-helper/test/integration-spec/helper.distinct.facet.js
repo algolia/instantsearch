@@ -5,15 +5,13 @@ var setup = utils.setup;
 
 var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
 
-var test = require('tape');
-var bind = require('lodash/bind');
 var random = require('lodash/random');
 
 if (!utils.shouldRun) {
   test = test.skip;
 }
 
-test('[INT][FILTERS] Using distinct should let me retrieve all facet without distinct', function(t) {
+test('[INT][FILTERS] Using distinct should let me retrieve all facet without distinct', function(done) {
   var indexName = '_travis-algoliasearch-helper-js-' +
     (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
     'helper_distinct.facet' + random(0, 5000);
@@ -41,31 +39,28 @@ test('[INT][FILTERS] Using distinct should let me retrieve all facet without dis
       facets: ['colors']
     });
 
-    var calls = 0;
     helper.on('error', function(err) {
-      t.fail(err);
-      t.end();
+      done.fail(err);
     });
-    helper.on('result', function(content) {
-      calls++;
 
-      if (calls === 1) {
-        t.equal(content.hits.length, 1);
-        t.deepEqual(content.facets[0].data, {
-          blue: 2,
-          red: 2,
-          gold: 1,
-          green: 1
-        });
-        client.deleteIndex(indexName);
-        if (!process.browser) {
-          client.destroy();
-        }
-        t.end();
+    helper.on('result', function(content) {
+      expect(content.hits.length).toBe(1);
+      expect(content.facets[0].data).toEqual({
+        blue: 2,
+        red: 2,
+        gold: 1,
+        green: 1
+      });
+
+      client.deleteIndex(indexName);
+
+      if (!process.browser) {
+        client.destroy();
       }
+
+      done();
     });
 
     helper.setQueryParameter('distinct', true).search();
-  })
-    .then(null, bind(t.error, t));
+  });
 });

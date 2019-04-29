@@ -1,10 +1,7 @@
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: combined with a disjunctive facet', function(t) {
+test('hierarchical facets: combined with a disjunctive facet', function() {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -24,17 +21,13 @@ test('hierarchical facets: combined with a disjunctive facet', function(t) {
   helper.toggleRefine('categories', 'beers > IPA');
   helper.toggleRefine('colors', 'blue');
 
-  client.search = sinon.stub().returns(new Promise(function() {}));
+  client.search = jest.fn(function() {
+    return new Promise(function() {});
+  });
 
   helper.setQuery('a').search();
 
-  var disjunctiveFacetsValuesQuery = client.search.getCall(0).args[0][1];
+  var disjunctiveFacetsValuesQuery = client.search.mock.calls[0][0][1];
 
-  t.deepEqual(
-    disjunctiveFacetsValuesQuery.params.facetFilters,
-    [['categories.lvl1:beers > IPA']],
-    'Disjunctive facet values query is done using the current hierarchical refinement'
-  );
-
-  t.end();
+  expect(disjunctiveFacetsValuesQuery.params.facetFilters).toEqual([['categories.lvl1:beers > IPA']]);
 });

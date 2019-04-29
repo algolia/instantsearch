@@ -1,6 +1,5 @@
 'use strict';
 
-var test = require('tape');
 var forEach = require('lodash/forEach');
 
 var SearchParameters = require('../../../src/SearchParameters');
@@ -19,37 +18,31 @@ var stateWithStringForIntegers = {
   minimumAroundRadius: '234'
 };
 
-test('Constructor should parse the numeric attributes', function(t) {
+test('Constructor should parse the numeric attributes', function() {
   var state = new SearchParameters(stateWithStringForIntegers);
 
   forEach(stateWithStringForIntegers, function(v, k) {
     var parsedValue = parseFloat(v);
-    t.equal(state[k], parsedValue, k + ' should be parsed');
+    expect(state[k]).toBe(parsedValue);
   });
-
-  t.end();
 });
 
-test('setQueryParameter should parse the numeric attributes', function(t) {
+test('setQueryParameter should parse the numeric attributes', function() {
   var state0 = new SearchParameters();
 
   forEach(stateWithStringForIntegers, function(v, k) {
     var parsedValue = parseFloat(v);
     var state1 = state0.setQueryParameter(k, v);
-    t.equal(state1[k], parsedValue, k + ' should be parsed');
+    expect(state1[k]).toBe(parsedValue);
   });
-
-  t.end();
 });
 
-test('setQueryParameters should parse the numeric attributes', function(t) {
+test('setQueryParameters should parse the numeric attributes', function() {
   var state0 = new SearchParameters();
   var state1 = state0.setQueryParameters(stateWithStringForIntegers);
 
   forEach(stateWithStringForIntegers, function(v, k) {
     var parsedValue = parseFloat(v);
-    t.equal(state1[k], parsedValue, k + ' should be parsed');
+    expect(state1[k]).toBe(parsedValue);
   });
-
-  t.end();
 });

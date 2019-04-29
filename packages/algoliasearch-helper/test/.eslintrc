@@ -1,6 +1,14 @@
 {
   "rules": {
-    // in tests quotes are used for results objects, let's ignore badly formatted quotes
-    "quote-props": [2, "consistent"],
+    "quote-props": [
+      2,
+      "consistent"
+    ]
+  },
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "test": true
   }
 }

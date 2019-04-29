@@ -1,18 +1,15 @@
 'use strict';
 
-var test = require('tape');
-var sinon = require('sinon');
-var algoliaSearch = require('algoliasearch');
-
 var algoliasearchHelper = require('../../index');
 
-test('Search should call the algolia client according to the number of refinements', function(t) {
-  var testData = require('./search.testdata.js')();
+test('Search should call the algolia client according to the number of refinements', function(done) {
+  var testData = require('../datasets/SearchParameters/search.dataset')();
 
-  var client = algoliaSearch('dsf', 'dsfdf');
-  var mock = sinon.mock(client);
-
-  mock.expects('search').once().resolves(testData.response);
+  var client = {
+    search: jest.fn().mockImplementationOnce(function() {
+      return Promise.resolve(testData.response);
+    })
+  };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node', {
     disjunctiveFacets: ['city']
@@ -23,11 +20,7 @@ test('Search should call the algolia client according to the number of refinemen
 
   helper.on('result', function(data) {
     // shame deepclone, to remove any associated methods coming from the results
-    t.deepEqual(
-      JSON.parse(JSON.stringify(data)),
-      JSON.parse(JSON.stringify(testData.responseHelper)),
-      'should be equal'
-    );
+    expect(JSON.parse(JSON.stringify(data))).toEqual(JSON.parse(JSON.stringify(testData.responseHelper)));
 
     var cityValues = data.getFacetValues('city');
     var expectedCityValues = [
@@ -36,10 +29,7 @@ test('Search should call the algolia client according to the number of refinemen
       {name: 'San Francisco', count: 1, isRefined: false}
     ];
 
-    t.deepEqual(
-      cityValues,
-      expectedCityValues,
-      'Facet values for "city" should be correctly ordered using the default sort');
+    expect(cityValues).toEqual(expectedCityValues);
 
     var cityValuesCustom = data.getFacetValues('city', {sortBy: ['count:asc', 'name:asc']});
     var expectedCityValuesCustom = [
@@ -49,10 +39,7 @@ test('Search should call the algolia client according to the number of refinemen
     ];
 
 
-    t.deepEqual(
-      cityValuesCustom,
-      expectedCityValuesCustom,
-      'Facet values for "city" should be correctly ordered using a custom sort');
+    expect(cityValuesCustom).toEqual(expectedCityValuesCustom);
 
     var cityValuesFn = data.getFacetValues('city', {sortBy: function(a, b) { return a.count - b.count; }});
     var expectedCityValuesFn = [
@@ -61,32 +48,31 @@ test('Search should call the algolia client according to the number of refinemen
       {name: 'Paris', count: 3, isRefined: true}
     ];
 
-    t.deepEqual(
-      cityValuesFn,
-      expectedCityValuesFn,
-      'Facet values for "city" should be correctly ordered using a sort function');
+    expect(cityValuesFn).toEqual(expectedCityValuesFn);
 
-    var queries = mock.expectations.search[0].args[0][0];
+    expect(client.search).toHaveBeenCalledTimes(1);
+
+    var queries = client.search.mock.calls[0][0];
     for (var i = 0; i < queries.length; i++) {
       var query = queries[i];
-      t.equal(query.query, undefined);
-      t.equal(query.params.query, '');
+      expect(query.query).toBe(undefined);
+      expect(query.params.query).toBe('');
     }
-    t.ok(mock.verify(), 'Mock constraints should be verified!');
 
-    t.end();
+    done();
   });
 
   helper.search('');
 });
 
-test('Search should not mutate the original client response', function(t) {
-  var testData = require('./search.testdata.js')();
+test('Search should not mutate the original client response', function(done) {
+  var testData = require('../datasets/SearchParameters/search.dataset')();
 
-  var client = algoliaSearch('dsf', 'dsfdf');
-  var mock = sinon.mock(client);
-
-  mock.expects('search').once().resolves(testData.response);
+  var client = {
+    search: jest.fn().mockImplementationOnce(function() {
+      return Promise.resolve(testData.response);
+    })
+  };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node');
 
@@ -95,24 +81,25 @@ test('Search should not mutate the original client response', function(t) {
   helper.on('result', function() {
     var currentResponseLength = testData.response.results.length;
 
-    t.equal(currentResponseLength, originalResponseLength);
+    expect(currentResponseLength).toBe(originalResponseLength);
 
-    t.end();
+    done();
   });
 
   helper.search('');
 });
 
-test('no mutating methods should trigger a search', function(t) {
-  var client = algoliaSearch('dsf', 'dsfdf');
-  sinon.mock(client);
+test('no mutating methods should trigger a search', function() {
+  var client = {
+    search: jest.fn().mockImplementationOnce(function() {
+      return new Promise(function() {});
+    })
+  };
 
   var helper = algoliasearchHelper(client, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });
-
-  var stubbedSearch = sinon.stub(helper, '_search');
 
   helper.setQuery('');
   helper.clearRefinements();
@@ -123,11 +110,9 @@ test('no mutating methods should trigger a search', function(t) {
   helper.addRefine('tower', 'Empire State Building');
   helper.removeRefine('tower', 'Empire State Building');
 
-  t.equal(stubbedSearch.callCount, 0, 'should not have triggered calls');
+  expect(client.search).toHaveBeenCalledTimes(0);
 
   helper.search();
 
-  t.equal(stubbedSearch.callCount, 1, 'should have triggered a single search');
-
-  t.end();
+  expect(client.search).toHaveBeenCalledTimes(1);
 });

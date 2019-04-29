@@ -1,9 +1,8 @@
 'use strict';
 
-var test = require('tape');
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('setqueryparameter should update existing parameter', function(t) {
+test('setqueryparameter should update existing parameter', function() {
   var sp = new SearchParameters({
     facets: ['facet']
   });
@@ -11,12 +10,10 @@ test('setqueryparameter should update existing parameter', function(t) {
   var newValue = [];
   var newsp = sp.setQueryParameter('facets', newValue);
 
-  t.deepEquals(newsp.facets, newValue, 'update of an existing parameter');
-
-  t.end();
+  expect(newsp.facets).toEqual(newValue);
 });
 
-test('setqueryparameter should add non-existing parameter', function(t) {
+test('setqueryparameter should add non-existing parameter', function() {
   var sp = new SearchParameters({
     facets: ['facet']
   });
@@ -24,12 +21,10 @@ test('setqueryparameter should add non-existing parameter', function(t) {
   var newValue = ['attributesToHighlight'];
   var newsp = sp.setQueryParameter('attributesToHighlight', newValue);
 
-  t.deepEquals(newsp.attributesToHighlight, newValue, 'add new parameter');
-
-  t.end();
+  expect(newsp.attributesToHighlight).toEqual(newValue);
 });
 
-test('setQueryParameter should not create a new instance if the update is non effective', function(t) {
+test('setQueryParameter should not create a new instance if the update is non effective', function() {
   var sp = new SearchParameters({
     facets: ['facet'],
     maxValuesPerFacet: 10
@@ -38,21 +33,17 @@ test('setQueryParameter should not create a new instance if the update is non ef
   var newValue = 10;
   var newsp = sp.setQueryParameter('maxValuesPerFacet', newValue);
 
-  t.deepEquals(newsp, sp, 'No change should result in the same instance');
-
-  t.end();
+  expect(newsp).toEqual(sp);
 });
 
 test(
   'setQueryParameter should not throw an error when trying to add an unknown parameter, and actually add it',
-  function(t) {
+  function() {
     var state0 = new SearchParameters();
 
     var state1 = state0.setQueryParameter('betaParameter', 'configValue');
     // manual test that the warnonce message actually display message once
     state0.setQueryParameter('betaParameter', 'configValue');
-    t.deepEquals(state1.betaParameter, 'configValue');
-
-    t.end();
+    expect(state1.betaParameter).toEqual('configValue');
   }
 );

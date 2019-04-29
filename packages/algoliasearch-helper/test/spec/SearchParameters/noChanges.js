@@ -1,169 +1,131 @@
 'use strict';
 
-var test = require('tape');
-
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('[No changes] setHitsPerPage', function(t) {
+test('[No changes] setHitsPerPage', function() {
   var state = SearchParameters.make({
     hitsPerPage: 2
   });
 
-  t.equal(state.setHitsPerPage(2), state, 'setHitsPerPage should return the same instance');
-
-  t.end();
+  expect(state.setHitsPerPage(2)).toBe(state);
 });
 
-test('[No changes] setTypoTolerance', function(t) {
+test('[No changes] setTypoTolerance', function() {
   var state = SearchParameters.make({
     typoTolerance: true
   });
 
-  t.equal(state.setTypoTolerance(true), state, 'setTypoTolerance should return the same instance');
-
-  t.end();
+  expect(state.setTypoTolerance(true)).toBe(state);
 });
 
-test('[No changes] setPage', function(t) {
+test('[No changes] setPage', function() {
   var state = SearchParameters.make({
     page: 2
   });
 
-  t.equal(state.setPage(2), state, 'setPage should return the same instance');
-
-  t.end();
+  expect(state.setPage(2)).toBe(state);
 });
 
-test('[No changes] setQuery', function(t) {
+test('[No changes] setQuery', function() {
   var state = SearchParameters.make({
     query: 'query'
   });
 
-  t.equal(state.setQuery('query'), state, 'setQuery should return the same instance');
-
-  t.end();
+  expect(state.setQuery('query')).toBe(state);
 });
 
-test('[No changes] addFacet', function(t) {
+test('[No changes] addFacet', function() {
   var state = SearchParameters.make({}).addFacet('facet');
 
-  t.equal(state.addFacet('facet'), state, 'addFacet should return the same instance');
-
-  t.end();
+  expect(state.addFacet('facet')).toBe(state);
 });
 
-test('[No changes] removeFacet', function(t) {
+test('[No changes] removeFacet', function() {
   var state = SearchParameters.make({});
 
-  t.equal(state.removeFacet('facet'), state, 'removeFacet should return the same instance');
-
-  t.end();
+  expect(state.removeFacet('facet')).toBe(state);
 });
 
-test('[No changes] addDisjunctiveFacet', function(t) {
+test('[No changes] addDisjunctiveFacet', function() {
   var state = SearchParameters.make({}).addDisjunctiveFacet('facet');
 
-  t.equal(state.addDisjunctiveFacet('facet'), state, 'addDisjunctiveFacet should return the same instance');
-
-  t.end();
+  expect(state.addDisjunctiveFacet('facet')).toBe(state);
 });
 
-test('[No changes] removeDisjunctiveFacet', function(t) {
+test('[No changes] removeDisjunctiveFacet', function() {
   var state = SearchParameters.make({});
 
-  t.equal(state.removeDisjunctiveFacet('facet'), state, 'removeDisjunctiveFacet should return the same instance');
-
-  t.end();
+  expect(state.removeDisjunctiveFacet('facet')).toBe(state);
 });
 
-test('[No changes] removeHierarchicalFacet', function(t) {
+test('[No changes] removeHierarchicalFacet', function() {
   var state = SearchParameters.make({});
 
-  t.equal(state.removeHierarchicalFacet('facet'), state, 'removeHierarchicalFacet should return the same instance');
-
-  t.end();
+  expect(state.removeHierarchicalFacet('facet')).toBe(state);
 });
 
-test('[No changes] addTagRefinement', function(t) {
+test('[No changes] addTagRefinement', function() {
   var state = SearchParameters.make({}).addTagRefinement('tag');
 
-  t.equal(state.addTagRefinement('tag'), state, 'addTagRefinement should return the same instance');
-
-  t.end();
+  expect(state.addTagRefinement('tag')).toBe(state);
 });
 
-test('[No changes] clearTags', function(t) {
+test('[No changes] clearTags', function() {
   var state = SearchParameters.make({
     query: 'query'
   });
 
-  t.equal(state.clearTags(), state, 'clearTags should return the same instance');
-
-  t.end();
+  expect(state.clearTags()).toBe(state);
 });
 
-test('[No changes] addDisjunctiveFacetRefinement', function(t) {
+test('[No changes] addDisjunctiveFacetRefinement', function() {
   var state = SearchParameters.make({
     disjunctiveFacets: ['facet']
   }).addDisjunctiveFacetRefinement('facet', 'value');
 
-  t.equal(state.addDisjunctiveFacetRefinement('facet', 'value'), state, 'addDisjunctiveFacetRefinement should return the same instance');
-
-  t.end();
+  expect(state.addDisjunctiveFacetRefinement('facet', 'value')).toBe(state);
 });
 
-test('[No changes] removeDisjunctiveFacetRefinement', function(t) {
+test('[No changes] removeDisjunctiveFacetRefinement', function() {
   var state = SearchParameters.make({
     disjunctiveFacets: ['facet']
   });
 
-  t.equal(state.removeDisjunctiveFacetRefinement('facet', 'value'), state, 'removeDisjunctiveFacetRefinement should return the same instance');
-
-  t.end();
+  expect(state.removeDisjunctiveFacetRefinement('facet', 'value')).toBe(state);
 });
 
-test('[No changes] addFacetRefinement', function(t) {
+test('[No changes] addFacetRefinement', function() {
   var state = SearchParameters.make({
     facets: ['facet']
   }).addFacetRefinement('facet', 'value');
 
-  t.equal(state.addFacetRefinement('facet', 'value'), state, 'addFacetRefinement should return the same instance');
-
-  t.end();
+  expect(state.addFacetRefinement('facet', 'value')).toBe(state);
 });
 
-test('[No changes] removeDisjunctiveFacetRefinement', function(t) {
+test('[No changes] removeDisjunctiveFacetRefinement', function() {
   var state = SearchParameters.make({
     disjunctiveFacets: ['facet']
   });
 
-  t.equal(state.removeDisjunctiveFacetRefinement('facet', 'value'), state, 'removeDisjunctiveFacetRefinement should return the same instance');
-
-  t.end();
+  expect(state.removeDisjunctiveFacetRefinement('facet', 'value')).toBe(state);
 });
 
-test('[No changes] addNumericRefinement', function(t) {
+test('[No changes] addNumericRefinement', function() {
   var state = SearchParameters.make({}).addNumericRefinement('attribute', '>', 0);
 
-  t.equal(state.addNumericRefinement('attribute', '>', 0), state, 'addNumericRefinement should return the same instance');
-
-  t.end();
+  expect(state.addNumericRefinement('attribute', '>', 0)).toBe(state);
 });
 
-test('[No changes] removeNumericRefinement', function(t) {
+test('[No changes] removeNumericRefinement', function() {
   var state = SearchParameters.make({});
 
-  t.equal(state.removeNumericRefinement('attribute', '>'), state, 'removeNumericRefinement should return the same instance');
-
-  t.end();
+  expect(state.removeNumericRefinement('attribute', '>')).toBe(state);
 });
 
-test('[No changes] setQueryParameter', function(t) {
+test('[No changes] setQueryParameter', function() {
   var state = SearchParameters.make({
     minWordSizefor1Typo: 50
   });
 
-  t.equal(state.setQueryParameter('minWordSizefor1Typo', 50), state, 'setQueryParameter should return the same instance');
-
-  t.end();
+  expect(state.setQueryParameter('minWordSizefor1Typo', 50)).toBe(state);
 });

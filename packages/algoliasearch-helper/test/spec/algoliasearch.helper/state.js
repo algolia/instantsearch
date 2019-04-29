@@ -1,6 +1,5 @@
 'use strict';
 
-var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
 var SearchParameters = algoliasearchHelper.SearchParameters;
@@ -12,44 +11,32 @@ var qs = require('qs');
 
 var fakeClient = {};
 
-test('setState should set the state of the helper and trigger a change event', function(t) {
+test('setState should set the state of the helper and trigger a change event', function(done) {
   var state0 = {query: 'a query'};
   var state1 = {query: 'another query'};
 
   var helper = algoliasearchHelper(fakeClient, null, state0);
 
-  t.deepEquals(helper.state, new SearchParameters(state0), '(setstate) initial state should be state0');
+  expect(helper.state).toEqual(new SearchParameters(state0));
 
   helper.on('change', function(newState) {
-    t.deepEquals(
-      helper.state,
-      new SearchParameters(state1),
-      '(setState) the state in the helper should be changed to state1');
-    t.deepEquals(
-      newState,
-      new SearchParameters(state1),
-      '(setState) the state parameter of the event handler should be set to state1');
-    t.end();
+    expect(helper.state).toEqual(new SearchParameters(state1));
+    expect(newState).toEqual(new SearchParameters(state1));
+    done();
   });
 
   helper.setState(state1);
 });
 
-test('getState should return the current state of the helper', function(t) {
+test('getState should return the current state of the helper', function() {
   var initialState = {query: 'a query'};
   var helper = algoliasearchHelper(fakeClient, null, initialState);
 
-  t.deepEquals(helper.getState(),
-    new SearchParameters(initialState),
-    '(getState) getState returned value should be equivalent to initialstate as a new SearchParameters');
-  t.deepEquals(helper.getState(),
-    helper.state,
-    '(getState) getState returned value should be equivalent to the internal state of the helper');
-
-  t.end();
+  expect(helper.getState()).toEqual(new SearchParameters(initialState));
+  expect(helper.getState()).toEqual(helper.state);
 });
 
-test('getState should return an object according to the specified filters', function(t) {
+test('getState should return an object according to the specified filters', function() {
   var initialState = {
     query: 'a query',
     facets: ['facetA', 'facetWeDontCareAbout'],
@@ -91,26 +78,17 @@ test('getState should return an object according to the specified filters', func
     hierarchicalFacetsRefinements: {facetC: ['menu']}
   };
 
-  t.deepEquals(helper.getState([]), {}, 'if an empty array is passed then we should get an empty object');
-  t.deepEquals(
-    helper.getState(['index', 'query', 'attribute:facetA', 'attribute:facetB', 'attribute:numerical']),
-    stateFinalWithSpecificAttribute,
-    '(getState) getState returned value should contain all the required elements');
+  expect(helper.getState([])).toEqual({});
+  expect(
+    helper.getState(['index', 'query', 'attribute:facetA', 'attribute:facetB', 'attribute:numerical'])
+  ).toEqual(stateFinalWithSpecificAttribute);
 
-  t.deepEquals(
-    helper.getState(['attribute:facetC']),
-    stateWithHierarchicalAttribute,
-    '(getState) getState returned value should contain the hierarchical facet');
+  expect(helper.getState(['attribute:facetC'])).toEqual(stateWithHierarchicalAttribute);
 
-  t.deepEquals(
-    helper.getState(['index', 'query', 'attribute:*']),
-    stateFinalWithoutSpecificAttributes,
-    '(getState) getState should return all the attributes if *');
-
-  t.end();
+  expect(helper.getState(['index', 'query', 'attribute:*'])).toEqual(stateFinalWithoutSpecificAttributes);
 });
 
-test('Get the state as a query string', function(t) {
+test('Get the state as a query string', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -138,15 +116,10 @@ test('Get the state as a query string', function(t) {
     }
   );
 
-  t.deepEquals(
-    algoliasearchHelper.SearchParameters._parseNumbers(decodedState),
-    stateWithoutConfig,
-    'deserialized qs should be equal to the state');
-
-  t.end();
+  expect(algoliasearchHelper.SearchParameters._parseNumbers(decodedState)).toEqual(stateWithoutConfig);
 });
 
-test('Set the state with a query parameter with index', function(t) {
+test('Set the state with a query parameter with index', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -166,18 +139,11 @@ test('Set the state with a query parameter with index', function(t) {
   var newHelper = algoliasearchHelper(fakeClient, null, initialState);
   newHelper.setStateFromQueryString(helper.getStateAsQueryString({filters: filters}));
 
-  t.deepEquals(
-    newHelper.state,
-    helper.state,
-    'Should be able to recreate a helper from a query string');
-  t.equal(
-    newHelper.getIndex(),
-    helper.getIndex(),
-    'Index should be equal');
-  t.end();
+  expect(newHelper.state).toEqual(helper.state);
+  expect(newHelper.getIndex()).toBe(helper.getIndex());
 });
 
-test('Set the state with a query parameter without index', function(t) {
+test('Set the state with a query parameter without index', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -196,18 +162,11 @@ test('Set the state with a query parameter without index', function(t) {
   var newHelper = algoliasearchHelper(fakeClient, null, initialState);
   newHelper.setStateFromQueryString(helper.getStateAsQueryString({filters: filters}));
 
-  t.deepEquals(
-    newHelper.state,
-    helper.state,
-    'Should be able to recreate a helper from a query string');
-  t.equal(
-    newHelper.getIndex(),
-    helper.getIndex(),
-    'Index should be equal');
-  t.end();
+  expect(newHelper.state).toEqual(helper.state);
+  expect(newHelper.getIndex()).toBe(helper.getIndex());
 });
 
-test('Set the state with a query parameter with unknown querystring attributes', function(t) {
+test('Set the state with a query parameter with unknown querystring attributes', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -227,18 +186,11 @@ test('Set the state with a query parameter with unknown querystring attributes',
   var queryString = helper.getStateAsQueryString({filters: filters}) + '&foo=bar&toto=tata';
   newHelper.setStateFromQueryString(queryString);
 
-  t.deepEquals(
-    newHelper.state,
-    helper.state,
-    'Should be able to recreate a helper from a query string');
-  t.equal(
-    newHelper.getIndex(),
-    helper.getIndex(),
-    'Index should be equal');
-  t.end();
+  expect(newHelper.state).toEqual(helper.state);
+  expect(newHelper.getIndex()).toBe(helper.getIndex());
 });
 
-test('Serialize with prefix', function(t) {
+test('Serialize with prefix', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -260,15 +212,12 @@ test('Serialize with prefix', function(t) {
 
   var qString = helper.getStateAsQueryString({filters: filters, prefix: prefix});
 
-  t.deepEquals(
-    qString,
-    'toto_q=a%20query&toto_idx=indexNameInTheHelper&toto_dFR[facetB][0]=d&toto_fR[facetA][0]=a&toto_fR[facetWeDontCareAbout][0]=v&toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3',
-    'serialized qs with prefix should be correct');
-
-  t.end();
+  expect(qString).toEqual(
+    'toto_q=a%20query&toto_idx=indexNameInTheHelper&toto_dFR[facetB][0]=d&toto_fR[facetA][0]=a&toto_fR[facetWeDontCareAbout][0]=v&toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3'
+  );
 });
 
-test('Serialize without any state to serialize, only more attributes', function(t) {
+test('Serialize without any state to serialize, only more attributes', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -289,15 +238,10 @@ test('Serialize without any state to serialize, only more attributes', function(
     }
   );
 
-  t.deepEquals(
-    qString,
-    'toto=tata&foo=bar',
-    'serialized qs without helper parameters and more attributes should be equal');
-
-  t.end();
+  expect(qString).toEqual('toto=tata&foo=bar');
 });
 
-test('Serialize with prefix, this should have no impact on user provided paramaters', function(t) {
+test('Serialize with prefix, this should have no impact on user provided paramaters', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -328,15 +272,12 @@ test('Serialize with prefix, this should have no impact on user provided paramat
     }
   );
 
-  t.deepEquals(
-    qString,
-    'toto_q=a%20query&toto_dFR[facetB][0]=d&toto_fR[facetA][0]=a&toto_fR[facetWeDontCareAbout][0]=v&toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3&toto=tata&foo=bar',
-    'serialized qs with prefix and more attributes should be equal');
-
-  t.end();
+  expect(qString).toEqual(
+    'toto_q=a%20query&toto_dFR[facetB][0]=d&toto_fR[facetA][0]=a&toto_fR[facetWeDontCareAbout][0]=v&toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3&toto=tata&foo=bar'
+  );
 });
 
-test('Should be able to deserialize qs with namespaced attributes', function(t) {
+test('Should be able to deserialize qs with namespaced attributes', function() {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
@@ -357,18 +298,11 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
   var queryString = helper.getStateAsQueryString({filters: filters, prefix: 'calimerou_'});
   newHelper.setStateFromQueryString(queryString, {prefix: 'calimerou_'});
 
-  t.deepEquals(
-    newHelper.state,
-    helper.state,
-    'Should be able to recreate a helper from a query string (with prefix)');
-  t.equal(
-    newHelper.getIndex(),
-    helper.getIndex(),
-    'Index should be equal even with the prefix');
-  t.end();
+  expect(newHelper.state).toEqual(helper.state);
+  expect(newHelper.getIndex()).toBe(helper.getIndex());
 });
 
-test('getStateFromQueryString should parse page as number and be consistent with the state', function(t) {
+test('getStateFromQueryString should parse page as number and be consistent with the state', function() {
   var index = 'indexNameInTheHelper';
   var helper = algoliasearchHelper(fakeClient, index, {});
 
@@ -382,14 +316,10 @@ test('getStateFromQueryString should parse page as number and be consistent with
     queryString
   );
 
-  t.deepEquals(
-    partialStateFromQueryString.page,
-    helper.state.page,
-    'Page should be consistent through query string serialization/deserialization');
-  t.end();
+  expect(partialStateFromQueryString.page).toEqual(helper.state.page);
 });
 
-test('getStateFromQueryString should use its options', function(t) {
+test('getStateFromQueryString should use its options', function() {
   var partialStateFromQueryString = algoliasearchHelper.url.getStateFromQueryString(
     'is_notexistingparam=val&is_MyQuery=test&is_p=3&extra_param=val',
     {
@@ -400,18 +330,13 @@ test('getStateFromQueryString should use its options', function(t) {
     }
   );
 
-  t.deepEquals(
-    partialStateFromQueryString,
-    {
-      query: 'test',
-      page: 3
-    },
-    'Partial state should have used both the prefix and the mapping'
-  );
-  t.end();
+  expect(partialStateFromQueryString).toEqual({
+    query: 'test',
+    page: 3
+  });
 });
 
-test('should be able to get configuration that is not from algolia', function(t) {
+test('should be able to get configuration that is not from algolia', function() {
   var index = 'indexNameInTheHelper';
   var helper = algoliasearchHelper(fakeClient, index, {});
 
@@ -452,19 +377,12 @@ test('should be able to get configuration that is not from algolia', function(t)
   var config2 = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qsWithPrefix, {prefix: 'wtf_'});
   var config3 = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qsWithPrefixAndMapping, {prefix: 'wtf_', mapping: {p: 'mypage'}});
 
-  t.deepEquals(
-    config1,
-    moar);
-  t.deepEquals(
-    config2,
-    moar);
-  t.deepEquals(
-    config3,
-    moar);
-  t.end();
+  expect(config1).toEqual(moar);
+  expect(config2).toEqual(moar);
+  expect(config3).toEqual(moar);
 });
 
-test('setState should set a default hierarchicalFacetRefinement when a rootPath is defined', function(t) {
+test('setState should set a default hierarchicalFacetRefinement when a rootPath is defined', function() {
   var searchParameters = {hierarchicalFacets: [
     {
       name: 'hierarchicalCategories.lvl0',
@@ -482,22 +400,20 @@ test('setState should set a default hierarchicalFacetRefinement when a rootPath 
   var helper = algoliasearchHelper(fakeClient, null, searchParameters);
   var initialHelperState = Object.assign({}, helper.getState());
 
-  t.deepEquals(initialHelperState.hierarchicalFacetsRefinements, {
+  expect(initialHelperState.hierarchicalFacetsRefinements).toEqual({
     'hierarchicalCategories.lvl0': ['Cameras & Camcorders']
   });
 
   // reset state
   helper.setState(helper.state.removeHierarchicalFacet('hierarchicalCategories.lvl0'));
-  t.deepEquals(helper.getState().hierarchicalFacetsRefinements, {});
+  expect(helper.getState().hierarchicalFacetsRefinements).toEqual({});
 
   // re-add `hierarchicalFacets`
   helper.setState(Object.assign({}, helper.state, searchParameters));
   var finalHelperState = Object.assign({}, helper.getState());
 
-  t.deepEquals(initialHelperState, finalHelperState);
-  t.deepEquals(finalHelperState.hierarchicalFacetsRefinements, {
+  expect(initialHelperState).toEqual(finalHelperState);
+  expect(finalHelperState.hierarchicalFacetsRefinements).toEqual({
     'hierarchicalCategories.lvl0': ['Cameras & Camcorders']
   });
-
-  t.end();
 });

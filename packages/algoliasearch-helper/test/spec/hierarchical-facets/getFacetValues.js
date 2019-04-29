@@ -1,10 +1,8 @@
 'use strict';
 
-var test = require('tape');
-
 var fakeClient = {};
 
-test('hierarchical facets: getFacetValues', function(t) {
+test('hierarchical facets: getFacetValues', function() {
   var algoliasearchHelper = require('../../../');
   var SearchResults = require('../../../src/SearchResults');
 
@@ -93,13 +91,8 @@ test('hierarchical facets: getFacetValues', function(t) {
 
   var results = new SearchResults(helper.state, algoliaResponse.results);
 
-  t.deepEqual(
-    results.getFacetValues('categories', {sortBy: ['name:asc']}),
-    expectedHelperResponseNameASC,
-    'Hierarchical facet values should be sorted as per the predicate');
-  t.deepEqual(
-    results.getFacetValues('categories', {sortBy: function(a, b) { return a.count - b.count; }}),
-    results.getFacetValues('categories', {sortBy: ['count:asc']}),
-    'Hierarchical faet values should be consistentely sort with string or function predicates');
-  t.end();
+  expect(results.getFacetValues('categories', {sortBy: ['name:asc']})).toEqual(expectedHelperResponseNameASC);
+  expect(
+    results.getFacetValues('categories', {sortBy: function(a, b) { return a.count - b.count; }})
+  ).toEqual(results.getFacetValues('categories', {sortBy: ['count:asc']}));
 });

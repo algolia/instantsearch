@@ -1,10 +1,7 @@
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: toggleRefine behavior', function(t) {
+test('hierarchical facets: toggleRefine behavior', function() {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -20,7 +17,9 @@ test('hierarchical facets: toggleRefine behavior', function(t) {
     }]
   });
 
-  client.search = sinon.stub().returns(new Promise(function() {}));
+  client.search = jest.fn(function() {
+    return new Promise(function() {});
+  });
 
   // select `Flying dog`
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
@@ -34,26 +33,15 @@ test('hierarchical facets: toggleRefine behavior', function(t) {
 
   helper.setQuery('a').search();
 
-  var call = client.search.getCall(0);
-  var queries = call.args[0];
+  var queries = client.search.mock.calls[0][0];
   var hitsQuery = queries[0];
 
-  t.deepEqual(
-    hitsQuery.params.facets,
-    ['categories.lvl0', 'categories.lvl1'],
-    'first query (hits) has `categories.lvl0, categories.lvl1` as facets'
-  );
-  t.deepEqual(
-    hitsQuery.params.facetFilters,
-    [['categories.lvl0:beers']],
-    'first query (hits) has our `categories.lvl0` refinement facet filter'
-  );
-  t.end();
+  expect(hitsQuery.params.facets).toEqual(['categories.lvl0', 'categories.lvl1']);
+  expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl0:beers']]);
 });
 
-test('hierarchical facets: toggleRefine behavior when root level', function(t) {
+test('hierarchical facets: toggleRefine behavior when root level', function() {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -69,7 +57,9 @@ test('hierarchical facets: toggleRefine behavior when root level', function(t) {
     }]
   });
 
-  client.search = sinon.stub().returns(new Promise(function() {}));
+  client.search = jest.fn(function() {
+    return new Promise(function() {});
+  });
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
   helper.toggleRefine('categories', 'beers');
@@ -77,26 +67,15 @@ test('hierarchical facets: toggleRefine behavior when root level', function(t) {
 
   helper.setQuery('a').search();
 
-  var call = client.search.getCall(0);
-  var queries = call.args[0];
+  var queries = client.search.mock.calls[0][0];
   var hitsQuery = queries[0];
 
-  t.deepEqual(
-    hitsQuery.params.facets,
-    ['categories.lvl0'],
-    'first query (hits) has `categories.lvl0, categories.lvl1` as facets'
-  );
-  t.equal(
-    hitsQuery.params.facetFilters,
-    undefined,
-    'first query (hits) has our `categories.lvl0` refinement facet filter'
-  );
-  t.end();
+  expect(hitsQuery.params.facets).toEqual(['categories.lvl0']);
+  expect(hitsQuery.params.facetFilters).toBe(undefined);
 });
 
-test('hierarchical facets: toggleRefine behavior when different root level', function(t) {
+test('hierarchical facets: toggleRefine behavior when different root level', function() {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -112,7 +91,9 @@ test('hierarchical facets: toggleRefine behavior when different root level', fun
     }]
   });
 
-  client.search = sinon.stub().returns(new Promise(function() {}));
+  client.search = jest.fn(function() {
+    return new Promise(function() {});
+  });
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
   helper.toggleRefine('categories', 'fruits');
@@ -120,19 +101,9 @@ test('hierarchical facets: toggleRefine behavior when different root level', fun
 
   helper.setQuery('a').search();
 
-  var call = client.search.getCall(0);
-  var queries = call.args[0];
+  var queries = client.search.mock.calls[0][0];
   var hitsQuery = queries[0];
 
-  t.deepEqual(
-    hitsQuery.params.facets,
-    ['categories.lvl0', 'categories.lvl1'],
-    'first query (hits) has `categories.lvl0, categories.lvl1` as facets'
-  );
-  t.deepEqual(
-    hitsQuery.params.facetFilters,
-    [['categories.lvl0:fruits']],
-    'first query (hits) has our `categories.lvl0` refinement facet filter'
-  );
-  t.end();
+  expect(hitsQuery.params.facets).toEqual(['categories.lvl0', 'categories.lvl1']);
+  expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl0:fruits']]);
 });

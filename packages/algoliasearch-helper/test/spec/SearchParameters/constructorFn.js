@@ -1,10 +1,9 @@
 'use strict';
 
-var test = require('tape');
 var forOwn = require('lodash/forOwn');
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('Constructor should accept an object with known keys', function(t) {
+test('Constructor should accept an object with known keys', function() {
   var legitConfig = {
     'query': '',
     'disjunctiveFacets': [
@@ -23,13 +22,11 @@ test('Constructor should accept an object with known keys', function(t) {
   };
   var params = new SearchParameters(legitConfig);
   forOwn(legitConfig, function(v, k) {
-    t.deepEqual(params[k], v);
+    expect(params[k]).toEqual(v);
   });
-
-  t.end();
 });
 
-test('Constructor should accept an object with unknown keys', function(t) {
+test('Constructor should accept an object with unknown keys', function() {
   var betaConfig = {
     'query': '',
     'disjunctiveFacets': [
@@ -50,13 +47,11 @@ test('Constructor should accept an object with unknown keys', function(t) {
   };
   var params = new SearchParameters(betaConfig);
   forOwn(betaConfig, function(v, k) {
-    t.deepEqual(params[k], v);
+    expect(params[k]).toEqual(v);
   });
-
-  t.end();
 });
 
-test('Factory should accept an object with known keys', function(t) {
+test('Factory should accept an object with known keys', function() {
   var legitConfig = {
     'query': '',
     'disjunctiveFacets': [
@@ -75,13 +70,11 @@ test('Factory should accept an object with known keys', function(t) {
   };
   var params = SearchParameters.make(legitConfig);
   forOwn(legitConfig, function(v, k) {
-    t.deepEqual(params[k], v);
+    expect(params[k]).toEqual(v);
   });
-
-  t.end();
 });
 
-test('Constructor should accept an object with unknown keys', function(t) {
+test('Constructor should accept an object with unknown keys', function() {
   var betaConfig = {
     'query': '',
     'disjunctiveFacets': [
@@ -102,8 +95,6 @@ test('Constructor should accept an object with unknown keys', function(t) {
   };
   var params = SearchParameters.make(betaConfig);
   forOwn(betaConfig, function(v, k) {
-    t.deepEqual(params[k], v);
+    expect(params[k]).toEqual(v);
   });
-
-  t.end();
 });

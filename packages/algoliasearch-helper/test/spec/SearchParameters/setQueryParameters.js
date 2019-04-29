@@ -1,24 +1,21 @@
 'use strict';
 
-var test = require('tape');
 var forOwn = require('lodash/forOwn');
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('setQueryParameters should return the same instance if the options is falsey', function(t) {
+test('setQueryParameters should return the same instance if the options is falsey', function() {
   var originalSP = new SearchParameters({
     facets: ['a', 'b'],
     ignorePlurals: false,
     attributesToHighlight: ''
   });
 
-  t.equal(originalSP, originalSP.setQueryParameters());
-  t.equal(originalSP, originalSP.setQueryParameters(null));
-  t.equal(originalSP, originalSP.setQueryParameters(undefined));
-
-  t.end();
+  expect(originalSP).toBe(originalSP.setQueryParameters());
+  expect(originalSP).toBe(originalSP.setQueryParameters(null));
+  expect(originalSP).toBe(originalSP.setQueryParameters(undefined));
 });
 
-test('setQueryParameters should be able to mix an actual state with a new set of parameters', function(t) {
+test('setQueryParameters should be able to mix an actual state with a new set of parameters', function() {
   var originalSP = new SearchParameters({
     facets: ['a', 'b'],
     ignorePlurals: false,
@@ -32,15 +29,13 @@ test('setQueryParameters should be able to mix an actual state with a new set of
   };
   var newSP = originalSP.setQueryParameters(params);
 
-  t.deepEquals(newSP.facets, params.facets, 'Facets should be updated (existing parameter)');
-  t.deepEquals(newSP.attributesToHighlight, newSP.attributesToHighlight, 'attributesToHighlight should be updated (existing parameter)');
-  t.equal(newSP.replaceSynonymsInHighlight, newSP.replaceSynonymsInHighlight, 'replaceSynonymsInHighlight should be updated (new parameter)');
-  t.equal(newSP.ignorePlurals, originalSP.ignorePlurals, 'ignorePlurals should be the same as the original');
-
-  t.end();
+  expect(newSP.facets).toEqual(params.facets);
+  expect(newSP.attributesToHighlight).toEqual(newSP.attributesToHighlight);
+  expect(newSP.replaceSynonymsInHighlight).toBe(newSP.replaceSynonymsInHighlight);
+  expect(newSP.ignorePlurals).toBe(originalSP.ignorePlurals);
 });
 
-test('setQueryParameters should add unknown properties', function(t) {
+test('setQueryParameters should add unknown properties', function() {
   var state0 = new SearchParameters({
     facets: ['a', 'b'],
     ignorePlurals: false,
@@ -55,8 +50,6 @@ test('setQueryParameters should add unknown properties', function(t) {
   var state1 = state0.setQueryParameters(params);
 
   forOwn(params, function(v, k) {
-    t.deepEquals(state1[k], v);
+    expect(state1[k]).toEqual(v);
   });
-
-  t.end();
 });

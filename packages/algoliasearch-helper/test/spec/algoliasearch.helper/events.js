@@ -1,12 +1,20 @@
 'use strict';
 
-var test = require('tape');
-var sinon = require('sinon');
 var algoliaSearchHelper = require('../../../index');
 
-var fakeClient = {};
+function makeFakeClient() {
+  return {
+    search: jest.fn(function() {
+      return new Promise(function() {});
+    }),
+    searchForFacetValues: jest.fn(function() {
+      return new Promise(function() {});
+    })
+  };
+}
 
-test('Change events should be emitted as soon as the state change, but search should be triggered (refactored)', function(t) {
+test('Change events should be emitted as soon as the state change, but search should be triggered (refactored)', function() {
+  var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
     disjunctiveFacetsRefinements: {city: ['Paris']},
@@ -25,48 +33,45 @@ test('Change events should be emitted as soon as the state change, but search sh
     changeEventCount++;
   });
 
-  var stubbedSearch = sinon.stub(helper, '_search');
-
   helper.setQuery('a');
-  t.equal(changeEventCount, 1, 'query - change');
-  t.equal(stubbedSearch.callCount, 0, 'query - search');
+  expect(changeEventCount).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.clearRefinements();
-  t.equal(changeEventCount, 2, 'clearRefinements - change');
-  t.equal(stubbedSearch.callCount, 0, 'clearRefinements - search');
+  expect(changeEventCount).toBe(2);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addDisjunctiveRefine('city', 'Paris');
-  t.equal(changeEventCount, 3, 'addDisjunctiveRefine - change');
-  t.equal(stubbedSearch.callCount, 0, 'addDisjunctiveRefine - search');
+  expect(changeEventCount).toBe(3);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeDisjunctiveRefine('city', 'Paris');
-  t.equal(changeEventCount, 4, 'removeDisjunctiveRefine - change');
-  t.equal(stubbedSearch.callCount, 0, 'removeDisjunctiveRefine - search');
+  expect(changeEventCount).toBe(4);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addExclude('tower', 'Empire State Building');
-  t.equal(changeEventCount, 5, 'addExclude - change');
-  t.equal(stubbedSearch.callCount, 0, 'addExclude - search');
+  expect(changeEventCount).toBe(5);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeExclude('tower', 'Empire State Building');
-  t.equal(changeEventCount, 6, 'removeExclude - change');
-  t.equal(stubbedSearch.callCount, 0, 'removeExclude - search');
+  expect(changeEventCount).toBe(6);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addRefine('tower', 'Empire State Building');
-  t.equal(changeEventCount, 7, 'addRefine - change');
-  t.equal(stubbedSearch.callCount, 0, 'addRefine - search');
+  expect(changeEventCount).toBe(7);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeRefine('tower', 'Empire State Building');
-  t.equal(changeEventCount, 8, 'removeRefine - change');
-  t.equal(stubbedSearch.callCount, 0, 'removeRefine - search');
+  expect(changeEventCount).toBe(8);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.search();
-  t.equal(changeEventCount, 8, "final search doesn't call the change");
-  t.equal(stubbedSearch.callCount, 1, 'final search triggers the search');
-
-  t.end();
+  expect(changeEventCount).toBe(8);
+  expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
-test('Change events should only be emitted for meaningful changes', function(t) {
+test('Change events should only be emitted for meaningful changes', function() {
+  var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     query: 'a',
     disjunctiveFacets: ['city'],
@@ -89,63 +94,55 @@ test('Change events should only be emitted for meaningful changes', function(t) 
     changeEventCount++;
   });
 
-  var stubbedSearch = sinon.stub(helper, '_search');
-
   helper.setQuery('a');
-  t.equal(changeEventCount, 0, 'search');
-  t.equal(stubbedSearch.callCount, 0, 'search');
+  expect(changeEventCount).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addDisjunctiveRefine('city', 'Paris');
-  t.equal(changeEventCount, 0, 'addDisjunctiveRefine');
-  t.equal(stubbedSearch.callCount, 0, 'addDisjunctiveRefine');
+  expect(changeEventCount).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addExclude('tower', 'Empire State Building');
-  t.equal(changeEventCount, 0, 'addExclude');
-  t.equal(stubbedSearch.callCount, 0, 'addExclude');
+  expect(changeEventCount).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addRefine('tower', 'Empire State Building');
-  t.equal(changeEventCount, 0, 'addRefine');
-  t.equal(stubbedSearch.callCount, 0, 'addRefine');
+  expect(changeEventCount).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addNumericRefinement('price', '>', 300);
-  t.equal(changeEventCount, 0, 'addNumericRefinement');
-  t.equal(stubbedSearch.callCount, 0, 'addNumericRefinement');
+  expect(changeEventCount).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   // This is an actual change
   helper.clearRefinements();
-  t.equal(changeEventCount, 1, 'clearRefinements');
-  t.equal(stubbedSearch.callCount, 0, 'clearRefinements');
+  expect(changeEventCount).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.clearRefinements();
-  t.equal(changeEventCount, 1, 'clearRefinements');
-  t.equal(stubbedSearch.callCount, 0, 'clearRefinements');
+  expect(changeEventCount).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeDisjunctiveRefine('city', 'Paris');
-  t.equal(changeEventCount, 1, 'removeDisjunctiveRefine');
-  t.equal(stubbedSearch.callCount, 0, 'removeDisjunctiveRefine');
+  expect(changeEventCount).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeExclude('tower', 'Empire State Building');
-  t.equal(changeEventCount, 1, 'removeExclude');
-  t.equal(stubbedSearch.callCount, 0, 'removeExclude');
+  expect(changeEventCount).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeRefine('tower', 'Empire State Building');
-  t.equal(changeEventCount, 1, 'removeRefine');
-  t.equal(stubbedSearch.callCount, 0, 'removeRefine');
+  expect(changeEventCount).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.search();
-  t.equal(changeEventCount, 1, "final search doesn't call the change");
-  t.equal(stubbedSearch.callCount, 1, 'final search triggers the search');
-
-  t.end();
+  expect(changeEventCount).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
-test('search event should be emitted once when the search is triggered and before the request is sent', function(t) {
-  var clientMock = {
-    search: function() {
-      return new Promise(function() {});
-    }
-  };
-  var helper = algoliaSearchHelper(clientMock, 'Index', {
+test('search event should be emitted once when the search is triggered and before the request is sent', function() {
+  var fakeClient = makeFakeClient();
+  var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });
@@ -156,49 +153,46 @@ test('search event should be emitted once when the search is triggered and befor
     count++;
   });
 
-  clientMock.search = function() {
-    t.equal(
-      count,
-      1,
-      'When the client search function is called the search' +
-      ' event should have been sent exactly once.');
-
-    return new Promise(function() {});
-  };
-
   helper.setQuery('');
-  t.equal(count, 0, 'search');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.clearRefinements();
-  t.equal(count, 0, 'clearRefinements');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addDisjunctiveRefine('city', 'Paris');
-  t.equal(count, 0, 'addDisjunctiveRefine');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeDisjunctiveRefine('city', 'Paris');
-  t.equal(count, 0, 'removeDisjunctiveRefine');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addExclude('tower', 'Empire State Building');
-  t.equal(count, 0, 'addExclude');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeExclude('tower', 'Empire State Building');
-  t.equal(count, 0, 'removeExclude');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addRefine('tower', 'Empire State Building');
-  t.equal(count, 0, 'addRefine');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeRefine('tower', 'Empire State Building');
-  t.equal(count, 0, 'removeRefine');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.search();
-  t.equal(count, 1, 'final search does trigger the search event');
-
-  t.end();
+  expect(count).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
-test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function(t) {
-  var clientMock = {};
-  var helper = algoliaSearchHelper(clientMock, 'Index', {
+test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function() {
+  var fakeClient = makeFakeClient();
+  var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });
@@ -209,28 +203,18 @@ test('searchOnce event should be emitted once when the search is triggered using
     count++;
   });
 
-  clientMock.search = function() {
-    t.equal(
-      count,
-      1,
-      'When the client search function is called the searchOnce' +
-      ' event should have been sent exactly once.');
-
-    return new Promise(function() {});
-  };
-
-  t.equal(count, 0, 'before search');
+  expect(count).toBe(0);
+  expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.searchOnce({}, function() {});
-  t.equal(count, 1, 'final search does trigger the search event');
-
-  t.end();
+  expect(count).toBe(1);
+  expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
 test('searchForFacetValues event should be emitted once when the search is triggered using' +
-     ' searchForFacetValues and before the request is sent', function(t) {
-  var clientMock = {};
-  var helper = algoliaSearchHelper(clientMock, 'Index', {
+     ' searchForFacetValues and before the request is sent', function() {
+  var fakeClient = makeFakeClient();
+  var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });
@@ -241,24 +225,10 @@ test('searchForFacetValues event should be emitted once when the search is trigg
     count++;
   });
 
-  clientMock.initIndex = function() {
-    return {
-      searchForFacetValues: function() {
-        t.equal(
-          count,
-          1,
-          'When the client search function is called the searchOnce' +
-          ' event should have been sent exactly once.');
-
-        return new Promise(function() {});
-      }
-    };
-  };
-
-  t.equal(count, 0, 'before search');
+  expect(count).toBe(0);
+  expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(0);
 
   helper.searchForFacetValues();
-  t.equal(count, 1, 'final search does trigger the search event');
-
-  t.end();
+  expect(count).toBe(1);
+  expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(1);
 });

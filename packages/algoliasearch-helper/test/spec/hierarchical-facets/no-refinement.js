@@ -1,10 +1,7 @@
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: no refinement', function(t) {
+test('hierarchical facets: no refinement', function(done) {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -55,29 +52,20 @@ test('hierarchical facets: no refinement', function(t) {
     }]
   }];
 
-  client.search = sinon
-    .stub()
-    .resolves(algoliaResponse);
+  client.search = jest.fn(function() {
+    return Promise.resolve(algoliaResponse);
+  });
 
   helper.setQuery('a').search();
   helper.once('result', function(content) {
-    var call = client.search.getCall(0);
-    var queries = call.args[0];
+    var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
 
-    t.equal(queries.length, 1, 'we made one query');
-    t.ok(client.search.calledOnce, 'client.search was called once');
-    t.deepEqual(
-      hitsQuery.params.facets,
-      ['categories.lvl0'],
-      'first query (hits) has `categories.lvl0` as facets'
-    );
-    t.equal(
-      hitsQuery.params.facetFilters,
-      undefined,
-      'first query (hits) has no facet refinement refinement'
-    );
-    t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);
-    t.end();
+    expect(queries.length).toBe(1);
+    expect(client.search).toHaveBeenCalledTimes(1);
+    expect(hitsQuery.params.facets).toEqual(['categories.lvl0']);
+    expect(hitsQuery.params.facetFilters).toBe(undefined);
+    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    done();
   });
 });

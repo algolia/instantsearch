@@ -5,8 +5,6 @@ var setup = utils.setupSimple;
 
 var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
 
-var test = require('tape');
-var bind = require('lodash/bind');
 var random = require('lodash/random');
 
 if (!utils.shouldRun) {
@@ -30,125 +28,114 @@ var config = {
 
 test(
   '[INT][SEARCHFORCETVALUES] Should be able to search for facet values - conjunctive',
-  function(t) {
-    setup(indexName, dataset, config).
-    then(function(client) {
+  function() {
+    return setup(indexName, dataset, config).then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {
         facets: ['f', 'f2']
       });
 
-      helper.searchForFacetValues('f', 'a').then(function(content) {
-        t.ok(content, 'should get some content');
-        t.equal(content.facetHits.length, 0, 'should get 0 results');
+      return helper.searchForFacetValues('f', 'a').then(function(content) {
+        expect(content).toBeTruthy();
+        expect(content.facetHits.length).toBe(0);
 
         return helper.searchForFacetValues('f', 'b');
       }).then(function(content) {
-        t.ok(content, 'should get some content');
+        expect(content).toBeTruthy();
 
-        t.deepEqual(content.facetHits, [
+        expect(content.facetHits).toEqual([
           {value: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false},
           {value: 'bb', highlighted: '<em>b</em>b', count: 2, isRefined: false}
         ]);
 
         helper.addFacetRefinement('f2', 'c');
+
         return helper.searchForFacetValues('f', 'b');
       }).then(function(content) {
-        t.ok(content, 'should get some content');
+        expect(content).toBeTruthy();
 
-        t.deepEqual(content.facetHits, [
+        expect(content.facetHits).toEqual([
           {value: 'ba', highlighted: '<em>b</em>a', count: 1, isRefined: false},
           {value: 'bb', highlighted: '<em>b</em>b', count: 1, isRefined: false}
         ]);
 
         helper.clearRefinements().addFacetRefinement('f2', 'c');
+
         return helper.searchForFacetValues('f2', '');
       }).then(function(content) {
-        t.ok(content, 'should get some content');
+        expect(content).toBeTruthy();
 
-        t.deepEqual(content.facetHits, [
+        expect(content.facetHits).toEqual([
           {value: 'c', highlighted: 'c', count: 2, isRefined: true},
           {value: 'x', highlighted: 'x', count: 1, isRefined: false},
           {value: 'y', highlighted: 'y', count: 1, isRefined: false}
         ]);
-
-        t.end();
-      }).catch(function(err) {
-        setTimeout(function() {throw err;}, 1);
       });
-    }).then(null, bind(t.error, t));
+    });
   });
 
 test(
   '[INT][SEARCHFORCETVALUES] Should be able to search for facet values - disjunctive',
-  function(t) {
-    setup(indexName, dataset, config).
-    then(function(client) {
+  function() {
+    return setup(indexName, dataset, config).then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {
         disjunctiveFacets: ['f', 'f2']
       });
 
-      helper.searchForFacetValues('f', 'a').then(function(content) {
-        t.ok(content, 'should get some content');
-        t.equal(content.facetHits.length, 0, 'should get 0 results');
+      return helper.searchForFacetValues('f', 'a').then(function(content) {
+        expect(content).toBeTruthy();
+        expect(content.facetHits.length).toBe(0);
 
         return helper.searchForFacetValues('f', 'b');
       }).then(function(content) {
-        t.ok(content, 'should get some content');
+        expect(content).toBeTruthy();
 
-        t.deepEqual(content.facetHits, [
+        expect(content.facetHits).toEqual([
           {value: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false},
           {value: 'bb', highlighted: '<em>b</em>b', count: 2, isRefined: false}
         ]);
 
         helper.addDisjunctiveFacetRefinement('f2', 'd');
+
         return helper.searchForFacetValues('f', 'b');
       }).then(function(content) {
-        t.ok(content, 'should get some content');
+        expect(content).toBeTruthy();
 
-        t.deepEqual(content.facetHits, [
+        expect(content.facetHits).toEqual([
           {value: 'ba', highlighted: '<em>b</em>a', count: 1, isRefined: false}
         ]);
 
         helper.clearRefinements().addDisjunctiveFacetRefinement('f2', 'c');
+
         return helper.searchForFacetValues('f2', '');
       }).then(function(content) {
-        t.ok(content, 'should get some content');
+        expect(content).toBeTruthy();
 
-        t.deepEqual(content.facetHits, [
+        expect(content.facetHits).toEqual([
           {value: 'b', highlighted: 'b', count: 2, isRefined: false},
           {value: 'c', highlighted: 'c', count: 2, isRefined: true},
           {value: 'd', highlighted: 'd', count: 1, isRefined: false},
           {value: 'x', highlighted: 'x', count: 1, isRefined: false},
           {value: 'y', highlighted: 'y', count: 1, isRefined: false}
         ]);
-
-        t.end();
-      }).catch(function(err) {
-        setTimeout(function() {throw err;}, 1);
       });
-    }).then(null, bind(t.error, t));
+    });
   });
 
 
 test(
   '[INT][SEARCHFORCETVALUES] Should be able to limit the number of returned items',
-  function(t) {
-    setup(indexName, dataset, config).
-    then(function(client) {
+  function() {
+    return setup(indexName, dataset, config).then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {
         facets: ['f', 'f2']
       });
 
-      helper.searchForFacetValues('f', 'b', 1).then(function(content) {
-        t.ok(content.facetHits.length, 'should get one value');
+      return helper.searchForFacetValues('f', 'b', 1).then(function(content) {
+        expect(content.facetHits.length).toBeTruthy();
 
-        t.deepEqual(content.facetHits, [
+        expect(content.facetHits).toEqual([
           {value: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false}
         ]);
-
-        t.end();
-      }).catch(function(err) {
-        setTimeout(function() {throw err;}, 1);
       });
-    }).then(null, bind(t.error, t));
+    });
   });

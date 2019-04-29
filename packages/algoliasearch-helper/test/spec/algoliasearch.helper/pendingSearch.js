@@ -1,18 +1,17 @@
 'use strict';
 
-var test = require('tape');
 var algoliaSearch = require('algoliasearch');
 
 var algoliasearchHelper = require('../../../index');
 
-test('When searchOnce with callback, hasPendingRequests is true', function(t) {
-  var testData = require('../search.testdata')();
+test('When searchOnce with callback, hasPendingRequests is true', function(done) {
+  var testData = require('../../datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.search = function() {
-    return new Promise(function(done) {
-      triggerCb = function() { done(testData.response); };
+    return new Promise(function(resolve) {
+      triggerCb = function() { resolve(testData.response); };
     });
   };
 
@@ -22,28 +21,28 @@ test('When searchOnce with callback, hasPendingRequests is true', function(t) {
     countNoMoreSearch += 1;
   });
 
-  t.equal(helper.hasPendingRequests(), false, 'before searchOnce');
+  expect(helper.hasPendingRequests()).toBe(false);
 
   helper.searchOnce(helper.state, function() {
-    t.equal(helper.hasPendingRequests(), false, 'after searchOnce');
-    t.equal(countNoMoreSearch, 1, 'No more search should have been called once after search results');
-    t.end();
+    expect(helper.hasPendingRequests()).toBe(false);
+    expect(countNoMoreSearch).toBe(1);
+    done();
   });
 
-  t.equal(helper.hasPendingRequests(), true, 'during searchOnce');
-  t.equal(countNoMoreSearch, 0, 'No more search should not have been called yet');
+  expect(helper.hasPendingRequests()).toBe(true);
+  expect(countNoMoreSearch).toBe(0);
 
   triggerCb();
 });
 
-test('When searchOnce with promises, hasPendingRequests is true', function(t) {
-  var testData = require('../search.testdata')();
+test('When searchOnce with promises, hasPendingRequests is true', function(done) {
+  var testData = require('../../datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.search = function() {
-    return new Promise(function(done) {
-      triggerCb = function() { done(testData.response); };
+    return new Promise(function(resolve) {
+      triggerCb = function() { resolve(testData.response); };
     });
   };
 
@@ -53,28 +52,28 @@ test('When searchOnce with promises, hasPendingRequests is true', function(t) {
     countNoMoreSearch += 1;
   });
 
-  t.equal(helper.hasPendingRequests(), false, 'before searchOnce');
+  expect(helper.hasPendingRequests()).toBe(false);
 
   helper.searchOnce(helper.state).then(function() {
-    t.equal(helper.hasPendingRequests(), false, 'after searchOnce');
-    t.equal(countNoMoreSearch, 1, 'No more search should have been called once after search results');
-    t.end();
+    expect(helper.hasPendingRequests()).toBe(false);
+    expect(countNoMoreSearch).toBe(1);
+    done();
   });
 
-  t.equal(helper.hasPendingRequests(), true, 'during searchOnce');
-  t.equal(countNoMoreSearch, 0, 'No more search should not have been called yet');
+  expect(helper.hasPendingRequests()).toBe(true);
+  expect(countNoMoreSearch).toBe(0);
 
   triggerCb();
 });
 
-test('When searchForFacetValues, hasPendingRequests is true', function(t) {
-  var testData = require('../search.testdata')();
+test('When searchForFacetValues, hasPendingRequests is true', function(done) {
+  var testData = require('../../datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.searchForFacetValues = function() {
-    return new Promise(function(done) {
-      triggerCb = function() { done([testData.response]); };
+    return new Promise(function(resolve) {
+      triggerCb = function() { resolve([testData.response]); };
     });
   };
 
@@ -84,28 +83,28 @@ test('When searchForFacetValues, hasPendingRequests is true', function(t) {
     countNoMoreSearch += 1;
   });
 
-  t.equal(helper.hasPendingRequests(), false, 'before searchForFacetValues');
+  expect(helper.hasPendingRequests()).toBe(false);
 
   helper.searchForFacetValues('').then(function() {
-    t.equal(helper.hasPendingRequests(), false, 'after searchForFacetValues');
-    t.equal(countNoMoreSearch, 1, 'No more search should have been called once after search results');
-    t.end();
+    expect(helper.hasPendingRequests()).toBe(false);
+    expect(countNoMoreSearch).toBe(1);
+    done();
   });
 
-  t.equal(helper.hasPendingRequests(), true, 'during searchForFacetValues');
-  t.equal(countNoMoreSearch, 0, 'No more search should not have been called yet');
+  expect(helper.hasPendingRequests()).toBe(true);
+  expect(countNoMoreSearch).toBe(0);
 
   triggerCb();
 });
 
-test('When helper.search(), hasPendingRequests is true', function(t) {
-  var testData = require('../search.testdata')();
+test('When helper.search(), hasPendingRequests is true', function(done) {
+  var testData = require('../../datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.search = function() {
-    return new Promise(function(done) {
-      triggerCb = function() { done(testData.response); };
+    return new Promise(function(resolve) {
+      triggerCb = function() { resolve(testData.response); };
     });
   };
 
@@ -115,30 +114,30 @@ test('When helper.search(), hasPendingRequests is true', function(t) {
     countNoMoreSearch += 1;
   });
 
-  t.equal(helper.hasPendingRequests(), false, 'before helper.search()');
+  expect(helper.hasPendingRequests()).toBe(false);
 
   helper.on('result', function() {
-    t.equal(helper.hasPendingRequests(), false, 'after helper.search()');
-    t.equal(countNoMoreSearch, 1, 'No more search should have been called once after search results');
-    t.end();
+    expect(helper.hasPendingRequests()).toBe(false);
+    expect(countNoMoreSearch).toBe(1);
+    done();
   });
 
   helper.search();
 
-  t.equal(helper.hasPendingRequests(), true, 'during helper.search()');
-  t.equal(countNoMoreSearch, 0, 'No more search should not have be called yet');
+  expect(helper.hasPendingRequests()).toBe(true);
+  expect(countNoMoreSearch).toBe(0);
 
   triggerCb();
 });
 
-test('When helper.search() and one request is discarded, hasPendingRequests is true unless all come back', function(t) {
-  var testData = require('../search.testdata');
+test('When helper.search() and one request is discarded, hasPendingRequests is true unless all come back', function(done) {
+  var testData = require('../../datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCbs = [];
   client.search = function() {
-    return new Promise(function(done) {
-      triggerCbs.push(function() { done(testData().response); });
+    return new Promise(function(resolve) {
+      triggerCbs.push(function() { resolve(testData.response); });
     });
   };
 
@@ -148,7 +147,7 @@ test('When helper.search() and one request is discarded, hasPendingRequests is t
     countNoMoreSearch += 1;
   });
 
-  t.equal(helper.hasPendingRequests(), false, 'before helper.search()');
+  expect(helper.hasPendingRequests()).toBe(false);
 
   helper.search();
   helper.search();
@@ -156,8 +155,8 @@ test('When helper.search() and one request is discarded, hasPendingRequests is t
 
   // intermediary result handler
   helper.once('result', function() {
-    t.equal(helper.hasPendingRequests(), true, 'second request come back first, but the first is still ongoing');
-    t.equal(countNoMoreSearch, 0, 'A search is still pending, which means that it should not have triggered the noMoreSearch event');
+    expect(helper.hasPendingRequests()).toBe(true);
+    expect(countNoMoreSearch).toBe(0);
   });
 
   // The second search returns from algolia -> discards the first one
@@ -165,13 +164,13 @@ test('When helper.search() and one request is discarded, hasPendingRequests is t
 
   // Final result handler
   helper.once('result', function() {
-    t.equal(helper.hasPendingRequests(), true, 'second request come back first, but searchOnce is still ongoing');
-    t.equal(countNoMoreSearch, 0, 'A search is still pending, which means that it should not have triggered the noMoreSearch event');
+    expect(helper.hasPendingRequests()).toBe(true);
+    expect(countNoMoreSearch).toBe(0);
   });
 
   helper.searchOnce({}, function() {
-    t.equal(helper.hasPendingRequests(), false, 'The last callback triggered is the searchOnce');
-    t.equal(countNoMoreSearch, 1, 'This the last query');
+    expect(helper.hasPendingRequests()).toBe(false);
+    expect(countNoMoreSearch).toBe(1);
   });
 
   // The third search returns from Algolia
@@ -182,8 +181,8 @@ test('When helper.search() and one request is discarded, hasPendingRequests is t
   // this will be ignored and it won't change anything
 
   setTimeout(function() {
-    t.equal(helper.hasPendingRequests(), false, 'after helper.search()');
-    t.equal(countNoMoreSearch, 1, 'No more search should have been called once after search results');
-    t.end();
+    expect(helper.hasPendingRequests()).toBe(false);
+    expect(countNoMoreSearch).toBe(1);
+    done();
   }, 0);
 });

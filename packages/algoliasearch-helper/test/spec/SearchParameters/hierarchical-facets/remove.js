@@ -1,9 +1,8 @@
 'use strict';
 
-var test = require('tape');
 var SearchParameters = require('../../../../src/SearchParameters');
 
-test('Should remove a refinement', function(t) {
+test('Should remove a refinement', function() {
   var state0 = SearchParameters.make({
     hierarchicalFacets: [{
       name: 'categories',
@@ -11,14 +10,12 @@ test('Should remove a refinement', function(t) {
     }]
   }).addHierarchicalFacetRefinement('categories', 'men');
 
-  t.deepEqual(state0.getHierarchicalRefinement('categories'), ['men']);
+  expect(state0.getHierarchicalRefinement('categories')).toEqual(['men']);
   var state1 = state0.removeHierarchicalFacetRefinement('categories');
-  t.deepEqual(state1.getHierarchicalRefinement('categories'), []);
-
-  t.end();
+  expect(state1.getHierarchicalRefinement('categories')).toEqual([]);
 });
 
-test('Should throw if there is no refinement', function(t) {
+test('Should throw if there is no refinement', function() {
   var state0 = SearchParameters.make({
     hierarchicalFacets: [{
       name: 'categories',
@@ -26,15 +23,11 @@ test('Should throw if there is no refinement', function(t) {
     }]
   });
 
-  t.throws(state0.removeHierarchicalFacetRefinement.bind(state0, 'categories'));
-
-  t.end();
+  expect(state0.removeHierarchicalFacetRefinement.bind(state0, 'categories')).toThrow();
 });
 
-test('Should throw if the facet is not defined', function(t) {
+test('Should throw if the facet is not defined', function() {
   var state0 = SearchParameters.make({});
 
-  t.throws(state0.removeHierarchicalFacetRefinement.bind(state0, 'categories'));
-
-  t.end();
+  expect(state0.removeHierarchicalFacetRefinement.bind(state0, 'categories')).toThrow();
 });

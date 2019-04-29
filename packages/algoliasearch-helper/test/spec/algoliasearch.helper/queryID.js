@@ -1,11 +1,10 @@
 'use strict';
 
-var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
 var fakeClient = {};
 
-test('the queryid should keep increasing when new requests arrives', function(t) {
+test('the queryid should keep increasing when new requests arrives', function() {
   var initialQueryID;
   var client = {
     search: function() {
@@ -19,13 +18,11 @@ test('the queryid should keep increasing when new requests arrives', function(t)
 
   helper.search().search().search().search().search();
 
-  t.equal(helper._queryId, initialQueryID, 'the _queryID should have increased of the number of calls');
-
-  t.end();
+  expect(helper._queryId).toBe(initialQueryID);
 });
 
-test('the response handler should check that the query is not outdated', function(t) {
-  var testData = require('../search.testdata')();
+test('the response handler should check that the query is not outdated', function(done) {
+  var testData = require('../../datasets/SearchParameters/search.dataset')();
   var shouldTriggerResult = true;
   var callCount = 0;
 
@@ -35,7 +32,7 @@ test('the response handler should check that the query is not outdated', functio
     callCount++;
 
     if (!shouldTriggerResult) {
-      t.fail('The id was outdated');
+      done.fail('The id was outdated');
     }
   });
 
@@ -47,17 +44,17 @@ test('the response handler should check that the query is not outdated', functio
 
   helper._dispatchAlgoliaResponse(states, helper._lastQueryIdReceived + 1, testData.response);
   helper._dispatchAlgoliaResponse(states, helper._lastQueryIdReceived + 10, testData.response);
-  t.equal(callCount, 2, 'the callback should have been called twice');
+  expect(callCount).toBe(2);
 
   shouldTriggerResult = false;
 
   helper._dispatchAlgoliaResponse(states, helper._lastQueryIdReceived - 1, testData.response);
-  t.equal(callCount, 2, "and shouldn't have been called if outdated");
+  expect(callCount).toBe(2);
 
-  t.end();
+  done();
 });
 
-test('the error handler should check that the query is not outdated', function(t) {
+test('the error handler should check that the query is not outdated', function(done) {
   var shouldTriggerError = true;
   var callCount = 0;
 
@@ -67,18 +64,18 @@ test('the error handler should check that the query is not outdated', function(t
     callCount++;
 
     if (!shouldTriggerError) {
-      t.fail('The id was outdated');
+      done.fail('The id was outdated');
     }
   });
 
   helper._dispatchAlgoliaError(helper._lastQueryIdReceived + 1, new Error());
   helper._dispatchAlgoliaError(helper._lastQueryIdReceived + 10, new Error());
-  t.equal(callCount, 2, 'the callback should have been called twice');
+  expect(callCount).toBe(2);
 
   shouldTriggerError = false;
 
   helper._dispatchAlgoliaError(helper._lastQueryIdReceived - 1, new Error());
-  t.equal(callCount, 2, "and shouldn't have been called if outdated");
+  expect(callCount).toBe(2);
 
-  t.end();
+  done();
 });

@@ -5,15 +5,13 @@ var setup = utils.setup;
 
 var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
 
-var test = require('tape');
-var bind = require('lodash/bind');
 var random = require('lodash/random');
 
 if (!utils.shouldRun) {
   test = test.skip;
 }
 
-test('[INT][FILTERS] Should retrieve different values for multi facetted records', function(t) {
+test('[INT][FILTERS] Should retrieve different values for multi facetted records', function(done) {
   var indexName = '_travis-algoliasearch-helper-js-' +
     (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
     'helper_refinements' + random(0, 5000);
@@ -41,16 +39,17 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
     });
 
     var calls = 0;
+
     helper.on('error', function(err) {
-      t.fail(err);
-      t.end();
+      done.fail(err);
     });
+
     helper.on('result', function(content) {
       calls++;
 
       if (calls === 1) {
-        t.equal(content.hits.length, 2, 'filter should result in two items');
-        t.deepEqual(content.facets[0].data, {
+        expect(content.hits.length).toBe(2);
+        expect(content.facets[0].data).toEqual({
           f1: 2,
           f2: 1,
           f3: 1
@@ -60,35 +59,39 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       }
 
       if (calls === 2) {
-        t.equal(content.hits.length, 1, 'filter should result in one item');
-        t.deepEqual(content.facets[0].data, {
+        expect(content.hits.length).toBe(1);
+        expect(content.facets[0].data).toEqual({
           f1: 1,
           f2: 1
         });
+
         helper.toggleRefine('facet', 'f3').search();
       }
 
       if (calls === 3) {
-        t.equal(content.hits.length, 0, 'filter should result in 0 item');
-        t.equal(content.facets[0], undefined);
+        expect(content.hits.length).toBe(0);
+        expect(content.facets[0]).toBe(undefined);
+
         helper.removeRefine('facet', 'f2').search();
       }
 
       if (calls === 4) {
-        t.equal(content.hits.length, 1, 'filter should result in one item again');
-        t.deepEqual(content.facets[0].data, {
+        expect(content.hits.length).toBe(1);
+        expect(content.facets[0].data).toEqual({
           f1: 1,
           f3: 1
         });
+
         client.deleteIndex(indexName);
+
         if (!process.browser) {
           client.destroy();
         }
-        t.end();
+
+        done();
       }
     });
 
     helper.addRefine('facet', 'f1').search();
-  })
-    .then(null, bind(t.error, t));
+  });
 });

@@ -1,6 +1,5 @@
 'use strict';
 
-var test = require('tape');
 var SearchResults = require('../../../src/SearchResults');
 var SearchParameters = require('../../../src/SearchParameters');
 
@@ -37,43 +36,25 @@ var response = {
   }]
 };
 
-test('getFacetStats(facetName) returns stats for any facet or disjunctiveFacet', function(t) {
+test('getFacetStats(facetName) returns stats for any facet or disjunctiveFacet', function() {
   var searchParams = new SearchParameters({
     facets: ['age', 'country'],
     disjunctiveFacets: ['price']
   });
   var result = new SearchResults(searchParams, response.results);
 
-  t.throws(
-    bind(result.getFacetStats, result, 'city'),
-    Error,
-    'non defined facet should throw');
-  t.equal(
-    result.getFacetStats('country'),
-    undefined,
-    'should be undefined as "country" has no stats');
-  t.deepEqual(
-    result.getFacetStats('age'),
-    response.results[0].facets_stats.age,
-    'should return the same stats data as in the response');
-  t.deepEqual(
-    result.getFacetStats('price'),
-    response.results[0].facets_stats.price,
-    'should return the same stats data as in the response');
-
-  t.end();
+  expect(bind(result.getFacetStats, result, 'city')).toThrowError(Error);
+  expect(result.getFacetStats('country')).toBe(undefined);
+  expect(result.getFacetStats('age')).toEqual(response.results[0].facets_stats.age);
+  expect(result.getFacetStats('price')).toEqual(response.results[0].facets_stats.price);
 });
 
-test('getFacetStats(facetName) returns stats if the facet is both a regular and disjunctive facet', function(t) {
+test('getFacetStats(facetName) returns stats if the facet is both a regular and disjunctive facet', function() {
   var searchParams = new SearchParameters({
     facets: ['price'],
     disjunctiveFacets: ['price']
   });
   var result = new SearchResults(searchParams, response.results);
 
-  t.deepEqual(
-    result.getFacetStats('price'),
-    response.results[0].facets_stats.price,
-    'should return the same stats data as in the response');
-  t.end();
+  expect(result.getFacetStats('price')).toEqual(response.results[0].facets_stats.price);
 });

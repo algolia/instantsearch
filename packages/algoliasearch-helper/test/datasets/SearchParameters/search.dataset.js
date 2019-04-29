@@ -1,6 +1,6 @@
 'use strict';
 
-var SearchParameters = require('../../src/SearchParameters');
+var SearchParameters = require('../../../src/SearchParameters');
 
 module.exports = getData;
 

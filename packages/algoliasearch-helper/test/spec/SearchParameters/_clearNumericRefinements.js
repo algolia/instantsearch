@@ -1,26 +1,23 @@
 'use strict';
 
-var test = require('tape');
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('When removing all numeric refinements of a state without any', function(t) {
+test('When removing all numeric refinements of a state without any', function() {
   var state = SearchParameters.make({});
-  t.equal(state._clearNumericRefinements(), state.numericRefinements, 'it should return the same ref');
-  t.end();
+  expect(state._clearNumericRefinements()).toBe(state.numericRefinements);
 });
 
-test('When removing numericRefinements of a specific attribute, and there are no refinements for this attribute', function(t) {
+test('When removing numericRefinements of a specific attribute, and there are no refinements for this attribute', function() {
   var state = SearchParameters.make({
     numericRefinements: {
       price: {'>': [300]}
     }
   });
 
-  t.equal(state._clearNumericRefinements('size'), state.numericRefinements, 'it should return the same ref');
-  t.end();
+  expect(state._clearNumericRefinements('size')).toBe(state.numericRefinements);
 });
 
-test('When removing numericRefinements using a function, and there are no changes', function(t) {
+test('When removing numericRefinements using a function, and there are no changes', function() {
   var state = SearchParameters.make({
     numericRefinements: {
       price: {'>': [300, 30]},
@@ -33,10 +30,8 @@ test('When removing numericRefinements using a function, and there are no change
   function clearUndefinedOperator(v) {return v.op === '<';}
   function clearUndefinedValue(v) {return v.val === 3;}
 
-  t.equal(state._clearNumericRefinements(clearNothing), state.numericRefinements, 'it should return the same ref - nothing');
-  t.equal(state._clearNumericRefinements(clearUndefinedAttribute), state.numericRefinements, 'it should return the same ref - undefined attribute');
-  t.equal(state._clearNumericRefinements(clearUndefinedOperator), state.numericRefinements, 'it should return the same ref - undefined operator');
-  t.equal(state._clearNumericRefinements(clearUndefinedValue), state.numericRefinements, 'it should return the same ref - undefined value');
-
-  t.end();
+  expect(state._clearNumericRefinements(clearNothing)).toBe(state.numericRefinements);
+  expect(state._clearNumericRefinements(clearUndefinedAttribute)).toBe(state.numericRefinements);
+  expect(state._clearNumericRefinements(clearUndefinedOperator)).toBe(state.numericRefinements);
+  expect(state._clearNumericRefinements(clearUndefinedValue)).toBe(state.numericRefinements);
 });

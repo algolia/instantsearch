@@ -1,88 +1,72 @@
 'use strict';
 
-var test = require('tape');
-
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('addFacet should add a facet to the facets list', function(t) {
+test('addFacet should add a facet to the facets list', function() {
   var state = SearchParameters.make({}).addFacet('facet');
 
-  t.deepEquals(state.facets, ['facet']);
-
-  t.end();
+  expect(state.facets).toEqual(['facet']);
 });
 
-test('removeFacet should remove a facet from the facets list', function(t) {
+test('removeFacet should remove a facet from the facets list', function() {
   var state = SearchParameters.make({}).addFacet('facet').removeFacet('facet');
 
-  t.deepEquals(state.facets, []);
+  expect(state.facets).toEqual([]);
 
   state = SearchParameters.make({})
     .addFacet('facet')
     .addFacetRefinement('facet', 'value')
     .removeFacet('facet');
 
-  t.deepEquals(state.facetsRefinements, {});
-
-  t.end();
+  expect(state.facetsRefinements).toEqual({});
 });
 
-test('addDisjunctiveFacet should add a facet to the disjunctiveFacets list', function(t) {
+test('addDisjunctiveFacet should add a facet to the disjunctiveFacets list', function() {
   var state = SearchParameters.make({}).addDisjunctiveFacet('facet');
 
-  t.deepEquals(state.disjunctiveFacets, ['facet']);
-
-  t.end();
+  expect(state.disjunctiveFacets).toEqual(['facet']);
 });
 
-test('removeDisjunctiveFacet should remove a facet from the disjunctiveFacets list', function(t) {
+test('removeDisjunctiveFacet should remove a facet from the disjunctiveFacets list', function() {
   var state = SearchParameters.make({})
     .addDisjunctiveFacet('facet')
     .removeDisjunctiveFacet('facet');
 
-  t.deepEquals(state.disjunctiveFacets, []);
+  expect(state.disjunctiveFacets).toEqual([]);
 
   state = SearchParameters.make({})
     .addDisjunctiveFacet('facet')
     .addDisjunctiveFacetRefinement('facet', 'value')
     .removeDisjunctiveFacet('facet');
 
-  t.deepEquals(state.disjunctiveFacetsRefinements, {});
-
-  t.end();
+  expect(state.disjunctiveFacetsRefinements).toEqual({});
 });
 
-test('addHierarchicalFacet should add a facet to the hierarchicalFacets list', function(t) {
+test('addHierarchicalFacet should add a facet to the hierarchicalFacets list', function() {
   var state = SearchParameters.make({}).addHierarchicalFacet({name: 'facet'});
 
-  t.deepEquals(state.hierarchicalFacets, [{name: 'facet'}]);
-
-  t.end();
+  expect(state.hierarchicalFacets).toEqual([{name: 'facet'}]);
 });
 
-test('addHierarchicalFacet should throw when a facet with the same name is already declared', function(t) {
-  t.throws(function() {
+test('addHierarchicalFacet should throw when a facet with the same name is already declared', function() {
+  expect(function() {
     SearchParameters
       .make({hierarchicalFacets: [{name: 'facet'}]})
       .addHierarchicalFacet({name: 'facet'});
-  });
-
-  t.end();
+  }).toThrow();
 });
 
-test('removeHierarchicalFacet should remove a facet from the hierarchicalFacets list', function(t) {
+test('removeHierarchicalFacet should remove a facet from the hierarchicalFacets list', function() {
   var state = SearchParameters.make({})
     .addHierarchicalFacet({name: 'facet'})
     .removeHierarchicalFacet('facet');
 
-  t.deepEquals(state.hierarchicalFacets, []);
+  expect(state.hierarchicalFacets).toEqual([]);
 
   state = SearchParameters.make({})
     .addHierarchicalFacet({name: 'facet'})
     .toggleHierarchicalFacetRefinement('facet', 'value')
     .removeHierarchicalFacet('facet');
 
-  t.deepEquals(state.hierarchicalFacetsRefinements, {});
-
-  t.end();
+  expect(state.hierarchicalFacetsRefinements).toEqual({});
 });

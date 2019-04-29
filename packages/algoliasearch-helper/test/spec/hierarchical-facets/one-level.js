@@ -1,10 +1,7 @@
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: only one level deep', function(t) {
+test('hierarchical facets: only one level deep', function(done) {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -68,40 +65,23 @@ test('hierarchical facets: only one level deep', function(t) {
     }]
   }];
 
-  client.search = sinon
-    .stub()
-    .resolves(algoliaResponse);
+  client.search = jest.fn(function() {
+    return Promise.resolve(algoliaResponse);
+  });
 
   helper.setQuery('a').search();
   helper.once('result', function(content) {
-    var call = client.search.getCall(0);
-    var queries = call.args[0];
+    var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
     var parentValuesQuery = queries[1];
 
-    t.equal(queries.length, 2, 'we made two queries');
-    t.ok(client.search.calledOnce, 'client.search was called once');
-    t.deepEqual(
-      hitsQuery.params.facets,
-      ['categories.lvl0'],
-      'first query (hits) has `categories.lvl0` as facets'
-    );
-    t.deepEqual(
-      hitsQuery.params.facetFilters,
-      [['categories.lvl0:beers']],
-      'first query (hits) has our `categories.lvl0` refinement facet filter'
-    );
-    t.deepEqual(
-      parentValuesQuery.params.facets,
-      ['categories.lvl0'],
-      'second query (unrefined parent facet values) has `categories.lvl0` as facets'
-    );
-    t.equal(
-      parentValuesQuery.params.facetFilters,
-      undefined,
-      'second query (unrefined parent facet values) has no facet refinement since we are at the root level'
-    );
-    t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);
-    t.end();
+    expect(queries.length).toBe(2);
+    expect(client.search).toHaveBeenCalledTimes(1);
+    expect(hitsQuery.params.facets).toEqual(['categories.lvl0']);
+    expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl0:beers']]);
+    expect(parentValuesQuery.params.facets).toEqual(['categories.lvl0']);
+    expect(parentValuesQuery.params.facetFilters).toBe(undefined);
+    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    done();
   });
 });

@@ -1,10 +1,7 @@
 'use strict';
 
-var test = require('tape');
-
-test('hierarchical facets: simple usage', function(t) {
+test('hierarchical facets: no results', function(done) {
   var algoliasearch = require('algoliasearch');
-  var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
 
@@ -57,14 +54,22 @@ test('hierarchical facets: simple usage', function(t) {
     }]
   };
 
-  client.search = sinon
-    .stub()
-    .resolves(algoliaResponse);
+  client.search = jest.fn(function() {
+    return Promise.resolve(algoliaResponse);
+  });
 
   helper.setQuery('badquery').search();
 
   helper.once('result', function(content) {
-    t.deepEqual(content.hierarchicalFacets, [{name: 'categories', count: null, isRefined: true, path: null, data: null}], 'Good facets values');
-    t.end();
+    expect(content.hierarchicalFacets).toEqual([
+      {
+        name: 'categories',
+        count: null,
+        isRefined: true,
+        path: null,
+        data: null
+      }
+    ]);
+    done();
   });
 });
