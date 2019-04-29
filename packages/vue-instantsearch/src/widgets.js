@@ -22,6 +22,10 @@ export { default as AisNumericMenu } from './components/NumericMenu.vue';
 export { default as AisPagination } from './components/Pagination.vue';
 export { default as AisPanel } from './components/Panel.vue';
 export { default as AisPoweredBy } from './components/PoweredBy.vue';
+export { default as AisQueryRuleContext } from './components/QueryRuleContext';
+export {
+  default as AisQueryRuleCustomData,
+} from './components/QueryRuleCustomData.vue';
 export { default as AisRangeInput } from './components/RangeInput.vue';
 export { default as AisRatingMenu } from './components/RatingMenu.vue';
 export { default as AisRefinementList } from './components/RefinementList.vue';

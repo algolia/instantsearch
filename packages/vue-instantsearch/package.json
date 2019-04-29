@@ -53,9 +53,9 @@
     "vue": "^2.4.0"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "3.4.11",
     "@storybook/addon-knobs": "3.4.11",
     "@storybook/addon-options": "3.4.11",
-    "@storybook/addon-actions": "3.4.11",
     "@storybook/vue": "3.4.11",
     "@vue/test-utils": "1.0.0-beta.25",
     "algoliasearch": "3.32.0",
@@ -101,7 +101,7 @@
   "bundlesize": [
     {
       "path": "./dist/vue-instantsearch.js",
-      "maxSize": "67 kB"
+      "maxSize": "67.25 kB"
     },
     {
       "path": "./dist/vue-instantsearch.esm.js",
