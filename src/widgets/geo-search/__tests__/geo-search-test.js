@@ -1,4 +1,3 @@
-import last from 'lodash/last';
 import { render, unmountComponentAtNode } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
 import createHTMLMarker from '../createHTMLMarker';
@@ -115,7 +114,7 @@ describe('GeoSearch', () => {
       'indexName'
     );
 
-  const lastRenderArgs = fn => last(fn.mock.calls)[0];
+  const lastRenderArgs = fn => fn.mock.calls[fn.mock.calls.length - 1][0];
   const lastRenderState = fn => lastRenderArgs(fn).widgetParams.renderState;
 
   const simulateMapReadyEvent = google => {

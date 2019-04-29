@@ -1,7 +1,5 @@
-import find from 'lodash/find';
-import get from 'lodash/get';
-import forEach from 'lodash/forEach';
 import { SearchParameters, SearchResults } from '../../types';
+import find from './find';
 import unescapeRefinement from './unescapeRefinement';
 
 export interface FacetRefinement {
@@ -47,26 +45,39 @@ function getRefinement(
   type: Refinement['type'],
   attributeName: Refinement['attributeName'],
   name: Refinement['name'],
-  resultsFacets: SearchResults['facets' | 'hierarchicalFacets']
+  resultsFacets: SearchResults['facets' | 'hierarchicalFacets'] = []
 ): Refinement {
   const res: Refinement = { type, attributeName, name };
-  let facet: any = find(resultsFacets, { name: attributeName });
+  let facet: any = find(
+    resultsFacets as Array<{ name: string }>,
+    resultsFacet => resultsFacet.name === attributeName
+  );
   let count: number;
 
   if (type === 'hierarchical') {
     const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
-    const split = name.split(facetDeclaration.separator);
+    const nameParts = name.split(facetDeclaration.separator);
 
-    for (let i = 0; facet !== undefined && i < split.length; ++i) {
-      facet = find(facet.data, { name: split[i] });
+    const getFacetRefinement = (
+      facetData: any
+    ): ((refinementKey: string) => any) => (refinementKey: string): any =>
+      facetData[refinementKey];
+
+    for (let i = 0; facet !== undefined && i < nameParts.length; ++i) {
+      facet =
+        facet.data &&
+        find(
+          Object.keys(facet.data).map(getFacetRefinement(facet.data)),
+          refinement => refinement.name === nameParts[i]
+        );
     }
 
-    count = get(facet, 'count');
+    count = facet && facet.count;
   } else {
-    count = get(facet, `data["${res.name}"]`);
+    count = facet && facet.data && facet.data[res.name];
   }
 
-  const exhaustive = get(facet, 'exhaustive');
+  const exhaustive = facet && facet.exhaustive;
 
   if (count !== undefined) {
     res.count = count;
@@ -85,67 +96,95 @@ function getRefinements(
   clearsQuery: boolean = false
 ): Refinement[] {
   const res: Refinement[] = [];
+  const {
+    facetsRefinements = {},
+    facetsExcludes = {},
+    disjunctiveFacetsRefinements = {},
+    hierarchicalFacetsRefinements = {},
+    numericRefinements = {},
+    tagRefinements = [],
+  } = state;
 
-  forEach(state.facetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, name => {
+  Object.keys(facetsRefinements).forEach(attributeName => {
+    const refinements = facetsRefinements[attributeName];
+
+    refinements.forEach(refinement => {
       res.push(
-        getRefinement(state, 'facet', attributeName, name, results.facets)
+        getRefinement(state, 'facet', attributeName, refinement, results.facets)
       );
     });
   });
 
-  forEach(state.facetsExcludes, (refinements, attributeName) => {
-    forEach(refinements, name => {
-      res.push({ type: 'exclude', attributeName, name, exclude: true });
+  Object.keys(facetsExcludes).forEach(attributeName => {
+    const refinements = facetsExcludes[attributeName];
+
+    refinements.forEach(refinement => {
+      res.push({
+        type: 'exclude',
+        attributeName,
+        name: refinement,
+        exclude: true,
+      });
     });
   });
 
-  forEach(state.disjunctiveFacetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, name => {
+  Object.keys(disjunctiveFacetsRefinements).forEach(attributeName => {
+    const refinements = disjunctiveFacetsRefinements[attributeName];
+
+    refinements.forEach(refinement => {
       res.push(
         getRefinement(
           state,
           'disjunctive',
           attributeName,
-          // we unescapeRefinement any disjunctive refined value since they can be escaped
-          // when negative numeric values search `escapeRefinement` usage in code
-          unescapeRefinement(name),
+          // We unescape any disjunctive refined values with `unescapeRefinement` because
+          // they can be escaped on negative numeric values with `escapeRefinement`.
+          unescapeRefinement(refinement),
           results.disjunctiveFacets
         )
       );
     });
   });
 
-  forEach(state.hierarchicalFacetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, name => {
+  Object.keys(hierarchicalFacetsRefinements).forEach(attributeName => {
+    const refinements = hierarchicalFacetsRefinements[attributeName];
+
+    refinements.forEach(refinement => {
       res.push(
         getRefinement(
           state,
           'hierarchical',
           attributeName,
-          name,
+          refinement,
           results.hierarchicalFacets
         )
       );
     });
   });
 
-  forEach(state.numericRefinements, (operators, attributeName) => {
-    forEach(operators, (values, operator) => {
-      forEach(values, value => {
+  Object.keys(numericRefinements).forEach(attributeName => {
+    const operators = numericRefinements[attributeName];
+
+    Object.keys(operators).forEach(operator => {
+      const valueOrValues = operators[operator];
+      const refinements = Array.isArray(valueOrValues)
+        ? valueOrValues
+        : [valueOrValues];
+
+      refinements.forEach(refinement => {
         res.push({
           type: 'numeric',
           attributeName,
-          name: `${value}`,
-          numericValue: value,
+          name: `${refinement}`,
+          numericValue: refinement,
           operator,
         });
       });
     });
   });
 
-  forEach(state.tagRefinements, name => {
-    res.push({ type: 'tag', attributeName: '_tags', name });
+  tagRefinements.forEach(refinement => {
+    res.push({ type: 'tag', attributeName: '_tags', name: refinement });
   });
 
   if (clearsQuery && state.query && state.query.trim()) {

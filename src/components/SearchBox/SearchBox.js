@@ -1,6 +1,6 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import noop from 'lodash/noop';
+import { noop } from '../../lib/utils';
 import Template from '../Template/Template';
 
 const SearchBoxCSSClasses = PropTypes.shape({

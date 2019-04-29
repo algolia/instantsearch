@@ -6,7 +6,19 @@ module.exports = {
     'react/no-string-refs': 1,
     // Avoid errors about `UNSAFE` lifecycles (e.g. `UNSAFE_componentWillMount`)
     'react/no-deprecated': 0,
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { argsIgnorePattern: '^_', ignoreRestSiblings: true },
+    ],
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        'valid-jsdoc': 0,
+      },
+    },
+  ],
   settings: {
     react: {
       version: 'detect',

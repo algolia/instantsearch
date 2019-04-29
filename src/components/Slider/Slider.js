@@ -2,9 +2,7 @@ import React, { Component } from 'preact-compat';
 import Rheostat from 'preact-rheostat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import times from 'lodash/times';
-import range from 'lodash/range';
-import has from 'lodash/has';
+import { range } from '../../lib/utils';
 import Pit from './Pit';
 
 class Slider extends Component {
@@ -43,7 +41,9 @@ class Slider extends Component {
 
     const pitPoints = [
       min,
-      ...times(steps - 1, step => min + stepsLength * (step + 1)),
+      ...range({
+        end: steps - 1,
+      }).map(step => min + stepsLength * (step + 1)),
       max,
     ];
 
@@ -53,17 +53,18 @@ class Slider extends Component {
   // creates an array of values where the slider should snap to
   computeSnapPoints({ min, max, step }) {
     if (!step) return undefined;
-    return [...range(min, max, step), max];
+    return [...range({ start: min, end: max, step }), max];
   }
 
   createHandleComponent = tooltips => props => {
     // display only two decimals after comma,
-    // and apply `tooltips.format()` if any`
+    // and apply `tooltips.format()` if any
     const roundedValue =
       Math.round(parseFloat(props['aria-valuenow']) * 100) / 100;
-    const value = has(tooltips, 'format')
-      ? tooltips.format(roundedValue)
-      : roundedValue;
+    const value =
+      tooltips && tooltips.format
+        ? tooltips.format(roundedValue)
+        : roundedValue;
 
     const className = cx(props.className, {
       'rheostat-handle-lower': props['data-handle-key'] === 0,

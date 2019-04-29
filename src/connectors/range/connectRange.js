@@ -1,8 +1,8 @@
-import find from 'lodash/find';
-import _isFinite from 'lodash/isFinite';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  isFiniteNumber,
+  find,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator(
@@ -49,15 +49,15 @@ export default function connectRange(renderFn, unmountFn) {
       attribute,
       min: minBound,
       max: maxBound,
-      precision = 2,
+      precision = 2, // @MAJOR: the `precision` default value should be 0
     } = widgetParams;
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    const hasMinBound = _isFinite(minBound);
-    const hasMaxBound = _isFinite(maxBound);
+    const hasMinBound = isFiniteNumber(minBound);
+    const hasMaxBound = isFiniteNumber(maxBound);
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -73,7 +73,7 @@ export default function connectRange(renderFn, unmountFn) {
         let min;
         if (hasMinBound) {
           min = minBound;
-        } else if (_isFinite(stats.min)) {
+        } else if (isFiniteNumber(stats.min)) {
           min = stats.min;
         } else {
           min = 0;
@@ -82,7 +82,7 @@ export default function connectRange(renderFn, unmountFn) {
         let max;
         if (hasMaxBound) {
           max = maxBound;
-        } else if (_isFinite(stats.max)) {
+        } else if (isFiniteNumber(stats.max)) {
           max = stats.max;
         } else {
           max = 0;
@@ -99,8 +99,8 @@ export default function connectRange(renderFn, unmountFn) {
 
         const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
 
-        const min = _isFinite(minValue) ? minValue : -Infinity;
-        const max = _isFinite(maxValue) ? maxValue : Infinity;
+        const min = isFiniteNumber(minValue) ? minValue : -Infinity;
+        const max = isFiniteNumber(maxValue) ? maxValue : Infinity;
 
         return [min, max];
       },
@@ -138,8 +138,8 @@ export default function connectRange(renderFn, unmountFn) {
           }
 
           const isResetNewNextMin = newNextMin === undefined;
-          const isValidNewNextMin = _isFinite(newNextMin);
-          const isValidMinCurrentRange = _isFinite(currentRangeMin);
+          const isValidNewNextMin = isFiniteNumber(newNextMin);
+          const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
           const isGreaterThanCurrentRange =
             isValidMinCurrentRange && currentRangeMin <= newNextMin;
           const isMinValid =
@@ -148,8 +148,8 @@ export default function connectRange(renderFn, unmountFn) {
               (!isValidMinCurrentRange || isGreaterThanCurrentRange));
 
           const isResetNewNextMax = newNextMax === undefined;
-          const isValidNewNextMax = _isFinite(newNextMax);
-          const isValidMaxCurrentRange = _isFinite(currentRangeMax);
+          const isValidNewNextMax = isFiniteNumber(newNextMax);
+          const isValidMaxCurrentRange = isFiniteNumber(currentRangeMax);
           const isLowerThanRange =
             isValidMaxCurrentRange && currentRangeMax >= newNextMax;
           const isMaxValid =
@@ -196,8 +196,8 @@ export default function connectRange(renderFn, unmountFn) {
           currentConfiguration.numericRefinements &&
           currentConfiguration.numericRefinements[attribute] !== undefined;
 
-        const isMinBoundValid = _isFinite(minBound);
-        const isMaxBoundValid = _isFinite(maxBound);
+        const isMinBoundValid = isFiniteNumber(minBound);
+        const isMaxBoundValid = isFiniteNumber(maxBound);
         const isAbleToRefine =
           isMinBoundValid && isMaxBoundValid
             ? minBound < maxBound
@@ -244,7 +244,10 @@ export default function connectRange(renderFn, unmountFn) {
 
       render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = find(facetsFromResults, { name: attribute });
+        const facet = find(
+          facetsFromResults,
+          facetResult => facetResult.name === attribute
+        );
         const stats = (facet && facet.stats) || {};
 
         const currentRange = this._getCurrentRange(stats);
@@ -321,7 +324,7 @@ export default function connectRange(renderFn, unmountFn) {
           return searchParameters;
         }
 
-        if (_isFinite(lowerBound)) {
+        if (isFiniteNumber(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '>=',
@@ -329,7 +332,7 @@ export default function connectRange(renderFn, unmountFn) {
           );
         }
 
-        if (_isFinite(upperBound)) {
+        if (isFiniteNumber(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attribute,
             '<=',
