@@ -99,10 +99,11 @@ class RefinementList extends Component {
       return;
     }
 
-    if (
-      originalEvent.target.matches('input[type="radio"]:checked') &&
-      isRefined
-    ) {
+    const matches = (
+      originalEvent.target.matches || originalEvent.target.msMatchesSelector
+    ).bind(originalEvent.target);
+
+    if (matches('input[type="radio"]:checked') && isRefined) {
       // Prevent refinement for being reset if the user clicks on an already checked radio button
       return;
     }
