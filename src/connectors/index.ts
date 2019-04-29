@@ -44,3 +44,6 @@ export {
   default as connectAutocomplete,
 } from './autocomplete/connectAutocomplete';
 export { default as connectQueryRules } from './query-rules/connectQueryRules';
+export {
+  default as connectVoiceSearch,
+} from './voice-search/connectVoiceSearch';

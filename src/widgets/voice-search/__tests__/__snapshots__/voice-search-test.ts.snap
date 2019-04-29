@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`voiceSearch() Rendering renders during init() 1`] = `
+<VoiceSearch
+  cssClasses={
+    Object {
+      "button": "ais-VoiceSearch-button",
+      "root": "ais-VoiceSearch",
+      "status": "ais-VoiceSearch-status",
+    }
+  }
+  isBrowserSupported={false}
+  isListening={false}
+  templates={
+    Object {
+      "buttonText": [Function],
+      "status": "<p>{{transcript}}</p>",
+    }
+  }
+  toggleListening={[Function]}
+  voiceListeningState={
+    Object {
+      "errorCode": undefined,
+      "isSpeechFinal": undefined,
+      "status": "initial",
+      "transcript": undefined,
+    }
+  }
+/>
+`;
+
+exports[`voiceSearch() Rendering renders during render() 1`] = `
+<VoiceSearch
+  cssClasses={
+    Object {
+      "button": "ais-VoiceSearch-button",
+      "root": "ais-VoiceSearch",
+      "status": "ais-VoiceSearch-status",
+    }
+  }
+  isBrowserSupported={false}
+  isListening={false}
+  templates={
+    Object {
+      "buttonText": [Function],
+      "status": "<p>{{transcript}}</p>",
+    }
+  }
+  toggleListening={[Function]}
+  voiceListeningState={
+    Object {
+      "errorCode": undefined,
+      "isSpeechFinal": undefined,
+      "status": "initial",
+      "transcript": undefined,
+    }
+  }
+/>
+`;
+
+exports[`voiceSearch() Rendering renders during render() 2`] = `
+<VoiceSearch
+  cssClasses={
+    Object {
+      "button": "ais-VoiceSearch-button",
+      "root": "ais-VoiceSearch",
+      "status": "ais-VoiceSearch-status",
+    }
+  }
+  isBrowserSupported={false}
+  isListening={false}
+  templates={
+    Object {
+      "buttonText": [Function],
+      "status": "<p>{{transcript}}</p>",
+    }
+  }
+  toggleListening={[Function]}
+  voiceListeningState={
+    Object {
+      "errorCode": undefined,
+      "isSpeechFinal": undefined,
+      "status": "initial",
+      "transcript": undefined,
+    }
+  }
+/>
+`;
+
+exports[`voiceSearch() Rendering sets the correct CSS classes 1`] = `
+Object {
+  "button": "ais-VoiceSearch-button",
+  "root": "ais-VoiceSearch",
+  "status": "ais-VoiceSearch-status",
+}
+`;
