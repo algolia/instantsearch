@@ -1,32 +1,29 @@
 import qs from 'qs';
 import { RouteState } from '../../types';
 
+type CreateUrlOptions = {
+  qsModule: typeof qs;
+  routeState: RouteState;
+  location: Location;
+};
+
+type ParseUrlOptions = {
+  qsModule: typeof qs;
+  location: Location;
+};
+
 type BrowserHistoryProps = {
   windowTitle?: (routeState: RouteState) => string;
   writeDelay: number;
-  createURL({
-    qsModule,
-    routeState,
-    location,
-  }: {
-    qsModule: typeof qs;
-    routeState: RouteState;
-    location: Location;
-  }): string;
-  parseURL({
-    qsModule,
-    location,
-  }: {
-    qsModule: typeof qs;
-    location: Location;
-  }): RouteState;
+  createURL({ qsModule, routeState, location }: CreateUrlOptions): string;
+  parseURL({ qsModule, location }: ParseUrlOptions): RouteState;
 };
 
-const defaultCreateURL: BrowserHistoryProps['createURL'] = ({
+const defaultCreateURL = ({
   qsModule,
   routeState,
   location,
-}): string => {
+}: CreateUrlOptions): string => {
   const { protocol, hostname, port = '', pathname, hash } = location;
   const queryString = qsModule.stringify(routeState);
   const portWithPrefix = port === '' ? '' : `:${port}`;
@@ -39,10 +36,10 @@ const defaultCreateURL: BrowserHistoryProps['createURL'] = ({
   return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
 };
 
-const defaultParseURL: BrowserHistoryProps['parseURL'] = ({
+const defaultParseURL = ({
   qsModule,
   location,
-}): RouteState => {
+}: ParseUrlOptions): RouteState => {
   // `qs` by default converts arrays with more than 20 items to an object.
   // We want to avoid this because the data structure manipulated can therefore vary.
   // Setting the limit to `100` seems a good number because the engine's default is 100
@@ -115,14 +112,14 @@ class BrowserHistory {
   /**
    * Reads the URL and returns a syncable UI search state.
    */
-  private read(): RouteState {
+  public read(): RouteState {
     return this.parseURL({ qsModule: qs, location: window.location });
   }
 
   /**
    * Pushes a search state into the URL.
    */
-  private write(routeState: RouteState): void {
+  public write(routeState: RouteState): void {
     const url = this.createURL(routeState);
     const title = this.windowTitle && this.windowTitle(routeState);
 
