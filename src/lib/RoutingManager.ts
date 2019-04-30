@@ -53,7 +53,7 @@ class RoutingManager implements Widget {
     }, currentSearchParameters);
   }
 
-  private getAllUIStates({
+  private getAllUiStates({
     searchParameters,
   }: {
     searchParameters: SearchParameters;
@@ -78,11 +78,11 @@ class RoutingManager implements Widget {
 
     this.router.onUpdate(route => {
       const nextUiState = this.stateMapping.routeToState(route);
-      const widgetsUIState = this.getAllUIStates({
+      const widgetsUiState = this.getAllUiStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(nextUiState, widgetsUIState)) {
+      if (isEqual(nextUiState, widgetsUiState)) {
         return;
       }
 
@@ -99,7 +99,7 @@ class RoutingManager implements Widget {
     });
 
     this.renderURLFromState = searchParameters => {
-      this.currentUiState = this.getAllUIStates({
+      this.currentUiState = this.getAllUiStates({
         searchParameters,
       });
 
@@ -113,7 +113,7 @@ class RoutingManager implements Widget {
     // Compare initial state and first render state to see if the query has been
     // changed by the `searchFunction`. It's required because the helper of the
     // `searchFunction` does not trigger change event (not the same instance).
-    const firstRenderState = this.getAllUIStates({
+    const firstRenderState = this.getAllUiStates({
       searchParameters: state,
     });
 
@@ -150,7 +150,7 @@ class RoutingManager implements Widget {
   public init({ state }: { state: SearchParameters }): void {
     // Store the initial state from the storage to compare it with the state on next renders
     // in case the `searchFunction` has modified it.
-    this.initState = this.getAllUIStates({
+    this.initState = this.getAllUiStates({
       searchParameters: state,
     });
   }
@@ -174,7 +174,7 @@ class RoutingManager implements Widget {
   }
 
   public createURL(state: SearchParameters): string {
-    const uiState = this.getAllUIStates({
+    const uiState = this.getAllUiStates({
       searchParameters: state,
     });
     const route = this.stateMapping.stateToRoute(uiState);
@@ -190,11 +190,11 @@ class RoutingManager implements Widget {
     this.router.onUpdate(route => {
       const nextUiState = this.stateMapping.routeToState(route);
 
-      const widgetsUIState = this.getAllUIStates({
+      const widgetsUiState = this.getAllUiStates({
         searchParameters: helper.state,
       });
 
-      if (isEqual(nextUiState, widgetsUIState)) {
+      if (isEqual(nextUiState, widgetsUiState)) {
         return;
       }
 
