@@ -92,17 +92,17 @@ export type NumericRefinement = {
 
 export type Refinement = FacetRefinement | NumericRefinement;
 
-export type Router = {
-  onUpdate(callback: (route: RouteState) => void): void;
+export type Router<TRouteState = UiState> = {
+  onUpdate(callback: (route: TRouteState) => void): void;
   read(): UiState;
-  write(route: RouteState): void;
+  write(route: TRouteState): void;
   createURL(state: UiState): string;
   dispose(): Widget['dispose'];
 };
 
-export type StateMapping = {
-  stateToRoute(state: UiState): UiState;
-  routeToState(route: UiState): UiState;
+export type StateMapping<TRouteState = UiState> = {
+  stateToRoute(state: UiState): TRouteState;
+  routeToState(route: TRouteState): UiState;
 };
 
 export type Client = AlgoliaSearchClient;
@@ -114,8 +114,4 @@ export type InstantSearch = {
   insightsClient?: AlgoliaInsightsClient;
   helper: Helper | null;
   widgets: Widget[];
-};
-
-export type RouteState = {
-  [stateKey: string]: any;
 };
