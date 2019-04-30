@@ -66,6 +66,7 @@
     "handlebars": "4.1.0",
     "http-server": "0.11.1",
     "jest": "24.7.1",
+    "jest-watch-typeahead": "0.3.0",
     "jsdoc-parse": "1.2.7",
     "jsdoc-to-markdown": "1.3.9",
     "marked": "0.3.19",
