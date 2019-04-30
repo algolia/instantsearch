@@ -29,7 +29,10 @@ function defaultSetup(opts = {}): DefaultSetupWrapper {
     }
     widget.init({
       helper,
-      instantSearchInstance: {},
+      instantSearchInstance: {
+        helper: null,
+        widgets: [],
+      },
       state: helper.state,
       templatesConfig: {},
       createURL: () => '',
@@ -41,7 +44,10 @@ function defaultSetup(opts = {}): DefaultSetupWrapper {
     }
     widget.render({
       helper,
-      instantSearchInstance: {},
+      instantSearchInstance: {
+        helper: null,
+        widgets: [],
+      },
       templatesConfig: {},
       results: new SearchResults(helper.state, [{}]),
       state: helper.state,
