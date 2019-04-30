@@ -16,12 +16,12 @@ type RoutingManagerProps = {
 };
 
 class RoutingManager implements Widget {
-  private readonly instantSearchInstance: RoutingManagerProps['instantSearchInstance'];
-  private readonly router: RoutingManagerProps['router'];
-  private readonly stateMapping: RoutingManagerProps['stateMapping'];
+  private readonly instantSearchInstance: InstantSearch;
+  private readonly router: Router;
+  private readonly stateMapping: StateMapping;
 
-  private firstRender: boolean;
-  private currentUIState: UiState;
+  private isFirstRender: boolean = true;
+  private currentUiState: UiState;
   private initState?: UiState;
   private renderURLFromState?: (searchParameters: SearchParameters) => void;
 
@@ -33,18 +33,16 @@ class RoutingManager implements Widget {
     this.router = router;
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
-
-    this.firstRender = true;
-    this.currentUIState = this.stateMapping.routeToState(this.router.read());
+    this.currentUiState = this.stateMapping.routeToState(this.router.read());
   }
 
   private getAllSearchParameters({
     currentSearchParameters,
     uiState,
   }): Partial<SearchParameters> {
-    const widgets = this.instantSearchInstance.widgets!;
+    const widgets = this.instantSearchInstance.widgets;
 
-    const searchParameters = widgets.reduce((parameters, widget) => {
+    return widgets.reduce((parameters, widget) => {
       if (!widget.getWidgetSearchParameters) {
         return parameters;
       }
@@ -53,8 +51,6 @@ class RoutingManager implements Widget {
         uiState,
       });
     }, currentSearchParameters);
-
-    return searchParameters;
   }
 
   private getAllUIStates({
@@ -62,21 +58,19 @@ class RoutingManager implements Widget {
   }: {
     searchParameters: SearchParameters;
   }): UiState {
-    const widgets = this.instantSearchInstance.widgets!;
+    const widgets = this.instantSearchInstance.widgets;
     const helper = this.instantSearchInstance.helper!;
 
-    const uiState = widgets
-      .filter(widget => Boolean(widget.getWidgetState))
-      .reduce(
-        (state, widget) =>
-          widget.getWidgetState!(state, {
-            helper,
-            searchParameters,
-          }),
-        {}
-      );
+    return widgets.reduce((state, widget) => {
+      if (!widget.getWidgetState) {
+        return state;
+      }
 
-    return uiState;
+      return widget.getWidgetState(state, {
+        helper,
+        searchParameters,
+      });
+    }, {});
   }
 
   private setupRouting(state: SearchParameters): void {
@@ -92,11 +86,11 @@ class RoutingManager implements Widget {
         return;
       }
 
-      this.currentUIState = nextUiState;
+      this.currentUiState = nextUiState;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: state,
-        uiState: this.currentUIState,
+        uiState: this.currentUiState,
       });
 
       helper
@@ -105,11 +99,11 @@ class RoutingManager implements Widget {
     });
 
     this.renderURLFromState = searchParameters => {
-      this.currentUIState = this.getAllUIStates({
+      this.currentUiState = this.getAllUIStates({
         searchParameters,
       });
 
-      const route = this.stateMapping.stateToRoute(this.currentUIState);
+      const route = this.stateMapping.stateToRoute(this.currentUiState);
 
       this.router.write(route);
     };
@@ -128,20 +122,12 @@ class RoutingManager implements Widget {
       // We do this in order to make the URL update when there is `searchFunction`
       // that prevents the search of the initial rendering.
       // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-      this.currentUIState = firstRenderState;
+      this.currentUiState = firstRenderState;
 
-      const route = this.stateMapping.stateToRoute(this.currentUIState);
+      const route = this.stateMapping.stateToRoute(this.currentUiState);
 
       this.router.write(route);
     }
-  }
-
-  public init({ state }: { state: SearchParameters }): void {
-    // Store the initial state from the storage to compare it with the state on next renders
-    // in case the `searchFunction` has modified it.
-    this.initState = this.getAllUIStates({
-      searchParameters: state,
-    });
   }
 
   public getConfiguration(
@@ -155,15 +141,23 @@ class RoutingManager implements Widget {
 
     return {
       ...this.getAllSearchParameters({
-        uiState: this.currentUIState,
+        uiState: this.currentUiState,
         currentSearchParameters,
       }),
     };
   }
 
+  public init({ state }: { state: SearchParameters }): void {
+    // Store the initial state from the storage to compare it with the state on next renders
+    // in case the `searchFunction` has modified it.
+    this.initState = this.getAllUIStates({
+      searchParameters: state,
+    });
+  }
+
   public render({ state }: { state: SearchParameters }): void {
-    if (this.firstRender) {
-      this.firstRender = false;
+    if (this.isFirstRender) {
+      this.isFirstRender = false;
       this.setupRouting(state);
     }
   }
@@ -204,11 +198,11 @@ class RoutingManager implements Widget {
         return;
       }
 
-      this.currentUIState = nextUiState;
+      this.currentUiState = nextUiState;
 
       const searchParameters = this.getAllSearchParameters({
         currentSearchParameters: helper.state,
-        uiState: this.currentUIState,
+        uiState: this.currentUiState,
       });
 
       callback({ ...searchParameters });

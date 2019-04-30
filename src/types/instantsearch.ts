@@ -93,16 +93,16 @@ export type NumericRefinement = {
 export type Refinement = FacetRefinement | NumericRefinement;
 
 export type Router = {
-  onUpdate(callback: (route: string) => void): void;
+  onUpdate(callback: (route: Partial<SearchParameters>) => void): void;
   read(): UiState;
-  write(route: string): void;
-  createURL(state: Partial<SearchParameters>): string;
+  write(route: Partial<SearchParameters>): void;
+  createURL(state: UiState): string;
   dispose(): Widget['dispose'];
 };
 
 export type StateMapping = {
-  stateToRoute(state: UiState): string;
-  routeToState(route: Partial<SearchParameters>): UiState;
+  stateToRoute(state: UiState): UiState;
+  routeToState(route: UiState): UiState;
 };
 
 export type Client = AlgoliaSearchClient;
