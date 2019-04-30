@@ -99,11 +99,12 @@ class RefinementList extends Component {
       return;
     }
 
-    const matches = (
-      originalEvent.target.matches || originalEvent.target.msMatchesSelector
-    ).bind(originalEvent.target);
-
-    if (matches('input[type="radio"]:checked') && isRefined) {
+    if (
+      originalEvent.target.parentNode.querySelector(
+        'input[type="radio"]:checked'
+      ) &&
+      isRefined
+    ) {
       // Prevent refinement for being reset if the user clicks on an already checked radio button
       return;
     }
@@ -132,14 +133,6 @@ class RefinementList extends Component {
     }
 
     originalEvent.stopPropagation();
-
-    if (
-      originalEvent.target.querySelector('input[type="radio"]:checked') &&
-      isRefined
-    ) {
-      // Prevent refinement for being reset if the user clicks on an already checked radio button
-      return;
-    }
 
     this.refine(facetValueToRefine, isRefined);
   }
