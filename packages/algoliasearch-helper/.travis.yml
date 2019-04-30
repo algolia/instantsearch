@@ -7,10 +7,6 @@ cache:
 script:
 - yarn test:ci
 - yarn doc
-branches:
-  only:
-  - master
-  - develop
 sudo: false
 cache:
   directories:
