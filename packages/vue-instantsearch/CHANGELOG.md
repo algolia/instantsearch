@@ -1,3 +1,23 @@
+# [2.1.0](https://github.com/algolia/vue-instantsearch/compare/v2.0.1...v2.1.0) (2019-04-30)
+
+
+### Bug Fixes
+
+* **stories:** update range slider component to v3 ([#648](https://github.com/algolia/vue-instantsearch/issues/648)) ([e3010f6](https://github.com/algolia/vue-instantsearch/commit/e3010f6)), closes [#647](https://github.com/algolia/vue-instantsearch/issues/647)
+* **toggle-refinement:** display label ([#649](https://github.com/algolia/vue-instantsearch/issues/649)) ([84c909d](https://github.com/algolia/vue-instantsearch/commit/84c909d))
+* **ua:** change the User-Agent to use the new specs lib (version) ([#650](https://github.com/algolia/vue-instantsearch/issues/650)) ([6942979](https://github.com/algolia/vue-instantsearch/commit/6942979))
+
+
+### Features
+
+* **infiniteHits:** add previous button ([#659](https://github.com/algolia/vue-instantsearch/issues/659)) ([3d2eec9](https://github.com/algolia/vue-instantsearch/commit/3d2eec9))
+* **insights:** add insights support to Hits widget ([#665](https://github.com/algolia/vue-instantsearch/issues/665)) ([2efa8c0](https://github.com/algolia/vue-instantsearch/commit/2efa8c0))
+* **insights:** add insights support to InfiniteHits widget ([#666](https://github.com/algolia/vue-instantsearch/issues/666)) ([b3302cf](https://github.com/algolia/vue-instantsearch/commit/b3302cf))
+* **insights:** add insightsClient support on storybook ([#664](https://github.com/algolia/vue-instantsearch/issues/664)) ([5ad4d3e](https://github.com/algolia/vue-instantsearch/commit/5ad4d3e))
+* **query-rules:** add new widgets ([#652](https://github.com/algolia/vue-instantsearch/issues/652)) ([cec815d](https://github.com/algolia/vue-instantsearch/commit/cec815d))
+
+
+
 ## [2.0.1](https://github.com/algolia/vue-instantsearch/compare/v2.0.0...v2.0.1) (2019-03-13)
 
 
