@@ -254,17 +254,23 @@ function normalizeRefinement(refinement) {
     ? `${getOperatorSymbol(refinement.operator)} ${refinement.name}`
     : refinement.name;
 
-  return {
+  const normalizedRefinement = {
     attribute: refinement.attributeName,
     type: refinement.type,
     value,
     label,
-    ...(refinement.operator !== undefined && { operator: refinement.operator }),
-    ...(refinement.count !== undefined && { count: refinement.count }),
-    ...(refinement.exhaustive !== undefined && {
-      exhaustive: refinement.exhaustive,
-    }),
   };
+
+  if (refinement.operator !== undefined) {
+    normalizedRefinement.operator = refinement.operator;
+  }
+  if (refinement.count !== undefined) {
+    normalizedRefinement.count = refinement.count;
+  }
+  if (refinement.exhaustive !== undefined) {
+    normalizedRefinement.exhaustive = refinement.exhaustive;
+  }
+  return normalizedRefinement;
 }
 
 function groupItemsByRefinements(items, helper) {

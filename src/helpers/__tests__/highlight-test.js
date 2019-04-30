@@ -1,6 +1,6 @@
 import highlight from '../highlight';
 
-/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/camelcase */
 const hit = {
   name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
   description:
@@ -65,7 +65,7 @@ const hit = {
     },
   },
 };
-/* eslint-enable camelcase */
+/* eslint-enable @typescript-eslint/camelcase */
 
 describe('highlight', () => {
   test('with default tag name', () => {

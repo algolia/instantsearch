@@ -1,7 +1,6 @@
-import range from 'lodash/range';
-import times from 'lodash/times';
 import algoliaSearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
+import version from '../version';
 
 jest.mock('algoliasearch-helper', () => {
   const module = require.requireActual('algoliasearch-helper');
@@ -48,6 +47,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
 See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
 `);
+  });
+
+  it('throws with invalid insightsClient', () => {
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient: { search: () => {} },
+        insightsClient: 'insights',
+      });
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"The provided \`insightsClient\` must be a function."`
+    );
+  });
+
+  it('stores insightsClient on instance', () => {
+    const insightsClient = jest.fn();
+    const instance = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: { search: () => {} },
+      insightsClient,
+    });
+    expect(instance.insightsClient).toEqual(insightsClient);
   });
 
   it('throws if addWidgets is called with a single widget', () => {
@@ -151,6 +173,7 @@ describe('InstantSearch lifecycle', () => {
           results: requests.map(() => ({})),
         });
       },
+      addAlgoliaAgent: jest.fn(),
     };
 
     algoliasearch = jest.fn().mockReturnValue(client);
@@ -174,12 +197,20 @@ describe('InstantSearch lifecycle', () => {
   });
 
   afterEach(() => {
+    client.addAlgoliaAgent.mockClear();
     algoliaSearchHelper.mockClear();
   });
 
   it('calls algoliasearch(appId, apiKey)', () => {
     expect(algoliasearch).toHaveBeenCalledTimes(1);
     expect(algoliasearch).toHaveBeenCalledWith(appId, apiKey);
+  });
+
+  it('calls addAlgoliaAgent', () => {
+    expect(client.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(client.addAlgoliaAgent).toHaveBeenCalledWith(
+      `instantsearch.js (${version})`
+    );
   });
 
   it('does not call algoliasearchHelper', () => {
@@ -236,10 +267,7 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls widget.getConfiguration(searchParameters)', () => {
-        expect(widget.getConfiguration).toHaveBeenCalledWith(
-          searchParameters,
-          undefined
-        );
+        expect(widget.getConfiguration).toHaveBeenCalledWith(searchParameters);
       });
 
       it('calls algoliasearchHelper(client, indexName, searchParameters)', () => {
@@ -306,7 +334,7 @@ describe('InstantSearch lifecycle', () => {
     let widgets;
 
     beforeEach(() => {
-      widgets = range(5).map((widget, widgetIndex) => ({
+      widgets = Array.from({ length: 5 }, (_widget, widgetIndex) => ({
         init() {},
         getConfiguration: jest.fn().mockReturnValue({ values: [widgetIndex] }),
       }));
@@ -331,7 +359,7 @@ describe('InstantSearch lifecycle', () => {
     const render = jest.fn();
     beforeEach(() => {
       render.mockReset();
-      const widgets = range(5).map(() => ({ render }));
+      const widgets = Array.from({ length: 5 }, () => ({ render }));
 
       widgets.forEach(search.addWidget, search);
 
@@ -641,7 +669,7 @@ describe('InstantSearch lifecycle', () => {
       searchClient: algoliasearch(appId, apiKey),
     });
 
-    const widgets = times(5, () => ({
+    const widgets = Array.from({ length: 5 }, () => ({
       getConfiguration: () => ({}),
       init: jest.fn(),
       render: jest.fn(),

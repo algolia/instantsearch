@@ -6,7 +6,10 @@ import Template from '../Template/Template';
 const InfiniteHits = ({
   results,
   hits,
+  hasShowPrevious,
+  showPrevious,
   showMore,
+  isFirstPage,
   isLastPage,
   cssClasses,
   templateProps,
@@ -26,6 +29,21 @@ const InfiniteHits = ({
 
   return (
     <div className={cssClasses.root}>
+      {hasShowPrevious && (
+        <Template
+          {...templateProps}
+          templateKey="showPreviousText"
+          rootTagName="button"
+          rootProps={{
+            className: cx(cssClasses.loadPrevious, {
+              [cssClasses.disabledLoadPrevious]: isFirstPage,
+            }),
+            disabled: isFirstPage,
+            onClick: showPrevious,
+          }}
+        />
+      )}
+
       <ol className={cssClasses.list}>
         {hits.map((hit, position) => (
           <Template
@@ -64,13 +82,18 @@ InfiniteHits.propTypes = {
     emptyRoot: PropTypes.string.isRequired,
     list: PropTypes.string.isRequired,
     item: PropTypes.string.isRequired,
+    loadPrevious: PropTypes.string.isRequired,
+    disabledLoadPrevious: PropTypes.string.isRequired,
     loadMore: PropTypes.string.isRequired,
     disabledLoadMore: PropTypes.string.isRequired,
   }).isRequired,
   hits: PropTypes.array.isRequired,
   results: PropTypes.object.isRequired,
-  showMore: PropTypes.func,
+  hasShowPrevious: PropTypes.bool.isRequired,
+  showPrevious: PropTypes.func.isRequired,
+  showMore: PropTypes.func.isRequired,
   templateProps: PropTypes.object.isRequired,
+  isFirstPage: PropTypes.bool.isRequired,
   isLastPage: PropTypes.bool.isRequired,
 };
 

@@ -1,4 +1,4 @@
-import range from 'lodash/range';
+import { range } from '../../lib/utils';
 
 class Paginator {
   constructor(params) {
@@ -13,7 +13,9 @@ class Paginator {
     if (total === 0) return [0];
 
     const totalDisplayedPages = this.nbPagesDisplayed(padding, total);
-    if (totalDisplayedPages === total) return range(0, total);
+    if (totalDisplayedPages === total) {
+      return range({ end: total });
+    }
 
     const paddingLeft = this.calculatePaddingLeft(
       currentPage,
@@ -26,7 +28,7 @@ class Paginator {
     const first = currentPage - paddingLeft;
     const last = currentPage + paddingRight;
 
-    return range(first, last);
+    return range({ start: first, end: last });
   }
 
   nbPagesDisplayed(padding, total) {

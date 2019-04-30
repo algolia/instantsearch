@@ -9,7 +9,7 @@ describe('enhanceConfiguration', () => {
     const configuration = { analytics: true, page: 2 };
     const widget = {};
 
-    const output = enhanceConfiguration({})(configuration, widget);
+    const output = enhanceConfiguration(configuration, widget);
     expect(output).toBe(configuration);
   });
 
@@ -17,7 +17,7 @@ describe('enhanceConfiguration', () => {
     const configuration = { analytics: true, page: 2 };
     const widget = createWidget(configuration);
 
-    const output = enhanceConfiguration({})(configuration, widget);
+    const output = enhanceConfiguration(configuration, widget);
     expect(output).not.toBe(configuration);
   });
 
@@ -25,7 +25,7 @@ describe('enhanceConfiguration', () => {
     const configuration = { analytics: true, page: 2 };
     const widget = createWidget(configuration);
 
-    const output = enhanceConfiguration({})(configuration, widget);
+    const output = enhanceConfiguration(configuration, widget);
     expect(output).toEqual(configuration);
   });
 
@@ -33,21 +33,18 @@ describe('enhanceConfiguration', () => {
     const widget = { getConfiguration: jest.fn() };
 
     const configuration = {};
-    const searchParametersFromUrl = {};
-    enhanceConfiguration(searchParametersFromUrl)(configuration, widget);
+
+    enhanceConfiguration(configuration, widget);
 
     expect(widget.getConfiguration).toHaveBeenCalled();
-    expect(widget.getConfiguration).toHaveBeenCalledWith(
-      configuration,
-      searchParametersFromUrl
-    );
+    expect(widget.getConfiguration).toHaveBeenCalledWith(configuration);
   });
 
   it('should replace boolean values', () => {
     const actualConfiguration = { analytics: false };
     const widget = createWidget({ analytics: true });
 
-    const output = enhanceConfiguration({})(actualConfiguration, widget);
+    const output = enhanceConfiguration(actualConfiguration, widget);
     expect(output.analytics).toBe(true);
   });
 
@@ -56,7 +53,7 @@ describe('enhanceConfiguration', () => {
       const actualConfiguration = { refinements: ['foo'] };
       const widget = createWidget({ refinements: ['foo', 'bar'] });
 
-      const output = enhanceConfiguration({})(actualConfiguration, widget);
+      const output = enhanceConfiguration(actualConfiguration, widget);
       expect(output.refinements).toEqual(['foo', 'bar']);
     }
 
@@ -64,7 +61,7 @@ describe('enhanceConfiguration', () => {
       const actualConfiguration = { refinements: ['foo'] };
       const widget = createWidget({ refinements: ['bar'] });
 
-      const output = enhanceConfiguration({})(actualConfiguration, widget);
+      const output = enhanceConfiguration(actualConfiguration, widget);
       expect(output.refinements).toEqual(['foo', 'bar']);
     }
 
@@ -72,7 +69,7 @@ describe('enhanceConfiguration', () => {
       const actualConfiguration = { refinements: ['foo', 'bar'] };
       const widget = createWidget({ refinements: [] });
 
-      const output = enhanceConfiguration({})(actualConfiguration, widget);
+      const output = enhanceConfiguration(actualConfiguration, widget);
       expect(output.refinements).toEqual(['foo', 'bar']);
     }
   });
@@ -81,7 +78,7 @@ describe('enhanceConfiguration', () => {
     const actualConfiguration = { refinements: { lvl1: ['foo'], lvl2: false } };
     const widget = createWidget({ refinements: { lvl1: ['bar'], lvl2: true } });
 
-    const output = enhanceConfiguration({})(actualConfiguration, widget);
+    const output = enhanceConfiguration(actualConfiguration, widget);
     expect(output).toEqual({
       refinements: { lvl1: ['foo', 'bar'], lvl2: true },
     });

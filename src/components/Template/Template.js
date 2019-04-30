@@ -1,7 +1,6 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
-import { renderTemplate } from '../../lib/utils';
+import { renderTemplate, isEqual } from '../../lib/utils';
 
 class Template extends Component {
   shouldComponentUpdate(nextProps) {

@@ -72,16 +72,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       }
 
       // when there is an identical hierarchicalFacets into current configuration
-      {
-        const spy = jest.spyOn(global.console, 'warn');
+      expect(() => {
         const config = widget.getConfiguration({
           hierarchicalFacets: [{ name: 'category' }],
         });
+
         expect(config).toEqual({});
-        expect(spy).toHaveBeenCalled();
-        spy.mockReset();
-        spy.mockRestore();
-      }
+      }).toWarnDev();
 
       // when there is already a different hierarchicalFacets into current configuration
       {

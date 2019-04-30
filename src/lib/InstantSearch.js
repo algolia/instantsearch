@@ -1,14 +1,16 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import mergeWith from 'lodash/mergeWith';
-import union from 'lodash/union';
-import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
 import RoutingManager from './RoutingManager';
 import simpleMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
-import { createDocumentationMessageGenerator } from './utils';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+  isPlainObject,
+  mergeDeep,
+} from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -50,6 +52,7 @@ class InstantSearch extends EventEmitter {
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
+      insightsClient = null,
     } = options;
 
     if (indexName === null) {
@@ -77,10 +80,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     if (typeof searchClient.addAlgoliaAgent === 'function') {
-      searchClient.addAlgoliaAgent(`instantsearch.js ${version}`);
+      searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
+    }
+
+    if (insightsClient && typeof insightsClient !== 'function') {
+      throw new Error('The provided `insightsClient` must be a function.');
     }
 
     this.client = searchClient;
+    this.insightsClient = insightsClient;
     this.helper = null;
     this.indexName = indexName;
     this.searchParameters = { ...searchParameters, index: indexName };
@@ -155,7 +163,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
 
     // Init the widget directly if instantsearch has been already started
     if (this.started && Boolean(widgets.length)) {
-      this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+      this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
         ...this.helper.state,
       });
 
@@ -227,7 +235,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+        this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
           ...nextState,
         });
 
@@ -273,8 +281,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       );
     }
 
-    let searchParametersFromUrl;
-
     if (this.routing) {
       const routingManager = new RoutingManager({
         ...this.routing,
@@ -289,11 +295,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = function() {};
+      this._onHistoryChange = noop;
     }
 
     this.searchParameters = this.widgets.reduce(
-      enhanceConfiguration(searchParametersFromUrl),
+      enhanceConfiguration,
       this.searchParameters
     );
 
@@ -308,7 +314,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            search: () => new Promise(() => {}),
+            search: () => new Promise(noop),
           },
           helper.state.index,
           helper.state
@@ -426,32 +432,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
   }
 }
 
-export function enhanceConfiguration(searchParametersFromUrl) {
-  return (configuration, widgetDefinition) => {
-    if (!widgetDefinition.getConfiguration) return configuration;
+export function enhanceConfiguration(configuration, widgetDefinition) {
+  if (!widgetDefinition.getConfiguration) {
+    return configuration;
+  }
 
-    // Get the relevant partial configuration asked by the widget
-    const partialConfiguration = widgetDefinition.getConfiguration(
-      configuration,
-      searchParametersFromUrl
-    );
+  // Get the relevant partial configuration asked by the widget
+  const partialConfiguration = widgetDefinition.getConfiguration(configuration);
 
-    const customizer = (a, b) => {
-      // always create a unified array for facets refinements
-      if (Array.isArray(a)) {
-        return union(a, b);
-      }
-
-      // avoid mutating objects
-      if (isPlainObject(a)) {
-        return mergeWith({}, a, b, customizer);
-      }
-
-      return undefined;
-    };
-
-    return mergeWith({}, configuration, partialConfiguration, customizer);
-  };
+  return mergeDeep(configuration, partialConfiguration);
 }
 
 export default InstantSearch;

@@ -1,7 +1,14 @@
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 
 import connectInfiniteHits from '../connectInfiniteHits';
+
+jest.mock('../../../lib/utils/hits-absolute-position', () => ({
+  addAbsolutePosition: hits => hits,
+}));
 
 describe('connectInfiniteHits', () => {
   it('throws without render function', () => {
@@ -47,8 +54,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [],
+        showPrevious: expect.any(Function),
         showMore: expect.any(Function),
         results: undefined,
+        isFirstPage: true,
         isLastPage: true,
         instantSearchInstance: undefined,
         widgetParams: {
@@ -73,8 +82,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [],
+        showPrevious: expect.any(Function),
         showMore: expect.any(Function),
         results: expect.any(Object),
+        isFirstPage: true,
         isLastPage: false,
         instantSearchInstance: undefined,
         widgetParams: {
@@ -96,7 +107,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
   });
 
-  it('Provides the hits and the whole results', () => {
+  it('Provides the hits and accumulates results on next page', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget();
@@ -148,27 +159,116 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const thirdRenderingOptions = rendering.mock.calls[2][0];
     expect(thirdRenderingOptions.hits).toEqual([...hits, ...otherHits]);
     expect(thirdRenderingOptions.results).toEqual(otherResults);
+  });
 
-    helper.setPage(0);
+  it('Provides the hits and prepends results on previous page', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget();
 
-    // If the page goes back to 0, the hits cache should be flushed
+    const helper = jsHelper({}, '', {});
+    helper.setPage(1);
+    helper.search = jest.fn();
+    helper.emit = jest.fn();
 
-    const thirdHits = [{ fake: 'data 3' }, { sample: 'infos 3' }];
-    const thirdResults = new SearchResults(helper.state, [
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const results = new SearchResults(helper.state, [
       {
-        hits: thirdHits,
+        hits,
       },
     ]);
     widget.render({
-      results: thirdResults,
+      results,
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    const fourthRenderingOptions = rendering.mock.calls[3][0];
-    expect(fourthRenderingOptions.hits).toEqual(thirdHits);
-    expect(fourthRenderingOptions.results).toEqual(thirdResults);
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    const { showPrevious } = secondRenderingOptions;
+    expect(secondRenderingOptions.hits).toEqual(hits);
+    expect(secondRenderingOptions.results).toEqual(results);
+    showPrevious();
+    expect(helper.getPage()).toBe(0);
+    expect(helper.emit).not.toHaveBeenCalled();
+    expect(helper.search).toHaveBeenCalledTimes(1);
+
+    // the results should be prepended if there is an decrement in page
+    const previousHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const previousResults = new SearchResults(helper.state, [
+      {
+        hits: previousHits,
+      },
+    ]);
+    widget.render({
+      results: previousResults,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
+    expect(thirdRenderingOptions.hits).toEqual([...previousHits, ...hits]);
+    expect(thirdRenderingOptions.results).toEqual(previousResults);
+  });
+
+  it('Provides the hits and flush hists cache on query changes', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget();
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.hits).toEqual(hits);
+    expect(secondRenderingOptions.results).toEqual(results);
+
+    helper.setQuery('data');
+
+    // If the query changes, the hits cache should be flushed
+    const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const otherResults = new SearchResults(helper.state, [{ hits: otherHits }]);
+    widget.render({
+      results: otherResults,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
+    expect(thirdRenderingOptions.hits).toEqual(otherHits);
+    expect(thirdRenderingOptions.results).toEqual(otherResults);
   });
 
   it('escape highlight properties if requested', () => {
@@ -360,6 +460,58 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
   });
 
+  it('adds queryID if provided to results', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({});
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const hits = [
+      {
+        name: 'name 1',
+      },
+      {
+        name: 'name 2',
+      },
+    ];
+
+    const results = new SearchResults(helper.state, [
+      { hits, queryID: 'theQueryID' },
+    ]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        hits: [
+          {
+            name: 'name 1',
+            __queryID: 'theQueryID',
+          },
+          {
+            name: 'name 2',
+            __queryID: 'theQueryID',
+          },
+        ],
+      }),
+      false
+    );
+  });
+
   it('does not render the same page twice', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
@@ -431,5 +583,221 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       }),
       false
     );
+  });
+
+  describe('routing', () => {
+    describe('getWidgetState', () => {
+      it('should give back the object unmodified if the default value is selected', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectInfiniteHits(rendering);
+        const widget = makeWidget({ showPrevious: true });
+
+        const helper = jsHelper({}, '', {});
+        helper.search = jest.fn();
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+        });
+
+        const uiStateBefore = { page: 1 };
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      it('should add an entry equal to the refinement', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectInfiniteHits(rendering);
+        const widget = makeWidget({ showPrevious: true });
+
+        const helper = jsHelper({}, '', {});
+        helper.search = jest.fn();
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+        });
+
+        const { showMore } = rendering.mock.calls[0][0];
+
+        showMore();
+
+        const uiStateBefore = { page: 1 };
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      it('should give back the object unmodified if showPrevious is disabled', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectInfiniteHits(rendering);
+        const widget = makeWidget({ showPrevious: false });
+
+        const helper = jsHelper({}, '', {});
+        helper.search = jest.fn();
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+        });
+
+        const { showMore } = rendering.mock.calls[0][0];
+
+        showMore();
+
+        const uiStateBefore = { page: 1 };
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      it('should return the same SP if there are no refinements in the UI state', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectInfiniteHits(rendering);
+        const widget = makeWidget({ showPrevious: true });
+
+        const helper = jsHelper({}, '', {});
+        helper.search = jest.fn();
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+        });
+
+        // The user presses back (browser), and the URL contains no parameters
+        const uiState = {};
+        // The current state is empty (and page is set to 0 by default)
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same values should not return a new object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      it('should enforce the default value if no value is in the UI State', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectInfiniteHits(rendering);
+        const widget = makeWidget({ showPrevious: true });
+
+        const helper = jsHelper({}, '', {});
+        helper.search = jest.fn();
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+        });
+
+        const { showMore } = rendering.mock.calls[0][0];
+
+        // The user presses back (browser), and the URL contains no parameters
+        const uiState = {};
+        // The current state is set to next page
+        showMore();
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          {
+            uiState,
+          }
+        );
+        // Applying an empty state, should force back to page 0
+        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter.page).toBe(0);
+      });
+
+      it('should add the refinements according to the UI state provided', () => {
+        global.window = { location: { pathname: null } };
+        const rendering = jest.fn();
+        const makeWidget = connectInfiniteHits(rendering);
+        const widget = makeWidget({ showPrevious: true });
+
+        const helper = jsHelper({}, '', {});
+        helper.search = jest.fn();
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+        });
+
+        const { showMore } = rendering.mock.calls[0][0];
+
+        // The user presses back (browser), and the URL contains some parameters
+        const uiState = {
+          page: 2,
+        };
+        // The current state is set to next page
+        showMore();
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          {
+            uiState,
+          }
+        );
+        // Applying a state with new parameters should apply them on the search
+        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter.page).toBe(1);
+      });
+    });
+
+    it('should return the same SP if showPrevious is disabled', () => {
+      global.window = { location: { pathname: null } };
+      const rendering = jest.fn();
+      const makeWidget = connectInfiniteHits(rendering);
+      const widget = makeWidget({ showPrevious: false });
+
+      const helper = jsHelper({}, '', {});
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { showMore } = rendering.mock.calls[0][0];
+
+      // The user presses back (browser), and the URL contains some parameters
+      const uiState = {
+        page: 4,
+      };
+      // The current state is set to next page
+      showMore();
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        {
+          uiState,
+        }
+      );
+      expect(searchParametersAfter).toBe(searchParametersBefore);
+    });
   });
 });
