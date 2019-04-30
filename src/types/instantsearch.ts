@@ -96,7 +96,7 @@ export type Router<TRouteState = UiState> = {
   onUpdate(callback: (route: TRouteState) => void): void;
   read(): UiState;
   write(route: TRouteState): void;
-  createURL(state: UiState): string;
+  createURL(state: TRouteState): string;
   dispose(): Widget['dispose'];
 };
 
