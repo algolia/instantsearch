@@ -89,7 +89,7 @@ const createFakeHitsPerPage = () => ({
 });
 
 describe('RoutingManager', () => {
-  describe('getAllUIStates', () => {
+  describe('getAllUiStates', () => {
     test('reads the state of widgets with a getWidgetState implementation', () => {
       const searchClient = createFakeSearchClient();
       const search = instantsearch({
@@ -120,7 +120,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const uiStates = router.getAllUIStates({
+      const uiStates = router.getAllUiStates({
         searchParameters: search.helper.state,
       });
       expect(uiStates).toEqual(widgetState);
@@ -160,7 +160,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const uiStates = router.getAllUIStates({
+      const uiStates = router.getAllUiStates({
         searchParameters: search.helper.state,
       });
       expect(uiStates).toEqual({});
