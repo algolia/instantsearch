@@ -597,14 +597,3 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/toggleFacetRefinement}}
 {{> jsdoc jsdoc/state/toggleTagRefinement}}
 {{> jsdoc jsdoc/state/validate}}
-
-## URL
-
-The helper exposes some URL utility methods for serializing and deserializing
-state to and from a URL query string.
-
-The following methods are available under the `algoliasearchHelper.url` namespace.
-
-{{> jsdoc jsdoc/url/getStateFromQueryString}}
-{{> jsdoc jsdoc/url/getUnrecognizedParametersInQueryString}}
-{{> jsdoc jsdoc/url/getQueryStringFromState}}

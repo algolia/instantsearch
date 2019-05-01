@@ -91,8 +91,7 @@
   },
   "dependencies": {
     "events": "^1.1.1",
-    "lodash": "^4.17.5",
-    "qs": "^6.5.1"
+    "lodash": "^4.17.5"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"

@@ -768,36 +768,11 @@ var state1 = helper.searchOnce({hitsPerPage: 1})
 
 ### URL Helpers
 
-#### Set the state from a query string
-
-```js
-helper.setState(algoliasearchHelper.url.getStateFromQueryString(qs));
-```
-
 #### Get a plain object with a subset of the state
 
 ```js
 // to an object with the query and all the refinements
 helper.getState(['query', 'attribute:*']);
-```
-
-#### Get an object for the helper configuration in the query string
-
-```js
-var state = algoliasearchHelper.url.getStateFromQueryString(qs);
-```
-
-#### Get the configuration contained in the query string that is not for the helper
-
-```js
-var otherConf = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs);
-```
-
-#### Get the query string of any state
-
-```js
-var state = helper.getState();
-var qs = algoliasearchHelper.url.getQueryStringFromState(state);
 ```
 
 ### Query parameters

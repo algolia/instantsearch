@@ -11,7 +11,6 @@ var inherits = require('./functions/inherits');
 var flatten = require('lodash/flatten');
 var isEmpty = require('lodash/isEmpty');
 
-var url = require('./url');
 var version = require('./version');
 
 /**
@@ -827,75 +826,6 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
 AlgoliaSearchHelper.prototype.getState = function(filters) {
   if (filters === undefined) return this.state;
   return this.state.filter(filters);
-};
-
-/**
- * DEPRECATED Get part of the state as a query string. By default, the output keys will not
- * be prefixed and will only take the applied refinements and the query.
- * @deprecated
- * @param {object} [options] May contain the following parameters :
- *
- * **filters** : possible values are all the keys of the [SearchParameters](#searchparameters), `index` for
- * the index, all the refinements with `attribute:*` or for some specific attributes with
- * `attribute:theAttribute`
- *
- * **prefix** : prefix in front of the keys
- *
- * **moreAttributes** : more values to be added in the query string. Those values
- *    won't be prefixed.
- * @return {string} the query string
- */
-AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(options) {
-  var filters = options && options.filters || ['query', 'attribute:*'];
-  var partialState = this.getState(filters);
-
-  return url.getQueryStringFromState(partialState, options);
-};
-
-/**
- * DEPRECATED Read a query string and return an object containing the state. Use
- * url module.
- * @deprecated
- * @static
- * @param {string} queryString the query string that will be decoded
- * @param {object} options accepted options :
- *   - prefix : the prefix used for the saved attributes, you have to provide the
- *     same that was used for serialization
- * @return {object} partial search parameters object (same properties than in the
- * SearchParameters but not exhaustive)
- * @see {@link url#getStateFromQueryString}
- */
-AlgoliaSearchHelper.getConfigurationFromQueryString = url.getStateFromQueryString;
-
-/**
- * DEPRECATED Retrieve an object of all the properties that are not understandable as helper
- * parameters. Use url module.
- * @deprecated
- * @static
- * @param {string} queryString the query string to read
- * @param {object} options the options
- *   - prefixForParameters : prefix used for the helper configuration keys
- * @return {object} the object containing the parsed configuration that doesn't
- * to the helper
- */
-AlgoliaSearchHelper.getForeignConfigurationInQueryString = url.getUnrecognizedParametersInQueryString;
-
-/**
- * DEPRECATED Overrides part of the state with the properties stored in the provided query
- * string.
- * @deprecated
- * @param {string} queryString the query string containing the informations to url the state
- * @param {object} options optional parameters :
- *  - prefix : prefix used for the algolia parameters
- *  - triggerChange : if set to true the state update will trigger a change event
- */
-AlgoliaSearchHelper.prototype.setStateFromQueryString = function(queryString, options) {
-  var triggerChange = options && options.triggerChange || false;
-  var configuration = url.getStateFromQueryString(queryString, options);
-  var updatedState = this.state.setQueryParameters(configuration);
-
-  if (triggerChange) this.setState(updatedState);
-  else this.overrideStateWithoutTriggeringChangeEvent(updatedState);
 };
 
 /**
