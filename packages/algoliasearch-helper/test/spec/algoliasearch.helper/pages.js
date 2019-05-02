@@ -9,29 +9,43 @@ var fakeClient = {};
 test('setChange should change the current page', function() {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
-  expect(helper.getCurrentPage() === 0).toBeTruthy();
-  helper.setCurrentPage(3);
-  expect(helper.getCurrentPage() === 3).toBeTruthy();
+  expect(helper.getPage()).toBeUndefined();
+
+  helper.setPage(3);
+
+  expect(helper.getPage()).toBe(3);
 });
 
 test('nextPage should increment the page by one', function() {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
-  expect(helper.getCurrentPage() === 0).toBeTruthy();
+  expect(helper.getPage()).toBeUndefined();
+
   helper.nextPage();
   helper.nextPage();
   helper.nextPage();
-  expect(helper.getCurrentPage() === 3).toBeTruthy();
+
+  expect(helper.getPage()).toBe(3);
 });
 
 test('previousPage should decrement the current page by one', function() {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
-  expect(helper.getCurrentPage() === 0).toBeTruthy();
-  helper.setCurrentPage(3);
-  expect(helper.getCurrentPage() === 3).toBeTruthy();
+  expect(helper.getPage()).toBeUndefined();
+
+  helper.setPage(3);
+
+  expect(helper.getPage()).toBe(3);
+
   helper.previousPage();
-  expect(helper.getCurrentPage() === 2).toBeTruthy();
+
+  expect(helper.getPage()).toBe(2);
+});
+
+test('previousPage should throw an error without a current page', function() {
+  var helper = algoliasearchHelper(fakeClient, null, null);
+
+  expect(bind(helper.previousPage, helper)).toThrow('Page requested below 0.');
 });
 
 test('pages should be reset if the mutation might change the number of pages', function() {
@@ -60,9 +74,12 @@ test('pages should be reset if the mutation might change the number of pages', f
   ].forEach(function(definition) {
     var fn = definition[1];
 
-    helper.setCurrentPage(10);
-    expect(helper.getCurrentPage()).toBe(10);
+    helper.setPage(10);
+
+    expect(helper.getPage()).toBe(10);
+
     fn();
-    expect(helper.getCurrentPage()).toBe(0);
+
+    expect(helper.getPage()).toBe(0);
   });
 });

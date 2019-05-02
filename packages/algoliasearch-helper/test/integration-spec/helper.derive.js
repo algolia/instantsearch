@@ -66,7 +66,7 @@ test(
     }).then(function(responses) {
       var mainResponse = responses[0];
 
-      expect(mainResponse.state.query).toBe('');
+      expect(mainResponse.state.query).toBeUndefined();
       expect(mainResponse.results.hits.length).toBe(2);
 
       var derivedResponse = responses[1];

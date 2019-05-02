@@ -45,7 +45,7 @@ test('[Derived helper] no derived helpers, modification', function() {
 
   function searchTest(requests) {
     expect(requests.length).toBe(2);
-    expect(requests[0].params.query).toBe('');
+    expect(requests[0].params.query).toBeUndefined();
     expect(requests[1].params.query).toBe('otherQuery');
 
     delete requests[0].params.query;

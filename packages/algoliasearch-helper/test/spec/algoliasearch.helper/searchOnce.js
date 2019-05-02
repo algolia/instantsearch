@@ -18,6 +18,11 @@ test('searchOnce should call the algolia client according to the number of refin
   var parameters = new SearchParameters({
     disjunctiveFacets: ['city']
   })
+    // @TODO: at the moment we have to provide a default value for the page, otherwise
+    // some methods reset the page to 0 (because of the reset behavior). This is what
+    // happens: page omit -> page defined with 0. We'll fix those issues with a next PR
+    // that implements a proper reset with the updated structure of the `SearchParameters`.
+    .setPage(0)
     .setIndex('test_hotels-node')
     .addDisjunctiveFacetRefinement('city', 'Paris')
     .addDisjunctiveFacetRefinement('city', 'New York');
@@ -60,8 +65,8 @@ test('searchOnce should call the algolia client according to the number of refin
     var queries = client.search.mock.calls[0][0];
     for (var i = 0; i < queries.length; i++) {
       var query = queries[i];
-      expect(query.query).toBe(undefined);
-      expect(query.params.query).toBe('');
+      expect(query.query).toBeUndefined();
+      expect(query.params.query).toBeUndefined();
     }
 
     done();
@@ -94,8 +99,8 @@ test('searchOnce should call the algolia client according to the number of refin
     var queries = client.search.mock.calls[0][0];
     for (var i = 0; i < queries.length; i++) {
       var query = queries[i];
-      expect(query.query).toBe(undefined);
-      expect(query.params.query).toBe('');
+      expect(query.query).toBeUndefined();
+      expect(query.params.query).toBeUndefined();
     }
 
     done();
