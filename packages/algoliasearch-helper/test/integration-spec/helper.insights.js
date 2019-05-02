@@ -3,16 +3,13 @@
 var utils = require('../integration-utils.js');
 var setup = utils.setupSimple;
 
-var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
+var algoliasearchHelper = require('../../');
 
 var random = require('lodash/random');
 
-if (!utils.shouldRun) {
-  test = test.skip;
-}
 
-var indexName = '_travis-algoliasearch-helper-js-' +
-  (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
+var indexName = '_circle-algoliasearch-helper-js-' +
+  (process.env.CIRCLE_BUILD_NUM || 'DEV') +
   'helper_searchonce' + random(0, 5000);
 
 var dataset = [

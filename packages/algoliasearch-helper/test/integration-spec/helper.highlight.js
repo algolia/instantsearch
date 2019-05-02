@@ -3,17 +3,14 @@
 var utils = require('../integration-utils.js');
 var setup = utils.setup;
 
-var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
+var algoliasearchHelper = require('../../');
 
 var random = require('lodash/random');
 
-if (!utils.shouldRun) {
-  test = test.skip;
-}
 
 test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', function(done) {
-  var indexName = '_travis-algoliasearch-helper-js-' +
-    (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
+  var indexName = '_circle-algoliasearch-helper-js-' +
+    (process.env.CIRCLE_BUILD_NUM || 'DEV') +
     'helper_highlight' + random(0, 5000);
 
   setup(indexName, function(client, index) {

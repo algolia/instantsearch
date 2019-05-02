@@ -35,7 +35,7 @@ jest.runCLI(dynamicJestConfig, projectsRootPaths).then(function(response) {
     client.listIndexes().then(content => {
       content.items
         .map(i => i.name)
-        .filter(n => n.indexOf('_travis-algoliasearch-helper') !== -1)
+        .filter(n => n.indexOf('_circle-algoliasearch-helper') !== -1)
         .forEach(n => client.deleteIndex(n));
     });
   }

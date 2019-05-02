@@ -34,21 +34,7 @@ function withDatasetAndConfig(indexName, dataset, config) {
   });
 }
 
-// some environements are not able to do indexing requests using
-// PUT, like IE8 and IE9
-var shouldRun;
-
-if (!process.browser) {
-  shouldRun = true;
-} else if ('XDomainRequest' in window) {
-  shouldRun = false;
-} else {
-  shouldRun = true;
-}
-
 module.exports = {
-  isCIBrowser: process.browser && process.env.TRAVIS_BUILD_NUMBER,
   setup: setup,
-  setupSimple: withDatasetAndConfig,
-  shouldRun: shouldRun
+  setupSimple: withDatasetAndConfig
 };

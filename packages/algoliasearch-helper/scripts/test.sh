@@ -2,16 +2,10 @@
 
 set -e # exit when error
 
-[ -z $TRAVIS_BUILD_NUMBER ] && CI='false' || CI='true'
+[ -z $CIRCLE_BUILD_NUM ] && CI='false' || CI='true'
 
 if [ $CI == 'true' ]; then
   set -x # debug messages
 fi
 
-echo "Test"
-
-echo "Test: node"
-./scripts/test-node.sh
-
-echo "Test: lint"
-./scripts/lint.sh
+node test/run.js

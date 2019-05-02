@@ -3,14 +3,10 @@
 var utils = require('../integration-utils.js');
 var setup = utils.setup;
 
-var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
+var algoliasearchHelper = require('../../');
 
 var random = require('lodash/random');
 var map = require('lodash/map');
-
-if (!utils.shouldRun) {
-  test = test.skip;
-}
 
 function hitsToParsedID(h) {
   return parseInt(h.objectID, 10);
@@ -18,8 +14,8 @@ function hitsToParsedID(h) {
 
 test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their results on the algolia API',
   function(done) {
-    var indexName = '_travis-algoliasearch-helper-js-' +
-      (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
+    var indexName = '_circle-algoliasearch-helper-js-' +
+      (process.env.CIRCLE_BUILD_NUM || 'DEV') +
       'helper_numerics' + random(0, 5000);
 
     setup(indexName, function(client, index) {
@@ -87,8 +83,8 @@ test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their re
 
 test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and their results on the algolia API',
   function(done) {
-    var indexName = '_travis-algoliasearch-helper-js-' +
-      (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
+    var indexName = '_circle-algoliasearch-helper-js-' +
+      (process.env.CIRCLE_BUILD_NUM || 'DEV') +
       'helper_numerics_managed' + random(0, 5000);
 
     setup(indexName, function(client, index) {

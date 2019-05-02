@@ -2,7 +2,7 @@
 
 set -e # exit when error
 
-[ -z $TRAVIS_BUILD_NUMBER ] && CI='false' || CI='true' || CI='true'
+[ -z $CIRCLE_BUILD_NUM ] && CI='false' || CI='true'
 
 if [ $CI == 'true' ]; then
   set -x # debug messages
