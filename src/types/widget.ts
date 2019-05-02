@@ -30,7 +30,7 @@ interface DisposeOptions {
   state: SearchParameters;
 }
 
-type UiState = {
+export type UiState = {
   [stateKey: string]: any;
 };
 

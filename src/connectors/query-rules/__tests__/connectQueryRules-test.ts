@@ -10,13 +10,19 @@ describe('connectQueryRules', () => {
   let makeWidget: QueryRulesWidgetFactory<{}>;
 
   const defaultInitOptions = {
-    instantSearchInstance: {},
+    instantSearchInstance: {
+      helper: null,
+      widgets: [],
+    },
     templatesConfig: {},
     createURL: () => '#',
   };
 
   const defaultRenderOptions = {
-    instantSearchInstance: {},
+    instantSearchInstance: {
+      helper: null,
+      widgets: [],
+    },
     templatesConfig: {},
     searchMetadata: { isSearchStalled: false },
     createURL: () => '#',
@@ -98,7 +104,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       } = renderingParameters;
 
       expect(items).toEqual([]);
-      expect(instantSearchInstance).toEqual({});
+      expect(instantSearchInstance).toEqual(
+        defaultInitOptions.instantSearchInstance
+      );
       expect(widgetParams).toEqual({});
     });
 
@@ -130,7 +138,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         } = renderingParameters;
 
         expect(items).toEqual([]);
-        expect(instantSearchInstance).toEqual({});
+        expect(instantSearchInstance).toEqual(
+          defaultInitOptions.instantSearchInstance
+        );
         expect(widgetParams).toEqual({});
       }
 
@@ -155,7 +165,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         } = renderingParameters;
 
         expect(items).toEqual([{ banner: 'image.png' }]);
-        expect(instantSearchInstance).toEqual({});
+        expect(instantSearchInstance).toEqual(
+          defaultInitOptions.instantSearchInstance
+        );
         expect(widgetParams).toEqual({});
       }
     });
