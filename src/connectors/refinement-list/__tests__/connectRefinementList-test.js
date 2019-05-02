@@ -806,6 +806,120 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     );
   });
 
+  it('Toggle show more should be disabled when number of facet is above limit and below showMoreLimit', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      limit: 1,
+      showMore: true,
+      showMoreLimit: 3,
+    });
+
+    const helper = jsHelper({}, '', {
+      ...widget.getConfiguration({}),
+      maxValuesPerFacet: 10,
+    });
+    helper.search = jest.fn();
+
+    // 1st rendering: initialization
+    widget.init({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // 2nd rendering: with 4 results (collapsed refinement list with limit < showMoreLimit < facets)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+
+    expect(secondRenderingOptions.canToggleShowMore).toEqual(true);
+
+    // 3rd rendering: expand refinement list
+    secondRenderingOptions.toggleShowMore();
+
+    // 4th rendering: with 2 results (expanded refinement list with limit < facets < showMoreLimit)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const forthRenderingOptions = rendering.mock.calls[3][0];
+
+    expect(forthRenderingOptions.canToggleShowMore).toEqual(false);
+  });
+
   it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({

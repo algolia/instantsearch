@@ -154,6 +154,8 @@ export default function connectRefinementList(renderFn, unmountFn) {
     });
     const getLimit = isShowingMore => (isShowingMore ? showMoreLimit : limit);
 
+    let lastResultsFromMainSearch = [];
+
     const render = ({
       items,
       state,
@@ -184,6 +186,12 @@ export default function connectRefinementList(renderFn, unmountFn) {
           isShowingMore
         );
 
+      const canShowLess =
+        isShowingMore && lastResultsFromMainSearch.length > items.length;
+      const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
+
+      const canToggleShowMore = canShowLess || canShowMore;
+
       renderFn(
         {
           createURL: _createURL,
@@ -195,7 +203,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
           canRefine: isFromSearch || items.length > 0,
           widgetParams,
           isShowingMore,
-          canToggleShowMore: showMore && !isFromSearch && !hasExhaustiveItems,
+          canToggleShowMore,
           toggleShowMore,
           hasExhaustiveItems,
         },
@@ -203,7 +211,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
       );
     };
 
-    let lastResultsFromMainSearch;
     let searchForFacetValues;
     let refine;
 
