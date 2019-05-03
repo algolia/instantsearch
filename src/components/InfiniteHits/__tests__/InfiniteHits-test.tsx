@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import InfiniteHits from '../InfiniteHits';
+import { Hits, SearchResults } from '../../../types';
 
 describe('InfiniteHits', () => {
   const cssClasses = {
@@ -16,14 +17,16 @@ describe('InfiniteHits', () => {
 
   describe('markup', () => {
     it('should render <InfiniteHits /> on first page', () => {
-      const hits = [
+      const hits: Hits = [
         {
           objectID: 'one',
           foo: 'bar',
+          __position: 0,
         },
         {
           objectID: 'two',
           foo: 'baz',
+          __position: 1,
         },
       ];
 
@@ -31,7 +34,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits },
+        results: { hits } as SearchResults,
         hits,
         isFirstPage: true,
         isLastPage: false,
@@ -50,14 +53,16 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> on last page', () => {
-      const hits = [
+      const hits: Hits = [
         {
           objectID: 'one',
           foo: 'bar',
+          __position: 0,
         },
         {
           objectID: 'two',
           foo: 'baz',
+          __position: 1,
         },
       ];
 
@@ -65,7 +70,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits },
+        results: { hits } as SearchResults,
         hits,
         isFirstPage: false,
         isLastPage: true,
@@ -84,13 +89,13 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> without hits on first page', () => {
-      const hits = [];
+      const hits: Hits = [];
 
       const props = {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits },
+        results: { hits } as SearchResults,
         hits,
         isFirstPage: true,
         isLastPage: false,
@@ -109,13 +114,13 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> without hits on last page', () => {
-      const hits = [];
+      const hits: Hits = [];
 
       const props = {
         hasShowPrevious: false,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits },
+        results: { hits } as SearchResults,
         hits,
         isFirstPage: false,
         isLastPage: true,
@@ -134,14 +139,16 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> with "Show previous" button on first page', () => {
-      const hits = [
+      const hits: Hits = [
         {
           objectID: 'one',
           foo: 'bar',
+          __position: 0,
         },
         {
           objectID: 'two',
           foo: 'baz',
+          __position: 1,
         },
       ];
 
@@ -149,7 +156,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: true,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits },
+        results: { hits } as SearchResults,
         hits,
         isFirstPage: true,
         isLastPage: false,
@@ -174,14 +181,16 @@ describe('InfiniteHits', () => {
     });
 
     it('should render <InfiniteHits /> with "Show previous" button on last page', () => {
-      const hits = [
+      const hits: Hits = [
         {
           objectID: 'one',
           foo: 'bar',
+          __position: 0,
         },
         {
           objectID: 'two',
           foo: 'baz',
+          __position: 1,
         },
       ];
 
@@ -189,7 +198,7 @@ describe('InfiniteHits', () => {
         hasShowPrevious: true,
         showPrevious: () => {},
         showMore: () => {},
-        results: { hits },
+        results: { hits } as SearchResults,
         hits,
         isFirstPage: false,
         isLastPage: true,

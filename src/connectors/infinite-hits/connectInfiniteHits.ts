@@ -1,11 +1,42 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
+import { Renderer, RenderOptions, WidgetFactory, Hits } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   isEqual,
   addAbsolutePosition,
   addQueryID,
+  noop,
 } from '../../lib/utils';
+
+export type InfiniteHitsConnectorParams = {
+  escapeHTML?: boolean;
+  transformItems?: (items: any[]) => any;
+  showPrevious?: boolean;
+};
+
+export interface InfiniteHitsRenderOptions<TInfiniteHitsWidgetParams>
+  extends RenderOptions<TInfiniteHitsWidgetParams> {
+  showPrevious: () => void;
+  showMore: () => void;
+  isFirstPage: boolean;
+  isLastPage: boolean;
+}
+
+export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
+  InfiniteHitsRenderOptions<
+    InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams
+  >
+>;
+
+export type InfiniteHitsWidgetFactory<
+  TInfiniteHitsWidgetParams
+> = WidgetFactory<InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams>;
+
+export type InfiniteHitsConnector = <TInfiniteHitsWidgetParams>(
+  render: InfiniteHitsRenderer<TInfiniteHitsWidgetParams>,
+  unmount?: () => void
+) => InfiniteHitsWidgetFactory<TInfiniteHitsWidgetParams>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -67,21 +98,24 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectInfiniteHits(renderFn, unmountFn) {
+const connectInfiniteHits: InfiniteHitsConnector = (
+  renderFn,
+  unmountFn = noop
+) => {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
     const {
       escapeHTML = true,
       transformItems = items => items,
       showPrevious = false,
-    } = widgetParams;
-    let hitsCache = [];
+    } = widgetParams || {};
+    let hitsCache: Hits = [];
     let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
     let prevState;
 
-    const getShowPrevious = helper => () => {
+    const getShowPrevious = (helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
       // avoid updating the browser URL when the user displays the previous page.
       helper
@@ -91,27 +125,27 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         })
         .search();
     };
-    const getShowMore = helper => () => {
+    const getShowMore = (helper): (() => void) => () => {
       helper.setPage(lastReceivedPage + 1).search();
     };
 
     return {
       getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
+        return escapeHTML ? TAG_PLACEHOLDER : {};
       },
 
       init({ instantSearchInstance, helper }) {
-        this.showPrevious = getShowPrevious(helper);
-        this.showMore = getShowMore(helper);
-        firstReceivedPage = helper.state.page;
-        lastReceivedPage = helper.state.page;
+        (this as any).showPrevious = getShowPrevious(helper);
+        (this as any).showMore = getShowMore(helper);
+        firstReceivedPage = helper.state.page as number;
+        lastReceivedPage = helper.state.page as number;
 
         renderFn(
           {
             hits: hitsCache,
             results: undefined,
-            showPrevious: this.showPrevious,
-            showMore: this.showMore,
+            showPrevious: (this as any).showPrevious,
+            showMore: (this as any).showMore,
             isFirstPage: firstReceivedPage === 0,
             isLastPage: true,
             instantSearchInstance,
@@ -131,8 +165,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         const { page, ...currentState } = state;
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
-          firstReceivedPage = page;
-          lastReceivedPage = page;
+          firstReceivedPage = page as number;
+          lastReceivedPage = page as number;
           prevState = currentState;
         }
 
@@ -150,12 +184,12 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
         results.hits = transformItems(results.hits);
 
-        if (lastReceivedPage < page || !hitsCache.length) {
+        if (lastReceivedPage < (page as number) || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = page;
-        } else if (firstReceivedPage > page) {
+          lastReceivedPage = page as number;
+        } else if (firstReceivedPage > (page as number)) {
           hitsCache = [...results.hits, ...hitsCache];
-          firstReceivedPage = page;
+          firstReceivedPage = page as number;
         }
 
         const isFirstPage = firstReceivedPage === 0;
@@ -165,8 +199,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           {
             hits: hitsCache,
             results,
-            showPrevious: this.showPrevious,
-            showMore: this.showMore,
+            showPrevious: (this as any).showPrevious,
+            showMore: (this as any).showMore,
             isFirstPage,
             isLastPage,
             instantSearchInstance,
@@ -181,7 +215,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page;
+        const page = searchParameters.page as number;
 
         if (!showPrevious || page === 0 || page + 1 === uiState.page) {
           return uiState;
@@ -205,4 +239,6 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
     };
   };
-}
+};
+
+export default connectInfiniteHits;
