@@ -102,7 +102,7 @@
     "react-native": "0.58.4",
     "react-test-renderer": "16.8.6",
     "rheostat": "2.2.0",
-    "rollup": "1.11.2",
+    "rollup": "1.11.3",
     "rollup-plugin-babel": "4.3.2",
     "rollup-plugin-commonjs": "9.3.4",
     "rollup-plugin-filesize": "6.0.1",
