@@ -3,7 +3,6 @@
 var compact = require('lodash/compact');
 var findIndex = require('lodash/findIndex');
 
-var sumBy = require('lodash/sumBy');
 var find = require('lodash/find');
 var orderBy = require('lodash/orderBy');
 
@@ -286,7 +285,11 @@ function SearchResults(state, results) {
    * sum of the processing time of all the queries
    * @member {number}
    */
-  this.processingTimeMS = sumBy(results, 'processingTimeMS');
+  this.processingTimeMS = results.reduce(function(sum, result) {
+    return result.processingTimeMS === undefined
+      ? sum
+      : sum + result.processingTimeMS;
+  }, 0);
   /**
    * The position if the position was guessed by IP.
    * @member {string}
