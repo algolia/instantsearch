@@ -5,7 +5,6 @@ var intersection = require('lodash/intersection');
 var forOwn = require('lodash/forOwn');
 var forEach = require('lodash/forEach');
 var filter = require('lodash/filter');
-var map = require('lodash/map');
 var reduce = require('lodash/reduce');
 var isNaN = require('lodash/isNaN');
 var isEmpty = require('lodash/isEmpty');
@@ -13,7 +12,6 @@ var isEqual = require('lodash/isEqual');
 var isUndefined = require('lodash/isUndefined');
 var isFunction = require('lodash/isFunction');
 var find = require('lodash/find');
-var trim = require('lodash/trim');
 
 var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
@@ -1506,7 +1504,7 @@ SearchParameters.prototype = {
     return intersection(
       // enforce the order between the two arrays,
       // so that refinement name index === hierarchical facet index
-      map(this.hierarchicalFacets, 'name'),
+      this.hierarchicalFacets.map(function(facet) { return facet.name; }),
       keys(this.hierarchicalFacetsRefinements)
     );
   },
@@ -1700,7 +1698,9 @@ SearchParameters.prototype = {
       this.getHierarchicalFacetByName(facetName)
     );
     var path = refinement.split(separator);
-    return map(path, trim);
+    return path.map(function(part) {
+      return part.trim();
+    });
   },
 
   toString: function() {
