@@ -115,12 +115,14 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     const {
       escapeHTML = true,
       transformItems = (items: any[]) => items,
-      showPrevious = false,
+      showPrevious: hasShowPrevious = false,
     } = widgetParams || {};
     let hitsCache: Hits = [];
     let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
     let prevState: Partial<SearchParameters>;
+    let showPrevious: () => void;
+    let showMore: () => void;
 
     const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
@@ -142,8 +144,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       init({ instantSearchInstance, helper }) {
-        (this as any).showPrevious = getShowPrevious(helper);
-        (this as any).showMore = getShowMore(helper);
+        showPrevious = getShowPrevious(helper);
+        showMore = getShowMore(helper);
         firstReceivedPage = helper.state.page as number;
         lastReceivedPage = helper.state.page as number;
 
@@ -151,8 +153,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           {
             hits: hitsCache,
             results: undefined,
-            showPrevious: (this as any).showPrevious,
-            showMore: (this as any).showMore,
+            showPrevious,
+            showMore,
             isFirstPage: firstReceivedPage === 0,
             isLastPage: true,
             instantSearchInstance,
@@ -206,8 +208,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           {
             hits: hitsCache,
             results,
-            showPrevious: (this as any).showPrevious,
-            showMore: (this as any).showMore,
+            showPrevious,
+            showMore,
             isFirstPage,
             isLastPage,
             instantSearchInstance,
@@ -224,7 +226,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page as number;
 
-        if (!showPrevious || page === 0 || page + 1 === uiState.page) {
+        if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
           return uiState;
         }
 
@@ -235,7 +237,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (!showPrevious) {
+        if (!hasShowPrevious) {
           return searchParameters;
         }
         const uiPage = uiState.page;
