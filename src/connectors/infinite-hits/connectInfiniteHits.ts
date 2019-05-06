@@ -5,6 +5,8 @@ import {
   WidgetFactory,
   Hits,
   Unmounter,
+  Helper,
+  SearchParameters,
 } from '../../types';
 import {
   checkRendering,
@@ -112,15 +114,15 @@ const connectInfiniteHits: InfiniteHitsConnector = (
   return widgetParams => {
     const {
       escapeHTML = true,
-      transformItems = items => items,
+      transformItems = (items: any[]) => items,
       showPrevious = false,
     } = widgetParams || {};
     let hitsCache: Hits = [];
     let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
-    let prevState;
+    let prevState: Partial<SearchParameters>;
 
-    const getShowPrevious = (helper): (() => void) => () => {
+    const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
       // avoid updating the browser URL when the user displays the previous page.
       helper
@@ -130,7 +132,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         })
         .search();
     };
-    const getShowMore = (helper): (() => void) => () => {
+    const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(lastReceivedPage + 1).search();
     };
 
