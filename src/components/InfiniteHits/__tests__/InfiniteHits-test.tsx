@@ -40,8 +40,10 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            item: 'item',
+            empty: 'empty',
+            showPreviousText: 'showPreviousText',
             showMoreText: 'showMoreText',
+            item: 'item',
           },
         },
         cssClasses,
@@ -76,8 +78,10 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            item: 'item',
+            empty: 'empty',
+            showPreviousText: 'showPreviousText',
             showMoreText: 'showMoreText',
+            item: 'item',
           },
         },
         cssClasses,
@@ -102,7 +106,9 @@ describe('InfiniteHits', () => {
         templateProps: {
           templates: {
             empty: 'empty',
+            showPreviousText: 'showPreviousText',
             showMoreText: 'showMoreText',
+            item: 'item',
           },
         },
         cssClasses,
@@ -127,7 +133,9 @@ describe('InfiniteHits', () => {
         templateProps: {
           templates: {
             empty: 'empty',
+            showPreviousText: 'showPreviousText',
             showMoreText: 'showMoreText',
+            item: 'item',
           },
         },
         cssClasses,
@@ -162,9 +170,10 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            item: 'item',
-            showMoreText: 'showMoreText',
+            empty: 'empty',
             showPreviousText: 'showPreviousText',
+            showMoreText: 'showMoreText',
+            item: 'item',
           },
         },
         cssClasses,
@@ -204,9 +213,10 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            item: 'item',
-            showMoreText: 'showMoreText',
+            empty: 'empty',
             showPreviousText: 'showPreviousText',
+            showMoreText: 'showMoreText',
+            item: 'item',
           },
         },
         cssClasses,

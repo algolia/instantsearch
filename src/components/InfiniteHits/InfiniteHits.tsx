@@ -2,6 +2,7 @@ import React from 'preact-compat';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import { Hits, SearchResults } from '../../types';
+import { InfiniteHitsTemplates } from '../../widgets/infinite-hits/infinite-hits';
 
 type InfiniteHitsCSSClasses = {
   root: string;
@@ -23,6 +24,7 @@ type InfiniteHitsProps = {
   showMore: () => void;
   templateProps: {
     [key: string]: any;
+    templates: InfiniteHitsTemplates;
   };
   isFirstPage: boolean;
   isLastPage: boolean;
