@@ -4,7 +4,6 @@ var keys = require('lodash/keys');
 var intersection = require('lodash/intersection');
 var forOwn = require('lodash/forOwn');
 var filter = require('lodash/filter');
-var reduce = require('lodash/reduce');
 var isNaN = require('lodash/isNaN');
 var isEmpty = require('lodash/isEmpty');
 var isEqual = require('lodash/isEqual');
@@ -901,7 +900,9 @@ SearchParameters.prototype = {
       return omit(this.numericRefinements, attribute);
     } else if (isFunction(attribute)) {
       var hasChanged = false;
-      var newNumericRefinements = reduce(this.numericRefinements, function(memo, operators, key) {
+      var numericRefinements = this.numericRefinements;
+      var newNumericRefinements = Object.keys(numericRefinements).reduce(function(memo, key) {
+        var operators = numericRefinements[key];
         var operatorList = {};
 
         operators = operators || {};
