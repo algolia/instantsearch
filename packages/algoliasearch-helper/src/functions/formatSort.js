@@ -1,7 +1,6 @@
 'use strict';
 
 var find = require('lodash/find');
-var startsWith = require('lodash/startsWith');
 
 /**
  * Transform sort format from user friendly notation to lodash format
@@ -14,7 +13,7 @@ module.exports = function formatSort(sortBy, defaults) {
       var sortInstructions = sortInstruction.split(':');
       if (defaults && sortInstructions.length === 1) {
         var similarDefault = find(defaults, function(predicate) {
-          return startsWith(predicate, sortInstruction[0]);
+          return predicate[0] === sortInstruction[0];
         });
         if (similarDefault) {
           sortInstructions = similarDefault.split(':');
