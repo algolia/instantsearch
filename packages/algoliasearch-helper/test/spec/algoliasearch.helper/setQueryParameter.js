@@ -20,13 +20,7 @@ test('setChange should change the current state', function() {
 });
 
 test('setChange should not change the current state: no real modification', function() {
-  var helper = algoliasearchHelper(fakeClient, null, {
-    // @TODO: at the moment we have to provide a default value for the page, otherwise
-    // some methods reset the page to 0 (because of the reset behavior). This is what
-    // happens: page omit -> page defined with 0. We'll fix those issues with a next PR
-    // that implements a proper reset with the updated structure of the `SearchParameters`.
-    page: 0
-  });
+  var helper = algoliasearchHelper(fakeClient, null, {page: 0});
   var changed = false;
   var initialState = helper.state;
 

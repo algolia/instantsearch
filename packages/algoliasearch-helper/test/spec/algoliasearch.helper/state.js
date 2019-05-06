@@ -14,9 +14,9 @@ test('setState should set the state of the helper and trigger a change event', f
 
   expect(helper.state).toEqual(new SearchParameters(state0));
 
-  helper.on('change', function(newState) {
+  helper.on('change', function(event) {
     expect(helper.state).toEqual(new SearchParameters(state1));
-    expect(newState).toEqual(new SearchParameters(state1));
+    expect(event.state).toEqual(new SearchParameters(state1));
     done();
   });
 

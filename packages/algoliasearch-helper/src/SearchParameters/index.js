@@ -1335,6 +1335,20 @@ SearchParameters.prototype = {
   },
 
   /**
+   * Returns a new instance with the page reset. Two scenarios possible:
+   * the page is omitted -> return the given instance
+   * the page is set -> return a new instance with a page of 0
+   * @return {SearchParameters} a new updated instance
+   */
+  resetPage: function() {
+    if (this.page === undefined) {
+      return this;
+    }
+
+    return this.setPage(0);
+  },
+
+  /**
    * Returns an object with only the selected attributes.
    * @param {string[]} filters filters to retrieve only a subset of the state. It
    * accepts strings that can be either attributes of the SearchParameters (e.g. hitsPerPage)

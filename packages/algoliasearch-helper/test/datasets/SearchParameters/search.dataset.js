@@ -193,11 +193,6 @@ function getData() {
   };
 
   var searchParams = new SearchParameters({
-    // @TODO: at the moment we have to provide a default value for the page, otherwise
-    // some methods reset the page to 0 (because of the reset behavior). This is what
-    // happens: page omit -> page defined with 0. We'll fix those issues with a next PR
-    // that implements a proper reset with the updated structure of the `SearchParameters`.
-    page: 0,
     index: 'test_hotels-node',
     disjunctiveFacets: ['city'],
     disjunctiveFacetsRefinements: {
