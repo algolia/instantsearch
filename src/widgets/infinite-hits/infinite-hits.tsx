@@ -47,7 +47,7 @@ export type InfiniteHitsTemplates = {
 
 export type InfiniteHitsRendererWidgetParams = {
   escapeHTML: boolean;
-  transformItems: (items: any[]) => any;
+  transformItems: (items: any[]) => any[];
   showPrevious: boolean;
 };
 
