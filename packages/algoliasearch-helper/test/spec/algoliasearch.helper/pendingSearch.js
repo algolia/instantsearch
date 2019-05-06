@@ -67,13 +67,18 @@ test('When searchOnce with promises, hasPendingRequests is true', function(done)
 });
 
 test('When searchForFacetValues, hasPendingRequests is true', function(done) {
-  var testData = require('../../datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.searchForFacetValues = function() {
     return new Promise(function(resolve) {
-      triggerCb = function() { resolve([testData.response]); };
+      triggerCb = function() {
+        resolve([{
+          exhaustiveFacetsCount: true,
+          facetHits: [],
+          processingTimeMS: 3
+        }]);
+      };
     });
   };
 

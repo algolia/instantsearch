@@ -305,15 +305,10 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
 
     content = Array.isArray(content) ? content[0] : content;
 
-    content.facetHits = Array.isArray(content.facetHits)
-      ? content.facetHits
-      : [];
-
-    content.facetHits = content.facetHits.map(function(f) {
+    content.facetHits.forEach(function(f) {
       f.isRefined = isDisjunctive
         ? state.isDisjunctiveFacetRefined(facet, f.value)
         : state.isFacetRefined(facet, f.value);
-      return f;
     });
 
     return content;
