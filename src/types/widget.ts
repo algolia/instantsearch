@@ -11,6 +11,7 @@ interface InitOptions {
   helper: Helper;
   templatesConfig: object;
   createURL(state: SearchParameters): string;
+  onHistoryChange?(state: Partial<SearchParameters>): void;
 }
 
 interface RenderOptions {
