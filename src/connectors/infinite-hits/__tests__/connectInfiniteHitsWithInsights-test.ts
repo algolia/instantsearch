@@ -11,7 +11,7 @@ describe('connectInfiniteHitsWithInsights', () => {
     instantSearchInstance: {
       helper: null,
       widgets: [],
-      insightsClient: jest.fn(),
+      insightsClient: () => {},
     },
     templatesConfig: {},
     createURL: () => '#',
@@ -21,7 +21,7 @@ describe('connectInfiniteHitsWithInsights', () => {
     instantSearchInstance: {
       helper: null,
       widgets: [],
-      insightsClient: jest.fn(),
+      insightsClient: () => {},
     },
     templatesConfig: {},
     searchMetadata: { isSearchStalled: false },
