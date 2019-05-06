@@ -295,7 +295,12 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
   this._currentNbQueries++;
   var self = this;
 
-  this.emit('searchForFacetValues', state, facet, query);
+  this.emit('searchForFacetValues', {
+    state: state,
+    facet: facet,
+    query: query
+  });
+
   var searchForFacetValuesPromise = clientHasSFFV
     ? this.client.searchForFacetValues([{indexName: state.index, params: algoliaQuery}])
     : this.client.initIndex(state.index).searchForFacetValues(algoliaQuery);

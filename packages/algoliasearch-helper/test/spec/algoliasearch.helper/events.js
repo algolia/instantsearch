@@ -279,22 +279,24 @@ test('searchOnce event should be emitted once when the search is triggered using
 
 test('searchForFacetValues event should be emitted once when the search is triggered using' +
      ' searchForFacetValues and before the request is sent', function() {
+  var searchedForFacetValues = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });
 
-  var count = 0;
+  helper.on('searchForFacetValues', searchedForFacetValues);
 
-  helper.on('searchForFacetValues', function() {
-    count++;
-  });
-
-  expect(count).toBe(0);
+  expect(searchedForFacetValues).toHaveBeenCalledTimes(0);
   expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(0);
 
-  helper.searchForFacetValues();
-  expect(count).toBe(1);
+  helper.searchForFacetValues('city', 'NYC');
+  expect(searchedForFacetValues).toHaveBeenCalledTimes(1);
+  expect(searchedForFacetValues).toHaveBeenLastCalledWith({
+    state: helper.state,
+    facet: 'city',
+    query: 'NYC'
+  });
   expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(1);
 });
