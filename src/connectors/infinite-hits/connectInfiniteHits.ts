@@ -146,8 +146,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
-        firstReceivedPage = helper.state.page as number;
-        lastReceivedPage = helper.state.page as number;
+        firstReceivedPage = helper.state.page!;
+        lastReceivedPage = helper.state.page!;
 
         renderFn(
           {
@@ -174,8 +174,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         const { page, ...currentState } = state;
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
-          firstReceivedPage = page as number;
-          lastReceivedPage = page as number;
+          firstReceivedPage = page!;
+          lastReceivedPage = page!;
           prevState = currentState;
         }
 
@@ -193,12 +193,12 @@ const connectInfiniteHits: InfiniteHitsConnector = (
 
         results.hits = transformItems(results.hits);
 
-        if (lastReceivedPage < (page as number) || !hitsCache.length) {
+        if (lastReceivedPage < page! || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = page as number;
-        } else if (firstReceivedPage > (page as number)) {
+          lastReceivedPage = page!;
+        } else if (firstReceivedPage > page!) {
           hitsCache = [...results.hits, ...hitsCache];
-          firstReceivedPage = page as number;
+          firstReceivedPage = page!;
         }
 
         const isFirstPage = firstReceivedPage === 0;
@@ -224,7 +224,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page as number;
+        const page = searchParameters.page!;
 
         if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
           return uiState;
