@@ -426,5 +426,37 @@ describe('RefinementList', () => {
 
       expect(wrapper).toMatchSnapshot();
     });
+
+    it('should not refine on click on already refined items', () => {
+      const toggleRefinement = jest.fn();
+      const props = {
+        container: document.createElement('div'),
+        facetValues: [
+          { value: 'foo', isRefined: false },
+          { value: 'bar', isRefined: true },
+          { value: 'baz', isRefined: false },
+        ],
+        templateProps: {
+          templates: {
+            item: item => `
+              <label>
+                <input type="radio" checked=${item.isRefined} />
+                ${item.value}
+              </span>
+            `,
+          },
+        },
+        toggleRefinement,
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      const items = wrapper.find(RefinementListItem);
+      const secondItem = items.at(1);
+
+      secondItem.simulate('click');
+
+      expect(toggleRefinement).not.toHaveBeenCalled();
+    });
   });
 });
