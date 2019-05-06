@@ -3,7 +3,6 @@
 var keys = require('lodash/keys');
 var intersection = require('lodash/intersection');
 var forOwn = require('lodash/forOwn');
-var filter = require('lodash/filter');
 var isNaN = require('lodash/isNaN');
 var isEmpty = require('lodash/isEmpty');
 var isEqual = require('lodash/isEqual');
@@ -1060,7 +1059,7 @@ SearchParameters.prototype = {
     }
 
     return this.clearRefinements(facet).setQueryParameters({
-      facets: filter(this.facets, function(f) {
+      facets: this.facets.filter(function(f) {
         return f !== facet;
       })
     });
@@ -1078,7 +1077,7 @@ SearchParameters.prototype = {
     }
 
     return this.clearRefinements(facet).setQueryParameters({
-      disjunctiveFacets: filter(this.disjunctiveFacets, function(f) {
+      disjunctiveFacets: this.disjunctiveFacets.filter(function(f) {
         return f !== facet;
       })
     });
@@ -1096,7 +1095,7 @@ SearchParameters.prototype = {
     }
 
     return this.clearRefinements(facet).setQueryParameters({
-      hierarchicalFacets: filter(this.hierarchicalFacets, function(f) {
+      hierarchicalFacets: this.hierarchicalFacets.filter(function(f) {
         return f.name !== facet;
       })
     });
@@ -1166,7 +1165,9 @@ SearchParameters.prototype = {
     if (!this.isTagRefined(tag)) return this;
 
     var modification = {
-      tagRefinements: filter(this.tagRefinements, function(t) { return t !== tag; })
+      tagRefinements: this.tagRefinements.filter(function(t) {
+        return t !== tag;
+      })
     };
 
     return this.setQueryParameters(modification);
@@ -1521,7 +1522,7 @@ SearchParameters.prototype = {
   getUnrefinedDisjunctiveFacets: function() {
     var refinedFacets = this.getRefinedDisjunctiveFacets();
 
-    return filter(this.disjunctiveFacets, function(f) {
+    return this.disjunctiveFacets. filter(function(f) {
       return refinedFacets.indexOf(f) === -1;
     });
   },

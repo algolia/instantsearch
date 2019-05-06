@@ -17,7 +17,6 @@ var isFunction = require('lodash/isFunction');
 var isEmpty = require('lodash/isEmpty');
 var defaults = require('lodash/defaults');
 
-var filter = require('lodash/filter');
 var omit = require('../functions/omit');
 
 var lib = {
@@ -103,8 +102,8 @@ var lib = {
       var hasChanged = false;
 
       var newRefinementList = Object.keys(refinementList).reduce(function(memo, key) {
-        var values = refinementList[key];
-        var facetList = filter(values, function(value) {
+        var values = refinementList[key] || [];
+        var facetList = values.filter(function(value) {
           return !attribute(value, key, refinementType);
         });
 
