@@ -15,7 +15,6 @@ describe('connectInfiniteHitsWithInsights', () => {
     },
     templatesConfig: {},
     createURL: () => '#',
-    onHistoryChange: () => {},
   };
 
   const defaultRenderOptions = {

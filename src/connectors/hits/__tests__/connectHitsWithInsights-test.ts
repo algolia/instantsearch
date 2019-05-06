@@ -15,7 +15,6 @@ describe('connectHitsWithInsights', () => {
     },
     templatesConfig: {},
     createURL: () => '#',
-    onHistoryChange: () => {},
   };
 
   const defaultRenderOptions = {

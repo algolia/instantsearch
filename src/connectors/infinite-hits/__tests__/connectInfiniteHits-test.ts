@@ -20,7 +20,6 @@ describe('connectInfiniteHits', () => {
     },
     templatesConfig: {},
     createURL: () => '#',
-    onHistoryChange: () => {},
   };
 
   const defaultRenderOptions = {

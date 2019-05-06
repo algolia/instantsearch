@@ -16,7 +16,6 @@ describe('connectQueryRules', () => {
     },
     templatesConfig: {},
     createURL: () => '#',
-    onHistoryChange: () => {},
   };
 
   const defaultRenderOptions = {
