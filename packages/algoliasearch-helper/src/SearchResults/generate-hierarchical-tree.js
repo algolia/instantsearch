@@ -3,8 +3,8 @@
 module.exports = generateTrees;
 
 var orderBy = require('lodash/orderBy');
-var find = require('lodash/find');
 
+var find = require('../functions/find');
 var prepareHierarchicalFacetSortBy = require('../functions/formatSort');
 
 function generateTrees(state) {
@@ -82,7 +82,9 @@ function generateHierarchicalTree(
          * @type {object[]]} hierarchical data
          */
         var data = parent && Array.isArray(parent.data) ? parent.data : [];
-        parent = find(data, {isRefined: true});
+        parent = find(data, function(subtree) {
+          return subtree.isRefined;
+        });
         level++;
       }
     }

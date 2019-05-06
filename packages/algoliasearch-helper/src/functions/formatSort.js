@@ -1,6 +1,6 @@
 'use strict';
 
-var find = require('lodash/find');
+var find = require('./find');
 
 /**
  * Transform sort format from user friendly notation to lodash format

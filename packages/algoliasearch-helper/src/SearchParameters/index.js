@@ -8,11 +8,11 @@ var isEmpty = require('lodash/isEmpty');
 var isEqual = require('lodash/isEqual');
 var isUndefined = require('lodash/isUndefined');
 var isFunction = require('lodash/isFunction');
-var find = require('lodash/find');
 
 var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
 
+var find = require('../functions/find');
 var valToNumber = require('../functions/valToNumber');
 var omit = require('../functions/omit');
 
@@ -1682,7 +1682,9 @@ SearchParameters.prototype = {
   getHierarchicalFacetByName: function(hierarchicalFacetName) {
     return find(
       this.hierarchicalFacets,
-      {name: hierarchicalFacetName}
+      function(f) {
+        return f.name === hierarchicalFacetName;
+      }
     );
   },
 
