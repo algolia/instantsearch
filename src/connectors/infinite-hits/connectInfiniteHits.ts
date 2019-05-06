@@ -14,12 +14,11 @@ import {
   addQueryID,
   noop,
 } from '../../lib/utils';
+import { InfiniteHitsRendererWidgetParams } from '../../widgets/infinite-hits/infinite-hits';
 
-export type InfiniteHitsConnectorParams = {
-  escapeHTML?: boolean;
-  transformItems?: (items: any[]) => any;
-  showPrevious?: boolean;
-};
+export type InfiniteHitsConnectorParams = Partial<
+  InfiniteHitsRendererWidgetParams
+>;
 
 export interface InfiniteHitsRenderOptions<TInfiniteHitsWidgetParams>
   extends RenderOptions<TInfiniteHitsWidgetParams> {
