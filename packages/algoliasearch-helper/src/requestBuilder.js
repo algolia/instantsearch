@@ -1,6 +1,5 @@
 'use strict';
 
-var forEach = require('lodash/forEach');
 var reduce = require('lodash/reduce');
 var merge = require('lodash/merge');
 
@@ -21,7 +20,7 @@ var requestBuilder = {
     });
 
     // One for each disjunctive facets
-    forEach(state.getRefinedDisjunctiveFacets(), function(refinedFacet) {
+    state.getRefinedDisjunctiveFacets().forEach(function(refinedFacet) {
       queries.push({
         indexName: index,
         params: requestBuilder._getDisjunctiveFacetSearchParams(state, refinedFacet)
@@ -29,7 +28,7 @@ var requestBuilder = {
     });
 
     // maybe more to get the root level of hierarchical facets when activated
-    forEach(state.getRefinedHierarchicalFacets(), function(refinedFacet) {
+    state.getRefinedHierarchicalFacets().forEach(function(refinedFacet) {
       var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
 
       var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
@@ -135,10 +134,12 @@ var requestBuilder = {
 
     var numericFilters = [];
 
-    forEach(state.numericRefinements, function(operators, attribute) {
-      forEach(operators, function(values, operator) {
+    Object.keys(state.numericRefinements).forEach(function(attribute) {
+      var operators = state.numericRefinements[attribute] || {};
+      Object.keys(operators).forEach(function(operator) {
+        var values = operators[operator] || [];
         if (facetName !== attribute) {
-          forEach(values, function(value) {
+          values.forEach(function(value) {
             if (Array.isArray(value)) {
               var vs = value.map(function(v) {
                 return attribute + operator + v;
@@ -179,30 +180,40 @@ var requestBuilder = {
   _getFacetFilters: function(state, facet, hierarchicalRootLevel) {
     var facetFilters = [];
 
-    forEach(state.facetsRefinements, function(facetValues, facetName) {
-      forEach(facetValues, function(facetValue) {
+    var facetsRefinements = state.facetsRefinements || {};
+    Object.keys(facetsRefinements).forEach(function(facetName) {
+      var facetValues = facetsRefinements[facetName] || [];
+      facetValues.forEach(function(facetValue) {
         facetFilters.push(facetName + ':' + facetValue);
       });
     });
 
-    forEach(state.facetsExcludes, function(facetValues, facetName) {
-      forEach(facetValues, function(facetValue) {
+    var facetsExcludes = state.facetsExcludes || {};
+    Object.keys(facetsExcludes).forEach(function(facetName) {
+      var facetValues = facetsExcludes[facetName] || [];
+      facetValues.forEach(function(facetValue) {
         facetFilters.push(facetName + ':-' + facetValue);
       });
     });
 
-    forEach(state.disjunctiveFacetsRefinements, function(facetValues, facetName) {
-      if (facetName === facet || !facetValues || facetValues.length === 0) return;
+    var disjunctiveFacetsRefinements = state.disjunctiveFacetsRefinements || {};
+    Object.keys(disjunctiveFacetsRefinements).forEach(function(facetName) {
+      var facetValues = disjunctiveFacetsRefinements[facetName] || [];
+      if (facetName === facet || !facetValues || facetValues.length === 0) {
+        return;
+      }
       var orFilters = [];
 
-      forEach(facetValues, function(facetValue) {
+      facetValues.forEach(function(facetValue) {
         orFilters.push(facetName + ':' + facetValue);
       });
 
       facetFilters.push(orFilters);
     });
 
-    forEach(state.hierarchicalFacetsRefinements, function(facetValues, facetName) {
+    var hierarchicalFacetsRefinements = state.hierarchicalFacetsRefinements || {};
+    Object.keys(hierarchicalFacetsRefinements).forEach(function(facetName) {
+      var facetValues = hierarchicalFacetsRefinements[facetName] || [];
       var facetValue = facetValues[0];
 
       if (facetValue === undefined) {

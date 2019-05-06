@@ -9,7 +9,6 @@ var events = require('events');
 var inherits = require('./functions/inherits');
 
 var flatten = require('lodash/flatten');
-var forEach = require('lodash/forEach');
 var isEmpty = require('lodash/isEmpty');
 
 var url = require('./url');
@@ -306,10 +305,15 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
 
     content = Array.isArray(content) ? content[0] : content;
 
-    content.facetHits = forEach(content.facetHits, function(f) {
-      f.isRefined = isDisjunctive ?
-        state.isDisjunctiveFacetRefined(facet, f.value) :
-        state.isFacetRefined(facet, f.value);
+    content.facetHits = Array.isArray(content.facetHits)
+      ? content.facetHits
+      : [];
+
+    content.facetHits = content.facetHits.map(function(f) {
+      f.isRefined = isDisjunctive
+        ? state.isDisjunctiveFacetRefined(facet, f.value)
+        : state.isFacetRefined(facet, f.value);
+      return f;
     });
 
     return content;
@@ -1130,7 +1134,7 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
   if (this.state.isConjunctiveFacet(facetName)) {
     var conjRefinements = this.state.getConjunctiveRefinements(facetName);
 
-    forEach(conjRefinements, function(r) {
+    conjRefinements.forEach(function(r) {
       refinements.push({
         value: r,
         type: 'conjunctive'
@@ -1139,7 +1143,7 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
 
     var excludeRefinements = this.state.getExcludeRefinements(facetName);
 
-    forEach(excludeRefinements, function(r) {
+    excludeRefinements.forEach(function(r) {
       refinements.push({
         value: r,
         type: 'exclude'
@@ -1148,7 +1152,7 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
   } else if (this.state.isDisjunctiveFacet(facetName)) {
     var disjRefinements = this.state.getDisjunctiveRefinements(facetName);
 
-    forEach(disjRefinements, function(r) {
+    disjRefinements.forEach(function(r) {
       refinements.push({
         value: r,
         type: 'disjunctive'
@@ -1158,7 +1162,9 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
 
   var numericRefinements = this.state.getNumericRefinements(facetName);
 
-  forEach(numericRefinements, function(value, operator) {
+  Object.keys(numericRefinements).forEach(function(operator) {
+    var value = numericRefinements[operator];
+
     refinements.push({
       value: value,
       operator: operator,
@@ -1262,7 +1268,8 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
   var results = content.results.slice();
-  forEach(states, function(s) {
+
+  states.forEach(function(s) {
     var state = s.state;
     var queriesCount = s.queriesCount;
     var helper = s.helper;
