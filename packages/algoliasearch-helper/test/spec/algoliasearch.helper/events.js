@@ -254,23 +254,25 @@ test('search event should be emitted once when the search is triggered and befor
 });
 
 test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function() {
+  var searchedOnce = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });
 
-  var count = 0;
+  helper.on('searchOnce', searchedOnce);
 
-  helper.on('searchOnce', function() {
-    count++;
-  });
-
-  expect(count).toBe(0);
+  expect(searchedOnce).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.searchOnce({}, function() {});
-  expect(count).toBe(1);
+
+  expect(searchedOnce).toHaveBeenCalledTimes(1);
+  expect(searchedOnce).toHaveBeenLastCalledWith({
+    state: helper.state
+  });
+
   expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
