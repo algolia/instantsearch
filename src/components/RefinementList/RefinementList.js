@@ -99,6 +99,16 @@ class RefinementList extends Component {
       return;
     }
 
+    if (
+      isRefined &&
+      originalEvent.target.parentNode.querySelector(
+        'input[type="radio"]:checked'
+      )
+    ) {
+      // Prevent refinement for being reset if the user clicks on an already checked radio button
+      return;
+    }
+
     if (originalEvent.target.tagName === 'INPUT') {
       this.refine(facetValueToRefine, isRefined);
       return;
