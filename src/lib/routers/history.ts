@@ -1,29 +1,32 @@
 import qs from 'qs';
 import { RouteState } from '../../types';
 
-type CreateUrlOptions = {
+type CreateURL = ({
+  qsModule,
+  routeState,
+  location,
+}: {
   qsModule: typeof qs;
   routeState: RouteState;
   location: Location;
-};
+}) => string;
 
-type ParseUrlOptions = {
+type ParseURL = ({
+  qsModule,
+  location,
+}: {
   qsModule: typeof qs;
   location: Location;
-};
+}) => RouteState;
 
 type BrowserHistoryProps = {
   windowTitle?: (routeState: RouteState) => string;
   writeDelay: number;
-  createURL({ qsModule, routeState, location }: CreateUrlOptions): string;
-  parseURL({ qsModule, location }: ParseUrlOptions): RouteState;
+  createURL: CreateURL;
+  parseURL: ParseURL;
 };
 
-const defaultCreateURL = ({
-  qsModule,
-  routeState,
-  location,
-}: CreateUrlOptions): string => {
+const defaultCreateURL: CreateURL = ({ qsModule, routeState, location }) => {
   const { protocol, hostname, port = '', pathname, hash } = location;
   const queryString = qsModule.stringify(routeState);
   const portWithPrefix = port === '' ? '' : `:${port}`;
@@ -36,10 +39,7 @@ const defaultCreateURL = ({
   return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
 };
 
-const defaultParseURL = ({
-  qsModule,
-  location,
-}: ParseUrlOptions): RouteState => {
+const defaultParseURL: ParseURL = ({ qsModule, location }) => {
   // `qs` by default converts arrays with more than 20 items to an object.
   // We want to avoid this because the data structure manipulated can therefore vary.
   // Setting the limit to `100` seems a good number because the engine's default is 100
