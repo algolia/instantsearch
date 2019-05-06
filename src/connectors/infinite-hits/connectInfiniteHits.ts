@@ -1,5 +1,11 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
-import { Renderer, RenderOptions, WidgetFactory, Hits } from '../../types';
+import {
+  Renderer,
+  RenderOptions,
+  WidgetFactory,
+  Hits,
+  Unmounter,
+} from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -35,7 +41,7 @@ export type InfiniteHitsWidgetFactory<
 
 export type InfiniteHitsConnector = <TInfiniteHitsWidgetParams>(
   render: InfiniteHitsRenderer<TInfiniteHitsWidgetParams>,
-  unmount?: () => void
+  unmount?: Unmounter
 ) => InfiniteHitsWidgetFactory<TInfiniteHitsWidgetParams>;
 
 const withUsage = createDocumentationMessageGenerator({

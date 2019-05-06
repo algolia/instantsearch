@@ -45,19 +45,16 @@ export type InfiniteHitsTemplates = {
   item: Template<Hit>;
 };
 
-type InfiniteHitsWidgetParams = {
-  container: string | HTMLElement;
-  cssClasses?: Partial<InfiniteHitsCSSClasses>;
-  templates?: Partial<InfiniteHitsTemplates>;
+type InfiniteHitsRendererWidgetParams = {
   escapeHTML: boolean;
   transformItems: (items: any[]) => any;
   showPrevious: boolean;
 };
 
-interface InfiniteHitsRendererWidgetParams extends InfiniteHitsWidgetParams {
-  container: HTMLElement;
-  cssClasses: InfiniteHitsCSSClasses;
-  templates: InfiniteHitsTemplates;
+interface InfiniteHitsWidgetParams extends InfiniteHitsRendererWidgetParams {
+  container: string | HTMLElement;
+  cssClasses?: Partial<InfiniteHitsCSSClasses>;
+  templates?: Partial<InfiniteHitsTemplates>;
 }
 
 type InfiniteHits = WidgetFactory<InfiniteHitsWidgetParams>;

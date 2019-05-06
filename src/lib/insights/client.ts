@@ -94,12 +94,12 @@ const wrapInsightsClient = (
 };
 
 type Connector<TWidgetParams> = (
-  renderFn: Renderer<RenderOptions<TWidgetParams>>,
+  renderFn: Renderer<any>,
   unmountFn: Unmounter
 ) => WidgetFactory<TWidgetParams>;
 
 export default function withInsights(
-  connector: Connector<unknown>
+  connector: Connector<any>
 ): Connector<unknown> {
   const wrapRenderFn = (
     renderFn: Renderer<RenderOptions<unknown>>
