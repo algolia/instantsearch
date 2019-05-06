@@ -204,52 +204,53 @@ test('Change events should only be emitted for meaningful changes', function() {
 });
 
 test('search event should be emitted once when the search is triggered and before the request is sent', function() {
+  var searched = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });
 
-  var count = 0;
-
-  helper.on('search', function() {
-    count++;
-  });
+  helper.on('search', searched);
 
   helper.setQuery('');
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.clearRefinements();
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addDisjunctiveRefine('city', 'Paris');
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeDisjunctiveRefine('city', 'Paris');
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addExclude('tower', 'Empire State Building');
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeExclude('tower', 'Empire State Building');
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.addRefine('tower', 'Empire State Building');
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.removeRefine('tower', 'Empire State Building');
-  expect(count).toBe(0);
+  expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   helper.search();
-  expect(count).toBe(1);
+  expect(searched).toHaveBeenCalledTimes(1);
+  expect(searched).toHaveBeenLastCalledWith({
+    state: helper.state,
+    results: null
+  });
   expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 

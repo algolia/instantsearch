@@ -1230,17 +1230,26 @@ AlgoliaSearchHelper.prototype._search = function() {
     helper: this
   }];
 
-  this.emit('search', state, this.lastResults);
+  this.emit('search', {
+    state: state,
+    results: this.lastResults
+  });
 
   var derivedQueries = this.derivedHelpers.map(function(derivedHelper) {
     var derivedState = derivedHelper.getModifiedState(state);
     var queries = requestBuilder._getQueries(derivedState.index, derivedState);
+
     states.push({
       state: derivedState,
       queriesCount: queries.length,
       helper: derivedHelper
     });
-    derivedHelper.emit('search', derivedState, derivedHelper.lastResults);
+
+    derivedHelper.emit('search', {
+      state: derivedState,
+      results: derivedHelper.lastResults
+    });
+
     return queries;
   });
 
