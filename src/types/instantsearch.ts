@@ -115,3 +115,7 @@ export type InstantSearch = {
   helper: Helper | null;
   widgets: Widget[];
 };
+
+export type RouteState = {
+  [stateKey: string]: any;
+};
