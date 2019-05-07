@@ -1,3 +1,7 @@
+2.28.0 - 2019-05-07
+ * fix(results): revert changes done in #648
+    * this will come back in the next major version, but has breaking changes for now
+
 2.27.0 - 2019-04-12
  * chore(deps): update dependency algolia-frontend-components to v0.0.35 (#605) https://github.com/algolia/algoliasearch-helper-js/commit/41043af49af79752cb9414dcbbc33af7bb98c4a6
  * chore(deps): update dependency algoliasearch to v3.32.0 (#628) https://github.com/algolia/algoliasearch-helper-js/commit/e5cab52b1d925fc706d3754c0441dc6bc292ff8c
