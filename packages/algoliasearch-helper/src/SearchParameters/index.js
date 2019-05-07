@@ -2,7 +2,6 @@
 
 var keys = require('lodash/keys');
 var intersection = require('lodash/intersection');
-var forOwn = require('lodash/forOwn');
 var isNaN = require('lodash/isNaN');
 var isEmpty = require('lodash/isEmpty');
 var isEqual = require('lodash/isEqual');
@@ -185,9 +184,9 @@ function SearchParameters(newParameters) {
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
 
   var self = this;
-  forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
+  Object.keys(params).forEach(function(paramName) {
     if (SearchParameters.PARAMETERS.indexOf(paramName) === -1) {
-      self[paramName] = paramValue;
+      self[paramName] = params[paramName];
     }
   });
 }
@@ -1265,7 +1264,9 @@ SearchParameters.prototype = {
 
     var queryParams = {};
 
-    forOwn(this, function(paramValue, paramName) {
+    var self = this;
+    Object.keys(this).forEach(function(paramName) {
+      var paramValue = self[paramName];
       if (managedParameters.indexOf(paramName) === -1 && paramValue !== undefined) {
         queryParams[paramName] = paramValue;
       }
