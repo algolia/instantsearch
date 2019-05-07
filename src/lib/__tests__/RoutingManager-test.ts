@@ -3,7 +3,13 @@ import qs from 'qs';
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
 import historyRouter from '../routers/history';
-import { Router, StateMapping, WidgetFactory, Widget } from '../../types';
+import {
+  Router,
+  StateMapping,
+  WidgetFactory,
+  Widget,
+  RouteState,
+} from '../../types';
 
 const runAllMicroTasks: () => Promise<any> = () => new Promise(setImmediate);
 
@@ -594,17 +600,10 @@ describe('RoutingManager', () => {
       const searchClient = createFakeSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = historyRouter({
-        windowTitle(routeState) {
+        windowTitle(routeState: RouteState) {
           return `Searching for "${routeState.query}"`;
         },
-        writeDelay: 0,
-        createURL() {
-          return '#';
-        },
-        parseURL() {
-          return {};
-        },
-      });
+      } as any);
 
       const search = instantsearch({
         indexName: 'instant_search',
