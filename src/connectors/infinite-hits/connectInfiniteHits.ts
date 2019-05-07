@@ -1,11 +1,49 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
+  Renderer,
+  RenderOptions,
+  WidgetFactory,
+  Hits,
+  Unmounter,
+  Helper,
+  SearchParameters,
+} from '../../types';
+import {
   checkRendering,
   createDocumentationMessageGenerator,
   isEqual,
   addAbsolutePosition,
   addQueryID,
+  noop,
 } from '../../lib/utils';
+import { InfiniteHitsRendererWidgetParams } from '../../widgets/infinite-hits/infinite-hits';
+
+export type InfiniteHitsConnectorParams = Partial<
+  InfiniteHitsRendererWidgetParams
+>;
+
+export interface InfiniteHitsRenderOptions<TInfiniteHitsWidgetParams>
+  extends RenderOptions<TInfiniteHitsWidgetParams> {
+  showPrevious: () => void;
+  showMore: () => void;
+  isFirstPage: boolean;
+  isLastPage: boolean;
+}
+
+export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
+  InfiniteHitsRenderOptions<
+    InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams
+  >
+>;
+
+export type InfiniteHitsWidgetFactory<
+  TInfiniteHitsWidgetParams
+> = WidgetFactory<InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams>;
+
+export type InfiniteHitsConnector = <TInfiniteHitsWidgetParams>(
+  render: InfiniteHitsRenderer<TInfiniteHitsWidgetParams>,
+  unmount?: Unmounter
+) => InfiniteHitsWidgetFactory<TInfiniteHitsWidgetParams>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -67,21 +105,26 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectInfiniteHits(renderFn, unmountFn) {
+const connectInfiniteHits: InfiniteHitsConnector = (
+  renderFn,
+  unmountFn = noop
+) => {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
     const {
       escapeHTML = true,
-      transformItems = items => items,
-      showPrevious = false,
-    } = widgetParams;
-    let hitsCache = [];
+      transformItems = (items: any[]) => items,
+      showPrevious: hasShowPrevious = false,
+    } = widgetParams || {};
+    let hitsCache: Hits = [];
     let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
-    let prevState;
+    let prevState: Partial<SearchParameters>;
+    let showPrevious: () => void;
+    let showMore: () => void;
 
-    const getShowPrevious = helper => () => {
+    const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
       // avoid updating the browser URL when the user displays the previous page.
       helper
@@ -91,27 +134,27 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         })
         .search();
     };
-    const getShowMore = helper => () => {
+    const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(lastReceivedPage + 1).search();
     };
 
     return {
       getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
+        return escapeHTML ? TAG_PLACEHOLDER : {};
       },
 
       init({ instantSearchInstance, helper }) {
-        this.showPrevious = getShowPrevious(helper);
-        this.showMore = getShowMore(helper);
-        firstReceivedPage = helper.state.page;
-        lastReceivedPage = helper.state.page;
+        showPrevious = getShowPrevious(helper);
+        showMore = getShowMore(helper);
+        firstReceivedPage = helper.state.page!;
+        lastReceivedPage = helper.state.page!;
 
         renderFn(
           {
             hits: hitsCache,
             results: undefined,
-            showPrevious: this.showPrevious,
-            showMore: this.showMore,
+            showPrevious,
+            showMore,
             isFirstPage: firstReceivedPage === 0,
             isLastPage: true,
             instantSearchInstance,
@@ -131,8 +174,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         const { page, ...currentState } = state;
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
-          firstReceivedPage = page;
-          lastReceivedPage = page;
+          firstReceivedPage = page!;
+          lastReceivedPage = page!;
           prevState = currentState;
         }
 
@@ -150,12 +193,12 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
         results.hits = transformItems(results.hits);
 
-        if (lastReceivedPage < page || !hitsCache.length) {
+        if (lastReceivedPage < page! || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = page;
-        } else if (firstReceivedPage > page) {
+          lastReceivedPage = page!;
+        } else if (firstReceivedPage > page!) {
           hitsCache = [...results.hits, ...hitsCache];
-          firstReceivedPage = page;
+          firstReceivedPage = page!;
         }
 
         const isFirstPage = firstReceivedPage === 0;
@@ -165,8 +208,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           {
             hits: hitsCache,
             results,
-            showPrevious: this.showPrevious,
-            showMore: this.showMore,
+            showPrevious,
+            showMore,
             isFirstPage,
             isLastPage,
             instantSearchInstance,
@@ -181,9 +224,9 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page;
+        const page = searchParameters.page!;
 
-        if (!showPrevious || page === 0 || page + 1 === uiState.page) {
+        if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
           return uiState;
         }
 
@@ -194,7 +237,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (!showPrevious) {
+        if (!hasShowPrevious) {
           return searchParameters;
         }
         const uiPage = uiState.page;
@@ -205,4 +248,6 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       },
     };
   };
-}
+};
+
+export default connectInfiniteHits;

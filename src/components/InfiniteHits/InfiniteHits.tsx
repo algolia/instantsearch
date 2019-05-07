@@ -1,7 +1,34 @@
 import React from 'preact-compat';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';
+import { Hits, SearchResults } from '../../types';
+import { InfiniteHitsTemplates } from '../../widgets/infinite-hits/infinite-hits';
+
+type InfiniteHitsCSSClasses = {
+  root: string;
+  emptyRoot: string;
+  list: string;
+  item: string;
+  loadPrevious: string;
+  disabledLoadPrevious: string;
+  loadMore: string;
+  disabledLoadMore: string;
+};
+
+type InfiniteHitsProps = {
+  cssClasses: InfiniteHitsCSSClasses;
+  hits: Hits;
+  results: SearchResults;
+  hasShowPrevious: boolean;
+  showPrevious: () => void;
+  showMore: () => void;
+  templateProps: {
+    [key: string]: any;
+    templates: InfiniteHitsTemplates;
+  };
+  isFirstPage: boolean;
+  isLastPage: boolean;
+};
 
 const InfiniteHits = ({
   results,
@@ -13,7 +40,7 @@ const InfiniteHits = ({
   isLastPage,
   cssClasses,
   templateProps,
-}) => {
+}: InfiniteHitsProps): React.ReactNode => {
   if (results.hits.length === 0) {
     return (
       <Template
@@ -74,27 +101,6 @@ const InfiniteHits = ({
       />
     </div>
   );
-};
-
-InfiniteHits.propTypes = {
-  cssClasses: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    emptyRoot: PropTypes.string.isRequired,
-    list: PropTypes.string.isRequired,
-    item: PropTypes.string.isRequired,
-    loadPrevious: PropTypes.string.isRequired,
-    disabledLoadPrevious: PropTypes.string.isRequired,
-    loadMore: PropTypes.string.isRequired,
-    disabledLoadMore: PropTypes.string.isRequired,
-  }).isRequired,
-  hits: PropTypes.array.isRequired,
-  results: PropTypes.object.isRequired,
-  hasShowPrevious: PropTypes.bool.isRequired,
-  showPrevious: PropTypes.func.isRequired,
-  showMore: PropTypes.func.isRequired,
-  templateProps: PropTypes.object.isRequired,
-  isFirstPage: PropTypes.bool.isRequired,
-  isLastPage: PropTypes.bool.isRequired,
 };
 
 export default InfiniteHits;

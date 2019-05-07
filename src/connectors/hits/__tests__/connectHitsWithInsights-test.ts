@@ -7,22 +7,39 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
 }));
 
 describe('connectHitsWithInsights', () => {
+  const defaultInitOptions = {
+    instantSearchInstance: {
+      helper: null,
+      widgets: [],
+      insightsClient: () => {},
+    },
+    templatesConfig: {},
+    createURL: () => '#',
+  };
+
+  const defaultRenderOptions = {
+    instantSearchInstance: {
+      helper: null,
+      widgets: [],
+      insightsClient: () => {},
+    },
+    templatesConfig: {},
+    searchMetadata: { isSearchStalled: false },
+    createURL: () => '#',
+  };
+
   it('should expose `insights` props', () => {
     const rendering = jest.fn();
     const makeWidget = connectHitsWithInsights(rendering, jest.fn());
-    const widget: any = makeWidget({});
+    const widget = makeWidget({});
 
     const helper = jsHelper({} as Client, '', {});
     helper.search = jest.fn();
 
-    widget.init({
+    widget.init!({
+      ...defaultInitOptions,
       helper,
       state: helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-      instantSearchInstance: {
-        insightsClient: jest.fn(),
-      },
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -30,14 +47,11 @@ describe('connectHitsWithInsights', () => {
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render({
+    widget.render!({
+      ...defaultRenderOptions,
       results,
       state: helper.state,
       helper,
-      createURL: () => '#',
-      instantSearchInstance: {
-        insightsClient: jest.fn(),
-      },
     });
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
@@ -47,31 +61,24 @@ describe('connectHitsWithInsights', () => {
   it('should preserve props exposed by connectHits', () => {
     const rendering = jest.fn();
     const makeWidget = connectHitsWithInsights(rendering, jest.fn());
-    const widget: any = makeWidget({});
+    const widget = makeWidget({});
 
     const helper = jsHelper({} as Client, '', {});
     helper.search = jest.fn();
 
-    widget.init({
+    widget.init!({
+      ...defaultInitOptions,
       helper,
       state: helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-      instantSearchInstance: {
-        insightsClient: jest.fn(),
-      },
     });
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render({
+    widget.render!({
+      ...defaultRenderOptions,
       results,
       state: helper.state,
       helper,
-      createURL: () => '#',
-      instantSearchInstance: {
-        insightsClient: jest.fn(),
-      },
     });
 
     const secondRenderingOptions = rendering.mock.calls[1][0];

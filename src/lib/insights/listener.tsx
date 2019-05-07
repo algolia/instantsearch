@@ -3,6 +3,7 @@ import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
 import { InsightsClientWrapper } from '../../types';
 
 type WithInsightsListenerProps = {
+  [key: string]: unknown;
   insights: InsightsClientWrapper;
 };
 
