@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { RouteState } from '../../types';
+import { Router, RouteState } from '../../types';
 
 type CreateURL = ({
   qsModule,
@@ -59,7 +59,7 @@ const setWindowTitle = (title?: string): void => {
   }
 };
 
-class BrowserHistory {
+class BrowserHistory implements Router {
   /**
    * Transforms a UI state into a title for the page.
    */
@@ -76,12 +76,12 @@ class BrowserHistory {
    * Creates a full URL based on the route state.
    * The storage adaptor maps all syncable keys to the query string of the URL.
    */
-  private readonly _createURL: BrowserHistoryProps['createURL'];
+  public readonly _createURL: BrowserHistoryProps['createURL'];
   /**
    * Parses the URL into a route state.
    * It should be symetrical to `createURL`.
    */
-  private readonly parseURL: BrowserHistoryProps['parseURL'];
+  public readonly parseURL: BrowserHistoryProps['parseURL'];
 
   private writeTimer?: number;
   private _onPopState?(event: PopStateEvent): void;
@@ -179,7 +179,7 @@ class BrowserHistory {
   /**
    * Removes the event listener and cleans up the URL.
    */
-  public dispose(): void {
+  public dispose(): undefined {
     if (this._onPopState) {
       window.removeEventListener('popstate', this._onPopState);
     }
@@ -189,6 +189,8 @@ class BrowserHistory {
     }
 
     this.write({});
+
+    return undefined;
   }
 }
 
