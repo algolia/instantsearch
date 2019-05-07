@@ -4,7 +4,6 @@ import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
 import historyRouter from '../routers/history';
 import { Router, StateMapping, WidgetFactory, Widget } from '../../types';
-import { noop } from '../utils';
 
 const runAllMicroTasks: () => Promise<any> = () => new Promise(setImmediate);
 
@@ -116,7 +115,7 @@ describe('RoutingManager', () => {
   const defaultRouter: Router = {
     onUpdate: (..._args) => {},
     read: () => ({}),
-    write: noop,
+    write: () => {},
     createURL: () => '#',
     dispose: () => undefined,
   };
