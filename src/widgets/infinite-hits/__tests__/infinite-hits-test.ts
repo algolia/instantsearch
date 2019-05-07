@@ -2,6 +2,7 @@ import { render } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import infiniteHits from '../infinite-hits';
+import { Client } from '../../../types';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
@@ -14,6 +15,7 @@ jest.mock('preact-compat', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
+      // @ts-ignore: test infiniteHits with invalid parameters
       infiniteHits({ container: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -32,13 +34,14 @@ describe('infiniteHits()', () => {
   beforeEach(() => {
     render.mockClear();
 
-    helper = algoliasearchHelper({});
+    helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     container = document.createElement('div');
     widget = infiniteHits({
       container,
       escapeHTML: true,
+      transformItems: items => items,
       cssClasses: { root: ['root', 'cx'] },
       showPrevious: false,
     });
@@ -74,6 +77,7 @@ describe('infiniteHits()', () => {
 
     widget = infiniteHits({
       container,
+      escapeHTML: true,
       transformItems: items =>
         items.map(item => ({ ...item, transformed: true })),
       showPrevious: false,
@@ -111,7 +115,12 @@ describe('infiniteHits()', () => {
   it('updates the search state properly when showMore is called', () => {
     expect(helper.state.page).toBe(0);
 
-    widget.showMore();
+    const state = { page: 0 };
+    widget.render({ results, state });
+
+    const { showMore } = render.mock.calls[0][0].props;
+
+    showMore();
 
     expect(helper.state.page).toBe(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
