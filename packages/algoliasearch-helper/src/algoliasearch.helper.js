@@ -8,7 +8,6 @@ var requestBuilder = require('./requestBuilder');
 var events = require('events');
 var inherits = require('./functions/inherits');
 
-var flatten = require('lodash/flatten');
 var isEmpty = require('lodash/isEmpty');
 
 var version = require('./version');
@@ -1259,7 +1258,7 @@ AlgoliaSearchHelper.prototype._search = function() {
     return queries;
   });
 
-  var queries = mainQueries.concat(flatten(derivedQueries));
+  var queries = Array.prototype.concat.apply(mainQueries, derivedQueries);
   var queryId = this._queryId++;
 
   this._currentNbQueries++;
