@@ -15,8 +15,8 @@
 var isUndefined = require('lodash/isUndefined');
 var isFunction = require('lodash/isFunction');
 var isEmpty = require('lodash/isEmpty');
-var defaults = require('lodash/defaults');
 
+var defaultsPure = require('../functions/defaultsPure');
 var omit = require('../functions/omit');
 
 var lib = {
@@ -42,7 +42,7 @@ var lib = {
 
     mod[attribute] = facetRefinement;
 
-    return defaults({}, mod, refinementList);
+    return defaultsPure({}, mod, refinementList);
   },
   /**
    * Removes refinement(s) for an attribute:

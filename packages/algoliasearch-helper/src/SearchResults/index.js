@@ -2,7 +2,6 @@
 
 var orderBy = require('lodash/orderBy');
 
-var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
 
 var isFunction = require('lodash/isFunction');
@@ -10,6 +9,7 @@ var isFunction = require('lodash/isFunction');
 var partial = require('lodash/partial');
 var partialRight = require('lodash/partialRight');
 
+var defaultsPure = require('../functions/defaultsPure');
 var compact = require('../functions/compact');
 var find = require('../functions/find');
 var findIndex = require('../functions/findIndex');
@@ -462,7 +462,7 @@ function SearchResults(state, results) {
 
         self.disjunctiveFacets[position] = {
           name: dfacet,
-          data: defaults({}, facetResults, dataFromMainRequest),
+          data: defaultsPure({}, facetResults, dataFromMainRequest),
           exhaustive: result.exhaustiveFacetsCount
         };
         assignFacetStats(self.disjunctiveFacets[position], result.facets_stats, dfacet);
@@ -526,7 +526,7 @@ function SearchResults(state, results) {
         defaultData[root] = self.hierarchicalFacets[position][attributeIndex].data[root];
       }
 
-      self.hierarchicalFacets[position][attributeIndex].data = defaults(
+      self.hierarchicalFacets[position][attributeIndex].data = defaultsPure(
         defaultData,
         facetResults,
         self.hierarchicalFacets[position][attributeIndex].data
@@ -697,7 +697,7 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
   var facetValues = extractNormalizedFacetValues(this, attribute);
   if (!facetValues) throw new Error(attribute + ' is not a retrieved facet.');
 
-  var options = defaults({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
+  var options = defaultsPure({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
 
   if (Array.isArray(options.sortBy)) {
     var order = formatSort(options.sortBy, SearchResults.DEFAULT_SORT);

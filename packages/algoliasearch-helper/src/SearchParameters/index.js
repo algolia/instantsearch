@@ -7,9 +7,9 @@ var isEqual = require('lodash/isEqual');
 var isUndefined = require('lodash/isUndefined');
 var isFunction = require('lodash/isFunction');
 
-var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
 
+var defaultsPure = require('../functions/defaultsPure');
 var find = require('../functions/find');
 var valToNumber = require('../functions/valToNumber');
 var omit = require('../functions/omit');
@@ -1020,7 +1020,7 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+      hierarchicalFacetsRefinements: defaultsPure({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
 
@@ -1038,7 +1038,7 @@ SearchParameters.prototype = {
     var mod = {};
     mod[facet] = [path];
     return this.setQueryParameters({
-      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+      hierarchicalFacetsRefinements: defaultsPure({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
 
@@ -1055,7 +1055,7 @@ SearchParameters.prototype = {
     var mod = {};
     mod[facet] = [];
     return this.setQueryParameters({
-      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+      hierarchicalFacetsRefinements: defaultsPure({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
   /**
