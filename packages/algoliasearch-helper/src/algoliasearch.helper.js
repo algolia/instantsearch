@@ -16,11 +16,11 @@ var version = require('./version');
 /**
  * Event triggered when a parameter is set or updated
  * @event AlgoliaSearchHelper#event:change
- * @property {SearchParameters} state the current parameters with the latest changes applied
- * @property {SearchResults} lastResults the previous results received from Algolia. `null` before
- * the first request
+ * @property {object} event
+ * @property {SearchParameters} event.state the current parameters with the latest changes applied
+ * @property {SearchResults} event.results the previous results received from Algolia. `null` before the first request
  * @example
- * helper.on('change', function(state, lastResults) {
+ * helper.on('change', function(event) {
  *   console.log('The parameters have changed');
  * });
  */
@@ -28,11 +28,11 @@ var version = require('./version');
 /**
  * Event triggered when a main search is sent to Algolia
  * @event AlgoliaSearchHelper#event:search
- * @property {SearchParameters} state the parameters used for this search
- * @property {SearchResults} lastResults the results from the previous search. `null` if
- * it is the first search.
+ * @property {object} event
+ * @property {SearchParameters} event.state the parameters used for this search
+ * @property {SearchResults} event.results the results from the previous search. `null` if it is the first search.
  * @example
- * helper.on('search', function(state, lastResults) {
+ * helper.on('search', function(event) {
  *   console.log('Search sent');
  * });
  */
@@ -40,12 +40,12 @@ var version = require('./version');
 /**
  * Event triggered when a search using `searchForFacetValues` is sent to Algolia
  * @event AlgoliaSearchHelper#event:searchForFacetValues
- * @property {SearchParameters} state the parameters used for this search
- * it is the first search.
- * @property {string} facet the facet searched into
- * @property {string} query the query used to search in the facets
+ * @property {object} event
+ * @property {SearchParameters} event.state the parameters used for this search it is the first search.
+ * @property {string} event.facet the facet searched into
+ * @property {string} event.query the query used to search in the facets
  * @example
- * helper.on('searchForFacetValues', function(state, facet, query) {
+ * helper.on('searchForFacetValues', function(event) {
  *   console.log('searchForFacetValues sent');
  * });
  */
@@ -53,10 +53,10 @@ var version = require('./version');
 /**
  * Event triggered when a search using `searchOnce` is sent to Algolia
  * @event AlgoliaSearchHelper#event:searchOnce
- * @property {SearchParameters} state the parameters used for this search
- * it is the first search.
+ * @property {object} event
+ * @property {SearchParameters} event.state the parameters used for this search it is the first search.
  * @example
- * helper.on('searchOnce', function(state) {
+ * helper.on('searchOnce', function(event) {
  *   console.log('searchOnce sent');
  * });
  */
@@ -64,11 +64,11 @@ var version = require('./version');
 /**
  * Event triggered when the results are retrieved from Algolia
  * @event AlgoliaSearchHelper#event:result
- * @property {SearchResults} results the results received from Algolia
- * @property {SearchParameters} state the parameters used to query Algolia. Those might
- * be different from the one in the helper instance (for example if the network is unreliable).
+ * @property {object} event
+ * @property {SearchResults} event.results the results received from Algolia
+ * @property {SearchParameters} event.state the parameters used to query Algolia. Those might be different from the one in the helper instance (for example if the network is unreliable).
  * @example
- * helper.on('result', function(results, state) {
+ * helper.on('result', function(event) {
  *   console.log('Search results received');
  * });
  */
@@ -77,9 +77,10 @@ var version = require('./version');
  * Event triggered when Algolia sends back an error. For example, if an unknown parameter is
  * used, the error can be caught using this event.
  * @event AlgoliaSearchHelper#event:error
- * @property {Error} error the error returned by the Algolia.
+ * @property {object} event
+ * @property {Error} event.error the error returned by the Algolia.
  * @example
- * helper.on('error', function(error) {
+ * helper.on('error', function(event) {
  *   console.log('Houston we got a problem.');
  * });
  */

@@ -17,8 +17,8 @@ var SearchResults = require('./src/SearchResults');
  *   facets: ['shipping'],
  *   disjunctiveFacets: ['category']
  * });
- * helper.on('result', function(result) {
- *   console.log(result);
+ * helper.on('result', function(event) {
+ *   console.log(event.results);
  * });
  * helper
  *   .toggleFacetRefinement('category', 'Movies & TV Shows')

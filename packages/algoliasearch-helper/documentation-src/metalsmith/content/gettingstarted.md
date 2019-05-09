@@ -99,8 +99,8 @@ Once you've added those lines, you need to listen to the results coming from Alg
 For now, we'll implement a very basic display of the JSON response in the page.
 
 ```javascript
-helper.on('result', function(content) {
-  renderHits(content);
+helper.on('result', function(event) {
+  renderHits(event.results);
 });
 
 function renderHits(content) {
@@ -139,12 +139,12 @@ see how to add a search input to let our users do a textual search in the data.
 
 Before going further, let's customize a little bit the display of our results.
 We're going to focus on the actual results computed by Algolia. The
-results are returned in the `hits` attribute of the `content`. Let's display
+results are returned in the `hits` attribute of the `results`. Let's display
 only the `name` of each product for now.
 
 ```javascript
-helper.on('result', function(content) {
-  renderHits(content);
+helper.on('result', function(event) {
+  renderHits(event.results);
 });
 
 function renderHits(content) {
@@ -181,8 +181,8 @@ results returned by Algolia. This way the users can easily understand why the
 results match their query.
 
 ```javascript
-helper.on('result', function(content) {
-  renderHits(content);
+helper.on('result', function(event) {
+  renderHits(event.results);
 });
 
 function renderHits(content) {
@@ -267,9 +267,9 @@ an attribute. The object returned by this method contains three properties:
 Let's add the rendering of the facet list into the `result` handler.
 
 ```javascript
-helper.on('result', function(content) {
-  renderFacetList(content);
-  renderHits(content);
+helper.on('result', function(event) {
+  renderFacetList(event.results);
+  renderHits(event.results);
 });
 ```
 

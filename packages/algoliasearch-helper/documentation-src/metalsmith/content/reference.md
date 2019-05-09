@@ -226,8 +226,8 @@ You will get a hierarchical presentation of your facet values: a navigation menu
 of your facet values.
 
 ```js
-helper.on('result', function(data){
-  console.log(data.hierarchicalFacets[0]);
+helper.on('result', function(event){
+  console.log(event.results.hierarchicalFacets[0]);
   // {
   //   'name': 'products',
   //   'count': null,

@@ -679,11 +679,11 @@ function vanillaSortFn(order, data) {
  * @return {FacetValue[]|HierarchicalFacet} depending on the type of facet of
  * the attribute requested (hierarchical, disjunctive or conjunctive)
  * @example
- * helper.on('results', function(content){
+ * helper.on('result', function(event){
  *   //get values ordered only by name ascending using the string predicate
- *   content.getFacetValues('city', {sortBy: ['name:asc']});
+ *   event.results.getFacetValues('city', {sortBy: ['name:asc']});
  *   //get values  ordered only by count ascending using a function
- *   content.getFacetValues('city', {
+ *   event.results.getFacetValues('city', {
  *     // this is equivalent to ['count:asc']
  *     sortBy: function(a, b) {
  *       if (a.count === b.count) return 0;
