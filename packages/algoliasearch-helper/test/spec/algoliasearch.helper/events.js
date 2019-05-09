@@ -13,6 +13,10 @@ function makeFakeClient() {
   };
 }
 
+function runAllMicroTasks() {
+  return new Promise(setImmediate);
+}
+
 test('Change events should be emitted with reset page to true on implicit reset methods', function() {
   var changed = jest.fn();
   var fakeClient = makeFakeClient();
@@ -321,11 +325,61 @@ test('result event should be emitted once the request is complete', function() {
 
   helper.search();
 
-  return Promise.resolve().then(function() {
+  return runAllMicroTasks().then(function() {
     expect(resulted).toHaveBeenCalledTimes(1);
     expect(resulted).toHaveBeenLastCalledWith({
       results: expect.any(algoliaSearchHelper.SearchResults),
       state: helper.state
     });
+  });
+});
+
+test('error event should be emitted once the request is complete with errors', function() {
+  var errored = jest.fn();
+  var fakeClient = makeFakeClient();
+  var helper = algoliaSearchHelper(fakeClient, 'Index', {
+    disjunctiveFacets: ['city'],
+    facets: ['tower']
+  });
+
+  fakeClient.search.mockImplementationOnce(function() {
+    return Promise.reject(new Error('Abort'));
+  });
+
+  helper.on('error', errored);
+
+  expect(errored).toHaveBeenCalledTimes(0);
+
+  helper.search();
+
+  return runAllMicroTasks().then(function() {
+    expect(errored).toHaveBeenCalledTimes(1);
+    expect(errored).toHaveBeenLastCalledWith({
+      error: expect.any(Error)
+    });
+  });
+});
+
+test('error event should be emitted if an error happens at request time', function() {
+  var errored = jest.fn();
+  var fakeClient = makeFakeClient();
+  var helper = algoliaSearchHelper(fakeClient, 'Index', {
+    disjunctiveFacets: ['city'],
+    facets: ['tower']
+  });
+
+  fakeClient.search.mockImplementationOnce(function() {
+    throw new Error('Unexpected error');
+  });
+
+  helper.on('error', errored);
+
+  expect(errored).toHaveBeenCalledTimes(0);
+
+  helper.search();
+
+  expect(errored).toHaveBeenCalledTimes(1);
+  expect(errored).toHaveBeenLastCalledWith({
+    error: expect.any(Error)
   });
 });

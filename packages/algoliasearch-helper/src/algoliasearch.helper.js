@@ -1267,9 +1267,11 @@ AlgoliaSearchHelper.prototype._search = function() {
     this.client.search(queries)
       .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
-  } catch (err) {
+  } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', err);
+    this.emit('error', {
+      error: error
+    });
   }
 };
 
@@ -1314,7 +1316,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
   });
 };
 
-AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function(queryId, err) {
+AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function(queryId, error) {
   if (queryId < this._lastQueryIdReceived) {
     // Outdated answer
     return;
@@ -1323,7 +1325,9 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function(queryId, err) {
   this._currentNbQueries -= queryId - this._lastQueryIdReceived;
   this._lastQueryIdReceived = queryId;
 
-  this.emit('error', err);
+  this.emit('error', {
+    error: error
+  });
 
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };

@@ -35,8 +35,8 @@ test(
       var state0 = helper.state;
 
       var calls = 1;
-      helper.on('error', function(err) {
-        done.fail(err);
+      helper.on('error', function(event) {
+        done.fail(event.error);
       });
 
       helper.on('result', function(event) {
