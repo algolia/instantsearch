@@ -2,8 +2,7 @@
 
 module.exports = generateTrees;
 
-var orderBy = require('lodash/orderBy');
-
+var orderBy = require('../functions/orderBy');
 var find = require('../functions/find');
 var prepareHierarchicalFacetSortBy = require('../functions/formatSort');
 

@@ -1,12 +1,11 @@
 'use strict';
 
-var orderBy = require('lodash/orderBy');
-
 var merge = require('lodash/merge');
 
 var isFunction = require('lodash/isFunction');
 
 var defaultsPure = require('../functions/defaultsPure');
+var orderBy = require('../functions/orderBy');
 var compact = require('../functions/compact');
 var find = require('../functions/find');
 var findIndex = require('../functions/findIndex');
