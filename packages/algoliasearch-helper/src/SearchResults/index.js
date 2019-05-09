@@ -6,9 +6,6 @@ var merge = require('lodash/merge');
 
 var isFunction = require('lodash/isFunction');
 
-var partial = require('lodash/partial');
-var partialRight = require('lodash/partialRight');
-
 var defaultsPure = require('../functions/defaultsPure');
 var compact = require('../functions/compact');
 var find = require('../functions/find');
@@ -636,7 +633,9 @@ function recSort(sortFn, node) {
     return node;
   }
 
-  var children = node.data.map(partial(recSort, sortFn));
+  var children = node.data.map(function(childNode) {
+    return recSort(sortFn, childNode);
+  });
   var sortedChildren = sortFn(children);
   var newNode = merge({}, node, {data: sortedChildren});
   return newNode;
@@ -705,13 +704,17 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
       return orderBy(facetValues, order[0], order[1]);
     }
     // If facetValues is not an array, it's an object thus a hierarchical facet object
-    return recSort(partialRight(orderBy, order[0], order[1]), facetValues);
+    return recSort(function(hierarchicalFacetValues) {
+      return orderBy(hierarchicalFacetValues, order[0], order[1]);
+    }, facetValues);
   } else if (isFunction(options.sortBy)) {
     if (Array.isArray(facetValues)) {
       return facetValues.sort(options.sortBy);
     }
     // If facetValues is not an array, it's an object thus a hierarchical facet object
-    return recSort(partial(vanillaSortFn, options.sortBy), facetValues);
+    return recSort(function(data) {
+      return vanillaSortFn(options.sortBy, data);
+    }, facetValues);
   }
   throw new Error(
     'options.sortBy is optional but if defined it must be ' +
