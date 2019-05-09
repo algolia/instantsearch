@@ -300,3 +300,32 @@ test('searchForFacetValues event should be emitted once when the search is trigg
   });
   expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(1);
 });
+
+test('result event should be emitted once the request is complete', function() {
+  var resulted = jest.fn();
+  var fakeClient = makeFakeClient();
+  var helper = algoliaSearchHelper(fakeClient, 'Index', {
+    disjunctiveFacets: ['city'],
+    facets: ['tower']
+  });
+
+  fakeClient.search.mockImplementationOnce(function() {
+    return Promise.resolve({
+      results: [{}]
+    });
+  });
+
+  helper.on('result', resulted);
+
+  expect(resulted).toHaveBeenCalledTimes(0);
+
+  helper.search();
+
+  return Promise.resolve().then(function() {
+    expect(resulted).toHaveBeenCalledTimes(1);
+    expect(resulted).toHaveBeenLastCalledWith({
+      results: expect.any(algoliaSearchHelper.SearchResults),
+      state: helper.state
+    });
+  });
+});

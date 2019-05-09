@@ -70,8 +70,8 @@ test('hierarchical facets: facet value called length', function(done) {
   });
 
   helper.search();
-  helper.once('result', function(content) {
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+  helper.once('result', function(event) {
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

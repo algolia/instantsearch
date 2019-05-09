@@ -39,9 +39,9 @@ test(
         done.fail(err);
       });
 
-      helper.on('result', function(content) {
+      helper.on('result', function(event) {
         if (calls === 3) {
-          expect(content.hits.length).toBe(3);
+          expect(event.results.hits.length).toBe(3);
           done();
         } else {
           done.fail('Should not trigger the result event until the third call');

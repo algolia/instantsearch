@@ -100,9 +100,9 @@ test('hierarchical facets: attributes order', function(done) {
 
   helper.setQuery('a').search();
 
-  helper.once('result', function(content) {
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
-    expect(content.getFacetByName('categories')).toEqual(expectedHelperResponse[0]);
+  helper.once('result', function(event) {
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
+    expect(event.results.getFacetByName('categories')).toEqual(expectedHelperResponse[0]);
 
     done();
   });

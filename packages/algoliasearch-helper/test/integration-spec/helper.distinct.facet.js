@@ -39,9 +39,9 @@ test('[INT][FILTERS] Using distinct should let me retrieve all facet without dis
       done.fail(err);
     });
 
-    helper.on('result', function(content) {
-      expect(content.hits.length).toBe(1);
-      expect(content.facets[0].data).toEqual({
+    helper.on('result', function(event) {
+      expect(event.results.hits.length).toBe(1);
+      expect(event.results.facets[0].data).toEqual({
         blue: 2,
         red: 2,
         gold: 1,

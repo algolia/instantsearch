@@ -26,9 +26,9 @@ test(
     setup(indexName, dataset, config).
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
-      helper.on('result', function(content) {
-        expect(content.hits.length).toBe(1);
-        expect(content.hits[0].objectID).toBe('1');
+      helper.on('result', function(event) {
+        expect(event.results.hits.length).toBe(1);
+        expect(event.results.hits[0].objectID).toBe('1');
         done();
       });
 
@@ -43,9 +43,9 @@ test(
     setup(indexName, dataset, config).
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
-      helper.on('result', function(content) {
-        expect(content.hits.length).toBe(1);
-        expect(content.hits[0].objectID).toBe('1');
+      helper.on('result', function(event) {
+        expect(event.results.hits.length).toBe(1);
+        expect(event.results.hits[0].objectID).toBe('1');
         done();
       });
 
@@ -61,9 +61,9 @@ test(
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
 
-      helper.on('result', function(content) {
-        expect(content.hits.length).toBe(2);
-        var sortedHits = content.hits.sort(function(a, b) { return a.objectID.localeCompare(b.objectID); });
+      helper.on('result', function(event) {
+        expect(event.results.hits.length).toBe(2);
+        var sortedHits = event.results.hits.sort(function(a, b) { return a.objectID.localeCompare(b.objectID); });
         expect(sortedHits[0].objectID).toBe('1');
         expect(sortedHits[1].objectID).toBe('4');
         done();

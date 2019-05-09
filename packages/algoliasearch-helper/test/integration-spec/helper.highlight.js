@@ -37,17 +37,17 @@ test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', 
     });
 
     var calls = 0;
-    helper.on('result', function(content) {
+    helper.on('result', function(event) {
       calls++;
       if (calls === 1) {
-        expect(content.hits[0]._highlightResult.facet[0].value).toBe('<em>f1</em>');
-        expect(content.hits[1]._highlightResult.facet[0].value).toBe('<em>f1</em>');
+        expect(event.results.hits[0]._highlightResult.facet[0].value).toBe('<em>f1</em>');
+        expect(event.results.hits[1]._highlightResult.facet[0].value).toBe('<em>f1</em>');
         helper.setQueryParameter('highlightPostTag', '</strong>')
           .setQueryParameter('highlightPreTag', '<strong>')
           .search();
       } else if (calls === 2) {
-        expect(content.hits[0]._highlightResult.facet[0].value).toBe('<strong>f1</strong>');
-        expect(content.hits[1]._highlightResult.facet[0].value).toBe('<strong>f1</strong>');
+        expect(event.results.hits[0]._highlightResult.facet[0].value).toBe('<strong>f1</strong>');
+        expect(event.results.hits[1]._highlightResult.facet[0].value).toBe('<strong>f1</strong>');
         client.deleteIndex(indexName);
         if (!process.browser) {
           client.destroy();

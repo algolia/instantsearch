@@ -74,7 +74,7 @@ test('hierarchical facets: only one level deep', function(done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(content) {
+  helper.once('result', function(event) {
     var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
     var parentValuesQuery = queries[1];
@@ -85,7 +85,7 @@ test('hierarchical facets: only one level deep', function(done) {
     expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl0:beers']]);
     expect(parentValuesQuery.params.facets).toEqual(['categories.lvl0']);
     expect(parentValuesQuery.params.facetFilters).toBe(undefined);
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

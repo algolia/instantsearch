@@ -96,9 +96,9 @@ test('hierarchical facets: show parent level', function(done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(content) {
+  helper.once('result', function(event) {
     expect(client.search).toHaveBeenCalledTimes(1);
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

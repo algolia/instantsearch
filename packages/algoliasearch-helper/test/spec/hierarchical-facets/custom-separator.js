@@ -95,7 +95,7 @@ test('hierarchical facets: custom separator', function(done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(content) {
+  helper.once('result', function(event) {
     var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
     var parentValuesQuery = queries[1];
@@ -105,7 +105,7 @@ test('hierarchical facets: custom separator', function(done) {
     expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl1:beers | IPA']]);
     expect(parentValuesQuery.params.facets).toEqual(['categories.lvl0', 'categories.lvl1']);
     expect(parentValuesQuery.params.facetFilters).toEqual([['categories.lvl0:beers']]);
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

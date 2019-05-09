@@ -101,8 +101,8 @@ test('hierarchical facets: objects with multiple categories', function(done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(content) {
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+  helper.once('result', function(event) {
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

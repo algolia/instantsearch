@@ -41,12 +41,14 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       done.fail(err);
     });
 
-    helper.on('result', function(content) {
+    helper.on('result', function(event) {
       calls++;
 
+      var results = event.results;
+
       if (calls === 1) {
-        expect(content.hits.length).toBe(2);
-        expect(content.facets[0].data).toEqual({
+        expect(results.hits.length).toBe(2);
+        expect(results.facets[0].data).toEqual({
           f1: 2,
           f2: 1,
           f3: 1
@@ -56,8 +58,8 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       }
 
       if (calls === 2) {
-        expect(content.hits.length).toBe(1);
-        expect(content.facets[0].data).toEqual({
+        expect(results.hits.length).toBe(1);
+        expect(results.facets[0].data).toEqual({
           f1: 1,
           f2: 1
         });
@@ -66,15 +68,15 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       }
 
       if (calls === 3) {
-        expect(content.hits.length).toBe(0);
-        expect(content.facets[0]).toBe(undefined);
+        expect(results.hits.length).toBe(0);
+        expect(results.facets[0]).toBe(undefined);
 
         helper.removeRefine('facet', 'f2').search();
       }
 
       if (calls === 4) {
-        expect(content.hits.length).toBe(1);
-        expect(content.facets[0].data).toEqual({
+        expect(results.hits.length).toBe(1);
+        expect(results.facets[0].data).toEqual({
           f1: 1,
           f3: 1
         });

@@ -24,8 +24,8 @@ test(
     setup(indexName, dataset, config).
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {clickAnalytics: true});
-      helper.on('result', function(content) {
-        expect(typeof content.queryID).toBe('string');
+      helper.on('result', function(event) {
+        expect(event.results.queryID).toEqual(expect.any(String));
         done();
       });
 
@@ -40,8 +40,8 @@ test(
     setup(indexName, dataset, config).
     then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
-      helper.on('result', function(content) {
-        expect(content.queryID).toBe(undefined);
+      helper.on('result', function(event) {
+        expect(event.results.queryID).toBeUndefined();
         done();
       });
 

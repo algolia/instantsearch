@@ -1306,7 +1306,11 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
     var specificResults = results.splice(0, queriesCount);
 
     var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
-    helper.emit('result', formattedResponse, state);
+
+    helper.emit('result', {
+      results: formattedResponse,
+      state: state
+    });
   });
 };
 
