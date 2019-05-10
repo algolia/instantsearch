@@ -7,8 +7,7 @@ var requestBuilder = require('./requestBuilder');
 
 var events = require('events');
 var inherits = require('./functions/inherits');
-
-var isEmpty = require('lodash/isEmpty');
+var objectHasKeys = require('./functions/objectHasKeys');
 
 var version = require('./version');
 
@@ -985,7 +984,7 @@ AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
  *
  */
 AlgoliaSearchHelper.prototype.hasRefinements = function(attribute) {
-  if (!isEmpty(this.state.getNumericRefinements(attribute))) {
+  if (objectHasKeys(this.state.getNumericRefinements(attribute))) {
     return true;
   } else if (this.state.isConjunctiveFacet(attribute)) {
     return this.state.isFacetRefined(attribute);

@@ -9,7 +9,7 @@ function valToNumber(v) {
     return v.map(valToNumber);
   }
 
-  throw new Error('The value should be a number, a parseable string or an array of those.');
+  throw new Error('The value should be a number, a parsable string or an array of those.');
 }
 
 module.exports = valToNumber;

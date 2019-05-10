@@ -1,6 +1,6 @@
 'use strict';
 
-var isEmpty = require('lodash/isEmpty');
+var objectHasKeys = require('../functions/objectHasKeys');
 
 /**
  * @param {any[]} filters
@@ -28,20 +28,20 @@ function filterState(state, filters) {
       }
 
       var numericRefinements = state.getNumericRefinements(attr);
-      if (!isEmpty(numericRefinements)) {
+      if (objectHasKeys(numericRefinements)) {
         if (!partialState.numericRefinements) partialState.numericRefinements = {};
         partialState.numericRefinements[attr] = state.numericRefinements[attr];
       }
     });
   } else {
-    if (!isEmpty(state.numericRefinements)) {
+    if (objectHasKeys(state.numericRefinements)) {
       partialState.numericRefinements = state.numericRefinements;
     }
-    if (!isEmpty(state.facetsRefinements)) partialState.facetsRefinements = state.facetsRefinements;
-    if (!isEmpty(state.disjunctiveFacetsRefinements)) {
+    if (objectHasKeys(state.facetsRefinements)) partialState.facetsRefinements = state.facetsRefinements;
+    if (objectHasKeys(state.disjunctiveFacetsRefinements)) {
       partialState.disjunctiveFacetsRefinements = state.disjunctiveFacetsRefinements;
     }
-    if (!isEmpty(state.hierarchicalFacetsRefinements)) {
+    if (objectHasKeys(state.hierarchicalFacetsRefinements)) {
       partialState.hierarchicalFacetsRefinements = state.hierarchicalFacetsRefinements;
     }
   }

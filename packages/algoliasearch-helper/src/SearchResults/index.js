@@ -2,8 +2,6 @@
 
 var merge = require('lodash/merge');
 
-var isFunction = require('lodash/isFunction');
-
 var defaultsPure = require('../functions/defaultsPure');
 var orderBy = require('../functions/orderBy');
 var compact = require('../functions/compact');
@@ -706,7 +704,7 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
     return recSort(function(hierarchicalFacetValues) {
       return orderBy(hierarchicalFacetValues, order[0], order[1]);
     }, facetValues);
-  } else if (isFunction(options.sortBy)) {
+  } else if (typeof options.sortBy === 'function') {
     if (Array.isArray(facetValues)) {
       return facetValues.sort(options.sortBy);
     }

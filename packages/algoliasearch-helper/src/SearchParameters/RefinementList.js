@@ -12,12 +12,9 @@
  * @typedef {Object.<string, SearchParameters.refinementList.Refinements>} SearchParameters.refinementList.RefinementList
  */
 
-var isUndefined = require('lodash/isUndefined');
-var isFunction = require('lodash/isFunction');
-var isEmpty = require('lodash/isEmpty');
-
 var defaultsPure = require('../functions/defaultsPure');
 var omit = require('../functions/omit');
+var objectHasKeys = require('../functions/objectHasKeys');
 
 var lib = {
   /**
@@ -54,7 +51,7 @@ var lib = {
    * @return {RefinementList} a new and updated refinement lst
    */
   removeRefinement: function removeRefinement(refinementList, attribute, value) {
-    if (isUndefined(value)) {
+    if (value === undefined) {
       return lib.clearRefinement(refinementList, attribute);
     }
 
@@ -72,7 +69,7 @@ var lib = {
    * @return {RefinementList} a new and updated list
    */
   toggleRefinement: function toggleRefinement(refinementList, attribute, value) {
-    if (isUndefined(value)) throw new Error('toggleRefinement should be used with a value');
+    if (value === undefined) throw new Error('toggleRefinement should be used with a value');
 
     if (lib.isRefined(refinementList, attribute, value)) {
       return lib.removeRefinement(refinementList, attribute, value);
@@ -92,13 +89,17 @@ var lib = {
    * @return {RefinementList} a new and updated refinement list
    */
   clearRefinement: function clearRefinement(refinementList, attribute, refinementType) {
-    if (isUndefined(attribute)) {
-      if (isEmpty(refinementList)) return refinementList;
+    if (attribute === undefined) {
+      if (!objectHasKeys(refinementList)) {
+        return refinementList;
+      }
       return {};
     } else if (typeof attribute === 'string') {
-      if (isEmpty(refinementList[attribute])) return refinementList;
+      if (!(refinementList[attribute] && refinementList[attribute].length > 0)) {
+        return refinementList;
+      }
       return omit(refinementList, attribute);
-    } else if (isFunction(attribute)) {
+    } else if (typeof attribute === 'function') {
       var hasChanged = false;
 
       var newRefinementList = Object.keys(refinementList).reduce(function(memo, key) {
@@ -106,12 +107,14 @@ var lib = {
         var facetList = values.filter(function(value) {
           return !attribute(value, key, refinementType);
         });
-
-        if (!isEmpty(facetList)) {
-          if (facetList.length !== values.length) hasChanged = true;
+        if (facetList.length > 0) {
+          if (facetList.length !== values.length) {
+            hasChanged = true;
+          }
           memo[key] = facetList;
+        } else {
+          hasChanged = true;
         }
-        else hasChanged = true;
 
         return memo;
       }, {});
@@ -133,7 +136,7 @@ var lib = {
     var containsRefinements = !!refinementList[attribute] &&
       refinementList[attribute].length > 0;
 
-    if (isUndefined(refinementValue) || !containsRefinements) {
+    if (refinementValue === undefined || !containsRefinements) {
       return containsRefinements;
     }
 
