@@ -1,4 +1,4 @@
-import noop from 'lodash/noop';
+import { noop } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
