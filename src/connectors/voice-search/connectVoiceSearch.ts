@@ -1,7 +1,7 @@
-import noop from 'lodash/noop';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  noop,
 } from '../../lib/utils';
 import { Renderer, RenderOptions, WidgetFactory } from '../../types';
 import voiceSearchHelper, {
