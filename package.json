@@ -80,7 +80,7 @@
     "@types/storybook__addon-actions": "^3.4.2",
     "@typescript-eslint/eslint-plugin": "1.7.0",
     "@typescript-eslint/parser": "1.7.0",
-    "algoliasearch": "3.32.1",
+    "algoliasearch": "3.33.0",
     "babel-eslint": "10.0.1",
     "babel-jest": "24.8.0",
     "babel-loader": "8.0.5",
