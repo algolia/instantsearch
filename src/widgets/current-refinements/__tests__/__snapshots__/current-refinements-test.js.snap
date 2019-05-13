@@ -16,21 +16,6 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
   items={
     Array [
       Object {
-        "attribute": "extraFacet",
-        "label": "extraFacet",
-        "refine": [Function],
-        "refinements": Array [
-          Object {
-            "attribute": "extraFacet",
-            "count": 42,
-            "exhaustive": true,
-            "label": "extraFacet-val1",
-            "type": "facet",
-            "value": "extraFacet-val1",
-          },
-        ],
-      },
-      Object {
         "attribute": "facet",
         "label": "facet",
         "refine": [Function],
@@ -50,6 +35,21 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
             "label": "facet-val2",
             "type": "facet",
             "value": "facet-val2",
+          },
+        ],
+      },
+      Object {
+        "attribute": "extraFacet",
+        "label": "extraFacet",
+        "refine": [Function],
+        "refinements": Array [
+          Object {
+            "attribute": "extraFacet",
+            "count": 42,
+            "exhaustive": true,
+            "label": "extraFacet-val1",
+            "type": "facet",
+            "value": "extraFacet-val1",
           },
         ],
       },
