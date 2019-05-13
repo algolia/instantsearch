@@ -3,25 +3,19 @@ import qs from 'qs';
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
 import historyRouter from '../routers/history';
-import {
-  Router,
-  StateMapping,
-  WidgetFactory,
-  Widget,
-  RouteState,
-} from '../../types';
+import { Router, Widget, StateMapping, RouteState } from '../../types';
 
-const runAllMicroTasks: () => Promise<any> = () => new Promise(setImmediate);
+const runAllMicroTasks = (): Promise<any> => new Promise(setImmediate);
 
 type FakeSearchClient = {
   search: (query: string) => Promise<{ results: object[] }>;
 };
 
-const createFakeSearchClient: () => FakeSearchClient = () => ({
+const createFakeSearchClient = (): FakeSearchClient => ({
   search: () => Promise.resolve({ results: [{}] }),
 });
 
-const createFakeRouter: (args: Partial<Router>) => Router = (args = {}) => ({
+const createFakeRouter = (args: Partial<Router> = {}): Router => ({
   onUpdate(..._args) {},
   write(..._args) {},
   read() {
@@ -36,9 +30,9 @@ const createFakeRouter: (args: Partial<Router>) => Router = (args = {}) => ({
   ...args,
 });
 
-const createFakeStateMapping: (args: Partial<StateMapping>) => StateMapping = (
-  args = {}
-) => ({
+const createFakeStateMapping = (
+  args: Partial<StateMapping> = {}
+): StateMapping => ({
   stateToRoute(uiState) {
     return uiState;
   },
@@ -84,7 +78,7 @@ const createFakeHistory = (
   };
 };
 
-const createFakeSearchBox: WidgetFactory<any> = () => ({
+const createFakeSearchBox = (): Widget => ({
   render({ helper }) {
     (this as any).refine = (value: string) => {
       helper.setQuery(value).search();
@@ -104,7 +98,7 @@ const createFakeSearchBox: WidgetFactory<any> = () => ({
   },
 });
 
-const createFakeHitsPerPage: WidgetFactory<any> = () => ({
+const createFakeHitsPerPage = (): Widget => ({
   render() {},
   dispose({ state }) {
     return state;
@@ -455,8 +449,8 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox: any = createFakeSearchBox({});
-      const fakeHitsPerPage = createFakeHitsPerPage({});
+      const fakeSearchBox: any = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
 
       search.addWidget(fakeSearchBox);
       search.addWidget(fakeHitsPerPage);
@@ -506,8 +500,8 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox = createFakeSearchBox({});
-      const fakeHitsPerPage = createFakeHitsPerPage({});
+      const fakeSearchBox = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
 
       search.addWidget(fakeSearchBox);
       search.addWidget(fakeHitsPerPage);
@@ -557,8 +551,8 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox: any = createFakeSearchBox({});
-      const fakeHitsPerPage = createFakeHitsPerPage({});
+      const fakeSearchBox: any = createFakeSearchBox();
+      const fakeHitsPerPage = createFakeHitsPerPage();
 
       search.addWidget(fakeSearchBox);
       search.addWidget(fakeHitsPerPage);
@@ -626,7 +620,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox = createFakeSearchBox({});
+      const fakeSearchBox = createFakeSearchBox();
 
       search.addWidget(fakeSearchBox);
       search.start();
