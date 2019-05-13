@@ -1970,10 +1970,10 @@ ant-design-palettes@^1.1.3:
   dependencies:
     tinycolor2 "^1.4.1"
 
-antd@3.18.0:
-  version "3.18.0"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-3.18.0.tgz#aa357e2aa521463e84833350073790a5660090e2"
-  integrity sha512-lljtJwrk7YwnGAl7tfml9R5jT56x31WjCrh9cuvuGKm5/RVFowMYkTE3zJUEtoQp6LEQgVlWjY/dUjbSPsLLtA==
+antd@3.18.1:
+  version "3.18.1"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-3.18.1.tgz#14c8a4c506427cff3c1b3b5ece6ee7f1e83cea42"
+  integrity sha512-dAlnkIPCmgp946uEKj12XqERku8n4G/Yn3Wo/sh/OoSdDNyVl43y4XoWsvP2nmg3/bDEjYJwAZx8QJDyIXstYg==
   dependencies:
     "@ant-design/create-react-context" "^0.2.4"
     "@ant-design/icons" "~2.0.0"
