@@ -61,7 +61,7 @@ class RoutingManager implements Widget {
     const widgets = this.instantSearchInstance.widgets;
     const helper = this.instantSearchInstance.helper!;
 
-    return widgets.reduce((state, widget) => {
+    return widgets.reduce<UiState>((state, widget) => {
       if (!widget.getWidgetState) {
         return state;
       }
