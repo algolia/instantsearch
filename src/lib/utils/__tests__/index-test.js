@@ -1185,6 +1185,12 @@ describe('utils.addAbsolutePosition', () => {
     expect(hits[0].__position).toEqual(3);
     expect(hits[1].__position).toEqual(4);
   });
+  it('should keep __escape property on the original array if present', () => {
+    let hits = [{ objectID: 1 }, { objectID: 2 }];
+    hits.__escape = true;
+    hits = utils.addAbsolutePosition(hits, 1, 2);
+    expect(hits.__escape).toEqual(true);
+  });
 });
 
 describe('utils.addQueryID', () => {
@@ -1195,5 +1201,11 @@ describe('utils.addQueryID', () => {
     );
     expect(hits[0].__queryID).toEqual('theQueryID');
     expect(hits[1].__queryID).toEqual('theQueryID');
+  });
+  it('should keep __escape property on the original array if present', () => {
+    let hits = [{ objectID: 1 }, { objectID: 2 }];
+    hits.__escape = true;
+    hits = utils.addQueryID(hits, 'theQueryID');
+    expect(hits.__escape).toEqual(true);
   });
 });

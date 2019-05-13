@@ -5,8 +5,10 @@ export const addAbsolutePosition = (
   page: number,
   hitsPerPage: number
 ): Hits => {
-  return hits.map((hit, idx) => ({
-    ...hit,
-    __position: hitsPerPage * page + idx + 1,
-  }));
+  if (hits && hits.length) {
+    for (let i = 0, length = hits.length; i < length; i++) {
+      hits[i].__position = hitsPerPage * page + i + 1;
+    }
+  }
+  return hits;
 };
