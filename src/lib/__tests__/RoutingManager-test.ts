@@ -158,6 +158,9 @@ describe('RoutingManager', () => {
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const uiStates = router.getAllUiStates({
         searchParameters: search.helper.state,
       });
@@ -199,6 +202,9 @@ describe('RoutingManager', () => {
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const uiStates = router.getAllUiStates({
         searchParameters: search.helper.state,
       });
@@ -235,6 +241,9 @@ describe('RoutingManager', () => {
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const searchParameters = router.getAllSearchParameters({
         currentSearchParameters: search.helper.state,
         uiState: {},
@@ -273,6 +282,9 @@ describe('RoutingManager', () => {
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const searchParameters = router.getAllSearchParameters({
         currentSearchParameters: search.helper.state,
         uiState: {},

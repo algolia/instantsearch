@@ -36,7 +36,7 @@ class RoutingManager implements Widget {
     this.currentUiState = this.stateMapping.routeToState(this.router.read());
   }
 
-  public getAllSearchParameters({
+  private getAllSearchParameters({
     currentSearchParameters,
     uiState,
   }): Partial<SearchParameters> {
@@ -53,7 +53,7 @@ class RoutingManager implements Widget {
     }, currentSearchParameters);
   }
 
-  public getAllUiStates({
+  private getAllUiStates({
     searchParameters,
   }: {
     searchParameters: SearchParameters;
