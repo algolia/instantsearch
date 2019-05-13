@@ -91,13 +91,18 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
       },
 
       removeSearchParameters(state) {
-        // widgetParams are assumed 'controlled',
-        // so they override whatever other widgets give the state
-        return state.mutateMe(mutableState => {
-          Object.keys(widgetParams.searchParameters).forEach(key => {
-            delete mutableState[key];
-          });
-        });
+        // We leverage the Helper internals to remove the `widgetParams` from
+        // the state. The function `setQueryParameters` omit (or remove) the
+        // values that are `undefined` on the next state.
+        return state.setQueryParameters(
+          Object.keys(widgetParams.searchParameters).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
     };
   };
