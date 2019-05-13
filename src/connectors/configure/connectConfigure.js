@@ -1,3 +1,4 @@
+import algoliasearcHelper from 'algoliasearch-helper';
 import {
   createDocumentationMessageGenerator,
   noop,
@@ -91,13 +92,22 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
       },
 
       removeSearchParameters(state) {
-        // widgetParams are assumed 'controlled',
-        // so they override whatever other widgets give the state
-        return state.mutateMe(mutableState => {
-          Object.keys(widgetParams.searchParameters).forEach(key => {
-            delete mutableState[key];
-          });
-        });
+        const stateWithoutWidgetParams = Object.keys(
+          widgetParams.searchParameters
+        ).reduce(
+          (prevState, key) => {
+            const { [key]: _, ...prevStateWhithoutKey } = prevState;
+
+            return prevStateWhithoutKey;
+          },
+          {
+            ...state,
+          }
+        );
+
+        return new algoliasearcHelper.SearchParameters(
+          stateWithoutWidgetParams
+        );
       },
     };
   };
