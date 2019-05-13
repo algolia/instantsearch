@@ -2,7 +2,9 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import defaultTemplates from './defaultTemplates';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
+import connectInfiniteHits, {
+  InfiniteHitsRenderer,
+} from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
   getContainerNode,
@@ -12,6 +14,12 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
+import {
+  WidgetFactory,
+  Template,
+  Hit,
+  InsightsClientWrapper,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -19,13 +27,45 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('InfiniteHits');
 const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
+export type InfiniteHitsCSSClasses = {
+  root: string | string[];
+  emptyRoot: string | string[];
+  item: string | string[];
+  list: string | string[];
+  loadPrevious: string | string[];
+  disabledLoadPrevious: string | string[];
+  loadMore: string | string[];
+  disabledLoadMore: string | string[];
+};
+
+export type InfiniteHitsTemplates = {
+  empty: Template<void>;
+  showPreviousText: Template<void>;
+  showMoreText: Template<void>;
+  item: Template<Hit>;
+};
+
+export type InfiniteHitsRendererWidgetParams = {
+  escapeHTML: boolean;
+  transformItems: (items: any[]) => any[];
+  showPrevious: boolean;
+};
+
+interface InfiniteHitsWidgetParams extends InfiniteHitsRendererWidgetParams {
+  container: string | HTMLElement;
+  cssClasses?: Partial<InfiniteHitsCSSClasses>;
+  templates?: Partial<InfiniteHitsTemplates>;
+}
+
+type InfiniteHits = WidgetFactory<InfiniteHitsWidgetParams>;
+
 const renderer = ({
   cssClasses,
   containerNode,
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}) => (
+}): InfiniteHitsRenderer<InfiniteHitsRendererWidgetParams> => (
   {
     hits,
     results,
@@ -58,7 +98,7 @@ const renderer = ({
       templateProps={renderState.templateProps}
       isFirstPage={isFirstPage}
       isLastPage={isLastPage}
-      insights={insights}
+      insights={insights as InsightsClientWrapper}
     />,
     containerNode
   );
@@ -114,21 +154,23 @@ const renderer = ({
  *   })
  * );
  */
-export default function infiniteHits({
-  container,
-  escapeHTML,
-  transformItems,
-  templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
-  showPrevious,
-} = {}) {
+const infiniteHits: InfiniteHits = (
+  {
+    container,
+    escapeHTML,
+    transformItems,
+    templates = defaultTemplates,
+    cssClasses: userCssClasses = {},
+    showPrevious,
+  } = {} as InfiniteHitsWidgetParams
+) => {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  // We have this specific check because unlike `hits`, `infiniteHits` does not support
-  // the `allItems` template. This can be misleading as they are very similar.
   warning(
+    // @ts-ignore: We have this specific check because unlike `hits`, `infiniteHits` does not support
+    // the `allItems` template. This can be misleading as they are very similar.
     typeof templates.allItems === 'undefined',
     `The template \`allItems\` does not exist since InstantSearch.js 3.
 
@@ -172,4 +214,6 @@ export default function infiniteHits({
   );
 
   return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });
-}
+};
+
+export default infiniteHits;
