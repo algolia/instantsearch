@@ -319,7 +319,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
           helper.state.index,
           helper.state
         );
-        helperSearchFunction.once('search', state => {
+        helperSearchFunction.once('search', ({ state }) => {
           helper.overrideStateWithoutTriggeringChangeEvent(state);
           this._mainHelperSearch();
         });
@@ -328,10 +328,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     }
 
     this.helper = helper;
+
     this._init(helper.state, this.helper);
-    this.helper.on('result', this._render.bind(this, this.helper));
-    this.helper.on('error', e => {
-      this.emit('error', e);
+
+    this.helper.on('result', ({ results, state }) => {
+      this._render(this.helper, results, state);
+    });
+
+    this.helper.on('error', ({ error }) => {
+      this.emit('error', error);
     });
 
     this._searchStalledTimer = null;

@@ -310,6 +310,7 @@ describe('RoutingManager', () => {
         })),
         getWidgetSearchParameters: jest.fn(),
       };
+
       search.addWidget(widget);
 
       search.start();

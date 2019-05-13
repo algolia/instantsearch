@@ -1,4 +1,3 @@
-// import algoliaSearchHelper from 'algoliasearch-helper';
 import algoliasearch from 'algoliasearch';
 import InstantSearch from '../InstantSearch';
 
@@ -21,9 +20,9 @@ describe('InstantSearch lifecycle', () => {
       reject = r;
     });
 
-    search.on('error', e => {
+    search.on('error', error => {
       try {
-        expect(e).toEqual(expect.any(Error));
+        expect(error).toEqual(expect.any(Error));
       } catch (err) {
         reject(err);
       }

@@ -18,6 +18,10 @@ import {
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';
 
+type AlgoliaSearchChangeEvent = {
+  state: SearchParameters;
+};
+
 type TrackedFilterRefinement = string | number | boolean;
 
 export type ParamTrackedFilters = {
@@ -126,7 +130,7 @@ function applyRuleContexts(
     trackedFilters: ParamTrackedFilters;
     transformRuleContexts: ParamTransformRuleContexts;
   },
-  sharedHelperState: SearchParameters
+  event: AlgoliaSearchChangeEvent
 ): void {
   const {
     helper,
@@ -135,6 +139,7 @@ function applyRuleContexts(
     transformRuleContexts,
   } = this;
 
+  const sharedHelperState = event.state;
   const previousRuleContexts: string[] = sharedHelperState.ruleContexts || [];
   const newRuleContexts = getRuleContextsFromTrackedFilters({
     helper,
@@ -186,7 +191,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-    let onHelperChange: (state: SearchParameters) => void;
+    let onHelperChange: (event: AlgoliaSearchChangeEvent) => void;
 
     return {
       init({ helper, state, instantSearchInstance }) {
@@ -207,11 +212,13 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
             hasStateRefinements(state) ||
             Boolean(widgetParams.transformRuleContexts)
           ) {
-            onHelperChange(state);
+            onHelperChange({ state });
           }
 
           // We track every change in the helper to override its state and add
           // any `ruleContexts` needed based on the `trackedFilters`.
+          // @ts-ignore
+          // @TODO: we have to override the definition
           helper.on('change', onHelperChange);
         }
 

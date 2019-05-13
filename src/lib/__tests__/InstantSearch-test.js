@@ -303,7 +303,10 @@ describe('InstantSearch lifecycle', () => {
 
         beforeEach(() => {
           results = { some: 'data' };
-          search.helper.emit('result', results, search.helper.state);
+          search.helper.emit('result', {
+            state: search.helper.state,
+            results,
+          });
         });
 
         it('calls widget.render({results, state, helper, templatesConfig, instantSearchInstance})', () => {
