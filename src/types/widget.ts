@@ -31,7 +31,45 @@ interface DisposeOptions {
 }
 
 export type UiState = {
-  [stateKey: string]: any;
+  query?: string;
+  menu?: {
+    [attribute: string]: string;
+  };
+  /**
+   * The list of hierarchical menus.
+   * Nested levels must contain the record separator.
+   *
+   * @example ['Audio', 'Audio > Headphones']
+   */
+  hierarchicalMenu?: {
+    [attribute: string]: string[];
+  };
+  refinementList?: {
+    [attribute: string]: string[];
+  };
+  numericRefinementList?: {
+    [attribute: string]: number;
+  };
+  numericSelector?: {
+    [attribute: string]: number;
+  };
+  /**
+   * The range as a tuple.
+   *
+   * @example '100:500'
+   */
+  range?: {
+    [attribute: string]: string;
+  };
+  starRating?: {
+    [attribute: string]: number;
+  };
+  toggle?: {
+    [attribute: string]: boolean;
+  };
+  sortBy?: string;
+  page?: number;
+  hitsPerPage?: number;
 };
 
 export interface Widget {
