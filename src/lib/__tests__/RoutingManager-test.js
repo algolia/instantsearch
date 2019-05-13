@@ -98,7 +98,7 @@ describe('RoutingManager', () => {
       });
 
       const widgetState = {
-        some: 'values',
+        query: 'query',
       };
       const widget = {
         render: () => {},
@@ -107,7 +107,7 @@ describe('RoutingManager', () => {
       search.addWidget(widget);
 
       const actualInitialState = {
-        some: 'values',
+        query: 'query',
       };
 
       search.start();
@@ -149,7 +149,7 @@ describe('RoutingManager', () => {
       search.start();
 
       const actualInitialState = {
-        some: 'values',
+        query: 'query',
       };
 
       const router = new RoutingManager({
@@ -182,7 +182,7 @@ describe('RoutingManager', () => {
       search.addWidget(widget);
 
       const actualInitialState = {
-        some: 'values',
+        query: 'query',
       };
 
       search.start();
