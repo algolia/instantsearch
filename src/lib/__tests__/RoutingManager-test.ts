@@ -654,6 +654,9 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter();
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({
         qsModule: qs,
         location: window.location,
@@ -698,6 +701,9 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter();
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({
         qsModule: qs,
         location: window.location,

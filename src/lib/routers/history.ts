@@ -76,12 +76,12 @@ class BrowserHistory implements Router {
    * Creates a full URL based on the route state.
    * The storage adaptor maps all syncable keys to the query string of the URL.
    */
-  public readonly _createURL: BrowserHistoryProps['createURL'];
+  private readonly _createURL: BrowserHistoryProps['createURL'];
   /**
    * Parses the URL into a route state.
    * It should be symetrical to `createURL`.
    */
-  public readonly parseURL: BrowserHistoryProps['parseURL'];
+  private readonly parseURL: BrowserHistoryProps['parseURL'];
 
   private writeTimer?: number;
   private _onPopState?(event: PopStateEvent): void;
