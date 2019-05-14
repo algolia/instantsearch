@@ -47,8 +47,15 @@ export type UiState = {
   hierarchicalMenu?: {
     [attribute: string]: string[];
   };
+  /**
+   * The numeric menu as a tuple.
+   *
+   * @example ':5'
+   * @example '5:10'
+   * @example '10:'
+   */
   numericMenu?: {
-    [attribute: string]: number;
+    [attribute: string]: string;
   };
   ratingMenu?: {
     [attribute: string]: number;
