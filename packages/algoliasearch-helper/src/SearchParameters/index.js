@@ -197,7 +197,10 @@ function SearchParameters(newParameters) {
 
   var self = this;
   Object.keys(params).forEach(function(paramName) {
-    if (SearchParameters.PARAMETERS.indexOf(paramName) === -1) {
+    var isKeyKnown = SearchParameters.PARAMETERS.indexOf(paramName) !== -1;
+    var isValueDefined = params[paramName] !== undefined;
+
+    if (!isKeyKnown && isValueDefined) {
       self[paramName] = params[paramName];
     }
   });
@@ -1358,15 +1361,32 @@ SearchParameters.prototype = {
       throw error;
     }
 
-    var parsedParams = SearchParameters._parseNumbers(params);
+    var self = this;
+    var nextWithNumbers = SearchParameters._parseNumbers(params);
+    var previousPlainObject = Object.keys(this).reduce(function(acc, key) {
+      acc[key] = self[key];
+      return acc;
+    }, {});
 
-    return this.mutateMe(function mergeWith(newInstance) {
-      Object.keys(params).forEach(function(k) {
-        newInstance[k] = parsedParams[k];
-      });
+    var nextPlainObject = Object.keys(nextWithNumbers).reduce(
+      function(previous, key) {
+        var isPreviousValueDefined = previous[key] !== undefined;
+        var isNextValueDefined = nextWithNumbers[key] !== undefined;
 
-      return newInstance;
-    });
+        if (isPreviousValueDefined && !isNextValueDefined) {
+          return omit(previous, [key]);
+        }
+
+        if (isNextValueDefined) {
+          previous[key] = nextWithNumbers[key];
+        }
+
+        return previous;
+      },
+      previousPlainObject
+    );
+
+    return new this.constructor(nextPlainObject);
   },
 
   /**
@@ -1392,20 +1412,6 @@ SearchParameters.prototype = {
    */
   filter: function(filters) {
     return filterState(this, filters);
-  },
-  /**
-   * Helper function to make it easier to build new instances from a mutating
-   * function
-   * @private
-   * @param {function} fn newMutableState -> previousState -> () function that will
-   * change the value of the newMutable to the desired state
-   * @return {SearchParameters} a new instance with the specified modifications applied
-   */
-  mutateMe: function mutateMe(fn) {
-    var newState = new this.constructor(this);
-
-    fn(newState, this);
-    return newState;
   },
 
   /**
