@@ -179,7 +179,7 @@ class BrowserHistory implements Router {
   /**
    * Removes the event listener and cleans up the URL.
    */
-  public dispose(): undefined {
+  public dispose(): void {
     if (this._onPopState) {
       window.removeEventListener('popstate', this._onPopState);
     }
@@ -189,8 +189,6 @@ class BrowserHistory implements Router {
     }
 
     this.write({});
-
-    return undefined;
   }
 }
 

@@ -117,7 +117,7 @@ describe('RoutingManager', () => {
     read: () => ({}),
     write: () => {},
     createURL: () => '#',
-    dispose: () => undefined,
+    dispose: () => {},
   };
 
   describe('getAllUiStates', () => {
