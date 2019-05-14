@@ -146,8 +146,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
-        firstReceivedPage = helper.state.page!;
-        lastReceivedPage = helper.state.page!;
+        firstReceivedPage = helper.state.page || 0;
+        lastReceivedPage = helper.state.page || 0;
 
         renderFn(
           {
@@ -171,7 +171,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // We're doing this to "reset" the widget if a refinement or the
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
-        const { page, ...currentState } = state;
+        const { page = 0, ...currentState } = state;
+
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
           firstReceivedPage = page!;
@@ -224,7 +225,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page!;
+        const page = searchParameters.page || 0;
 
         if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
           return uiState;
@@ -240,11 +241,16 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         if (!hasShowPrevious) {
           return searchParameters;
         }
+
         const uiPage = uiState.page;
+
         if (uiPage) {
           return searchParameters.setQueryParameter('page', uiPage - 1);
         }
-        return searchParameters.setQueryParameter('page', 0);
+
+        // @ts-ignore
+        // @TODO: we have to override the definition
+        return searchParameters.setQueryParameter('page');
       },
     };
   };

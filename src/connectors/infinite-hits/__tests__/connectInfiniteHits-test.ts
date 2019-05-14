@@ -225,7 +225,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(secondRenderingOptions.hits).toEqual(hits);
     expect(secondRenderingOptions.results).toEqual(results);
     showPrevious();
-    expect(helper.getPage()).toBe(0);
+    expect(helper.state.page).toBe(0);
     expect(helper.emit).not.toHaveBeenCalled();
     expect(helper.search).toHaveBeenCalledTimes(1);
 
@@ -696,8 +696,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
         widget.init!({
           ...defaultInitOptions,
-          helper,
           state: helper.state,
+          helper,
         });
 
         // The user presses back (browser), and the URL contains no parameters
@@ -741,7 +741,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         );
         // Applying an empty state, should force back to page 0
         expect(searchParametersAfter).toMatchSnapshot();
-        expect(searchParametersAfter.page).toBe(0);
+        expect(searchParametersAfter.page).toBeUndefined();
       });
 
       it('should add the refinements according to the UI state provided', () => {

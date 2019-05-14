@@ -27,7 +27,6 @@ SearchParameters {
   "hierarchicalFacetsRefinements": Object {},
   "index": "",
   "numericRefinements": Object {},
-  "page": 0,
   "tagRefinements": Array [],
 }
 `;

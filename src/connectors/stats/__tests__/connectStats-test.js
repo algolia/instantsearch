@@ -58,7 +58,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(0);
       expect(nbPages).toBe(0);
-      expect(page).toBe(helper.state.page);
+      expect(page).toBe(0);
       expect(processingTimeMS).toBe(-1);
       expect(query).toBe(helper.state.query);
       expect(widgetParams).toEqual({ foo: 'bar' });
