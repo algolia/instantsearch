@@ -281,7 +281,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
       const isFirstRendering = false;
       // We don't use the state provided by the render function because we need
       // to be sure that the state is the latest one for the following condition
-      const state = helper.getState();
+      const state = helper.state;
 
       const positionChangedSinceLastRefine =
         Boolean(state.aroundLatLng) &&

@@ -89,7 +89,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     widget.init({ helper });
 
     expect(widget.getConfiguration()).toEqual({ analytics: true });
-    expect(helper.getState().analytics).toEqual(true);
+    expect(helper.state.analytics).toEqual(true);
 
     const { refine } = renderFn.mock.calls[0][0];
     expect(refine).toBe(widget._refine);
@@ -97,8 +97,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     refine({ hitsPerPage: 3 });
 
     expect(widget.getConfiguration()).toEqual({ hitsPerPage: 3 });
-    expect(helper.getState().analytics).toBe(undefined);
-    expect(helper.getState().hitsPerPage).toBe(3);
+    expect(helper.state.analytics).toBe(undefined);
+    expect(helper.state.hitsPerPage).toBe(3);
   });
 
   it('should dispose all the state set by configure', () => {
@@ -109,9 +109,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     widget.init({ helper });
 
     expect(widget.getConfiguration()).toEqual({ analytics: true });
-    expect(helper.getState().analytics).toBe(true);
+    expect(helper.state.analytics).toBe(true);
 
-    const nextState = widget.dispose({ state: helper.getState() });
+    const nextState = widget.dispose({ state: helper.state });
 
     expect(nextState.analytics).toBe(undefined);
   });

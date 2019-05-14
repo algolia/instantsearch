@@ -183,7 +183,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         });
         widget.dispose!({
           helper,
-          state: helper.getState(),
+          state: helper.state,
         });
 
         expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
