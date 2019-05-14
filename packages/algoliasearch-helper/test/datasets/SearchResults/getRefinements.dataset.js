@@ -30,7 +30,7 @@ if (require.main === module) {
     }]
   });
 
-  var initialState = helper.getState();
+  var initialState = helper.state;
 
   helper.searchOnce().then(function() {
     helper.__saveLastToFile('noFilters.json');

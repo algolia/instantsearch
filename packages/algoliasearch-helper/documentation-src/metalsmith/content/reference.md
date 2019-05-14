@@ -417,7 +417,6 @@ Algolia.
 
 ### State management
 
-{{> jsdoc jsdoc/helper/getState}}
 {{> jsdoc jsdoc/helper/setState}}
 {{> jsdoc jsdoc/helper/overrideStateWithoutTriggeringChangeEvent}}
 
@@ -505,10 +504,10 @@ that you might encounter in the documentation.
 The SearchParameters is the class that structures all the parameters
 that are needed to build a query to Algolia.
 
-The SearchParameters instances are usually refered to as the state of
+The SearchParameters instances are usually referred to as the state of
 the search. This state is available when receiving `change` and `search`
 events, and with `result` as a secondary parameter. Alternatively,
-it can be retrieved using the [getState](#AlgoliaSearchHelper#getState) method on the Helper.
+it can be retrieved using `helper.state`.
 
 SearchParameter is an immutable class. Each setter method returns a new
 instance with the modification, and does not modify the object it is

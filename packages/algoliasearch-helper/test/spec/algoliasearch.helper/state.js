@@ -23,14 +23,6 @@ test('setState should set the state of the helper and trigger a change event', f
   helper.setState(state1);
 });
 
-test('getState should return the current state of the helper', function() {
-  var initialState = {query: 'a query'};
-  var helper = algoliasearchHelper(fakeClient, null, initialState);
-
-  expect(helper.getState()).toEqual(new SearchParameters(initialState));
-  expect(helper.getState()).toEqual(helper.state);
-});
-
 test('setState should set a default hierarchicalFacetRefinement when a rootPath is defined', function() {
   var searchParameters = {hierarchicalFacets: [
     {
@@ -47,7 +39,7 @@ test('setState should set a default hierarchicalFacetRefinement when a rootPath 
   ]};
 
   var helper = algoliasearchHelper(fakeClient, null, searchParameters);
-  var initialHelperState = Object.assign({}, helper.getState());
+  var initialHelperState = Object.assign({}, helper.state);
 
   expect(initialHelperState.hierarchicalFacetsRefinements).toEqual({
     'hierarchicalCategories.lvl0': ['Cameras & Camcorders']
@@ -55,11 +47,11 @@ test('setState should set a default hierarchicalFacetRefinement when a rootPath 
 
   // reset state
   helper.setState(helper.state.removeHierarchicalFacet('hierarchicalCategories.lvl0'));
-  expect(helper.getState().hierarchicalFacetsRefinements).toEqual({});
+  expect(helper.state.hierarchicalFacetsRefinements).toEqual({});
 
   // re-add `hierarchicalFacets`
   helper.setState(Object.assign({}, helper.state, searchParameters));
-  var finalHelperState = Object.assign({}, helper.getState());
+  var finalHelperState = Object.assign({}, helper.state);
 
   expect(initialHelperState).toEqual(finalHelperState);
   expect(finalHelperState.hierarchicalFacetsRefinements).toEqual({

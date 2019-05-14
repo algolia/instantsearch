@@ -911,19 +911,6 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
 };
 
 /**
- * Get the current search state stored in the helper. This object is immutable.
- * @return {SearchParameters|object} if filters is specified a plain object is
- * returned containing only the requested fields, otherwise return the unfiltered
- * state
- * @example
- * // Get the complete state as stored in the helper
- * helper.getState();
- */
-AlgoliaSearchHelper.prototype.getState = function() {
-  return this.state;
-};
-
-/**
  * Override the current state without triggering a change event.
  * Do not use this method unless you know what you are doing. (see the example
  * for a legit use case)

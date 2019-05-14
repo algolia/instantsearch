@@ -21,7 +21,7 @@ if (require.main === module) {
     maxValuesPerFacet: 3
   });
 
-  var initialState = helper.getState();
+  var initialState = helper.state;
 
   helper.searchOnce().then(function() {
     helper.__saveLastToFile('noFilters.json');
