@@ -66,7 +66,9 @@ function getRefinements(
 ): TrackedFilterRefinement[] {
   const refinements = Object.keys(searchState)
     .filter(
-      widgetKey => typeof searchState[widgetKey][attribute] !== 'undefined'
+      widgetKey =>
+        searchState[widgetKey] !== undefined &&
+        searchState[widgetKey][attribute] !== undefined
     )
     .map(widgetKey => getWidgetRefinements(attribute, widgetKey, searchState))
     .reduce((acc, current) => acc.concat(current), []); // flatten the refinements
