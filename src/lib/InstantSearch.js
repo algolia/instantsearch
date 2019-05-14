@@ -229,7 +229,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
 
       const nextState = widget.dispose({
         helper: this.helper,
-        state: this.helper.getState(),
+        state: this.helper.state,
       });
 
       // re-compute remaining widgets to the state

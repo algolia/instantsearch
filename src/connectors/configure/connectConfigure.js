@@ -58,7 +58,7 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
       refine(helper) {
         return searchParameters => {
           // merge new `searchParameters` with the ones set from other widgets
-          const actualState = this.removeSearchParameters(helper.getState());
+          const actualState = this.removeSearchParameters(helper.state);
           const nextSearchParameters = enhanceConfiguration(
             { ...actualState },
             {

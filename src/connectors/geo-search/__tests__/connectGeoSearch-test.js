@@ -104,7 +104,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
 
     widget.render({
-      results: new SearchResults(helper.getState(), [
+      results: new SearchResults(helper.state, [
         {
           hits: [
             { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
@@ -161,7 +161,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
 
     widget.render({
-      results: new SearchResults(helper.getState(), [
+      results: new SearchResults(helper.state, [
         {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
@@ -183,7 +183,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const helper = createFakeHelper({});
 
     widget.render({
-      results: new SearchResults(helper.getState(), [
+      results: new SearchResults(helper.state, [
         {
           hits: [
             { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
@@ -225,7 +225,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const helper = createFakeHelper({});
 
     widget.render({
-      results: new SearchResults(helper.getState(), [
+      results: new SearchResults(helper.state, [
         {
           hits: [
             { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
@@ -276,7 +276,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     );
 
     widget.render({
-      results: new SearchResults(helper.getState(), [
+      results: new SearchResults(helper.state, [
         {
           hits: [],
         },
@@ -299,7 +299,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     helper.setQueryParameter('aroundLatLng', '12, 14');
 
     widget.render({
-      results: new SearchResults(helper.getState(), [
+      results: new SearchResults(helper.state, [
         {
           hits: [],
         },
@@ -338,7 +338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       lng: 42,
     };
 
-    const results = new SearchResults(helper.getState(), [
+    const results = new SearchResults(helper.state, [
       {
         hits: [
           { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
@@ -403,7 +403,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       lng: 42,
     };
 
-    const results = new SearchResults(helper.getState(), [
+    const results = new SearchResults(helper.state, [
       {
         hits: [
           { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
@@ -468,7 +468,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       lng: 42,
     };
 
-    const results = new SearchResults(helper.getState(), [
+    const results = new SearchResults(helper.state, [
       {
         hits: [
           { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
@@ -533,7 +533,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       lng: 42,
     };
 
-    const results = new SearchResults(helper.getState(), [
+    const results = new SearchResults(helper.state, [
       {
         hits: [
           { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
@@ -610,7 +610,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       });
 
       widget.render({
-        results: new SearchResults(helper.getState(), [
+        results: new SearchResults(helper.state, [
           {
             hits: [],
           },
@@ -635,7 +635,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper.setQueryParameter('insideBoundingBox');
 
       widget.render({
-        results: new SearchResults(helper.getState(), [
+        results: new SearchResults(helper.state, [
           {
             hits: [],
           },
@@ -676,7 +676,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       });
 
       widget.render({
-        results: new SearchResults(helper.getState(), [
+        results: new SearchResults(helper.state, [
           {
             hits: [],
           },
@@ -701,7 +701,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       helper.setQueryParameter('insideBoundingBox');
 
       widget.render({
-        results: new SearchResults(helper.getState(), [
+        results: new SearchResults(helper.state, [
           {
             hits: [],
           },
@@ -734,7 +734,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         lng: 42,
       };
 
-      const results = new SearchResults(helper.getState(), [
+      const results = new SearchResults(helper.state, [
         {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
@@ -748,7 +748,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(1);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
-      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
       lastRenderArgs(render).refine({ northEast, southWest });
@@ -761,7 +761,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
+      expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
 
@@ -784,7 +784,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         lng: 42,
       };
 
-      const results = new SearchResults(helper.getState(), [
+      const results = new SearchResults(helper.state, [
         {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
@@ -798,7 +798,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(1);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
-      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
       lastRenderArgs(render).refine({ northEast, southWest });
@@ -811,7 +811,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
+      expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
   });
@@ -836,7 +836,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         lng: 42,
       };
 
-      const results = new SearchResults(helper.getState(), [
+      const results = new SearchResults(helper.state, [
         {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
@@ -850,7 +850,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(1);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
-      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
       lastRenderArgs(render).refine({ northEast, southWest });
@@ -863,7 +863,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
+      expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
 
       lastRenderArgs(render).clearMapRefinement();
@@ -876,7 +876,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
-      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
     });
 
@@ -899,7 +899,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         lng: 42,
       };
 
-      const results = new SearchResults(helper.getState(), [
+      const results = new SearchResults(helper.state, [
         {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
@@ -913,7 +913,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(1);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
-      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
       lastRenderArgs(render).refine({ northEast, southWest });
@@ -926,7 +926,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(2);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
+      expect(helper.state.insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
 
       lastRenderArgs(render).clearMapRefinement();
@@ -939,7 +939,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(3);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
       expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
-      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.state.insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
     });
   });
@@ -968,7 +968,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
 
       widget.render({
-        results: new SearchResults(helper.getState(), [
+        results: new SearchResults(helper.state, [
           {
             hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
           },
@@ -993,7 +993,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const helper = createFakeHelper({});
 
       widget.render({
-        results: new SearchResults(helper.getState(), [
+        results: new SearchResults(helper.state, [
           {
             hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
           },
@@ -1038,7 +1038,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
 
       widget.render({
-        results: new SearchResults(helper.getState(), [
+        results: new SearchResults(helper.state, [
           {
             hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
           },
@@ -1062,7 +1062,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       const helper = createFakeHelper({});
 
-      const results = new SearchResults(helper.getState(), [
+      const results = new SearchResults(helper.state, [
         {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
@@ -1094,7 +1094,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       const helper = createFakeHelper({});
 
-      const results = new SearchResults(helper.getState(), [
+      const results = new SearchResults(helper.state, [
         {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
@@ -1138,7 +1138,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         insideBoundingBox: undefined,
       };
 
-      const actual = widget.dispose({ state: helper.getState() });
+      const actual = widget.dispose({ state: helper.state });
 
       expect(unmount).toHaveBeenCalled();
       expect(actual).toMatchObject(expectation);
