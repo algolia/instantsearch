@@ -1,7 +1,6 @@
 'use strict';
 
-var merge = require('lodash/merge');
-
+var merge = require('../functions/merge');
 var defaultsPure = require('../functions/defaultsPure');
 var orderBy = require('../functions/orderBy');
 var compact = require('../functions/compact');

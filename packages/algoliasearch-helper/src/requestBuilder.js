@@ -1,6 +1,6 @@
 'use strict';
 
-var merge = require('lodash/merge');
+var merge = require('./functions/merge');
 
 var requestBuilder = {
   /**
@@ -72,7 +72,7 @@ var requestBuilder = {
       additionalParams.numericFilters = numericFilters;
     }
 
-    return merge(state.getQueryParams(), additionalParams);
+    return merge({}, state.getQueryParams(), additionalParams);
   },
 
   /**
@@ -117,7 +117,7 @@ var requestBuilder = {
       additionalParams.facetFilters = facetFilters;
     }
 
-    return merge(state.getQueryParams(), additionalParams);
+    return merge({}, state.getQueryParams(), additionalParams);
   },
 
   /**
@@ -310,8 +310,11 @@ var requestBuilder = {
     if (typeof maxFacetHits === 'number') {
       searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
     }
-    var queries = merge(requestBuilder._getHitsSearchParams(stateForSearchForFacetValues), searchForFacetSearchParameters);
-    return queries;
+    return merge(
+      {},
+      requestBuilder._getHitsSearchParams(stateForSearchForFacetValues),
+      searchForFacetSearchParameters
+    );
   }
 };
 

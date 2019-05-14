@@ -1,7 +1,6 @@
 'use strict';
 
-var merge = require('lodash/merge');
-
+var merge = require('../functions/merge');
 var defaultsPure = require('../functions/defaultsPure');
 var find = require('../functions/find');
 var valToNumber = require('../functions/valToNumber');
