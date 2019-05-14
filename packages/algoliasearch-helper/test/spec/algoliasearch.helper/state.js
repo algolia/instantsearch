@@ -31,58 +31,6 @@ test('getState should return the current state of the helper', function() {
   expect(helper.getState()).toEqual(helper.state);
 });
 
-test('getState should return an object according to the specified filters', function() {
-  var initialState = {
-    query: 'a query',
-    facets: ['facetA', 'facetWeDontCareAbout'],
-    disjunctiveFacets: ['facetB'],
-    hierarchicalFacets: [{
-      name: 'facetC',
-      attributes: ['facetC']
-    }],
-    minWordSizefor1Typo: 1
-  };
-  var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(fakeClient, index, initialState);
-
-  helper.toggleRefine('facetA', 'a');
-  helper.toggleRefine('facetWeDontCareAbout', 'v');
-  helper.toggleRefine('facetB', 'd');
-  helper.toggleRefine('facetC', 'menu');
-  helper.addNumericRefinement('numerical', '=', 3);
-  helper.addNumericRefinement('numerical2', '<=', 3);
-
-  var stateFinalWithSpecificAttribute = {
-    index: index,
-    query: initialState.query,
-    facetsRefinements: {facetA: ['a']},
-    disjunctiveFacetsRefinements: {facetB: ['d']},
-    numericRefinements: {numerical: {'=': [3]}}
-  };
-
-  var stateFinalWithoutSpecificAttributes = {
-    index: index,
-    query: initialState.query,
-    facetsRefinements: {facetA: ['a'], facetWeDontCareAbout: ['v']},
-    disjunctiveFacetsRefinements: {facetB: ['d']},
-    hierarchicalFacetsRefinements: {facetC: ['menu']},
-    numericRefinements: {numerical2: {'<=': [3]}, numerical: {'=': [3]}}
-  };
-
-  var stateWithHierarchicalAttribute = {
-    hierarchicalFacetsRefinements: {facetC: ['menu']}
-  };
-
-  expect(helper.getState([])).toEqual({});
-  expect(
-    helper.getState(['index', 'query', 'attribute:facetA', 'attribute:facetB', 'attribute:numerical'])
-  ).toEqual(stateFinalWithSpecificAttribute);
-
-  expect(helper.getState(['attribute:facetC'])).toEqual(stateWithHierarchicalAttribute);
-
-  expect(helper.getState(['index', 'query', 'attribute:*'])).toEqual(stateFinalWithoutSpecificAttributes);
-});
-
 test('setState should set a default hierarchicalFacetRefinement when a rootPath is defined', function() {
   var searchParameters = {hierarchicalFacets: [
     {

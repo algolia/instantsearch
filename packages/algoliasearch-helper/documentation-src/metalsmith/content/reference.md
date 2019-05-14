@@ -551,7 +551,6 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/addTagRefinement}}
 {{> jsdoc jsdoc/state/clearRefinements}}
 {{> jsdoc jsdoc/state/clearTags}}
-{{> jsdoc jsdoc/state/filter}}
 {{> jsdoc jsdoc/state/getConjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getDisjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getExcludeRefinements}}

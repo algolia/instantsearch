@@ -912,20 +912,15 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
 
 /**
  * Get the current search state stored in the helper. This object is immutable.
- * @param {string[]} [filters] optional filters to retrieve only a subset of the state
  * @return {SearchParameters|object} if filters is specified a plain object is
  * returned containing only the requested fields, otherwise return the unfiltered
  * state
  * @example
  * // Get the complete state as stored in the helper
  * helper.getState();
- * @example
- * // Get a part of the state with all the refinements on attributes and the query
- * helper.getState(['query', 'attribute:category']);
  */
-AlgoliaSearchHelper.prototype.getState = function(filters) {
-  if (filters === undefined) return this.state;
-  return this.state.filter(filters);
+AlgoliaSearchHelper.prototype.getState = function() {
+  return this.state;
 };
 
 /**
