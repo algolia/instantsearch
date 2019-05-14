@@ -144,7 +144,12 @@ inherits(AlgoliaSearchHelper, events.EventEmitter);
  * @chainable
  */
 AlgoliaSearchHelper.prototype.search = function() {
-  this._search();
+  this._search({onlyWithDerivedHelpers: false});
+  return this;
+};
+
+AlgoliaSearchHelper.prototype.searchOnlyWithDerivedHelpers = function() {
+  this._search({onlyWithDerivedHelpers: true});
   return this;
 };
 
@@ -1224,28 +1229,33 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
  * @fires result
  * @fires error
  */
-AlgoliaSearchHelper.prototype._search = function() {
+AlgoliaSearchHelper.prototype._search = function(options) {
   var state = this.state;
-  var mainQueries = requestBuilder._getQueries(state.index, state);
+  var states = [];
+  var mainQueries = [];
 
-  var states = [{
-    state: state,
-    queriesCount: mainQueries.length,
-    helper: this
-  }];
+  if (!options.onlyWithDerivedHelpers) {
+    mainQueries = requestBuilder._getQueries(state.index, state);
 
-  this.emit('search', {
-    state: state,
-    results: this.lastResults
-  });
+    states.push({
+      state: state,
+      queriesCount: mainQueries.length,
+      helper: this
+    });
+
+    this.emit('search', {
+      state: state,
+      results: this.lastResults
+    });
+  }
 
   var derivedQueries = this.derivedHelpers.map(function(derivedHelper) {
     var derivedState = derivedHelper.getModifiedState(state);
-    var queries = requestBuilder._getQueries(derivedState.index, derivedState);
+    var derivedStateQueries = requestBuilder._getQueries(derivedState.index, derivedState);
 
     states.push({
       state: derivedState,
-      queriesCount: queries.length,
+      queriesCount: derivedStateQueries.length,
       helper: derivedHelper
     });
 
@@ -1254,7 +1264,7 @@ AlgoliaSearchHelper.prototype._search = function() {
       results: derivedHelper.lastResults
     });
 
-    return queries;
+    return derivedStateQueries;
   });
 
   var queries = Array.prototype.concat.apply(mainQueries, derivedQueries);
