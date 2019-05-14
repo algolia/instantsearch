@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { RouteState } from '../../types';
+import { Router, RouteState } from '../../types';
 
 type CreateURL = ({
   qsModule,
@@ -59,7 +59,7 @@ const setWindowTitle = (title?: string): void => {
   }
 };
 
-class BrowserHistory {
+class BrowserHistory implements Router {
   /**
    * Transforms a UI state into a title for the page.
    */
