@@ -132,6 +132,23 @@ describe('connectQueryRules', () => {
         expect(searchParameters.ruleContexts).toEqual(['initial-rule']);
       });
 
+      it('does not throw an error with search state that contains `undefined` value', () => {
+        const props: QueryRulesProps = {
+          ...defaultProps,
+          trackedFilters: {
+            price: values => values,
+          },
+        };
+
+        const searchState = {
+          refinementList: undefined,
+        };
+
+        expect(() => {
+          getSearchParameters(SearchParameters.make({}), props, searchState);
+        }).not.toThrow();
+      });
+
       it('sets ruleContexts based on range', () => {
         const priceSpy = jest.fn(values => values);
         const props: QueryRulesProps = {
