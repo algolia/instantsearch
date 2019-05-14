@@ -1,3 +1,21 @@
+# [3.5.0](https://github.com/algolia/instantsearch.js/compare/v3.4.0...v3.5.0) (2019-05-14)
+
+
+### Bug Fixes
+
+* **hitsPerPage:** improve warning for missing state value ([#3707](https://github.com/algolia/instantsearch.js/issues/3707)) ([93d8432](https://github.com/algolia/instantsearch.js/commit/93d8432))
+* **numericMenu:** prevent refinement reset on checked radio click ([#3749](https://github.com/algolia/instantsearch.js/issues/3749)) ([e4a6e75](https://github.com/algolia/instantsearch.js/commit/e4a6e75))
+* **rangeSlider:** round the slider pit value ([#3758](https://github.com/algolia/instantsearch.js/issues/3758)) ([6edee3e](https://github.com/algolia/instantsearch.js/commit/6edee3e)), closes [#2904](https://github.com/algolia/instantsearch.js/issues/2904)
+* **types:** improve UiState types ([#3763](https://github.com/algolia/instantsearch.js/issues/3763)) ([e8ea57b](https://github.com/algolia/instantsearch.js/commit/e8ea57b))
+* **voice:** import correct noop ([#3766](https://github.com/algolia/instantsearch.js/issues/3766)) ([6a80422](https://github.com/algolia/instantsearch.js/commit/6a80422))
+
+
+### Features
+
+* **voiceSearch:** add connector and widget ([#3601](https://github.com/algolia/instantsearch.js/issues/3601)) ([21e4d81](https://github.com/algolia/instantsearch.js/commit/21e4d81))
+
+
+
 # [3.4.0](https://github.com/algolia/instantsearch.js/compare/v3.3.0...v3.4.0) (2019-04-17)
 
 
