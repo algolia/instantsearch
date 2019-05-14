@@ -121,7 +121,7 @@
   },
   "engines": {
     "node": "8.16.0",
-    "yarn": "1.15.2"
+    "yarn": "1.16.0"
   },
   "bundlesize": [
     {
