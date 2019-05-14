@@ -629,9 +629,9 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           ]),
         });
 
-        expect(
-          (helper.state as SearchParameters).ruleContexts
-        ).toHaveLength(10);
+        expect((helper.state as SearchParameters).ruleContexts).toHaveLength(
+          10
+        );
         expect((helper.state as SearchParameters).ruleContexts).toEqual([
           'ais-brand-Insignia',
           'ais-brand-Canon',
