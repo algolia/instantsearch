@@ -117,6 +117,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       },
       dispose({ state }) {
         unmountFn();
+        (this as any)._voiceSearchHelper.removeEventListeners();
         return state.setQuery('');
       },
       getWidgetState(uiState, { searchParameters }) {

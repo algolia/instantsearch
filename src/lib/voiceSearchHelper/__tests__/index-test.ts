@@ -61,11 +61,11 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:false)', () => {
-    let recognition;
+    const listeners: any = {};
     window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {
-        /* eslint-disable-next-line consistent-this */
-        recognition = this;
+      start() {},
+      addEventListener(eventName: string, callback: () => void) {
+        listeners[eventName] = callback;
       },
     }));
     const onQueryChange = jest.fn();
@@ -79,9 +79,9 @@ describe('VoiceSearchHelper', () => {
     voiceSearchHelper.toggleListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
-    recognition.onstart();
+    listeners.start();
     expect(voiceSearchHelper.getState().status).toEqual('waiting');
-    recognition.onresult({
+    listeners.result({
       results: [
         (() => {
           const obj = [
@@ -98,17 +98,17 @@ describe('VoiceSearchHelper', () => {
     expect(voiceSearchHelper.getState().transcript).toEqual('Hello World');
     expect(voiceSearchHelper.getState().isSpeechFinal).toBe(true);
     expect(onQueryChange).toHaveBeenCalledTimes(0);
-    recognition.onend();
+    listeners.end();
     expect(onQueryChange).toHaveBeenCalledWith('Hello World');
     expect(voiceSearchHelper.getState().status).toEqual('finished');
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:true)', () => {
-    let recognition;
+    const listeners: any = {};
     window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {
-        /* eslint-disable-next-line consistent-this */
-        recognition = this;
+      start() {},
+      addEventListener(eventName: string, callback: () => void) {
+        listeners[eventName] = callback;
       },
     }));
     const onQueryChange = jest.fn();
@@ -122,9 +122,9 @@ describe('VoiceSearchHelper', () => {
     voiceSearchHelper.toggleListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
-    recognition.onstart();
+    listeners.start();
     expect(voiceSearchHelper.getState().status).toEqual('waiting');
-    recognition.onresult({
+    listeners.result({
       results: [
         (() => {
           const obj = [
@@ -141,17 +141,17 @@ describe('VoiceSearchHelper', () => {
     expect(voiceSearchHelper.getState().transcript).toEqual('Hello World');
     expect(voiceSearchHelper.getState().isSpeechFinal).toBe(true);
     expect(onQueryChange).toHaveBeenCalledWith('Hello World');
-    recognition.onend();
+    listeners.end();
     expect(onQueryChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('finished');
   });
 
   it('works with onerror', () => {
-    let recognition;
+    const listeners: any = {};
     window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {
-        /* eslint-disable-next-line consistent-this */
-        recognition = this;
+      start() {},
+      addEventListener(eventName: string, callback: () => void) {
+        listeners[eventName] = callback;
       },
     }));
     const onQueryChange = jest.fn();
@@ -163,12 +163,12 @@ describe('VoiceSearchHelper', () => {
     });
     voiceSearchHelper.toggleListening();
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
-    recognition.onerror({
+    listeners.error({
       error: 'not-allowed',
     });
     expect(voiceSearchHelper.getState().status).toEqual('error');
     expect(voiceSearchHelper.getState().errorCode).toEqual('not-allowed');
-    recognition.onend();
+    listeners.end();
     expect(onQueryChange).toHaveBeenCalledTimes(0);
   });
 });
