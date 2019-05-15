@@ -28,14 +28,14 @@ describe('InstantSearch Search Client', () => {
 
       search.start();
 
-      expect(search.helper.state.query).toBe('');
+      expect(search.helper.state.query).toBeUndefined();
       expect(searchClientSpy.search).toHaveBeenCalledTimes(1);
       expect(searchClientSpy.search.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('calls the provided searchFunction when used', () => {
-      const searchFunctionSpy = jest.fn(h => {
-        h.setQuery('test').search();
+      const searchFunctionSpy = jest.fn(helper => {
+        helper.setQuery('test').search();
       });
 
       const searchClientSpy = {

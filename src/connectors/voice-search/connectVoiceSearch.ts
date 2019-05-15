@@ -82,10 +82,10 @@ const connectVoiceSearch: VoiceSearchConnector = (
               previousQuery = helper.state.query;
               helper.setQuery(query);
             }
-            if (
-              typeof previousQuery !== 'undefined' &&
-              previousQuery !== query
-            ) {
+
+            // @TODO: we remove a condition about `undefined`. Worth double
+            // check that it has the expected bahevior.
+            if (previousQuery !== query) {
               helper.search();
             }
           };
@@ -121,7 +121,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
         return state.setQuery('');
       },
       getWidgetState(uiState, { searchParameters }) {
-        const query = searchParameters.query;
+        const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {
           return uiState;
@@ -133,7 +133,9 @@ const connectVoiceSearch: VoiceSearchConnector = (
         };
       },
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
+        // @ts-ignore
+        // @TODO: we have to override the definition
+        return searchParameters.setQuery(uiState.query);
       },
     };
   };

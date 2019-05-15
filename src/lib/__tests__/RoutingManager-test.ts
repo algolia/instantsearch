@@ -364,7 +364,7 @@ describe('RoutingManager', () => {
       search.once('render', () => {
         // initialization is done at this point
 
-        expect(search.helper.state.query).toEqual('');
+        expect(search.helper.state.query).toBeUndefined();
 
         // this simulates a router update with a uiState of {q: 'a'}
         onRouterUpdateCallback({

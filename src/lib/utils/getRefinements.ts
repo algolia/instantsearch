@@ -191,8 +191,8 @@ function getRefinements(
     res.push({
       attributeName: 'query',
       type: 'query',
-      name: state.query,
-      query: state.query,
+      name: state.query || '',
+      query: state.query || '',
     });
   }
 

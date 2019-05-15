@@ -44,7 +44,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     // should provide good values for the first rendering
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        query: helper.state.query,
+        query: '',
         widgetParams: { foo: 'bar' },
       }),
       true
@@ -63,7 +63,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     // should provide good values after the first search
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        query: helper.state.query,
+        query: '',
         widgetParams: { foo: 'bar' },
       }),
       false
@@ -88,8 +88,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     {
       // first rendering
-      expect(helper.state.query).toBe('');
-      const { refine } = rendering.mock.calls[0][0];
+      expect(helper.state.query).toBeUndefined();
+      const { refine, query } = rendering.mock.calls[0][0];
+      expect(query).toBe('');
       refine('bip');
       expect(helper.state.query).toBe('bip');
       expect(helper.search).toHaveBeenCalledTimes(1);
@@ -191,10 +192,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       refine('bip');
       expect(queryHook).toHaveBeenCalledTimes(1);
-      expect(helper.state.query).toBe('');
+      expect(helper.state.query).toBeUndefined();
       expect(helper.search).not.toHaveBeenCalled();
 
       letSearchThrough = true;
+
       refine('bip');
       expect(queryHook).toHaveBeenCalledTimes(2);
       expect(helper.state.query).toBe('bip');

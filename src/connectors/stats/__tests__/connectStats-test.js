@@ -60,7 +60,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(nbPages).toBe(0);
       expect(page).toBe(0);
       expect(processingTimeMS).toBe(-1);
-      expect(query).toBe(helper.state.query);
+      expect(query).toBe('');
       expect(widgetParams).toEqual({ foo: 'bar' });
     }
 
@@ -72,7 +72,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
           nbHits: 1,
           hitsPerPage: helper.state.hitsPerPage,
           page: helper.state.page,
-          query: helper.state.query,
+          query: 'Apple',
           processingTimeMS: 12,
         },
       ]),
@@ -102,7 +102,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(nbPages).toBe(1);
       expect(page).toBe(helper.state.page);
       expect(processingTimeMS).toBe(12);
-      expect(query).toBe(helper.state.query);
+      expect(query).toBe('Apple');
     }
   });
 });

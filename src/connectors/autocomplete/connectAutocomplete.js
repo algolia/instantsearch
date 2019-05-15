@@ -121,7 +121,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       },
 
       renderWithAllIndices({ isFirstRendering = false } = {}) {
-        const currentRefinement = this.indices[0].helper.state.query;
+        const currentRefinement = this.indices[0].helper.state.query || '';
 
         renderFn(
           {

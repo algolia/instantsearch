@@ -94,8 +94,12 @@ export default function connectSearchBox(renderFn, unmountFn) {
               previousQuery = helper.state.query;
               helper.setQuery(q);
             }
-            if (doSearch && previousQuery !== undefined && previousQuery !== q)
+
+            // @TODO: we remove a condition about `undefined`. Worth double
+            // check that it has the expected bahevior.
+            if (doSearch && previousQuery !== q) {
               helper.search();
+            }
           };
 
           return queryHook
@@ -105,7 +109,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -120,7 +124,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -133,11 +137,12 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
       dispose({ state }) {
         unmountFn();
+
         return state.setQuery('');
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const query = searchParameters.query;
+        const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {
           return uiState;
@@ -150,7 +155,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
+        return searchParameters.setQuery(uiState.query);
       },
     };
   };
