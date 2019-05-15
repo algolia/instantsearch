@@ -34,7 +34,7 @@ describe('VoiceSearchHelper', () => {
       errorCode: undefined,
       isSpeechFinal: false,
       status: 'initial',
-      transcript: undefined,
+      transcript: '',
     });
   });
 

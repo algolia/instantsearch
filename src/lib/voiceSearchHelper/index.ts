@@ -13,7 +13,7 @@ export type VoiceSearchHelperParams = {
 
 export type VoiceListeningState = {
   status: string;
-  transcript?: string;
+  transcript: string;
   isSpeechFinal: boolean;
   errorCode?: string;
 };
@@ -37,7 +37,7 @@ export default function voiceSearchHelper({
     (window as any).SpeechRecognition;
   const getDefaultState = (status: string): VoiceListeningState => ({
     status,
-    transcript: undefined,
+    transcript: '',
     isSpeechFinal: false,
     errorCode: undefined,
   });

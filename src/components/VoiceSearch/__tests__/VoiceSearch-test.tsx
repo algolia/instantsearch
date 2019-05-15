@@ -14,6 +14,7 @@ const defaultProps: VoiceSearchProps = {
   voiceListeningState: {
     status: 'initial',
     isSpeechFinal: false,
+    transcript: '',
   },
   templates: {
     buttonText: 'button',
