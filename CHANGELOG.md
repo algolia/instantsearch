@@ -1,3 +1,17 @@
+# [5.6.0](https://github.com/algolia/react-instantsearch/compare/v5.5.0...v5.6.0) (2019-05-15)
+
+
+### Bug Fixes
+
+* **connectQueryRules:** avoid to throw an error with undefined values ([#2436](https://github.com/algolia/react-instantsearch/issues/2436)) ([1e18287](https://github.com/algolia/react-instantsearch/commit/1e18287))
+
+
+### Features
+
+* **infiniteHits:** add previous button ([#2296](https://github.com/algolia/react-instantsearch/issues/2296)) ([010a69a](https://github.com/algolia/react-instantsearch/commit/010a69a))
+
+
+
 # [5.5.0](https://github.com/algolia/react-instantsearch/compare/v5.4.0...v5.5.0) (2019-04-23)
 
 
