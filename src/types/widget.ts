@@ -32,6 +32,9 @@ interface DisposeOptions {
 
 export type UiState = {
   query?: string;
+  refinementList?: {
+    [attribute: string]: string[];
+  };
   menu?: {
     [attribute: string]: string;
   };
@@ -44,13 +47,17 @@ export type UiState = {
   hierarchicalMenu?: {
     [attribute: string]: string[];
   };
-  refinementList?: {
-    [attribute: string]: string[];
+  /**
+   * The numeric menu as a tuple.
+   *
+   * @example ':5'
+   * @example '5:10'
+   * @example '10:'
+   */
+  numericMenu?: {
+    [attribute: string]: string;
   };
-  numericRefinementList?: {
-    [attribute: string]: number;
-  };
-  numericSelector?: {
+  ratingMenu?: {
     [attribute: string]: number;
   };
   /**
@@ -61,11 +68,17 @@ export type UiState = {
   range?: {
     [attribute: string]: string;
   };
-  starRating?: {
-    [attribute: string]: number;
-  };
   toggle?: {
     [attribute: string]: boolean;
+  };
+  geoSearch?: {
+    /**
+     * The rectangular area in geo coordinates.
+     * The rectangle is defined by two diagonally opposite points, hence by 4 floats separated by commas.
+     *
+     * @example '47.3165,4.9665,47.3424,5.0201'
+     */
+    boundingBox: string;
   };
   sortBy?: string;
   page?: number;

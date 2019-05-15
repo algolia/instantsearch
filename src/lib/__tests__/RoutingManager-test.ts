@@ -3,23 +3,36 @@ import qs from 'qs';
 import instantsearch from '../main';
 import RoutingManager from '../RoutingManager';
 import historyRouter from '../routers/history';
+import { Router, Widget, StateMapping, RouteState } from '../../types';
 
-const runAllMicroTasks = () => new Promise(setImmediate);
+const runAllMicroTasks = (): Promise<any> => new Promise(setImmediate);
 
-const createFakeSearchClient = () => ({
+type FakeSearchClient = {
+  search: (query: string) => Promise<{ results: object[] }>;
+};
+
+const createFakeSearchClient = (): FakeSearchClient => ({
   search: () => Promise.resolve({ results: [{}] }),
 });
 
-const createFakeRouter = (args = {}) => ({
-  onUpdate() {},
-  write() {},
+const createFakeRouter = (args: Partial<Router> = {}): Router => ({
+  onUpdate(..._args) {},
+  write(..._args) {},
   read() {
     return {};
+  },
+  createURL(..._args) {
+    return '';
+  },
+  dispose() {
+    return undefined;
   },
   ...args,
 });
 
-const createFakeStateMapping = (args = {}) => ({
+const createFakeStateMapping = (
+  args: Partial<StateMapping> = {}
+): StateMapping => ({
   stateToRoute(uiState) {
     return uiState;
   },
@@ -29,40 +42,50 @@ const createFakeStateMapping = (args = {}) => ({
   ...args,
 });
 
-const createFakeHistory = ({
-  index = -1,
-  entries = [],
-  listeners = [],
-} = {}) => {
-  const state = {
+type HistoryState = {
+  index: number;
+  entries: object[];
+  listeners: Array<(value: object) => void>;
+};
+
+const createFakeHistory = (
+  {
+    index = -1,
+    entries = [],
+    listeners = [],
+  }: HistoryState = {} as HistoryState
+): any => {
+  const state: HistoryState = {
     index,
     entries,
     listeners,
   };
 
   return {
-    subscribe(listener) {
+    subscribe(listener: () => void) {
       state.listeners.push(listener);
     },
-    push(value) {
+    push(value: object) {
       state.entries.push(value);
       state.index++;
     },
     back() {
       state.index--;
-      listeners.forEach(listener => listener(state.entries[state.index]));
+      listeners.forEach(listener => {
+        listener(state.entries[state.index]);
+      });
     },
   };
 };
 
-const createFakeSearchBox = () => ({
+const createFakeSearchBox = (): Widget => ({
   render({ helper }) {
-    this.refine = value => {
+    (this as any).refine = (value: string) => {
       helper.setQuery(value).search();
     };
   },
   dispose({ state }) {
-    return state.setQuery();
+    return state.setQuery('');
   },
   getWidgetSearchParameters(searchParameters, { uiState }) {
     return searchParameters.setQuery(uiState.query || '');
@@ -75,7 +98,7 @@ const createFakeSearchBox = () => ({
   },
 });
 
-const createFakeHitsPerPage = () => ({
+const createFakeHitsPerPage = (): Widget => ({
   render() {},
   dispose({ state }) {
     return state;
@@ -89,6 +112,14 @@ const createFakeHitsPerPage = () => ({
 });
 
 describe('RoutingManager', () => {
+  const defaultRouter: Router = {
+    onUpdate: (..._args) => {},
+    read: () => ({}),
+    write: () => {},
+    createURL: () => '#',
+    dispose: () => {},
+  };
+
   describe('getAllUiStates', () => {
     test('reads the state of widgets with a getWidgetState implementation', () => {
       const searchClient = createFakeSearchClient();
@@ -114,12 +145,16 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: createFakeStateMapping(),
+        stateMapping: createFakeStateMapping({}),
         router: {
+          ...defaultRouter,
           read: () => actualInitialState,
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const uiStates = router.getAllUiStates({
         searchParameters: search.helper.state,
       });
@@ -154,12 +189,16 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: createFakeStateMapping(),
+        stateMapping: createFakeStateMapping({}),
         router: {
+          ...defaultRouter,
           read: () => actualInitialState,
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const uiStates = router.getAllUiStates({
         searchParameters: search.helper.state,
       });
@@ -189,12 +228,16 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: createFakeStateMapping(),
+        stateMapping: createFakeStateMapping({}),
         router: {
+          ...defaultRouter,
           read: () => actualInitialState,
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const searchParameters = router.getAllSearchParameters({
         currentSearchParameters: search.helper.state,
         uiState: {},
@@ -226,12 +269,16 @@ describe('RoutingManager', () => {
 
       const router = new RoutingManager({
         instantSearchInstance: search,
-        stateMapping: createFakeStateMapping(),
+        stateMapping: createFakeStateMapping({}),
         router: {
-          read: () => {},
+          ...defaultRouter,
+          read: () => ({}),
         },
       });
 
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const searchParameters = router.getAllSearchParameters({
         currentSearchParameters: search.helper.state,
         uiState: {},
@@ -288,7 +335,7 @@ describe('RoutingManager', () => {
     test('should update the searchParameters on router state update', done => {
       const searchClient = createFakeSearchClient();
 
-      let onRouterUpdateCallback;
+      let onRouterUpdateCallback: (args: object) => void;
       const router = createFakeRouter({
         onUpdate: fn => {
           onRouterUpdateCallback = fn;
@@ -359,7 +406,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget = {
+      const widget: Widget = {
         render: jest.fn(),
         getWidgetSearchParameters: jest.fn(),
         getWidgetState(uiState, { searchParameters }) {
@@ -388,7 +435,7 @@ describe('RoutingManager', () => {
 
     test('should keep the UI state up to date on state changes', async () => {
       const searchClient = createFakeSearchClient();
-      const stateMapping = createFakeStateMapping();
+      const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
         write: jest.fn(),
       });
@@ -402,7 +449,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox = createFakeSearchBox();
+      const fakeSearchBox: any = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
       search.addWidget(fakeSearchBox);
@@ -435,7 +482,7 @@ describe('RoutingManager', () => {
 
     test('should keep the UI state up to date on first render', async () => {
       const searchClient = createFakeSearchClient();
-      const stateMapping = createFakeStateMapping();
+      const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
         write: jest.fn(),
       });
@@ -482,7 +529,7 @@ describe('RoutingManager', () => {
 
     test('should keep the UI state up to date on router.update', async () => {
       const searchClient = createFakeSearchClient();
-      const stateMapping = createFakeStateMapping();
+      const stateMapping = createFakeStateMapping({});
       const history = createFakeHistory();
       const router = createFakeRouter({
         onUpdate(fn) {
@@ -504,7 +551,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      const fakeSearchBox = createFakeSearchBox();
+      const fakeSearchBox: any = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
       search.addWidget(fakeSearchBox);
@@ -557,12 +604,12 @@ describe('RoutingManager', () => {
 
       const setWindowTitle = jest.spyOn(window.document, 'title', 'set');
       const searchClient = createFakeSearchClient();
-      const stateMapping = createFakeStateMapping();
+      const stateMapping = createFakeStateMapping({});
       const router = historyRouter({
-        windowTitle(routeState) {
+        windowTitle(routeState: RouteState) {
           return `Searching for "${routeState.query}"`;
         },
-      });
+      } as any);
 
       const search = instantsearch({
         indexName: 'instant_search',
@@ -588,7 +635,11 @@ describe('RoutingManager', () => {
   });
 
   describe('parseURL', () => {
-    const createFakeUrlWithRefinements = ({ length }) =>
+    const createFakeUrlWithRefinements: ({
+      length,
+    }: {
+      length: number;
+    }) => string = ({ length }) =>
       [
         'https://website.com/',
         Array.from(
@@ -603,6 +654,9 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter();
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({
         qsModule: qs,
         location: window.location,
@@ -647,6 +701,9 @@ describe('RoutingManager', () => {
       });
 
       const router = historyRouter();
+      // @ts-ignore: This method is considered private but we still use it
+      // in the test after the TypeScript migration.
+      // In a next refactor, we can consider changing this test implementation.
       const parsedUrl = router.parseURL({
         qsModule: qs,
         location: window.location,

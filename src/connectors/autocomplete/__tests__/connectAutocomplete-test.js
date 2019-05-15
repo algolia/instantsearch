@@ -85,7 +85,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     expect(refine).toBe(widget._refine);
     expect(helper.search).toHaveBeenCalledTimes(1);
-    expect(helper.getState().query).toBe('foo');
+    expect(helper.state.query).toBe('foo');
   });
 
   it('with escapeHTML should escape the hits', () => {

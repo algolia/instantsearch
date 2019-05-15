@@ -162,7 +162,7 @@ class RoutingManager implements Widget {
     }
   }
 
-  public dispose(): void {
+  public dispose({ helper, state }): void {
     if (this.renderURLFromState) {
       this.instantSearchInstance.helper!.removeListener(
         'change',
@@ -170,7 +170,9 @@ class RoutingManager implements Widget {
       );
     }
 
-    this.router.dispose();
+    if (this.router.dispose) {
+      this.router.dispose({ helper, state });
+    }
   }
 
   public createURL(state: SearchParameters): string {

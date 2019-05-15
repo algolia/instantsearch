@@ -92,13 +92,12 @@ export type NumericRefinement = {
 
 export type Refinement = FacetRefinement | NumericRefinement;
 
-export type Router<TRouteState = UiState> = {
+export interface Router<TRouteState = UiState> extends Widget {
   onUpdate(callback: (route: TRouteState) => void): void;
   read(): UiState;
   write(route: TRouteState): void;
   createURL(state: TRouteState): string;
-  dispose(): Widget['dispose'];
-};
+}
 
 export type StateMapping<TRouteState = UiState> = {
   stateToRoute(state: UiState): TRouteState;
