@@ -187,7 +187,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         );
 
       const canShowLess =
-        isShowingMore && lastResultsFromMainSearch.length > items.length;
+        isShowingMore && lastResultsFromMainSearch.length > limit;
       const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
 
       const canToggleShowMore = canShowLess || canShowMore;
