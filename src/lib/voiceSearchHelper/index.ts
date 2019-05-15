@@ -13,8 +13,8 @@ export type VoiceSearchHelperParams = {
 
 export type VoiceListeningState = {
   status: string;
-  transcript?: string;
-  isSpeechFinal?: boolean;
+  transcript: string;
+  isSpeechFinal: boolean;
   errorCode?: string;
 };
 
@@ -37,8 +37,8 @@ export default function voiceSearchHelper({
     (window as any).SpeechRecognition;
   const getDefaultState = (status: string): VoiceListeningState => ({
     status,
-    transcript: undefined,
-    isSpeechFinal: undefined,
+    transcript: '',
+    isSpeechFinal: false,
     errorCode: undefined,
   });
   let state: VoiceListeningState = getDefaultState(STATUS_INITIAL);
@@ -89,9 +89,10 @@ export default function voiceSearchHelper({
       setState({
         status: STATUS_RECOGNIZING,
         transcript:
-          event.results[0] &&
-          event.results[0][0] &&
-          event.results[0][0].transcript,
+          (event.results[0] &&
+            event.results[0][0] &&
+            event.results[0][0].transcript) ||
+          '',
         isSpeechFinal: event.results[0] && event.results[0].isFinal,
       });
       if (searchAsYouSpeak && state.transcript) {

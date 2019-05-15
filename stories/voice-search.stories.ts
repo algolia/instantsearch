@@ -171,7 +171,7 @@ storiesOf('VoiceSearch', module)
             status({ isListening, transcript }) {
               return `
                 <div class="layer listening-${isListening}">
-                  <span>${transcript ? transcript : ''}</span>
+                  <span>${transcript}</span>
                 </div>
               `;
             },
