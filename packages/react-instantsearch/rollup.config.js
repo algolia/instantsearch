@@ -66,11 +66,11 @@ const createConfiguration = ({ input, name, minify = false } = {}) => ({
 export default [
   // Core
   createConfiguration({
-    input: 'index.umd.js',
+    input: 'index.js',
     name: 'Core',
   }),
   createConfiguration({
-    input: 'index.umd.js',
+    input: 'index.js',
     name: 'Core',
     minify: true,
   }),
