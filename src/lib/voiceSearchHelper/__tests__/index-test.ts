@@ -32,7 +32,7 @@ describe('VoiceSearchHelper', () => {
     const voiceSearchHelper = getVoiceSearchHelper();
     expect(voiceSearchHelper.getState()).toEqual({
       errorCode: undefined,
-      isSpeechFinal: undefined,
+      isSpeechFinal: false,
       status: 'initial',
       transcript: undefined,
     });

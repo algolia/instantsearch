@@ -14,7 +14,7 @@ export type VoiceSearchHelperParams = {
 export type VoiceListeningState = {
   status: string;
   transcript?: string;
-  isSpeechFinal?: boolean;
+  isSpeechFinal: boolean;
   errorCode?: string;
 };
 
@@ -38,7 +38,7 @@ export default function voiceSearchHelper({
   const getDefaultState = (status: string): VoiceListeningState => ({
     status,
     transcript: undefined,
-    isSpeechFinal: undefined,
+    isSpeechFinal: false,
     errorCode: undefined,
   });
   let state: VoiceListeningState = getDefaultState(STATUS_INITIAL);

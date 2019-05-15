@@ -21,7 +21,7 @@ exports[`voiceSearch() Rendering renders during init() 1`] = `
   voiceListeningState={
     Object {
       "errorCode": undefined,
-      "isSpeechFinal": undefined,
+      "isSpeechFinal": false,
       "status": "initial",
       "transcript": undefined,
     }
@@ -50,7 +50,7 @@ exports[`voiceSearch() Rendering renders during render() 1`] = `
   voiceListeningState={
     Object {
       "errorCode": undefined,
-      "isSpeechFinal": undefined,
+      "isSpeechFinal": false,
       "status": "initial",
       "transcript": undefined,
     }
@@ -79,7 +79,7 @@ exports[`voiceSearch() Rendering renders during render() 2`] = `
   voiceListeningState={
     Object {
       "errorCode": undefined,
-      "isSpeechFinal": undefined,
+      "isSpeechFinal": false,
       "status": "initial",
       "transcript": undefined,
     }

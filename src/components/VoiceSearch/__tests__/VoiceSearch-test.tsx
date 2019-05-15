@@ -13,6 +13,7 @@ const defaultProps: VoiceSearchProps = {
   toggleListening: () => {},
   voiceListeningState: {
     status: 'initial',
+    isSpeechFinal: false,
   },
   templates: {
     buttonText: 'button',
