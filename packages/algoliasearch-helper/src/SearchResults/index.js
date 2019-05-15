@@ -296,6 +296,9 @@ function SearchResults(state, results) {
   this.automaticRadius = mainSubResponse.automaticRadius;
   /**
    * String identifying the server used to serve this request.
+   *
+   * getRankingInfo needs to be set to `true` for this to be returned
+   *
    * @member {string}
    * @example "c7-use-2.algolia.net",
    */
