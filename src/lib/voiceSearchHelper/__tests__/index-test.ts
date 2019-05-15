@@ -1,18 +1,4 @@
-import createVoiceSearchHelper, {
-  VoiceSearchHelper,
-  VoiceSearchHelperParams,
-} from '..';
-
-const getVoiceSearchHelper = (
-  opts?: VoiceSearchHelperParams
-): VoiceSearchHelper =>
-  createVoiceSearchHelper(
-    opts || {
-      searchAsYouSpeak: false,
-      onQueryChange: () => {},
-      onStateChange: () => {},
-    }
-  );
+import createVoiceSearchHelper from '..';
 
 type DummySpeechRecognition = () => void;
 declare global {
@@ -29,7 +15,11 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('has initial state correctly', () => {
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.getState()).toEqual({
       errorCode: undefined,
       isSpeechFinal: false,
@@ -39,24 +29,40 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('is not supported', () => {
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isBrowserSupported()).toBe(false);
   });
 
   it('is not listening', () => {
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isListening()).toBe(false);
   });
 
   it('is supported with webkitSpeechRecognition', () => {
     window.webkitSpeechRecognition = () => {};
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isBrowserSupported()).toBe(true);
   });
 
   it('is supported with SpeechRecognition', () => {
     window.SpeechRecognition = () => {};
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isBrowserSupported()).toBe(true);
   });
 
@@ -70,7 +76,7 @@ describe('VoiceSearchHelper', () => {
     }));
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
-    const voiceSearchHelper = getVoiceSearchHelper({
+    const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: false,
       onQueryChange,
       onStateChange,
@@ -113,7 +119,7 @@ describe('VoiceSearchHelper', () => {
     }));
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
-    const voiceSearchHelper = getVoiceSearchHelper({
+    const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: true,
       onQueryChange,
       onStateChange,
@@ -156,7 +162,7 @@ describe('VoiceSearchHelper', () => {
     }));
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
-    const voiceSearchHelper = getVoiceSearchHelper({
+    const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: true,
       onQueryChange,
       onStateChange,
