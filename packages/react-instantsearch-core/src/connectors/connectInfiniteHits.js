@@ -15,19 +15,18 @@ function getId() {
 function getCurrentRefinement(props, searchState, context) {
   const id = getId();
   const page = 1;
-  return getCurrentRefinementValue(
+  const currentRefinement = getCurrentRefinementValue(
     props,
     searchState,
     context,
     id,
-    page,
-    currentRefinement => {
-      if (typeof currentRefinement === 'string') {
-        currentRefinement = parseInt(currentRefinement, 10);
-      }
-      return currentRefinement;
-    }
+    page
   );
+
+  if (typeof currentRefinement === 'string') {
+    return parseInt(currentRefinement, 10);
+  }
+  return currentRefinement;
 }
 
 /**

@@ -35,8 +35,7 @@ export default createConnector({
       searchState,
       this.context,
       id,
-      null,
-      currentRefinement => currentRefinement
+      null
     );
 
     if (!this._prevSearchState) {

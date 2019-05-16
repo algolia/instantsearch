@@ -16,19 +16,18 @@ function getId(props) {
 const namespace = 'toggle';
 
 function getCurrentRefinement(props, searchState, context) {
-  return getCurrentRefinementValue(
+  const currentRefinement = getCurrentRefinementValue(
     props,
     searchState,
     context,
     `${namespace}.${getId(props)}`,
-    false,
-    currentRefinement => {
-      if (currentRefinement) {
-        return currentRefinement;
-      }
-      return false;
-    }
+    false
   );
+
+  if (currentRefinement) {
+    return currentRefinement;
+  }
+  return false;
 }
 
 function refine(props, searchState, nextRefinement, context) {
