@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-const createFakeSpeechRecognition = () => {
+const createFakeSpeechRecognition = (): jest.Mock => {
   const listeners: any = {};
   const mock = jest.fn().mockImplementation(() => ({
     start() {},
