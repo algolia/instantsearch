@@ -8,6 +8,18 @@ declare global {
   }
 }
 
+const createFakeSpeechRecognition = () => {
+  const listeners: any = {};
+  const mock = jest.fn().mockImplementation(() => ({
+    start() {},
+    addEventListener(eventName: string, callback: () => void) {
+      listeners[eventName] = callback;
+    },
+  }));
+  (mock as any).listeners = listeners;
+  return mock;
+};
+
 describe('VoiceSearchHelper', () => {
   beforeEach(() => {
     delete window.webkitSpeechRecognition;
@@ -57,7 +69,7 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('is supported with SpeechRecognition', () => {
-    window.SpeechRecognition = () => {};
+    window.SpeechRecognition = createFakeSpeechRecognition();
     const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: false,
       onQueryChange: () => {},
@@ -67,13 +79,8 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:false)', () => {
-    const listeners: any = {};
-    window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {},
-      addEventListener(eventName: string, callback: () => void) {
-        listeners[eventName] = callback;
-      },
-    }));
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const { listeners } = window.SpeechRecognition as any;
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
     const voiceSearchHelper = createVoiceSearchHelper({
@@ -110,13 +117,8 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:true)', () => {
-    const listeners: any = {};
-    window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {},
-      addEventListener(eventName: string, callback: () => void) {
-        listeners[eventName] = callback;
-      },
-    }));
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const { listeners } = window.SpeechRecognition as any;
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
     const voiceSearchHelper = createVoiceSearchHelper({
@@ -153,13 +155,8 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('works with onerror', () => {
-    const listeners: any = {};
-    window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {},
-      addEventListener(eventName: string, callback: () => void) {
-        listeners[eventName] = callback;
-      },
-    }));
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const { listeners } = window.SpeechRecognition as any;
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
     const voiceSearchHelper = createVoiceSearchHelper({
