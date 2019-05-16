@@ -52,41 +52,13 @@ storiesOf('ClearRefinements', module)
     'with refinements and query',
     withHits(
       ({ search, container, instantsearch }) => {
-        const clearRefinementsContainer = document.createElement('div');
-        container.appendChild(clearRefinementsContainer);
-        const refinementListContainer = document.createElement('div');
-        container.appendChild(refinementListContainer);
-        const numericMenuContainer = document.createElement('div');
-        container.appendChild(numericMenuContainer);
-
         search.addWidget(
           instantsearch.widgets.clearRefinements({
-            container: clearRefinementsContainer,
+            container,
             excludedAttributes: [],
             templates: {
               resetLabel: 'Clear refinements and query',
             },
-          })
-        );
-
-        search.addWidget(
-          instantsearch.widgets.refinementList({
-            container: refinementListContainer,
-            attribute: 'brand',
-          })
-        );
-
-        search.addWidget(
-          instantsearch.widgets.numericMenu({
-            container: numericMenuContainer,
-            attribute: 'price',
-            items: [
-              { label: 'All' },
-              { end: 10, label: '≤ $10' },
-              { start: 10, end: 100, label: '$10–$100' },
-              { start: 100, end: 500, label: '$100–$500' },
-              { start: 500, label: '≥ $500' },
-            ],
           })
         );
       },
@@ -114,10 +86,6 @@ storiesOf('ClearRefinements', module)
       ({ search, container, instantsearch }) => {
         const clearRefinementsContainer = document.createElement('div');
         container.appendChild(clearRefinementsContainer);
-        const refinementListContainer = document.createElement('div');
-        container.appendChild(refinementListContainer);
-        const numericMenuContainer = document.createElement('div');
-        container.appendChild(numericMenuContainer);
 
         search.addWidget(
           instantsearch.widgets.clearRefinements({
@@ -125,27 +93,6 @@ storiesOf('ClearRefinements', module)
             excludedAttributes: [],
             transformItems: items =>
               items.filter(attribute => attribute !== 'brand'),
-          })
-        );
-
-        search.addWidget(
-          instantsearch.widgets.refinementList({
-            container: refinementListContainer,
-            attribute: 'brand',
-          })
-        );
-
-        search.addWidget(
-          instantsearch.widgets.numericMenu({
-            container: numericMenuContainer,
-            attribute: 'price',
-            items: [
-              { label: 'All' },
-              { end: 10, label: '≤ $10' },
-              { start: 10, end: 100, label: '$10–$100' },
-              { start: 100, end: 500, label: '$100–$500' },
-              { start: 500, label: '≥ $500' },
-            ],
           })
         );
       },
