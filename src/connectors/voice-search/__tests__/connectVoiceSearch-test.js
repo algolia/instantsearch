@@ -8,7 +8,7 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
       isBrowserSupported: () => true,
       isListening: () => false,
       toggleListening: () => {},
-      removeEventListeners: jest.fn(),
+      dispose: jest.fn(),
       // ⬇️ for test
       changeState: () => onStateChange(),
       changeQuery: query => onQueryChange(query),
@@ -78,20 +78,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       );
     });
 
-    it('calls unmount on dispose', () => {
+    it('calls unmount on disposal', () => {
       const { unmountFn, widget, helper } = getDefaultSetup();
       widget.init({ helper });
       widget.dispose({ helper, state: helper.state });
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
-    it('remove event listeners on dispose', () => {
+    it('removes event listeners on disposal', () => {
       const { widget, helper } = getDefaultSetup();
       widget.init({ helper });
       widget.dispose({ helper, state: helper.state });
-      expect(
-        widget._voiceSearchHelper.removeEventListeners
-      ).toHaveBeenCalledTimes(1);
+      expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(1);
     });
   });
 

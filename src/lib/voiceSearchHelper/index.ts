@@ -23,7 +23,7 @@ export type VoiceSearchHelper = {
   isBrowserSupported: () => boolean;
   isListening: () => boolean;
   toggleListening: () => void;
-  removeEventListeners: () => void;
+  dispose: () => void;
 };
 
 export type ToggleListening = () => void;
@@ -119,14 +119,17 @@ export default function voiceSearchHelper({
     recognition.start();
   };
 
-  const removeEventListeners = (): void => {
+  const dispose = (): void => {
     if (!recognition) {
       return;
     }
+    recognition.stop();
     recognition.removeEventListener('start', onStart);
     recognition.removeEventListener('error', onError);
     recognition.removeEventListener('result', onResult);
     recognition.removeEventListener('end', onEnd);
+    recognition = undefined;
+    resetState();
   };
 
   const toggleListening = (): void => {
@@ -145,6 +148,6 @@ export default function voiceSearchHelper({
     isBrowserSupported,
     isListening,
     toggleListening,
-    removeEventListeners,
+    dispose,
   };
 }

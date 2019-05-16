@@ -12,16 +12,18 @@ const createFakeSpeechRecognition = () => {
   const listeners: any = {};
   const mock = jest.fn().mockImplementation(() => ({
     start() {},
+    stop() {},
     addEventListener(eventName: string, callback: () => void) {
       listeners[eventName] = callback;
     },
+    removeEventListener() {},
   }));
   (mock as any).listeners = listeners;
   return mock;
 };
 
 describe('VoiceSearchHelper', () => {
-  beforeEach(() => {
+  afterEach(() => {
     delete window.webkitSpeechRecognition;
     delete window.SpeechRecognition;
   });
@@ -173,5 +175,17 @@ describe('VoiceSearchHelper', () => {
     expect(voiceSearchHelper.getState().errorCode).toEqual('not-allowed');
     listeners.end();
     expect(onQueryChange).toHaveBeenCalledTimes(0);
+  });
+
+  it('stops listening on disposal', () => {
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
+    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.dispose();
+    expect(voiceSearchHelper.isListening()).toBe(false);
   });
 });
