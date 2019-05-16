@@ -121,12 +121,7 @@ storiesOf('Panel', module)
       search.addWidget(
         brandList({
           container,
-          attribute: 'price',
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
+          attribute: 'brand',
         })
       );
     })
