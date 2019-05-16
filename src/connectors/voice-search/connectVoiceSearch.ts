@@ -4,7 +4,7 @@ import {
   noop,
 } from '../../lib/utils';
 import { Renderer, RenderOptions, WidgetFactory } from '../../types';
-import voiceSearchHelper, {
+import createVoiceSearchHelper, {
   VoiceListeningState,
   ToggleListening,
 } from '../../lib/voiceSearchHelper';
@@ -91,7 +91,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
           };
           return setQueryAndSearch;
         })();
-        (this as any)._voiceSearchHelper = voiceSearchHelper({
+        (this as any)._voiceSearchHelper = createVoiceSearchHelper({
           searchAsYouSpeak,
           onQueryChange: query => (this as any)._refine(query),
           onStateChange: () => {

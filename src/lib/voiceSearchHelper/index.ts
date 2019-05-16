@@ -28,7 +28,7 @@ export type VoiceSearchHelper = {
 
 export type ToggleListening = () => void;
 
-export default function voiceSearchHelper({
+export default function createVoiceSearchHelper({
   searchAsYouSpeak,
   onQueryChange,
   onStateChange,
