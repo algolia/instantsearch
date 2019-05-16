@@ -35,21 +35,7 @@ storiesOf('ClearRefinements', module)
     })
   )
   .add(
-    'with query only (via excludedAttributes)',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.clearRefinements({
-          container,
-          excludedAttributes: [],
-          templates: {
-            resetLabel: 'Clear refinements and query',
-          },
-        })
-      );
-    })
-  )
-  .add(
-    'with refinements and query',
+    'with refinements and query (via excludedAttributes)',
     withHits(
       ({ search, container, instantsearch }) => {
         search.addWidget(
@@ -69,16 +55,6 @@ storiesOf('ClearRefinements', module)
         },
       }
     )
-  )
-  .add(
-    'with nothing to clear',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.clearRefinements({
-          container,
-        })
-      );
-    })
   )
   .add(
     'with brands excluded (via transformItems)',
