@@ -78,14 +78,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       );
     });
 
-    it('calls unmount on disposal', () => {
+    it('calls unmount on `dispose`', () => {
       const { unmountFn, widget, helper } = getDefaultSetup();
       widget.init({ helper });
       widget.dispose({ helper, state: helper.state });
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
-    it('removes event listeners on disposal', () => {
+    it('removes event listeners on `dispose`', () => {
       const { widget, helper } = getDefaultSetup();
       widget.init({ helper });
       widget.dispose({ helper, state: helper.state });

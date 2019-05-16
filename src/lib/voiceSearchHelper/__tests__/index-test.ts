@@ -183,7 +183,7 @@ describe('VoiceSearchHelper', () => {
     expect(onQueryChange).toHaveBeenCalledTimes(0);
   });
 
-  it('stops listening on disposal', () => {
+  it('stops listening on `dispose`', () => {
     window.SpeechRecognition = createFakeSpeechRecognition();
     const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: false,
