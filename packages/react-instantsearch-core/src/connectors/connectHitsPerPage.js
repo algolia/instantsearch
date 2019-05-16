@@ -12,19 +12,18 @@ function getId() {
 
 function getCurrentRefinement(props, searchState, context) {
   const id = getId();
-  return getCurrentRefinementValue(
+  const currentRefinement = getCurrentRefinementValue(
     props,
     searchState,
     context,
     id,
-    null,
-    currentRefinement => {
-      if (typeof currentRefinement === 'string') {
-        return parseInt(currentRefinement, 10);
-      }
-      return currentRefinement;
-    }
+    null
   );
+
+  if (typeof currentRefinement === 'string') {
+    return parseInt(currentRefinement, 10);
+  }
+  return currentRefinement;
 }
 
 /**

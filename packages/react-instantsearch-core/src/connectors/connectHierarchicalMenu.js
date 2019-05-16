@@ -14,19 +14,18 @@ export const getId = props => props.attributes[0];
 const namespace = 'hierarchicalMenu';
 
 function getCurrentRefinement(props, searchState, context) {
-  return getCurrentRefinementValue(
+  const currentRefinement = getCurrentRefinementValue(
     props,
     searchState,
     context,
     `${namespace}.${getId(props)}`,
-    null,
-    currentRefinement => {
-      if (currentRefinement === '') {
-        return null;
-      }
-      return currentRefinement;
-    }
+    null
   );
+
+  if (currentRefinement === '') {
+    return null;
+  }
+  return currentRefinement;
 }
 
 function getValue(path, props, searchState, context) {

@@ -109,48 +109,42 @@ describe('utility method for manipulating the search state', () => {
         },
       };
 
-      expect.assertions(5); // async assertions
-
-      let expectedRefinement = value => expect(value).toEqual('refinement');
-
-      getCurrentRefinementValue(
+      let value = getCurrentRefinementValue(
         {},
         searchState,
         context,
         'refinement',
-        null,
-        expectedRefinement
+        null
       );
 
-      expectedRefinement = value => expect(value).toEqual('another');
+      expect(value).toEqual('refinement');
 
-      getCurrentRefinementValue(
+      value = getCurrentRefinementValue(
         {},
         searchState,
         context,
         'namespace.another',
-        null,
-        expectedRefinement
+        null
       );
 
-      expectedRefinement = value => expect(value).toEqual('nested.another');
+      expect(value).toEqual('another');
 
-      getCurrentRefinementValue(
+      value = getCurrentRefinementValue(
         {},
         searchState,
         context,
         'namespace.nested.another',
-        null,
-        expectedRefinement
+        null
       );
 
-      let value = getCurrentRefinementValue(
+      expect(value).toEqual('nested.another');
+
+      value = getCurrentRefinementValue(
         {},
         {},
         context,
         'refinement',
-        'defaultValue',
-        () => {}
+        'defaultValue'
       );
 
       expect(value).toEqual('defaultValue');
@@ -160,8 +154,7 @@ describe('utility method for manipulating the search state', () => {
         {},
         context,
         'refinement',
-        null,
-        () => {}
+        null
       );
 
       expect(value).toEqual('defaultRefinement');
@@ -235,6 +228,7 @@ describe('utility method for manipulating the search state', () => {
       expect(results).toEqual({ hits: ['some'] });
     });
   });
+
   describe('when there are multiple index', () => {
     let context = { multiIndexContext: { targetedIndex: 'first' } };
     it('refine with no namespace', () => {
@@ -346,59 +340,52 @@ describe('utility method for manipulating the search state', () => {
         },
       };
 
-      expect.assertions(7); // async assertions
-
-      let expectedRefinement = value => expect(value).toEqual('refinement');
-
-      getCurrentRefinementValue(
+      let value = getCurrentRefinementValue(
         {},
         searchState,
         context,
         'refinement',
-        null,
-        expectedRefinement
+        null
       );
 
-      expectedRefinement = value => expect(value).toEqual('refinement');
+      expect(value).toEqual('refinement');
 
-      getCurrentRefinementValue(
+      value = getCurrentRefinementValue(
         {},
         searchState,
         context,
         'namespace.refinement',
-        null,
-        expectedRefinement
+        null
       );
 
-      expectedRefinement = value => expect(value).toEqual('another');
+      expect(value).toEqual('refinement');
 
-      getCurrentRefinementValue(
+      value = getCurrentRefinementValue(
         {},
         searchState,
         context,
         'namespace.another',
-        null,
-        expectedRefinement
+        null
       );
 
-      expectedRefinement = value => expect(value).toEqual('nested.another');
+      expect(value).toEqual('another');
 
-      getCurrentRefinementValue(
+      value = getCurrentRefinementValue(
         {},
         searchState,
         context,
         'namespace.nested.another',
-        null,
-        expectedRefinement
+        null
       );
 
-      let value = getCurrentRefinementValue(
+      expect(value).toEqual('nested.another');
+
+      value = getCurrentRefinementValue(
         {},
         {},
         context,
         'refinement',
-        'defaultValue',
-        () => {}
+        'defaultValue'
       );
 
       expect(value).toEqual('defaultValue');
@@ -408,8 +395,7 @@ describe('utility method for manipulating the search state', () => {
         searchState,
         context,
         'anotherNamespace.refinement.top',
-        'defaultValue',
-        () => {}
+        'defaultValue'
       );
 
       expect(value).toEqual('defaultValue');
@@ -419,11 +405,30 @@ describe('utility method for manipulating the search state', () => {
         {},
         context,
         'refinement',
-        null,
-        () => {}
+        null
       );
 
       expect(value).toEqual('defaultRefinement');
+    });
+
+    it('retrieve the default refinement value there is no current refinement', () => {
+      const searchState = {
+        page: 1,
+        refinement: 'refinement',
+        indices: {},
+      };
+
+      const defaultRefinement = null;
+
+      const value = getCurrentRefinementValue(
+        {},
+        searchState,
+        context,
+        'refinement',
+        defaultRefinement
+      );
+
+      expect(value).toBe(defaultRefinement);
     });
 
     it('clean up values', () => {

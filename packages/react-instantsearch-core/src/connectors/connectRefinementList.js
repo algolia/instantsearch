@@ -15,25 +15,23 @@ function getId(props) {
 }
 
 function getCurrentRefinement(props, searchState, context) {
-  return getCurrentRefinementValue(
+  const currentRefinement = getCurrentRefinementValue(
     props,
     searchState,
     context,
     `${namespace}.${getId(props)}`,
-    [],
-    currentRefinement => {
-      if (typeof currentRefinement === 'string') {
-        // All items were unselected
-        if (currentRefinement === '') {
-          return [];
-        }
-
-        // Only one item was in the searchState but we know it should be an array
-        return [currentRefinement];
-      }
-      return currentRefinement;
-    }
+    []
   );
+
+  if (typeof currentRefinement !== 'string') {
+    return currentRefinement;
+  }
+
+  if (currentRefinement) {
+    return [currentRefinement];
+  }
+
+  return [];
 }
 
 function getValue(name, props, searchState, context) {
