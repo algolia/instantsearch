@@ -92,7 +92,7 @@ function bumpVersion(newVersion, cb) {
   var newContent = "'use strict';\n\nmodule.exports = '" + newVersion + "';\n";
   fs.writeFileSync(versionFile, newContent);
 
-  shell.echo('..bower.json and package.json');
+  shell.echo('..package.json');
 
   mversion.update(newVersion, (err) => {
     if (err) {

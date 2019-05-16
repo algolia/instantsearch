@@ -61,7 +61,7 @@ in the application.
 
 ## Integrate
 
-The helper is available on different platforms. You can use it as a script, via bower or NPM. As the helper extends the client, we need to import both of them.
+The helper is available on different platforms. You can use it as a script or NPM. As the helper extends the client, we need to import both of them.
 
 ### Script tag
 

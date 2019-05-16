@@ -37,7 +37,6 @@ track of the search parameters and provides a higher level API.
     - [Add the helper in your project](#add-the-helper-in-your-project)
     - [Regular `<script>` tag](#regular-script-tag)
     - [With NPM](#with-npm)
-    - [With bower](#with-bower)
     - [Init the helper](#init-the-helper)
     - [Helper lifecycle](#helper-lifecycle)
     - [Objects](#objects)
@@ -143,10 +142,6 @@ Use our [jsDelivr](http://www.jsdelivr.com/) build:
 ### With NPM
 
 `npm install algoliasearch-helper`
-
-### With bower
-
-`bower install algoliasearch-helper`
 
 ### Init the helper
 
