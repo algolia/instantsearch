@@ -13,8 +13,8 @@ export type VoiceSearchHelperParams = {
 
 export type VoiceListeningState = {
   status: string;
-  transcript?: string;
-  isSpeechFinal?: boolean;
+  transcript: string;
+  isSpeechFinal: boolean;
   errorCode?: string;
 };
 
@@ -23,11 +23,12 @@ export type VoiceSearchHelper = {
   isBrowserSupported: () => boolean;
   isListening: () => boolean;
   toggleListening: () => void;
+  dispose: () => void;
 };
 
 export type ToggleListening = () => void;
 
-export default function voiceSearchHelper({
+export default function createVoiceSearchHelper({
   searchAsYouSpeak,
   onQueryChange,
   onStateChange,
@@ -37,8 +38,8 @@ export default function voiceSearchHelper({
     (window as any).SpeechRecognition;
   const getDefaultState = (status: string): VoiceListeningState => ({
     status,
-    transcript: undefined,
-    isSpeechFinal: undefined,
+    transcript: '',
+    isSpeechFinal: false,
     errorCode: undefined,
   });
   let state: VoiceListeningState = getDefaultState(STATUS_INITIAL);
@@ -62,6 +63,40 @@ export default function voiceSearchHelper({
     setState(getDefaultState(status));
   };
 
+  const onStart = (): void => {
+    setState({
+      status: STATUS_WAITING,
+    });
+  };
+
+  const onError = (event: SpeechRecognitionError): void => {
+    setState({ status: STATUS_ERROR, errorCode: event.error });
+  };
+
+  const onResult = (event: SpeechRecognitionEvent): void => {
+    setState({
+      status: STATUS_RECOGNIZING,
+      transcript:
+        (event.results[0] &&
+          event.results[0][0] &&
+          event.results[0][0].transcript) ||
+        '',
+      isSpeechFinal: event.results[0] && event.results[0].isFinal,
+    });
+    if (searchAsYouSpeak && state.transcript) {
+      onQueryChange(state.transcript);
+    }
+  };
+
+  const onEnd = (): void => {
+    if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
+      onQueryChange(state.transcript);
+    }
+    if (state.status !== STATUS_ERROR) {
+      setState({ status: STATUS_FINISHED });
+    }
+  };
+
   const stop = (): void => {
     if (recognition) {
       recognition.stop();
@@ -77,37 +112,23 @@ export default function voiceSearchHelper({
     }
     resetState(STATUS_ASKING_PERMISSION);
     recognition.interimResults = true;
-    recognition.onstart = () => {
-      setState({
-        status: STATUS_WAITING,
-      });
-    };
-    recognition.onerror = (event: SpeechRecognitionError) => {
-      setState({ status: STATUS_ERROR, errorCode: event.error });
-    };
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
-      setState({
-        status: STATUS_RECOGNIZING,
-        transcript:
-          event.results[0] &&
-          event.results[0][0] &&
-          event.results[0][0].transcript,
-        isSpeechFinal: event.results[0] && event.results[0].isFinal,
-      });
-      if (searchAsYouSpeak && state.transcript) {
-        onQueryChange(state.transcript);
-      }
-    };
-    recognition.onend = () => {
-      if (!state.errorCode && state.transcript && !searchAsYouSpeak) {
-        onQueryChange(state.transcript);
-      }
-      if (state.status !== STATUS_ERROR) {
-        setState({ status: STATUS_FINISHED });
-      }
-    };
-
+    recognition.addEventListener('start', onStart);
+    recognition.addEventListener('error', onError);
+    recognition.addEventListener('result', onResult);
+    recognition.addEventListener('end', onEnd);
     recognition.start();
+  };
+
+  const dispose = (): void => {
+    if (!recognition) {
+      return;
+    }
+    recognition.stop();
+    recognition.removeEventListener('start', onStart);
+    recognition.removeEventListener('error', onError);
+    recognition.removeEventListener('result', onResult);
+    recognition.removeEventListener('end', onEnd);
+    recognition = undefined;
   };
 
   const toggleListening = (): void => {
@@ -126,5 +147,6 @@ export default function voiceSearchHelper({
     isBrowserSupported,
     isListening,
     toggleListening,
+    dispose,
   };
 }
