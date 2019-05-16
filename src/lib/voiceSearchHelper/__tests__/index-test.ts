@@ -8,11 +8,14 @@ declare global {
   }
 }
 
+const start = jest.fn();
+const stop = jest.fn();
+
 const createFakeSpeechRecognition = (): jest.Mock => {
   const listeners: any = {};
   const mock = jest.fn().mockImplementation(() => ({
-    start() {},
-    stop() {},
+    start,
+    stop,
     addEventListener(eventName: string, callback: () => void) {
       listeners[eventName] = callback;
     },
@@ -189,6 +192,6 @@ describe('VoiceSearchHelper', () => {
     });
     voiceSearchHelper.toggleListening();
     voiceSearchHelper.dispose();
-    expect(voiceSearchHelper.isListening()).toBe(false);
+    expect(stop).toHaveBeenCalledTimes(1);
   });
 });

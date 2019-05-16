@@ -129,7 +129,6 @@ export default function voiceSearchHelper({
     recognition.removeEventListener('result', onResult);
     recognition.removeEventListener('end', onEnd);
     recognition = undefined;
-    resetState();
   };
 
   const toggleListening = (): void => {
