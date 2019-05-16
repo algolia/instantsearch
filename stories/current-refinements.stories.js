@@ -56,7 +56,7 @@ storiesOf('CurrentRefinements', module)
       search.addWidget(
         instantsearch.widgets.configure({
           hierarchicalFacetsRefinements: {
-            brand: ['Samsung'],
+            categories: ['Audio'],
           },
         })
       );
@@ -64,7 +64,7 @@ storiesOf('CurrentRefinements', module)
       search.addWidget(
         instantsearch.widgets.menu({
           container: menuContainer,
-          attribute: 'brand',
+          attribute: 'categories',
         })
       );
 
