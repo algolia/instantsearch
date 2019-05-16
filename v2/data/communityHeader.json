@@ -95,11 +95,8 @@
       {
         "name": "Use your own backend",
         "url": "guides/custom-backend.html"
-      },
-      {
-        "name": "Prepare for v3",
-        "url": "guides/prepare-for-v3.html"
       }
+
     ]
   },
   {
@@ -155,10 +152,6 @@
   {
     "name": "Use your own backend",
     "url": "guides/custom-backend.html"
-  },
-  {
-    "name": "Prepare for v3",
-    "url": "guides/prepare-for-v3.html"
   },
   {
     "name": "instantsearch()",
