@@ -85,7 +85,7 @@ describe('VoiceSearchHelper', () => {
     voiceSearchHelper.toggleListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
-    listeners.start();
+    listeners.start(); // This way, we're simulating `start` event of the SpeechRecognition.
     expect(voiceSearchHelper.getState().status).toEqual('waiting');
     listeners.result({
       results: [
