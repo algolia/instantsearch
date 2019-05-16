@@ -7,10 +7,6 @@ storiesOf('CurrentRefinements', module)
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
       container.appendChild(currentRefinementsContainer);
-      const refinementListContainer = document.createElement('div');
-      container.appendChild(refinementListContainer);
-      const numericMenuContainer = document.createElement('div');
-      container.appendChild(numericMenuContainer);
 
       search.addWidget(
         instantsearch.widgets.configure({
@@ -25,27 +21,6 @@ storiesOf('CurrentRefinements', module)
           container: currentRefinementsContainer,
         })
       );
-
-      search.addWidget(
-        instantsearch.widgets.refinementList({
-          container: refinementListContainer,
-          attribute: 'brand',
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.numericMenu({
-          container: numericMenuContainer,
-          attribute: 'price',
-          items: [
-            { label: 'All' },
-            { end: 10, label: '≤ $10' },
-            { start: 10, end: 100, label: '$10–$100' },
-            { start: 100, end: 500, label: '$100–$500' },
-            { start: 500, label: '≥ $500' },
-          ],
-        })
-      );
     })
   )
   .add(
@@ -53,8 +28,6 @@ storiesOf('CurrentRefinements', module)
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
       container.appendChild(currentRefinementsContainer);
-      const refinementListContainer = document.createElement('div');
-      container.appendChild(refinementListContainer);
 
       search.addWidget(
         instantsearch.widgets.configure({
@@ -62,13 +35,6 @@ storiesOf('CurrentRefinements', module)
             brand: ['Google', 'Apple', 'Samsung'],
           },
           disjunctiveFacets: ['brand'],
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.refinementList({
-          container: refinementListContainer,
-          attribute: 'brand',
         })
       );
 
@@ -83,6 +49,7 @@ storiesOf('CurrentRefinements', module)
     'with menu',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const menuContainer = document.createElement('div');
       container.appendChild(menuContainer);
@@ -90,7 +57,7 @@ storiesOf('CurrentRefinements', module)
       search.addWidget(
         instantsearch.widgets.configure({
           hierarchicalFacetsRefinements: {
-            brand: ['Samsung'],
+            categories: ['Audio'],
           },
         })
       );
@@ -98,7 +65,7 @@ storiesOf('CurrentRefinements', module)
       search.addWidget(
         instantsearch.widgets.menu({
           container: menuContainer,
-          attribute: 'brand',
+          attribute: 'categories',
         })
       );
 
@@ -113,6 +80,7 @@ storiesOf('CurrentRefinements', module)
     'with hierarchicalMenu',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const hierarchicalMenuContainer = document.createElement('div');
       container.appendChild(hierarchicalMenuContainer);
@@ -148,6 +116,7 @@ storiesOf('CurrentRefinements', module)
     'with toggleRefinement',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const toggleRefinementContainer = document.createElement('div');
       container.appendChild(toggleRefinementContainer);
@@ -174,26 +143,10 @@ storiesOf('CurrentRefinements', module)
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
       container.appendChild(currentRefinementsContainer);
-      const numericMenuContainer = document.createElement('div');
-      container.appendChild(numericMenuContainer);
 
       search.addWidget(
         instantsearch.widgets.configure({
           numericRefinements: { price: { '<=': [10] } },
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.numericMenu({
-          container: numericMenuContainer,
-          attribute: 'price',
-          items: [
-            { label: 'All' },
-            { end: 10, label: '≤ $10' },
-            { start: 10, end: 100, label: '$10–$100' },
-            { start: 100, end: 500, label: '$100–$500' },
-            { start: 500, label: '≥ $500' },
-          ],
         })
       );
 
@@ -208,6 +161,7 @@ storiesOf('CurrentRefinements', module)
     'with rangeInput',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const rangeInputContainer = document.createElement('div');
       container.appendChild(rangeInputContainer);
@@ -237,38 +191,10 @@ storiesOf('CurrentRefinements', module)
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
       container.appendChild(currentRefinementsContainer);
-      const toggleRefinementContainer = document.createElement('div');
-      container.appendChild(toggleRefinementContainer);
-      const numericMenuContainer = document.createElement('div');
-      container.appendChild(numericMenuContainer);
 
       search.addWidget(
         instantsearch.widgets.configure({
           numericRefinements: { price: { '<=': [10] } },
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.numericMenu({
-          container: numericMenuContainer,
-          attribute: 'price',
-          items: [
-            { label: 'All' },
-            { end: 10, label: '≤ $10' },
-            { start: 10, end: 100, label: '$10–$100' },
-            { start: 100, end: 500, label: '$100–$500' },
-            { start: 500, label: '≥ $500' },
-          ],
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.toggleRefinement({
-          container: toggleRefinementContainer,
-          attribute: 'free_shipping',
-          templates: {
-            labelText: 'Free Shipping',
-          },
         })
       );
 
@@ -285,10 +211,6 @@ storiesOf('CurrentRefinements', module)
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
       container.appendChild(currentRefinementsContainer);
-      const refinementListContainer = document.createElement('div');
-      container.appendChild(refinementListContainer);
-      const numericMenuContainer = document.createElement('div');
-      container.appendChild(numericMenuContainer);
 
       search.addWidget(
         instantsearch.widgets.configure({
@@ -304,27 +226,6 @@ storiesOf('CurrentRefinements', module)
           excludedAttributes: ['query', 'price'],
         })
       );
-
-      search.addWidget(
-        instantsearch.widgets.refinementList({
-          container: refinementListContainer,
-          attribute: 'brand',
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.numericMenu({
-          container: numericMenuContainer,
-          attribute: 'price',
-          items: [
-            { label: 'All' },
-            { end: 10, label: '≤ $10' },
-            { start: 10, end: 100, label: '$10–$100' },
-            { start: 100, end: 500, label: '$100–$500' },
-            { start: 500, label: '≥ $500' },
-          ],
-        })
-      );
     })
   )
   .add(
@@ -332,10 +233,6 @@ storiesOf('CurrentRefinements', module)
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
       container.appendChild(currentRefinementsContainer);
-      const refinementListContainer = document.createElement('div');
-      container.appendChild(refinementListContainer);
-      const numericMenuContainer = document.createElement('div');
-      container.appendChild(numericMenuContainer);
 
       search.addWidget(
         instantsearch.widgets.configure({
@@ -351,27 +248,6 @@ storiesOf('CurrentRefinements', module)
           excludedAttributes: [],
         })
       );
-
-      search.addWidget(
-        instantsearch.widgets.refinementList({
-          container: refinementListContainer,
-          attribute: 'brand',
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.numericMenu({
-          container: numericMenuContainer,
-          attribute: 'price',
-          items: [
-            { label: 'All' },
-            { end: 10, label: '≤ $10' },
-            { start: 10, end: 100, label: '$10–$100' },
-            { start: 100, end: 500, label: '$100–$500' },
-            { start: 500, label: '≥ $500' },
-          ],
-        })
-      );
     })
   )
   .add(
@@ -379,10 +255,6 @@ storiesOf('CurrentRefinements', module)
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
       container.appendChild(currentRefinementsContainer);
-      const refinementListContainer = document.createElement('div');
-      container.appendChild(refinementListContainer);
-      const numericMenuContainer = document.createElement('div');
-      container.appendChild(numericMenuContainer);
 
       search.addWidget(
         instantsearch.widgets.configure({
@@ -403,27 +275,6 @@ storiesOf('CurrentRefinements', module)
                 label: item.label.toUpperCase(),
               })),
             })),
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.refinementList({
-          container: refinementListContainer,
-          attribute: 'brand',
-        })
-      );
-
-      search.addWidget(
-        instantsearch.widgets.numericMenu({
-          container: numericMenuContainer,
-          attribute: 'price',
-          items: [
-            { label: 'All' },
-            { end: 10, label: '≤ $10' },
-            { start: 10, end: 100, label: '$10–$100' },
-            { start: 100, end: 500, label: '$100–$500' },
-            { start: 500, label: '≥ $500' },
-          ],
         })
       );
     })
