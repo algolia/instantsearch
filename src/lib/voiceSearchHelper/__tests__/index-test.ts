@@ -1,18 +1,4 @@
-import createVoiceSearchHelper, {
-  VoiceSearchHelper,
-  VoiceSearchHelperParams,
-} from '..';
-
-const getVoiceSearchHelper = (
-  opts?: VoiceSearchHelperParams
-): VoiceSearchHelper =>
-  createVoiceSearchHelper(
-    opts || {
-      searchAsYouSpeak: false,
-      onQueryChange: () => {},
-      onStateChange: () => {},
-    }
-  );
+import createVoiceSearchHelper from '..';
 
 type DummySpeechRecognition = () => void;
 declare global {
@@ -22,14 +8,35 @@ declare global {
   }
 }
 
+const start = jest.fn();
+const stop = jest.fn();
+
+const createFakeSpeechRecognition = (): jest.Mock => {
+  const simulateListener: any = {};
+  const mock = jest.fn().mockImplementation(() => ({
+    start,
+    stop,
+    addEventListener(eventName: string, callback: () => void) {
+      simulateListener[eventName] = callback;
+    },
+    removeEventListener() {},
+  }));
+  (mock as any).simulateListener = simulateListener;
+  return mock;
+};
+
 describe('VoiceSearchHelper', () => {
-  beforeEach(() => {
+  afterEach(() => {
     delete window.webkitSpeechRecognition;
     delete window.SpeechRecognition;
   });
 
   it('has initial state correctly', () => {
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.getState()).toEqual({
       errorCode: undefined,
       isSpeechFinal: false,
@@ -39,38 +46,49 @@ describe('VoiceSearchHelper', () => {
   });
 
   it('is not supported', () => {
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isBrowserSupported()).toBe(false);
   });
 
   it('is not listening', () => {
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isListening()).toBe(false);
   });
 
   it('is supported with webkitSpeechRecognition', () => {
     window.webkitSpeechRecognition = () => {};
-    const voiceSearchHelper = getVoiceSearchHelper();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isBrowserSupported()).toBe(true);
   });
 
   it('is supported with SpeechRecognition', () => {
-    window.SpeechRecognition = () => {};
-    const voiceSearchHelper = getVoiceSearchHelper();
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
     expect(voiceSearchHelper.isBrowserSupported()).toBe(true);
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:false)', () => {
-    let recognition;
-    window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {
-        /* eslint-disable-next-line consistent-this */
-        recognition = this;
-      },
-    }));
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const { simulateListener } = window.SpeechRecognition as any;
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
-    const voiceSearchHelper = getVoiceSearchHelper({
+    const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: false,
       onQueryChange,
       onStateChange,
@@ -79,9 +97,9 @@ describe('VoiceSearchHelper', () => {
     voiceSearchHelper.toggleListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
-    recognition.onstart();
+    simulateListener.start();
     expect(voiceSearchHelper.getState().status).toEqual('waiting');
-    recognition.onresult({
+    simulateListener.result({
       results: [
         (() => {
           const obj = [
@@ -98,22 +116,17 @@ describe('VoiceSearchHelper', () => {
     expect(voiceSearchHelper.getState().transcript).toEqual('Hello World');
     expect(voiceSearchHelper.getState().isSpeechFinal).toBe(true);
     expect(onQueryChange).toHaveBeenCalledTimes(0);
-    recognition.onend();
+    simulateListener.end();
     expect(onQueryChange).toHaveBeenCalledWith('Hello World');
     expect(voiceSearchHelper.getState().status).toEqual('finished');
   });
 
   it('works with mock SpeechRecognition (searchAsYouSpeak:true)', () => {
-    let recognition;
-    window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {
-        /* eslint-disable-next-line consistent-this */
-        recognition = this;
-      },
-    }));
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const { simulateListener } = window.SpeechRecognition as any;
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
-    const voiceSearchHelper = getVoiceSearchHelper({
+    const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: true,
       onQueryChange,
       onStateChange,
@@ -122,9 +135,9 @@ describe('VoiceSearchHelper', () => {
     voiceSearchHelper.toggleListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
-    recognition.onstart();
+    simulateListener.start();
     expect(voiceSearchHelper.getState().status).toEqual('waiting');
-    recognition.onresult({
+    simulateListener.result({
       results: [
         (() => {
           const obj = [
@@ -141,34 +154,41 @@ describe('VoiceSearchHelper', () => {
     expect(voiceSearchHelper.getState().transcript).toEqual('Hello World');
     expect(voiceSearchHelper.getState().isSpeechFinal).toBe(true);
     expect(onQueryChange).toHaveBeenCalledWith('Hello World');
-    recognition.onend();
+    simulateListener.end();
     expect(onQueryChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('finished');
   });
 
   it('works with onerror', () => {
-    let recognition;
-    window.SpeechRecognition = jest.fn().mockImplementation(() => ({
-      start() {
-        /* eslint-disable-next-line consistent-this */
-        recognition = this;
-      },
-    }));
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const { simulateListener } = window.SpeechRecognition as any;
     const onQueryChange = jest.fn();
     const onStateChange = jest.fn();
-    const voiceSearchHelper = getVoiceSearchHelper({
+    const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: true,
       onQueryChange,
       onStateChange,
     });
     voiceSearchHelper.toggleListening();
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
-    recognition.onerror({
+    simulateListener.error({
       error: 'not-allowed',
     });
     expect(voiceSearchHelper.getState().status).toEqual('error');
     expect(voiceSearchHelper.getState().errorCode).toEqual('not-allowed');
-    recognition.onend();
+    simulateListener.end();
     expect(onQueryChange).toHaveBeenCalledTimes(0);
+  });
+
+  it('stops listening on `dispose`', () => {
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: false,
+      onQueryChange: () => {},
+      onStateChange: () => {},
+    });
+    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.dispose();
+    expect(stop).toHaveBeenCalledTimes(1);
   });
 });
