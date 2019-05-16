@@ -49,6 +49,7 @@ storiesOf('CurrentRefinements', module)
     'with menu',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const menuContainer = document.createElement('div');
       container.appendChild(menuContainer);
@@ -79,6 +80,7 @@ storiesOf('CurrentRefinements', module)
     'with hierarchicalMenu',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const hierarchicalMenuContainer = document.createElement('div');
       container.appendChild(hierarchicalMenuContainer);
@@ -114,6 +116,7 @@ storiesOf('CurrentRefinements', module)
     'with toggleRefinement',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const toggleRefinementContainer = document.createElement('div');
       container.appendChild(toggleRefinementContainer);
@@ -158,6 +161,7 @@ storiesOf('CurrentRefinements', module)
     'with rangeInput',
     withHits(({ search, container, instantsearch }) => {
       const currentRefinementsContainer = document.createElement('div');
+      currentRefinementsContainer.style.marginBottom = '10px';
       container.appendChild(currentRefinementsContainer);
       const rangeInputContainer = document.createElement('div');
       container.appendChild(rangeInputContainer);
