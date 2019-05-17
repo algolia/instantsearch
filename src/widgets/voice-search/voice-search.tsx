@@ -16,9 +16,9 @@ const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
 
 export type VoiceSearchCSSClasses = {
-  root: string;
-  button: string;
-  status: string;
+  root: string | string[];
+  button: string | string[];
+  status: string | string[];
 };
 
 type VoiceSearchTemplateProps = {
