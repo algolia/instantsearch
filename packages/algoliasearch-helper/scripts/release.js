@@ -1,9 +1,11 @@
 #!/usr/bin/env node
+
 'use strict';
 
 const prompt = require('prompt');
 const semver = require('semver');
 const mversion = require('mversion');
+const argv = require('yargs').argv;
 const path = require('path');
 const fs = require('fs');
 
@@ -20,29 +22,57 @@ const packageJson = require('../package.json');
 
 const {showChangelog, getChangelog, updateChangelog} = require('./lib/conventionalChangelog.js');
 
-shell.echo(`Algoliasearch-Helper release script`);
+const {canary: isCanary} = argv;
 
-checkEnvironment();
-mergeDevIntoMaster();
-showChangelog(shell);
-promptVersion(packageJson.version, (version) => {
-  bumpVersion(version, () => {
+if (isCanary) {
+  releaseCanaryVersion();
+} else {
+  releaseStableVersion();
+}
+
+function releaseCanaryVersion() {
+  shell.echo(`Algolia JS Helper release CANARY version`);
+
+  checkCleanWorkdir();
+  updateCanaryVersion(canaryVersion => {
     build();
-    updateChangelog(shell);
-    commitNewFiles(version);
-    publish();
-    goBackToDevelop();
+    publishOnNpm('canary');
+    revertStableVersion(packageJson.version, () => {
+      shell.echo(`Algolia JS Helper v${canaryVersion} released`);
+    });
   });
-});
+}
 
-function checkEnvironment() {
+function releaseStableVersion() {
+  shell.echo(`Algolia JS Helper release STABLE version`);
+
+  checkDevelopBranch();
+  checkCleanWorkdir();
+  mergeDevIntoMaster();
+  showChangelog(shell);
+  promptVersion(packageJson.version, (version) => {
+    bumpVersion(version, () => {
+      build();
+      updateChangelog(shell);
+      commitNewFiles(version);
+      publish();
+      goBackToDevelop();
+
+      shell.echo(`Algolia JS Helper v${version} released`);
+    });
+  });
+}
+
+function checkDevelopBranch() {
   const currentBranch = shell.exec('git rev-parse --abbrev-ref HEAD', {silent: true}).toString().trim();
 
   if (currentBranch !== 'develop') {
     shell.echo('The release script should be started from develop'.error);
     process.exit(1);
   }
+}
 
+function checkCleanWorkdir() {
   const changes = shell.exec('git status --porcelain', {silent: true}).toString().trim();
 
   if (changes.length > 0) {
@@ -85,7 +115,7 @@ function promptVersion(currentVersion, cb) {
 }
 
 function bumpVersion(newVersion, cb) {
-  shell.echo('Updating files');
+  shell.echo(`Updating files to version: ${newVersion}`);
   shell.echo('..src/version.js');
 
   var versionFile = path.join(__dirname, '../src/version.js');
@@ -118,11 +148,15 @@ function publish() {
   shell.exec('git push origin', {silent: true});
   shell.exec('git push origin --tags', {silent: true});
 
-  shell.echo('Publishing new version on NPM');
-  shell.exec('npm publish', {silent: true});
+  publishOnNpm('latest');
 
   shell.echo('Publishing new documentation');
   shell.exec('yarn run doc:publish');
+}
+
+function publishOnNpm(tag) {
+  shell.echo('Publishing new version on NPM');
+  shell.exec(`npm publish --tag ${tag}`, {silent: true});
 }
 
 function goBackToDevelop() {
@@ -135,4 +169,17 @@ function goBackToDevelop() {
 
 function build() {
   shell.exec('yarn run build');
+}
+
+function updateCanaryVersion(cb) {
+  const lastCommitHash = shell.exec('git rev-parse --short HEAD', {silent: true}).toString().trim();
+  const canaryVersion = `0.0.0-${lastCommitHash}`;
+
+  bumpVersion(canaryVersion, () => {
+    cb(canaryVersion);
+  });
+}
+
+function revertStableVersion(version, cb) {
+  bumpVersion(version, cb);
 }
