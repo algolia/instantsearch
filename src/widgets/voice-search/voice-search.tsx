@@ -8,7 +8,9 @@ import { component } from '../../lib/suit';
 import connectVoiceSearch, {
   VoiceSearchRenderer,
 } from '../../connectors/voice-search/connectVoiceSearch';
-import VoiceSearch from '../../components/VoiceSearch/VoiceSearch';
+import VoiceSearch, {
+  VoiceSearchComponentCSSClasses,
+} from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
 import { WidgetFactory, Template } from '../../types';
 
@@ -61,7 +63,7 @@ const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
 
   render(
     <VoiceSearch
-      cssClasses={cssClasses}
+      cssClasses={cssClasses as VoiceSearchComponentCSSClasses}
       templates={templates}
       isBrowserSupported={isBrowserSupported}
       isListening={isListening}
