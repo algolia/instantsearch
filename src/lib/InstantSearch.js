@@ -319,7 +319,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
           helper.state.index,
           helper.state
         );
-        helperSearchFunction.once('search', state => {
+        helperSearchFunction.once('search', ({ state }) => {
           helper.overrideStateWithoutTriggeringChangeEvent(state);
           this._mainHelperSearch();
         });
