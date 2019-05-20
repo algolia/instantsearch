@@ -1,4 +1,4 @@
-## [3.5.1](https://github.com/algolia/instantsearch.js/compare/v3.4.0...v3.5.1) (2019-05-20)
+# [3.5.1](https://github.com/algolia/instantsearch.js/compare/v3.4.0...v3.5.1) (2019-05-20)
 
 
 ### Bug Fixes
