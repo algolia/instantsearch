@@ -1,3 +1,19 @@
+## [3.5.1](https://github.com/algolia/instantsearch.js/compare/v3.5.0...v3.5.1) (2019-05-20)
+
+
+### Bug Fixes
+
+* **types:** improve types for voiceSearch ([#3778](https://github.com/algolia/instantsearch.js/issues/3778)) ([ed2d61a](https://github.com/algolia/instantsearch.js/commit/ed2d61a))
+* **types:** update UiState type ([#3777](https://github.com/algolia/instantsearch.js/issues/3777)) ([36e3a3d](https://github.com/algolia/instantsearch.js/commit/36e3a3d))
+* **voiceSearch:** remove event listeners on dispose ([#3779](https://github.com/algolia/instantsearch.js/issues/3779)) ([0e988cc](https://github.com/algolia/instantsearch.js/commit/0e988cc))
+
+
+### Reverts
+
+* chore(build): remove PropTypes from builds ([#3697](https://github.com/algolia/instantsearch.js/issues/3697)) ([#3776](https://github.com/algolia/instantsearch.js/issues/3776)) ([1e6be79](https://github.com/algolia/instantsearch.js/commit/1e6be79))
+
+
+
 # [3.5.0](https://github.com/algolia/instantsearch.js/compare/v3.4.0...v3.5.0) (2019-05-14)
 
 
