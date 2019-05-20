@@ -46,7 +46,7 @@ type VoiceSearchWidgetParams = {
 
 interface VoiceSearchRendererWidgetParams extends VoiceSearchWidgetParams {
   container: HTMLElement;
-  cssClasses: VoiceSearchCSSClasses;
+  cssClasses: VoiceSearchComponentCSSClasses;
   templates: VoiceSearchTemplates;
 }
 
@@ -63,7 +63,7 @@ const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
 
   render(
     <VoiceSearch
-      cssClasses={cssClasses as VoiceSearchComponentCSSClasses}
+      cssClasses={cssClasses}
       templates={templates}
       isBrowserSupported={isBrowserSupported}
       isListening={isListening}
