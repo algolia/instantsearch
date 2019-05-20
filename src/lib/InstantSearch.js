@@ -335,8 +335,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       this._render(this.helper, results, state);
     });
 
-    this.helper.on('error', e => {
-      this.emit('error', e);
+    this.helper.on('error', ({ error }) => {
+      this.emit('error', {
+        error,
+      });
     });
 
     this._searchStalledTimer = null;
