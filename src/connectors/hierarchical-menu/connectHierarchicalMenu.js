@@ -219,9 +219,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
           );
         }
 
-        const maxValuesPerFacetConfig = state.getQueryParameter(
-          'maxValuesPerFacet'
-        );
+        const maxValuesPerFacetConfig = state.maxValuesPerFacet;
         const currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
         // if the facets are exhaustive. The only moment we are sure it is exhaustive
