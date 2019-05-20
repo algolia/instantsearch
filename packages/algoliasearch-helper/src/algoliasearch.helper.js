@@ -1074,24 +1074,6 @@ AlgoliaSearchHelper.prototype.getTags = function() {
 };
 
 /**
- * Get a parameter of the search by its name. It is possible that a parameter is directly
- * defined in the index dashboard, but it will be undefined using this method.
- *
- * The complete list of parameters is
- * available on the
- * [Algolia website](https://www.algolia.com/doc/rest#query-an-index).
- * The most commonly used parameters have their own [shortcuts](#query-parameters-shortcuts)
- * or benefit from higher-level APIs (all the kind of filters have their own API)
- * @param {string} parameterName the parameter name
- * @return {any} the parameter value
- * @example
- * var hitsPerPage = helper.getQueryParameter('hitsPerPage');
- */
-AlgoliaSearchHelper.prototype.getQueryParameter = function(parameterName) {
-  return this.state.getQueryParameter(parameterName);
-};
-
-/**
  * Get the list of refinements for a given attribute. This method works with
  * conjunctive, disjunctive, excluding and numerical filters.
  *

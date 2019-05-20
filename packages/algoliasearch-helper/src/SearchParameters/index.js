@@ -1311,20 +1311,6 @@ SearchParameters.prototype = {
     return queryParams;
   },
   /**
-   * Let the user retrieve any parameter value from the SearchParameters
-   * @param {string} paramName name of the parameter
-   * @return {any} the value of the parameter
-   */
-  getQueryParameter: function getQueryParameter(paramName) {
-    if (!this.hasOwnProperty(paramName)) {
-      throw new Error(
-        "Parameter '" + paramName + "' is not an attribute of SearchParameters " +
-        '(http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
-    }
-
-    return this[paramName];
-  },
-  /**
    * Let the user set a specific value for a given parameter. Will return the
    * same instance if the parameter is invalid or if the value is the same as the
    * previous one.

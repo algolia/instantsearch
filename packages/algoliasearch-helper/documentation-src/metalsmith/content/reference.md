@@ -83,7 +83,6 @@ documentation](https://www.algolia.com/doc/rest#query-an-index).
 Before using those methods, be sure to check [the shortcuts](query-parameters-shortcuts).
 
 {{> jsdoc jsdoc/helper/setQueryParameter}}
-{{> jsdoc jsdoc/helper/getQueryParameter}}
 
 
 ### Conjunctive Facets
@@ -558,7 +557,6 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/getHierarchicalRefinement}}
 {{> jsdoc jsdoc/state/getNumericRefinements}}
 {{> jsdoc jsdoc/state/getNumericRefinement}}
-{{> jsdoc jsdoc/state/getQueryParameter}}
 {{> jsdoc jsdoc/state/getRefinedDisjunctiveFacets}}
 {{> jsdoc jsdoc/state/getRefinedHierarchicalFacets}}
 {{> jsdoc jsdoc/state/getUnrefinedDisjunctiveFacets}}
