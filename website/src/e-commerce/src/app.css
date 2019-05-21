@@ -92,3 +92,166 @@ body {
 .container-footer {
   margin: 4rem 0;
 }
+
+/* Styles the SFFV highlightings */
+
+mark {
+  background: rgba(226, 164, 0, 0.4);
+}
+
+/* Clear refinements container */
+
+.clear-filters {
+  align-items: center;
+  display: flex;
+}
+
+.clear-filters svg {
+  margin-right: 8px;
+}
+
+/* Panel */
+
+.panel-header {
+  font-family: Hind, sans-serif;
+}
+
+/* Search box */
+
+.searchbox {
+  height: 64px;
+  width: 740px;
+}
+
+.searchbox .searchbox-input {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 48px 0 rgba(0, 0, 0, 0.2);
+  font-family: Hind, sans-serif;
+  max-height: 64px;
+  padding: 24px;
+  padding-left: 58px;
+}
+
+.searchbox .searchbox-input::placeholder {
+  color: rgba(33, 36, 61, 0.24);
+  opacity: 1; /* Firefox */
+}
+
+.searchbox-input:-ms-input-placeholder {
+  color: rgba(33, 36, 61, 0.24);
+}
+
+.searchbox-input::-ms-input-placeholder {
+  color: rgba(33, 36, 61, 0.24);
+}
+
+.searchbox-submit {
+  color: #e2a400;
+}
+
+.refinement-list-searchbox-input {
+  font-family: Hind, sans-serif;
+}
+
+/* Hits */
+
+.hit {
+  color: #21243d;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.hit h1 {
+  font-size: 14px;
+}
+
+.hit-category {
+  color: #21243d;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 8px;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.hit-description {
+  margin-top: 2px;
+}
+
+.hit-image-container {
+  align-items: center;
+  display: flex;
+  height: 174px;
+  justify-content: center;
+  margin: auto;
+  width: 174px;
+}
+
+.hit-image {
+  height: auto;
+  max-width: 100%;
+}
+
+.hit-em {
+  color: #e2a400;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.hit-rating {
+  background-color: rgba(226, 164, 0, 0.16);
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+/* RangeInput */
+
+.range-input-label::before {
+  color: #e2a400;
+  content: '$';
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.range-input-input {
+  max-width: 50px;
+}
+
+.range-input-submit {
+  display: none;
+}
+
+/* ToggleRefinement */
+
+.toggle-refinement-label {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.toggle-refinement-checkbox {
+  font: inherit;
+  margin-right: 0;
+}
+
+.toggle-refinement-checkbox:checked::before {
+  color: #e2a400;
+}
+
+.toggle-refinement-checkbox::before {
+  align-items: center;
+  color: rgba(33, 36, 61, 0.32);
+  content: 'No';
+  display: flex;
+  font-size: 0.8rem;
+  height: 16px;
+  position: absolute;
+  right: 38px;
+}
+
+.toggle-refinement-checkbox:checked::before {
+  content: 'Yes';
+}
