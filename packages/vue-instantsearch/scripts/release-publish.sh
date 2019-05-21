@@ -22,6 +22,11 @@ if ! yarn run test; then
   exit 1
 fi
 
+if ! yarn run build; then
+  echo "Failed to build dist files, aborting..."
+  exit 1
+fi
+
 readonly PACKAGE_VERSION=$(scripts/get-version.js)
 
 npm publish --tag=$(scripts/get-npm-tag.js)
