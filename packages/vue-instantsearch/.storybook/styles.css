@@ -108,14 +108,14 @@ body {
   min-height: unset !important;
 }
 
-input {
+input:not([class^='ais-']) {
   border-style: solid !important;
   border-width: 1px;
   border-color: #c4c8d8;
   border-radius: 5px !important;
 }
 
-button {
+button:not([class^='ais-']) {
   border-style: solid !important;
   border-width: 1px;
   padding: 0.2em;
@@ -123,6 +123,6 @@ button {
   border-radius: 5px !important;
 }
 
-button:disabled {
+button:not([class^='ais-']):disabled {
   border-color: #c4c8d8;
 }

@@ -37,3 +37,4 @@ export { default as AisStats } from './components/Stats.vue';
 export {
   default as AisToggleRefinement,
 } from './components/ToggleRefinement.vue';
+export { default as AisVoiceSearch } from './components/VoiceSearch.vue';
