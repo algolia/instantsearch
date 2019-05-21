@@ -67,7 +67,7 @@ describe('pagination()', () => {
     helper = {
       setPage: jest.fn(),
       search: jest.fn(),
-      getPage: () => 0,
+      state: {},
     };
     widget.init({ helper });
   });
