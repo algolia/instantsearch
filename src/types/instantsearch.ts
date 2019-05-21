@@ -9,10 +9,13 @@ import { Widget, UiState } from './widget';
 
 export type InstantSearchOptions = any;
 
-// That's a proxy to avoid manipulating the original `algoliasearch-helper` SearchParameters
-// typings and to add newer search parameters not yet documented.
+// That's a proxy to avoid manipulating the original `algoliasearch-helper`
+// SearchParameters typings and to add newer search parameters not yet
+// documented or wrongly typed.
 export type SearchParameters = AlgoliaSearchHelperSearchParameters & {
   ruleContexts?: string[];
+  // The value is optional not required
+  setQueryParameter(parameter: string, value?: any): SearchParameters;
 };
 
 export type SearchResults = AlgoliaSearchHelperSearchResults;
