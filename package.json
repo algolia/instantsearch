@@ -28,7 +28,7 @@
     "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "storybook": "start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
     "storybook:build": "build-storybook --quiet --output-dir website/stories --static-dir .storybook/static",
-    "website:build": "yarn run storybook:build && ./scripts/website/zip-examples.sh",
+    "website:build": "yarn run storybook:build && ./scripts/website/build-examples.sh && ./scripts/website/zip-examples.sh",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc",
