@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "parcel index.html --port 3000",
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --public-url .",
     "lint": "eslint ."
   },
   "dependencies": {
