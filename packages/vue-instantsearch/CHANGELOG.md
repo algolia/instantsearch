@@ -1,3 +1,13 @@
+# [2.2.0](https://github.com/algolia/vue-instantsearch/compare/v2.1.0...v2.2.0) (2019-05-21)
+
+
+### Features
+
+* **panel:** provide hasRefinement scope to slots ([#670](https://github.com/algolia/vue-instantsearch/issues/670)) ([2a21b52](https://github.com/algolia/vue-instantsearch/commit/2a21b52)), closes [#347](https://github.com/algolia/vue-instantsearch/issues/347)
+* **voiceSearch:** add voice search component ([#668](https://github.com/algolia/vue-instantsearch/issues/668)) ([84efffc](https://github.com/algolia/vue-instantsearch/commit/84efffc))
+
+
+
 # [2.1.0](https://github.com/algolia/vue-instantsearch/compare/v2.0.1...v2.1.0) (2019-04-30)
 
 
