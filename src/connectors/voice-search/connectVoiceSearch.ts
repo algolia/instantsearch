@@ -112,7 +112,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
         return state.setQuery('');
       },
       getWidgetState(uiState, { searchParameters }) {
-        const query = searchParameters.query;
+        const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {
           return uiState;
@@ -124,7 +124,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
         };
       },
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
+        return searchParameters.setQuery(uiState.query);
       },
     };
   };
