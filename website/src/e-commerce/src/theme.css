@@ -124,6 +124,7 @@ a[class^='ais-'] {
 .ais-Panel-collapseButton {
   background: none;
   border: none;
+  cursor: pointer;
   outline: none;
   padding: 0;
   position: absolute;
