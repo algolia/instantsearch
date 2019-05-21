@@ -89,12 +89,13 @@ export default function connectSearchBox(renderFn, unmountFn) {
         this._refine = (() => {
           let previousQuery;
 
-          const setQueryAndSearch = (q, doSearch = true) => {
+          const setQueryAndSearch = q => {
             if (q !== helper.state.query) {
               previousQuery = helper.state.query;
               helper.setQuery(q);
             }
-            if (doSearch && previousQuery !== undefined && previousQuery !== q)
+
+            if (previousQuery !== undefined && previousQuery !== q)
               helper.search();
           };
 
