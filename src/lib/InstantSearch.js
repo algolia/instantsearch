@@ -382,6 +382,31 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     this.helper = null;
   }
 
+  getAllSearchParameters({ uiState, currentSearchParameters }) {
+    return this.widgets.reduce((parameters, widget) => {
+      if (!widget.getWidgetSearchParameters) {
+        return parameters;
+      }
+
+      return widget.getWidgetSearchParameters(parameters, {
+        uiState,
+      });
+    }, currentSearchParameters);
+  }
+
+  getAllUiStates({ searchParameters }) {
+    return this.widgets.reduce((state, widget) => {
+      if (!widget.getWidgetState) {
+        return state;
+      }
+
+      return widget.getWidgetState(state, {
+        helper: this.helper,
+        searchParameters,
+      });
+    }, {});
+  }
+
   createURL(params) {
     if (!this._createURL) {
       throw new Error(
