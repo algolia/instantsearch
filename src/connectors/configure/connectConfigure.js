@@ -92,8 +92,8 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
 
       removeSearchParameters(state) {
         // We leverage the Helper internals to remove the `widgetParams` from
-        // the state. The function `setQueryParameters` omit (or remove) the
-        // values that are `undefined` on the next state.
+        // the state. The function `setQueryParameters` omits the values that
+        // are `undefined` on the next state.
         return state.setQueryParameters(
           Object.keys(widgetParams.searchParameters).reduce(
             (acc, key) => ({
