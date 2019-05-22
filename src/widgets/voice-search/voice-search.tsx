@@ -8,7 +8,9 @@ import { component } from '../../lib/suit';
 import connectVoiceSearch, {
   VoiceSearchRenderer,
 } from '../../connectors/voice-search/connectVoiceSearch';
-import VoiceSearch from '../../components/VoiceSearch/VoiceSearch';
+import VoiceSearch, {
+  VoiceSearchComponentCSSClasses,
+} from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
 import { WidgetFactory, Template } from '../../types';
 
@@ -16,9 +18,9 @@ const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
 
 export type VoiceSearchCSSClasses = {
-  root: string;
-  button: string;
-  status: string;
+  root: string | string[];
+  button: string | string[];
+  status: string | string[];
 };
 
 type VoiceSearchTemplateProps = {
@@ -44,7 +46,7 @@ type VoiceSearchWidgetParams = {
 
 interface VoiceSearchRendererWidgetParams extends VoiceSearchWidgetParams {
   container: HTMLElement;
-  cssClasses: VoiceSearchCSSClasses;
+  cssClasses: VoiceSearchComponentCSSClasses;
   templates: VoiceSearchTemplates;
 }
 

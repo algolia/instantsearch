@@ -1,18 +1,21 @@
 import React from 'preact-compat';
 import Template from '../Template/Template';
 
-import {
-  VoiceSearchCSSClasses,
-  VoiceSearchTemplates,
-} from '../../widgets/voice-search/voice-search';
+import { VoiceSearchTemplates } from '../../widgets/voice-search/voice-search';
 
 import {
   VoiceListeningState,
   ToggleListening,
 } from '../../lib/voiceSearchHelper';
 
+export type VoiceSearchComponentCSSClasses = {
+  root: string;
+  button: string;
+  status: string;
+};
+
 export type VoiceSearchProps = {
-  cssClasses: VoiceSearchCSSClasses;
+  cssClasses: VoiceSearchComponentCSSClasses;
   isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: ToggleListening;
