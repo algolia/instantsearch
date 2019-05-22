@@ -75,22 +75,12 @@ const connectVoiceSearch: VoiceSearchConnector = (
 
     return {
       init({ helper, instantSearchInstance }) {
-        (this as any)._refine = (() => {
-          let previousQuery: string | undefined;
-          const setQueryAndSearch = (query: string): void => {
-            if (query !== helper.state.query) {
-              previousQuery = helper.state.query;
-              helper.setQuery(query);
-            }
-            if (
-              typeof previousQuery !== 'undefined' &&
-              previousQuery !== query
-            ) {
-              helper.search();
-            }
-          };
-          return setQueryAndSearch;
-        })();
+        (this as any)._refine = (query: string): void => {
+          if (query !== helper.state.query) {
+            helper.setQuery(query).search();
+          }
+        };
+
         (this as any)._voiceSearchHelper = createVoiceSearchHelper({
           searchAsYouSpeak,
           onQueryChange: query => (this as any)._refine(query),
@@ -102,6 +92,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
             });
           },
         });
+
         render({
           isFirstRendering: true,
           instantSearchInstance,

@@ -86,22 +86,20 @@ export default function connectSearchBox(renderFn, unmountFn) {
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
 
-        this._refine = (() => {
-          let previousQuery;
+        const setQueryAndSearch = query => {
+          if (query !== helper.state.query) {
+            helper.setQuery(query).search();
+          }
+        };
 
-          const setQueryAndSearch = (q, doSearch = true) => {
-            if (q !== helper.state.query) {
-              previousQuery = helper.state.query;
-              helper.setQuery(q);
-            }
-            if (doSearch && previousQuery !== undefined && previousQuery !== q)
-              helper.search();
-          };
+        this._refine = query => {
+          if (queryHook) {
+            queryHook(query, setQueryAndSearch);
+            return;
+          }
 
-          return queryHook
-            ? q => queryHook(q, setQueryAndSearch)
-            : setQueryAndSearch;
-        })();
+          setQueryAndSearch(query);
+        };
 
         renderFn(
           {
