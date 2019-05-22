@@ -3,6 +3,7 @@ import {
   RenderOptions,
   WidgetFactory,
   Helper,
+  HelperChangeEvent,
   SearchParameters,
 } from '../../types';
 import {
@@ -17,10 +18,6 @@ import {
   Refinement as InternalRefinement,
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';
-
-type HelperChangeEvent = {
-  state: SearchParameters;
-};
 
 type TrackedFilterRefinement = string | number | boolean;
 

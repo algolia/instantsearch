@@ -17,6 +17,10 @@ export type SearchParameters = AlgoliaSearchHelperSearchParameters & {
 
 export type SearchResults = AlgoliaSearchHelperSearchResults;
 
+export type HelperChangeEvent = {
+  state: SearchParameters;
+};
+
 type HitAttributeHighlightResult = {
   value: string;
   matchLevel: 'none' | 'partial' | 'full';
