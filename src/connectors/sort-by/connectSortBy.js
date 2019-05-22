@@ -159,10 +159,11 @@ export default function connectSortBy(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQueryParameter(
-          'index',
-          uiState.sortBy || this.initialIndex
-        );
+        if (uiState.sortBy) {
+          return searchParameters.setQueryParameter('index', uiState.sortBy);
+        }
+
+        return searchParameters;
       },
     };
   };
