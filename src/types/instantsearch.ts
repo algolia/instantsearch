@@ -14,8 +14,6 @@ export type InstantSearchOptions = any;
 // documented or wrongly typed.
 export type SearchParameters = AlgoliaSearchHelperSearchParameters & {
   ruleContexts?: string[];
-  // The value is optional
-  setQueryParameter(parameter: string, value?: any): SearchParameters;
 };
 
 export type SearchResults = AlgoliaSearchHelperSearchResults;
