@@ -124,7 +124,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
         };
       },
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query);
+        return searchParameters.setQueryParameter('query', uiState.query);
       },
     };
   };
