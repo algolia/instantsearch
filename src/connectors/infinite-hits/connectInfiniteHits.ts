@@ -248,7 +248,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           return searchParameters.setQueryParameter('page', uiPage - 1);
         }
 
-        return searchParameters.setQueryParameter('page');
+        return searchParameters.setQueryParameter('page', undefined);
       },
     };
   };

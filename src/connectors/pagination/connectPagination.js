@@ -175,7 +175,7 @@ export default function connectPagination(renderFn, unmountFn) {
           return searchParameters.setQueryParameter('page', uiState.page - 1);
         }
 
-        return searchParameters.setQueryParameter('page');
+        return searchParameters.setQueryParameter('page', undefined);
       },
     };
   };
