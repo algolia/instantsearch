@@ -118,6 +118,20 @@ export type InstantSearch = {
   insightsClient?: AlgoliaInsightsClient;
   helper: Helper | null;
   widgets: Widget[];
+
+  getWidgetsSearchParameters({
+    currentSearchParameters,
+    uiState,
+  }: {
+    currentSearchParameters: SearchParameters;
+    uiState: UiState;
+  }): SearchParameters;
+
+  getWidgetsUiState({
+    searchParameters,
+  }: {
+    searchParameters: SearchParameters;
+  }): UiState;
 };
 
 export type RouteState = {

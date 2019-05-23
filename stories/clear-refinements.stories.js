@@ -6,15 +6,45 @@ storiesOf('ClearRefinements', module)
     'default',
     withHits(
       ({ search, container, instantsearch }) => {
+        const addWidgetButton = document.createElement('button');
+        addWidgetButton.textContent = 'Add widget';
+
+        const removeWidgetButton = document.createElement('button');
+        removeWidgetButton.textContent = 'Remove widget';
+
+        const widgetContainer = document.createElement('div');
+        widgetContainer.style.marginTop = '10px';
+
+        container.appendChild(addWidgetButton);
+        container.appendChild(removeWidgetButton);
+        container.appendChild(widgetContainer);
+
+        const widget = instantsearch.widgets.sortBy({
+          container: widgetContainer,
+          items: [
+            { value: 'instant_search', label: 'Most relevant' },
+            { value: 'instant_search_price_asc', label: 'Lowest price' },
+            { value: 'instant_search_price_desc', label: 'Highest price' },
+          ],
+        });
+
         search.addWidget(
-          instantsearch.widgets.clearRefinements({
-            container,
+          instantsearch.widgets.configure({
+            hitsPerPage: 5,
           })
         );
+
+        addWidgetButton.addEventListener('click', () => {
+          search.addWidget(widget);
+        });
+
+        removeWidgetButton.addEventListener('click', () => {
+          search.removeWidget(widget);
+        });
       },
       {
         searchParameters: {
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
+          // disjunctiveFacetsRefinements: { brand: ['Apple'] },
           disjunctiveFacets: ['brand'],
         },
       }

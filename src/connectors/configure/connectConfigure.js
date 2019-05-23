@@ -39,9 +39,9 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
     }
 
     return {
-      getConfiguration() {
-        return widgetParams.searchParameters;
-      },
+      // getConfiguration() {
+      //   return widgetParams.searchParameters;
+      // },
 
       init({ helper }) {
         this._refine = this.refine(helper);
@@ -88,6 +88,23 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
         unmountFn();
 
         return this.removeSearchParameters(state);
+      },
+
+      // getWidgetState(uiState) {
+      //   return {
+      //     ...uiState,
+      //     configure: widgetParams.searchParameters,
+      //   };
+      // },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        // if (uiState.configure) {
+        //   return searchParameters.setQueryParameters(uiState.configure);
+        // }
+
+        return searchParameters.setQueryParameters(
+          widgetParams.searchParameters
+        );
       },
 
       removeSearchParameters(state) {

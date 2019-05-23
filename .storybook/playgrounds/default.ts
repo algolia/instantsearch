@@ -9,21 +9,21 @@ function instantSearchPlayground({
   leftPanel: HTMLElement;
   rightPanel: HTMLElement;
 }) {
-  const refinementList = document.createElement('div');
-  leftPanel.appendChild(refinementList);
+  // const refinementList = document.createElement('div');
+  // leftPanel.appendChild(refinementList);
 
-  const brandList = instantsearch.widgets.panel({
-    templates: {
-      header: 'Brands',
-    },
-  })(instantsearch.widgets.refinementList);
+  // const brandList = instantsearch.widgets.panel({
+  //   templates: {
+  //     header: 'Brands',
+  //   },
+  // })(instantsearch.widgets.refinementList);
 
-  search.addWidget(
-    brandList({
-      container: refinementList,
-      attribute: 'brand',
-    })
-  );
+  // search.addWidget(
+  //   brandList({
+  //     container: refinementList,
+  //     attribute: 'brand',
+  //   })
+  // );
 
   const numericMenu = document.createElement('div');
   leftPanel.appendChild(numericMenu);
@@ -48,21 +48,21 @@ function instantSearchPlayground({
     })
   );
 
-  const ratingMenu = document.createElement('div');
-  leftPanel.appendChild(ratingMenu);
+  // const ratingMenu = document.createElement('div');
+  // leftPanel.appendChild(ratingMenu);
 
-  const ratingList = instantsearch.widgets.panel({
-    templates: {
-      header: 'Rating',
-    },
-  })(instantsearch.widgets.ratingMenu);
+  // const ratingList = instantsearch.widgets.panel({
+  //   templates: {
+  //     header: 'Rating',
+  //   },
+  // })(instantsearch.widgets.ratingMenu);
 
-  search.addWidget(
-    ratingList({
-      container: ratingMenu,
-      attribute: 'rating',
-    })
-  );
+  // search.addWidget(
+  //   ratingList({
+  //     container: ratingMenu,
+  //     attribute: 'rating',
+  //   })
+  // );
 
   const searchBox = document.createElement('div');
   searchBox.classList.add('searchbox');

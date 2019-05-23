@@ -57,8 +57,8 @@ export default [
     mode: 'development',
     filename: 'instantsearch.development.js',
   }),
-  createConfiguration({
-    mode: 'production',
-    filename: 'instantsearch.production.min.js',
-  }),
+  // createConfiguration({
+  //   mode: 'production',
+  //   filename: 'instantsearch.production.min.js',
+  // }),
 ];

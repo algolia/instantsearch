@@ -47,7 +47,6 @@ class InstantSearch extends EventEmitter {
     const {
       indexName = null,
       numberLocale,
-      searchParameters = {},
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -91,7 +90,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this.insightsClient = insightsClient;
     this.helper = null;
     this.indexName = indexName;
-    this.searchParameters = { ...searchParameters, index: indexName };
+    this.uiState = {};
     this.widgets = [];
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
@@ -163,11 +162,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
 
     // Init the widget directly if instantsearch has been already started
     if (this.started && Boolean(widgets.length)) {
-      this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
-        ...this.helper.state,
-      });
-
-      this.helper.setState(this.searchParameters);
+      this.helper.setState(
+        this.getWidgetsSearchParameters({
+          // We have to provide the state to avoid issues where a widget does
+          // not implement getWidgetState/getWidgetSearchParameters. Without
+          // the state the refinement would be lost.
+          currentSearchParameters: this.helper.state,
+          uiState: this.uiState,
+        })
+      );
 
       widgets.forEach(widget => {
         if (widget.init) {
@@ -235,11 +238,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
-          ...nextState,
-        });
-
-        this.helper.setState(this.searchParameters);
+        this.helper.setState(
+          this.getWidgetsSearchParameters({
+            // We have to provide the state to avoid issues where a widget does
+            // not implement getWidgetState/getWidgetSearchParameters. Without
+            // the state the refinement would be lost.
+            currentSearchParameters: nextState,
+            uiState: this.uiState,
+          })
+        );
       }
     });
 
@@ -282,32 +289,50 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     }
 
     if (this.routing) {
-      const routingManager = new RoutingManager({
+      this.routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
+        onUiStateChange: nextUiState => {
+          this.uiState = nextUiState;
+        },
       });
-      this._onHistoryChange = routingManager.onHistoryChange.bind(
-        routingManager
-      );
-      this._createURL = routingManager.createURL.bind(routingManager);
+
+      this._createURL = this.routingManager.createURL.bind(this.routingManager);
       this._createAbsoluteURL = this._createURL;
-      this.widgets.push(routingManager);
+
+      this.widgets.push(this.routingManager);
     } else {
+      this.routingManager = {
+        renderUiState() {},
+        getInitialState() {
+          return {};
+        },
+      };
+
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = noop;
     }
 
-    this.searchParameters = this.widgets.reduce(
-      enhanceConfiguration,
-      this.searchParameters
-    );
+    const initialSearchParameters = this.getWidgetsSearchParameters({
+      uiState: this.uiState,
+      currentSearchParameters: new algoliasearchHelper.SearchParameters({
+        index: this.indexName,
+      }),
+    });
 
     const helper = algoliasearchHelper(
       this.client,
-      this.searchParameters.index || this.indexName,
-      this.searchParameters
+      initialSearchParameters.index || this.indexName,
+      initialSearchParameters
     );
+
+    helper.on('change', event => {
+      this.uiState = this.getWidgetsUiState({
+        searchParameters: event.state,
+      });
+
+      this.routingManager.renderUiState(this.uiState);
+    });
 
     if (this._searchFunction) {
       this._mainHelperSearch = helper.search.bind(helper);
@@ -382,7 +407,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     this.helper = null;
   }
 
-  getAllSearchParameters({ uiState, currentSearchParameters }) {
+  getWidgetsSearchParameters({ uiState, currentSearchParameters }) {
     return this.widgets.reduce((parameters, widget) => {
       if (!widget.getWidgetSearchParameters) {
         return parameters;
@@ -394,7 +419,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     }, currentSearchParameters);
   }
 
-  getAllUiStates({ searchParameters }) {
+  getWidgetsUiState({ searchParameters }) {
     return this.widgets.reduce((state, widget) => {
       if (!widget.getWidgetState) {
         return state;
