@@ -187,12 +187,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     });
 
     it('removes the created DerivedHelper', () => {
-      const detach = jest.fn();
+      const detachDerivedHelper = jest.fn();
       const helper = algoliasearchHelper(fakeClient, 'firstIndex');
-      helper.derive = () => ({
-        on() {},
-        detach,
-      });
+      helper.detachDerivedHelper = detachDerivedHelper;
 
       const renderFn = () => {};
       const unmountFn = () => {};
@@ -206,11 +203,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
       widget.init({ helper, instantSearchInstance: {} });
 
-      expect(detach).toHaveBeenCalledTimes(0);
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(0);
 
       widget.dispose({ helper, state: helper.state });
 
-      expect(detach).toHaveBeenCalledTimes(2);
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(2);
+    });
+
+    it('removes only the DerivedHelper created by autocomplete', () => {
+      const detachDerivedHelper = jest.fn();
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
+      helper.detachDerivedHelper = detachDerivedHelper;
+
+      const renderFn = () => {};
+      const unmountFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const widget = makeWidget({
+        indices: [
+          { label: 'Second', value: 'secondIndex' },
+          { label: 'Third', value: 'thirdIndex' },
+        ],
+      });
+
+      const derivedHelperOne = helper.derive(state => state);
+      const derivedHelperTwo = helper.derive(state => state);
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(2);
+      expect(helper.derivedHelpers).toEqual(
+        expect.arrayContaining([derivedHelperOne, derivedHelperTwo])
+      );
     });
 
     it('removes the `query` from the `SearchParameters`', () => {
