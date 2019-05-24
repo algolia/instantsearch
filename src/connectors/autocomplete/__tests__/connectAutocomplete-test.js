@@ -167,4 +167,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     expect(rendering.indices[0].hits).toEqual(hits);
   });
+
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const helper = jsHelper(fakeClient, 'firstIndex');
+
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const widget = makeWidget();
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose();
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+  });
 });
