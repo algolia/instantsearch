@@ -220,8 +220,18 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
 
       getWidgetState(uiState, { searchParameters }) {
