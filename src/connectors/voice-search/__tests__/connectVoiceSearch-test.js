@@ -59,38 +59,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
   });
 
-  describe('lifecycle', () => {
-    it('calls renderFn during init and render', () => {
-      const { renderFn, widget, helper } = getDefaultSetup();
-      widget.init({ helper });
-      expect(renderFn).toHaveBeenCalledTimes(1);
-      expect(renderFn).toHaveBeenLastCalledWith(
-        expect.objectContaining({}),
-        true
-      );
-      widget.render({
-        helper,
-      });
-      expect(renderFn).toHaveBeenCalledTimes(2);
-      expect(renderFn).toHaveBeenLastCalledWith(
-        expect.objectContaining({}),
-        false
-      );
+  it('calls renderFn during init and render', () => {
+    const { renderFn, widget, helper } = getDefaultSetup();
+    widget.init({ helper });
+    expect(renderFn).toHaveBeenCalledTimes(1);
+    expect(renderFn).toHaveBeenLastCalledWith(
+      expect.objectContaining({}),
+      true
+    );
+    widget.render({
+      helper,
     });
-
-    it('calls unmount on `dispose`', () => {
-      const { unmountFn, widget, helper } = getDefaultSetup();
-      widget.init({ helper });
-      widget.dispose({ helper, state: helper.state });
-      expect(unmountFn).toHaveBeenCalledTimes(1);
-    });
-
-    it('removes event listeners on `dispose`', () => {
-      const { widget, helper } = getDefaultSetup();
-      widget.init({ helper });
-      widget.dispose({ helper, state: helper.state });
-      expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(1);
-    });
+    expect(renderFn).toHaveBeenCalledTimes(2);
+    expect(renderFn).toHaveBeenLastCalledWith(
+      expect.objectContaining({}),
+      false
+    );
   });
 
   it('triggers render when state changes', () => {
@@ -112,6 +96,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     expect(helper.setQuery).toHaveBeenCalledTimes(1);
     expect(helper.setQuery).toHaveBeenCalledWith('foo');
     expect(helper.search).toHaveBeenCalledTimes(1);
+  });
+
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const { unmountFn, widget, helper } = getDefaultSetup();
+
+      widget.init({ helper });
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('removes event listeners on the voice helper', () => {
+      const { widget, helper } = getDefaultSetup();
+
+      widget.init({ helper });
+
+      expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('getWidgetState', () => {
