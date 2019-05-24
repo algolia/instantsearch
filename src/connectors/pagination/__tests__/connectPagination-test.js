@@ -267,6 +267,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
+
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectPagination(renderFn);
+      const widget = makeWidget();
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   describe('routing', () => {
