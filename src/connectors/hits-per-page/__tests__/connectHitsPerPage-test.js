@@ -1,7 +1,7 @@
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
-const SearchParameters = jsHelper.SearchParameters;
-
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import connectHitsPerPage from '../connectHitsPerPage';
 
 describe('connectHitsPerPage', () => {
@@ -52,7 +52,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 3,
     });
     helper.search = jest.fn();
@@ -113,7 +113,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         items.map(item => ({ ...item, label: 'transformed' })),
     });
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 3,
     });
     helper.search = jest.fn();
@@ -189,7 +189,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 11,
     });
     helper.search = jest.fn();
@@ -233,7 +233,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         { value: 20, label: '20 items per page' },
       ],
     });
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 20,
     });
     helper.search = jest.fn();
@@ -271,7 +271,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
@@ -308,7 +308,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
@@ -351,7 +351,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
@@ -394,7 +394,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
@@ -458,7 +458,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      const helper = algoliasearchHelper({}, '', widget.getConfiguration({}));
       helper.search = jest.fn();
 
       widget.init({
