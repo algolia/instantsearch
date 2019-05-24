@@ -223,7 +223,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       dispose({ state }) {
         unmountFn();
 
-        return state.setQueryParameters(
+        return state.setQueryParameter('page', undefined).setQueryParameters(
           Object.keys(TAG_PLACEHOLDER).reduce(
             (acc, key) => ({
               ...acc,

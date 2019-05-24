@@ -642,6 +642,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(nextState.highlightPreTag).toBeUndefined();
       expect(nextState.highlightPostTag).toBeUndefined();
     });
+
+    it('removes the `page` from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper({} as Client, '', {
+        page: 5,
+      });
+
+      const renderFn = (): void => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectInfiniteHits(renderFn, unmountFn);
+      const widget = makeWidget({});
+
+      expect(helper.state.page).toBe(5);
+
+      const nextState = widget.dispose!({
+        helper,
+        state: helper.state,
+      }) as SearchParameters;
+
+      expect(nextState.page).toBeUndefined();
+    });
   });
 
   describe('routing', () => {
