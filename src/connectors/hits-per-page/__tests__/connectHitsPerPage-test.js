@@ -424,6 +424,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
@@ -436,9 +438,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose();
+      widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('removes `hitsPerPage` from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper({}, '', {
+        hitsPerPage: 5,
+      });
+
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectHitsPerPage(renderFn, unmountFn);
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page' },
+          { value: 10, label: '10 items per page' },
+        ],
+      });
+
+      expect(helper.state.hitsPerPage).toBe(5);
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.hitsPerPage).toBeUndefined();
     });
   });
 

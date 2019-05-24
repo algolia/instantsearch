@@ -201,8 +201,10 @@ You may want to add another entry to the \`items\` option with this value.`
         }));
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setQueryParameter('hitsPerPage', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
