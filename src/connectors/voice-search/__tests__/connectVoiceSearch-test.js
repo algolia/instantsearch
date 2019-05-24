@@ -1,4 +1,4 @@
-import jsHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import connectVoiceSearch from '../connectVoiceSearch';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
@@ -21,7 +21,7 @@ function getDefaultSetup() {
   const unmountFn = jest.fn();
   const makeWidget = connectVoiceSearch(renderFn, unmountFn);
   const widget = makeWidget({});
-  const helper = jsHelper({});
+  const helper = algoliasearchHelper({});
 
   return {
     renderFn,
@@ -112,7 +112,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = jsHelper({}, '');
+      const helper = algoliasearchHelper({}, '');
 
       const renderFn = () => {};
       const makeWidget = connectVoiceSearch(renderFn);
@@ -138,7 +138,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
 
     it('removes the `query` from the `SearchParameters`', () => {
-      const helper = jsHelper({}, '', {
+      const helper = algoliasearchHelper({}, '', {
         query: 'Apple',
       });
 
