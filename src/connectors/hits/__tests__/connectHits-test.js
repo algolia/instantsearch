@@ -348,4 +348,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect.anything()
     );
   });
+
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectHits(renderFn, unmountFn);
+      const widget = makeWidget();
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose();
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+  });
 });
