@@ -1,4 +1,4 @@
-import jsHelper, {
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -27,7 +27,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -86,7 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget();
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -131,7 +131,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     const makeWidget = connectPagination(renderFn);
     const widget = makeWidget();
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -197,7 +197,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       padding: 5,
     });
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -275,7 +275,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const makeWidget = connectPagination(renderFn);
       const widget = makeWidget({});
 
-      const helper = jsHelper({}, '');
+      const helper = algoliasearchHelper({}, '');
       helper.search = jest.fn();
 
       widget.init({
