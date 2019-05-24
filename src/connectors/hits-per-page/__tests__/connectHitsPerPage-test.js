@@ -35,10 +35,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
   });
 
   it('Renders during init and render', () => {
-    // test that the dummyRendering is called with the isFirstRendering
-    // flag set accordingly
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -49,8 +47,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     expect(typeof widget.getConfiguration).toEqual('function');
     expect(widget.getConfiguration()).toEqual({});
 
-    // test if widget is not rendered yet at this point
-    expect(rendering).toHaveBeenCalledTimes(0);
+    expect(renderFn).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 3,
@@ -64,10 +61,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       onHistoryChange: () => {},
     });
 
-    // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering).toHaveBeenCalledTimes(1);
-    // test if isFirstRendering is true during init
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(1);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         widgetParams: {
           items: [
@@ -86,9 +81,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: () => '#',
     });
 
-    // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering).toHaveBeenCalledTimes(2);
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(2);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         widgetParams: {
           items: [
@@ -102,8 +96,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
   });
 
   it('Renders during init and render with transformed items', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -123,7 +117,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       state: helper.state,
     });
 
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         items: [
           expect.objectContaining({ label: 'transformed' }),
@@ -139,7 +133,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       helper,
     });
 
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         items: [
           expect.objectContaining({ label: 'transformed' }),
@@ -151,8 +145,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
   });
 
   it('Configures the search with the default hitsPerPage provided', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -166,8 +160,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
   });
 
   it('Does not configures the search when there is no default value', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -179,8 +173,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -201,8 +195,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    const { refine } = firstRenderingOptions;
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    const { refine } = firstRenderOptions;
     expect(helper.state.hitsPerPage).toBe(11);
     refine(3);
     expect(helper.state.hitsPerPage).toBe(3);
@@ -214,8 +208,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { refine: renderSetValue } = secondRenderingOptions;
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    const { refine: renderSetValue } = secondRenderOptions;
     expect(helper.state.hitsPerPage).toBe(3);
     renderSetValue(10);
     expect(helper.state.hitsPerPage).toBe(10);
@@ -224,8 +218,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
   });
 
   it('provides a createURL function', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -233,6 +227,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         { value: 20, label: '20 items per page' },
       ],
     });
+
     const helper = algoliasearchHelper({}, '', {
       hitsPerPage: 20,
     });
@@ -244,7 +239,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: state => state,
     });
 
-    const createURLAtInit = rendering.mock.calls[0][0].createURL;
+    const createURLAtInit = renderFn.mock.calls[0][0].createURL;
     expect(helper.state.hitsPerPage).toEqual(20);
     const URLStateAtInit = createURLAtInit(3);
     expect(URLStateAtInit.hitsPerPage).toEqual(3);
@@ -255,14 +250,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: state => state,
     });
 
-    const createURLAtRender = rendering.mock.calls[1][0].createURL;
+    const createURLAtRender = renderFn.mock.calls[1][0].createURL;
     const URLStateAtRender = createURLAtRender(5);
     expect(URLStateAtRender.hitsPerPage).toEqual(5);
   });
 
   it('provides the current hitsPerPage value', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -283,9 +278,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.items).toMatchSnapshot();
-    firstRenderingOptions.refine(3);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.items).toMatchSnapshot();
+    firstRenderOptions.refine(3);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -294,13 +289,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.items).toMatchSnapshot();
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    expect(secondRenderOptions.items).toMatchSnapshot();
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -320,9 +315,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.items).toHaveLength(3);
-    firstRenderingOptions.refine(firstRenderingOptions.items[0].value);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.items).toHaveLength(3);
+    firstRenderOptions.refine(firstRenderOptions.items[0].value);
     expect(helper.state.hitsPerPage).toBeUndefined();
 
     // Reset the hitsPerPage to an actual value
@@ -335,15 +330,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.items).toHaveLength(3);
-    secondRenderingOptions.refine(secondRenderingOptions.items[0].value);
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    expect(secondRenderOptions.items).toHaveLength(3);
+    secondRenderOptions.refine(secondRenderOptions.items[0].value);
     expect(helper.state.hitsPerPage).toBeUndefined();
   });
 
   it('the option for unselecting values should work even if stringified', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -363,9 +358,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.items).toHaveLength(3);
-    firstRenderingOptions.refine(`${firstRenderingOptions.items[0].value}`);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.items).toHaveLength(3);
+    firstRenderOptions.refine(`${firstRenderOptions.items[0].value}`);
     expect(helper.state.hitsPerPage).toBeUndefined();
 
     // Reset the hitsPerPage to an actual value
@@ -378,15 +373,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.items).toHaveLength(3);
-    secondRenderingOptions.refine(`${secondRenderingOptions.items[0].value}`);
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    expect(secondRenderOptions.items).toHaveLength(3);
+    secondRenderOptions.refine(`${secondRenderOptions.items[0].value}`);
     expect(helper.state.hitsPerPage).toBeUndefined();
   });
 
   it('Should be able to unselect using an empty string', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
@@ -406,9 +401,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.items).toHaveLength(3);
-    firstRenderingOptions.refine('');
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.items).toHaveLength(3);
+    firstRenderOptions.refine('');
     expect(helper.state.hitsPerPage).toBeUndefined();
 
     // Reset the hitsPerPage to an actual value
@@ -421,9 +416,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.items).toHaveLength(3);
-    secondRenderingOptions.refine('');
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    expect(secondRenderOptions.items).toHaveLength(3);
+    secondRenderOptions.refine('');
     expect(helper.state.hitsPerPage).toBeUndefined();
   });
 
@@ -449,8 +444,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
   describe('routing', () => {
     const getInitializedWidget = () => {
-      const rendering = jest.fn();
-      const makeWidget = connectHitsPerPage(rendering);
+      const renderFn = jest.fn();
+      const makeWidget = connectHitsPerPage(renderFn);
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page', default: true },
@@ -468,7 +463,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         onHistoryChange: () => {},
       });
 
-      const { refine } = rendering.mock.calls[0][0];
+      const { refine } = renderFn.mock.calls[0][0];
 
       return [widget, helper, refine];
     };
