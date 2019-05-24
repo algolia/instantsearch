@@ -1,4 +1,4 @@
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectHits from '../connectHits';
 
@@ -32,7 +32,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
 
-    const helper = jsHelper({}, '', {});
+    const helper = algoliasearchHelper({}, '', {});
     helper.search = jest.fn();
 
     widget.init({
@@ -80,7 +80,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper({}, '', {});
+    const helper = algoliasearchHelper({}, '', {});
     helper.search = jest.fn();
 
     widget.init({
@@ -125,7 +125,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({ escapeHTML: true });
 
-    const helper = jsHelper({}, '', {});
+    const helper = algoliasearchHelper({}, '', {});
     helper.search = jest.fn();
 
     widget.init({
@@ -191,7 +191,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       transformItems: items => items.map(() => ({ name: 'transformed' })),
     });
 
-    const helper = jsHelper({}, '', {});
+    const helper = algoliasearchHelper({}, '', {});
     helper.search = jest.fn();
 
     widget.init({
@@ -232,7 +232,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper({}, '', {});
+    const helper = algoliasearchHelper({}, '', {});
     helper.search = jest.fn();
 
     widget.init({
@@ -282,7 +282,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       escapeHTML: true,
     });
 
-    const helper = jsHelper({}, '', {});
+    const helper = algoliasearchHelper({}, '', {});
     helper.search = jest.fn();
 
     widget.init({
