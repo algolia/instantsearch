@@ -16,30 +16,18 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
   };
 });
 
-function getDefaultSetup() {
-  const renderFn = jest.fn();
-  const unmountFn = jest.fn();
-  const makeWidget = connectVoiceSearch(renderFn, unmountFn);
-  const widget = makeWidget({});
-  const helper = algoliasearchHelper({});
-
-  return {
-    renderFn,
-    unmountFn,
-    widget,
-    helper,
-  };
-}
-
 function getInitializedWidget() {
-  const { renderFn, unmountFn, widget, helper } = getDefaultSetup();
+  const helper = algoliasearchHelper({}, '');
+
+  const renderFn = () => {};
+  const makeWidget = connectVoiceSearch(renderFn);
+  const widget = makeWidget({});
 
   helper.search = () => {};
   widget.init({ helper });
 
   return {
     renderFn,
-    unmountFn,
     widget,
     helper,
     refine: query => widget._refine(query),
@@ -60,16 +48,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   });
 
   it('calls renderFn during init and render', () => {
-    const { renderFn, widget, helper } = getDefaultSetup();
+    const helper = algoliasearchHelper({}, '');
+
+    const renderFn = jest.fn();
+    const makeWidget = connectVoiceSearch(renderFn);
+    const widget = makeWidget({});
+
     widget.init({ helper });
+
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({}),
       true
     );
+
     widget.render({
       helper,
     });
+
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({}),
@@ -78,21 +74,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   });
 
   it('triggers render when state changes', () => {
-    const { renderFn, widget, helper } = getDefaultSetup();
+    const helper = algoliasearchHelper({}, '');
+
+    const renderFn = jest.fn();
+    const makeWidget = connectVoiceSearch(renderFn);
+    const widget = makeWidget({});
+
     widget.init({ helper });
+
     expect(renderFn).toHaveBeenCalledTimes(1);
+
     widget._voiceSearchHelper.changeState();
+
     expect(renderFn).toHaveBeenCalledTimes(2);
+
     widget._voiceSearchHelper.changeState();
+
     expect(renderFn).toHaveBeenCalledTimes(3);
   });
 
   it('setQuery and search when query changes', () => {
-    const { widget, helper } = getDefaultSetup();
+    const helper = algoliasearchHelper({}, '');
+
+    const renderFn = jest.fn();
+    const makeWidget = connectVoiceSearch(renderFn);
+    const widget = makeWidget({});
+
     jest.spyOn(helper, 'setQuery');
+
     helper.search = jest.fn();
+
     widget.init({ helper });
+
     widget._voiceSearchHelper.changeQuery('foo');
+
     expect(helper.setQuery).toHaveBeenCalledTimes(1);
     expect(helper.setQuery).toHaveBeenCalledWith('foo');
     expect(helper.search).toHaveBeenCalledTimes(1);
@@ -100,7 +115,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const { unmountFn, widget, helper } = getDefaultSetup();
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectVoiceSearch(renderFn, unmountFn);
+      const widget = makeWidget({});
 
       widget.init({ helper });
 
@@ -126,7 +146,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
 
     it('removes event listeners on the voice helper', () => {
-      const { widget, helper } = getDefaultSetup();
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
 
       widget.init({ helper });
 
