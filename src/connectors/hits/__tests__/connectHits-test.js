@@ -18,10 +18,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('Renders during init and render', () => {
-    // test that the dummyRendering is called with the isFirstRendering
-    // flag set accordingly
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
     expect(widget.getConfiguration()).toEqual({
@@ -30,7 +28,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering).toHaveBeenCalledTimes(0);
+    expect(renderFn).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper({}, '', {});
     helper.search = jest.fn();
@@ -42,9 +40,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       onHistoryChange: () => {},
     });
 
-    expect(rendering).toHaveBeenCalledTimes(1);
-    // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(1);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({ widgetParams: { escapeHTML: true } }),
       true
     );
@@ -56,17 +53,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
-    expect(rendering).toHaveBeenCalledTimes(2);
-    // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(2);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({ widgetParams: { escapeHTML: true } }),
       false
     );
   });
 
   it('sets the default configuration', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHits(renderFn);
     const widget = makeWidget();
 
     expect(widget.getConfiguration()).toEqual({
@@ -76,8 +72,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('Provides the hits and the whole results', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({}, '', {});
@@ -90,7 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       onHistoryChange: () => {},
     });
 
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [],
         results: undefined,
@@ -111,7 +107,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits,
         results,
@@ -121,8 +117,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('escape highlight properties if requested', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
     const helper = algoliasearchHelper({}, '', {});
@@ -135,7 +131,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       onHistoryChange: () => {},
     });
 
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [],
         results: undefined,
@@ -175,7 +171,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     escapedHits.__escaped = true;
 
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: escapedHits,
         results,
@@ -185,8 +181,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('transform items if requested', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHits(renderFn);
     const widget = makeWidget({
       transformItems: items => items.map(() => ({ name: 'transformed' })),
     });
@@ -201,7 +197,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       onHistoryChange: () => {},
     });
 
-    expect(rendering).toHaveBeenNthCalledWith(
+    expect(renderFn).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({ hits: [], results: undefined }),
       expect.anything()
@@ -217,7 +213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
-    expect(rendering).toHaveBeenNthCalledWith(
+    expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         hits: [{ name: 'transformed' }, { name: 'transformed' }],
@@ -228,8 +224,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('adds queryID if provided to results', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({}, '', {});
@@ -254,7 +250,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
-    expect(rendering).toHaveBeenNthCalledWith(
+    expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         hits: [
@@ -267,8 +263,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   it('transform items after escaping', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectHits(renderFn);
     const widget = makeWidget({
       transformItems: items =>
         items.map(item => ({
@@ -322,7 +318,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
-    expect(rendering).toHaveBeenNthCalledWith(
+    expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         hits: [
