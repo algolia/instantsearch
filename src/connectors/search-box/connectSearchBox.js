@@ -133,7 +133,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        return state.setQuery('');
+        return state.setQueryParameter('query', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {

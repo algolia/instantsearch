@@ -324,6 +324,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         widget.dispose({ helper, state: helper.state })
       ).not.toThrow();
     });
+
+    it('removes the `query` from the `SearchParameters`', () => {
+      const helper = jsHelper({}, '', {
+        query: 'Apple',
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget();
+
+      expect(helper.state.query).toBe('Apple');
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.query).toBeUndefined();
+    });
   });
 
   describe('routing', () => {
