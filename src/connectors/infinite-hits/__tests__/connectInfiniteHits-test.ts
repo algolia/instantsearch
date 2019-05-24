@@ -1,4 +1,4 @@
-import jsHelper, {
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -60,7 +60,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -139,7 +139,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -192,7 +192,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.setPage(1);
     helper.search = jest.fn();
     helper.emit = jest.fn();
@@ -253,7 +253,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -300,7 +300,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({ escapeHTML: true });
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -355,7 +355,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       transformItems: items => items.map(() => ({ name: 'transformed' })),
     });
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -415,7 +415,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       escapeHTML: true,
     });
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -487,7 +487,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -538,7 +538,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
 
     widget.init!({
@@ -607,7 +607,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = jsHelper({} as Client, '', {});
+      const helper = algoliasearchHelper({} as Client, '', {});
 
       const renderFn = (): void => {};
       const unmountFn = jest.fn();
@@ -629,7 +629,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         const makeWidget = connectInfiniteHits(rendering);
         const widget = makeWidget({ showPrevious: true });
 
-        const helper = jsHelper({} as Client, '', {});
+        const helper = algoliasearchHelper({} as Client, '', {});
         helper.search = jest.fn();
 
         widget.init!({
@@ -652,7 +652,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         const makeWidget = connectInfiniteHits(rendering);
         const widget = makeWidget({ showPrevious: true });
 
-        const helper = jsHelper({} as Client, '', {});
+        const helper = algoliasearchHelper({} as Client, '', {});
         helper.search = jest.fn();
 
         widget.init!({
@@ -679,7 +679,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         const makeWidget = connectInfiniteHits(rendering);
         const widget = makeWidget({ showPrevious: false });
 
-        const helper = jsHelper({} as Client, '', {});
+        const helper = algoliasearchHelper({} as Client, '', {});
         helper.search = jest.fn();
 
         widget.init!({
@@ -708,7 +708,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         const makeWidget = connectInfiniteHits(rendering);
         const widget = makeWidget({ showPrevious: true });
 
-        const helper = jsHelper({} as Client, '', {});
+        const helper = algoliasearchHelper({} as Client, '', {});
         helper.search = jest.fn();
 
         widget.init!({
@@ -735,7 +735,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         const makeWidget = connectInfiniteHits(rendering);
         const widget = makeWidget({ showPrevious: true });
 
-        const helper = jsHelper({} as Client, '', {});
+        const helper = algoliasearchHelper({} as Client, '', {});
         helper.search = jest.fn();
 
         widget.init!({
@@ -768,7 +768,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         const makeWidget = connectInfiniteHits(rendering);
         const widget = makeWidget({ showPrevious: true });
 
-        const helper = jsHelper({} as Client, '', {});
+        const helper = algoliasearchHelper({} as Client, '', {});
         helper.search = jest.fn();
 
         widget.init!({
@@ -804,7 +804,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const makeWidget = connectInfiniteHits(rendering);
       const widget = makeWidget({ showPrevious: false });
 
-      const helper = jsHelper({} as Client, '', {});
+      const helper = algoliasearchHelper({} as Client, '', {});
       helper.search = jest.fn();
 
       widget.init!({
