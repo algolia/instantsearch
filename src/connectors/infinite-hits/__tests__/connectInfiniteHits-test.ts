@@ -605,6 +605,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
   });
 
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const helper = jsHelper({} as Client, '', {});
+
+      const renderFn = (): void => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectInfiniteHits(renderFn, unmountFn);
+      const widget = makeWidget({});
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose!({ helper, state: helper.state });
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('routing', () => {
     describe('getWidgetState', () => {
       it('should give back the object unmodified if the default value is selected', () => {
