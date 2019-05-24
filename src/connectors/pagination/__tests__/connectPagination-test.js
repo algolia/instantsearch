@@ -256,6 +256,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectPagination(renderFn, unmountFn);
@@ -263,7 +265,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose();
+      widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -278,6 +280,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       expect(() =>
         widget.dispose({ helper, state: helper.state })
       ).not.toThrow();
+    });
+
+    it('removes the `page` from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper({}, '', {
+        page: 5,
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectPagination(renderFn);
+      const widget = makeWidget();
+
+      expect(helper.state.page).toBe(5);
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.page).toBeUndefined();
     });
   });
 
