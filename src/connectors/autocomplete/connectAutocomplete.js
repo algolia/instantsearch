@@ -142,7 +142,6 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       },
 
       dispose() {
-        // detach every derived indices from the main helper instance
         this.indices.slice(1).forEach(({ helper }) => helper.detach());
 
         unmountFn();

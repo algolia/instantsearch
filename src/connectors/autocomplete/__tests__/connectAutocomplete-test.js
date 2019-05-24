@@ -54,7 +54,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     });
   });
 
-  it('creates derived helper', () => {
+  it('creates DerivedHelper', () => {
     const renderFn = jest.fn();
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({ indices: [{ label: 'foo', value: 'foo' }] });
@@ -184,6 +184,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       widget.dispose();
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('removes the created DerivedHelper', () => {
+      const detach = jest.fn();
+      const helper = jsHelper(fakeClient, 'firstIndex');
+      helper.derive = () => ({
+        on() {},
+        detach,
+      });
+
+      const renderFn = () => {};
+      const unmountFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const widget = makeWidget({
+        indices: [
+          { label: 'Second', value: 'secondIndex' },
+          { label: 'Third', value: 'thirdIndex' },
+        ],
+      });
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(detach).toHaveBeenCalledTimes(0);
+
+      widget.dispose();
+
+      expect(detach).toHaveBeenCalledTimes(2);
     });
   });
 });
