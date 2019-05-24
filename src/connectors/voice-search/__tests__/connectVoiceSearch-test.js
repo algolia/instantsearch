@@ -111,6 +111,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
+    it('does not throw without the unmount function', () => {
+      const helper = jsHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      widget.init({ helper });
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('removes event listeners on the voice helper', () => {
       const { widget, helper } = getDefaultSetup();
 
