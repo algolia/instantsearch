@@ -1,4 +1,4 @@
-import jsHelper, {
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -29,7 +29,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = () => {};
 
     widget.init({
@@ -76,7 +76,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     const widget = makeWidget();
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -121,7 +121,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     const widget = makeWidget();
 
-    const helper = jsHelper({}, '', {
+    const helper = algoliasearchHelper({}, '', {
       query: 'bup',
     });
     helper.search = jest.fn();
@@ -176,7 +176,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       queryHook,
     });
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -237,7 +237,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     const widget = makeWidget();
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = () => {};
 
     widget.init({
@@ -277,7 +277,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     const widget = makeWidget();
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
     helper.setQuery('foobar');
 
@@ -299,7 +299,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = jsHelper({}, '');
+      const helper = algoliasearchHelper({}, '');
 
       const renderFn = () => {};
       const unmountFn = jest.fn();
@@ -314,7 +314,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = jsHelper({}, '');
+      const helper = algoliasearchHelper({}, '');
 
       const renderFn = () => {};
       const makeWidget = connectSearchBox(renderFn);
@@ -326,7 +326,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
 
     it('removes the `query` from the `SearchParameters`', () => {
-      const helper = jsHelper({}, '', {
+      const helper = algoliasearchHelper({}, '', {
         query: 'Apple',
       });
 
@@ -352,7 +352,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       });
 
       const initialConfig = {};
-      const helper = jsHelper({}, '', initialConfig);
+      const helper = algoliasearchHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
       widget.init({
