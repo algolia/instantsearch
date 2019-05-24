@@ -99,6 +99,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
           voiceSearchHelper: (this as any)._voiceSearchHelper,
         });
       },
+
       render({ instantSearchInstance }) {
         render({
           isFirstRendering: false,
@@ -106,11 +107,15 @@ const connectVoiceSearch: VoiceSearchConnector = (
           voiceSearchHelper: (this as any)._voiceSearchHelper,
         });
       },
+
       dispose({ state }) {
         (this as any)._voiceSearchHelper.dispose();
+
         unmountFn();
-        return state.setQuery('');
+
+        return state.setQueryParameter('query', undefined);
       },
+
       getWidgetState(uiState, { searchParameters }) {
         const query = searchParameters.query || '';
 
@@ -123,6 +128,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
           query,
         };
       },
+
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameter('query', uiState.query);
       },

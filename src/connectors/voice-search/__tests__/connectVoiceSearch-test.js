@@ -136,6 +136,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(1);
     });
+
+    it('removes the `query` from the `SearchParameters`', () => {
+      const helper = jsHelper({}, '', {
+        query: 'Apple',
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      widget.init({ helper });
+
+      expect(helper.state.query).toBe('Apple');
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.query).toBeUndefined();
+    });
   });
 
   describe('getWidgetState', () => {
