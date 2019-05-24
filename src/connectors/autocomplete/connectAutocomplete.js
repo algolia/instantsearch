@@ -141,10 +141,12 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         this.indices.slice(1).forEach(({ helper }) => helper.detach());
 
         unmountFn();
+
+        return state.setQueryParameter('query', undefined);
       },
     };
   };
