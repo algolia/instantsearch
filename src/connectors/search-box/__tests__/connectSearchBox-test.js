@@ -312,6 +312,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
+
+    it('does not throw without the unmount function', () => {
+      const helper = jsHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget();
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   describe('routing', () => {
