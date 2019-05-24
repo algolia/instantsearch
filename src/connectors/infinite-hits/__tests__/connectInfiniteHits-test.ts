@@ -44,10 +44,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('Renders during init and render', () => {
-    // test that the dummyRendering is called with the isFirstRendering
-    // flag set accordingly
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
       escapeHTML: true,
     });
@@ -57,8 +55,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
     });
 
-    // test if widget is not rendered yet at this point
-    expect(rendering).toHaveBeenCalledTimes(0);
+    expect(renderFn).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper({} as Client, '', {});
     helper.search = jest.fn();
@@ -69,10 +66,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       state: helper.state,
     });
 
-    // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering).toHaveBeenCalledTimes(1);
-    // test if isFirstRendering is true during init
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(1);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [],
         showPrevious: expect.any(Function),
@@ -102,8 +97,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    expect(rendering).toHaveBeenCalledTimes(2);
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(2);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [],
         showPrevious: expect.any(Function),
@@ -124,8 +119,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('sets the default configuration', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = (): void => {};
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     expect(widget.getConfiguration!()).toEqual({
@@ -135,8 +130,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('Provides the hits and accumulates results on next page', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as Client, '', {});
@@ -148,9 +143,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       state: helper.state,
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
@@ -161,10 +156,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { showMore } = secondRenderingOptions;
-    expect(secondRenderingOptions.hits).toEqual(hits);
-    expect(secondRenderingOptions.results).toEqual(results);
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    const { showMore } = secondRenderOptions;
+    expect(secondRenderOptions.hits).toEqual(hits);
+    expect(secondRenderOptions.results).toEqual(results);
     showMore();
     expect(helper.search).toHaveBeenCalledTimes(1);
 
@@ -182,14 +177,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    const thirdRenderingOptions = rendering.mock.calls[2][0];
-    expect(thirdRenderingOptions.hits).toEqual([...hits, ...otherHits]);
-    expect(thirdRenderingOptions.results).toEqual(otherResults);
+    const thirdRenderOptions = renderFn.mock.calls[2][0];
+    expect(thirdRenderOptions.hits).toEqual([...hits, ...otherHits]);
+    expect(thirdRenderOptions.results).toEqual(otherResults);
   });
 
   it('Provides the hits and prepends results on previous page', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as Client, '', {});
@@ -203,9 +198,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       state: helper.state,
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [
@@ -220,10 +215,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    const { showPrevious } = secondRenderingOptions;
-    expect(secondRenderingOptions.hits).toEqual(hits);
-    expect(secondRenderingOptions.results).toEqual(results);
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    const { showPrevious } = secondRenderOptions;
+    expect(secondRenderOptions.hits).toEqual(hits);
+    expect(secondRenderOptions.results).toEqual(results);
     showPrevious();
     expect(helper.state.page).toBe(0);
     expect(helper.emit).not.toHaveBeenCalled();
@@ -243,14 +238,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    const thirdRenderingOptions = rendering.mock.calls[2][0];
-    expect(thirdRenderingOptions.hits).toEqual([...previousHits, ...hits]);
-    expect(thirdRenderingOptions.results).toEqual(previousResults);
+    const thirdRenderOptions = renderFn.mock.calls[2][0];
+    expect(thirdRenderOptions.hits).toEqual([...previousHits, ...hits]);
+    expect(thirdRenderOptions.results).toEqual(previousResults);
   });
 
   it('Provides the hits and flush hists cache on query changes', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as Client, '', {});
@@ -262,9 +257,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       state: helper.state,
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
@@ -275,9 +270,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.hits).toEqual(hits);
-    expect(secondRenderingOptions.results).toEqual(results);
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    expect(secondRenderOptions.hits).toEqual(hits);
+    expect(secondRenderOptions.results).toEqual(results);
 
     helper.setQuery('data');
 
@@ -290,14 +285,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       state: helper.state,
       helper,
     });
-    const thirdRenderingOptions = rendering.mock.calls[2][0];
-    expect(thirdRenderingOptions.hits).toEqual(otherHits);
-    expect(thirdRenderingOptions.results).toEqual(otherResults);
+    const thirdRenderOptions = renderFn.mock.calls[2][0];
+    expect(thirdRenderOptions.hits).toEqual(otherHits);
+    expect(thirdRenderOptions.results).toEqual(otherResults);
   });
 
   it('escape highlight properties if requested', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
     const helper = algoliasearchHelper({} as Client, '', {});
@@ -309,9 +304,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       state: helper.state,
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [
       {
@@ -343,14 +338,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       },
     ];
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.hits).toEqual(escapedHits);
-    expect(secondRenderingOptions.results).toEqual(results);
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    expect(secondRenderOptions.hits).toEqual(escapedHits);
+    expect(secondRenderOptions.results).toEqual(results);
   });
 
   it('transform items if requested', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
       transformItems: items => items.map(() => ({ name: 'transformed' })),
     });
@@ -364,9 +359,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       state: helper.state,
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    const firstRenderOptions = renderFn.mock.calls[0][0];
+    expect(firstRenderOptions.hits).toEqual([]);
+    expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [
       {
@@ -394,14 +389,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       },
     ];
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.hits).toEqual(transformedHits);
-    expect(secondRenderingOptions.results).toEqual(results);
+    const secondRenderOptions = renderFn.mock.calls[1][0];
+    expect(secondRenderOptions.hits).toEqual(transformedHits);
+    expect(secondRenderOptions.results).toEqual(results);
   });
 
   it('transform items after escaping', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
       transformItems: items =>
         items.map(item => ({
@@ -455,7 +450,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    expect(rendering).toHaveBeenNthCalledWith(
+    expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         hits: [
@@ -483,8 +478,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('adds queryID if provided to results', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as Client, '', {});
@@ -515,7 +510,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    expect(rendering).toHaveBeenNthCalledWith(
+    expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
         hits: [
@@ -534,8 +529,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   it('does not render the same page twice', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper({} as Client, '', {});
@@ -575,8 +570,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    expect(rendering).toHaveBeenCalledTimes(3);
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(3);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [{ objectID: 'a' }, { objectID: 'b' }],
       }),
@@ -596,8 +591,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       helper,
     });
 
-    expect(rendering).toHaveBeenCalledTimes(4);
-    expect(rendering).toHaveBeenLastCalledWith(
+    expect(renderFn).toHaveBeenCalledTimes(4);
+    expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [{ objectID: 'a' }, { objectID: 'b' }],
       }),
@@ -625,8 +620,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   describe('routing', () => {
     describe('getWidgetState', () => {
       it('should give back the object unmodified if the default value is selected', () => {
-        const rendering = jest.fn();
-        const makeWidget = connectInfiniteHits(rendering);
+        const renderFn = jest.fn();
+        const makeWidget = connectInfiniteHits(renderFn);
         const widget = makeWidget({ showPrevious: true });
 
         const helper = algoliasearchHelper({} as Client, '', {});
@@ -648,8 +643,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
 
       it('should add an entry equal to the refinement', () => {
-        const rendering = jest.fn();
-        const makeWidget = connectInfiniteHits(rendering);
+        const renderFn = jest.fn();
+        const makeWidget = connectInfiniteHits(renderFn);
         const widget = makeWidget({ showPrevious: true });
 
         const helper = algoliasearchHelper({} as Client, '', {});
@@ -661,7 +656,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           state: helper.state,
         });
 
-        const { showMore } = rendering.mock.calls[0][0];
+        const { showMore } = renderFn.mock.calls[0][0];
 
         showMore();
 
@@ -675,8 +670,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
 
       it('should give back the object unmodified if showPrevious is disabled', () => {
-        const rendering = jest.fn();
-        const makeWidget = connectInfiniteHits(rendering);
+        const renderFn = jest.fn();
+        const makeWidget = connectInfiniteHits(renderFn);
         const widget = makeWidget({ showPrevious: false });
 
         const helper = algoliasearchHelper({} as Client, '', {});
@@ -688,7 +683,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           state: helper.state,
         });
 
-        const { showMore } = rendering.mock.calls[0][0];
+        const { showMore } = renderFn.mock.calls[0][0];
 
         showMore();
 
@@ -704,8 +699,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     describe('getWidgetSearchParameters', () => {
       it('should return the same SP if there are no refinements in the UI state', () => {
-        const rendering = jest.fn();
-        const makeWidget = connectInfiniteHits(rendering);
+        const renderFn = jest.fn();
+        const makeWidget = connectInfiniteHits(renderFn);
         const widget = makeWidget({ showPrevious: true });
 
         const helper = algoliasearchHelper({} as Client, '', {});
@@ -731,8 +726,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
 
       it('should enforce the default value if no value is in the UI State', () => {
-        const rendering = jest.fn();
-        const makeWidget = connectInfiniteHits(rendering);
+        const renderFn = jest.fn();
+        const makeWidget = connectInfiniteHits(renderFn);
         const widget = makeWidget({ showPrevious: true });
 
         const helper = algoliasearchHelper({} as Client, '', {});
@@ -744,7 +739,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           state: helper.state,
         });
 
-        const { showMore } = rendering.mock.calls[0][0];
+        const { showMore } = renderFn.mock.calls[0][0];
 
         // The user presses back (browser), and the URL contains no parameters
         const uiState = {};
@@ -764,8 +759,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       it('should add the refinements according to the UI state provided', () => {
         (global as any).window = { location: { pathname: null } };
-        const rendering = jest.fn();
-        const makeWidget = connectInfiniteHits(rendering);
+        const renderFn = jest.fn();
+        const makeWidget = connectInfiniteHits(renderFn);
         const widget = makeWidget({ showPrevious: true });
 
         const helper = algoliasearchHelper({} as Client, '', {});
@@ -777,7 +772,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
           state: helper.state,
         });
 
-        const { showMore } = rendering.mock.calls[0][0];
+        const { showMore } = renderFn.mock.calls[0][0];
 
         // The user presses back (browser), and the URL contains some parameters
         const uiState = {
@@ -800,8 +795,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     it('should return the same SP if showPrevious is disabled', () => {
       (global as any).window = { location: { pathname: null } };
-      const rendering = jest.fn();
-      const makeWidget = connectInfiniteHits(rendering);
+      const renderFn = jest.fn();
+      const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({ showPrevious: false });
 
       const helper = algoliasearchHelper({} as Client, '', {});
@@ -813,7 +808,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         state: helper.state,
       });
 
-      const { showMore } = rendering.mock.calls[0][0];
+      const { showMore } = renderFn.mock.calls[0][0];
 
       // The user presses back (browser), and the URL contains some parameters
       const uiState = {
