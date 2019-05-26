@@ -203,9 +203,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(11);
+    expect(helper.state.hitsPerPage).toBe(11);
     refine(3);
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(3);
+    expect(helper.state.hitsPerPage).toBe(3);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -216,9 +216,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderSetValue } = secondRenderingOptions;
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(3);
+    expect(helper.state.hitsPerPage).toBe(3);
     renderSetValue(10);
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(10);
+    expect(helper.state.hitsPerPage).toBe(10);
 
     expect(helper.search).toHaveBeenCalledTimes(2);
   });
@@ -245,7 +245,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     const createURLAtInit = rendering.mock.calls[0][0].createURL;
-    expect(helper.getQueryParameter('hitsPerPage')).toEqual(20);
+    expect(helper.state.hitsPerPage).toEqual(20);
     const URLStateAtInit = createURLAtInit(3);
     expect(URLStateAtInit.hitsPerPage).toEqual(3);
 
@@ -323,7 +323,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items).toHaveLength(3);
     firstRenderingOptions.refine(firstRenderingOptions.items[0].value);
-    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+    expect(helper.state.hitsPerPage).toBeUndefined();
 
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
@@ -338,7 +338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toHaveLength(3);
     secondRenderingOptions.refine(secondRenderingOptions.items[0].value);
-    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+    expect(helper.state.hitsPerPage).toBeUndefined();
   });
 
   it('the option for unselecting values should work even if stringified', () => {
@@ -366,7 +366,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items).toHaveLength(3);
     firstRenderingOptions.refine(`${firstRenderingOptions.items[0].value}`);
-    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+    expect(helper.state.hitsPerPage).toBeUndefined();
 
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
@@ -381,7 +381,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toHaveLength(3);
     secondRenderingOptions.refine(`${secondRenderingOptions.items[0].value}`);
-    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+    expect(helper.state.hitsPerPage).toBeUndefined();
   });
 
   it('Should be able to unselect using an empty string', () => {
@@ -409,7 +409,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items).toHaveLength(3);
     firstRenderingOptions.refine('');
-    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+    expect(helper.state.hitsPerPage).toBeUndefined();
 
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
@@ -424,7 +424,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toHaveLength(3);
     secondRenderingOptions.refine('');
-    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+    expect(helper.state.hitsPerPage).toBeUndefined();
   });
 
   describe('routing', () => {

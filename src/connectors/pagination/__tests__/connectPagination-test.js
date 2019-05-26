@@ -110,7 +110,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine(2);
-      expect(helper.getPage()).toBe(2);
+      expect(helper.state.page).toBe(2);
       expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
@@ -131,7 +131,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine(7);
-      expect(helper.getPage()).toBe(7);
+      expect(helper.state.page).toBe(7);
       expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
@@ -354,7 +354,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         );
         // Applying an empty state, should force back to page 0
         expect(searchParametersAfter).toMatchSnapshot();
-        expect(searchParametersAfter.page).toBe(0);
+        expect(searchParametersAfter.page).toBeUndefined();
       });
 
       test('should add the refinements according to the UI state provided', () => {
