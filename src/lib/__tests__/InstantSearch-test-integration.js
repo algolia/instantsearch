@@ -21,9 +21,11 @@ describe('InstantSearch lifecycle', () => {
       reject = r;
     });
 
-    search.on('error', e => {
+    search.on('error', event => {
       try {
-        expect(e).toEqual(expect.any(Error));
+        expect(event).toEqual({
+          error: expect.any(Error),
+        });
       } catch (err) {
         reject(err);
       }
