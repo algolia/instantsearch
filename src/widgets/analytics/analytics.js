@@ -147,9 +147,9 @@ function analytics({
 
     formattedParams = formattedParams.join('&');
 
-    let dataToSend = `Query: ${state.state.query}, ${formattedParams}`;
+    let dataToSend = `Query: ${state.state.query || ''}, ${formattedParams}`;
     if (pushPagination === true) {
-      dataToSend += `, Page: ${state.state.page}`;
+      dataToSend += `, Page: ${state.state.page || 0}`;
     }
 
     if (lastSentData !== dataToSend) {

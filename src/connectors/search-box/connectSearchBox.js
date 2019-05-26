@@ -103,7 +103,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -118,7 +118,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -131,11 +131,12 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
       dispose({ state }) {
         unmountFn();
+
         return state.setQuery('');
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const query = searchParameters.query;
+        const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {
           return uiState;
@@ -148,7 +149,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
+        return searchParameters.setQueryParameter('query', uiState.query);
       },
     };
   };
