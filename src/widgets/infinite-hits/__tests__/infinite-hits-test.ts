@@ -113,7 +113,7 @@ describe('infiniteHits()', () => {
   });
 
   it('updates the search state properly when showMore is called', () => {
-    expect(helper.state.page).toBe(0);
+    expect(helper.state.page).toBeUndefined();
 
     const state = { page: 0 };
     widget.render({ results, state });

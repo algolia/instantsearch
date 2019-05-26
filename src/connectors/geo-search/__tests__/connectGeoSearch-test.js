@@ -1134,14 +1134,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
 
-      const expectation = {
-        insideBoundingBox: undefined,
-      };
+      const expectation = new SearchParameters();
 
       const actual = widget.dispose({ state: helper.state });
 
       expect(unmount).toHaveBeenCalled();
-      expect(actual).toMatchObject(expectation);
+      expect(actual).toEqual(expectation);
     });
   });
 
