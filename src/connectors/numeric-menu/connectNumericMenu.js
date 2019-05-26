@@ -340,7 +340,9 @@ function refine(state, attribute, items, facetValue) {
     }
   }
 
-  resolvedState.page = 0;
+  if (typeof resolvedState.page === 'number') {
+    resolvedState.page = 0;
+  }
 
   return resolvedState;
 }

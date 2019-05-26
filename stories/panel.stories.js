@@ -88,7 +88,7 @@ storiesOf('Panel', module)
     withHits(({ search, container, instantsearch }) => {
       const brandList = instantsearch.widgets.panel({
         collapsed: options => {
-          return options && options.state && options.state.query.length === 0;
+          return options && options.state && !options.state.query;
         },
         templates: {
           header: 'Brand (collapsible)',
@@ -109,7 +109,7 @@ storiesOf('Panel', module)
     withHits(({ search, container, instantsearch }) => {
       const brandList = instantsearch.widgets.panel({
         collapsed: options => {
-          return options && options.state && options.state.query.length === 0;
+          return options && options.state && !options.state.query;
         },
         templates: {
           header: 'Collapsible panel',
