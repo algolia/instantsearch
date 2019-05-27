@@ -72,10 +72,6 @@ describe('pagination()', () => {
     widget.init({ helper });
   });
 
-  it('configures nothing', () => {
-    expect(widget.getConfiguration).toEqual(undefined);
-  });
-
   it('sets the page', () => {
     widget.refine(helper, 42);
     expect(helper.setPage).toHaveBeenCalledTimes(1);
