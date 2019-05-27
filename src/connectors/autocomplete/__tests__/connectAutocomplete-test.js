@@ -269,5 +269,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
       expect(nextState.query).toBeUndefined();
     });
+
+    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex', {
+        ...TAG_PLACEHOLDER,
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget();
+
+      expect(helper.state.highlightPreTag).toBe(
+        TAG_PLACEHOLDER.highlightPreTag
+      );
+
+      expect(helper.state.highlightPostTag).toBe(
+        TAG_PLACEHOLDER.highlightPostTag
+      );
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.highlightPreTag).toBeUndefined();
+      expect(nextState.highlightPostTag).toBeUndefined();
+    });
   });
 });

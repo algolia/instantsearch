@@ -147,7 +147,15 @@ export default function connectAutocomplete(renderFn, unmountFn = noop) {
 
         unmountFn();
 
-        return state.setQueryParameter('query', undefined);
+        return state.setQueryParameter('query', undefined).setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
     };
   };
