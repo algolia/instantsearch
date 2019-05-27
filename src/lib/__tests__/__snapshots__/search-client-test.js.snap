@@ -6,7 +6,6 @@ Array [
     "indexName": "",
     "params": Object {
       "facets": Array [],
-      "page": 0,
       "query": "test",
       "tagFilters": "",
     },
@@ -20,8 +19,6 @@ Array [
     "indexName": "",
     "params": Object {
       "facets": Array [],
-      "page": 0,
-      "query": "",
       "tagFilters": "",
     },
   },

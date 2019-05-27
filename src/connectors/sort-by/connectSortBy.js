@@ -162,7 +162,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const currentIndex = searchParameters.getQueryParameter('index');
+        const currentIndex = searchParameters.index;
         const isInitialIndex = currentIndex === this.initialIndex;
 
         if (isInitialIndex || (uiState && uiState.sortBy === currentIndex)) {
@@ -171,7 +171,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
 
         return {
           ...uiState,
-          sortBy: searchParameters.getQueryParameter('index'),
+          sortBy: currentIndex,
         };
       },
 

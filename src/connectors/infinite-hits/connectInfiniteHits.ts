@@ -91,8 +91,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
-        firstReceivedPage = helper.state.page!;
-        lastReceivedPage = helper.state.page!;
+        firstReceivedPage = helper.state.page || 0;
+        lastReceivedPage = helper.state.page || 0;
 
         renderFn(
           {
@@ -116,11 +116,12 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // We're doing this to "reset" the widget if a refinement or the
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
-        const { page, ...currentState } = state;
+        const { page = 0, ...currentState } = state;
+
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
-          firstReceivedPage = page!;
-          lastReceivedPage = page!;
+          firstReceivedPage = page;
+          lastReceivedPage = page;
           prevState = currentState;
         }
 
@@ -144,12 +145,12 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // hits widgets mounted on the page.
         (results.hits as any).__escaped = initialEscaped;
 
-        if (lastReceivedPage < page! || !hitsCache.length) {
+        if (lastReceivedPage < page || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = page!;
-        } else if (firstReceivedPage > page!) {
+          lastReceivedPage = page;
+        } else if (firstReceivedPage > page) {
           hitsCache = [...results.hits, ...hitsCache];
-          firstReceivedPage = page!;
+          firstReceivedPage = page;
         }
 
         const isFirstPage = firstReceivedPage === 0;
@@ -175,7 +176,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page!;
+        const page = searchParameters.page || 0;
 
         if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
           return uiState;
@@ -191,11 +192,14 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         if (!hasShowPrevious) {
           return searchParameters;
         }
+
         const uiPage = uiState.page;
+
         if (uiPage) {
           return searchParameters.setQueryParameter('page', uiPage - 1);
         }
-        return searchParameters.setQueryParameter('page', 0);
+
+        return searchParameters.setQueryParameter('page', undefined);
       },
     };
   };

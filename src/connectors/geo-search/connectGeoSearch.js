@@ -212,7 +212,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
     };
 
     const clearMapRefinement = helper => () => {
-      helper.setQueryParameter('insideBoundingBox').search();
+      helper.setQueryParameter('insideBoundingBox', undefined).search();
     };
 
     const isRefinedWithMap = state => () => Boolean(state.insideBoundingBox);
@@ -338,7 +338,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
       dispose({ state }) {
         unmountFn();
 
-        return state.setQueryParameter('insideBoundingBox');
+        return state.setQueryParameter('insideBoundingBox', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
@@ -363,7 +363,10 @@ http://community.algolia.com/instantsearch.js/migration-guide
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         if (!uiState || !uiState.geoSearch) {
-          return searchParameters.setQueryParameter('insideBoundingBox');
+          return searchParameters.setQueryParameter(
+            'insideBoundingBox',
+            undefined
+          );
         }
 
         return searchParameters.setQueryParameter(

@@ -151,7 +151,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
         if (hasAnOffValue) {
           // Add filtering on the 'off' value if set
           if (!isRefined) {
-            const currentPage = helper.getPage();
+            const currentPage = helper.state.page;
             helper
               .addDisjunctiveFacetRefinement(attribute, off)
               .setPage(currentPage);

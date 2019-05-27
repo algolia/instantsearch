@@ -465,7 +465,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(secondRenderingOptions.items[0].isRefined).toBe(true);
   });
 
-  it('should reset page on refine()', () => {
+  it('should reset page to 0 on refine() when the page is defined', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericMenu(rendering);
 
@@ -499,6 +499,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     refine(items[0].value);
 
     expect(helper.state.page).toBe(0);
+  });
+
+  it('should not reset page on refine() when the page is not defined', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericMenu(rendering);
+
+    const widget = makeWidget({
+      attribute: 'numerics',
+      items: [
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
+        { label: '42', start: 42, end: 42 },
+        { label: 'void' },
+      ],
+    });
+
+    const helper = jsHelper({});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(helper.state.page).toBeUndefined();
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const { refine, items } = firstRenderingOptions;
+
+    refine(items[0].value);
+
+    expect(helper.state.page).toBeUndefined();
   });
 
   it('does not throw without the unmount function', () => {
