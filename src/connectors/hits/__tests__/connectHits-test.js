@@ -361,6 +361,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectHits(renderFn);
+      const widget = makeWidget();
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
       const helper = algoliasearchHelper({}, '', {
         ...TAG_PLACEHOLDER,
