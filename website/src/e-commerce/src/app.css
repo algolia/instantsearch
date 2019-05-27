@@ -128,9 +128,13 @@ mark {
   border-radius: 8px;
   box-shadow: 0 4px 48px 0 rgba(0, 0, 0, 0.2);
   font-family: Hind, sans-serif;
-  max-height: 64px;
-  padding: 24px;
+  height: 64px;
   padding-left: 58px;
+  /*
+    The "Hind" font family is vertically off-balance.
+    Adding some padding top makes it more vertically aligned.
+  */
+  padding-top: 4px;
 }
 
 .searchbox .searchbox-input::placeholder {
@@ -148,10 +152,16 @@ mark {
 
 .searchbox-submit {
   color: #e2a400;
+  height: 16px;
 }
 
 .refinement-list-searchbox-input {
   font-family: Hind, sans-serif;
+  /*
+    The "Hind" font family is vertically off-balance.
+    Adding some padding top makes it more vertically aligned.
+  */
+  padding-top: 1px;
 }
 
 /* Hits */
