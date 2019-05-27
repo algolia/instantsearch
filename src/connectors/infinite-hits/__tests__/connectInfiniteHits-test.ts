@@ -634,8 +634,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
 
       const renderFn = (): void => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectInfiniteHits(renderFn, unmountFn);
+      const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({});
 
       expect(helper.state.highlightPreTag).toBe(
@@ -655,14 +654,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(nextState.highlightPostTag).toBeUndefined();
     });
 
+    it('removes the TAG_PLACEHOLDER from the `SearchParameters` only with `escapeHTML`', () => {
+      const helper = algoliasearchHelper({} as Client, '', {
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      const renderFn = (): void => {};
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({
+        escapeHTML: false,
+      });
+
+      expect(helper.state.highlightPreTag).toBe('<mark>');
+      expect(helper.state.highlightPostTag).toBe('</mark>');
+
+      const nextState = widget.dispose!({
+        helper,
+        state: helper.state,
+      }) as SearchParameters;
+
+      expect(nextState.highlightPreTag).toBe('<mark>');
+      expect(nextState.highlightPostTag).toBe('</mark>');
+    });
+
     it('removes the `page` from the `SearchParameters`', () => {
       const helper = algoliasearchHelper({} as Client, '', {
         page: 5,
       });
 
       const renderFn = (): void => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectInfiniteHits(renderFn, unmountFn);
+      const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({});
 
       expect(helper.state.page).toBe(5);
