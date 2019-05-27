@@ -443,6 +443,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectHitsPerPage(renderFn);
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page' },
+          { value: 10, label: '10 items per page' },
+        ],
+      });
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('removes `hitsPerPage` from the `SearchParameters`', () => {
       const helper = algoliasearchHelper({}, '', {
         hitsPerPage: 5,
