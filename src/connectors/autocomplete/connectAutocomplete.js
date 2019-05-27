@@ -147,7 +147,13 @@ export default function connectAutocomplete(renderFn, unmountFn = noop) {
 
         unmountFn();
 
-        return state.setQueryParameter('query', undefined).setQueryParameters(
+        const stateWithoutQuery = state.setQueryParameter('query', undefined);
+
+        if (!escapeHTML) {
+          return stateWithoutQuery;
+        }
+
+        return stateWithoutQuery.setQueryParameters(
           Object.keys(TAG_PLACEHOLDER).reduce(
             (acc, key) => ({
               ...acc,

@@ -294,5 +294,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       expect(nextState.highlightPreTag).toBeUndefined();
       expect(nextState.highlightPostTag).toBeUndefined();
     });
+
+    it('removes the TAG_PLACEHOLDER from the `SearchParameters` only with `escapeHTML`', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex', {
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget({
+        escapeHTML: false,
+      });
+
+      expect(helper.state.highlightPreTag).toBe('<mark>');
+      expect(helper.state.highlightPostTag).toBe('</mark>');
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.highlightPreTag).toBe('<mark>');
+      expect(nextState.highlightPostTag).toBe('</mark>');
+    });
   });
 });
