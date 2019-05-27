@@ -15,6 +15,10 @@ type RoutingManagerProps = {
   stateMapping: StateMapping;
 };
 
+type HelperChangeEvent = {
+  state: SearchParameters;
+};
+
 class RoutingManager implements Widget {
   private readonly instantSearchInstance: InstantSearch;
   private readonly router: Router;
@@ -23,7 +27,7 @@ class RoutingManager implements Widget {
   private isFirstRender: boolean = true;
   private currentUiState: UiState;
   private initState?: UiState;
-  private renderURLFromState?: (searchParameters: SearchParameters) => void;
+  private renderURLFromState?: (event: HelperChangeEvent) => void;
 
   public constructor({
     router,
@@ -98,9 +102,9 @@ class RoutingManager implements Widget {
         .search();
     });
 
-    this.renderURLFromState = searchParameters => {
+    this.renderURLFromState = event => {
       this.currentUiState = this.getAllUiStates({
-        searchParameters,
+        searchParameters: event.state,
       });
 
       const route = this.stateMapping.stateToRoute(this.currentUiState);
@@ -108,6 +112,8 @@ class RoutingManager implements Widget {
       this.router.write(route);
     };
 
+    // @ts-ignore
+    // @TODO: we have to update the definition to make it work
     helper.on('change', this.renderURLFromState);
 
     // Compare initial state and first render state to see if the query has been

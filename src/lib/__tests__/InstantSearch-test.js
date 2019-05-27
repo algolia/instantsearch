@@ -342,7 +342,10 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
         beforeEach(() => {
           results = { some: 'data' };
-          search.helper.emit('result', results, search.helper.state);
+          search.helper.emit('result', {
+            state: search.helper.state,
+            results,
+          });
         });
 
         it('calls widget.render({results, state, helper, templatesConfig, instantSearchInstance})', () => {
@@ -412,12 +415,18 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(10);
       expect(onRender).toHaveBeenCalledTimes(2);
@@ -430,12 +439,18 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(10);
       expect(onRender).toHaveBeenCalledTimes(1);

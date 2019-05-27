@@ -58,9 +58,9 @@ export default function connectStats(renderFn, unmountFn = noop) {
           hitsPerPage: helper.state.hitsPerPage,
           nbHits: 0,
           nbPages: 0,
-          page: helper.state.page,
+          page: helper.state.page || 0,
           processingTimeMS: -1,
-          query: helper.state.query,
+          query: helper.state.query || '',
           widgetParams,
         },
         true
