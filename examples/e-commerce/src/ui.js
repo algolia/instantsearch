@@ -14,6 +14,7 @@ function spyCssClassMutationsAndCopy({ source, target }) {
           mutation.attributeName === 'class' && mutation.target === source
       )
       .forEach(mutation => {
+        // eslint-disable-next-line no-param-reassign
         target.className = mutation.target.className;
       });
   });
