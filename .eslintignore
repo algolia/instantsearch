@@ -3,8 +3,3 @@
 /es
 /website
 node_modules/
-
-# TODO: don't ignore these examples once we're updated
-/examples/calendar-widget
-/examples/media
-/examples/tourism
