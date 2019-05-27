@@ -616,6 +616,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({} as Client, '', {});
+
+      const renderFn = (): void => {};
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({});
+
+      expect(() =>
+        widget.dispose!({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
       const helper = algoliasearchHelper({} as Client, '', {
         ...TAG_PLACEHOLDER,
