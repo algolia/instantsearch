@@ -379,8 +379,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       });
 
       const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectHits(renderFn, unmountFn);
+      const makeWidget = connectHits(renderFn);
       const widget = makeWidget();
 
       expect(helper.state.highlightPreTag).toBe(
@@ -395,6 +394,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(nextState.highlightPreTag).toBeUndefined();
       expect(nextState.highlightPostTag).toBeUndefined();
+    });
+
+    it('removes the TAG_PLACEHOLDER from the `SearchParameters` only with `escapeHTML`', () => {
+      const helper = algoliasearchHelper({}, '', {
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectHits(renderFn);
+      const widget = makeWidget({
+        escapeHTML: false,
+      });
+
+      expect(helper.state.highlightPreTag).toBe('<mark>');
+      expect(helper.state.highlightPostTag).toBe('</mark>');
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.highlightPreTag).toBe('<mark>');
+      expect(nextState.highlightPostTag).toBe('</mark>');
     });
   });
 });
