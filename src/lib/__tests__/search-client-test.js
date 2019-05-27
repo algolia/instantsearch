@@ -28,7 +28,7 @@ describe('InstantSearch Search Client', () => {
 
       search.start();
 
-      expect(search.helper.state.query).toBe('');
+      expect(search.helper.state.query).toBeUndefined();
       expect(searchClientSpy.search).toHaveBeenCalledTimes(1);
       expect(searchClientSpy.search.mock.calls[0][0]).toMatchSnapshot();
     });

@@ -87,7 +87,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
           });
 
           // update results then trigger render after a search from any helper
-          derivedHelper.on('result', results =>
+          derivedHelper.on('result', ({ results }) =>
             this.saveResults({ results, label })
           );
         });
@@ -121,7 +121,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       },
 
       renderWithAllIndices({ isFirstRendering = false } = {}) {
-        const currentRefinement = this.indices[0].helper.state.query;
+        const currentRefinement = this.indices[0].helper.state.query || '';
 
         renderFn(
           {

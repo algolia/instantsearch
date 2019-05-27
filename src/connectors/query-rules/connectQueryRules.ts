@@ -3,6 +3,7 @@ import {
   RenderOptions,
   WidgetFactory,
   Helper,
+  HelperChangeEvent,
   SearchParameters,
 } from '../../types';
 import {
@@ -126,7 +127,7 @@ function applyRuleContexts(
     trackedFilters: ParamTrackedFilters;
     transformRuleContexts: ParamTransformRuleContexts;
   },
-  sharedHelperState: SearchParameters
+  event: HelperChangeEvent
 ): void {
   const {
     helper,
@@ -135,6 +136,7 @@ function applyRuleContexts(
     transformRuleContexts,
   } = this;
 
+  const sharedHelperState = event.state;
   const previousRuleContexts: string[] = sharedHelperState.ruleContexts || [];
   const newRuleContexts = getRuleContextsFromTrackedFilters({
     helper,
@@ -186,7 +188,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-    let onHelperChange: (state: SearchParameters) => void;
+    let onHelperChange: (event: HelperChangeEvent) => void;
 
     return {
       init({ helper, state, instantSearchInstance }) {
@@ -207,11 +209,13 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
             hasStateRefinements(state) ||
             Boolean(widgetParams.transformRuleContexts)
           ) {
-            onHelperChange(state);
+            onHelperChange({ state });
           }
 
           // We track every change in the helper to override its state and add
           // any `ruleContexts` needed based on the `trackedFilters`.
+          // @ts-ignore
+          // @TODO: we have to update the definition to make it work
           helper.on('change', onHelperChange);
         }
 

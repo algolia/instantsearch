@@ -303,7 +303,10 @@ describe('InstantSearch lifecycle', () => {
 
         beforeEach(() => {
           results = { some: 'data' };
-          search.helper.emit('result', results, search.helper.state);
+          search.helper.emit('result', {
+            state: search.helper.state,
+            results,
+          });
         });
 
         it('calls widget.render({results, state, helper, templatesConfig, instantSearchInstance})', () => {
@@ -373,12 +376,18 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(10);
       expect(onRender).toHaveBeenCalledTimes(2);
@@ -391,12 +400,18 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      search.helper.emit('result', {}, search.helper.state);
+      search.helper.emit('result', {
+        results: null,
+        state: search.helper.state,
+      });
 
       expect(render).toHaveBeenCalledTimes(10);
       expect(onRender).toHaveBeenCalledTimes(1);
