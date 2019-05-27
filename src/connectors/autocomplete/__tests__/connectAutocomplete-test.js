@@ -186,14 +186,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget();
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('removes the created DerivedHelper', () => {
       const detachDerivedHelper = jest.fn();
       const helper = algoliasearchHelper(fakeClient, 'firstIndex');
       helper.detachDerivedHelper = detachDerivedHelper;
 
       const renderFn = () => {};
-      const unmountFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const makeWidget = connectAutocomplete(renderFn);
       const widget = makeWidget({
         indices: [
           { label: 'Second', value: 'secondIndex' },
@@ -216,8 +229,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       helper.detachDerivedHelper = detachDerivedHelper;
 
       const renderFn = () => {};
-      const unmountFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const makeWidget = connectAutocomplete(renderFn);
       const widget = makeWidget({
         indices: [
           { label: 'Second', value: 'secondIndex' },
@@ -246,8 +258,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       });
 
       const renderFn = () => {};
-      const unmountFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const makeWidget = connectAutocomplete(renderFn);
       const widget = makeWidget();
 
       widget.init({ helper, instantSearchInstance: {} });
