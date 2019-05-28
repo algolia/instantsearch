@@ -3,6 +3,7 @@ import {
   warning,
   createDocumentationMessageGenerator,
   find,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -94,7 +95,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectHitsPerPage(renderFn, unmountFn) {
+export default function connectHitsPerPage(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
@@ -201,8 +202,10 @@ You may want to add another entry to the \`items\` option with this value.`
         }));
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setQueryParameter('hitsPerPage', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
