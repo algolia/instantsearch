@@ -1,4 +1,4 @@
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 
@@ -22,7 +22,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     expect(renderFn).toHaveBeenCalledTimes(0);
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     widget.init({
@@ -54,12 +54,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     });
   });
 
-  it('creates derived helper', () => {
+  it('creates DerivedHelper', () => {
     const renderFn = jest.fn();
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({ indices: [{ label: 'foo', value: 'foo' }] });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     widget.init({ helper, instantSearchInstance: {} });
@@ -75,7 +75,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     widget.init({ helper, instantSearchInstance: {} });
@@ -93,7 +93,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     const hits = [
@@ -137,7 +137,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(renderFn);
     const widget = makeWidget({ escapeHTML: false });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     const hits = [
@@ -164,12 +164,154 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     expect(rendering.indices[0].hits).toEqual(hits);
   });
 
-  it('does not throw without the unmount function', () => {
-    const helper = jsHelper(fakeClient, '', {});
-    const renderFn = () => {};
-    const makeWidget = connectAutocomplete(renderFn);
-    const widget = makeWidget({});
-    widget.init({ helper, instantSearchInstance: {} });
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
+
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const widget = makeWidget();
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget();
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
+    it('removes the created DerivedHelper', () => {
+      const detachDerivedHelper = jest.fn();
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
+      helper.detachDerivedHelper = detachDerivedHelper;
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget({
+        indices: [
+          { label: 'Second', value: 'secondIndex' },
+          { label: 'Third', value: 'thirdIndex' },
+        ],
+      });
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(2);
+    });
+
+    it('removes only the DerivedHelper created by autocomplete', () => {
+      const detachDerivedHelper = jest.fn();
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
+      helper.detachDerivedHelper = detachDerivedHelper;
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget({
+        indices: [
+          { label: 'Second', value: 'secondIndex' },
+          { label: 'Third', value: 'thirdIndex' },
+        ],
+      });
+
+      const derivedHelperOne = helper.derive(state => state);
+      const derivedHelperTwo = helper.derive(state => state);
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(detachDerivedHelper).toHaveBeenCalledTimes(2);
+      expect(helper.derivedHelpers).toEqual(
+        expect.arrayContaining([derivedHelperOne, derivedHelperTwo])
+      );
+    });
+
+    it('removes the `query` from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex', {
+        query: 'Apple',
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget();
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      expect(helper.state.query).toBe('Apple');
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.query).toBeUndefined();
+    });
+
+    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex', {
+        ...TAG_PLACEHOLDER,
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget();
+
+      expect(helper.state.highlightPreTag).toBe(
+        TAG_PLACEHOLDER.highlightPreTag
+      );
+
+      expect(helper.state.highlightPostTag).toBe(
+        TAG_PLACEHOLDER.highlightPostTag
+      );
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.highlightPreTag).toBeUndefined();
+      expect(nextState.highlightPostTag).toBeUndefined();
+    });
+
+    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML`', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex', {
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget({
+        escapeHTML: false,
+      });
+
+      expect(helper.state.highlightPreTag).toBe('<mark>');
+      expect(helper.state.highlightPostTag).toBe('</mark>');
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.highlightPreTag).toBe('<mark>');
+      expect(nextState.highlightPostTag).toBe('</mark>');
+    });
   });
 });
