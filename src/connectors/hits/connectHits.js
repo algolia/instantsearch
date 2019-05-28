@@ -107,8 +107,22 @@ export default function connectHits(renderFn, unmountFn = noop) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        if (!escapeHTML) {
+          return state;
+        }
+
+        return state.setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
     };
   };
