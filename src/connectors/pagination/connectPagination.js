@@ -152,8 +152,10 @@ export default function connectPagination(renderFn, unmountFn = noop) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setQueryParameter('page', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
