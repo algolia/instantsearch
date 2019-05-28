@@ -218,6 +218,74 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     }
   });
 
+  describe('options', () => {
+    describe('items', () => {
+      test('uses the helper index by default', () => {
+        const renderFn = jest.fn();
+        const customSortBy = connectSortBy(renderFn);
+        const instantSearchInstance = instantSearch({
+          indexName: '',
+          searchClient: { search() {} },
+        });
+        const helper = jsHelper({}, 'index_featured');
+        helper.search = jest.fn();
+
+        const items = [
+          { label: 'Featured', value: 'index_featured' },
+          { label: 'Price asc.', value: 'index_price_asc' },
+          { label: 'Price desc.', value: 'index_price_desc' },
+        ];
+        const widget = customSortBy({ items });
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          instantSearchInstance,
+        });
+
+        expect(renderFn).toHaveBeenCalledTimes(1);
+        const [renderOptions] = renderFn.mock.calls[0];
+
+        expect(renderOptions.currentRefinement).toBe('index_featured');
+      });
+
+      test('warns and falls back to the helper index if not present in the items', () => {
+        const renderFn = jest.fn();
+        const customSortBy = connectSortBy(renderFn);
+        const instantSearchInstance = instantSearch({
+          indexName: '',
+          searchClient: { search() {} },
+        });
+        const helper = jsHelper({}, 'index_initial');
+        helper.search = jest.fn();
+
+        const items = [
+          { label: 'Featured', value: 'index_featured' },
+          { label: 'Price asc.', value: 'index_price_asc' },
+          { label: 'Price desc.', value: 'index_price_desc' },
+        ];
+        const widget = customSortBy({ items });
+
+        expect(() => {
+          widget.init({
+            helper,
+            state: helper.state,
+            createURL: () => '#',
+            instantSearchInstance,
+          });
+        }).toWarnDev(
+          '[InstantSearch.js]: The index named "index_initial" is not listed in the `items` of `sortBy`.'
+        );
+
+        expect(renderFn).toHaveBeenCalledTimes(1);
+        const [firstRenderOptions] = renderFn.mock.calls[0];
+
+        expect(firstRenderOptions.currentRefinement).toBe('index_initial');
+      });
+    });
+  });
+
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();

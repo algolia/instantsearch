@@ -99,21 +99,4 @@ describe('sortBy()', () => {
     expect(helper.setIndex).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
-
-  it('should throw if there is no name attribute in a passed object', () => {
-    items.length = 0;
-    items.push({ label: 'Label without a name' });
-
-    expect(() => {
-      widget.init({ helper });
-    }).toThrow(/Index index-a not present/);
-  });
-
-  it('must include the current index at initialization time', () => {
-    helper.getIndex = jest.fn().mockReturnValue('non-existing-index');
-
-    expect(() => {
-      widget.init({ helper });
-    }).toThrow(/Index non-existing-index not present/);
-  });
 });
