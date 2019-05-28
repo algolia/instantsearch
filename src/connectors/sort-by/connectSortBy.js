@@ -101,7 +101,7 @@ export default function connectSortBy(renderFn, unmountFn) {
 
     return {
       init({ helper, instantSearchInstance }) {
-        const initialIndex = helper.getIndex();
+        const initialIndex = helper.state.index;
         const isInitialIndexInItems = find(
           items,
           item => item.value === initialIndex
