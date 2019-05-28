@@ -3,6 +3,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   find,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -41,7 +42,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomAutocompleteWidgetOptions)} Re-usable widget factory for a custom **Autocomplete** widget.
  */
-export default function connectAutocomplete(renderFn, unmountFn) {
+export default function connectAutocomplete(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
@@ -141,11 +142,26 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         );
       },
 
-      dispose() {
-        // detach every derived indices from the main helper instance
+      dispose({ state }) {
         this.indices.slice(1).forEach(({ helper }) => helper.detach());
 
         unmountFn();
+
+        const stateWithoutQuery = state.setQueryParameter('query', undefined);
+
+        if (!escapeHTML) {
+          return stateWithoutQuery;
+        }
+
+        return stateWithoutQuery.setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
     };
   };
