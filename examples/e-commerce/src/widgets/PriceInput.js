@@ -21,6 +21,7 @@ const priceInput = priceRangeInput({
   cssClasses: {
     label: 'range-input-label',
     input: 'range-input-input',
+    separator: 'range-input-separator',
     submit: 'range-input-submit',
   },
 });

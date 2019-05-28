@@ -230,6 +230,17 @@ mark {
   max-width: 50px;
 }
 
+.range-input-input::-webkit-inner-spin-button,
+.range-input-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.range-input-separator {
+  padding: 0 8px;
+}
+
 .range-input-submit {
   display: none;
 }
