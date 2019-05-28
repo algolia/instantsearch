@@ -1,4 +1,4 @@
-import jsHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import connectVoiceSearch from '../connectVoiceSearch';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
@@ -16,30 +16,18 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
   };
 });
 
-function getDefaultSetup() {
-  const renderFn = jest.fn();
-  const unmountFn = jest.fn();
-  const makeWidget = connectVoiceSearch(renderFn, unmountFn);
-  const widget = makeWidget({});
-  const helper = jsHelper({});
-
-  return {
-    renderFn,
-    unmountFn,
-    widget,
-    helper,
-  };
-}
-
 function getInitializedWidget() {
-  const { renderFn, unmountFn, widget, helper } = getDefaultSetup();
+  const helper = algoliasearchHelper({}, '');
+
+  const renderFn = () => {};
+  const makeWidget = connectVoiceSearch(renderFn);
+  const widget = makeWidget({});
 
   helper.search = () => {};
   widget.init({ helper });
 
   return {
     renderFn,
-    unmountFn,
     widget,
     helper,
     refine: query => widget._refine(query),
@@ -59,59 +47,137 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     });
   });
 
-  describe('lifecycle', () => {
-    it('calls renderFn during init and render', () => {
-      const { renderFn, widget, helper } = getDefaultSetup();
-      widget.init({ helper });
-      expect(renderFn).toHaveBeenCalledTimes(1);
-      expect(renderFn).toHaveBeenLastCalledWith(
-        expect.objectContaining({}),
-        true
-      );
-      widget.render({
-        helper,
-      });
-      expect(renderFn).toHaveBeenCalledTimes(2);
-      expect(renderFn).toHaveBeenLastCalledWith(
-        expect.objectContaining({}),
-        false
-      );
+  it('calls renderFn during init and render', () => {
+    const helper = algoliasearchHelper({}, '');
+
+    const renderFn = jest.fn();
+    const makeWidget = connectVoiceSearch(renderFn);
+    const widget = makeWidget({});
+
+    widget.init({ helper });
+
+    expect(renderFn).toHaveBeenCalledTimes(1);
+    expect(renderFn).toHaveBeenLastCalledWith(
+      expect.objectContaining({}),
+      true
+    );
+
+    widget.render({
+      helper,
     });
 
-    it('calls unmount on `dispose`', () => {
-      const { unmountFn, widget, helper } = getDefaultSetup();
-      widget.init({ helper });
-      widget.dispose({ helper, state: helper.state });
-      expect(unmountFn).toHaveBeenCalledTimes(1);
-    });
-
-    it('removes event listeners on `dispose`', () => {
-      const { widget, helper } = getDefaultSetup();
-      widget.init({ helper });
-      widget.dispose({ helper, state: helper.state });
-      expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(1);
-    });
+    expect(renderFn).toHaveBeenCalledTimes(2);
+    expect(renderFn).toHaveBeenLastCalledWith(
+      expect.objectContaining({}),
+      false
+    );
   });
 
   it('triggers render when state changes', () => {
-    const { renderFn, widget, helper } = getDefaultSetup();
+    const helper = algoliasearchHelper({}, '');
+
+    const renderFn = jest.fn();
+    const makeWidget = connectVoiceSearch(renderFn);
+    const widget = makeWidget({});
+
     widget.init({ helper });
+
     expect(renderFn).toHaveBeenCalledTimes(1);
+
     widget._voiceSearchHelper.changeState();
+
     expect(renderFn).toHaveBeenCalledTimes(2);
+
     widget._voiceSearchHelper.changeState();
+
     expect(renderFn).toHaveBeenCalledTimes(3);
   });
 
   it('setQuery and search when query changes', () => {
-    const { widget, helper } = getDefaultSetup();
+    const helper = algoliasearchHelper({}, '');
+
+    const renderFn = jest.fn();
+    const makeWidget = connectVoiceSearch(renderFn);
+    const widget = makeWidget({});
+
     jest.spyOn(helper, 'setQuery');
+
     helper.search = jest.fn();
+
     widget.init({ helper });
+
     widget._voiceSearchHelper.changeQuery('foo');
+
     expect(helper.setQuery).toHaveBeenCalledTimes(1);
     expect(helper.setQuery).toHaveBeenCalledWith('foo');
     expect(helper.search).toHaveBeenCalledTimes(1);
+  });
+
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectVoiceSearch(renderFn, unmountFn);
+      const widget = makeWidget({});
+
+      widget.init({ helper });
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      widget.init({ helper });
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
+    it('removes event listeners on the voice helper', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      widget.init({ helper });
+
+      expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('removes the `query` from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper({}, '', {
+        query: 'Apple',
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      widget.init({ helper });
+
+      expect(helper.state.query).toBe('Apple');
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.query).toBeUndefined();
+    });
   });
 
   describe('getWidgetState', () => {
