@@ -220,8 +220,24 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        const stateWithoutQuery = state.setQueryParameter('page', undefined);
+
+        if (!escapeHTML) {
+          return stateWithoutQuery;
+        }
+
+        return stateWithoutQuery.setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
 
       getWidgetState(uiState, { searchParameters }) {
