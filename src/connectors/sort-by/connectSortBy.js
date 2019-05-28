@@ -133,7 +133,7 @@ export default function connectSortBy(renderFn, unmountFn) {
       render({ helper, results, instantSearchInstance }) {
         renderFn(
           {
-            currentRefinement: helper.getIndex(),
+            currentRefinement: helper.state.index,
             options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: results.nbHits === 0,

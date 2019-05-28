@@ -35,7 +35,7 @@ describe('sortBy()', () => {
     render.mockClear();
 
     const instantSearchInstance = instantSearch({
-      indexName: 'defaultIndex',
+      indexName: '',
       searchClient: {
         search() {},
       },
@@ -53,8 +53,7 @@ describe('sortBy()', () => {
     };
     widget = sortBy({ container, items, cssClasses });
 
-    helper = algoliasearchHelper({}, '');
-    helper.getIndex = jest.fn().mockReturnValue('index-a');
+    helper = algoliasearchHelper({}, 'index-a');
     helper.setIndex = jest.fn().mockReturnThis();
     helper.search = jest.fn();
 
