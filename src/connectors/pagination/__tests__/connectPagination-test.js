@@ -1,4 +1,4 @@
-import jsHelper, {
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -19,18 +19,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   it('connectPagination - Renders during init and render', () => {
-    // test that the dummyRendering is called with the isFirstRendering
-    // flag set accordingly
-    const rendering = jest.fn();
-    const makeWidget = connectPagination(rendering);
+    const renderFn = jest.fn();
+    const makeWidget = connectPagination(renderFn);
     const widget = makeWidget({
-      foo: 'bar', // dummy param for `widgetParams` test
+      foo: 'bar',
     });
 
-    // does not have a getConfiguration method
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -41,19 +38,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     });
 
     {
-      // should call the rendering once with isFirstRendering to true
-      expect(rendering).toHaveBeenCalledTimes(1);
+      expect(renderFn).toHaveBeenCalledTimes(1);
       const isFirstRendering =
-        rendering.mock.calls[rendering.mock.calls.length - 1][1];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(true);
 
-      // should provide good values for the first rendering
-      const firstRenderingOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
-      expect(firstRenderingOptions.currentRefinement).toBe(0);
-      expect(firstRenderingOptions.nbHits).toBe(0);
-      expect(firstRenderingOptions.nbPages).toBe(0);
-      expect(firstRenderingOptions.widgetParams).toEqual({
+      const renderOptions =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(renderOptions.currentRefinement).toBe(0);
+      expect(renderOptions.nbHits).toBe(0);
+      expect(renderOptions.nbPages).toBe(0);
+      expect(renderOptions.widgetParams).toEqual({
         foo: 'bar',
       });
     }
@@ -73,28 +68,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     });
 
     {
-      // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering).toHaveBeenCalledTimes(2);
+      expect(renderFn).toHaveBeenCalledTimes(2);
       const isFirstRendering =
-        rendering.mock.calls[rendering.mock.calls.length - 1][1];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][1];
       expect(isFirstRendering).toBe(false);
 
-      // should call the rendering with values from the results
-      const secondRenderingOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
-      expect(secondRenderingOptions.currentRefinement).toBe(0);
-      expect(secondRenderingOptions.nbHits).toBe(1);
-      expect(secondRenderingOptions.nbPages).toBe(1);
+      const renderOptions =
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
+      expect(renderOptions.currentRefinement).toBe(0);
+      expect(renderOptions.nbHits).toBe(1);
+      expect(renderOptions.nbPages).toBe(1);
     }
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectPagination(rendering);
-
+    const renderFn = jest.fn();
+    const makeWidget = connectPagination(renderFn);
     const widget = makeWidget();
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -105,9 +97,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     });
 
     {
-      // first rendering
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine(2);
       expect(helper.state.page).toBe(2);
@@ -126,9 +117,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     });
 
     {
-      // Second rendering
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { refine } = renderOptions;
       refine(7);
       expect(helper.state.page).toBe(7);
@@ -137,12 +127,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   it('Provides the pages to render (default)', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectPagination(rendering);
-
+    const renderFn = jest.fn();
+    const makeWidget = connectPagination(renderFn);
     const widget = makeWidget();
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -162,13 +151,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     {
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { pages } = renderOptions;
       expect(pages).toEqual([0, 1, 2, 3, 4, 5, 6]);
     }
 
-    // some random page
     helper.setPage(5);
+
     widget.render({
       results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
@@ -178,13 +167,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     {
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { pages } = renderOptions;
       expect(pages).toEqual([2, 3, 4, 5, 6, 7, 8]);
     }
 
-    // last pages
+    // Last page
     helper.setPage(49);
+
     widget.render({
       results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
@@ -194,21 +184,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     {
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { pages } = renderOptions;
       expect(pages).toEqual([43, 44, 45, 46, 47, 48, 49]);
     }
   });
 
   it('Provides the pages to render (extra padding)', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectPagination(rendering);
-
+    const renderFn = jest.fn();
+    const makeWidget = connectPagination(renderFn);
     const widget = makeWidget({
       padding: 5,
     });
 
-    const helper = jsHelper({});
+    const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -218,7 +207,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       onHistoryChange: () => {},
     });
 
-    // page 0
     widget.render({
       results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
@@ -228,13 +216,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     {
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { pages } = renderOptions;
       expect(pages).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     }
 
-    // some random page
     helper.setPage(5);
+
     widget.render({
       results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
@@ -244,12 +232,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     {
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { pages } = renderOptions;
       expect(pages).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     }
 
-    // last pages
+    // Last page
     helper.setPage(49);
     widget.render({
       results: new SearchResults(helper.state, [{ nbPages: 50 }]),
@@ -260,29 +248,64 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     {
       const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
       const { pages } = renderOptions;
       expect(pages).toEqual([39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]);
     }
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = () => {};
-    const makeWidget = connectPagination(rendering);
-    const widget = makeWidget({
-      padding: 5,
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectPagination(renderFn, unmountFn);
+      const widget = makeWidget();
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose({ helper, state: helper.state });
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
     });
-    const helper = jsHelper({});
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectPagination(renderFn);
+      const widget = makeWidget();
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
+    it('removes the `page` from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper({}, '', {
+        page: 5,
+      });
+
+      const renderFn = () => {};
+      const makeWidget = connectPagination(renderFn);
+      const widget = makeWidget();
+
+      expect(helper.state.page).toBe(5);
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.page).toBeUndefined();
+    });
   });
 
   describe('routing', () => {
     const getInitializedWidget = () => {
-      const rendering = jest.fn();
-      const makeWidget = connectPagination(rendering);
+      const renderFn = jest.fn();
+      const makeWidget = connectPagination(renderFn);
       const widget = makeWidget({});
 
-      const helper = jsHelper({}, '');
+      const helper = algoliasearchHelper({}, '');
       helper.search = jest.fn();
 
       widget.init({
@@ -292,7 +315,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         onHistoryChange: () => {},
       });
 
-      const { refine } = rendering.mock.calls[0][0];
+      const { refine } = renderFn.mock.calls[0][0];
 
       return [widget, helper, refine];
     };
