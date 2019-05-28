@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  noop,
 } from '../../lib/utils';
 import Paginator from './Paginator';
 
@@ -84,7 +85,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectPagination(renderFn, unmountFn) {
+export default function connectPagination(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
@@ -151,8 +152,10 @@ export default function connectPagination(renderFn, unmountFn) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setQueryParameter('page', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
