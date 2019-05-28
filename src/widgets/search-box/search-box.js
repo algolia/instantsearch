@@ -44,7 +44,7 @@ const renderer = ({
 };
 
 /**
- * @typedef {Ojbect} SearchBoxTemplates
+ * @typedef {Object} SearchBoxTemplates
  * @property {function|string} submit Template used for displaying the submit. Can accept a function or a Hogan string.
  * @property {function|string} reset Template used for displaying the button. Can accept a function or a Hogan string.
  * @property {function|string} loadingIndicator Template used for displaying the button. Can accept a function or a Hogan string.
