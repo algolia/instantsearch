@@ -158,6 +158,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
   });
 
   describe('getConfiguration', () => {
+    it('adds a `query` to the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget();
+
+      const nextConfiguation = widget.getConfiguration();
+
+      expect(nextConfiguation.query).toBe('');
+    });
+
     it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
       const renderFn = () => {};
       const makeWidget = connectAutocomplete(renderFn);
