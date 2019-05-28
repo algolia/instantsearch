@@ -654,7 +654,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(nextState.highlightPostTag).toBeUndefined();
     });
 
-    it('removes the TAG_PLACEHOLDER from the `SearchParameters` only with `escapeHTML`', () => {
+    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML`', () => {
       const helper = algoliasearchHelper({} as Client, '', {
         highlightPreTag: '<mark>',
         highlightPostTag: '</mark>',
