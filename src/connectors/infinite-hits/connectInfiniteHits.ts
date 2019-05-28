@@ -140,7 +140,18 @@ const connectInfiniteHits: InfiniteHitsConnector = (
 
     return {
       getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : {};
+        const parameters = {
+          page: 0,
+        };
+
+        if (!escapeHTML) {
+          return parameters;
+        }
+
+        return {
+          ...parameters,
+          ...TAG_PLACEHOLDER,
+        };
       },
 
       init({ instantSearchInstance, helper }) {
