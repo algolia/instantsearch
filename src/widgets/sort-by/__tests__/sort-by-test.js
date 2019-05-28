@@ -1,4 +1,5 @@
 import { render } from 'preact-compat';
+import algoliasearchHelper from 'algoliasearch-helper';
 import sortBy from '../sort-by';
 import instantSearch from '../../../lib/main';
 
@@ -51,11 +52,11 @@ describe('sortBy()', () => {
       item: 'custom-item',
     };
     widget = sortBy({ container, items, cssClasses });
-    helper = {
-      getIndex: jest.fn().mockReturnValue('index-a'),
-      setIndex: jest.fn().mockReturnThis(),
-      search: jest.fn(),
-    };
+
+    helper = algoliasearchHelper({}, '');
+    helper.getIndex = jest.fn().mockReturnValue('index-a');
+    helper.setIndex = jest.fn().mockReturnThis();
+    helper.search = jest.fn();
 
     results = {
       hits: [],
