@@ -8,7 +8,7 @@ function getTag(value: any): string {
     return value === undefined ? '[object Undefined]' : '[object Null]';
   }
 
-  return toString.call(value);
+  return Object.prototype.toString.call(value);
 }
 
 function isObjectLike(value: any): boolean {

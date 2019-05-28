@@ -1,3 +1,13 @@
+## [3.5.2](https://github.com/algolia/instantsearch.js/compare/v3.5.1...v3.5.2) (2019-05-28)
+
+
+### Bug Fixes
+
+* **getTag:** use object version of toString ([#3820](https://github.com/algolia/instantsearch.js/issues/3820)) ([a7348ea](https://github.com/algolia/instantsearch.js/commit/a7348ea))
+* **types:** fix cssClasses of voiceSearch ([#3783](https://github.com/algolia/instantsearch.js/issues/3783)) ([f016326](https://github.com/algolia/instantsearch.js/commit/f016326))
+
+
+
 # [3.5.1](https://github.com/algolia/instantsearch.js/compare/v3.4.0...v3.5.1) (2019-05-20)
 
 
