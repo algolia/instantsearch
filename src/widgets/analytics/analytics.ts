@@ -1,109 +1,94 @@
 import { createDocumentationMessageGenerator } from '../../lib/utils';
+import { SearchParameters, SearchResults, Widget } from '../../types';
+
+type AnalyticsWidgetParams = {
+  pushFunction(
+    formattedParameters: string,
+    state: SearchParameters,
+    results: SearchResults
+  ): void;
+  /**
+   * @default 3000
+   */
+  delay: number;
+  /**
+   * @default false
+   */
+  triggerOnUIInteraction: boolean;
+  /**
+   * @default false
+   */
+  pushInitialSearch: boolean;
+  /**
+   * @default false
+   */
+  pushPagination: boolean;
+};
 
 const withUsage = createDocumentationMessageGenerator({ name: 'analytics' });
 
-/**
- * @typedef {Object} AnalyticsWidgetOptions
- * @property {function(qs: string, state: SearchParameters, results: SearchResults)} pushFunction
- * Function called when data are ready to be pushed. It should push the data to your analytics platform.
- * The `qs` parameter contains the parameters serialized as a query string. The `state` contains the
- * whole search state, and the `results` the last results received.
- * @property {number} [delay=3000] Number of milliseconds between last search key stroke and calling pushFunction.
- * @property {boolean} [triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
- * @property {boolean} [pushInitialSearch=true] Trigger pushFunction after the initial search
- * @property {boolean} [pushPagination=false] Trigger pushFunction on pagination
- */
-
-/**
- * The analytics widget pushes the current state of the search to the analytics platform of your
- * choice. It requires the implementation of a function that will push the data.
- *
- * This is a headless widget, which means that it does not have a rendered output in the
- * UI.
- * @type {WidgetFactory}
- * @devNovel Analytics
- * @category analytics
- * @param {AnalyticsWidgetOptions} $0 The Analytics widget options.
- * @return {Widget} A new instance of the Analytics widget.
- * @example
- * search.addWidget(
- *   instantsearch.widgets.analytics({
- *     pushFunction: function(formattedParameters, state, results) {
- *       // Google Analytics
- *       // window.ga('set', 'page', window.location.pathname + window.location.search);
- *       // window.ga('send', 'pageView');
- *
- *       // GTM
- *       // dataLayer.push({'event': 'search', 'Search Query': state.query, 'Facet Parameters': formattedParameters, 'Number of Hits': results.nbHits});
- *
- *       // Segment.io
- *       // analytics.page( '[SEGMENT] instantsearch', { path: '/instantsearch/?query=' + state.query + '&' + formattedParameters });
- *
- *       // Kissmetrics
- *       // var objParams = JSON.parse('{"' + decodeURI(formattedParameters.replace(/&/g, "\",\"").replace(/=/g,"\":\"")) + '"}');
- *       // var arrParams = $.map(objParams, function(value, index) {
- *       //   return [value];
- *       // });
- *       //
- *       // _kmq.push(['record', '[KM] Viewed Result page', {
- *       //   'Query': state.query ,
- *       //   'Number of Hits': results.nbHits,
- *       //   'Search Params': arrParams
- *       // }]);
- *
- *       // any other analytics service
- *     }
- *   })
- * );
- */
-function analytics({
-  pushFunction,
-  delay = 3000,
-  triggerOnUIInteraction = false,
-  pushInitialSearch = true,
-  pushPagination = false,
-} = {}) {
+function analytics(
+  {
+    pushFunction,
+    delay = 3000,
+    triggerOnUIInteraction = false,
+    pushInitialSearch = true,
+    pushPagination = false,
+  }: AnalyticsWidgetParams = {} as AnalyticsWidgetParams
+): Widget {
   if (!pushFunction) {
     throw new Error(withUsage('The `pushFunction` option is required.'));
   }
 
-  let cachedState = null;
+  type AnalyticsState = {
+    results: SearchResults;
+    state: SearchParameters;
+  } | null;
 
-  const serializeRefinements = function(obj) {
-    const str = [];
-    for (const p in obj) {
-      if (obj.hasOwnProperty(p)) {
-        const values = obj[p].join('+');
-        str.push(
-          `${encodeURIComponent(p)}=${encodeURIComponent(
-            p
+  let cachedState: AnalyticsState = null;
+
+  const serializeRefinements = function(parameters: object): string {
+    const refinements: string[] = [];
+
+    for (const parameter in parameters) {
+      if (parameters.hasOwnProperty(parameter)) {
+        const values = parameters[parameter].join('+');
+
+        refinements.push(
+          `${encodeURIComponent(parameter)}=${encodeURIComponent(
+            parameter
           )}_${encodeURIComponent(values)}`
         );
       }
     }
 
-    return str.join('&');
+    return refinements.join('&');
   };
 
-  const serializeNumericRefinements = function(numericRefinements) {
-    const numericStr = [];
+  const serializeNumericRefinements = function(
+    numericRefinements: any
+  ): string {
+    const refinements: string[] = [];
 
-    for (const attr in numericRefinements) {
-      if (numericRefinements.hasOwnProperty(attr)) {
-        const filter = numericRefinements[attr];
+    for (const attribute in numericRefinements) {
+      if (numericRefinements.hasOwnProperty(attribute)) {
+        const filter = numericRefinements[attribute];
 
         if (filter.hasOwnProperty('>=') && filter.hasOwnProperty('<=')) {
           if (filter['>='][0] === filter['<='][0]) {
-            numericStr.push(`${attr}=${attr}_${filter['>=']}`);
+            refinements.push(`${attribute}=${attribute}_${filter['>=']}`);
           } else {
-            numericStr.push(`${attr}=${attr}_${filter['>=']}to${filter['<=']}`);
+            refinements.push(
+              `${attribute}=${attribute}_${filter['>=']}to${filter['<=']}`
+            );
           }
         } else if (filter.hasOwnProperty('>=')) {
-          numericStr.push(`${attr}=${attr}_from${filter['>=']}`);
+          refinements.push(`${attribute}=${attribute}_from${filter['>=']}`);
         } else if (filter.hasOwnProperty('<=')) {
-          numericStr.push(`${attr}=${attr}_to${filter['<=']}`);
+          refinements.push(`${attribute}=${attribute}_to${filter['<=']}`);
         } else if (filter.hasOwnProperty('=')) {
-          const equals = [];
+          const equals: string[] = [];
+
           for (const equal in filter['=']) {
             // eslint-disable-next-line max-depth
             if (filter['='].hasOwnProperty(equal)) {
@@ -111,73 +96,84 @@ function analytics({
             }
           }
 
-          numericStr.push(`${attr}=${attr}_${equals.join('-')}`);
+          refinements.push(`${attribute}=${attribute}_${equals.join('-')}`);
         }
       }
     }
 
-    return numericStr.join('&');
+    return refinements.join('&');
   };
 
   let lastSentData = '';
-  const sendAnalytics = function(state) {
-    if (state === null) {
+
+  const sendAnalytics = function(analyticsState: AnalyticsState | null): void {
+    if (analyticsState === null) {
       return;
     }
 
-    let formattedParams = [];
+    const serializedParams: string[] = [];
 
     const serializedRefinements = serializeRefinements({
-      ...state.state.disjunctiveFacetsRefinements,
-      ...state.state.facetsRefinements,
-      ...state.state.hierarchicalFacetsRefinements,
+      ...analyticsState.state.disjunctiveFacetsRefinements,
+      ...analyticsState.state.facetsRefinements,
+      ...analyticsState.state.hierarchicalFacetsRefinements,
     });
 
     const serializedNumericRefinements = serializeNumericRefinements(
-      state.state.numericRefinements
+      analyticsState.state.numericRefinements
     );
 
     if (serializedRefinements !== '') {
-      formattedParams.push(serializedRefinements);
+      serializedParams.push(serializedRefinements);
     }
 
     if (serializedNumericRefinements !== '') {
-      formattedParams.push(serializedNumericRefinements);
+      serializedParams.push(serializedNumericRefinements);
     }
 
-    formattedParams = formattedParams.join('&');
+    const stringifiedParams = serializedParams.join('&');
 
-    let dataToSend = `Query: ${state.state.query}, ${formattedParams}`;
+    let dataToSend = `Query: ${
+      analyticsState.state.query
+    }, ${stringifiedParams}`;
     if (pushPagination === true) {
-      dataToSend += `, Page: ${state.state.page}`;
+      dataToSend += `, Page: ${analyticsState.state.page}`;
     }
 
     if (lastSentData !== dataToSend) {
-      pushFunction(formattedParams, state.state, state.results);
+      pushFunction(
+        stringifiedParams,
+        analyticsState.state,
+        analyticsState.results
+      );
 
       lastSentData = dataToSend;
     }
   };
 
-  let pushTimeout;
-
+  let pushTimeout: any;
   let isInitialSearch = true;
+
   if (pushInitialSearch === true) {
     isInitialSearch = false;
   }
 
+  const onClick = (): void => {
+    sendAnalytics(cachedState);
+  };
+
+  const onUnload = (): void => {
+    sendAnalytics(cachedState);
+  };
+
   return {
     init() {
       if (triggerOnUIInteraction === true) {
-        document.addEventListener('click', () => {
-          sendAnalytics(cachedState);
-        });
-
-        window.addEventListener('beforeunload', () => {
-          sendAnalytics(cachedState);
-        });
+        document.addEventListener('click', onClick);
+        window.addEventListener('beforeunload', onUnload);
       }
     },
+
     render({ results, state }) {
       if (isInitialSearch === true) {
         isInitialSearch = false;
@@ -192,6 +188,13 @@ function analytics({
       }
 
       pushTimeout = setTimeout(() => sendAnalytics(cachedState), delay);
+    },
+
+    dispose() {
+      if (triggerOnUIInteraction === true) {
+        document.removeEventListener('click', onClick);
+        window.removeEventListener('beforeunload', onUnload);
+      }
     },
   };
 }
