@@ -142,11 +142,26 @@ export default function connectAutocomplete(renderFn, unmountFn = noop) {
         );
       },
 
-      dispose() {
-        // detach every derived indices from the main helper instance
+      dispose({ state }) {
         this.indices.slice(1).forEach(({ helper }) => helper.detach());
 
         unmountFn();
+
+        const stateWithoutQuery = state.setQueryParameter('query', undefined);
+
+        if (!escapeHTML) {
+          return stateWithoutQuery;
+        }
+
+        return stateWithoutQuery.setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
     };
   };
