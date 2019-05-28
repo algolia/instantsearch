@@ -103,26 +103,26 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.sortBy',
 
-      init({ helper, instantSearchInstance, parent }) {
-        const currentIndex = helper.state.index;
-        const isCurrentIndexInItems = find(
+      init({ helper, instantSearchInstance }) {
+        const initialIndex = helper.state.index;
+        const isInitialIndexInItems = find(
           items,
-          item => item.value === currentIndex
+          item => item.value === initialIndex
         );
 
-        this.initialIndex = parent.getIndexName();
+        this.initialIndex = initialIndex;
         this.setIndex = indexName => {
           helper.setIndex(indexName).search();
         };
 
         warning(
-          isCurrentIndexInItems,
-          `The index named "${currentIndex}" is not listed in the \`items\` of \`sortBy\`.`
+          isInitialIndexInItems,
+          `The index named "${initialIndex}" is not listed in the \`items\` of \`sortBy\`.`
         );
 
         renderFn(
           {
-            currentRefinement: currentIndex,
+            currentRefinement: initialIndex,
             options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: true,

@@ -41,6 +41,7 @@ describe('sortBy()', () => {
 
     const instantSearchInstance = createInstantSearch({
       indexName: '',
+      searchClient: createSearchClient(),
     });
 
     container = document.createElement('div');

@@ -264,6 +264,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
           indexName: '',
+          searchClient: { search() {} },
         });
         const helper = algoliasearchHelper({}, 'index_featured');
         helper.search = jest.fn();
@@ -294,6 +295,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
           indexName: '',
+          searchClient: { search() {} },
         });
         const helper = algoliasearchHelper({}, 'index_initial');
         helper.search = jest.fn();
