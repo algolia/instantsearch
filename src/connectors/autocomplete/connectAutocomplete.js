@@ -57,7 +57,7 @@ export default function connectAutocomplete(renderFn, unmountFn = noop) {
 
     return {
       getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
+        return escapeHTML ? TAG_PLACEHOLDER : {};
       },
 
       init({ instantSearchInstance, helper }) {

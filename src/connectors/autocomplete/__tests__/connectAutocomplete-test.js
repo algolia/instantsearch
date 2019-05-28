@@ -43,17 +43,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     expect(renderFn.mock.calls[1][1]).toBeFalsy();
   });
 
-  it('sets the default configuration', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
-    const widget = makeWidget();
-
-    expect(widget.getConfiguration()).toEqual({
-      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
-      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
-    });
-  });
-
   it('creates DerivedHelper', () => {
     const renderFn = jest.fn();
     const makeWidget = connectAutocomplete(renderFn);
@@ -166,6 +155,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const rendering = renderFn.mock.calls[1][0];
 
     expect(rendering.indices[0].hits).toEqual(hits);
+  });
+
+  describe('getConfiguration', () => {
+    it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget();
+
+      const nextConfiguation = widget.getConfiguration();
+
+      expect(nextConfiguation.highlightPreTag).toBe(
+        TAG_PLACEHOLDER.highlightPreTag
+      );
+
+      expect(nextConfiguation.highlightPostTag).toBe(
+        TAG_PLACEHOLDER.highlightPostTag
+      );
+    });
+
+    it('does not add the TAG_PLACEHOLDER to the `SearchParameters` with `escapeHTML` disabled', () => {
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget({
+        escapeHTML: false,
+      });
+
+      const nextConfiguation = widget.getConfiguration();
+
+      expect(nextConfiguation.highlightPreTag).toBeUndefined();
+      expect(nextConfiguation.highlightPostTag).toBeUndefined();
+    });
   });
 
   describe('dispose', () => {
@@ -295,7 +315,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       expect(nextState.highlightPostTag).toBeUndefined();
     });
 
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML`', () => {
+    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
       const helper = algoliasearchHelper(fakeClient, 'firstIndex', {
         highlightPreTag: '<mark>',
         highlightPostTag: '</mark>',
