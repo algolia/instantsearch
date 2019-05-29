@@ -11,7 +11,6 @@ If this guide does not contain what you are looking for and thus prevents you fr
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
 - [Commit conventions](#commit-conventions)
@@ -58,7 +57,7 @@ Then:
 
 After you create a pull request, a bot will comment with a link to a development version of the website.
 
-You will find there a playground for the widgets: https://**netlify-deploy-url**/stories
+You will find a playground for the widgets: https://**netlify-deploy-url**/stories.
 
 - Example: https://deploy-preview-3376--instantsearchjs.netlify.com/stories/
 - Source: https://github.com/algolia/instantsearch.js/tree/develop/stories
@@ -76,6 +75,7 @@ In most cases, we use the following types:
 - `fix`: for any resolution of an issue (identified or not)
 - `feat`: for any new feature
 - `refactor`: for any code change that neither adds a feature nor fixes an issue
+- `docs`: for any documentation change or addition
 - `chore`: for anything that is not related to the library itself (doc, tooling)
 
 Even though the scope is optional, we try to fill it in as it helps us better understand the impact of a change. We either use the name of the widget/connector/component impacted or we use impact topic (e.g. `docs`, `tooling`, `deps`, `ci`).
@@ -99,7 +99,7 @@ The project is based on the classic GitHub flow:
 
 Most of the time, your pull requests should target the `develop` branch, except if you're fixing a critical bug on an older version.
 
-_Note that no new features will be developed on the `vX` branches._
+_Note that no new features will be developed or backported for the `vX` branches._
 
 ## Requirements
 
@@ -143,7 +143,7 @@ Here are the main files and folders of the project.
   ▸ connectors/       << The source of all the connectors driving the widgets' logic
   ▸ helpers/          << The source of the method helpers
   ▸ lib/              << The core of the library (InstantSearch, routers, etc.)
-  ▸ types/            << The types describing the interfaces
+  ▸ types/            << The TypeScript declarations
   ▸ widgets/          << The source of the widgets
 ```
 
