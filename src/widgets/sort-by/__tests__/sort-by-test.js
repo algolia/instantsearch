@@ -1,4 +1,5 @@
 import { render } from 'preact-compat';
+import algoliasearchHelper from 'algoliasearch-helper';
 import sortBy from '../sort-by';
 import instantSearch from '../../../lib/main';
 
@@ -34,7 +35,7 @@ describe('sortBy()', () => {
     render.mockClear();
 
     const instantSearchInstance = instantSearch({
-      indexName: 'defaultIndex',
+      indexName: '',
       searchClient: {
         search() {},
       },
@@ -51,11 +52,10 @@ describe('sortBy()', () => {
       item: 'custom-item',
     };
     widget = sortBy({ container, items, cssClasses });
-    helper = {
-      getIndex: jest.fn().mockReturnValue('index-a'),
-      setIndex: jest.fn().mockReturnThis(),
-      search: jest.fn(),
-    };
+
+    helper = algoliasearchHelper({}, 'index-a');
+    helper.setIndex = jest.fn().mockReturnThis();
+    helper.search = jest.fn();
 
     results = {
       hits: [],
@@ -98,22 +98,5 @@ describe('sortBy()', () => {
 
     expect(helper.setIndex).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
-  });
-
-  it('should throw if there is no name attribute in a passed object', () => {
-    items.length = 0;
-    items.push({ label: 'Label without a name' });
-
-    expect(() => {
-      widget.init({ helper });
-    }).toThrow(/Index index-a not present/);
-  });
-
-  it('must include the current index at initialization time', () => {
-    helper.getIndex = jest.fn().mockReturnValue('non-existing-index');
-
-    expect(() => {
-      widget.init({ helper });
-    }).toThrow(/Index non-existing-index not present/);
   });
 });
