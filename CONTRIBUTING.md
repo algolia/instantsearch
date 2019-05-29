@@ -38,7 +38,7 @@ Another element that will help us go faster at solving the issue is to provide a
 
 ## The code contribution process
 
-InstantSearch.js was first developed in JavaScript and is now slowly being migrated to TypeScript.
+InstantSearch.js was first developed in JavaScript and is now being migrated to TypeScript.
 
 For any code contribution, you need to:
 
