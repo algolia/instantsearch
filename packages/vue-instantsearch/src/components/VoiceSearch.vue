@@ -91,7 +91,7 @@ export default {
     searchAsYouSpeak: {
       type: Boolean,
       required: false,
-      default: false,
+      default: undefined,
     },
     buttonTitle: {
       type: String,
