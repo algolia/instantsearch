@@ -4,18 +4,17 @@
   </a>
 </p>
 
-Hello and welcome to the contributing guide guide for InstantSearch.js. Thanks for considering participating in our project 🙇
+Hello and welcome to the contributing guide for InstantSearch.js. Thanks for considering participating in our project 🙇
 
-If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or [open an issue](https://github.com/algolia/instantsearch.js/issues).
+If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or to [open an issue](https://github.com/algolia/instantsearch.js/issues).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [Contributing with a new issue](#contributing-with-a-new-issue)
+- [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
 - [Commit conventions](#commit-conventions)
-- [Branches organization](#branches-organization)
+- [Branch organization](#branch-organization)
 - [Requirements](#requirements)
 - [Launch the dev environment](#launch-the-dev-environment)
 - [Folders of the project](#folders-of-the-project)
@@ -29,37 +28,39 @@ If this guide does not contain what you are looking for and thus prevents you fr
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Contributing with a new issue
+## Reporting an issue
 
-Opening an issue is very useful for us so don't hesitate, we'll make sure to fix it as soon as possible if it's technically feasible and doesn't have important side effects for the other users.
+Opening an issue is very effective way to contribute because many users might also be impacted. We'll make sure to fix it quickly if it's technically feasible and doesn't have important side effects for other users.
 
-Before opening an issue, first check that there is not an already open issue for the same topic using the [issues tab](https://github.com/algolia/instantsearch.js/issues). Don't hesitate to thumb up an issue that corresponds to the problem you found.
+Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/instantsearch.js/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
 
 Another element that will help us go faster at solving the issue is to provide a reproducible test case. We often recommend to [use this CodeSandbox template](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js).
 
 ## The code contribution process
 
-On your side:
+InstantSearch.js was first developed in JavaScript and is now being migrated to TypeScript.
+
+For any code contribution, you need to:
 
 - Fork and clone the project
-- Create a new branch for what you want to solve (fix/_issue number_, feat/2.x-_name of the feature_)
+- Create a new branch for what you want to solve (fix/_issue-number_, feat/_name-of-the-feature_)
 - Make your changes
 - Open a pull request
 
-Depending on what you're working, you might consider different base branches.
+Depending on what you're working on, you might consider different [base branches](#branch-organization).
 
 Then:
 
 - Peer review of the pull request (by at least one of the core contributors)
-- Automatic checks ([tests](#tests-), [commits](#commit-conventions-), [linters](#lint-))
+- Automatic checks ([tests](#tests), [commits](#commit-conventions), [linters](#linting))
 - When everything is green, your contribution is merged 🚀
 
 After you create a pull request, a bot will comment with a link to a development version of the website.
 
-On it you can find a playground for the widgets: https://**deploy-url-netlify**/stories
+You will find a playground for the widgets: https://**netlify-deploy-url**/stories.
 
-- for example: https://deploy-preview-3376--instantsearchjs.netlify.com/stories/
-- source: https://github.com/algolia/instantsearch.js/tree/develop/stories
+- Example: https://deploy-preview-3376--instantsearchjs.netlify.com/stories/
+- Source: https://github.com/algolia/instantsearch.js/tree/develop/stories
 
 ## Commit conventions
 
@@ -71,35 +72,34 @@ type(scope): description
 
 In most cases, we use the following types:
 
-- `fix`: for anything that contains the resolution of an issue (identified or not)
-- `feat`: for anything that contains a new feature
+- `fix`: for any resolution of an issue (identified or not)
+- `feat`: for any new feature
+- `refactor`: for any code change that neither adds a feature nor fixes an issue
+- `docs`: for any documentation change or addition
 - `chore`: for anything that is not related to the library itself (doc, tooling)
 
-Even though the scope is optional, we try to fill it in as it helps us better understand the impact of a change. We either use the name of the widget / connector / component impacted or we use the kind of part of the project it will impact, for example: `docs`, `tooling`, `ci`
+Even though the scope is optional, we try to fill it in as it helps us better understand the impact of a change. We either use the name of the widget/connector/component impacted or we use impact topic (e.g. `docs`, `tooling`, `deps`, `ci`).
 
-Finally if your work is based on an issue on GitHub, please add in the body of the commit message `fix #1234` if it solves the issue #1234.
+Finally, if your work is based on an issue on GitHub, please add in the body of the commit message "fix #1234" if it solves the issue #1234 (read "[Closing issues using keywords](https://help.github.com/en/articles/closing-issues-using-keywords)").
 
-Some examples of valid commit messages (first line):
+Some examples of valid commit messages (used as first lines):
 
-- fix(searchbox): make magnifying glass bigger
-- chore(deps): update dependency rollup-plugin-babel to v3.0.7
-- fix(connectRefinementList): set default value for limit
-- chore: reword contributions guides
+> - fix(searchbox): increase magnifying glass size
+> - chore(deps): update dependency rollup-plugin-babel to v3.0.7
+> - fix(connectRefinementList): set default value for limit
+> - chore: reword contributions guides
 
-## Branches organization
+## Branch organization
 
-The project is based on the classic GitHub flow because we are building a library and each version must be crafted with care. We also maintain a branch specific for the older version of the library (currently v1). Finally, when building feature (that will go in the next minor version) we have specific branch.
+The project is based on the classic GitHub flow:
 
-To sum up, we have:
+- `develop` for the current version being worked on – Pull requests for bugs and feature related to the current major version should be created against this branch
+- `master` for the latest stable version – we usually don't make pull requests on this branch
+- `vX` for each major version (`X` being a number) – Pull requests for critical bug fixes should be created against this branch
 
-- `develop` for the version -- Pull requests for bugs should be created against this branch
-- `feat/2.*` for the next minor version -- Pull requests for features should be created against this branch
-- `master` for the current stable version -- we usually don't make pull requests for this branch
-- `maintenance` for the previous major version (currently v1) -- Pull requests for critical bug fixes on the old version
+Most of the time, your pull requests should target the `develop` branch, except if you're fixing a critical bug on an older version.
 
-You should do the dev and create pull requests according to the target version.
-
-_Note that no new features will be developed on the maintenance version._
+_Note that no new features will be developed or backported for the `vX` branches._
 
 ## Requirements
 
@@ -139,12 +139,12 @@ Here are the main files and folders of the project.
 
 ```
 ▸ src/
-  ▸ components/       << The pReact components for the UI of our widgets (UI)
-  ▸ connectors/       << The source of all the connectors (UX without UI)
-  ▸ css/              << The source of the themes (reset / algolia theme)
-  ▸ lib/              << The core of the library, instantsearch, url
-  ▸ widgets/          << The source of the widgets (UX + UI)
+  ▸ components/       << The Preact components for the UI of our widgets
+  ▸ connectors/       << The source of all the connectors driving the widgets' logic
   ▸ helpers/          << The source of the method helpers
+  ▸ lib/              << The core of the library (InstantSearch, routers, etc.)
+  ▸ types/            << The TypeScript declarations
+  ▸ widgets/          << The source of the widgets
 ```
 
 ## Tests
@@ -167,7 +167,7 @@ yarn test --watch
 
 ## Linting
 
-Linters are static checkers for code. They help us maintain a consistent code base. They are used for JavaScript files.
+Linters are static checkers for code. They help us maintain a consistent code base. They are used for JavaScript and TypeScript files.
 
 If your editor support them, then you will see the errors directly there. You can also run them using your command line:
 
@@ -175,7 +175,7 @@ If your editor support them, then you will see the errors directly there. You ca
 yarn lint
 ```
 
-JavaScript files are validated using a combination of [Prettier](https://github.com/prettier/prettier) (strict syntax form) and [ESLint](https://github.com/eslint/eslint) rules (for common mistakes and patterns).
+JavaScript and TypeScript files are validated using a combination of [Prettier](https://github.com/prettier/prettier) (strict syntax form) and [ESLint](https://github.com/eslint/eslint) rules (for common mistakes and patterns).
 
 ## Release
 
