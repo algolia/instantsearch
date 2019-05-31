@@ -219,7 +219,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     const expectedHits = [{ name: 'transformed' }, { name: 'transformed' }];
     expectedHits.__escaped = true;
-    results.hits.__escaped = true;
 
     expect(rendering).toHaveBeenNthCalledWith(
       2,
@@ -348,7 +347,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       },
     ];
     expectedHits.__escaped = true;
-    results.hits.__escaped = true;
 
     expect(rendering).toHaveBeenNthCalledWith(
       2,
