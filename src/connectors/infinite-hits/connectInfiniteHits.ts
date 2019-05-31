@@ -194,8 +194,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
 
         results.hits = transformItems(results.hits);
 
-        // make sure the escaped tag stays, even after mapping over the hits
-        // this prevents the hits from being double-escaped if there are multiple
+        // Make sure the escaped tag stays after mapping over the hits.
+        // This prevents the hits from being double-escaped if there are multiple
         // hits widgets mounted on the page.
         (results.hits as any).__escaped = oldEscaped;
 
