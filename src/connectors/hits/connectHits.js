@@ -78,7 +78,7 @@ export default function connectHits(renderFn, unmountFn) {
           results.hits = escapeHits(results.hits);
         }
 
-        const oldEscaped = results.hits.__escaped;
+        const initialEscaped = results.hits.__escaped;
 
         results.hits = addAbsolutePosition(
           results.hits,
@@ -93,7 +93,7 @@ export default function connectHits(renderFn, unmountFn) {
         // Make sure the escaped tag stays, even after mapping over the hits.
         // This prevents the hits from being double-escaped if there are multiple
         // hits widgets mounted on the page.
-        results.hits.__escaped = oldEscaped;
+        results.hits.__escaped = initialEscaped;
 
         renderFn(
           {
