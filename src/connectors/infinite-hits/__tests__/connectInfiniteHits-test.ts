@@ -9,7 +9,10 @@ import connectInfiniteHits from '../connectInfiniteHits';
 import { Client } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
-  addAbsolutePosition: hits => hits,
+  // The real implementation creates a new array instance, which can cause bugs,
+  // especially with the __escaped mark, we thus make sure the mock also has the
+  // same behavior regarding the array.
+  addAbsolutePosition: hits => hits.map(x => x),
 }));
 
 describe('connectInfiniteHits', () => {
@@ -603,6 +606,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       }),
       false
     );
+  });
+
+  it('keeps the __escaped mark', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({});
+
+    const helper = jsHelper({} as Client, '', {});
+    helper.search = jest.fn();
+
+    widget.init!({
+      ...defaultInitOptions,
+      helper,
+      state: helper.state,
+    });
+
+    const results = new SearchResults(helper.state, [
+      { hits: [{ whatever: 'i like kittens' }] },
+    ]);
+    widget.render!({
+      ...defaultRenderOptions,
+      results,
+      state: helper.state,
+      helper,
+    });
+
+    expect((results.hits as any).__escaped).toBe(true);
   });
 
   describe('routing', () => {
