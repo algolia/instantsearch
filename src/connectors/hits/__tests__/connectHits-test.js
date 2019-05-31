@@ -3,7 +3,7 @@ import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectHits from '../connectHits';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
-  addAbsolutePosition: hits => hits,
+  addAbsolutePosition: hits => hits.map(x => x),
 }));
 
 describe('connectHits', () => {
@@ -50,7 +50,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     );
 
     widget.render({
-      results: new SearchResults(helper.state, [{}]),
+      results: new SearchResults(helper.state, [{ hits: [] }]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -217,10 +217,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
+    const expectedHits = [{ name: 'transformed' }, { name: 'transformed' }];
+    expectedHits.__escaped = true;
+    results.hits.__escaped = true;
+
     expect(rendering).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: [{ name: 'transformed' }, { name: 'transformed' }],
+        hits: expectedHits,
         results,
       }),
       expect.anything()
@@ -254,13 +258,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
+    const expectedHits = [
+      { name: 'name 1', __queryID: 'theQueryID' },
+      { name: 'name 2', __queryID: 'theQueryID' },
+    ];
+    expectedHits.__escaped = true;
+
     expect(rendering).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: [
-          { name: 'name 1', __queryID: 'theQueryID' },
-          { name: 'name 2', __queryID: 'theQueryID' },
-        ],
+        hits: expectedHits,
       }),
       expect.anything()
     );
@@ -322,30 +329,62 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       createURL: () => '#',
     });
 
+    const expectedHits = [
+      {
+        name: 'hello',
+        _highlightResult: {
+          name: {
+            value: 'HE<MARK>LLO</MARK>',
+          },
+        },
+      },
+      {
+        name: 'halloween',
+        _highlightResult: {
+          name: {
+            value: 'HA<MARK>LLO</MARK>WEEN',
+          },
+        },
+      },
+    ];
+    expectedHits.__escaped = true;
+    results.hits.__escaped = true;
+
     expect(rendering).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: [
-          {
-            name: 'hello',
-            _highlightResult: {
-              name: {
-                value: 'HE<MARK>LLO</MARK>',
-              },
-            },
-          },
-          {
-            name: 'halloween',
-            _highlightResult: {
-              name: {
-                value: 'HA<MARK>LLO</MARK>WEEN',
-              },
-            },
-          },
-        ],
+        hits: expectedHits,
         results,
       }),
       expect.anything()
     );
+  });
+
+  it('keeps the __escaped mark', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget({});
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const results = new SearchResults(helper.state, [
+      { hits: [{ whatever: 'i like kittens' }] },
+    ]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(results.hits.__escaped).toBe(true);
   });
 });
