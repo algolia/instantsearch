@@ -1,5 +1,6 @@
 import { createDocumentationMessageGenerator } from '../../lib/utils';
 import { SearchParameters, SearchResults, Widget } from '../../types';
+import { QueryParameters } from 'algoliasearch-helper';
 
 type AnalyticsWidgetParams = {
   pushFunction(
@@ -47,7 +48,13 @@ function analytics(
 
   let cachedState: AnalyticsState = null;
 
-  const serializeRefinements = function(parameters: object): string {
+  type RefinementParameters = {
+    [key: string]: string[];
+  };
+
+  const serializeRefinements = function(
+    parameters: RefinementParameters
+  ): string {
     const refinements: string[] = [];
 
     for (const parameter in parameters) {
@@ -66,7 +73,7 @@ function analytics(
   };
 
   const serializeNumericRefinements = function(
-    numericRefinements: any
+    numericRefinements: QueryParameters['numericRefinements']
   ): string {
     const refinements: string[] = [];
 
@@ -75,7 +82,11 @@ function analytics(
         const filter = numericRefinements[attribute];
 
         if (filter.hasOwnProperty('>=') && filter.hasOwnProperty('<=')) {
-          if (filter['>='][0] === filter['<='][0]) {
+          if (
+            filter['>='] &&
+            filter['>='][0] === filter['<='] &&
+            filter['<='][0]
+          ) {
             refinements.push(`${attribute}=${attribute}_${filter['>=']}`);
           } else {
             refinements.push(
@@ -151,7 +162,7 @@ function analytics(
     }
   };
 
-  let pushTimeout: any;
+  let pushTimeout: number;
   let isInitialSearch = true;
 
   if (pushInitialSearch === true) {
@@ -187,7 +198,7 @@ function analytics(
         clearTimeout(pushTimeout);
       }
 
-      pushTimeout = setTimeout(() => sendAnalytics(cachedState), delay);
+      pushTimeout = window.setTimeout(() => sendAnalytics(cachedState), delay);
     },
 
     dispose() {
