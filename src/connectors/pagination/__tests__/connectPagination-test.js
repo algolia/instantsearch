@@ -25,8 +25,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       foo: 'bar',
     });
 
-    expect(widget.getConfiguration).toBe(undefined);
-
     const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
@@ -252,6 +250,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const { pages } = renderOptions;
       expect(pages).toEqual([39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]);
     }
+  });
+
+  describe('getConfiguration', () => {
+    it('adds a `page` to the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectPagination(renderFn);
+      const widget = makeWidget();
+
+      const nextConfiguation = widget.getConfiguration();
+
+      expect(nextConfiguation.page).toBe(0);
+    });
   });
 
   describe('dispose', () => {

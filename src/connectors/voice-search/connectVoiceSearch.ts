@@ -74,6 +74,12 @@ const connectVoiceSearch: VoiceSearchConnector = (
     const { searchAsYouSpeak } = widgetParams;
 
     return {
+      getConfiguration() {
+        return {
+          query: '',
+        };
+      },
+
       init({ helper, instantSearchInstance }) {
         (this as any)._refine = (query: string): void => {
           if (query !== helper.state.query) {
