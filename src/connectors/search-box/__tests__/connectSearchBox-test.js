@@ -24,8 +24,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       foo: 'bar',
     });
 
-    expect(widget.getConfiguration).toBe(undefined);
-
     const helper = algoliasearchHelper({});
     helper.search = () => {};
 
@@ -274,6 +272,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     expect(helper.state.query).toBe('');
     expect(helper.search).toHaveBeenCalledTimes(1);
+  });
+
+  describe('getConfiguration', () => {
+    it('adds a `query` to the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget();
+
+      const nextConfiguration = widget.getConfiguration();
+
+      expect(nextConfiguration.query).toBe('');
+    });
   });
 
   describe('dispose', () => {
