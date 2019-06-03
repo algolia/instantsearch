@@ -27,10 +27,6 @@ const products = hits({
 </article>
       `,
   },
-  cssClasses: {
-    list: 'hits-list',
-    item: 'hits-item',
-  },
 });
 
 export default products;
