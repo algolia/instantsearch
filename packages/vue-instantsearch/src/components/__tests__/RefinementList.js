@@ -9,7 +9,7 @@ const defaultState = {
     {
       value: 'yo',
       label: 'yo',
-      highlighted: 'y<em>o</em>',
+      highlighted: 'y<mark>o</mark>',
       isRefined: false,
       count: 20,
     },
