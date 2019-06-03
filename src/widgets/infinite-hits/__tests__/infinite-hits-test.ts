@@ -1,6 +1,5 @@
 import { render } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import infiniteHits from '../infinite-hits';
 import { Client } from '../../../types';
 
@@ -51,13 +50,6 @@ describe('infiniteHits()', () => {
       hitsPerPage: 2,
       page: 1,
     };
-  });
-
-  it('It does have a specific configuration', () => {
-    expect(widget.getConfiguration()).toEqual({
-      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
-      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
-    });
   });
 
   it('calls twice render(<Hits props />, container)', () => {
