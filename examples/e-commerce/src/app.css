@@ -242,7 +242,12 @@ mark {
 }
 
 .range-input-submit {
-  display: none;
+  /*
+    Safari doesn't send forms on "enter" with a submit
+    button having the property `display: none`.
+  */
+  position: absolute;
+  visibility: hidden;
 }
 
 /* ToggleRefinement */
