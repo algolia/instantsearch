@@ -7,7 +7,7 @@ storiesOf('InstantSearch', module).add(
     searchFunction: helper => {
       const query = helper.state.query;
 
-      if (query === '') {
+      if (!query) {
         return;
       }
 
