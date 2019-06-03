@@ -113,6 +113,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
+  describe('getConfiguration', () => {
+    it('adds a `query` to the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      const nextConfiguration = widget.getConfiguration();
+
+      expect(nextConfiguration.query).toBe('');
+    });
+  });
+
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({}, '');
