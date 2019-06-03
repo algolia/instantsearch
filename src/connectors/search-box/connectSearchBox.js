@@ -83,6 +83,12 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         this._clear();
       },
 
+      getConfiguration() {
+        return {
+          query: '',
+        };
+      },
+
       init({ helper, instantSearchInstance }) {
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
