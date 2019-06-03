@@ -98,6 +98,12 @@ export default function connectPagination(renderFn, unmountFn = noop) {
     });
 
     return {
+      getConfiguration() {
+        return {
+          page: 0,
+        };
+      },
+
       init({ helper, createURL, instantSearchInstance }) {
         this.refine = page => {
           helper.setPage(page);
