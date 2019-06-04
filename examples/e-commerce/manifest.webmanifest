@@ -1,6 +1,6 @@
 {
-  "short_name": "instantsearch-ecommerce",
-  "name": "InstantSearch E-commerce demo",
+  "short_name": "E-commerce",
+  "name": "InstantSearch.js E-commerce Demo",
   "icons": [
     {
       "src": "favicon.png",
