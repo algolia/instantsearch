@@ -1,3 +1,18 @@
+# [5.7.0](https://github.com/algolia/react-instantsearch/compare/v5.6.0...v5.7.0) (2019-06-04)
+
+
+### Bug Fixes
+
+* **highlight:** allow array as "attribute" ([#2474](https://github.com/algolia/react-instantsearch/issues/2474)) ([9dc829a](https://github.com/algolia/react-instantsearch/commit/9dc829a)), closes [#2461](https://github.com/algolia/react-instantsearch/issues/2461)
+* **indexUtils:** allow index with dots in it ([#2350](https://github.com/algolia/react-instantsearch/issues/2350)) ([f91906f](https://github.com/algolia/react-instantsearch/commit/f91906f))
+
+
+### Features
+
+* **voiceSearch:** add voice search widget ([#2316](https://github.com/algolia/react-instantsearch/issues/2316)) ([0e3b124](https://github.com/algolia/react-instantsearch/commit/0e3b124))
+
+
+
 # [5.6.0](https://github.com/algolia/react-instantsearch/compare/v5.5.0...v5.6.0) (2019-05-15)
 
 
