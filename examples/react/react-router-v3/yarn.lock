@@ -8805,20 +8805,20 @@ react-error-overlay@^5.1.6:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.6.tgz#0cd73407c5d141f9638ae1e0c63e7b2bf7e9929d"
   integrity sha512-X1Y+0jR47ImDVr54Ab6V9eGk0Hnu7fVWGeHQSOXHf/C2pF9c6uy3gef8QUeuUiWlNb0i08InPSE5a/KJzNzw1Q==
 
-react-instantsearch-core@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.6.0.tgz#1d5e9a6c07bc6bbb732953b19f22c4fa584a8405"
-  integrity sha512-dwKF+2XuFnpOaRD0Xnz1cRg26HL7TGhT/PnSyqAUgio8xiKywNQhJUeXL6Rgf6LqKxC0Ey3si8zV+IMxeGDPfA==
+react-instantsearch-core@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.7.0.tgz#6979ec419d2711033f6c83181de6cae9e1f064c2"
+  integrity sha512-fjexlv+hR8OyZraAmjwM+GmiVcJFzLUnufIKPMLO7/L4Mg5h0pETSXNBT22cCXTnda6XML//+GqQmWJFf+PBrA==
   dependencies:
     "@babel/runtime" "^7.1.2"
     algoliasearch-helper "^2.26.0"
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
-react-instantsearch-dom@5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.6.0.tgz#217bf68d959430d6680ee0dca63f7c0f345db3df"
-  integrity sha512-d4jWnRl+RF8It+t8crVrWUP6Gsc0VQ44jcbjnjmQRQXZNRIeeOKpJh7QfpWnKrDAY1qjUn/fZFZRB6W1XBHwYg==
+react-instantsearch-dom@5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.7.0.tgz#5a9b0cfb461c08a349a5fdc5d1cff50b8f5fcf56"
+  integrity sha512-FwFZZXwgaYtLrXD9KJNlrPVkfw8JOqVgpDBvra547udF4zbacZUuX7/qTyMHjVW/Lz59t5T25vCGLzmQiO89YA==
   dependencies:
     "@babel/runtime" "^7.1.2"
     algoliasearch "^3.27.1"
@@ -8826,7 +8826,7 @@ react-instantsearch-dom@5.6.0:
     classnames "^2.2.5"
     lodash "^4.17.4"
     prop-types "^15.5.10"
-    react-instantsearch-core "^5.6.0"
+    react-instantsearch-core "^5.7.0"
 
 react-is@^16.8.4, react-is@^16.8.6:
   version "16.8.6"
