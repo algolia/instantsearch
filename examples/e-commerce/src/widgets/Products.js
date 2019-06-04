@@ -10,7 +10,7 @@ const products = hits({
   </header>
 
   <p class="hit-category">{{categories.0}}</p>
-  <h1>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</h1>
+  <h1>{{#helpers.snippet}}{ "attribute": "name" }{{/helpers.snippet}}</h1>
   <p class="hit-description">{{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}</p>
 
   <footer>

@@ -3,7 +3,8 @@
 }
 
 body,
-h1 {
+h1,
+h2 {
   margin: 0;
   padding: 0;
 }
@@ -13,6 +14,13 @@ body {
     Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol';
   -webkit-font-smoothing: antialiased;
+}
+
+h2 {
+  color: #21243d;
+  font-family: Hind, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 /* Header */
@@ -67,6 +75,7 @@ body {
 .container-header {
   align-items: center;
   display: flex;
+  justify-content: space-between;
   min-height: 80px;
 }
 
@@ -75,6 +84,7 @@ body {
 }
 
 .container-options {
+  justify-content: flex-end;
   border-bottom: 1px solid #ebecf3;
   display: flex;
   margin-bottom: 30px;
@@ -211,43 +221,19 @@ mark {
 }
 
 .hit-rating {
-  background-color: rgba(226, 164, 0, 0.16);
+  border: 1px solid rgba(226, 164, 0, 0.5);
   border-radius: 4px;
-  padding: 2px 4px;
+  margin-left: 4px;
+  padding: 0 4px;
 }
 
-/* RangeInput */
+/* RangeSlider */
 
-.range-input-label::before {
+.rheostat-tooltip::before {
   color: #e2a400;
   content: '$';
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.6;
   margin-right: 4px;
-}
-
-.range-input-input {
-  max-width: 50px;
-}
-
-.range-input-input::-webkit-inner-spin-button,
-.range-input-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.range-input-separator {
-  padding: 0 8px;
-}
-
-.range-input-submit {
-  /*
-    Safari doesn't send forms on "enter" with a submit
-    button having the property `display: none`.
-  */
-  position: absolute;
-  visibility: hidden;
 }
 
 /* ToggleRefinement */
@@ -280,4 +266,10 @@ mark {
 
 .toggle-refinement-checkbox:checked::before {
   content: 'Yes';
+}
+
+/* RatingMenu */
+
+.rating-menu-item:not(.rating-menu-item--selected) {
+  opacity: 0.5;
 }
