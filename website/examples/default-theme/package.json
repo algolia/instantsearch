@@ -7,6 +7,6 @@
     "qs": "6.7.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "react-instantsearch-dom": "5.6.0"
+    "react-instantsearch-dom": "5.7.0"
   }
 }
