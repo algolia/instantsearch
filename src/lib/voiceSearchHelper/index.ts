@@ -110,7 +110,10 @@ export default function createVoiceSearchHelper({
 
   const stop = (): void => {
     dispose();
-    resetState();
+    // Because `dispose` removes event listeners, `end` listener is not called.
+    // So we're setting the `status` as `finished` here.
+    // If we don't do it, it will be still `waiting` or `recognizing`.
+    resetState('finished');
   };
 
   const start = (): void => {
