@@ -239,7 +239,7 @@ inquirer
                 return rollback(newVersion);
               }
 
-              shell.exec(`git push origin ${currentBranch}`);
+              shell.exec(`git push origin ${currentBranch} --tags`);
             }
 
             return process.exit(0);
