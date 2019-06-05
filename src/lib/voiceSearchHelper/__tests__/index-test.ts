@@ -191,4 +191,19 @@ describe('VoiceSearchHelper', () => {
     voiceSearchHelper.dispose();
     expect(stop).toHaveBeenCalledTimes(1);
   });
+
+  it('stops and the status becomes `finished`', () => {
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const onQueryChange = () => {};
+    const onStateChange = () => {};
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: true,
+      onQueryChange,
+      onStateChange,
+    });
+
+    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.toggleListening();
+    expect(voiceSearchHelper.getState().status).toBe('finished');
+  });
 });
