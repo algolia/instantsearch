@@ -28,7 +28,7 @@
     "react-instantsearch": "5.7.0",
     "react-native": "0.52.0",
     "react-native-animatable": "1.3.2",
-    "react-native-vector-icons": "6.4.2",
+    "react-native-vector-icons": "6.5.0",
     "react-test-renderer": "16.8.6"
   },
   "jest": {
