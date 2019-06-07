@@ -254,9 +254,7 @@ const HitsList = ({ hits, removeSuggestions, onEndReached }) => (
       <View style={styles.hitsContainer}>
         <Image
           source={{
-            uri: `https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${
-              item.image
-            }`,
+            uri: `https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${item.image}`,
           }}
           style={styles.hitsPicture}
         />

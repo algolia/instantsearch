@@ -157,9 +157,7 @@ const Hit = ({ item }) => {
         <div className="product-picture">
           <img
             alt={item.name}
-            src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${
-              item.image
-            }`}
+            src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${item.image}`}
           />
         </div>
       </div>
