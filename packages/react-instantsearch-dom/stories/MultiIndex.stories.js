@@ -254,9 +254,7 @@ const CustomProducts = connectHits(({ hits }) => {
 });
 
 const Product = ({ hit }) => {
-  const image = `https://ecommerce-images.algolia.com/img/produit/nano/${
-    hit.objectID
-  }-1.jpg%3Falgolia`;
+  const image = `https://ecommerce-images.algolia.com/img/produit/nano/${hit.objectID}-1.jpg%3Falgolia`;
   return (
     <div className="multi-index_hit">
       <div>

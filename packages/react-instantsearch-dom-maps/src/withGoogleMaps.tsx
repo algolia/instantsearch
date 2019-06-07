@@ -30,7 +30,7 @@ const withGoogleMaps = <Props extends WithGoogleMapsProps>(
       <Wrapped
         // @TODO: remove the cast once TypeScript fixes the issue
         // https://github.com/Microsoft/TypeScript/issues/28938
-        {...props as Props}
+        {...(props as Props)}
         google={google}
         googleMapsInstance={instance}
       />

@@ -293,9 +293,7 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
             <div style={imageHolderStyle}>
               <img
                 alt={hit.name}
-                src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${
-                  hit.image
-                }`}
+                src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${hit.image}`}
                 style={{ maxWidth: 120, maxHeight: 120 }}
               />
             </div>

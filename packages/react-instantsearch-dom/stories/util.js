@@ -19,9 +19,7 @@ export const CustomHits = connectHits(({ hits }) => (
         {hit.image && (
           <div className="hit-picture">
             <img
-              src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_100,q_100,f_auto/${
-                hit.image
-              }`}
+              src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_100,q_100,f_auto/${hit.image}`}
             />
           </div>
         )}
