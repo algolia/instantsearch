@@ -35,7 +35,7 @@
     "type-check:watch": "yarn type-check --watch",
     "test": "jest",
     "test:watch": "jest --watch --bail",
-    "test:size": "bundlesize",
+    "test:size": "size-limit",
     "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
     "release": "./scripts/release/publish.js",
     "release:maintenance": "./scripts/release/publish-maintenance.sh",
@@ -89,7 +89,6 @@
     "babel-plugin-syntax-jsx": "6.18.0",
     "babel-plugin-transform-react-pure-class-to-function": "1.0.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
-    "bundlesize": "0.17.2",
     "colors": "1.3.2",
     "conventional-changelog-cli": "2.0.21",
     "doctoc": "1.4.0",
@@ -126,17 +125,8 @@
     "scriptjs": "2.5.9",
     "semver": "6.1.1",
     "shelljs": "0.8.3",
+    "size-limit": "1.3.5",
     "typescript": "3.4.5",
     "webpack": "4.32.2"
-  },
-  "bundlesize": [
-    {
-      "path": "./dist/instantsearch.production.min.js",
-      "maxSize": "80 kB"
-    },
-    {
-      "path": "./dist/instantsearch.development.js",
-      "maxSize": "250 kB"
-    }
-  ]
+  }
 }

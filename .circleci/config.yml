@@ -2,7 +2,7 @@ aliases:
   - &install_yarn_version
     name: Install specific Yarn version
     command: |
-      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.16.0
       echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> $BASH_ENV
 
   - &restore_yarn_cache
@@ -27,21 +27,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  test_build:
-    <<: *defaults
-    steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
-      - run:
-          name: Build & Test packages size
-          command: |
-            yarn run build
-            yarn run test:size
-
-  test_lint:
+  lint:
     <<: *defaults
     steps:
       - checkout
@@ -56,7 +42,7 @@ jobs:
           name: Type Checking
           command: yarn run type-check
 
-  test_unit:
+  test:
     <<: *defaults
     steps:
       - checkout
@@ -68,10 +54,26 @@ jobs:
           name: Unit tests
           command: yarn run test --maxWorkers=4
 
+  build:
+    <<: *defaults
+    docker:
+      - image: circleci/node:latest-browsers
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Build & Test packages size
+          command: |
+            yarn run build
+            yarn run test:size
+
 workflows:
   version: 2
   ci:
     jobs:
-      - test_build
-      - test_unit
-      - test_lint
+      - lint
+      - test
+      - build
