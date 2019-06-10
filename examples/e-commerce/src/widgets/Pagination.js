@@ -3,7 +3,7 @@ import { pagination as paginationWidget } from 'instantsearch.js/es/widgets';
 const pagination = paginationWidget({
   container: '#pagination',
   scrollTo: '.container',
-  totalPages: 4,
+  padding: 2,
   showFirst: false,
   showLast: false,
   templates: {

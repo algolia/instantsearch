@@ -6,7 +6,6 @@ export { default as freeShipping } from './FreeShipping';
 export { default as products } from './Products';
 export { default as hitsPerPage } from './HitsPerPage';
 export { default as pagination } from './Pagination';
-export { default as priceInput } from './PriceInput';
 export { default as priceSlider } from './PriceSlider';
 export { default as ratings } from './Ratings';
 export { default as searchBox } from './SearchBox';
