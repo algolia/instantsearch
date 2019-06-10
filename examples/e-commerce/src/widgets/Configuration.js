@@ -1,7 +1,7 @@
 import { configure } from 'instantsearch.js/es/widgets';
 
 const configuration = configure({
-  attributesToSnippet: ['description'],
+  attributesToSnippet: ['description:10'],
   snippetEllipsisText: '…',
 });
 
