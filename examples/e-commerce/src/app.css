@@ -1,0 +1,275 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Open Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+  -webkit-font-smoothing: antialiased;
+}
+
+h2 {
+  color: #21243d;
+  font-family: Hind, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Header */
+
+.header {
+  align-items: center;
+  background: linear-gradient(to bottom, #fbc300, #c98a00);
+  background-image: url('./images/cover.png');
+  background-image: url('./images/cover.png'),
+    linear-gradient(to bottom, #fbc300, #c98a00);
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 368px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+}
+
+.header-logo {
+  margin: 0;
+}
+
+.header-title {
+  font-size: 38px;
+  font-weight: 300;
+}
+
+/* Containers */
+
+.container {
+  display: flex;
+  margin: 0 auto;
+  max-width: 1300px;
+  padding: 2rem 1rem;
+}
+
+.container-filters {
+  flex: 1;
+  margin-right: 60px;
+  max-width: 260px;
+}
+
+.container-body > div {
+  border-top: 1px solid #ebecf3;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
+
+.container-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: 80px;
+}
+
+.container-results {
+  flex: 3;
+}
+
+.container-options {
+  justify-content: flex-end;
+  border-bottom: 1px solid #ebecf3;
+  display: flex;
+  margin-bottom: 30px;
+  padding: 30px 0;
+}
+
+.container-options > div:not(:first-of-type) {
+  margin-left: 48px;
+}
+
+.container-options select {
+  min-width: 100px;
+}
+
+.container-footer {
+  margin: 4rem 0;
+}
+
+/* Styles the SFFV highlightings */
+
+mark {
+  background: rgba(226, 164, 0, 0.4);
+}
+
+/* Clear refinements container */
+
+.clear-filters {
+  align-items: center;
+  display: flex;
+}
+
+.clear-filters svg {
+  margin-right: 8px;
+}
+
+/* Panel */
+
+.panel-header {
+  font-family: Hind, sans-serif;
+}
+
+/* Search box */
+
+.searchbox {
+  height: 64px;
+  width: 740px;
+}
+
+.searchbox .searchbox-input {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 48px 0 rgba(0, 0, 0, 0.2);
+  font-family: Hind, sans-serif;
+  height: 64px;
+  padding-left: 58px;
+  /*
+    The "Hind" font family is vertically off-balance.
+    Adding some padding top makes it more vertically aligned.
+  */
+  padding-top: 4px;
+}
+
+.searchbox .searchbox-input::placeholder {
+  color: rgba(33, 36, 61, 0.24);
+  opacity: 1; /* Firefox */
+}
+
+.searchbox-input:-ms-input-placeholder {
+  color: rgba(33, 36, 61, 0.24);
+}
+
+.searchbox-input::-ms-input-placeholder {
+  color: rgba(33, 36, 61, 0.24);
+}
+
+.searchbox-submit {
+  color: #e2a400;
+  height: 16px;
+}
+
+.refinement-list-searchbox-input {
+  font-family: Hind, sans-serif;
+  /*
+    The "Hind" font family is vertically off-balance.
+    Adding some padding top makes it more vertically aligned.
+  */
+  padding-top: 1px;
+}
+
+/* Hits */
+
+.hit {
+  color: #21243d;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.hit h1 {
+  font-size: 14px;
+}
+
+.hit-category {
+  color: #21243d;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 8px;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.hit-description {
+  margin-top: 2px;
+}
+
+.hit-image-container {
+  align-items: center;
+  display: flex;
+  height: 174px;
+  justify-content: center;
+  margin: auto;
+  width: 174px;
+}
+
+.hit-image {
+  height: auto;
+  max-width: 100%;
+}
+
+.hit-em {
+  color: #e2a400;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.hit-rating {
+  border: 1px solid rgba(226, 164, 0, 0.5);
+  border-radius: 4px;
+  margin-left: 4px;
+  padding: 0 4px;
+}
+
+/* RangeSlider */
+
+.rheostat-tooltip::before {
+  color: #e2a400;
+  content: '$';
+  font-size: 0.6;
+  margin-right: 4px;
+}
+
+/* ToggleRefinement */
+
+.toggle-refinement-label {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.toggle-refinement-checkbox {
+  font: inherit;
+  margin-right: 0;
+}
+
+.toggle-refinement-checkbox:checked::before {
+  color: #e2a400;
+}
+
+.toggle-refinement-checkbox::before {
+  align-items: center;
+  color: rgba(33, 36, 61, 0.32);
+  content: 'No';
+  display: flex;
+  font-size: 0.8rem;
+  height: 16px;
+  position: absolute;
+  right: 38px;
+}
+
+.toggle-refinement-checkbox:checked::before {
+  content: 'Yes';
+}
+
+/* RatingMenu */
+
+.rating-menu-item:not(.rating-menu-item--selected) {
+  opacity: 0.5;
+}
