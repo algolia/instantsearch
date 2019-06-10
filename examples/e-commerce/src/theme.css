@@ -115,9 +115,12 @@ a[class^='ais-'] {
   font-weight: bold;
 }
 
-.ais-RatingMenu-item--selected .ais-RatingMenu-count {
-  background-color: rgba(226, 164, 0, 0.16);
-  color: #e2a400;
+.ais-RatingMenu-starIcon--full {
+  fill: #e2a400;
+}
+
+.ais-RatingMenu-starIcon--empty {
+  fill: rgba(0, 0, 0, 0.08);
 }
 
 /* Panel */
@@ -422,6 +425,7 @@ a[class^='ais-'] {
 }
 
 .ais-RangeSlider .rheostat-tooltip {
+  font-weight: bold;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
