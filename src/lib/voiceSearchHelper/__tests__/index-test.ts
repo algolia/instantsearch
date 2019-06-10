@@ -194,8 +194,8 @@ describe('VoiceSearchHelper', () => {
 
   it('stops and the status becomes `finished`', () => {
     window.SpeechRecognition = createFakeSpeechRecognition();
-    const onQueryChange = () => {};
-    const onStateChange = () => {};
+    const onQueryChange = (): void => {};
+    const onStateChange = (): void => {};
     const voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak: true,
       onQueryChange,
