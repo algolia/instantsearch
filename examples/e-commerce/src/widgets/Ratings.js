@@ -30,8 +30,7 @@ const ratings = ratingsMenu({
     width="16"
     height="16"
   >
-    {{#.}}<path fill="#e2a400" fill-rule="evenodd" d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"/>{{/.}}
-    {{^.}}<path fill="#414247" opacity=".08" fill-rule="evenodd" d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"/>{{/.}}
+    <path fill-rule="evenodd" d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"/>
   </svg>
 {{/stars}}
 {{#count}}
@@ -44,6 +43,10 @@ const ratings = ratingsMenu({
   </div>
 {{/count}}
   `,
+  },
+  cssClasses: {
+    item: 'rating-menu-item',
+    selectedItem: 'rating-menu-item--selected',
   },
 });
 
