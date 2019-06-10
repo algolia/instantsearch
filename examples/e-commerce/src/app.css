@@ -216,40 +216,6 @@ mark {
   padding: 2px 4px;
 }
 
-/* RangeInput */
-
-.range-input-label::before {
-  color: #e2a400;
-  content: '$';
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-right: 4px;
-}
-
-.range-input-input {
-  max-width: 50px;
-}
-
-.range-input-input::-webkit-inner-spin-button,
-.range-input-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.range-input-separator {
-  padding: 0 8px;
-}
-
-.range-input-submit {
-  /*
-    Safari doesn't send forms on "enter" with a submit
-    button having the property `display: none`.
-  */
-  position: absolute;
-  visibility: hidden;
-}
-
 /* ToggleRefinement */
 
 .toggle-refinement-label {
