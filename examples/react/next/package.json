@@ -12,7 +12,7 @@
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "23.6.0",
-    "css-loader": "2.1.1",
+    "css-loader": "3.0.0",
     "jest": "23.6.0",
     "react-test-renderer": "16.8.6",
     "style-loader": "0.23.1"
