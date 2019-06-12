@@ -179,9 +179,10 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           prevState = currentState;
         }
 
-        if (escapeHTML && results.hits && results.hits.length > 0) {
+        if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
+        const initialEscaped = (results.hits as any).__escaped;
 
         results.hits = addAbsolutePosition(
           results.hits,
@@ -192,6 +193,11 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         results.hits = addQueryID(results.hits, results.queryID);
 
         results.hits = transformItems(results.hits);
+
+        // Make sure the escaped tag stays after mapping over the hits.
+        // This prevents the hits from being double-escaped if there are multiple
+        // hits widgets mounted on the page.
+        (results.hits as any).__escaped = initialEscaped;
 
         if (lastReceivedPage < page! || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
