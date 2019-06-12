@@ -9,7 +9,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "core-js": "2.6.5",
+    "core-js": "2.6.9",
     "vue": "2.6.10",
     "vue-instantsearch": "{{libraryVersion}}"
   },
