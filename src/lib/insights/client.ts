@@ -9,7 +9,6 @@ import {
   RenderOptions,
   Unmounter,
   WidgetFactory,
-  Omit,
   SearchResults,
 } from '../../types';
 

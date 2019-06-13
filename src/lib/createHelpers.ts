@@ -1,4 +1,3 @@
-import { Omit } from '../types';
 import {
   highlight,
   snippet,
