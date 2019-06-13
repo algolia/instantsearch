@@ -4,212 +4,278 @@ import {
   HierarchicalMenu,
   RefinementList,
   SortBy,
-  Stats,
   Pagination,
   ClearRefinements,
-  RatingMenu,
-  RangeInput,
   Highlight,
+  Hits,
+  HitsPerPage,
   Panel,
   Configure,
-  connectSearchBox,
-  connectHits,
-  connectStateResults,
+  ScrollTo,
+  SearchBox,
+  Snippet,
+  ToggleRefinement,
 } from 'react-instantsearch-dom';
+import algoliasearch from 'algoliasearch/lite';
+import { Ratings, PriceSlider } from './widgets';
 import withURLSync from './URLSync';
+import './Theme.css';
 import './App.css';
+import AlgoliaSvg from './AlgoliaSvg';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
+
+const Hit = ({ hit }) => (
+  <article className="hit">
+    <header className="hit-image-container">
+      <img src={hit.image} alt={hit.name} className="hit-image" />
+    </header>
+
+    <p className="hit-category">{hit.categories[0]}</p>
+    <h1>
+      <Highlight attribute="name" tagName="mark" hit={hit} />
+    </h1>
+    <p className="hit-description">
+      <Snippet attribute="description" tagName="mark" hit={hit} />
+    </p>
+
+    <footer>
+      <p>
+        <span className="hit-em">$</span> <strong>{hit.price}</strong>{' '}
+        <span className="hit-em hit-rating">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="8"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill="#e2a400"
+              fillRule="evenodd"
+              d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"
+            />
+          </svg>{' '}
+          {hit.rating}
+        </span>
+      </p>
+    </footer>
+  </article>
+);
 
 const App = props => (
   <InstantSearch
-    appId="latency"
-    apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+    searchClient={searchClient}
     indexName="instant_search"
     searchState={props.searchState}
     createURL={props.createURL}
     onSearchStateChange={props.onSearchStateChange}
   >
-    <Configure hitsPerPage={16} />
-    <Header />
-    <div className="content-wrapper">
-      <Facets />
-      <CustomResults />
-    </div>
-  </InstantSearch>
-);
+    <header className="header">
+      <p className="header-logo">
+        <AlgoliaSvg />
+      </p>
 
-const Header = () => (
-  <header className="content-wrapper">
-    <a
-      href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/"
-      className="is-logo"
-    >
-      <img
-        alt="React InstantSearch"
-        src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
-        width={40}
+      <p className="header-title">Stop looking for an item — find it.</p>
+
+      <SearchBox
+        translations={{
+          placeholder: 'Search for a product, brand, color, …',
+        }}
+        submit={
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 18 18"
+          >
+            <g
+              fill="none"
+              fillRule="evenodd"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.67"
+              transform="translate(1 1)"
+            >
+              <circle cx="7.11" cy="7.11" r="7.11" />
+              <path d="M16 16l-3.87-3.87" />
+            </g>
+          </svg>
+        }
+        showLoadingIndicator={false}
       />
-    </a>
-    <a href="./" className="logo">
-      aeki
-    </a>
-    <ConnectedSearchBox />
-  </header>
-);
+    </header>
 
-const Facets = () => (
-  <aside>
-    <ClearRefinements
-      translations={{
-        reset: 'Clear all filters',
-      }}
+    <Configure
+      attributesToSnippet={['description:10']}
+      snippetEllipsisText="…"
     />
 
-    <section className="facet-wrapper">
-      <div className="facet-category-title facet">Show results for</div>
-      <HierarchicalMenu
-        attributes={[
-          'hierarchicalCategories.lvl0',
-          'hierarchicalCategories.lvl1',
-          'hierarchicalCategories.lvl2',
-        ]}
-      />
-    </section>
+    <ScrollTo>
+      <main className="container">
+        <section className="container-filters">
+          <div className="container-header">
+            <h2>Filters</h2>
 
-    <section className="facet-wrapper">
-      <div className="facet-category-title facet">Refine By</div>
-
-      <Panel header={<h5>Type</h5>}>
-        <RefinementList attribute="type" operator="or" limit={5} />
-      </Panel>
-
-      <Panel header={<h5>Brand</h5>}>
-        <RefinementList attribute="brand" operator="or" limit={5} searchable />
-      </Panel>
-
-      <Panel header={<h5>Rating</h5>}>
-        <RatingMenu attribute="rating" max={5} />
-      </Panel>
-
-      <Panel header={<h5>Price</h5>}>
-        <RangeInput attribute="price" />
-      </Panel>
-    </section>
-
-    <div className="thank-you">
-      Data courtesy of <a href="https://developer.bestbuy.com/">Best Buy</a>
-    </div>
-  </aside>
-);
-
-const CustomSearchBox = ({ currentRefinement, refine }) => (
-  <div className="input-group">
-    <input
-      type="text"
-      value={currentRefinement}
-      onChange={e => refine(e.target.value)}
-      autoComplete="off"
-      className="form-control"
-      id="q"
-    />
-    <span className="input-group-btn">
-      <button className="btn btn-default">
-        <i className="fa fa-search" />
-      </button>
-    </span>
-  </div>
-);
-
-function CustomHits({ hits }) {
-  return (
-    <main id="hits">
-      {hits.map(hit => (
-        <Hit item={hit} key={hit.objectID} />
-      ))}
-    </main>
-  );
-}
-
-const Hit = ({ item }) => {
-  const icons = [];
-  for (let i = 0; i < 5; i++) {
-    const suffixClassName = i >= item.rating ? '--empty' : '';
-    const suffixXlink = i >= item.rating ? 'Empty' : '';
-
-    icons.push(
-      <svg
-        key={i}
-        className={`ais-RatingMenu-starIcon ais-RatingMenu-starIcon${suffixClassName}`}
-        aria-hidden="true"
-        width="24"
-        height="24"
-      >
-        <use xlinkHref={`#ais-RatingMenu-star${suffixXlink}Symbol`} />
-      </svg>
-    );
-  }
-  return (
-    <article className="hit">
-      <div className="product-picture-wrapper">
-        <div className="product-picture">
-          <img
-            alt={item.name}
-            src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${item.image}`}
-          />
-        </div>
-      </div>
-      <div className="product-desc-wrapper">
-        <div className="product-name">
-          <Highlight attribute="name" hit={item} />
-        </div>
-        <div className="product-type">
-          <Highlight attribute="type" hit={item} />
-        </div>
-        <div className="product-footer">
-          <div className="ais-RatingMenu-link">{icons}</div>
-          <div className="product-price">${item.price}</div>
-        </div>
-      </div>
-    </article>
-  );
-};
-
-const CustomResults = connectStateResults(({ searchState, searchResult }) => {
-  if (searchResult && searchResult.nbHits === 0) {
-    return (
-      <div className="results-wrapper">
-        <div className="no-results">
-          No results found matching{' '}
-          <span className="query">{searchState.query}</span>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="results-wrapper">
-        <section id="results-topbar">
-          <div className="sort-by">
-            <label>Sort by</label>
-            <SortBy
-              items={[
-                { value: 'instant_search', label: 'Featured' },
-                { value: 'instant_search_price_asc', label: 'Price asc.' },
-                { value: 'instant_search_price_desc', label: 'Price desc.' },
-              ]}
-              defaultRefinement="instant_search"
+            <ClearRefinements
+              translations={{
+                reset: (
+                  <div className="clear-filters">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="11"
+                      height="11"
+                      viewBox="0 0 11 11"
+                    >
+                      <g fill="none" fillRule="evenodd" opacity=".4">
+                        <path d="M0 0h11v11H0z" />
+                        <path
+                          fill="#000"
+                          fillRule="nonzero"
+                          d="M8.26 2.75a3.896 3.896 0 1 0 1.102 3.262l.007-.056a.49.49 0 0 1 .485-.456c.253 0 .451.206.437.457 0 0 .012-.109-.006.061a4.813 4.813 0 1 1-1.348-3.887v-.987a.458.458 0 1 1 .917.002v2.062a.459.459 0 0 1-.459.459H7.334a.458.458 0 1 1-.002-.917h.928z"
+                        />
+                      </g>
+                    </svg>
+                    Clear filters
+                  </div>
+                ),
+              }}
             />
           </div>
-          <Stats />
-        </section>
-        <ConnectedHits />
-        <footer>
-          <Pagination showLast={true} />
-        </footer>
-      </div>
-    );
-  }
-});
 
-const ConnectedSearchBox = connectSearchBox(CustomSearchBox);
-const ConnectedHits = connectHits(CustomHits);
+          <div className="container-body">
+            <Panel header="Brands">
+              <RefinementList
+                attribute="brand"
+                searchable={true}
+                translations={{
+                  placeholder: 'Search for brands…',
+                }}
+              />
+            </Panel>
+
+            <Panel header="Category">
+              <HierarchicalMenu
+                attributes={[
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                ]}
+              />
+            </Panel>
+
+            <Panel header="Price">
+              <PriceSlider attribute="price" />
+            </Panel>
+
+            <Panel header="Free shipping">
+              <ToggleRefinement
+                attribute="free_shipping"
+                label="Display only items with free shipping"
+                value={true}
+              />
+            </Panel>
+
+            <Panel header="Ratings">
+              <Ratings attribute="rating" />
+            </Panel>
+          </div>
+        </section>
+
+        <section className="container-results">
+          <header className="container-header container-options">
+            <SortBy
+              defaultRefinement="instant_search"
+              items={[
+                {
+                  label: 'Sort by featured',
+                  value: 'instant_search',
+                },
+                {
+                  label: 'Price ascending',
+                  value: 'instant_search_price_asc',
+                },
+                {
+                  label: 'Price descending',
+                  value: 'instant_search_price_desc',
+                },
+              ]}
+            />
+
+            <HitsPerPage
+              items={[
+                {
+                  label: '16 hits per page',
+                  value: 16,
+                },
+                {
+                  label: '32 hits per page',
+                  value: 32,
+                },
+                {
+                  label: '64 hits per page',
+                  value: 64,
+                },
+              ]}
+              defaultRefinement={16}
+            />
+          </header>
+
+          <Hits hitComponent={Hit} />
+
+          <footer className="container-footer">
+            <Pagination
+              padding={2}
+              showFirst={false}
+              showLast={false}
+              translations={{
+                previous: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                  >
+                    <g
+                      fill="none"
+                      fillRule="evenodd"
+                      stroke="#000"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.143"
+                    >
+                      <path d="M9 5H1M5 9L1 5l4-4" />
+                    </g>
+                  </svg>
+                ),
+                next: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                  >
+                    <g
+                      fill="none"
+                      fillRule="evenodd"
+                      stroke="#000"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.143"
+                    >
+                      <path d="M1 5h8M5 9l4-4-4-4" />
+                    </g>
+                  </svg>
+                ),
+              }}
+            />
+          </footer>
+        </section>
+      </main>
+    </ScrollTo>
+  </InstantSearch>
+);
 
 export default withURLSync(App);
