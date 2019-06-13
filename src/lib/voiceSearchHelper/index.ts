@@ -12,21 +12,11 @@ export type Status =
   | 'finished'
   | 'error';
 
-export type ErrorCode =
-  | 'no-speech'
-  | 'aborted'
-  | 'audio-capture'
-  | 'network'
-  | 'not-allowed'
-  | 'service-not-allowed'
-  | 'bad-grammar'
-  | 'language-not-supported';
-
 export type VoiceListeningState = {
   status: Status;
   transcript: string;
   isSpeechFinal: boolean;
-  errorCode?: ErrorCode;
+  errorCode?: SpeechRecognitionErrorCode;
 };
 
 export type VoiceSearchHelper = {
