@@ -39,24 +39,46 @@ module.exports = {
         test: /\.css$/,
         use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
       },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              publicPath: 'assets',
+              context: __dirname,
+              outputPath(_url, resourcePath, context) {
+                return path.relative(context, resourcePath);
+              },
+              name: '[name].[ext]',
+            },
+          },
+        ],
+      },
     ],
   },
   performance: {
     hints: false,
   },
-  plugins: examples
-    .map(
+  plugins: [
+    ...examples.map(
       example =>
         new HTMLWebpackPlugin({
           template: path.join(__dirname, example, 'index.html'),
           filename: path.join(outputPath, example, 'index.html'),
           chunks: [example],
         })
-    )
-    .concat([
-      new CopyWebpackPlugin([
-        { from: path.join(__dirname, 'assets'), to: 'assets/' },
-        path.join(__dirname, '_redirects'),
-      ]),
+    ),
+    new CopyWebpackPlugin([
+      ...examples.map(example => ({
+        from: path.join(__dirname, example, 'assets'),
+        to: path.join(outputPath, example, 'assets'),
+      })),
+      {
+        from: path.join(__dirname, 'assets'),
+        to: 'assets/',
+      },
+      path.join(__dirname, '_redirects'),
     ]),
+  ],
 };
