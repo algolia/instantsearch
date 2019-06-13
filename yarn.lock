@@ -3642,10 +3642,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.1.tgz#e2d374ef15b315b48e7efc308fa1a7cd51faa06c"
   integrity sha512-xwlHq5DXQFRpe+u6hmmNkzYk/3oxxqDp71a/AJMupOQYmxyaBetqrVMqdNlSQfbg7XTJYD8vARjf3Op06OzdtQ==
 
-"@types/node@^12.0.7":
-  version "12.0.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.7.tgz#4f2563bad652b2acb1722d7e7aae2b0ff62d192c"
-  integrity sha512-1YKeT4JitGgE4SOzyB9eMwO0nGVNkNEsm9qlIt1Lqm/tG2QEiSMTD4kS3aO6L+w5SClLVxALmIBESK6Mk5wX0A==
+"@types/node@^12.0.8":
+  version "12.0.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.8.tgz#551466be11b2adc3f3d47156758f610bd9f6b1d8"
+  integrity sha512-b8bbUOTwzIY3V5vDTY1fIJ+ePKDUBqt2hC2woVGotdQQhG/2Sh62HOKHrT7ab+VerXAcPyAiTEipPu/FsreUtg==
 
 "@types/prop-types@*", "@types/prop-types@^15.5.8":
   version "15.5.8"
@@ -15610,13 +15610,13 @@ rollup-pluginutils@^2.8.0:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@1.15.1:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.15.1.tgz#76580d9a3e7e8632530bcc5809baf431e9e16aa9"
-  integrity sha512-JErZxFKs0w7wpHZXWonAlom1Jezo0gJ7mf7JHTjOAjFGKAqNMEnlzEjMYhy6cqHgSfSPj/idVscuW+Lo6y6AoQ==
+rollup@1.15.2:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.15.2.tgz#676feb0e73c8f99f75e0078b331a576c56354df6"
+  integrity sha512-NsH0Mjqk/RtlhSIJopNUiCYi3r3zudHxg9Cj6Or96QnJw/suab0/PjL50/GRNE5omvXEG2F9K4a334ddvA1Txg==
   dependencies:
     "@types/estree" "0.0.39"
-    "@types/node" "^12.0.7"
+    "@types/node" "^12.0.8"
     acorn "^6.1.1"
 
 rst-selector-parser@^2.2.3:
