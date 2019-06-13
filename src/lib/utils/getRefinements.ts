@@ -177,7 +177,7 @@ function getRefinements(
           attributeName,
           name: `${refinement}`,
           numericValue: refinement,
-          operator,
+          operator: operator as NumericRefinement['operator'],
         });
       });
     });

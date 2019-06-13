@@ -126,7 +126,7 @@
     "scriptjs": "2.5.9",
     "semver": "6.1.1",
     "shelljs": "0.8.3",
-    "typescript": "3.4.5",
+    "typescript": "3.5.1",
     "webpack": "4.33.0"
   },
   "bundlesize": [
