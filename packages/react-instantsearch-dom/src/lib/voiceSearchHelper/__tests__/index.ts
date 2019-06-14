@@ -1,4 +1,4 @@
-// copied from https://github.com/algolia/instantsearch.js/blob/0e988cc85487f61aa3b61131c22bed135ddfd76d/src/lib/voiceSearchHelper/__tests__/index-test.ts
+// copied from https://github.com/algolia/instantsearch.js/blob/688e36a67bb4c63d008d8abc02257a7b7c04e513/src/lib/voiceSearchHelper/__tests__/index-test.ts
 
 import createVoiceSearchHelper from '..';
 
@@ -192,5 +192,20 @@ describe('VoiceSearchHelper', () => {
     voiceSearchHelper.toggleListening();
     voiceSearchHelper.dispose();
     expect(stop).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops and the status becomes `finished`', () => {
+    window.SpeechRecognition = createFakeSpeechRecognition();
+    const onQueryChange = (): void => {};
+    const onStateChange = (): void => {};
+    const voiceSearchHelper = createVoiceSearchHelper({
+      searchAsYouSpeak: true,
+      onQueryChange,
+      onStateChange,
+    });
+
+    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.toggleListening();
+    expect(voiceSearchHelper.getState().status).toBe('finished');
   });
 });
