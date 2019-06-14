@@ -7,9 +7,9 @@ import version from './version';
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
-  noop,
+  enhanceConfiguration,
   isPlainObject,
-  mergeDeep,
+  noop,
 } from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -437,17 +437,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       }
     });
   }
-}
-
-export function enhanceConfiguration(configuration, widgetDefinition) {
-  if (!widgetDefinition.getConfiguration) {
-    return configuration;
-  }
-
-  // Get the relevant partial configuration asked by the widget
-  const partialConfiguration = widgetDefinition.getConfiguration(configuration);
-
-  return mergeDeep(configuration, partialConfiguration);
 }
 
 export default InstantSearch;
