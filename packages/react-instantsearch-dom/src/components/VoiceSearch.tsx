@@ -5,13 +5,12 @@ import createVoiceSearchHelper, {
   VoiceSearchHelper,
   VoiceListeningState,
   Status,
-  ErrorCode,
 } from '../lib/voiceSearchHelper';
 const cx = createClassNames('VoiceSearch');
 
 type InnerComponentProps = {
   status: Status;
-  errorCode?: ErrorCode;
+  errorCode?: SpeechRecognitionErrorCode;
   isListening: boolean;
   transcript: string;
   isSpeechFinal: boolean;

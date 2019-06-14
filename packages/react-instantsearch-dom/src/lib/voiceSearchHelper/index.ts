@@ -1,4 +1,4 @@
-// copied from https://github.com/algolia/instantsearch.js/blob/0e988cc85487f61aa3b61131c22bed135ddfd76d/src/lib/voiceSearchHelper/index.ts
+// copied from https://github.com/algolia/instantsearch.js/blob/688e36a67bb4c63d008d8abc02257a7b7c04e513/src/lib/voiceSearchHelper/index.ts
 
 export type VoiceSearchHelperParams = {
   searchAsYouSpeak: boolean;
@@ -14,21 +14,11 @@ export type Status =
   | 'finished'
   | 'error';
 
-export type ErrorCode =
-  | 'no-speech'
-  | 'aborted'
-  | 'audio-capture'
-  | 'network'
-  | 'not-allowed'
-  | 'service-not-allowed'
-  | 'bad-grammar'
-  | 'language-not-supported';
-
 export type VoiceListeningState = {
   status: Status;
   transcript: string;
   isSpeechFinal: boolean;
-  errorCode?: ErrorCode;
+  errorCode?: SpeechRecognitionErrorCode;
 };
 
 export type VoiceSearchHelper = {
@@ -110,11 +100,6 @@ export default function createVoiceSearchHelper({
     }
   };
 
-  const stop = (): void => {
-    dispose();
-    resetState();
-  };
-
   const start = (): void => {
     recognition = new SpeechRecognitionAPI();
     if (!recognition) {
@@ -139,6 +124,14 @@ export default function createVoiceSearchHelper({
     recognition.removeEventListener('result', onResult);
     recognition.removeEventListener('end', onEnd);
     recognition = undefined;
+  };
+
+  const stop = (): void => {
+    dispose();
+    // Because `dispose` removes event listeners, `end` listener is not called.
+    // So we're setting the `status` as `finished` here.
+    // If we don't do it, it will be still `waiting` or `recognizing`.
+    resetState('finished');
   };
 
   const toggleListening = (): void => {
