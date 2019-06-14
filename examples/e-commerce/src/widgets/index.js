@@ -1,0 +1,12 @@
+export { default as brands } from './Brands';
+export { default as categories } from './Categories';
+export { default as clearFilters } from './ClearFilters';
+export { default as configuration } from './Configuration';
+export { default as freeShipping } from './FreeShipping';
+export { default as products } from './Products';
+export { default as hitsPerPage } from './HitsPerPage';
+export { default as pagination } from './Pagination';
+export { default as priceSlider } from './PriceSlider';
+export { default as ratings } from './Ratings';
+export { default as searchBox } from './SearchBox';
+export { default as sortBy } from './SortBy';

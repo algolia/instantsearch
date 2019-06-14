@@ -11,8 +11,8 @@ yarn-error.log
 
 # Generated files
 /docs
+/website/examples
 /website/stories
-/website/examples/*.zip
 /storybook/dist/*
 
 # Argos CI screenshots
