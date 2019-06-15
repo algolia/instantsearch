@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "babel-eslint": "10.0.1",
-    "conventional-changelog-cli": "2.0.12",
+    "conventional-changelog-cli": "2.0.21",
     "doctoc": "1.4.0",
     "eslint": "5.16.0",
     "eslint-config-algolia": "13.2.3",
