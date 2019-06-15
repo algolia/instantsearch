@@ -39,7 +39,7 @@
     "algoliasearch": "3.32.1",
     "chalk": "2.4.2",
     "commander": "2.20.0",
-    "inquirer": "6.2.2",
+    "inquirer": "6.3.1",
     "jstransformer-handlebars": "1.1.0",
     "latest-semver": "1.0.0",
     "load-json-file": "5.2.0",
