@@ -49,7 +49,7 @@
     "metalsmith-in-place": "4.4.0",
     "metalsmith-rename": "1.0.0",
     "prettier": "1.16.4",
-    "semver": "6.0.0",
+    "semver": "6.1.1",
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
