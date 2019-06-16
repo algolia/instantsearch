@@ -1970,10 +1970,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-antd@3.19.3:
-  version "3.19.3"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-3.19.3.tgz#9d4af091bbfab8bb888cc98f36c994fbaf12e931"
-  integrity sha512-7pIICKAMLC2EvRu4Wi0bLuIfkco84u3rbghyqibBZetVrCQQHjhWBxKiv3dxSAlr9HdT71fFvZcus+R81KlGSg==
+antd@3.19.4:
+  version "3.19.4"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-3.19.4.tgz#43e6285459b359e1bf48a649b109b7083ab21f18"
+  integrity sha512-N6eYH4ZaO1EZzYRNh0uCFn8UVZ9w0oN8lyIJ3QS5MW+xNh6O5D45RzClHJ8sCcVvjPYwKaaCIzNwUQsCRr3bAA==
   dependencies:
     "@ant-design/create-react-context" "^0.2.4"
     "@ant-design/icons" "~2.0.0"
@@ -1992,7 +1992,7 @@ antd@3.19.3:
     prop-types "^15.7.2"
     raf "^3.4.1"
     rc-animate "^2.8.3"
-    rc-calendar "~9.14.5"
+    rc-calendar "~9.15.0"
     rc-cascader "~0.17.4"
     rc-checkbox "~2.1.6"
     rc-collapse "~1.11.3"
@@ -9345,10 +9345,10 @@ rc-animate@^3.0.0-rc.1:
     rc-util "^4.5.0"
     react-lifecycles-compat "^3.0.4"
 
-rc-calendar@~9.14.5:
-  version "9.14.5"
-  resolved "https://registry.yarnpkg.com/rc-calendar/-/rc-calendar-9.14.5.tgz#77c9d6bfec827d2e325adc770f1cef2fa2e4fc0e"
-  integrity sha512-UCo2O7e3hfOJrV0pkBzpw5vedwyn08YTWvErMTvYbz3nE7rLehXH6i2ABUe1fMCIXoH+YDhQ085SRJgKyA3mZA==
+rc-calendar@~9.15.0:
+  version "9.15.0"
+  resolved "https://registry.yarnpkg.com/rc-calendar/-/rc-calendar-9.15.0.tgz#4ed253723aa875505d2d5738dcfd42eed1684405"
+  integrity sha512-jmyiSG2QWIwB6Po2PySwB+kwpodWMxLVIJ0G2VJKu3jPQL0hNbsV47U28bhQzHkm5o0B3rJ3Tm+lk2VLcKbkaA==
   dependencies:
     babel-runtime "6.x"
     classnames "2.x"
