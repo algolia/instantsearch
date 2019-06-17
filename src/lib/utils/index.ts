@@ -1,4 +1,5 @@
 export { default as capitalize } from './capitalize';
+export { default as defer } from './defer';
 export { default as isDomElement } from './isDomElement';
 export { default as getContainerNode } from './getContainerNode';
 export { default as isSpecialClick } from './isSpecialClick';
