@@ -1,7 +1,7 @@
 import { clearRefinements } from 'instantsearch.js/es/widgets';
 
 const clearFilters = clearRefinements({
-  container: '#clear-refinements',
+  container: '[data-widget="clear-filters"]',
   templates: {
     resetLabel: `
 <div class="clear-filters">

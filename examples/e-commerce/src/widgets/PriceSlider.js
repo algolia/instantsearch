@@ -13,13 +13,16 @@ const priceRangeSlider = panel({
 })(rangeSlider);
 
 const priceSlider = priceRangeSlider({
-  container: '#price-range',
+  container: '[data-widget="price-range"]',
   attribute: 'price',
   pips: false,
   tooltips: {
     format(value) {
       return `${Math.round(value).toLocaleString()}`;
     },
+  },
+  cssClasses: {
+    root: 'range-slider',
   },
 });
 

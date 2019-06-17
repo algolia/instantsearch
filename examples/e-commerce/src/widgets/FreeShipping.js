@@ -13,7 +13,7 @@ const freeShippingToggleRefinement = panel({
 })(toggleRefinement);
 
 const freeShipping = freeShippingToggleRefinement({
-  container: '#shipping',
+  container: '[data-widget="free-shipping"]',
   attribute: 'free_shipping',
   templates: {
     labelText: 'Display only items with free shipping',

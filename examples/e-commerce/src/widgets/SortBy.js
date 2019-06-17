@@ -1,7 +1,7 @@
 import { sortBy as sortByWidget } from 'instantsearch.js/es/widgets';
 
 const sortBy = sortByWidget({
-  container: '#sort-by',
+  container: '[data-widget="sort-by"]',
   attribute: 'price',
   items: [
     {

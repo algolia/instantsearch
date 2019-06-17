@@ -10,6 +10,7 @@ a[class^='ais-'] {
   text-decoration: none;
 }
 
+[class^='ais-'][class$='--disabled'],
 [class^='ais-'][class$='--disabled'] * {
   cursor: not-allowed;
 }
@@ -138,7 +139,6 @@ a[class^='ais-'] {
   background: none;
   border: none;
   cursor: pointer;
-  outline: none;
   padding: 0;
   position: absolute;
   right: 0;
@@ -258,13 +258,17 @@ a[class^='ais-'] {
   -moz-appearance: none;
   appearance: none;
   background-color: rgba(65, 66, 71, 0.08);
+  border: none;
   border-radius: 2px;
   height: 1rem;
   margin: 0;
   margin-right: 1rem;
-  outline: none;
   position: relative;
   width: 1rem;
+}
+
+.ais-RefinementList-item--selected {
+  font-weight: bold;
 }
 
 .ais-RefinementList-item--selected .ais-RefinementList-checkbox {
@@ -311,11 +315,13 @@ a[class^='ais-'] {
 }
 
 .ais-HierarchicalMenu-link::before {
-  align-items: flex-end;
-  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath fill='%2390919E' fill-rule='nonzero' d='M0 4l4-4 4 4z'/%3E%3C/svg%3E%0A");
+  align-items: center;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%2390919E' fill-rule='nonzero' d='M0 4l4-4 4 4z'/%3E%3C/svg%3E%0A");
   display: flex;
-  height: 12px;
+  height: 8px;
+  justify-content: center;
   margin-right: 1rem;
+  width: 8px;
 }
 
 .ais-HierarchicalMenu-item--selected .ais-HierarchicalMenu-link::before {
@@ -351,12 +357,12 @@ a[class^='ais-'] {
   -moz-appearance: none;
   appearance: none;
   background: rgba(65, 66, 71, 0.08);
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   height: 16px;
   margin-right: 16px;
   min-width: 30px;
-  outline: none;
   transition: background 150ms ease-out;
 }
 
@@ -407,6 +413,7 @@ a[class^='ais-'] {
 /* Sliders */
 
 .ais-RangeSlider .rheostat-horizontal {
+  cursor: pointer;
   width: calc(100% - 10px);
 }
 

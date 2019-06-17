@@ -13,7 +13,7 @@ const brandRefinementList = panel({
 })(refinementList);
 
 const brands = brandRefinementList({
-  container: '#brands',
+  container: '[data-widget="brands"]',
   attribute: 'brand',
   searchable: true,
   searchablePlaceholder: 'Search for brands…',
@@ -29,6 +29,10 @@ const brands = brandRefinementList({
     `,
   },
   cssClasses: {
+    list: 'refinement-list-list',
+    item: 'refinement-list-item',
+    selectedItem: 'refinement-list-selectedItem',
+    checkbox: 'refinement-list-checkbox',
     searchableInput: 'refinement-list-searchbox-input',
   },
 });

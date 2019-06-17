@@ -13,8 +13,11 @@ const categoryHierarchicalMenu = panel({
 })(hierarchicalMenu);
 
 const categories = categoryHierarchicalMenu({
-  container: '#categories',
+  container: '[data-widget="categories"]',
   attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1'],
+  cssClasses: {
+    link: 'hierarchical-menu-link',
+  },
 });
 
 export default categories;

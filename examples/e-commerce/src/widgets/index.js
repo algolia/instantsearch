@@ -8,5 +8,7 @@ export { default as hitsPerPage } from './HitsPerPage';
 export { default as pagination } from './Pagination';
 export { default as priceSlider } from './PriceSlider';
 export { default as ratings } from './Ratings';
+export { default as clearFiltersMobile } from './ClearFilters.mobile';
+export { default as resultsNumber } from './ResultsNumber';
 export { default as searchBox } from './SearchBox';
 export { default as sortBy } from './SortBy';

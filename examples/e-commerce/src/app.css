@@ -23,14 +23,18 @@ h2 {
   font-weight: bold;
 }
 
+@media (min-width: 900px) {
+  [data-layout='mobile'] {
+    display: none;
+  }
+}
+
 /* Header */
 
 .header {
   align-items: center;
   background: linear-gradient(to bottom, #fbc300, #c98a00);
   background-image: url('./images/cover.png');
-  background-image: url('./images/cover.png'),
-    linear-gradient(to bottom, #fbc300, #c98a00);
   background-position: center;
   background-size: cover;
   color: #fff;
@@ -39,11 +43,17 @@ h2 {
   justify-content: center;
   min-height: 368px;
   padding: 0.5rem 1rem;
+  position: relative;
   text-align: center;
 }
 
 .header-logo {
   margin: 0;
+}
+
+.header-logo svg {
+  width: 92px;
+  height: 24px;
 }
 
 .header-title {
@@ -84,9 +94,9 @@ h2 {
 }
 
 .container-options {
-  justify-content: flex-end;
   border-bottom: 1px solid #ebecf3;
   display: flex;
+  justify-content: flex-end;
   margin-bottom: 30px;
   padding: 30px 0;
 }
@@ -139,12 +149,11 @@ mark {
   box-shadow: 0 4px 48px 0 rgba(0, 0, 0, 0.2);
   font-family: Hind, sans-serif;
   height: 64px;
-  padding-left: 58px;
   /*
     The "Hind" font family is vertically off-balance.
-    Adding some padding top makes it more vertically aligned.
+    Adding 4px of padding top makes it more vertically aligned.
   */
-  padding-top: 4px;
+  padding: 4px 48px 0 58px;
 }
 
 .searchbox .searchbox-input::placeholder {
@@ -211,6 +220,7 @@ mark {
 
 .hit-image {
   height: auto;
+  max-height: 100%;
   max-width: 100%;
 }
 
@@ -241,11 +251,12 @@ mark {
 .toggle-refinement-label {
   display: flex;
   flex-direction: row-reverse;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .toggle-refinement-checkbox {
   font: inherit;
+  margin-left: 1rem;
   margin-right: 0;
 }
 
@@ -272,4 +283,8 @@ mark {
 
 .rating-menu-item:not(.rating-menu-item--selected) {
   opacity: 0.5;
+}
+
+.rating-menu-starIcon {
+  margin-right: 0.5rem;
 }
