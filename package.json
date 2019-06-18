@@ -60,7 +60,7 @@
     "@types/storybook__react": "^4.0.0",
     "algoliasearch": "3.33.0",
     "argos-cli": "0.1.1",
-    "babel-eslint": "10.0.1",
+    "babel-eslint": "10.0.2",
     "babel-jest": "24.8.0",
     "babel-loader": "8.0.6",
     "babel-plugin-dynamic-import-node": "2.2.0",
