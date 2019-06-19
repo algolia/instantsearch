@@ -137,6 +137,7 @@
     background-position: bottom;
     background-size: cover;
     min-height: 300px;
+    position: relative;
     transition: transform 200ms ease-out;
   }
 

@@ -43,7 +43,6 @@ h2 {
   justify-content: center;
   min-height: 368px;
   padding: 0.5rem 1rem;
-  position: relative;
   text-align: center;
 }
 
@@ -52,8 +51,8 @@ h2 {
 }
 
 .header-logo svg {
-  width: 92px;
   height: 24px;
+  width: 92px;
 }
 
 .header-title {
