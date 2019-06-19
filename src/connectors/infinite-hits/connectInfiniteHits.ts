@@ -1,7 +1,7 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   Renderer,
-  RenderOptions,
+  RendererOptions,
   WidgetFactory,
   Hits,
   Unmounter,
@@ -22,8 +22,8 @@ export type InfiniteHitsConnectorParams = Partial<
   InfiniteHitsRendererWidgetParams
 >;
 
-export interface InfiniteHitsRenderOptions<TInfiniteHitsWidgetParams>
-  extends RenderOptions<TInfiniteHitsWidgetParams> {
+export interface InfiniteHitsRendererOptions<TInfiniteHitsWidgetParams>
+  extends RendererOptions<TInfiniteHitsWidgetParams> {
   showPrevious: () => void;
   showMore: () => void;
   isFirstPage: boolean;
@@ -31,7 +31,7 @@ export interface InfiniteHitsRenderOptions<TInfiniteHitsWidgetParams>
 }
 
 export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
-  InfiniteHitsRenderOptions<
+  InfiniteHitsRendererOptions<
     InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams
   >
 >;
