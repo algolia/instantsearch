@@ -7,9 +7,6 @@ const brandRefinementList = panel({
     collapseButtonText,
   },
   collapsed: () => false,
-  cssClasses: {
-    header: 'panel-header',
-  },
 })(refinementList);
 
 const brands = brandRefinementList({
@@ -27,13 +24,6 @@ const brands = brandRefinementList({
   </g>
 </svg>
     `,
-  },
-  cssClasses: {
-    list: 'refinement-list-list',
-    item: 'refinement-list-item',
-    selectedItem: 'refinement-list-selectedItem',
-    checkbox: 'refinement-list-checkbox',
-    searchableInput: 'refinement-list-searchbox-input',
   },
 });
 

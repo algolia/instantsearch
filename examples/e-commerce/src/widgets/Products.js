@@ -2,9 +2,6 @@ import { hits } from 'instantsearch.js/es/widgets';
 
 const products = hits({
   container: '[data-widget="hits"]',
-  cssClasses: {
-    list: 'hits-list',
-  },
   templates: {
     item: `
 <article class="hit">
