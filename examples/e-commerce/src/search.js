@@ -12,7 +12,8 @@ import {
   priceSlider,
   ratings,
   clearFiltersMobile,
-  resultsNumber,
+  resultsNumberMobile,
+  saveFiltersMobile,
   searchBox,
   sortBy,
 } from './widgets';
@@ -32,7 +33,7 @@ search.addWidgets([
   configuration,
   searchBox,
   clearFilters,
-  resultsNumber,
+  resultsNumberMobile,
   brands,
   categories,
   priceSlider,
@@ -43,6 +44,7 @@ search.addWidgets([
   products,
   pagination,
   clearFiltersMobile,
+  saveFiltersMobile,
 ]);
 
 export default search;
