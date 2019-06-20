@@ -1,7 +1,7 @@
 import { Hits, InstantSearch, SearchResults } from './instantsearch';
 import { InsightsClient } from './insights';
 
-export type RenderOptions<TWidgetParams = unknown> = {
+export type RendererOptions<TWidgetParams = unknown> = {
   widgetParams: TWidgetParams;
   instantSearchInstance: InstantSearch;
   results?: SearchResults;
@@ -9,7 +9,7 @@ export type RenderOptions<TWidgetParams = unknown> = {
   insights?: InsightsClient;
 };
 
-export type Renderer<TRenderOptions extends RenderOptions = any> = (
+export type Renderer<TRenderOptions extends RendererOptions = any> = (
   renderOptions: TRenderOptions,
   isFirstRender: boolean
 ) => void;

@@ -1,6 +1,6 @@
 import {
   Renderer,
-  RenderOptions,
+  RendererOptions,
   WidgetFactory,
   Helper,
   HelperChangeEvent,
@@ -35,13 +35,13 @@ export type QueryRulesConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-export interface QueryRulesRenderOptions<TQueryRulesWidgetParams>
-  extends RenderOptions<TQueryRulesWidgetParams> {
+export interface QueryRulesRendererOptions<TQueryRulesWidgetParams>
+  extends RendererOptions<TQueryRulesWidgetParams> {
   items: any[];
 }
 
 export type QueryRulesRenderer<TQueryRulesWidgetParams> = Renderer<
-  QueryRulesRenderOptions<QueryRulesConnectorParams & TQueryRulesWidgetParams>
+  QueryRulesRendererOptions<QueryRulesConnectorParams & TQueryRulesWidgetParams>
 >;
 
 export type QueryRulesWidgetFactory<TQueryRulesWidgetParams> = WidgetFactory<

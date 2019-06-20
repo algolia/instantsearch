@@ -6,7 +6,7 @@ import {
   InsightsClientPayload,
   InsightsClientWrapper,
   Renderer,
-  RenderOptions,
+  RendererOptions,
   Unmounter,
   WidgetFactory,
   SearchResults,
@@ -101,9 +101,9 @@ export default function withInsights(
   connector: Connector<any>
 ): Connector<unknown> {
   const wrapRenderFn = (
-    renderFn: Renderer<RenderOptions<unknown>>
-  ): Renderer<RenderOptions<unknown>> => (
-    renderOptions: RenderOptions,
+    renderFn: Renderer<RendererOptions<unknown>>
+  ): Renderer<RendererOptions<unknown>> => (
+    renderOptions: RendererOptions,
     isFirstRender: boolean
   ) => {
     const { results, hits, instantSearchInstance } = renderOptions;
@@ -123,6 +123,6 @@ export default function withInsights(
     return renderFn(renderOptions, isFirstRender);
   };
 
-  return (renderFn: Renderer<RenderOptions<unknown>>, unmountFn: Unmounter) =>
+  return (renderFn: Renderer<RendererOptions<unknown>>, unmountFn: Unmounter) =>
     connector(wrapRenderFn(renderFn), unmountFn);
 }

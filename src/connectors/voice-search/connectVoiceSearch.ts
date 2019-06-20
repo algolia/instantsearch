@@ -3,7 +3,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Renderer, RenderOptions, WidgetFactory } from '../../types';
+import { Renderer, RendererOptions, WidgetFactory } from '../../types';
 import createVoiceSearchHelper, {
   VoiceListeningState,
   ToggleListening,
@@ -18,8 +18,8 @@ export type VoiceSearchConnectorParams = {
   searchAsYouSpeak?: boolean;
 };
 
-export interface VoiceSearchRenderOptions<TVoiceSearchWidgetParams>
-  extends RenderOptions<TVoiceSearchWidgetParams> {
+export interface VoiceSearchRendererOptions<TVoiceSearchWidgetParams>
+  extends RendererOptions<TVoiceSearchWidgetParams> {
   isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: ToggleListening;
@@ -27,7 +27,7 @@ export interface VoiceSearchRenderOptions<TVoiceSearchWidgetParams>
 }
 
 export type VoiceSearchRenderer<TVoiceSearchWidgetParams> = Renderer<
-  VoiceSearchRenderOptions<
+  VoiceSearchRendererOptions<
     VoiceSearchConnectorParams & TVoiceSearchWidgetParams
   >
 >;
