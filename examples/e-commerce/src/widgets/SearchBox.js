@@ -3,12 +3,6 @@ import { searchBox as searchBoxWidget } from 'instantsearch.js/es/widgets';
 const searchBox = searchBoxWidget({
   container: '[data-widget="searchbox"]',
   placeholder: 'Search for a product, brand, color, …',
-  cssClasses: {
-    root: 'searchbox',
-    form: 'searchbox-form',
-    input: 'searchbox-input',
-    submit: 'searchbox-submit',
-  },
   templates: {
     submit: `
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 18">

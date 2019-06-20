@@ -7,9 +7,6 @@ const freeShippingToggleRefinement = panel({
     collapseButtonText,
   },
   collapsed: () => false,
-  cssClasses: {
-    header: 'panel-header',
-  },
 })(toggleRefinement);
 
 const freeShipping = freeShippingToggleRefinement({
@@ -17,10 +14,6 @@ const freeShipping = freeShippingToggleRefinement({
   attribute: 'free_shipping',
   templates: {
     labelText: 'Display only items with free shipping',
-  },
-  cssClasses: {
-    label: 'toggle-refinement-label',
-    checkbox: 'toggle-refinement-checkbox',
   },
 });
 

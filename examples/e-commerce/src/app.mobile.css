@@ -73,7 +73,7 @@
     width: calc(50% - 0.5rem);
   }
 
-  .clear-refinements-button,
+  .ais-ClearRefinements-button,
   .container-filters-footer .button {
     background-color: rgba(65, 66, 71, 0.08);
     border: none;
@@ -147,7 +147,9 @@
     transition: transform 200ms ease-out;
   }
 
-  .searchbox {
+  /* SearchBox */
+
+  .header .ais-SearchBox {
     bottom: 0;
     left: 0;
     position: absolute;
@@ -155,27 +157,29 @@
     width: 100vw;
   }
 
-  .searchbox .searchbox-form {
+  .header .ais-SearchBox .ais-SearchBox-form {
     margin: auto;
     max-width: 90%;
   }
 
-  .refinement-list-list {
+  /* RefinementList */
+
+  .ais-RefinementList-list {
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(5, 1fr);
   }
 
-  .refinement-list-item {
+  .ais-RefinementList-item {
     flex: 50%;
   }
 
-  .refinement-list-checkbox {
+  .ais-RefinementList-checkbox {
     height: 1.5rem;
     width: 1.5rem;
   }
 
-  .refinement-list-selectedItem .refinement-list-checkbox::after {
+  .ais-RefinementList-item--selected .ais-RefinementList-checkbox::after {
     align-items: center;
     background: none;
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='12' height='9'%3E%3Cdefs%3E%3Cpath id='a' d='M0 0h24v24H0z'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(-6 -8)'%3E%3Cmask id='b' fill='%23fff'%3E%3Cuse xlink:href='%23a'/%3E%3C/mask%3E%3Cpath fill='%23fff' fill-rule='nonzero' d='M16.5 8.5L18 10l-6.99 7-4.51-4.5L8 11l3.01 3z' mask='url(%23b)'/%3E%3C/g%3E%3C/svg%3E");
@@ -189,44 +193,54 @@
     width: initial;
   }
 
-  .hierarchical-menu-link::before {
+  /* HierarchicalMenu */
+
+  .ais-HierarchicalMenu-link::before {
     background-color: rgba(65, 66, 71, 0.08);
     border-radius: 50%;
     padding: 8px;
   }
 
-  .range-slider .rheostat-handle {
+  /* RangeSlider */
+
+  .ais-RangeSlider .rheostat-handle {
     height: 1.5rem;
     top: -12px;
     width: 1.5rem;
   }
 
-  .toggle-refinement-checkbox {
+  /* ToggleRefinement */
+
+  .ais-ToggleRefinement-checkbox {
     min-width: 47px;
     position: relative;
   }
 
-  .toggle-refinement-checkbox {
+  .ais-ToggleRefinement-checkbox {
     margin-left: 2rem;
   }
 
-  .toggle-refinement-checkbox::after {
+  .ais-ToggleRefinement-checkbox::after {
     height: 1.5rem;
     top: -4px;
     width: 1.5rem;
   }
 
-  .toggle-refinement-checkbox::before {
+  .ais-ToggleRefinement-checkbox::before {
     right: 54px;
   }
 
-  .rating-menu-starIcon {
+  /* RatingMenu */
+
+  .ais-RatingMenu-starIcon {
     height: 1.5rem;
     margin-right: 1rem;
     width: 1.5rem;
   }
 
-  .hits-list {
+  /* Hits */
+
+  .ais-Hits-list {
     grid-gap: 1rem;
   }
 

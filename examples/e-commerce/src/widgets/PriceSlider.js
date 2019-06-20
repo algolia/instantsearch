@@ -7,9 +7,6 @@ const priceRangeSlider = panel({
     collapseButtonText,
   },
   collapsed: () => false,
-  cssClasses: {
-    header: 'panel-header',
-  },
 })(rangeSlider);
 
 const priceSlider = priceRangeSlider({
@@ -20,9 +17,6 @@ const priceSlider = priceRangeSlider({
     format(value) {
       return `${Math.round(value).toLocaleString()}`;
     },
-  },
-  cssClasses: {
-    root: 'range-slider',
   },
 });
 

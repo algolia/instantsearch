@@ -7,9 +7,6 @@ const ratingsMenu = panel({
     collapseButtonText,
   },
   collapsed: () => false,
-  cssClasses: {
-    header: 'panel-header',
-  },
 })(ratingMenu);
 
 const ratings = ratingsMenu({
@@ -42,11 +39,6 @@ const ratings = ratingsMenu({
   </div>
 {{/count}}
   `,
-  },
-  cssClasses: {
-    item: 'rating-menu-item',
-    selectedItem: 'rating-menu-item--selected',
-    starIcon: 'rating-menu-starIcon',
   },
 });
 

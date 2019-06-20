@@ -133,18 +133,18 @@ mark {
 
 /* Panel */
 
-.panel-header {
+.ais-Panel-header {
   font-family: Hind, sans-serif;
 }
 
 /* Search box */
 
-.searchbox {
+.header .ais-SearchBox {
   height: 64px;
   width: 740px;
 }
 
-.searchbox .searchbox-input {
+.header .ais-SearchBox .ais-SearchBox-input {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 48px 0 rgba(0, 0, 0, 0.2);
@@ -157,25 +157,25 @@ mark {
   padding: 4px 48px 0 58px;
 }
 
-.searchbox .searchbox-input::placeholder {
+.header .ais-SearchBox .ais-SearchBox-input::placeholder {
   color: rgba(33, 36, 61, 0.24);
   opacity: 1; /* Firefox */
 }
 
-.searchbox-input:-ms-input-placeholder {
+.ais-SearchBox-input:-ms-input-placeholder {
   color: rgba(33, 36, 61, 0.24);
 }
 
-.searchbox-input::-ms-input-placeholder {
+.ais-SearchBox-input::-ms-input-placeholder {
   color: rgba(33, 36, 61, 0.24);
 }
 
-.searchbox-submit {
+.ais-SearchBox-submit {
   color: #e2a400;
   height: 16px;
 }
 
-.refinement-list-searchbox-input {
+.ais-RefinementList .ais-SearchBox-input {
   font-family: Hind, sans-serif;
   /*
     The "Hind" font family is vertically off-balance.
@@ -240,7 +240,7 @@ mark {
 
 /* RangeSlider */
 
-.rheostat-tooltip::before {
+.ais-RangeSlider .rheostat-tooltip::before {
   color: #e2a400;
   content: '$';
   font-size: 0.6;
@@ -249,23 +249,23 @@ mark {
 
 /* ToggleRefinement */
 
-.toggle-refinement-label {
+.ais-ToggleRefinement-label {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
 }
 
-.toggle-refinement-checkbox {
+.ais-ToggleRefinement-checkbox {
   font: inherit;
   margin-left: 1rem;
   margin-right: 0;
 }
 
-.toggle-refinement-checkbox:checked::before {
+.ais-ToggleRefinement-checkbox:checked::before {
   color: #e2a400;
 }
 
-.toggle-refinement-checkbox::before {
+.ais-ToggleRefinement-checkbox::before {
   align-items: center;
   color: rgba(33, 36, 61, 0.32);
   content: 'No';
@@ -276,16 +276,16 @@ mark {
   right: 38px;
 }
 
-.toggle-refinement-checkbox:checked::before {
+.ais-ToggleRefinement-checkbox:checked::before {
   content: 'Yes';
 }
 
 /* RatingMenu */
 
-.rating-menu-item:not(.rating-menu-item--selected) {
+.ais-RatingMenu-item:not(.ais-RatingMenu-item--selected) {
   opacity: 0.5;
 }
 
-.rating-menu-starIcon {
+.ais-RatingMenu-starIcon {
   margin-right: 0.5rem;
 }
