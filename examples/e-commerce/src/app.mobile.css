@@ -96,6 +96,10 @@
 
   /* Filters button that triggers the overlay */
 
+  .filtering .filters-button {
+    display: none;
+  }
+
   .filters-button {
     align-items: center;
     background-color: #e2a400;
