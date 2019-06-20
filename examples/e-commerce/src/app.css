@@ -181,7 +181,7 @@ mark {
     The "Hind" font family is vertically off-balance.
     Adding some padding top makes it more vertically aligned.
   */
-  padding-top: 1px;
+  padding-top: 2px;
 }
 
 /* Hits */
