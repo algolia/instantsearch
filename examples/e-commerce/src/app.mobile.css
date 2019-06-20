@@ -1,8 +1,4 @@
 @media (max-width: 899px) {
-  [data-layout='desktop'] {
-    display: none;
-  }
-
   /* Filters overlay */
 
   .container-filters {
@@ -255,5 +251,11 @@
 
   .hit-info-container {
     flex: 2;
+  }
+
+  /* Hide all desktop-specific design on mobile */
+
+  [data-layout='desktop'] {
+    display: none;
   }
 }

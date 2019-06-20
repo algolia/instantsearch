@@ -23,12 +23,6 @@ h2 {
   font-weight: bold;
 }
 
-@media (min-width: 900px) {
-  [data-layout='mobile'] {
-    display: none;
-  }
-}
-
 /* Header */
 
 .header {
@@ -75,12 +69,6 @@ h2 {
   flex: 1;
   margin-right: 60px;
   max-width: 260px;
-}
-
-.container-body > div {
-  border-top: 1px solid #ebecf3;
-  padding-bottom: 2rem;
-  padding-top: 2rem;
 }
 
 .container-header {
@@ -132,6 +120,12 @@ mark {
 }
 
 /* Panel */
+
+.container-body .ais-Panel {
+  border-top: 1px solid #ebecf3;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
 
 .ais-Panel-header {
   font-family: Hind, sans-serif;
@@ -288,4 +282,12 @@ mark {
 
 .ais-RatingMenu-starIcon {
   margin-right: 0.5rem;
+}
+
+/* Hide all mobile-specific design on desktop */
+
+@media (min-width: 900px) {
+  [data-layout='mobile'] {
+    display: none;
+  }
 }
