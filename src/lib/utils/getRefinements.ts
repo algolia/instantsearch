@@ -65,6 +65,7 @@ function getRefinement(
 
     for (let i = 0; facet !== undefined && i < nameParts.length; ++i) {
       facet =
+        facet &&
         facet.data &&
         find(
           Object.keys(facet.data).map(getFacetRefinement(facet.data)),
