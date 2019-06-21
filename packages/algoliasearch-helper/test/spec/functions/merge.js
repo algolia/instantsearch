@@ -21,14 +21,14 @@ it('should merge `source` into `object`', function() {
     ]
   };
 
-  expect(merge(names, ages, heights)).toEqual(expected);
+  expect(merge(names, ages, heights)).toStrictEqual(expected);
 });
 
 it('should work with four arguments', function() {
   var expected = {a: 4};
   var actual = merge({a: 1}, {a: 2}, {a: 3}, expected);
 
-  expect(actual).toEqual(expected);
+  expect(actual).toStrictEqual(expected);
 });
 
 it('should merge onto function `object` values', function() {
@@ -37,8 +37,8 @@ it('should merge onto function `object` values', function() {
   var source = {a: 1};
   var actual = merge(Foo, source);
 
-  expect(actual).toEqual(Foo);
-  expect(Foo.a).toEqual(1);
+  expect(actual).toStrictEqual(Foo);
+  expect(Foo.a).toStrictEqual(1);
 });
 
 it('should merge first source object properties to function', function() {
@@ -79,9 +79,9 @@ it('should not augment source objects for inner objects', function() {
   var source2 = {a: [{b: 2}]};
   var actual = merge({}, source1, source2);
 
-  expect(source1.a).toEqual([{a: 1}]);
-  expect(source2.a).toEqual([{b: 2}]);
-  expect(actual.a).toEqual([{a: 1, b: 2}]);
+  expect(source1.a).toStrictEqual([{a: 1}]);
+  expect(source2.a).toStrictEqual([{b: 2}]);
+  expect(actual.a).toStrictEqual([{a: 1, b: 2}]);
 });
 
 it('should not augment source objects for inner arrays', function() {
@@ -89,9 +89,9 @@ it('should not augment source objects for inner arrays', function() {
   var source2 = {a: [[3, 4]]};
   var actual = merge({}, source1, source2);
 
-  expect(source1.a).toEqual([[1, 2, 3]]);
-  expect(source2.a).toEqual([[3, 4]]);
-  expect(actual.a).toEqual([[3, 4, 3]]);
+  expect(source1.a).toStrictEqual([[1, 2, 3]]);
+  expect(source2.a).toStrictEqual([[3, 4]]);
+  expect(actual.a).toStrictEqual([[3, 4, 3]]);
 });
 
 it('should merge plain objects onto non-plain objects', function() {
@@ -103,16 +103,16 @@ it('should merge plain objects onto non-plain objects', function() {
   var actual = merge(new Foo(), object);
 
   expect(actual instanceof Foo).toBe(true);
-  expect(actual).toEqual(new Foo(object));
+  expect(actual).toStrictEqual(new Foo(object));
 
   actual = merge([new Foo()], [object]);
   expect(actual[0] instanceof Foo).toBe(true);
-  expect(actual).toEqual([new Foo(object)]);
+  expect(actual).toStrictEqual([new Foo(object)]);
 });
 
 it('should not overwrite existing values with `undefined` values of object sources', function() {
   var actual = merge({a: 1}, {a: undefined, b: undefined});
-  expect(actual).toEqual({a: 1, b: undefined});
+  expect(actual).toStrictEqual({a: 1, b: undefined});
 });
 
 it('should not overwrite existing values with `undefined` values of array sources', function() {
@@ -122,12 +122,12 @@ it('should not overwrite existing values with `undefined` values of array source
   var actual = merge([4, 5, 6], array);
   var expected = [1, 5, 3];
 
-  expect(actual).toEqual(expected);
+  expect(actual).toStrictEqual(expected);
 
   array = [1, undefined, 3];
 
   actual = merge([4, 5, 6], array);
-  expect(actual).toEqual(expected);
+  expect(actual).toStrictEqual(expected);
 });
 
 it('should skip merging when `object` and `source` are the same value', function() {
@@ -153,7 +153,7 @@ it('should not convert objects to arrays when merging arrays of `source`', funct
   var object = {a: {'1': 'y', 'b': 'z', 'length': 2}};
   var actual = merge(object, {a: ['x']});
 
-  expect(actual).toEqual({a: {
+  expect(actual).toStrictEqual({a: {
     '0': 'x',
     '1': 'y',
     'b': 'z',
@@ -161,13 +161,12 @@ it('should not convert objects to arrays when merging arrays of `source`', funct
   }});
 
   actual = merge({a: {}}, {a: []});
-  expect(actual).toEqual({a: {}});
+  expect(actual).toStrictEqual({a: {}});
 });
 
 it('should not convert strings to arrays when merging arrays of `source`', function() {
   var object = {a: 'abcde'};
   var actual = merge(object, {a: ['x', 'y', 'z']});
 
-  expect(actual).toEqual({a: ['x', 'y', 'z']});
+  expect(actual).toStrictEqual({a: ['x', 'y', 'z']});
 });
-
