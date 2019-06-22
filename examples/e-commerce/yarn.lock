@@ -2966,10 +2966,10 @@ inquirer@^6.2.2:
     strip-ansi "^5.1.0"
     through "^2.3.6"
 
-instantsearch.js@3.5.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-3.5.1.tgz#6252dba4b71cc121ce3f76ba693437614d2d4da7"
-  integrity sha512-BPJMfwcxsXYZkk9pow/kmL2PGAC/1DZpuk1kn+amvaY9cvgPXpCTexhF2uQ/ixdVL8UGcINpIXYKekKz72EbbQ==
+instantsearch.js@3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-3.5.3.tgz#da85f306874fb1b588f886de5a38331bc689b03f"
+  integrity sha512-QEXkKCJtBIQK5cJMGlkWdyM+aBZFV+8YwxwhN/qcebPJEA19Mwq9LlsFpMSv7UEw42Xx0wEpHuLVUtDqEC7YIQ==
   dependencies:
     algoliasearch-helper "^2.26.0"
     classnames "^2.2.5"
