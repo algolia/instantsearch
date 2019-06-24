@@ -1,9 +1,9 @@
 import {
   createDocumentationMessageGenerator,
-  noop,
+  enhanceConfiguration,
   isPlainObject,
+  noop,
 } from '../../lib/utils';
-import { enhanceConfiguration } from '../../lib/InstantSearch';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'configure',
