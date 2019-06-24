@@ -1,3 +1,24 @@
+# [4.0.0](https://github.com/algolia/instantsearch.js/compare/v3.7.0...v4.0.0) (2019-10-23)
+
+
+### Features
+
+* **connectAutocomplete:** add default value on getConfiguration ([#3836](https://github.com/algolia/instantsearch.js/issues/3836)) ([724b83f](https://github.com/algolia/instantsearch.js/commit/724b83f))
+* **connectAutocomplete:** clear the state on dispose ([#3815](https://github.com/algolia/instantsearch.js/issues/3815)) ([8ae87d8](https://github.com/algolia/instantsearch.js/commit/8ae87d8))
+* **connectHits:** clear the state on dispose ([#3816](https://github.com/algolia/instantsearch.js/issues/3816)) ([c4de730](https://github.com/algolia/instantsearch.js/commit/c4de730))
+* **connectHitsPerPage:** clear the state on dispose ([#3818](https://github.com/algolia/instantsearch.js/issues/3818)) ([d7a5c89](https://github.com/algolia/instantsearch.js/commit/d7a5c89))
+* **connectInfiniteHits:** add default value on getConfiguration ([#3837](https://github.com/algolia/instantsearch.js/issues/3837)) ([8c65249](https://github.com/algolia/instantsearch.js/commit/8c65249))
+* **connectInfiniteHits:** clear the state on dispose ([#3819](https://github.com/algolia/instantsearch.js/issues/3819)) ([60ce151](https://github.com/algolia/instantsearch.js/commit/60ce151))
+* **connectPagination:** add default value on getConfiguration ([#3838](https://github.com/algolia/instantsearch.js/issues/3838)) ([aa4602c](https://github.com/algolia/instantsearch.js/commit/aa4602c))
+* **connectPagination:** clear the state on dispose ([#3821](https://github.com/algolia/instantsearch.js/issues/3821)) ([5b8ef49](https://github.com/algolia/instantsearch.js/commit/5b8ef49))
+* **connectSearchBox:** clear the state on dispose ([#3822](https://github.com/algolia/instantsearch.js/issues/3822)) ([940522c](https://github.com/algolia/instantsearch.js/commit/940522c))
+* **connectSearchBox:** mount with a default query ([#3840](https://github.com/algolia/instantsearch.js/issues/3840)) ([c3a7d69](https://github.com/algolia/instantsearch.js/commit/c3a7d69))
+* **connectVoiceSearch:** add default value on getConfiguration ([#3841](https://github.com/algolia/instantsearch.js/issues/3841)) ([fb70363](https://github.com/algolia/instantsearch.js/commit/fb70363))
+* **connectVoiceSearch:** clear the state on dispose ([#3823](https://github.com/algolia/instantsearch.js/issues/3823)) ([705b3e6](https://github.com/algolia/instantsearch.js/commit/705b3e6))
+* **types:** rename RenderOptions -> RendererOptions ([#3867](https://github.com/algolia/instantsearch.js/issues/3867)) ([05c6f72](https://github.com/algolia/instantsearch.js/commit/05c6f72))
+
+
+
 # [3.7.0](https://github.com/algolia/instantsearch.js/compare/v3.5.4...v3.7.0) (2019-10-08)
 
 
