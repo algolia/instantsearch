@@ -1,4 +1,4 @@
-import { enhanceConfiguration } from '../InstantSearch';
+import enhanceConfiguration from '../enhanceConfiguration';
 
 const createWidget = (configuration = {}) => ({
   getConfiguration: () => configuration,
