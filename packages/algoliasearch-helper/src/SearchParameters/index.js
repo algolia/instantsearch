@@ -2,6 +2,7 @@
 
 var merge = require('../functions/merge');
 var defaultsPure = require('../functions/defaultsPure');
+var intersection = require('../functions/intersection');
 var find = require('../functions/find');
 var valToNumber = require('../functions/valToNumber');
 var omit = require('../functions/omit');
@@ -1246,11 +1247,9 @@ SearchParameters.prototype = {
    */
   getRefinedDisjunctiveFacets: function getRefinedDisjunctiveFacets() {
     // attributes used for numeric filter can also be disjunctive
-    var numericRefinements = Object.keys(this.numericRefinements);
-    var disjunctiveNumericRefinedFacets = this.disjunctiveFacets.filter(
-      function(facet) {
-        return numericRefinements.indexOf(facet) > -1;
-      }
+    var disjunctiveNumericRefinedFacets = intersection(
+      Object.keys(this.numericRefinements),
+      this.disjunctiveFacets
     );
 
     return Object.keys(this.disjunctiveFacetsRefinements)
@@ -1265,16 +1264,12 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedHierarchicalFacets: function getRefinedHierarchicalFacets() {
-    var hierarchicalRefinedFacets = Object.keys(
-      this.hierarchicalFacetsRefinements
+    return intersection(
+      // enforce the order between the two arrays,
+      // so that refinement name index === hierarchical facet index
+      this.hierarchicalFacets.map(function(facet) { return facet.name; }),
+      Object.keys(this.hierarchicalFacetsRefinements)
     );
-    return this.hierarchicalFacets
-      .map(function(facet) {
-        return facet.name;
-      })
-      .filter(function(name) {
-        return hierarchicalRefinedFacets.indexOf(name) > -1;
-      });
   },
   /**
    * Returned the list of all disjunctive facets not refined
