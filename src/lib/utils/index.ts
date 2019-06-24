@@ -1,4 +1,5 @@
 export { default as capitalize } from './capitalize';
+export { default as defer } from './defer';
 export { default as isDomElement } from './isDomElement';
 export { default as getContainerNode } from './getContainerNode';
 export { default as isSpecialClick } from './isSpecialClick';
@@ -7,6 +8,7 @@ export { default as renderTemplate } from './renderTemplate';
 export { default as getRefinements } from './getRefinements';
 export { default as clearRefinements } from './clearRefinements';
 export { default as escapeRefinement } from './escapeRefinement';
+export { default as enhanceConfiguration } from './enhanceConfiguration';
 export { default as unescapeRefinement } from './unescapeRefinement';
 export { default as checkRendering } from './checkRendering';
 export { default as getPropertyByPath } from './getPropertyByPath';
