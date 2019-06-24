@@ -110,13 +110,17 @@ See ${createDocumentationLink({
     this.insightsClient = insightsClient;
     this.helper = null;
     this.indexName = indexName;
-    this.searchParameters = { ...searchParameters, index: indexName };
     this.widgets = [];
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
       compileOptions: {},
     };
+
     this._stalledSearchDelay = stalledSearchDelay;
+    this._searchParameters = {
+      ...searchParameters,
+      index: indexName,
+    };
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -182,11 +186,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
 
     // Init the widget directly if instantsearch has been already started
     if (this.started && Boolean(widgets.length)) {
-      this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
-        ...this.helper.state,
-      });
-
-      this.helper.setState(this.searchParameters);
+      this.helper.setState(
+        this.widgets.reduce(enhanceConfiguration, {
+          ...this.helper.state,
+        })
+      );
 
       widgets.forEach(widget => {
         if (widget.init) {
@@ -254,11 +258,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        this.searchParameters = this.widgets.reduce(enhanceConfiguration, {
-          ...nextState,
-        });
-
-        this.helper.setState(this.searchParameters);
+        this.helper.setState(
+          this.widgets.reduce(enhanceConfiguration, {
+            ...nextState,
+          })
+        );
       }
     });
 
@@ -317,15 +321,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       this._onHistoryChange = noop;
     }
 
-    this.searchParameters = this.widgets.reduce(
+    const initialSearchParameters = this.widgets.reduce(
       enhanceConfiguration,
-      this.searchParameters
+      this._searchParameters
     );
 
     const helper = algoliasearchHelper(
       this.client,
-      this.searchParameters.index || this.indexName,
-      this.searchParameters
+      initialSearchParameters.index || this.indexName,
+      initialSearchParameters
     );
 
     if (this._searchFunction) {

@@ -274,7 +274,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       init: () => {},
     });
     search.start();
-    expect(search.searchParameters.facetsRefinements).toEqual({
+    expect(search.helper.state.facetsRefinements).toEqual({
       fruits: ['apple'],
     });
   });
@@ -504,12 +504,12 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.start();
 
       expect(search.widgets).toHaveLength(1);
-      expect(search.searchParameters.facets).toEqual(['price']);
+      expect(search.helper.state.facets).toEqual(['price']);
 
       search.removeWidget(widget1);
 
       expect(search.widgets).toHaveLength(0);
-      expect(search.searchParameters.facets).toEqual([]);
+      expect(search.helper.state.facets).toEqual([]);
     });
 
     it('should unmount a widget with hierarchicalFacets configuration', () => {
@@ -530,7 +530,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.start();
 
       expect(search.widgets).toHaveLength(1);
-      expect(search.searchParameters.hierarchicalFacets).toEqual([
+      expect(search.helper.state.hierarchicalFacets).toEqual([
         {
           name: 'price',
           attributes: ['foo'],
@@ -543,7 +543,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.removeWidget(widget1);
 
       expect(search.widgets).toHaveLength(0);
-      expect(search.searchParameters.hierarchicalFacets).toEqual([]);
+      expect(search.helper.state.hierarchicalFacets).toEqual([]);
     });
 
     it('should unmount a widget with disjunctiveFacets configuration', () => {
@@ -554,12 +554,12 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.start();
 
       expect(search.widgets).toHaveLength(1);
-      expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
+      expect(search.helper.state.disjunctiveFacets).toEqual(['price']);
 
       search.removeWidget(widget1);
 
       expect(search.widgets).toHaveLength(0);
-      expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+      expect(search.helper.state.disjunctiveFacets).toEqual([]);
     });
 
     it('should unmount a widget with numericRefinements configuration', () => {
@@ -576,7 +576,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.start();
 
       expect(search.widgets).toHaveLength(1);
-      expect(search.searchParameters.numericRefinements).toEqual({
+      expect(search.helper.state.numericRefinements).toEqual({
         price: {
           '=': [10],
         },
@@ -585,7 +585,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.removeWidget(widget1);
 
       expect(search.widgets).toHaveLength(0);
-      expect(search.searchParameters.numericRefinements).toEqual({});
+      expect(search.helper.state.numericRefinements).toEqual({});
     });
 
     it('should unmount a widget with maxValuesPerFacet configuration', () => {
@@ -597,14 +597,14 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.start();
 
       expect(search.widgets).toHaveLength(1);
-      expect(search.searchParameters.facets).toEqual(['categories']);
-      expect(search.searchParameters.maxValuesPerFacet).toEqual(10);
+      expect(search.helper.state.facets).toEqual(['categories']);
+      expect(search.helper.state.maxValuesPerFacet).toEqual(10);
 
       search.removeWidget(widget1);
 
       expect(search.widgets).toHaveLength(0);
-      expect(search.searchParameters.facets).toEqual([]);
-      expect(search.searchParameters.maxValuesPerFacet).toBe(undefined);
+      expect(search.helper.state.facets).toEqual([]);
+      expect(search.helper.state.maxValuesPerFacet).toBe(undefined);
     });
 
     it('should unmount multiple widgets at once', () => {
@@ -627,8 +627,8 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.start();
 
       expect(search.widgets).toHaveLength(2);
-      expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
-      expect(search.searchParameters.numericRefinements).toEqual({
+      expect(search.helper.state.disjunctiveFacets).toEqual(['price']);
+      expect(search.helper.state.numericRefinements).toEqual({
         price: {
           '=': [10],
         },
@@ -637,8 +637,8 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.removeWidgets([widget1, widget2]);
 
       expect(search.widgets).toHaveLength(0);
-      expect(search.searchParameters.disjunctiveFacets).toEqual([]);
-      expect(search.searchParameters.numericRefinements).toEqual({});
+      expect(search.helper.state.disjunctiveFacets).toEqual([]);
+      expect(search.helper.state.numericRefinements).toEqual({});
     });
   });
 
@@ -681,8 +681,8 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       expect(search.helper.search).toHaveBeenCalledTimes(3);
 
       expect(search.widgets).toHaveLength(2);
-      expect(search.searchParameters.facets).toEqual(['price']);
-      expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
+      expect(search.helper.state.facets).toEqual(['price']);
+      expect(search.helper.state.disjunctiveFacets).toEqual(['categories']);
     });
 
     it('should trigger only one search using `addWidgets()`', () => {
@@ -698,8 +698,8 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       search.addWidgets([widget1, widget2]);
 
       expect(search.helper.search).toHaveBeenCalledTimes(2);
-      expect(search.searchParameters.facets).toEqual(['price']);
-      expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
+      expect(search.helper.state.facets).toEqual(['price']);
+      expect(search.helper.state.disjunctiveFacets).toEqual(['categories']);
     });
 
     it('should not trigger a search without widgets to add', () => {
