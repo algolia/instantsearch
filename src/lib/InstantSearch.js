@@ -109,6 +109,7 @@ See ${createDocumentationLink({
     this.client = searchClient;
     this.insightsClient = insightsClient;
     this.helper = null;
+    this.derivedHelper = null;
     this.indexName = indexName;
     this.widgets = [];
     this.templatesConfig = {
@@ -332,6 +333,16 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       initialSearchParameters
     );
 
+    const derivedHelper = helper.derive(() => helper.state);
+
+    helper.search = () => {
+      // This solution allows us to keep the exact same API for the users but
+      // under the hood, we have a different implementation. It should be
+      // completely transparent for the rest of the codebase. Only this module
+      // is impacted.
+      helper.searchOnlyWithDerivedHelpers();
+    };
+
     if (this._searchFunction) {
       this._mainHelperSearch = helper.search.bind(helper);
       helper.search = () => {
@@ -351,14 +362,17 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     }
 
     this.helper = helper;
+    this.derivedHelper = derivedHelper;
 
-    this._init(helper.state, this.helper);
+    this._init(helper, helper.state);
 
-    this.helper.on('result', ({ results, state }) => {
-      this._render(this.helper, results, state);
+    derivedHelper.on('result', ({ results, state }) => {
+      this._render(helper, results, state);
     });
 
-    this.helper.on('error', ({ error }) => {
+    // Only the "main" Helper emits the `error` event vs the one for `search`
+    // and `results` that are also emitted on the derived one.
+    helper.on('error', ({ error }) => {
       this.emit('error', {
         error,
       });
@@ -367,16 +381,16 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     this._searchStalledTimer = null;
     this._isSearchStalled = true;
 
-    this.helper.search();
+    helper.search();
 
-    this.helper.on('search', () => {
+    derivedHelper.on('search', () => {
       if (!this._isSearchStalled && !this._searchStalledTimer) {
         this._searchStalledTimer = setTimeout(() => {
           this._isSearchStalled = true;
           this._render(
-            this.helper,
-            this.helper.lastResults,
-            this.helper.lastResults._state
+            helper,
+            derivedHelper.lastResults,
+            derivedHelper.lastResults._state
           );
         }, this._stalledSearchDelay);
       }
@@ -395,9 +409,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
    */
   dispose() {
     this.removeWidgets(this.widgets);
-    // You can not start an instance two times, therefore a disposed instance needs to set started as false
-    // otherwise this can not be restarted at a later point.
+    // You can not start an instance two times, therefore a disposed instance
+    // needs to set started as false otherwise this can not be restarted at a
+    // later point.
     this.started = false;
+
+    this.derivedHelper.detach();
+    this.derivedHelper = null;
 
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
@@ -412,6 +430,21 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       );
     }
     return this._createURL(this.helper.state.setQueryParameters(params));
+  }
+
+  _init(helper, state) {
+    this.widgets.forEach(widget => {
+      if (widget.init) {
+        widget.init({
+          state,
+          helper,
+          templatesConfig: this.templatesConfig,
+          createURL: this._createAbsoluteURL,
+          onHistoryChange: this._onHistoryChange,
+          instantSearchInstance: this,
+        });
+      }
+    });
   }
 
   _render(helper, results, state) {
@@ -444,21 +477,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
      * @event InstantSearch#render
      */
     this.emit('render');
-  }
-
-  _init(state, helper) {
-    this.widgets.forEach(widget => {
-      if (widget.init) {
-        widget.init({
-          state,
-          helper,
-          templatesConfig: this.templatesConfig,
-          createURL: this._createAbsoluteURL,
-          onHistoryChange: this._onHistoryChange,
-          instantSearchInstance: this,
-        });
-      }
-    });
   }
 }
 
