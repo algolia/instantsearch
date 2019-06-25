@@ -1,4 +1,5 @@
-import algoliaSearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
 import { warning } from '../utils';
@@ -55,7 +56,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       // eslint-disable-next-line no-new
       new InstantSearch({
         indexName: 'indexName',
-        searchClient: { search: () => {} },
+        searchClient: createSearchClient(),
         insightsClient: 'insights',
       });
     }).toThrowErrorMatchingInlineSnapshot(
@@ -77,7 +78,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     expect(() => {
       const search = new InstantSearch({
         indexName: 'indexName',
-        searchClient: { search: () => {} },
+        searchClient: createSearchClient(),
       });
       search.addWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
@@ -93,7 +94,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(() => {
       const search = new InstantSearch({
         indexName: 'indexName',
-        searchClient: { search: () => {} },
+        searchClient: createSearchClient(),
       });
       search.addWidgets(widgets);
     }).toThrowErrorMatchingInlineSnapshot(`
@@ -109,7 +110,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     expect(() => {
       const search = new InstantSearch({
         indexName: 'indexName',
-        searchClient: { search: () => {} },
+        searchClient: createSearchClient(),
       });
       search.addWidgets(widgets);
     }).not.toThrow();
@@ -121,7 +122,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     expect(() => {
       const search = new InstantSearch({
         indexName: 'indexName',
-        searchClient: { search: () => {} },
+        searchClient: createSearchClient(),
       });
       search.addWidgets(widgets);
     }).not.toThrow();
@@ -131,7 +132,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     expect(() => {
       const search = new InstantSearch({
         indexName: 'indexName',
-        searchClient: { search: () => {} },
+        searchClient: createSearchClient(),
       });
       search.removeWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
@@ -147,7 +148,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     expect(() => {
       const search = new InstantSearch({
         indexName: 'indexName',
-        searchClient: { search: () => {} },
+        searchClient: createSearchClient(),
       });
       search.removeWidgets(widgets);
     }).toThrowErrorMatchingInlineSnapshot(`
@@ -199,7 +200,7 @@ describe('InstantSearch lifecycle', () => {
 
   afterEach(() => {
     client.addAlgoliaAgent.mockClear();
-    algoliaSearchHelper.mockClear();
+    algoliasearchHelper.mockClear();
   });
 
   it('calls algoliasearch(appId, apiKey)', () => {
@@ -215,7 +216,7 @@ describe('InstantSearch lifecycle', () => {
   });
 
   it('does not call algoliasearchHelper', () => {
-    expect(algoliaSearchHelper).not.toHaveBeenCalled();
+    expect(algoliasearchHelper).not.toHaveBeenCalled();
   });
 
   it('warns deprecated usage of `searchParameters`', () => {
@@ -310,8 +311,8 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       });
 
       it('calls algoliasearchHelper(client, indexName, searchParameters)', () => {
-        expect(algoliaSearchHelper).toHaveBeenCalledTimes(1);
-        expect(algoliaSearchHelper).toHaveBeenCalledWith(client, indexName, {
+        expect(algoliasearchHelper).toHaveBeenCalledTimes(1);
+        expect(algoliasearchHelper).toHaveBeenCalledWith(client, indexName, {
           some: 'modified',
           values: [-2, -1],
           index: indexName,
@@ -387,7 +388,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     });
 
     it('recursively merges searchParameters.values array', () => {
-      expect(algoliaSearchHelper.mock.calls[0][2].values).toEqual([
+      expect(algoliasearchHelper.mock.calls[0][2].values).toEqual([
         -2,
         -1,
         0,

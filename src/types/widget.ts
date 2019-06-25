@@ -5,7 +5,7 @@ import {
   SearchParameters,
 } from './instantsearch';
 
-interface InitOptions {
+export interface InitOptions {
   instantSearchInstance: InstantSearch;
   state: SearchParameters;
   helper: Helper;
@@ -13,7 +13,7 @@ interface InitOptions {
   createURL(state: SearchParameters): string;
 }
 
-interface RenderOptions {
+export interface RenderOptions {
   instantSearchInstance: InstantSearch;
   templatesConfig: object;
   results: SearchResults;
@@ -25,7 +25,7 @@ interface RenderOptions {
   createURL(state: SearchParameters): string;
 }
 
-interface DisposeOptions {
+export interface DisposeOptions {
   helper: Helper;
   state: SearchParameters;
 }
