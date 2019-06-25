@@ -119,8 +119,8 @@ export type DerivedHelper = EventEmitter & {
 };
 
 export type InstantSearch = {
-  templatesConfig?: object;
-  insightsClient?: AlgoliaInsightsClient;
+  templatesConfig: object;
+  insightsClient: AlgoliaInsightsClient | null;
   helper: Helper | null;
   widgets: Widget[];
 };

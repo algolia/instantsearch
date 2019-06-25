@@ -1,19 +1,14 @@
 /* globals jsdom */
+
 import qs from 'qs';
-import instantsearch from '../main';
-import RoutingManager from '../RoutingManager';
-import historyRouter from '../routers/history';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
+import { createWidget } from '../../../test/mock/createWidget';
 import { Router, Widget, StateMapping, RouteState } from '../../types';
+import historyRouter from '../routers/history';
+import RoutingManager from '../RoutingManager';
+import instantsearch from '../main';
 
 const runAllMicroTasks = (): Promise<any> => new Promise(setImmediate);
-
-type FakeSearchClient = {
-  search: (query: string) => Promise<{ results: object[] }>;
-};
-
-const createFakeSearchClient = (): FakeSearchClient => ({
-  search: () => Promise.resolve({ results: [{}] }),
-});
 
 const createFakeRouter = (args: Partial<Router> = {}): Router => ({
   onUpdate(..._args) {},
@@ -78,38 +73,39 @@ const createFakeHistory = (
   };
 };
 
-const createFakeSearchBox = (): Widget => ({
-  render({ helper }) {
-    (this as any).refine = (value: string) => {
-      helper.setQuery(value).search();
-    };
-  },
-  dispose({ state }) {
-    return state.setQuery('');
-  },
-  getWidgetSearchParameters(searchParameters, { uiState }) {
-    return searchParameters.setQuery(uiState.query || '');
-  },
-  getWidgetState(uiState, { searchParameters }) {
-    return {
-      ...uiState,
-      query: searchParameters.query,
-    };
-  },
-});
+const createFakeSearchBox = (): Widget =>
+  createWidget({
+    render({ helper }) {
+      (this as any).refine = (value: string) => {
+        helper.setQuery(value).search();
+      };
+    },
+    dispose({ state }) {
+      return state.setQuery('');
+    },
+    getWidgetSearchParameters(searchParameters, { uiState }) {
+      return searchParameters.setQuery(uiState.query || '');
+    },
+    getWidgetState(uiState, { searchParameters }) {
+      return {
+        ...uiState,
+        query: searchParameters.query,
+      };
+    },
+  });
 
-const createFakeHitsPerPage = (): Widget => ({
-  render() {},
-  dispose({ state }) {
-    return state;
-  },
-  getWidgetSearchParameters(parameters) {
-    return parameters;
-  },
-  getWidgetState(uiState) {
-    return uiState;
-  },
-});
+const createFakeHitsPerPage = (): Widget =>
+  createWidget({
+    dispose({ state }) {
+      return state;
+    },
+    getWidgetSearchParameters(parameters) {
+      return parameters;
+    },
+    getWidgetState(uiState) {
+      return uiState;
+    },
+  });
 
 describe('RoutingManager', () => {
   const defaultRouter: Router = {
@@ -122,7 +118,7 @@ describe('RoutingManager', () => {
 
   describe('getAllUiStates', () => {
     test('reads the state of widgets with a getWidgetState implementation', () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: '',
         searchClient,
@@ -171,7 +167,7 @@ describe('RoutingManager', () => {
     });
 
     test('Does not read UI state from widgets without an implementation of getWidgetState', () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: '',
         searchClient,
@@ -208,7 +204,7 @@ describe('RoutingManager', () => {
 
   describe('getAllSearchParameters', () => {
     test('should get searchParameters from widget that implements getWidgetSearchParameters', () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: '',
         searchClient,
@@ -254,7 +250,7 @@ describe('RoutingManager', () => {
     });
 
     test('should not change the searchParameters if no widget has a getWidgetSearchParameters', () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: '',
         searchClient,
@@ -289,7 +285,7 @@ describe('RoutingManager', () => {
 
   describe('within instantsearch', () => {
     test('should write in the router on searchParameters change', done => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const router = createFakeRouter({
         write: jest.fn(),
       });
@@ -333,7 +329,7 @@ describe('RoutingManager', () => {
     });
 
     test('should update the searchParameters on router state update', done => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
 
       let onRouterUpdateCallback: (args: object) => void;
       const router = createFakeRouter({
@@ -380,7 +376,7 @@ describe('RoutingManager', () => {
     });
 
     test('should apply state mapping on differences after searchfunction', done => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
 
       const router = createFakeRouter({
         write: jest.fn(),
@@ -406,17 +402,17 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget: Widget = {
-        render: jest.fn(),
-        getWidgetSearchParameters: jest.fn(),
-        getWidgetState(uiState, { searchParameters }) {
-          return {
-            ...uiState,
-            query: searchParameters.query,
-          };
-        },
-      };
-      search.addWidget(widget);
+      search.addWidget(
+        createWidget({
+          getWidgetSearchParameters: jest.fn(),
+          getWidgetState(uiState, { searchParameters }) {
+            return {
+              ...uiState,
+              query: searchParameters.query,
+            };
+          },
+        })
+      );
 
       search.start();
 
@@ -434,7 +430,7 @@ describe('RoutingManager', () => {
     });
 
     test('should keep the UI state up to date on state changes', async () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
         write: jest.fn(),
@@ -481,7 +477,7 @@ describe('RoutingManager', () => {
     });
 
     test('should keep the UI state up to date on first render', async () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
         write: jest.fn(),
@@ -528,7 +524,7 @@ describe('RoutingManager', () => {
     });
 
     test('should keep the UI state up to date on router.update', async () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const history = createFakeHistory();
       const router = createFakeRouter({
@@ -603,7 +599,7 @@ describe('RoutingManager', () => {
       });
 
       const setWindowTitle = jest.spyOn(window.document, 'title', 'set');
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = historyRouter({
         windowTitle(routeState: RouteState) {
