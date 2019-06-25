@@ -7,6 +7,7 @@ import {
   SearchResults as AlgoliaSearchHelperSearchResults,
 } from 'algoliasearch-helper';
 import { Widget, UiState } from './widget';
+import { Index } from '../lib/index';
 
 export type InstantSearchOptions = any;
 
@@ -119,10 +120,19 @@ export type DerivedHelper = EventEmitter & {
 };
 
 export type InstantSearch = {
-  templatesConfig: object;
-  insightsClient: AlgoliaInsightsClient | null;
   helper: Helper | null;
-  widgets: Widget[];
+  widgets: Widget[]; // @TODO: remove once the RoutingManger uses the index
+  mainHelper: Helper | null;
+  mainIndex: Index;
+  insightsClient: AlgoliaInsightsClient | null;
+  templatesConfig: object;
+  _isSearchStalled: boolean;
+  _searchParameters: Partial<SearchParameters>;
+  _createAbsoluteURL(state: Partial<SearchParameters>): string;
+  _onHistoryChange(callback: (state: Partial<SearchParameters>) => void): void;
+  scheduleSearch(): void;
+  scheduleRender(): void;
+  scheduleStalledRender(): void;
 };
 
 export type RouteState = {
