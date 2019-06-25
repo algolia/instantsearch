@@ -1,5 +1,6 @@
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { Client, Helper, SearchParameters } from '../../../types';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { Helper, SearchParameters } from '../../../types';
 import connectQueryRules, {
   QueryRulesWidgetFactory,
 } from '../connectQueryRules';
@@ -28,12 +29,8 @@ describe('connectQueryRules', () => {
     createURL: () => '#',
   };
 
-  const createFakeClient = (options = {}): Client => {
-    return options as Client;
-  };
-
   const createFakeHelper = (state = {}): Helper => {
-    const client = createFakeClient();
+    const client = createSearchClient();
     const indexName = '';
     const helper = algoliasearchHelper(client, indexName, state);
 

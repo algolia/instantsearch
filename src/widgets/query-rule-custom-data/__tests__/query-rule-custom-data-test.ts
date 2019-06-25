@@ -1,6 +1,7 @@
 import { render, unmountComponentAtNode } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { Client, Helper } from '../../../types';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { Helper } from '../../../types';
 import queryRuleCustomData from '../query-rule-custom-data';
 
 jest.mock('preact-compat', () => {
@@ -22,12 +23,8 @@ describe('queryRuleCustomData', () => {
     createURL: () => '#',
   };
 
-  const createFakeClient = (options = {}): Client => {
-    return options as Client;
-  };
-
   const createFakeHelper = (state = {}): Helper => {
-    const client = createFakeClient();
+    const client = createSearchClient();
     const indexName = '';
     const helper = algoliasearchHelper(client, indexName, state);
 
