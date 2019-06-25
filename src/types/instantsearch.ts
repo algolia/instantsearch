@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import {
@@ -112,6 +113,10 @@ export type StateMapping<TRouteState = UiState> = {
 export type Client = AlgoliaSearchClient;
 
 export type Helper = AlgoliaSearchHelper;
+export type DerivedHelper = EventEmitter & {
+  lastResults: SearchResults | null;
+  detach(): void;
+};
 
 export type InstantSearch = {
   templatesConfig: object;
