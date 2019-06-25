@@ -1,5 +1,11 @@
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { InstantSearch, InitOptions, RenderOptions } from '../../../types';
 import connectInfiniteHitsWithInsights from '../connectInfiniteHitsWithInsights';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
@@ -7,26 +13,26 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
 }));
 
 describe('connectInfiniteHitsWithInsights', () => {
-  const defaultInitOptions = {
-    instantSearchInstance: {
-      helper: null,
-      widgets: [],
-      insightsClient: () => {},
-    },
-    templatesConfig: {},
-    createURL: () => '#',
-  };
+  const createInstantSearchWithInsights = (): InstantSearch =>
+    createInstantSearch({
+      insightsClient() {},
+    });
 
-  const defaultRenderOptions = {
-    instantSearchInstance: {
-      helper: null,
-      widgets: [],
-      insightsClient: () => {},
-    },
-    templatesConfig: {},
-    searchMetadata: { isSearchStalled: false },
-    createURL: () => '#',
-  };
+  const createInitOptionsWithInsights = (
+    args: Partial<InitOptions>
+  ): InitOptions =>
+    createInitOptions({
+      instantSearchInstance: createInstantSearchWithInsights(),
+      ...args,
+    });
+
+  const createRenderOptionsWithInsights = (
+    args: Partial<RenderOptions>
+  ): RenderOptions =>
+    createRenderOptions({
+      instantSearchInstance: createInstantSearchWithInsights(),
+      ...args,
+    });
 
   it('should expose `insights` props', () => {
     const rendering = jest.fn();
@@ -36,23 +42,26 @@ describe('connectInfiniteHitsWithInsights', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init!({
-      ...defaultInitOptions,
-      helper,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptionsWithInsights({
+        state: helper.state,
+        helper,
+      })
+    );
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.insights).toBeUndefined();
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render!({
-      ...defaultRenderOptions,
-      results,
-      state: helper.state,
-      helper,
-    });
+
+    widget.render!(
+      createRenderOptionsWithInsights({
+        state: helper.state,
+        results,
+        helper,
+      })
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.insights).toBeInstanceOf(Function);
@@ -66,20 +75,23 @@ describe('connectInfiniteHitsWithInsights', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init!({
-      ...defaultInitOptions,
-      helper,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptionsWithInsights({
+        state: helper.state,
+        helper,
+      })
+    );
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render!({
-      ...defaultRenderOptions,
-      results,
-      state: helper.state,
-      helper,
-    });
+
+    widget.render!(
+      createRenderOptionsWithInsights({
+        state: helper.state,
+        results,
+        helper,
+      })
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.hits).toEqual(expect.objectContaining(hits));

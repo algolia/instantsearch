@@ -2,6 +2,7 @@
 
 import qs from 'qs';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
+import { createWidget } from '../../../test/mock/createWidget';
 import { Router, Widget, StateMapping, RouteState } from '../../types';
 import historyRouter from '../routers/history';
 import RoutingManager from '../RoutingManager';
@@ -72,38 +73,39 @@ const createFakeHistory = (
   };
 };
 
-const createFakeSearchBox = (): Widget => ({
-  render({ helper }) {
-    (this as any).refine = (value: string) => {
-      helper.setQuery(value).search();
-    };
-  },
-  dispose({ state }) {
-    return state.setQuery('');
-  },
-  getWidgetSearchParameters(searchParameters, { uiState }) {
-    return searchParameters.setQuery(uiState.query || '');
-  },
-  getWidgetState(uiState, { searchParameters }) {
-    return {
-      ...uiState,
-      query: searchParameters.query,
-    };
-  },
-});
+const createFakeSearchBox = (): Widget =>
+  createWidget({
+    render({ helper }) {
+      (this as any).refine = (value: string) => {
+        helper.setQuery(value).search();
+      };
+    },
+    dispose({ state }) {
+      return state.setQuery('');
+    },
+    getWidgetSearchParameters(searchParameters, { uiState }) {
+      return searchParameters.setQuery(uiState.query || '');
+    },
+    getWidgetState(uiState, { searchParameters }) {
+      return {
+        ...uiState,
+        query: searchParameters.query,
+      };
+    },
+  });
 
-const createFakeHitsPerPage = (): Widget => ({
-  render() {},
-  dispose({ state }) {
-    return state;
-  },
-  getWidgetSearchParameters(parameters) {
-    return parameters;
-  },
-  getWidgetState(uiState) {
-    return uiState;
-  },
-});
+const createFakeHitsPerPage = (): Widget =>
+  createWidget({
+    dispose({ state }) {
+      return state;
+    },
+    getWidgetSearchParameters(parameters) {
+      return parameters;
+    },
+    getWidgetState(uiState) {
+      return uiState;
+    },
+  });
 
 describe('RoutingManager', () => {
   const defaultRouter: Router = {
@@ -400,17 +402,17 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget: Widget = {
-        render: jest.fn(),
-        getWidgetSearchParameters: jest.fn(),
-        getWidgetState(uiState, { searchParameters }) {
-          return {
-            ...uiState,
-            query: searchParameters.query,
-          };
-        },
-      };
-      search.addWidget(widget);
+      search.addWidget(
+        createWidget({
+          getWidgetSearchParameters: jest.fn(),
+          getWidgetState(uiState, { searchParameters }) {
+            return {
+              ...uiState,
+              query: searchParameters.query,
+            };
+          },
+        })
+      );
 
       search.start();
 

@@ -1,6 +1,7 @@
 import { render, unmountComponentAtNode } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createInitOptions } from '../../../../test/mock/createWidget';
 import { Helper } from '../../../types';
 import queryRuleCustomData from '../query-rule-custom-data';
 
@@ -14,15 +15,6 @@ jest.mock('preact-compat', () => {
 });
 
 describe('queryRuleCustomData', () => {
-  const defaultInitOptions = {
-    instantSearchInstance: {
-      helper: null,
-      widgets: [],
-    },
-    templatesConfig: {},
-    createURL: () => '#',
-  };
-
   const createFakeHelper = (state = {}): Helper => {
     const client = createSearchClient();
     const indexName = '';
@@ -70,11 +62,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           container: document.createElement('div'),
         });
 
-        widget.init!({
-          ...defaultInitOptions,
-          helper,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         const { cssClasses } = render.mock.calls[0][0].props;
 
@@ -92,11 +85,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           },
         });
 
-        widget.init!({
-          ...defaultInitOptions,
-          helper,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         const { cssClasses } = render.mock.calls[0][0].props;
 
@@ -113,11 +107,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           container: document.createElement('div'),
         });
 
-        widget.init!({
-          ...defaultInitOptions,
-          helper,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         const { templates } = render.mock.calls[0][0].props;
 
@@ -149,11 +144,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           },
         });
 
-        widget.init!({
-          ...defaultInitOptions,
-          helper,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         const { templates } = render.mock.calls[0][0].props;
 
@@ -173,11 +169,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           container,
         });
 
-        widget.init!({
-          ...defaultInitOptions,
-          helper,
-          state: helper.state,
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
+
         widget.dispose!({
           helper,
           state: helper.state,
