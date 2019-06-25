@@ -199,33 +199,30 @@ a[class^='ais-'] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  height: 100%;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
 }
 
+.ais-SearchBox-reset,
 .ais-SearchBox-submit {
-  left: 26px;
+  display: flex;
+}
+
+.ais-SearchBox-submit {
+  left: 0;
+  padding: 0 1rem 0 2rem;
 }
 
 .ais-SearchBox-reset,
 .ais-SearchBox-loadingIndicator {
-  right: 26px;
+  padding: 0 2rem 0 1rem;
+  right: 0;
 }
 
 .ais-SearchBox-form {
   position: relative;
-}
-
-.ais-SearchBox-loadingIndicator,
-.ais-SearchBox-reset,
-.ais-SearchBox-submit {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 /* SFFV search box */
