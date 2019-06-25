@@ -3,12 +3,11 @@
 import qs from 'qs';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
+import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 import { Router, Widget, StateMapping, RouteState } from '../../types';
 import historyRouter from '../routers/history';
 import RoutingManager from '../RoutingManager';
 import instantsearch from '../main';
-
-const runAllMicroTasks = (): Promise<any> => new Promise(setImmediate);
 
 const createFakeRouter = (args: Partial<Router> = {}): Router => ({
   onUpdate(..._args) {},
