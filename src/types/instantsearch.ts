@@ -114,7 +114,7 @@ export type Client = AlgoliaSearchClient;
 export type Helper = AlgoliaSearchHelper;
 
 export type InstantSearch = {
-  templatesConfig?: object;
+  templatesConfig: object;
   insightsClient?: AlgoliaInsightsClient;
   helper: Helper | null;
   widgets: Widget[];
