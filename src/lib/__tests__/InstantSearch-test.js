@@ -10,7 +10,7 @@ jest.mock('algoliasearch-helper', () => {
     const helper = module(...args);
 
     const mock = jest.fn();
-    helper.search = mock;
+    helper.searchOnlyWithDerivedHelpers = mock;
 
     return helper;
   });
@@ -282,7 +282,9 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls helper.search()', () => {
-        expect(search.helper.search).toHaveBeenCalledTimes(1);
+        expect(
+          search.helper.searchOnlyWithDerivedHelpers
+        ).toHaveBeenCalledTimes(1);
       });
 
       it('calls widget.init(helper.state, helper, templatesConfig)', () => {
@@ -304,7 +306,7 @@ describe('InstantSearch lifecycle', () => {
 
         beforeEach(() => {
           results = { some: 'data' };
-          search.helper.emit('result', {
+          search.derivedHelper.emit('result', {
             state: search.helper.state,
             results,
           });
@@ -377,7 +379,7 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      search.helper.emit('result', {
+      search.derivedHelper.emit('result', {
         results: null,
         state: search.helper.state,
       });
@@ -385,7 +387,7 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      search.helper.emit('result', {
+      search.derivedHelper.emit('result', {
         results: null,
         state: search.helper.state,
       });
@@ -401,7 +403,7 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(0);
       expect(onRender).toHaveBeenCalledTimes(0);
 
-      search.helper.emit('result', {
+      search.derivedHelper.emit('result', {
         results: null,
         state: search.helper.state,
       });
@@ -409,7 +411,7 @@ describe('InstantSearch lifecycle', () => {
       expect(render).toHaveBeenCalledTimes(5);
       expect(onRender).toHaveBeenCalledTimes(1);
 
-      search.helper.emit('result', {
+      search.derivedHelper.emit('result', {
         results: null,
         state: search.helper.state,
       });
@@ -625,22 +627,28 @@ describe('InstantSearch lifecycle', () => {
 
     it('should add widgets after start', () => {
       search.start();
-      expect(search.helper.search).toHaveBeenCalledTimes(1);
 
+      expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+        1
+      );
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
 
       const widget1 = registerWidget({ facets: ['price'] });
       search.addWidget(widget1);
 
-      expect(search.helper.search).toHaveBeenCalledTimes(2);
+      expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+        2
+      );
       expect(widget1.init).toHaveBeenCalledTimes(1);
 
       const widget2 = registerWidget({ disjunctiveFacets: ['categories'] });
       search.addWidget(widget2);
 
       expect(widget2.init).toHaveBeenCalledTimes(1);
-      expect(search.helper.search).toHaveBeenCalledTimes(3);
+      expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+        3
+      );
 
       expect(search.widgets).toHaveLength(2);
       expect(search.helper.state.facets).toEqual(['price']);
@@ -650,7 +658,9 @@ describe('InstantSearch lifecycle', () => {
     it('should trigger only one search using `addWidgets()`', () => {
       search.start();
 
-      expect(search.helper.search).toHaveBeenCalledTimes(1);
+      expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+        1
+      );
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
 
@@ -659,7 +669,9 @@ describe('InstantSearch lifecycle', () => {
 
       search.addWidgets([widget1, widget2]);
 
-      expect(search.helper.search).toHaveBeenCalledTimes(2);
+      expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+        2
+      );
       expect(search.helper.state.facets).toEqual(['price']);
       expect(search.helper.state.disjunctiveFacets).toEqual(['categories']);
     });
@@ -667,13 +679,17 @@ describe('InstantSearch lifecycle', () => {
     it('should not trigger a search without widgets to add', () => {
       search.start();
 
-      expect(search.helper.search).toHaveBeenCalledTimes(1);
+      expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+        1
+      );
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
 
       search.addWidgets([]);
 
-      expect(search.helper.search).toHaveBeenCalledTimes(1);
+      expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(
+        1
+      );
       expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
     });
@@ -696,7 +712,7 @@ describe('InstantSearch lifecycle', () => {
     search.start();
 
     expect(search.widgets).toHaveLength(5);
-    expect(search.helper.search).toHaveBeenCalledTimes(1);
+    expect(search.helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(1);
     expect(search.started).toBe(true);
 
     // Calling `dispose()` deletes the reference of the `helper`
@@ -709,7 +725,7 @@ describe('InstantSearch lifecycle', () => {
       // called we have to wait for the timeout. Not the best solution but it
       // works.
       expect(search.widgets).toHaveLength(0);
-      expect(helper.search).toHaveBeenCalledTimes(1);
+      expect(helper.searchOnlyWithDerivedHelpers).toHaveBeenCalledTimes(1);
       expect(search.started).toBe(false);
       done();
     }, 100);
@@ -771,6 +787,62 @@ describe('dispose', () => {
     search.dispose();
 
     done();
+  });
+
+  it('should set the DerivedHelper to `null`', () => {
+    const search = new InstantSearch({
+      indexName: '',
+      searchClient: {
+        search() {
+          return Promise.resolve({
+            results: [
+              {
+                query: 'fake query',
+              },
+            ],
+          });
+        },
+      },
+    });
+
+    search.start();
+
+    expect(search.derivedHelper).not.toBe(null);
+
+    search.dispose();
+
+    expect(search.derivedHelper).toBe(null);
+
+    search.start();
+
+    expect(search.derivedHelper).not.toBe(null);
+  });
+
+  it('should detach the DerivedHelper', () => {
+    const search = new InstantSearch({
+      indexName: '',
+      searchClient: {
+        search() {
+          return Promise.resolve({
+            results: [
+              {
+                query: 'fake query',
+              },
+            ],
+          });
+        },
+      },
+    });
+
+    search.start();
+
+    expect(search.helper.derivedHelpers).toHaveLength(1);
+
+    const { helper } = search;
+
+    search.dispose();
+
+    expect(helper.derivedHelpers).toHaveLength(0);
   });
 });
 
