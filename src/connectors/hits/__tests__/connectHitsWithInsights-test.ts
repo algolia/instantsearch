@@ -1,58 +1,51 @@
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 import connectHitsWithInsights from '../connectHitsWithInsights';
-import { Client } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: hits => hits,
 }));
 
 describe('connectHitsWithInsights', () => {
-  const defaultInitOptions = {
-    instantSearchInstance: {
-      helper: null,
-      widgets: [],
-      insightsClient: () => {},
-    },
-    templatesConfig: {},
-    createURL: () => '#',
-  };
-
-  const defaultRenderOptions = {
-    instantSearchInstance: {
-      helper: null,
-      widgets: [],
-      insightsClient: () => {},
-    },
-    templatesConfig: {},
-    searchMetadata: { isSearchStalled: false },
-    createURL: () => '#',
-  };
-
   it('should expose `insights` props', () => {
+    const instantSearchInstance = createInstantSearch({
+      insightsClient() {},
+    });
+
     const rendering = jest.fn();
     const makeWidget = connectHitsWithInsights(rendering, jest.fn());
     const widget = makeWidget({});
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init!({
-      ...defaultInitOptions,
-      helper,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        instantSearchInstance,
+        state: helper.state,
+        helper,
+      })
+    );
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.insights).toBeUndefined();
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render!({
-      ...defaultRenderOptions,
-      results,
-      state: helper.state,
-      helper,
-    });
+
+    widget.render!(
+      createRenderOptions({
+        instantSearchInstance,
+        state: helper.state,
+        results,
+        helper,
+      })
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.insights).toBeInstanceOf(Function);
@@ -63,23 +56,26 @@ describe('connectHitsWithInsights', () => {
     const makeWidget = connectHitsWithInsights(rendering, jest.fn());
     const widget = makeWidget({});
 
-    const helper = jsHelper({} as Client, '', {});
+    const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init!({
-      ...defaultInitOptions,
-      helper,
-      state: helper.state,
-    });
+    widget.init!(
+      createInitOptions({
+        state: helper.state,
+        helper,
+      })
+    );
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render!({
-      ...defaultRenderOptions,
-      results,
-      state: helper.state,
-      helper,
-    });
+
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results,
+        helper,
+      })
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.hits).toEqual(expect.objectContaining(hits));

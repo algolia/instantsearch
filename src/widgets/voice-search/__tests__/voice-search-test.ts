@@ -1,11 +1,15 @@
 import { render } from 'preact-compat';
+import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import voiceSearch from '../voice-search';
-import algoliasearch from 'algoliasearch';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 import { Helper, Widget } from '../../../types';
+import voiceSearch from '../voice-search';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
@@ -23,39 +27,32 @@ interface DefaultSetupWrapper {
 function defaultSetup(opts = {}): DefaultSetupWrapper {
   const container = document.createElement('div');
   const widget = voiceSearch({ container, ...opts });
+
   const widgetInit = (helper: Helper): void => {
     if (!widget.init) {
       throw new Error('VoiceSearch widget has no init method.');
     }
-    widget.init({
-      helper,
-      instantSearchInstance: {
-        helper: null,
-        widgets: [],
-      },
-      state: helper.state,
-      templatesConfig: {},
-      createURL: () => '',
-    });
+
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
   };
+
   const widgetRender = (helper: Helper): void => {
     if (!widget.render) {
       throw new Error('VoiceSearch widget has no render method.');
     }
-    widget.render({
-      helper,
-      instantSearchInstance: {
-        helper: null,
-        widgets: [],
-      },
-      templatesConfig: {},
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      searchMetadata: {
-        isSearchStalled: false,
-      },
-      createURL: () => '',
-    });
+
+    widget.render(
+      createRenderOptions({
+        helper,
+        state: helper.state,
+        results: new SearchResults(helper.state, [{}]),
+      })
+    );
   };
 
   return { container, widget, widgetInit, widgetRender };
