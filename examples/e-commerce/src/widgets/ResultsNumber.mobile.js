@@ -3,7 +3,8 @@ import { stats } from 'instantsearch.js/es/widgets';
 const resultsNumber = stats({
   container: '[data-widget="results-number-mobile"]',
   templates: {
-    text: '<strong>{{nbHits}}</strong> results',
+    text:
+      '<strong>{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}}</strong> results',
   },
 });
 

@@ -5,7 +5,7 @@ const saveFilters = stats({
   templates: {
     text: `
 <button class="button button-primary">
-  See {{nbHits}} results
+  See {{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results
 </button>
 `,
   },
