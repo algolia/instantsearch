@@ -152,12 +152,12 @@ const index = (props: IndexProps): Index => {
       localInstantSearchInstance = instantSearchInstance;
 
       // The `mainHelper` is already defined at this point. The instance is created
-      // inside InstantSerach at the `start` method, which occurs before the `init`
+      // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
       const mainHelper = instantSearchInstance.mainHelper!;
 
       const initialSearchParameters =
-        // Uses the `searchParameters` for the top level index only, it allow
+        // Uses the `searchParameters` for the top level index only, it allows
         // us to have the exact same behaviour than before for the mono-index.
         parent === null ? instantSearchInstance._searchParameters : {};
 
@@ -171,7 +171,7 @@ const index = (props: IndexProps): Index => {
       );
 
       // We forward the call to `search` to the "main" instance of the Helper
-      // which is repsonsible to manage the queries (it's the only one that is
+      // which is responsible for managing the queries (it's the only one that is
       // aware of the `searchClient`).
       helper.search = () => mainHelper.search();
 
@@ -209,7 +209,7 @@ const index = (props: IndexProps): Index => {
       // We have to use `!` at the moment because `dervive` is not correctly typed.
       derivedHelper!.on('result', () => {
         // The index does not render the results it schedules a new render
-        // to let all the other indices emit their own results. It allow us to
+        // to let all the other indices emit their own results. It allows us to
         // run the render process in one pass.
         instantSearchInstance.scheduleRender();
       });
@@ -256,7 +256,7 @@ const index = (props: IndexProps): Index => {
       localWidgets.forEach(widget => {
         if (widget.dispose) {
           // The dispose function is always called once the instance is started
-          // (it's an effect of  `removeWidgets`). The index is initialized and
+          // (it's an effect of `removeWidgets`). The index is initialized and
           // the Helper is available. We don't care about the return value of
           // `dispose` because the index is removed. We can't call `removeWidgets`
           // because we want to keep the widgets on the instance, to allow idempotent
