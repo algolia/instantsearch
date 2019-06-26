@@ -528,7 +528,7 @@ a[class^='ais-'] {
   color: #fff;
 }
 
-.ais-Pagination-item:not(:last-of-type) {
+.ais-Pagination-item.ais-Pagination-item--page {
   margin-right: 4px;
 }
 
@@ -537,7 +537,7 @@ a[class^='ais-'] {
 }
 
 .ais-Pagination-item.ais-Pagination-item--nextPage {
-  margin-left: 1rem;
+  margin-left: calc(1rem - 4px);
 }
 
 .ais-Pagination-link {

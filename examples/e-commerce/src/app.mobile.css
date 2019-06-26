@@ -35,6 +35,7 @@
 
   .filtering .header-logo {
     left: 50%;
+    pointer-events: none;
     position: absolute;
     top: 1.5rem;
     transform: translateX(-50%);
