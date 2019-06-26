@@ -219,6 +219,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
   });
 
   describe('removeWidgets', () => {
+    it('removes given widget from the instance', () => {
+      const instance = index({ indexName: 'index_name' });
+      const searchBox = createSearchBox();
+      const pagination = createPagination();
+
+      instance.addWidgets([searchBox, pagination]);
+
+      expect(instance.getWidgets()).toHaveLength(2);
+
+      instance.removeWidgets([pagination]);
+
+      expect(instance.getWidgets()).toEqual([searchBox]);
+    });
+
     it('removes given widgets from the instance', () => {
       const instance = index({ indexName: 'index_name' });
       const searchBox = createSearchBox();
