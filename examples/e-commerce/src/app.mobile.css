@@ -160,6 +160,7 @@
   .ais-RefinementList-list {
     display: grid;
     grid-auto-flow: column;
+    grid-gap: 0 2rem;
     grid-template-rows: repeat(5, 1fr);
   }
 
@@ -169,7 +170,7 @@
 
   .ais-RefinementList-checkbox {
     height: 1.5rem;
-    width: 1.5rem;
+    min-width: 1.5rem;
   }
 
   .ais-RefinementList-item--selected .ais-RefinementList-checkbox::after {
