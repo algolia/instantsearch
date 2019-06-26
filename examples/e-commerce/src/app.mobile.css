@@ -159,6 +159,15 @@
     max-width: 90%;
   }
 
+  .ais-SearchBox .ais-SearchBox-input,
+  .ais-RefinementList .ais-SearchBox-input {
+    font-size: 1rem;
+  }
+
+  .ais-RefinementList .ais-SearchBox-input {
+    min-height: 48px;
+  }
+
   /* RefinementList */
 
   .ais-RefinementList-list {
