@@ -1,5 +1,10 @@
 import algolisearchHelper from 'algoliasearch-helper';
-import { InitOptions, RenderOptions, Widget } from '../../src/types';
+import {
+  InitOptions,
+  RenderOptions,
+  DisposeOptions,
+  Widget,
+} from '../../src/types';
 import { createMutliSearchResponse } from './createAPIResponse';
 import { createInstantSearch } from './createInstantSearch';
 
@@ -37,6 +42,18 @@ export const createRenderOptions = (
       isSearchStalled: false,
     },
     createURL: jest.fn(() => '#'),
+    ...args,
+  };
+};
+
+export const createDisposeOptions = (
+  args: Partial<DisposeOptions> = {}
+): DisposeOptions => {
+  const instantSearchInstance = createInstantSearch();
+
+  return {
+    helper: instantSearchInstance.helper!,
+    state: instantSearchInstance.helper!.state,
     ...args,
   };
 };
