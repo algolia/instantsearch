@@ -1341,10 +1341,10 @@
     traverse "^0.6.6"
     unified "^6.1.6"
 
-"@types/algoliasearch-helper@2.26.0":
-  version "2.26.0"
-  resolved "https://registry.yarnpkg.com/@types/algoliasearch-helper/-/algoliasearch-helper-2.26.0.tgz#314849c4b14e2c495fd38e239758b37633dcba16"
-  integrity sha512-X+5sSx5Pc+cDVO3s8FTgYSxtS+oDiXZxolW6MJdzGhzEx/69Kn5YhLDBYpZOMUGvc8nccEy3ahfgGN/sLa7AsA==
+"@types/algoliasearch-helper@2.26.1":
+  version "2.26.1"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch-helper/-/algoliasearch-helper-2.26.1.tgz#60cf377e7cb4bd9a55f7eba35182792763230a24"
+  integrity sha512-JN1wq/yLxxBcc6MeSe57F9Aqv8wL964L0nBOUTSQ5OECzWxaECuGYV06VnGKn/c+9AGB97RAgqx2PUbYflZNqA==
   dependencies:
     "@types/algoliasearch" "*"
 
