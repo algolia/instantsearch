@@ -622,11 +622,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     it('schedules a render on DerivedHelper results', async () => {
       const instance = index({ indexName: 'index_name' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
+      const instantSearchInstance = createInstantSearch();
 
       instance.init!(
         createInitOptions({
@@ -646,11 +642,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     it('schedules a stalled render on DerivedHelper search', () => {
       const instance = index({ indexName: 'index_name' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
+      const instantSearchInstance = createInstantSearch();
 
       instance.init!(
         createInitOptions({
@@ -705,11 +697,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
   describe('render', () => {
     it('calls `render` on its widgets', async () => {
       const instance = index({ indexName: 'index_name' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
+      const instantSearchInstance = createInstantSearch();
 
       const widgets = [createSearchBox(), createPagination()];
 
@@ -835,14 +823,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('removes the listeners on DerivedHelper', async () => {
-      const scheduleRender = jest.fn();
       const instance = index({ indexName: 'index_name' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        scheduleRender,
-        mainHelper,
-      });
+      const instantSearchInstance = createInstantSearch();
 
       instance.init!(
         createInitOptions({
@@ -858,11 +840,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       // Simulate a call to search from a widget
       helper!.search();
 
-      expect(scheduleRender).toHaveBeenCalledTimes(0);
+      expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(0);
 
       await runAllMicroTasks();
 
-      expect(scheduleRender).toHaveBeenCalledTimes(0);
+      expect(instantSearchInstance.scheduleRender).toHaveBeenCalledTimes(0);
     });
 
     it('removes the DerivedHelper', () => {
