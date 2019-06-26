@@ -21,6 +21,10 @@
     padding: 2rem 2rem 0 2rem;
   }
 
+  .filtering .header {
+    cursor: pointer;
+  }
+
   .filtering .header-logo {
     left: 50%;
     pointer-events: none;
