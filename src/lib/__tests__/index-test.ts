@@ -834,7 +834,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       expect(instance.getHelper()).toBe(null);
     });
 
-    it('removes the DerivedHelper', async () => {
+    it('removes the listeners on DerivedHelper', async () => {
       const scheduleRender = jest.fn();
       const instance = index({ indexName: 'index_name' });
       const searchClient = createSearchClient();
@@ -863,6 +863,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       await runAllMicroTasks();
 
       expect(scheduleRender).toHaveBeenCalledTimes(0);
+    });
+
+    it('removes the DerivedHelper', async () => {
+      const instance = index({ indexName: 'index_name' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.init!(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      expect(mainHelper.derivedHelpers).toHaveLength(1);
+
+      instance.dispose!(createDisposeOptions());
+
+      expect(mainHelper.derivedHelpers).toHaveLength(0);
     });
   });
 });
