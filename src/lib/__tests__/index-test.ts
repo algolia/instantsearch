@@ -865,7 +865,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       expect(scheduleRender).toHaveBeenCalledTimes(0);
     });
 
-    it('removes the DerivedHelper', async () => {
+    it('removes the DerivedHelper', () => {
       const instance = index({ indexName: 'index_name' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
