@@ -14,27 +14,27 @@ import index from '../index';
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      getConfiguration() {
+      getConfiguration: jest.fn(() => {
         return {
           query: 'Apple',
         };
-      },
-      dispose({ state }) {
+      }),
+      dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('query', undefined);
-      },
+      }),
       ...args,
     });
 
   const createPagination = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      getConfiguration() {
+      getConfiguration: jest.fn(() => {
         return {
           page: 5,
         };
-      },
-      dispose({ state }) {
+      }),
+      dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('page', undefined);
-      },
+      }),
       ...args,
     });
 
@@ -152,9 +152,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('calls `init` on the added widgets', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch();
-        const pagination = createSearchBox({
-          init: jest.fn(),
-        });
+        const widgets = [createSearchBox(), createPagination()];
 
         instance.init!(
           createInitOptions({
@@ -162,19 +160,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           })
         );
 
-        expect(pagination.init).toHaveBeenCalledTimes(0);
+        widgets.forEach(widget => {
+          expect(widget.init).toHaveBeenCalledTimes(0);
+        });
 
-        instance.addWidgets([pagination]);
+        instance.addWidgets(widgets);
 
-        expect(pagination.init).toHaveBeenCalledTimes(1);
-        expect(pagination.init).toHaveBeenCalledWith({
-          instantSearchInstance,
-          parent: instance,
-          helper: instance.getHelper(),
-          state: instance.getHelper()!.state,
-          templatesConfig: instantSearchInstance.templatesConfig,
-          createURL: instantSearchInstance._createAbsoluteURL,
-          onHistoryChange: instantSearchInstance._onHistoryChange,
+        widgets.forEach(widget => {
+          expect(widget.init).toHaveBeenCalledTimes(1);
+          expect(widget.init).toHaveBeenCalledWith({
+            instantSearchInstance,
+            parent: instance,
+            helper: instance.getHelper(),
+            state: instance.getHelper()!.state,
+            templatesConfig: instantSearchInstance.templatesConfig,
+            createURL: instantSearchInstance._createAbsoluteURL,
+            onHistoryChange: instantSearchInstance._onHistoryChange,
+          });
         });
       });
 
@@ -338,11 +340,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('calls `dispose` on the removed widgets', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch();
-        const pagination = createPagination({
-          dispose: jest.fn(),
-        });
+        const widgets = [
+          createSearchBox({
+            dispose: jest.fn(),
+          }),
+          createPagination({
+            dispose: jest.fn(),
+          }),
+        ];
 
-        instance.addWidgets([pagination]);
+        instance.addWidgets(widgets);
 
         instance.init!(
           createInitOptions({
@@ -350,14 +357,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           })
         );
 
-        expect(pagination.dispose).toHaveBeenCalledTimes(0);
+        widgets.forEach(widget => {
+          expect(widget.dispose).toHaveBeenCalledTimes(0);
+        });
 
-        instance.removeWidgets([pagination]);
+        instance.removeWidgets(widgets);
 
-        expect(pagination.dispose).toHaveBeenCalledTimes(1);
-        expect(pagination.dispose).toHaveBeenCalledWith({
-          helper: instance.getHelper(),
-          state: instance.getHelper()!.state,
+        widgets.forEach(widget => {
+          expect(widget.dispose).toHaveBeenCalledTimes(1);
+          expect(widget.dispose).toHaveBeenCalledWith({
+            helper: instance.getHelper(),
+            state: instance.getHelper()!.state,
+          });
         });
       });
 
@@ -662,19 +673,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     it('calls `init` on its widgets', () => {
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();
+      const widgets = [createSearchBox(), createPagination()];
 
-      const searchBox = createSearchBox({
-        init: jest.fn(),
+      instance.addWidgets(widgets);
+
+      widgets.forEach(widget => {
+        expect(widget.init).toHaveBeenCalledTimes(0);
       });
-
-      const pagination = createSearchBox({
-        init: jest.fn(),
-      });
-
-      instance.addWidgets([searchBox, pagination]);
-
-      expect(searchBox.init).toHaveBeenCalledTimes(0);
-      expect(pagination.init).toHaveBeenCalledTimes(0);
 
       instance.init!(
         createInitOptions({
@@ -682,16 +687,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         })
       );
 
-      expect(searchBox.init).toHaveBeenCalledTimes(1);
-      expect(pagination.init).toHaveBeenCalledTimes(1);
-      expect(pagination.init).toHaveBeenCalledWith({
-        instantSearchInstance,
-        parent: instance,
-        helper: instance.getHelper(),
-        state: instance.getHelper()!.state,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        createURL: instantSearchInstance._createAbsoluteURL,
-        onHistoryChange: instantSearchInstance._onHistoryChange,
+      widgets.forEach(widget => {
+        expect(widget.init).toHaveBeenCalledTimes(1);
+        expect(widget.init).toHaveBeenCalledWith({
+          instantSearchInstance,
+          parent: instance,
+          helper: instance.getHelper(),
+          state: instance.getHelper()!.state,
+          templatesConfig: instantSearchInstance.templatesConfig,
+          createURL: instantSearchInstance._createAbsoluteURL,
+          onHistoryChange: instantSearchInstance._onHistoryChange,
+        });
       });
     });
   });
@@ -705,18 +711,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         mainHelper,
       });
 
-      const searchBox = createSearchBox({
-        render: jest.fn(),
+      const widgets = [createSearchBox(), createPagination()];
+
+      instance.addWidgets(widgets);
+
+      widgets.forEach(widget => {
+        expect(widget.render).toHaveBeenCalledTimes(0);
       });
-
-      const pagination = createSearchBox({
-        render: jest.fn(),
-      });
-
-      instance.addWidgets([searchBox, pagination]);
-
-      expect(searchBox.render).toHaveBeenCalledTimes(0);
-      expect(pagination.render).toHaveBeenCalledTimes(0);
 
       instance.init!(
         createInitOptions({
@@ -731,8 +732,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       await runAllMicroTasks();
 
-      expect(searchBox.render).toHaveBeenCalledTimes(0);
-      expect(pagination.render).toHaveBeenCalledTimes(0);
+      widgets.forEach(widget => {
+        expect(widget.render).toHaveBeenCalledTimes(0);
+      });
 
       instance.render!(
         createRenderOptions({
@@ -740,18 +742,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         })
       );
 
-      expect(searchBox.render).toHaveBeenCalledTimes(1);
-      expect(pagination.render).toHaveBeenCalledTimes(1);
-      expect(pagination.render).toHaveBeenCalledWith({
-        instantSearchInstance,
-        results: expect.any(algoliasearchHelper.SearchResults),
-        state: expect.any(algoliasearchHelper.SearchParameters),
-        helper: instance.getHelper(),
-        templatesConfig: instantSearchInstance.templatesConfig,
-        createURL: instantSearchInstance._createAbsoluteURL,
-        searchMetadata: {
-          isSearchStalled: instantSearchInstance._isSearchStalled,
-        },
+      widgets.forEach(widget => {
+        expect(widget.render).toHaveBeenCalledTimes(1);
+        expect(widget.render).toHaveBeenCalledWith({
+          instantSearchInstance,
+          results: expect.any(algoliasearchHelper.SearchResults),
+          state: expect.any(algoliasearchHelper.SearchParameters),
+          helper: instance.getHelper(),
+          templatesConfig: instantSearchInstance.templatesConfig,
+          createURL: instantSearchInstance._createAbsoluteURL,
+          searchMetadata: {
+            isSearchStalled: instantSearchInstance._isSearchStalled,
+          },
+        });
       });
     });
   });
@@ -760,15 +763,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     it('calls `dispose` on its widgets', () => {
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();
-      const searchBox = createSearchBox({
-        dispose: jest.fn(),
-      });
+      const widgets = [createSearchBox(), createPagination()];
 
-      const pagination = createPagination({
-        dispose: jest.fn(),
-      });
-
-      instance.addWidgets([searchBox, pagination]);
+      instance.addWidgets(widgets);
 
       instance.init!(
         createInitOptions({
@@ -776,8 +773,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         })
       );
 
-      expect(searchBox.dispose).toHaveBeenCalledTimes(0);
-      expect(pagination.dispose).toHaveBeenCalledTimes(0);
+      widgets.forEach(widget => {
+        expect(widget.dispose).toHaveBeenCalledTimes(0);
+      });
 
       // Save the Helper to be able to simulate the search
       const helper = instance.getHelper();
@@ -789,11 +787,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         })
       );
 
-      expect(searchBox.dispose).toHaveBeenCalledTimes(1);
-      expect(pagination.dispose).toHaveBeenCalledTimes(1);
-      expect(pagination.dispose).toHaveBeenCalledWith({
-        state: helper!.state,
-        helper,
+      widgets.forEach(widget => {
+        expect(widget.dispose).toHaveBeenCalledTimes(1);
+        expect(widget.dispose).toHaveBeenCalledWith({
+          state: helper!.state,
+          helper,
+        });
       });
     });
 
