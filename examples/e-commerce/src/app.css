@@ -257,6 +257,7 @@ mark {
   font: inherit;
   margin-left: 1rem;
   margin-right: 0;
+  position: relative;
 }
 
 .ais-ToggleRefinement-checkbox:checked::before {
