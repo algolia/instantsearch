@@ -7,13 +7,10 @@ const priceRangeSlider = panel({
     collapseButtonText,
   },
   collapsed: () => false,
-  cssClasses: {
-    header: 'panel-header',
-  },
 })(rangeSlider);
 
 const priceSlider = priceRangeSlider({
-  container: '#price-range',
+  container: '[data-widget="price-range"]',
   attribute: 'price',
   pips: false,
   tooltips: {

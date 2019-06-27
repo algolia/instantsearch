@@ -7,13 +7,10 @@ const brandRefinementList = panel({
     collapseButtonText,
   },
   collapsed: () => false,
-  cssClasses: {
-    header: 'panel-header',
-  },
 })(refinementList);
 
 const brands = brandRefinementList({
-  container: '#brands',
+  container: '[data-widget="brands"]',
   attribute: 'brand',
   searchable: true,
   searchablePlaceholder: 'Search for brands…',
@@ -27,9 +24,6 @@ const brands = brandRefinementList({
   </g>
 </svg>
     `,
-  },
-  cssClasses: {
-    searchableInput: 'refinement-list-searchbox-input',
   },
 });
 

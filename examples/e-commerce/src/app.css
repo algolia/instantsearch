@@ -46,6 +46,11 @@ h2 {
   margin: 0;
 }
 
+.header-logo svg {
+  height: 24px;
+  width: 92px;
+}
+
 .header-title {
   font-size: 38px;
   font-weight: 300;
@@ -66,12 +71,6 @@ h2 {
   max-width: 260px;
 }
 
-.container-body > div {
-  border-top: 1px solid #ebecf3;
-  padding-bottom: 2rem;
-  padding-top: 2rem;
-}
-
 .container-header {
   align-items: center;
   display: flex;
@@ -84,14 +83,14 @@ h2 {
 }
 
 .container-options {
-  justify-content: flex-end;
   border-bottom: 1px solid #ebecf3;
   display: flex;
+  justify-content: flex-end;
   margin-bottom: 30px;
   padding: 30px 0;
 }
 
-.container-options > div:not(:first-of-type) {
+.container-options div:not(:first-of-type) {
   margin-left: 48px;
 }
 
@@ -105,6 +104,11 @@ h2 {
 
 /* Styles the SFFV highlightings */
 
+em {
+  font-style: normal;
+}
+
+em,
 mark {
   background: rgba(226, 164, 0, 0.4);
 }
@@ -122,56 +126,65 @@ mark {
 
 /* Panel */
 
-.panel-header {
+.container-body .ais-Panel {
+  border-top: 1px solid #ebecf3;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
+
+.ais-Panel-header {
   font-family: Hind, sans-serif;
 }
 
 /* Search box */
 
-.searchbox {
+.header .ais-SearchBox {
   height: 64px;
   width: 740px;
 }
 
-.searchbox .searchbox-input {
+.header .ais-SearchBox .ais-SearchBox-input {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 48px 0 rgba(0, 0, 0, 0.2);
   font-family: Hind, sans-serif;
   height: 64px;
-  padding-left: 58px;
   /*
     The "Hind" font family is vertically off-balance.
-    Adding some padding top makes it more vertically aligned.
+    Adding 4px of padding top makes it more vertically aligned.
   */
-  padding-top: 4px;
+  padding: 4px 48px 0 64px;
 }
 
-.searchbox .searchbox-input::placeholder {
+.header .ais-SearchBox-submit {
+  padding: 0 1rem 0 2rem;
+  width: 64px;
+}
+
+.header .ais-SearchBox .ais-SearchBox-input::placeholder {
   color: rgba(33, 36, 61, 0.24);
   opacity: 1; /* Firefox */
 }
 
-.searchbox-input:-ms-input-placeholder {
+.ais-SearchBox-input:-ms-input-placeholder {
   color: rgba(33, 36, 61, 0.24);
 }
 
-.searchbox-input::-ms-input-placeholder {
+.ais-SearchBox-input::-ms-input-placeholder {
   color: rgba(33, 36, 61, 0.24);
 }
 
-.searchbox-submit {
+.ais-SearchBox-submit {
   color: #e2a400;
-  height: 16px;
 }
 
-.refinement-list-searchbox-input {
+.ais-RefinementList .ais-SearchBox-input {
   font-family: Hind, sans-serif;
   /*
     The "Hind" font family is vertically off-balance.
     Adding some padding top makes it more vertically aligned.
   */
-  padding-top: 1px;
+  padding-top: 2px;
 }
 
 /* Hits */
@@ -211,6 +224,7 @@ mark {
 
 .hit-image {
   height: auto;
+  max-height: 100%;
   max-width: 100%;
 }
 
@@ -227,9 +241,47 @@ mark {
   padding: 0 4px;
 }
 
+.hits-empty-state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 300px;
+}
+
+.hits-empty-state-title {
+  font-family: Hind;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.hits-empty-state-description {
+  color: rgba(35, 37, 51, 0.6);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.hits-empty-state .ais-ClearRefinements {
+  margin-top: 1rem;
+}
+
+.hits-empty-state .ais-ClearRefinements-button--disabled {
+  display: none;
+}
+
+.hits-empty-state .ais-ClearRefinements-button {
+  background: rgba(10, 8, 41, 0.04);
+  border-radius: 3px;
+  color: #21243d;
+  min-height: 48px;
+  padding: 16px 24px;
+}
+
 /* RangeSlider */
 
-.rheostat-tooltip::before {
+.ais-RangeSlider .rheostat-tooltip::before {
   color: #e2a400;
   content: '$';
   font-size: 0.6;
@@ -238,22 +290,24 @@ mark {
 
 /* ToggleRefinement */
 
-.toggle-refinement-label {
+.ais-ToggleRefinement-label {
   display: flex;
   flex-direction: row-reverse;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
-.toggle-refinement-checkbox {
+.ais-ToggleRefinement-checkbox {
   font: inherit;
+  margin-left: 1rem;
   margin-right: 0;
+  position: relative;
 }
 
-.toggle-refinement-checkbox:checked::before {
+.ais-ToggleRefinement-checkbox:checked::before {
   color: #e2a400;
 }
 
-.toggle-refinement-checkbox::before {
+.ais-ToggleRefinement-checkbox::before {
   align-items: center;
   color: rgba(33, 36, 61, 0.32);
   content: 'No';
@@ -264,12 +318,28 @@ mark {
   right: 38px;
 }
 
-.toggle-refinement-checkbox:checked::before {
+.ais-ToggleRefinement-checkbox:checked::before {
   content: 'Yes';
+}
+
+.ais-ToggleRefinement-count {
+  display: none;
 }
 
 /* RatingMenu */
 
-.rating-menu-item:not(.rating-menu-item--selected) {
+.ais-RatingMenu-item:not(.ais-RatingMenu-item--selected) {
   opacity: 0.5;
+}
+
+.ais-RatingMenu-starIcon {
+  margin-right: 0.5rem;
+}
+
+/* Hide all mobile-specific design on desktop */
+
+@media (min-width: 900px) {
+  [data-layout='mobile'] {
+    display: none;
+  }
 }

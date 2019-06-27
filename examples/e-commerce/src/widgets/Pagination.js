@@ -1,7 +1,16 @@
-import { pagination as paginationWidget } from 'instantsearch.js/es/widgets';
+import {
+  pagination as paginationWidget,
+  panel,
+} from 'instantsearch.js/es/widgets';
 
-const pagination = paginationWidget({
-  container: '#pagination',
+const paginationWithMultiplePages = panel({
+  hidden({ results }) {
+    return results.nbPages <= 1;
+  },
+})(paginationWidget);
+
+const pagination = paginationWithMultiplePages({
+  container: '[data-widget="pagination"]',
   scrollTo: '.container',
   padding: 2,
   showFirst: false,

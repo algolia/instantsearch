@@ -21,20 +21,16 @@
     />
     <link rel="stylesheet" href="./src/theme.css" />
     <link rel="stylesheet" href="./src/app.css" />
+    <link rel="stylesheet" href="./src/app.mobile.css" />
 
     <title>E-commerce demo | Algolia</title>
   </head>
 
   <body>
-    <header class="header">
+    <header class="header" id="header">
       <p class="header-logo">
         <a href="https://algolia.com" aria-label="Go to the Algolia website">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="93"
-            height="24"
-            viewBox="0 0 93 24"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 93 24">
             <path
               fill="#fff"
               fill-rule="nonzero"
@@ -48,44 +44,79 @@
         Stop looking for an item — find it.
       </p>
 
-      <div id="searchbox"></div>
+      <div data-widget="searchbox"></div>
     </header>
 
     <main class="container">
-      <section class="container-filters">
-        <div class="container-header">
-          <h2>Filters</h2>
+      <div class="container-wrapper">
+        <section class="container-filters">
+          <div class="container-header">
+            <h2>Filters</h2>
 
-          <div id="clear-refinements"></div>
-        </div>
-
-        <div class="container-body">
-          <div id="brands"></div>
-          <div id="categories"></div>
-
-          <div>
-            <div id="price-input"></div>
-            <div id="price-range"></div>
+            <div data-widget="clear-filters" data-layout="desktop"></div>
+            <div data-widget="results-number-mobile" data-layout="mobile"></div>
           </div>
 
-          <div id="shipping"></div>
-          <div id="ratings"></div>
-        </div>
-      </section>
+          <div class="container-body">
+            <div data-widget="categories"></div>
+            <div data-widget="brands"></div>
+            <div data-widget="price-range"></div>
+            <div data-widget="free-shipping"></div>
+            <div data-widget="ratings"></div>
+          </div>
+        </section>
+
+        <footer class="container-filters-footer" data-layout="mobile">
+          <div
+            class="container-filters-footer-button-wrapper"
+            data-widget="clear-filters-mobile"
+          ></div>
+
+          <div
+            class="container-filters-footer-button-wrapper"
+            data-widget="save-filters-mobile"
+            data-action="close-overlay"
+          ></div>
+        </footer>
+      </div>
 
       <section class="container-results">
         <header class="container-header container-options">
-          <div id="sort-by"></div>
-          <div id="hits-per-page"></div>
+          <div data-widget="sort-by"></div>
+          <div data-widget="hits-per-page"></div>
         </header>
 
-        <div id="hits"></div>
+        <div data-widget="hits"></div>
+        <div class="hits-empty-state">
+          <div
+            data-widget="clear-filters-empty-state"
+            class="hits-empty-results"
+          ></div>
+        </div>
 
         <footer class="container-footer">
-          <nav id="pagination"></nav>
+          <nav data-widget="pagination"></nav>
         </footer>
       </section>
     </main>
+
+    <aside data-layout="mobile">
+      <button class="filters-button" data-action="open-overlay">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 14">
+          <path
+            d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z"
+            stroke="#fff"
+            stroke-width="1.29"
+            fill="none"
+            fill-rule="evenodd"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+
+        Filters
+      </button>
+    </aside>
 
     <script src="./src/app.js"></script>
   </body>

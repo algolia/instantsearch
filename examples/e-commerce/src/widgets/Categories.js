@@ -7,13 +7,10 @@ const categoryHierarchicalMenu = panel({
     collapseButtonText,
   },
   collapsed: () => false,
-  cssClasses: {
-    header: 'panel-header',
-  },
 })(hierarchicalMenu);
 
 const categories = categoryHierarchicalMenu({
-  container: '#categories',
+  container: '[data-widget="categories"]',
   attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1'],
 });
 

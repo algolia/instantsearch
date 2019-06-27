@@ -1,7 +1,7 @@
 import { hitsPerPage as hitsPerPageWidget } from 'instantsearch.js/es/widgets';
 
 const hitsPerPage = hitsPerPageWidget({
-  container: '#hits-per-page',
+  container: '[data-widget="hits-per-page"]',
   items: [
     {
       label: '16 hits per page',
