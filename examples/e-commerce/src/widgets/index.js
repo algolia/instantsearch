@@ -1,6 +1,7 @@
 export { default as brands } from './Brands';
 export { default as categories } from './Categories';
 export { default as clearFilters } from './ClearFilters';
+export { default as clearFiltersEmptyState } from './ClearFiltersEmptyState';
 export { default as configuration } from './Configuration';
 export { default as freeShipping } from './FreeShipping';
 export { default as products } from './Products';
