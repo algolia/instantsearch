@@ -90,7 +90,7 @@ h2 {
   padding: 30px 0;
 }
 
-.container-options .container-option:not(:first-of-type) {
+.container-options .container-option:not(:first-child) {
   margin-left: 48px;
 }
 
