@@ -7,10 +7,10 @@
     >
       <ais-configure :attributesToSnippet="['description:10']" snippetEllipsisText="…"/>
 
-      <header class="header">
+      <header class="header" id="header">
         <p class="header-logo">
           <a href="https://algolia.com" aria-label="Go to the Algolia website">
-            <svg xmlns="http://www.w3.org/2000/svg" width="93" height="24" viewBox="0 0 93 24">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 93 24">
               <path
                 fill="#fff"
                 fill-rule="nonzero"
@@ -23,17 +23,15 @@
         <p class="header-title">Stop looking for an item — find it.</p>
 
         <ais-search-box
-          placeholder="Search for a product, brand, color, …"
-          :class-names="{
-            'ais-SearchBox': 'searchbox',
-            'ais-SearchBox-input': 'searchbox-input',
-            'ais-SearchBox-submit': 'searchbox-submit',
-          }"
+          placeholder="Product, brand, color, …"
         >
-          <div slot="reset-icon"></div>
-
-          <div slot="submit-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 18 18">
+          <template slot="submit-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 18 18"
+              width="16"
+              height="16"
+            >
               <g
                 fill="none"
                 fill-rule="evenodd"
@@ -47,79 +45,75 @@
                 <path d="M16 16l-3.87-3.87"></path>
               </g>
             </svg>
-          </div>
+          </template>
         </ais-search-box>
       </header>
 
       <main class="container">
-        <section class="container-filters">
-          <div class="container-header">
-            <h2>Filters</h2>
+        <div class="container-wrapper">
+          <section class="container-filters">
+            <div class="container-header">
+              <h2>Filters</h2>
 
-            <ais-clear-refinements>
-              <template slot="resetLabel">
-                <div class="clear-filters">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="11"
-                    height="11"
-                    viewBox="0 0 11 11"
-                  >
-                    <g fill="none" fill-rule="evenodd" opacity=".4">
-                      <path d="M0 0h11v11H0z"></path>
-                      <path
-                        fill="#000"
-                        fill-rule="nonzero"
-                        d="M8.26 2.75a3.896 3.896 0 1 0 1.102 3.262l.007-.056a.49.49 0 0 1 .485-.456c.253 0 .451.206.437.457 0 0 .012-.109-.006.061a4.813 4.813 0 1 1-1.348-3.887v-.987a.458.458 0 1 1 .917.002v2.062a.459.459 0 0 1-.459.459H7.334a.458.458 0 1 1-.002-.917h.928z"
-                      ></path>
-                    </g>
-                  </svg>
-                  Clear filters
-                </div>
-              </template>
-            </ais-clear-refinements>
-          </div>
+              <ais-clear-refinements data-layout="desktop">
+                <template slot="resetLabel">
+                  <div class="clear-filters">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 11 11"
+                    >
+                      <g fill="none" fill-rule="evenodd" opacity=".4">
+                        <path d="M0 0h11v11H0z"></path>
+                        <path
+                          fill="#000"
+                          fill-rule="nonzero"
+                          d="M8.26 2.75a3.896 3.896 0 1 0 1.102 3.262l.007-.056a.49.49 0 0 1 .485-.456c.253 0 .451.206.437.457 0 0 .012-.109-.006.061a4.813 4.813 0 1 1-1.348-3.887v-.987a.458.458 0 1 1 .917.002v2.062a.459.459 0 0 1-.459.459H7.334a.458.458 0 1 1-.002-.917h.928z"
+                        ></path>
+                      </g>
+                    </svg>
+                    Clear filters
+                  </div>
+                </template>
+              </ais-clear-refinements>
 
-          <div class="container-body">
-            <ais-panel
-              :class-names="{
-                'ais-Panel-header': 'panel-header',
-              }"
-            >
-              <template slot="header">Brands</template>
+              <ais-stats data-layout="mobile">
+                <template slot="default" slot-scope="{ nbHits }">
+                  <span class="ais-Stats-text">
+                    <strong>{{ formatNumber(nbHits) }}</strong> results
+                  </span>
+                </template>
+              </ais-stats>
+            </div>
 
-              <template slot="default">
-                <ais-refinement-list
-                  attribute="brand"
-                  searchable
-                  searchablePlaceholder="Search for brands…"
-                />
-              </template>
-            </ais-panel>
+            <div class="container-body">
+              <ais-panel>
+                <template slot="header">Category</template>
 
-            <ais-panel
-              :class-names="{
-                'ais-Panel-header': 'panel-header',
-              }"
-            >
-              <template slot="header">Category</template>
+                <template slot="default">
+                  <ais-hierarchical-menu
+                    :attributes="[
+                      'hierarchicalCategories.lvl0',
+                      'hierarchicalCategories.lvl1'
+                    ]"
+                  />
+                </template>
+              </ais-panel>
 
-              <template slot="default">
-                <ais-hierarchical-menu
-                  :attributes="[
-                    'hierarchicalCategories.lvl0',
-                    'hierarchicalCategories.lvl1'
-                  ]"
-                />
-              </template>
-            </ais-panel>
+              <ais-panel>
+                <template slot="header">Brands</template>
 
-            <div>
-              <ais-panel
-                :class-names="{
-                'ais-Panel-header': 'panel-header',
-              }"
-              >
+                <template slot="default">
+                  <ais-refinement-list
+                    attribute="brand"
+                    searchable
+                    searchablePlaceholder="Search for brands…"
+                  />
+                </template>
+              </ais-panel>
+
+              <ais-panel>
                 <template slot="header">Price</template>
 
                 <template slot="default">
@@ -134,87 +128,95 @@
                         :useKeyboard="true"
                         :enableCross="false"
                         tooltip="always"
-                        duration="0"
+                        :duration="0"
                         @change="refine({ min: $event[0], max: $event[1] })"
-                      />
+                      >
+                        <template slot="tooltip" slot-scope="{ value }">
+                          {{ formatNumber(value) }}
+                        </template>
+                      </vue-slider>
                     </div>
                   </ais-range-input>
                 </template>
               </ais-panel>
-            </div>
 
-            <ais-panel
-              :class-names="{
-                'ais-Panel-header': 'panel-header',
-              }"
-            >
-              <template slot="header">Free shipping</template>
+              <ais-panel>
+                <template slot="header">Free shipping</template>
 
-              <template slot="default">
-                <ais-toggle-refinement
-                  attribute="free_shipping"
-                  label="Display only items with free shipping"
-                  :class-names="{
-                    'ais-ToggleRefinement-label': 'toggle-refinement-label',
-                    'ais-ToggleRefinement-checkbox': 'toggle-refinement-checkbox',
-                    'ais-ToggleRefinement-count': 'toggle-refinement-count'
-                  }"
-                />
-              </template>
-            </ais-panel>
+                <template slot="default">
+                  <ais-toggle-refinement
+                    attribute="free_shipping"
+                    label="Display only items with free shipping"
+                  />
+                </template>
+              </ais-panel>
 
-            <ais-panel
-              :class-names="{
-                'ais-Panel-header': 'panel-header',
-              }"
-            >
-              <template slot="header">Rating</template>
+              <ais-panel>
+                <template slot="header">Ratings</template>
 
-              <template slot="default">
-                <ais-rating-menu attribute="rating">
-                  <ul class="ais-RatingMenu-list" slot-scope="{ items, refine, createURL }">
-                    <li
-                      :class="cx('ais-RatingMenu-item', {
-                        'ais-RatingMenu-item--selected': items.every(item => !item.isRefined) || item.isRefined
-                      })"
-                      v-for="item in items"
-                      :key="item.value"
-                    >
-                      <a
-                        class="ais-RatingMenu-link"
-                        :href="createURL(item.value)"
-                        @click.prevent="refine(item.value)"
+                <template slot="default">
+                  <ais-rating-menu attribute="rating">
+                    <ul class="ais-RatingMenu-list" slot-scope="{ items, refine, createURL }">
+                      <li
+                        :class="cx('ais-RatingMenu-item', {
+                          'ais-RatingMenu-item--selected': items.every(item => !item.isRefined) || item.isRefined
+                        })"
+                        v-for="item in items"
+                        :key="item.value"
                       >
-                        <span v-for="(full, index) in item.stars" :key="index">
-                          <svg
-                            :class="cx('ais-RatingMenu-starIcon', {
-                              'ais-RatingMenu-starIcon--full': full,
-                              'ais-RatingMenu-starIcon--empty': !full,
-                            })"
-                            aria-hidden="true"
-                            width="16"
-                            height="16"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"
-                            ></path>
-                          </svg>
-                        </span>
+                        <a
+                          class="ais-RatingMenu-link"
+                          :href="createURL(item.value)"
+                          @click.prevent="refine(item.value)"
+                        >
+                          <span v-for="(full, index) in item.stars" :key="index">
+                            <svg
+                              :class="cx('ais-RatingMenu-starIcon', {
+                                'ais-RatingMenu-starIcon--full': full,
+                                'ais-RatingMenu-starIcon--empty': !full,
+                              })"
+                              aria-hidden="true"
+                              viewBox="0 0 16 16"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"
+                              ></path>
+                            </svg>
+                          </span>
 
-                        <span class="ais-RatingMenu-count">{{ item.count }}</span>
-                      </a>
-                    </li>
-                  </ul>
-                </ais-rating-menu>
+                          <span class="ais-RatingMenu-count">{{ item.count }}</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </ais-rating-menu>
+                </template>
+              </ais-panel>
+            </div>
+          </section>
+
+          <footer class="container-filters-footer" data-layout="mobile">
+            <clear-refinements
+              class="container-filters-footer-button-wrapper"
+              @click="closeFilters"
+            />
+
+            <ais-stats
+              class="container-filters-footer-button-wrapper"
+            >
+              <template slot="default" slot-scope="{ nbHits }">
+                <button class="button button-primary" @click="closeFilters">
+                  See {{ formatNumber(nbHits) }} results
+                </button>
               </template>
-            </ais-panel>
-          </div>
-        </section>
+            </ais-stats>
+          </footer>
+        </div>
 
         <section class="container-results">
           <header class="container-header container-options">
             <ais-sort-by
+              class="container-option"
               :items="[
                 { value: 'instant_search', label: 'Featured' },
                 { value: 'instant_search_price_asc', label: 'Price asc.' },
@@ -223,6 +225,7 @@
             />
 
             <ais-hits-per-page
+              class="container-option"
               :items="[
                 {
                   label: '16 hits per page',
@@ -248,35 +251,36 @@
                   <img :src="item.image" :alt="item.name" class="hit-image">
                 </header>
 
-                <p class="hit-category">{{ item.categories[0] }}</p>
-                <h1>
-                  <ais-highlight attribute="name" :hit="item"/>
-                </h1>
-                <p class="hit-description">
-                  <ais-snippet attribute="description" :hit="item"/>
-                </p>
-
-                <footer>
-                  <p>
-                    <span class="hit-em">$&nbsp;</span>
-                    <strong>{{ item.price }}&nbsp;</strong>
-                    <span class="hit-em hit-rating">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="8"
-                        height="8"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fill="#e2a400"
-                          fill-rule="evenodd"
-                          d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"
-                        ></path>
-                      </svg>
-                      {{ item.rating }}
-                    </span>
+                <main class="hit-info-container">
+                  <p class="hit-category">{{ item.categories[0] }}</p>
+                  <h1>
+                    <ais-highlight attribute="name" :hit="item"/>
+                  </h1>
+                  <p class="hit-description">
+                    <ais-snippet attribute="description" :hit="item"/>
                   </p>
-                </footer>
+                  <footer>
+                    <p>
+                      <span class="hit-em">$&nbsp;</span>
+                      <strong>{{ formatNumber(item.price) }}</strong>
+                      <span class="hit-em hit-rating">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 16 16"
+                          width="8"
+                          height="8"
+                        >
+                          <path
+                            fill="#e2a400"
+                            fill-rule="evenodd"
+                            d="M10.472 5.008L16 5.816l-4 3.896.944 5.504L8 12.616l-4.944 2.6L4 9.712 0 5.816l5.528-.808L8 0z"
+                          ></path>
+                        </svg>
+                        {{ item.rating }}
+                      </span>
+                    </p>
+                  </footer>
+                </main>
               </article>
             </div>
           </ais-hits>
@@ -303,9 +307,9 @@
                     <span class="ais-Pagination-link">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 10 10"
                         width="10"
                         height="10"
-                        viewBox="0 0 10 10"
                       >
                         <g
                           fill="none"
@@ -333,9 +337,9 @@
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 10 10"
                         width="10"
                         height="10"
-                        viewBox="0 0 10 10"
                       >
                         <g
                           fill="none"
@@ -375,9 +379,9 @@
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 10 10"
                         width="10"
                         height="10"
-                        viewBox="0 0 10 10"
                       >
                         <g
                           fill="none"
@@ -400,9 +404,9 @@
                     <span class="ais-Pagination-link">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 10 10"
                         width="10"
                         height="10"
-                        viewBox="0 0 10 10"
                       >
                         <g
                           fill="none"
@@ -423,6 +427,24 @@
           </footer>
         </section>
       </main>
+
+      <aside data-layout="mobile">
+        <button class="filters-button" @click="openFilters">
+          <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 14">
+            <path
+              d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z"
+              stroke="#fff"
+              stroke-width="1.29"
+              fill="none"
+              fill-rule="evenodd"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+
+          Filters
+        </button>
+      </aside>
     </ais-instant-search>
   </div>
 </template>
@@ -433,13 +455,38 @@ import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
 import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
 import VueSlider from 'vue-slider-component';
 import cx from 'classnames';
+import ClearRefinements from './widgets/ClearRefinements.vue';
+import { formatNumber } from './utils';
 
 import './Theme.css';
 import './App.css';
+import './App.mobile.css';
+import './widgets/PriceSlider.css';
 
 export default {
   components: {
     VueSlider,
+    ClearRefinements
+  },
+  created() {
+    this.onKeyUp = event => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+      this.closeFilters();
+    }
+
+    this.onClick = event => {
+      if (event.target !== this.header) {
+        return;
+      }
+
+      this.closeFilters();
+    }
+  },
+  mounted() {
+    this.resultsContainer = document.querySelector('.container-results');
+    this.header = document.querySelector('#header');
   },
   data() {
     return {
@@ -455,11 +502,24 @@ export default {
     };
   },
   methods: {
+    formatNumber,
     toValue(value, range) {
       return [
         value.min !== null ? value.min : range.min,
         value.max !== null ? value.max : range.max,
       ];
+    },
+    openFilters() {
+      document.body.classList.add('filtering');
+      window.scrollTo(0, 0);
+      window.addEventListener('keyup', this.onKeyUp);
+      window.addEventListener('click', this.onClick);
+    },
+    closeFilters() {
+      document.body.classList.remove('filtering');
+      this.resultsContainer.scrollIntoView();
+      window.removeEventListener('keyup', this.onKeyUp);
+      window.removeEventListener('click', this.onClick);
     },
   },
 };
