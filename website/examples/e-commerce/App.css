@@ -46,6 +46,11 @@ h2 {
   margin: 0;
 }
 
+.header-logo svg {
+  height: 24px;
+  width: 92px;
+}
+
 .header-title {
   font-size: 38px;
   font-weight: 300;
@@ -64,12 +69,6 @@ h2 {
   flex: 1;
   margin-right: 60px;
   max-width: 260px;
-}
-
-.container-body > div {
-  border-top: 1px solid #ebecf3;
-  padding-bottom: 2rem;
-  padding-top: 2rem;
 }
 
 .container-header {
@@ -91,7 +90,7 @@ h2 {
   padding: 30px 0;
 }
 
-.container-options > div:not(:first-of-type) {
+.container-options .container-option:not(:first-child) {
   margin-left: 48px;
 }
 
@@ -105,10 +104,13 @@ h2 {
 
 /* Styles the SFFV highlightings */
 
+em {
+  font-style: normal;
+}
+
 em,
 mark {
   background: rgba(226, 164, 0, 0.4);
-  font-style: normal;
 }
 
 /* Clear refinements container */
@@ -123,6 +125,12 @@ mark {
 }
 
 /* Panel */
+
+.container-body .ais-Panel {
+  border-top: 1px solid #ebecf3;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
 
 .ais-Panel-header {
   font-family: Hind, sans-serif;
@@ -141,12 +149,16 @@ mark {
   box-shadow: 0 4px 48px 0 rgba(0, 0, 0, 0.2);
   font-family: Hind, sans-serif;
   height: 64px;
-  padding-left: 58px;
   /*
     The "Hind" font family is vertically off-balance.
-    Adding some padding top makes it more vertically aligned.
+    Adding 4px of padding top makes it more vertically aligned.
   */
-  padding-top: 4px;
+  padding: 4px 48px 0 64px;
+}
+
+.header .ais-SearchBox-submit {
+  padding: 0 1rem 0 2rem;
+  width: 64px;
 }
 
 .header .ais-SearchBox .ais-SearchBox-input::placeholder {
@@ -164,16 +176,15 @@ mark {
 
 .ais-SearchBox-submit {
   color: #e2a400;
-  height: 16px;
 }
 
-.ais-RefinementList-searchBox .ais-SearchBox-input {
+.ais-RefinementList .ais-SearchBox-input {
   font-family: Hind, sans-serif;
   /*
     The "Hind" font family is vertically off-balance.
     Adding some padding top makes it more vertically aligned.
   */
-  padding-top: 1px;
+  padding-top: 2px;
 }
 
 /* Hits */
@@ -213,6 +224,7 @@ mark {
 
 .hit-image {
   height: auto;
+  max-height: 100%;
   max-width: 100%;
 }
 
@@ -229,18 +241,87 @@ mark {
   padding: 0 4px;
 }
 
+.hits-empty-state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 300px;
+}
+
+.hits-empty-state-title {
+  font-family: Hind;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.hits-empty-state-description {
+  color: rgba(35, 37, 51, 0.6);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.hits-empty-state .ais-ClearRefinements {
+  margin-top: 1rem;
+}
+
+.hits-empty-state .ais-ClearRefinements-button--disabled {
+  display: none;
+}
+
+.hits-empty-state .ais-ClearRefinements-button {
+  background: rgba(10, 8, 41, 0.04);
+  border-radius: 3px;
+  color: #21243d;
+  min-height: 48px;
+  padding: 16px 24px;
+}
+
+.hits-empty-state-title {
+  font-family: Hind;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.hits-empty-state-description {
+  color: rgba(35, 37, 51, 0.6);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.hits-empty-state .ais-ClearRefinements {
+  margin-top: 1rem;
+}
+
+.hits-empty-state .ais-ClearRefinements-button--disabled {
+  display: none;
+}
+
+.hits-empty-state .ais-ClearRefinements-button {
+  background: rgba(10, 8, 41, 0.04);
+  border-radius: 3px;
+  color: #21243d;
+  min-height: 48px;
+  padding: 16px 24px;
+}
+
 /* ToggleRefinement */
 
 .ais-ToggleRefinement-label {
   display: flex;
   flex-direction: row-reverse;
-  justify-content: flex-end;
-  position: relative;
+  justify-content: space-between;
 }
 
 .ais-ToggleRefinement-checkbox {
   font: inherit;
+  margin-left: 1rem;
   margin-right: 0;
+  position: relative;
 }
 
 .ais-ToggleRefinement-checkbox:checked::before {
@@ -262,8 +343,24 @@ mark {
   content: 'Yes';
 }
 
+.ais-ToggleRefinement-count {
+  display: none;
+}
+
 /* RatingMenu */
 
 .ais-RatingMenu-item:not(.ais-RatingMenu-item--selected) {
   opacity: 0.5;
+}
+
+.ais-RatingMenu-starIcon {
+  margin-right: 0.5rem;
+}
+
+/* Hide all mobile-specific design on desktop */
+
+@media (min-width: 900px) {
+  [data-layout='mobile'] {
+    display: none;
+  }
 }
