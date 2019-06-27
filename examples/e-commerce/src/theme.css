@@ -227,6 +227,11 @@ a[class^='ais-'] {
   right: 0;
 }
 
+.ais-SearchBox-resetIcon {
+  width: 10px;
+  height: 10px;
+}
+
 /* SFFV search box */
 
 .ais-RefinementList .ais-SearchBox-input {
