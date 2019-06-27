@@ -104,6 +104,11 @@ h2 {
 
 /* Styles the SFFV highlightings */
 
+em {
+  font-style: normal;
+}
+
+em,
 mark {
   background: rgba(226, 164, 0, 0.4);
 }
