@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/html';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('Menu', module)
   .add(
@@ -75,6 +75,17 @@ storiesOf('Menu', module)
                   ⬇️
                 {{/isShowingMore}}`,
           },
+        })
+      );
+    })
+  )
+  .add(
+    'with add/remove',
+    withHits(({ search, container, instantsearch }) => {
+      withLifecycle(search, container, node =>
+        instantsearch.widgets.menu({
+          container: node,
+          attribute: 'categories',
         })
       );
     })
