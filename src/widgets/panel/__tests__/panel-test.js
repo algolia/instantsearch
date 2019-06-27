@@ -182,4 +182,19 @@ describe('Lifecycle', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.dispose).toHaveBeenCalledTimes(1);
   });
+
+  test('returns the `state` from the widget dispose function', () => {
+    const widget = {
+      dispose: jest.fn(() => 'nextState'),
+    };
+    const widgetFactory = () => widget;
+
+    const widgetWithPanel = panel()(widgetFactory)({
+      container: document.createElement('div'),
+    });
+
+    const nextState = widgetWithPanel.dispose({});
+
+    expect(nextState).toBe('nextState');
+  });
 });
