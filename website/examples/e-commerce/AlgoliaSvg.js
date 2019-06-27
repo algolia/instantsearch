@@ -2,12 +2,7 @@ import React from 'react';
 
 const AlgoliaSvg = () => (
   <a href="https://algolia.com" aria-label="Go to the Algolia website">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="93"
-      height="24"
-      viewBox="0 0 93 24"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 93 24">
       <path
         fill="#fff"
         fillRule="nonzero"

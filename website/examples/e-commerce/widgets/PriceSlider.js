@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connectRange } from 'react-instantsearch-dom';
 import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider';
+import { formatNumber } from '../utils';
+import './PriceSlider.css';
 
 function Handle({
   domain: [min, max],
@@ -26,22 +28,13 @@ function Handle({
       />
       <div
         role="slider"
+        className="slider-handle"
         aria-valuemin={min}
         aria-valuemax={max}
         aria-valuenow={value}
         style={{
           left: `${percent}%`,
-          position: 'absolute',
-          transform: 'translate(-50%, -50%)',
-          backgroundImage: 'linear-gradient(to top, #f5f5fa, #fff)',
-          borderRadius: '50%',
           cursor: disabled ? 'not-allowed' : 'grab',
-          height: 16,
-          outline: 'none',
-          width: 16,
-          boxShadow:
-            '0 4px 11px 0 rgba(37, 44, 97, 0.15), 0 2px 3px 0 rgba(93, 100, 148, 0.2)',
-          zIndex: 2,
         }}
         {...getHandleProps(id)}
       />
@@ -78,20 +71,11 @@ const PriceSlider = ({ min, max, refine, currentRefinement, canRefine }) => {
       onChange={onChange}
       onUpdate={setTicksValues}
       rootStyle={{ position: 'relative', marginTop: '1.5rem' }}
+      className="ais-RangeSlider"
     >
       <Rail>
         {({ getRailProps }) => (
-          <div
-            style={{
-              position: 'absolute',
-              cursor: 'pointer',
-              height: 3,
-              borderRadius: 3,
-              width: '100%',
-              backgroundColor: 'rgba(65, 66, 71, 0.08)',
-            }}
-            {...getRailProps()}
-          />
+          <div className="slider-rail" {...getRailProps()} />
         )}
       </Rail>
 
@@ -101,12 +85,8 @@ const PriceSlider = ({ min, max, refine, currentRefinement, canRefine }) => {
             {tracks.map(({ id, source, target }) => (
               <div
                 key={id}
+                className="slider-track"
                 style={{
-                  position: 'absolute',
-                  cursor: 'pointer',
-                  height: 3,
-                  borderRadius: 3,
-                  backgroundColor: '#e2a400',
                   left: `${source.percent}%`,
                   width: `${target.percent - source.percent}%`,
                 }}
@@ -138,23 +118,15 @@ const PriceSlider = ({ min, max, refine, currentRefinement, canRefine }) => {
             {ticks.map(({ id, count, value, percent }) => (
               <div
                 key={id}
+                className="slider-tick"
                 style={{
-                  position: 'absolute',
-                  display: 'flex',
-                  cursor: 'grab',
-                  userSelect: 'none',
-                  top: -28,
-                  fontWeight: 'bold',
-                  fontSize: '0.75rem',
-                  textAlign: 'center',
-                  transform: 'translateX(-50%)',
                   marginLeft: `${-(100 / count) / 2}%`,
                   width: `${100 / count}%`,
                   left: `${percent}%`,
                 }}
               >
                 <span style={{ color: '#e2a400', marginRight: 4 }}>$</span>
-                {value}
+                {formatNumber(value)}
               </div>
             ))}
           </div>
