@@ -59,7 +59,7 @@
     padding: 1rem;
     position: fixed;
     width: 100%;
-    z-index: 1;
+    z-index: 5; /* avoid collision with slider UI */
   }
 
   .container-filters-footer-button-wrapper {
@@ -202,14 +202,6 @@
     background-color: rgba(65, 66, 71, 0.08);
     border-radius: 50%;
     padding: 8px;
-  }
-
-  /* RangeSlider */
-
-  .ais-RangeSlider .rheostat-handle {
-    height: 1.5rem;
-    top: -12px;
-    width: 1.5rem;
   }
 
   /* ToggleRefinement */

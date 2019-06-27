@@ -90,7 +90,7 @@ h2 {
   padding: 30px 0;
 }
 
-.container-options div:not(:first-of-type) {
+.container-options .container-option:not(:first-child) {
   margin-left: 48px;
 }
 
@@ -277,15 +277,6 @@ mark {
   color: #21243d;
   min-height: 48px;
   padding: 16px 24px;
-}
-
-/* RangeSlider */
-
-.ais-RangeSlider .rheostat-tooltip::before {
-  color: #e2a400;
-  content: '$';
-  font-size: 0.6;
-  margin-right: 4px;
 }
 
 /* ToggleRefinement */
