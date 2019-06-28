@@ -5,7 +5,11 @@
       index-name="instant_search"
       :routing="routing"
     >
-      <ais-configure :attributesToSnippet="['description:10']" snippetEllipsisText="…"/>
+      <ais-configure
+        :attributesToSnippet="['description:10']"
+        snippetEllipsisText="…"
+        removeWordsIfNoResults="allOptional"
+      />
 
       <header class="header" id="header">
         <p class="header-logo">
@@ -285,6 +289,8 @@
             </div>
           </ais-hits>
 
+          <no-results />
+
           <footer class="container-footer">
             <ais-pagination :padding="2">
               <div
@@ -456,6 +462,7 @@ import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
 import VueSlider from 'vue-slider-component';
 import cx from 'classnames';
 import ClearRefinements from './widgets/ClearRefinements.vue';
+import NoResults from './widgets/NoResults.vue';
 import { formatNumber } from './utils';
 
 import './Theme.css';
@@ -466,7 +473,8 @@ import './widgets/PriceSlider.css';
 export default {
   components: {
     VueSlider,
-    ClearRefinements
+    ClearRefinements,
+    NoResults
   },
   created() {
     this.onKeyUp = event => {
