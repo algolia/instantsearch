@@ -213,6 +213,11 @@ mark {
   margin-top: 2px;
 }
 
+.hit-info-container {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 .hit-image-container {
   align-items: center;
   display: flex;
@@ -247,36 +252,6 @@ mark {
   flex-direction: column;
   margin: auto;
   max-width: 300px;
-}
-
-.hits-empty-state-title {
-  font-family: Hind;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0;
-  text-align: center;
-}
-
-.hits-empty-state-description {
-  color: rgba(35, 37, 51, 0.6);
-  font-size: 0.875rem;
-  text-align: center;
-}
-
-.hits-empty-state .ais-ClearRefinements {
-  margin-top: 1rem;
-}
-
-.hits-empty-state .ais-ClearRefinements-button--disabled {
-  display: none;
-}
-
-.hits-empty-state .ais-ClearRefinements-button {
-  background: rgba(10, 8, 41, 0.04);
-  border-radius: 3px;
-  color: #21243d;
-  min-height: 48px;
-  padding: 16px 24px;
 }
 
 .hits-empty-state-title {
