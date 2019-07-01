@@ -14,9 +14,9 @@
     "vue-instantsearch": "{{libraryVersion}}"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "3.8.0",
-    "@vue/cli-plugin-eslint": "3.8.0",
-    "@vue/cli-service": "3.8.4",
+    "@vue/cli-plugin-babel": "3.6.0",
+    "@vue/cli-plugin-eslint": "3.6.0",
+    "@vue/cli-service": "3.6.0",
     "babel-eslint": "10.0.2",
     "eslint": "5.7.0",
     "eslint-config-algolia": "13.2.3",
