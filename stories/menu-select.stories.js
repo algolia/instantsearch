@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/html';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('MenuSelect', module)
   .add(
@@ -39,6 +39,17 @@ storiesOf('MenuSelect', module)
           templates: {
             defaultOption: 'Default choice',
           },
+        })
+      );
+    })
+  )
+  .add(
+    'with add/remove',
+    withHits(({ search, container, instantsearch }) => {
+      withLifecycle(search, container, node =>
+        instantsearch.widgets.menuSelect({
+          container: node,
+          attribute: 'categories',
         })
       );
     })

@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/html';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('SortBy', module)
   .add(
@@ -33,6 +33,21 @@ storiesOf('SortBy', module)
               ...item,
               label: item.label.toUpperCase(),
             })),
+        })
+      );
+    })
+  )
+  .add(
+    'with add/remove',
+    withHits(({ search, container, instantsearch }) => {
+      withLifecycle(search, container, node =>
+        instantsearch.widgets.sortBy({
+          container: node,
+          items: [
+            { value: 'instant_search', label: 'Most relevant' },
+            { value: 'instant_search_price_asc', label: 'Lowest price' },
+            { value: 'instant_search_price_desc', label: 'Highest price' },
+          ],
         })
       );
     })

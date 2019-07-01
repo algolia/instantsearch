@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/html';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('Breadcrumb', module)
   .add(
@@ -202,6 +202,32 @@ storiesOf('Breadcrumb', module)
                 ...item,
                 label: `${item.label} (transformed)`,
               })),
+          })
+        );
+      },
+      {
+        searchParameters: {
+          hierarchicalFacetsRefinements: {
+            'hierarchicalCategories.lvl0': [
+              'Cameras & Camcorders > Digital Cameras',
+            ],
+          },
+        },
+      }
+    )
+  )
+  .add(
+    'with add/remove',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        withLifecycle(search, container, node =>
+          instantsearch.widgets.breadcrumb({
+            container: node,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
           })
         );
       },
