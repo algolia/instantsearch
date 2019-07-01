@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import connectMenu from '../../connectors/menu/connectMenu';
 import MenuSelect from '../../components/MenuSelect/MenuSelect';
@@ -112,7 +112,9 @@ export default function menuSelect({
     templates,
   });
 
-  const makeWidget = connectMenu(specializedRenderer);
+  const makeWidget = connectMenu(specializedRenderer, () =>
+    unmountComponentAtNode(containerNode)
+  );
 
   return makeWidget({ attribute, limit, sortBy, transformItems });
 }
