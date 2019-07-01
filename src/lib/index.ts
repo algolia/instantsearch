@@ -126,7 +126,7 @@ const index = (props: IndexProps): Index => {
         widget => widgets.indexOf(widget) === -1
       );
 
-      if (localInstantSearchInstance && widgets.length) {
+      if (localInstantSearchInstance && Boolean(widgets.length)) {
         const nextState = widgets.reduce((state, widget) => {
           // the `dispose` method exists at this point we already assert it
           const next = widget.dispose!({ helper: helper!, state });
