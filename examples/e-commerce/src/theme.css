@@ -63,6 +63,12 @@ a[class^='ais-'] {
   background: rgba(226, 164, 0, 0.4);
 }
 
+.ais-Highlight,
+.ais-Snippet {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 /* Hits */
 
 .ais-Hits-list {
