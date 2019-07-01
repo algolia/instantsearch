@@ -155,6 +155,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
     const getLimit = isShowingMore => (isShowingMore ? showMoreLimit : limit);
 
     let lastResultsFromMainSearch = [];
+    let hasExhaustiveItems = true;
 
     const render = ({
       items,
@@ -166,7 +167,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
       isFirstSearch,
       isShowingMore,
       toggleShowMore,
-      hasExhaustiveItems,
       instantSearchInstance,
     }) => {
       // Compute a specific createURL method able to link to any facet value state change
@@ -234,7 +234,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
           isFromSearch: false,
           isFirstSearch: false,
           instantSearchInstance,
-          hasExhaustiveItems: false, // SFFV should not be used with show more
           toggleShowMore, // and yet it will be
           isShowingMore, // so we need to restore in the state of show more as well
         });
@@ -272,7 +271,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
               isFromSearch: true,
               isFirstSearch: false,
               instantSearchInstance,
-              hasExhaustiveItems: false, // SFFV should not be used with show more
               isShowingMore,
             });
           });
@@ -338,7 +336,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
-          hasExhaustiveItems: true,
         });
       },
 
@@ -365,7 +362,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         // widget has requested more values (maxValuesPerFacet > getLimit()).
         // Because this is used for making the search of facets unable or not, it is important
         // to be conservative here.
-        const hasExhaustiveItems =
+        hasExhaustiveItems =
           maxValuesPerFacetConfig > currentLimit
             ? facetValues.length <= currentLimit
             : facetValues.length < currentLimit;
@@ -385,7 +382,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
-          hasExhaustiveItems,
         });
       },
 
