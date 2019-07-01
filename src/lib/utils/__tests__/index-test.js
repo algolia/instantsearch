@@ -699,6 +699,37 @@ describe('utils.getRefinements', () => {
     );
   });
 
+  it('should retrieve hierarchicalFacetsRefinements on multiple levels without any data', () => {
+    helper.toggleRefinement(
+      'hierarchicalFacet2',
+      'hierarchicalFacet2lvl0val1 > lvl1val1'
+    );
+
+    results = {
+      hierarchicalFacets: [
+        {
+          count: null,
+          data: null,
+          isRefined: true,
+          name: 'hierarchicalFacet2',
+          path: null,
+        },
+      ],
+    };
+
+    const expected = {
+      type: 'hierarchical',
+      attributeName: 'hierarchicalFacet2',
+      name: 'hierarchicalFacet2lvl0val1 > lvl1val1',
+      count: null,
+      exhaustive: null,
+    };
+
+    expect(utils.getRefinements(results, helper.state)).toContainEqual(
+      expected
+    );
+  });
+
   it('should have a count for a hierarchicalFacetRefinement if available', () => {
     helper.toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1val1');
     results = {

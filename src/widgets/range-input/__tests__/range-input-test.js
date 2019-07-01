@@ -6,22 +6,12 @@ jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
+  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
 
 describe('rangeInput', () => {
-  describe('Usage', () => {
-    it('throws without container', () => {
-      expect(() => rangeInput({ container: undefined }))
-        .toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option is required.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/"
-`);
-    });
-  });
-
   const attribute = 'aNumAttr';
   const createContainer = () => document.createElement('div');
   const instantSearchInstance = {};
@@ -38,6 +28,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
   afterEach(() => {
     ReactDOM.render.mockReset();
+    ReactDOM.unmountComponentAtNode.mockReset();
+  });
+
+  describe('Usage', () => {
+    it('throws without container', () => {
+      expect(() => rangeInput({ container: undefined }))
+        .toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/"
+`);
+    });
+  });
+
+  describe('Lifecycle', () => {
+    describe('dispose', () => {
+      it('unmounts the component', () => {
+        const container = document.createElement('div');
+        const helper = createHelper();
+        const widget = rangeInput({
+          attribute: 'price',
+          container,
+        });
+
+        expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledTimes(0);
+
+        widget.dispose({
+          state: helper.state,
+          helper,
+        });
+
+        expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledWith(container);
+      });
+    });
   });
 
   it('expect to render with results', () => {
