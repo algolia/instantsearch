@@ -213,6 +213,11 @@ mark {
   margin-top: 2px;
 }
 
+.hit-info-container {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 .hit-image-container {
   align-items: center;
   display: flex;
