@@ -7,7 +7,7 @@
     "classnames": "2.2.6",
     "qs": "6.7.0",
     "react": "16.8.6",
-    "react-compound-slider": "2.0.0",
+    "react-compound-slider": "2.1.0",
     "react-dom": "16.8.6",
     "react-instantsearch-dom": "5.7.0"
   }

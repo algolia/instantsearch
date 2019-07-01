@@ -1719,7 +1719,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.4.4":
+"@babel/runtime@^7.4.5":
   version "7.4.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.5.tgz#582bb531f5f9dc67d2fcb682979894f75e253f12"
   integrity sha512-TuI4qpWZP6lGOGIuGWtp9sPluqYICmbk8T/1vpSysqJxRPkudh/ofFWyqdcMsDf2s7KvDL4/YHgKyvcS3g9CJQ==
@@ -14376,12 +14376,12 @@ react-color@^2.17.0:
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
 
-react-compound-slider@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-2.0.0.tgz#ea0e5d26b61ced4856cfef3e5e73f2787f5e27ed"
-  integrity sha512-VA3128tThUm+DJticmVZTQPB8U1weiTXyyPb+cnpULkw2sfy8Cap5Hi/28mDxhyo/ZvfG6DEPGNiyB7iLzTGGA==
+react-compound-slider@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-2.1.0.tgz#10196fe13d2432b651947738f02d5e9dcf5fe96a"
+  integrity sha512-OcVsAuPRX6gdz+5zyaJdZpI7gG2NV4hlsz7J61grL/iLYunqF1C9bRqhLVl2mfa5quu7TkA3f5qdGjcUs9wiCA==
   dependencies:
-    "@babel/runtime" "^7.4.4"
+    "@babel/runtime" "^7.4.5"
     d3-array "^1.2.4"
     prop-types "^15.7.2"
     warning "^3.0.0"
