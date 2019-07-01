@@ -66,7 +66,7 @@
     "babel-plugin-dynamic-import-node": "2.3.0",
     "babel-plugin-lodash": "3.3.4",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
-    "bundlesize": "0.17.2",
+    "bundlesize": "0.18.0",
     "conventional-changelog-cli": "2.0.21",
     "copy-webpack-plugin": "5.0.3",
     "css-loader": "3.0.0",
