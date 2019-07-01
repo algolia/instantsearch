@@ -1,0 +1,385 @@
+* {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #fcfefe;
+  font-family: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+  -webkit-font-smoothing: antialiased;
+}
+
+em {
+  font-style: normal;
+}
+
+em,
+mark {
+  background: #e9ddf0;
+}
+
+strong {
+  color: #6634d1;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+/* Header */
+
+.header {
+  background-image: linear-gradient(279deg, #764ba2, #667eea);
+  box-shadow: 0 9px 50px 3px rgba(0, 0, 0, 0.07);
+  height: 215px;
+}
+
+.header-logo {
+  height: 20px;
+  position: absolute;
+  right: 1rem;
+  width: 85px;
+}
+
+.header-content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+/* Containers */
+
+.container {
+  margin: auto;
+  max-width: 1200px;
+  padding: 2.5rem;
+}
+
+.searchbox-container {
+  align-items: center;
+  border-bottom: 2px solid rgba(233, 221, 240, 0.2);
+  color: #fff;
+  display: flex;
+  margin: 2rem auto;
+  max-width: 700px;
+  padding: 0 0.5rem;
+  width: 100%;
+}
+
+.searchbox-container-input {
+  width: 100%;
+}
+
+.searchbox-container svg {
+  height: 17px;
+  margin-right: 1rem;
+  min-width: 17px;
+}
+
+.container-filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.container-filters-left {
+  align-items: center;
+  display: flex;
+}
+
+.container-filters-left .container-filters-filter:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.container-filters-title {
+  align-items: center;
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: bold;
+  margin-right: 2rem;
+  text-transform: uppercase;
+}
+
+.container-filters-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.container-filters-button svg {
+  height: 13px;
+  margin-right: 0.25rem;
+  width: 16px;
+}
+
+.container-filters-panel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  transform-origin: top;
+  transition: transform 300ms ease;
+}
+
+.container-filters-panel--hidden {
+  margin-bottom: 0;
+  max-height: 0;
+  transform: scaleY(0);
+}
+
+.container-filters-panel-column:not(:last-child) {
+  flex: 2;
+  margin-right: 4rem;
+}
+
+.container-filters-panel-column:last-child {
+  flex: 1;
+}
+
+/* Back to top */
+
+.back-to-top {
+  bottom: 2.5rem;
+  position: fixed;
+  right: 2.5rem;
+}
+
+.back-to-top {
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+/* SearchBox */
+
+.header .ais-SearchBox-input {
+  border: none;
+  color: #fff;
+  font-size: 1.4375rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.header .ais-SearchBox-input::placeholder {
+  color: rgba(255, 255, 255, 0.66);
+  opacity: 1; /* Firefox */
+}
+
+.header .ais-SearchBox-input:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.header .ais-SearchBox-input::-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+/* Hits */
+
+.card {
+  background-color: #fff;
+  box-shadow: 0 3px 50px 7px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* min-height: 300px; */
+}
+
+.card-image,
+.card-image img {
+  max-height: 182px;
+}
+
+.card-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.card-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.card-subject {
+  background-color: #e9ddf0;
+  border-radius: 4px;
+  color: #6634d1;
+  font-size: 0.75rem;
+  font-weight: bold;
+  height: 21px;
+  padding: 0.3rem 0.6rem;
+}
+
+.card-title {
+  font-size: 1.375rem;
+  font-weight: bold;
+  line-height: 1.64;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.card-title mark {
+  font-size: inherit;
+}
+
+.card-description {
+  color: #6e7070;
+  flex: 2;
+  font-size: 0.875rem;
+  line-height: 1.64;
+  margin: 0 0 1rem 0;
+}
+
+.card-author {
+  font-weight: bold;
+}
+
+.infinite-hits-item--highlighted {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+
+.infinite-hits-item--highlighted .card {
+  flex-direction: row;
+  height: auto;
+}
+
+.infinite-hits-item--highlighted .card-image {
+  flex: 1;
+}
+
+.infinite-hits-item--highlighted .card-image,
+.infinite-hits-item--highlighted .card-image img {
+  max-height: 300px;
+}
+
+.infinite-hits-end {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 5rem;
+  text-align: center;
+}
+
+.infinite-hits-end::after {
+  background: linear-gradient(to left, #764ba2, #667eea);
+  border-radius: 5px;
+  content: '';
+  display: block;
+  height: 5px;
+  margin: auto;
+  margin-top: 1rem;
+  width: 150px;
+}
+
+/* SearchBox */
+
+.ais-SearchBox-submit {
+  color: #fff;
+}
+
+/* Topics */
+
+.header .ais-RefinementList-list,
+.header .ais-CurrentRefinements-item {
+  display: flex;
+}
+
+.header .ais-RefinementList-item:not(:last-child),
+.header .ais-CurrentRefinements-category {
+  margin-right: 0.5rem;
+}
+
+.header .ais-RefinementList-item--selected {
+  display: none;
+}
+
+.header .ais-RefinementList-checkbox,
+.header .ais-RefinementList-count {
+  display: none;
+}
+
+.header .ais-CurrentRefinements-item {
+  align-items: center;
+}
+
+.header .ais-CurrentRefinements-category,
+.header .ais-RefinementList-labelText {
+  align-items: center;
+  background: #f3f3f3;
+  border-radius: 3px;
+  color: #6634d1;
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: bold;
+  min-height: 31px;
+  padding: 0.4rem 1rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.header .ais-CurrentRefinements-categoryLabel {
+  white-space: nowrap;
+}
+
+.header .ais-RefinementList-labelText:hover {
+  background-color: #e9ddf0;
+}
+
+.header .ais-CurrentRefinements-category * {
+  font-size: inherit;
+}
+
+.header .ais-CurrentRefinements-delete {
+  margin-left: 0.5rem;
+}
+
+/* SelectedTopics */
+
+.header .ais-CurrentRefinements-label {
+  display: none;
+}
+
+/* RefinementList */
+
+.container-filters-panel .ais-RefinementList-list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 0 2rem;
+  grid-template-rows: repeat(5, 1fr);
+}
+
+.container-filters-panel .ais-RefinementList-item {
+  flex: 50%;
+}
+
+/* SortBy */
+
+.ais-SortBy-select,
+.ais-HitsPerPage-select {
+  font-size: 0.875rem;
+  min-width: 132px;
+}
+
+/* ClearRefinements */
+
+.ais-ClearRefinements-button--disabled {
+  display: none;
+}
+
+.clear-filters {
+  align-items: center;
+  display: flex;
+}
+
+.clear-filters svg {
+  margin-right: 0.625rem;
+}
