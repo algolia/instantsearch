@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 import createInfoBox from '../.storybook/utils/create-info-box';
 import instantsearchPlacesWidget from 'places.js/instantsearchWidget';
 import injectScript from 'scriptjs';
@@ -720,6 +720,25 @@ stories
                 ...item,
                 name: item.name.toUpperCase(),
               })),
+          })
+        );
+      })
+    )
+  )
+  .add(
+    'with add/remove',
+    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+      injectGoogleMaps(() => {
+        search.addWidget(
+          instantsearch.widgets.configure({
+            aroundLatLngViaIP: true,
+          })
+        );
+
+        withLifecycle(search, container, node =>
+          instantsearch.widgets.geoSearch({
+            googleReference: window.google,
+            container: node,
           })
         );
       })

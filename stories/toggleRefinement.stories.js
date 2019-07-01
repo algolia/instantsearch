@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/html';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('ToggleRefinement', module)
   .add(
@@ -38,6 +38,20 @@ storiesOf('ToggleRefinement', module)
           off: 'Canon',
           templates: {
             labelText: 'Canon (not checked) or sony (checked)',
+          },
+        })
+      );
+    })
+  )
+  .add(
+    'with add/remove',
+    withHits(({ search, container, instantsearch }) => {
+      withLifecycle(search, container, node =>
+        instantsearch.widgets.toggleRefinement({
+          container: node,
+          attribute: 'free_shipping',
+          templates: {
+            labelText: 'Free Shipping (toggle single value)',
           },
         })
       );
