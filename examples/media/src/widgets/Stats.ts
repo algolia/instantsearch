@@ -61,6 +61,7 @@ const statsWidget = connectHits(({ results, widgetParams }) => {
   const stringRefinements = results
     .getRefinements()
     .filter(refinement => refinement.type !== 'numeric')
+    .filter(refinement => refinement.attributeName !== 'topics')
     .map(refinement => refinement.name);
   const dateRefinement = getDateRangeFromTimestamp(
     results
