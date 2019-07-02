@@ -81,7 +81,7 @@ SearchParameters no longer contains a default value for the parameters, from the
 
 ### Removed methods
 
-- `getQueryParameter`
+- `getQueryParameter` & `helper.state.getQueryParameter`
 
 ```
 // With getQueryParameter
@@ -91,8 +91,10 @@ helper.getQueryParameter('hitsPerPage');
 helper.state.hitsPerPage;
 ```
 
-- `SearchParameters.filter`
+- `helper.state.filter`
 
 You need to filter the returned object yourself using e.g. `Object.fromEntries(Object.entries(helper.state).filter(/**/))`
 
-- `SearchParameters.mutateMe`
+- `helper.state.mutateMe`
+
+- `helper.getState` -> `helper.state`
