@@ -1,5 +1,5 @@
 import search from './search';
-import { attachEventListeners } from './ui';
+import { enhanceUi } from './ui';
 
 search.start();
-attachEventListeners();
+enhanceUi();
