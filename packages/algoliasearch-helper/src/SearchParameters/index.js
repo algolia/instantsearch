@@ -1279,7 +1279,7 @@ SearchParameters.prototype = {
   getUnrefinedDisjunctiveFacets: function() {
     var refinedFacets = this.getRefinedDisjunctiveFacets();
 
-    return this.disjunctiveFacets. filter(function(f) {
+    return this.disjunctiveFacets.filter(function(f) {
       return refinedFacets.indexOf(f) === -1;
     });
   },

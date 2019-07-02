@@ -48,7 +48,7 @@ customMarkedRenderer.heading = function(text, level) {
 };
 
 var header = a.communityHeader({
-  menu:{
+  menu: {
     project: {
       label: "algoliasearch-helper",
       url: "https://community.algolia.com/algoliasearch-helper-js/"
@@ -58,7 +58,8 @@ var header = a.communityHeader({
     { name: "Getting started", dropdownItems: null, url: "gettingstarted.html" },
     { name: "Concepts", url: "concepts.html" },
     { name: "Reference", url: "reference.html" },
-    { name: "Examples", url: "examples.html"}
+    { name: "Examples", url: "examples.html"},
+    { name: "Upgrade", url: "upgrade.html"}
   ],
   mobileMenu: [
     { name: "Getting started", url: "gettingstarted.html" },
