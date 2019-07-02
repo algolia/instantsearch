@@ -6,11 +6,11 @@ import {
   Helper,
   SearchParameters,
   DerivedHelper,
-} from '../types';
+} from '../../types';
 import {
   createDocumentationMessageGenerator,
   enhanceConfiguration,
-} from './utils';
+} from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'index',

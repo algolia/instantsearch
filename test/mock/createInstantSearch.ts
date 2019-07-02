@@ -1,5 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import index from '../../src/lib/index';
+import index from '../../src/widgets/index/index';
 import { InstantSearch } from '../../src/types';
 import { createSearchClient } from './createSearchClient';
 

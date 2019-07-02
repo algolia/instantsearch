@@ -1,4 +1,4 @@
-import { Index } from '../lib/index';
+import { Index } from '../widgets/index/index';
 import {
   Helper,
   SearchResults,

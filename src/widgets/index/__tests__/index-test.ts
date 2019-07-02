@@ -1,14 +1,14 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '../../../test/mock/createSearchClient';
-import { createInstantSearch } from '../../../test/mock/createInstantSearch';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createWidget,
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../test/mock/createWidget';
-import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
-import { Widget } from '../../types';
+} from '../../../../test/mock/createWidget';
+import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
+import { Widget } from '../../../types';
 import index from '../index';
 
 describe('index', () => {

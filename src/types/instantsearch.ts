@@ -7,7 +7,7 @@ import {
   SearchResults as AlgoliaSearchHelperSearchResults,
 } from 'algoliasearch-helper';
 import { Widget, UiState } from './widget';
-import { Index } from '../lib/index';
+import { Index } from '../widgets/index/index';
 
 export type InstantSearchOptions = any;
 
