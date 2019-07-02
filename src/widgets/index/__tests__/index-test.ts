@@ -125,7 +125,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets([createSearchBox()]);
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -154,7 +154,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         const instantSearchInstance = createInstantSearch();
         const widgets = [createSearchBox(), createPagination()];
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -186,7 +186,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           scheduleSearch: jest.fn(),
         });
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -205,7 +205,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           scheduleSearch: jest.fn(),
         });
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -313,7 +313,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets([createSearchBox(), pagination]);
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -351,7 +351,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets(widgets);
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -382,7 +382,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets([searchBox, createPagination()]);
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -405,7 +405,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets([searchBox]);
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -428,7 +428,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets([searchBox]);
 
-        instance.init!(
+        instance.init(
           createInitOptions({
             instantSearchInstance,
           })
@@ -453,7 +453,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       const search = jest.spyOn(mainHelper, 'search').mockImplementation();
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -476,7 +476,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         .spyOn(mainHelper, 'searchForFacetValues')
         .mockImplementation();
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -509,7 +509,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         },
       });
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -536,7 +536,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         },
       });
 
-      subLevelInstance.init!(
+      subLevelInstance.init(
         createInitOptions({
           instantSearchInstance,
           parent: topLevelInstance,
@@ -560,7 +560,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       instance.addWidgets([createSearchBox(), createPagination()]);
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -592,7 +592,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       instance.addWidgets([createSearchBox(), createPagination()]);
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -624,7 +624,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -644,7 +644,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -673,7 +673,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.init).toHaveBeenCalledTimes(0);
       });
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -707,7 +707,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -724,7 +724,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
-      instance.render!(
+      instance.render(
         createRenderOptions({
           instantSearchInstance,
         })
@@ -755,7 +755,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       instance.addWidgets(widgets);
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -768,7 +768,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       // Save the Helper to be able to simulate the search
       const helper = instance.getHelper();
 
-      instance.dispose!(
+      instance.dispose(
         createDisposeOptions({
           helper: instantSearchInstance.helper!,
           state: instantSearchInstance.helper!.state,
@@ -792,7 +792,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       instance.addWidgets([searchBox, pagination]);
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -800,7 +800,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       expect(instance.getWidgets()).toHaveLength(2);
 
-      instance.dispose!(createDisposeOptions());
+      instance.dispose(createDisposeOptions());
 
       expect(instance.getWidgets()).toHaveLength(2);
     });
@@ -809,7 +809,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -817,7 +817,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       expect(instance.getHelper()).toBeDefined();
 
-      instance.dispose!(createDisposeOptions());
+      instance.dispose(createDisposeOptions());
 
       expect(instance.getHelper()).toBe(null);
     });
@@ -826,7 +826,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -835,7 +835,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       // Save the Helper to be able to simulate the search
       const helper = instance.getHelper();
 
-      instance.dispose!(createDisposeOptions());
+      instance.dispose(createDisposeOptions());
 
       // Simulate a call to search from a widget
       helper!.search();
@@ -855,7 +855,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         mainHelper,
       });
 
-      instance.init!(
+      instance.init(
         createInitOptions({
           instantSearchInstance,
         })
@@ -863,7 +863,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       expect(mainHelper.derivedHelpers).toHaveLength(1);
 
-      instance.dispose!(createDisposeOptions());
+      instance.dispose(createDisposeOptions());
 
       expect(mainHelper.derivedHelpers).toHaveLength(0);
     });

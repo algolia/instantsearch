@@ -2,6 +2,9 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import {
   InstantSearch,
   Widget,
+  InitOptions,
+  RenderOptions,
+  DisposeOptions,
   Client,
   Helper,
   SearchParameters,
@@ -25,6 +28,9 @@ export type Index = Widget & {
   getWidgets(): Widget[];
   addWidgets(widgets: Widget[]): Index;
   removeWidgets(widgets: Widget[]): Index;
+  init(options: InitOptions): void;
+  render(options: RenderOptions): void;
+  dispose(options: DisposeOptions): void;
 };
 
 const index = (props: IndexProps): Index => {
