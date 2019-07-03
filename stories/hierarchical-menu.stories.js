@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/html';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('HierarchicalMenu', module)
   .add(
@@ -148,6 +148,21 @@ storiesOf('HierarchicalMenu', module)
               ...item,
               label: `${item.label} (transformed)`,
             })),
+        })
+      );
+    })
+  )
+  .add(
+    'with add/remove',
+    withHits(({ search, container, instantsearch }) => {
+      withLifecycle(search, container, node =>
+        instantsearch.widgets.hierarchicalMenu({
+          container: node,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
         })
       );
     })
