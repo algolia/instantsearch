@@ -1,11 +1,12 @@
 import { EventEmitter } from 'events';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
-import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import {
   AlgoliaSearchHelper,
   SearchParameters as AlgoliaSearchHelperSearchParameters,
   SearchResults as AlgoliaSearchHelperSearchResults,
 } from 'algoliasearch-helper';
+import { Index } from '../widgets/index/index';
+import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import { Widget, UiState } from './widget';
 
 export type InstantSearchOptions = any;
@@ -119,10 +120,19 @@ export type DerivedHelper = EventEmitter & {
 };
 
 export type InstantSearch = {
-  templatesConfig: object;
-  insightsClient: AlgoliaInsightsClient | null;
   helper: Helper | null;
-  widgets: Widget[];
+  widgets: Widget[]; // @TODO: remove once the RoutingManger uses the index
+  mainHelper: Helper | null;
+  mainIndex: Index;
+  insightsClient: AlgoliaInsightsClient | null;
+  templatesConfig: object;
+  _isSearchStalled: boolean;
+  _searchParameters: Partial<SearchParameters>;
+  _createAbsoluteURL(state: Partial<SearchParameters>): string;
+  _onHistoryChange(callback: (state: Partial<SearchParameters>) => void): void;
+  scheduleSearch(): void;
+  scheduleRender(): void;
+  scheduleStalledRender(): void;
 };
 
 export type RouteState = {
