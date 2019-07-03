@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { VoiceSearch, SearchBox } from '../packages/react-instantsearch-dom';
 import { WrapWithHits } from './util';
+import { InnerComponentProps } from '../packages/react-instantsearch-dom/src/components/VoiceSearch';
 
 const stories = storiesOf('VoiceSearch', module);
 
@@ -59,7 +60,7 @@ stories
       transcript,
       isSpeechFinal,
       isBrowserSupported,
-    }) => {
+    }: InnerComponentProps) => {
       return (
         <div>
           <p>status: {status}</p>
@@ -90,7 +91,7 @@ stories
       transcript,
       isSpeechFinal,
       isBrowserSupported,
-    }) => {
+    }: InnerComponentProps) => {
       return (
         <div>
           <p>status: {status}</p>
@@ -113,7 +114,7 @@ stories
     );
   })
   .add('example of dynamic UI working with SearchBox', () => {
-    const Status = ({ isListening, transcript }) => {
+    const Status = ({ isListening, transcript }: InnerComponentProps) => {
       return (
         <div className={`layer listening-${isListening}`}>
           <span>{transcript}</span>

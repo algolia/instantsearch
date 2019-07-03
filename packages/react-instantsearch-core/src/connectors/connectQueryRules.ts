@@ -162,7 +162,7 @@ export default createConnector({
 
     if (process.env.NODE_ENV === 'development') {
       if (nextRuleContexts.length > 10) {
-        // tslint:disable-next-line:no-console
+        // eslint-disable-next-line no-console
         console.warn(
           `The maximum number of \`ruleContexts\` is 10. They have been sliced to that limit.
 Consider using \`transformRuleContexts\` to minimize the number of rules sent to Algolia.`

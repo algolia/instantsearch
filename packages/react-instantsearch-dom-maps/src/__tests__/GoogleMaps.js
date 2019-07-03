@@ -320,7 +320,7 @@ describe('GoogleMaps', () => {
       });
 
       expect(wrapper.instance().getChildContext()).toEqual({
-        // eslint-disable-next-line camelcase
+        // eslint-disable-next-line @typescript-eslint/camelcase
         __ais_geo_search__google_maps__: expect.objectContaining({
           google,
         }),
@@ -343,7 +343,7 @@ describe('GoogleMaps', () => {
       });
 
       expect(wrapper.instance().getChildContext()).toEqual({
-        // eslint-disable-next-line camelcase
+        // eslint-disable-next-line @typescript-eslint/camelcase
         __ais_geo_search__google_maps__: expect.objectContaining({
           instance: undefined,
         }),
@@ -353,7 +353,7 @@ describe('GoogleMaps', () => {
       wrapper.instance().componentDidMount();
 
       expect(wrapper.instance().getChildContext()).toEqual({
-        // eslint-disable-next-line camelcase
+        // eslint-disable-next-line @typescript-eslint/camelcase
         __ais_geo_search__google_maps__: expect.objectContaining({
           instance: mapInstance,
         }),

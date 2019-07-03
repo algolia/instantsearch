@@ -58,12 +58,12 @@ stories
     <WrapWithHits {...storyProps}>
       <ul>
         <li>
-          On empty query, select the "Drama" category and The Shawshank
-          Redemption appears
+          On empty query, select the &quot;Drama&quot; category and The
+          Shawshank Redemption appears
         </li>
         <li>
-          On empty query, select the "Thriller" category and Pulp Fiction
-          appears
+          On empty query, select the &quot;Thriller&quot; category and Pulp
+          Fiction appears
         </li>
         <li>
           Type <q>music</q> and a banner will appear
@@ -110,9 +110,12 @@ stories
       <ul>
         <li>The rule context `ais-genre-Drama` is applied by default</li>
         <li>
-          Select the "Drama" category and The Shawshank Redemption appears
+          Select the &quot;Drama&quot; category and The Shawshank Redemption
+          appears
         </li>
-        <li>Select the "Thriller" category and Pulp Fiction appears</li>
+        <li>
+          Select the &quot;Thriller&quot; category and Pulp Fiction appears
+        </li>
         <li>
           Type <q>music</q> and a banner will appear
         </li>

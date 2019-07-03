@@ -575,7 +575,7 @@ describe('CustomMarker', () => {
         </Connected>,
         {
           context: {
-            // eslint-disable-next-line camelcase
+            // eslint-disable-next-line @typescript-eslint/camelcase
             __ais_geo_search__google_maps__: {
               instance: mapInstance,
               google,

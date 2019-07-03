@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['algolia/react', 'algolia/jest'],
+  extends: ['algolia', 'algolia/jest', 'algolia/react', 'algolia/typescript'],
   rules: {
     'no-param-reassign': 'off',
     // @TODO: to remove once `eslint-config-algolia` ships the change
@@ -11,14 +11,13 @@ module.exports = {
   },
   settings: {
     react: {
-      pragma: 'React',
-      version: '16.2',
+      version: 'detect',
     },
     'import/resolver': {
       node: {
-        // The migration is an incremental process so it happens that we import
-        // TypeScript module from JavaScript. By default the `import/resolver`
-        // only supports JavaScript modules.
+        // The migration is an incremental process so we import TypeScript modules
+        // from JavaScript files.
+        // By default, `import/resolver` only supports JavaScript modules.
         extensions: ['.js', '.ts', '.tsx'],
       },
     },
