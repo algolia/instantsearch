@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'algolia',
+  extends: ['algolia', 'algolia/typescript'],
   rules: {
     'valid-jsdoc': 'off',
     // The "no-unresolved" rule is needed for the CI
@@ -7,5 +7,6 @@ module.exports = {
     // examples' dependencies first.
     'import/no-unresolved': 'off',
     'import/extensions': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
   },
 };
