@@ -1,4 +1,4 @@
-import { startOfDay } from 'date-fns';
+import { endOfDay } from 'date-fns';
 
 /**
  * Returns the latest date from the dataset.
@@ -7,5 +7,5 @@ import { startOfDay } from 'date-fns';
  * This indirection is not needed in user code.
  */
 export function getCurrentDate() {
-  return startOfDay(1555164449000);
+  return endOfDay(1560394805000);
 }
