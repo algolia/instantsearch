@@ -1,13 +1,13 @@
 import { EventEmitter } from 'events';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
-import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import {
   AlgoliaSearchHelper,
   SearchParameters as AlgoliaSearchHelperSearchParameters,
   SearchResults as AlgoliaSearchHelperSearchResults,
 } from 'algoliasearch-helper';
-import { Widget, UiState } from './widget';
 import { Index } from '../widgets/index/index';
+import { InsightsClient as AlgoliaInsightsClient } from './insights';
+import { Widget, UiState } from './widget';
 
 export type InstantSearchOptions = any;
 

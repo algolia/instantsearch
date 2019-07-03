@@ -1,5 +1,25 @@
 import instantsearch from '../../src/index';
 
+export const hitsItemTemplate = `
+<div
+  class="hits-image"
+  style="background-image: url({{image}})"
+></div>
+<article>
+  <header>
+    <strong>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</strong>
+  </header>
+  <p>
+    {{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}
+  </p>
+  <footer>
+    <p>
+      <strong>{{price}}$</strong>
+    </p>
+  </footer>
+</article>
+`;
+
 function instantSearchPlayground({
   search,
   leftPanel,
@@ -93,25 +113,7 @@ function instantSearchPlayground({
     instantsearch.widgets.hits({
       container: hits,
       templates: {
-        item: `
-<div
-  class="hits-image"
-  style="background-image: url({{image}})"
-></div>
-<article>
-  <header>
-    <strong>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</strong>
-  </header>
-  <p>
-    {{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}
-  </p>
-  <footer>
-    <p>
-      <strong>{{price}}$</strong>
-    </p>
-  </footer>
-</article>
-          `,
+        item: hitsItemTemplate,
       },
       cssClasses: {
         item: 'hits-item',
