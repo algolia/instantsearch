@@ -20,7 +20,7 @@ class GoogleMaps extends Component {
   };
 
   static childContextTypes = {
-    // eslint-disable-next-line camelcase
+    // eslint-disable-next-line @typescript-eslint/camelcase
     __ais_geo_search__google_maps__: PropTypes.shape({
       google: PropTypes.object,
       instance: PropTypes.object,
@@ -39,7 +39,7 @@ class GoogleMaps extends Component {
     const { google } = this.props;
 
     return {
-      // eslint-disable-next-line camelcase
+      // eslint-disable-next-line @typescript-eslint/camelcase
       __ais_geo_search__google_maps__: {
         instance: this.instance,
         google,

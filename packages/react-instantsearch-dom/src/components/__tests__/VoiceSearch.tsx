@@ -1,7 +1,7 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import VoiceSearch from '../VoiceSearch';
+import VoiceSearch, { InnerComponentProps } from '../VoiceSearch';
 
 const mockGetState = jest.fn().mockImplementation(() => ({}));
 const mockIsBrowserSupported = jest.fn().mockImplementation(() => true);
@@ -83,7 +83,7 @@ describe('VoiceSearch', () => {
         transcript,
         isSpeechFinal,
         isBrowserSupported,
-      }) => (
+      }: InnerComponentProps) => (
         <div>
           <p>status: {status}</p>
           <p>errorCode: {errorCode}</p>

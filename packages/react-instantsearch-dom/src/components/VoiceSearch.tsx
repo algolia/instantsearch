@@ -8,7 +8,11 @@ import createVoiceSearchHelper, {
 } from '../lib/voiceSearchHelper';
 const cx = createClassNames('VoiceSearch');
 
-type InnerComponentProps = {
+type ButtonSvgProps = {
+  children: React.ReactNode;
+};
+
+export type InnerComponentProps = {
   status: Status;
   errorCode?: SpeechRecognitionErrorCode;
   isListening: boolean;
@@ -25,7 +29,7 @@ type VoiceSearchProps = {
   statusComponent: React.FC<InnerComponentProps>;
 };
 
-const ButtonSvg = ({ children }) => (
+const ButtonSvg = ({ children }: ButtonSvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="16"
@@ -41,11 +45,11 @@ const ButtonSvg = ({ children }) => (
   </svg>
 );
 
-const DefaultButtonText: React.FC<InnerComponentProps> = ({
+const DefaultButtonText = ({
   status,
   errorCode,
   isListening,
-}) => {
+}: InnerComponentProps) => {
   return status === 'error' && errorCode === 'not-allowed' ? (
     <ButtonSvg>
       <line x1="1" y1="1" x2="23" y2="23" />
@@ -67,7 +71,7 @@ const DefaultButtonText: React.FC<InnerComponentProps> = ({
   );
 };
 
-const DefaultStatus: React.FC<InnerComponentProps> = ({ transcript }) => (
+const DefaultStatus = ({ transcript }: InnerComponentProps) => (
   <p>{transcript}</p>
 );
 

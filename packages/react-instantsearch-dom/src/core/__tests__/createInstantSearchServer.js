@@ -680,7 +680,7 @@ describe('createInstantSearchServer', () => {
           searchState: {
             query: 'iPhone',
             indices: {
-              // eslint-disable-next-line camelcase
+              // eslint-disable-next-line @typescript-eslint/camelcase
               index1_with_refinement: {
                 query: 'iPad',
               },

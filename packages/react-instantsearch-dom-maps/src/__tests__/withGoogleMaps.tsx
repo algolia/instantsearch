@@ -17,6 +17,7 @@ describe('withGoogleMaps', () => {
     google = {} as any,
     googleMapsInstance = {} as any,
   }): GoogleMapsContext => ({
+    // eslint-disable-next-line @typescript-eslint/camelcase
     __ais_geo_search__google_maps__: {
       instance: googleMapsInstance,
       google,
