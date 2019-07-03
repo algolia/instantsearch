@@ -15,10 +15,12 @@ export const createInitOptions = (
 
   return {
     instantSearchInstance,
+    parent: null,
     templatesConfig: instantSearchInstance.templatesConfig,
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
     createURL: jest.fn(() => '#'),
+    onHistoryChange: jest.fn(),
     ...args,
   };
 };

@@ -1,5 +1,6 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import EventEmitter from 'events';
+import index from '../widgets/index/index';
 import RoutingManager from './RoutingManager';
 import simpleMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
@@ -7,8 +8,8 @@ import version from './version';
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
-  enhanceConfiguration,
   isPlainObject,
+  defer,
   noop,
 } from './utils';
 
@@ -84,21 +85,30 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     if (insightsClient && typeof insightsClient !== 'function') {
-      throw new Error('The provided `insightsClient` must be a function.');
+      throw new Error(
+        withUsage('The `insightsClient` option should be a function.')
+      );
     }
 
     this.client = searchClient;
     this.insightsClient = insightsClient;
-    this.helper = null;
-    this.derivedHelper = null;
+
     this.indexName = indexName;
-    this.widgets = [];
+    this.helper = null;
+    this.mainHelper = null;
+    this.mainIndex = index({
+      indexName,
+    });
+
+    this.started = false;
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
       compileOptions: {},
     };
 
     this._stalledSearchDelay = stalledSearchDelay;
+    this._searchStalledTimer = null;
+    this._isSearchStalled = true;
     this._searchParameters = {
       ...searchParameters,
       index: indexName,
@@ -108,12 +118,14 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       this._searchFunction = searchFunction;
     }
 
-    if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
-    else if (isPlainObject(routing))
+    if (routing === true) {
+      this.routing = ROUTING_DEFAULT_OPTIONS;
+    } else if (isPlainObject(routing)) {
       this.routing = {
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
+    }
   }
 
   /**
@@ -146,49 +158,21 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       );
     }
 
-    // The routing manager widget is always added manually at the last position.
-    // By removing it from the last position and adding it back after, we ensure
-    // it keeps this position.
-    // fixes #3148
-    const lastWidget = this.widgets.pop();
-
-    widgets.forEach(widget => {
-      // Add the widget to the list of widget
-      if (widget.render === undefined && widget.init === undefined) {
-        throw new Error(`The widget definition expects a \`render\` and/or an \`init\` method.
-
-See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/`);
-      }
-
-      this.widgets.push(widget);
-    });
-
-    // Second part of the fix for #3148
-    if (lastWidget) this.widgets.push(lastWidget);
-
-    // Init the widget directly if instantsearch has been already started
-    if (this.started && Boolean(widgets.length)) {
-      this.helper.setState(
-        this.widgets.reduce(enhanceConfiguration, {
-          ...this.helper.state,
-        })
+    if (
+      widgets.some(
+        widget =>
+          typeof widget.init !== 'function' &&
+          typeof widget.render !== 'function'
+      )
+    ) {
+      throw new Error(
+        withUsage(
+          'The widget definition expects a `render` and/or an `init` method.'
+        )
       );
-
-      widgets.forEach(widget => {
-        if (widget.init) {
-          widget.init({
-            state: this.helper.state,
-            helper: this.helper,
-            templatesConfig: this.templatesConfig,
-            createURL: this._createAbsoluteURL,
-            onHistoryChange: this._onHistoryChange,
-            instantSearchInstance: this,
-          });
-        }
-      });
-
-      this.helper.search();
     }
+
+    this.mainIndex.addWidgets(widgets);
   }
 
   /**
@@ -218,57 +202,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       );
     }
 
-    widgets.forEach(widget => {
-      if (
-        !this.widgets.includes(widget) ||
-        typeof widget.dispose !== 'function'
-      ) {
-        throw new Error(
-          `The \`dispose\` method is required to remove the widget.
-
-See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-own-widgets/js/#the-widget-lifecycle-and-api`
-        );
-      }
-
-      this.widgets = this.widgets.filter(w => w !== widget);
-
-      const nextState = widget.dispose({
-        helper: this.helper,
-        state: this.helper.state,
-      });
-
-      // re-compute remaining widgets to the state
-      // in a case two widgets were using the same configuration but we removed one
-      if (nextState) {
-        this.helper.setState(
-          this.widgets.reduce(enhanceConfiguration, {
-            ...nextState,
-          })
-        );
-      }
-    });
-
-    // If there's multiple call to `removeWidget()` let's wait until they are all made
-    // and then check for widgets.length & make a search on next tick
-    //
-    // This solves an issue where you unmount a page and removing widget by widget
-    setTimeout(() => {
-      // no need to trigger a search if we don't have any widgets left
-      if (this.widgets.length > 0) {
-        this.helper.search();
-      }
-    }, 0);
-  }
-
-  /**
-   * Clears the cached answers from Algolia and triggers a new search.
-   *
-   * @return {undefined} Does not return anything
-   */
-  refresh() {
-    if (this.helper) {
-      this.helper.clearCache().search();
+    if (widgets.some(widget => typeof widget.dispose !== 'function')) {
+      throw new Error(
+        withUsage('The widget definition expects a `dispose` method.')
+      );
     }
+
+    this.mainIndex.removeWidgets(widgets);
   }
 
   /**
@@ -296,86 +236,69 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
       );
       this._createURL = routingManager.createURL.bind(routingManager);
       this._createAbsoluteURL = this._createURL;
-      this.widgets.push(routingManager);
+      // We don't use `addWidgets` because we have to ensure that `RoutingManager`
+      // is the last widget added. Otherwise we have an issue with the `routing`.
+      // https://github.com/algolia/instantsearch.js/pull/3149
+      this.mainIndex.getWidgets().push(routingManager);
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
       this._onHistoryChange = noop;
     }
 
-    const initialSearchParameters = this.widgets.reduce(
-      enhanceConfiguration,
-      this._searchParameters
-    );
+    // This Helper is used for the queries, we don't care about its state. The
+    // states are managed at the `index` level. We use this Helper to create
+    // DerivedHelper scoped into the `index` widgets.
+    const mainHelper = algoliasearchHelper(this.client);
 
-    const helper = algoliasearchHelper(
-      this.client,
-      initialSearchParameters.index || this.indexName,
-      initialSearchParameters
-    );
-
-    const derivedHelper = helper.derive(() => helper.state);
-
-    helper.search = () => {
+    mainHelper.search = () => {
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be
       // completely transparent for the rest of the codebase. Only this module
       // is impacted.
-      helper.searchOnlyWithDerivedHelpers();
+      return mainHelper.searchOnlyWithDerivedHelpers();
     };
 
     if (this._searchFunction) {
-      this._mainHelperSearch = helper.search.bind(helper);
-      helper.search = () => {
-        const helperSearchFunction = algoliasearchHelper(
+      this._mainHelperSearch = mainHelper.search.bind(mainHelper);
+      mainHelper.search = () => {
+        const mainIndexHelper = this.mainIndex.getHelper();
+        const searchFunctionHelper = algoliasearchHelper(
           {
             search: () => new Promise(noop),
           },
-          helper.state.index,
-          helper.state
+          mainIndexHelper.state.index,
+          mainIndexHelper.state
         );
-        helperSearchFunction.once('search', ({ state }) => {
-          helper.overrideStateWithoutTriggeringChangeEvent(state);
+        searchFunctionHelper.once('search', ({ state }) => {
+          mainIndexHelper.overrideStateWithoutTriggeringChangeEvent(state);
           this._mainHelperSearch();
         });
-        this._searchFunction(helperSearchFunction);
+        this._searchFunction(searchFunctionHelper);
+        return mainHelper;
       };
     }
 
-    this.helper = helper;
-    this.derivedHelper = derivedHelper;
-
-    this._init(helper, helper.state);
-
-    derivedHelper.on('result', ({ results, state }) => {
-      this._render(helper, results, state);
-    });
-
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.
-    helper.on('error', ({ error }) => {
+    mainHelper.on('error', ({ error }) => {
       this.emit('error', {
         error,
       });
     });
 
-    this._searchStalledTimer = null;
-    this._isSearchStalled = true;
+    this.mainHelper = mainHelper;
 
-    helper.search();
-
-    derivedHelper.on('search', () => {
-      if (!this._isSearchStalled && !this._searchStalledTimer) {
-        this._searchStalledTimer = setTimeout(() => {
-          this._isSearchStalled = true;
-          this._render(
-            helper,
-            derivedHelper.lastResults,
-            derivedHelper.lastResults._state
-          );
-        }, this._stalledSearchDelay);
-      }
+    this.mainIndex.init({
+      instantSearchInstance: this,
+      parent: null,
     });
+
+    mainHelper.search();
+
+    // Keep the previous reference for legacy purpose, some pattern use
+    // the direct Helper access `search.helper` (e.g mutli-index).
+    this.helper = this.mainIndex.getHelper();
 
     // track we started the search if we add more widgets,
     // to init them directly after add
@@ -389,75 +312,69 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
    * @return {undefined} This method does not return anything
    */
   dispose() {
-    this.removeWidgets(this.widgets);
+    this.removeWidgets(this.mainIndex.getWidgets());
+    this.mainIndex.dispose();
+
     // You can not start an instance two times, therefore a disposed instance
     // needs to set started as false otherwise this can not be restarted at a
     // later point.
     this.started = false;
 
-    this.derivedHelper.detach();
-    this.derivedHelper = null;
-
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
-    this.helper.removeAllListeners();
+    this.removeAllListeners();
+    this.mainHelper.removeAllListeners();
+    this.mainHelper = null;
     this.helper = null;
   }
 
-  createURL(params) {
-    if (!this._createURL) {
-      throw new Error(
-        'The `start` method needs to be called before `createURL`.'
-      );
-    }
-    return this._createURL(this.helper.state.setQueryParameters(params));
-  }
+  scheduleSearch = defer(() => {
+    this.mainHelper.search();
+  });
 
-  _init(helper, state) {
-    this.widgets.forEach(widget => {
-      if (widget.init) {
-        widget.init({
-          state,
-          helper,
-          templatesConfig: this.templatesConfig,
-          createURL: this._createAbsoluteURL,
-          onHistoryChange: this._onHistoryChange,
-          instantSearchInstance: this,
-        });
-      }
-    });
-  }
-
-  _render(helper, results, state) {
-    if (!this.helper.hasPendingRequests()) {
+  scheduleRender = defer(() => {
+    if (!this.mainHelper.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
       this._searchStalledTimer = null;
       this._isSearchStalled = false;
     }
 
-    this.widgets.forEach(widget => {
-      if (!widget.render) {
-        return;
-      }
-      widget.render({
-        templatesConfig: this.templatesConfig,
-        results,
-        state,
-        helper,
-        createURL: this._createAbsoluteURL,
-        instantSearchInstance: this,
-        searchMetadata: {
-          isSearchStalled: this._isSearchStalled,
-        },
-      });
+    this.mainIndex.render({
+      instantSearchInstance: this,
     });
 
-    /**
-     * Render is triggered when the rendering of the widgets has been completed
-     * after a search.
-     * @event InstantSearch#render
-     */
     this.emit('render');
+  });
+
+  scheduleStalledRender() {
+    if (!this._isSearchStalled && !this._searchStalledTimer) {
+      this._searchStalledTimer = setTimeout(() => {
+        this._isSearchStalled = true;
+        this.scheduleRender();
+      }, this._stalledSearchDelay);
+    }
+  }
+
+  createURL(params) {
+    if (!this._createURL) {
+      throw new Error(
+        withUsage('The `start` method needs to be called before `createURL`.')
+      );
+    }
+
+    return this._createURL(
+      this.mainIndex.getHelper().state.setQueryParameters(params)
+    );
+  }
+
+  refresh() {
+    if (!this.mainHelper) {
+      throw new Error(
+        withUsage('The `start` method needs to be called before `refresh`.')
+      );
+    }
+
+    this.mainHelper.clearCache().search();
   }
 }
 

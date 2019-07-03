@@ -1,3 +1,4 @@
+import { Index } from '../widgets/index/index';
 import {
   Helper,
   SearchResults,
@@ -7,10 +8,12 @@ import {
 
 export interface InitOptions {
   instantSearchInstance: InstantSearch;
+  parent: Index | null;
   state: SearchParameters;
   helper: Helper;
   templatesConfig: object;
   createURL(state: SearchParameters): string;
+  onHistoryChange(callback: (state: Partial<SearchParameters>) => void): void;
 }
 
 export interface RenderOptions {
