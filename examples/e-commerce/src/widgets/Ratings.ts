@@ -41,3 +41,15 @@ export const ratings = ratingsMenu({
   `,
   },
 });
+
+export function getFallbackRatingsRoutingValue(
+  value: string
+): string | undefined {
+  const ratingValue = Number(value);
+
+  if (ratingValue >= 1 && ratingValue <= 4) {
+    return value;
+  }
+
+  return undefined;
+}
