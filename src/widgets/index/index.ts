@@ -238,16 +238,18 @@ const index = (props: IndexProps): Index => {
     render({ instantSearchInstance }) {
       localWidgets.forEach(widget => {
         // At this point, all the variables used below are set. Both `helper`
-        //  and `derivedHelper` has been created at the `init` step. The attribute
-        // `lastResults` is set before the event `result` is emitted. At this stage,
-        // the event has emitted hence the value is already set.
+        // and `derivedHelper` has been created at the `init` step. The attribute
+        // `lastResults` might be `null` though. It's possible that a stalled render
+        // happen before the result e.g with a dynamically added index the request might
+        // be delayed. The render is triggered for the complete tree but some parts do
+        // not have results yet.
 
-        if (widget.render) {
+        if (widget.render && derivedHelper!.lastResults) {
           widget.render({
             helper: helper!,
             instantSearchInstance,
-            results: derivedHelper!.lastResults!,
-            state: derivedHelper!.lastResults!._state,
+            results: derivedHelper!.lastResults,
+            state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: instantSearchInstance._createAbsoluteURL,
             searchMetadata: {
