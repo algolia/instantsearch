@@ -115,7 +115,7 @@
     "rollup-plugin-uglify": "6.0.2",
     "style-loader": "0.23.1",
     "typescript": "3.5.2",
-    "webpack": "4.35.2",
+    "webpack": "4.35.3",
     "webpack-cli": "3.3.5"
   },
   "engines": {
