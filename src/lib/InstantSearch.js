@@ -331,6 +331,10 @@ See ${createDocumentationLink({
    * @return {undefined} This method does not return anything
    */
   dispose() {
+    this.scheduleSearch.cancel();
+    this.scheduleRender.cancel();
+    clearTimeout(this._searchStalledTimer);
+
     this.removeWidgets(this.mainIndex.getWidgets());
     this.mainIndex.dispose();
 

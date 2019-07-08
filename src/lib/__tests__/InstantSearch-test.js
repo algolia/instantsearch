@@ -1,7 +1,9 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '../../../test/mock/createSearchClient';
+import {
+  createSearchClient,
+  createControlledSearchClient,
+} from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
-import { createMutliSearchResponse } from '../../../test/mock/createAPIResponse';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
@@ -514,6 +516,82 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 });
 
 describe('dispose', () => {
+  it('cancels the scheduled search', async () => {
+    const search = new InstantSearch({
+      indexName: 'index_name',
+      searchClient: createSearchClient(),
+    });
+
+    search.addWidgets([createWidget(), createWidget()]);
+
+    search.start();
+
+    await runAllMicroTasks();
+
+    // The call to `addWidgets` schedules a new search
+    search.addWidgets([createWidget()]);
+
+    search.dispose();
+
+    // Without the cancel operation, the function call throws an error which
+    // prevents the test to complete. We can't assert that the function throws
+    // because we don't have access to the promise that throws in the first place.
+    await runAllMicroTasks();
+  });
+
+  it('cancels the scheduled render', async () => {
+    const search = new InstantSearch({
+      indexName: 'index_name',
+      searchClient: createSearchClient(),
+    });
+
+    search.addWidgets([createWidget(), createWidget()]);
+
+    search.start();
+
+    // We only wait for the search to schedule the render. We have now a render
+    // that is scheduled, it will be processed in the next microtask if not canceled.
+    await Promise.resolve();
+
+    search.dispose();
+
+    // Without the cancel operation, the function call throws an error which
+    // prevents the test to complete. We can't assert that the function throws
+    // because we don't have access to the promise that throws in the first place.
+    await runAllMicroTasks();
+  });
+
+  it('cancels the scheduled stalled render', async () => {
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'index_name',
+      searchClient,
+    });
+
+    search.addWidgets([createWidget(), createWidget()]);
+
+    search.start();
+
+    // Resolve the `search`
+    searches[0].resolver();
+
+    // Wait for the `render`
+    await runAllMicroTasks();
+
+    // Simulate a search
+    search.mainHelper.search();
+
+    search.dispose();
+
+    // Reaches the delay
+    jest.runOnlyPendingTimers();
+
+    // Without the cancel operation, the function call throws an error which
+    // prevents the test to complete. We can't assert that the function throws
+    // because we don't have access to the promise that throws in the first place.
+    await runAllMicroTasks();
+  });
+
   it('removes the widgets from the main index', () => {
     const search = new InstantSearch({
       indexName: 'index_name',
@@ -753,30 +831,6 @@ describe('scheduleRender', () => {
 });
 
 describe('scheduleStalledRender', () => {
-  const createControlledSearchClient = () => {
-    const searches = [];
-    const searchClient = {
-      search: jest.fn(() => {
-        let resolver;
-        const promise = new Promise(resolve => {
-          resolver = () => resolve(createMutliSearchResponse());
-        });
-
-        searches.push({
-          promise,
-          resolver,
-        });
-
-        return promise;
-      }),
-    };
-
-    return {
-      searchClient,
-      searches,
-    };
-  };
-
   it('calls the `render` method on the main index', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
@@ -792,9 +846,6 @@ describe('scheduleStalledRender', () => {
 
     // Resolve the `search`
     searches[0].resolver();
-
-    // Wait for the `search`
-    await searches[0].promise;
 
     // Wait for the `render`
     await runAllMicroTasks();
@@ -828,9 +879,6 @@ describe('scheduleStalledRender', () => {
 
     // Resolve the `search`
     searches[0].resolver();
-
-    // Wait for the `search`
-    await searches[0].promise;
 
     // Wait for the `render`
     await runAllMicroTasks();
@@ -872,9 +920,6 @@ describe('scheduleStalledRender', () => {
     // Resolve the `search`
     searches[0].resolver();
 
-    // Wait for the `search`
-    await searches[0].promise;
-
     // Wait for the `render`
     await runAllMicroTasks();
 
@@ -910,9 +955,6 @@ describe('scheduleStalledRender', () => {
 
     // Resolve the `search`
     searches[1].resolver();
-
-    // Wait for the `search`
-    await searches[1].promise;
 
     // Wait for the `render`
     await runAllMicroTasks();
