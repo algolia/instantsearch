@@ -37,7 +37,7 @@ function createHit(hit, { isHighlighted }) {
     currentDate,
     hit.date,
     { addSuffix: true }
-  )}
+  ).replace('about ', '')}
       </footer>
     </div>
   </article>
