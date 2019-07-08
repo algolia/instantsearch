@@ -1,2 +1,3 @@
-/           https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/
-/examples   https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
+/             https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/
+/examples     https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
+/examples/*   /examples/:splat/index.html   200
