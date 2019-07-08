@@ -60,7 +60,7 @@ a[class^='ais-'] {
 
 .ais-Highlight-highlighted,
 .ais-Snippet-highlighted {
-  background: #e9ddf0;
+  background: #e6ebf7;
 }
 
 /* InfiniteHits */
@@ -171,7 +171,7 @@ a[class^='ais-'] {
   appearance: none;
   background: none;
   border: none;
-  border-bottom: 1px solid #e9ddf0;
+  border-bottom: 1px solid #e6ebf7;
   color: 000;
   font-family: inherit;
   font-size: 1.4375rem;
@@ -248,7 +248,7 @@ a[class^='ais-'] {
 }
 
 .ais-RefinementList .ais-SearchBox-submit svg {
-  color: #e9ddf0;
+  color: #e6ebf7;
   height: 17px;
   width: 17px;
 }
@@ -268,7 +268,7 @@ a[class^='ais-'] {
   -moz-appearance: none;
   appearance: none;
   background: none;
-  border: 2px solid #e9ddf0;
+  border: 2px solid #e6ebf7;
   height: 1.25rem;
   margin: 0;
   margin-right: 0.5rem;
@@ -305,7 +305,7 @@ a[class^='ais-'] {
 
 .ais-RefinementList-item:not(.ais-RefinementList-item--selected)
   .ais-RefinementList-checkbox:hover {
-  border-color: #a789b9;
+  border-color: #6634d1;
 }
 
 .ais-NumericMenu-label {
@@ -324,7 +324,7 @@ a[class^='ais-'] {
 
 .ais-NumericMenu-item:not(.ais-NumericMenu-item--selected)
   .ais-NumericMenu-radio:hover {
-  border-color: #a789b9;
+  border-color: #6634d1;
 }
 
 .ais-HierarchicalMenu-count,
@@ -333,7 +333,7 @@ a[class^='ais-'] {
 .ais-ToggleRefinement-count,
 .ais-RatingMenu-count {
   align-items: center;
-  background-color: #e9ddf0;
+  background-color: #e6ebf7;
   border-radius: 4px;
   color: #6634d1;
   color: 6634d1;
@@ -365,9 +365,9 @@ a[class^='ais-'] {
   background: none;
   border: none;
   font-family: inherit;
+  font-size: 0.875rem;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 0.875rem;
 }
 
 /* Stats */
