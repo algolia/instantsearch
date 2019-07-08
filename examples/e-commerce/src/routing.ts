@@ -1,4 +1,4 @@
-/* eslint @typescript-eslint/camelcase: ["error", { allow: ["free_shipping"] }] */
+/* eslint @typescript-eslint/camelcase: ["error", { allow: ["free_shipping"] }], complexity: off */
 
 import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
 import {
