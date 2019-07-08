@@ -77,7 +77,11 @@ const infiniteHits = connectInfiniteHits(
 
     if (results.nbHits === 0) {
       containerNode.querySelector('div').innerHTML = `
-<p>No results.</p>
+<div class="infinite-hits-no-results-container">
+  <p class="infinite-hits-no-results-paragraph">
+    Sorry, we can't find any matches for "${results.query}".
+  </p>
+</div>
 `;
       return;
     }

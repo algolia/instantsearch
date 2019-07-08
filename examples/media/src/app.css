@@ -275,7 +275,21 @@ strong {
 }
 
 .infinite-hits-item--highlighted .card-title {
+  font-size: 1.375rem;
   line-height: 1.36;
+}
+
+.infinite-hits-no-results-container {
+  margin: auto;
+  max-width: 513px;
+}
+
+.infinite-hits-no-results-paragraph {
+  color: #000;
+  font-size: 1.875rem;
+  font-weight: bold;
+  line-height: 1.7;
+  text-align: center;
 }
 
 .infinite-hits-end {
