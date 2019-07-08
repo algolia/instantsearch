@@ -506,6 +506,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 });
 
 describe('dispose', () => {
+  it('cancels the scheduled search', async () => {
+    const search = new InstantSearch({
+      indexName: 'index_name',
+      searchClient: createSearchClient(),
+    });
+
+    search.addWidgets([createWidget(), createWidget()]);
+
+    search.start();
+
+    await runAllMicroTasks();
+
+    // The call to `addWidgets` schedules a new search
+    search.addWidgets([createWidget()]);
+
+    search.dispose();
+
+    // Without the cancel operation, the function call throws an error which
+    // prevents the test to complete. We can't assert that the function throws
+    // because we don't have access to the promise that throws in the first place.
+    await runAllMicroTasks();
+  });
+
   it('cancels the scheduled render', async () => {
     const search = new InstantSearch({
       indexName: 'index_name',
