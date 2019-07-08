@@ -12,7 +12,7 @@ function findIndex<TItem>(
     return -1;
   }
 
-  for (var i = 0; i < array.length; i++) {
+  for (let i = 0; i < array.length; i++) {
     if (comparator(array[i])) {
       return i;
     }
