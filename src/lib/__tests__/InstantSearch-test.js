@@ -551,6 +551,64 @@ describe('dispose', () => {
     await runAllMicroTasks();
   });
 
+  it('cancels the scheduled stalled render', async () => {
+    const createControlledSearchClient = () => {
+      const searches = [];
+      const searchClient = {
+        search: jest.fn(() => {
+          let resolver;
+          const promise = new Promise(resolve => {
+            resolver = () => resolve(createMutliSearchResponse());
+          });
+
+          searches.push({
+            promise,
+            resolver,
+          });
+
+          return promise;
+        }),
+      };
+
+      return {
+        searchClient,
+        searches,
+      };
+    };
+
+    const { searches, searchClient } = createControlledSearchClient();
+    const search = new InstantSearch({
+      indexName: 'index_name',
+      searchClient,
+    });
+
+    search.addWidgets([createWidget(), createWidget()]);
+
+    search.start();
+
+    // Resolve the `search`
+    searches[0].resolver();
+
+    // Wait for the `search`
+    await searches[0].promise;
+
+    // Wait for the `render`
+    await runAllMicroTasks();
+
+    // Simulate a search
+    search.mainHelper.search();
+
+    search.dispose();
+
+    // Reaches the delay
+    jest.runOnlyPendingTimers();
+
+    // Without the cancel operation, the function call throws an error which
+    // prevents the test to complete. We can't assert that the function throws
+    // because we don't have access to the promise that throws in the first place.
+    await runAllMicroTasks();
+  });
+
   it('removes the widgets from the main index', () => {
     const search = new InstantSearch({
       indexName: 'index_name',
