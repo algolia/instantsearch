@@ -1,4 +1,4 @@
-export const collapseButtonText = ({ collapsed }) =>
+export const collapseButtonText = ({ collapsed }: { collapsed: boolean }) =>
   collapsed
     ? `
 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13">

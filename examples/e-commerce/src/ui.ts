@@ -16,12 +16,12 @@ function openFilters() {
 
 function closeFilters() {
   document.body.classList.remove('filtering');
-  resultsContainer.scrollIntoView();
+  resultsContainer!.scrollIntoView();
   window.removeEventListener('keyup', onKeyUp);
   window.removeEventListener('click', onClick);
 }
 
-function onKeyUp(event) {
+function onKeyUp(event: KeyboardEvent) {
   if (event.key !== 'Escape') {
     return;
   }
@@ -29,7 +29,7 @@ function onKeyUp(event) {
   closeFilters();
 }
 
-function onClick(event) {
+function onClick(event: MouseEvent) {
   if (event.target !== header) {
     return;
   }

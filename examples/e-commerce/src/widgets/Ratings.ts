@@ -9,7 +9,7 @@ const ratingsMenu = panel({
   collapsed: () => false,
 })(ratingMenu);
 
-const ratings = ratingsMenu({
+export const ratings = ratingsMenu({
   container: '[data-widget="ratings"]',
   attribute: 'rating',
   templates: {
@@ -41,5 +41,3 @@ const ratings = ratingsMenu({
   `,
   },
 });
-
-export default ratings;

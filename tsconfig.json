@@ -16,5 +16,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true
-  }
+  },
+  "exclude": ["examples"]
 }
