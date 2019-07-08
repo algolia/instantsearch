@@ -1,4 +1,5 @@
 import { SearchParameters } from '../../types';
+import findIndex from './findIndex';
 
 type Merge = (value: SearchParameters) => SearchParameters;
 
@@ -49,7 +50,7 @@ const mergeHierarchicalFacets: Merger = right => left =>
     // @TODO: remove this cast when typings in helper are merged
     hierarchicalFacets: (right.hierarchicalFacets as HierarchicalFacet[]).reduce(
       (facets, facet) => {
-        const index = facets.findIndex(_ => _.name === facet.name);
+        const index = findIndex(facets, _ => _.name === facet.name);
 
         if (index === -1) {
           return facets.concat(facet);
