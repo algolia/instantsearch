@@ -1,7 +1,9 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '../../../test/mock/createSearchClient';
+import {
+  createSearchClient,
+  createControlledSearchClient,
+} from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
-import { createMutliSearchResponse } from '../../../test/mock/createAPIResponse';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
@@ -552,30 +554,6 @@ describe('dispose', () => {
   });
 
   it('cancels the scheduled stalled render', async () => {
-    const createControlledSearchClient = () => {
-      const searches = [];
-      const searchClient = {
-        search: jest.fn(() => {
-          let resolver;
-          const promise = new Promise(resolve => {
-            resolver = () => resolve(createMutliSearchResponse());
-          });
-
-          searches.push({
-            promise,
-            resolver,
-          });
-
-          return promise;
-        }),
-      };
-
-      return {
-        searchClient,
-        searches,
-      };
-    };
-
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
       indexName: 'index_name',
@@ -588,9 +566,6 @@ describe('dispose', () => {
 
     // Resolve the `search`
     searches[0].resolver();
-
-    // Wait for the `search`
-    await searches[0].promise;
 
     // Wait for the `render`
     await runAllMicroTasks();
@@ -848,30 +823,6 @@ describe('scheduleRender', () => {
 });
 
 describe('scheduleStalledRender', () => {
-  const createControlledSearchClient = () => {
-    const searches = [];
-    const searchClient = {
-      search: jest.fn(() => {
-        let resolver;
-        const promise = new Promise(resolve => {
-          resolver = () => resolve(createMutliSearchResponse());
-        });
-
-        searches.push({
-          promise,
-          resolver,
-        });
-
-        return promise;
-      }),
-    };
-
-    return {
-      searchClient,
-      searches,
-    };
-  };
-
   it('calls the `render` method on the main index', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
@@ -887,9 +838,6 @@ describe('scheduleStalledRender', () => {
 
     // Resolve the `search`
     searches[0].resolver();
-
-    // Wait for the `search`
-    await searches[0].promise;
 
     // Wait for the `render`
     await runAllMicroTasks();
@@ -923,9 +871,6 @@ describe('scheduleStalledRender', () => {
 
     // Resolve the `search`
     searches[0].resolver();
-
-    // Wait for the `search`
-    await searches[0].promise;
 
     // Wait for the `render`
     await runAllMicroTasks();
@@ -967,9 +912,6 @@ describe('scheduleStalledRender', () => {
     // Resolve the `search`
     searches[0].resolver();
 
-    // Wait for the `search`
-    await searches[0].promise;
-
     // Wait for the `render`
     await runAllMicroTasks();
 
@@ -1005,9 +947,6 @@ describe('scheduleStalledRender', () => {
 
     // Resolve the `search`
     searches[1].resolver();
-
-    // Wait for the `search`
-    await searches[1].promise;
 
     // Wait for the `render`
     await runAllMicroTasks();
