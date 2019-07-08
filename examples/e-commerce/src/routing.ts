@@ -107,8 +107,12 @@ const router = historyRouter({
   },
 
   createURL({ qsModule, routeState, location }): string {
+    const { protocol, hostname, port = '', pathname, hash } = location;
+    const portWithPrefix = port === '' ? '' : `:${port}`;
     const urlParts = location.href.match(/^(.*?)\/search/);
-    const baseUrl = `${urlParts ? urlParts[1] : ''}/`;
+    const baseUrl =
+      (urlParts && urlParts[0]) ||
+      `${protocol}//${hostname}${portWithPrefix}${pathname}search`;
 
     const categoryPath = routeState.category
       ? `${getCategorySlug(routeState.category)}/`
@@ -166,7 +170,7 @@ const router = historyRouter({
       arrayFormat: 'repeat',
     });
 
-    return `${baseUrl}search/${categoryPath}${queryString}`;
+    return `${baseUrl}/${categoryPath}${queryString}${hash}`;
   },
 
   parseURL({ qsModule, location }): RouteState {
