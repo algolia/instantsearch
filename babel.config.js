@@ -16,17 +16,7 @@ module.exports = api => {
     targets.browsers = ['last 2 versions', 'ie >= 9'];
   }
 
-  const testPlugins = [
-    '@babel/plugin-proposal-class-properties',
-    [
-      'module-resolver',
-      {
-        alias: {
-          'preact-compat': 'react',
-        },
-      },
-    ],
-  ];
+  const testPlugins = ['@babel/plugin-proposal-class-properties'];
 
   const buildPlugins = clean([
     '@babel/plugin-proposal-class-properties',

@@ -1,0 +1,425 @@
+{
+  "results": [
+    {
+      "hits": [
+        {
+          "name": "Nikon - Coolpix AW130 16.0-Megapixel Waterproof Digital Camera - Orange",
+          "description": "Only at Best Buy  Capture your next adventure. Whether you're diving, biking, climbing or skiing, this Nikon camera gives you sharp photos and HD video footage. The wide-angle NIKKOR lens gives you a wide range for all your action shots and up to 100 feet underwater. Built-in Wi-Fi makes it easy to share stored footage across devices.  Memory card sold separately.",
+          "brand": "Nikon",
+          "categories": [
+            "Cameras & Camcorders",
+            "Digital Cameras",
+            "Point & Shoot Cameras",
+            "All Point & Shoot Cameras"
+          ],
+          "hierarchicalCategories": {
+            "lvl0": "Cameras & Camcorders",
+            "lvl1": "Cameras & Camcorders > Digital Cameras",
+            "lvl2": "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras",
+            "lvl3": "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras > All Point & Shoot Cameras"
+          },
+          "type": "Digital cameras",
+          "price": 349.99,
+          "price_range": "200 - 500",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/3574072_sb.jpg",
+          "url": "https://api.bestbuy.com/click/-/3574072/pdp",
+          "free_shipping": false,
+          "rating": 4,
+          "popularity": 21238,
+          "objectID": "3574072",
+          "_snippetResult": {
+            "description": {
+              "value": "Only at Best Buy  Capture your next adventure. Whether you're diving, biking, climbing or […]",
+              "matchLevel": "none"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "Nikon - Coolpix AW130 16.0-Megapixel Waterproof Digital Camera - Orange",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "description": {
+              "value": "Only at Best Buy  Capture your next adventure. Whether you're diving, biking, climbing or skiing, this Nikon camera gives you sharp photos and HD video footage. The wide-angle NIKKOR lens gives you a wide range for all your action shots and up to 100 feet underwater. Built-in Wi-Fi makes it easy to share stored footage across devices.  Memory card sold separately.",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "brand": {
+              "value": "Nikon",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "categories": [
+              {
+                "value": "Cameras & Camcorders",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Digital Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Point & Shoot Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "All Point & Shoot Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "type": {
+              "value": "Digital cameras",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        },
+        {
+          "name": "Fujifilm - instax mini 8 Instant Film Camera - Blue",
+          "description": "Capture special moments with this Fujifilm 16273439 instax mini 8 camera that utilizes film packs (not included) to instantly provide you with photos. The brightness dial enables simple customization, and the high-key mode softens your shots for a creative touch.",
+          "brand": "Fujifilm",
+          "categories": [
+            "Cameras & Camcorders",
+            "Digital Cameras",
+            "Point & Shoot Cameras",
+            "Children's Cameras"
+          ],
+          "hierarchicalCategories": {
+            "lvl0": "Cameras & Camcorders",
+            "lvl1": "Cameras & Camcorders > Digital Cameras",
+            "lvl2": "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras",
+            "lvl3": "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras > Children's Cameras"
+          },
+          "type": "Instant print hw",
+          "price": 69.99,
+          "price_range": "50 - 100",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/1319385_sb.jpg",
+          "url": "https://api.bestbuy.com/click/-/1319385/pdp",
+          "free_shipping": true,
+          "rating": 4,
+          "popularity": 21098,
+          "objectID": "1319385",
+          "_snippetResult": {
+            "description": {
+              "value": "Capture special moments with this Fujifilm 16273439 instax mini 8 camera that utilizes film packs […]",
+              "matchLevel": "none"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "Fujifilm - instax mini 8 Instant Film Camera - Blue",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "description": {
+              "value": "Capture special moments with this Fujifilm 16273439 instax mini 8 camera that utilizes film packs (not included) to instantly provide you with photos. The brightness dial enables simple customization, and the high-key mode softens your shots for a creative touch.",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "brand": {
+              "value": "Fujifilm",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "categories": [
+              {
+                "value": "Cameras & Camcorders",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Digital Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Point & Shoot Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Children's Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "type": {
+              "value": "Instant print hw",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        },
+        {
+          "name": "Polaroid - Snap 10.0-Megapixel Digital Camera - White",
+          "description": "Instantly share your favorite moments with this Polaroid Snap digital camera, which allows you to print 2\" x 3\" photos on the spot. Six shooting modes, including photobooth mode, make it easy to capture great shots.  Memory card sold separately.",
+          "brand": "Polaroid",
+          "categories": ["Cameras & Camcorders", "Digital Cameras"],
+          "hierarchicalCategories": {
+            "lvl0": "Cameras & Camcorders",
+            "lvl1": "Cameras & Camcorders > Digital Cameras"
+          },
+          "type": "Instant print hw",
+          "price": 99.99,
+          "price_range": "50 - 100",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/4416001_sb.jpg",
+          "url": "https://api.bestbuy.com/click/-/4416001/pdp",
+          "free_shipping": true,
+          "rating": 4,
+          "popularity": 20995,
+          "objectID": "4416001",
+          "_snippetResult": {
+            "description": {
+              "value": "Instantly share your favorite moments with this Polaroid Snap digital camera, which allows you to […]",
+              "matchLevel": "none"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "Polaroid - Snap 10.0-Megapixel Digital Camera - White",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "description": {
+              "value": "Instantly share your favorite moments with this Polaroid Snap digital camera, which allows you to print 2\" x 3\" photos on the spot. Six shooting modes, including photobooth mode, make it easy to capture great shots.  Memory card sold separately.",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "brand": {
+              "value": "Polaroid",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "categories": [
+              {
+                "value": "Cameras & Camcorders",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Digital Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "type": {
+              "value": "Instant print hw",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        },
+        {
+          "name": "Nikon - D3400 DSLR Camera with AF-P DX 18-55mm G VR and 70-300mm G ED Lenses - Black",
+          "description": "Delve into the world of DSLRs with the Nikon D3400. This lightweight camera gives you outstanding control even in low-light conditions, letting you explore, play with and customize your images to produce exactly the effect you want. Explore lighting levels, long shutter speeds and even tripod-mounted shots with the Nikon D3400.",
+          "brand": "Nikon",
+          "categories": [
+            "Cameras & Camcorders",
+            "Digital Cameras",
+            "Digital SLR Cameras",
+            "DSLR Body & Lens"
+          ],
+          "hierarchicalCategories": {
+            "lvl0": "Cameras & Camcorders",
+            "lvl1": "Cameras & Camcorders > Digital Cameras",
+            "lvl2": "Cameras & Camcorders > Digital Cameras > Digital SLR Cameras",
+            "lvl3": "Cameras & Camcorders > Digital Cameras > Digital SLR Cameras > DSLR Body & Lens"
+          },
+          "type": "Dslr cameras",
+          "price": 899.99,
+          "price_range": "500 - 2000",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/5580131_sb.jpg",
+          "url": "https://api.bestbuy.com/click/-/5580131/pdp",
+          "free_shipping": true,
+          "rating": 4,
+          "popularity": 20899,
+          "objectID": "5580131",
+          "_snippetResult": {
+            "description": {
+              "value": "Delve into the world of DSLRs with the Nikon D3400. This lightweight camera gives you […]",
+              "matchLevel": "none"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "Nikon - D3400 DSLR Camera with AF-P DX 18-55mm G VR and 70-300mm G ED Lenses - Black",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "description": {
+              "value": "Delve into the world of DSLRs with the Nikon D3400. This lightweight camera gives you outstanding control even in low-light conditions, letting you explore, play with and customize your images to produce exactly the effect you want. Explore lighting levels, long shutter speeds and even tripod-mounted shots with the Nikon D3400.",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "brand": {
+              "value": "Nikon",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "categories": [
+              {
+                "value": "Cameras & Camcorders",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Digital Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "Digital SLR Cameras",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "DSLR Body & Lens",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "type": {
+              "value": "Dslr cameras",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        }
+      ],
+      "nbHits": 170,
+      "page": 0,
+      "nbPages": 43,
+      "hitsPerPage": 4,
+      "processingTimeMS": 1,
+      "facets": {
+        "hierarchicalCategories.lvl0": { "Cameras & Camcorders": 170 },
+        "hierarchicalCategories.lvl1": {
+          "Cameras & Camcorders > Digital Cameras": 170
+        },
+        "hierarchicalCategories.lvl2": {
+          "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras": 84,
+          "Cameras & Camcorders > Digital Cameras > Digital SLR Cameras": 44,
+          "Cameras & Camcorders > Digital Cameras > Mirrorless Cameras": 29
+        }
+      },
+      "exhaustiveFacetsCount": true,
+      "exhaustiveNbHits": true,
+      "query": "",
+      "queryAfterRemoval": "",
+      "params": "query=&hitsPerPage=4&page=0&attributesToSnippet=%5B%22description%3A15%22%5D&snippetEllipsisText=%5B%E2%80%A6%5D&facets=%5B%22hierarchicalCategories.lvl0%22%2C%22hierarchicalCategories.lvl1%22%2C%22hierarchicalCategories.lvl2%22%2C%22hierarchicalCategories.lvl0%22%2C%22hierarchicalCategories.lvl1%22%2C%22hierarchicalCategories.lvl2%22%5D&tagFilters=&facetFilters=%5B%5B%22hierarchicalCategories.lvl1%3ACameras%20%26%20Camcorders%20%3E%20Digital%20Cameras%22%5D%5D",
+      "index": "instant_search"
+    },
+    {
+      "hits": [
+        {
+          "objectID": "3142635",
+          "_snippetResult": {
+            "description": {
+              "value": "Expand the storage of your compatible device with this SanDisk Ultra Plus microSDHC memory card […]",
+              "matchLevel": "none"
+            }
+          }
+        }
+      ],
+      "nbHits": 1369,
+      "page": 0,
+      "nbPages": 1000,
+      "hitsPerPage": 1,
+      "processingTimeMS": 1,
+      "facets": {
+        "hierarchicalCategories.lvl0": { "Cameras & Camcorders": 1369 },
+        "hierarchicalCategories.lvl1": {
+          "Cameras & Camcorders > Digital Camera Accessories": 804,
+          "Cameras & Camcorders > Camcorder Accessories": 173,
+          "Cameras & Camcorders > Digital Cameras": 170,
+          "Cameras & Camcorders > Memory Cards": 113,
+          "Cameras & Camcorders > Camcorders": 50,
+          "Cameras & Camcorders > Binoculars": 20,
+          "Cameras & Camcorders > Telescopes": 15,
+          "Cameras & Camcorders > Microscopes": 5,
+          "Cameras & Camcorders > Monoculars": 5,
+          "Cameras & Camcorders > Spotting Scopes": 5,
+          "Cameras & Camcorders > Trail Cameras": 5,
+          "Cameras & Camcorders > P&S Adapters & Chargers": 1
+        }
+      },
+      "exhaustiveFacetsCount": true,
+      "exhaustiveNbHits": true,
+      "query": "",
+      "queryAfterRemoval": "",
+      "params": "query=&hitsPerPage=1&page=0&attributesToSnippet=%5B%22description%3A15%22%5D&snippetEllipsisText=%5B%E2%80%A6%5D&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=%5B%22hierarchicalCategories.lvl0%22%2C%22hierarchicalCategories.lvl1%22%5D&facetFilters=%5B%5B%22hierarchicalCategories.lvl0%3ACameras%20%26%20Camcorders%22%5D%5D",
+      "index": "instant_search"
+    },
+    {
+      "hits": [
+        {
+          "objectID": "5477500",
+          "_snippetResult": {
+            "description": {
+              "value": "Enjoy smart access to videos, games and apps with this Amazon Fire TV stick. Its […]",
+              "matchLevel": "none"
+            }
+          }
+        }
+      ],
+      "nbHits": 21469,
+      "page": 0,
+      "nbPages": 1000,
+      "hitsPerPage": 1,
+      "processingTimeMS": 1,
+      "facets": {
+        "hierarchicalCategories.lvl0": {
+          "Appliances": 4306,
+          "Computers & Tablets": 3563,
+          "Cell Phones": 3291,
+          "Audio": 1570,
+          "Cameras & Camcorders": 1369,
+          "Car Electronics & GPS": 1208,
+          "TV & Home Theater": 1201,
+          "Health, Fitness & Beauty": 923,
+          "Office & School Supplies": 617,
+          "Video Games": 505,
+          "Smart Home": 405,
+          "Office Electronics": 328,
+          "Musical Instruments": 312,
+          "Toys, Games & Drones": 285,
+          "Wearable Technology": 271,
+          "Housewares": 255,
+          "Telephones & Communication": 194,
+          "Office Furniture & Storage": 152,
+          "Household Essentials": 148,
+          "Name Brands": 101,
+          "Furniture & Decor": 91,
+          "Paper": 65,
+          "Entertainment Gift Cards": 46,
+          "Scanners, Faxes & Copiers": 46,
+          "Magnolia Home Theater": 33,
+          "Movies & Music": 18,
+          "Batteries & Power": 7,
+          "Carfi Instore Only": 4,
+          "MP Pending": 3,
+          "Custom Parts": 2,
+          "Geek Squad": 2,
+          "Gift Ideas": 2,
+          "In-Store Only": 2,
+          "Avengers: Age of Ultron": 1,
+          "Beverage & Wine Coolers": 1,
+          "DC Comics": 1,
+          "Exclusives": 1,
+          "MP Exclusives": 1,
+          "Star Wars": 1
+        }
+      },
+      "exhaustiveFacetsCount": true,
+      "exhaustiveNbHits": true,
+      "query": "",
+      "queryAfterRemoval": "",
+      "params": "query=&hitsPerPage=1&page=0&attributesToSnippet=%5B%22description%3A15%22%5D&snippetEllipsisText=%5B%E2%80%A6%5D&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&tagFilters=&analytics=false&clickAnalytics=false&facets=%5B%22hierarchicalCategories.lvl0%22%5D",
+      "index": "instant_search"
+    }
+  ]
+}
