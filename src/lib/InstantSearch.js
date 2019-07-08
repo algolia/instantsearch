@@ -312,6 +312,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
    * @return {undefined} This method does not return anything
    */
   dispose() {
+    this.scheduleSearch.cancel();
+    this.scheduleRender.cancel();
+    clearTimeout(this._searchStalledTimer);
+
     this.removeWidgets(this.mainIndex.getWidgets());
     this.mainIndex.dispose();
 
