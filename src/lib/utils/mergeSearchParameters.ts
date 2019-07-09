@@ -1,15 +1,12 @@
 import { SearchParameters } from '../../types';
 import findIndex from './findIndex';
 
-type Merge = (value: SearchParameters) => SearchParameters;
+type Merger = (
+  left: SearchParameters,
+  right: SearchParameters
+) => SearchParameters;
 
-type Merger = (right: SearchParameters) => Merge;
-
-const compose = <TValue>(...fns: Array<(x: TValue) => TValue>) => (
-  initial: TValue
-) => fns.reduceRight((_, fn) => fn(_), initial);
-
-const mergeWithRest: Merger = right => left => {
+const mergeWithRest: Merger = (left, right) => {
   const {
     facets,
     disjunctiveFacets,
@@ -27,16 +24,16 @@ const mergeWithRest: Merger = right => left => {
 };
 
 // Merge facets
-const mergeFacets: Merger = right => left =>
+const mergeFacets: Merger = (left, right) =>
   right.facets!.reduce((_, name) => _.addFacet(name), left);
 
-const mergeDisjunctiveFacets: Merger = right => left =>
+const mergeDisjunctiveFacets: Merger = (left, right) =>
   right.disjunctiveFacets!.reduce(
     (_, name) => _.addDisjunctiveFacet(name),
     left
   );
 
-const mergeTagRefinements: Merger = right => left =>
+const mergeTagRefinements: Merger = (left, right) =>
   right.tagRefinements!.reduce((_, value) => _.addTagRefinement(value), left);
 
 type HierarchicalFacet = {
@@ -45,7 +42,7 @@ type HierarchicalFacet = {
   separator: string;
 };
 
-const mergeHierarchicalFacets: Merger = right => left =>
+const mergeHierarchicalFacets: Merger = (left, right) =>
   left.setQueryParameters({
     // @TODO: remove this cast when typings in helper are merged
     hierarchicalFacets: (right.hierarchicalFacets as HierarchicalFacet[]).reduce(
@@ -66,7 +63,7 @@ const mergeHierarchicalFacets: Merger = right => left =>
   });
 
 // Merge facets refinements
-const mergeFacetRefinements: Merger = right => left =>
+const mergeFacetRefinements: Merger = (left, right) =>
   left.setQueryParameters({
     facetsRefinements: {
       ...left.facetsRefinements,
@@ -74,7 +71,7 @@ const mergeFacetRefinements: Merger = right => left =>
     },
   });
 
-const mergeFacetsExcludes: Merger = right => left =>
+const mergeFacetsExcludes: Merger = (left, right) =>
   left.setQueryParameters({
     facetsExcludes: {
       ...left.facetsExcludes,
@@ -82,7 +79,7 @@ const mergeFacetsExcludes: Merger = right => left =>
     },
   });
 
-const mergeDisjunctiveFacetsRefinements: Merger = right => left =>
+const mergeDisjunctiveFacetsRefinements: Merger = (left, right) =>
   left.setQueryParameters({
     disjunctiveFacetsRefinements: {
       ...left.disjunctiveFacetsRefinements,
@@ -90,7 +87,7 @@ const mergeDisjunctiveFacetsRefinements: Merger = right => left =>
     },
   });
 
-const mergeNumericRefinements: Merger = right => left =>
+const mergeNumericRefinements: Merger = (left, right) =>
   left.setQueryParameters({
     numericRefinements: {
       ...left.numericRefinements,
@@ -98,7 +95,7 @@ const mergeNumericRefinements: Merger = right => left =>
     },
   });
 
-const mergeHierarchicalFacetsRefinements: Merger = right => left =>
+const mergeHierarchicalFacetsRefinements: Merger = (left, right) =>
   left.setQueryParameters({
     hierarchicalFacetsRefinements: {
       ...left.hierarchicalFacetsRefinements,
@@ -106,21 +103,43 @@ const mergeHierarchicalFacetsRefinements: Merger = right => left =>
     },
   });
 
-const merge = (...parameters: SearchParameters[]): SearchParameters => {
-  return parameters.reduce((left, right) =>
-    compose(
-      mergeHierarchicalFacetsRefinements(right),
-      mergeHierarchicalFacets(right),
-      mergeTagRefinements(right),
-      mergeNumericRefinements(right),
-      mergeDisjunctiveFacetsRefinements(right),
-      mergeFacetsExcludes(right),
-      mergeFacetRefinements(right),
-      mergeDisjunctiveFacets(right),
-      mergeFacets(right),
-      mergeWithRest(right)
-    )(left)
-  );
-};
+const merge = (...parameters: SearchParameters[]): SearchParameters =>
+  parameters.reduce((left, right) => {
+    const hierarchicalFacetsRefinementsMerged = mergeHierarchicalFacetsRefinements(
+      left,
+      right
+    );
+    const hierarchicalFacetsMerged = mergeHierarchicalFacets(
+      hierarchicalFacetsRefinementsMerged,
+      right
+    );
+    const tagRefinementsMerged = mergeTagRefinements(
+      hierarchicalFacetsMerged,
+      right
+    );
+    const numericRefinementsMerged = mergeNumericRefinements(
+      tagRefinementsMerged,
+      right
+    );
+    const disjunctiveFacetsRefinementsMerged = mergeDisjunctiveFacetsRefinements(
+      numericRefinementsMerged,
+      right
+    );
+    const facetsExcludesMerged = mergeFacetsExcludes(
+      disjunctiveFacetsRefinementsMerged,
+      right
+    );
+    const facetRefinementsMerged = mergeFacetRefinements(
+      facetsExcludesMerged,
+      right
+    );
+    const disjunctiveFacetsMerged = mergeDisjunctiveFacets(
+      facetRefinementsMerged,
+      right
+    );
+    const facetsMerged = mergeFacets(disjunctiveFacetsMerged, right);
+
+    return mergeWithRest(facetsMerged, right);
+  });
 
 export default merge;
