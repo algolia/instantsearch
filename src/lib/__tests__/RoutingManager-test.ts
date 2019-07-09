@@ -126,10 +126,12 @@ describe('RoutingManager', () => {
       const widgetState = {
         query: 'query',
       };
+
       const widget = {
         render: () => {},
         getWidgetState: jest.fn(() => widgetState),
       };
+
       search.addWidget(widget);
 
       const actualInitialState = {
@@ -151,16 +153,17 @@ describe('RoutingManager', () => {
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
       const uiStates = router.getAllUiStates({
-        searchParameters: search.helper.state,
+        searchParameters: search.mainIndex.getHelper().state,
       });
+
       expect(uiStates).toEqual(widgetState);
 
       expect(widget.getWidgetState).toHaveBeenCalledTimes(1);
       expect(widget.getWidgetState).toHaveBeenCalledWith(
         {},
         {
-          helper: search.helper,
-          searchParameters: search.helper.state,
+          helper: search.mainIndex.getHelper(),
+          searchParameters: search.mainIndex.getHelper().state,
         }
       );
     });
@@ -195,8 +198,9 @@ describe('RoutingManager', () => {
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
       const uiStates = router.getAllUiStates({
-        searchParameters: search.helper.state,
+        searchParameters: search.mainIndex.getHelper().state,
       });
+
       expect(uiStates).toEqual({});
     });
   });
@@ -213,6 +217,7 @@ describe('RoutingManager', () => {
         render: () => {},
         getWidgetSearchParameters: jest.fn(sp => sp.setQuery('test')),
       };
+
       search.addWidget(widget);
 
       const actualInitialState = {
@@ -234,14 +239,17 @@ describe('RoutingManager', () => {
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
       const searchParameters = router.getAllSearchParameters({
-        currentSearchParameters: search.helper.state,
+        currentSearchParameters: search.mainIndex.getHelper().state,
         uiState: {},
       });
-      expect(searchParameters).toEqual(search.helper.state.setQuery('test'));
+
+      expect(searchParameters).toEqual(
+        search.mainIndex.getHelper().state.setQuery('test')
+      );
 
       expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
       expect(widget.getWidgetSearchParameters).toHaveBeenCalledWith(
-        search.helper.state,
+        search.mainIndex.getHelper().state,
         {
           uiState: {},
         }
@@ -275,10 +283,11 @@ describe('RoutingManager', () => {
       // in the test after the TypeScript migration.
       // In a next refactor, we can consider changing this test implementation.
       const searchParameters = router.getAllSearchParameters({
-        currentSearchParameters: search.helper.state,
+        currentSearchParameters: search.mainIndex.getHelper().state,
         uiState: {},
       });
-      expect(searchParameters).toEqual(search.helper.state);
+
+      expect(searchParameters).toEqual(search.mainIndex.getHelper().state);
     });
   });
 
@@ -305,6 +314,7 @@ describe('RoutingManager', () => {
         })),
         getWidgetSearchParameters: jest.fn(),
       };
+
       search.addWidget(widget);
 
       search.start();
@@ -316,7 +326,7 @@ describe('RoutingManager', () => {
 
         expect(router.write).toHaveBeenCalledTimes(0);
 
-        search.helper.setQuery('q'); // routing write updates on change
+        search.mainIndex.getHelper().setQuery('q'); // routing write updates on change
 
         expect(router.write).toHaveBeenCalledTimes(1);
         expect(router.write).toHaveBeenCalledWith({
@@ -358,7 +368,7 @@ describe('RoutingManager', () => {
       search.once('render', () => {
         // initialization is done at this point
 
-        expect(search.helper.state.query).toBeUndefined();
+        expect(search.mainIndex.getHelper().state.query).toBeUndefined();
 
         // this simulates a router update with a uiState of {q: 'a'}
         onRouterUpdateCallback({
@@ -368,7 +378,7 @@ describe('RoutingManager', () => {
         search.once('render', () => {
           // the router update triggers a new search
           // and given that the widget reads q as a query parameter
-          expect(search.helper.state.query).toEqual('a');
+          expect(search.mainIndex.getHelper().state.query).toEqual('a');
           done();
         });
       });
@@ -418,7 +428,7 @@ describe('RoutingManager', () => {
       search.once('render', () => {
         // initialization is done at this point
 
-        expect(search.helper.state.query).toEqual('test');
+        expect(search.mainIndex.getHelper().state.query).toEqual('test');
 
         expect(router.write).toHaveBeenLastCalledWith({
           query: 'TEST',

@@ -44,7 +44,7 @@ class RoutingManager implements Widget {
     currentSearchParameters,
     uiState,
   }): Partial<SearchParameters> {
-    const widgets = this.instantSearchInstance.widgets;
+    const widgets = this.instantSearchInstance.mainIndex.getWidgets();
 
     return widgets.reduce((parameters, widget) => {
       if (!widget.getWidgetSearchParameters) {
@@ -62,8 +62,8 @@ class RoutingManager implements Widget {
   }: {
     searchParameters: SearchParameters;
   }): UiState {
-    const widgets = this.instantSearchInstance.widgets;
-    const helper = this.instantSearchInstance.helper!;
+    const widgets = this.instantSearchInstance.mainIndex.getWidgets();
+    const helper = this.instantSearchInstance.mainIndex.getHelper()!;
 
     return widgets.reduce<UiState>((state, widget) => {
       if (!widget.getWidgetState) {
@@ -78,7 +78,7 @@ class RoutingManager implements Widget {
   }
 
   private setupRouting(state: SearchParameters): void {
-    const helper = this.instantSearchInstance.helper!;
+    const helper = this.instantSearchInstance.mainIndex.getHelper()!;
 
     this.router.onUpdate(route => {
       const nextUiState = this.stateMapping.routeToState(route);
@@ -170,10 +170,7 @@ class RoutingManager implements Widget {
 
   public dispose({ helper, state }): void {
     if (this.renderURLFromState) {
-      this.instantSearchInstance.helper!.removeListener(
-        'change',
-        this.renderURLFromState
-      );
+      helper.removeListener('change', this.renderURLFromState);
     }
 
     if (this.router.dispose) {
@@ -185,6 +182,7 @@ class RoutingManager implements Widget {
     const uiState = this.getAllUiStates({
       searchParameters: state,
     });
+
     const route = this.stateMapping.stateToRoute(uiState);
 
     return this.router.createURL(route);
@@ -193,7 +191,7 @@ class RoutingManager implements Widget {
   public onHistoryChange(
     callback: (state: Partial<SearchParameters>) => void
   ): void {
-    const helper = this.instantSearchInstance.helper!;
+    const helper = this.instantSearchInstance.mainIndex.getHelper()!;
 
     this.router.onUpdate(route => {
       const nextUiState = this.stateMapping.routeToState(route);
