@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "antd": "3.20.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "prop-types": "15.6.0",
     "react": "16.8.6",
     "react-autosuggest": "9.4.3",
