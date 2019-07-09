@@ -72,13 +72,17 @@ const statsWidget = connectHits(({ results, widgetParams }) => {
 
   const refinements = [...stringRefinements, dateRefinement]
     .filter(Boolean)
-    .map(refinement => `<strong>${refinement}</strong>`)
-    .join(', ');
+    .map(refinement => `<strong>${refinement}</strong>`);
 
   containerNode.innerHTML = `
 <div class="ais-Stats">
   <div class="ais-Stats-text">
-    ${[resultsStats, refinements].filter(Boolean).join(' in ')}
+    ${[
+      [resultsStats, refinements.slice(0, 5).join(', ')].join(' in '),
+      refinements.length > 5 && '...',
+    ]
+      .filter(Boolean)
+      .join('')}
   </div>
 </div>
 `;
