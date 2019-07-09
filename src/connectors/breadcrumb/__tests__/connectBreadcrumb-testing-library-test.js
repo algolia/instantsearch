@@ -1,6 +1,6 @@
 import { wait } from '@testing-library/dom';
 
-import instantsearch from '../../../index';
+import instantsearch from '../../../../dist/instantsearch.production.min';
 
 import apiResults from '../../../widgets/breadcrumb/__tests__/__fixtures__/results.json';
 

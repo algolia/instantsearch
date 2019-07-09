@@ -1,6 +1,6 @@
 import { queryByText, getAllByText, wait } from '@testing-library/dom';
 
-import instantsearch from '../../../index';
+import instantsearch from '../../../../dist/instantsearch.production.min';
 
 import apiResults from './__fixtures__/results.json';
 
