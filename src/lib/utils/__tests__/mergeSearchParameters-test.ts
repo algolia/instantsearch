@@ -2,7 +2,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import merge from '../mergeSearchParameters';
 
 describe('mergeSearchParameters', () => {
-  it('merges non-managed parameters', () => {
+  it('overrides non-managed parameters', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         // Inherit
@@ -78,7 +78,7 @@ describe('mergeSearchParameters', () => {
     );
   });
 
-  it('merges `facetsRefinements` parameters', () => {
+  it('merges `facetsRefinements` parameters, overrides conflicts', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         facets: ['brand'],
@@ -113,7 +113,7 @@ describe('mergeSearchParameters', () => {
     );
   });
 
-  it('merges `facetsExcludes` parameters', () => {
+  it('merges `facetsExcludes` parameters, overrides conflicts', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         facets: ['brand'],
@@ -148,7 +148,7 @@ describe('mergeSearchParameters', () => {
     );
   });
 
-  it('merges `disjunctiveFacetsRefinements` parameters', () => {
+  it('merges `disjunctiveFacetsRefinements` parameters, overrides conflicts', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         disjunctiveFacets: ['brand'],
@@ -183,7 +183,7 @@ describe('mergeSearchParameters', () => {
     );
   });
 
-  it('merges `numericRefinements` parameters', () => {
+  it('merges `numericRefinements` parameters, overrides conflicts', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         numericRefinements: {
@@ -229,7 +229,7 @@ describe('mergeSearchParameters', () => {
     );
   });
 
-  it('merges `tagRefinements` parameters', () => {
+  it('merges `tagRefinements` parameters, overrides conflicts', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         tagRefinements: ['brand'],
@@ -249,7 +249,7 @@ describe('mergeSearchParameters', () => {
     );
   });
 
-  it('merges `hierarchicalFacets` parameters', () => {
+  it('merges `hierarchicalFacets` parameters, overrides conflicts', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         hierarchicalFacets: [
@@ -301,7 +301,7 @@ describe('mergeSearchParameters', () => {
     );
   });
 
-  it('merges `hierarchicalFacetsRefinements` parameters', () => {
+  it('merges `hierarchicalFacetsRefinements` parameters, overrides conflicts', () => {
     const actual = merge(
       algoliasearchHelper.SearchParameters.make({
         hierarchicalFacets: [
