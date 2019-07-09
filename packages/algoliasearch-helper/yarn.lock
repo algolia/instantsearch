@@ -283,6 +283,11 @@
     "@types/istanbul-lib-coverage" "^2.0.0"
     "@types/yargs" "^12.0.9"
 
+"@types/algoliasearch@^3.30.12":
+  version "3.30.12"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.30.12.tgz#3270ba642107f00cd743c29b8cae30c92a043dba"
+  integrity sha512-IiJ4/GP3NEFWZkZhF5/cPxIZNzAitLdZnMpo5KlWLcNL567LHDHG2NOZLwXzRrTuxNa1zmqZJKEDWHnw8kp3Ng==
+
 "@types/babel-types@*", "@types/babel-types@^7.0.0":
   version "7.0.4"
   resolved "https://registry.yarnpkg.com/@types/babel-types/-/babel-types-7.0.4.tgz#bfd5b0d0d1ba13e351dff65b6e52783b816826c8"
