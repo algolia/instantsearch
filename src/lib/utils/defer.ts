@@ -16,14 +16,14 @@ const defer = (callback: Callback): Defer => {
     }
 
     progress = nextMicroTask.then(() => {
+      progress = null;
+
       if (cancelled) {
-        progress = null;
         cancelled = false;
         return;
       }
 
       callback(...args);
-      progress = null;
     });
   };
 
