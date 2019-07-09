@@ -108,7 +108,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
-    this._isSearchStalled = true;
+    this._isSearchStalled = false;
     this._searchParameters = {
       ...searchParameters,
       index: indexName,
@@ -351,7 +351,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   });
 
   scheduleStalledRender() {
-    if (!this._isSearchStalled && !this._searchStalledTimer) {
+    if (!this._searchStalledTimer) {
       this._searchStalledTimer = setTimeout(() => {
         this._isSearchStalled = true;
         this.scheduleRender();

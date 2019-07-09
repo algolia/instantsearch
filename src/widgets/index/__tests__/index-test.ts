@@ -745,6 +745,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
       });
     });
+
+    // https://github.com/algolia/instantsearch.js/pull/2623
+    it('does not call `render` without `lastResults`', () => {
+      const instance = index({ indexName: 'index_name' });
+      const instantSearchInstance = createInstantSearch();
+
+      const widgets = [createSearchBox(), createPagination()];
+
+      instance.addWidgets(widgets);
+
+      widgets.forEach(widget => {
+        expect(widget.render).toHaveBeenCalledTimes(0);
+      });
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      widgets.forEach(widget => {
+        expect(widget.render).toHaveBeenCalledTimes(0);
+      });
+
+      instance.render(
+        createRenderOptions({
+          instantSearchInstance,
+        })
+      );
+
+      widgets.forEach(widget => {
+        expect(widget.render).toHaveBeenCalledTimes(0);
+      });
+    });
   });
 
   describe('dispose', () => {
