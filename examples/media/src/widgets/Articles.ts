@@ -113,7 +113,7 @@ const infiniteHits = connectInfiniteHits(
 
   <p class="infinite-hits-no-results-paragraph">
     Sorry, we can't find any matches${
-      results.query ? `for "${results.query}"` : ''
+      results.query ? ` for "${results.query}"` : ''
     }.
   </p>
 </div>
