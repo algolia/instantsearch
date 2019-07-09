@@ -305,7 +305,8 @@ strong {
   text-align: center;
 }
 
-.infinite-hits-end::after {
+.infinite-hits-end::after,
+.infinite-hits-no-results-container::after {
   background: linear-gradient(to left, #764ba2, #667eea);
   border-radius: 5px;
   content: '';
