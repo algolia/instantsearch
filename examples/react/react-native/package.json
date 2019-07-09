@@ -22,7 +22,7 @@
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "1.0.0",
     "expo": "25.1.2",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "prop-types": "15.6.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
