@@ -9,7 +9,7 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(1);
   });
@@ -24,7 +24,7 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(1);
   });
@@ -39,7 +39,7 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(1);
 
@@ -47,7 +47,7 @@ describe('defer', () => {
     deferred();
     deferred();
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(2);
   });
@@ -64,7 +64,7 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(0);
   });
@@ -81,13 +81,13 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(0);
 
     deferred();
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(1);
   });
@@ -104,8 +104,28 @@ describe('defer', () => {
 
     expect(fn).toHaveBeenCalledTimes(0);
 
-    await Promise.resolve();
+    await deferred.wait();
 
     expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('waits for the deferred function', async () => {
+    const fn = jest.fn();
+    const deferred = defer(fn);
+
+    deferred();
+
+    await deferred.wait();
+
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws an error when `wait` is called before the deferred function', () => {
+    const fn = jest.fn();
+    const deferred = defer(fn);
+
+    expect(() => deferred.wait()).toThrowErrorMatchingInlineSnapshot(
+      `"The deferred function should be called before calling \`wait()\`"`
+    );
   });
 });
