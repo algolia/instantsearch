@@ -1,4 +1,5 @@
 import { refinementList, panel } from 'instantsearch.js/es/widgets';
+import { isWindowMediumSize } from '../utils';
 
 const categoriesList = panel({
   templates: {
@@ -9,8 +10,11 @@ const categoriesList = panel({
 export const categories = categoriesList({
   container: '[data-widget="categories"]',
   attribute: 'categories.lvl0',
+  limit: isWindowMediumSize ? 5 : 10,
   searchable: true,
-  searchablePlaceholder: 'Search for categories or topics',
+  searchablePlaceholder: isWindowMediumSize
+    ? 'Categories or topics'
+    : 'Search for categories or topics',
   templates: {
     searchableSubmit: `
 <svg
