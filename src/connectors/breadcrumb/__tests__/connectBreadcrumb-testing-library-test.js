@@ -19,10 +19,8 @@ describe('connectBreadcrumb', () => {
   });
 
   afterEach(() => {
-    try {
+    if (search.started) {
       search.dispose();
-    } catch (e) {
-      // Fail if the search was never started, ignoring
     }
   });
 
@@ -80,7 +78,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         const renderBreadcrumb = jest.fn();
 
         const customBreadcrumb = instantsearch.connectors.connectBreadcrumb(
-          renderBreadcrumb
+          renderBreadcrumb,
+          () => {}
         );
 
         search.addWidget(
@@ -106,7 +105,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         const renderBreadcrumb = jest.fn();
 
         const customBreadcrumb = instantsearch.connectors.connectBreadcrumb(
-          renderBreadcrumb
+          renderBreadcrumb,
+          () => {}
         );
 
         search.addWidget(
@@ -133,7 +133,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         const renderBreadcrumb = jest.fn();
 
         const customBreadcrumb = instantsearch.connectors.connectBreadcrumb(
-          renderBreadcrumb
+          renderBreadcrumb,
+          () => {}
         );
 
         search.addWidget(
@@ -172,7 +173,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         const renderBreadcrumb = jest.fn();
 
         const customBreadcrumb = instantsearch.connectors.connectBreadcrumb(
-          renderBreadcrumb
+          renderBreadcrumb,
+          () => {}
         );
 
         search.addWidget(
@@ -205,7 +207,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           const renderBreadcrumb = jest.fn();
 
           const customBreadcrumb = instantsearch.connectors.connectBreadcrumb(
-            renderBreadcrumb
+            renderBreadcrumb,
+            () => {}
           );
 
           search.addWidget(
