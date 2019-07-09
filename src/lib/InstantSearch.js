@@ -127,7 +127,7 @@ See ${createDocumentationLink({
 
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
-    this._isSearchStalled = true;
+    this._isSearchStalled = false;
     this._searchParameters = {
       ...searchParameters,
       index: indexName,
@@ -370,7 +370,7 @@ See ${createDocumentationLink({
   });
 
   scheduleStalledRender() {
-    if (!this._isSearchStalled && !this._searchStalledTimer) {
+    if (!this._searchStalledTimer) {
       this._searchStalledTimer = setTimeout(() => {
         this._isSearchStalled = true;
         this.scheduleRender();
