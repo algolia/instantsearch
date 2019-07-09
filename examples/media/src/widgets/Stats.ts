@@ -78,7 +78,9 @@ const statsWidget = connectHits(({ results, widgetParams }) => {
 <div class="ais-Stats">
   <div class="ais-Stats-text">
     ${[
-      [resultsStats, refinements.slice(0, 5).join(', ')].join(' in '),
+      [resultsStats, refinements.slice(0, 5).join(', ')]
+        .filter(Boolean)
+        .join(' in '),
       refinements.length > 5 && '...',
     ]
       .filter(Boolean)
