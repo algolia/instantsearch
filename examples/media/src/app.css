@@ -105,14 +105,16 @@ strong {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
-  transform-origin: top;
-  transition: transform 300ms ease;
+}
+
+.container-filters-panel:not(.container-filters-panel--hidden) {
+  padding-bottom: 1.75rem;
 }
 
 .container-filters-panel--hidden {
+  display: none;
   margin-bottom: 0;
   max-height: 0;
-  transform: scaleY(0);
 }
 
 .container-filters-panel-column:not(:last-child) {
