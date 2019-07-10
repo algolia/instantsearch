@@ -67,11 +67,11 @@ export const withHits = (
   rightPanelPlaygroundElement.classList.add('panel-right');
   playgroundElement.appendChild(rightPanelPlaygroundElement);
 
-  playground({
-    search,
-    leftPanel: leftPanelPlaygroundElement,
-    rightPanel: rightPanelPlaygroundElement,
-  });
+  // playground({
+  //   search,
+  //   leftPanel: leftPanelPlaygroundElement,
+  //   rightPanel: rightPanelPlaygroundElement,
+  // });
 
   storyFn({
     container: previewElement,

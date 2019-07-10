@@ -22,8 +22,10 @@ describe('Breadcrumb', () => {
   });
 
   afterEach(() => {
-    if (search.started) {
+    try {
       search.dispose();
+    } catch (e) {
+      // Fail if the search was never started, ignoring
     }
   });
 
