@@ -1,3 +1,14 @@
+<a name="2.10.5"></a>
+## [2.10.5](https://github.com/algolia/instantsearch.js/compare/v2.10.4...v2.10.5) (2019-07-10)
+
+
+### Bug Fixes
+
+* **routing:** enforce RoutingManager is the last widget ([#3149](https://github.com/algolia/instantsearch.js/issues/3149)) ([1e86b2e](https://github.com/algolia/instantsearch.js/commit/1e86b2e)), closes [#3148](https://github.com/algolia/instantsearch.js/issues/3148)
+* **routing:** support parsing URLs with up to 100 refinements ([#3935](https://github.com/algolia/instantsearch.js/issues/3935)) ([d6476e2](https://github.com/algolia/instantsearch.js/commit/d6476e2))
+
+
+
 <a name="2.10.4"></a>
 ## [2.10.4](https://github.com/algolia/instantsearch.js/compare/v2.10.3...v2.10.4) (2018-10-30)
 
