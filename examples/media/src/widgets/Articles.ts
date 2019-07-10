@@ -45,6 +45,23 @@ function createHit(hit, { isHighlighted }) {
 `;
 }
 
+function createPlaceholderHit({ isHighlighted }) {
+  return `
+<li class="ais-InfiniteHits-item${
+    isHighlighted ? ' infinite-hits-item--highlighted' : ''
+  }">
+  <article class="card card--placeholder">
+    <div class="card-image">
+    </div>
+
+    <div class="card-content">
+
+    </div>
+  </article>
+</li>
+`;
+}
+
 let globalIsLastPage = false;
 
 const infiniteHits = connectInfiniteHits(
@@ -71,6 +88,14 @@ const infiniteHits = connectInfiniteHits(
       });
 
       observer.observe(loadMoreTrigger);
+
+      containerNode.querySelector('div').innerHTML = `
+<ol class="ais-InfiniteHits-list">
+  ${[...Array(7)]
+    .map((_, index) => createPlaceholderHit({ isHighlighted: index === 0 }))
+    .join('')}
+</ol>
+`;
 
       return;
     }
