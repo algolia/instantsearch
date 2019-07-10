@@ -536,7 +536,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       helper.setPage(2);
       clearRefinements();
-      expect(helper.getPage()).toBe(0);
+      expect(helper.state.page).toBe(0);
     });
   });
 });
