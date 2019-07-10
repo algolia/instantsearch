@@ -961,25 +961,6 @@ describe('scheduleStalledRender', () => {
       })
     );
   });
-
-  // https://github.com/algolia/instantsearch.js/pull/2623
-  it('does not trigger a re-`render` without results', () => {
-    const { searchClient } = createControlledSearchClient();
-    const search = new InstantSearch({
-      indexName: 'index_name',
-      searchClient,
-    });
-
-    search.start();
-
-    search.addWidget({
-      render: () => {},
-    });
-
-    jest.runOnlyPendingTimers();
-
-    return runAllMicroTasks();
-  });
 });
 
 describe('createURL', () => {
