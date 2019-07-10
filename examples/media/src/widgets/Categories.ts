@@ -10,7 +10,7 @@ const categoriesList = panel({
 export const categories = categoriesList({
   container: '[data-widget="categories"]',
   attribute: 'categories.lvl0',
-  limit: isWindowMediumSize ? 5 : 10,
+  limit: 7,
   searchable: true,
   searchablePlaceholder: isWindowMediumSize
     ? 'Categories or topics'

@@ -10,7 +10,7 @@ const locationsList = panel({
 export const locations = locationsList({
   container: '[data-widget="locations"]',
   attribute: 'locations',
-  limit: isWindowMediumSize ? 5 : 10,
+  limit: 7,
   searchable: true,
   searchablePlaceholder: isWindowMediumSize
     ? 'Cities or countries'
