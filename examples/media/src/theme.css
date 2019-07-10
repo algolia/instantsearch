@@ -77,7 +77,7 @@ a[class^='ais-'] {
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
   .ais-InfiniteHits-list {
     grid-template-columns: 1fr 1fr 1fr;
   }
