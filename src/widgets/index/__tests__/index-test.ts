@@ -582,6 +582,108 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
     });
 
+    it('inherits from the parent states for the queries', () => {
+      const level0 = index({ indexName: 'level_0_index_name' });
+      const level1 = index({ indexName: 'level_1_index_name' });
+      const level2 = index({ indexName: 'level_1_index_name' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      level0.addWidgets([
+        createWidget({
+          getConfiguration() {
+            return {
+              hitsPerPage: 5,
+            };
+          },
+        }),
+
+        createSearchBox({
+          getConfiguration() {
+            return {
+              query: 'Apple',
+            };
+          },
+        }),
+
+        createPagination({
+          getConfiguration() {
+            return {
+              page: 1,
+            };
+          },
+        }),
+
+        level1.addWidgets([
+          createSearchBox({
+            getConfiguration() {
+              return {
+                query: 'Apple iPhone',
+              };
+            },
+          }),
+
+          createPagination({
+            getConfiguration() {
+              return {
+                page: 2,
+              };
+            },
+          }),
+
+          level2.addWidgets([
+            createSearchBox({
+              getConfiguration() {
+                return {
+                  query: 'Apple iPhone XS',
+                };
+              },
+            }),
+          ]),
+        ]),
+      ]);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      level0.getHelper()!.search();
+
+      expect(searchClient.search).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          {
+            indexName: 'level_0_index_name',
+            params: expect.objectContaining({
+              hitsPerPage: 5,
+              query: 'Apple',
+              page: 1,
+            }),
+          },
+          {
+            indexName: 'level_1_index_name',
+            params: expect.objectContaining({
+              hitsPerPage: 5,
+              query: 'Apple iPhone',
+              page: 2,
+            }),
+          },
+          {
+            indexName: 'level_1_index_name',
+            params: expect.objectContaining({
+              hitsPerPage: 5,
+              query: 'Apple iPhone XS',
+              page: 2,
+            }),
+          },
+        ])
+      );
+    });
+
     it('uses the internal state for the SFFV queries', () => {
       const instance = index({ indexName: 'index_name' });
       const searchClient = createSearchClient();

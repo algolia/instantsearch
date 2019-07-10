@@ -12,6 +12,7 @@ import {
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
+  resolveSearchParameters,
   enhanceConfiguration,
 } from '../../lib/utils';
 
@@ -206,8 +207,15 @@ const index = (props: IndexProps): Index => {
       };
 
       derivedHelper = mainHelper.derive(() => {
-        // @TODO: resolve the root and merge the SearchParameters
-        return helper!.state;
+        const parameters = resolveSearchParameters(this);
+
+        // @TODO: replace this dummy merge with the correct function
+        return parameters.reduce((previous, current) =>
+          algoliasearchHelper.SearchParameters.make({
+            ...previous,
+            ...current,
+          })
+        );
       });
 
       // We have to use `!` at the moment because `dervive` is not correctly typed.
