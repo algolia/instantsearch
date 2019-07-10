@@ -156,6 +156,8 @@ export default function connectRefinementList(renderFn, unmountFn) {
 
     let lastResultsFromMainSearch = [];
     let hasExhaustiveItems = true;
+    let searchForFacetValues;
+    let triggerRefine;
 
     const render = ({
       items,
@@ -210,9 +212,6 @@ export default function connectRefinementList(renderFn, unmountFn) {
         isFirstSearch
       );
     };
-
-    let searchForFacetValues;
-    let refine;
 
     /* eslint-disable max-params */
     const createSearchForFacetValues = (helper, toggleShowMore) => (
@@ -317,7 +316,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
-        refine = facetValue =>
+        triggerRefine = facetValue =>
           helper.toggleRefinement(attribute, facetValue).search();
 
         searchForFacetValues = createSearchForFacetValues(
@@ -330,7 +329,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
           state: helper.state,
           createURL,
           helperSpecializedSearchFacetValues: searchForFacetValues,
-          refine,
+          refine: triggerRefine,
           isFromSearch: false,
           isFirstSearch: true,
           instantSearchInstance,
@@ -376,7 +375,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
           state,
           createURL,
           helperSpecializedSearchFacetValues: searchForFacetValues,
-          refine,
+          refine: triggerRefine,
           isFromSearch: false,
           isFirstSearch: false,
           instantSearchInstance,
