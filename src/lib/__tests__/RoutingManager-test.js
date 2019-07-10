@@ -1,5 +1,11 @@
-import instantsearch from '../main.js';
-import RoutingManager from '../RoutingManager.js';
+/**
+ * @jest-environment jest-environment-jsdom-global
+ */
+/* globals jsdom */
+import qs from 'qs';
+import instantsearch from '../main';
+import RoutingManager from '../RoutingManager';
+import historyRouter from '../routers/history';
 import simpleMapping from '../stateMappings/simple.js';
 
 const makeFakeAlgoliaClient = () => ({
@@ -312,6 +318,75 @@ describe('RoutingManager', () => {
 
         done();
       });
+    });
+  });
+
+  describe('parseURL', () => {
+    const createFakeUrlWithRefinements = ({ length }) =>
+      [
+        'https://website.com/',
+        Array.from(
+          { length },
+          (_v, i) => `refinementList[brand][${i}]=brand-${i}`
+        ).join('&'),
+      ].join('?');
+
+    test('should parse refinements with more than 20 filters per category as array', () => {
+      jsdom.reconfigure({
+        url: createFakeUrlWithRefinements({ length: 22 }),
+      });
+
+      const router = historyRouter();
+      const parsedUrl = router.parseURL({
+        qsModule: qs,
+        location: window.location,
+      });
+
+      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
+      expect(parsedUrl).toMatchInlineSnapshot(`
+Object {
+  "refinementList": Object {
+    "brand": Array [
+      "brand-0",
+      "brand-1",
+      "brand-2",
+      "brand-3",
+      "brand-4",
+      "brand-5",
+      "brand-6",
+      "brand-7",
+      "brand-8",
+      "brand-9",
+      "brand-10",
+      "brand-11",
+      "brand-12",
+      "brand-13",
+      "brand-14",
+      "brand-15",
+      "brand-16",
+      "brand-17",
+      "brand-18",
+      "brand-19",
+      "brand-20",
+      "brand-21",
+    ],
+  },
+}
+`);
+    });
+
+    test('should support returning 100 refinements as array', () => {
+      jsdom.reconfigure({
+        url: createFakeUrlWithRefinements({ length: 100 }),
+      });
+
+      const router = historyRouter();
+      const parsedUrl = router.parseURL({
+        qsModule: qs,
+        location: window.location,
+      });
+
+      expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
     });
   });
 });
