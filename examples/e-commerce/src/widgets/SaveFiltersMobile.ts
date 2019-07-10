@@ -1,6 +1,6 @@
 import { stats } from 'instantsearch.js/es/widgets';
 
-const saveFilters = stats({
+export const saveFiltersMobile = stats({
   container: '[data-widget="save-filters-mobile"]',
   templates: {
     text: `
@@ -10,5 +10,3 @@ const saveFilters = stats({
 `,
   },
 });
-
-export default saveFilters;

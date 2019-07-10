@@ -9,7 +9,7 @@ const brandRefinementList = panel({
   collapsed: () => false,
 })(refinementList);
 
-const brands = brandRefinementList({
+export const brands = brandRefinementList({
   container: '[data-widget="brands"]',
   attribute: 'brand',
   searchable: true,
@@ -26,5 +26,3 @@ const brands = brandRefinementList({
     `,
   },
 });
-
-export default brands;

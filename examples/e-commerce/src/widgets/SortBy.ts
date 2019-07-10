@@ -1,11 +1,11 @@
 import { sortBy as sortByWidget } from 'instantsearch.js/es/widgets';
 
-const sortBy = sortByWidget({
+export const sortBy = sortByWidget({
   container: '[data-widget="sort-by"]',
   attribute: 'price',
   items: [
     {
-      label: 'Sort by featured',
+      label: 'Featured',
       value: 'instant_search',
     },
     {
@@ -18,5 +18,3 @@ const sortBy = sortByWidget({
     },
   ],
 });
-
-export default sortBy;
