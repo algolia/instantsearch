@@ -21,6 +21,7 @@ function clearRefinements({ helper, attributesToClear = [] }) {
   if (attributesToClear.indexOf('query') !== -1) {
     finalState = finalState.setQuery('');
   }
+  finalState = finalState.setPage(0);
 
   return finalState;
 }
