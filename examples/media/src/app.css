@@ -399,19 +399,6 @@ strong {
   display: none;
 }
 
-/* RefinementList */
-
-.container-filters-panel .ais-RefinementList-list {
-  display: grid;
-  grid-auto-flow: column;
-  grid-gap: 0 2rem;
-  grid-template-rows: repeat(5, 1fr);
-}
-
-.container-filters-panel .ais-RefinementList-item {
-  flex: 50%;
-}
-
 /* SortBy */
 
 .ais-SortBy-select,
