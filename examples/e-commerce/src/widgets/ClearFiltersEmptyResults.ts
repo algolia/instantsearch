@@ -6,7 +6,7 @@ const clearFilters = panel({
   },
 })(clearRefinements);
 
-const clearFiltersEmptyResults = clearFilters({
+export const clearFiltersEmptyResults = clearFilters({
   container: '[data-widget="clear-filters-empty-state"]',
   templates: {
     resetLabel: `
@@ -23,5 +23,3 @@ const clearFiltersEmptyResults = clearFilters({
     `,
   },
 });
-
-export default clearFiltersEmptyResults;
