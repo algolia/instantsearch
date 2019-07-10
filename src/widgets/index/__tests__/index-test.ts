@@ -839,6 +839,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       expect(instance.getWidgets()).toHaveLength(2);
     });
 
+    it('removes the internal parent', () => {
+      const topLevelInstance = index({ indexName: 'top_level_index_name' });
+      const subLevelInstance = index({ indexName: 'sub_level_index_name' });
+      const instantSearchInstance = createInstantSearch();
+
+      topLevelInstance.addWidgets([subLevelInstance]);
+
+      topLevelInstance.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      expect(subLevelInstance.getHelper()).toBeDefined();
+
+      subLevelInstance.dispose(createDisposeOptions());
+
+      expect(subLevelInstance.getHelper()).toBe(null);
+    });
+
     it('removes the internal Helper', () => {
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();
