@@ -204,7 +204,6 @@ strong {
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* min-height: 300px; */
 }
 
 .card-image,
@@ -252,6 +251,19 @@ strong {
 
 .card-author {
   font-weight: bold;
+}
+
+.card--placeholder {
+  min-height: 350px;
+}
+
+.card--placeholder .card-image {
+  background-color: #eee;
+  min-height: 182px;
+}
+
+.infinite-hits-item--highlighted .card--placeholder .card-image {
+  min-height: 350px;
 }
 
 @media (min-width: 1200px) {
