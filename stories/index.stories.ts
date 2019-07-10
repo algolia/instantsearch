@@ -31,8 +31,6 @@ storiesOf('Index', module)
           .index({ indexName: 'instant_search_price_asc' })
           .addWidgets([
             instantsearch.widgets.configure({
-              // @TODO: remove once we support inheritance of SearchParameters
-              attributesToSnippet: ['description'],
               hitsPerPage: 2,
             }),
             instantsearch.widgets.hits({
@@ -50,8 +48,6 @@ storiesOf('Index', module)
           .index({ indexName: 'instant_search_rating_asc' })
           .addWidgets([
             instantsearch.widgets.configure({
-              // @TODO: remove once we support inheritance of SearchParameters
-              attributesToSnippet: ['description'],
               hitsPerPage: 1,
             }),
             instantsearch.widgets.hits({
@@ -87,8 +83,6 @@ storiesOf('Index', module)
           .index({ indexName: 'instant_search_price_asc' })
           .addWidgets([
             instantsearch.widgets.configure({
-              // @TODO: remove once we support inheritance of SearchParameters
-              attributesToSnippet: ['description'],
               hitsPerPage: 2,
             }),
             instantsearch.widgets.hits({
