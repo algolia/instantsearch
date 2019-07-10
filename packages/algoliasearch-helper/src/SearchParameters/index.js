@@ -1171,8 +1171,7 @@ SearchParameters.prototype = {
    */
   isDisjunctiveFacetRefined: function isDisjunctiveFacetRefined(facet, value) {
     if (!this.isDisjunctiveFacet(facet)) {
-      throw new Error(
-        facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+      return false;
     }
     return RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value);
   },
