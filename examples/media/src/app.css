@@ -235,7 +235,7 @@ strong {
 .card-title {
   font-weight: bold;
   line-height: 1.63;
-  margin: 1rem 0 0.5rem 0;
+  margin: 0.5rem 0 0.5rem 0;
 }
 
 .card-title mark {
