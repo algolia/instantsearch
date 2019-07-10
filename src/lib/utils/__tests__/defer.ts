@@ -109,17 +109,6 @@ describe('defer', () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  it('waits for the deferred function', async () => {
-    const fn = jest.fn();
-    const deferred = defer(fn);
-
-    deferred();
-
-    await deferred.wait();
-
-    expect(fn).toHaveBeenCalledTimes(1);
-  });
-
   it('throws an error when `wait` is called before the deferred function', () => {
     const fn = jest.fn();
     const deferred = defer(fn);
