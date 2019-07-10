@@ -8,7 +8,7 @@
  * @returns {SearchParameters} search parameters with refinements cleared
  */
 function clearRefinements({ helper, attributesToClear = [] }) {
-  let finalState = helper.state;
+  let finalState = helper.state.setPage(0);
 
   attributesToClear.forEach(attribute => {
     if (attribute === '_tags') {
@@ -21,7 +21,6 @@ function clearRefinements({ helper, attributesToClear = [] }) {
   if (attributesToClear.indexOf('query') !== -1) {
     finalState = finalState.setQuery('');
   }
-  finalState = finalState.setPage(0);
 
   return finalState;
 }
