@@ -1156,7 +1156,7 @@ SearchParameters.prototype = {
    */
   isExcludeRefined: function isExcludeRefined(facet, value) {
     if (!this.isConjunctiveFacet(facet)) {
-      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+      return false;
     }
     return RefinementList.isRefined(this.facetsExcludes, facet, value);
   },
