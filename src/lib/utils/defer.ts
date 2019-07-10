@@ -1,35 +1,48 @@
 const nextMicroTask = Promise.resolve();
 
 type Callback = (...args: any[]) => void;
-type Cancellable = Callback & {
+type Defer = Callback & {
+  wait(): Promise<void>;
   cancel(): void;
 };
 
-const defer = (callback: Callback): Cancellable => {
+const defer = (callback: Callback): Defer => {
   let progress: Promise<void> | null = null;
   let cancelled = false;
 
-  const fn: Cancellable = (...args) => {
+  const fn: Defer = (...args) => {
     if (progress !== null) {
       return;
     }
 
     progress = nextMicroTask.then(() => {
+      progress = null;
+
       if (cancelled) {
-        progress = null;
         cancelled = false;
         return;
       }
 
       callback(...args);
-      progress = null;
     });
   };
 
-  fn.cancel = () => {
-    if (progress !== null) {
-      cancelled = true;
+  fn.wait = () => {
+    if (progress === null) {
+      throw new Error(
+        'The deferred function should be called before calling `wait()`'
+      );
     }
+
+    return progress;
+  };
+
+  fn.cancel = () => {
+    if (progress === null) {
+      return;
+    }
+
+    cancelled = true;
   };
 
   return fn;
