@@ -22,6 +22,7 @@ export { default as escape } from './escape';
 export { default as find } from './find';
 export { default as findIndex } from './findIndex';
 export { default as mergeDeep } from './mergeDeep';
+export { default as resolveSearchParameters } from './resolveSearchParameters';
 export { warning, deprecate } from './logger';
 export {
   createDocumentationLink,
