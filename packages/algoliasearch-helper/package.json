@@ -34,7 +34,8 @@
   "files": [
     "dist",
     "src",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "devDependencies": {
     "@types/algoliasearch": "^3.30.12",
