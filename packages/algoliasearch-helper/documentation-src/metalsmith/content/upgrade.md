@@ -79,6 +79,21 @@ SearchParameters no longer contains a default value for the parameters, from the
 }
 ```
 
+### Errors on getters
+
+There were multiple places in SearchParameters or SearchResults which would throw an error when e.g. a refinement is requested which isn't set up via facets. This behavior was confusing, and especially unhelpful in InstantSearch where we have situations where we try to fetch before the results are in. We chose for that reason to migrate those cases to the default response:
+
+- `SearchResults.getFacetValues` -> undefined
+- `SearchResults.getFacetStats` -> undefined
+- `SearchParameters.getConjunctiveRefinements` -> []
+- `SearchParameters.getDisjunctiveRefinements` -> []
+- `SearchParameters.getExcludeRefinements` -> []
+- `SearchParameters.getHierarchicalFacetBreadcrumb` -> []
+- `SearchParameters.isFacetRefined` -> false
+- `SearchParameters.isExcludeRefined` -> false
+- `SearchParameters.isDisjunctiveFacetRefined` -> false
+- `SearchParameters.isHierarchicalFacetRefined` -> false
+
 ### Removed methods
 
 - `getQueryParameter` & `helper.state.getQueryParameter`
@@ -98,3 +113,5 @@ You need to filter the returned object yourself using e.g. `Object.fromEntries(O
 - `helper.state.mutateMe`
 
 - `helper.getState` -> `helper.state`
+
+- `helper.isRefined` -> `helper.hasRefinements`
