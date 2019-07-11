@@ -1,3 +1,12 @@
+## [2.2.2](https://github.com/algolia/vue-instantsearch/compare/v2.2.1...v2.2.2) (2019-07-11)
+
+
+### Bug Fixes
+
+* **highlight:** change expected tag to replace ([#679](https://github.com/algolia/vue-instantsearch/issues/679)) ([4aa06fb](https://github.com/algolia/vue-instantsearch/commit/4aa06fb))
+
+
+
 # [2.2.1](https://github.com/algolia/vue-instantsearch/compare/v2.1.0...v2.2.1) (2019-05-21)
 
 
