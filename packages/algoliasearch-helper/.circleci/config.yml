@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/algoliasearch-helper-js
   docker:
-    - image: circleci/node:8.15.1@sha256:3d32b8457083c33c04eb60fac02c0e39de5bd28de4b95393d7dcb5aa37b20af7
+    - image: circleci/node:8.15.1@sha256:ef1a0c468510c5f3de8fe9dbccb7dfaf29d7e21086e7db2bb59cdc811b30ae80
 
 version: 2
 jobs:
