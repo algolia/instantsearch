@@ -570,7 +570,7 @@ SearchParameters.prototype = {
    */
   getExcludeRefinements: function(facetName) {
     if (!this.isConjunctiveFacet(facetName)) {
-      throw new Error(facetName + ' is not defined in the facets attribute of the helper configuration');
+      return [];
     }
     return this.facetsExcludes[facetName] || [];
   },
