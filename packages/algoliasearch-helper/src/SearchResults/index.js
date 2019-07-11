@@ -734,7 +734,7 @@ SearchResults.prototype.getFacetStats = function(attribute) {
     return getFacetStatsIfAvailable(this.disjunctiveFacets, attribute);
   }
 
-  throw new Error(attribute + ' is not present in `facets` or `disjunctiveFacets`');
+  return undefined;
 };
 
 /**
