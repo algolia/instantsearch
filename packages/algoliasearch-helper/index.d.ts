@@ -402,6 +402,8 @@ declare namespace algoliasearchHelper {
     hierarchicalFacetsRefinements?: {
       [facet: string]: SearchParameters.FacetList;
     };
+
+    ruleContexts?: string[];
   }
 
   export class SearchParameters implements PlainSearchParameters {
@@ -973,6 +975,8 @@ declare namespace algoliasearchHelper {
     sortFacetValuesBy?: 'count' | 'alpha';
 
     /* end implementation of algoliasearch.QueryParameters */
+
+    ruleContexts?: string[];
   }
 
   namespace SearchParameters {
