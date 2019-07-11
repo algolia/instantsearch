@@ -18,7 +18,7 @@
     "test": "scripts/test.sh",
     "test:unit": "jest",
     "test:watch": "jest --watch",
-    "release": "git checkout dist/ && rm -rf node_modules && yarn && ./scripts/release.js",
+    "release": "./scripts/release.js",
     "changelog:view-last": "conventional-changelog -u -n scripts/conventional-changelog/",
     "changelog:update": "conventional-changelog -i CHANGELOG -s -u -n scripts/conventional-changelog/"
   },
