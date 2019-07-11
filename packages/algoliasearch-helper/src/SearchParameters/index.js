@@ -1066,6 +1066,9 @@ SearchParameters.prototype = {
     if (this.isHierarchicalFacetRefined(facet)) {
       throw new Error(facet + ' is already refined.');
     }
+    if (!this.isHierarchicalFacet(facet)) {
+      throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration.');
+    }
     var mod = {};
     mod[facet] = [path];
     return this.setQueryParameters({
@@ -1186,8 +1189,7 @@ SearchParameters.prototype = {
    */
   isHierarchicalFacetRefined: function isHierarchicalFacetRefined(facet, value) {
     if (!this.isHierarchicalFacet(facet)) {
-      throw new Error(
-        facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
+      return false;
     }
 
     var refinements = this.getHierarchicalRefinement(facet);
