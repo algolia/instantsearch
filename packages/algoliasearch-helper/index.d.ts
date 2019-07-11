@@ -259,7 +259,7 @@ declare namespace algoliasearchHelper {
     getTags(...args: any[]): any;
     getRefinements(...args: any[]): any;
     getNumericRefinement(...args: any[]): any;
-    getHierarchicalFacetBreadcrumb(...args: any[]): any;
+    getHierarchicalFacetBreadcrumb(facetName: string): string[];
     containsRefinement(...args: any[]): any;
     clearCache(...args: any[]): any;
     setClient(client: SearchClient): this;

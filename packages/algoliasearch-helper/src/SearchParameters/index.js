@@ -1445,8 +1445,7 @@ SearchParameters.prototype = {
    */
   getHierarchicalFacetBreadcrumb: function(facetName) {
     if (!this.isHierarchicalFacet(facetName)) {
-      throw new Error(
-        'Cannot get the breadcrumb of an unknown hierarchical facet: `' + facetName + '`');
+      return [];
     }
 
     var refinement = this.getHierarchicalRefinement(facetName)[0];
