@@ -585,7 +585,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     it('inherits from the parent states for the queries', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
-      const level2 = index({ indexName: 'level_1_index_name' });
+      const level2 = index({ indexName: 'level_2_index_name' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
@@ -673,7 +673,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             }),
           },
           {
-            indexName: 'level_1_index_name',
+            indexName: 'level_2_index_name',
             params: expect.objectContaining({
               hitsPerPage: 5,
               query: 'Apple iPhone XS',
