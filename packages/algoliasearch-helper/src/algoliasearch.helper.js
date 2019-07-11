@@ -933,21 +933,6 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = functi
 };
 
 /**
- * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
- */
-AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
-  if (this.state.isConjunctiveFacet(facet)) {
-    return this.state.isFacetRefined(facet, value);
-  } else if (this.state.isDisjunctiveFacet(facet)) {
-    return this.state.isDisjunctiveFacetRefined(facet, value);
-  }
-
-  throw new Error(facet +
-    ' is not properly defined in this helper configuration' +
-    '(use the facets or disjunctiveFacets keys to configure it)');
-};
-
-/**
  * Check if an attribute has any numeric, conjunctive, disjunctive or hierarchical filters.
  * @param {string} attribute the name of the attribute
  * @return {boolean} true if the attribute is filtered by at least one value
