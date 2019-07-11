@@ -1155,7 +1155,7 @@ declare namespace algoliasearchHelper {
     getFacetValues(
       attribute: string,
       opts: any
-    ): SearchResults.FacetValue[] | SearchResults.HierarchicalFacet;
+    ): SearchResults.FacetValue[] | SearchResults.HierarchicalFacet | undefined;
 
     /**
      * Returns the facet stats if attribute is defined and the facet contains some.

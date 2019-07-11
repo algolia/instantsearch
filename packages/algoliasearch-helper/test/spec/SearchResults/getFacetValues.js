@@ -148,3 +148,20 @@ test('getFacetValues(disjunctive) returns correct facet values with the name `le
   expect(facetValues).toEqual(expected);
   expect(facetValues.length).toBe(2);
 });
+
+test('getFacetValues(unknown) returns undefined (does not throw)', function() {
+  var searchParams = new SearchParameters({
+    index: 'instant_search'
+  });
+
+  var result = {
+    query: '',
+    // it does not matter if the result here is given or not,
+    // if something is not a parameter, it will not be read.
+    facets: {}
+  };
+
+  var results = new SearchResults(searchParams, [result, result]);
+
+  expect(results.getFacetValues('type')).toBeUndefined();
+});

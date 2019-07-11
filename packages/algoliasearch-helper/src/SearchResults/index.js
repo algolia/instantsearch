@@ -674,7 +674,7 @@ function vanillaSortFn(order, data) {
  * bigger or -1 otherwise.
  *
  * The default value for this attribute `['isRefined:desc', 'count:desc', 'name:asc']`
- * @return {FacetValue[]|HierarchicalFacet} depending on the type of facet of
+ * @return {FacetValue[]|HierarchicalFacet|undefined} depending on the type of facet of
  * the attribute requested (hierarchical, disjunctive or conjunctive)
  * @example
  * helper.on('result', function(event){
@@ -693,7 +693,9 @@ function vanillaSortFn(order, data) {
  */
 SearchResults.prototype.getFacetValues = function(attribute, opts) {
   var facetValues = extractNormalizedFacetValues(this, attribute);
-  if (!facetValues) throw new Error(attribute + ' is not a retrieved facet.');
+  if (!facetValues) {
+    return undefined;
+  }
 
   var options = defaultsPure({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
 
