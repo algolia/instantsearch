@@ -547,9 +547,7 @@ SearchParameters.prototype = {
    */
   getDisjunctiveRefinements: function(facetName) {
     if (!this.isDisjunctiveFacet(facetName)) {
-      throw new Error(
-        facetName + ' is not defined in the disjunctiveFacets attribute of the helper configuration'
-      );
+      return [];
     }
     return this.disjunctiveFacetsRefinements[facetName] || [];
   },
