@@ -68,10 +68,32 @@ jobs:
           name: Unit tests
           command: yarn run test --maxWorkers=4
 
+  test_integration:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Build
+          command: yarn run build
+      - run:
+          name: Integration tests
+          command: yarn run test:integration --maxWorkers=4
+      - run:
+          name: Integration tests on UMD build
+          command: yarn run test:integration:umd --maxWorkers=4
+      - run:
+          name: Integration tests on CJS build
+          command: yarn run test:integration:cjs --maxWorkers=4
+
 workflows:
   version: 2
   ci:
     jobs:
       - test_build
       - test_unit
+      - test_integration
       - test_lint

@@ -1,6 +1,7 @@
 import { wait } from '@testing-library/dom';
 
-import instantsearch from '../../../../dist/instantsearch.production.min';
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import instantsearch from 'instantsearch.js';
 
 import apiResults from '../../../widgets/breadcrumb/__tests__/__fixtures__/results.json';
 
