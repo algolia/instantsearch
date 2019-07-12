@@ -1,14 +1,15 @@
 import { refinementList, panel } from 'instantsearch.js/es/widgets';
 import { isWindowMediumSize } from '../utils';
 
-const locationsList = panel({
-  templates: {
-    header: 'Locations',
-  },
-})(refinementList);
+const createLocationsList = () =>
+  panel({
+    templates: {
+      header: 'Locations',
+    },
+  })(refinementList);
 
 export const createLocations = ({ container }) =>
-  locationsList({
+  createLocationsList()({
     container,
     attribute: 'locations',
     limit: 7,
