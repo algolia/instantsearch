@@ -7,5 +7,9 @@ export const sortBy = sortByWidget({
       label: 'Most relevant',
       value: 'instant_search_media',
     },
+    {
+      label: 'Engagement',
+      value: 'instant_search_media_engagement_desc',
+    },
   ],
 });
