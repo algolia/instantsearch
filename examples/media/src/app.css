@@ -445,6 +445,7 @@ strong {
   border-radius: 4px;
   background-color: #6634d1;
   cursor: pointer;
+  border: none;
 }
 
 .container-filters-footer .see-results-button .ais-Stats-text {
