@@ -23,7 +23,6 @@ export const createInstantSearch = (
     _isSearchStalled: true,
     _searchParameters: {},
     _createAbsoluteURL: jest.fn(() => '#'),
-    _onHistoryChange: jest.fn(),
     ...args,
   };
 };
