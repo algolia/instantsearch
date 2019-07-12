@@ -1,4 +1,8 @@
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper as Helper,
+  DerivedHelper,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
 import {
   InstantSearch,
   Widget,
@@ -6,9 +10,6 @@ import {
   RenderOptions,
   DisposeOptions,
   Client,
-  Helper,
-  SearchParameters,
-  DerivedHelper,
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
@@ -193,7 +194,7 @@ const index = (props: IndexProps): Index => {
         facetName,
         facetValue,
         maxFacetHits,
-        userState: Partial<SearchParameters>
+        userState: PlainSearchParameters
       ) => {
         const state = helper!.state.setQueryParameters(userState);
 

@@ -1,25 +1,12 @@
-import { EventEmitter } from 'events';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
-import {
-  AlgoliaSearchHelper,
-  SearchParameters as AlgoliaSearchHelperSearchParameters,
-  SearchResults as AlgoliaSearchHelperSearchResults,
-} from 'algoliasearch-helper';
+import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
 import { Index } from '../widgets/index/index';
 import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import { Widget, UiState } from './widget';
 
 export type InstantSearchOptions = any;
 
-// That's a proxy to avoid manipulating the original `algoliasearch-helper`
-// SearchParameters typings and to add newer search parameters not yet
-// documented or wrongly typed.
-export type SearchParameters = AlgoliaSearchHelperSearchParameters & {
-  ruleContexts?: string[];
-};
-
-export type SearchResults = AlgoliaSearchHelperSearchResults;
-
+// @TODO: can this be written some other way?
 export type HelperChangeEvent = {
   state: SearchParameters;
 };
@@ -113,16 +100,10 @@ export type StateMapping<TRouteState = UiState> = {
 
 export type Client = AlgoliaSearchClient;
 
-export type Helper = AlgoliaSearchHelper;
-export type DerivedHelper = EventEmitter & {
-  lastResults: SearchResults | null;
-  detach(): void;
-};
-
 export type InstantSearch = {
-  helper: Helper | null;
+  helper: AlgoliaSearchHelper | null;
   widgets: Widget[]; // @TODO: remove once the RoutingManger uses the index
-  mainHelper: Helper | null;
+  mainHelper: AlgoliaSearchHelper | null;
   mainIndex: Index;
   insightsClient: AlgoliaInsightsClient | null;
   templatesConfig: object;

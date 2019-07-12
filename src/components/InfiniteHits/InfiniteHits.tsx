@@ -1,7 +1,8 @@
 import React from 'preact-compat';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import { Hits, SearchResults } from '../../types';
+import { SearchResults } from 'algoliasearch-helper';
+import { Hits } from '../../types';
 import { InfiniteHitsTemplates } from '../../widgets/infinite-hits/infinite-hits';
 
 type InfiniteHitsCSSClasses = {

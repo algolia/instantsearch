@@ -1,10 +1,13 @@
 import {
+  AlgoliaSearchHelper as Helper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import {
   Renderer,
   RendererOptions,
   WidgetFactory,
-  Helper,
   HelperChangeEvent,
-  SearchParameters,
 } from '../../types';
 import {
   checkRendering,
@@ -87,7 +90,7 @@ function getRuleContextsFromTrackedFilters({
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const facetRefinements: TrackedFilterRefinement[] = getRefinements(
-        helper.lastResults || {},
+        helper.lastResults || new SearchResults(new SearchParameters(), []),
         sharedHelperState
       )
         .filter(

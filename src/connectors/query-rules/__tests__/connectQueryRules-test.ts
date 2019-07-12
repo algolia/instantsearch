@@ -1,11 +1,14 @@
-import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+  AlgoliaSearchHelper as Helper,
+} from 'algoliasearch-helper';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { Helper, SearchParameters } from '../../../types';
 import createAlgoliaResponse from '../../../../test/utils/createAlgoliaResponse';
 import connectQueryRules, {
   QueryRulesWidgetFactory,

@@ -1,7 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../InfiniteHits';
-import { Hits, SearchResults } from '../../../types';
+import { Hits } from '../../../types';
 
 describe('InfiniteHits', () => {
   const cssClasses = {

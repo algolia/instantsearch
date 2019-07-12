@@ -1,3 +1,4 @@
+import { SearchResults } from 'algoliasearch-helper';
 import { uniq, find } from '../utils';
 import {
   Hits,
@@ -9,7 +10,6 @@ import {
   RendererOptions,
   Unmounter,
   WidgetFactory,
-  SearchResults,
 } from '../../types';
 
 const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
