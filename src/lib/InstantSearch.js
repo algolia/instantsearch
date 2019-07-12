@@ -231,9 +231,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         ...this.routing,
         instantSearchInstance: this,
       });
-      this._onHistoryChange = routingManager.onHistoryChange.bind(
-        routingManager
-      );
       this._createURL = routingManager.createURL.bind(routingManager);
       this._createAbsoluteURL = this._createURL;
       // We don't use `addWidgets` because we have to ensure that `RoutingManager`
@@ -243,7 +240,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = noop;
     }
 
     // This Helper is used for the queries, we don't care about its state. The

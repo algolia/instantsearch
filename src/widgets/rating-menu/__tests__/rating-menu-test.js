@@ -147,7 +147,6 @@ describe('ratingMenu()', () => {
       helper: _helper,
       state: _helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
       instantSearchInstance: {
         templatesConfig: {},
       },

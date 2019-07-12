@@ -64,7 +64,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
       instantSearchInstance,
     });
 
@@ -195,7 +194,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
       instantSearchInstance,
     });
 
@@ -326,7 +324,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
         instantSearchInstance,
       });
 

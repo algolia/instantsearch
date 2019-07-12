@@ -58,7 +58,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(renderFn).toHaveBeenCalledTimes(1);
@@ -192,7 +191,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
@@ -275,7 +273,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
@@ -312,7 +309,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
@@ -355,7 +351,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
@@ -398,7 +393,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
@@ -501,7 +495,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       const { refine } = renderFn.mock.calls[0][0];

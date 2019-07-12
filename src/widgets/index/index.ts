@@ -111,7 +111,6 @@ const index = (props: IndexProps): Index => {
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
               createURL: localInstantSearchInstance._createAbsoluteURL,
-              onHistoryChange: localInstantSearchInstance._onHistoryChange,
             });
           }
         });
@@ -244,7 +243,6 @@ const index = (props: IndexProps): Index => {
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: instantSearchInstance._createAbsoluteURL,
-            onHistoryChange: instantSearchInstance._onHistoryChange,
           });
         }
       });

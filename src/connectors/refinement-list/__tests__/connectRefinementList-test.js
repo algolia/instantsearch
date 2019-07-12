@@ -134,7 +134,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       widget.render({
@@ -195,7 +194,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       widget.render({
@@ -275,7 +273,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     // test that rendering has been called during init with isFirstRendering = true
@@ -387,7 +384,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -428,7 +424,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     widget.render({
@@ -474,7 +469,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     widget.render({
@@ -526,7 +520,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     widget.render({
@@ -578,7 +571,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     widget.render({
@@ -633,7 +625,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     widget.render({
@@ -1046,7 +1037,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(rendering.mock.calls[0][0].hasExhaustiveItems).toEqual(true);
@@ -1126,7 +1116,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(rendering.mock.calls[0][0].hasExhaustiveItems).toEqual(true);
@@ -1224,7 +1213,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
     expect(rendering).toHaveBeenCalledTimes(1);
 
@@ -1337,7 +1325,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
     expect(rendering).toHaveBeenCalledTimes(1);
 
@@ -1439,7 +1426,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
     expect(rendering).toHaveBeenCalledTimes(1);
 
@@ -1543,7 +1529,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
     expect(rendering).toHaveBeenCalledTimes(1);
 
@@ -1635,7 +1620,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       const { refine } = rendering.mock.calls[0][0];

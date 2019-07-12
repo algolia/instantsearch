@@ -25,7 +25,6 @@ describe('connectGeoSearch', () => {
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const { refine } = render.mock.calls[0][0];
