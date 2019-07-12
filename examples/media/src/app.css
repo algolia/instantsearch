@@ -32,6 +32,10 @@ strong {
   font-weight: bold;
 }
 
+.powered-by {
+  text-align: center;
+}
+
 /* Header */
 
 .header {
