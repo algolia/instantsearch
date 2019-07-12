@@ -86,9 +86,12 @@ strong {
 }
 
 .container-filters-panel {
+  margin-bottom: 2rem;
+}
+
+.container-filters-panel-column-wrapper {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
 }
 
 .container-filters-panel:not(.container-filters-panel--hidden) {
