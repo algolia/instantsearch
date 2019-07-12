@@ -9,6 +9,7 @@ const sortBy = connectSortBy(
     isFirstRendering
   ) => {
     if (isFirstRendering) {
+      // eslint-disable-next-line no-param-reassign
       container.innerHTML = `
       <div class="ais-NumericMenu">
         <ul class="ais-NumericMenu-list">
