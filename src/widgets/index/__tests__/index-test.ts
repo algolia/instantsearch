@@ -175,7 +175,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             state: instance.getHelper()!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: instantSearchInstance._createAbsoluteURL,
-            onHistoryChange: instantSearchInstance._onHistoryChange,
           });
         });
       });
@@ -790,7 +789,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           state: instance.getHelper()!.state,
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: instantSearchInstance._createAbsoluteURL,
-          onHistoryChange: instantSearchInstance._onHistoryChange,
         });
       });
     });

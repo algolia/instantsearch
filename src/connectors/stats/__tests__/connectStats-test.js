@@ -35,7 +35,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {

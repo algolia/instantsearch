@@ -129,7 +129,6 @@ export type InstantSearch = {
   _isSearchStalled: boolean;
   _searchParameters: Partial<SearchParameters>;
   _createAbsoluteURL(state: Partial<SearchParameters>): string;
-  _onHistoryChange(callback: (state: Partial<SearchParameters>) => void): void;
   scheduleSearch(): void;
   scheduleRender(): void;
   scheduleStalledRender(): void;
