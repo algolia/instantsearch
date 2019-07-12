@@ -423,6 +423,7 @@ strong {
   height: 50px;
   border-radius: 4px;
   background-color: #6634d1;
+  cursor: pointer;
 }
 
 .container-filters-footer .see-results-button .ais-Stats-text {
