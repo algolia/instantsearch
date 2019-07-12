@@ -401,6 +401,23 @@ strong {
   padding-bottom: 117px;
 }
 
+.container-filters-panel-mobile .ais-NumericMenu-labelText,
+.container-filters-panel-mobile .ais-RefinementList-labelText {
+  font-size: 1rem;
+  color: #6e7070;
+}
+
+.container-filters-panel-mobile .ais-NumericMenu-radio,
+.container-filters-panel-mobile .ais-RefinementList-checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 1rem;
+}
+
+.container-filters-panel-mobile .ais-RefinementList-count {
+  font-weight: bold;
+}
+
 .container-filters-header {
   display: flex;
   justify-content: space-between;
