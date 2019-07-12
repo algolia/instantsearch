@@ -81,7 +81,7 @@ export const sortByMobile = sortByWithPanel({
       value: 'instant_search_media',
     },
     {
-      label: 'Popularity',
+      label: 'Engagement',
       value: 'instant_search_media_engagement_desc',
     },
   ],
