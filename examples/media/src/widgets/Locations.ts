@@ -7,16 +7,17 @@ const locationsList = panel({
   },
 })(refinementList);
 
-export const locations = locationsList({
-  container: '[data-widget="locations"]',
-  attribute: 'locations',
-  limit: 7,
-  searchable: true,
-  searchablePlaceholder: isWindowMediumSize
-    ? 'Cities or countries'
-    : 'Search for cities or countries',
-  templates: {
-    searchableSubmit: `
+export const createLocations = ({ container }) =>
+  locationsList({
+    container,
+    attribute: 'locations',
+    limit: 7,
+    searchable: true,
+    searchablePlaceholder: isWindowMediumSize
+      ? 'Cities or countries'
+      : 'Search for cities or countries',
+    templates: {
+      searchableSubmit: `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 17 17"
@@ -28,5 +29,5 @@ export const locations = locationsList({
   />
 </svg>
 `,
-  },
-});
+    },
+  });

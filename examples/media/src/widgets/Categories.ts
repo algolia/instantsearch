@@ -7,16 +7,17 @@ const categoriesList = panel({
   },
 })(refinementList);
 
-export const categories = categoriesList({
-  container: '[data-widget="categories"]',
-  attribute: 'categories.lvl0',
-  limit: 7,
-  searchable: true,
-  searchablePlaceholder: isWindowMediumSize
-    ? 'Categories or topics'
-    : 'Search for categories or topics',
-  templates: {
-    searchableSubmit: `
+export const createCategories = ({ container }) =>
+  categoriesList({
+    container,
+    attribute: 'categories.lvl0',
+    limit: 7,
+    searchable: true,
+    searchablePlaceholder: isWindowMediumSize
+      ? 'Categories or topics'
+      : 'Search for categories or topics',
+    templates: {
+      searchableSubmit: `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 17 17"
@@ -28,5 +29,5 @@ export const categories = categoriesList({
   />
 </svg>
 `,
-  },
-});
+    },
+  });
