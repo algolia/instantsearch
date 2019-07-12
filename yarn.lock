@@ -1341,18 +1341,6 @@
     traverse "^0.6.6"
     unified "^6.1.6"
 
-"@types/algoliasearch-helper@2.26.0":
-  version "2.26.0"
-  resolved "https://registry.yarnpkg.com/@types/algoliasearch-helper/-/algoliasearch-helper-2.26.0.tgz#314849c4b14e2c495fd38e239758b37633dcba16"
-  integrity sha512-X+5sSx5Pc+cDVO3s8FTgYSxtS+oDiXZxolW6MJdzGhzEx/69Kn5YhLDBYpZOMUGvc8nccEy3ahfgGN/sLa7AsA==
-  dependencies:
-    "@types/algoliasearch" "*"
-
-"@types/algoliasearch@*":
-  version "3.30.8"
-  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.30.8.tgz#f7004bd905e61f7f56b0e6da2744ebd4dbafc87c"
-  integrity sha512-Lzf9kcLtFJe9gAu6lqc0/RR/yiQy7LfWXZYpZVaXUGsJ1t+ifyAiH/iPpXhslDqS11A6JiPKBeQTuG0/VtPLdA==
-
 "@types/babel__core@^7.1.0":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.1.tgz#ce9a9e5d92b7031421e1d0d74ae59f572ba48be6"
@@ -1844,10 +1832,10 @@ algolia-aerial@^1.5.3:
   resolved "https://registry.yarnpkg.com/algolia-aerial/-/algolia-aerial-1.5.3.tgz#c8b8ca6bc484164ffc7b36717689a424ea6bfe6c"
   integrity sha512-LZTpVlYnhqNFd+ru/Spm73omhsagiRQLmjrosa5bJ6/I9OMRp4Sb9pYZkAxcx3RSr+ZNXZqthL7rpXqMFdrnPA==
 
-algoliasearch-helper@0.0.0-27095c0:
-  version "0.0.0-27095c0"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-0.0.0-27095c0.tgz#8aa246e23fc665403917eeaf9cf7beeea70866f1"
-  integrity sha512-d0wlSReMpnz7sT5ibojXucYsWHTigu83ge+qktQ9m0u+kG7bHqRErzBUOZ03BMr9zd1sWSNR1TMR9l6AHHrqow==
+algoliasearch-helper@0.0.0-c4a4e01:
+  version "0.0.0-c4a4e01"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-0.0.0-c4a4e01.tgz#04ff0bd1289f8656f20fecaa00dc0acb2091b511"
+  integrity sha512-IhI921Q5lfKIG6nDUoeWMG1DOdK7UN4vt2LKWlgiToZPyxTSMur1M0Z9zcyIpKfCVye0FyC3FAaRq+h8OkNZdQ==
   dependencies:
     events "^1.1.1"
 
@@ -11148,10 +11136,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.4.5:
-  version "3.4.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
-  integrity sha512-YycBxUb49UUhdNMU5aJ7z5Ej2XGmaIBL0x34vZ82fn3hGvD+bgrMrVDpatgz2f7YxUMJxMkbWxJZeAvDxVe7Vw==
+typescript@3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
+  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
 
 ua-parser-js@^0.7.18:
   version "0.7.19"

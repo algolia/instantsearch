@@ -47,7 +47,7 @@
     "es"
   ],
   "dependencies": {
-    "algoliasearch-helper": "0.0.0-27095c0",
+    "algoliasearch-helper": "0.0.0-c4a4e01",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
@@ -68,7 +68,6 @@
     "@storybook/addon-actions": "5.0.11",
     "@storybook/html": "5.0.11",
     "@storybook/theming": "5.0.11",
-    "@types/algoliasearch-helper": "2.26.0",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
@@ -126,7 +125,7 @@
     "scriptjs": "2.5.9",
     "semver": "6.0.0",
     "shelljs": "0.8.3",
-    "typescript": "3.4.5",
+    "typescript": "3.5.3",
     "webpack": "4.31.0"
   },
   "bundlesize": [
