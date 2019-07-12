@@ -11,6 +11,7 @@ import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectInfiniteHits from '../connectInfiniteHits';
 
 import { Client } from '../../../types';
+import createAlgoliaResponse from '../../../../test/utils/createAlgoliaResponse';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: hits => hits,
@@ -69,9 +70,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     widget.render!(
       createRenderOptions({
         results: new SearchResults(helper.state, [
-          {
-            hits: [],
-          },
+          createAlgoliaResponse({ hits: [] }),
         ]),
         state: helper.state,
         instantSearchInstance,
@@ -117,7 +116,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -137,9 +138,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     // the results should accumulate if there is an increment in page
     const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
     const otherResults = new SearchResults(helper.state, [
-      {
-        hits: otherHits,
-      },
+      createAlgoliaResponse({ hits: otherHits }),
     ]);
 
     widget.render!(
@@ -178,9 +177,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [
-      {
-        hits,
-      },
+      createAlgoliaResponse({ hits }),
     ]);
 
     widget.render!(
@@ -203,9 +200,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     // the results should be prepended if there is an decrement in page
     const previousHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
     const previousResults = new SearchResults(helper.state, [
-      {
-        hits: previousHits,
-      },
+      createAlgoliaResponse({ hits: previousHits }),
     ]);
 
     widget.render!(
@@ -241,7 +236,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(firstRenderOptions.results).toBe(undefined);
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -259,7 +256,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     // If the query changes, the hits cache should be flushed
     const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
-    const otherResults = new SearchResults(helper.state, [{ hits: otherHits }]);
+    const otherResults = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits: otherHits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -305,7 +304,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       },
     ];
 
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -360,7 +361,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       },
     ];
 
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -433,7 +436,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       },
     ];
 
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -495,7 +500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     ];
 
     const results = new SearchResults(helper.state, [
-      { hits, queryID: 'theQueryID' },
+      createAlgoliaResponse({ hits, queryID: 'theQueryID' }),
     ]);
 
     widget.render!(
@@ -542,11 +547,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     widget.render!(
       createRenderOptions({
         results: new SearchResults(helper.state, [
-          {
+          createAlgoliaResponse({
             hits: [{ objectID: 'a' }],
             page: 0,
             nbPages: 4,
-          },
+          }),
         ]),
         state: helper.state,
         helper,
@@ -558,11 +563,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     widget.render!(
       createRenderOptions({
         results: new SearchResults(helper.state, [
-          {
+          createAlgoliaResponse({
             hits: [{ objectID: 'b' }],
             page: 1,
             nbPages: 4,
-          },
+          }),
         ]),
         state: helper.state,
         helper,
@@ -580,11 +585,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     widget.render!(
       createRenderOptions({
         results: new SearchResults(helper.state, [
-          {
+          createAlgoliaResponse({
             hits: [{ objectID: 'b' }],
             page: 1,
             nbPages: 4,
-          },
+          }),
         ]),
         state: helper.state,
         helper,

@@ -6,6 +6,7 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import connectHitsWithInsights from '../connectHitsWithInsights';
+import createAlgoliaResponse from '../../../../test/utils/createAlgoliaResponse';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: hits => hits,
@@ -36,7 +37,9 @@ describe('connectHitsWithInsights', () => {
     expect(firstRenderingOptions.insights).toBeUndefined();
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -67,7 +70,9 @@ describe('connectHitsWithInsights', () => {
     );
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createAlgoliaResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
