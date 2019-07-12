@@ -74,7 +74,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     // test that rendering has been called during init with isFirstRendering = true
@@ -138,7 +137,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(rendering).toHaveBeenLastCalledWith(
@@ -184,7 +182,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -263,7 +260,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(rendering).toHaveBeenLastCalledWith(
@@ -326,7 +322,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     let refine =
@@ -379,7 +374,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const refine =
@@ -443,7 +437,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -488,7 +481,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(helper.state.page).toBe(2);
@@ -523,7 +515,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(helper.state.page).toBeUndefined();
@@ -576,7 +567,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       const { refine } = rendering.mock.calls[0][0];

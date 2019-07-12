@@ -187,33 +187,6 @@ class RoutingManager implements Widget {
 
     return this.router.createURL(route);
   }
-
-  public onHistoryChange(
-    callback: (state: Partial<SearchParameters>) => void
-  ): void {
-    const helper = this.instantSearchInstance.mainIndex.getHelper()!;
-
-    this.router.onUpdate(route => {
-      const nextUiState = this.stateMapping.routeToState(route);
-
-      const widgetsUiState = this.getAllUiStates({
-        searchParameters: helper.state,
-      });
-
-      if (isEqual(nextUiState, widgetsUiState)) {
-        return;
-      }
-
-      this.currentUiState = nextUiState;
-
-      const searchParameters = this.getAllSearchParameters({
-        currentSearchParameters: helper.state,
-        uiState: this.currentUiState,
-      });
-
-      callback({ ...searchParameters });
-    });
-  }
 }
 
 export default RoutingManager;

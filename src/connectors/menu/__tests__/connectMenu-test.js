@@ -120,7 +120,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     // test that rendering has been called during init with isFirstRendering = true
@@ -172,7 +171,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -211,7 +209,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     // During the first rendering there are no facet values
@@ -394,7 +391,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       expect(rendering).toHaveBeenLastCalledWith(
@@ -425,7 +421,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       widget.render({
@@ -490,7 +485,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       widget.render({
@@ -538,7 +532,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       const { refine } = rendering2.mock.calls[0][0];
