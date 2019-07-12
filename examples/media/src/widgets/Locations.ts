@@ -1,22 +1,24 @@
 import { refinementList, panel } from 'instantsearch.js/es/widgets';
 import { isWindowMediumSize } from '../utils';
 
-const locationsList = panel({
-  templates: {
-    header: 'Locations',
-  },
-})(refinementList);
+const createLocationsList = () =>
+  panel({
+    templates: {
+      header: 'Locations',
+    },
+  })(refinementList);
 
-export const locations = locationsList({
-  container: '[data-widget="locations"]',
-  attribute: 'locations',
-  limit: 7,
-  searchable: true,
-  searchablePlaceholder: isWindowMediumSize
-    ? 'Cities or countries'
-    : 'Search for cities or countries',
-  templates: {
-    searchableSubmit: `
+export const createLocations = ({ container }) =>
+  createLocationsList()({
+    container,
+    attribute: 'locations',
+    limit: 7,
+    searchable: true,
+    searchablePlaceholder: isWindowMediumSize
+      ? 'Cities or countries'
+      : 'Search for cities or countries',
+    templates: {
+      searchableSubmit: `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 17 17"
@@ -28,5 +30,5 @@ export const locations = locationsList({
   />
 </svg>
 `,
-  },
-});
+    },
+  });

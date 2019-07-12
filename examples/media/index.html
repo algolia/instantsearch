@@ -23,6 +23,7 @@
     />
     <link rel="stylesheet" href="./src/theme.css" />
     <link rel="stylesheet" href="./src/app.css" />
+    <link rel="stylesheet" href="./src/app.desktop.css" />
 
     <title>Media demo | Algolia</title>
   </head>
@@ -44,7 +45,44 @@
       <div class="header-content">
         <div class="searchbox-container">
           <label for="search-input">
-            <svg class="magnifier-icon" viewBox="0 0 17 17">
+            <svg
+              data-layout="mobile"
+              class="magnifier-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+            >
+              <defs>
+                <path
+                  id="a"
+                  d="M20.981 19.094l-4.2-4.199c2.733-3.656 2.473-8.84-.848-12.161a9.333 9.333 0 0 0-13.2 13.199c3.323 3.322 8.507 3.581 12.163.848l4.198 4.2c.522.52 1.366.52 1.887 0 .52-.522.52-1.366 0-1.887zm-6.933-5.047a6.668 6.668 0 0 1-9.428 0 6.666 6.666 0 0 1 0-9.428 6.666 6.666 0 0 1 9.428 0 6.668 6.668 0 0 1 0 9.428z"
+                />
+                <linearGradient
+                  id="b"
+                  x1="100%"
+                  x2="0%"
+                  y1="85.172%"
+                  y2="14.828%"
+                >
+                  <stop offset="0%" stop-color="#764BA2" />
+                  <stop offset="100%" stop-color="#667EEA" />
+                </linearGradient>
+              </defs>
+              <g fill="none" fill-rule="evenodd">
+                <mask id="c" fill="#fff">
+                  <use xlink:href="#a" />
+                </mask>
+                <use fill="#4BC0D9" xlink:href="#a" />
+                <path fill="url(#b)" d="M-3-3h31v26H-3z" mask="url(#c)" />
+              </g>
+            </svg>
+            <svg
+              data-layout="desktop"
+              class="magnifier-icon"
+              viewBox="0 0 17 17"
+            >
               <path
                 fill="currentColor"
                 fill-rule="evenodd"
@@ -53,11 +91,40 @@
             </svg>
           </label>
 
-          <div data-widget="selected-topics"></div>
+          <div
+            data-widget="selected-topics-desktop"
+            data-layout="desktop"
+          ></div>
           <div data-widget="searchbox" class="searchbox-container-input"></div>
+          <button
+            data-action="toggle-filters"
+            class="container-filters-button"
+            title="Filter"
+            data-layout="mobile"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 22">
+              <g
+                fill="none"
+                fill-rule="evenodd"
+                stroke="#7259B6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              >
+                <path
+                  d="M4.273 20.636V13M4.273 8.636V1M13 20.636v-9.818M13 6.455V1M21.727 20.636v-5.454M21.727 10.818V1M1 13h6.545M9.727 6.455h6.546M18.455 15.182H25"
+                />
+              </g>
+            </svg>
+          </button>
         </div>
 
         <div class="topics-container">
+          <div
+            class="selected-topics-mobile"
+            data-widget="selected-topics-mobile"
+            data-layout="mobile"
+          ></div>
           <div data-widget="topics"></div>
         </div>
       </div>
@@ -70,7 +137,7 @@
         </a>
       </div>
 
-      <div class="container-filters">
+      <div class="container-filters" data-layout="desktop">
         <div class="container-filters-left">
           <button data-action="toggle-filters" class="container-filters-button">
             <svg viewBow="0 0 16 13">
@@ -92,12 +159,12 @@
 
           <div data-widget="stats" class="container-filters-filter"></div>
           <div
-            data-widget="clear-filters"
+            data-widget="clear-filters-desktop"
             class="container-filters-filter"
           ></div>
         </div>
 
-        <div data-widget="sort-by"></div>
+        <div data-widget="sort-by-desktop"></div>
       </div>
 
       <div
@@ -105,14 +172,39 @@
         class="container-filters-panel container-filters-panel--hidden"
       >
         <div
-          data-widget="categories"
-          class="container-filters-panel-column"
-        ></div>
-        <div
-          data-widget="locations"
-          class="container-filters-panel-column"
-        ></div>
-        <div data-widget="dates" class="container-filters-panel-column"></div>
+          data-layout="desktop"
+          class="container-filters-panel-column-wrapper"
+        >
+          <div
+            data-widget="categories-desktop"
+            class="container-filters-panel-column"
+          ></div>
+          <div
+            data-widget="locations-desktop"
+            class="container-filters-panel-column"
+          ></div>
+          <div
+            data-widget="dates-desktop"
+            class="container-filters-panel-column"
+          ></div>
+        </div>
+        <div data-layout="mobile" class="container-filters-panel-mobile">
+          <div class="container-filters-header">
+            <h2 class="container-filters-title">
+              Filters
+            </h2>
+            <div data-widget="clear-filters-mobile"></div>
+          </div>
+          <div data-widget="sort-by-mobile"></div>
+          <div data-widget="dates-mobile"></div>
+          <div data-widget="categories-mobile"></div>
+          <div data-widget="locations-mobile"></div>
+          <div class="container-filters-footer">
+            <button class="see-results-button">
+              <div data-widget="see-results-button"></div>
+            </button>
+          </div>
+        </div>
       </div>
 
       <section class="container-results">
