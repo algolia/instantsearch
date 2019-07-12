@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "instantsearch.css": "7.3.1",
-    "lodash": "4.17.13",
+    "lodash": "4.17.14",
     "prop-types": "15.6.0",
     "qs": "6.7.0",
     "react": "16.8.6",
