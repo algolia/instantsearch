@@ -87,7 +87,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showMore: expect.any(Function),
         results: expect.any(Object),
         isFirstPage: true,
-        isLastPage: false,
+        isLastPage: true,
         widgetParams: {
           escapeHTML: true,
         },
