@@ -15,7 +15,7 @@ function createHit(hit, { isHighlighted }) {
       <img src="${hit.image}" alt="${hit.title}">
     </div>
 
-    <div class="card-content">
+    <div class="card-content" data-layout="desktop">
       <header>
         ${
           hit.topics ? `<span class="card-subject">${hit.topics[0]}</span>` : ''
@@ -39,6 +39,26 @@ function createHit(hit, { isHighlighted }) {
     { addSuffix: true }
   ).replace('about ', '')}
       </footer>
+    </div>
+
+    <div class="card-content" data-layout="mobile">
+      <header>
+      <h1 class="card-title">${instantsearch.highlight({
+        attribute: 'title',
+        hit,
+      })}</h1>
+      </header>
+
+      <p class="card-mobile-footer">
+        ${
+          hit.topics ? `<span class="card-subject">${hit.topics[0]}</span>` : ''
+        }
+        <span class="card-timestamp">
+          ${distanceInWords(currentDate, hit.date, {
+            addSuffix: true,
+          }).replace('about ', '')}
+        </span>
+      </p>
     </div>
   </article>
 </li>
