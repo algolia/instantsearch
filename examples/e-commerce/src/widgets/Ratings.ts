@@ -9,7 +9,7 @@ const ratingsMenu = panel({
   collapsed: () => false,
 })(ratingMenu);
 
-const ratings = ratingsMenu({
+export const ratings = ratingsMenu({
   container: '[data-widget="ratings"]',
   attribute: 'rating',
   templates: {
@@ -42,4 +42,14 @@ const ratings = ratingsMenu({
   },
 });
 
-export default ratings;
+export function getFallbackRatingsRoutingValue(
+  value: string
+): string | undefined {
+  const ratingValue = Number(value);
+
+  if (ratingValue >= 1 && ratingValue <= 4) {
+    return value;
+  }
+
+  return undefined;
+}

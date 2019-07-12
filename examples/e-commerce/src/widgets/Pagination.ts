@@ -9,7 +9,7 @@ const paginationWithMultiplePages = panel({
   },
 })(paginationWidget);
 
-const pagination = paginationWithMultiplePages({
+export const pagination = paginationWithMultiplePages({
   container: '[data-widget="pagination"]',
   scrollTo: '.container',
   padding: 2,
@@ -32,5 +32,3 @@ const pagination = paginationWithMultiplePages({
     `,
   },
 });
-
-export default pagination;

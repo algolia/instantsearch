@@ -9,7 +9,7 @@ const priceRangeSlider = panel({
   collapsed: () => false,
 })(rangeSlider);
 
-const priceSlider = priceRangeSlider({
+export const priceSlider = priceRangeSlider({
   container: '[data-widget="price-range"]',
   attribute: 'price',
   pips: false,
@@ -19,5 +19,3 @@ const priceSlider = priceRangeSlider({
     },
   },
 });
-
-export default priceSlider;
