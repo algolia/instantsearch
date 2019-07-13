@@ -2,7 +2,7 @@ import { MultiResponse } from 'algoliasearch';
 import { Client } from '../../src/types';
 import {
   createSingleSearchResponse,
-  createMutliSearchResponse,
+  createMultiSearchResponse,
   createSFFVResponse,
 } from './createAPIResponse';
 
@@ -10,7 +10,7 @@ export const createSearchClient = (args: Partial<Client> = {}): Client =>
   ({
     search: jest.fn(requests =>
       Promise.resolve(
-        createMutliSearchResponse(
+        createMultiSearchResponse(
           ...requests.map(() => createSingleSearchResponse())
         )
       )
@@ -37,7 +37,7 @@ export const createControlledSearchClient = (
     search: jest.fn(() => {
       let resolver: () => void;
       const promise: Promise<MultiResponse> = new Promise(resolve => {
-        resolver = () => resolve(createMutliSearchResponse());
+        resolver = () => resolve(createMultiSearchResponse());
       });
 
       searches.push({

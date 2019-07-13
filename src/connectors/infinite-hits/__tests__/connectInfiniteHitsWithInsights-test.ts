@@ -5,9 +5,9 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { InstantSearch, InitOptions, RenderOptions } from '../../../types';
 import connectInfiniteHitsWithInsights from '../connectInfiniteHitsWithInsights';
-import createAlgoliaResponse from '../../../../test/utils/createAlgoliaResponse';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   addAbsolutePosition: hits => hits,
@@ -55,7 +55,7 @@ describe('connectInfiniteHitsWithInsights', () => {
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [
-      createAlgoliaResponse({ hits }),
+      createSingleSearchResponse({ hits }),
     ]);
 
     widget.render!(
@@ -87,7 +87,7 @@ describe('connectInfiniteHitsWithInsights', () => {
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
     const results = new SearchResults(helper.state, [
-      createAlgoliaResponse({ hits }),
+      createSingleSearchResponse({ hits }),
     ]);
 
     widget.render!(

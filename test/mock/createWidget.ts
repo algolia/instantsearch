@@ -5,7 +5,7 @@ import {
   DisposeOptions,
   Widget,
 } from '../../src/types';
-import { createMutliSearchResponse } from './createAPIResponse';
+import { createMultiSearchResponse } from './createAPIResponse';
 import { createInstantSearch } from './createInstantSearch';
 
 export const createInitOptions = (
@@ -28,7 +28,7 @@ export const createRenderOptions = (
   args: Partial<RenderOptions> = {}
 ): RenderOptions => {
   const instantSearchInstance = createInstantSearch();
-  const response = createMutliSearchResponse();
+  const response = createMultiSearchResponse();
 
   return {
     instantSearchInstance,

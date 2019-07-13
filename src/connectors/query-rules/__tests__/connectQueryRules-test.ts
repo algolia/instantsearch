@@ -9,7 +9,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import createAlgoliaResponse from '../../../../test/utils/createAlgoliaResponse';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectQueryRules, {
   QueryRulesWidgetFactory,
 } from '../connectQueryRules';
@@ -114,7 +114,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           helper,
           instantSearchInstance,
           state: helper.state,
-          results: new SearchResults(helper.state, [createAlgoliaResponse()]),
+          results: new SearchResults(helper.state, [createSingleSearchResponse()]),
         })
       );
 
@@ -140,7 +140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           instantSearchInstance,
           state: helper.state,
           results: new SearchResults(helper.state, [
-            createAlgoliaResponse({ userData: [{ banner: 'image.png' }] }),
+            createSingleSearchResponse({ userData: [{ banner: 'image.png' }] }),
           ]),
         })
       );
@@ -199,7 +199,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse({
+              createSingleSearchResponse({
                 userData: [{ banner: 'image1.png' }, { banner: 'image2.png' }],
               }),
             ]),
@@ -317,8 +317,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
@@ -358,8 +358,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
@@ -414,8 +414,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
@@ -443,8 +443,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
@@ -489,8 +489,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse(),
+              createSingleSearchResponse(),
+              createSingleSearchResponse(),
             ]),
           })
         );
@@ -514,8 +514,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse(),
+              createSingleSearchResponse(),
+              createSingleSearchResponse(),
             ]),
           })
         );
@@ -555,8 +555,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     'Insignia™': 100,
@@ -622,8 +622,8 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Insignia: 100,
@@ -690,8 +690,8 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
@@ -793,8 +793,8 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              createAlgoliaResponse(),
-              createAlgoliaResponse({
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
