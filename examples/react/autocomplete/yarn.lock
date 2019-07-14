@@ -1970,10 +1970,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-antd@3.20.1:
-  version "3.20.1"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-3.20.1.tgz#b6274517bab290754a10907a87a23b2fd8e39417"
-  integrity sha512-4F1XvFUj6V6b2Aki65pkKd/WlwfeNeE2HftJG0jBB6D5QBWCHU/Csv0cVph8n9UCcGNOAErNpi2dA26GmjjRFw==
+antd@3.20.2:
+  version "3.20.2"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-3.20.2.tgz#e452f6e9545b945f0d5a58e78e5b262170ac1169"
+  integrity sha512-3IFhM7blPzd19exELLO67Rc/10N48oIZbIzNwIDaR4wmVJ2muWoJ5cLYPcDujUlnDFuVlTvEZjDYVa1jdR0oUg==
   dependencies:
     "@ant-design/create-react-context" "^0.2.4"
     "@ant-design/icons" "~2.1.1"
