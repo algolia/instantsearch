@@ -130,6 +130,10 @@ strong {
   width: 2.5rem;
 }
 
+.filtering .back-to-top {
+  display: none;
+}
+
 /* SearchBox */
 
 .header .searchbox-container {
