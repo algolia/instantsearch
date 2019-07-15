@@ -90,8 +90,8 @@ function getRuleContextsFromTrackedFilters({
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const facetRefinements: TrackedFilterRefinement[] = getRefinements(
-        // Note that this isn't correct, but getRefinements only uses properties,
-        // meaning it will not throw with an empty object
+        // An empty object is technically not a `SearchResults` but `getRefinements`
+        // only accesses properties, meaning it will not throw with an empty object.
         helper.lastResults || ({} as SearchResults),
         sharedHelperState
       )
