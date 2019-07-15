@@ -1,7 +1,7 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
+import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
-import defaultTemplates from './defaultTemplates';
 import connectInfiniteHits, {
   InfiniteHitsRenderer,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
@@ -19,8 +19,8 @@ import {
   Template,
   Hit,
   InsightsClientWrapper,
-  SearchResults,
 } from '../../types';
+import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',

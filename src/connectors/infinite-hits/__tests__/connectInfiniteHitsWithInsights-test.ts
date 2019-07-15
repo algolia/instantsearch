@@ -5,6 +5,7 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { InstantSearch, InitOptions, RenderOptions } from '../../../types';
 import connectInfiniteHitsWithInsights from '../connectInfiniteHitsWithInsights';
 
@@ -53,7 +54,9 @@ describe('connectInfiniteHitsWithInsights', () => {
     expect(firstRenderingOptions.insights).toBeUndefined();
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptionsWithInsights({
@@ -83,7 +86,9 @@ describe('connectInfiniteHitsWithInsights', () => {
     );
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptionsWithInsights({

@@ -1,10 +1,11 @@
 import { Index } from '../widgets/index/index';
 import {
-  Helper,
-  SearchResults,
-  InstantSearch,
+  AlgoliaSearchHelper as Helper,
   SearchParameters,
-} from './instantsearch';
+  SearchResults,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
+import { InstantSearch } from './instantsearch';
 
 export interface InitOptions {
   instantSearchInstance: InstantSearch;
@@ -92,8 +93,8 @@ export interface Widget {
   render?(options: RenderOptions): void;
   dispose?(options: DisposeOptions): SearchParameters | void;
   getConfiguration?(
-    previousConfiguration?: Partial<SearchParameters>
-  ): Partial<SearchParameters>;
+    previousConfiguration?: PlainSearchParameters
+  ): PlainSearchParameters;
   getWidgetState?(
     uiState: UiState,
     widgetStateOptions: {

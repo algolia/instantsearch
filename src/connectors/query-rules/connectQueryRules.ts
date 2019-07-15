@@ -1,10 +1,13 @@
 import {
+  AlgoliaSearchHelper as Helper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import {
   Renderer,
   RendererOptions,
   WidgetFactory,
-  Helper,
   HelperChangeEvent,
-  SearchParameters,
 } from '../../types';
 import {
   checkRendering,
@@ -87,7 +90,9 @@ function getRuleContextsFromTrackedFilters({
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const facetRefinements: TrackedFilterRefinement[] = getRefinements(
-        helper.lastResults || {},
+        // An empty object is technically not a `SearchResults` but `getRefinements`
+        // only accesses properties, meaning it will not throw with an empty object.
+        helper.lastResults || ({} as SearchResults),
         sharedHelperState
       )
         .filter(

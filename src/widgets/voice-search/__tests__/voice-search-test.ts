@@ -1,6 +1,7 @@
 import { render } from 'preact-compat';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {
+  AlgoliaSearchHelper as Helper,
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -8,7 +9,8 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { Helper, Widget } from '../../../types';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { Widget } from '../../../types';
 import voiceSearch from '../voice-search';
 
 jest.mock('preact-compat', () => {
@@ -50,7 +52,9 @@ function defaultSetup(opts = {}): DefaultSetupWrapper {
       createRenderOptions({
         helper,
         state: helper.state,
-        results: new SearchResults(helper.state, [{}]),
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
       })
     );
   };

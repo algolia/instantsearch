@@ -1,8 +1,9 @@
 import { render, unmountComponentAtNode } from 'preact-compat';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper as Helper,
+} from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInitOptions } from '../../../../test/mock/createWidget';
-import { Helper } from '../../../types';
 import queryRuleCustomData from '../query-rule-custom-data';
 
 jest.mock('preact-compat', () => {

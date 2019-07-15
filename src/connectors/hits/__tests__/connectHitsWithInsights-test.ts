@@ -5,6 +5,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectHitsWithInsights from '../connectHitsWithInsights';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
@@ -36,7 +37,9 @@ describe('connectHitsWithInsights', () => {
     expect(firstRenderingOptions.insights).toBeUndefined();
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
@@ -67,7 +70,9 @@ describe('connectHitsWithInsights', () => {
     );
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    const results = new SearchResults(helper.state, [{ hits }]);
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ hits }),
+    ]);
 
     widget.render!(
       createRenderOptions({
