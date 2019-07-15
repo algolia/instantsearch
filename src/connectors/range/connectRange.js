@@ -49,7 +49,7 @@ export default function connectRange(renderFn, unmountFn) {
       attribute,
       min: minBound,
       max: maxBound,
-      precision = 2, // @MAJOR: the `precision` default value should be 0
+      precision = 0,
     } = widgetParams;
 
     if (!attribute) {

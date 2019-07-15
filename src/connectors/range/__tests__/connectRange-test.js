@@ -67,7 +67,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
         attribute,
-        precision: 2,
+        precision: 0,
       });
     }
 
@@ -110,7 +110,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
         attribute,
-        precision: 2,
+        precision: 0,
       });
     }
   });
@@ -652,8 +652,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       widget._refine(helper, range)(values);
 
-      expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10.5]);
-      expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490.5]);
+      expect(helper.getNumericRefinement(attribute, '>=')).toEqual([11]);
+      expect(helper.getNumericRefinement(attribute, '<=')).toEqual([491]);
       expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
