@@ -1,10 +1,11 @@
-import { SearchParameters, Widget } from '../../types';
+import { PlainSearchParameters } from 'algoliasearch-helper';
+import { Widget } from '../../types';
 import mergeDeep from './mergeDeep';
 
 function enhanceConfiguration(
-  configuration: Partial<SearchParameters>,
+  configuration: PlainSearchParameters,
   widget: Widget
-): Partial<SearchParameters> {
+): PlainSearchParameters {
   if (!widget.getConfiguration) {
     return configuration;
   }

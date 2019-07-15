@@ -1,12 +1,14 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
+  AlgoliaSearchHelper as Helper,
+  SearchParameters,
+} from 'algoliasearch-helper';
+import {
   Renderer,
   RendererOptions,
   WidgetFactory,
   Hits,
   Unmounter,
-  Helper,
-  SearchParameters,
 } from '../../types';
 import {
   checkRendering,

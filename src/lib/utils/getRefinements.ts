@@ -1,4 +1,4 @@
-import { SearchParameters, SearchResults } from '../../types';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import find from './find';
 import unescapeRefinement from './unescapeRefinement';
 
@@ -165,7 +165,8 @@ function getRefinements(
   Object.keys(numericRefinements).forEach(attributeName => {
     const operators = numericRefinements[attributeName];
 
-    Object.keys(operators).forEach(operator => {
+    Object.keys(operators).forEach(operatorOriginal => {
+      const operator = operatorOriginal as SearchParameters.Operator;
       const valueOrValues = operators[operator];
       const refinements = Array.isArray(valueOrValues)
         ? valueOrValues

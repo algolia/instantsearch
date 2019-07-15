@@ -1,5 +1,5 @@
+import { SearchParameters } from 'algoliasearch-helper';
 import { Index } from '../../widgets/index/index';
-import { SearchParameters } from '../../types';
 
 const resolveSearchParameters = (current: Index): SearchParameters[] => {
   let parent = current.getParent();

@@ -1,4 +1,5 @@
-import { Hits, InstantSearch, SearchResults } from './instantsearch';
+import { SearchResults } from 'algoliasearch-helper';
+import { Hits, InstantSearch } from './instantsearch';
 import { InsightsClient } from './insights';
 
 export type RendererOptions<TWidgetParams = unknown> = {
