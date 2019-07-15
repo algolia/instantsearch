@@ -190,8 +190,10 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       render({ results, instantSearchInstance }) {
+        const facetValues = results.getFacetValues(attribute, { sortBy });
         const facetItems =
-          results.getFacetValues(attribute, { sortBy }).data || [];
+          facetValues && facetValues.data ? facetValues.data : [];
+
         const items = transformItems(
           facetItems
             .slice(0, this.getLimit())
