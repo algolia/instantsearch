@@ -381,4 +381,31 @@ describe('mergeSearchParameters', () => {
       })
     );
   });
+
+  it('merges and dedupes `ruleContexts` parameters', () => {
+    const actual = merge(
+      algoliasearchHelper.SearchParameters.make({
+        ruleContexts: ['ais-genre-comedy'],
+      }),
+      algoliasearchHelper.SearchParameters.make({
+        ruleContexts: ['ais-genre-thriller', 'ais-genre-comedy'],
+      }),
+      algoliasearchHelper.SearchParameters.make({
+        ruleContexts: ['ais-rating-4'],
+      }),
+      algoliasearchHelper.SearchParameters.make({
+        ruleContexts: [],
+      })
+    );
+
+    expect(actual).toEqual(
+      algoliasearchHelper.SearchParameters.make({
+        ruleContexts: [
+          'ais-genre-comedy',
+          'ais-genre-thriller',
+          'ais-rating-4',
+        ],
+      })
+    );
+  });
 });

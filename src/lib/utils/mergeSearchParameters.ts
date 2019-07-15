@@ -1,5 +1,6 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import findIndex from './findIndex';
+import uniq from './uniq';
 
 type Merger = (
   left: SearchParameters,
@@ -17,6 +18,7 @@ const mergeWithRest: Merger = (left, right) => {
     tagRefinements,
     hierarchicalFacets,
     hierarchicalFacetsRefinements,
+    ruleContexts,
     ...rest
   } = right;
 
@@ -103,6 +105,23 @@ const mergeHierarchicalFacetsRefinements: Merger = (left, right) =>
     },
   });
 
+const mergeRuleContexts: Merger = (left, right) => {
+  const ruleContexts: string[] = uniq(
+    ([] as any)
+      .concat(left.ruleContexts)
+      .concat(right.ruleContexts)
+      .filter(Boolean)
+  );
+
+  if (ruleContexts.length > 0) {
+    return left.setQueryParameters({
+      ruleContexts,
+    });
+  }
+
+  return left;
+};
+
 const merge = (...parameters: SearchParameters[]): SearchParameters =>
   parameters.reduce((left, right) => {
     const hierarchicalFacetsRefinementsMerged = mergeHierarchicalFacetsRefinements(
@@ -137,7 +156,11 @@ const merge = (...parameters: SearchParameters[]): SearchParameters =>
       facetRefinementsMerged,
       right
     );
-    const facetsMerged = mergeFacets(disjunctiveFacetsMerged, right);
+    const ruleContextsMerged = mergeRuleContexts(
+      disjunctiveFacetsMerged,
+      right
+    );
+    const facetsMerged = mergeFacets(ruleContextsMerged, right);
 
     return mergeWithRest(facetsMerged, right);
   });
