@@ -256,6 +256,7 @@ describe('mergeSearchParameters', () => {
           {
             name: 'categories',
             attributes: ['categories.lvl0', 'categories.lvl1'],
+            separator: ' > ',
           },
         ],
       }),
@@ -264,6 +265,7 @@ describe('mergeSearchParameters', () => {
           {
             name: 'department',
             attributes: ['department.lvl0', 'department.lvl1'],
+            separator: ' > ',
           },
         ],
       }),
@@ -272,10 +274,12 @@ describe('mergeSearchParameters', () => {
           {
             name: 'categories',
             attributes: ['topLevelCategories', 'subLevelCategories'],
+            separator: ' > ',
           },
           {
             name: 'folders',
             attributes: ['folders.lvl0', 'folders.lvl1'],
+            separator: ' > ',
           },
         ],
       })
@@ -287,14 +291,17 @@ describe('mergeSearchParameters', () => {
           {
             name: 'categories',
             attributes: ['topLevelCategories', 'subLevelCategories'],
+            separator: ' > ',
           },
           {
             name: 'department',
             attributes: ['department.lvl0', 'department.lvl1'],
+            separator: ' > ',
           },
           {
             name: 'folders',
             attributes: ['folders.lvl0', 'folders.lvl1'],
+            separator: ' > ',
           },
         ],
       })
@@ -308,6 +315,7 @@ describe('mergeSearchParameters', () => {
           {
             name: 'categories',
             attributes: ['categories.lvl0', 'categories.lvl1'],
+            separator: ' > ',
           },
         ],
         hierarchicalFacetsRefinements: {
@@ -319,6 +327,7 @@ describe('mergeSearchParameters', () => {
           {
             name: 'department',
             attributes: ['department.lvl0', 'department.lvl1'],
+            separator: ' > ',
           },
         ],
         hierarchicalFacetsRefinements: {
@@ -330,10 +339,12 @@ describe('mergeSearchParameters', () => {
           {
             name: 'categories',
             attributes: ['topLevelCategories', 'subLevelCategories'],
+            separator: ' > ',
           },
           {
             name: 'folders',
             attributes: ['folders.lvl0', 'folders.lvl1'],
+            separator: ' > ',
           },
         ],
         hierarchicalFacetsRefinements: {
@@ -349,14 +360,17 @@ describe('mergeSearchParameters', () => {
           {
             name: 'categories',
             attributes: ['topLevelCategories', 'subLevelCategories'],
+            separator: ' > ',
           },
           {
             name: 'department',
             attributes: ['department.lvl0', 'department.lvl1'],
+            separator: ' > ',
           },
           {
             name: 'folders',
             attributes: ['folders.lvl0', 'folders.lvl1'],
+            separator: ' > ',
           },
         ],
         hierarchicalFacetsRefinements: {

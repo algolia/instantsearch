@@ -1,11 +1,15 @@
-import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchResults,
+  SearchParameters,
+  AlgoliaSearchHelper as Helper,
+} from 'algoliasearch-helper';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
-import { Helper, SearchParameters } from '../../../types';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectQueryRules, {
   QueryRulesWidgetFactory,
 } from '../connectQueryRules';
@@ -110,7 +114,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           helper,
           instantSearchInstance,
           state: helper.state,
-          results: new SearchResults(helper.state, [{ hits: [] }]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
         })
       );
 
@@ -136,7 +142,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           instantSearchInstance,
           state: helper.state,
           results: new SearchResults(helper.state, [
-            { hits: [], userData: [{ banner: 'image.png' }] },
+            createSingleSearchResponse({ userData: [{ banner: 'image.png' }] }),
           ]),
         })
       );
@@ -195,10 +201,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {
-                hits: [],
+              createSingleSearchResponse({
                 userData: [{ banner: 'image1.png' }, { banner: 'image2.png' }],
-              },
+              }),
             ]),
           })
         );
@@ -314,15 +319,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
                     Apple: 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );
@@ -355,15 +360,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
                     Apple: 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );
@@ -411,15 +416,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
                     Apple: 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );
@@ -440,15 +445,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
                     Apple: 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );
@@ -485,7 +490,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           createRenderOptions({
             helper,
             state: helper.state,
-            results: new SearchResults(helper.state, [{}, {}]),
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+              createSingleSearchResponse(),
+            ]),
           })
         );
 
@@ -507,7 +515,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           createRenderOptions({
             helper,
             state: helper.state,
-            results: new SearchResults(helper.state, [{}, {}]),
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+              createSingleSearchResponse(),
+            ]),
           })
         );
 
@@ -546,15 +557,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     'Insignia™': 100,
                     '© Apple': 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );
@@ -613,8 +624,8 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Insignia: 100,
@@ -630,7 +641,7 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
                     PNY: 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );
@@ -681,15 +692,15 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
                     Apple: 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );
@@ -784,15 +795,15 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
             helper,
             state: helper.state,
             results: new SearchResults(helper.state, [
-              {},
-              {
+              createSingleSearchResponse(),
+              createSingleSearchResponse({
                 facets: {
                   brand: {
                     Samsung: 100,
                     Apple: 100,
                   },
                 },
-              },
+              }),
             ]),
           })
         );

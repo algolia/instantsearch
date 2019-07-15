@@ -1,22 +1,21 @@
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchParameters,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
 import { isEqual } from './utils';
 import {
   InstantSearch,
   UiState,
-  SearchParameters,
   Router,
   StateMapping,
   Widget,
+  HelperChangeEvent,
 } from '../types';
 
 type RoutingManagerProps = {
   instantSearchInstance: InstantSearch;
   router: Router;
   stateMapping: StateMapping;
-};
-
-type HelperChangeEvent = {
-  state: SearchParameters;
 };
 
 class RoutingManager implements Widget {
@@ -43,7 +42,7 @@ class RoutingManager implements Widget {
   private getAllSearchParameters({
     currentSearchParameters,
     uiState,
-  }): Partial<SearchParameters> {
+  }): PlainSearchParameters {
     const widgets = this.instantSearchInstance.mainIndex.getWidgets();
 
     return widgets.reduce((parameters, widget) => {
@@ -137,8 +136,8 @@ class RoutingManager implements Widget {
   }
 
   public getConfiguration(
-    currentConfiguration: Partial<SearchParameters>
-  ): Partial<SearchParameters> {
+    currentConfiguration: PlainSearchParameters
+  ): PlainSearchParameters {
     // We have to create a `SearchParameters` because `getAllSearchParameters`
     // expects an instance of `SearchParameters` and not a plain object.
     const currentSearchParameters = algoliasearchHelper.SearchParameters.make(

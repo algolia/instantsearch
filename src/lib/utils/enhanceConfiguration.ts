@@ -1,10 +1,13 @@
-import { SearchParameters, Widget } from '../../types';
-import mergeDeep from './mergeDeep';
+import algoliasearchHelper, {
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
+import { Widget } from '../../types';
+import mergeSearchParameters from './mergeSearchParameters';
 
 function enhanceConfiguration(
-  configuration: Partial<SearchParameters>,
+  configuration: PlainSearchParameters,
   widget: Widget
-): Partial<SearchParameters> {
+): PlainSearchParameters {
   if (!widget.getConfiguration) {
     return configuration;
   }
@@ -12,7 +15,10 @@ function enhanceConfiguration(
   // Get the relevant partial configuration asked by the widget
   const partialConfiguration = widget.getConfiguration(configuration);
 
-  return mergeDeep(configuration, partialConfiguration);
+  return mergeSearchParameters(
+    new algoliasearchHelper.SearchParameters(configuration),
+    new algoliasearchHelper.SearchParameters(partialConfiguration)
+  );
 }
 
 export default enhanceConfiguration;
