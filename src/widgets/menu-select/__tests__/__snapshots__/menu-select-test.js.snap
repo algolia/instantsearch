@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`menuSelect render renders correctly 1`] = `
+exports[`menuSelect Lifecycle render renders correctly 1`] = `
 <MenuSelect
   canRefine={true}
   cssClasses={
@@ -40,7 +40,7 @@ exports[`menuSelect render renders correctly 1`] = `
 />
 `;
 
-exports[`menuSelect render renders transformed items correctly 1`] = `
+exports[`menuSelect Lifecycle render renders transformed items correctly 1`] = `
 <MenuSelect
   canRefine={true}
   cssClasses={

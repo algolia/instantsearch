@@ -2,6 +2,8 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   find,
+  warning,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -86,7 +88,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectSortBy(renderFn, unmountFn) {
+export default function connectSortBy(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
@@ -100,21 +102,25 @@ export default function connectSortBy(renderFn, unmountFn) {
 
     return {
       init({ helper, instantSearchInstance }) {
-        const currentIndex = helper.getIndex();
-        const isIndexInList = find(items, item => item.value === currentIndex);
+        const initialIndex = helper.state.index;
+        const isInitialIndexInItems = find(
+          items,
+          item => item.value === initialIndex
+        );
 
-        if (!isIndexInList) {
-          throw new Error(
-            `[sortBy]: Index ${currentIndex} not present in \`items\``
-          );
-        }
+        this.initialIndex = initialIndex;
+        this.setIndex = indexName => {
+          helper.setIndex(indexName).search();
+        };
 
-        this.initialIndex = instantSearchInstance.indexName;
-        this.setIndex = indexName => helper.setIndex(indexName).search();
+        warning(
+          isInitialIndexInItems,
+          `The index named "${initialIndex}" is not listed in the \`items\` of \`sortBy\`.`
+        );
 
         renderFn(
           {
-            currentRefinement: currentIndex,
+            currentRefinement: initialIndex,
             options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: true,
@@ -128,7 +134,7 @@ export default function connectSortBy(renderFn, unmountFn) {
       render({ helper, results, instantSearchInstance }) {
         renderFn(
           {
-            currentRefinement: helper.getIndex(),
+            currentRefinement: helper.state.index,
             options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: results.nbHits === 0,
@@ -141,6 +147,7 @@ export default function connectSortBy(renderFn, unmountFn) {
 
       dispose({ state }) {
         unmountFn();
+
         return state.setIndex(this.initialIndex);
       },
 

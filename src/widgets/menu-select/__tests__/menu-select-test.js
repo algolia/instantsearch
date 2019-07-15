@@ -1,10 +1,12 @@
-import { render } from 'preact-compat';
+import { render, unmountComponentAtNode } from 'preact-compat';
+import algoliasearchHelper from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
+  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -22,7 +24,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
     });
   });
 
-  describe('render', () => {
+  describe('Lifecycle', () => {
     let data;
     let results;
     let state;
@@ -31,40 +33,69 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
     beforeEach(() => {
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
       results = { getFacetValues: jest.fn(() => data) };
-      state = { toggleRefinement: jest.fn() };
-      helper = {
-        toggleRefinement: jest.fn().mockReturnThis(),
-        search: jest.fn(),
-        state,
-      };
+      helper = algoliasearchHelper({}, 'index_name');
+      helper.search = jest.fn();
+      state = helper.state;
 
       render.mockClear();
     });
 
-    it('renders correctly', () => {
-      const widget = menuSelect({
-        container: document.createElement('div'),
-        attribute: 'test',
+    describe('render', () => {
+      it('renders correctly', () => {
+        const widget = menuSelect({
+          container: document.createElement('div'),
+          attribute: 'test',
+        });
+
+        widget.init({
+          helper,
+          createURL: () => '#',
+          instantSearchInstance: {},
+        });
+        widget.render({ results, createURL: () => '#', state });
+
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
       });
 
-      widget.init({ helper, createURL: () => '#', instantSearchInstance: {} });
-      widget.render({ results, createURL: () => '#', state });
+      it('renders transformed items correctly', () => {
+        const widget = menuSelect({
+          container: document.createElement('div'),
+          attribute: 'test',
+          transformItems: items =>
+            items.map(item => ({ ...item, transformed: true })),
+        });
 
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+        widget.init({
+          helper,
+          createURL: () => '#',
+          instantSearchInstance: {},
+        });
+        widget.render({ results, createURL: () => '#', state });
+
+        expect(render.mock.calls[0][0]).toMatchSnapshot();
+      });
     });
 
-    it('renders transformed items correctly', () => {
-      const widget = menuSelect({
-        container: document.createElement('div'),
-        attribute: 'test',
-        transformItems: items =>
-          items.map(item => ({ ...item, transformed: true })),
+    describe('dispose', () => {
+      it('unmounts the component', () => {
+        const container = document.createElement('div');
+        const widget = menuSelect({
+          attribute: 'test',
+          container,
+        });
+
+        helper.setState(widget.getConfiguration({}));
+
+        expect(unmountComponentAtNode).toHaveBeenCalledTimes(0);
+
+        widget.dispose({
+          state: helper.state,
+          helper,
+        });
+
+        expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
+        expect(unmountComponentAtNode).toHaveBeenCalledWith(container);
       });
-
-      widget.init({ helper, createURL: () => '#', instantSearchInstance: {} });
-      widget.render({ results, createURL: () => '#', state });
-
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 });

@@ -4,6 +4,7 @@ import {
   createDocumentationMessageGenerator,
   isEqual,
   find,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -59,7 +60,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
-export default function connectHierarchicalMenu(renderFn, unmountFn) {
+export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

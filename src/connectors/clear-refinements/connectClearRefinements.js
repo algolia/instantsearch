@@ -3,6 +3,7 @@ import {
   clearRefinements,
   getRefinements,
   createDocumentationMessageGenerator,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -67,7 +68,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectClearRefinements(renderFn, unmountFn) {
+export default function connectClearRefinements(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

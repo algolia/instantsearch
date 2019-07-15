@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   isFiniteNumber,
   find,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator(
@@ -41,7 +42,7 @@ const withUsage = createDocumentationMessageGenerator(
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRangeWidgetOptions)} Re-usable widget factory for a custom **Range** widget.
  */
-export default function connectRange(renderFn, unmountFn) {
+export default function connectRange(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

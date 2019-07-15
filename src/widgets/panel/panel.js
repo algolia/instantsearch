@@ -179,8 +179,10 @@ export default function panel({
         unmountComponentAtNode(getContainerNode(container));
 
         if (typeof widget.dispose === 'function') {
-          widget.dispose.call(this, ...args);
+          return widget.dispose.call(this, ...args);
         }
+
+        return undefined;
       },
       render(...args) {
         const [options] = args;
