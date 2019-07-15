@@ -206,7 +206,7 @@ const index = (props: IndexProps): Index => {
         );
       };
 
-      derivedHelper = mainHelper.derive(() => 
+      derivedHelper = mainHelper.derive(() =>
         mergeSearchParameters(...resolveSearchParameters(this))
       );
 
