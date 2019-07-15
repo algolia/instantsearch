@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   find,
   warning,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -87,7 +88,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectSortBy(renderFn, unmountFn) {
+export default function connectSortBy(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

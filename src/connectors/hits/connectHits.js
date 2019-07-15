@@ -4,6 +4,7 @@ import {
   createDocumentationMessageGenerator,
   addAbsolutePosition,
   addQueryID,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -50,7 +51,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectHits(renderFn, unmountFn) {
+export default function connectHits(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
