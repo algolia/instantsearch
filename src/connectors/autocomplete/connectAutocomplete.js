@@ -3,6 +3,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   find,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -41,7 +42,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomAutocompleteWidgetOptions)} Re-usable widget factory for a custom **Autocomplete** widget.
  */
-export default function connectAutocomplete(renderFn, unmountFn) {
+export default function connectAutocomplete(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

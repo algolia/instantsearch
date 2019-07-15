@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -28,7 +29,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function} Re-usable widget factory for a custom **PoweredBy** widget.
  */
-export default function connectPoweredBy(renderFn, unmountFn) {
+export default function connectPoweredBy(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   const defaultUrl =

@@ -4,6 +4,7 @@ import {
   unescapeRefinement,
   createDocumentationMessageGenerator,
   find,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -86,7 +87,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectToggleRefinement(renderFn, unmountFn) {
+export default function connectToggleRefinement(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {
