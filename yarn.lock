@@ -1693,17 +1693,10 @@
     traverse "^0.6.6"
     unified "^6.1.6"
 
-"@types/algoliasearch-helper@2.26.1":
-  version "2.26.1"
-  resolved "https://registry.yarnpkg.com/@types/algoliasearch-helper/-/algoliasearch-helper-2.26.1.tgz#60cf377e7cb4bd9a55f7eba35182792763230a24"
-  integrity sha512-JN1wq/yLxxBcc6MeSe57F9Aqv8wL964L0nBOUTSQ5OECzWxaECuGYV06VnGKn/c+9AGB97RAgqx2PUbYflZNqA==
-  dependencies:
-    "@types/algoliasearch" "*"
-
-"@types/algoliasearch@*":
-  version "3.30.8"
-  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.30.8.tgz#f7004bd905e61f7f56b0e6da2744ebd4dbafc87c"
-  integrity sha512-Lzf9kcLtFJe9gAu6lqc0/RR/yiQy7LfWXZYpZVaXUGsJ1t+ifyAiH/iPpXhslDqS11A6JiPKBeQTuG0/VtPLdA==
+"@types/algoliasearch@3.30.14":
+  version "3.30.14"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.30.14.tgz#2166c0fedfa029a4be0fd80e5b35b4eb2d99731e"
+  integrity sha512-GfUz6Cb7BXSyR/mQchUVy4Y6TNbho/0NrdqDtfSENJaBI9+miD00xowISIsidDJTonjQIq0tN7f/+OQBVBM1Cw==
 
 "@types/babel__core@^7.1.0":
   version "7.1.1"
@@ -2408,10 +2401,10 @@ algolia-aerial@^1.5.3:
   resolved "https://registry.yarnpkg.com/algolia-aerial/-/algolia-aerial-1.5.3.tgz#c8b8ca6bc484164ffc7b36717689a424ea6bfe6c"
   integrity sha512-LZTpVlYnhqNFd+ru/Spm73omhsagiRQLmjrosa5bJ6/I9OMRp4Sb9pYZkAxcx3RSr+ZNXZqthL7rpXqMFdrnPA==
 
-algoliasearch-helper@0.0.0-8ee79ed:
-  version "0.0.0-8ee79ed"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-0.0.0-8ee79ed.tgz#8d7a92d1fee6ad26e5dbd4b6ffa8d974744d81bb"
-  integrity sha512-3PBAuw1rbIGKJySVJmBo/ibTLcW70Qw8Tki9vCXSp3mNCNcve2JlifEKroIZaYF/XJfme/H6Yc0+l7BJ0yTMlA==
+algoliasearch-helper@0.0.0-c4a4e01:
+  version "0.0.0-c4a4e01"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-0.0.0-c4a4e01.tgz#04ff0bd1289f8656f20fecaa00dc0acb2091b511"
+  integrity sha512-IhI921Q5lfKIG6nDUoeWMG1DOdK7UN4vt2LKWlgiToZPyxTSMur1M0Z9zcyIpKfCVye0FyC3FAaRq+h8OkNZdQ==
   dependencies:
     events "^1.1.1"
 

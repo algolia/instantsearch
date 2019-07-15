@@ -1,6 +1,6 @@
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createDocumentationMessageGenerator } from '../../lib/utils';
-import { SearchParameters, SearchResults, Widget } from '../../types';
-import { QueryParameters } from 'algoliasearch-helper';
+import { Widget } from '../../types';
 
 type AnalyticsWidgetParams = {
   pushFunction(

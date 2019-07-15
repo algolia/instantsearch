@@ -483,7 +483,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       // Simulate a call to searchForFacetValues from a widget
       instance.getHelper()!.searchForFacetValues('brand', 'Apple', 10, {
-        highlightTags: 'mark',
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
       });
 
       expect(searchForFacetValues).toHaveBeenCalledTimes(1);
@@ -493,7 +494,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         10,
         expect.objectContaining({
           index: 'index_name',
-          highlightTags: 'mark',
+          highlightPreTag: '<mark>',
+          highlightPostTag: '</mark>',
         })
       );
     });
@@ -701,7 +703,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       // Simulate a call to search from a widget
       instance.getHelper()!.searchForFacetValues('brand', 'Apple', 10, {
-        highlightTags: 'mark',
+        highlightPreTag: '<mark>',
+        highlightPostTag: '</mark>',
       });
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
@@ -713,7 +716,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               facetName: 'brand',
               facetQuery: 'Apple',
               maxFacetHits: 10,
-              highlightTags: 'mark',
+              highlightPreTag: '<mark>',
+              highlightPostTag: '</mark>',
               page: 5,
             }),
           },

@@ -1,4 +1,8 @@
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper as Helper,
+  DerivedHelper,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
 import {
   InstantSearch,
   Widget,
@@ -6,9 +10,6 @@ import {
   RenderOptions,
   DisposeOptions,
   Client,
-  Helper,
-  SearchParameters,
-  DerivedHelper,
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
@@ -161,7 +162,7 @@ const index = (props: IndexProps): Index => {
       return this;
     },
 
-    init({ instantSearchInstance, parent }) {
+    init({ instantSearchInstance, parent }: InitOptions) {
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
 
@@ -194,7 +195,7 @@ const index = (props: IndexProps): Index => {
         facetName,
         facetValue,
         maxFacetHits,
-        userState: Partial<SearchParameters>
+        userState: PlainSearchParameters
       ) => {
         const state = helper!.state.setQueryParameters(userState);
 
@@ -210,17 +211,15 @@ const index = (props: IndexProps): Index => {
         mergeSearchParameters(...resolveSearchParameters(this))
       );
 
-      // We have to use `!` at the moment because `dervive` is not correctly typed.
-      derivedHelper!.on('search', () => {
-        // The index does not manage the "stalleness" of the search. This is the
+      derivedHelper.on('search', () => {
+        // The index does not manage the "staleness" of the search. This is the
         // responsibility of the main instance. It does not make sense to manage
         // it at the index level because it's either: all of them or none of them
         // that are stalled. The queries are performed into a single network request.
         instantSearchInstance.scheduleStalledRender();
       });
 
-      // We have to use `!` at the moment because `dervive` is not correctly typed.
-      derivedHelper!.on('result', () => {
+      derivedHelper.on('result', () => {
         // The index does not render the results it schedules a new render
         // to let all the other indices emit their own results. It allows us to
         // run the render process in one pass.
@@ -241,7 +240,7 @@ const index = (props: IndexProps): Index => {
       });
     },
 
-    render({ instantSearchInstance }) {
+    render({ instantSearchInstance }: RenderOptions) {
       localWidgets.forEach(widget => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute

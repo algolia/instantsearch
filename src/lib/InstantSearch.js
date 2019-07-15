@@ -293,7 +293,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     mainHelper.search();
 
     // Keep the previous reference for legacy purpose, some pattern use
-    // the direct Helper access `search.helper` (e.g mutli-index).
+    // the direct Helper access `search.helper` (e.g multi-index).
     this.helper = this.mainIndex.getHelper();
 
     // track we started the search if we add more widgets,

@@ -1,4 +1,4 @@
-import { SearchParameters } from '../../types';
+import { SearchParameters } from 'algoliasearch-helper';
 import findIndex from './findIndex';
 
 type Merger = (
