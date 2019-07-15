@@ -21,6 +21,7 @@ export { default as isEqual } from './isEqual';
 export { default as escape } from './escape';
 export { default as find } from './find';
 export { default as mergeDeep } from './mergeDeep';
+export { default as mergeSearchParameters } from './mergeSearchParameters';
 export { default as resolveSearchParameters } from './resolveSearchParameters';
 export { warning, deprecate } from './logger';
 export {

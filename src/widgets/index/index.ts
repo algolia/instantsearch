@@ -14,6 +14,7 @@ import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   enhanceConfiguration,
+  mergeSearchParameters,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -205,17 +206,9 @@ const index = (props: IndexProps): Index => {
         );
       };
 
-      derivedHelper = mainHelper.derive(() => {
-        const parameters = resolveSearchParameters(this);
-
-        // @TODO: replace this dummy merge with the correct function
-        return parameters.reduce((previous, current) =>
-          algoliasearchHelper.SearchParameters.make({
-            ...previous,
-            ...current,
-          })
-        );
-      });
+      derivedHelper = mainHelper.derive(() => 
+        mergeSearchParameters(...resolveSearchParameters(this))
+      );
 
       // We have to use `!` at the moment because `dervive` is not correctly typed.
       derivedHelper!.on('search', () => {
