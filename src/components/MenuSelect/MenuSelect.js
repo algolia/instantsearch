@@ -8,6 +8,7 @@ class MenuSelect extends Component {
   static propTypes = {
     cssClasses: PropTypes.shape({
       root: PropTypes.string.isRequired,
+      noRefinementRoot: PropTypes.string.isRequired,
       select: PropTypes.string.isRequired,
       option: PropTypes.string.isRequired,
     }).isRequired,
