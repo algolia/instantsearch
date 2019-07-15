@@ -26,7 +26,7 @@ describe('enhanceConfiguration', () => {
     const widget = createWidget(configuration);
 
     const output = enhanceConfiguration(configuration, widget);
-    expect(output).toEqual(configuration);
+    expect(output).toEqual(expect.objectContaining(configuration));
   });
 
   it('should call `getConfiguration` from widget correctly', () => {
@@ -48,39 +48,41 @@ describe('enhanceConfiguration', () => {
     expect(output.analytics).toBe(true);
   });
 
-  it('should union array', () => {
+  it('should union facets', () => {
     {
-      const actualConfiguration = { refinements: ['foo'] };
-      const widget = createWidget({ refinements: ['foo', 'bar'] });
+      const actualConfiguration = { facets: ['foo'] };
+      const widget = createWidget({ facets: ['foo', 'bar'] });
 
       const output = enhanceConfiguration(actualConfiguration, widget);
-      expect(output.refinements).toEqual(['foo', 'bar']);
+      expect(output.facets).toEqual(['foo', 'bar']);
     }
 
     {
-      const actualConfiguration = { refinements: ['foo'] };
-      const widget = createWidget({ refinements: ['bar'] });
+      const actualConfiguration = { facets: ['foo'] };
+      const widget = createWidget({ facets: ['bar'] });
 
       const output = enhanceConfiguration(actualConfiguration, widget);
-      expect(output.refinements).toEqual(['foo', 'bar']);
+      expect(output.facets).toEqual(['foo', 'bar']);
     }
 
     {
-      const actualConfiguration = { refinements: ['foo', 'bar'] };
-      const widget = createWidget({ refinements: [] });
+      const actualConfiguration = { facets: ['foo', 'bar'] };
+      const widget = createWidget({ facets: [] });
 
       const output = enhanceConfiguration(actualConfiguration, widget);
-      expect(output.refinements).toEqual(['foo', 'bar']);
+      expect(output.facets).toEqual(['foo', 'bar']);
     }
   });
 
-  it('should replace nested values', () => {
+  it('should replace unknown deep values', () => {
     const actualConfiguration = { refinements: { lvl1: ['foo'], lvl2: false } };
     const widget = createWidget({ refinements: { lvl1: ['bar'], lvl2: true } });
 
     const output = enhanceConfiguration(actualConfiguration, widget);
-    expect(output).toEqual({
-      refinements: { lvl1: ['foo', 'bar'], lvl2: true },
-    });
+    expect(output).toEqual(
+      expect.objectContaining({
+        refinements: { lvl1: ['bar'], lvl2: true },
+      })
+    );
   });
 });
