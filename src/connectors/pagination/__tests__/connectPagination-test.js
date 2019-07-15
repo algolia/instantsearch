@@ -266,6 +266,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     }
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectPagination(rendering);
+    const widget = makeWidget({
+      padding: 5,
+    });
+    const helper = jsHelper({});
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('routing', () => {
     const getInitializedWidget = () => {
       const rendering = jest.fn();

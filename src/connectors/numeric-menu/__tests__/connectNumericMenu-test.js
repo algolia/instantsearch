@@ -501,6 +501,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(helper.state.page).toBe(0);
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectNumericMenu(rendering);
+
+    const widget = makeWidget({
+      attribute: 'numerics',
+      items: [
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
+        { label: '42', start: 42, end: 42 },
+        { label: 'void' },
+      ],
+    });
+
+    const helper = jsHelper({});
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('routing', () => {
     const getInitializedWidget = () => {
       const rendering = jest.fn();

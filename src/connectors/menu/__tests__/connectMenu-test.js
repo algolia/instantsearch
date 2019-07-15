@@ -330,6 +330,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
   });
 
+  it('does not throw without the unmount function', () => {
+    const widget = connectMenu(() => {})({
+      attribute: 'category',
+    });
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('showMore', () => {
     it('should set `maxValuesPerFacet` by default', () => {
       const widget = makeWidget({

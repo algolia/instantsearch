@@ -91,6 +91,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       widget.dispose({ helper, state: helper.state });
       expect(widget._voiceSearchHelper.dispose).toHaveBeenCalledTimes(1);
     });
+
+    it('does not throw without the unmount function', () => {
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+      const helper = jsHelper({});
+      widget.init({ helper });
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   it('triggers render when state changes', () => {

@@ -1,3 +1,4 @@
+import jsHelper from 'algoliasearch-helper';
 import connectPoweredBy from '../connectPoweredBy';
 
 describe('connectPoweredBy', () => {
@@ -90,5 +91,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
       expect.objectContaining({ widgetParams: { theme: 'dark' } }),
       true
     );
+  });
+
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectPoweredBy(rendering);
+    const widget = makeWidget({});
+    const helper = jsHelper({});
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 });

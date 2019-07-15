@@ -105,4 +105,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(query).toBe(helper.state.query);
     }
   });
+
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectStats(rendering);
+    const widget = makeWidget({});
+    const helper = jsHelper({});
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
 });

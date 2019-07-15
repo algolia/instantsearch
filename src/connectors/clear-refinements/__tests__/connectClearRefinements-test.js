@@ -76,6 +76,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const secondRenderingOptions = rendering.mock.calls[1][0];
       expect(secondRenderingOptions.hasRefinements).toBe(false);
     });
+
+    it('does not throw without the unmount function', () => {
+      const helper = jsHelper({});
+      const rendering = () => {};
+      const makeWidget = connectClearRefinements(rendering);
+      const widget = makeWidget();
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   describe('Instance options', () => {

@@ -461,6 +461,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHierarchicalMenu(rendering);
+    const widget = makeWidget({
+      attributes: ['category'],
+    });
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('routing', () => {
     const getInitializedWidget = () => {
       const rendering = jest.fn();
