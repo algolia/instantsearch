@@ -114,7 +114,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
           helper,
           instantSearchInstance,
           state: helper.state,
-          results: new SearchResults(helper.state, [createSingleSearchResponse()]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
         })
       );
 

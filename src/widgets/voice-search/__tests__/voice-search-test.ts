@@ -52,7 +52,9 @@ function defaultSetup(opts = {}): DefaultSetupWrapper {
       createRenderOptions({
         helper,
         state: helper.state,
-        results: new SearchResults(helper.state, [createSingleSearchResponse()]),
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
       })
     );
   };
