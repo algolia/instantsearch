@@ -37,7 +37,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(renderFn).toHaveBeenCalledTimes(1);
@@ -83,7 +82,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -128,7 +126,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -194,7 +191,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     expect(renderFn).toHaveBeenNthCalledWith(
@@ -235,7 +231,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const hits = [{ name: 'name 1' }, { name: 'name 2' }];

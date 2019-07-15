@@ -12,6 +12,7 @@ import {
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
+  resolveSearchParameters,
   enhanceConfiguration,
 } from '../../lib/utils';
 
@@ -25,6 +26,7 @@ type IndexProps = {
 
 export type Index = Widget & {
   getHelper(): Helper | null;
+  getParent(): Index | null;
   getWidgets(): Widget[];
   addWidgets(widgets: Widget[]): Index;
   removeWidgets(widgets: Widget[]): Index;
@@ -38,6 +40,7 @@ const index = (props: IndexProps): Index => {
 
   let localWidgets: Widget[] = [];
   let localInstantSearchInstance: InstantSearch | null = null;
+  let localParent: Index | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
 
@@ -48,6 +51,10 @@ const index = (props: IndexProps): Index => {
   return {
     getHelper() {
       return helper;
+    },
+
+    getParent() {
+      return localParent;
     },
 
     getWidgets() {
@@ -104,7 +111,6 @@ const index = (props: IndexProps): Index => {
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
               createURL: localInstantSearchInstance._createAbsoluteURL,
-              onHistoryChange: localInstantSearchInstance._onHistoryChange,
             });
           }
         });
@@ -156,6 +162,7 @@ const index = (props: IndexProps): Index => {
 
     init({ instantSearchInstance, parent }) {
       localInstantSearchInstance = instantSearchInstance;
+      localParent = parent;
 
       // The `mainHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
@@ -199,8 +206,15 @@ const index = (props: IndexProps): Index => {
       };
 
       derivedHelper = mainHelper.derive(() => {
-        // @TODO: resolve the root and merge the SearchParameters
-        return helper!.state;
+        const parameters = resolveSearchParameters(this);
+
+        // @TODO: replace this dummy merge with the correct function
+        return parameters.reduce((previous, current) =>
+          algoliasearchHelper.SearchParameters.make({
+            ...previous,
+            ...current,
+          })
+        );
       });
 
       // We have to use `!` at the moment because `dervive` is not correctly typed.
@@ -229,7 +243,6 @@ const index = (props: IndexProps): Index => {
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: instantSearchInstance._createAbsoluteURL,
-            onHistoryChange: instantSearchInstance._onHistoryChange,
           });
         }
       });
@@ -274,6 +287,7 @@ const index = (props: IndexProps): Index => {
       });
 
       localInstantSearchInstance = null;
+      localParent = null;
       helper = null;
 
       derivedHelper!.detach();

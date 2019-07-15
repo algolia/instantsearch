@@ -50,7 +50,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -164,7 +163,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -233,7 +231,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -273,7 +270,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -310,7 +306,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -925,7 +920,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       const { refine } = rendering.mock.calls[0][0];

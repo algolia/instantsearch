@@ -20,7 +20,6 @@ export const createInitOptions = (
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
     createURL: jest.fn(() => '#'),
-    onHistoryChange: jest.fn(),
     ...args,
   };
 };

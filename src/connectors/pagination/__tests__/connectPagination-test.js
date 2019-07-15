@@ -32,7 +32,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -91,7 +90,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -136,7 +134,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     // page 0
@@ -202,7 +199,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     widget.render({
@@ -322,7 +318,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         helper,
         state: helper.state,
         createURL: () => '#',
-        onHistoryChange: () => {},
       });
 
       const { refine } = renderFn.mock.calls[0][0];
