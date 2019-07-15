@@ -6,7 +6,7 @@ export function createSingleSearchResponse<THit = any>(
   const {
     page = 0,
     hitsPerPage = 20,
-    nbHits = 0,
+    nbHits,
     nbPages,
     processingTimeMS = 0,
     hits = [],
@@ -16,12 +16,14 @@ export function createSingleSearchResponse<THit = any>(
     exhaustiveFacetsCount = true,
     ...rest
   } = subset;
+  const fallbackNbHits = nbHits !== undefined ? nbHits : hits.length;
   const fallbackNbPages =
-    nbPages !== undefined ? nbPages : Math.ceil(nbHits / hitsPerPage);
+    nbPages !== undefined ? nbPages : Math.ceil(fallbackNbHits / hitsPerPage);
+
   return {
     page,
     hitsPerPage,
-    nbHits,
+    nbHits: fallbackNbHits,
     nbPages: fallbackNbPages,
     processingTimeMS,
     hits,
