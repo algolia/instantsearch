@@ -2,7 +2,7 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectMenu from '../connectMenu';
 
 describe('connectMenu', () => {
@@ -263,6 +263,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         ],
       }),
       expect.anything()
+    );
+  });
+
+  it('returns empty items if the facet is not declared', () => {
+    const widget = makeWidget({
+      attribute: 'category',
+    });
+
+    // note that the helper is called with empty search parameters
+    // which means this can only happen in a stale search situation
+    // when this widget gets mounted
+    const helper = jsHelper({}, '', {});
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+          },
+        }),
+        createSingleSearchResponse({
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        }),
+      ]),
+      state: helper.state,
+      helper,
+    });
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({ items: [] }),
+      false
     );
   });
 
