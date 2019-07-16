@@ -23,11 +23,13 @@ export default [
     ],
     output: [
       {
+        sourcemap: true,
         file: `dist/vue-instantsearch.common.js`,
         format: 'cjs',
         exports: 'named',
       },
       {
+        sourcemap: true,
         file: `dist/vue-instantsearch.esm.js`,
         format: 'es',
       },
@@ -41,7 +43,9 @@ export default [
           dangerousForOf: true,
         },
       }),
-      terser(),
+      terser({
+        sourcemap: true,
+      }),
       filesize(),
     ],
   },
@@ -50,6 +54,7 @@ export default [
     external: ['vue'],
     output: [
       {
+        sourcemap: true,
         file: `dist/vue-instantsearch.js`,
         format: 'umd',
         name: 'VueInstantSearch',
@@ -73,7 +78,9 @@ export default [
       }),
       replace(processEnv({ NODE_ENV: 'production' })),
       commonjs(),
-      terser(),
+      terser({
+        sourcemap: true,
+      }),
       filesize(),
     ],
   },
