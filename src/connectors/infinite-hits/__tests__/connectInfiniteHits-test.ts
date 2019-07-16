@@ -635,6 +635,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect((results.hits as any).__escaped).toBe(true);
   });
 
+  it('does not throw without the unmount function', () => {
+    const helper = jsHelper({} as Client, '', {});
+    const rendering = () => {};
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({});
+    expect(() =>
+      widget.dispose!({ helper, state: helper.state })
+    ).not.toThrow();
+  });
+
   describe('routing', () => {
     describe('getWidgetState', () => {
       it('should give back the object unmodified if the default value is selected', () => {

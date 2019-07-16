@@ -117,6 +117,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     }
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectToggleRefinement(rendering);
+    const attribute = 'isShippingFree';
+    const widget = makeWidget({
+      attribute,
+    });
+    const config = widget.getConfiguration();
+    const helper = jsHelper({}, '', config);
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   it('Provides a function to add/remove a facet value', () => {
     const rendering = jest.fn();
     const makeWidget = connectToggleRefinement(rendering);

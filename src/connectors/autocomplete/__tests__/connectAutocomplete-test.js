@@ -167,4 +167,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     expect(rendering.indices[0].hits).toEqual(hits);
   });
+
+  it('does not throw without the unmount function', () => {
+    const helper = jsHelper(fakeClient, '', {});
+    const renderFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn);
+    const widget = makeWidget({});
+    widget.init({ helper, instantSearchInstance: {} });
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
 });

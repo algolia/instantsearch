@@ -1283,6 +1283,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectRefinementList(rendering);
+    const widget = makeWidget({
+      attribute: 'myFacet',
+    });
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();

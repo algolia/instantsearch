@@ -388,4 +388,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     expect(results.hits.__escaped).toBe(true);
   });
+
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget({});
+    const helper = jsHelper({}, '', {});
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
 });

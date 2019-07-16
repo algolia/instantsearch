@@ -338,6 +338,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     }
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectRange(rendering);
+    const attribute = 'price';
+    const widget = makeWidget({ attribute });
+    const helper = jsHelper({}, '', widget.getConfiguration());
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('getConfiguration', () => {
     const attribute = 'price';
     const rendering = () => {};

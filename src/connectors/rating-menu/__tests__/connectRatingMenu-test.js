@@ -126,6 +126,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     }
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectRatingMenu(rendering);
+    const attribute = 'grade';
+    const widget = makeWidget({
+      attribute,
+    });
+    const config = widget.getConfiguration({});
+    const helper = jsHelper({}, '', config);
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   it('Provides a function to update the index at each step', () => {
     const rendering = jest.fn();
     const makeWidget = connectRatingMenu(rendering);

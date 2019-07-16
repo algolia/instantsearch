@@ -70,6 +70,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     );
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectSearchBox(rendering);
+    const widget = makeWidget({});
+    const helper = jsHelper({});
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   it('Provides a function to update the refinements at each step', () => {
     const rendering = jest.fn();
     const makeWidget = connectSearchBox(rendering);

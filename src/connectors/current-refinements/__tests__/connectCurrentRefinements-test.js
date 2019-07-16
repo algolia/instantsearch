@@ -69,6 +69,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         foo: 'bar',
       });
     });
+
+    it('does not throw without the unmount function', () => {
+      const helper = jsHelper({});
+      const rendering = () => {};
+      const customCurrentRefinements = connectCurrentRefinements(rendering);
+      const widget = customCurrentRefinements({});
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   describe('Widget options', () => {

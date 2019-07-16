@@ -104,6 +104,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     );
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectSortBy(rendering);
+    const items = [
+      { label: 'Sort products by relevance', value: 'relevance' },
+      { label: 'Sort products by price', value: 'priceASC' },
+    ];
+    const widget = makeWidget({ items });
+    const helper = jsHelper({}, items[0].value);
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   it('Renders with transformed items', () => {
     const rendering = jest.fn();
     const makeWidget = connectSortBy(rendering);
