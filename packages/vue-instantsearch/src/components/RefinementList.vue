@@ -25,6 +25,7 @@
         <search-input
           v-model="searchForFacetValues"
           :placeholder="searchablePlaceholder"
+          :class-names="classNames"
         />
       </div>
       <slot

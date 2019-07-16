@@ -103,6 +103,26 @@ it("allows override of placeholder when it's searchable", () => {
   );
 });
 
+it("allows search bar classes override when it's searchable", () => {
+  __setState({
+    ...defaultState,
+  });
+  const wrapper = mount(RefinementList, {
+    propsData: {
+      searchable: true,
+      attribute: 'something',
+      classNames: {
+        'ais-SearchBox-form': 'moar-classes',
+      },
+    },
+  });
+  expect(wrapper.html()).toMatchSnapshot();
+
+  expect(wrapper.find('.ais-SearchBox-form').hasClass('moar-classes')).toBe(
+    true
+  );
+});
+
 it("disables show more if can't refine", () => {
   __setState({
     ...defaultState,
