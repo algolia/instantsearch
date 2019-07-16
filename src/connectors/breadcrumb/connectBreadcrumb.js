@@ -4,6 +4,7 @@ import {
   createDocumentationMessageGenerator,
   isEqual,
   find,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -44,7 +45,7 @@ const withUsage = createDocumentationMessageGenerator({
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
  */
-export default function connectBreadcrumb(renderFn, unmountFn) {
+export default function connectBreadcrumb(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
   return (widgetParams = {}) => {
     const {

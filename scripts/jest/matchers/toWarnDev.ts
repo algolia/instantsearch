@@ -1,4 +1,10 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console, no-redeclare */
+/*
+ * The `no-redeclare` rule sends a false positive with
+ * an incompatibility with TypeScript namespaces.
+ * See: https://github.com/typescript-eslint/typescript-eslint/issues/60
+ */
+
 import jestDiff from 'jest-diff';
 
 declare global {

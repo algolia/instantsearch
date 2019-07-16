@@ -15,7 +15,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type VoiceSearchConnectorParams = {
-  searchAsYouSpeak: boolean;
+  searchAsYouSpeak?: boolean;
 };
 
 export interface VoiceSearchRendererOptions<TVoiceSearchWidgetParams>
@@ -71,7 +71,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       );
     };
 
-    const { searchAsYouSpeak } = widgetParams;
+    const { searchAsYouSpeak = false } = widgetParams;
 
     return {
       getConfiguration() {

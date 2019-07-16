@@ -2,6 +2,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   isEqual,
+  noop,
 } from '../../lib/utils';
 import {
   escapeFacets,
@@ -113,7 +114,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectRefinementList(renderFn, unmountFn) {
+export default function connectRefinementList(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

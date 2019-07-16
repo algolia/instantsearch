@@ -102,7 +102,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-const connectGeoSearch = (renderFn, unmountFn) => {
+const connectGeoSearch = (renderFn, unmountFn = noop) => {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

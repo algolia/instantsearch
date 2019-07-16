@@ -1,3 +1,28 @@
+## [3.5.4](https://github.com/algolia/instantsearch.js/compare/v3.5.3...v3.5.4) (2019-07-01)
+
+
+### Bug Fixes
+
+* **connectSortBy:** do not throw with wrong indexes ([#3824](https://github.com/algolia/instantsearch.js/issues/3824)) ([2a84ee2](https://github.com/algolia/instantsearch.js/commit/2a84ee2))
+* **deps:** update dependency instantsearch.js to v3.5.3 ([#3877](https://github.com/algolia/instantsearch.js/issues/3877)) ([463f3bb](https://github.com/algolia/instantsearch.js/commit/463f3bb))
+* **escape:** make sure that __escaped does not get removed ([#3830](https://github.com/algolia/instantsearch.js/issues/3830)) ([fbafd22](https://github.com/algolia/instantsearch.js/commit/fbafd22))
+* **getRefinements:** check for facet before accessing its data ([#3842](https://github.com/algolia/instantsearch.js/issues/3842)) ([aadc769](https://github.com/algolia/instantsearch.js/commit/aadc769))
+* **panel:** return value from dispose ([#3895](https://github.com/algolia/instantsearch.js/issues/3895)) ([bceb78f](https://github.com/algolia/instantsearch.js/commit/bceb78f))
+* **voiceSearch:** remove event listeners on stop ([#3845](https://github.com/algolia/instantsearch.js/issues/3845)) ([688e36a](https://github.com/algolia/instantsearch.js/commit/688e36a))
+
+
+
+## [3.5.3](https://github.com/algolia/instantsearch.js/compare/v3.5.1...v3.5.3) (2019-05-28)
+
+
+### Bug Fixes
+
+* **voiceSearch:** let the connector handle the default value of searchAsYouSpeak when it's not given ([#3817](https://github.com/algolia/instantsearch.js/issues/3817)) ([9d3e91b](https://github.com/algolia/instantsearch.js/commit/9d3e91b))
+* **getTag:** use object version of toString ([#3820](https://github.com/algolia/instantsearch.js/issues/3820)) ([a7348ea](https://github.com/algolia/instantsearch.js/commit/a7348ea))
+* **types:** fix cssClasses of voiceSearch ([#3783](https://github.com/algolia/instantsearch.js/issues/3783)) ([f016326](https://github.com/algolia/instantsearch.js/commit/f016326))
+
+
+
 # [3.5.1](https://github.com/algolia/instantsearch.js/compare/v3.4.0...v3.5.1) (2019-05-20)
 
 

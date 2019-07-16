@@ -79,7 +79,7 @@ const voiceSearch: VoiceSearch = (
     container,
     cssClasses: userCssClasses = {} as VoiceSearchCSSClasses,
     templates,
-    searchAsYouSpeak = false,
+    searchAsYouSpeak,
   } = {} as VoiceSearchWidgetParams
 ) => {
   if (!container) {
