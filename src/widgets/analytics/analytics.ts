@@ -1,6 +1,6 @@
 import { createDocumentationMessageGenerator } from '../../lib/utils';
-import { SearchParameters, SearchResults, Widget } from '../../types';
-import { QueryParameters } from 'algoliasearch-helper';
+import { Widget } from '../../types';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 type AnalyticsWidgetParams = {
   pushFunction(
@@ -73,7 +73,7 @@ function analytics(
   };
 
   const serializeNumericRefinements = function(
-    numericRefinements: QueryParameters['numericRefinements']
+    numericRefinements: SearchParameters['numericRefinements']
   ): string {
     const refinements: string[] = [];
 
