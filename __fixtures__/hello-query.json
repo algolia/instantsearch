@@ -1,0 +1,261 @@
+{
+  "results": [
+    {
+      "hits": [
+        {
+          "name": "eKids - On-Ear Headphones - White, Pink, Blue",
+          "description": "Protect small ears with these eKids Hello Kitty youth headphones. A built-in volume limiter keeps sound at a safe level for kids, and the soft, padded headband provides a comfortable fit. Adorable graphics are accompanied by plush ears and a signature bow on top. Connect to any audio device and enjoy high-quality sound with the eKids Hello Kitty youth headphones.",
+          "brand": "eKids",
+          "categories": ["Video Games", "Hello Kitty Collectibles"],
+          "hierarchicalCategories": {
+            "lvl0": "Video Games",
+            "lvl1": "Video Games > Hello Kitty Collectibles"
+          },
+          "type": "Novelty lic prod",
+          "price": 19.99,
+          "price_range": "1 - 50",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/5364000_rb.jpg",
+          "url": "https://api.bestbuy.com/click/-/5364000/pdp",
+          "free_shipping": false,
+          "rating": 4,
+          "popularity": 11994,
+          "objectID": "5364000",
+          "_snippetResult": {
+            "description": {
+              "value": "Protect small ears with these eKids __ais-highlight__Hello__/ais-highlight__ Kitty youth headphones. A built-in volume limiter […]",
+              "matchLevel": "full"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "eKids - On-Ear Headphones - White, Pink, Blue",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "description": {
+              "value": "Protect small ears with these eKids __ais-highlight__Hello__/ais-highlight__ Kitty youth headphones. A built-in volume limiter keeps sound at a safe level for kids, and the soft, padded headband provides a comfortable fit. Adorable graphics are accompanied by plush ears and a signature bow on top. Connect to any audio device and enjoy high-quality sound with the eKids __ais-highlight__Hello__/ais-highlight__ Kitty youth headphones.",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "brand": {
+              "value": "eKids",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "categories": [
+              {
+                "value": "Video Games",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              {
+                "value": "__ais-highlight__Hello__/ais-highlight__ Kitty Collectibles",
+                "matchLevel": "full",
+                "fullyHighlighted": false,
+                "matchedWords": ["hello"]
+              }
+            ],
+            "type": {
+              "value": "Novelty lic prod",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        },
+        {
+          "name": "Hello Kitty - Polycarbonate Cover for Apple® iPhone® 5 - Black/Pink",
+          "description": "Protect your Apple iPhone 5 from bumps and scratches with this Hello Kitty KT4489BPG cover that features rugged polycarbonate construction to help keep your device safe. The slip-on design allows for easy attachment and removal.",
+          "brand": "Hello Kitty",
+          "categories": ["Video Games"],
+          "hierarchicalCategories": { "lvl0": "Video Games" },
+          "type": "Hello kitty",
+          "price": 19.99,
+          "price_range": "1 - 50",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/1494407_sb.jpg",
+          "url": "https://api.bestbuy.com/click/-/1494407/pdp",
+          "free_shipping": true,
+          "rating": 3,
+          "popularity": 14318,
+          "objectID": "1494407",
+          "_snippetResult": {
+            "description": {
+              "value": "Protect your Apple iPhone 5 from bumps and scratches with this __ais-highlight__Hello__/ais-highlight__ Kitty KT4489BPG cover […]",
+              "matchLevel": "full"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "__ais-highlight__Hello__/ais-highlight__ Kitty - Polycarbonate Cover for Apple® iPhone® 5 - Black/Pink",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "description": {
+              "value": "Protect your Apple iPhone 5 from bumps and scratches with this __ais-highlight__Hello__/ais-highlight__ Kitty KT4489BPG cover that features rugged polycarbonate construction to help keep your device safe. The slip-on design allows for easy attachment and removal.",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "brand": {
+              "value": "__ais-highlight__Hello__/ais-highlight__ Kitty",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "categories": [
+              {
+                "value": "Video Games",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "type": {
+              "value": "__ais-highlight__Hello__/ais-highlight__ kitty",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            }
+          }
+        },
+        {
+          "name": "hello - Sense Sleep Tracker - Cotton",
+          "description": "Improve your sleep quality with this Hello Sense sleep monitor.  It produces ambient sounds to promote uninterrupted sleep, and its Sleep Pill clips onto a pillow to monitor movement throughout the night. This Hello Sense sleep monitor records the room temperature and air quality to help you analyse and improve your sleep environment for a better night's rest.",
+          "brand": "hello",
+          "categories": ["Health, Fitness & Beauty"],
+          "hierarchicalCategories": { "lvl0": "Health, Fitness & Beauty" },
+          "type": "Monitoring devices",
+          "price": 149.99,
+          "price_range": "100 - 200",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/5657197_sb.jpg",
+          "url": "https://api.bestbuy.com/click/-/5657197/pdp",
+          "free_shipping": true,
+          "rating": 5,
+          "popularity": 4206,
+          "objectID": "5657197",
+          "_snippetResult": {
+            "description": {
+              "value": "Improve your sleep quality with this __ais-highlight__Hello__/ais-highlight__ Sense sleep monitor.  It produces ambient sounds to […]",
+              "matchLevel": "full"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "__ais-highlight__hello__/ais-highlight__ - Sense Sleep Tracker - Cotton",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "description": {
+              "value": "Improve your sleep quality with this __ais-highlight__Hello__/ais-highlight__ Sense sleep monitor.  It produces ambient sounds to promote uninterrupted sleep, and its Sleep Pill clips onto a pillow to monitor movement throughout the night. This __ais-highlight__Hello__/ais-highlight__ Sense sleep monitor records the room temperature and air quality to help you analyse and improve your sleep environment for a better night's rest.",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "brand": {
+              "value": "__ais-highlight__hello__/ais-highlight__",
+              "matchLevel": "full",
+              "fullyHighlighted": true,
+              "matchedWords": ["hello"]
+            },
+            "categories": [
+              {
+                "value": "Health, Fitness & Beauty",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "type": {
+              "value": "Monitoring devices",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        },
+        {
+          "name": "hello - Sense Sleep Tracker - Charcoal",
+          "description": "Improve the quality of your slumber with this Hello Sense sleep monitor. It records the room temperature and air quality, and the included Sleep Pill tracker attaches to your pillow to monitor your sleep movement. This versatile Hello Sense sleep monitor also works as an ambient sound machine, and its Smart Alarm function determines your best wake-up time.",
+          "brand": "hello",
+          "categories": ["Health, Fitness & Beauty"],
+          "hierarchicalCategories": { "lvl0": "Health, Fitness & Beauty" },
+          "type": "Monitoring devices",
+          "price": 149.99,
+          "price_range": "100 - 200",
+          "image": "https://cdn-demo.algolia.com/bestbuy-0118/5657198_sb.jpg",
+          "url": "https://api.bestbuy.com/click/-/5657198/pdp",
+          "free_shipping": true,
+          "rating": 5,
+          "popularity": 3062,
+          "objectID": "5657198",
+          "_snippetResult": {
+            "description": {
+              "value": "Improve the quality of your slumber with this __ais-highlight__Hello__/ais-highlight__ Sense sleep monitor. It records the […]",
+              "matchLevel": "full"
+            }
+          },
+          "_highlightResult": {
+            "name": {
+              "value": "__ais-highlight__hello__/ais-highlight__ - Sense Sleep Tracker - Charcoal",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "description": {
+              "value": "Improve the quality of your slumber with this __ais-highlight__Hello__/ais-highlight__ Sense sleep monitor. It records the room temperature and air quality, and the included Sleep Pill tracker attaches to your pillow to monitor your sleep movement. This versatile __ais-highlight__Hello__/ais-highlight__ Sense sleep monitor also works as an ambient sound machine, and its Smart Alarm function determines your best wake-up time.",
+              "matchLevel": "full",
+              "fullyHighlighted": false,
+              "matchedWords": ["hello"]
+            },
+            "brand": {
+              "value": "__ais-highlight__hello__/ais-highlight__",
+              "matchLevel": "full",
+              "fullyHighlighted": true,
+              "matchedWords": ["hello"]
+            },
+            "categories": [
+              {
+                "value": "Health, Fitness & Beauty",
+                "matchLevel": "none",
+                "matchedWords": []
+              }
+            ],
+            "type": {
+              "value": "Monitoring devices",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        }
+      ],
+      "nbHits": 374,
+      "page": 0,
+      "nbPages": 94,
+      "hitsPerPage": 4,
+      "processingTimeMS": 1,
+      "facets": {
+        "brand": {
+          "HP": 64,
+          "Epson": 52,
+          "Bell'O": 30,
+          "Canon": 28,
+          "Brother": 16,
+          "Speck": 15,
+          "Fellowes": 8,
+          "Apple": 7,
+          "Hello Kitty": 6,
+          "Ballistic": 4
+        },
+        "rating": { "4": 269, "0": 49, "5": 43, "3": 12, "1": 1 }
+      },
+      "facets_stats": {
+        "rating": { "min": 0, "max": 5, "avg": 3, "sum": 1328 }
+      },
+      "exhaustiveFacetsCount": true,
+      "exhaustiveNbHits": true,
+      "query": "Hello",
+      "queryAfterRemoval": "Hello",
+      "params": "query=Hello&hitsPerPage=4&maxValuesPerFacet=10&page=0&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&attributesToSnippet=%5B%22description%3A15%22%5D&snippetEllipsisText=%5B%E2%80%A6%5D&facets=%5B%22rating%22%2C%22brand%22%5D&tagFilters=",
+      "index": "instant_search"
+    }
+  ]
+}

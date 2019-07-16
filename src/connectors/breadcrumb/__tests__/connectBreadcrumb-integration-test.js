@@ -3,7 +3,7 @@ import { wait } from '@testing-library/dom';
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import instantsearch from 'instantsearch.js';
 
-import apiResults from '../../../widgets/breadcrumb/__tests__/__fixtures__/results.json';
+import apiResults from '../../../../__fixtures__/empty-query.json';
 
 const searchClient = {
   search: jest.fn(() => Promise.resolve(apiResults)),
