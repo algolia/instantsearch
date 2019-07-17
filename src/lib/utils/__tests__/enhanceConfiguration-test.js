@@ -1,3 +1,4 @@
+import { SearchParameters } from 'algoliasearch-helper';
 import enhanceConfiguration from '../enhanceConfiguration';
 
 const createWidget = (configuration = {}) => ({
@@ -6,7 +7,7 @@ const createWidget = (configuration = {}) => ({
 
 describe('enhanceConfiguration', () => {
   it('should return the same object if widget does not provide a configuration', () => {
-    const configuration = { analytics: true, page: 2 };
+    const configuration = new SearchParameters({ analytics: true, page: 2 });
     const widget = {};
 
     const output = enhanceConfiguration(configuration, widget);
@@ -14,7 +15,7 @@ describe('enhanceConfiguration', () => {
   });
 
   it('should return a new object if widget does provide a configuration', () => {
-    const configuration = { analytics: true, page: 2 };
+    const configuration = new SearchParameters({ analytics: true, page: 2 });
     const widget = createWidget(configuration);
 
     const output = enhanceConfiguration(configuration, widget);
@@ -22,7 +23,7 @@ describe('enhanceConfiguration', () => {
   });
 
   it('should add widget configuration to an empty state', () => {
-    const configuration = { analytics: true, page: 2 };
+    const configuration = new SearchParameters({ analytics: true, page: 2 });
     const widget = createWidget(configuration);
 
     const output = enhanceConfiguration(configuration, widget);
@@ -32,7 +33,7 @@ describe('enhanceConfiguration', () => {
   it('should call `getConfiguration` from widget correctly', () => {
     const widget = { getConfiguration: jest.fn() };
 
-    const configuration = {};
+    const configuration = new SearchParameters({});
 
     enhanceConfiguration(configuration, widget);
 
@@ -41,7 +42,7 @@ describe('enhanceConfiguration', () => {
   });
 
   it('should replace boolean values', () => {
-    const actualConfiguration = { analytics: false };
+    const actualConfiguration = new SearchParameters({ analytics: false });
     const widget = createWidget({ analytics: true });
 
     const output = enhanceConfiguration(actualConfiguration, widget);
@@ -50,7 +51,7 @@ describe('enhanceConfiguration', () => {
 
   it('should union facets', () => {
     {
-      const actualConfiguration = { facets: ['foo'] };
+      const actualConfiguration = new SearchParameters({ facets: ['foo'] });
       const widget = createWidget({ facets: ['foo', 'bar'] });
 
       const output = enhanceConfiguration(actualConfiguration, widget);
@@ -58,7 +59,7 @@ describe('enhanceConfiguration', () => {
     }
 
     {
-      const actualConfiguration = { facets: ['foo'] };
+      const actualConfiguration = new SearchParameters({ facets: ['foo'] });
       const widget = createWidget({ facets: ['bar'] });
 
       const output = enhanceConfiguration(actualConfiguration, widget);
@@ -66,7 +67,9 @@ describe('enhanceConfiguration', () => {
     }
 
     {
-      const actualConfiguration = { facets: ['foo', 'bar'] };
+      const actualConfiguration = new SearchParameters({
+        facets: ['foo', 'bar'],
+      });
       const widget = createWidget({ facets: [] });
 
       const output = enhanceConfiguration(actualConfiguration, widget);
@@ -75,13 +78,31 @@ describe('enhanceConfiguration', () => {
   });
 
   it('should replace unknown deep values', () => {
-    const actualConfiguration = { refinements: { lvl1: ['foo'], lvl2: false } };
+    const actualConfiguration = new SearchParameters({
+      refinements: { lvl1: ['foo'], lvl2: false },
+    });
     const widget = createWidget({ refinements: { lvl1: ['bar'], lvl2: true } });
 
     const output = enhanceConfiguration(actualConfiguration, widget);
     expect(output).toEqual(
       expect.objectContaining({
         refinements: { lvl1: ['bar'], lvl2: true },
+      })
+    );
+  });
+
+  it('does not duplicate hierarchicalFacets (object in array)', () => {
+    const actualConfiguration = new SearchParameters({
+      hierarchicalFacets: [{ attribute: 'duplicate' }],
+    });
+    const widget = createWidget({
+      hierarchicalFacets: [{ attribute: 'duplicate' }],
+    });
+    const output = enhanceConfiguration(actualConfiguration, widget);
+
+    expect(output).toEqual(
+      expect.objectContaining({
+        hierarchicalFacets: [{ attribute: 'duplicate' }],
       })
     );
   });
