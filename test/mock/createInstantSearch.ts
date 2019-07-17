@@ -13,7 +13,6 @@ export const createInstantSearch = (
   return {
     mainIndex,
     mainHelper,
-    widgets: [], // @TODO: remove once the RoutingManger uses the index
     helper: mainHelper, // @TODO: use the Helper from the index once the RoutingManger uses the index
     templatesConfig: {},
     insightsClient: null,
