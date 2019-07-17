@@ -37,6 +37,29 @@ export type Index = Widget & {
   dispose(options: DisposeOptions): void;
 };
 
+function isIndexWidget(widget: Widget): widget is Index {
+  return widget.$$type === 'ais.index';
+}
+
+function resetPageFromIndexWidgetsRecursively(indexWidgets: Index[]): void {
+  if (indexWidgets.length === 0) {
+    return;
+  }
+
+  indexWidgets.forEach(widget => {
+    const widgetHelper = widget.getHelper()!;
+
+    widgetHelper.overrideStateWithoutTriggeringChangeEvent(
+      // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
+      widgetHelper.state.resetPage()
+    );
+
+    resetPageFromIndexWidgetsRecursively(
+      widget.getWidgets().filter(isIndexWidget)
+    );
+  });
+}
+
 const index = (props: IndexProps): Index => {
   const { indexName = null } = props || {};
 
@@ -212,6 +235,14 @@ const index = (props: IndexProps): Index => {
       derivedHelper = mainHelper.derive(() =>
         mergeSearchParameters(...resolveSearchParameters(this))
       );
+
+      helper.on('change', ({ isPageReset }) => {
+        if (isPageReset) {
+          resetPageFromIndexWidgetsRecursively(
+            localWidgets.filter(isIndexWidget)
+          );
+        }
+      });
 
       derivedHelper.on('search', () => {
         // The index does not manage the "staleness" of the search. This is the
