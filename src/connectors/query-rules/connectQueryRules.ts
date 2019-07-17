@@ -219,8 +219,6 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
 
           // We track every change in the helper to override its state and add
           // any `ruleContexts` needed based on the `trackedFilters`.
-          // @ts-ignore
-          // @TODO: we have to update the definition to make it work
           helper.on('change', onHelperChange);
         }
 
