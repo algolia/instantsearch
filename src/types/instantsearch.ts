@@ -102,7 +102,6 @@ export type Client = AlgoliaSearchClient;
 
 export type InstantSearch = {
   helper: AlgoliaSearchHelper | null;
-  widgets: Widget[]; // @TODO: remove once the RoutingManger uses the index
   mainHelper: AlgoliaSearchHelper | null;
   mainIndex: Index;
   insightsClient: AlgoliaInsightsClient | null;

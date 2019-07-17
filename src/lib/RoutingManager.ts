@@ -111,8 +111,6 @@ class RoutingManager implements Widget {
       this.router.write(route);
     };
 
-    // @ts-ignore
-    // @TODO: we have to update the definition to make it work
     helper.on('change', this.renderURLFromState);
 
     // Compare initial state and first render state to see if the query has been

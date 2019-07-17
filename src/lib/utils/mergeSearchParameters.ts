@@ -35,30 +35,20 @@ const mergeDisjunctiveFacets: Merger = (left, right) =>
     left
   );
 
-type HierarchicalFacet = {
-  name: string;
-  attributes: string[];
-  separator: string;
-};
-
 const mergeHierarchicalFacets: Merger = (left, right) =>
   left.setQueryParameters({
-    // @TODO: remove this cast when typings in helper are merged
-    hierarchicalFacets: (right.hierarchicalFacets as HierarchicalFacet[]).reduce(
-      (facets, facet) => {
-        const index = findIndex(facets, _ => _.name === facet.name);
+    hierarchicalFacets: right.hierarchicalFacets.reduce((facets, facet) => {
+      const index = findIndex(facets, _ => _.name === facet.name);
 
-        if (index === -1) {
-          return facets.concat(facet);
-        }
+      if (index === -1) {
+        return facets.concat(facet);
+      }
 
-        const nextFacets = facets.slice();
-        nextFacets.splice(index, 1, facet);
+      const nextFacets = facets.slice();
+      nextFacets.splice(index, 1, facet);
 
-        return nextFacets;
-      },
-      left.hierarchicalFacets as HierarchicalFacet[]
-    ),
+      return nextFacets;
+    }, left.hierarchicalFacets),
   });
 
 // Merge facet refinements
