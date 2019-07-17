@@ -94,7 +94,7 @@ export interface Widget {
   render?(options: RenderOptions): void;
   dispose?(options: DisposeOptions): SearchParameters | void;
   getConfiguration?(
-    previousConfiguration?: PlainSearchParameters
+    previousConfiguration?: SearchParameters
   ): PlainSearchParameters;
   getWidgetState?(
     uiState: UiState,

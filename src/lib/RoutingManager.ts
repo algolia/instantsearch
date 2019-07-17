@@ -137,7 +137,7 @@ class RoutingManager implements Widget {
   }
 
   public getConfiguration(
-    currentConfiguration: PlainSearchParameters
+    currentConfiguration: SearchParameters
   ): PlainSearchParameters {
     // We have to create a `SearchParameters` because `getAllSearchParameters`
     // expects an instance of `SearchParameters` and not a plain object.
