@@ -4,20 +4,21 @@ import {
   brands,
   categories,
   clearFilters,
-  clearFiltersEmptyState,
+  clearFiltersEmptyResults,
+  clearFiltersMobile,
   configuration,
   freeShipping,
-  products,
   hitsPerPage,
   pagination,
   priceSlider,
+  products,
   ratings,
-  clearFiltersMobile,
   resultsNumberMobile,
   saveFiltersMobile,
   searchBox,
   sortBy,
 } from './widgets';
+import routing from './routing';
 
 const searchClient = algoliasearch(
   'latency',
@@ -27,26 +28,26 @@ const searchClient = algoliasearch(
 const search = instantsearch({
   searchClient,
   indexName: 'instant_search',
-  routing: true,
+  routing,
 });
 
 search.addWidgets([
-  configuration,
-  searchBox,
-  clearFilters,
-  clearFiltersEmptyState,
-  resultsNumberMobile,
   brands,
   categories,
-  priceSlider,
-  freeShipping,
-  ratings,
-  sortBy,
-  hitsPerPage,
-  products,
-  pagination,
+  clearFilters,
+  clearFiltersEmptyResults,
   clearFiltersMobile,
+  configuration,
+  freeShipping,
+  hitsPerPage,
+  pagination,
+  priceSlider,
+  products,
+  ratings,
+  resultsNumberMobile,
   saveFiltersMobile,
+  searchBox,
+  sortBy,
 ]);
 
 export default search;

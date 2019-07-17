@@ -85,4 +85,15 @@ describe('connectHitsWithInsights', () => {
     expect(secondRenderingOptions.hits).toEqual(expect.objectContaining(hits));
     expect(secondRenderingOptions.results).toEqual(results);
   });
+
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    // @ts-ignore:next-line
+    const makeWidget = connectHitsWithInsights(rendering);
+    const widget = makeWidget({});
+    const helper = jsHelper({} as Client, '', {});
+    expect(() => {
+      widget.dispose!({ helper, state: helper.state });
+    }).not.toThrow();
+  });
 });

@@ -2,6 +2,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   isFiniteNumber,
+  noop,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -97,7 +98,7 @@ const withUsage = createDocumentationMessageGenerator({
  *   })
  * );
  */
-export default function connectNumericMenu(renderFn, unmountFn) {
+export default function connectNumericMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => {

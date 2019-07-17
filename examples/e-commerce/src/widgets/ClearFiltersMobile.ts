@@ -2,7 +2,7 @@ import { connectClearRefinements } from 'instantsearch.js/es/connectors';
 
 const resultsContainer = document.querySelector('.container-results');
 
-const clearFiltersMobile = connectClearRefinements(
+const clearRefinements = connectClearRefinements(
   ({ refine, widgetParams }, isFirstRender) => {
     const { container } = widgetParams;
     const containerNode = document.querySelector(container);
@@ -18,7 +18,7 @@ const clearFiltersMobile = connectClearRefinements(
         refine();
 
         document.body.classList.remove('filtering');
-        resultsContainer.scrollIntoView();
+        resultsContainer!.scrollIntoView();
       });
 
       wrapper.appendChild(button);
@@ -27,8 +27,6 @@ const clearFiltersMobile = connectClearRefinements(
   }
 );
 
-const clearFilters = clearFiltersMobile({
+export const clearFiltersMobile = clearRefinements({
   container: '[data-widget="clear-filters-mobile"]',
 });
-
-export default clearFilters;

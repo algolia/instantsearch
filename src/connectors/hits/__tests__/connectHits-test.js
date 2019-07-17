@@ -150,9 +150,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       {
         _highlightResult: {
           foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
-              TAG_PLACEHOLDER.highlightPostTag
-            }</script>`,
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
       },
@@ -305,9 +303,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         name: 'hello',
         _highlightResult: {
           name: {
-            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${
-              TAG_PLACEHOLDER.highlightPostTag
-            }`,
+            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
       },
@@ -315,9 +311,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         name: 'halloween',
         _highlightResult: {
           name: {
-            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${
-              TAG_PLACEHOLDER.highlightPostTag
-            }ween`,
+            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
       },
@@ -387,5 +381,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     });
 
     expect(results.hits.__escaped).toBe(true);
+  });
+
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget({});
+    const helper = jsHelper({}, '', {});
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 });

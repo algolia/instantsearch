@@ -673,4 +673,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       ],
     });
   });
+
+  it('does not throw without the unmount function', () => {
+    const helper = jsHelper({}, '');
+
+    const renderFn = () => {};
+    const makeWidget = connectBreadcrumb(renderFn);
+    const widget = makeWidget({ attributes: ['category'] });
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
 });

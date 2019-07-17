@@ -320,9 +320,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       {
         _highlightResult: {
           foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
-              TAG_PLACEHOLDER.highlightPostTag
-            }</script>`,
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
       },
@@ -432,9 +430,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'hello',
         _highlightResult: {
           name: {
-            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${
-              TAG_PLACEHOLDER.highlightPostTag
-            }`,
+            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
       },
@@ -442,9 +438,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'halloween',
         _highlightResult: {
           name: {
-            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${
-              TAG_PLACEHOLDER.highlightPostTag
-            }ween`,
+            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
       },
@@ -633,6 +627,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     expect((results.hits as any).__escaped).toBe(true);
+  });
+
+  it('does not throw without the unmount function', () => {
+    const helper = jsHelper({} as Client, '', {});
+    const rendering = () => {};
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({});
+    expect(() =>
+      widget.dispose!({ helper, state: helper.state })
+    ).not.toThrow();
   });
 
   describe('routing', () => {

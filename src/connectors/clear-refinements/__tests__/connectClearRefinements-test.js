@@ -76,6 +76,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const secondRenderingOptions = rendering.mock.calls[1][0];
       expect(secondRenderingOptions.hasRefinements).toBe(false);
     });
+
+    it('does not throw without the unmount function', () => {
+      const helper = jsHelper({});
+      const rendering = () => {};
+      const makeWidget = connectClearRefinements(rendering);
+      const widget = makeWidget();
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   describe('Instance options', () => {
@@ -516,6 +526,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           expect(createURLState).toEqual(stateAfterRefine);
         }
       });
+    });
+
+    it('reset the page to 0', () => {
+      const helper = jsHelper({}, '', {});
+      helper.search = () => {};
+      helper.setQuery('not empty');
+
+      const rendering = jest.fn();
+      const makeWidget = connectClearRefinements(rendering);
+      const widget = makeWidget({});
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+      const clearRefinements = rendering.mock.calls[0][0].refine;
+
+      helper.setPage(2);
+      clearRefinements();
+      expect(helper.state.page).toBe(0);
     });
   });
 });

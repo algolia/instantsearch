@@ -100,9 +100,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       {
         _highlightResult: {
           foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
-              TAG_PLACEHOLDER.highlightPostTag
-            }</script>`,
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
       },
@@ -146,9 +144,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       {
         _highlightResult: {
           foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
-              TAG_PLACEHOLDER.highlightPostTag
-            }</script>`,
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
       },
@@ -166,5 +162,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const rendering = renderFn.mock.calls[1][0];
 
     expect(rendering.indices[0].hits).toEqual(hits);
+  });
+
+  it('does not throw without the unmount function', () => {
+    const helper = jsHelper(fakeClient, '', {});
+    const renderFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn);
+    const widget = makeWidget({});
+    widget.init({ helper, instantSearchInstance: {} });
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 });

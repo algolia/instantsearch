@@ -1525,16 +1525,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         facetHits: [
           {
             count: 33,
-            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${
-              TAG_PLACEHOLDER.highlightPostTag
-            }li`,
+            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${
-              TAG_PLACEHOLDER.highlightPostTag
-            }vidoff`,
+            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
             value: 'Davidoff',
           },
         ],
@@ -1608,6 +1604,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         },
       ]);
     });
+  });
+
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectRefinementList(rendering);
+    const widget = makeWidget({
+      attribute: 'myFacet',
+    });
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 
   describe('routing', () => {
