@@ -289,10 +289,19 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      getConfiguration: (configuration = {}) => {
-        const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
-        };
+      getConfiguration(configuration) {
+        let widgetConfiguration;
+        if (operator === 'and') {
+          widgetConfiguration = {
+            facets: [attribute],
+            facetsRefinements: { [attribute]: [] },
+          };
+        } else {
+          widgetConfiguration = {
+            disjunctiveFacets: [attribute],
+            disjunctiveFacetsRefinements: { [attribute]: [] },
+          };
+        }
 
         const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
 
@@ -376,11 +385,9 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         unmountFn();
 
         if (operator === 'and') {
-          return state.removeFacetRefinement(attribute).removeFacet(attribute);
+          return state.removeFacet(attribute);
         } else {
-          return state
-            .removeDisjunctiveFacetRefinement(attribute)
-            .removeDisjunctiveFacet(attribute);
+          return state.removeDisjunctiveFacet(attribute);
         }
       },
 

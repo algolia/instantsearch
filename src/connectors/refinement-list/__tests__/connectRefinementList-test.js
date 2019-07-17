@@ -111,8 +111,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'myFacet',
       });
 
-      expect(widget.getConfiguration()).toEqual({
+      expect(widget.getConfiguration({})).toEqual({
         disjunctiveFacets: ['myFacet'],
+        disjunctiveFacetsRefinements: { myFacet: [] },
         maxValuesPerFacet: 10,
       });
     });
@@ -124,14 +125,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         limit: 20,
       });
 
-      expect(widget.getConfiguration()).toEqual({
+      expect(widget.getConfiguration({})).toEqual({
         disjunctiveFacets: ['myFacet'],
+        disjunctiveFacetsRefinements: { myFacet: [] },
         maxValuesPerFacet: 20,
       });
 
       expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual(
         {
           disjunctiveFacets: ['myFacet'],
+          disjunctiveFacetsRefinements: { myFacet: [] },
           maxValuesPerFacet: 100,
         },
         'Can read the previous maxValuesPerFacet value'
@@ -188,13 +191,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const secondRenderingOptions = rendering.mock.calls[1][0];
       secondRenderingOptions.toggleShowMore();
 
-      expect(widget.getConfiguration()).toEqual({
+      expect(widget.getConfiguration({})).toEqual({
         disjunctiveFacets: ['myFacet'],
+        disjunctiveFacetsRefinements: { myFacet: [] },
         maxValuesPerFacet: 30,
       });
 
       expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual({
         disjunctiveFacets: ['myFacet'],
+        disjunctiveFacetsRefinements: { myFacet: [] },
         maxValuesPerFacet: 100,
       });
     });
@@ -248,8 +253,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const secondRenderingOptions = rendering.mock.calls[1][0];
       secondRenderingOptions.toggleShowMore();
 
-      expect(widget.getConfiguration()).toEqual({
+      expect(widget.getConfiguration({})).toEqual({
         disjunctiveFacets: ['myFacet'],
+        disjunctiveFacetsRefinements: { myFacet: [] },
         maxValuesPerFacet: 20,
       });
     });
@@ -261,8 +267,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         operator: 'and',
       });
 
-      expect(widget.getConfiguration()).toEqual({
+      expect(widget.getConfiguration({})).toEqual({
         facets: ['myFacet'],
+        facetsRefinements: { myFacet: [] },
         maxValuesPerFacet: 10,
       });
     });
@@ -280,6 +287,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const config = widget.getConfiguration({});
     expect(config).toEqual({
       disjunctiveFacets: ['myFacet'],
+      disjunctiveFacetsRefinements: { myFacet: [] },
       maxValuesPerFacet: 9,
     });
 
