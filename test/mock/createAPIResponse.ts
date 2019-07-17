@@ -1,30 +1,27 @@
 import { SearchForFacetValues, Response, MultiResponse } from 'algoliasearch';
 
-export function createSingleSearchResponse<THit = any>(
+export const createSingleSearchResponse = <THit = any>(
   subset: Partial<Response<THit>> = {}
-): Response<THit> {
+): Response<THit> => {
   const {
+    query = '',
     page = 0,
     hitsPerPage = 20,
-    nbHits,
-    nbPages,
-    processingTimeMS = 0,
     hits = [],
-    query = '',
+    nbHits = hits.length,
+    nbPages = Math.ceil(nbHits / hitsPerPage),
     params = '',
     exhaustiveNbHits = true,
     exhaustiveFacetsCount = true,
+    processingTimeMS = 0,
     ...rest
   } = subset;
-  const fallbackNbHits = nbHits !== undefined ? nbHits : hits.length;
-  const fallbackNbPages =
-    nbPages !== undefined ? nbPages : Math.ceil(fallbackNbHits / hitsPerPage);
 
   return {
     page,
     hitsPerPage,
-    nbHits: fallbackNbHits,
-    nbPages: fallbackNbPages,
+    nbHits,
+    nbPages,
     processingTimeMS,
     hits,
     query,
@@ -33,7 +30,7 @@ export function createSingleSearchResponse<THit = any>(
     exhaustiveFacetsCount,
     ...rest,
   };
-}
+};
 
 export const createMultiSearchResponse = (
   ...args: Array<Partial<Response>>

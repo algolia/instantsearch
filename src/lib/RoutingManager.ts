@@ -42,7 +42,10 @@ class RoutingManager implements Widget {
   private getAllSearchParameters({
     currentSearchParameters,
     uiState,
-  }): PlainSearchParameters {
+  }: {
+    currentSearchParameters: SearchParameters;
+    uiState: UiState;
+  }): SearchParameters {
     const widgets = this.instantSearchInstance.mainIndex.getWidgets();
 
     return widgets.reduce((parameters, widget) => {
