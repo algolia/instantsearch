@@ -20,6 +20,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 `);
   });
 
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customHits = connectHits(render, unmount);
+    const widget = customHits({});
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.hits',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+        getConfiguration: expect.any(Function),
+      })
+    );
+  });
+
   it('Renders during init and render', () => {
     const rendering = jest.fn();
     const makeWidget = connectHits(rendering);

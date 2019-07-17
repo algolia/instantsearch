@@ -38,6 +38,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     });
   });
 
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customBreadcrumb = connectBreadcrumb(render, unmount);
+    const widget = customBreadcrumb({ attributes: ['category'] });
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.breadcrumb',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+        getConfiguration: expect.any(Function),
+      })
+    );
+  });
+
   it('should compute getConfiguration() correctly', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);

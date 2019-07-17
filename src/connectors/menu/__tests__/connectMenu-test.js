@@ -15,7 +15,7 @@ describe('connectMenu', () => {
   });
 
   describe('Usage', () => {
-    it('throws with render function', () => {
+    it('throws without render function', () => {
       expect(() => {
         connectMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -54,6 +54,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#connector"
 `);
     });
+  });
+
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customMenu = connectMenu(render, unmount);
+    const widget = customMenu({ attribute: 'facet' });
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.menu',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+        getConfiguration: expect.any(Function),
+        getWidgetState: expect.any(Function),
+        getWidgetSearchParameters: expect.any(Function),
+      })
+    );
   });
 
   describe('options configuring the helper', () => {

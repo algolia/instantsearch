@@ -103,6 +103,8 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     const off = hasAnOffValue ? escapeRefinement(userOff) : undefined;
 
     return {
+      $$type: 'ais.toggleRefinement',
+
       getConfiguration() {
         return {
           disjunctiveFacets: [attribute],

@@ -58,6 +58,8 @@ export default function connectHits(renderFn, unmountFn = noop) {
     const { escapeHTML = true, transformItems = items => items } = widgetParams;
 
     return {
+      $$type: 'ais.hits',
+
       getConfiguration() {
         return escapeHTML ? TAG_PLACEHOLDER : undefined;
       },

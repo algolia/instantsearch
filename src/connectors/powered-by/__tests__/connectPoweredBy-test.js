@@ -11,6 +11,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
 `);
   });
 
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customPoweredBy = connectPoweredBy(render, unmount);
+    const widget = customPoweredBy({});
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.poweredBy',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+      })
+    );
+  });
+
   it('renders during init and render', () => {
     const rendering = jest.fn();
     const makeWidget = connectPoweredBy(rendering);

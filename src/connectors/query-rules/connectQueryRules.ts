@@ -196,6 +196,8 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     let onHelperChange: (event: HelperChangeEvent) => void;
 
     return {
+      $$type: 'ais.queryRules',
+
       init({ helper, state, instantSearchInstance }) {
         initialRuleContexts = state.ruleContexts || [];
         onHelperChange = applyRuleContexts.bind({

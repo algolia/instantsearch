@@ -64,6 +64,8 @@ export default function connectBreadcrumb(renderFn, unmountFn = noop) {
     const [hierarchicalFacetName] = attributes;
 
     return {
+      $$type: 'ais.breadcrumb',
+
       getConfiguration: currentConfiguration => {
         if (currentConfiguration.hierarchicalFacets) {
           const isFacetSet = find(
