@@ -79,7 +79,7 @@
     "eslint-config-algolia": "13.4.0",
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-import": "2.18.0",
-    "eslint-plugin-jest": "22.9.0",
+    "eslint-plugin-jest": "22.10.0",
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-react": "7.14.2",
     "file-loader": "4.0.0",
