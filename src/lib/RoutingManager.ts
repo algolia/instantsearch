@@ -136,15 +136,9 @@ class RoutingManager implements Widget {
   public getConfiguration(
     currentConfiguration: SearchParameters
   ): SearchParameters {
-    // We have to create a `SearchParameters` because `getAllSearchParameters`
-    // expects an instance of `SearchParameters` and not a plain object.
-    const currentSearchParameters = algoliasearchHelper.SearchParameters.make(
-      currentConfiguration
-    );
-
     return this.getAllSearchParameters({
       uiState: this.currentUiState,
-      currentSearchParameters,
+      currentSearchParameters: currentConfiguration,
     });
   }
 
