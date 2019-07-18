@@ -46,6 +46,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customHierarchicalMenu = connectHierarchicalMenu(render, unmount);
+      const widget = customHierarchicalMenu({ attributes: ['category'] });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.hierarchicalMenu',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getConfiguration: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   describe('getConfiguration', () => {

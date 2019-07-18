@@ -46,6 +46,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customNumericMenu = connectNumericMenu(render, unmount);
+      const widget = customNumericMenu({ attribute: 'facet', items: [] });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.numericMenu',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {

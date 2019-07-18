@@ -115,6 +115,8 @@ export default function connectMenu(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.menu',
+
       isShowingMore: false,
 
       // Provide the same function to the `renderFn` so that way the user

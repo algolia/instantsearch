@@ -78,7 +78,10 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.searchBox',
+
       _clear() {},
+
       _cachedClear() {
         this._clear();
       },

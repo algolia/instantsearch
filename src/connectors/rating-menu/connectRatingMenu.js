@@ -104,6 +104,8 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.ratingMenu',
+
       getConfiguration() {
         return { disjunctiveFacets: [attribute] };
       },

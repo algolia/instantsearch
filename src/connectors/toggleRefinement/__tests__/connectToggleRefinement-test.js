@@ -15,6 +15,36 @@ describe('connectToggleRefinement', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/#connector"
 `);
     });
+
+    it('throws without attribute option', () => {
+      expect(() => {
+        connectToggleRefinement(() => {})({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`attribute\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/#connector"
+`);
+    });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customToggleRefinement = connectToggleRefinement(render, unmount);
+      const widget = customToggleRefinement({ attribute: 'facet' });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.toggleRefinement',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getConfiguration: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {

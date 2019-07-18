@@ -101,6 +101,8 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.sortBy',
+
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.state.index;
         const isCurrentIndexInItems = find(

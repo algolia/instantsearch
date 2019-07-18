@@ -16,6 +16,26 @@ describe('connectPagination', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customPagination = connectPagination(render, unmount);
+      const widget = customPagination({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.pagination',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getConfiguration: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('connectPagination - Renders during init and render', () => {

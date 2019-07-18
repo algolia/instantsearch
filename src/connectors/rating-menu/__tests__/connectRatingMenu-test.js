@@ -25,6 +25,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customRatingMenu = connectRatingMenu(render, unmount);
+      const widget = customRatingMenu({ attribute: 'facet' });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.ratingMenu',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getConfiguration: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {

@@ -52,9 +52,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const unmount = jest.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
-    const widget = customGeoSearch();
+    const widget = customGeoSearch({});
 
     expect(widget).toEqual({
+      $$type: 'ais.geoSearch',
       init: expect.any(Function),
       render: expect.any(Function),
       dispose: expect.any(Function),

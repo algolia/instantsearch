@@ -98,6 +98,8 @@ export default function connectPagination(renderFn, unmountFn = noop) {
     });
 
     return {
+      $$type: 'ais.pagination',
+
       getConfiguration() {
         return {
           page: 0,
