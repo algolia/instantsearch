@@ -39,6 +39,15 @@ export const createRenderOptions = (
       instantSearchInstance.helper!.state,
       response.results
     ),
+    scopedResults: [
+      {
+        indexId: instantSearchInstance.helper!.state.index,
+        results: new algolisearchHelper.SearchResults(
+          instantSearchInstance.helper!.state,
+          response.results
+        ),
+      },
+    ],
     searchMetadata: {
       isSearchStalled: false,
     },
