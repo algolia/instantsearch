@@ -287,20 +287,20 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      getConfiguration: (configuration = {}) => {
-        const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
-        };
+      // getConfiguration: (configuration = {}) => {
+      //   const widgetConfiguration = {
+      //     [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
+      //   };
 
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      //   const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
 
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
+      //   widgetConfiguration.maxValuesPerFacet = Math.max(
+      //     currentMaxValuesPerFacet,
+      //     showMore ? showMoreLimit : limit
+      //   );
 
-        return widgetConfiguration;
-      },
+      //   return widgetConfiguration;
+      // },
 
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
@@ -406,15 +406,46 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        const isConjonctive = operator === 'and';
         const values =
           uiState.refinementList && uiState.refinementList[attribute];
-        if (values === undefined) return searchParameters;
+
+        const withFacetConfiguration = isConjonctive
+          ? searchParameters.addFacet(attribute)
+          : searchParameters.addDisjunctiveFacet(attribute);
+
+        const previousMaxValuesPerFacet =
+          searchParameters.maxValuesPerFacet || 0;
+
+        const currentMaxValuesPerFacet = Math.max(
+          previousMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameters(
+          {
+            maxValuesPerFacet: currentMaxValuesPerFacet,
+          }
+        );
+
+        if (!values) {
+          const previousValue =
+            withMaxValuesPerFacet.disjunctiveFacetsRefinements[attribute];
+
+          return withMaxValuesPerFacet.setQueryParameters({
+            disjunctiveFacetsRefinements: {
+              ...withMaxValuesPerFacet.disjunctiveFacetsRefinements,
+              [attribute]: previousValue || [],
+            },
+          });
+        }
+
         return values.reduce(
-          (sp, v) =>
-            operator === 'or'
-              ? sp.addDisjunctiveFacetRefinement(attribute, v)
-              : sp.addFacetRefinement(attribute, v),
-          searchParameters.clearRefinements(attribute)
+          (previous, facetValue) =>
+            isConjonctive
+              ? previous.addFacetRefinement(attribute, facetValue)
+              : previous.addDisjunctiveFacetRefinement(attribute, facetValue),
+          withMaxValuesPerFacet
         );
       },
     };
