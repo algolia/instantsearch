@@ -1,4 +1,4 @@
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import { SearchParameters } from 'algoliasearch-helper';
 import { isEqual } from './utils';
 import {
   InstantSearch,
