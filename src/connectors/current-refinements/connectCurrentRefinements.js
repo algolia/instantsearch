@@ -120,6 +120,8 @@ export default function connectCurrentRefinements(renderFn, unmountFn = noop) {
     } = widgetParams;
 
     return {
+      $$type: 'ais.currentRefinements',
+
       init({ helper, createURL, instantSearchInstance }) {
         const items = transformItems(
           getFilteredRefinements({

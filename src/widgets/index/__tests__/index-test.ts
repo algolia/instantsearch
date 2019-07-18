@@ -59,6 +59,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 `);
   });
 
+  it('is a widget', () => {
+    const widget = index({ indexName: 'indexName' });
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.index',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+      })
+    );
+  });
+
   describe('addWidgets', () => {
     it('adds given widgets to the instance', () => {
       const instance = index({ indexName: 'index_name' });

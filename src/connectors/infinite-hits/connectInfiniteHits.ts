@@ -86,6 +86,8 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     };
 
     return {
+      $$type: 'ais.infiniteHits',
+
       getConfiguration() {
         const parameters = {
           page: 0,

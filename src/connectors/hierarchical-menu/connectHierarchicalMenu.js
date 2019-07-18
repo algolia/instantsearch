@@ -94,6 +94,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     const [hierarchicalFacetName] = attributes;
 
     return {
+      $$type: 'ais.hierarchicalMenu',
+
       isShowingMore: false,
 
       // Provide the same function to the `renderFn` so that way the user

@@ -47,6 +47,8 @@ export default function connectPoweredBy(renderFn, unmountFn = noop) {
     const { url = defaultUrl } = widgetParams;
 
     return {
+      $$type: 'ais.poweredBy',
+
       init() {
         renderFn(
           {

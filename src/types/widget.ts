@@ -89,6 +89,7 @@ export type UiState = {
 };
 
 export interface Widget {
+  $$type?: string;
   init?(options: InitOptions): void;
   render?(options: RenderOptions): void;
   dispose?(options: DisposeOptions): SearchParameters | void;

@@ -115,6 +115,8 @@ export default function connectNumericMenu(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.numericMenu',
+
       init({ helper, createURL, instantSearchInstance }) {
         this._refine = facetValue => {
           const refinedState = refine(

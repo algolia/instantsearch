@@ -332,7 +332,10 @@ http://community.algolia.com/instantsearch.js/migration-guide
     };
 
     return {
+      $$type: 'ais.geoSearch',
+
       init,
+
       render,
 
       dispose({ state }) {

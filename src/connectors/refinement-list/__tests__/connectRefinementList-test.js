@@ -84,6 +84,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 `);
   });
 
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customRefinementList = connectRefinementList(render, unmount);
+    const widget = customRefinementList({ attribute: 'facet' });
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.refinementList',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+        getConfiguration: expect.any(Function),
+        getWidgetState: expect.any(Function),
+        getWidgetSearchParameters: expect.any(Function),
+      })
+    );
+  });
+
   describe('options configuring the helper', () => {
     it('`attribute`', () => {
       const { makeWidget } = createWidgetFactory();

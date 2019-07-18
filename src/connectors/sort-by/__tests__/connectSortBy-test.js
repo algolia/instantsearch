@@ -37,6 +37,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customSortBy = connectSortBy(render, unmount);
+      const widget = customSortBy({ items: [] });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.sortBy',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {

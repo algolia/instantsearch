@@ -45,6 +45,26 @@ describe('connectVoiceSearch', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-search/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customVoiceSearch = connectVoiceSearch(render, unmount);
+      const widget = customVoiceSearch({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.voiceSearch',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getConfiguration: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('calls renderFn during init and render', () => {

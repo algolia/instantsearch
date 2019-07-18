@@ -15,6 +15,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 `);
   });
 
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customAutocomplete = connectAutocomplete(render, unmount);
+    const widget = customAutocomplete({});
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.autocomplete',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+        getConfiguration: expect.any(Function),
+      })
+    );
+  });
+
   it('renders during init and render', () => {
     const renderFn = jest.fn();
     const makeWidget = connectAutocomplete(renderFn);
