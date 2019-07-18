@@ -83,11 +83,11 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         this._clear();
       },
 
-      getConfiguration() {
-        return {
-          query: '',
-        };
-      },
+      // getConfiguration() {
+      //   return {
+      //     query: '',
+      //   };
+      // },
 
       init({ helper, instantSearchInstance }) {
         this._cachedClear = this._cachedClear.bind(this);
@@ -156,7 +156,9 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQueryParameter('query', uiState.query);
+        return searchParameters.setQueryParameters({
+          query: uiState.query || searchParameters.query || '',
+        });
       },
     };
   };
