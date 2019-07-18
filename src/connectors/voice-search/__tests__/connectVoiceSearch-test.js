@@ -139,7 +139,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       const makeWidget = connectVoiceSearch(renderFn);
       const widget = makeWidget({});
 
-      const nextConfiguration = widget.getConfiguration();
+      const nextConfiguration = widget.getConfiguration(new SearchParameters());
 
       expect(nextConfiguration.query).toBe('');
     });

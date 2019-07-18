@@ -1,5 +1,5 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
-import {
+import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -149,13 +149,13 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         };
 
         if (!escapeHTML) {
-          return parameters;
+          return new algoliasearchHelper.SearchParameters(parameters);
         }
 
-        return {
+        return new algoliasearchHelper.SearchParameters({
           ...parameters,
           ...TAG_PLACEHOLDER,
-        };
+        });
       },
 
       init({ instantSearchInstance, helper }) {
