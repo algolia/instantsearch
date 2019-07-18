@@ -98,11 +98,11 @@ export default function connectPagination(renderFn, unmountFn = noop) {
     });
 
     return {
-      getConfiguration() {
-        return {
-          page: 0,
-        };
-      },
+      // getConfiguration() {
+      //   return {
+      //     page: 0,
+      //   };
+      // },
 
       init({ helper, createURL, instantSearchInstance }) {
         this.refine = page => {
@@ -177,14 +177,10 @@ export default function connectPagination(renderFn, unmountFn = noop) {
         };
       },
 
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        const uiPage = uiState.page;
-
-        if (uiPage) {
-          return searchParameters.setQueryParameter('page', uiState.page - 1);
-        }
-
-        return searchParameters.setQueryParameter('page', undefined);
+      getWidgetSearchParameters(previous, { uiState }) {
+        return previous.setQueryParameters({
+          page: uiState.page || previous.page || 0,
+        });
       },
     };
   };
