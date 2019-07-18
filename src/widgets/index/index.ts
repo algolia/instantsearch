@@ -73,15 +73,15 @@ function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
   return indexWidgets.reduce<ScopedResult[]>((scopedResults, current) => {
     const currentDerivedHelper = current.getDerivedHelper()!;
 
-    scopedResults.push({
-      indexId: current.getIndexId(),
-      results: currentDerivedHelper.lastResults!,
-    });
+    scopedResults.push(
+      {
+        indexId: current.getIndexId(),
+        results: currentDerivedHelper.lastResults!,
+      },
+      ...resolveScopedResultsFromWidgets(current.getWidgets())
+    );
 
-    return [
-      ...scopedResults,
-      ...resolveScopedResultsFromWidgets(current.getWidgets()),
-    ];
+    return scopedResults;
   }, []);
 }
 
