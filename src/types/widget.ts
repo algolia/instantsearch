@@ -3,7 +3,6 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
-  PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 
@@ -93,9 +92,7 @@ export interface Widget {
   init?(options: InitOptions): void;
   render?(options: RenderOptions): void;
   dispose?(options: DisposeOptions): SearchParameters | void;
-  getConfiguration?(
-    previousConfiguration?: SearchParameters
-  ): PlainSearchParameters;
+  getConfiguration?(previousConfiguration: SearchParameters): SearchParameters;
   getWidgetState?(
     uiState: UiState,
     widgetStateOptions: {

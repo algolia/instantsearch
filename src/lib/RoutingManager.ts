@@ -1,7 +1,4 @@
-import algoliasearchHelper, {
-  SearchParameters,
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import { isEqual } from './utils';
 import {
   InstantSearch,
@@ -138,19 +135,17 @@ class RoutingManager implements Widget {
 
   public getConfiguration(
     currentConfiguration: SearchParameters
-  ): PlainSearchParameters {
+  ): SearchParameters {
     // We have to create a `SearchParameters` because `getAllSearchParameters`
     // expects an instance of `SearchParameters` and not a plain object.
     const currentSearchParameters = algoliasearchHelper.SearchParameters.make(
       currentConfiguration
     );
 
-    return {
-      ...this.getAllSearchParameters({
-        uiState: this.currentUiState,
-        currentSearchParameters,
-      }),
-    };
+    return this.getAllSearchParameters({
+      uiState: this.currentUiState,
+      currentSearchParameters,
+    });
   }
 
   public init({ state }: { state: SearchParameters }): void {
