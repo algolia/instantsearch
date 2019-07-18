@@ -1257,6 +1257,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.render).toHaveBeenCalledWith({
           instantSearchInstance,
           results: expect.any(algoliasearchHelper.SearchResults),
+          scopedResults: [
+            {
+              indexId: 'index_name',
+              results: (widget.render as jest.Mock).mock.calls[0][0].results,
+            },
+          ],
           state: expect.any(algoliasearchHelper.SearchParameters),
           helper: instance.getHelper(),
           templatesConfig: instantSearchInstance.templatesConfig,
@@ -1300,6 +1306,132 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       widgets.forEach(widget => {
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
+    });
+
+    it('calls `render` with `scopedResults` coming from siblings and children', async () => {
+      /* eslint-disable @typescript-eslint/camelcase */
+      const level0 = index({ indexName: 'level0_index_name' });
+      const level1 = index({ indexName: 'level1_index_name' });
+      const level2 = index({ indexName: 'level2_index_name' });
+      const level2_1 = index({ indexName: 'level2_1_index_name' });
+      const level2_2 = index({ indexName: 'level2_2_index_name' });
+      const level2_2_1 = index({ indexName: 'level2_2_1_index_name' });
+      const level3 = index({ indexName: 'level3_index_name' });
+      const instantSearchInstance = createInstantSearch();
+      const level0SearchBox = createSearchBox();
+      const level1SearchBox = createSearchBox();
+
+      level0.addWidgets([
+        level0SearchBox,
+        level1.addWidgets([level1SearchBox]),
+        level2.addWidgets([
+          createSearchBox(),
+          level2_1.addWidgets([createSearchBox()]),
+          level2_2.addWidgets([
+            createSearchBox(),
+            level2_2_1.addWidgets([createSearchBox()]),
+          ]),
+        ]),
+        level3.addWidgets([createSearchBox()]),
+      ]);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // Simulate a call to search from a widget - this step is required otherwise
+      // the DerivedHelper does not contain the results. The `lastResults` attribute
+      // is set once the `result` event is emitted.
+      level0.getHelper()!.search();
+
+      await runAllMicroTasks();
+
+      level0.render(
+        createRenderOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // First-level index
+      expect(level1SearchBox.render).toHaveBeenCalledTimes(1);
+      expect(level1SearchBox.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          scopedResults: [
+            // Current index
+            {
+              indexId: 'level1_index_name',
+              results: (level1SearchBox.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            // Siblings and children
+            {
+              indexId: 'level2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level3_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+          ],
+        })
+      );
+
+      // Top-level index
+      expect(level0SearchBox.render).toHaveBeenCalledTimes(1);
+      expect(level0SearchBox.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          scopedResults: [
+            // Current index
+            {
+              indexId: 'level0_index_name',
+              results: (level0SearchBox.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            // Siblings and children
+            {
+              indexId: 'level1_index_name',
+              results: (level1SearchBox.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            {
+              indexId: 'level2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level3_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+          ],
+        })
+      );
+
+      /* eslint-enable @typescript-eslint/camelcase */
     });
   });
 

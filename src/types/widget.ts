@@ -15,10 +15,16 @@ export interface InitOptions {
   createURL(state: SearchParameters): string;
 }
 
+export interface ScopedResult {
+  indexId: string;
+  results: SearchResults;
+}
+
 export interface RenderOptions {
   instantSearchInstance: InstantSearch;
   templatesConfig: object;
   results: SearchResults;
+  scopedResults: ScopedResult[];
   state: SearchParameters;
   helper: Helper;
   searchMetadata: {
