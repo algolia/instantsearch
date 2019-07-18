@@ -15,6 +15,7 @@ function enhanceConfiguration(
 
   return mergeSearchParameters(
     configuration,
+    // @TODO: remove this after IFW-874 is completed (all widgets return SP)
     new algoliasearchHelper.SearchParameters(partialConfiguration)
   );
 }
