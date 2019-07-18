@@ -41,7 +41,9 @@ function isIndexWidget(widget: Widget): widget is Index {
   return widget.$$type === 'ais.index';
 }
 
-function resetPageFromIndexWidgetsRecursively(indexWidgets: Index[]): void {
+function resetPageFromWidgets(widgets: Widget[]): void {
+  const indexWidgets = widgets.filter(isIndexWidget);
+
   if (indexWidgets.length === 0) {
     return;
   }
@@ -54,9 +56,7 @@ function resetPageFromIndexWidgetsRecursively(indexWidgets: Index[]): void {
       widgetHelper.state.resetPage()
     );
 
-    resetPageFromIndexWidgetsRecursively(
-      widget.getWidgets().filter(isIndexWidget)
-    );
+    resetPageFromWidgets(widget.getWidgets());
   });
 }
 
@@ -238,9 +238,7 @@ const index = (props: IndexProps): Index => {
 
       helper.on('change', ({ isPageReset }) => {
         if (isPageReset) {
-          resetPageFromIndexWidgetsRecursively(
-            localWidgets.filter(isIndexWidget)
-          );
+          resetPageFromWidgets(localWidgets);
         }
       });
 
