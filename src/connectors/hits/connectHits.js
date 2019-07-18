@@ -58,9 +58,9 @@ export default function connectHits(renderFn, unmountFn = noop) {
     const { escapeHTML = true, transformItems = items => items } = widgetParams;
 
     return {
-      getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
-      },
+      // getConfiguration() {
+      //   return escapeHTML ? TAG_PLACEHOLDER : undefined;
+      // },
 
       init({ instantSearchInstance }) {
         renderFn(
@@ -123,6 +123,14 @@ export default function connectHits(renderFn, unmountFn = noop) {
             {}
           )
         );
+      },
+
+      getWidgetSearchParameters(searchParameters) {
+        if (!escapeHTML) {
+          return searchParameters;
+        }
+
+        return searchParameters.setQueryParameters(TAG_PLACEHOLDER);
       },
     };
   };
