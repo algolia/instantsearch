@@ -17,6 +17,26 @@ describe('connectCurrentRefinements', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/current-refinements/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customCurrentRefinements = connectCurrentRefinements(
+        render,
+        unmount
+      );
+      const widget = customCurrentRefinements({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.currentRefinements',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+        })
+      );
+    });
   });
 
   describe('Lifecycle', () => {

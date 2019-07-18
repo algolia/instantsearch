@@ -68,6 +68,8 @@ export default function connectRange(renderFn, unmountFn = noop) {
     };
 
     return {
+      $$type: 'ais.range',
+
       _getCurrentRange(stats) {
         const pow = Math.pow(10, precision);
 

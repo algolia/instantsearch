@@ -32,6 +32,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 `);
   });
 
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customInfiniteHits = connectInfiniteHits(render, unmount);
+    const widget = customInfiniteHits({});
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.infiniteHits',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+        getConfiguration: expect.any(Function),
+        getWidgetState: expect.any(Function),
+        getWidgetSearchParameters: expect.any(Function),
+      })
+    );
+  });
+
   it('Renders during init and render', () => {
     const renderFn = jest.fn();
     const instantSearchInstance = createInstantSearch();

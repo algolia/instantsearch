@@ -56,6 +56,8 @@ export default function connectAutocomplete(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.autocomplete',
+
       getConfiguration() {
         const parameters = {
           query: '',

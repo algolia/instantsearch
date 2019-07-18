@@ -51,6 +51,8 @@ const index = (props: IndexProps): Index => {
   }
 
   return {
+    $$type: 'ais.index',
+
     getHelper() {
       return helper;
     },

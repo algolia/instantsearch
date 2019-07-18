@@ -32,6 +32,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customHitsPerPage = connectHitsPerPage(render, unmount);
+      const widget = customHitsPerPage({ items: [] });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.hitsPerPage',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getConfiguration: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {

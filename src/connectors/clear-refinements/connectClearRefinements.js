@@ -87,6 +87,8 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
     } = widgetParams;
 
     return {
+      $$type: 'ais.clearRefinements',
+
       init({ helper, instantSearchInstance, createURL }) {
         const attributesToClear = getAttributesToClear({
           helper,

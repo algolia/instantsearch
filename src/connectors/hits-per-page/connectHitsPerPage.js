@@ -118,6 +118,8 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
     const defaultValue = find(userItems, item => item.default === true);
 
     return {
+      $$type: 'ais.hitsPerPage',
+
       getConfiguration() {
         return defaultValues.length > 0
           ? { hitsPerPage: defaultValues[0].value }

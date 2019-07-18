@@ -74,6 +74,8 @@ const connectVoiceSearch: VoiceSearchConnector = (
     const { searchAsYouSpeak = false } = widgetParams;
 
     return {
+      $$type: 'ais.voiceSearch',
+
       getConfiguration() {
         return {
           query: '',

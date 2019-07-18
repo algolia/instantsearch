@@ -14,6 +14,23 @@ describe('connectStats', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customStats = connectStats(render, unmount);
+      const widget = customStats({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.stats',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {

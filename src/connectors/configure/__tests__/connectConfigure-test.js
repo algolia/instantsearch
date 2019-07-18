@@ -53,6 +53,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
   });
 
+  it('is a widget', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customConfigure = connectConfigure(render, unmount);
+    const widget = customConfigure({ searchParameters: {} });
+
+    expect(widget).toEqual(
+      expect.objectContaining({
+        $$type: 'ais.configure',
+        init: expect.any(Function),
+        render: expect.any(Function),
+        dispose: expect.any(Function),
+        getConfiguration: expect.any(Function),
+      })
+    );
+  });
+
   it('should apply searchParameters', () => {
     const makeWidget = connectConfigure();
     const widget = makeWidget({ searchParameters: { analytics: true } });

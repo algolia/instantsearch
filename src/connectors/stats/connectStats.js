@@ -51,6 +51,8 @@ export default function connectStats(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return (widgetParams = {}) => ({
+    $$type: 'ais.stats',
+
     init({ helper, instantSearchInstance }) {
       renderFn(
         {

@@ -15,6 +15,26 @@ describe('connectSearchBox', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customSearchBox = connectSearchBox(render, unmount);
+      const widget = customSearchBox({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.searchBox',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+          getConfiguration: expect.any(Function),
+          getWidgetState: expect.any(Function),
+          getWidgetSearchParameters: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {

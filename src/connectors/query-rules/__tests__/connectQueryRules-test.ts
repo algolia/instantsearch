@@ -67,6 +67,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customQueryRules = connectQueryRules(render, unmount);
+      const widget = customQueryRules({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.queryRules',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+        })
+      );
+    });
   });
 
   describe('lifecycle', () => {

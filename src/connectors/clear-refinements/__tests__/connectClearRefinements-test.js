@@ -27,6 +27,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refinements/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customClearRefinements = connectClearRefinements(render, unmount);
+      const widget = customClearRefinements({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.clearRefinements',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+        })
+      );
+    });
   });
 
   describe('Lifecycle', () => {
