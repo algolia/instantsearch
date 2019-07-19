@@ -60,7 +60,7 @@ storiesOf('HierarchicalMenu', module)
     )
   )
   .add(
-    'with header',
+    'with root path',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(
         instantsearch.widgets.hierarchicalMenu({
