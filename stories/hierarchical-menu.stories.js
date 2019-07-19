@@ -45,7 +45,6 @@ storiesOf('HierarchicalMenu', module)
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            rootPath: 'Cameras & Camcorders',
           })
         );
       },
