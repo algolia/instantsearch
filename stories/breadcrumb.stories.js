@@ -156,14 +156,12 @@ storiesOf('Breadcrumb', module)
 
       search.addWidget(
         instantsearch.widgets.hierarchicalMenu({
-          showParentLevel: false,
           container: hierarchicalMenu,
           attributes: [
             'hierarchicalCategories.lvl0',
             'hierarchicalCategories.lvl1',
             'hierarchicalCategories.lvl2',
           ],
-          rootPath: 'Cameras & Camcorders',
         })
       );
     })
