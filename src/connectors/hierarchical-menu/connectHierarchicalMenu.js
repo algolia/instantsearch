@@ -120,18 +120,23 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             currentConfiguration.hierarchicalFacets,
             ({ name }) => name === hierarchicalFacetName
           );
-          if (
-            isFacetSet &&
-            !(
-              isEqual(isFacetSet.attributes, attributes) &&
-              isFacetSet.separator === separator
-            )
-          ) {
+
+          const isAttributesEqual =
+            isFacetSet && isEqual(isFacetSet.attributes, attributes);
+          const isSeparatorEqual =
+            isFacetSet && isFacetSet.separator === separator;
+          const isRootPathEqual =
+            isFacetSet && isFacetSet.rootPath === rootPath;
+
+          const isHierarchicalOptionsEqual =
+            isAttributesEqual && isSeparatorEqual && isRootPathEqual;
+
+          if (isFacetSet && !isHierarchicalOptionsEqual) {
             warning(
-              isEqual(isFacetSet.attributes, attributes) &&
-                isFacetSet.separator === separator,
+              false,
               'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
             );
+
             return {};
           }
         }

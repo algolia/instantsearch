@@ -2,6 +2,7 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
+import { warning } from '../../../lib/utils';
 import connectHierarchicalMenu from '../connectHierarchicalMenu';
 
 describe('connectHierarchicalMenu', () => {
@@ -48,56 +49,252 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   describe('getConfiguration', () => {
-    it('It should compute getConfiguration() correctly', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectHierarchicalMenu(rendering);
+    beforeEach(() => {
+      warning.cache = {};
+    });
 
+    it('returns the default configuration', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+      });
+
+      const previous = {};
+
+      const actual = widget.getConfiguration(previous);
+
+      expect(actual).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            rootPath: null,
+            separator: ' > ',
+            showParentLevel: true,
+          },
+        ],
+        maxValuesPerFacet: 10,
+      });
+    });
+
+    it('returns the configuration with custom `separator`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        separator: ' / ',
+      });
+
+      const previous = {};
+
+      const actual = widget.getConfiguration(previous);
+
+      expect(actual).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            rootPath: null,
+            separator: ' / ',
+            showParentLevel: true,
+          },
+        ],
+        maxValuesPerFacet: 10,
+      });
+    });
+
+    it('returns the configuration with custom `rootPath`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        rootPath: 'TopLevel > SubLevel',
+      });
+
+      const previous = {};
+
+      const actual = widget.getConfiguration(previous);
+
+      expect(actual).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            rootPath: 'TopLevel > SubLevel',
+            separator: ' > ',
+            showParentLevel: true,
+          },
+        ],
+        maxValuesPerFacet: 10,
+      });
+    });
+
+    it('returns the configuration with custom `showParentLevel`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        showParentLevel: false,
+      });
+
+      const previous = {};
+
+      const actual = widget.getConfiguration(previous);
+
+      expect(actual).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            rootPath: null,
+            separator: ' > ',
+            showParentLevel: false,
+          },
+        ],
+        maxValuesPerFacet: 10,
+      });
+    });
+
+    it('returns the configuration with another `hierarchicalFacets` already defined', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+      });
+
+      const previous = {
+        hierarchicalFacets: [
+          {
+            name: 'country',
+            attributes: ['country', 'sub_country'],
+            separator: ' > ',
+            rootPath: null,
+            showParentLevel: true,
+          },
+        ],
+      };
+
+      const actual = widget.getConfiguration(previous);
+
+      expect(actual).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            separator: ' > ',
+            rootPath: null,
+            showParentLevel: true,
+          },
+        ],
+        maxValuesPerFacet: 10,
+      });
+    });
+
+    it('returns an empty configuration with the same `hierarchicalFacets` already defined with same options', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
       const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-      // when there is no hierarchicalFacets into current configuration
-      {
-        const config = widget.getConfiguration({});
-        expect(config).toEqual({
-          hierarchicalFacets: [
-            {
-              attributes: ['category', 'sub_category'],
-              name: 'category',
-              rootPath: null,
-              separator: ' > ',
-              showParentLevel: true,
-            },
-          ],
-          maxValuesPerFacet: 10,
-        });
-      }
+      const previous = {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            separator: ' > ',
+            rootPath: null,
+            showParentLevel: true,
+          },
+        ],
+      };
 
-      // when there is an identical hierarchicalFacets into current configuration
+      const actual = widget.getConfiguration(previous);
+
+      expect(actual).toEqual({
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            separator: ' > ',
+            rootPath: null,
+            showParentLevel: true,
+          },
+        ],
+        maxValuesPerFacet: 10,
+      });
+    });
+
+    it('warns and returns an empty configuration with the same `hierarchicalFacets` already defined with different `attributes`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+
+      const previous = {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category', 'sub_sub_category'],
+          },
+        ],
+      };
+
       expect(() => {
-        const config = widget.getConfiguration({
-          hierarchicalFacets: [{ name: 'category' }],
-        });
+        const actual = widget.getConfiguration(previous);
 
-        expect(config).toEqual({});
+        expect(actual).toEqual({});
       }).toWarnDev();
+    });
 
-      // when there is already a different hierarchicalFacets into current configuration
-      {
-        const config = widget.getConfiguration({
-          hierarchicalFacets: [{ name: 'foo' }],
-        });
-        expect(config).toEqual({
-          hierarchicalFacets: [
-            {
-              attributes: ['category', 'sub_category'],
-              name: 'category',
-              rootPath: null,
-              separator: ' > ',
-              showParentLevel: true,
-            },
-          ],
-          maxValuesPerFacet: 10,
-        });
-      }
+    it('warns and returns an empty configuration with the same `hierarchicalFacets` already defined with different `separator`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        separator: ' / ',
+      });
+
+      const previous = {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            separator: ' > ',
+          },
+        ],
+      };
+
+      expect(() => {
+        const actual = widget.getConfiguration(previous);
+
+        expect(actual).toEqual({});
+      }).toWarnDev();
+    });
+
+    it('warns and returns an empty configuration with the same `hierarchicalFacets` already defined with different `rootPath`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        separator: ' > ',
+        rootPath: 'TopLevel',
+      });
+
+      const previous = {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            separator: ' > ',
+            rootPath: 'TopLevel > SubLevel',
+          },
+        ],
+      };
+
+      expect(() => {
+        const actual = widget.getConfiguration(previous);
+
+        expect(actual).toEqual({});
+      }).toWarnDev();
     });
 
     it('sets the correct limit with showMore', () => {
