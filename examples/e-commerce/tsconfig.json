@@ -5,6 +5,7 @@
       "dom",
       "dom.iterable"
     ],
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "esModuleInterop": true
   }
 }
