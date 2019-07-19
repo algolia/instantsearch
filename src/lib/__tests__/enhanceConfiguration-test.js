@@ -48,7 +48,7 @@ describe('enhanceConfiguration', () => {
     expect(output.analytics).toBe(true);
   });
 
-  it('should union array', () => {
+  it('should deduplicate primitive array', () => {
     {
       const actualConfiguration = { refinements: ['foo'] };
       const widget = createWidget({ refinements: ['foo', 'bar'] });
@@ -81,6 +81,141 @@ describe('enhanceConfiguration', () => {
     const output = enhanceConfiguration(actualConfiguration, widget);
     expect(output).toEqual({
       refinements: { lvl1: ['foo', 'bar'], lvl2: true },
+    });
+  });
+
+  it('should add `hierarchicalFacets`', () => {
+    const actualConfiguration = {};
+
+    const widget = createWidget({
+      hierarchicalFacets: [
+        {
+          name: 'categories',
+          attributes: [
+            'categories.lvl0',
+            'categories.lvl1',
+            'categories.lvl2',
+            'categories.lvl3',
+          ],
+        },
+      ],
+    });
+
+    const output = enhanceConfiguration(actualConfiguration, widget);
+
+    expect(output).toEqual({
+      hierarchicalFacets: [
+        {
+          name: 'categories',
+          attributes: [
+            'categories.lvl0',
+            'categories.lvl1',
+            'categories.lvl2',
+            'categories.lvl3',
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should add multiple `hierarchicalFacets`', () => {
+    const actualConfiguration = {
+      hierarchicalFacets: [
+        {
+          name: 'countries',
+          attributes: [
+            'countries.lvl0',
+            'countries.lvl1',
+            'countries.lvl2',
+            'countries.lvl3',
+          ],
+        },
+      ],
+    };
+
+    const widget = createWidget({
+      hierarchicalFacets: [
+        {
+          name: 'categories',
+          attributes: [
+            'categories.lvl0',
+            'categories.lvl1',
+            'categories.lvl2',
+            'categories.lvl3',
+          ],
+        },
+      ],
+    });
+
+    const output = enhanceConfiguration(actualConfiguration, widget);
+
+    expect(output).toEqual({
+      hierarchicalFacets: [
+        {
+          name: 'countries',
+          attributes: [
+            'countries.lvl0',
+            'countries.lvl1',
+            'countries.lvl2',
+            'countries.lvl3',
+          ],
+        },
+        {
+          name: 'categories',
+          attributes: [
+            'categories.lvl0',
+            'categories.lvl1',
+            'categories.lvl2',
+            'categories.lvl3',
+          ],
+        },
+      ],
+    });
+  });
+
+  it('should deduplicate `hierarchicalFacets` with same name', () => {
+    const actualConfiguration = {
+      hierarchicalFacets: [
+        {
+          name: 'categories',
+          attributes: [
+            'categories.lvl0',
+            'categories.lvl1',
+            'categories.lvl2',
+            'categories.lvl3',
+          ],
+        },
+      ],
+    };
+
+    const widget = createWidget({
+      hierarchicalFacets: [
+        {
+          name: 'categories',
+          attributes: [
+            'categories.lvl0',
+            'categories.lvl1',
+            'categories.lvl2',
+            'categories.lvl3',
+          ],
+        },
+      ],
+    });
+
+    const output = enhanceConfiguration(actualConfiguration, widget);
+
+    expect(output).toEqual({
+      hierarchicalFacets: [
+        {
+          name: 'categories',
+          attributes: [
+            'categories.lvl0',
+            'categories.lvl1',
+            'categories.lvl2',
+            'categories.lvl3',
+          ],
+        },
+      ],
     });
   });
 });
