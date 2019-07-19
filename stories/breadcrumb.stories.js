@@ -91,38 +91,49 @@ storiesOf('Breadcrumb', module)
     })
   )
   .add(
-    'with default selected item',
-    withHits(({ search, container, instantsearch }) => {
-      const breadcrumb = document.createElement('div');
-      container.appendChild(breadcrumb);
-      const hierarchicalMenu = document.createElement('div');
-      container.appendChild(hierarchicalMenu);
+    'with root path',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        const breadcrumb = document.createElement('div');
+        container.appendChild(breadcrumb);
+        const hierarchicalMenu = document.createElement('div');
+        container.appendChild(hierarchicalMenu);
 
-      search.addWidget(
-        instantsearch.widgets.breadcrumb({
-          container: breadcrumb,
-          attributes: [
-            'hierarchicalCategories.lvl0',
-            'hierarchicalCategories.lvl1',
-            'hierarchicalCategories.lvl2',
-          ],
-          rootPath: 'Cameras & Camcorders > Digital Cameras',
-        })
-      );
+        search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: breadcrumb,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders',
+          })
+        );
 
-      search.addWidget(
-        instantsearch.widgets.hierarchicalMenu({
-          showParentLevel: false,
-          container: hierarchicalMenu,
-          attributes: [
-            'hierarchicalCategories.lvl0',
-            'hierarchicalCategories.lvl1',
-            'hierarchicalCategories.lvl2',
-          ],
-          rootPath: 'Cameras & Camcorders',
-        })
-      );
-    })
+        search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            showParentLevel: false,
+            container: hierarchicalMenu,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders',
+          })
+        );
+      },
+      {
+        searchParameters: {
+          hierarchicalFacetsRefinements: {
+            'hierarchicalCategories.lvl0': [
+              'Cameras & Camcorders > Digital Cameras',
+            ],
+          },
+        },
+      }
+    )
   )
   .add(
     'with hierarchical menu',
