@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "expo": "25.1.2",
-    "lodash": "4.17.14",
+    "lodash": "4.17.15",
     "prop-types": "15.6.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
