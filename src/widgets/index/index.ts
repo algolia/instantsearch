@@ -1,11 +1,13 @@
 import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
+  SearchParameters,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import {
   InstantSearch,
   Widget,
+  UiState,
   InitOptions,
   RenderOptions,
   DisposeOptions,
@@ -14,7 +16,7 @@ import {
 import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
-  enhanceConfiguration,
+  // enhanceConfiguration,
   mergeSearchParameters,
 } from '../../lib/utils';
 
@@ -27,6 +29,7 @@ type IndexProps = {
 };
 
 export type Index = Widget & {
+  $$type: string;
   getHelper(): Helper | null;
   getParent(): Index | null;
   getWidgets(): Widget[];
@@ -41,6 +44,7 @@ const index = (props: IndexProps): Index => {
   const { indexName = null } = props || {};
 
   let localWidgets: Widget[] = [];
+  const localUiState: UiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
   let localParent: Index | null = null;
   let helper: Helper | null = null;
@@ -50,7 +54,36 @@ const index = (props: IndexProps): Index => {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
+  type LocalSearchParametersArgs = {
+    widgets: Widget[];
+    uiState: UiState;
+    parameters: SearchParameters;
+  };
+
+  const getLocalSearchParameters = ({
+    widgets,
+    uiState,
+    parameters,
+  }: LocalSearchParametersArgs): SearchParameters => {
+    return widgets
+      .filter(widget => {
+        // @ts-ignore: Use classic widget vs index
+        return widget.$$type !== 'ais.index';
+      })
+      .reduce((previous, widget) => {
+        if (!widget.getWidgetSearchParameters) {
+          return previous;
+        }
+
+        return widget.getWidgetSearchParameters(previous, {
+          uiState,
+        });
+      }, parameters);
+  };
+
   return {
+    $$type: 'ais.index',
+
     getHelper() {
       return helper;
     },
@@ -99,8 +132,13 @@ const index = (props: IndexProps): Index => {
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         helper!.setState(
-          localWidgets.reduce(enhanceConfiguration, {
-            ...helper!.state,
+          // localWidgets.reduce(enhanceConfiguration, {
+          //   ...helper!.state,
+          // })
+          getLocalSearchParameters({
+            widgets: localWidgets,
+            uiState: localUiState,
+            parameters: helper!.state,
           })
         );
 
@@ -149,8 +187,13 @@ const index = (props: IndexProps): Index => {
         }, helper!.state);
 
         helper!.setState(
-          localWidgets.reduce(enhanceConfiguration, {
-            ...nextState,
+          // localWidgets.reduce(enhanceConfiguration, {
+          //   ...nextState,
+          // })
+          getLocalSearchParameters({
+            widgets: localWidgets,
+            uiState: localUiState,
+            parameters: nextState,
           })
         );
 
@@ -182,7 +225,14 @@ const index = (props: IndexProps): Index => {
       helper = algoliasearchHelper(
         {} as Client,
         indexName,
-        localWidgets.reduce(enhanceConfiguration, initialSearchParameters)
+        // localWidgets.reduce(enhanceConfiguration, initialSearchParameters)
+        getLocalSearchParameters({
+          widgets: localWidgets,
+          uiState: localUiState,
+          parameters: algoliasearchHelper.SearchParameters.make(
+            initialSearchParameters
+          ),
+        })
       );
 
       // We forward the call to `search` to the "main" instance of the Helper
