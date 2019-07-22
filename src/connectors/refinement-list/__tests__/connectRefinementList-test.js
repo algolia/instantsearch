@@ -363,6 +363,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
+  it('can render before getConfiguration', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+
+    const widget = makeWidget({
+      attribute: 'myFacet',
+      limit: 9,
+    });
+
+    const helper = jsHelper({}, '');
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: [],
+      }),
+      false
+    );
+  });
+
   it('transforms items if requested', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
