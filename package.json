@@ -58,11 +58,11 @@
     "qs": "^6.5.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.5.0",
-    "@babel/core": "7.5.4",
-    "@babel/plugin-proposal-class-properties": "7.5.0",
+    "@babel/cli": "7.5.5",
+    "@babel/core": "7.5.5",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
     "@babel/plugin-transform-react-constant-elements": "7.5.0",
-    "@babel/preset-env": "7.5.4",
+    "@babel/preset-env": "7.5.5",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.3.3",
     "@storybook/addon-actions": "5.1.9",
