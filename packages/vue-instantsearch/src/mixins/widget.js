@@ -27,7 +27,7 @@ export const createWidgetMixin = ({ connector } = {}) => ({
       if ((!started && hydrated) || this.$isServer) {
         if (typeof this.instantSearchInstance.__forceRender !== 'function') {
           throw new Error(
-            'You are using server side rendering with <ais-instant-search> instead of <ais-instant-search-server>.'
+            'You are using server side rendering with <ais-instant-search> instead of <ais-instant-search-ssr>.'
           );
         }
         this.instantSearchInstance.__forceRender(this.widget);
