@@ -67,17 +67,13 @@ function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
   const indexWidgets = widgets.filter(isIndexWidget);
 
   return indexWidgets.reduce<ScopedResult[]>((scopedResults, current) => {
-    const currentDerivedHelper = current.getDerivedHelper()!;
-
-    scopedResults.push(
+    return scopedResults.concat(
       {
         indexId: current.getIndexId(),
-        results: currentDerivedHelper.lastResults!,
+        results: current.getDerivedHelper()!.lastResults!,
       },
       ...resolveScopedResultsFromWidgets(current.getWidgets())
     );
-
-    return scopedResults;
   }, []);
 }
 
