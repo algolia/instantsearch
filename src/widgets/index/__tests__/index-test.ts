@@ -1318,15 +1318,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const level2_2_1 = index({ indexName: 'level2_2_1_index_name' });
       const level3 = index({ indexName: 'level3_index_name' });
       const instantSearchInstance = createInstantSearch();
-      const level0SearchBox = createSearchBox();
-      const level1SearchBox = createSearchBox();
+      const searchBoxLevel0 = createSearchBox();
+      const searchBoxLevel1 = createSearchBox();
+      const seachBoxLevel2_1 = createSearchBox();
 
       level0.addWidgets([
-        level0SearchBox,
-        level1.addWidgets([level1SearchBox]),
+        searchBoxLevel0,
+        level1.addWidgets([searchBoxLevel1]),
         level2.addWidgets([
           createSearchBox(),
-          level2_1.addWidgets([createSearchBox()]),
+          level2_1.addWidgets([seachBoxLevel2_1]),
           level2_2.addWidgets([
             createSearchBox(),
             level2_2_1.addWidgets([createSearchBox()]),
@@ -1354,15 +1355,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         })
       );
 
-      // First-level index
-      expect(level1SearchBox.render).toHaveBeenCalledTimes(1);
-      expect(level1SearchBox.render).toHaveBeenCalledWith(
+      // First-level child index
+      expect(searchBoxLevel1.render).toHaveBeenCalledTimes(1);
+      expect(searchBoxLevel1.render).toHaveBeenCalledWith(
         expect.objectContaining({
           scopedResults: [
-            // Current index
+            // Root index
             {
               indexId: 'level1_index_name',
-              results: (level1SearchBox.render as jest.Mock).mock.calls[0][0]
+              results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
                 .results,
             },
             // Siblings and children
@@ -1390,21 +1391,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         })
       );
 
-      // Top-level index
-      expect(level0SearchBox.render).toHaveBeenCalledTimes(1);
-      expect(level0SearchBox.render).toHaveBeenCalledWith(
+      // Sibling index
+      expect(seachBoxLevel2_1.render).toHaveBeenCalledTimes(1);
+      expect(seachBoxLevel2_1.render).toHaveBeenCalledWith(
         expect.objectContaining({
           scopedResults: [
-            // Current index
+            // Root index
+            {
+              indexId: 'level2_1_index_name',
+              results: (seachBoxLevel2_1.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            // Siblings and children
+            {
+              indexId: 'level2_2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+          ],
+        })
+      );
+
+      // Top-level index
+      expect(searchBoxLevel0.render).toHaveBeenCalledTimes(1);
+      expect(searchBoxLevel0.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          scopedResults: [
+            // Root index
             {
               indexId: 'level0_index_name',
-              results: (level0SearchBox.render as jest.Mock).mock.calls[0][0]
+              results: (searchBoxLevel0.render as jest.Mock).mock.calls[0][0]
                 .results,
             },
             // Siblings and children
             {
               indexId: 'level1_index_name',
-              results: (level1SearchBox.render as jest.Mock).mock.calls[0][0]
+              results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
                 .results,
             },
             {
