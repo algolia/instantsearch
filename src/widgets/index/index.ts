@@ -66,10 +66,6 @@ function resetPageFromWidgets(widgets: Widget[]): void {
 function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
   const indexWidgets = widgets.filter(isIndexWidget);
 
-  if (indexWidgets.length === 0) {
-    return [];
-  }
-
   return indexWidgets.reduce<ScopedResult[]>((scopedResults, current) => {
     const currentDerivedHelper = current.getDerivedHelper()!;
 
