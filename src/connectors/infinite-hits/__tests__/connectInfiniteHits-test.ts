@@ -663,7 +663,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({});
 
-      const nextConfiguration = widget.getConfiguration!();
+      const nextConfiguration = widget.getConfiguration!(
+        new SearchParameters()
+      );
 
       expect(nextConfiguration.page).toBe(0);
     });
@@ -673,7 +675,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({});
 
-      const nextConfiguration = widget.getConfiguration!();
+      const nextConfiguration = widget.getConfiguration!(
+        new SearchParameters()
+      );
 
       expect(nextConfiguration.highlightPreTag).toBe(
         TAG_PLACEHOLDER.highlightPreTag
@@ -691,7 +695,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         escapeHTML: false,
       });
 
-      const nextConfiguration = widget.getConfiguration!();
+      const nextConfiguration = widget.getConfiguration!(
+        new SearchParameters()
+      );
 
       expect(nextConfiguration.highlightPreTag).toBeUndefined();
       expect(nextConfiguration.highlightPostTag).toBeUndefined();
