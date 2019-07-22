@@ -1,4 +1,4 @@
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -15,9 +15,9 @@ describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
     createWidget({
       getConfiguration: jest.fn(() => {
-        return {
+        return new SearchParameters({
           query: 'Apple',
-        };
+        });
       }),
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('query', undefined);
@@ -28,9 +28,9 @@ describe('index', () => {
   const createPagination = (args: Partial<Widget> = {}): Widget =>
     createWidget({
       getConfiguration: jest.fn(() => {
-        return {
+        return new SearchParameters({
           page: 5,
-        };
+        });
       }),
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('page', undefined);
@@ -609,51 +609,51 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       level0.addWidgets([
         createWidget({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               hitsPerPage: 5,
-            };
+            });
           },
         }),
 
         createSearchBox({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               query: 'Apple',
-            };
+            });
           },
         }),
 
         createPagination({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               page: 1,
-            };
+            });
           },
         }),
 
         level1.addWidgets([
           createSearchBox({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 query: 'Apple iPhone',
-              };
+              });
             },
           }),
 
           createPagination({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 page: 2,
-              };
+              });
             },
           }),
 
           level2.addWidgets([
             createSearchBox({
               getConfiguration() {
-                return {
+                return new SearchParameters({
                   query: 'Apple iPhone XS',
-                };
+                });
               },
             }),
           ]),
