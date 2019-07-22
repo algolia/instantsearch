@@ -455,7 +455,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     ]);
   });
 
-  it('Provide a function to clear the refinements at each step', () => {
+  it('Provide a function to clear the refinements at each step (or)', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attribute: 'category',
@@ -479,9 +479,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(0);
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(1);
 
     widget.render({
       results: new SearchResults(helper.state, [{}, {}]),
@@ -493,9 +493,53 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderToggleRefinement } = secondRenderingOptions;
     renderToggleRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(0);
     renderToggleRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(1);
+  });
+
+  it('Provide a function to clear the refinements at each step (and)', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      operator: 'and',
+    });
+
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', 'value');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const { refine } = firstRenderingOptions;
+    refine('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(0);
+    refine('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}, {}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    const { refine: renderToggleRefinement } = secondRenderingOptions;
+    renderToggleRefinement('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(0);
+    renderToggleRefinement('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(1);
   });
 
   it('If there are too few items then canToggleShowMore is false', () => {
