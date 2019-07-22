@@ -1,6 +1,7 @@
 import {
   createDocumentationMessageGenerator,
-  enhanceConfiguration,
+  mergeSearchParameters,
+  // enhanceConfiguration,
   isPlainObject,
   noop,
 } from '../../lib/utils';
@@ -59,12 +60,16 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
         return searchParameters => {
           // merge new `searchParameters` with the ones set from other widgets
           const actualState = this.removeSearchParameters(helper.state);
-          const nextSearchParameters = enhanceConfiguration(
-            { ...actualState },
-            {
-              getConfiguration: () => searchParameters,
-            }
+          const nextSearchParameters = mergeSearchParameters(
+            actualState,
+            searchParameters
           );
+          // const nextSearchParameters = enhanceConfiguration(
+          //   { ...actualState },
+          //   {
+          //     getConfiguration: () => searchParameters,
+          //   }
+          // );
 
           // trigger a search with the new merged searchParameters
           helper.setState(nextSearchParameters).search();
