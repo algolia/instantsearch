@@ -1,13 +1,11 @@
-import algoliasearchHelper, {
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import { Widget } from '../../types';
 import mergeSearchParameters from './mergeSearchParameters';
 
-export function enhanceConfiguration(
-  configuration: PlainSearchParameters,
+function enhanceConfiguration(
+  configuration: SearchParameters,
   widget: Widget
-): PlainSearchParameters {
+): SearchParameters {
   if (!widget.getConfiguration) {
     return configuration;
   }
@@ -16,7 +14,8 @@ export function enhanceConfiguration(
   const partialConfiguration = widget.getConfiguration(configuration);
 
   return mergeSearchParameters(
-    new algoliasearchHelper.SearchParameters(configuration),
+    configuration,
+    // @TODO: remove this after IFW-874 is completed (all widgets return SP)
     new algoliasearchHelper.SearchParameters(partialConfiguration)
   );
 }

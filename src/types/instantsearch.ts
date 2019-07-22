@@ -1,5 +1,9 @@
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
-import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
+import {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
 import { Index } from '../widgets/index/index';
 import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import { Widget, UiState } from './widget';
@@ -107,8 +111,8 @@ export type InstantSearch = {
   insightsClient: AlgoliaInsightsClient | null;
   templatesConfig: object;
   _isSearchStalled: boolean;
-  _searchParameters: Partial<SearchParameters>;
-  _createAbsoluteURL(state: Partial<SearchParameters>): string;
+  _searchParameters: PlainSearchParameters;
+  _createAbsoluteURL(state: PlainSearchParameters): string;
   scheduleSearch(): void;
   scheduleRender(): void;
   scheduleStalledRender(): void;
