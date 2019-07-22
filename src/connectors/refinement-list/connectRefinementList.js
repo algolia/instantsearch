@@ -333,7 +333,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
         } = renderOptions;
 
-        const facetValues = results.getFacetValues(attribute, { sortBy });
+        const facetValues = results.getFacetValues(attribute, { sortBy }) || [];
         const items = transformItems(
           facetValues.slice(0, this.getLimit()).map(formatItems)
         );
