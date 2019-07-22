@@ -146,24 +146,24 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getConfiguration(configuration) {
-        const widgetConfiguration = {
-          hierarchicalFacets: [
-            {
-              name: attribute,
-              attributes: [attribute],
-            },
-          ],
-        };
+      // getConfiguration(configuration) {
+      //   const widgetConfiguration = {
+      //     hierarchicalFacets: [
+      //       {
+      //         name: attribute,
+      //         attributes: [attribute],
+      //       },
+      //     ],
+      //   };
 
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
+      //   const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      //   widgetConfiguration.maxValuesPerFacet = Math.max(
+      //     currentMaxValuesPerFacet,
+      //     showMore ? showMoreLimit : limit
+      //   );
 
-        return widgetConfiguration;
-      },
+      //   return widgetConfiguration;
+      // },
 
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
@@ -270,25 +270,41 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (uiState.menu && uiState.menu[attribute]) {
-          const uiStateRefinedItem = uiState.menu[attribute];
-          const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
-            attribute,
-            uiStateRefinedItem
-          );
-          if (isAlreadyRefined) return searchParameters;
-          return searchParameters.toggleRefinement(
-            attribute,
-            uiStateRefinedItem
-          );
+        const values = uiState.menu && uiState.menu[attribute];
+
+        const withHierarchicalFacet = searchParameters.addHierarchicalFacet({
+          name: attribute,
+          attributes: [attribute],
+        });
+
+        const previousMaxValuesPerFacet =
+          searchParameters.maxValuesPerFacet || 0;
+
+        const currentMaxValuesPerFacet = Math.max(
+          previousMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withHierarchicalFacet.setQueryParameters({
+          maxValuesPerFacet: currentMaxValuesPerFacet,
+        });
+
+        if (!values) {
+          const previousValue =
+            withMaxValuesPerFacet.hierarchicalFacetsRefinements[attribute];
+
+          return withMaxValuesPerFacet.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+              [attribute]: previousValue || [],
+            },
+          });
         }
-        if (searchParameters.isHierarchicalFacetRefined(attribute)) {
-          const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
-            attribute
-          );
-          return searchParameters.toggleRefinement(attribute, refinedItem);
-        }
-        return searchParameters;
+
+        return searchParameters.addHierarchicalFacetRefinement(
+          attribute,
+          values
+        );
       },
     };
   };
