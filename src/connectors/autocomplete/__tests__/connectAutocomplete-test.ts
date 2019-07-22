@@ -274,7 +274,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       const makeWidget = connectAutocomplete(renderFn);
       const widget = makeWidget({});
 
-      const nextConfiguation = widget.getConfiguration!();
+      const nextConfiguation = widget.getConfiguration!(new SearchParameters());
 
       expect(nextConfiguation.query).toBe('');
     });
@@ -284,7 +284,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       const makeWidget = connectAutocomplete(renderFn);
       const widget = makeWidget({});
 
-      const nextConfiguation = widget.getConfiguration!();
+      const nextConfiguation = widget.getConfiguration!(new SearchParameters());
 
       expect(nextConfiguation.highlightPreTag).toBe(
         TAG_PLACEHOLDER.highlightPreTag
@@ -302,7 +302,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
         escapeHTML: false,
       });
 
-      const nextConfiguation = widget.getConfiguration!();
+      const nextConfiguation = widget.getConfiguration!(new SearchParameters());
 
       expect(nextConfiguation.highlightPreTag).toBeUndefined();
       expect(nextConfiguation.highlightPostTag).toBeUndefined();

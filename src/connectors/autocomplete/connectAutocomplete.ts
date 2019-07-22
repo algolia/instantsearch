@@ -88,19 +88,19 @@ The \`indices\` option is ignored.`
     return {
       $$type: 'ais.autocomplete',
 
-      getConfiguration() {
+      getConfiguration(previousParameters) {
         const parameters = {
           query: '',
         };
 
         if (!escapeHTML) {
-          return parameters;
+          return previousParameters.setQueryParameters(parameters);
         }
 
-        return {
+        return previousParameters.setQueryParameters({
           ...parameters,
           ...TAG_PLACEHOLDER,
-        };
+        });
       },
 
       init({ instantSearchInstance, helper }) {
