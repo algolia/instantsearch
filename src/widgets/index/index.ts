@@ -44,7 +44,7 @@ const index = (props: IndexProps): Index => {
   const { indexName = null } = props || {};
 
   let localWidgets: Widget[] = [];
-  const localUiState: UiState = {};
+  let localUiState: UiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
   let localParent: Index | null = null;
   let helper: Helper | null = null;
@@ -79,6 +79,34 @@ const index = (props: IndexProps): Index => {
           uiState,
         });
       }, parameters);
+  };
+
+  type LocalUiStateArgs = {
+    widgets: Widget[];
+    helper: Helper;
+    parameters: SearchParameters;
+  };
+
+  const getLocalUiState = ({
+    widgets,
+    parameters,
+    helper: localHelper,
+  }: LocalUiStateArgs): UiState => {
+    return widgets
+      .filter(widget => {
+        // @ts-ignore: Use classic widget vs index
+        return widget.$$type !== 'ais.index';
+      })
+      .reduce<UiState>((previous, widget) => {
+        if (!widget.getWidgetState) {
+          return previous;
+        }
+
+        return widget.getWidgetState(previous, {
+          searchParameters: parameters,
+          helper: localHelper,
+        });
+      }, {});
   };
 
   return {
@@ -257,6 +285,14 @@ const index = (props: IndexProps): Index => {
         );
       };
 
+      helper.on('change', ({ state }) => {
+        localUiState = getLocalUiState({
+          widgets: localWidgets,
+          parameters: state,
+          helper: helper!,
+        });
+      });
+
       derivedHelper = mainHelper.derive(() =>
         mergeSearchParameters(...resolveSearchParameters(this))
       );
@@ -330,6 +366,8 @@ const index = (props: IndexProps): Index => {
 
       localInstantSearchInstance = null;
       localParent = null;
+
+      helper!.removeAllListeners();
       helper = null;
 
       derivedHelper!.detach();
