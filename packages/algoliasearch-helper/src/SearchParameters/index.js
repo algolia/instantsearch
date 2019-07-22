@@ -1245,13 +1245,19 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedDisjunctiveFacets: function getRefinedDisjunctiveFacets() {
+    var self = this;
+
     // attributes used for numeric filter can also be disjunctive
     var disjunctiveNumericRefinedFacets = intersection(
-      Object.keys(this.numericRefinements),
+      Object.keys(this.numericRefinements).filter(function(facet) {
+        return Object.keys(self.numericRefinements[facet]).length > 0;
+      }),
       this.disjunctiveFacets
     );
 
-    return Object.keys(this.disjunctiveFacetsRefinements)
+    return Object.keys(this.disjunctiveFacetsRefinements).filter(function(facet) {
+      return self.disjunctiveFacetsRefinements[facet].length > 0;
+    })
       .concat(disjunctiveNumericRefinedFacets)
       .concat(this.getRefinedHierarchicalFacets());
   },
@@ -1263,11 +1269,14 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedHierarchicalFacets: function getRefinedHierarchicalFacets() {
+    var self = this;
     return intersection(
       // enforce the order between the two arrays,
       // so that refinement name index === hierarchical facet index
       this.hierarchicalFacets.map(function(facet) { return facet.name; }),
-      Object.keys(this.hierarchicalFacetsRefinements)
+      Object.keys(this.hierarchicalFacetsRefinements).filter(function(facet) {
+        return self.hierarchicalFacetsRefinements[facet].length > 0;
+      })
     );
   },
   /**
