@@ -109,7 +109,7 @@
     },
     {
       "path": "./dist/vue-instantsearch.common.js",
-      "maxSize": "14.50 kB"
+      "maxSize": "14.75 kB"
     }
   ],
   "jest": {
