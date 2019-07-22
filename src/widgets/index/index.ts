@@ -239,6 +239,12 @@ const index = (props: IndexProps): Index => {
     },
 
     init({ instantSearchInstance, parent }: InitOptions) {
+      localUiState =
+        // @ts-ignore
+        instantSearchInstance.getInitialWidgetState(
+          parent === null ? null : indexName
+        ) || {};
+
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
 
