@@ -2,6 +2,7 @@ import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
   PlainSearchParameters,
+  SearchResults,
 } from 'algoliasearch-helper';
 import {
   InstantSearch,
@@ -30,7 +31,7 @@ type IndexProps = {
 export type Index = Widget & {
   getIndexId(): string;
   getHelper(): Helper | null;
-  getDerivedHelper(): DerivedHelper | null;
+  getResults(): SearchResults | null;
   getParent(): Index | null;
   getWidgets(): Widget[];
   addWidgets(widgets: Widget[]): Index;
@@ -70,7 +71,7 @@ function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
     return scopedResults.concat(
       {
         indexId: current.getIndexId(),
-        results: current.getDerivedHelper()!.lastResults!,
+        results: current.getResults()!,
       },
       ...resolveScopedResultsFromWidgets(current.getWidgets())
     );
@@ -109,8 +110,8 @@ const index = (props: IndexProps): Index => {
       return helper;
     },
 
-    getDerivedHelper() {
-      return derivedHelper;
+    getResults() {
+      return derivedHelper && derivedHelper.lastResults;
     },
 
     getParent() {
