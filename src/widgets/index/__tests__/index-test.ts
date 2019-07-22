@@ -824,76 +824,76 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       level0.addWidgets([
         createWidget({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               hitsPerPage: 5,
-            };
+            });
           },
         }),
 
         createSearchBox({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               query: 'Apple',
-            };
+            });
           },
         }),
 
         createPagination({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               page: 1,
-            };
+            });
           },
         }),
 
         level1.addWidgets([
           createSearchBox({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 query: 'Apple iPhone',
-              };
+              });
             },
           }),
 
           createPagination({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 page: 2,
-              };
+              });
             },
           }),
 
           level2.addWidgets([
             createSearchBox({
               getConfiguration() {
-                return {
+                return new SearchParameters({
                   query: 'Apple iPhone XS',
-                };
+                });
               },
             }),
 
             createPagination({
               getConfiguration() {
-                return {
+                return new SearchParameters({
                   page: 3,
-                };
+                });
               },
             }),
 
             level3.addWidgets([
               createSearchBox({
                 getConfiguration() {
-                  return {
+                  return new SearchParameters({
                     query: 'Apple iPhone XS Red',
-                  };
+                  });
                 },
               }),
 
               createPagination({
                 getConfiguration() {
-                  return {
+                  return new SearchParameters({
                     page: 4,
-                  };
+                  });
                 },
               }),
             ]),
@@ -965,76 +965,76 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       level0.addWidgets([
         createWidget({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               hitsPerPage: 5,
-            };
+            });
           },
         }),
 
         createSearchBox({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               query: 'Apple',
-            };
+            });
           },
         }),
 
         createPagination({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               page: 1,
-            };
+            });
           },
         }),
 
         level1.addWidgets([
           createSearchBox({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 query: 'Apple iPhone',
-              };
+              });
             },
           }),
 
           createPagination({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 page: 2,
-              };
+              });
             },
           }),
 
           level2.addWidgets([
             createSearchBox({
               getConfiguration() {
-                return {
+                return new SearchParameters({
                   query: 'Apple iPhone XS',
-                };
+                });
               },
             }),
 
             createPagination({
               getConfiguration() {
-                return {
+                return new SearchParameters({
                   page: 3,
-                };
+                });
               },
             }),
 
             level3.addWidgets([
               createSearchBox({
                 getConfiguration() {
-                  return {
+                  return new SearchParameters({
                     query: 'Apple iPhone XS Red',
-                  };
+                  });
                 },
               }),
 
               createPagination({
                 getConfiguration() {
-                  return {
+                  return new SearchParameters({
                     page: 4,
-                  };
+                  });
                 },
               }),
             ]),
@@ -1105,60 +1105,60 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       level0.addWidgets([
         createWidget({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               hitsPerPage: 5,
-            };
+            });
           },
         }),
 
         createSearchBox({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               query: 'Apple',
-            };
+            });
           },
         }),
 
         createPagination({
           getConfiguration() {
-            return {
+            return new SearchParameters({
               page: 1,
-            };
+            });
           },
         }),
 
         level1.addWidgets([
           createSearchBox({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 query: 'Apple iPhone',
-              };
+              });
             },
           }),
 
           createPagination({
             getConfiguration() {
-              return {
+              return new SearchParameters({
                 page: 2,
-              };
+              });
             },
           }),
 
           level2.addWidgets([
             createSearchBox({
               getConfiguration() {
-                return {
+                return new SearchParameters({
                   query: 'Apple iPhone XS',
-                };
+                });
               },
             }),
 
             level3.addWidgets([
               createSearchBox({
                 getConfiguration() {
-                  return {
+                  return new SearchParameters({
                     query: 'Apple iPhone XS Red',
-                  };
+                  });
                 },
               }),
             ]),
@@ -1257,6 +1257,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.render).toHaveBeenCalledWith({
           instantSearchInstance,
           results: expect.any(algoliasearchHelper.SearchResults),
+          scopedResults: [
+            {
+              indexId: 'index_name',
+              results: (widget.render as jest.Mock).mock.calls[0][0].results,
+            },
+          ],
           state: expect.any(algoliasearchHelper.SearchParameters),
           helper: instance.getHelper(),
           templatesConfig: instantSearchInstance.templatesConfig,
@@ -1300,6 +1306,157 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       widgets.forEach(widget => {
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
+    });
+
+    it('calls `render` with `scopedResults` coming from siblings and children', async () => {
+      /* eslint-disable @typescript-eslint/camelcase */
+      const level0 = index({ indexName: 'level0_index_name' });
+      const level1 = index({ indexName: 'level1_index_name' });
+      const level2 = index({ indexName: 'level2_index_name' });
+      const level2_1 = index({ indexName: 'level2_1_index_name' });
+      const level2_2 = index({ indexName: 'level2_2_index_name' });
+      const level2_2_1 = index({ indexName: 'level2_2_1_index_name' });
+      const level3 = index({ indexName: 'level3_index_name' });
+      const instantSearchInstance = createInstantSearch();
+      const searchBoxLevel0 = createSearchBox();
+      const searchBoxLevel1 = createSearchBox();
+      const seachBoxLevel2_1 = createSearchBox();
+
+      level0.addWidgets([
+        searchBoxLevel0,
+        level1.addWidgets([searchBoxLevel1]),
+        level2.addWidgets([
+          createSearchBox(),
+          level2_1.addWidgets([seachBoxLevel2_1]),
+          level2_2.addWidgets([
+            createSearchBox(),
+            level2_2_1.addWidgets([createSearchBox()]),
+          ]),
+        ]),
+        level3.addWidgets([createSearchBox()]),
+      ]);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // Simulate a call to search from a widget - this step is required otherwise
+      // the DerivedHelper does not contain the results. The `lastResults` attribute
+      // is set once the `result` event is emitted.
+      level0.getHelper()!.search();
+
+      await runAllMicroTasks();
+
+      level0.render(
+        createRenderOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // First-level child index
+      expect(searchBoxLevel1.render).toHaveBeenCalledTimes(1);
+      expect(searchBoxLevel1.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          scopedResults: [
+            // Root index
+            {
+              indexId: 'level1_index_name',
+              results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            // Siblings and children
+            {
+              indexId: 'level2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level3_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+          ],
+        })
+      );
+
+      // Sibling index
+      expect(seachBoxLevel2_1.render).toHaveBeenCalledTimes(1);
+      expect(seachBoxLevel2_1.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          scopedResults: [
+            // Root index
+            {
+              indexId: 'level2_1_index_name',
+              results: (seachBoxLevel2_1.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            // Siblings and children
+            {
+              indexId: 'level2_2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+          ],
+        })
+      );
+
+      // Top-level index
+      expect(searchBoxLevel0.render).toHaveBeenCalledTimes(1);
+      expect(searchBoxLevel0.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          scopedResults: [
+            // Root index
+            {
+              indexId: 'level0_index_name',
+              results: (searchBoxLevel0.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            // Siblings and children
+            {
+              indexId: 'level1_index_name',
+              results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
+                .results,
+            },
+            {
+              indexId: 'level2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level2_2_1_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+            {
+              indexId: 'level3_index_name',
+              results: expect.any(algoliasearchHelper.SearchResults),
+            },
+          ],
+        })
+      );
+
+      /* eslint-enable @typescript-eslint/camelcase */
     });
   });
 
