@@ -2,6 +2,7 @@ import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
   PlainSearchParameters,
+  SearchResults,
 } from 'algoliasearch-helper';
 import {
   InstantSearch,
@@ -10,6 +11,7 @@ import {
   RenderOptions,
   DisposeOptions,
   Client,
+  ScopedResult,
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
@@ -27,7 +29,9 @@ type IndexProps = {
 };
 
 export type Index = Widget & {
+  getIndexId(): string;
   getHelper(): Helper | null;
+  getResults(): SearchResults | null;
   getParent(): Index | null;
   getWidgets(): Widget[];
   addWidgets(widgets: Widget[]): Index;
@@ -60,6 +64,28 @@ function resetPageFromWidgets(widgets: Widget[]): void {
   });
 }
 
+function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
+  const indexWidgets = widgets.filter(isIndexWidget);
+
+  return indexWidgets.reduce<ScopedResult[]>((scopedResults, current) => {
+    return scopedResults.concat(
+      {
+        indexId: current.getIndexId(),
+        results: current.getResults()!,
+      },
+      ...resolveScopedResultsFromWidgets(current.getWidgets())
+    );
+  }, []);
+}
+
+function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
+  const widgetParent = widget.getParent();
+  // If the widget is the root, we consider itself as the only sibling.
+  const widgetSiblings = widgetParent ? widgetParent.getWidgets() : [widget];
+
+  return resolveScopedResultsFromWidgets(widgetSiblings);
+}
+
 const index = (props: IndexProps): Index => {
   const { indexName = null } = props || {};
 
@@ -76,8 +102,16 @@ const index = (props: IndexProps): Index => {
   return {
     $$type: 'ais.index',
 
+    getIndexId() {
+      return indexName;
+    },
+
     getHelper() {
       return helper;
+    },
+
+    getResults() {
+      return derivedHelper && derivedHelper.lastResults;
     },
 
     getParent() {
@@ -280,6 +314,7 @@ const index = (props: IndexProps): Index => {
             helper: helper!,
             instantSearchInstance,
             results: derivedHelper!.lastResults,
+            scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: instantSearchInstance._createAbsoluteURL,

@@ -29,16 +29,23 @@ export const createRenderOptions = (
 ): RenderOptions => {
   const instantSearchInstance = createInstantSearch();
   const response = createMultiSearchResponse();
+  const results = new algolisearchHelper.SearchResults(
+    instantSearchInstance.helper!.state,
+    response.results
+  );
 
   return {
     instantSearchInstance,
     templatesConfig: instantSearchInstance.templatesConfig,
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
-    results: new algolisearchHelper.SearchResults(
-      instantSearchInstance.helper!.state,
-      response.results
-    ),
+    results,
+    scopedResults: [
+      {
+        indexId: instantSearchInstance.helper!.state.index,
+        results,
+      },
+    ],
     searchMetadata: {
       isSearchStalled: false,
     },
