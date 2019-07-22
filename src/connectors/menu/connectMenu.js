@@ -278,7 +278,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         });
 
         const previousMaxValuesPerFacet =
-          searchParameters.maxValuesPerFacet || 0;
+          withHierarchicalFacet.maxValuesPerFacet || 0;
 
         const currentMaxValuesPerFacet = Math.max(
           previousMaxValuesPerFacet,
@@ -301,7 +301,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           });
         }
 
-        return searchParameters.addHierarchicalFacetRefinement(
+        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
           attribute,
           values
         );
