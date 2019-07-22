@@ -30,6 +30,7 @@ type IndexProps = {
 
 export type Index = Widget & {
   $$type: string;
+  getUiState(): UiState;
   getHelper(): Helper | null;
   getParent(): Index | null;
   getWidgets(): Widget[];
@@ -111,6 +112,10 @@ const index = (props: IndexProps): Index => {
 
   return {
     $$type: 'ais.index',
+
+    getUiState() {
+      return localUiState;
+    },
 
     getHelper() {
       return helper;

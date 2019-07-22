@@ -355,6 +355,29 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
   }
 
+  getWidgetState() {
+    // THIS IS BAD.
+    const loop = (uiState, current) => {
+      return current
+        .getWidgets()
+        .filter(w => w.$$type === 'ais.index')
+        .reduce((previous, innerIndex) => {
+          return loop(
+            {
+              ...previous,
+              indices: {
+                ...previous.indices,
+                [innerIndex.getHelper().state.index]: innerIndex.getUiState(),
+              },
+            },
+            innerIndex
+          );
+        }, uiState);
+    };
+
+    return loop(this.mainIndex.getUiState(), this.mainIndex);
+  }
+
   createURL(params) {
     if (!this._createURL) {
       throw new Error(
