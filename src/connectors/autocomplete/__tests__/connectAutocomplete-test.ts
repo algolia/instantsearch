@@ -25,8 +25,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
   });
 
   it('warns when using the outdated `indices` option', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const render = jest.fn();
+    const makeWidget = connectAutocomplete(render);
 
     const trigger = () => {
       // @ts-ignore outdated `indices` option
@@ -58,35 +58,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('renders during init and render', () => {
     const searchClient = createSearchClient();
-    const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const render = jest.fn();
+    const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({});
 
-    expect(renderFn).toHaveBeenCalledTimes(0);
+    expect(render).toHaveBeenCalledTimes(0);
 
     const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(createInitOptions({ helper }));
 
-    expect(renderFn).toHaveBeenCalledTimes(1);
-    expect(renderFn).toHaveBeenLastCalledWith(
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         currentRefinement: '',
         indices: [],
         refine: expect.any(Function),
+        instantSearchInstance: expect.any(Object),
+        widgetParams: expect.any(Object),
       }),
       true
     );
 
     widget.render!(createRenderOptions());
 
-    expect(renderFn).toHaveBeenCalledTimes(2);
-    expect(renderFn).toHaveBeenLastCalledWith(
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenLastCalledWith(
       expect.objectContaining({
         currentRefinement: '',
         indices: expect.any(Array),
         refine: expect.any(Function),
+        instantSearchInstance: expect.any(Object),
+        widgetParams: expect.any(Object),
       }),
       false
     );
@@ -94,8 +98,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('consumes the correct indices', () => {
     const searchClient = createSearchClient();
-    const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const render = jest.fn();
+    const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({ escapeHTML: false });
 
     const helper = algoliasearchHelper(searchClient, '', {});
@@ -103,9 +107,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     widget.init!(createInitOptions({ helper }));
 
-    expect(renderFn).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenCalledTimes(1);
 
-    const firstRenderOptions = renderFn.mock.calls[0][0];
+    const firstRenderOptions = render.mock.calls[0][0];
 
     expect(firstRenderOptions.indices).toHaveLength(0);
 
@@ -134,9 +138,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     widget.render!(createRenderOptions({ helper, scopedResults }));
 
-    const secondRenderOptions = renderFn.mock.calls[1][0];
+    const secondRenderOptions = render.mock.calls[1][0];
 
-    expect(renderFn).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(2);
     expect(secondRenderOptions.indices).toHaveLength(2);
     expect(secondRenderOptions.indices[0].indexName).toEqual('index0');
     expect(secondRenderOptions.indices[0].hits).toEqual(firstIndexHits);
@@ -152,8 +156,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('sets a query and triggers search on `refine`', () => {
     const searchClient = createSearchClient();
-    const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const render = jest.fn();
+    const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({});
 
     const helper = algoliasearchHelper(searchClient, '', {});
@@ -161,7 +165,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     widget.init!(createInitOptions({ helper }));
 
-    const { refine } = renderFn.mock.calls[0][0];
+    const { refine } = render.mock.calls[0][0];
     refine('foo');
 
     expect(helper.search).toHaveBeenCalledTimes(1);
@@ -170,8 +174,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('with escapeHTML should escape the hits and the results', () => {
     const searchClient = createSearchClient();
-    const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const render = jest.fn();
+    const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({ escapeHTML: true });
 
     const helper = algoliasearchHelper(searchClient, '', {});
@@ -218,7 +222,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       })
     );
 
-    const rendering = renderFn.mock.calls[1][0];
+    const rendering = render.mock.calls[1][0];
 
     expect(rendering.indices[0].hits).toEqual(escapedHits);
     expect(rendering.indices[0].results.hits).toEqual(escapedHits);
@@ -226,8 +230,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('without escapeHTML should not escape the hits', () => {
     const searchClient = createSearchClient();
-    const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const render = jest.fn();
+    const makeWidget = connectAutocomplete(render);
     const widget = makeWidget({ escapeHTML: false });
 
     const helper = algoliasearchHelper(searchClient, '', {});
@@ -262,7 +266,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
       })
     );
 
-    const rendering = renderFn.mock.calls[1][0];
+    const rendering = render.mock.calls[1][0];
 
     expect(rendering.indices[0].hits).toEqual(hits);
     expect(rendering.indices[0].results.hits).toEqual(hits);
@@ -270,8 +274,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   describe('getConfiguration', () => {
     it('takes the existing `query` from the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
       const nextConfiguation = widget.getConfiguration!(
@@ -284,8 +288,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     });
 
     it('adds a `query` to the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
       const nextConfiguation = widget.getConfiguration!(new SearchParameters());
@@ -294,8 +298,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     });
 
     it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
       const nextConfiguation = widget.getConfiguration!(new SearchParameters());
@@ -310,8 +314,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     });
 
     it('does not add the TAG_PLACEHOLDER to the `SearchParameters` with `escapeHTML` disabled', () => {
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({
         escapeHTML: false,
       });
@@ -326,28 +330,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, 'firstIndex');
+      const helper = algoliasearchHelper(searchClient, '');
 
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const render = jest.fn();
+      const unmount = jest.fn();
+      const makeWidget = connectAutocomplete(render, unmount);
       const widget = makeWidget({});
 
       widget.init!(createInitOptions({ helper }));
 
-      expect(unmountFn).toHaveBeenCalledTimes(0);
+      expect(unmount).toHaveBeenCalledTimes(0);
 
       widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
 
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalledTimes(1);
     });
 
     it('does not throw without the unmount function', () => {
       const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, 'firstIndex');
+      const helper = algoliasearchHelper(searchClient, '');
 
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
       widget.init!(createInitOptions({ helper }));
@@ -359,12 +363,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     it('removes the `query` from the `SearchParameters`', () => {
       const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, 'firstIndex', {
+      const helper = algoliasearchHelper(searchClient, '', {
         query: 'Apple',
       });
 
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
       widget.init!(createInitOptions({ helper }));
@@ -380,12 +384,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
       const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, 'firstIndex', {
+      const helper = algoliasearchHelper(searchClient, '', {
         ...TAG_PLACEHOLDER,
       });
 
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({});
 
       expect(helper.state.highlightPreTag).toBe(
@@ -408,13 +412,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
       const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, 'firstIndex', {
+      const helper = algoliasearchHelper(searchClient, '', {
         highlightPreTag: '<mark>',
         highlightPostTag: '</mark>',
       });
 
-      const renderFn = () => {};
-      const makeWidget = connectAutocomplete(renderFn);
+      const render = jest.fn();
+      const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({
         escapeHTML: false,
       });
