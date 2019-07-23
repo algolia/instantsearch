@@ -2,7 +2,7 @@ import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import { AlgoliaSearchHelper, SearchParameters } from 'algoliasearch-helper';
 import { Index } from '../widgets/index/index';
 import { InsightsClient as AlgoliaInsightsClient } from './insights';
-import { Widget, UiState } from './widget';
+import { UiState } from './widget';
 
 export type InstantSearchOptions = any;
 
@@ -86,11 +86,12 @@ export type NumericRefinement = {
 
 export type Refinement = FacetRefinement | NumericRefinement;
 
-export interface Router<TRouteState = UiState> extends Widget {
+export interface Router<TRouteState = UiState> {
   onUpdate(callback: (route: TRouteState) => void): void;
   read(): UiState;
   write(route: TRouteState): void;
   createURL(state: TRouteState): string;
+  dispose(): void;
 }
 
 export type StateMapping<TRouteState = UiState> = {

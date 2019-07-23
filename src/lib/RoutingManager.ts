@@ -1,15 +1,12 @@
-import algoliasearchHelper, {
-  SearchParameters,
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper'; // PlainSearchParameters, // SearchParameters,
 import { isEqual } from './utils';
 import {
   InstantSearch,
   UiState,
   Router,
   StateMapping,
-  Widget,
-  HelperChangeEvent,
+  // Widget,
+  // HelperChangeEvent,
 } from '../types';
 
 type RoutingManagerProps = {
@@ -29,15 +26,15 @@ const walk = (current, callback) => {
     });
 };
 
-class RoutingManager implements Widget {
+class RoutingManager {
   private readonly instantSearchInstance: InstantSearch;
   private readonly router: Router;
   private readonly stateMapping: StateMapping;
 
-  private isFirstRender: boolean = true;
+  // private isFirstRender: boolean = true;
   private currentUiState: UiState;
-  private initState?: UiState;
-  private renderURLFromState?: (event: HelperChangeEvent) => void;
+  // private initState?: UiState;
+  // private renderURLFromState?: (event: HelperChangeEvent) => void;
 
   public constructor({
     router,
@@ -189,7 +186,7 @@ class RoutingManager implements Widget {
     }
 
     // @ts-ignore
-    return this.currentUiState.indices[indexName];
+    return (this.currentUiState.indices || {})[indexName];
   }
 
   // public getConfiguration(
@@ -224,15 +221,15 @@ class RoutingManager implements Widget {
   //   }
   // }
 
-  // public dispose({ helper, state }): void {
-  //   if (this.renderURLFromState) {
-  //     helper.removeListener('change', this.renderURLFromState);
-  //   }
+  public dispose(): void {
+    // if (this.renderURLFromState) {
+    //   helper.removeListener('change', this.renderURLFromState);
+    // }
 
-  //   if (this.router.dispose) {
-  //     this.router.dispose({ helper, state });
-  //   }
-  // }
+    if (this.router.dispose) {
+      this.router.dispose();
+    }
+  }
 
   public createURL({
     indexId,

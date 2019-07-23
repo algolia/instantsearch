@@ -317,6 +317,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     this.removeWidgets(this.mainIndex.getWidgets());
     this.mainIndex.dispose();
+    this._routingManager.dispose();
 
     // You can not start an instance two times, therefore a disposed instance
     // needs to set started as false otherwise this can not be restarted at a
