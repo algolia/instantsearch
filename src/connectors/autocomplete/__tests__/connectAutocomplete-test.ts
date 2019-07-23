@@ -138,11 +138,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(secondRenderOptions.indices).toHaveLength(2);
-    expect(secondRenderOptions.indices[0].index).toEqual('index0');
+    expect(secondRenderOptions.indices[0].indexName).toEqual('index0');
     expect(secondRenderOptions.indices[0].hits).toEqual(firstIndexHits);
     expect(secondRenderOptions.indices[0].results.index).toEqual('index0');
     expect(secondRenderOptions.indices[0].results.hits).toEqual(firstIndexHits);
-    expect(secondRenderOptions.indices[1].index).toEqual('index1');
+    expect(secondRenderOptions.indices[1].indexName).toEqual('index1');
     expect(secondRenderOptions.indices[1].hits).toEqual(secondIndexHits);
     expect(secondRenderOptions.indices[1].results.index).toEqual('index1');
     expect(secondRenderOptions.indices[1].results.hits).toEqual(

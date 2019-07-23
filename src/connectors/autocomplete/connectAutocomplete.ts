@@ -21,7 +21,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 interface AutocompleteIndex {
-  index: string;
+  indexName: string;
   hits: Hits;
   results: SearchResults;
 }
@@ -123,7 +123,7 @@ The \`indices\` option is ignored.`
             : scopedResult.results.hits;
 
           return {
-            index: scopedResult.results.index,
+            indexName: scopedResult.results.index,
             hits: scopedResult.results.hits,
             results: scopedResult.results,
           };
