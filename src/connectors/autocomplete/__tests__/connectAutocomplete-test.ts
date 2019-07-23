@@ -269,6 +269,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
   });
 
   describe('getConfiguration', () => {
+    it('takes the existing `query` from the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn);
+      const widget = makeWidget({});
+
+      const nextConfiguation = widget.getConfiguration!(
+        new SearchParameters({
+          query: 'First query',
+        })
+      );
+
+      expect(nextConfiguation.query).toBe('First query');
+    });
+
     it('adds a `query` to the `SearchParameters`', () => {
       const renderFn = () => {};
       const makeWidget = connectAutocomplete(renderFn);

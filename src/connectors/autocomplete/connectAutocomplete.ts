@@ -88,7 +88,7 @@ The \`indices\` option is ignored.`
 
       getConfiguration(previousParameters) {
         const parameters = {
-          query: '',
+          query: previousParameters.query || '',
         };
 
         if (!escapeHTML) {
