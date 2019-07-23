@@ -18,6 +18,7 @@ import {
   resolveSearchParameters,
   // enhanceConfiguration,
   mergeSearchParameters,
+  isEqual,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -61,6 +62,7 @@ const index = (props: IndexProps): Index => {
   let localParent: Index | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
+  let isFirstRender = true;
 
   if (indexName === null) {
     throw new Error(withUsage('The `indexName` option is required.'));
@@ -312,7 +314,7 @@ const index = (props: IndexProps): Index => {
         });
 
         // @ts-ignore
-        localInstantSearchInstance._routingManager.onChange(localUiState);
+        localInstantSearchInstance._routingManager.onChange();
 
         console.log('localUiState', indexName, localUiState);
       });
@@ -352,6 +354,30 @@ const index = (props: IndexProps): Index => {
     },
 
     render({ instantSearchInstance }: RenderOptions) {
+      // Hack for backward compatibily with `searchFunction` + `routing`
+      // https://github.com/algolia/instantsearch.js/blob/509513c0feafaad522f6f18d87a441559f4aa050/src/lib/RoutingManager.ts#L113-L130
+      if (localParent === null && isFirstRender) {
+        isFirstRender = false;
+        // Compare initial state and first render state to see if the query has been
+        // changed by the `searchFunction`. It's required because the helper of the
+        // `searchFunction` does not trigger change event (not the same instance).
+        // @ts-ignore
+        const { indices, ...firstRenderUiState } = getLocalUiState({
+          parameters: helper!.state,
+        });
+
+        if (!isEqual(localUiState, firstRenderUiState)) {
+          // Force update the URL, if the state has changed since the initial read.
+          // We do this in order to make the URL update when there is `searchFunction`
+          // that prevents the search of the initial rendering.
+          // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
+          localUiState = firstRenderUiState;
+
+          // @ts-ignore
+          localInstantSearchInstance._routingManager.onChange();
+        }
+      }
+
       localWidgets.forEach(widget => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
