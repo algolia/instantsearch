@@ -236,7 +236,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       // We don't use `addWidgets` because we have to ensure that `RoutingManager`
       // is the last widget added. Otherwise we have an issue with the `routing`.
       // https://github.com/algolia/instantsearch.js/pull/3149
-      this.mainIndex.getWidgets().push(routingManager);
+      // this.mainIndex.getWidgets().push(routingManager);
+      this._routingManager = routingManager;
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
@@ -284,6 +285,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     });
 
     this.mainHelper = mainHelper;
+
+    this._routingManager.setupRouting();
 
     this.mainIndex.init({
       instantSearchInstance: this,
@@ -376,41 +379,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     };
 
     return loop(this.mainIndex.getUiState(), this.mainIndex);
-  }
-
-  // This uiState is a mocked version of the one retrived by the
-  // RoutingManager. Real world it comes from the storage e.g. URL.
-  initialWidgetState = {
-    refinementList: {
-      brand: ['Apple'],
-    },
-    query: 'apple',
-    configure: {
-      hitsPerPage: 4,
-      attributesToSnippet: ['description:15'],
-      snippetEllipsisText: '[…]',
-    },
-    indices: {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      instant_search_price_asc: {
-        configure: {
-          hitsPerPage: 2,
-        },
-        menu: {
-          categories: 'Computers & Tablets',
-        },
-      },
-    },
-  };
-
-  getInitialWidgetState(indexName) {
-    if (indexName === null) {
-      // This is the root index
-      const { indices, ...rest } = this.initialWidgetState;
-      return rest;
-    }
-
-    return this.initialWidgetState.indices[indexName];
   }
 
   createURL(params) {

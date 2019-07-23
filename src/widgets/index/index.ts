@@ -28,9 +28,20 @@ type IndexProps = {
   indexName: string;
 };
 
+type GetSearchParametersOptions = {
+  parameters: SearchParameters;
+};
+
+type GetUiStateOptions = {
+  parameters: SearchParameters;
+};
+
 export type Index = Widget & {
   $$type: string;
+  getIndexName(): string;
   getUiState(): UiState;
+  setUiState(uiState: UiState): void;
+  getSearchParameters(options: GetSearchParametersOptions): SearchParameters;
   getHelper(): Helper | null;
   getParent(): Index | null;
   getWidgets(): Widget[];
@@ -55,18 +66,10 @@ const index = (props: IndexProps): Index => {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
-  type LocalSearchParametersArgs = {
-    widgets: Widget[];
-    uiState: UiState;
-    parameters: SearchParameters;
-  };
-
-  const getLocalSearchParameters = ({
-    widgets,
-    uiState,
-    parameters,
-  }: LocalSearchParametersArgs): SearchParameters => {
-    return widgets
+  const getLocalSearchParameters = (
+    options: GetSearchParametersOptions
+  ): SearchParameters => {
+    return localWidgets
       .filter(widget => {
         // @ts-ignore: Use classic widget vs index
         return widget.$$type !== 'ais.index';
@@ -77,23 +80,13 @@ const index = (props: IndexProps): Index => {
         }
 
         return widget.getWidgetSearchParameters(previous, {
-          uiState,
+          uiState: localUiState,
         });
-      }, parameters);
+      }, options.parameters);
   };
 
-  type LocalUiStateArgs = {
-    widgets: Widget[];
-    helper: Helper;
-    parameters: SearchParameters;
-  };
-
-  const getLocalUiState = ({
-    widgets,
-    parameters,
-    helper: localHelper,
-  }: LocalUiStateArgs): UiState => {
-    return widgets
+  const getLocalUiState = (options: GetUiStateOptions): UiState => {
+    return localWidgets
       .filter(widget => {
         // @ts-ignore: Use classic widget vs index
         return widget.$$type !== 'ais.index';
@@ -104,8 +97,8 @@ const index = (props: IndexProps): Index => {
         }
 
         return widget.getWidgetState(previous, {
-          searchParameters: parameters,
-          helper: localHelper,
+          searchParameters: options.parameters,
+          helper: helper!,
         });
       }, {});
   };
@@ -113,8 +106,22 @@ const index = (props: IndexProps): Index => {
   return {
     $$type: 'ais.index',
 
+    getIndexName() {
+      return indexName;
+    },
+
     getUiState() {
       return localUiState;
+    },
+
+    setUiState(uiState) {
+      localUiState = uiState;
+    },
+
+    getSearchParameters({ parameters }) {
+      return getLocalSearchParameters({
+        parameters,
+      });
     },
 
     getHelper() {
@@ -169,8 +176,6 @@ const index = (props: IndexProps): Index => {
           //   ...helper!.state,
           // })
           getLocalSearchParameters({
-            widgets: localWidgets,
-            uiState: localUiState,
             parameters: helper!.state,
           })
         );
@@ -224,8 +229,6 @@ const index = (props: IndexProps): Index => {
           //   ...nextState,
           // })
           getLocalSearchParameters({
-            widgets: localWidgets,
-            uiState: localUiState,
             parameters: nextState,
           })
         );
@@ -241,7 +244,7 @@ const index = (props: IndexProps): Index => {
     init({ instantSearchInstance, parent }: InitOptions) {
       localUiState =
         // @ts-ignore
-        instantSearchInstance.getInitialWidgetState(
+        instantSearchInstance._routingManager.getInitialWidgetState(
           parent === null ? null : indexName
         ) || {};
 
@@ -266,8 +269,6 @@ const index = (props: IndexProps): Index => {
         indexName,
         // localWidgets.reduce(enhanceConfiguration, initialSearchParameters)
         getLocalSearchParameters({
-          widgets: localWidgets,
-          uiState: localUiState,
           parameters: algoliasearchHelper.SearchParameters.make(
             initialSearchParameters
           ),
@@ -298,10 +299,13 @@ const index = (props: IndexProps): Index => {
 
       helper.on('change', ({ state }) => {
         localUiState = getLocalUiState({
-          widgets: localWidgets,
           parameters: state,
-          helper: helper!,
         });
+
+        // @ts-ignore
+        localInstantSearchInstance._routingManager.onChange(localUiState);
+
+        console.log('localUiState', indexName, localUiState);
       });
 
       derivedHelper = mainHelper.derive(() =>
