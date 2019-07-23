@@ -65,7 +65,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     expect(typeof widget.getConfiguration).toEqual('function');
-    expect(widget.getConfiguration()).toEqual({});
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({})
+    );
 
     expect(renderFn).toHaveBeenCalledTimes(0);
 
@@ -173,9 +175,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    expect(widget.getConfiguration()).toEqual({
-      hitsPerPage: 10,
-    });
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect.objectContaining({
+        hitsPerPage: 10,
+      })
+    );
   });
 
   it('Does not configures the search when there is no default value', () => {
@@ -188,7 +192,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    expect(widget.getConfiguration()).toEqual({});
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({})
+    );
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
@@ -508,7 +514,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ],
       });
 
-      const helper = algoliasearchHelper({}, '', widget.getConfiguration({}));
+      const helper = algoliasearchHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters({}))
+      );
       helper.search = jest.fn();
 
       widget.init({
