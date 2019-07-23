@@ -15,6 +15,8 @@ function getId(props) {
 
 const namespace = 'toggle';
 
+const falsyStrings = ['0', 'false', 'null', 'undefined'];
+
 function getCurrentRefinement(props, searchState, context) {
   const currentRefinement = getCurrentRefinementValue(
     props,
@@ -24,10 +26,11 @@ function getCurrentRefinement(props, searchState, context) {
     false
   );
 
-  if (currentRefinement) {
-    return currentRefinement;
+  if (falsyStrings.indexOf(currentRefinement) !== -1) {
+    return false;
   }
-  return false;
+
+  return Boolean(currentRefinement);
 }
 
 function refine(props, searchState, nextRefinement, context) {
