@@ -53,6 +53,16 @@ describe('connectToggleRefinement', () => {
       expect(actual.currentRefinement).toBe(false);
     });
 
+    it('expect `currentRefinement` to be `false` when searchState is a string considered falsy', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = { toggle: { shipping: 'false' } };
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(false);
+    });
+
     it('expect `currentRefinement` to be `defaultRefinement`', () => {
       const props = {
         defaultRefinement: true,
@@ -399,6 +409,18 @@ describe('connectToggleRefinement', () => {
     it('expect `currentRefinement` to be `false` when the value is not checked', () => {
       const props = { attribute: 'shipping', value: true };
       const searchState = createMultiIndexSearchState();
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(false);
+    });
+
+    it('expect `currentRefinement` to be `false` when searchState is a string considered falsy', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState({
+        toggle: { shipping: 'false' },
+      });
       const searchResults = {};
 
       const actual = getProvidedProps(props, searchState, searchResults);
