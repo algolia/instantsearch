@@ -74,6 +74,11 @@ declare namespace algoliasearchHelper {
     search(): this;
 
     /**
+     * Private method to only search on derived helpers
+     */
+    searchOnlyWithDerivedHelpers(): this;
+
+    /**
      * Gets the search query parameters that would be sent to the Algolia Client
      * for the hits
      */
