@@ -4,21 +4,38 @@ import { withHits } from '../.storybook/decorators';
 storiesOf('Autocomplete', module).add(
   'default',
   withHits(({ search, container, instantsearch }) => {
-    const instantSearchRatingAscSearchBox = document.createElement('div');
     const instantSearchAutocomplete = document.createElement('div');
 
-    container.appendChild(instantSearchRatingAscSearchBox);
     container.appendChild(instantSearchAutocomplete);
 
     const customAutocomplete = instantsearch.connectors.connectAutocomplete(
-      renderOptions => {
-        const { indices, widgetParams } = renderOptions;
+      (renderOptions, isFirstRender) => {
+        const {
+          indices,
+          currentRefinement,
+          refine,
+          widgetParams,
+        } = renderOptions;
 
-        widgetParams.container.innerHTML = indices
+        if (isFirstRender) {
+          const input = document.createElement('input');
+          input.classList.add('ais-SearchBox-input');
+          const list = document.createElement('ul');
+
+          input.addEventListener('input', (event: any) => {
+            refine(event.currentTarget.value);
+          });
+
+          widgetParams.container.appendChild(input);
+          widgetParams.container.appendChild(list);
+        }
+
+        widgetParams.container.querySelector('input').value = currentRefinement;
+        widgetParams.container.querySelector('ul').innerHTML = indices
           .map(
-            ({ index, hits }) => `
+            ({ indexName, hits }) => `
 <li>
-  Index: <strong>${index}</strong>
+  Index: <strong>${indexName}</strong>
   <ol>
     ${hits
       .map(
@@ -39,11 +56,6 @@ storiesOf('Autocomplete', module).add(
         .addWidgets([
           instantsearch.widgets.configure({
             hitsPerPage: 3,
-          }),
-
-          instantsearch.widgets.searchBox({
-            container: instantSearchRatingAscSearchBox,
-            placeholder: 'Search in the autocomplete list',
           }),
 
           customAutocomplete({
