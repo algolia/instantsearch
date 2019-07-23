@@ -1,7 +1,4 @@
-import {
-  AlgoliaSearchHelper as Helper,
-  SearchResults,
-} from 'algoliasearch-helper';
+import { SearchResults } from 'algoliasearch-helper';
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
@@ -26,7 +23,7 @@ const withUsage = createDocumentationMessageGenerator({
 interface AutocompleteIndex {
   index: string;
   hits: Hits;
-  results: SearchResults | undefined;
+  results: SearchResults;
 }
 
 interface AutocompleteConnectorParams {
