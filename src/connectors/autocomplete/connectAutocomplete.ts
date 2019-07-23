@@ -38,14 +38,12 @@ interface AutocompleteConnectorParams {
   escapeHTML?: boolean;
 }
 
-type RefineFunction = (query: string) => Helper;
-
 export interface AutocompleteRendererOptions<TAutocompleteWidgetParams>
   extends RendererOptions<TAutocompleteWidgetParams> {
   currentRefinement: string;
   indices: AutocompleteIndex[];
   instantSearchInstance: InstantSearch;
-  refine: RefineFunction;
+  refine: (query: string) => void;
 }
 
 export type AutocompleteRenderer<TAutocompleteWidgetParams> = Renderer<
@@ -80,7 +78,7 @@ The \`indices\` option is ignored.`
 
     type ConnectorState = {
       instantSearchInstance?: InstantSearch;
-      refine?: RefineFunction;
+      refine?: (query: string) => void;
     };
 
     const connectorState: ConnectorState = {};
@@ -105,8 +103,9 @@ The \`indices\` option is ignored.`
 
       init({ instantSearchInstance, helper }) {
         connectorState.instantSearchInstance = instantSearchInstance;
-        connectorState.refine = (query: string) =>
+        connectorState.refine = (query: string) => {
           helper.setQuery(query).search();
+        };
 
         renderFn(
           {
