@@ -274,7 +274,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const makeWidget = connectPagination(renderFn);
       const widget = makeWidget();
 
-      const nextConfiguation = widget.getConfiguration();
+      const nextConfiguation = widget.getConfiguration(
+        new SearchParameters({})
+      );
 
       expect(nextConfiguation.page).toBe(0);
     });

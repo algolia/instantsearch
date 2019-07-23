@@ -100,10 +100,10 @@ export default function connectPagination(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.pagination',
 
-      getConfiguration() {
-        return {
+      getConfiguration(state) {
+        return state.setQueryParameters({
           page: 0,
-        };
+        });
       },
 
       init({ helper, createURL, instantSearchInstance }) {
