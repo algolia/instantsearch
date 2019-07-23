@@ -69,8 +69,27 @@ const connectAutocomplete: AutocompleteConnector = (
 
     warning(
       !(widgetParams as any).indices,
-      `Since InstantSearch.js 4, \`connectAutocomplete\` infers the indices from the tree of widgets.
-The \`indices\` option is ignored.`
+      `
+The option \`indices\` has been removed from the Autocomplete connector.
+
+The indices to target are now inferred from the widgets tree.
+${
+  Array.isArray((widgetParams as any).indices)
+    ? `
+An alternative would be:
+
+const autocomplete = connectAutocomplete(renderer);
+
+search.addWidgets([
+  ${(widgetParams as any).indices
+    .map(({ value }: { value: string }) => `index({ indexName: '${value}'}),`)
+    .join('\n  ')}
+  autocomplete()
+]);
+`
+    : ''
+}
+      `
     );
 
     type ConnectorState = {

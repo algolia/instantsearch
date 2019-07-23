@@ -29,13 +29,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(render);
 
     const trigger = () => {
-      // @ts-ignore outdated `indices` option
-      makeWidget({ indices: [{ label: 'foo', value: 'foo' }] });
+      makeWidget({
+        // @ts-ignore outdated `indices` option
+        indices: [
+          { label: 'Products', value: 'products' },
+          { label: 'Services', value: 'services' },
+        ],
+      });
     };
 
-    expect(trigger).toWarnDev(
-      '[InstantSearch.js]: Since InstantSearch.js 4, `connectAutocomplete` infers the indices from the tree of widgets.\nThe `indices` option is ignored.'
-    );
+    expect(trigger)
+      .toWarnDev(`[InstantSearch.js]: The option \`indices\` has been removed from the Autocomplete connector.
+
+The indices to target are now inferred from the widgets tree.
+
+An alternative would be:
+
+const autocomplete = connectAutocomplete(renderer);
+
+search.addWidgets([
+  index({ indexName: 'products'}),
+  index({ indexName: 'services'}),
+  autocomplete()
+]);`);
   });
 
   it('is a widget', () => {
