@@ -137,6 +137,8 @@ search.addWidgets([
 
       render({ helper, scopedResults }) {
         const indices = scopedResults.map(scopedResult => {
+          // We need to escape the hits because highlighting
+          // exposes HTML tags to the end-user.
           scopedResult.results.hits = escapeHTML
             ? escapeHits(scopedResult.results.hits)
             : scopedResult.results.hits;
