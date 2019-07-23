@@ -143,18 +143,6 @@ class RoutingManager implements Widget {
       //   .search();
     });
 
-    // -> onChange
-    // this.renderURLFromState = event => {
-    //   this.currentUiState = this.getAllUiStates({
-    //     searchParameters: event.state,
-    //   });
-
-    //   const route = this.stateMapping.stateToRoute(this.currentUiState);
-
-    //   this.router.write(route);
-    // };
-
-    // helper.on('change', this.renderURLFromState);
     // // Compare initial state and first render state to see if the query has been
     // // changed by the `searchFunction`. It's required because the helper of the
     // // `searchFunction` does not trigger change event (not the same instance).
@@ -180,6 +168,18 @@ class RoutingManager implements Widget {
 
     this.router.write(route);
   }
+
+  // this.renderURLFromState = event => {
+  //   this.currentUiState = this.getAllUiStates({
+  //     searchParameters: event.state,
+  //   });
+
+  //   const route = this.stateMapping.stateToRoute(this.currentUiState);
+
+  //   this.router.write(route);
+  // };
+
+  // helper.on('change', this.renderURLFromState);
 
   public getInitialWidgetState(indexName: string | null): UiState {
     if (indexName === null) {
@@ -234,16 +234,39 @@ class RoutingManager implements Widget {
   //   }
   // }
 
-  public createURL(state: SearchParameters): string {
-    // @TODO: implement
+  public createURL({
+    indexId,
+    uiState,
+  }: {
+    indexId: string | null;
+    uiState: UiState;
+  }): string {
     // const uiState = this.getAllUiStates({
     //   searchParameters: state,
     // });
 
-    // const route = this.stateMapping.stateToRoute(uiState);
+    // @ts-ignore
+    const currentUiState = this.instantSearchInstance.getWidgetState();
 
-    // return this.router.createURL(route);
-    return '';
+    let nextUiState: UiState;
+    if (indexId === null) {
+      nextUiState = {
+        ...currentUiState,
+        ...uiState,
+      };
+    } else {
+      nextUiState = {
+        ...currentUiState,
+        indices: {
+          ...currentUiState.indices,
+          [indexId]: uiState,
+        },
+      };
+    }
+
+    const route = this.stateMapping.stateToRoute(nextUiState);
+
+    return this.router.createURL(route);
   }
 }
 

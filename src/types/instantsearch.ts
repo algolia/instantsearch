@@ -108,7 +108,8 @@ export type InstantSearch = {
   templatesConfig: object;
   _isSearchStalled: boolean;
   _searchParameters: Partial<SearchParameters>;
-  _createAbsoluteURL(state: Partial<SearchParameters>): string;
+  _createAbsoluteURL(state: any): string;
+  // _createAbsoluteURL(state: Partial<SearchParameters>): string;
   scheduleSearch(): void;
   scheduleRender(): void;
   scheduleStalledRender(): void;

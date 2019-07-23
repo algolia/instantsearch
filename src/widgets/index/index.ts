@@ -103,6 +103,15 @@ const index = (props: IndexProps): Index => {
       }, {});
   };
 
+  const createURL = (state: SearchParameters): string => {
+    return localInstantSearchInstance!._createAbsoluteURL({
+      indexId: parent === null ? null : indexName,
+      uiState: getLocalUiState({
+        parameters: state,
+      }),
+    });
+  };
+
   return {
     $$type: 'ais.index',
 
@@ -335,7 +344,8 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            // createURL: instantSearchInstance._createAbsoluteURL,
+            createURL,
           });
         }
       });
@@ -357,7 +367,8 @@ const index = (props: IndexProps): Index => {
             results: derivedHelper!.lastResults,
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            // createURL: instantSearchInstance._createAbsoluteURL,
+            createURL,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },
