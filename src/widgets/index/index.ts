@@ -267,9 +267,12 @@ const index = (props: IndexProps): Index => {
     init({ instantSearchInstance, parent }: InitOptions) {
       localUiState =
         // @ts-ignore
-        instantSearchInstance._routingManager.getInitialWidgetState(
-          parent === null ? null : indexName
-        ) || {};
+        (instantSearchInstance._routingManager &&
+          // @ts-ignore
+          instantSearchInstance._routingManager.getInitialWidgetState(
+            parent === null ? null : indexName
+          )) ||
+        {};
 
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
@@ -326,7 +329,10 @@ const index = (props: IndexProps): Index => {
         });
 
         // @ts-ignore
-        localInstantSearchInstance._routingManager.onChange();
+        // eslint-disable-next-line no-unused-expressions
+        localInstantSearchInstance._routingManager &&
+          // @ts-ignore
+          localInstantSearchInstance._routingManager.onChange();
 
         console.log('localUiState', indexName, localUiState);
       });
@@ -386,7 +392,10 @@ const index = (props: IndexProps): Index => {
           localUiState = firstRenderUiState;
 
           // @ts-ignore
-          localInstantSearchInstance._routingManager.onChange();
+          // eslint-disable-next-line no-unused-expressions
+          localInstantSearchInstance._routingManager &&
+            // @ts-ignore
+            localInstantSearchInstance._routingManager.onChange();
         }
       }
 

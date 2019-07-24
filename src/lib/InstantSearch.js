@@ -286,7 +286,9 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     this.mainHelper = mainHelper;
 
-    this._routingManager.setupRouting();
+    if (this.routing) {
+      this._routingManager.setupRouting();
+    }
 
     this.mainIndex.init({
       instantSearchInstance: this,
