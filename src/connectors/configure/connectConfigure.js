@@ -113,14 +113,18 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
       getWidgetState(uiState) {
         return {
           ...uiState,
-          configure: widgetParams.searchParameters,
+          configure: {
+            ...uiState.configure,
+            ...widgetParams.searchParameters,
+          },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQueryParameters(
-          uiState.configure || widgetParams.searchParameters
-        );
+        return searchParameters.setQueryParameters({
+          ...uiState.configure,
+          ...widgetParams.searchParameters,
+        });
       },
     };
   };
