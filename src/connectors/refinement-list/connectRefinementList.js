@@ -410,12 +410,22 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         const values =
           uiState.refinementList && uiState.refinementList[attribute];
 
+        // This step is required because the state we get is the one from a
+        // previous render. Without a clear refinement call the state persit
+        // but it actually might be removed. We don't get a fresh instance to
+        // allow custom widget to alter the state without having to implement
+        // the routing lifecycle. This behaviour is for backward compatibility.
+        // https://github.com/algolia/instantsearch.js/issues/3629
+        const withoutRefinements = isConjonctive
+          ? searchParameters.removeFacet(attribute)
+          : searchParameters.removeDisjunctiveFacet(attribute);
+
         const withFacetConfiguration = isConjonctive
-          ? searchParameters.addFacet(attribute)
-          : searchParameters.addDisjunctiveFacet(attribute);
+          ? withoutRefinements.addFacet(attribute)
+          : withoutRefinements.addDisjunctiveFacet(attribute);
 
         const previousMaxValuesPerFacet =
-          searchParameters.maxValuesPerFacet || 0;
+          withFacetConfiguration.maxValuesPerFacet || 0;
 
         const currentMaxValuesPerFacet = Math.max(
           previousMaxValuesPerFacet,
@@ -429,13 +439,17 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         );
 
         if (!values) {
-          const previousValue =
-            withMaxValuesPerFacet.disjunctiveFacetsRefinements[attribute];
+          // Widget that implements routing are driven by the uiState we don't care
+          // about the previous value anymore, otherwise we always keep the previous
+          // refinement.
+          // const previousValue =
+          //   withMaxValuesPerFacet.disjunctiveFacetsRefinements[attribute];
 
           return withMaxValuesPerFacet.setQueryParameters({
             disjunctiveFacetsRefinements: {
               ...withMaxValuesPerFacet.disjunctiveFacetsRefinements,
-              [attribute]: previousValue || [],
+              [attribute]: [],
+              // [attribute]: previousValue || [],
             },
           });
         }
