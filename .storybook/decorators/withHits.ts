@@ -1,5 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
+import { MemoryRouter } from '../MemoryRouter';
 import instantsearch from '../../src/index';
 import defaultPlayground from '../playgrounds/default';
 
@@ -24,7 +25,7 @@ export const withHits = (
     ...instantsearchOptions
   } = searchOptions || {};
 
-  const urlLogger = action('Routing state');
+  // const urlLogger = action('Routing state');
   const search = instantsearch({
     indexName,
     searchClient: algoliasearch(appId, apiKey),
@@ -35,14 +36,28 @@ export const withHits = (
       ...searchParameters,
     },
     routing: {
-      router: {
-        write: (routeState: object) => {
-          urlLogger(JSON.stringify(routeState, null, 2));
-        },
-        read: () => ({}),
-        createURL: () => '',
-        onUpdate: () => {},
-      },
+      router: new MemoryRouter({
+        // refinementList: {
+        //   brand: ['Apple'],
+        // },
+        query: 'phone',
+        // configure: {
+        //   hitsPerPage: 4,
+        //   attributesToSnippet: ['description:15'],
+        //   snippetEllipsisText: '[…]',
+        // },
+        // indices: {
+        //   // eslint-disable-next-line @typescript-eslint/camelcase
+        //   instant_search_price_asc: {
+        //     configure: {
+        //       hitsPerPage: 2,
+        //     },
+        //     menu: {
+        //       categories: 'Computers & Tablets',
+        //     },
+        //   },
+        // },
+      }),
     },
     ...instantsearchOptions,
   });

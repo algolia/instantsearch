@@ -45,44 +45,44 @@ function instantSearchPlayground({
     })
   );
 
-  const numericMenu = document.createElement('div');
-  leftPanel.appendChild(numericMenu);
+  // const numericMenu = document.createElement('div');
+  // leftPanel.appendChild(numericMenu);
 
-  const priceMenu = instantsearch.widgets.panel({
-    templates: {
-      header: 'Price',
-    },
-  })(instantsearch.widgets.numericMenu);
+  // const priceMenu = instantsearch.widgets.panel({
+  //   templates: {
+  //     header: 'Price',
+  //   },
+  // })(instantsearch.widgets.numericMenu);
 
-  search.addWidget(
-    priceMenu({
-      container: numericMenu,
-      attribute: 'price',
-      items: [
-        { label: 'All' },
-        { label: '≤ 10$', end: 10 },
-        { label: '10–100$', start: 10, end: 100 },
-        { label: '100–500$', start: 100, end: 500 },
-        { label: '≥ 500$', start: 500 },
-      ],
-    })
-  );
+  // search.addWidget(
+  //   priceMenu({
+  //     container: numericMenu,
+  //     attribute: 'price',
+  //     items: [
+  //       { label: 'All' },
+  //       { label: '≤ 10$', end: 10 },
+  //       { label: '10–100$', start: 10, end: 100 },
+  //       { label: '100–500$', start: 100, end: 500 },
+  //       { label: '≥ 500$', start: 500 },
+  //     ],
+  //   })
+  // );
 
-  const ratingMenu = document.createElement('div');
-  leftPanel.appendChild(ratingMenu);
+  // const ratingMenu = document.createElement('div');
+  // leftPanel.appendChild(ratingMenu);
 
-  const ratingList = instantsearch.widgets.panel({
-    templates: {
-      header: 'Rating',
-    },
-  })(instantsearch.widgets.ratingMenu);
+  // const ratingList = instantsearch.widgets.panel({
+  //   templates: {
+  //     header: 'Rating',
+  //   },
+  // })(instantsearch.widgets.ratingMenu);
 
-  search.addWidget(
-    ratingList({
-      container: ratingMenu,
-      attribute: 'rating',
-    })
-  );
+  // search.addWidget(
+  //   ratingList({
+  //     container: ratingMenu,
+  //     attribute: 'rating',
+  //   })
+  // );
 
   const searchBox = document.createElement('div');
   searchBox.classList.add('searchbox');
@@ -121,14 +121,14 @@ function instantSearchPlayground({
     })
   );
 
-  const pagination = document.createElement('div');
-  rightPanel.appendChild(pagination);
+  // const pagination = document.createElement('div');
+  // rightPanel.appendChild(pagination);
 
-  search.addWidget(
-    instantsearch.widgets.pagination({
-      container: pagination,
-    })
-  );
+  // search.addWidget(
+  //   instantsearch.widgets.pagination({
+  //     container: pagination,
+  //   })
+  // );
 }
 
 export default instantSearchPlayground;

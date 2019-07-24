@@ -65,36 +65,54 @@ storiesOf('Index', module)
   )
   .add(
     'with add/remove',
-    withHits(({ search, container, instantsearch }) => {
-      const lifecycle = document.createElement('div');
-      const preview = document.createElement('div');
+    withHits(
+      ({ search, container, instantsearch }) => {
+        const lifecycle = document.createElement('div');
+        const preview = document.createElement('div');
 
-      container.appendChild(lifecycle);
-      container.appendChild(preview);
+        container.appendChild(lifecycle);
+        container.appendChild(preview);
 
-      const instantSearchPriceAscHits = document.createElement('div');
-      const instantSearchPriceAsc = document.createElement('div');
+        const instantSearchPriceAscHits = document.createElement('div');
+        const instantSearchPriceAscMenu = document.createElement('div');
+        const instantSearchPriceAsc = document.createElement('div');
 
-      preview.appendChild(instantSearchPriceAsc);
-      preview.appendChild(instantSearchPriceAscHits);
+        preview.appendChild(instantSearchPriceAsc);
+        preview.appendChild(instantSearchPriceAscMenu);
+        preview.appendChild(instantSearchPriceAscHits);
 
-      withLifecycle(search, lifecycle, () =>
-        instantsearch.widgets
-          .index({ indexName: 'instant_search_price_asc' })
-          .addWidgets([
-            instantsearch.widgets.configure({
-              hitsPerPage: 2,
-            }),
-            instantsearch.widgets.hits({
-              container: instantSearchPriceAscHits,
-              templates: {
-                item: hitsItemTemplate,
-              },
-              cssClasses: {
-                item: 'hits-item',
-              },
-            }),
-          ])
-      );
-    })
+        withLifecycle(search, lifecycle, () =>
+          instantsearch.widgets
+            .index({ indexName: 'instant_search_price_asc' })
+            .addWidgets([
+              instantsearch.widgets.configure({
+                hitsPerPage: 2,
+              }),
+
+              instantsearch.widgets.menu({
+                container: instantSearchPriceAscMenu,
+                attribute: 'categories',
+                limit: 5,
+              }),
+
+              instantsearch.widgets.hits({
+                container: instantSearchPriceAscHits,
+                templates: {
+                  item: hitsItemTemplate,
+                },
+                cssClasses: {
+                  item: 'hits-item',
+                },
+              }),
+            ])
+        );
+      },
+      {
+        initialUiState: {
+          refinementList: {
+            brand: ['Sony', 'GE'],
+          },
+        },
+      }
+    )
   );
