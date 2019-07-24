@@ -366,6 +366,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         .getWidgets()
         .filter(w => w.$$type === 'ais.index')
         .reduce((previous, innerIndex) => {
+          if (!innerIndex.getHelper()) {
+            return loop(previous, innerIndex);
+          }
+
           return loop(
             {
               ...previous,
