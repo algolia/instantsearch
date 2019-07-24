@@ -102,7 +102,7 @@ export default function connectPagination(renderFn, unmountFn = noop) {
 
       getConfiguration(state) {
         return state.setQueryParameters({
-          page: 0,
+          page: state.page || 0,
         });
       },
 
