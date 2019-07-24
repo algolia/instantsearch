@@ -120,10 +120,14 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.hitsPerPage',
 
-      getConfiguration() {
-        return defaultValues.length > 0
-          ? { hitsPerPage: defaultValues[0].value }
-          : {};
+      getConfiguration(state) {
+        if (!defaultValue) {
+          return state;
+        }
+
+        return state.setQueryParameters({
+          hitsPerPage: state.hitsPerPage || defaultValue.value,
+        });
       },
 
       init({ helper, createURL, state, instantSearchInstance }) {
