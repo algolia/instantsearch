@@ -90,7 +90,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
 
       getConfiguration(config) {
         const parameters = {
-          page: 0,
+          page: config.page || 0,
         };
 
         if (!escapeHTML) {
