@@ -141,7 +141,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       const nextConfiguration = widget.getConfiguration(new SearchParameters());
 
-      expect(nextConfiguration.query).toBe('');
+      expect(nextConfiguration).toEqual(
+        new SearchParameters({
+          query: '',
+        })
+      );
+    });
+
+    it('support previous `query` from the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      const nextConfiguration = widget.getConfiguration(
+        new SearchParameters({
+          query: 'Previous query',
+        })
+      );
+
+      expect(nextConfiguration).toEqual(
+        new SearchParameters({
+          query: 'Previous query',
+        })
+      );
     });
   });
 
