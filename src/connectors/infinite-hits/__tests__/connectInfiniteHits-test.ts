@@ -658,16 +658,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   describe('getConfiguration', () => {
+    it('returns `SearchParameters`', () => {
+      const renderFn = (): void => {};
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({});
+
+      expect(widget.getConfiguration!(new SearchParameters())).toBeInstanceOf(
+        SearchParameters
+      );
+    });
+
     it('adds a `page` to the `SearchParameters`', () => {
       const renderFn = (): void => {};
       const makeWidget = connectInfiniteHits(renderFn);
       const widget = makeWidget({});
 
-      const nextConfiguration = widget.getConfiguration!(
-        new SearchParameters()
-      );
+      expect(widget.getConfiguration!(new SearchParameters()).page).toEqual(0);
+    });
 
-      expect(nextConfiguration.page).toBe(0);
+    it('supports previous `page` from the `SearchParameters`', () => {
+      const renderFn = (): void => {};
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({});
+
+      expect(
+        widget.getConfiguration!(new SearchParameters({ page: 0 })).page
+      ).toEqual(0);
+
+      expect(
+        widget.getConfiguration!(new SearchParameters({ page: 6 })).page
+      ).toEqual(6);
     });
 
     it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
