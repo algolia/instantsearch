@@ -1568,4 +1568,174 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
     });
   });
+
+  describe('dispose', () => {
+    it('removes refinements completely on dispose (and)', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectRefinementList(rendering);
+
+      const widget = makeWidget({
+        attribute: 'category',
+        operator: 'and',
+      });
+
+      const indexName = 'my-index';
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters({}))
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          facets: ['category'],
+          facetsRefinements: {
+            category: [],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      refine('zimbo');
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          facets: ['category'],
+          facetsRefinements: {
+            category: ['zimbo'],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      const newState = widget.dispose({
+        state: helper.state,
+      });
+
+      expect(newState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
+    });
+
+    it('removes refinements completely on dispose (or)', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectRefinementList(rendering);
+
+      const widget = makeWidget({
+        attribute: 'category',
+        operator: 'or',
+      });
+
+      const indexName = 'my-index';
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters({}))
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['category'],
+          disjunctiveFacetsRefinements: {
+            category: [],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      refine('zimbo');
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['category'],
+          disjunctiveFacetsRefinements: {
+            category: ['zimbo'],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      const newState = widget.dispose({
+        state: helper.state,
+      });
+
+      expect(newState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
+    });
+  });
 });

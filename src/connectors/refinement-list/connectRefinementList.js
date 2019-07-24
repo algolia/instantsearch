@@ -9,7 +9,6 @@ import {
   TAG_PLACEHOLDER,
   TAG_REPLACEMENT,
 } from '../../lib/escape-highlight';
-import algoliasearchHelper from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -389,10 +388,14 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
+        let newState;
         if (operator === 'and') {
-          return state.removeFacet(attribute);
+          newState = state.removeFacet(attribute);
+        } else {
+          newState = state.removeDisjunctiveFacet(attribute);
         }
-        return state.removeDisjunctiveFacet(attribute);
+
+        return newState.setQueryParameter('maxValuesPerFacet', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
