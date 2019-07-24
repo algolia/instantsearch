@@ -190,9 +190,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         'true',
       ]);
       refine({ isRefined: !value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
-        undefined
-      );
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([]);
     }
 
     widget.render({
@@ -214,9 +212,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
     {
       // Second rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
-        undefined
-      );
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([]);
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
@@ -286,9 +282,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         },
       });
       refine(value);
-      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
-        undefined
-      );
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([]);
     }
   });
 
