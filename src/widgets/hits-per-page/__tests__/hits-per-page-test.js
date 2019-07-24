@@ -1,4 +1,5 @@
 import { render } from 'preact-compat';
+import { SearchParameters } from 'algoliasearch-helper';
 import hitsPerPage from '../hits-per-page';
 
 jest.mock('preact-compat', () => {
@@ -62,7 +63,9 @@ describe('hitsPerPage()', () => {
 
   it('does not configure the default hits per page if not specified', () => {
     expect(typeof widget.getConfiguration).toEqual('function');
-    expect(widget.getConfiguration()).toEqual({});
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({})
+    );
   });
 
   it('does configures the default hits per page if specified', () => {
@@ -74,9 +77,13 @@ describe('hitsPerPage()', () => {
       ],
     });
 
-    expect(widgetWithDefaults.getConfiguration()).toEqual({
-      hitsPerPage: 20,
-    });
+    expect(
+      widgetWithDefaults.getConfiguration(new SearchParameters({}))
+    ).toEqual(
+      new SearchParameters({
+        hitsPerPage: 20,
+      })
+    );
   });
 
   it('calls twice render(<Selector props />, container)', () => {
