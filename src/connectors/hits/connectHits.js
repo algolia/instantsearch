@@ -65,9 +65,7 @@ export default function connectHits(renderFn, unmountFn = noop) {
           return state;
         }
 
-        return state.setQueryParameters({
-          ...TAG_PLACEHOLDER,
-        });
+        return state.setQueryParameters(TAG_PLACEHOLDER);
       },
 
       init({ instantSearchInstance }) {
