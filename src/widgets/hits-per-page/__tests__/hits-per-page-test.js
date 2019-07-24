@@ -80,7 +80,7 @@ describe('hitsPerPage()', () => {
     expect(
       widgetWithDefaults.getConfiguration(new SearchParameters({}))
     ).toEqual(
-      expect.objectContaining({
+      new SearchParameters({
         hitsPerPage: 20,
       })
     );
