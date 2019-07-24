@@ -82,7 +82,7 @@ const autocomplete = connectAutocomplete(renderer);
 
 search.addWidgets([
   ${(widgetParams as any).indices
-    .map(({ value }: { value: string }) => `index({ indexName: '${value}'}),`)
+    .map(({ value }: { value: string }) => `index({ indexName: '${value}' }),`)
     .join('\n  ')}
   autocomplete()
 ]);

@@ -48,8 +48,8 @@ An alternative would be:
 const autocomplete = connectAutocomplete(renderer);
 
 search.addWidgets([
-  index({ indexName: 'products'}),
-  index({ indexName: 'services'}),
+  index({ indexName: 'products' }),
+  index({ indexName: 'services' }),
   autocomplete()
 ]);`);
   });
