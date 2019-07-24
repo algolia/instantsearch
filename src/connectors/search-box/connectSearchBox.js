@@ -86,10 +86,10 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         this._clear();
       },
 
-      getConfiguration() {
-        return {
-          query: '',
-        };
+      getConfiguration(state) {
+        return state.setQueryParameters({
+          query: state.query || '',
+        });
       },
 
       init({ helper, instantSearchInstance }) {

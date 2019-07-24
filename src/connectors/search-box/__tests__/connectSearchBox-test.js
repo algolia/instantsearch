@@ -294,9 +294,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       const makeWidget = connectSearchBox(renderFn);
       const widget = makeWidget();
 
-      const nextConfiguration = widget.getConfiguration();
+      const nextConfiguration = widget.getConfiguration(
+        new SearchParameters({})
+      );
 
-      expect(nextConfiguration.query).toBe('');
+      expect(nextConfiguration).toEqual(
+        new SearchParameters({
+          query: '',
+        })
+      );
+    });
+
+    it('takes the default `query` from the `SearchParameters` passed', () => {
+      const renderFn = () => {};
+      const makeWidget = connectSearchBox(renderFn);
+      const widget = makeWidget();
+
+      const nextConfiguration = widget.getConfiguration(
+        new SearchParameters({
+          query: 'Previous query',
+        })
+      );
+
+      expect(nextConfiguration).toEqual(
+        new SearchParameters({
+          query: 'Previous query',
+        })
+      );
     });
   });
 
