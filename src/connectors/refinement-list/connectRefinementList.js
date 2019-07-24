@@ -315,7 +315,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           showMore ? showMoreLimit : limit
         );
 
-        return new algoliasearchHelper.SearchParameters(widgetConfiguration);
+        return configuration.setQueryParameters(widgetConfiguration);
       },
 
       init({ helper, createURL, instantSearchInstance }) {
