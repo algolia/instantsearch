@@ -77,7 +77,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       $$type: 'ais.voiceSearch',
 
       getConfiguration(config) {
-        return config.setQuery('');
+        return config.setQuery(config.query || '');
       },
 
       init({ helper, instantSearchInstance }) {
