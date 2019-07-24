@@ -119,9 +119,7 @@ class RoutingManager {
             // by custom widget that do not impleement lifecyle. We
             // have to clear the refinements inside the function then
             // otherwise we always get the previous value.
-            parameters: new algoliasearchHelper.SearchParameters({
-              index: current.getIndexName(),
-            }),
+            parameters: current.getHelper().state,
           })
         );
 
