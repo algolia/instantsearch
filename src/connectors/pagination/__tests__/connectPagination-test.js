@@ -274,9 +274,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const makeWidget = connectPagination(renderFn);
       const widget = makeWidget();
 
-      const nextConfiguation = widget.getConfiguration();
+      const nextConfiguation = widget.getConfiguration(
+        new SearchParameters({})
+      );
 
-      expect(nextConfiguation.page).toBe(0);
+      expect(nextConfiguation).toEqual(
+        new SearchParameters({
+          page: 0,
+        })
+      );
+    });
+
+    it('takes the previous `page` from the `SearchParameters`', () => {
+      const renderFn = () => {};
+      const makeWidget = connectPagination(renderFn);
+      const widget = makeWidget();
+
+      const nextConfiguation1 = widget.getConfiguration(
+        new SearchParameters({
+          page: 0,
+        })
+      );
+
+      expect(nextConfiguation1).toEqual(
+        new SearchParameters({
+          page: 0,
+        })
+      );
+
+      const nextConfiguation2 = widget.getConfiguration(
+        new SearchParameters({
+          page: 6,
+        })
+      );
+
+      expect(nextConfiguation2).toEqual(
+        new SearchParameters({
+          page: 6,
+        })
+      );
     });
   });
 
