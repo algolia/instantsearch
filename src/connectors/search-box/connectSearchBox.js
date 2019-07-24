@@ -157,7 +157,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameters({
-          query: uiState.query || searchParameters.query || '',
+          query: uiState.query || '',
         });
       },
     };
