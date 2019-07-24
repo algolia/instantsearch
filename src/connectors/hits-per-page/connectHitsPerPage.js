@@ -126,7 +126,7 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
         }
 
         return state.setQueryParameters({
-          hitsPerPage: defaultValue.value,
+          hitsPerPage: state.hitsPerPage || defaultValue.value,
         });
       },
 
