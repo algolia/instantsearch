@@ -50,7 +50,7 @@
     "es"
   ],
   "dependencies": {
-    "algoliasearch-helper": "0.0.0-c4a4e01",
+    "algoliasearch-helper": "0.0.0-6ac260d",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",

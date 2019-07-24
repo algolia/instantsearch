@@ -5,7 +5,9 @@ SearchParameters {
   "disjunctiveFacets": Array [
     "isShippingFree",
   ],
-  "disjunctiveFacetsRefinements": Object {},
+  "disjunctiveFacetsRefinements": Object {
+    "isShippingFree": Array [],
+  },
   "facets": Array [],
   "facetsExcludes": Object {},
   "facetsRefinements": Object {},
