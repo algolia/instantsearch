@@ -391,9 +391,8 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
 
         if (operator === 'and') {
           return state.removeFacet(attribute);
-        } else {
-          return state.removeDisjunctiveFacet(attribute);
         }
+        return state.removeDisjunctiveFacet(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
