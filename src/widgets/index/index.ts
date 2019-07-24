@@ -323,20 +323,6 @@ const index = (props: IndexProps): Index => {
         );
       };
 
-      helper.on('change', ({ state }) => {
-        localUiState = getLocalUiState({
-          parameters: state,
-        });
-
-        // @ts-ignore
-        // eslint-disable-next-line no-unused-expressions
-        localInstantSearchInstance._routingManager &&
-          // @ts-ignore
-          localInstantSearchInstance._routingManager.onChange();
-
-        console.log('localUiState', indexName, localUiState);
-      });
-
       derivedHelper = mainHelper.derive(() =>
         mergeSearchParameters(...resolveSearchParameters(this))
       );
@@ -368,6 +354,25 @@ const index = (props: IndexProps): Index => {
             createURL,
           });
         }
+      });
+
+      // Register the event like it was registered inside the RoutingManager
+      // on the first render to avoid issues with the URL updates. It's not
+      // the exact same time but it should be fine at leat the init step has
+      // been called which means that widget that alter the state don't alter
+      // the URL at the same time.
+      helper.on('change', ({ state }) => {
+        localUiState = getLocalUiState({
+          parameters: state,
+        });
+
+        // @ts-ignore
+        // eslint-disable-next-line no-unused-expressions
+        localInstantSearchInstance._routingManager &&
+          // @ts-ignore
+          localInstantSearchInstance._routingManager.onChange();
+
+        console.log('localUiState', indexName, localUiState);
       });
     },
 
