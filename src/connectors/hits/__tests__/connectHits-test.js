@@ -98,6 +98,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     );
   });
 
+  it('sets the configuration based on the previous one', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget();
+
+    expect(
+      widget.getConfiguration(
+        new SearchParameters({
+          highlightPreTag: '<mark class="custom-class">',
+        })
+      )
+    ).toEqual(
+      new SearchParameters({
+        highlightPreTag: '<mark class="custom-class">',
+        highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
+      })
+    );
+
+    expect(
+      widget.getConfiguration(
+        new SearchParameters({
+          highlightPostTag: '</MARK>',
+        })
+      )
+    ).toEqual(
+      new SearchParameters({
+        highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+        highlightPostTag: '</MARK>',
+      })
+    );
+
+    expect(
+      widget.getConfiguration(
+        new SearchParameters({
+          highlightPreTag: '<blink>',
+          highlightPostTag: '</blink>',
+        })
+      )
+    ).toEqual(
+      new SearchParameters({
+        highlightPreTag: '<blink>',
+        highlightPostTag: '</blink>',
+      })
+    );
+
+    expect(
+      widget.getConfiguration(
+        new SearchParameters({
+          highlightPreTag: '',
+          highlightPostTag: '',
+        })
+      )
+    ).toEqual(
+      new SearchParameters({
+        highlightPreTag: '',
+        highlightPostTag: '',
+      })
+    );
+  });
+
   it('Provides the hits and the whole results', () => {
     const rendering = jest.fn();
     const makeWidget = connectHits(rendering);

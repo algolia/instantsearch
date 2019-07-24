@@ -66,7 +66,14 @@ export default function connectHits(renderFn, unmountFn = noop) {
         }
 
         return state.setQueryParameters({
-          ...TAG_PLACEHOLDER,
+          highlightPreTag:
+            state.highlightPreTag === undefined
+              ? TAG_PLACEHOLDER.highlightPreTag
+              : state.highlightPreTag,
+          highlightPostTag:
+            state.highlightPostTag === undefined
+              ? TAG_PLACEHOLDER.highlightPostTag
+              : state.highlightPostTag,
         });
       },
 
