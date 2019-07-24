@@ -49,6 +49,7 @@ class InstantSearch extends EventEmitter {
       indexName = null,
       numberLocale,
       searchParameters = {},
+      initialUiState = {},
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -109,6 +110,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
+    this._initialUiState = initialUiState;
     this._searchParameters = {
       ...searchParameters,
       index: indexName,
@@ -229,6 +231,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     if (this.routing) {
       const routingManager = new RoutingManager({
         ...this.routing,
+        initialUiState: this._initialUiState,
         instantSearchInstance: this,
       });
       this._createURL = routingManager.createURL.bind(routingManager);

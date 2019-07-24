@@ -10,9 +10,10 @@ import {
 } from '../types';
 
 type RoutingManagerProps = {
-  instantSearchInstance: InstantSearch;
   router: Router;
   stateMapping: StateMapping;
+  initialUiState: UiState;
+  instantSearchInstance: InstantSearch;
 };
 
 const walk = (current, callback) => {
@@ -39,12 +40,16 @@ class RoutingManager {
   public constructor({
     router,
     stateMapping,
+    initialUiState,
     instantSearchInstance,
   }: RoutingManagerProps) {
     this.router = router;
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
-    this.currentUiState = this.stateMapping.routeToState(this.router.read());
+    this.currentUiState = {
+      ...initialUiState,
+      ...this.stateMapping.routeToState(this.router.read()),
+    };
   }
 
   // private getAllSearchParameters({
