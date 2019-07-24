@@ -290,13 +290,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const makeWidget = connectPagination(renderFn);
       const widget = makeWidget();
 
-      const nextConfiguation = widget.getConfiguration(
+      const nextConfiguation1 = widget.getConfiguration(
+        new SearchParameters({
+          page: 0,
+        })
+      );
+
+      expect(nextConfiguation1).toEqual(
+        new SearchParameters({
+          page: 0,
+        })
+      );
+
+      const nextConfiguation2 = widget.getConfiguration(
         new SearchParameters({
           page: 6,
         })
       );
 
-      expect(nextConfiguation).toEqual(
+      expect(nextConfiguation2).toEqual(
         new SearchParameters({
           page: 6,
         })
