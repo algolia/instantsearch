@@ -52,7 +52,11 @@ var lib = {
    */
   removeRefinement: function removeRefinement(refinementList, attribute, value) {
     if (value === undefined) {
-      return lib.clearRefinement(refinementList, attribute);
+      // we use the "filter" form of clearRefinement, since it leaves empty values as-is
+      // the form with a string will remove the attribute completely
+      return lib.clearRefinement(refinementList, function(v, f) {
+        return attribute === f;
+      });
     }
 
     var valueAsString = '' + value;
@@ -107,14 +111,11 @@ var lib = {
         var facetList = values.filter(function(value) {
           return !attribute(value, key, refinementType);
         });
-        if (facetList.length > 0) {
-          if (facetList.length !== values.length) {
-            hasChanged = true;
-          }
-          memo[key] = facetList;
-        } else {
+
+        if (facetList.length !== values.length) {
           hasChanged = true;
         }
+        memo[key] = facetList;
 
         return memo;
       }, {});

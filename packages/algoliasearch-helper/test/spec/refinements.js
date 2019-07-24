@@ -15,12 +15,13 @@ test('Adding refinements should add an entry to the refinements attribute', func
 
   expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
   helper.addRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements) === 1).toBeTruthy();
+  expect(_.size(helper.state.facetsRefinements)).toBe(1);
   expect(helper.state.facetsRefinements.facet1).toEqual([facetValue]);
   helper.addRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements) === 1).toBeTruthy();
+  expect(_.size(helper.state.facetsRefinements)).toBe(1);
   helper.removeRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements) === 0).toBeTruthy();
+  expect(_.size(helper.state.facetsRefinements)).toBe(1);
+  expect(helper.state.facetsRefinements[facetName]).toEqual([]);
 });
 
 test('Adding several refinements for a single attribute should be handled', function() {

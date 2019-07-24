@@ -762,6 +762,9 @@ function getFacetStatsIfAvailable(facetList, facetName) {
  * See the [refinement type](#Refinement) for an exhaustive view of the available
  * data.
  *
+ * Note that for a numeric refinement, results are grouped per operator, this
+ * means that it will return responses for operators which are empty.
+ *
  * @return {Array.<Refinement>} all the refinements
  */
 SearchResults.prototype.getRefinements = function() {
