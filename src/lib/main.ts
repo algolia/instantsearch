@@ -9,6 +9,7 @@ import * as helpers from '../helpers/index';
 
 import * as routers from './routers/index';
 import * as stateMappings from './stateMappings/index';
+import { InstantSearchOptions } from '../types';
 
 /**
  * @external SearchParameters
@@ -120,7 +121,8 @@ import * as stateMappings from './stateMappings/index';
  * @param {InstantSearchOptions} options The options
  * @return {InstantSearch} the instantsearch instance
  */
-const instantsearch = options => new InstantSearch(options);
+const instantsearch = (options: InstantSearchOptions) =>
+  new InstantSearch(options);
 
 instantsearch.routers = routers;
 instantsearch.stateMappings = stateMappings;
