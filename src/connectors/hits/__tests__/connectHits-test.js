@@ -47,7 +47,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const widget = makeWidget({ escapeHTML: true });
 
     expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      expect.objectContaining({
+      new SearchParameters({
         highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
         highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
       })
@@ -91,7 +91,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const widget = makeWidget();
 
     expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      expect.objectContaining({
+      new SearchParameters({
         highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
         highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
       })
