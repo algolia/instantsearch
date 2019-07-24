@@ -168,18 +168,18 @@ const index = (props: IndexProps): Index => {
         );
       }
 
-      // The routing manager widget is always added manually at the last position.
-      // By removing it from the last position and adding it back after, we ensure
-      // it keeps this position.
-      // fixes #3148
-      const lastWidget = localWidgets.pop();
+      // // The routing manager widget is always added manually at the last position.
+      // // By removing it from the last position and adding it back after, we ensure
+      // // it keeps this position.
+      // // fixes #3148
+      // const lastWidget = localWidgets.pop();
 
       localWidgets = localWidgets.concat(widgets);
 
-      if (lastWidget) {
-        // Second part of the fix for #3148
-        localWidgets = localWidgets.concat(lastWidget);
-      }
+      // if (lastWidget) {
+      //   // Second part of the fix for #3148
+      //   localWidgets = localWidgets.concat(lastWidget);
+      // }
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         helper!.setState(
