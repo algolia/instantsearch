@@ -416,7 +416,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(renderingParameters0.items).toEqual(expectedResults0);
 
     // All the refinements are cleared by a third party
-    helper.removeNumericRefinement('numerics');
+    helper.setState(
+      helper.state.setQueryParameter('numericRefinements', {
+        numerics: {},
+      })
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
