@@ -235,6 +235,18 @@ const index = (props: IndexProps): Index => {
           return next || state;
         }, helper!.state);
 
+        // The uiState controlled the `searchParameters` which means that it
+        // should always be up to date. Issue arise with multiple time the same
+        // widget e.g. configure. The two widgets sets$ different kind of settings
+        // when one is removed the state is cleared but not the uiState. Once we
+        // collect the state on the widgets the uiState is read which re-apply the
+        // removed state. The downside at the moment is that we perform the computation
+        // two times in a single task. The other call is made by the `change` event, we
+        // would `setState` without `change` but it would break the query rules connector.
+        localUiState = getLocalUiState({
+          parameters: nextState,
+        });
+
         helper!.setState(
           // localWidgets.reduce(enhanceConfiguration, {
           //   ...nextState,
