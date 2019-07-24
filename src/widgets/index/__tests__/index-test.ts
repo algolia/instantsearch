@@ -1,4 +1,4 @@
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -516,11 +516,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     it('uses `searchParameters` for the top level index', () => {
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch({
-        _searchParameters: new SearchParameters({
+        _searchParameters: {
           hitsPerPage: 5,
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
           disjunctiveFacets: ['brand'],
-        }),
+        },
       });
 
       instance.init(
@@ -543,11 +543,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const topLevelInstance = index({ indexName: 'top_level_index_name' });
       const subLevelInstance = index({ indexName: 'sub_level_index_name' });
       const instantSearchInstance = createInstantSearch({
-        _searchParameters: new SearchParameters({
+        _searchParameters: {
           hitsPerPage: 5,
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
           disjunctiveFacets: ['brand'],
-        }),
+        },
       });
 
       subLevelInstance.init(
