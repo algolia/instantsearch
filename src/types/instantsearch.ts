@@ -4,11 +4,22 @@ import {
   SearchParameters,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { Index } from '../widgets/index/index';
 import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import { Widget, UiState } from './widget';
+export { default as InstantSearch } from '../lib/InstantSearch';
 
-export type InstantSearchOptions = any;
+export type SearchClient = Pick<Client, 'search' | 'searchForFacetValues'>;
+
+export type InstantSearchOptions = {
+  indexName: string;
+  searchClient: SearchClient | Client;
+  numberLocale?: string;
+  searchFunction?: (helper: AlgoliaSearchHelper) => void;
+  searchParameters?: PlainSearchParameters;
+  routing?: any;
+  stalledSearchDelay?: number;
+  insightsClient?: AlgoliaInsightsClient;
+};
 
 // @TODO: can this be written some other way?
 export type HelperChangeEvent = {
@@ -103,20 +114,6 @@ export type StateMapping<TRouteState = UiState> = {
 };
 
 export type Client = AlgoliaSearchClient;
-
-export type InstantSearch = {
-  helper: AlgoliaSearchHelper | null;
-  mainHelper: AlgoliaSearchHelper | null;
-  mainIndex: Index;
-  insightsClient: AlgoliaInsightsClient | null;
-  templatesConfig: object;
-  _isSearchStalled: boolean;
-  _searchParameters: PlainSearchParameters;
-  _createAbsoluteURL(state: PlainSearchParameters): string;
-  scheduleSearch(): void;
-  scheduleRender(): void;
-  scheduleStalledRender(): void;
-};
 
 export type RouteState = {
   [stateKey: string]: any;

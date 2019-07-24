@@ -195,7 +195,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('schedules a search to take the added widgets into account', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch({
-          scheduleSearch: jest.fn(),
+          scheduleSearch: jest.fn() as any,
         });
 
         instance.init(
@@ -214,7 +214,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('does not trigger a search without widgets to add', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch({
-          scheduleSearch: jest.fn(),
+          scheduleSearch: jest.fn() as any,
         });
 
         instance.init(
@@ -387,7 +387,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('schedules a search to take the removed widgets into account', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch({
-          scheduleSearch: jest.fn(),
+          scheduleSearch: jest.fn() as any,
         });
 
         const searchBox = createSearchBox();
@@ -410,7 +410,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('does not schedule a search without widgets to remove', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch({
-          scheduleSearch: jest.fn(),
+          scheduleSearch: jest.fn() as any,
         });
 
         const searchBox = createSearchBox();
@@ -433,7 +433,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('does not schedule a search without widgets in the index', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch({
-          scheduleSearch: jest.fn(),
+          scheduleSearch: jest.fn() as any,
         });
 
         const searchBox = createSearchBox();
@@ -516,11 +516,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     it('uses `searchParameters` for the top level index', () => {
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch({
-        _searchParameters: {
+        _searchParameters: new SearchParameters({
           hitsPerPage: 5,
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
           disjunctiveFacets: ['brand'],
-        },
+        }),
       });
 
       instance.init(
@@ -543,11 +543,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const topLevelInstance = index({ indexName: 'top_level_index_name' });
       const subLevelInstance = index({ indexName: 'sub_level_index_name' });
       const instantSearchInstance = createInstantSearch({
-        _searchParameters: {
+        _searchParameters: new SearchParameters({
           hitsPerPage: 5,
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
           disjunctiveFacets: ['brand'],
-        },
+        }),
       });
 
       subLevelInstance.init(
@@ -740,7 +740,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     it('schedules a render on DerivedHelper results', async () => {
       const instance = index({ indexName: 'index_name' });
-      const instantSearchInstance = createInstantSearch();
+      const instantSearchInstance = createInstantSearch({
+        scheduleRender: jest.fn() as any,
+      });
 
       instance.init(
         createInitOptions({
@@ -760,7 +762,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     it('schedules a stalled render on DerivedHelper search', () => {
       const instance = index({ indexName: 'index_name' });
-      const instantSearchInstance = createInstantSearch();
+      const instantSearchInstance = createInstantSearch({
+        scheduleStalledRender: jest.fn() as any,
+      });
 
       instance.init(
         createInitOptions({
@@ -1557,7 +1561,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     it('removes the listeners on DerivedHelper', async () => {
       const instance = index({ indexName: 'index_name' });
-      const instantSearchInstance = createInstantSearch();
+      const instantSearchInstance = createInstantSearch({
+        scheduleRender: jest.fn() as any,
+      });
 
       instance.init(
         createInitOptions({

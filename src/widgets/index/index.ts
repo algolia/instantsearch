@@ -169,7 +169,7 @@ const index = (props: IndexProps): Index => {
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
-              createURL: localInstantSearchInstance._createAbsoluteURL,
+              createURL: localInstantSearchInstance._createAbsoluteURL!,
             });
           }
         });
@@ -294,7 +294,7 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            createURL: instantSearchInstance._createAbsoluteURL!,
           });
         }
       });
@@ -317,7 +317,7 @@ const index = (props: IndexProps): Index => {
             scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            createURL: instantSearchInstance._createAbsoluteURL!,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },
