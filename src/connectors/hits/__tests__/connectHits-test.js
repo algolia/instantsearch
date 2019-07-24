@@ -1,4 +1,7 @@
-import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectHits from '../connectHits';
 
@@ -43,10 +46,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({ escapeHTML: true });
 
-    expect(widget.getConfiguration()).toEqual({
-      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
-      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
-    });
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({
+        highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+        highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
+      })
+    );
 
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
@@ -85,10 +90,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(rendering);
     const widget = makeWidget();
 
-    expect(widget.getConfiguration()).toEqual({
-      highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
-      highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
-    });
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({
+        highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
+        highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
+      })
+    );
   });
 
   it('Provides the hits and the whole results', () => {
