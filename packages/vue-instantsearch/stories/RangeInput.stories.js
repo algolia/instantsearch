@@ -85,6 +85,7 @@ storiesOf('ais-range-input', module)
           <vue-slider
             :min="minRange"
             :max="maxRange"
+            :lazy="true"
             :value="[
               minValue !== null ? minValue : minRange,
               maxValue !== null ? maxValue : maxRange,
