@@ -104,7 +104,7 @@
     "eslint-plugin-jasmine": "2.10.1",
     "eslint-plugin-jest": "22.13.0",
     "eslint-plugin-prettier": "3.1.0",
-    "eslint-plugin-react": "7.14.2",
+    "eslint-plugin-react": "7.14.3",
     "inquirer": "6.5.0",
     "jest": "24.8.0",
     "jest-diff": "24.8.0",
