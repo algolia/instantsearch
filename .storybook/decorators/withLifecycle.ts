@@ -2,7 +2,11 @@ import { Widget } from '../../src/types';
 
 const setDisabledState = (element: HTMLButtonElement, state: boolean) => {
   element.disabled = state;
-  element.classList.toggle('ais-ClearRefinements-button--disabled');
+  if (state) {
+    element.classList.add('ais-ClearRefinements-button--disabled');
+  } else {
+    element.classList.remove('ais-ClearRefinements-button--disabled');
+  }
 };
 
 export const withLifecycle = (
@@ -25,14 +29,20 @@ export const withLifecycle = (
   add.textContent = 'Add widget';
 
   const remove = document.createElement('button');
+  remove.style.marginRight = '10px';
   remove.className = 'ais-ClearRefinements-button';
   remove.textContent = 'Remove widget';
+
+  const dispose = document.createElement('button');
+  dispose.className = 'ais-ClearRefinements-button';
+  dispose.textContent = 'Remove instance';
 
   const node = document.createElement('div');
 
   actions.appendChild(description);
   actions.appendChild(add);
   actions.appendChild(remove);
+  actions.appendChild(dispose);
 
   container.appendChild(actions);
   container.appendChild(node);
@@ -52,5 +62,12 @@ export const withLifecycle = (
     search.removeWidget(widget);
     setDisabledState(add, false);
     setDisabledState(remove, true);
+  });
+
+  dispose.addEventListener('click', () => {
+    search.dispose();
+    setDisabledState(add, true);
+    setDisabledState(remove, true);
+    setDisabledState(dispose, true);
   });
 };

@@ -1,5 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
+import { MemoryRouter } from '../MemoryRouter';
 import instantsearch from '../../src/index';
 import defaultPlayground from '../playgrounds/default';
 
@@ -24,28 +25,47 @@ export const withHits = (
     ...instantsearchOptions
   } = searchOptions || {};
 
-  const urlLogger = action('Routing state');
+  // const urlLogger = action('Routing state');
   const search = instantsearch({
     indexName,
     searchClient: algoliasearch(appId, apiKey),
-    searchParameters: {
+    // searchParameters: {},
+    routing: {
+      router: new MemoryRouter({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        instant_search: {
+          query: 'phone',
+          refinementList: {
+            brand: ['Sony', 'GE'],
+          },
+          // configure: {
+          //   hitsPerPage: 4,
+          //   attributesToSnippet: ['description:15'],
+          //   snippetEllipsisText: '[…]',
+          // },
+        },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        instant_search_price_asc: {
+          // configure: {
+          //   hitsPerPage: 1,
+          // },
+          // menu: {
+          //   categories: 'Computers & Tablets',
+          // },
+        },
+      }),
+    },
+    ...instantsearchOptions,
+  });
+
+  search.addWidget(
+    instantsearch.widgets.configure({
       hitsPerPage: 4,
       attributesToSnippet: ['description:15'],
       snippetEllipsisText: '[…]',
       ...searchParameters,
-    },
-    routing: {
-      router: {
-        write: (routeState: object) => {
-          urlLogger(JSON.stringify(routeState, null, 2));
-        },
-        read: () => ({}),
-        createURL: () => '',
-        onUpdate: () => {},
-      },
-    },
-    ...instantsearchOptions,
-  });
+    })
+  );
 
   const containerElement = document.createElement('div');
 
