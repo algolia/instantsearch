@@ -1,14 +1,16 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import EventEmitter from 'events';
 import index from '../widgets/index/index';
-import RoutingManager from './RoutingManager';
+// import RoutingManager from './RoutingManager';
 import simpleMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
+import createRoutingPlaceholder from './placeholders/createRoutingPlaceholder';
+import createNoopPlaceholder from './placeholders/createNoopPlaceholder';
 import {
   createDocumentationMessageGenerator,
-  isPlainObject,
+  // isPlainObject,
   defer,
   noop,
 } from './utils';
@@ -22,9 +24,9 @@ const ROUTING_DEFAULT_OPTIONS = {
   router: historyRouter(),
 };
 
-function defaultCreateURL() {
-  return '#';
-}
+// function defaultCreateURL() {
+//   return '#';
+// }
 
 /**
  * Widgets are the building blocks of InstantSearch.js. Any
@@ -50,6 +52,7 @@ class InstantSearch extends EventEmitter {
       numberLocale,
       searchParameters = {},
       initialUiState = {},
+      placeholders = [],
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -111,6 +114,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
     this._initialUiState = initialUiState;
+    this._placeholders = placeholders;
     this._searchParameters = {
       ...searchParameters,
       index: indexName,
@@ -120,13 +124,24 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       this._searchFunction = searchFunction;
     }
 
-    if (routing === true) {
-      this.routing = ROUTING_DEFAULT_OPTIONS;
-    } else if (isPlainObject(routing)) {
-      this.routing = {
-        ...ROUTING_DEFAULT_OPTIONS,
-        ...routing,
-      };
+    // if (routing === true) {
+    //   this.routing = ROUTING_DEFAULT_OPTIONS;
+    // } else if (isPlainObject(routing)) {
+    //   this.routing = {
+    //     ...ROUTING_DEFAULT_OPTIONS,
+    //     ...routing,
+    //   };
+    // }
+
+    if (!routing) {
+      this._placeholders.push(createNoopPlaceholder());
+    } else {
+      this._placeholders.push(
+        createRoutingPlaceholder({
+          ...ROUTING_DEFAULT_OPTIONS,
+          ...routing,
+        })
+      );
     }
   }
 
@@ -228,23 +243,23 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       );
     }
 
-    if (this.routing) {
-      const routingManager = new RoutingManager({
-        ...this.routing,
-        initialUiState: this._initialUiState,
-        instantSearchInstance: this,
-      });
-      this._createURL = routingManager.createURL.bind(routingManager);
-      this._createAbsoluteURL = this._createURL;
-      // We don't use `addWidgets` because we have to ensure that `RoutingManager`
-      // is the last widget added. Otherwise we have an issue with the `routing`.
-      // https://github.com/algolia/instantsearch.js/pull/3149
-      // this.mainIndex.getWidgets().push(routingManager);
-      this._routingManager = routingManager;
-    } else {
-      this._createURL = defaultCreateURL;
-      this._createAbsoluteURL = defaultCreateURL;
-    }
+    // if (this.routing) {
+    //   const routingManager = new RoutingManager({
+    //     ...this.routing,
+    //     initialUiState: this._initialUiState,
+    //     instantSearchInstance: this,
+    //   });
+    //   this._createURL = routingManager.createURL.bind(routingManager);
+    //   this._createAbsoluteURL = this._createURL;
+    //   // We don't use `addWidgets` because we have to ensure that `RoutingManager`
+    //   // is the last widget added. Otherwise we have an issue with the `routing`.
+    //   // https://github.com/algolia/instantsearch.js/pull/3149
+    //   // this.mainIndex.getWidgets().push(routingManager);
+    //   this._routingManager = routingManager;
+    // } else {
+    //   this._createURL = defaultCreateURL;
+    //   this._createAbsoluteURL = defaultCreateURL;
+    // }
 
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
@@ -289,12 +304,34 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     this.mainHelper = mainHelper;
 
-    if (this.routing) {
-      this._routingManager.setupRouting();
-    }
+    const initialUiState = this._placeholders
+      .filter(placeholder => typeof placeholder.intialState === 'function')
+      .reduce(
+        (previous, placeholder) =>
+          placeholder.intialState({ uiState: previous }),
+        this._initialUiState
+      );
+
+    this._placeholderRenderOptions = this._placeholders
+      .filter(placeholder => typeof placeholder.renderOptions === 'function')
+      .reduce(
+        (previous, placeholder) => ({
+          ...previous,
+          ...placeholder.renderOptions(),
+        }),
+        {}
+      );
+
+    this._unsubscribePlaceholders = this._placeholders
+      .filter(placeholder => typeof placeholder.subscribe === 'function')
+      .map(placeholder =>
+        placeholder.subscribe({ instantSearchInstance: this })
+      );
 
     this.mainIndex.init({
       instantSearchInstance: this,
+      placeholderRenderOptions: this._placeholderRenderOptions,
+      initialUiState,
       parent: null,
     });
 
@@ -350,6 +387,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     this.mainIndex.render({
       instantSearchInstance: this,
+      placeholderRenderOptions: this._placeholderRenderOptions,
     });
 
     this.emit('render');
@@ -378,17 +416,26 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
           return loop(
             {
               ...previous,
-              indices: {
-                ...previous.indices,
-                [innerIndex.getHelper().state.index]: innerIndex.getUiState(),
-              },
+              [innerIndex.getHelper().state.index]: innerIndex.getUiState(),
             },
             innerIndex
           );
         }, uiState);
     };
 
-    return loop(this.mainIndex.getUiState(), this.mainIndex);
+    return loop(
+      {
+        [this.mainIndex.getHelper().state.index]: this.mainIndex.getUiState(),
+      },
+      this.mainIndex
+    );
+  }
+
+  onChange() {
+    const nextUiState = this.getWidgetState();
+    this._placeholders.forEach(placeholder => {
+      placeholder({ uiState: nextUiState });
+    });
   }
 
   createURL(params) {

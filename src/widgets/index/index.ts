@@ -105,8 +105,8 @@ const index = (props: IndexProps): Index => {
       }, {});
   };
 
-  const createURL = (state: SearchParameters): string => {
-    return localInstantSearchInstance!._createAbsoluteURL({
+  const createURL = (args: any) => (state: SearchParameters): string => {
+    return args.routing.createURL({
       indexId: parent === null ? null : indexName,
       uiState: getLocalUiState({
         parameters: state,
@@ -194,6 +194,9 @@ const index = (props: IndexProps): Index => {
         widgets.forEach(widget => {
           if (localInstantSearchInstance && widget.init) {
             widget.init({
+              // @TODO: we have to provide initialUiState + createURL
+              // otherwise the child indices thow an error on add. Did
+              // not find the best answer at the moment.
               helper: helper!,
               parent: this,
               instantSearchInstance: localInstantSearchInstance,
@@ -264,16 +267,15 @@ const index = (props: IndexProps): Index => {
       return this;
     },
 
-    init({ instantSearchInstance, parent }: InitOptions) {
-      localUiState =
-        // @ts-ignore
-        (instantSearchInstance._routingManager &&
-          // @ts-ignore
-          instantSearchInstance._routingManager.getInitialWidgetState(
-            parent === null ? null : indexName
-          )) ||
-        {};
-
+    init({
+      instantSearchInstance,
+      // @ts-ignore
+      placeholderRenderOptions,
+      // @ts-ignore
+      initialUiState,
+      parent,
+    }: InitOptions) {
+      localUiState = initialUiState[indexName] || {};
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
 
@@ -347,11 +349,15 @@ const index = (props: IndexProps): Index => {
           widget.init({
             helper: helper!,
             parent: this,
+            // @ts-ignore
+            initialUiState,
             instantSearchInstance,
+            // @ts-ignore
+            placeholderRenderOptions,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
             // createURL: instantSearchInstance._createAbsoluteURL,
-            createURL,
+            createURL: createURL(placeholderRenderOptions),
           });
         }
       });
@@ -367,16 +373,14 @@ const index = (props: IndexProps): Index => {
         });
 
         // @ts-ignore
-        // eslint-disable-next-line no-unused-expressions
-        localInstantSearchInstance._routingManager &&
-          // @ts-ignore
-          localInstantSearchInstance._routingManager.onChange();
+        localInstantSearchInstance.onChange();
 
         console.log('localUiState', indexName, localUiState);
       });
     },
 
-    render({ instantSearchInstance }: RenderOptions) {
+    // @ts-ignore
+    render({ instantSearchInstance, placeholderRenderOptions }: RenderOptions) {
       // Hack for backward compatibily with `searchFunction` + `routing`
       // https://github.com/algolia/instantsearch.js/blob/509513c0feafaad522f6f18d87a441559f4aa050/src/lib/RoutingManager.ts#L113-L130
       if (localParent === null && isFirstRender) {
@@ -397,10 +401,7 @@ const index = (props: IndexProps): Index => {
           localUiState = firstRenderUiState;
 
           // @ts-ignore
-          // eslint-disable-next-line no-unused-expressions
-          localInstantSearchInstance._routingManager &&
-            // @ts-ignore
-            localInstantSearchInstance._routingManager.onChange();
+          localInstantSearchInstance.onChange();
         }
       }
 
@@ -416,11 +417,13 @@ const index = (props: IndexProps): Index => {
           widget.render({
             helper: helper!,
             instantSearchInstance,
+            // @ts-ignore
+            placeholderRenderOptions,
             results: derivedHelper!.lastResults,
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
             // createURL: instantSearchInstance._createAbsoluteURL,
-            createURL,
+            createURL: createURL(placeholderRenderOptions),
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },

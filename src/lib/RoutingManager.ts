@@ -1,3 +1,5 @@
+// We don't use this anymore see './placeholders/createRoutingPlaceholder'
+
 import algoliasearchHelper from 'algoliasearch-helper'; // PlainSearchParameters, // SearchParameters,
 import { isEqual } from './utils';
 import {
