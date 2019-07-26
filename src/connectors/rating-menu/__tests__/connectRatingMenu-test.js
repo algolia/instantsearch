@@ -58,10 +58,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       attribute,
     });
 
-    const config = widget.getConfiguration({});
-    expect(config).toEqual({
-      disjunctiveFacets: [attribute],
-    });
+    const config = widget.getConfiguration(new SearchParameters({}));
+    expect(config).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: [attribute],
+        disjunctiveFacetsRefinements: {
+          grade: [],
+        },
+      })
+    );
 
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
@@ -154,7 +159,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       attribute,
     });
 
-    const config = widget.getConfiguration({});
+    const config = widget.getConfiguration(new SearchParameters({}));
 
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
@@ -248,6 +253,95 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     }
   });
 
+  describe('getConfiguration', () => {
+    test('returns initial search parameters', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectRatingMenu(rendering);
+
+      const attribute = 'grade';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: [attribute],
+          disjunctiveFacetsRefinements: {
+            grade: [],
+          },
+        })
+      );
+    });
+
+    test('supports previous disjunctive facets refinements', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectRatingMenu(rendering);
+
+      const attribute = 'grade';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      expect(
+        widget.getConfiguration(
+          new SearchParameters({
+            disjunctiveFacets: [attribute],
+            disjunctiveFacetsRefinements: {
+              grade: [4],
+            },
+          })
+        )
+      ).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: [attribute],
+          disjunctiveFacetsRefinements: {
+            grade: [4],
+          },
+        })
+      );
+    });
+  });
+
+  describe('dispose', () => {
+    test('calls the unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+      const makeWidget = connectRatingMenu(render, unmount);
+      const helper = jsHelper({}, '', {});
+      helper.search = jest.fn();
+
+      const attribute = 'grade';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      widget.dispose({ state: helper.state });
+
+      expect(unmount).toHaveBeenCalledTimes(1);
+    });
+
+    test('resets the state', () => {
+      const render = jest.fn();
+      const makeWidget = connectRatingMenu(render);
+      const indexName = 'indexName';
+      const helper = jsHelper({}, indexName, {});
+      helper.search = jest.fn();
+
+      const attribute = 'grade';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      const nextState = widget.dispose({ state: helper.state });
+
+      expect(nextState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
+    });
+  });
+
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
@@ -259,7 +353,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         ...config,
       });
 
-      const initialConfig = widget.getConfiguration({});
+      const initialConfig = widget.getConfiguration(new SearchParameters({}));
       const helper = jsHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
