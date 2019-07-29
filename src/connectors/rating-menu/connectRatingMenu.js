@@ -185,9 +185,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        const nextState = state.removeDisjunctiveFacet(attribute);
-
-        return nextState;
+        return state.removeDisjunctiveFacet(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
