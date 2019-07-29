@@ -589,13 +589,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const render = jest.fn();
       const makeWidget = connectToggleRefinement(render);
       const indexName = 'indexName';
-      const helper = jsHelper({}, indexName, {});
+      const helper = jsHelper({}, indexName, {
+        disjunctiveFacets: ['freeShipping'],
+      });
       helper.search = jest.fn();
 
       const attribute = 'freeShipping';
       const widget = makeWidget({
         attribute,
       });
+
+      helper.addDisjunctiveFacetRefinement('freeShipping', ['true']);
 
       const nextState = widget.dispose({ state: helper.state });
 
