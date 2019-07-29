@@ -1,5 +1,8 @@
 import { render } from 'preact-compat';
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import ratingMenu from '../rating-menu';
 
 jest.mock('preact-compat', () => {
@@ -40,7 +43,11 @@ describe('ratingMenu()', () => {
       attribute,
       cssClasses: { body: ['body', 'cx'] },
     });
-    helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     jest.spyOn(helper, 'clearRefinements');
     jest.spyOn(helper, 'addDisjunctiveFacetRefinement');
     jest.spyOn(helper, 'getRefinements');
@@ -61,9 +68,14 @@ describe('ratingMenu()', () => {
   });
 
   it('configures the underlying disjunctive facet', () => {
-    expect(widget.getConfiguration()).toEqual({
-      disjunctiveFacets: ['anAttrName'],
-    });
+    expect(widget.getConfiguration(new SearchParameters())).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: ['anAttrName'],
+        disjunctiveFacetsRefinements: {
+          anAttrName: [],
+        },
+      })
+    );
   });
 
   it('calls twice render(<RefinementList props />, container)', () => {
@@ -140,7 +152,11 @@ describe('ratingMenu()', () => {
       attribute,
       cssClasses: { body: ['body', 'cx'] },
     });
-    const _helper = jsHelper({}, '', _widget.getConfiguration({}));
+    const _helper = jsHelper(
+      {},
+      '',
+      _widget.getConfiguration(new SearchParameters({}))
+    );
     _helper.search = jest.fn();
 
     _widget.init({
