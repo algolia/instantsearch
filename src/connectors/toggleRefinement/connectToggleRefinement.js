@@ -105,10 +105,13 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.toggleRefinement',
 
-      getConfiguration() {
-        return {
+      getConfiguration(state) {
+        return state.setQueryParameters({
           disjunctiveFacets: [attribute],
-        };
+          disjunctiveFacetsRefinements: {
+            [attribute]: [],
+          },
+        });
       },
 
       _toggleRefinement(helper, { isRefined } = {}) {
@@ -193,7 +196,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       render({ helper, results, state, instantSearchInstance }) {
         const isRefined = helper.state.isDisjunctiveFacetRefined(attribute, on);
         const offValue = off === undefined ? false : off;
-        const allFacetValues = results.getFacetValues(attribute);
+        const allFacetValues = results.getFacetValues(attribute) || [];
 
         const onData = find(
           allFacetValues,
@@ -248,11 +251,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeDisjunctiveFacetRefinement(attribute)
-          .removeDisjunctiveFacet(attribute);
-
-        return nextState;
+        return state.removeDisjunctiveFacet(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
