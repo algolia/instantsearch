@@ -58,10 +58,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       attribute,
     });
 
-    const config = widget.getConfiguration();
-    expect(config).toEqual({
-      disjunctiveFacets: [attribute],
-    });
+    const config = widget.getConfiguration(new SearchParameters({}));
+    expect(config).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: [attribute],
+        disjunctiveFacetsRefinements: {
+          [attribute]: [],
+        },
+      })
+    );
 
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
@@ -155,7 +160,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       attribute,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration());
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -166,9 +175,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
     {
       // first rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
-        undefined
-      );
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([]);
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, value } = renderOptions;
@@ -297,7 +304,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       off: 'false',
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration());
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -451,7 +462,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       off: false,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration());
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     widget.init({ helper, state: helper.state });
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual(
@@ -468,7 +483,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       off: true,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration());
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     widget.init({ helper, state: helper.state });
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual(
@@ -488,12 +507,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       on: false,
     });
 
-    const helper = jsHelper({ search() {} }, '', widget.getConfiguration());
+    const helper = jsHelper(
+      { search() {} },
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({ helper, state: helper.state });
 
-    expect(helper.state.disjunctiveFacetsRefinements).toEqual({});
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+      whatever: [],
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -521,6 +546,67 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
   });
 
+  describe('getConfiguration', () => {
+    test('returns initial search parameters', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectToggleRefinement(rendering);
+
+      const attribute = 'freeShipping';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: [attribute],
+          disjunctiveFacetsRefinements: {
+            freeShipping: [],
+          },
+        })
+      );
+    });
+  });
+
+  describe('dispose', () => {
+    test('calls the unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+      const makeWidget = connectToggleRefinement(render, unmount);
+      const helper = jsHelper({}, '', {});
+      helper.search = jest.fn();
+
+      const attribute = 'freeShipping';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      widget.dispose({ state: helper.state });
+
+      expect(unmount).toHaveBeenCalledTimes(1);
+    });
+
+    test('resets the state', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const indexName = 'indexName';
+      const helper = jsHelper({}, indexName, {});
+      helper.search = jest.fn();
+
+      const attribute = 'freeShipping';
+      const widget = makeWidget({
+        attribute,
+      });
+
+      const nextState = widget.dispose({ state: helper.state });
+
+      expect(nextState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
+    });
+  });
+
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
@@ -532,7 +618,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         ...config,
       });
 
-      const initialConfig = widget.getConfiguration({});
+      const initialConfig = widget.getConfiguration(new SearchParameters({}));
       const helper = jsHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
