@@ -591,6 +591,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const indexName = 'indexName';
       const helper = jsHelper({}, indexName, {
         disjunctiveFacets: ['freeShipping'],
+        disjunctiveFacetsRefinements: {
+          freeShipping: ['true'],
+        },
       });
       helper.search = jest.fn();
 
@@ -598,8 +601,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const widget = makeWidget({
         attribute,
       });
-
-      helper.addDisjunctiveFacetRefinement('freeShipping', ['true']);
 
       expect(helper.state).toEqual(
         new SearchParameters({
