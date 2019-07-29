@@ -324,13 +324,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const render = jest.fn();
       const makeWidget = connectRatingMenu(render);
       const indexName = 'indexName';
-      const helper = jsHelper({}, indexName, {});
+      const attribute = 'grade';
+      const helper = jsHelper({}, indexName, {
+        disjunctiveFacets: [attribute],
+      });
       helper.search = jest.fn();
 
-      const attribute = 'grade';
       const widget = makeWidget({
         attribute,
       });
+
+      helper.addDisjunctiveFacetRefinement(attribute, [4, 5]);
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: indexName,
+          disjunctiveFacets: [attribute],
+          disjunctiveFacetsRefinements: {
+            grade: ['4,5'],
+          },
+        })
+      );
 
       const nextState = widget.dispose({ state: helper.state });
 
