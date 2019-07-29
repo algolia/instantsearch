@@ -601,6 +601,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
 
       helper.addDisjunctiveFacetRefinement('freeShipping', ['true']);
 
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: indexName,
+          disjunctiveFacets: ['freeShipping'],
+          disjunctiveFacetsRefinements: {
+            freeShipping: ['true'],
+          },
+        })
+      );
+
       const nextState = widget.dispose({ state: helper.state });
 
       expect(nextState).toEqual(
