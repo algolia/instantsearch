@@ -327,6 +327,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       const attribute = 'grade';
       const helper = jsHelper({}, indexName, {
         disjunctiveFacets: [attribute],
+        disjunctiveFacetsRefinements: {
+          [attribute]: [4, 5],
+        },
       });
       helper.search = jest.fn();
 
@@ -334,14 +337,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute,
       });
 
-      helper.addDisjunctiveFacetRefinement(attribute, [4, 5]);
-
       expect(helper.state).toEqual(
         new SearchParameters({
           index: indexName,
           disjunctiveFacets: [attribute],
           disjunctiveFacetsRefinements: {
-            grade: ['4,5'],
+            grade: [4, 5],
           },
         })
       );
