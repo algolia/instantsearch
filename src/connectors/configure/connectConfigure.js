@@ -1,7 +1,8 @@
+import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createDocumentationMessageGenerator,
-  enhanceConfiguration,
   isPlainObject,
+  mergeSearchParameters,
   noop,
 } from '../../lib/utils';
 
@@ -9,6 +10,21 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'configure',
   connector: true,
 });
+
+function getInitialSearchParameters(state, widgetParams) {
+  // We leverage the helper internals to remove the `widgetParams` from
+  // the state. The function `setQueryParameters` omits the values that
+  // are `undefined` on the next state.
+  return state.setQueryParameters(
+    Object.keys(widgetParams.searchParameters).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: undefined,
+      }),
+      {}
+    )
+  );
+}
 
 /**
  * @typedef {Object} CustomConfigureWidgetOptions
@@ -41,8 +57,8 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
     return {
       $$type: 'ais.configure',
 
-      getConfiguration() {
-        return widgetParams.searchParameters;
+      getConfiguration(state) {
+        return state.setQueryParameters(widgetParams.searchParameters);
       },
 
       init({ helper }) {
@@ -60,10 +76,14 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
       refine(helper) {
         return searchParameters => {
           // merge new `searchParameters` with the ones set from other widgets
-          const actualState = this.removeSearchParameters(helper.state);
-          const nextSearchParameters = enhanceConfiguration(actualState, {
-            getConfiguration: () => searchParameters,
-          });
+          const actualState = getInitialSearchParameters(
+            helper.state,
+            widgetParams
+          );
+          const nextSearchParameters = mergeSearchParameters(
+            actualState,
+            new algoliasearchHelper.SearchParameters(searchParameters)
+          );
 
           // trigger a search with the new merged searchParameters
           helper.setState(nextSearchParameters).search();
@@ -86,22 +106,7 @@ export default function connectConfigure(renderFn = noop, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        return this.removeSearchParameters(state);
-      },
-
-      removeSearchParameters(state) {
-        // We leverage the Helper internals to remove the `widgetParams` from
-        // the state. The function `setQueryParameters` omits the values that
-        // are `undefined` on the next state.
-        return state.setQueryParameters(
-          Object.keys(widgetParams.searchParameters).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
+        return getInitialSearchParameters(state, widgetParams);
       },
     };
   };
