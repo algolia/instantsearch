@@ -21,13 +21,13 @@ exports[`Highlighter - multi renders a custom className 1`] = `
   className="MyCustomHighlighter"
 >
   <span
-    key="split-0-Apple"
+    key="0"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Apple"
+      key="0"
       nonHighlightedTagName="span"
       value="Apple"
     />
@@ -38,13 +38,13 @@ exports[`Highlighter - multi renders a custom className 1`] = `
     </span>
   </span>
   <span
-    key="split-1-Samsung"
+    key="1"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={true}
-      key="split-0-Sam"
+      key="0"
       nonHighlightedTagName="span"
       value="Sam"
     />
@@ -52,7 +52,7 @@ exports[`Highlighter - multi renders a custom className 1`] = `
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-1-sung"
+      key="1"
       nonHighlightedTagName="span"
       value="sung"
     />
@@ -63,13 +63,13 @@ exports[`Highlighter - multi renders a custom className 1`] = `
     </span>
   </span>
   <span
-    key="split-2-Philips"
+    key="2"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Philips"
+      key="0"
       nonHighlightedTagName="span"
       value="Philips"
     />
@@ -82,13 +82,13 @@ exports[`Highlighter - multi renders a highlighted value 1`] = `
   className=""
 >
   <span
-    key="split-0-Apple"
+    key="0"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Apple"
+      key="0"
       nonHighlightedTagName="span"
       value="Apple"
     />
@@ -99,13 +99,13 @@ exports[`Highlighter - multi renders a highlighted value 1`] = `
     </span>
   </span>
   <span
-    key="split-1-Samsung"
+    key="1"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={true}
-      key="split-0-Sam"
+      key="0"
       nonHighlightedTagName="span"
       value="Sam"
     />
@@ -113,7 +113,7 @@ exports[`Highlighter - multi renders a highlighted value 1`] = `
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-1-sung"
+      key="1"
       nonHighlightedTagName="span"
       value="sung"
     />
@@ -124,13 +124,13 @@ exports[`Highlighter - multi renders a highlighted value 1`] = `
     </span>
   </span>
   <span
-    key="split-2-Philips"
+    key="2"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Philips"
+      key="0"
       nonHighlightedTagName="span"
       value="Philips"
     />
@@ -143,13 +143,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom nonHighli
   className=""
 >
   <span
-    key="split-0-Apple"
+    key="0"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Apple"
+      key="0"
       nonHighlightedTagName="p"
       value="Apple"
     />
@@ -160,13 +160,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom nonHighli
     </span>
   </span>
   <span
-    key="split-1-Samsung"
+    key="1"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={true}
-      key="split-0-Sam"
+      key="0"
       nonHighlightedTagName="p"
       value="Sam"
     />
@@ -174,7 +174,7 @@ exports[`Highlighter - multi renders a highlighted value with a custom nonHighli
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-1-sung"
+      key="1"
       nonHighlightedTagName="p"
       value="sung"
     />
@@ -185,13 +185,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom nonHighli
     </span>
   </span>
   <span
-    key="split-2-Philips"
+    key="2"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Philips"
+      key="0"
       nonHighlightedTagName="p"
       value="Philips"
     />
@@ -204,13 +204,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom separator
   className=""
 >
   <span
-    key="split-0-Apple"
+    key="0"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Apple"
+      key="0"
       nonHighlightedTagName="span"
       value="Apple"
     />
@@ -221,13 +221,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom separator
     </span>
   </span>
   <span
-    key="split-1-Samsung"
+    key="1"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={true}
-      key="split-0-Sam"
+      key="0"
       nonHighlightedTagName="span"
       value="Sam"
     />
@@ -235,7 +235,7 @@ exports[`Highlighter - multi renders a highlighted value with a custom separator
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-1-sung"
+      key="1"
       nonHighlightedTagName="span"
       value="sung"
     />
@@ -246,13 +246,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom separator
     </span>
   </span>
   <span
-    key="split-2-Philips"
+    key="2"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Philips"
+      key="0"
       nonHighlightedTagName="span"
       value="Philips"
     />
@@ -265,13 +265,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom tagName 1
   className=""
 >
   <span
-    key="split-0-Apple"
+    key="0"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="strong"
       isHighlighted={false}
-      key="split-0-Apple"
+      key="0"
       nonHighlightedTagName="span"
       value="Apple"
     />
@@ -282,13 +282,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom tagName 1
     </span>
   </span>
   <span
-    key="split-1-Samsung"
+    key="1"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="strong"
       isHighlighted={true}
-      key="split-0-Sam"
+      key="0"
       nonHighlightedTagName="span"
       value="Sam"
     />
@@ -296,7 +296,7 @@ exports[`Highlighter - multi renders a highlighted value with a custom tagName 1
       cx={[Function]}
       highlightedTagName="strong"
       isHighlighted={false}
-      key="split-1-sung"
+      key="1"
       nonHighlightedTagName="span"
       value="sung"
     />
@@ -307,13 +307,13 @@ exports[`Highlighter - multi renders a highlighted value with a custom tagName 1
     </span>
   </span>
   <span
-    key="split-2-Philips"
+    key="2"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="strong"
       isHighlighted={false}
-      key="split-0-Philips"
+      key="0"
       nonHighlightedTagName="span"
       value="Philips"
     />
@@ -326,13 +326,13 @@ exports[`Highlighter - multi renders a non highlighted value 1`] = `
   className=""
 >
   <span
-    key="split-0-Apple"
+    key="0"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Apple"
+      key="0"
       nonHighlightedTagName="span"
       value="Apple"
     />
@@ -343,13 +343,13 @@ exports[`Highlighter - multi renders a non highlighted value 1`] = `
     </span>
   </span>
   <span
-    key="split-1-Samsung"
+    key="1"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Samsung"
+      key="0"
       nonHighlightedTagName="span"
       value="Samsung"
     />
@@ -360,13 +360,13 @@ exports[`Highlighter - multi renders a non highlighted value 1`] = `
     </span>
   </span>
   <span
-    key="split-2-Philips"
+    key="2"
   >
     <Highlight
       cx={[Function]}
       highlightedTagName="em"
       isHighlighted={false}
-      key="split-0-Philips"
+      key="0"
       nonHighlightedTagName="span"
       value="Philips"
     />
@@ -382,7 +382,7 @@ exports[`Highlighter - simple renders a highlighted value 1`] = `
     cx={[Function]}
     highlightedTagName="em"
     isHighlighted={true}
-    key="split-0-Ap"
+    key="0"
     nonHighlightedTagName="span"
     value="Ap"
   />
@@ -390,7 +390,7 @@ exports[`Highlighter - simple renders a highlighted value 1`] = `
     cx={[Function]}
     highlightedTagName="em"
     isHighlighted={false}
-    key="split-1-ple"
+    key="1"
     nonHighlightedTagName="span"
     value="ple"
   />
@@ -405,7 +405,7 @@ exports[`Highlighter - simple renders a highlighted value with a custom nonHighl
     cx={[Function]}
     highlightedTagName="em"
     isHighlighted={true}
-    key="split-0-Ap"
+    key="0"
     nonHighlightedTagName="p"
     value="Ap"
   />
@@ -413,7 +413,7 @@ exports[`Highlighter - simple renders a highlighted value with a custom nonHighl
     cx={[Function]}
     highlightedTagName="em"
     isHighlighted={false}
-    key="split-1-ple"
+    key="1"
     nonHighlightedTagName="p"
     value="ple"
   />
@@ -428,7 +428,7 @@ exports[`Highlighter - simple renders a highlighted value with a custom tagName 
     cx={[Function]}
     highlightedTagName="strong"
     isHighlighted={true}
-    key="split-0-Ap"
+    key="0"
     nonHighlightedTagName="span"
     value="Ap"
   />
@@ -436,7 +436,7 @@ exports[`Highlighter - simple renders a highlighted value with a custom tagName 
     cx={[Function]}
     highlightedTagName="strong"
     isHighlighted={false}
-    key="split-1-ple"
+    key="1"
     nonHighlightedTagName="span"
     value="ple"
   />
@@ -451,7 +451,7 @@ exports[`Highlighter - simple renders a non highlighted value 1`] = `
     cx={[Function]}
     highlightedTagName="em"
     isHighlighted={false}
-    key="split-0-Apple"
+    key="0"
     nonHighlightedTagName="span"
     value="Apple"
   />
@@ -466,7 +466,7 @@ exports[`Highlighter - simple renders with a custom className 1`] = `
     cx={[Function]}
     highlightedTagName="em"
     isHighlighted={true}
-    key="split-0-Ap"
+    key="0"
     nonHighlightedTagName="span"
     value="Ap"
   />
@@ -474,7 +474,7 @@ exports[`Highlighter - simple renders with a custom className 1`] = `
     cx={[Function]}
     highlightedTagName="em"
     isHighlighted={false}
-    key="split-1-ple"
+    key="1"
     nonHighlightedTagName="span"
     value="ple"
   />

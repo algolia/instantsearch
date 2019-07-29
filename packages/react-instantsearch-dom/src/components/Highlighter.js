@@ -2,10 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-function generateKey(i, value) {
-  return `split-${i}-${value}`;
-}
-
 export const Highlight = ({
   cx,
   value,
@@ -49,11 +45,11 @@ const Highlighter = ({
         if (Array.isArray(item)) {
           const isLast = i === parsedHighlightedValue.length - 1;
           return (
-            <span key={generateKey(i, hit[attribute][i])}>
+            <span key={i}>
               {item.map((element, index) => (
                 <Highlight
                   cx={cx}
-                  key={generateKey(index, element.value)}
+                  key={index}
                   value={element.value}
                   highlightedTagName={tagName}
                   nonHighlightedTagName={nonHighlightedTagName}
@@ -68,7 +64,7 @@ const Highlighter = ({
         return (
           <Highlight
             cx={cx}
-            key={generateKey(i, item.value)}
+            key={i}
             value={item.value}
             highlightedTagName={tagName}
             nonHighlightedTagName={nonHighlightedTagName}
