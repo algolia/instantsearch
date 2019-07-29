@@ -73,64 +73,128 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
   it('should apply searchParameters', () => {
     const makeWidget = connectConfigure();
-    const widget = makeWidget({ searchParameters: { analytics: true } });
+    const widget = makeWidget({
+      searchParameters: {
+        analytics: true,
+      },
+    });
 
-    const config = widget.getConfiguration(SearchParameters.make({}));
-    expect(config).toEqual({ analytics: true });
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({
+        analytics: true,
+      })
+    );
   });
 
   it('should apply searchParameters with a higher priority', () => {
     const makeWidget = connectConfigure();
-    const widget = makeWidget({ searchParameters: { analytics: true } });
+    const widget = makeWidget({
+      searchParameters: {
+        analytics: true,
+      },
+    });
 
-    {
-      const config = widget.getConfiguration(
-        SearchParameters.make({ analytics: false })
-      );
-      expect(config).toEqual({ analytics: true });
-    }
+    expect(
+      widget.getConfiguration(
+        new SearchParameters({
+          analytics: false,
+        })
+      )
+    ).toEqual(
+      new SearchParameters({
+        analytics: true,
+      })
+    );
 
-    {
-      const config = widget.getConfiguration(
-        SearchParameters.make({ analytics: false, extra: true })
-      );
-      expect(config).toEqual({ analytics: true });
-    }
+    expect(
+      widget.getConfiguration(
+        new SearchParameters({
+          analytics: false,
+          clickAnalytics: true,
+        })
+      )
+    ).toEqual(
+      new SearchParameters({
+        analytics: true,
+        clickAnalytics: true,
+      })
+    );
   });
 
   it('should apply new searchParameters on refine()', () => {
     const renderFn = jest.fn();
     const makeWidget = connectConfigure(renderFn, jest.fn());
-    const widget = makeWidget({ searchParameters: { analytics: true } });
+    const widget = makeWidget({
+      searchParameters: {
+        analytics: true,
+      },
+    });
 
-    helper.setState(widget.getConfiguration());
+    helper.setState(
+      widget.getConfiguration(
+        new SearchParameters({
+          // This facet is added outside of the widget params
+          // so it shouldn't be overridden when calling `refine`.
+          facets: ['brand'],
+        })
+      )
+    );
     widget.init({ helper });
 
-    expect(widget.getConfiguration()).toEqual({ analytics: true });
-    expect(helper.state.analytics).toEqual(true);
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({
+        analytics: true,
+      })
+    );
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        analytics: true,
+        facets: ['brand'],
+      })
+    );
 
     const { refine } = renderFn.mock.calls[0][0];
-    expect(refine).toBe(widget._refine);
 
-    refine({ hitsPerPage: 3 });
+    refine({ hitsPerPage: 3, facets: ['rating'] });
 
-    expect(widget.getConfiguration()).toEqual({ hitsPerPage: 3 });
-    expect(helper.state.analytics).toBe(undefined);
-    expect(helper.state.hitsPerPage).toBe(3);
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({
+        hitsPerPage: 3,
+        facets: ['rating'],
+      })
+    );
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        hitsPerPage: 3,
+        facets: ['brand', 'rating'],
+      })
+    );
   });
 
   it('should dispose all the state set by configure', () => {
     const makeWidget = connectConfigure();
-    const widget = makeWidget({ searchParameters: { analytics: true } });
+    const widget = makeWidget({
+      searchParameters: {
+        analytics: true,
+      },
+    });
 
-    helper.setState(widget.getConfiguration());
+    helper.setState(widget.getConfiguration(new SearchParameters({})));
     widget.init({ helper });
 
-    expect(widget.getConfiguration()).toEqual({ analytics: true });
-    expect(helper.state.analytics).toBe(true);
+    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      new SearchParameters({
+        analytics: true,
+      })
+    );
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        analytics: true,
+      })
+    );
 
     const nextState = widget.dispose({ state: helper.state });
 
-    expect(nextState.analytics).toBe(undefined);
+    expect(nextState).toEqual(new SearchParameters({}));
   });
 });
