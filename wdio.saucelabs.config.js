@@ -1,3 +1,5 @@
+/* eslint-disable import/no-commonjs */
+
 const config = {
   hostname: 'ondemand.eu-central-1.saucelabs.com',
   port: 443,

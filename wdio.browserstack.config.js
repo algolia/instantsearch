@@ -1,3 +1,5 @@
+/* eslint-disable import/no-commonjs */
+
 const config = {
   hostname: 'hub.browserstack.com',
   port: 443,

@@ -1,3 +1,5 @@
+/* eslint-disable import/no-commonjs */
+
 const config = {
   hostname: 'cloud.seetest.io',
   protocol: 'https',

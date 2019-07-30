@@ -117,6 +117,7 @@
     "eslint-plugin-jest": "22.14.0",
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-react": "7.14.3",
+    "eslint-plugin-wdio": "5.11.0",
     "inquirer": "6.5.0",
     "jest": "24.8.0",
     "jest-diff": "24.8.0",

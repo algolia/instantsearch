@@ -5539,6 +5539,11 @@ eslint-plugin-react@7.14.3:
     prop-types "^15.7.2"
     resolve "^1.10.1"
 
+eslint-plugin-wdio@5.11.0:
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-wdio/-/eslint-plugin-wdio-5.11.0.tgz#17440b83224c78d09a8dcdc77cbcbc11e34da463"
+  integrity sha512-o7VzDo4D7jipbKS+k2e0lsFD8v3Lpm3Iffc59XOLunJlgebGA6lasEhTk8VqJtmlC50P9YxxSnZaQTAMqxw+YA==
+
 eslint-scope@3.7.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-3.7.1.tgz#3d63c3edfda02e06e01a452ad88caacc7cdcb6e8"

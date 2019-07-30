@@ -18,6 +18,18 @@ module.exports = {
         'valid-jsdoc': 0,
       },
     },
+    {
+      files: ['e2e/**/*.js'],
+      extends: ['plugin:wdio/recommended'],
+      plugins: ['wdio'],
+      env: {
+        mocha: true,
+        jest: false,
+      },
+      rules: {
+        'jest/valid-expect': 'off',
+      },
+    },
   ],
   settings: {
     react: {

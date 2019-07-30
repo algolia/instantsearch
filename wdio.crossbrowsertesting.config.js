@@ -1,3 +1,5 @@
+/* eslint-disable import/no-commonjs */
+
 const config = {
   hostname: 'hub.crossbrowsertesting.com',
   port: 80,
@@ -12,8 +14,8 @@ const config = {
   // Capabilities Generator
   // https://app.crossbrowsertesting.com/selenium/run
   commonCapabilities: {
-    record_video: 'true',
-    record_network: 'true',
+    record_video: 'true', // eslint-disable-line @typescript-eslint/camelcase
+    record_network: 'true', // eslint-disable-line @typescript-eslint/camelcase
   },
 
   capabilities: [
