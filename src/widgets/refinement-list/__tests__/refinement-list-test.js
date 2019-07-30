@@ -185,7 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         limit: 1,
       };
       const wdgt = refinementList(opts);
-      const partialConfig = wdgt.getConfiguration({});
+      const partialConfig = wdgt.getConfiguration(new SearchParameters({}));
       expect(partialConfig.maxValuesPerFacet).toBe(1);
     });
 
@@ -198,7 +198,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 99,
       };
       const wdgt = refinementList(opts);
-      const partialConfig = wdgt.getConfiguration({});
+      const partialConfig = wdgt.getConfiguration(new SearchParameters({}));
       expect(partialConfig.maxValuesPerFacet).toBe(opts.showMoreLimit);
     });
 

@@ -301,10 +301,23 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         return getLimit(this.isShowingMore);
       },
 
-      getConfiguration: (configuration = {}) => {
-        const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
-        };
+      getConfiguration(configuration) {
+        let widgetConfiguration;
+        if (operator === 'and') {
+          widgetConfiguration = {
+            facets: [attribute],
+            facetsRefinements: {
+              [attribute]: configuration.facetsRefinements[attribute] || [],
+            },
+          };
+        } else {
+          widgetConfiguration = {
+            disjunctiveFacets: [attribute],
+            disjunctiveFacetsRefinements: {
+              [attribute]: configuration.facetsRefinements[attribute] || [],
+            },
+          };
+        }
 
         const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
 
@@ -313,7 +326,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           showMore ? showMoreLimit : limit
         );
 
-        return widgetConfiguration;
+        return configuration.setQueryParameters(widgetConfiguration);
       },
 
       init({ helper, createURL, instantSearchInstance }) {
@@ -349,7 +362,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
         } = renderOptions;
 
-        const facetValues = results.getFacetValues(attribute, { sortBy });
+        const facetValues = results.getFacetValues(attribute, { sortBy }) || [];
         const items = transformItems(
           facetValues.slice(0, this.getLimit()).map(formatItems)
         );
@@ -388,13 +401,14 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
+        const withoutMaxValuesPerFacet = state.setQueryParameter(
+          'maxValuesPerFacet',
+          undefined
+        );
         if (operator === 'and') {
-          return state.removeFacetRefinement(attribute).removeFacet(attribute);
-        } else {
-          return state
-            .removeDisjunctiveFacetRefinement(attribute)
-            .removeDisjunctiveFacet(attribute);
+          return withoutMaxValuesPerFacet.removeFacet(attribute);
         }
+        return withoutMaxValuesPerFacet.removeDisjunctiveFacet(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
