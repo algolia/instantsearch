@@ -1,3 +1,19 @@
+# [3.6.0](https://github.com/algolia/instantsearch.js/compare/v3.5.4...v3.6.0) (2019-07-30)
+
+
+### Bug Fixes
+
+* **clearRefinements:** reset page to 0 ([#3936](https://github.com/algolia/instantsearch.js/issues/3936)) ([7378a0a](https://github.com/algolia/instantsearch.js/commit/7378a0a))
+* **deps:** update dependency instantsearch.js to v3.5.4 ([#3929](https://github.com/algolia/instantsearch.js/issues/3929)) ([eff84c5](https://github.com/algolia/instantsearch.js/commit/eff84c5))
+* pass noop as default value to unmountFn at connectors ([#3955](https://github.com/algolia/instantsearch.js/issues/3955)) ([7c38744](https://github.com/algolia/instantsearch.js/commit/7c38744))
+* **enhanceConfiguration:** deduplicate the hierarchicalFacets ([#3966](https://github.com/algolia/instantsearch.js/issues/3966)) ([baf8a35](https://github.com/algolia/instantsearch.js/commit/baf8a35))
+* **hierarchicalFacets:** prevent different rootPath on same attribute ([#3965](https://github.com/algolia/instantsearch.js/issues/3965)) ([5ee79fa](https://github.com/algolia/instantsearch.js/commit/5ee79fa))
+* **menuSelect:** unmount component ([#3911](https://github.com/algolia/instantsearch.js/issues/3911)) ([f6debce](https://github.com/algolia/instantsearch.js/commit/f6debce))
+* **rangeInput:** unmount component ([#3910](https://github.com/algolia/instantsearch.js/issues/3910)) ([f6c29e8](https://github.com/algolia/instantsearch.js/commit/f6c29e8))
+* **refinementList:** fix showMore button to work after search ([#3082](https://github.com/algolia/instantsearch.js/issues/3082)) ([23e46b6](https://github.com/algolia/instantsearch.js/commit/23e46b6))
+
+
+
 ## [3.5.4](https://github.com/algolia/instantsearch.js/compare/v3.5.3...v3.5.4) (2019-07-01)
 
 
