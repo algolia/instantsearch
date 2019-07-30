@@ -118,7 +118,7 @@ it("allows search bar classes override when it's searchable", () => {
   });
   expect(wrapper.html()).toMatchSnapshot();
 
-  expect(wrapper.find('.ais-SearchBox-form').hasClass('moar-classes')).toBe(
+  expect(wrapper.find('.ais-SearchBox-form').classes('moar-classes')).toBe(
     true
   );
 });
