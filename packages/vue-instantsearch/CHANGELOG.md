@@ -1,3 +1,19 @@
+# [2.3.0](https://github.com/algolia/vue-instantsearch/compare/v2.2.2...v2.3.0) (2019-07-30)
+
+
+### Bug Fixes
+
+* **core:** prevent duplicating facet values ([#705](https://github.com/algolia/vue-instantsearch/issues/705)) ([7573be1](https://github.com/algolia/vue-instantsearch/commit/7573be1)), closes [#663](https://github.com/algolia/vue-instantsearch/issues/663)
+* **error:** correct suggestion ([44f2d9c](https://github.com/algolia/vue-instantsearch/commit/44f2d9c))
+* **ssr:** clearer error message when using ssr without the component ([#698](https://github.com/algolia/vue-instantsearch/issues/698)) ([20c2153](https://github.com/algolia/vue-instantsearch/commit/20c2153)), closes [#697](https://github.com/algolia/vue-instantsearch/issues/697)
+
+
+### Features
+
+* **RefinementList:** forward class names to input ([#696](https://github.com/algolia/vue-instantsearch/issues/696)) ([793eaf2](https://github.com/algolia/vue-instantsearch/commit/793eaf2)), closes [#644](https://github.com/algolia/vue-instantsearch/issues/644)
+
+
+
 ## [2.2.2](https://github.com/algolia/vue-instantsearch/compare/v2.2.1...v2.2.2) (2019-07-11)
 
 
