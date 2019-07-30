@@ -967,7 +967,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
     });
 
-    it('retrieves the `uiState` for the children indices with empty indices omit', () => {
+    it('retrieves the `uiState` for the children indices with empty indices omitted', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
       const instantSearchInstance = createInstantSearch();
