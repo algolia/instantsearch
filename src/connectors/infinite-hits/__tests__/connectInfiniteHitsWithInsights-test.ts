@@ -102,4 +102,14 @@ describe('connectInfiniteHitsWithInsights', () => {
     expect(secondRenderingOptions.hits).toEqual(expect.objectContaining(hits));
     expect(secondRenderingOptions.results).toEqual(results);
   });
+
+  it('does not throw without the unmount function', () => {
+    const helper = algoliasearchHelper(createSearchClient(), '', {});
+    const rendering = () => {};
+    const makeWidget = connectInfiniteHitsWithInsights(rendering, jest.fn());
+    const widget = makeWidget({});
+    expect(() =>
+      widget.dispose!({ helper, state: helper.state })
+    ).not.toThrow();
+  });
 });

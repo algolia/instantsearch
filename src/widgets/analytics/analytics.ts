@@ -144,9 +144,7 @@ function analytics(
 
     const stringifiedParams = serializedParams.join('&');
 
-    let dataToSend = `Query: ${
-      analyticsState.state.query
-    }, ${stringifiedParams}`;
+    let dataToSend = `Query: ${analyticsState.state.query}, ${stringifiedParams}`;
     if (pushPagination === true) {
       dataToSend += `, Page: ${analyticsState.state.page}`;
     }

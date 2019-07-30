@@ -201,9 +201,7 @@ search.addWidgets([
       {
         _highlightResult: {
           foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
-              TAG_PLACEHOLDER.highlightPostTag
-            }</script>`,
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
       },
@@ -257,9 +255,7 @@ search.addWidgets([
       {
         _highlightResult: {
           foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
-              TAG_PLACEHOLDER.highlightPostTag
-            }</script>`,
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
       },

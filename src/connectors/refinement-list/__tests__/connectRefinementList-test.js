@@ -722,6 +722,327 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     ]);
   });
 
+  it('show more should toggle between two limits after search', async () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const limit = 1;
+    const showMoreLimit = 2;
+    const widget = makeWidget({
+      attribute: 'category',
+      limit,
+      showMore: true,
+      showMoreLimit,
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        facetHits: [],
+      })
+    );
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const renderingOptions2 = rendering.mock.calls[1][0];
+    expect(renderingOptions2.items).toHaveLength(1);
+
+    // `searchForItems` triggers a new render
+    renderingOptions2.searchForItems('query triggering no results');
+    await Promise.resolve();
+
+    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      limit,
+      expect.anything()
+    );
+
+    expect(rendering).toHaveBeenCalledTimes(3);
+    const renderingOptions3 = rendering.mock.calls[2][0];
+
+    // `searchForItems` triggers a new render
+    renderingOptions3.searchForItems('');
+    await Promise.resolve();
+
+    expect(rendering).toHaveBeenCalledTimes(4);
+    const renderingOptions4 = rendering.mock.calls[3][0];
+    expect(renderingOptions4.toggleShowMore).toBeDefined();
+
+    // `toggleShowMore` triggers a new render
+    renderingOptions4.toggleShowMore();
+
+    expect(rendering).toHaveBeenCalledTimes(5);
+    const renderingOptions5 = rendering.mock.calls[4][0];
+    expect(renderingOptions5.items).toHaveLength(2);
+
+    renderingOptions5.searchForItems('new search');
+    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      showMoreLimit,
+      expect.anything()
+    );
+  });
+
+  it('Toggle show more should be enabled when refinement list is expanded and number of facet is above limit and below showMoreLimit', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      limit: 1,
+      showMore: true,
+      showMoreLimit: 3,
+    });
+
+    const helper = jsHelper({}, '', {
+      ...widget.getConfiguration({}),
+      maxValuesPerFacet: 10,
+    });
+    helper.search = jest.fn();
+
+    // 1st rendering: initialization
+    widget.init({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // 2nd rendering: with 4 results (collapsed refinement list with limit < showMoreLimit < facets)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+
+    expect(secondRenderingOptions.canToggleShowMore).toEqual(true);
+
+    // 3rd rendering: expand refinement list
+    secondRenderingOptions.toggleShowMore();
+
+    // 4th rendering: with 2 results (expanded refinement list with limit < facets < showMoreLimit)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const forthRenderingOptions = rendering.mock.calls[3][0];
+
+    expect(forthRenderingOptions.canToggleShowMore).toEqual(true);
+  });
+
+  it('Toggle show more should be disabled when refinement list is expanded and number of facet is below limit', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      limit: 2,
+      showMore: true,
+      showMoreLimit: 3,
+    });
+
+    const helper = jsHelper({}, '', {
+      ...widget.getConfiguration({}),
+      maxValuesPerFacet: 10,
+    });
+    helper.search = jest.fn();
+
+    // 1st rendering: initialization
+    widget.init({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // 2nd rendering: with 4 results (collapsed refinement list with limit < showMoreLimit < facets)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+
+    expect(secondRenderingOptions.canToggleShowMore).toEqual(true);
+
+    // 3rd rendering: expand refinement list
+    secondRenderingOptions.toggleShowMore();
+
+    // 4th rendering: with 1 result (expanded refinement list with facets < limit < showMoreLimit)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const forthRenderingOptions = rendering.mock.calls[3][0];
+
+    expect(forthRenderingOptions.canToggleShowMore).toEqual(false);
+  });
+
   it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
@@ -922,6 +1243,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           facets: {
             category: {
               c1: 880,
+              c2: 880,
+              c3: 880,
+              c4: 880,
             },
           },
         },
@@ -929,6 +1253,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           facets: {
             category: {
               c1: 880,
+              c2: 880,
+              c3: 880,
+              c4: 880,
             },
           },
         },
@@ -1204,16 +1531,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         facetHits: [
           {
             count: 33,
-            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${
-              TAG_PLACEHOLDER.highlightPostTag
-            }li`,
+            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${
-              TAG_PLACEHOLDER.highlightPostTag
-            }vidoff`,
+            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
             value: 'Davidoff',
           },
         ],
@@ -1286,6 +1609,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         },
       ]);
     });
+  });
+
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectRefinementList(rendering);
+    const widget = makeWidget({
+      attribute: 'myFacet',
+    });
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 
   describe('routing', () => {

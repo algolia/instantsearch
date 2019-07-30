@@ -196,6 +196,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
+
+    test('does not throw without the unmount function', () => {
+      const helper = createFakeHelper();
+      const rendering = () => {};
+      const createWidget = connectQueryRules(rendering);
+      const widget = createWidget({});
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+      expect(() =>
+        widget.dispose!({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   describe('options', () => {
