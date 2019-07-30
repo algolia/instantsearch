@@ -996,7 +996,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
     });
 
-    it('resets pages of nested indexes when the state changes', () => {
+    it('resets pages of nested indices when the state changes', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
       const level2 = index({ indexName: 'level_2_index_name' });
@@ -1137,7 +1137,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
     });
 
-    it('does not reset pages of nested indexes when only the page changes', () => {
+    it('does not reset pages of nested indices when only the page changes', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
       const level2 = index({ indexName: 'level_2_index_name' });
@@ -1277,7 +1277,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
     });
 
-    it('is a noop for unset pages of nested indexes when the state changes', () => {
+    it('is a noop for unset pages of nested indices when the state changes', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
       const level2 = index({ indexName: 'level_2_index_name' });
