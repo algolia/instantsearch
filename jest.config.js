@@ -8,6 +8,7 @@ module.exports = {
     '<rootDir>/node_modules/',
     '<rootDir>/dist*',
     '<rootDir>/functional-tests',
+    '<rootDir>/e2e',
   ],
   watchPathIgnorePatterns: [
     '<rootDir>/cjs',
