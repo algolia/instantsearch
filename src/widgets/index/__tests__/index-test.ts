@@ -22,6 +22,16 @@ describe('index', () => {
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('query', undefined);
       }),
+      getWidgetState: jest.fn((uiState, { searchParameters }) => {
+        if (!searchParameters.query) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          query: searchParameters.query,
+        };
+      }),
       ...args,
     });
 
@@ -34,6 +44,16 @@ describe('index', () => {
       }),
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('page', undefined);
+      }),
+      getWidgetState: jest.fn((uiState, { searchParameters }) => {
+        if (!searchParameters.page) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          page: searchParameters.page,
+        };
       }),
       ...args,
     });
@@ -807,6 +827,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: instantSearchInstance._createAbsoluteURL,
         });
+      });
+    });
+
+    it('updates the local `uiState` when the state changes', () => {
+      const instance = index({ indexName: 'index_name' });
+      const instantSearchInstance = createInstantSearch();
+      const widgets = [createSearchBox(), createPagination()];
+
+      instance.addWidgets(widgets);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // Simulate a state change
+      instance
+        .getHelper()!
+        .setQueryParameter('query', 'Apple')
+        .setQueryParameter('page', 5);
+
+      expect(instance.getWidgetState({})).toEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        index_name: {
+          query: 'Apple',
+          page: 5,
+        },
       });
     });
 

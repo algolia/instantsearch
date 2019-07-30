@@ -6,10 +6,12 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import {
   InstantSearch,
+  UiState,
   Widget,
   InitOptions,
   RenderOptions,
   DisposeOptions,
+  WidgetStateOptions,
   Client,
   ScopedResult,
 } from '../../types';
@@ -39,10 +41,26 @@ export type Index = Widget & {
   init(options: InitOptions): void;
   render(options: RenderOptions): void;
   dispose(options: DisposeOptions): void;
+  getWidgetState(uiState: UiState): UiState;
 };
 
 function isIndexWidget(widget: Widget): widget is Index {
   return widget.$$type === 'ais.index';
+}
+
+function getLocalWidgetsState(
+  widgets: Widget[],
+  widgetStateOptions: WidgetStateOptions
+): UiState {
+  return widgets
+    .filter(widget => !isIndexWidget(widget))
+    .reduce<UiState>((uiState, widget) => {
+      if (!widget.getWidgetState) {
+        return uiState;
+      }
+
+      return widget.getWidgetState(uiState, widgetStateOptions);
+    }, {});
 }
 
 function resetPageFromWidgets(widgets: Widget[]): void {
@@ -90,6 +108,7 @@ const index = (props: IndexProps): Index => {
   const { indexName = null } = props || {};
 
   let localWidgets: Widget[] = [];
+  let localUiState: UiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
   let localParent: Index | null = null;
   let helper: Helper | null = null;
@@ -265,7 +284,12 @@ const index = (props: IndexProps): Index => {
         mergeSearchParameters(...resolveSearchParameters(this))
       );
 
-      helper.on('change', ({ isPageReset }) => {
+      helper.on('change', ({ state, isPageReset }) => {
+        localUiState = getLocalWidgetsState(localWidgets, {
+          searchParameters: state,
+          helper: helper!,
+        });
+
         if (isPageReset) {
           resetPageFromWidgets(localWidgets);
         }
@@ -345,6 +369,13 @@ const index = (props: IndexProps): Index => {
 
       derivedHelper!.detach();
       derivedHelper = null;
+    },
+
+    getWidgetState(uiState: UiState) {
+      return {
+        ...uiState,
+        [indexName]: localUiState,
+      };
     },
   };
 };
