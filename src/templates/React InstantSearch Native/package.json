@@ -11,21 +11,21 @@
   },
   "dependencies": {
     "algoliasearch": "3.32.1",
-    "expo": "32.0.0",
+    "expo": "32.0.6",
     "prop-types": "15.7.2",
     "react": "16.5.0",
     "react-instantsearch-native": "{{libraryVersion}}",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
   },
   "devDependencies": {
-    "babel-preset-expo": "5.0.0",
+    "babel-preset-expo": "5.2.0",
     "eslint": "5.7.0",
     "eslint-config-algolia": "13.2.3",
     "eslint-config-prettier": "3.6.0",
     "eslint-plugin-import": "2.17.3",
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-react": "7.13.0",
-    "expo-cli": "2.13.0",
+    "expo-cli": "2.21.2",
     "prettier": "1.16.4"
   }
 }
