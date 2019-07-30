@@ -372,10 +372,17 @@ const index = (props: IndexProps): Index => {
     },
 
     getWidgetState(uiState: UiState) {
-      return {
-        ...uiState,
-        [indexName]: localUiState,
-      };
+      const currentUiState = Object.keys(localUiState).length
+        ? { ...uiState, [this.getIndexId()]: localUiState }
+        : uiState;
+
+      return localWidgets
+        .filter(isIndexWidget)
+        .reduce<UiState>(
+          (previousUiState, innerIndex) =>
+            innerIndex.getWidgetState(previousUiState),
+          currentUiState
+        );
     },
   };
 };

@@ -858,6 +858,144 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
     });
 
+    it('updates the local `uiState` only with widgets not indices', () => {
+      const level0 = index({ indexName: 'level_0_index_name' });
+      const level1 = index({ indexName: 'level_1_index_name' });
+      const instantSearchInstance = createInstantSearch();
+      const widgets = [createSearchBox(), createPagination()];
+
+      jest.spyOn(level1, 'getWidgetState');
+
+      level0.addWidgets([...widgets, level1]);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // Simulate a state change
+      level0
+        .getHelper()!
+        .setQueryParameter('query', 'Apple')
+        .setQueryParameter('page', 5);
+
+      widgets.forEach(widget => {
+        expect(widget.getWidgetState).toHaveBeenCalledTimes(2); // 2 changes
+      });
+
+      expect(level1.getWidgetState).toHaveBeenCalledTimes(0);
+    });
+
+    it('retrieves the `uiState` for the children indices', () => {
+      const level0 = index({ indexName: 'level_0_index_name' });
+      const level1 = index({ indexName: 'level_1_index_name' });
+      const level2 = index({ indexName: 'level_2_index_name' });
+      const instantSearchInstance = createInstantSearch();
+
+      level0.addWidgets([
+        createSearchBox(),
+        createPagination(),
+
+        level1.addWidgets([
+          createSearchBox(),
+          createPagination(),
+
+          level2.addWidgets([createSearchBox(), createPagination()]),
+        ]),
+      ]);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // Simulate a state change
+      level0
+        .getHelper()!
+        .setQueryParameter('query', 'Apple')
+        .setQueryParameter('page', 5);
+
+      level1
+        .getHelper()!
+        .setQueryParameter('query', 'Apple iPhone')
+        .setQueryParameter('page', 7);
+
+      level2
+        .getHelper()!
+        .setQueryParameter('query', 'Apple iPhone 5S')
+        .setQueryParameter('page', 9);
+
+      expect(level0.getWidgetState({})).toEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_0_index_name: {
+          query: 'Apple',
+          page: 5,
+        },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_1_index_name: {
+          query: 'Apple iPhone',
+          page: 7,
+        },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_2_index_name: {
+          query: 'Apple iPhone 5S',
+          page: 9,
+        },
+      });
+
+      expect(level1.getWidgetState({})).toEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_1_index_name: {
+          query: 'Apple iPhone',
+          page: 7,
+        },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_2_index_name: {
+          query: 'Apple iPhone 5S',
+          page: 9,
+        },
+      });
+
+      expect(level2.getWidgetState({})).toEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_2_index_name: {
+          query: 'Apple iPhone 5S',
+          page: 9,
+        },
+      });
+    });
+
+    it('retrieves the `uiState` for the children indices with empty indices omit', () => {
+      const level0 = index({ indexName: 'level_0_index_name' });
+      const level1 = index({ indexName: 'level_1_index_name' });
+      const instantSearchInstance = createInstantSearch();
+      const widgets = [createSearchBox(), createPagination(), level1];
+
+      level0.addWidgets(widgets);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // Simulate a state change
+      level0
+        .getHelper()!
+        .setQueryParameter('query', 'Apple')
+        .setQueryParameter('page', 5);
+
+      expect(level0.getWidgetState({})).toEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_0_index_name: {
+          query: 'Apple',
+          page: 5,
+        },
+      });
+    });
+
     it('resets pages of nested indexes when the state changes', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
