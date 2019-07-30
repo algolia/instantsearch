@@ -168,6 +168,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   });
 
   describe('dispose', () => {
+    it('does not throw without the unmount function', () => {
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+      const helper = algoliasearchHelper({});
+      widget.init({ helper });
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({}, '');
 
@@ -183,20 +194,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({}, '');
-
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      widget.init({ helper });
-
-      expect(() =>
-        widget.dispose({ helper, state: helper.state })
-      ).not.toThrow();
     });
 
     it('removes event listeners on the voice helper', () => {

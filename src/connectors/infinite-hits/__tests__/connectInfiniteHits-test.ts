@@ -319,9 +319,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       {
         _highlightResult: {
           foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${
-              TAG_PLACEHOLDER.highlightPostTag
-            }</script>`,
+            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
       },
@@ -470,9 +468,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'hello',
         _highlightResult: {
           name: {
-            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${
-              TAG_PLACEHOLDER.highlightPostTag
-            }`,
+            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
       },
@@ -480,9 +476,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         name: 'halloween',
         _highlightResult: {
           name: {
-            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${
-              TAG_PLACEHOLDER.highlightPostTag
-            }ween`,
+            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
       },
@@ -722,9 +716,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(nextConfiguration.highlightPreTag).toBeUndefined();
       expect(nextConfiguration.highlightPostTag).toBeUndefined();
     });
+
+    it('keeps the __escaped mark', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectInfiniteHits(rendering);
+      const widget = makeWidget({});
+
+      const helper = algoliasearchHelper({} as Client, '', {});
+      helper.search = jest.fn();
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits: [{ whatever: 'i like kittens' }] }),
+      ]);
+      widget.render!(
+        createRenderOptions({
+          results,
+          state: helper.state,
+          helper,
+        })
+      );
+
+      expect((results.hits as any).__escaped).toBe(true);
+    });
   });
 
   describe('dispose', () => {
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({} as Client, '', {});
+      const rendering = () => {};
+      const makeWidget = connectInfiniteHits(rendering);
+      const widget = makeWidget({});
+      expect(() =>
+        widget.dispose!({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({} as Client, '', {});
 
@@ -738,18 +771,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       widget.dispose!({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({} as Client, '', {});
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(() =>
-        widget.dispose!({ helper, state: helper.state })
-      ).not.toThrow();
     });
 
     it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {

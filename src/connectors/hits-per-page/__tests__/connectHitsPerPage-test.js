@@ -521,6 +521,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page', default: true },
+        { value: 10, label: '10 items per page' },
+      ],
+    });
+    const helper = algoliasearchHelper({}, '', {});
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('routing', () => {
     const getInitializedWidget = () => {
       const renderFn = jest.fn();
