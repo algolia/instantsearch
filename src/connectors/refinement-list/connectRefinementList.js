@@ -388,14 +388,15 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        let newState;
+        const newState = state.setQueryParameter(
+          'maxValuesPerFacet',
+          undefined
+        );
         if (operator === 'and') {
-          newState = state.removeFacet(attribute);
+          return newState.removeFacet(attribute);
         } else {
-          newState = state.removeDisjunctiveFacet(attribute);
+          return newState.removeDisjunctiveFacet(attribute);
         }
-
-        return newState.setQueryParameter('maxValuesPerFacet', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
