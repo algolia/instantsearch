@@ -1724,6 +1724,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       expect(subLevelInstance.getHelper()).toBe(null);
     });
 
+    it('removes the listeners on internal Helper', () => {
+      const instance = index({ indexName: 'index_name' });
+      const instantSearchInstance = createInstantSearch();
+      const searchBox = createSearchBox();
+
+      instance.addWidgets([searchBox]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      // Save the Helper to be able to simulate a change
+      const helper = instance.getHelper()!;
+
+      // Simuate a state change
+      helper.setQueryParameter('query', 'Apple iPhone');
+
+      expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
+
+      instance.dispose(createDisposeOptions());
+
+      // Simuate a state change
+      helper.setQueryParameter('query', 'Apple iPhone 5S');
+
+      expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
+    });
+
     it('removes the internal Helper', () => {
       const instance = index({ indexName: 'index_name' });
       const instantSearchInstance = createInstantSearch();

@@ -365,6 +365,7 @@ const index = (props: IndexProps): Index => {
 
       localInstantSearchInstance = null;
       localParent = null;
+      helper!.removeAllListeners();
       helper = null;
 
       derivedHelper!.detach();
