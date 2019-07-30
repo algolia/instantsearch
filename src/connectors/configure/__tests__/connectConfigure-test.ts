@@ -1,20 +1,25 @@
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchParameters,
+  AlgoliaSearchHelper,
+} from 'algoliasearch-helper';
 
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import connectConfigure from '../connectConfigure';
-
-const fakeClient = {
-  search: jest.fn(() => Promise.resolve({ results: [{}] })),
-};
+import {
+  createInitOptions,
+  createDisposeOptions,
+} from '../../../../test/mock/createWidget';
 
 describe('connectConfigure', () => {
-  let helper;
+  let helper: AlgoliaSearchHelper;
 
   beforeEach(() => {
-    helper = algoliasearchHelper(fakeClient, '', {});
+    helper = algoliasearchHelper(createSearchClient(), '', {});
   });
 
   describe('Usage', () => {
     it('throws without searchParameters', () => {
+      // @ts-ignore wrong options
       expect(() => connectConfigure()()).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchParameters\` option expects an object.
 
@@ -24,6 +29,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
     it('throws when you pass it a non-plain object', () => {
       expect(() => {
+        // @ts-ignore wrong options
         connectConfigure()(new Date());
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchParameters\` option expects an object.
@@ -32,6 +38,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 `);
 
       expect(() => {
+        // @ts-ignore wrong options
         connectConfigure()(() => {});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchParameters\` option expects an object.
@@ -45,10 +52,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('with a unmount function but no render function does not throw', () => {
+      // @ts-ignore wrong options
       expect(() => connectConfigure(undefined, jest.fn())).not.toThrow();
     });
 
     it('does not throw without render and unmount functions', () => {
+      // @ts-ignore wrong options
       expect(() => connectConfigure(undefined, undefined)).not.toThrow();
     });
   });
@@ -79,7 +88,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       },
     });
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
       new SearchParameters({
         analytics: true,
       })
@@ -95,7 +104,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     expect(
-      widget.getConfiguration(
+      widget.getConfiguration!(
         new SearchParameters({
           analytics: false,
         })
@@ -107,7 +116,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
 
     expect(
-      widget.getConfiguration(
+      widget.getConfiguration!(
         new SearchParameters({
           analytics: false,
           clickAnalytics: true,
@@ -131,7 +140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     helper.setState(
-      widget.getConfiguration(
+      widget.getConfiguration!(
         new SearchParameters({
           // This facet is added outside of the widget params
           // so it shouldn't be overridden when calling `refine`.
@@ -139,9 +148,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         })
       )
     );
-    widget.init({ helper });
+    widget.init!(createInitOptions({ helper }));
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
       new SearchParameters({
         analytics: true,
       })
@@ -157,7 +166,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
     refine({ hitsPerPage: 3, facets: ['rating'] });
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
       new SearchParameters({
         hitsPerPage: 3,
         facets: ['rating'],
@@ -171,7 +180,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
   });
 
-  it('should dispose all the state set by configure', () => {
+  it('should dispose only the state set by configure', () => {
     const makeWidget = connectConfigure();
     const widget = makeWidget({
       searchParameters: {
@@ -179,10 +188,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       },
     });
 
-    helper.setState(widget.getConfiguration(new SearchParameters({})));
-    widget.init({ helper });
+    helper.setState(
+      widget.getConfiguration!(
+        new SearchParameters({
+          clickAnalytics: true,
+        })
+      )
+    );
+    widget.init!(createInitOptions({ helper }));
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
       new SearchParameters({
         analytics: true,
       })
@@ -190,11 +205,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     expect(helper.state).toEqual(
       new SearchParameters({
         analytics: true,
+        clickAnalytics: true,
       })
     );
 
-    const nextState = widget.dispose({ state: helper.state });
+    const nextState = widget.dispose!(
+      createDisposeOptions({ state: helper.state })
+    );
 
-    expect(nextState).toEqual(new SearchParameters({}));
+    expect(nextState).toEqual(
+      new SearchParameters({
+        clickAnalytics: true,
+      })
+    );
   });
 });
