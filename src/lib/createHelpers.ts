@@ -16,7 +16,7 @@ interface HoganHelpers {
 export default function hoganHelpers({
   numberLocale,
 }: {
-  numberLocale: string;
+  numberLocale?: string;
 }): HoganHelpers {
   return {
     formatNumber(value, render) {

@@ -4,15 +4,14 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import { Client } from 'algoliasearch';
 import {
   InstantSearch,
   UiState,
   Widget,
   InitOptions,
   RenderOptions,
-  DisposeOptions,
   WidgetStateOptions,
-  Client,
   ScopedResult,
 } from '../../types';
 import {
@@ -30,6 +29,9 @@ type IndexProps = {
   indexName: string;
 };
 
+type IndexInitOptions = Pick<InitOptions, 'instantSearchInstance' | 'parent'>;
+type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
+
 export type Index = Widget & {
   getIndexId(): string;
   getHelper(): Helper | null;
@@ -38,9 +40,9 @@ export type Index = Widget & {
   getWidgets(): Widget[];
   addWidgets(widgets: Widget[]): Index;
   removeWidgets(widgets: Widget[]): Index;
-  init(options: InitOptions): void;
-  render(options: RenderOptions): void;
-  dispose(options: DisposeOptions): void;
+  init(options: IndexInitOptions): void;
+  render(options: IndexRenderOptions): void;
+  dispose(): void;
   getWidgetState(uiState: UiState): UiState;
 };
 
@@ -188,7 +190,7 @@ const index = (props: IndexProps): Index => {
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
-              createURL: localInstantSearchInstance._createAbsoluteURL,
+              createURL: localInstantSearchInstance._createAbsoluteURL!,
             });
           }
         });
@@ -234,7 +236,7 @@ const index = (props: IndexProps): Index => {
       return this;
     },
 
-    init({ instantSearchInstance, parent }: InitOptions) {
+    init({ instantSearchInstance, parent }: IndexInitOptions) {
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
 
@@ -317,7 +319,7 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            createURL: instantSearchInstance._createAbsoluteURL!,
           });
         }
       });
@@ -336,7 +338,7 @@ const index = (props: IndexProps): Index => {
       });
     },
 
-    render({ instantSearchInstance }: RenderOptions) {
+    render({ instantSearchInstance }: IndexRenderOptions) {
       localWidgets.forEach(widget => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
@@ -353,7 +355,7 @@ const index = (props: IndexProps): Index => {
             scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            createURL: instantSearchInstance._createAbsoluteURL!,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },
