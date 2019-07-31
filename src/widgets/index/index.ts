@@ -4,13 +4,13 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import { Client } from 'algoliasearch';
 import {
   InstantSearch,
   Widget,
   InitOptions,
   RenderOptions,
   DisposeOptions,
-  Client,
   ScopedResult,
 } from '../../types';
 import {

@@ -3,6 +3,7 @@ import algoliasearchHelper, {
   SearchParameters,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
+import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
 import RoutingManager from './RoutingManager';
@@ -17,10 +18,9 @@ import {
   noop,
 } from './utils';
 import {
-  Client,
-  InsightsClient,
+  InsightsClient as AlgoliaInsightsClient,
+  SearchClient,
   Widget,
-  InstantSearchOptions,
   RenderOptions,
   DisposeOptions,
   InitOptions,
@@ -49,6 +49,17 @@ function defaultCreateURL() {
  * @property {function} [init] Called once before the first search
  */
 
+export type InstantSearchOptions = {
+  indexName: string;
+  searchClient: SearchClient | AlgoliaSearchClient;
+  numberLocale?: string;
+  searchFunction?: (helper: AlgoliaSearchHelper) => void;
+  searchParameters?: PlainSearchParameters;
+  routing?: any;
+  stalledSearchDelay?: number;
+  insightsClient?: AlgoliaInsightsClient;
+};
+
 /**
  * The actual implementation of the InstantSearch. This is
  * created using the `instantsearch` factory function.
@@ -56,8 +67,8 @@ function defaultCreateURL() {
  */
 class InstantSearch extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
-  public insightsClient: InsightsClient | null;
   public indexName: string;
+  public insightsClient: AlgoliaInsightsClient | null;
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: Index;
@@ -111,8 +122,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       );
     }
 
-    if (typeof (searchClient as Client).addAlgoliaAgent === 'function') {
-      (searchClient as Client).addAlgoliaAgent(`instantsearch.js (${version})`);
+    if (
+      typeof (searchClient as AlgoliaSearchClient).addAlgoliaAgent ===
+      'function'
+    ) {
+      (searchClient as AlgoliaSearchClient).addAlgoliaAgent(
+        `instantsearch.js (${version})`
+      );
     }
 
     if (insightsClient && typeof insightsClient !== 'function') {
@@ -285,7 +301,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       // to not throw errors
       const fakeClient = ({
         search: () => new Promise(noop),
-      } as any) as Client;
+      } as any) as AlgoliaSearchClient;
 
       this._mainHelperSearch = mainHelper.search.bind(mainHelper);
       mainHelper.search = () => {

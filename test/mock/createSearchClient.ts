@@ -1,28 +1,28 @@
 import { MultiResponse } from 'algoliasearch';
-import { Client } from '../../src/types';
+import { SearchClient } from '../../src/types';
+
 import {
   createSingleSearchResponse,
   createMultiSearchResponse,
   createSFFVResponse,
 } from './createAPIResponse';
 
-export const createSearchClient = (args: Partial<Client> = {}): Client =>
-  ({
-    search: jest.fn(requests =>
-      Promise.resolve(
-        createMultiSearchResponse(
-          ...requests.map(() => createSingleSearchResponse())
-        )
+export const createSearchClient = (
+  args: Partial<SearchClient> = {}
+): SearchClient => ({
+  search: jest.fn(requests =>
+    Promise.resolve(
+      createMultiSearchResponse(
+        ...requests.map(() => createSingleSearchResponse())
       )
-    ),
-    searchForFacetValues: jest.fn(() =>
-      Promise.resolve([createSFFVResponse()])
-    ),
-    ...args,
-  } as Client);
+    )
+  ),
+  searchForFacetValues: jest.fn(() => Promise.resolve([createSFFVResponse()])),
+  ...args,
+});
 
 type ControlledClient = {
-  searchClient: Client;
+  searchClient: SearchClient;
   searches: Array<{
     promise: Promise<MultiResponse>;
     resolver: () => void;
@@ -30,7 +30,7 @@ type ControlledClient = {
 };
 
 export const createControlledSearchClient = (
-  args: Partial<Client> = {}
+  args: Partial<SearchClient> = {}
 ): ControlledClient => {
   const searches: ControlledClient['searches'] = [];
   const searchClient = createSearchClient({
