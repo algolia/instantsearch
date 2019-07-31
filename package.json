@@ -90,6 +90,7 @@
     "@wdio/crossbrowsertesting-service": "5.11.4",
     "@wdio/local-runner": "5.11.7",
     "@wdio/mocha-framework": "5.11.0",
+    "@wdio/sauce-service": "5.11.1",
     "@wdio/spec-reporter": "5.11.7",
     "algoliasearch": "3.33.0",
     "babel-eslint": "10.0.2",
@@ -139,6 +140,7 @@
     "rollup-plugin-uglify": "6.0.2",
     "scriptjs": "2.5.9",
     "semver": "6.3.0",
+    "serve-handler": "6.1.0",
     "shelljs": "0.8.3",
     "typescript": "3.5.3",
     "webpack": "4.38.0"

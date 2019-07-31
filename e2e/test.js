@@ -6,9 +6,7 @@ describe('InstantSearch e-commerce demo', () => {
   });
 
   it('must work', async () => {
-    await browser.url(
-      'https://deploy-preview-3967--instantsearchjs.netlify.com/examples/e-commerce/'
-    );
+    await browser.url('http://localhost:5000/examples/e-commerce/');
 
     // Select "Apple" brand in list
     const brand = await browser.$('span=Apple');
