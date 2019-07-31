@@ -242,20 +242,14 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         helper.search();
       },
 
-      _getRefinedStar(searchParameters) {
-        let refinedStar = undefined;
+      _getRefinedStar(state) {
+        const refinements = state.getDisjunctiveRefinements(attribute);
 
-        const refinements = searchParameters.getDisjunctiveRefinements(
-          attribute
-        );
+        if (!refinements.length) {
+          return undefined;
+        }
 
-        refinements.forEach(r => {
-          if (!refinedStar || Number(r) < refinedStar) {
-            refinedStar = Number(r);
-          }
-        });
-
-        return refinedStar;
+        return Math.min(...refinements.map(Number));
       },
     };
   };
