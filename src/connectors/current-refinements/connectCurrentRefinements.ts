@@ -126,7 +126,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
     const {
       includedAttributes,
       excludedAttributes = ['query'],
-      transformItems = (items: Refinement[]) => items,
+      transformItems = (items: Item[]) => items,
     } = widgetParams || ({} as CurrentRefinementsConnectorParams);
 
     return {
