@@ -1,7 +1,15 @@
 import { render } from 'preact-compat';
-import algoliasearch from 'algoliasearch';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  AlgoliaSearchHelper,
+  SearchResults,
+} from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
@@ -20,6 +28,7 @@ describe('currentRefinements()', () => {
     it('throws without container', () => {
       expect(() => {
         currentRefinements({
+          // @ts-ignore wrong options
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -64,39 +73,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       });
     });
 
-    describe('options.templates', () => {
-      it('does not throw with an empty object', () => {
-        expect(
-          currentRefinements.bind(null, {
-            container: document.createElement('div'),
-            templates: {},
-          })
-        ).not.toThrow();
-      });
-
-      it('does not throw with a string template', () => {
-        expect(
-          currentRefinements.bind(null, {
-            container: document.createElement('div'),
-            templates: {
-              item: 'string template',
-            },
-          })
-        ).not.toThrow();
-      });
-
-      it('does not throw with a function template', () => {
-        expect(
-          currentRefinements.bind(null, {
-            container: document.createElement('div'),
-            templates: {
-              item: () => 'function template',
-            },
-          })
-        ).not.toThrow();
-      });
-    });
-
     describe('options.cssClasses', () => {
       it('does not throw with an empty object', () => {
         expect(
@@ -130,12 +106,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
   });
 
   describe('render()', () => {
-    let client;
-    let helper;
+    let helper: AlgoliaSearchHelper;
 
     beforeEach(() => {
-      client = algoliasearch('APP_ID', 'API_KEY');
-      helper = algoliasearchHelper(client, 'index_name', {
+      helper = algoliasearchHelper(createSearchClient(), 'index_name', {
         facets: ['facet', 'facetExclude', 'numericFacet', 'extraFacet'],
         disjunctiveFacets: ['disjunctiveFacet', 'numericDisjunctiveFacet'],
         hierarchicalFacets: [
@@ -158,31 +132,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       helper.addFacetRefinement('facet', 'facet-val1');
 
-      widget.init({
-        helper,
-        createURL: () => '#cleared',
-        instantSearchInstance: {},
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+        })
+      );
 
       const renderParameters = {
-        results: {
-          facets: [
-            {
-              name: 'facet',
-              data: {
-                'facet-val1': 1,
+        results: new SearchResults(helper.state, [
+          // @ts-ignore wrong types for `facets`
+          createSingleSearchResponse({
+            facets: [
+              {
+                name: 'facet',
+                data: {
+                  'facet-val1': 1,
+                },
               },
-            },
-          ],
-        },
+            ],
+          }),
+        ]),
         helper,
         state: helper.state,
-        createURL: () => '#cleared',
-        instantSearchInstance: {},
       };
 
-      widget.render(renderParameters);
-      widget.render(renderParameters);
+      widget.render!(createRenderOptions(renderParameters));
+      widget.render!(createRenderOptions(renderParameters));
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[0][0]).toMatchSnapshot();
@@ -201,18 +176,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           container: '#container',
         });
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {},
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         expect(render).toHaveBeenCalledTimes(1);
         expect(render.mock.calls[0][0]).toMatchSnapshot();
@@ -225,18 +199,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           container,
         });
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {},
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         expect(render).toHaveBeenCalledTimes(1);
         expect(render.mock.calls[0][0]).toMatchSnapshot();
@@ -266,47 +239,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           .addFacetRefinement('extraFacet', 'extraFacet-val1')
           .addFacetRefinement('extraFacet', 'extraFacet-val2');
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {
-            facets: [
-              {
-                name: 'facet',
-                exhaustive: true,
-                data: {
-                  'facet-val1': 1,
-                  'facet-val2': 2,
-                },
-              },
-              {
-                name: 'extraFacet',
-                exhaustive: true,
-                data: {
-                  'extraFacet-val1': 42,
-                  'extraFacet-val2': 42,
-                },
-              },
-            ],
-            disjunctiveFacets: [
-              {
-                name: 'disjunctiveFacet',
-                exhaustive: true,
-                data: {
-                  'disjunctiveFacet-val1': 3,
-                  'disjunctiveFacet-val2': 4,
-                },
-              },
-            ],
-          },
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                facets: [
+                  {
+                    name: 'facet',
+                    exhaustive: true,
+                    data: {
+                      'facet-val1': 1,
+                      'facet-val2': 2,
+                    },
+                  },
+                  {
+                    name: 'extraFacet',
+                    exhaustive: true,
+                    data: {
+                      'extraFacet-val1': 42,
+                      'extraFacet-val2': 42,
+                    },
+                  },
+                ],
+                // @ts-ignore wrong types for `disjunctiveFacets`
+                disjunctiveFacets: [
+                  {
+                    name: 'disjunctiveFacet',
+                    exhaustive: true,
+                    data: {
+                      'disjunctiveFacet-val1': 3,
+                      'disjunctiveFacet-val2': 4,
+                    },
+                  },
+                ],
+              }),
+            ]),
+            helper,
+            state: helper.state,
+          })
+        );
 
         const renderedItems = render.mock.calls[0][0].props.items;
         expect(renderedItems).toHaveLength(1);
@@ -334,39 +310,42 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           .addFacetRefinement('extraFacet', 'extraFacet-val1')
           .addFacetRefinement('extraFacet', 'extraFacet-val2');
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {
-            facets: [
-              {
-                name: 'extraFacet',
-                exhaustive: true,
-                data: {
-                  'extraFacet-val1': 42,
-                  'extraFacet-val2': 42,
-                },
-              },
-            ],
-            disjunctiveFacets: [
-              {
-                name: 'disjunctiveFacet',
-                exhaustive: true,
-                data: {
-                  'disjunctiveFacet-val1': 3,
-                  'disjunctiveFacet-val2': 4,
-                },
-              },
-            ],
-          },
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                facets: [
+                  {
+                    name: 'extraFacet',
+                    exhaustive: true,
+                    data: {
+                      'extraFacet-val1': 42,
+                      'extraFacet-val2': 42,
+                    },
+                  },
+                ],
+                // @ts-ignore wrong types for `disjunctiveFacets`
+                disjunctiveFacets: [
+                  {
+                    name: 'disjunctiveFacet',
+                    exhaustive: true,
+                    data: {
+                      'disjunctiveFacet-val1': 3,
+                      'disjunctiveFacet-val2': 4,
+                    },
+                  },
+                ],
+              }),
+            ]),
+            helper,
+            state: helper.state,
+          })
+        );
 
         const renderedItems = render.mock.calls[0][0].props.items;
         expect(renderedItems).toHaveLength(0);
@@ -403,47 +382,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
             'disjunctiveFacet-val2'
           );
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {
-            facets: [
-              {
-                name: 'facet',
-                exhaustive: true,
-                data: {
-                  'facet-val1': 1,
-                  'facet-val2': 2,
-                },
-              },
-              {
-                name: 'extraFacet',
-                exhaustive: true,
-                data: {
-                  'extraFacet-val1': 42,
-                  'extraFacet-val2': 42,
-                },
-              },
-            ],
-            disjunctiveFacets: [
-              {
-                name: 'disjunctiveFacet',
-                exhaustive: true,
-                data: {
-                  'disjunctiveFacet-val1': 3,
-                  'disjunctiveFacet-val2': 4,
-                },
-              },
-            ],
-          },
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                facets: [
+                  {
+                    name: 'facet',
+                    exhaustive: true,
+                    data: {
+                      'facet-val1': 1,
+                      'facet-val2': 2,
+                    },
+                  },
+                  {
+                    name: 'extraFacet',
+                    exhaustive: true,
+                    data: {
+                      'extraFacet-val1': 42,
+                      'extraFacet-val2': 42,
+                    },
+                  },
+                ],
+                // @ts-ignore wrong types for `disjunctiveFacets`
+                disjunctiveFacets: [
+                  {
+                    name: 'disjunctiveFacet',
+                    exhaustive: true,
+                    data: {
+                      'disjunctiveFacet-val1': 3,
+                      'disjunctiveFacet-val2': 4,
+                    },
+                  },
+                ],
+              }),
+            ]),
+            helper,
+            state: helper.state,
+          })
+        );
 
         const renderedItems = render.mock.calls[0][0].props.items;
 
@@ -465,18 +447,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           },
         });
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {},
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
           'customRoot'
@@ -491,18 +472,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           },
         });
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {},
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
           'customRoot1'
@@ -526,7 +506,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
             category: 'category',
             categoryLabel: 'categoryLabel',
             delete: 'delete',
-            query: 'query',
           },
         });
 
@@ -555,73 +534,76 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           .addTag('tag1')
           .addTag('tag2');
 
-        widget.init({
-          helper,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
-        widget.render({
-          results: {
-            facets: [
-              {
-                name: 'facet',
-                exhaustive: true,
-                data: {
-                  'facet-val1': 1,
-                  'facet-val2': 2,
-                  'facet-val3': 42,
-                },
-              },
-              {
-                name: 'extraFacet',
-                exhaustive: true,
-                data: {
-                  'extraFacet-val1': 42,
-                  'extraFacet-val2': 42,
-                },
-              },
-            ],
-            disjunctiveFacets: [
-              {
-                name: 'disjunctiveFacet',
-                exhaustive: true,
-                data: {
-                  'disjunctiveFacet-val1': 3,
-                  'disjunctiveFacet-val2': 4,
-                  'disjunctiveFacet-val3': 42,
-                },
-              },
-            ],
-            hierarchicalFacets: [
-              {
-                name: 'hierarchicalFacet',
-                data: [
+        widget.init!(
+          createInitOptions({
+            helper,
+          })
+        );
+        widget.render!(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                facets: [
                   {
-                    name: 'hierarchicalFacet-val1',
-                    count: 5,
+                    name: 'facet',
                     exhaustive: true,
+                    data: {
+                      'facet-val1': 1,
+                      'facet-val2': 2,
+                      'facet-val3': 42,
+                    },
+                  },
+                  {
+                    name: 'extraFacet',
+                    exhaustive: true,
+                    data: {
+                      'extraFacet-val1': 42,
+                      'extraFacet-val2': 42,
+                    },
+                  },
+                ],
+                // @ts-ignore wrong types for `disjunctiveFacets`
+                disjunctiveFacets: [
+                  {
+                    name: 'disjunctiveFacet',
+                    exhaustive: true,
+                    data: {
+                      'disjunctiveFacet-val1': 3,
+                      'disjunctiveFacet-val2': 4,
+                      'disjunctiveFacet-val3': 42,
+                    },
+                  },
+                ],
+                hierarchicalFacets: [
+                  {
+                    name: 'hierarchicalFacet',
                     data: [
                       {
+                        name: 'hierarchicalFacet-val1',
+                        count: 5,
+                        exhaustive: true,
+                        data: [
+                          {
+                            name: 'hierarchicalFacet-val2',
+                            count: 6,
+                            exhaustive: true,
+                          },
+                        ],
+                      },
+                      {
                         name: 'hierarchicalFacet-val2',
-                        count: 6,
+                        count: 42,
                         exhaustive: true,
                       },
                     ],
                   },
-                  {
-                    name: 'hierarchicalFacet-val2',
-                    count: 42,
-                    exhaustive: true,
-                  },
                 ],
-              },
-            ],
-          },
-          helper,
-          state: helper.state,
-          createURL: () => '#cleared',
-          instantSearchInstance: {},
-        });
+              }),
+            ]),
+            helper,
+            state: helper.state,
+          })
+        );
 
         expect(render.mock.calls[0][0]).toMatchSnapshot();
       });

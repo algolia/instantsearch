@@ -22,16 +22,12 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "facet",
-            "count": 1,
-            "exhaustive": true,
             "label": "facet-val1",
             "type": "facet",
             "value": "facet-val1",
           },
           Object {
             "attribute": "facet",
-            "count": 2,
-            "exhaustive": true,
             "label": "facet-val2",
             "type": "facet",
             "value": "facet-val2",
@@ -45,8 +41,6 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "extraFacet",
-            "count": 42,
-            "exhaustive": true,
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
@@ -79,16 +73,12 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "disjunctiveFacet",
-            "count": 3,
-            "exhaustive": true,
             "label": "disjunctiveFacet-val1",
             "type": "disjunctive",
             "value": "disjunctiveFacet-val1",
           },
           Object {
             "attribute": "disjunctiveFacet",
-            "count": 4,
-            "exhaustive": true,
             "label": "disjunctiveFacet-val2",
             "type": "disjunctive",
             "value": "disjunctiveFacet-val2",
@@ -102,8 +92,8 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "hierarchicalFacet",
-            "count": 6,
-            "exhaustive": true,
+            "count": null,
+            "exhaustive": null,
             "label": "hierarchicalFacet-val1 > hierarchicalFacet-val2",
             "type": "hierarchical",
             "value": "hierarchicalFacet-val1 > hierarchicalFacet-val2",
@@ -232,7 +222,6 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
         "refinements": Array [
           Object {
             "attribute": "facet",
-            "count": 1,
             "label": "facet-val1",
             "type": "facet",
             "value": "facet-val1",
@@ -266,7 +255,6 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
         "refinements": Array [
           Object {
             "attribute": "facet",
-            "count": 1,
             "label": "facet-val1",
             "type": "facet",
             "value": "facet-val1",
