@@ -370,7 +370,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           searchParameters: helper.state,
           helper,
         });
-        expect(uiStateAfter).toMatchSnapshot();
+        expect(uiStateAfter).toEqual({
+          sortBy: 'priceASC',
+        });
       });
 
       test('should give back the object unmodified if the value is already in the ui state', () => {
@@ -405,27 +407,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
+        const newIndexName = 'other';
         const uiState = {
-          sortBy: 'other',
+          sortBy: newIndexName,
         };
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
-        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter).toEqual(
+          new SearchParameters({
+            index: newIndexName,
+          })
+        );
       });
 
-      test('should enforce the default value', () => {
+      test('should enforce the default value on empty UiState', () => {
         const [widget, helper, refine] = getInitializedWidget();
         refine('other');
         const uiState = {};
-        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersBefore = new SearchParameters(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
-        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter).toEqual(
+          new SearchParameters({
+            // note that this isn't the refined value, but the default
+            index: 'relevance',
+          })
+        );
       });
     });
   });
