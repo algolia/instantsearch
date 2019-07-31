@@ -117,7 +117,7 @@ export interface Widget {
    */
   render?(options: RenderOptions): void;
   /**
-   * Called when  this widget is unmounted. Used to remove refinements set by
+   * Called when this widget is unmounted. Used to remove refinements set by
    * during this widget's initialization and life time.
    */
   dispose?(options: DisposeOptions): SearchParameters | void;
