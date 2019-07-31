@@ -164,7 +164,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           showMore ? showMoreLimit : limit
         );
 
-        return widgetConfiguration;
+        return configuration.setQueryParameters(widgetConfiguration);
       },
 
       init({ helper, createURL, instantSearchInstance }) {
@@ -232,22 +232,9 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        let nextState = state;
-
-        if (state.isHierarchicalFacetRefined(attribute)) {
-          nextState = state.removeHierarchicalFacetRefinement(attribute);
-        }
-
-        nextState = nextState.removeHierarchicalFacet(attribute);
-
-        if (
-          nextState.maxValuesPerFacet === limit ||
-          (showMoreLimit && nextState.maxValuesPerFacet === showMoreLimit)
-        ) {
-          nextState.setQueryParameters('maxValuesPerFacet', undefined);
-        }
-
-        return nextState;
+        return state
+          .removeHierarchicalFacet(attribute)
+          .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
