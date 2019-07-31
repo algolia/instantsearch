@@ -5,6 +5,31 @@ import jsHelper, {
 import connectRatingMenu from '../connectRatingMenu';
 
 describe('connectRatingMenu', () => {
+  const getInitializedWidget = (config = {}) => {
+    const rendering = jest.fn();
+    const makeWidget = connectRatingMenu(rendering);
+
+    const attribute = 'grade';
+    const widget = makeWidget({
+      attribute,
+      ...config,
+    });
+
+    const initialConfig = widget.getConfiguration(new SearchParameters({}));
+    const helper = jsHelper({}, '', initialConfig);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const { refine } = rendering.mock.calls[0][0];
+
+    return [widget, helper, refine];
+  };
+
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -370,116 +395,89 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
   });
 
-  describe('routing', () => {
-    const getInitializedWidget = (config = {}) => {
-      const rendering = jest.fn();
-      const makeWidget = connectRatingMenu(rendering);
-
-      const attribute = 'grade';
-      const widget = makeWidget({
-        attribute,
-        ...config,
-      });
-
-      const initialConfig = widget.getConfiguration(new SearchParameters({}));
-      const helper = jsHelper({}, '', initialConfig);
-      helper.search = jest.fn();
-
-      widget.init({
+  describe('getWidgetState', () => {
+    test('should give back the object unmodified if the default value is selected', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
         helper,
-        state: helper.state,
-        createURL: () => '#',
       });
-
-      const { refine } = rendering.mock.calls[0][0];
-
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if the default value is selected', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('3');
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should give back the object unmodified if the value is already in the UI State', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('3');
-        const uiStateBefore = widget.getWidgetState(
-          {},
-          {
-            searchParameters: helper.state,
-            helper,
-          }
-        );
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
+      expect(uiStateAfter).toBe(uiStateBefore);
     });
 
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if no value is in the UI state', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiState = {};
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toBe(searchParametersBefore);
+    test('should add an entry equal to the refinement', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('3');
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
       });
+      expect(uiStateAfter).toMatchSnapshot();
+    });
 
-      test('should add the refinements according to the UI state provided', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiState = {
-          ratingMenu: {
-            grade: '2',
-          },
-        };
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toMatchSnapshot();
+    test('should give back the object unmodified if the value is already in the UI State', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('3');
+      const uiStateBefore = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
       });
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+  });
 
-      test('should return the same SP if the value is consistent with the UI state', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('2');
-        const uiState = widget.getWidgetState(
-          {},
-          {
-            searchParameters: helper.state,
-            helper,
-          }
-        );
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
+  describe('getWidgetSearchParameters', () => {
+    test('should return the same SP if no value is in the UI state', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiState = {};
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+      expect(searchParametersAfter).toBe(searchParametersBefore);
+    });
+
+    test('should add the refinements according to the UI state provided', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiState = {
+        ratingMenu: {
+          grade: '2',
+        },
+      };
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+      expect(searchParametersAfter).toMatchSnapshot();
+    });
+
+    test('should return the same SP if the value is consistent with the UI state', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('2');
+      const uiState = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+      expect(searchParametersAfter).toBe(searchParametersBefore);
     });
   });
 });

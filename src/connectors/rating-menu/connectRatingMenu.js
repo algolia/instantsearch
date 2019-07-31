@@ -190,13 +190,16 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
 
       getWidgetState(uiState, { searchParameters }) {
         const refinedStar = this._getRefinedStar(searchParameters);
+
         if (
           refinedStar === undefined ||
           (uiState &&
             uiState.ratingMenu &&
             uiState.ratingMenu[attribute] === refinedStar)
-        )
+        ) {
           return uiState;
+        }
+
         return {
           ...uiState,
           ratingMenu: {
@@ -241,14 +244,17 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
 
       _getRefinedStar(searchParameters) {
         let refinedStar = undefined;
+
         const refinements = searchParameters.getDisjunctiveRefinements(
           attribute
         );
+
         refinements.forEach(r => {
           if (!refinedStar || Number(r) < refinedStar) {
             refinedStar = Number(r);
           }
         });
+
         return refinedStar;
       },
     };
