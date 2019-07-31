@@ -1,7 +1,7 @@
 import { render } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
+import { Client } from 'algoliasearch';
 import infiniteHits from '../infinite-hits';
-import { Client } from '../../../types';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');

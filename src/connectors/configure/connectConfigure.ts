@@ -4,7 +4,6 @@ import algoliasearchHelper, {
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 import {
-  InstantSearchOptions,
   Renderer,
   RendererOptions,
   Unmounter,
@@ -80,7 +79,6 @@ const connectConfigure: ConfigureConnector = (
     }
 
     type ConnectorState = {
-      instantSearchInstance?: InstantSearchOptions;
       refine?: Refine;
     };
 
@@ -114,24 +112,23 @@ const connectConfigure: ConfigureConnector = (
       },
 
       init({ instantSearchInstance, helper }) {
-        connectorState.instantSearchInstance = instantSearchInstance;
         connectorState.refine = refine(helper);
 
         renderFn(
           {
             refine: connectorState.refine!,
-            instantSearchInstance: connectorState.instantSearchInstance,
+            instantSearchInstance,
             widgetParams,
           },
           true
         );
       },
 
-      render() {
+      render({ instantSearchInstance }) {
         renderFn(
           {
             refine: connectorState.refine!,
-            instantSearchInstance: connectorState.instantSearchInstance,
+            instantSearchInstance,
             widgetParams,
           },
           false
