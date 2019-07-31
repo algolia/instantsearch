@@ -284,12 +284,11 @@ const index = (props: IndexProps): Index => {
         mergeSearchParameters(...resolveSearchParameters(this))
       );
 
-      helper.on('change', ({ state, isPageReset }) => {
-        localUiState = getLocalWidgetsState(localWidgets, {
-          searchParameters: state,
-          helper: helper!,
-        });
-
+      // Subscribe to the Helper state changes for the page before widgets
+      // are initialized. This behavior mimics the original one of the Helper.
+      // It makes sense to replicate it at the `init` step. We have another
+      // listener on `change` below, once `init` is done.
+      helper.on('change', ({ isPageReset }) => {
         if (isPageReset) {
           resetPageFromWidgets(localWidgets);
         }
@@ -321,6 +320,19 @@ const index = (props: IndexProps): Index => {
             createURL: instantSearchInstance._createAbsoluteURL,
           });
         }
+      });
+
+      // Subscribe to the Helper state changes for the `uiState` once widgets
+      // are initialized. Until the first render, state changes are part of the
+      // configuration step. This is mainly for backward compatibility with custom
+      // widgets. When the subscription happens before the `init` step, the (static)
+      // configuration of the widget is pushed in the URL. That's what we want to avoid.
+      // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
+      helper.on('change', ({ state }) => {
+        localUiState = getLocalWidgetsState(localWidgets, {
+          searchParameters: state,
+          helper: helper!,
+        });
       });
     },
 
