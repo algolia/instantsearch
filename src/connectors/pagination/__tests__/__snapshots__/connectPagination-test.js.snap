@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectPagination routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
+exports[`connectPagination getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
 SearchParameters {
   "disjunctiveFacets": Array [],
   "disjunctiveFacetsRefinements": Object {},
@@ -16,7 +16,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectPagination routing getWidgetSearchParameters should enforce the default value if no value is in the UI State 1`] = `
+exports[`connectPagination getWidgetSearchParameters should enforce the default value if no value is in the UI State 1`] = `
 SearchParameters {
   "disjunctiveFacets": Array [],
   "disjunctiveFacetsRefinements": Object {},
@@ -31,7 +31,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectPagination routing getWidgetState should add an entry equal to the refinement 1`] = `
+exports[`connectPagination getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
   "page": 5,
 }
