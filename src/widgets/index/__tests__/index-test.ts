@@ -834,7 +834,414 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
     });
 
-    describe('uiState updates', () => {
+    describe('with page reset', () => {
+      it('resets pages of nested indices when the state changes', () => {
+        const level0 = index({ indexName: 'level_0_index_name' });
+        const level1 = index({ indexName: 'level_1_index_name' });
+        const level2 = index({ indexName: 'level_2_index_name' });
+        const level3 = index({ indexName: 'level_3_index_name' });
+        const searchClient = createSearchClient();
+        const mainHelper = algoliasearchHelper(searchClient, '', {});
+        const instantSearchInstance = createInstantSearch({
+          mainHelper,
+        });
+
+        level0.addWidgets([
+          createWidget({
+            getConfiguration() {
+              return new SearchParameters({
+                hitsPerPage: 5,
+              });
+            },
+          }),
+
+          createSearchBox({
+            getConfiguration() {
+              return new SearchParameters({
+                query: 'Apple',
+              });
+            },
+          }),
+
+          createPagination({
+            getConfiguration() {
+              return new SearchParameters({
+                page: 1,
+              });
+            },
+          }),
+
+          level1.addWidgets([
+            createSearchBox({
+              getConfiguration() {
+                return new SearchParameters({
+                  query: 'Apple iPhone',
+                });
+              },
+            }),
+
+            createPagination({
+              getConfiguration() {
+                return new SearchParameters({
+                  page: 2,
+                });
+              },
+            }),
+
+            level2.addWidgets([
+              createSearchBox({
+                getConfiguration() {
+                  return new SearchParameters({
+                    query: 'Apple iPhone XS',
+                  });
+                },
+              }),
+
+              createPagination({
+                getConfiguration() {
+                  return new SearchParameters({
+                    page: 3,
+                  });
+                },
+              }),
+
+              level3.addWidgets([
+                createSearchBox({
+                  getConfiguration() {
+                    return new SearchParameters({
+                      query: 'Apple iPhone XS Red',
+                    });
+                  },
+                }),
+
+                createPagination({
+                  getConfiguration() {
+                    return new SearchParameters({
+                      page: 4,
+                    });
+                  },
+                }),
+              ]),
+            ]),
+          ]),
+        ]);
+
+        level0.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
+
+        // Setting a query is considered as a change
+        level1
+          .getHelper()!
+          .setQuery('Hey')
+          .search();
+
+        expect(searchClient.search).toHaveBeenCalledWith(
+          expect.arrayContaining([
+            {
+              indexName: 'level_0_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple',
+                page: 1,
+              }),
+            },
+            {
+              indexName: 'level_1_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Hey',
+                page: 0,
+              }),
+            },
+            {
+              indexName: 'level_2_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple iPhone XS',
+                page: 0,
+              }),
+            },
+            {
+              indexName: 'level_3_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple iPhone XS Red',
+                page: 0,
+              }),
+            },
+          ])
+        );
+      });
+
+      it('does not reset pages of nested indices when only the page changes', () => {
+        const level0 = index({ indexName: 'level_0_index_name' });
+        const level1 = index({ indexName: 'level_1_index_name' });
+        const level2 = index({ indexName: 'level_2_index_name' });
+        const level3 = index({ indexName: 'level_3_index_name' });
+        const searchClient = createSearchClient();
+        const mainHelper = algoliasearchHelper(searchClient, '', {});
+        const instantSearchInstance = createInstantSearch({
+          mainHelper,
+        });
+
+        level0.addWidgets([
+          createWidget({
+            getConfiguration() {
+              return new SearchParameters({
+                hitsPerPage: 5,
+              });
+            },
+          }),
+
+          createSearchBox({
+            getConfiguration() {
+              return new SearchParameters({
+                query: 'Apple',
+              });
+            },
+          }),
+
+          createPagination({
+            getConfiguration() {
+              return new SearchParameters({
+                page: 1,
+              });
+            },
+          }),
+
+          level1.addWidgets([
+            createSearchBox({
+              getConfiguration() {
+                return new SearchParameters({
+                  query: 'Apple iPhone',
+                });
+              },
+            }),
+
+            createPagination({
+              getConfiguration() {
+                return new SearchParameters({
+                  page: 2,
+                });
+              },
+            }),
+
+            level2.addWidgets([
+              createSearchBox({
+                getConfiguration() {
+                  return new SearchParameters({
+                    query: 'Apple iPhone XS',
+                  });
+                },
+              }),
+
+              createPagination({
+                getConfiguration() {
+                  return new SearchParameters({
+                    page: 3,
+                  });
+                },
+              }),
+
+              level3.addWidgets([
+                createSearchBox({
+                  getConfiguration() {
+                    return new SearchParameters({
+                      query: 'Apple iPhone XS Red',
+                    });
+                  },
+                }),
+
+                createPagination({
+                  getConfiguration() {
+                    return new SearchParameters({
+                      page: 4,
+                    });
+                  },
+                }),
+              ]),
+            ]),
+          ]),
+        ]);
+
+        level0.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
+
+        level1
+          .getHelper()!
+          .setPage(4)
+          .search();
+
+        expect(searchClient.search).toHaveBeenCalledWith(
+          expect.arrayContaining([
+            {
+              indexName: 'level_0_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple',
+                page: 1,
+              }),
+            },
+            {
+              indexName: 'level_1_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple iPhone',
+                page: 4,
+              }),
+            },
+            {
+              indexName: 'level_2_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple iPhone XS',
+                page: 3,
+              }),
+            },
+            {
+              indexName: 'level_3_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple iPhone XS Red',
+                page: 4,
+              }),
+            },
+          ])
+        );
+      });
+
+      it('is a noop for unset pages of nested indices when the state changes', () => {
+        const level0 = index({ indexName: 'level_0_index_name' });
+        const level1 = index({ indexName: 'level_1_index_name' });
+        const level2 = index({ indexName: 'level_2_index_name' });
+        const level3 = index({ indexName: 'level_3_index_name' });
+        const searchClient = createSearchClient();
+        const mainHelper = algoliasearchHelper(searchClient, '', {});
+        const instantSearchInstance = createInstantSearch({
+          mainHelper,
+        });
+
+        level0.addWidgets([
+          createWidget({
+            getConfiguration() {
+              return new SearchParameters({
+                hitsPerPage: 5,
+              });
+            },
+          }),
+
+          createSearchBox({
+            getConfiguration() {
+              return new SearchParameters({
+                query: 'Apple',
+              });
+            },
+          }),
+
+          createPagination({
+            getConfiguration() {
+              return new SearchParameters({
+                page: 1,
+              });
+            },
+          }),
+
+          level1.addWidgets([
+            createSearchBox({
+              getConfiguration() {
+                return new SearchParameters({
+                  query: 'Apple iPhone',
+                });
+              },
+            }),
+
+            createPagination({
+              getConfiguration() {
+                return new SearchParameters({
+                  page: 2,
+                });
+              },
+            }),
+
+            level2.addWidgets([
+              createSearchBox({
+                getConfiguration() {
+                  return new SearchParameters({
+                    query: 'Apple iPhone XS',
+                  });
+                },
+              }),
+
+              level3.addWidgets([
+                createSearchBox({
+                  getConfiguration() {
+                    return new SearchParameters({
+                      query: 'Apple iPhone XS Red',
+                    });
+                  },
+                }),
+              ]),
+            ]),
+          ]),
+        ]);
+
+        level0.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
+
+        level1
+          .getHelper()!
+          .setQuery('Hey')
+          .search();
+
+        expect(searchClient.search).toHaveBeenCalledWith(
+          expect.arrayContaining([
+            {
+              indexName: 'level_0_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple',
+                page: 1,
+              }),
+            },
+            {
+              indexName: 'level_1_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Hey',
+                page: 0,
+              }),
+            },
+            {
+              indexName: 'level_2_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple iPhone XS',
+                page: 0,
+              }),
+            },
+            {
+              indexName: 'level_3_index_name',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+                query: 'Apple iPhone XS Red',
+                page: 0,
+              }),
+            },
+          ])
+        );
+      });
+    });
+
+    describe('with uiState', () => {
       it('updates the local `uiState` when the state changes', () => {
         const instance = index({ indexName: 'index_name' });
         const instantSearchInstance = createInstantSearch();
@@ -1020,411 +1427,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           level_3_index_name: {},
         });
       });
-    });
-
-    it('resets pages of nested indices when the state changes', () => {
-      const level0 = index({ indexName: 'level_0_index_name' });
-      const level1 = index({ indexName: 'level_1_index_name' });
-      const level2 = index({ indexName: 'level_2_index_name' });
-      const level3 = index({ indexName: 'level_3_index_name' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      level0.addWidgets([
-        createWidget({
-          getConfiguration() {
-            return new SearchParameters({
-              hitsPerPage: 5,
-            });
-          },
-        }),
-
-        createSearchBox({
-          getConfiguration() {
-            return new SearchParameters({
-              query: 'Apple',
-            });
-          },
-        }),
-
-        createPagination({
-          getConfiguration() {
-            return new SearchParameters({
-              page: 1,
-            });
-          },
-        }),
-
-        level1.addWidgets([
-          createSearchBox({
-            getConfiguration() {
-              return new SearchParameters({
-                query: 'Apple iPhone',
-              });
-            },
-          }),
-
-          createPagination({
-            getConfiguration() {
-              return new SearchParameters({
-                page: 2,
-              });
-            },
-          }),
-
-          level2.addWidgets([
-            createSearchBox({
-              getConfiguration() {
-                return new SearchParameters({
-                  query: 'Apple iPhone XS',
-                });
-              },
-            }),
-
-            createPagination({
-              getConfiguration() {
-                return new SearchParameters({
-                  page: 3,
-                });
-              },
-            }),
-
-            level3.addWidgets([
-              createSearchBox({
-                getConfiguration() {
-                  return new SearchParameters({
-                    query: 'Apple iPhone XS Red',
-                  });
-                },
-              }),
-
-              createPagination({
-                getConfiguration() {
-                  return new SearchParameters({
-                    page: 4,
-                  });
-                },
-              }),
-            ]),
-          ]),
-        ]),
-      ]);
-
-      level0.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      // Setting a query is considered as a change
-      level1
-        .getHelper()!
-        .setQuery('Hey')
-        .search();
-
-      expect(searchClient.search).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          {
-            indexName: 'level_0_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple',
-              page: 1,
-            }),
-          },
-          {
-            indexName: 'level_1_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Hey',
-              page: 0,
-            }),
-          },
-          {
-            indexName: 'level_2_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple iPhone XS',
-              page: 0,
-            }),
-          },
-          {
-            indexName: 'level_3_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple iPhone XS Red',
-              page: 0,
-            }),
-          },
-        ])
-      );
-    });
-
-    it('does not reset pages of nested indices when only the page changes', () => {
-      const level0 = index({ indexName: 'level_0_index_name' });
-      const level1 = index({ indexName: 'level_1_index_name' });
-      const level2 = index({ indexName: 'level_2_index_name' });
-      const level3 = index({ indexName: 'level_3_index_name' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      level0.addWidgets([
-        createWidget({
-          getConfiguration() {
-            return new SearchParameters({
-              hitsPerPage: 5,
-            });
-          },
-        }),
-
-        createSearchBox({
-          getConfiguration() {
-            return new SearchParameters({
-              query: 'Apple',
-            });
-          },
-        }),
-
-        createPagination({
-          getConfiguration() {
-            return new SearchParameters({
-              page: 1,
-            });
-          },
-        }),
-
-        level1.addWidgets([
-          createSearchBox({
-            getConfiguration() {
-              return new SearchParameters({
-                query: 'Apple iPhone',
-              });
-            },
-          }),
-
-          createPagination({
-            getConfiguration() {
-              return new SearchParameters({
-                page: 2,
-              });
-            },
-          }),
-
-          level2.addWidgets([
-            createSearchBox({
-              getConfiguration() {
-                return new SearchParameters({
-                  query: 'Apple iPhone XS',
-                });
-              },
-            }),
-
-            createPagination({
-              getConfiguration() {
-                return new SearchParameters({
-                  page: 3,
-                });
-              },
-            }),
-
-            level3.addWidgets([
-              createSearchBox({
-                getConfiguration() {
-                  return new SearchParameters({
-                    query: 'Apple iPhone XS Red',
-                  });
-                },
-              }),
-
-              createPagination({
-                getConfiguration() {
-                  return new SearchParameters({
-                    page: 4,
-                  });
-                },
-              }),
-            ]),
-          ]),
-        ]),
-      ]);
-
-      level0.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      level1
-        .getHelper()!
-        .setPage(4)
-        .search();
-
-      expect(searchClient.search).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          {
-            indexName: 'level_0_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple',
-              page: 1,
-            }),
-          },
-          {
-            indexName: 'level_1_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple iPhone',
-              page: 4,
-            }),
-          },
-          {
-            indexName: 'level_2_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple iPhone XS',
-              page: 3,
-            }),
-          },
-          {
-            indexName: 'level_3_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple iPhone XS Red',
-              page: 4,
-            }),
-          },
-        ])
-      );
-    });
-
-    it('is a noop for unset pages of nested indices when the state changes', () => {
-      const level0 = index({ indexName: 'level_0_index_name' });
-      const level1 = index({ indexName: 'level_1_index_name' });
-      const level2 = index({ indexName: 'level_2_index_name' });
-      const level3 = index({ indexName: 'level_3_index_name' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      level0.addWidgets([
-        createWidget({
-          getConfiguration() {
-            return new SearchParameters({
-              hitsPerPage: 5,
-            });
-          },
-        }),
-
-        createSearchBox({
-          getConfiguration() {
-            return new SearchParameters({
-              query: 'Apple',
-            });
-          },
-        }),
-
-        createPagination({
-          getConfiguration() {
-            return new SearchParameters({
-              page: 1,
-            });
-          },
-        }),
-
-        level1.addWidgets([
-          createSearchBox({
-            getConfiguration() {
-              return new SearchParameters({
-                query: 'Apple iPhone',
-              });
-            },
-          }),
-
-          createPagination({
-            getConfiguration() {
-              return new SearchParameters({
-                page: 2,
-              });
-            },
-          }),
-
-          level2.addWidgets([
-            createSearchBox({
-              getConfiguration() {
-                return new SearchParameters({
-                  query: 'Apple iPhone XS',
-                });
-              },
-            }),
-
-            level3.addWidgets([
-              createSearchBox({
-                getConfiguration() {
-                  return new SearchParameters({
-                    query: 'Apple iPhone XS Red',
-                  });
-                },
-              }),
-            ]),
-          ]),
-        ]),
-      ]);
-
-      level0.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      level1
-        .getHelper()!
-        .setQuery('Hey')
-        .search();
-
-      expect(searchClient.search).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          {
-            indexName: 'level_0_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple',
-              page: 1,
-            }),
-          },
-          {
-            indexName: 'level_1_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Hey',
-              page: 0,
-            }),
-          },
-          {
-            indexName: 'level_2_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple iPhone XS',
-              page: 0,
-            }),
-          },
-          {
-            indexName: 'level_3_index_name',
-            params: expect.objectContaining({
-              hitsPerPage: 5,
-              query: 'Apple iPhone XS Red',
-              page: 0,
-            }),
-          },
-        ])
-      );
     });
   });
 
