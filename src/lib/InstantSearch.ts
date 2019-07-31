@@ -24,6 +24,9 @@ import {
   RenderOptions,
   DisposeOptions,
   InitOptions,
+  StateMapping,
+  Router,
+  UiState,
 } from '../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -39,31 +42,90 @@ function defaultCreateURL() {
   return '#';
 }
 
-/**
- * Widgets are the building blocks of InstantSearch.js. Any
- * valid widget must have at least a `render` or a `init` function.
- * @typedef {Object} Widget
- * @property {function} [render] Called after each search response has been received
- * @property {function} [getConfiguration] Let the widget update the configuration
- * of the search with new parameters
- * @property {function} [init] Called once before the first search
- */
+export type Routing<TRouteState = UiState> = {
+  router: Router<TRouteState>;
+  stateMapping: StateMapping<TRouteState>;
+};
 
-export type InstantSearchOptions = {
+/**
+ * Global options for an InstantSearch instance.
+ */
+export type InstantSearchOptions<TRouteState = UiState> = {
+  /**
+   * The name of the main index
+   */
   indexName: string;
+
+  /**
+   * The search client to plug to InstantSearch.js
+   *
+   * Usage:
+   * ```javascript
+   * // Using the default Algolia search client
+   * instantsearch({
+   *   indexName: 'indexName',
+   *   searchClient: algoliasearch('appId', 'apiKey')
+   * });
+   *
+   * // Using a custom search client
+   * instantsearch({
+   *   indexName: 'indexName',
+   *   searchClient: {
+   *     search(requests) {
+   *       // fetch response based on requests
+   *       return response;
+   *     },
+   *     searchForFacetValues(requests) {
+   *       // fetch response based on requests
+   *       return response;
+   *     }
+   *   }
+   * });
+   * ```
+   */
   searchClient: SearchClient | AlgoliaSearchClient;
+
+  /**
+   * The locale used to display numbers. This will be passed
+   * to `Number.prototype.toLocaleString()`
+   */
   numberLocale?: string;
+
+  /**
+   * A hook that will be called each time a search needs to be done, with the
+   * helper as a parameter. It's your responsibility to call `helper.search()`.
+   * This option allows you to avoid doing searches at page load for example.
+   */
   searchFunction?: (helper: AlgoliaSearchHelper) => void;
+
+  /**
+   * Additional parameters to unconditionally pass to the Algolia API. See also
+   * the `configure` widget for dynamically passing search parameters.
+   */
   searchParameters?: PlainSearchParameters;
-  routing?: any;
+
+  /**
+   * Time before a search is considered stalled. The default is 200ms
+   */
   stalledSearchDelay?: number;
+
+  /**
+   * Router configuration used to save the UI State into the URL or any other
+   * client side persistence. Passing `true` will use the default URL options.
+   */
+  routing?: Partial<Routing<TRouteState>> | boolean;
+
+  /**
+   * the instance of search-insights to use for sending insights events inside
+   * widgets like `hits`.
+   */
   insightsClient?: AlgoliaInsightsClient;
 };
 
 /**
  * The actual implementation of the InstantSearch. This is
  * created using the `instantsearch` factory function.
- * @fires Instantsearch#render This event is triggered each time a render is done
+ * It emits the 'render' event every time a search is done
  */
 class InstantSearch extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
@@ -82,7 +144,7 @@ class InstantSearch extends EventEmitter {
   public _createURL?: (params: SearchParameters) => string;
   public _createAbsoluteURL?: (params: SearchParameters) => string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  public routing: InstantSearchOptions['routing'];
+  public routing?: Routing;
 
   public constructor(options: InstantSearchOptions) {
     super();

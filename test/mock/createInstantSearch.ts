@@ -40,12 +40,12 @@ export const createInstantSearch = (
     _createURL: jest.fn(() => '#'),
     _createAbsoluteURL: jest.fn(() => '#'),
     createURL: jest.fn(() => '#'),
-    routing: null, // @TODO: good definition
+    routing: undefined,
     addWidget: jest.fn(),
     addWidgets: jest.fn(),
     removeWidget: jest.fn(),
     removeWidgets: jest.fn(),
-    // @TODO: can be inherited from EventEmitter?
+    // methods from EventEmitter
     addListener: jest.fn(),
     removeListener: jest.fn(),
     on: jest.fn(),
