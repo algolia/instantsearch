@@ -75,10 +75,8 @@ function resetPageFromWidgets(widgets: Widget[]): void {
   indexWidgets.forEach(widget => {
     const widgetHelper = widget.getHelper()!;
 
-    widgetHelper.overrideStateWithoutTriggeringChangeEvent(
-      // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
-      widgetHelper.state.resetPage()
-    );
+    // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
+    widgetHelper.setState(widgetHelper.state.resetPage());
 
     resetPageFromWidgets(widget.getWidgets());
   });

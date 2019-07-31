@@ -976,6 +976,101 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         );
       });
 
+      it('resets pages of nested indices triggers an `uiState` change', () => {
+        const level0 = index({ indexName: 'level0IndexName' });
+        const level1 = index({ indexName: 'level1IndexName' });
+        const level2 = index({ indexName: 'level2IndexName' });
+        const level3 = index({ indexName: 'level3IndexName' });
+        const searchClient = createSearchClient();
+        const mainHelper = algoliasearchHelper(searchClient, '', {});
+        const instantSearchInstance = createInstantSearch({
+          mainHelper,
+        });
+
+        level0.addWidgets([
+          createSearchBox(),
+          createPagination(),
+
+          level1.addWidgets([
+            createSearchBox(),
+            createPagination(),
+
+            level2.addWidgets([
+              createSearchBox(),
+              createPagination(),
+
+              level3.addWidgets([createSearchBox(), createPagination()]),
+            ]),
+          ]),
+        ]);
+
+        level0.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
+
+        level0
+          .getHelper()!
+          .setQueryParameter('query', 'Apple')
+          .setQueryParameter('page', 1);
+
+        level1
+          .getHelper()!
+          .setQueryParameter('query', 'Apple iPhone')
+          .setQueryParameter('page', 2);
+
+        level2
+          .getHelper()!
+          .setQueryParameter('query', 'Apple iPhone XS')
+          .setQueryParameter('page', 3);
+
+        level3
+          .getHelper()!
+          .setQueryParameter('query', 'Apple iPhone XS Red')
+          .setQueryParameter('page', 4);
+
+        expect(level0.getWidgetState({})).toEqual({
+          level0IndexName: {
+            query: 'Apple',
+            page: 1,
+          },
+          level1IndexName: {
+            query: 'Apple iPhone',
+            page: 2,
+          },
+          level2IndexName: {
+            query: 'Apple iPhone XS',
+            page: 3,
+          },
+          level3IndexName: {
+            query: 'Apple iPhone XS Red',
+            page: 4,
+          },
+        });
+
+        // Setting a query is considered as a change
+        level0
+          .getHelper()!
+          .setQuery('Hey')
+          .search();
+
+        expect(level0.getWidgetState({})).toEqual({
+          level0IndexName: {
+            query: 'Hey',
+          },
+          level1IndexName: {
+            query: 'Apple iPhone',
+          },
+          level2IndexName: {
+            query: 'Apple iPhone XS',
+          },
+          level3IndexName: {
+            query: 'Apple iPhone XS Red',
+          },
+        });
+      });
+
       it('does not reset pages of nested indices when only the page changes', () => {
         const level0 = index({ indexName: 'level0IndexName' });
         const level1 = index({ indexName: 'level1IndexName' });
