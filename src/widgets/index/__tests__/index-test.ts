@@ -834,189 +834,191 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
     });
 
-    it('updates the local `uiState` when the state changes', () => {
-      const instance = index({ indexName: 'index_name' });
-      const instantSearchInstance = createInstantSearch();
-      const widgets = [createSearchBox(), createPagination()];
+    describe('uiState updates', () => {
+      it('updates the local `uiState` when the state changes', () => {
+        const instance = index({ indexName: 'index_name' });
+        const instantSearchInstance = createInstantSearch();
+        const widgets = [createSearchBox(), createPagination()];
 
-      instance.addWidgets(widgets);
+        instance.addWidgets(widgets);
 
-      instance.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
 
-      // Simulate a state change
-      instance
-        .getHelper()!
-        .setQueryParameter('query', 'Apple')
-        .setQueryParameter('page', 5);
+        // Simulate a state change
+        instance
+          .getHelper()!
+          .setQueryParameter('query', 'Apple')
+          .setQueryParameter('page', 5);
 
-      expect(instance.getWidgetState({})).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        index_name: {
-          query: 'Apple',
-          page: 5,
-        },
-      });
-    });
-
-    it('does not update the local `uiState` on state changes in `init`', () => {
-      const instance = index({ indexName: 'index_name' });
-      const instantSearchInstance = createInstantSearch();
-      const widgets = [
-        createSearchBox(),
-        createPagination(),
-        createWidget({
-          init({ helper }) {
-            helper
-              .setQueryParameter('query', 'Apple iPhone')
-              .setQueryParameter('page', 5);
+        expect(instance.getWidgetState({})).toEqual({
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          index_name: {
+            query: 'Apple',
+            page: 5,
           },
-        }),
-      ];
-
-      instance.addWidgets(widgets);
-
-      instance.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      expect(instance.getHelper()!.state).toEqual(
-        new SearchParameters({
-          index: 'index_name',
-          query: 'Apple iPhone',
-          page: 5,
-        })
-      );
-
-      expect(instance.getWidgetState({})).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        index_name: {},
-      });
-    });
-
-    it('updates the local `uiState` only with widgets not indices', () => {
-      const level0 = index({ indexName: 'level_0_index_name' });
-      const level1 = index({ indexName: 'level_1_index_name' });
-      const instantSearchInstance = createInstantSearch();
-      const widgets = [createSearchBox(), createPagination()];
-
-      jest.spyOn(level1, 'getWidgetState');
-
-      level0.addWidgets([...widgets, level1]);
-
-      level0.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      // Simulate a state change
-      level0
-        .getHelper()!
-        .setQueryParameter('query', 'Apple')
-        .setQueryParameter('page', 5);
-
-      widgets.forEach(widget => {
-        expect(widget.getWidgetState).toHaveBeenCalledTimes(2); // 2 changes
+        });
       });
 
-      expect(level1.getWidgetState).toHaveBeenCalledTimes(0);
-    });
+      it('does not update the local `uiState` on state changes in `init`', () => {
+        const instance = index({ indexName: 'index_name' });
+        const instantSearchInstance = createInstantSearch();
+        const widgets = [
+          createSearchBox(),
+          createPagination(),
+          createWidget({
+            init({ helper }) {
+              helper
+                .setQueryParameter('query', 'Apple iPhone')
+                .setQueryParameter('page', 5);
+            },
+          }),
+        ];
 
-    it('retrieves the `uiState` for the children indices', () => {
-      const level0 = index({ indexName: 'level_0_index_name' });
-      const level1 = index({ indexName: 'level_1_index_name' });
-      const level2 = index({ indexName: 'level_2_index_name' });
-      const level3 = index({ indexName: 'level_3_index_name' });
-      const instantSearchInstance = createInstantSearch();
+        instance.addWidgets(widgets);
 
-      level0.addWidgets([
-        createSearchBox(),
-        createPagination(),
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
 
-        level1.addWidgets([
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'index_name',
+            query: 'Apple iPhone',
+            page: 5,
+          })
+        );
+
+        expect(instance.getWidgetState({})).toEqual({
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          index_name: {},
+        });
+      });
+
+      it('updates the local `uiState` only with widgets not indices', () => {
+        const level0 = index({ indexName: 'level_0_index_name' });
+        const level1 = index({ indexName: 'level_1_index_name' });
+        const instantSearchInstance = createInstantSearch();
+        const widgets = [createSearchBox(), createPagination()];
+
+        jest.spyOn(level1, 'getWidgetState');
+
+        level0.addWidgets([...widgets, level1]);
+
+        level0.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
+
+        // Simulate a state change
+        level0
+          .getHelper()!
+          .setQueryParameter('query', 'Apple')
+          .setQueryParameter('page', 5);
+
+        widgets.forEach(widget => {
+          expect(widget.getWidgetState).toHaveBeenCalledTimes(2); // 2 changes
+        });
+
+        expect(level1.getWidgetState).toHaveBeenCalledTimes(0);
+      });
+
+      it('retrieves the `uiState` for the children indices', () => {
+        const level0 = index({ indexName: 'level_0_index_name' });
+        const level1 = index({ indexName: 'level_1_index_name' });
+        const level2 = index({ indexName: 'level_2_index_name' });
+        const level3 = index({ indexName: 'level_3_index_name' });
+        const instantSearchInstance = createInstantSearch();
+
+        level0.addWidgets([
           createSearchBox(),
           createPagination(),
 
-          level2.addWidgets([createSearchBox(), createPagination(), level3]),
-        ]),
-      ]);
+          level1.addWidgets([
+            createSearchBox(),
+            createPagination(),
 
-      level0.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
+            level2.addWidgets([createSearchBox(), createPagination(), level3]),
+          ]),
+        ]);
 
-      // Simulate a state change
-      level0
-        .getHelper()!
-        .setQueryParameter('query', 'Apple')
-        .setQueryParameter('page', 5);
+        level0.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
 
-      level1
-        .getHelper()!
-        .setQueryParameter('query', 'Apple iPhone')
-        .setQueryParameter('page', 7);
+        // Simulate a state change
+        level0
+          .getHelper()!
+          .setQueryParameter('query', 'Apple')
+          .setQueryParameter('page', 5);
 
-      level2
-        .getHelper()!
-        .setQueryParameter('query', 'Apple iPhone 5S')
-        .setQueryParameter('page', 9);
+        level1
+          .getHelper()!
+          .setQueryParameter('query', 'Apple iPhone')
+          .setQueryParameter('page', 7);
 
-      expect(level0.getWidgetState({})).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_0_index_name: {
-          query: 'Apple',
-          page: 5,
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_1_index_name: {
-          query: 'Apple iPhone',
-          page: 7,
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_2_index_name: {
-          query: 'Apple iPhone 5S',
-          page: 9,
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_3_index_name: {},
-      });
+        level2
+          .getHelper()!
+          .setQueryParameter('query', 'Apple iPhone 5S')
+          .setQueryParameter('page', 9);
 
-      expect(level1.getWidgetState({})).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_1_index_name: {
-          query: 'Apple iPhone',
-          page: 7,
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_2_index_name: {
-          query: 'Apple iPhone 5S',
-          page: 9,
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_3_index_name: {},
-      });
+        expect(level0.getWidgetState({})).toEqual({
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_0_index_name: {
+            query: 'Apple',
+            page: 5,
+          },
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_1_index_name: {
+            query: 'Apple iPhone',
+            page: 7,
+          },
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_2_index_name: {
+            query: 'Apple iPhone 5S',
+            page: 9,
+          },
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_3_index_name: {},
+        });
 
-      expect(level2.getWidgetState({})).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_2_index_name: {
-          query: 'Apple iPhone 5S',
-          page: 9,
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_3_index_name: {},
-      });
+        expect(level1.getWidgetState({})).toEqual({
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_1_index_name: {
+            query: 'Apple iPhone',
+            page: 7,
+          },
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_2_index_name: {
+            query: 'Apple iPhone 5S',
+            page: 9,
+          },
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_3_index_name: {},
+        });
 
-      expect(level3.getWidgetState({})).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        level_3_index_name: {},
+        expect(level2.getWidgetState({})).toEqual({
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_2_index_name: {
+            query: 'Apple iPhone 5S',
+            page: 9,
+          },
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_3_index_name: {},
+        });
+
+        expect(level3.getWidgetState({})).toEqual({
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          level_3_index_name: {},
+        });
       });
     });
 
