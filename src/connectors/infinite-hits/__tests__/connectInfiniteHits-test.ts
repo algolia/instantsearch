@@ -2,6 +2,7 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
+import { Client } from 'algoliasearch';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createInitOptions,
@@ -10,8 +11,6 @@ import {
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectInfiniteHits from '../connectInfiniteHits';
-
-import { Client } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
