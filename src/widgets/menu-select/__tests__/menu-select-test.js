@@ -1,5 +1,5 @@
 import { render, unmountComponentAtNode } from 'preact-compat';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 
 jest.mock('preact-compat', () => {
@@ -84,7 +84,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
           container,
         });
 
-        helper.setState(widget.getConfiguration({}));
+        helper.setState(widget.getConfiguration(new SearchParameters({})));
 
         expect(unmountComponentAtNode).toHaveBeenCalledTimes(0);
 

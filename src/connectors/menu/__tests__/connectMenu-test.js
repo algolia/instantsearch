@@ -82,15 +82,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'myFacet',
       });
 
-      expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'myFacet',
-            attributes: ['myFacet'],
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'myFacet',
+              attributes: ['myFacet'],
+            },
+          ],
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('`limit`', () => {
@@ -99,15 +101,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         limit: 20,
       });
 
-      expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'myFacet',
-            attributes: ['myFacet'],
-          },
-        ],
-        maxValuesPerFacet: 20,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'myFacet',
+              attributes: ['myFacet'],
+            },
+          ],
+          maxValuesPerFacet: 20,
+        })
+      );
     });
   });
 
@@ -119,16 +123,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       limit: 9,
     });
 
-    const config = widget.getConfiguration({});
-    expect(config).toEqual({
-      hierarchicalFacets: [
-        {
-          name: 'myFacet',
-          attributes: ['myFacet'],
-        },
-      ],
-      maxValuesPerFacet: 9,
-    });
+    const config = widget.getConfiguration(new SearchParameters({}));
+    expect(config).toEqual(
+      new SearchParameters({
+        hierarchicalFacets: [
+          {
+            name: 'myFacet',
+            attributes: ['myFacet'],
+          },
+        ],
+        maxValuesPerFacet: 9,
+      })
+    );
 
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
@@ -182,7 +188,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       attribute: 'category',
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
@@ -220,7 +230,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       attribute: 'category',
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -335,7 +349,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         })),
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -390,7 +408,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const widget = connectMenu(() => {})({
       attribute: 'category',
     });
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 
@@ -402,15 +424,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         showMore: true,
       });
 
-      expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'myFacet',
-            attributes: ['myFacet'],
-          },
-        ],
-        maxValuesPerFacet: 20,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'myFacet',
+              attributes: ['myFacet'],
+            },
+          ],
+          maxValuesPerFacet: 20,
+        })
+      );
     });
 
     it('should provide `showMoreLimit` as `maxValuesPerFacet`', () => {
@@ -421,15 +445,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         showMoreLimit: 30,
       });
 
-      expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'myFacet',
-            attributes: ['myFacet'],
-          },
-        ],
-        maxValuesPerFacet: 30,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'myFacet',
+              attributes: ['myFacet'],
+            },
+          ],
+          maxValuesPerFacet: 30,
+        })
+      );
     });
 
     it('should initialize with `isShowingMore === false`', () => {
@@ -442,7 +468,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration({});
+      const config = widget.getConfiguration(new SearchParameters({}));
       const helper = jsHelper({}, '', config);
       helper.search = jest.fn();
 
@@ -470,7 +496,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration({});
+      const config = widget.getConfiguration(new SearchParameters({}));
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
@@ -534,7 +560,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration({});
+      const config = widget.getConfiguration(new SearchParameters({}));
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
@@ -584,7 +610,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'category',
       });
 
-      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters({}))
+      );
       helper.search = jest.fn();
 
       widget.init({
@@ -619,7 +649,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           helper,
         });
 
-        expect(uiStateAfter).toMatchSnapshot();
+        expect(uiStateAfter).toEqual({
+          menu: {
+            category: 'pants',
+          },
+        });
       });
 
       test('should not override other values in the same namespace', () => {
@@ -635,7 +669,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           helper,
         });
 
-        expect(uiStateAfter).toMatchSnapshot();
+        expect(uiStateAfter).toEqual({
+          menu: {
+            category: 'pants',
+            othercategory: 'not-pants',
+          },
+        });
       });
 
       test('should give back the object unmodified if refinements are already set', () => {
@@ -684,9 +723,125 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           searchParametersBefore,
           { uiState }
         );
+
         // It should apply the new parameters on the search
-        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                attributes: ['category'],
+                name: 'category',
+              },
+            ],
+            hierarchicalFacetsRefinements: {
+              category: ['pants'],
+            },
+            maxValuesPerFacet: 10,
+            index: helper.state.index,
+          })
+        );
       });
+    });
+  });
+
+  describe('dispose', () => {
+    it('removes hierarchical refinements', () => {
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 10,
+        showMore: true,
+      });
+      const indexName = 'instant_search';
+
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters({}))
+      );
+      helper.search = jest.fn();
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              attributes: ['myFacet'],
+              name: 'myFacet',
+            },
+          ],
+          maxValuesPerFacet: 20,
+          index: indexName,
+        })
+      );
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              myFacet: {
+                Decoration: 880,
+              },
+            },
+          },
+          {
+            facets: {
+              myFacet: {
+                Decoration: 880,
+                Outdoor: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      refine('Decoration');
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              attributes: ['myFacet'],
+              name: 'myFacet',
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            myFacet: ['Decoration'],
+          },
+          index: indexName,
+          maxValuesPerFacet: 20,
+        })
+      );
+
+      const newState = widget.dispose({ state: helper.state });
+
+      expect(newState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
+    });
+
+    it('leaves empty state intact', () => {
+      const state = new SearchParameters({});
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 10,
+        showMore: true,
+      });
+      const newState = widget.dispose({ state });
+
+      expect(newState).toEqual(new SearchParameters({}));
     });
   });
 });
