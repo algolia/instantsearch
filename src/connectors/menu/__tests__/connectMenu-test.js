@@ -637,7 +637,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           helper,
         });
 
-        expect(uiStateAfter).toMatchSnapshot();
+        expect(uiStateAfter).toEqual({
+          menu: {
+            category: 'pants',
+          },
+        });
       });
 
       test('should not override other values in the same namespace', () => {
@@ -653,7 +657,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           helper,
         });
 
-        expect(uiStateAfter).toMatchSnapshot();
+        expect(uiStateAfter).toEqual({
+          menu: {
+            category: 'pants',
+            othercategory: 'not-pants',
+          },
+        });
       });
 
       test('should give back the object unmodified if refinements are already set', () => {
@@ -702,8 +711,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           searchParametersBefore,
           { uiState }
         );
+
         // It should apply the new parameters on the search
-        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                attributes: ['category'],
+                name: 'category',
+              },
+            ],
+            hierarchicalFacetsRefinements: {
+              category: ['pants'],
+            },
+            maxValuesPerFacet: 10,
+            index: helper.state.index,
+          })
+        );
       });
     });
   });
@@ -794,6 +818,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           index: indexName,
         })
       );
+    });
+
+    it('leaves empty state intact', () => {
+      const state = new SearchParameters({});
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 10,
+        showMore: true,
+      });
+      const newState = widget.dispose({ state });
+
+      expect(newState).toEqual(new SearchParameters({}));
     });
   });
 });
