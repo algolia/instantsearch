@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectSearchBox routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
+exports[`connectSearchBox getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
 SearchParameters {
   "disjunctiveFacets": Array [],
   "disjunctiveFacetsRefinements": Object {},
@@ -16,7 +16,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectSearchBox routing getWidgetSearchParameters should enforce the default value if no value is the ui state 1`] = `
+exports[`connectSearchBox getWidgetSearchParameters should enforce the default value if no value is the ui state 1`] = `
 SearchParameters {
   "disjunctiveFacets": Array [],
   "disjunctiveFacetsRefinements": Object {},
@@ -31,7 +31,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectSearchBox routing getWidgetState should add an entry equal to the refinement 1`] = `
+exports[`connectSearchBox getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
   "query": "some query",
 }
