@@ -10,7 +10,6 @@ import {
   Widget,
   InitOptions,
   RenderOptions,
-  DisposeOptions,
   ScopedResult,
 } from '../../types';
 import {
