@@ -204,6 +204,7 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
         },
       }
     }
+    disabled={true}
   />
 </div>
 `;
@@ -313,6 +314,7 @@ exports[`RefinementList rendering with facets and show more 1`] = `
         },
       }
     }
+    disabled={false}
   />
 </div>
 `;

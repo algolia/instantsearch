@@ -106,8 +106,13 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.ratingMenu',
 
-      getConfiguration() {
-        return { disjunctiveFacets: [attribute] };
+      getConfiguration(state) {
+        return state.setQueryParameters({
+          disjunctiveFacets: [attribute],
+          disjunctiveFacetsRefinements: {
+            [attribute]: state.disjunctiveFacetsRefinements[attribute] || [],
+          },
+        });
       },
 
       init({ helper, createURL, instantSearchInstance }) {
@@ -134,7 +139,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         for (let v = max; v >= 0; --v) {
           allValues[v] = 0;
         }
-        results.getFacetValues(attribute).forEach(facet => {
+        (results.getFacetValues(attribute) || []).forEach(facet => {
           const val = Math.round(facet.name);
           if (!val || val > max) {
             return;
@@ -180,11 +185,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeDisjunctiveFacetRefinement(attribute)
-          .removeDisjunctiveFacet(attribute);
-
-        return nextState;
+        return state.removeDisjunctiveFacet(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {

@@ -171,6 +171,7 @@ class RefinementList extends Component {
         rootTagName="button"
         rootProps={{
           className: showMoreButtonClassName,
+          disabled: !this.props.canToggleShowMore,
           onClick: this.props.toggleShowMore,
         }}
         data={{

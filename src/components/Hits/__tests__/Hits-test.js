@@ -252,9 +252,7 @@ describe('Hits', () => {
           name: 'name 1',
           _highlightResult: {
             name: {
-              value: `${TAG_REPLACEMENT.highlightPreTag}name 1${
-                TAG_REPLACEMENT.highlightPostTag
-              }`,
+              value: `${TAG_REPLACEMENT.highlightPreTag}name 1${TAG_REPLACEMENT.highlightPostTag}`,
             },
           },
         },
@@ -263,9 +261,7 @@ describe('Hits', () => {
           name: 'name 2',
           _highlightResult: {
             name: {
-              value: `${TAG_REPLACEMENT.highlightPreTag}name 2${
-                TAG_REPLACEMENT.highlightPostTag
-              }`,
+              value: `${TAG_REPLACEMENT.highlightPreTag}name 2${TAG_REPLACEMENT.highlightPostTag}`,
             },
           },
         },

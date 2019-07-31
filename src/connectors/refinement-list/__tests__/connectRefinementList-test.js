@@ -111,10 +111,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'myFacet',
       });
 
-      expect(widget.getConfiguration()).toEqual({
-        disjunctiveFacets: ['myFacet'],
-        maxValuesPerFacet: 10,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['myFacet'],
+          disjunctiveFacetsRefinements: { myFacet: [] },
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('`limit`', () => {
@@ -124,17 +127,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         limit: 20,
       });
 
-      expect(widget.getConfiguration()).toEqual({
-        disjunctiveFacets: ['myFacet'],
-        maxValuesPerFacet: 20,
-      });
-
-      expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual(
-        {
+      expect(widget.getConfiguration(new SearchParameters())).toEqual(
+        new SearchParameters({
           disjunctiveFacets: ['myFacet'],
+          disjunctiveFacetsRefinements: { myFacet: [] },
+          maxValuesPerFacet: 20,
+        })
+      );
+
+      expect(
+        widget.getConfiguration(
+          new SearchParameters({ maxValuesPerFacet: 100 })
+        )
+      ).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['myFacet'],
+          disjunctiveFacetsRefinements: { myFacet: [] },
           maxValuesPerFacet: 100,
-        },
-        'Can read the previous maxValuesPerFacet value'
+        })
       );
     });
 
@@ -147,7 +157,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 30,
       });
 
-      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters({}))
+      );
       helper.search = jest.fn();
 
       widget.init({
@@ -188,15 +202,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const secondRenderingOptions = rendering.mock.calls[1][0];
       secondRenderingOptions.toggleShowMore();
 
-      expect(widget.getConfiguration()).toEqual({
-        disjunctiveFacets: ['myFacet'],
-        maxValuesPerFacet: 30,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['myFacet'],
+          disjunctiveFacetsRefinements: { myFacet: [] },
+          maxValuesPerFacet: 30,
+        })
+      );
 
-      expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual({
-        disjunctiveFacets: ['myFacet'],
-        maxValuesPerFacet: 100,
-      });
+      expect(
+        widget.getConfiguration(
+          new SearchParameters({ maxValuesPerFacet: 100 })
+        )
+      ).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['myFacet'],
+          disjunctiveFacetsRefinements: { myFacet: [] },
+          maxValuesPerFacet: 100,
+        })
+      );
     });
 
     it('`showMoreLimit` without `showMore` does not set anything', () => {
@@ -207,7 +231,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 30,
       });
 
-      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters({}))
+      );
       helper.search = jest.fn();
 
       widget.init({
@@ -248,10 +276,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const secondRenderingOptions = rendering.mock.calls[1][0];
       secondRenderingOptions.toggleShowMore();
 
-      expect(widget.getConfiguration()).toEqual({
-        disjunctiveFacets: ['myFacet'],
-        maxValuesPerFacet: 20,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['myFacet'],
+          disjunctiveFacetsRefinements: { myFacet: [] },
+          maxValuesPerFacet: 20,
+        })
+      );
     });
 
     it('`operator="and"`', () => {
@@ -261,10 +292,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         operator: 'and',
       });
 
-      expect(widget.getConfiguration()).toEqual({
-        facets: ['myFacet'],
-        maxValuesPerFacet: 10,
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          facets: ['myFacet'],
+          facetsRefinements: { myFacet: [] },
+          maxValuesPerFacet: 10,
+        })
+      );
     });
   });
 
@@ -277,11 +311,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 9,
     });
 
-    const config = widget.getConfiguration({});
-    expect(config).toEqual({
-      disjunctiveFacets: ['myFacet'],
-      maxValuesPerFacet: 9,
-    });
+    const config = widget.getConfiguration(new SearchParameters({}));
+    expect(config).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: ['myFacet'],
+        disjunctiveFacetsRefinements: { myFacet: [] },
+        maxValuesPerFacet: 9,
+      })
+    );
 
     // test if widget is not rendered yet at this point
     expect(rendering).not.toHaveBeenCalled();
@@ -326,6 +363,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
+  it('can render before getConfiguration', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+
+    const widget = makeWidget({
+      attribute: 'myFacet',
+      limit: 9,
+    });
+
+    const helper = jsHelper({}, '');
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: [],
+      }),
+      false
+    );
+  });
+
   it('transforms items if requested', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
@@ -339,7 +401,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         })),
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -389,13 +455,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     ]);
   });
 
-  it('Provide a function to clear the refinements at each step', () => {
+  it('Provide a function to clear the refinements at each step (or)', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attribute: 'category',
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
@@ -409,9 +479,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(0);
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(1);
 
     widget.render({
       results: new SearchResults(helper.state, [{}, {}]),
@@ -423,9 +493,53 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderToggleRefinement } = secondRenderingOptions;
     renderToggleRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(0);
     renderToggleRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.disjunctiveFacetsRefinements.category).toHaveLength(1);
+  });
+
+  it('Provide a function to clear the refinements at each step (and)', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      operator: 'and',
+    });
+
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', 'value');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const { refine } = firstRenderingOptions;
+    refine('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(0);
+    refine('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}, {}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    const { refine: renderToggleRefinement } = secondRenderingOptions;
+    renderToggleRefinement('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(0);
+    renderToggleRefinement('value');
+    expect(helper.state.facetsRefinements.category).toHaveLength(1);
   });
 
   it('If there are too few items then canToggleShowMore is false', () => {
@@ -437,7 +551,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -482,7 +600,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 1,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -533,7 +655,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -584,7 +710,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -638,7 +768,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 3,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -722,6 +856,331 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     ]);
   });
 
+  it('show more should toggle between two limits after search', async () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const limit = 1;
+    const showMoreLimit = 2;
+    const widget = makeWidget({
+      attribute: 'category',
+      limit,
+      showMore: true,
+      showMoreLimit,
+    });
+
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        facetHits: [],
+      })
+    );
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const renderingOptions2 = rendering.mock.calls[1][0];
+    expect(renderingOptions2.items).toHaveLength(1);
+
+    // `searchForItems` triggers a new render
+    renderingOptions2.searchForItems('query triggering no results');
+    await Promise.resolve();
+
+    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      limit,
+      expect.anything()
+    );
+
+    expect(rendering).toHaveBeenCalledTimes(3);
+    const renderingOptions3 = rendering.mock.calls[2][0];
+
+    // `searchForItems` triggers a new render
+    renderingOptions3.searchForItems('');
+    await Promise.resolve();
+
+    expect(rendering).toHaveBeenCalledTimes(4);
+    const renderingOptions4 = rendering.mock.calls[3][0];
+    expect(renderingOptions4.toggleShowMore).toBeDefined();
+
+    // `toggleShowMore` triggers a new render
+    renderingOptions4.toggleShowMore();
+
+    expect(rendering).toHaveBeenCalledTimes(5);
+    const renderingOptions5 = rendering.mock.calls[4][0];
+    expect(renderingOptions5.items).toHaveLength(2);
+
+    renderingOptions5.searchForItems('new search');
+    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      showMoreLimit,
+      expect.anything()
+    );
+  });
+
+  it('Toggle show more should be enabled when refinement list is expanded and number of facet is above limit and below showMoreLimit', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      limit: 1,
+      showMore: true,
+      showMoreLimit: 3,
+    });
+
+    const helper = jsHelper({}, '', {
+      ...widget.getConfiguration(new SearchParameters({})),
+      maxValuesPerFacet: 10,
+    });
+    helper.search = jest.fn();
+
+    // 1st rendering: initialization
+    widget.init({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // 2nd rendering: with 4 results (collapsed refinement list with limit < showMoreLimit < facets)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+
+    expect(secondRenderingOptions.canToggleShowMore).toEqual(true);
+
+    // 3rd rendering: expand refinement list
+    secondRenderingOptions.toggleShowMore();
+
+    // 4th rendering: with 2 results (expanded refinement list with limit < facets < showMoreLimit)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const forthRenderingOptions = rendering.mock.calls[3][0];
+
+    expect(forthRenderingOptions.canToggleShowMore).toEqual(true);
+  });
+
+  it('Toggle show more should be disabled when refinement list is expanded and number of facet is below limit', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attribute: 'category',
+      limit: 2,
+      showMore: true,
+      showMoreLimit: 3,
+    });
+
+    const helper = jsHelper({}, '', {
+      ...widget.getConfiguration(new SearchParameters({})),
+      maxValuesPerFacet: 10,
+    });
+    helper.search = jest.fn();
+
+    // 1st rendering: initialization
+    widget.init({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // 2nd rendering: with 4 results (collapsed refinement list with limit < showMoreLimit < facets)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+
+    expect(secondRenderingOptions.canToggleShowMore).toEqual(true);
+
+    // 3rd rendering: expand refinement list
+    secondRenderingOptions.toggleShowMore();
+
+    // 4th rendering: with 1 result (expanded refinement list with facets < limit < showMoreLimit)
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const forthRenderingOptions = rendering.mock.calls[3][0];
+
+    expect(forthRenderingOptions.canToggleShowMore).toEqual(false);
+  });
+
   it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
@@ -729,7 +1188,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 2,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
 
     widget.init({
@@ -806,7 +1269,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration({}),
+      ...widget.getConfiguration(new SearchParameters({})),
       maxValuesPerFacet: 3,
     });
     helper.search = jest.fn();
@@ -886,7 +1349,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       escapeFacetValues: false,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
@@ -922,6 +1389,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           facets: {
             category: {
               c1: 880,
+              c2: 880,
+              c3: 880,
+              c4: 880,
             },
           },
         },
@@ -929,6 +1399,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           facets: {
             category: {
               c1: 880,
+              c2: 880,
+              c3: 880,
+              c4: 880,
             },
           },
         },
@@ -992,7 +1465,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         })),
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
@@ -1090,7 +1567,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration({}),
+      ...widget.getConfiguration(new SearchParameters({})),
       // Here we simulate that another widget has set some highlight tags
       ...TAG_PLACEHOLDER,
     });
@@ -1193,7 +1670,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration({}),
+      ...widget.getConfiguration(new SearchParameters({})),
       // Here we simulate that another widget has set some highlight tags
       ...TAG_PLACEHOLDER,
     });
@@ -1288,6 +1765,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
+  it('does not throw without the unmount function', () => {
+    const rendering = () => {};
+    const makeWidget = connectRefinementList(rendering);
+    const widget = makeWidget({
+      attribute: 'myFacet',
+    });
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
+
+    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+  });
+
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
@@ -1298,7 +1790,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         ...config,
       });
 
-      const initialConfig = widget.getConfiguration({}, {});
+      const initialConfig = widget.getConfiguration(new SearchParameters({}));
       const helper = jsHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
@@ -1420,6 +1912,176 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         // Applying the refinement should yield a new state with a conjunctive refinement
         expect(searchParametersAfter).toMatchSnapshot();
       });
+    });
+  });
+
+  describe('dispose', () => {
+    it('removes refinements completely on dispose (and)', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectRefinementList(rendering);
+
+      const widget = makeWidget({
+        attribute: 'category',
+        operator: 'and',
+      });
+
+      const indexName = 'my-index';
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters({}))
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          facets: ['category'],
+          facetsRefinements: {
+            category: [],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      refine('zimbo');
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          facets: ['category'],
+          facetsRefinements: {
+            category: ['zimbo'],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      const newState = widget.dispose({
+        state: helper.state,
+      });
+
+      expect(newState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
+    });
+
+    it('removes refinements completely on dispose (or)', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectRefinementList(rendering);
+
+      const widget = makeWidget({
+        attribute: 'category',
+        operator: 'or',
+      });
+
+      const indexName = 'my-index';
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters({}))
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                c1: 880,
+                c2: 47,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['category'],
+          disjunctiveFacetsRefinements: {
+            category: [],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      refine('zimbo');
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['category'],
+          disjunctiveFacetsRefinements: {
+            category: ['zimbo'],
+          },
+          index: indexName,
+          maxValuesPerFacet: 10,
+        })
+      );
+
+      const newState = widget.dispose({
+        state: helper.state,
+      });
+
+      expect(newState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
     });
   });
 });
