@@ -7,9 +7,11 @@ import algoliasearchHelper, {
 import { Client } from 'algoliasearch';
 import {
   InstantSearch,
+  UiState,
   Widget,
   InitOptions,
   RenderOptions,
+  WidgetStateOptions,
   ScopedResult,
 } from '../../types';
 import {
@@ -41,10 +43,26 @@ export type Index = Widget & {
   init(options: IndexInitOptions): void;
   render(options: IndexRenderOptions): void;
   dispose(): void;
+  getWidgetState(uiState: UiState): UiState;
 };
 
 function isIndexWidget(widget: Widget): widget is Index {
   return widget.$$type === 'ais.index';
+}
+
+function getLocalWidgetsState(
+  widgets: Widget[],
+  widgetStateOptions: WidgetStateOptions
+): UiState {
+  return widgets
+    .filter(widget => !isIndexWidget(widget))
+    .reduce<UiState>((uiState, widget) => {
+      if (!widget.getWidgetState) {
+        return uiState;
+      }
+
+      return widget.getWidgetState(uiState, widgetStateOptions);
+    }, {});
 }
 
 function resetPageFromWidgets(widgets: Widget[]): void {
@@ -92,6 +110,7 @@ const index = (props: IndexProps): Index => {
   const { indexName = null } = props || {};
 
   let localWidgets: Widget[] = [];
+  let localUiState: UiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
   let localParent: Index | null = null;
   let helper: Helper | null = null;
@@ -267,7 +286,12 @@ const index = (props: IndexProps): Index => {
         mergeSearchParameters(...resolveSearchParameters(this))
       );
 
-      helper.on('change', ({ isPageReset }) => {
+      helper.on('change', ({ state, isPageReset }) => {
+        localUiState = getLocalWidgetsState(localWidgets, {
+          searchParameters: state,
+          helper: helper!,
+        });
+
         if (isPageReset) {
           resetPageFromWidgets(localWidgets);
         }
@@ -343,10 +367,24 @@ const index = (props: IndexProps): Index => {
 
       localInstantSearchInstance = null;
       localParent = null;
+      helper!.removeAllListeners();
       helper = null;
 
       derivedHelper!.detach();
       derivedHelper = null;
+    },
+
+    getWidgetState(uiState: UiState) {
+      return localWidgets
+        .filter(isIndexWidget)
+        .reduce<UiState>(
+          (previousUiState, innerIndex) =>
+            innerIndex.getWidgetState(previousUiState),
+          {
+            ...uiState,
+            [this.getIndexId()]: localUiState,
+          }
+        );
     },
   };
 };

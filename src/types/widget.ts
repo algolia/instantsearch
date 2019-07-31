@@ -38,6 +38,15 @@ export interface DisposeOptions {
   state: SearchParameters;
 }
 
+export interface WidgetStateOptions {
+  searchParameters: SearchParameters;
+  helper: Helper;
+}
+
+export interface WidgetSearchParametersOptions {
+  uiState: UiState;
+}
+
 export type UiState = {
   query?: string;
   refinementList?: {
@@ -115,16 +124,11 @@ export interface Widget {
   getConfiguration?(previousConfiguration: SearchParameters): SearchParameters;
   getWidgetState?(
     uiState: UiState,
-    widgetStateOptions: {
-      searchParameters: SearchParameters;
-      helper: Helper;
-    }
+    widgetStateOptions: WidgetStateOptions
   ): UiState;
   getWidgetSearchParameters?(
     state: SearchParameters,
-    widgetSearchParametersOptions: {
-      uiState: UiState;
-    }
+    widgetSearchParametersOptions: WidgetSearchParametersOptions
   ): SearchParameters;
 }
 
