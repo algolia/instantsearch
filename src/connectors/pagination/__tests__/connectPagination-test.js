@@ -317,6 +317,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   describe('dispose', () => {
+    it('does not throw without the unmount function', () => {
+      const rendering = () => {};
+      const makeWidget = connectPagination(rendering);
+      const widget = makeWidget({
+        padding: 5,
+      });
+      const helper = algoliasearchHelper({});
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({}, '');
 
@@ -330,18 +342,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({}, '');
-
-      const renderFn = () => {};
-      const makeWidget = connectPagination(renderFn);
-      const widget = makeWidget();
-
-      expect(() =>
-        widget.dispose({ helper, state: helper.state })
-      ).not.toThrow();
     });
 
     it('removes the `page` from the `SearchParameters`', () => {
