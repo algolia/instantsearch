@@ -867,7 +867,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit,
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
@@ -961,7 +965,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration({}),
+      ...widget.getConfiguration(new SearchParameters({})),
       maxValuesPerFacet: 10,
     });
     helper.search = jest.fn();
@@ -1075,7 +1079,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration({}),
+      ...widget.getConfiguration(new SearchParameters({})),
       maxValuesPerFacet: 10,
     });
     helper.search = jest.fn();
@@ -1763,7 +1767,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const widget = makeWidget({
       attribute: 'myFacet',
     });
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
 
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
