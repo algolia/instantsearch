@@ -339,8 +339,9 @@ describe('removeWidget(s)', () => {
 describe('start', () => {
   it('creates two Helper one for the instance + one for the index', () => {
     const searchClient = createSearchClient();
+    const indexName = 'my_index_name';
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName,
       searchClient,
     });
 
@@ -349,7 +350,7 @@ describe('start', () => {
     search.start();
 
     expect(algoliasearchHelper).toHaveBeenCalledTimes(2);
-    expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient);
+    expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
   });
 
   it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', () => {

@@ -1,14 +1,10 @@
+import { SearchParameters } from 'algoliasearch-helper';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
-import {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
-import { Index } from '../widgets/index/index';
-import { InsightsClient as AlgoliaInsightsClient } from './insights';
 import { Widget, UiState } from './widget';
-
-export type InstantSearchOptions = any;
+export {
+  default as InstantSearch,
+  InstantSearchOptions,
+} from '../lib/InstantSearch';
 
 // @TODO: can this be written some other way?
 export type HelperChangeEvent = {
@@ -90,34 +86,66 @@ export type NumericRefinement = {
 
 export type Refinement = FacetRefinement | NumericRefinement;
 
+/**
+ * The router is the part that saves and reads the object from the storage.
+ * Usually this is the URL.
+ */
 export interface Router<TRouteState = UiState> extends Widget {
+  /**
+   * onUpdate Sets an event listener that is triggered when the storage is updated.
+   * The function should accept a callback to trigger when the update happens.
+   * In the case of the history / URL in a browser, the callback will be called
+   * by `onPopState`.
+   */
   onUpdate(callback: (route: TRouteState) => void): void;
-  read(): UiState;
+
+  /**
+   * Reads the storage and gets a route object. It does not take parameters,
+   * and should return an object
+   */
+  read(): TRouteState;
+
+  /**
+   * Pushes a route object into a storage. Takes the UI state mapped by the state
+   * mapping configured in the mapping
+   */
   write(route: TRouteState): void;
+
+  /**
+   * Transforms a route object into a URL. It receives an object and should
+   * return a string. It may return an empty string.
+   */
   createURL(state: TRouteState): string;
 }
 
+/**
+ * The state mapping is a way to customize the structure before sending it to the router.
+ * It can transform and filter out the properties. To work correctly, the following
+ * should be valid for any UiState:
+ * `UiState = routeToState(stateToRoute(UiState))`.
+ */
 export type StateMapping<TRouteState = UiState> = {
-  stateToRoute(state: UiState): TRouteState;
-  routeToState(route: TRouteState): UiState;
+  /**
+   * Transforms a UI state representation into a route object.
+   * It receives an object that contains the UI state of all the widgets in the page.
+   * It should return an object of any form as long as this form can be read by
+   * the `routeToState` function.
+   */
+  stateToRoute(uiState: UiState): TRouteState;
+  /**
+   * Transforms route object into a UI state representation.
+   * It receives an object that contains the UI state stored by the router.
+   * The format is the output of `stateToRoute`.
+   */
+  routeToState(routeState: TRouteState): UiState;
 };
 
-export type Client = AlgoliaSearchClient;
-
-export type InstantSearch = {
-  helper: AlgoliaSearchHelper | null;
-  mainHelper: AlgoliaSearchHelper | null;
-  mainIndex: Index;
-  insightsClient: AlgoliaInsightsClient | null;
-  templatesConfig: object;
-  _isSearchStalled: boolean;
-  _searchParameters: PlainSearchParameters;
-  _createAbsoluteURL(state: PlainSearchParameters): string;
-  scheduleSearch(): void;
-  scheduleRender(): void;
-  scheduleStalledRender(): void;
-};
-
+// @TODO: use the generic form of this in routers
 export type RouteState = {
   [stateKey: string]: any;
 };
+
+export type SearchClient = Pick<
+  AlgoliaSearchClient,
+  'search' | 'searchForFacetValues'
+>;

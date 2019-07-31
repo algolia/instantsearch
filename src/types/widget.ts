@@ -102,10 +102,24 @@ export type UiState = {
   hitsPerPage?: number;
 };
 
+/**
+ * Widgets are the building blocks of InstantSearch.js. Any valid widget must
+ * have at least a `render` or a `init` function.
+ */
 export interface Widget {
   $$type?: string;
+  /**
+   * Called once before the first search
+   */
   init?(options: InitOptions): void;
+  /**
+   * Called after each search response has been received
+   */
   render?(options: RenderOptions): void;
+  /**
+   * Called when this widget is unmounted. Used to remove refinements set by
+   * during this widget's initialization and life time.
+   */
   dispose?(options: DisposeOptions): SearchParameters | void;
   getConfiguration?(previousConfiguration: SearchParameters): SearchParameters;
   getWidgetState?(

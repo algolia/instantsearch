@@ -1693,10 +1693,10 @@
     traverse "^0.6.6"
     unified "^6.1.6"
 
-"@types/algoliasearch@3.30.14":
-  version "3.30.14"
-  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.30.14.tgz#2166c0fedfa029a4be0fd80e5b35b4eb2d99731e"
-  integrity sha512-GfUz6Cb7BXSyR/mQchUVy4Y6TNbho/0NrdqDtfSENJaBI9+miD00xowISIsidDJTonjQIq0tN7f/+OQBVBM1Cw==
+"@types/algoliasearch@3.30.16":
+  version "3.30.16"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.30.16.tgz#df71aa3eee3648441075ee6dcc428e54dd861196"
+  integrity sha512-47FcMwJuW5NJnzjgkX6O9LKyUeNuVFaeU5iEjCAPH21LQNqev1l6PL/LhGSkme89YIcT0DAl27dqA/woq4BBrw==
 
 "@types/babel__core@^7.1.0":
   version "7.1.1"
