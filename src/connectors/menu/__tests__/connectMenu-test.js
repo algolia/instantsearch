@@ -408,7 +408,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const widget = connectMenu(() => {})({
       attribute: 'category',
     });
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters({}))
+    );
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 
