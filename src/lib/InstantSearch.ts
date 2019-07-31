@@ -437,7 +437,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   });
 
   public scheduleRender = defer(() => {
-    if (this.mainHelper!.hasPendingRequests() === false) {
+    if (!this.mainHelper!.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
       this._searchStalledTimer = null;
       this._isSearchStalled = false;
