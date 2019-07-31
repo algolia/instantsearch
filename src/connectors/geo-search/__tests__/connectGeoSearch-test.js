@@ -1141,6 +1141,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(unmount).toHaveBeenCalled();
       expect(actual).toEqual(expectation);
     });
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const customGeoSearch = connectGeoSearch(render);
+      const widget = customGeoSearch();
+      const helper = createFakeHelper({});
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
   });
 
   describe('getWidgetState', () => {

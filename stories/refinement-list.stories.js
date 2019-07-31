@@ -82,6 +82,21 @@ storiesOf('RefinementList', module)
     })
   )
   .add(
+    'with search and show more',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidget(
+        instantsearch.widgets.refinementList({
+          container,
+          attribute: 'brand',
+          limit: 3,
+          showMore: true,
+          showMoreLimit: 10,
+          searchable: true,
+        })
+      );
+    })
+  )
+  .add(
     'with operator `and`',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(

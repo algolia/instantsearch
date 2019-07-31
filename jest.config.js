@@ -3,12 +3,21 @@
 module.exports = {
   rootDir: process.cwd(),
   testEnvironment: 'jest-environment-jsdom-global',
+  setupFilesAfterEnv: ['./scripts/jest/setupTests.js'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/dist*',
     '<rootDir>/functional-tests',
   ],
-  setupFilesAfterEnv: ['./scripts/jest/setupTests.js'],
+  watchPathIgnorePatterns: [
+    '<rootDir>/cjs',
+    '<rootDir>/dist',
+    '<rootDir>/es',
+    '<rootDir>/examples',
+    '<rootDir>/scripts',
+    '<rootDir>/stories',
+    '<rootDir>/website',
+  ],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',

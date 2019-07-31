@@ -1,5 +1,5 @@
 import { render } from 'preact-compat';
-import jsHelper from 'algoliasearch-helper';
+import jsHelper, { SearchParameters } from 'algoliasearch-helper';
 import toggleRefinement from '../toggleRefinement';
 import RefinementList from '../../../components/RefinementList/RefinementList';
 
@@ -43,9 +43,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     it('configures disjunctiveFacets', () => {
-      expect(widget.getConfiguration()).toEqual({
-        disjunctiveFacets: ['world!'],
-      });
+      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['world!'],
+          disjunctiveFacetsRefinements: {
+            'world!': [],
+          },
+        })
+      );
     });
 
     describe('render', () => {
@@ -88,7 +93,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           attribute,
           /* on: true, off: undefined */
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         widget.init({ helper, state, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
@@ -120,7 +125,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           /* on: true, off: undefined */
           RefinementList,
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         expect(render.mock.calls[0][0]).toMatchSnapshot();
@@ -143,7 +148,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           /* on: true, off: undefined */
           RefinementList,
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
@@ -171,7 +176,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           on: 5,
         });
 
-        const config = widget.getConfiguration();
+        const config = widget.getConfiguration(new SearchParameters({}));
         const altHelper = jsHelper({}, '', config);
         altHelper.search = () => {};
 
@@ -210,7 +215,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           /* on: true, off: undefined */
           RefinementList,
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
@@ -241,7 +246,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           /* on: true, off: undefined */
           RefinementList,
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
@@ -267,7 +272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           /* on: true, off: undefined */
           RefinementList,
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         const { refine } = render.mock.calls[0][0].props;
@@ -308,7 +313,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
             attribute,
             /* on: true, off: undefined */
           });
-          widget.getConfiguration();
+          widget.getConfiguration(new SearchParameters({}));
           const state = {
             isDisjunctiveFacetRefined: jest.fn().mockReturnValue(false),
           };
@@ -334,7 +339,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
             attribute,
             /* on: true, off: undefined */
           });
-          widget.getConfiguration();
+          widget.getConfiguration(new SearchParameters({}));
           const state = {
             isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
           };
@@ -362,7 +367,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
             ...userValues,
           });
 
-          const config = widget.getConfiguration();
+          const config = widget.getConfiguration(new SearchParameters({}));
           const altHelper = jsHelper({}, '', config);
           altHelper.search = () => {};
 
@@ -395,7 +400,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
             attribute,
             ...userValues,
           });
-          widget.getConfiguration();
+          widget.getConfiguration(new SearchParameters({}));
           const state = {
             isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
           };
@@ -428,7 +433,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           attribute,
           ...userValues,
         });
-        const config = widget.getConfiguration();
+        const config = widget.getConfiguration(new SearchParameters({}));
         const helper = jsHelper({}, '', config);
 
         // When
@@ -453,7 +458,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           attribute,
           ...userValues,
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         const state = {
           isDisjunctiveFacetRefined: jest.fn().mockReturnValue(true),
         };
@@ -476,7 +481,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
           attribute,
           ...userValues,
         });
-        widget.getConfiguration();
+        widget.getConfiguration(new SearchParameters({}));
         const state = {
           isDisjunctiveFacetRefined: () => false,
         };
