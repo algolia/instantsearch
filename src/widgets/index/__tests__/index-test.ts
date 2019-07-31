@@ -891,6 +891,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
       const level2 = index({ indexName: 'level_2_index_name' });
+      const level3 = index({ indexName: 'level_3_index_name' });
       const instantSearchInstance = createInstantSearch();
 
       level0.addWidgets([
@@ -901,7 +902,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           createSearchBox(),
           createPagination(),
 
-          level2.addWidgets([createSearchBox(), createPagination()]),
+          level2.addWidgets([createSearchBox(), createPagination(), level3]),
         ]),
       ]);
 
@@ -943,6 +944,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           query: 'Apple iPhone 5S',
           page: 9,
         },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_3_index_name: {},
       });
 
       expect(level1.getWidgetState({})).toEqual({
@@ -956,6 +959,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           query: 'Apple iPhone 5S',
           page: 9,
         },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_3_index_name: {},
       });
 
       expect(level2.getWidgetState({})).toEqual({
@@ -964,35 +969,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           query: 'Apple iPhone 5S',
           page: 9,
         },
-      });
-    });
-
-    it('retrieves the `uiState` for the children indices with empty indices omitted', () => {
-      const level0 = index({ indexName: 'level_0_index_name' });
-      const level1 = index({ indexName: 'level_1_index_name' });
-      const instantSearchInstance = createInstantSearch();
-      const widgets = [createSearchBox(), createPagination(), level1];
-
-      level0.addWidgets(widgets);
-
-      level0.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      // Simulate a state change
-      level0
-        .getHelper()!
-        .setQueryParameter('query', 'Apple')
-        .setQueryParameter('page', 5);
-
-      expect(level0.getWidgetState({})).toEqual({
         // eslint-disable-next-line @typescript-eslint/camelcase
-        level_0_index_name: {
-          query: 'Apple',
-          page: 5,
-        },
+        level_3_index_name: {},
+      });
+
+      expect(level3.getWidgetState({})).toEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        level_3_index_name: {},
       });
     });
 
