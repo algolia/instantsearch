@@ -21,9 +21,6 @@ import {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
-  RenderOptions,
-  DisposeOptions,
-  InitOptions,
   StateMapping,
   Router,
   UiState,
@@ -392,11 +389,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     this.mainHelper = mainHelper;
 
-    // @TODO: do we want this to be correct arguments?
-    this.mainIndex.init(({
+    this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
-    } as any) as InitOptions);
+    });
 
     mainHelper.search();
 
@@ -421,8 +417,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     clearTimeout(this._searchStalledTimer);
 
     this.removeWidgets(this.mainIndex.getWidgets());
-    // @TODO: do we want this to be correct arguments?
-    this.mainIndex.dispose(({} as any) as DisposeOptions);
+    this.mainIndex.dispose();
 
     // You can not start an instance two times, therefore a disposed instance
     // needs to set started as false otherwise this can not be restarted at a
@@ -448,10 +443,9 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       this._isSearchStalled = false;
     }
 
-    // @TODO: do we want this to be correct arguments?
-    this.mainIndex.render(({
+    this.mainIndex.render({
       instantSearchInstance: this,
-    } as any) as RenderOptions);
+    });
 
     this.emit('render');
   });

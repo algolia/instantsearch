@@ -28,6 +28,9 @@ type IndexProps = {
   indexName: string;
 };
 
+type IndexInitOptions = Pick<InitOptions, 'instantSearchInstance' | 'parent'>;
+type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
+
 export type Index = Widget & {
   getIndexId(): string;
   getHelper(): Helper | null;
@@ -36,9 +39,9 @@ export type Index = Widget & {
   getWidgets(): Widget[];
   addWidgets(widgets: Widget[]): Index;
   removeWidgets(widgets: Widget[]): Index;
-  init(options: InitOptions): void;
-  render(options: RenderOptions): void;
-  dispose(options: DisposeOptions): void;
+  init(options: IndexInitOptions): void;
+  render(options: IndexRenderOptions): void;
+  dispose(): void;
 };
 
 function isIndexWidget(widget: Widget): widget is Index {
@@ -215,7 +218,7 @@ const index = (props: IndexProps): Index => {
       return this;
     },
 
-    init({ instantSearchInstance, parent }: InitOptions) {
+    init({ instantSearchInstance, parent }: IndexInitOptions) {
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
 
@@ -300,7 +303,7 @@ const index = (props: IndexProps): Index => {
       });
     },
 
-    render({ instantSearchInstance }: RenderOptions) {
+    render({ instantSearchInstance }: IndexRenderOptions) {
       localWidgets.forEach(widget => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
