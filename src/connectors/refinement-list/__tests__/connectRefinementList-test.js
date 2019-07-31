@@ -1681,16 +1681,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         facetHits: [
           {
             count: 33,
-            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${
-              TAG_PLACEHOLDER.highlightPostTag
-            }li`,
+            highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${
-              TAG_PLACEHOLDER.highlightPostTag
-            }vidoff`,
+            highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
             value: 'Davidoff',
           },
         ],
