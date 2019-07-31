@@ -420,52 +420,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   describe('getWidgetSearchParameters', () => {
-    test('should return the same SP if there are no refinements in the UI state', () => {
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
       const [widget, helper] = getInitializedWidget();
-      // The user presses back (browser), and the URL contains no parameters
-      const uiState = {};
-      // The current state is empty (and page is set to 0 by default)
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          page: 5,
+        },
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          page: 4, // uiState.page - 1
+        })
       );
-      // Applying the same values should not return a new object
-      expect(searchParametersAfter).toBe(searchParametersBefore);
     });
 
-    test('should enforce the default value if no value is in the UI State', () => {
-      const [widget, helper, refine] = getInitializedWidget();
-      // The user presses back (browser), and the URL contains no parameters
-      const uiState = {};
-      // The current state is set to page 4
-      refine(4);
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
-      );
-      // Applying an empty state, should force back to page 0
-      expect(searchParametersAfter).toMatchSnapshot();
-      expect(searchParametersAfter.page).toBeUndefined();
-    });
+    test('returns the `SearchParameters` with the default value', () => {
+      const [widget, helper] = getInitializedWidget();
 
-    test('should add the refinements according to the UI state provided', () => {
-      const [widget, helper, refine] = getInitializedWidget();
-      // The user presses back (browser), and the URL contains some parameters
-      const uiState = {
-        page: 2,
-      };
-      // The current search is set to page 10
-      refine(10);
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          page: 0,
+        })
       );
-      // Applying a state with new parameters should apply them on the search
-      expect(searchParametersAfter).toMatchSnapshot();
-      expect(searchParametersAfter.page).toBe(1);
     });
   });
 });
