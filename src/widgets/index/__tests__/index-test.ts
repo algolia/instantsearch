@@ -94,7 +94,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
   describe('addWidgets', () => {
     it('adds given widgets to the instance', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
 
       expect(instance.getWidgets()).toHaveLength(0);
 
@@ -104,8 +104,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('returns the instance to be able to chain the calls', () => {
-      const topLevelIndex = index({ indexName: 'top_level_index_name' });
-      const subLevelIndex = index({ indexName: 'sub_level_index_name' });
+      const topLevelIndex = index({ indexName: 'topLevelIndexName' });
+      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
 
       topLevelIndex.addWidgets([
         subLevelIndex.addWidgets([createSearchBox(), createPagination()]),
@@ -116,14 +116,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('does not throw an error without the `init` step', () => {
-      const topLevelIndex = index({ indexName: 'top_level_index_name' });
-      const subLevelIndex = index({ indexName: 'sub_level_index_name' });
+      const topLevelIndex = index({ indexName: 'topLevelIndexName' });
+      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
 
       expect(() => topLevelIndex.addWidgets([subLevelIndex])).not.toThrow();
     });
 
     it('throws an error with a value different than `array`', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
 
       expect(() => {
         // @ts-ignore
@@ -140,7 +140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('throws an error with widgets that do not implement `init` or `render`', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
 
       expect(() => {
         instance.addWidgets([{ dummy: true } as any]);
@@ -153,7 +153,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     describe('with a started instance', () => {
       it('updates the internal state with added widgets', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
 
         instance.addWidgets([createSearchBox()]);
@@ -166,7 +166,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         expect(instance.getHelper()!.state).toEqual(
           algoliasearchHelper.SearchParameters.make({
-            index: 'index_name',
+            index: 'indexName',
             query: 'Apple',
           })
         );
@@ -175,7 +175,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         expect(instance.getHelper()!.state).toEqual(
           algoliasearchHelper.SearchParameters.make({
-            index: 'index_name',
+            index: 'indexName',
             query: 'Apple',
             page: 5,
           })
@@ -183,7 +183,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('calls `init` on the added widgets', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
         const widgets = [createSearchBox(), createPagination()];
 
@@ -213,7 +213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('schedules a search to take the added widgets into account', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
           scheduleSearch: jest.fn() as any,
         });
@@ -232,7 +232,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('does not trigger a search without widgets to add', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
           scheduleSearch: jest.fn() as any,
         });
@@ -254,7 +254,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
   describe('removeWidgets', () => {
     it('removes given widget from the instance', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const searchBox = createSearchBox();
       const pagination = createPagination();
 
@@ -268,7 +268,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('removes given widgets from the instance', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const searchBox = createSearchBox();
       const pagination = createPagination();
 
@@ -282,8 +282,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('returns the instance to be able to chain the calls', () => {
-      const topLevelInstance = index({ indexName: 'top_level_index_name' });
-      const subLevelInstance = index({ indexName: 'sub_level_index_name' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
       const searchBox = createSearchBox();
       const pagination = createPagination();
 
@@ -298,8 +298,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('does not throw an error without the `init` step', () => {
-      const topLevelInstance = index({ indexName: 'top_level_index_name' });
-      const subLevelIndex = index({ indexName: 'sub_level_index_name' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
 
       topLevelInstance.addWidgets([subLevelIndex]);
 
@@ -309,7 +309,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('throws an error with a value different than `array`', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
 
       expect(() => {
         // @ts-ignore
@@ -326,7 +326,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('throws an error with widgets that do not implement `dispose`', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
 
       expect(() => {
         instance.removeWidgets([{ dummy: true } as any]);
@@ -339,7 +339,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     describe('with a started instance', () => {
       it('updates the internal state with removed widgets', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
         const pagination = createPagination();
 
@@ -353,7 +353,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         expect(instance.getHelper()!.state).toEqual(
           algoliasearchHelper.SearchParameters.make({
-            index: 'index_name',
+            index: 'indexName',
             query: 'Apple',
             page: 5,
           })
@@ -363,14 +363,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         expect(instance.getHelper()!.state).toEqual(
           algoliasearchHelper.SearchParameters.make({
-            index: 'index_name',
+            index: 'indexName',
             query: 'Apple',
           })
         );
       });
 
       it('calls `dispose` on the removed widgets', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
         const widgets = [
           createSearchBox({
@@ -405,7 +405,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('schedules a search to take the removed widgets into account', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
           scheduleSearch: jest.fn() as any,
         });
@@ -428,7 +428,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('does not schedule a search without widgets to remove', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
           scheduleSearch: jest.fn() as any,
         });
@@ -451,7 +451,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('does not schedule a search without widgets in the index', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
           scheduleSearch: jest.fn() as any,
         });
@@ -477,7 +477,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
   describe('init', () => {
     it('forwards the `search` call to the main instance', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const mainHelper = algoliasearchHelper({} as any, '', {});
       const instantSearchInstance = createInstantSearch({
         mainHelper,
@@ -498,7 +498,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('forwards the `searchForFacetValues` call to the main instance', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const mainHelper = algoliasearchHelper({} as any, '', {});
       const instantSearchInstance = createInstantSearch({
         mainHelper,
@@ -526,7 +526,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         'Apple',
         10,
         expect.objectContaining({
-          index: 'index_name',
+          index: 'indexName',
           highlightPreTag: '<mark>',
           highlightPostTag: '</mark>',
         })
@@ -534,7 +534,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('uses `searchParameters` for the top level index', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch({
         _searchParameters: {
           hitsPerPage: 5,
@@ -551,7 +551,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       expect(instance.getHelper()!.state).toEqual(
         algoliasearchHelper.SearchParameters.make({
-          index: 'index_name',
+          index: 'indexName',
           hitsPerPage: 5,
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
           disjunctiveFacets: ['brand'],
@@ -560,8 +560,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('does not use `searchParameters` for sub level indices ', () => {
-      const topLevelInstance = index({ indexName: 'top_level_index_name' });
-      const subLevelInstance = index({ indexName: 'sub_level_index_name' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
       const instantSearchInstance = createInstantSearch({
         _searchParameters: {
           hitsPerPage: 5,
@@ -579,13 +579,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       expect(subLevelInstance.getHelper()!.state).toEqual(
         algoliasearchHelper.SearchParameters.make({
-          index: 'sub_level_index_name',
+          index: 'subLevelIndexName',
         })
       );
     });
 
     it('uses the internal state for the queries', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
@@ -606,7 +606,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       expect(searchClient.search).toHaveBeenCalledWith(
         expect.arrayContaining([
           {
-            indexName: 'index_name',
+            indexName: 'indexName',
             params: expect.objectContaining({
               query: 'Apple',
               page: 5,
@@ -617,9 +617,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('inherits from the parent states for the queries', () => {
-      const level0 = index({ indexName: 'level_0_index_name' });
-      const level1 = index({ indexName: 'level_1_index_name' });
-      const level2 = index({ indexName: 'level_2_index_name' });
+      const level0 = index({ indexName: 'level0IndexName' });
+      const level1 = index({ indexName: 'level1IndexName' });
+      const level2 = index({ indexName: 'level2IndexName' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
@@ -691,7 +691,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       expect(searchClient.search).toHaveBeenCalledWith(
         expect.arrayContaining([
           {
-            indexName: 'level_0_index_name',
+            indexName: 'level0IndexName',
             params: expect.objectContaining({
               hitsPerPage: 5,
               query: 'Apple',
@@ -699,7 +699,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             }),
           },
           {
-            indexName: 'level_1_index_name',
+            indexName: 'level1IndexName',
             params: expect.objectContaining({
               hitsPerPage: 5,
               query: 'Apple iPhone',
@@ -707,7 +707,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             }),
           },
           {
-            indexName: 'level_2_index_name',
+            indexName: 'level2IndexName',
             params: expect.objectContaining({
               hitsPerPage: 5,
               query: 'Apple iPhone XS',
@@ -719,7 +719,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('uses the internal state for the SFFV queries', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
@@ -744,7 +744,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([
           {
-            indexName: 'index_name',
+            indexName: 'indexName',
             params: expect.objectContaining({
               facetName: 'brand',
               facetQuery: 'Apple',
@@ -759,7 +759,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('schedules a render on DerivedHelper results', async () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch({
         scheduleRender: jest.fn() as any,
       });
@@ -781,7 +781,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('schedules a stalled render on DerivedHelper search', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch({
         scheduleStalledRender: jest.fn() as any,
       });
@@ -805,7 +805,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('calls `init` on its widgets', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
       const widgets = [createSearchBox(), createPagination()];
 
@@ -836,10 +836,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     describe('with page reset', () => {
       it('resets pages of nested indices when the state changes', () => {
-        const level0 = index({ indexName: 'level_0_index_name' });
-        const level1 = index({ indexName: 'level_1_index_name' });
-        const level2 = index({ indexName: 'level_2_index_name' });
-        const level3 = index({ indexName: 'level_3_index_name' });
+        const level0 = index({ indexName: 'level0IndexName' });
+        const level1 = index({ indexName: 'level1IndexName' });
+        const level2 = index({ indexName: 'level2IndexName' });
+        const level3 = index({ indexName: 'level3IndexName' });
         const searchClient = createSearchClient();
         const mainHelper = algoliasearchHelper(searchClient, '', {});
         const instantSearchInstance = createInstantSearch({
@@ -941,7 +941,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(searchClient.search).toHaveBeenCalledWith(
           expect.arrayContaining([
             {
-              indexName: 'level_0_index_name',
+              indexName: 'level0IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple',
@@ -949,7 +949,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_1_index_name',
+              indexName: 'level1IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Hey',
@@ -957,7 +957,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_2_index_name',
+              indexName: 'level2IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple iPhone XS',
@@ -965,7 +965,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_3_index_name',
+              indexName: 'level3IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple iPhone XS Red',
@@ -977,10 +977,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('does not reset pages of nested indices when only the page changes', () => {
-        const level0 = index({ indexName: 'level_0_index_name' });
-        const level1 = index({ indexName: 'level_1_index_name' });
-        const level2 = index({ indexName: 'level_2_index_name' });
-        const level3 = index({ indexName: 'level_3_index_name' });
+        const level0 = index({ indexName: 'level0IndexName' });
+        const level1 = index({ indexName: 'level1IndexName' });
+        const level2 = index({ indexName: 'level2IndexName' });
+        const level3 = index({ indexName: 'level3IndexName' });
         const searchClient = createSearchClient();
         const mainHelper = algoliasearchHelper(searchClient, '', {});
         const instantSearchInstance = createInstantSearch({
@@ -1081,7 +1081,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(searchClient.search).toHaveBeenCalledWith(
           expect.arrayContaining([
             {
-              indexName: 'level_0_index_name',
+              indexName: 'level0IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple',
@@ -1089,7 +1089,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_1_index_name',
+              indexName: 'level1IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple iPhone',
@@ -1097,7 +1097,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_2_index_name',
+              indexName: 'level2IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple iPhone XS',
@@ -1105,7 +1105,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_3_index_name',
+              indexName: 'level3IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple iPhone XS Red',
@@ -1117,10 +1117,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('is a noop for unset pages of nested indices when the state changes', () => {
-        const level0 = index({ indexName: 'level_0_index_name' });
-        const level1 = index({ indexName: 'level_1_index_name' });
-        const level2 = index({ indexName: 'level_2_index_name' });
-        const level3 = index({ indexName: 'level_3_index_name' });
+        const level0 = index({ indexName: 'level0IndexName' });
+        const level1 = index({ indexName: 'level1IndexName' });
+        const level2 = index({ indexName: 'level2IndexName' });
+        const level3 = index({ indexName: 'level3IndexName' });
         const searchClient = createSearchClient();
         const mainHelper = algoliasearchHelper(searchClient, '', {});
         const instantSearchInstance = createInstantSearch({
@@ -1205,7 +1205,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(searchClient.search).toHaveBeenCalledWith(
           expect.arrayContaining([
             {
-              indexName: 'level_0_index_name',
+              indexName: 'level0IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple',
@@ -1213,7 +1213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_1_index_name',
+              indexName: 'level1IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Hey',
@@ -1221,7 +1221,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_2_index_name',
+              indexName: 'level2IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple iPhone XS',
@@ -1229,7 +1229,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               }),
             },
             {
-              indexName: 'level_3_index_name',
+              indexName: 'level3IndexName',
               params: expect.objectContaining({
                 hitsPerPage: 5,
                 query: 'Apple iPhone XS Red',
@@ -1243,7 +1243,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     describe('with uiState', () => {
       it('updates the local `uiState` when the state changes', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
         const widgets = [createSearchBox(), createPagination()];
 
@@ -1262,8 +1262,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           .setQueryParameter('page', 5);
 
         expect(instance.getWidgetState({})).toEqual({
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          index_name: {
+          indexName: {
             query: 'Apple',
             page: 5,
           },
@@ -1271,7 +1270,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('does not update the local `uiState` on state changes in `init`', () => {
-        const instance = index({ indexName: 'index_name' });
+        const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
         const widgets = [
           createSearchBox(),
@@ -1295,21 +1294,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
-            index: 'index_name',
+            index: 'indexName',
             query: 'Apple iPhone',
             page: 5,
           })
         );
 
         expect(instance.getWidgetState({})).toEqual({
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          index_name: {},
+          indexName: {},
         });
       });
 
       it('updates the local `uiState` only with widgets not indices', () => {
-        const level0 = index({ indexName: 'level_0_index_name' });
-        const level1 = index({ indexName: 'level_1_index_name' });
+        const level0 = index({ indexName: 'level0IndexName' });
+        const level1 = index({ indexName: 'level1IndexName' });
         const instantSearchInstance = createInstantSearch();
         const widgets = [createSearchBox(), createPagination()];
 
@@ -1337,10 +1335,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('retrieves the `uiState` for the children indices', () => {
-        const level0 = index({ indexName: 'level_0_index_name' });
-        const level1 = index({ indexName: 'level_1_index_name' });
-        const level2 = index({ indexName: 'level_2_index_name' });
-        const level3 = index({ indexName: 'level_3_index_name' });
+        const level0 = index({ indexName: 'level0IndexName' });
+        const level1 = index({ indexName: 'level1IndexName' });
+        const level2 = index({ indexName: 'level2IndexName' });
+        const level3 = index({ indexName: 'level3IndexName' });
         const instantSearchInstance = createInstantSearch();
 
         level0.addWidgets([
@@ -1378,53 +1376,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           .setQueryParameter('page', 9);
 
         expect(level0.getWidgetState({})).toEqual({
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_0_index_name: {
+          level0IndexName: {
             query: 'Apple',
             page: 5,
           },
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_1_index_name: {
+          level1IndexName: {
             query: 'Apple iPhone',
             page: 7,
           },
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_2_index_name: {
+          level2IndexName: {
             query: 'Apple iPhone 5S',
             page: 9,
           },
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_3_index_name: {},
+          level3IndexName: {},
         });
 
         expect(level1.getWidgetState({})).toEqual({
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_1_index_name: {
+          level1IndexName: {
             query: 'Apple iPhone',
             page: 7,
           },
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_2_index_name: {
+          level2IndexName: {
             query: 'Apple iPhone 5S',
             page: 9,
           },
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_3_index_name: {},
+          level3IndexName: {},
         });
 
         expect(level2.getWidgetState({})).toEqual({
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_2_index_name: {
+          level2IndexName: {
             query: 'Apple iPhone 5S',
             page: 9,
           },
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_3_index_name: {},
+          level3IndexName: {},
         });
 
         expect(level3.getWidgetState({})).toEqual({
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          level_3_index_name: {},
+          level3IndexName: {},
         });
       });
     });
@@ -1432,7 +1420,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
   describe('render', () => {
     it('calls `render` on its widgets', async () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
 
       const widgets = [createSearchBox(), createPagination()];
@@ -1473,7 +1461,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           results: expect.any(algoliasearchHelper.SearchResults),
           scopedResults: [
             {
-              indexId: 'index_name',
+              indexId: 'indexName',
               results: (widget.render as jest.Mock).mock.calls[0][0].results,
             },
           ],
@@ -1490,7 +1478,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     // https://github.com/algolia/instantsearch.js/pull/2623
     it('does not call `render` without `lastResults`', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
 
       const widgets = [createSearchBox(), createPagination()];
@@ -1523,28 +1511,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('calls `render` with `scopedResults` coming from siblings and children', async () => {
-      /* eslint-disable @typescript-eslint/camelcase */
-      const level0 = index({ indexName: 'level0_index_name' });
-      const level1 = index({ indexName: 'level1_index_name' });
-      const level2 = index({ indexName: 'level2_index_name' });
-      const level2_1 = index({ indexName: 'level2_1_index_name' });
-      const level2_2 = index({ indexName: 'level2_2_index_name' });
-      const level2_2_1 = index({ indexName: 'level2_2_1_index_name' });
-      const level3 = index({ indexName: 'level3_index_name' });
+      const level0 = index({ indexName: 'level0IndexName' });
+      const level1 = index({ indexName: 'level1IndexName' });
+      const level2 = index({ indexName: 'level2IndexName' });
+      const level21 = index({ indexName: 'level21IndeName' });
+      const level22 = index({ indexName: 'level22IndexName' });
+      const level221 = index({ indexName: 'level221IndexName' });
+      const level3 = index({ indexName: 'level3IndexName' });
       const instantSearchInstance = createInstantSearch();
       const searchBoxLevel0 = createSearchBox();
       const searchBoxLevel1 = createSearchBox();
-      const seachBoxLevel2_1 = createSearchBox();
+      const seachBoxLevel21 = createSearchBox();
 
       level0.addWidgets([
         searchBoxLevel0,
         level1.addWidgets([searchBoxLevel1]),
         level2.addWidgets([
           createSearchBox(),
-          level2_1.addWidgets([seachBoxLevel2_1]),
-          level2_2.addWidgets([
+          level21.addWidgets([seachBoxLevel21]),
+          level22.addWidgets([
             createSearchBox(),
-            level2_2_1.addWidgets([createSearchBox()]),
+            level221.addWidgets([createSearchBox()]),
           ]),
         ]),
         level3.addWidgets([createSearchBox()]),
@@ -1576,29 +1563,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           scopedResults: [
             // Root index
             {
-              indexId: 'level1_index_name',
+              indexId: 'level1IndexName',
               results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
                 .results,
             },
             // Siblings and children
             {
-              indexId: 'level2_index_name',
+              indexId: 'level2IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level2_1_index_name',
+              indexId: 'level21IndeName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level2_2_index_name',
+              indexId: 'level22IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level2_2_1_index_name',
+              indexId: 'level221IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level3_index_name',
+              indexId: 'level3IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
           ],
@@ -1606,23 +1593,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
 
       // Sibling index
-      expect(seachBoxLevel2_1.render).toHaveBeenCalledTimes(1);
-      expect(seachBoxLevel2_1.render).toHaveBeenCalledWith(
+      expect(seachBoxLevel21.render).toHaveBeenCalledTimes(1);
+      expect(seachBoxLevel21.render).toHaveBeenCalledWith(
         expect.objectContaining({
           scopedResults: [
             // Root index
             {
-              indexId: 'level2_1_index_name',
-              results: (seachBoxLevel2_1.render as jest.Mock).mock.calls[0][0]
+              indexId: 'level21IndeName',
+              results: (seachBoxLevel21.render as jest.Mock).mock.calls[0][0]
                 .results,
             },
             // Siblings and children
             {
-              indexId: 'level2_2_index_name',
+              indexId: 'level22IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level2_2_1_index_name',
+              indexId: 'level221IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
           ],
@@ -1636,47 +1623,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           scopedResults: [
             // Root index
             {
-              indexId: 'level0_index_name',
+              indexId: 'level0IndexName',
               results: (searchBoxLevel0.render as jest.Mock).mock.calls[0][0]
                 .results,
             },
             // Siblings and children
             {
-              indexId: 'level1_index_name',
+              indexId: 'level1IndexName',
               results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
                 .results,
             },
             {
-              indexId: 'level2_index_name',
+              indexId: 'level2IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level2_1_index_name',
+              indexId: 'level21IndeName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level2_2_index_name',
+              indexId: 'level22IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level2_2_1_index_name',
+              indexId: 'level221IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
             {
-              indexId: 'level3_index_name',
+              indexId: 'level3IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
             },
           ],
         })
       );
-
-      /* eslint-enable @typescript-eslint/camelcase */
     });
   });
 
   describe('dispose', () => {
     it('calls `dispose` on its widgets', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
       const widgets = [createSearchBox(), createPagination()];
 
@@ -1712,7 +1697,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('keeps the widgets on the index', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
       const searchBox = createSearchBox();
       const pagination = createPagination();
@@ -1733,8 +1718,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('removes the internal parent', () => {
-      const topLevelInstance = index({ indexName: 'top_level_index_name' });
-      const subLevelInstance = index({ indexName: 'sub_level_index_name' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
       const instantSearchInstance = createInstantSearch();
 
       topLevelInstance.addWidgets([subLevelInstance]);
@@ -1753,7 +1738,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('removes the listeners on internal Helper', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
       const searchBox = createSearchBox();
 
@@ -1782,7 +1767,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('removes the internal Helper', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch();
 
       instance.init(
@@ -1799,7 +1784,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('removes the listeners on DerivedHelper', async () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const instantSearchInstance = createInstantSearch({
         scheduleRender: jest.fn() as any,
       });
@@ -1826,7 +1811,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('removes the DerivedHelper', () => {
-      const instance = index({ indexName: 'index_name' });
+      const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
       const mainHelper = algoliasearchHelper(searchClient, '', {});
       const instantSearchInstance = createInstantSearch({
