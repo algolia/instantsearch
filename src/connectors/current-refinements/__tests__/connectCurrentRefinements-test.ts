@@ -490,9 +490,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
-          ]),
+          scopedResults: [
+            {
+              indexId: 'firstIndex',
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  index: 'firstIndex',
+                }),
+              ]),
+            },
+          ],
           state: helper.state,
           helper,
         })
@@ -500,6 +508,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
       const items: Item[] = secondRenderingOptions.items;
+
+      expect(items).toHaveLength(2);
       expect(items).toEqual([
         {
           attribute: 'facet1',
@@ -551,6 +561,110 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           facetsRefinements: { facet1: [], facet2: ['facetValue'] },
         })
       );
+    });
+
+    it('provides the items from multiple scoped results', () => {
+      const rendering = jest.fn();
+      const customCurrentRefinements = connectCurrentRefinements(rendering);
+      const widget = customCurrentRefinements({});
+
+      helper.addFacetRefinement('facet1', 'facetValue');
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+
+      helper
+        .addFacetRefinement('facet1', 'facetValue')
+        .addFacetRefinement('facet2', 'facetValue');
+
+      widget.render!(
+        createRenderOptions({
+          scopedResults: [
+            {
+              indexId: 'firstIndex',
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  index: 'firstIndex',
+                }),
+              ]),
+            },
+            {
+              indexId: 'secondIndex',
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  index: 'secondIndex',
+                }),
+              ]),
+            },
+          ],
+          state: helper.state,
+          helper,
+        })
+      );
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      const items: Item[] = secondRenderingOptions.items;
+      expect(items).toHaveLength(4);
+      expect(items).toEqual([
+        {
+          attribute: 'facet1',
+          label: 'facet1',
+          refinements: [
+            {
+              attribute: 'facet1',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+        {
+          attribute: 'facet2',
+          label: 'facet2',
+          refinements: [
+            {
+              attribute: 'facet2',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+        {
+          attribute: 'facet1',
+          label: 'facet1',
+          refinements: [
+            {
+              attribute: 'facet1',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+        {
+          attribute: 'facet2',
+          label: 'facet2',
+          refinements: [
+            {
+              attribute: 'facet2',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+      ]);
     });
   });
 });

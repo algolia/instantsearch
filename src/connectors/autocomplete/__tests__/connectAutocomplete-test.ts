@@ -166,6 +166,7 @@ search.addWidgets([
             hits: firstIndexHits,
           }),
         ]),
+        helper,
       },
       {
         indexId: 'index1',
@@ -175,6 +176,7 @@ search.addWidgets([
             hits: secondIndexHits,
           }),
         ]),
+        helper,
       },
     ];
 
@@ -255,6 +257,7 @@ search.addWidgets([
             results: new SearchResults(helper.state, [
               createSingleSearchResponse({ hits }),
             ]),
+            helper,
           },
         ],
         state: helper.state,
@@ -297,6 +300,7 @@ search.addWidgets([
             results: new SearchResults(helper.state, [
               createSingleSearchResponse({ hits }),
             ]),
+            helper,
           },
         ],
         state: helper.state,

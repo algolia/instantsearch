@@ -1514,6 +1514,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             {
               indexId: 'indexName',
               results: (widget.render as jest.Mock).mock.calls[0][0].results,
+              helper: instance.getHelper(),
             },
           ],
           state: expect.any(algoliasearchHelper.SearchParameters),
@@ -1599,27 +1600,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               indexId: 'level1IndexName',
               results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
                 .results,
+              helper: level1.getHelper(),
             },
             // Siblings and children
             {
               indexId: 'level2IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level2.getHelper(),
             },
             {
               indexId: 'level21IndeName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level21.getHelper(),
             },
             {
               indexId: 'level22IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level22.getHelper(),
             },
             {
               indexId: 'level221IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level221.getHelper(),
             },
             {
               indexId: 'level3IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level3.getHelper(),
             },
           ],
         })
@@ -1635,15 +1642,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               indexId: 'level21IndeName',
               results: (seachBoxLevel21.render as jest.Mock).mock.calls[0][0]
                 .results,
+              helper: level21.getHelper(),
             },
             // Siblings and children
             {
               indexId: 'level22IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level22.getHelper(),
             },
             {
               indexId: 'level221IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level221.getHelper(),
             },
           ],
         })
@@ -1659,32 +1669,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               indexId: 'level0IndexName',
               results: (searchBoxLevel0.render as jest.Mock).mock.calls[0][0]
                 .results,
+              helper: level0.getHelper(),
             },
             // Siblings and children
             {
               indexId: 'level1IndexName',
               results: (searchBoxLevel1.render as jest.Mock).mock.calls[0][0]
                 .results,
+              helper: level1.getHelper(),
             },
             {
               indexId: 'level2IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level2.getHelper(),
             },
             {
               indexId: 'level21IndeName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level21.getHelper(),
             },
             {
               indexId: 'level22IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level22.getHelper(),
             },
             {
               indexId: 'level221IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level221.getHelper(),
             },
             {
               indexId: 'level3IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
+              helper: level3.getHelper(),
             },
           ],
         })
