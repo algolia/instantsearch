@@ -22,6 +22,7 @@ describe('CurrentRefinements', () => {
           attribute: 'facet',
           label: 'facet',
           refine: () => {},
+          createURL: () => '',
           refinements: [
             {
               type: 'facet' as ItemRefinement['type'],
@@ -41,6 +42,7 @@ describe('CurrentRefinements', () => {
           attribute: 'facetExclude',
           label: 'facetExclude',
           refine: () => {},
+          createURL: () => '',
           refinements: [
             {
               type: 'exclude' as ItemRefinement['type'],
@@ -55,6 +57,7 @@ describe('CurrentRefinements', () => {
           attribute: 'disjunctive',
           label: 'disjunctive',
           refine: () => {},
+          createURL: () => '',
           refinements: [
             {
               type: 'disjunctive' as ItemRefinement['type'],
@@ -68,6 +71,7 @@ describe('CurrentRefinements', () => {
           attribute: 'hierarchical',
           label: 'hierarchical',
           refine: () => {},
+          createURL: () => '',
           refinements: [
             {
               type: 'hierarchical' as ItemRefinement['type'],
@@ -81,6 +85,7 @@ describe('CurrentRefinements', () => {
           attribute: 'numeric',
           label: 'numeric',
           refine: () => {},
+          createURL: () => '',
           refinements: [
             {
               type: 'numeric' as ItemRefinement['type'],
@@ -95,6 +100,7 @@ describe('CurrentRefinements', () => {
           attribute: 'tag',
           label: 'tag',
           refine: () => {},
+          createURL: () => '',
           refinements: [
             {
               type: 'tag' as ItemRefinement['type'],
@@ -121,6 +127,7 @@ describe('CurrentRefinements', () => {
             attribute: 'customFacet',
             label: 'customFacet',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'customFacet',
@@ -146,6 +153,7 @@ describe('CurrentRefinements', () => {
             attribute: 'customExcludeFacet',
             label: 'customExcludeFacet',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'customExcludeFacet',
@@ -172,6 +180,7 @@ describe('CurrentRefinements', () => {
             attribute: 'customDisjunctiveFacet',
             label: 'customDisjunctiveFacet',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'customDisjunctiveFacet',
@@ -197,6 +206,7 @@ describe('CurrentRefinements', () => {
             attribute: 'customHierarchicalFacet',
             label: 'customHierarchicalFacet',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'customHierarchicalFacet',
@@ -222,6 +232,7 @@ describe('CurrentRefinements', () => {
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'customNumericFilter',
@@ -236,6 +247,7 @@ describe('CurrentRefinements', () => {
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'customNumericFilter',
@@ -250,6 +262,7 @@ describe('CurrentRefinements', () => {
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'customNumericFilter',
@@ -276,6 +289,7 @@ describe('CurrentRefinements', () => {
             attribute: '_tags',
             label: '_tags',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: '_tags',
@@ -301,6 +315,7 @@ describe('CurrentRefinements', () => {
             attribute: 'query',
             label: 'query',
             refine: () => {},
+            createURL: () => '',
             refinements: [
               {
                 attribute: 'query',

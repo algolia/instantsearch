@@ -8,7 +8,13 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
+  warning,
 } from '../../lib/utils';
+import {
+  Refinement,
+  FacetRefinement,
+  NumericRefinement,
+} from '../../lib/utils/getRefinements';
 import {
   Unmounter,
   WidgetFactory,
@@ -16,7 +22,7 @@ import {
   RendererOptions,
 } from '../../types';
 
-export type Refinement = {
+export type ConnectorRefinement = {
   attribute: string;
   type: string;
   value: string | number;
@@ -26,11 +32,16 @@ export type Refinement = {
   exhaustive?: boolean;
 };
 
+interface ConnectorNumericRefinement extends ConnectorRefinement {
+  value: number;
+}
+
 export type Item = {
   attribute: string;
   label: string;
-  refine: (refinement: ItemRefinement) => void;
   refinements: ItemRefinement[];
+  refine(refinement: ItemRefinement): void;
+  createURL(state: ItemRefinement): string;
 };
 
 export type ItemRefinement = {
@@ -77,8 +88,6 @@ export interface CurrentRefinementsRendererOptions<
   TCurrentRefinementsWidgetParams
 > extends RendererOptions<TCurrentRefinementsWidgetParams> {
   items: Item[];
-  refine: (refinement: ItemRefinement) => void;
-  createURL: (refinement: ItemRefinement) => string;
 }
 
 export type CurrentRefinementsRenderer<
@@ -134,21 +143,19 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
 
       init({ helper, createURL, instantSearchInstance }) {
         const items = transformItems(
-          getFilteredRefinements({
-            results: {},
+          getItems({
+            results: {} as SearchResults,
             state: helper.state,
             helper,
             includedAttributes,
             excludedAttributes,
+            createURL,
           })
         );
 
         renderFn(
           {
             items,
-            refine: refinement => clearRefinement(helper, refinement),
-            createURL: refinement =>
-              createURL(clearRefinementFromState(helper.state, refinement)),
             instantSearchInstance,
             widgetParams,
           },
@@ -158,21 +165,19 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
         const items = transformItems(
-          getFilteredRefinements({
+          getItems({
             results,
             state,
             helper,
             includedAttributes,
             excludedAttributes,
+            createURL,
           })
         );
 
         renderFn(
           {
             items,
-            refine: refinement => clearRefinement(helper, refinement),
-            createURL: refinement =>
-              createURL(clearRefinementFromState(helper.state, refinement)),
             instantSearchInstance,
             widgetParams,
           },
@@ -187,33 +192,66 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
   };
 };
 
-function getFilteredRefinements({
+function getItems({
   results,
   state,
   helper,
   includedAttributes,
   excludedAttributes,
-}) {
+  createURL,
+}: {
+  results: SearchResults;
+  state: SearchParameters;
+  helper: AlgoliaSearchHelper;
+  includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];
+  excludedAttributes: CurrentRefinementsConnectorParams['excludedAttributes'];
+  createURL(state: SearchParameters): string;
+}): Item[] {
   const clearsQuery =
     (includedAttributes || []).indexOf('query') !== -1 ||
     (excludedAttributes || []).indexOf('query') === -1;
 
   const filterFunction = includedAttributes
-    ? item => includedAttributes.indexOf(item.attributeName) !== -1
-    : item => excludedAttributes.indexOf(item.attributeName) === -1;
+    ? (item: ConnectorRefinement) =>
+        includedAttributes.indexOf(item.attribute) !== -1
+    : (item: ConnectorRefinement) =>
+        excludedAttributes!.indexOf(item.attribute) === -1;
 
   const items = getRefinements(results, state, clearsQuery)
-    .filter(filterFunction)
-    // @ts-ignore: @TODO the types don't match exactly, this will need to get refactored.
-    .map(normalizeRefinement);
+    .map(normalizeRefinement)
+    .filter(filterFunction);
 
-  return groupItemsByRefinements(items, helper);
+  return items.reduce<any[]>(
+    (allItems, currentItem) => [
+      ...allItems.filter(
+        (item: Item) => item.attribute !== currentItem.attribute
+      ),
+      {
+        attribute: currentItem.attribute,
+        label: currentItem.attribute,
+        refinements: items
+          .filter(result => result.attribute === currentItem.attribute)
+          // We want to keep the order of refinements except the numeric ones.
+          .sort((a, b) =>
+            a.type === 'numeric'
+              ? (a as ConnectorNumericRefinement).value -
+                (b as ConnectorNumericRefinement).value
+              : 0
+          ),
+        refine: (refinement: ItemRefinement) =>
+          clearRefinement(helper, refinement),
+        createURL: (refinement: ItemRefinement) =>
+          createURL(clearRefinementFromState(helper.state, refinement)),
+      },
+    ],
+    []
+  );
 }
 
 function clearRefinementFromState(
   state: SearchParameters,
   refinement: ItemRefinement
-) {
+): SearchParameters {
   switch (refinement.type) {
     case 'facet':
       return state.removeFacetRefinement(
@@ -244,9 +282,11 @@ function clearRefinementFromState(
     case 'query':
       return state.setQueryParameter('query', '');
     default:
-      throw new Error(
-        `clearRefinement: type ${refinement.type} is not handled`
+      warning(
+        false,
+        `The refinement type "${refinement.type}" does not exist and cannot be cleared from the current refinements.`
       );
+      return state;
   }
 }
 
@@ -268,53 +308,32 @@ function getOperatorSymbol(operator: SearchParameters.Operator): string {
   }
 }
 
-function normalizeRefinement(refinement: SearchResults.Refinement): Refinement {
+function normalizeRefinement(refinement: Refinement): ConnectorRefinement {
   const value =
     refinement.type === 'numeric' ? Number(refinement.name) : refinement.name;
-  const label = refinement.operator
-    ? `${getOperatorSymbol(refinement.operator as SearchParameters.Operator)} ${
-        refinement.name
-      }`
+  const label = (refinement as NumericRefinement).operator
+    ? `${getOperatorSymbol((refinement as NumericRefinement)
+        .operator as SearchParameters.Operator)} ${refinement.name}`
     : refinement.name;
 
-  const normalizedRefinement: Refinement = {
-    attribute: refinement.attributeName,
+  const normalizedRefinement: ConnectorRefinement = {
+    attribute: refinement.attribute,
     type: refinement.type,
     value,
     label,
   };
 
-  if (refinement.operator !== undefined) {
-    normalizedRefinement.operator = refinement.operator;
+  if ((refinement as NumericRefinement).operator !== undefined) {
+    normalizedRefinement.operator = (refinement as NumericRefinement).operator;
   }
-  if (refinement.count !== undefined) {
-    normalizedRefinement.count = refinement.count;
+  if ((refinement as FacetRefinement).count !== undefined) {
+    normalizedRefinement.count = (refinement as FacetRefinement).count;
   }
-  if (refinement.exhaustive !== undefined) {
-    normalizedRefinement.exhaustive = refinement.exhaustive;
+  if ((refinement as FacetRefinement).exhaustive !== undefined) {
+    normalizedRefinement.exhaustive = (refinement as FacetRefinement).exhaustive;
   }
-  return normalizedRefinement;
-}
 
-function groupItemsByRefinements(items: any[], helper: AlgoliaSearchHelper) {
-  return items.reduce(
-    (allItems, currentItem) => [
-      ...allItems.filter(
-        (item: Item) => item.attribute !== currentItem.attribute
-      ),
-      {
-        attribute: currentItem.attribute,
-        label: currentItem.attribute,
-        refinements: items
-          .filter(result => result.attribute === currentItem.attribute)
-          // We want to keep the order of refinements except the numeric ones.
-          .sort((a, b) => (a.type === 'numeric' ? a.value - b.value : 0)),
-        refine: (refinement: ItemRefinement) =>
-          clearRefinement(helper, refinement),
-      },
-    ],
-    []
-  );
+  return normalizedRefinement;
 }
 
 export default connectCurrentRefinements;

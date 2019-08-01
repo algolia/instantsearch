@@ -2,13 +2,14 @@ import algoliasearchHelper, {
   SearchResults,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import connectCurrentRefinements from '../connectCurrentRefinements';
+import connectCurrentRefinements, { Item } from '../connectCurrentRefinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { SearchParameters } from 'algoliasearch-helper';
 
 describe('connectCurrentRefinements', () => {
   describe('Usage', () => {
@@ -443,77 +444,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       helper.search = jest.fn();
     });
 
-    it('provides a `refine` function', () => {
-      const rendering = jest.fn();
-      const customCurrentRefinements = connectCurrentRefinements(rendering);
-      const widget = customCurrentRefinements({});
-
-      helper.addFacetRefinement('facet1', 'facetValue');
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      const firstRenderingOptions = rendering.mock.calls[0][0];
-      const [item] = firstRenderingOptions.items;
-      expect(typeof firstRenderingOptions.refine).toBe('function');
-
-      firstRenderingOptions.refine(item.refinements[0]);
-      expect(helper.hasRefinements('facet1')).toBe(false);
-
-      helper.addFacetRefinement('facet1', 'facetValue');
-
-      widget.render!(
-        createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
-          ]),
-          state: helper.state,
-          helper,
-        })
-      );
-
-      const secondRenderingOptions = rendering.mock.calls[1][0];
-      const [otherItem] = secondRenderingOptions.items;
-      expect(typeof secondRenderingOptions.refine).toBe('function');
-
-      secondRenderingOptions.refine(otherItem.refinements[0]);
-      expect(helper.hasRefinements('facet1')).toBe(false);
-    });
-
-    it('provides a `createURL` function', () => {
-      const rendering = jest.fn();
-      const customCurrentRefinements = connectCurrentRefinements(rendering);
-      const widget = customCurrentRefinements({});
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      const firstRenderingOptions = rendering.mock.calls[0][0];
-      expect(typeof firstRenderingOptions.createURL).toBe('function');
-
-      widget.render!(
-        createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
-          ]),
-          state: helper.state,
-          helper,
-        })
-      );
-
-      const secondRenderingOptions = rendering.mock.calls[1][0];
-      expect(typeof secondRenderingOptions.createURL).toBe('function');
-    });
-
-    it('provides the refinements', () => {
+    it('provides the items', () => {
       const rendering = jest.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
       const widget = customCurrentRefinements({});
@@ -529,9 +460,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
       expect(firstRenderingOptions.items).toEqual([
-        expect.objectContaining({
+        {
           attribute: 'facet1',
-        }),
+          label: 'facet1',
+          refinements: [
+            {
+              attribute: 'facet1',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          createURL: expect.any(Function),
+          refine: expect.any(Function),
+        },
       ]);
 
       helper
@@ -549,15 +491,68 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       );
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
-      expect(secondRenderingOptions.items).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            attribute: 'facet1',
-          }),
-          expect.objectContaining({
-            attribute: 'facet2',
-          }),
-        ])
+      const items: Item[] = secondRenderingOptions.items;
+      expect(items).toEqual([
+        {
+          attribute: 'facet1',
+          label: 'facet1',
+          refinements: [
+            {
+              attribute: 'facet1',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          createURL: expect.any(Function),
+          refine: expect.any(Function),
+        },
+        {
+          attribute: 'facet2',
+          label: 'facet2',
+          refinements: [
+            {
+              attribute: 'facet2',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          createURL: expect.any(Function),
+          refine: expect.any(Function),
+        },
+      ]);
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+          facets: ['facet1', 'facet2', 'facet3'],
+          facetsRefinements: { facet1: ['facetValue'], facet2: ['facetValue'] },
+        })
+      );
+
+      expect(
+        items[0].createURL({
+          attribute: 'facet1',
+          label: 'facetValue',
+          type: 'facet',
+          value: 'facetValue',
+        })
+      ).toEqual('#');
+
+      items[0].refine({
+        attribute: 'facet1',
+        label: 'facetValue',
+        type: 'facet',
+        value: 'facetValue',
+      });
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+          facets: ['facet1', 'facet2', 'facet3'],
+          facetsRefinements: { facet1: [], facet2: ['facetValue'] },
+        })
       );
     });
   });

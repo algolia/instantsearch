@@ -296,7 +296,7 @@ describe('utils.getRefinements', () => {
 
   it('should retrieve one tag', () => {
     helper.addTag('tag1');
-    const expected = [{ type: 'tag', attributeName: '_tags', name: 'tag1' }];
+    const expected = [{ type: 'tag', attribute: '_tags', name: 'tag1' }];
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
     );
@@ -305,8 +305,8 @@ describe('utils.getRefinements', () => {
   it('should retrieve multiple tags', () => {
     helper.addTag('tag1').addTag('tag2');
     const expected = [
-      { type: 'tag', attributeName: '_tags', name: 'tag1' },
-      { type: 'tag', attributeName: '_tags', name: 'tag2' },
+      { type: 'tag', attribute: '_tags', name: 'tag1' },
+      { type: 'tag', attribute: '_tags', name: 'tag2' },
     ];
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
@@ -316,7 +316,7 @@ describe('utils.getRefinements', () => {
   it('should retrieve one facetRefinement', () => {
     helper.toggleRefinement('facet1', 'facet1val1');
     const expected = [
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
+      { type: 'facet', attribute: 'facet1', name: 'facet1val1' },
     ];
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
@@ -328,7 +328,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'query',
-        attributeName: 'query',
+        attribute: 'query',
         name: 'a query',
         query: 'a query',
       },
@@ -353,8 +353,8 @@ describe('utils.getRefinements', () => {
       .toggleRefinement('facet1', 'facet1val1')
       .toggleRefinement('facet1', 'facet1val2');
     const expected = [
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val2' },
+      { type: 'facet', attribute: 'facet1', name: 'facet1val1' },
+      { type: 'facet', attribute: 'facet1', name: 'facet1val2' },
     ];
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
@@ -370,9 +370,9 @@ describe('utils.getRefinements', () => {
       .toggleRefinement('facet1', 'facet1val2')
       .toggleRefinement('facet2', 'facet2val1');
     const expected = [
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val1' },
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val2' },
-      { type: 'facet', attributeName: 'facet2', name: 'facet2val1' },
+      { type: 'facet', attribute: 'facet1', name: 'facet1val1' },
+      { type: 'facet', attribute: 'facet1', name: 'facet1val2' },
+      { type: 'facet', attribute: 'facet2', name: 'facet2val1' },
     ];
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
@@ -398,7 +398,7 @@ describe('utils.getRefinements', () => {
       ],
     };
     const expected = [
-      { type: 'facet', attributeName: 'facet1', name: 'facet1val1', count: 4 },
+      { type: 'facet', attribute: 'facet1', name: 'facet1val1', count: 4 },
     ];
     expect(utils.getRefinements(results, helper.state)).toContainEqual(
       expected[0]
@@ -418,7 +418,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'facet',
-        attributeName: 'facet1',
+        attribute: 'facet1',
         name: 'facet1val1',
         exhaustive: true,
       },
@@ -433,7 +433,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'exclude',
-        attributeName: 'facet1',
+        attribute: 'facet1',
         name: 'facet1exclude1',
         exclude: true,
       },
@@ -450,13 +450,13 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'exclude',
-        attributeName: 'facet1',
+        attribute: 'facet1',
         name: 'facet1exclude1',
         exclude: true,
       },
       {
         type: 'exclude',
-        attributeName: 'facet1',
+        attribute: 'facet1',
         name: 'facet1exclude2',
         exclude: true,
       },
@@ -477,19 +477,19 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'exclude',
-        attributeName: 'facet1',
+        attribute: 'facet1',
         name: 'facet1exclude1',
         exclude: true,
       },
       {
         type: 'exclude',
-        attributeName: 'facet1',
+        attribute: 'facet1',
         name: 'facet1exclude2',
         exclude: true,
       },
       {
         type: 'exclude',
-        attributeName: 'facet2',
+        attribute: 'facet2',
         name: 'facet2exclude1',
         exclude: true,
       },
@@ -513,7 +513,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet1',
+        attribute: 'disjunctiveFacet1',
         name: 'disjunctiveFacet1val1',
       },
     ];
@@ -535,12 +535,12 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet1',
+        attribute: 'disjunctiveFacet1',
         name: 'disjunctiveFacet1val1',
       },
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet1',
+        attribute: 'disjunctiveFacet1',
         name: 'disjunctiveFacet1val2',
       },
     ];
@@ -560,17 +560,17 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet1',
+        attribute: 'disjunctiveFacet1',
         name: 'disjunctiveFacet1val1',
       },
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet1',
+        attribute: 'disjunctiveFacet1',
         name: 'disjunctiveFacet1val2',
       },
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet2',
+        attribute: 'disjunctiveFacet2',
         name: 'disjunctiveFacet2val1',
       },
     ];
@@ -600,7 +600,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet1',
+        attribute: 'disjunctiveFacet1',
         name: 'disjunctiveFacet1val1',
         count: 4,
       },
@@ -623,7 +623,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'disjunctive',
-        attributeName: 'disjunctiveFacet1',
+        attribute: 'disjunctiveFacet1',
         name: 'disjunctiveFacet1val1',
         exhaustive: true,
       },
@@ -638,7 +638,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'hierarchical',
-        attributeName: 'hierarchicalFacet1',
+        attribute: 'hierarchicalFacet1',
         name: 'hierarchicalFacet1lvl0val1',
       },
     ];
@@ -654,12 +654,12 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'hierarchical',
-        attributeName: 'hierarchicalFacet1',
+        attribute: 'hierarchicalFacet1',
         name: 'hierarchicalFacet1lvl0val1',
       },
       {
         type: 'hierarchical',
-        attributeName: 'hierarchicalFacet2',
+        attribute: 'hierarchicalFacet2',
         name: 'hierarchicalFacet2lvl0val1',
       },
     ];
@@ -681,12 +681,12 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'hierarchical',
-        attributeName: 'hierarchicalFacet1',
+        attribute: 'hierarchicalFacet1',
         name: 'hierarchicalFacet1lvl0val1',
       },
       {
         type: 'hierarchical',
-        attributeName: 'hierarchicalFacet2',
+        attribute: 'hierarchicalFacet2',
         name: 'hierarchicalFacet2lvl0val1 > lvl1val1',
       },
     ];
@@ -719,7 +719,7 @@ describe('utils.getRefinements', () => {
 
     const expected = {
       type: 'hierarchical',
-      attributeName: 'hierarchicalFacet2',
+      attribute: 'hierarchicalFacet2',
       name: 'hierarchicalFacet2lvl0val1 > lvl1val1',
       count: null,
       exhaustive: null,
@@ -748,7 +748,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'hierarchical',
-        attributeName: 'hierarchicalFacet1',
+        attribute: 'hierarchicalFacet1',
         name: 'hierarchicalFacet1val1',
         count: 4,
       },
@@ -771,7 +771,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'hierarchical',
-        attributeName: 'hierarchicalFacet1',
+        attribute: 'hierarchicalFacet1',
         name: 'hierarchicalFacet1val1',
         exhaustive: true,
       },
@@ -786,7 +786,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'numeric',
-        attributeName: 'numericFacet1',
+        attribute: 'numericFacet1',
         operator: '>',
         name: '1',
         numericValue: 1,
@@ -802,7 +802,7 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'numeric',
-        attributeName: 'numericDisjunctiveFacet1',
+        attribute: 'numericDisjunctiveFacet1',
         operator: '>',
         name: '1',
         numericValue: 1,
@@ -820,14 +820,14 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'numeric',
-        attributeName: 'numericFacet1',
+        attribute: 'numericFacet1',
         operator: '>',
         name: '1',
         numericValue: 1,
       },
       {
         type: 'numeric',
-        attributeName: 'numericFacet1',
+        attribute: 'numericFacet1',
         operator: '>',
         name: '2',
         numericValue: 2,
@@ -851,35 +851,35 @@ describe('utils.getRefinements', () => {
     const expected = [
       {
         type: 'numeric',
-        attributeName: 'numericFacet1',
+        attribute: 'numericFacet1',
         operator: '>',
         name: '1',
         numericValue: 1,
       },
       {
         type: 'numeric',
-        attributeName: 'numericFacet1',
+        attribute: 'numericFacet1',
         operator: '>',
         name: '2',
         numericValue: 2,
       },
       {
         type: 'numeric',
-        attributeName: 'numericFacet1',
+        attribute: 'numericFacet1',
         operator: '<=',
         name: '3',
         numericValue: 3,
       },
       {
         type: 'numeric',
-        attributeName: 'numericDisjunctiveFacet1',
+        attribute: 'numericDisjunctiveFacet1',
         operator: '>',
         name: '1',
         numericValue: 1,
       },
       {
         type: 'numeric',
-        attributeName: 'numericDisjunctiveFacet1',
+        attribute: 'numericDisjunctiveFacet1',
         operator: '>',
         name: '2',
         numericValue: 2,
