@@ -399,6 +399,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     expect(results.hits.__escaped).toBe(true);
   });
 
+  describe('getWidgetSearchParameters', () => {
+    it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
+      const render = () => {};
+      const makeWidget = connectHits(render);
+      const widget = makeWidget();
+
+      const actual = widget.getWidgetSearchParameters(new SearchParameters());
+
+      expect(actual).toEqual(new SearchParameters(TAG_PLACEHOLDER));
+    });
+
+    it('does not add the TAG_PLACEHOLDER to the `SearchParameters` with `escapeHTML` disabled', () => {
+      const render = () => {};
+      const makeWidget = connectHits(render);
+      const widget = makeWidget({
+        escapeHTML: false,
+      });
+
+      const actual = widget.getWidgetSearchParameters(new SearchParameters());
+
+      expect(actual).toEqual(new SearchParameters());
+    });
+  });
+
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
       const rendering = () => {};
@@ -448,7 +472,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect(nextState.highlightPostTag).toBeUndefined();
     });
 
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML`', () => {
+    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
       const helper = algoliasearchHelper({}, '', {
         highlightPreTag: '<mark>',
         highlightPostTag: '</mark>',

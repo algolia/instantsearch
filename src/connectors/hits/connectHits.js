@@ -130,6 +130,14 @@ export default function connectHits(renderFn, unmountFn = noop) {
           )
         );
       },
+
+      getWidgetSearchParameters(state) {
+        if (!escapeHTML) {
+          return state;
+        }
+
+        return state.setQueryParameters(TAG_PLACEHOLDER);
+      },
     };
   };
 }
