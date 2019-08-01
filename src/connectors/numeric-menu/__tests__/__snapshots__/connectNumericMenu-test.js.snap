@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (equal) 1`] = `
+exports[`connectNumericMenu getWidgetState should add an entry equal to the refinement (equal) 1`] = `
 Object {
   "numericMenu": Object {
     "numerics": "20",
@@ -8,7 +8,7 @@ Object {
 }
 `;
 
-exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (only max) 1`] = `
+exports[`connectNumericMenu getWidgetState should add an entry equal to the refinement (only max) 1`] = `
 Object {
   "numericMenu": Object {
     "numerics": ":20",
@@ -16,7 +16,7 @@ Object {
 }
 `;
 
-exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (only min) 1`] = `
+exports[`connectNumericMenu getWidgetState should add an entry equal to the refinement (only min) 1`] = `
 Object {
   "numericMenu": Object {
     "numerics": "10:",
@@ -24,7 +24,7 @@ Object {
 }
 `;
 
-exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (range) 1`] = `
+exports[`connectNumericMenu getWidgetState should add an entry equal to the refinement (range) 1`] = `
 Object {
   "numericMenu": Object {
     "numerics": "10:20",
@@ -32,7 +32,7 @@ Object {
 }
 `;
 
-exports[`connectNumericMenu routing getWidgetState should not override other values in the same namespace 1`] = `
+exports[`connectNumericMenu getWidgetState should not override other values in the same namespace 1`] = `
 Object {
   "numericMenu": Object {
     "numerics": "10:20",
