@@ -862,6 +862,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
     });
 
+    it('does not update the local `uiState` on state changes in `init`', () => {
+      const instance = index({ indexName: 'index_name' });
+      const instantSearchInstance = createInstantSearch();
+      const widgets = [
+        createSearchBox(),
+        createPagination(),
+        createWidget({
+          init({ helper }) {
+            helper
+              .setQueryParameter('query', 'Apple iPhone')
+              .setQueryParameter('page', 5);
+          },
+        }),
+      ];
+
+      instance.addWidgets(widgets);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance,
+        })
+      );
+
+      expect(instance.getHelper()!.state).toEqual(
+        new SearchParameters({
+          index: 'index_name',
+          query: 'Apple iPhone',
+          page: 5,
+        })
+      );
+
+      expect(instance.getWidgetState({})).toEqual({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        index_name: {},
+      });
+    });
+
     it('updates the local `uiState` only with widgets not indices', () => {
       const level0 = index({ indexName: 'level_0_index_name' });
       const level1 = index({ indexName: 'level_1_index_name' });
