@@ -1,6 +1,7 @@
 import algoliasearchHelper, {
-  SearchResults,
   AlgoliaSearchHelper,
+  SearchResults,
+  SearchParameters,
 } from 'algoliasearch-helper';
 import connectCurrentRefinements, { Item } from '../connectCurrentRefinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -9,7 +10,6 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
-import { SearchParameters } from 'algoliasearch-helper';
 
 describe('connectCurrentRefinements', () => {
   describe('Usage', () => {
