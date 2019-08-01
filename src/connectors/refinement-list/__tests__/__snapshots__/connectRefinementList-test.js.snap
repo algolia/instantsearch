@@ -1,49 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectRefinementList getWidgetSearchParameters should add the refinements according to the UI state provided (operator "and") 1`] = `
-SearchParameters {
-  "disjunctiveFacets": Array [],
-  "disjunctiveFacetsRefinements": Object {},
-  "facets": Array [
-    "facetAttribute",
-  ],
-  "facetsExcludes": Object {},
-  "facetsRefinements": Object {
-    "facetAttribute": Array [
-      "value and",
-    ],
-  },
-  "hierarchicalFacets": Array [],
-  "hierarchicalFacetsRefinements": Object {},
-  "index": "",
-  "maxValuesPerFacet": 10,
-  "numericRefinements": Object {},
-  "tagRefinements": Array [],
-}
-`;
-
-exports[`connectRefinementList getWidgetSearchParameters should add the refinements according to the UI state provided (operator "or") 1`] = `
-SearchParameters {
-  "disjunctiveFacets": Array [
-    "facetAttribute",
-  ],
-  "disjunctiveFacetsRefinements": Object {
-    "facetAttribute": Array [
-      "value or",
-    ],
-  },
-  "facets": Array [],
-  "facetsExcludes": Object {},
-  "facetsRefinements": Object {},
-  "hierarchicalFacets": Array [],
-  "hierarchicalFacetsRefinements": Object {},
-  "index": "",
-  "maxValuesPerFacet": 10,
-  "numericRefinements": Object {},
-  "tagRefinements": Array [],
-}
-`;
-
 exports[`connectRefinementList getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
   "refinementList": Object {

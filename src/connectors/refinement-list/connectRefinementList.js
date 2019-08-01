@@ -435,15 +435,47 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        const isDisjunctive = operator === 'or';
         const values =
           uiState.refinementList && uiState.refinementList[attribute];
-        if (values === undefined) return searchParameters;
+
+        const withoutRefinements = searchParameters.clearRefinements(attribute);
+        const withFacetConfiguration = isDisjunctive
+          ? withoutRefinements.addDisjunctiveFacet(attribute)
+          : withoutRefinements.addFacet(attribute);
+
+        const currentMaxValuesPerFacet =
+          withFacetConfiguration.maxValuesPerFacet || 0;
+
+        const nextMaxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+          'maxValuesPerFacet',
+          nextMaxValuesPerFacet
+        );
+
+        if (!values) {
+          const key = isDisjunctive
+            ? 'disjunctiveFacetsRefinements'
+            : 'facetsRefinements';
+
+          return withMaxValuesPerFacet.setQueryParameters({
+            [key]: {
+              ...withMaxValuesPerFacet[key],
+              [attribute]: [],
+            },
+          });
+        }
+
         return values.reduce(
-          (sp, v) =>
-            operator === 'or'
-              ? sp.addDisjunctiveFacetRefinement(attribute, v)
-              : sp.addFacetRefinement(attribute, v),
-          searchParameters.clearRefinements(attribute)
+          (parameters, value) =>
+            isDisjunctive
+              ? parameters.addDisjunctiveFacetRefinement(attribute, value)
+              : parameters.addFacetRefinement(attribute, value),
+          withMaxValuesPerFacet
         );
       },
     };
