@@ -41,7 +41,6 @@ export type Item = {
   label: string;
   refinements: ItemRefinement[];
   refine(refinement: ItemRefinement): void;
-  createURL(state: ItemRefinement): string;
 };
 
 export type ItemRefinement = {
@@ -88,6 +87,8 @@ export interface CurrentRefinementsRendererOptions<
   TCurrentRefinementsWidgetParams
 > extends RendererOptions<TCurrentRefinementsWidgetParams> {
   items: Item[];
+  refine(refinement: ItemRefinement): void;
+  createURL(state: ItemRefinement): string;
 }
 
 export type CurrentRefinementsRenderer<
@@ -149,13 +150,15 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
             helper,
             includedAttributes,
             excludedAttributes,
-            createURL,
           })
         );
 
         renderFn(
           {
             items,
+            refine: refinement => clearRefinement(helper, refinement),
+            createURL: refinement =>
+              createURL(clearRefinementFromState(helper.state, refinement)),
             instantSearchInstance,
             widgetParams,
           },
@@ -171,13 +174,15 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
             helper,
             includedAttributes,
             excludedAttributes,
-            createURL,
           })
         );
 
         renderFn(
           {
             items,
+            refine: refinement => clearRefinement(helper, refinement),
+            createURL: refinement =>
+              createURL(clearRefinementFromState(helper.state, refinement)),
             instantSearchInstance,
             widgetParams,
           },
@@ -198,14 +203,12 @@ function getItems({
   helper,
   includedAttributes,
   excludedAttributes,
-  createURL,
 }: {
   results: SearchResults;
   state: SearchParameters;
   helper: AlgoliaSearchHelper;
   includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];
   excludedAttributes: CurrentRefinementsConnectorParams['excludedAttributes'];
-  createURL(state: SearchParameters): string;
 }): Item[] {
   const clearsQuery =
     (includedAttributes || []).indexOf('query') !== -1 ||
@@ -240,8 +243,6 @@ function getItems({
           ),
         refine: (refinement: ItemRefinement) =>
           clearRefinement(helper, refinement),
-        createURL: (refinement: ItemRefinement) =>
-          createURL(clearRefinementFromState(helper.state, refinement)),
       },
     ],
     []

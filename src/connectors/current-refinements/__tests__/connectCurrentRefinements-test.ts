@@ -78,6 +78,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
       expect(firstRenderingOptions.items).toEqual([]);
+      expect(firstRenderingOptions.refine).toBeInstanceOf(Function);
+      expect(firstRenderingOptions.createURL).toBeInstanceOf(Function);
       expect(firstRenderingOptions.widgetParams).toBe(widgetParams);
 
       widget.render!(
@@ -98,6 +100,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       const secondRenderingOptions = rendering.mock.calls[0][0];
 
       expect(secondRenderingOptions.items).toEqual([]);
+      expect(secondRenderingOptions.refine).toBeInstanceOf(Function);
+      expect(secondRenderingOptions.createURL).toBeInstanceOf(Function);
       expect(secondRenderingOptions.widgetParams).toBe(widgetParams);
     });
 
@@ -471,7 +475,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
               value: 'facetValue',
             },
           ],
-          createURL: expect.any(Function),
           refine: expect.any(Function),
         },
       ]);
@@ -504,7 +507,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
               value: 'facetValue',
             },
           ],
-          createURL: expect.any(Function),
           refine: expect.any(Function),
         },
         {
@@ -518,7 +520,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
               value: 'facetValue',
             },
           ],
-          createURL: expect.any(Function),
           refine: expect.any(Function),
         },
       ]);
@@ -530,15 +531,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           facetsRefinements: { facet1: ['facetValue'], facet2: ['facetValue'] },
         })
       );
-
-      expect(
-        items[0].createURL({
-          attribute: 'facet1',
-          label: 'facetValue',
-          type: 'facet',
-          value: 'facetValue',
-        })
-      ).toEqual('#');
 
       items[0].refine({
         attribute: 'facet1',
