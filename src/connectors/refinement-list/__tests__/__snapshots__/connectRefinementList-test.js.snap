@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectRefinementList routing getWidgetSearchParameters should add the refinements according to the UI state provided (operator "and") 1`] = `
+exports[`connectRefinementList getWidgetSearchParameters should add the refinements according to the UI state provided (operator "and") 1`] = `
 SearchParameters {
   "disjunctiveFacets": Array [],
   "disjunctiveFacetsRefinements": Object {},
@@ -22,7 +22,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectRefinementList routing getWidgetSearchParameters should add the refinements according to the UI state provided (operator "or") 1`] = `
+exports[`connectRefinementList getWidgetSearchParameters should add the refinements according to the UI state provided (operator "or") 1`] = `
 SearchParameters {
   "disjunctiveFacets": Array [
     "facetAttribute",
@@ -44,7 +44,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectRefinementList routing getWidgetState should add an entry equal to the refinement 1`] = `
+exports[`connectRefinementList getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
   "refinementList": Object {
     "facetAttribute": Array [
@@ -54,7 +54,7 @@ Object {
 }
 `;
 
-exports[`connectRefinementList routing getWidgetState should not override other values in the same namespace 1`] = `
+exports[`connectRefinementList getWidgetState should not override other values in the same namespace 1`] = `
 Object {
   "refinementList": Object {
     "facetAttribute": Array [

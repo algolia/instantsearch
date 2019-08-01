@@ -12,6 +12,30 @@ describe('connectRefinementList', () => {
     return { rendering, makeWidget };
   };
 
+  const getInitializedWidget = (config = {}) => {
+    const rendering = jest.fn();
+    const makeWidget = connectRefinementList(rendering);
+
+    const widget = makeWidget({
+      attribute: 'facetAttribute',
+      ...config,
+    });
+
+    const initialConfig = widget.getConfiguration(new SearchParameters({}));
+    const helper = jsHelper({}, '', initialConfig);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const { refine } = rendering.mock.calls[0][0];
+
+    return [widget, helper, refine];
+  };
+
   it('throws on bad usage', () => {
     expect(connectRefinementList).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (got type \\"undefined\\").
@@ -1776,141 +1800,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 
-  describe('routing', () => {
-    const getInitializedWidget = (config = {}) => {
-      const rendering = jest.fn();
-      const makeWidget = connectRefinementList(rendering);
-
-      const widget = makeWidget({
-        attribute: 'facetAttribute',
-        ...config,
-      });
-
-      const initialConfig = widget.getConfiguration(new SearchParameters({}));
-      const helper = jsHelper({}, '', initialConfig);
-      helper.search = jest.fn();
-
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
-
-      const { refine } = rendering.mock.calls[0][0];
-
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if the default value is selected', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('value');
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should not override other values in the same namespace', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('value');
-        const uiStateBefore = {
-          refinementList: {
-            otherFacetAttribute: ['val'],
-          },
-        };
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should return the same instance if the value is already in the UI state', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('value');
-        const uiStateBefore = widget.getWidgetState(
-          {},
-          {
-            searchParameters: helper.state,
-            helper,
-          }
-        );
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-    });
-
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if no value is in the UI state', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), the url is empty
-        const uiState = {};
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying nothing on an empty search should return the same object
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-
-      test('should add the refinements according to the UI state provided (operator "or")', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), the URL contains a diskunctive refinement
-        const uiState = {
-          refinementList: {
-            facetAttribute: ['value or'],
-          },
-        };
-        // The current search is emtpy
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the refinement should yield a new state with a disjunctive refinement
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-
-      test('should add the refinements according to the UI state provided (operator "and")', () => {
-        const [widget, helper] = getInitializedWidget({
-          operator: 'and',
-        });
-        // The user presses back (browser), and there is one value
-        const uiState = {
-          refinementList: {
-            facetAttribute: ['value and'],
-          },
-        };
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the refinement should yield a new state with a conjunctive refinement
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-    });
-  });
-
   describe('dispose', () => {
     it('removes refinements completely on dispose (and)', () => {
       const rendering = jest.fn();
@@ -2078,6 +1967,115 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           index: indexName,
         })
       );
+    });
+  });
+
+  describe('getWidgetState', () => {
+    test('should give back the object unmodified if the default value is selected', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+
+    test('should add an entry equal to the refinement', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('value');
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toMatchSnapshot();
+    });
+
+    test('should not override other values in the same namespace', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('value');
+      const uiStateBefore = {
+        refinementList: {
+          otherFacetAttribute: ['val'],
+        },
+      };
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toMatchSnapshot();
+    });
+
+    test('should return the same instance if the value is already in the UI state', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('value');
+      const uiStateBefore = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    test('should return the same SP if no value is in the UI state', () => {
+      const [widget, helper] = getInitializedWidget();
+      // The user presses back (browser), the url is empty
+      const uiState = {};
+      // The current search is empty
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+      // Applying nothing on an empty search should return the same object
+      expect(searchParametersAfter).toBe(searchParametersBefore);
+    });
+
+    test('should add the refinements according to the UI state provided (operator "or")', () => {
+      const [widget, helper] = getInitializedWidget();
+      // The user presses back (browser), the URL contains a diskunctive refinement
+      const uiState = {
+        refinementList: {
+          facetAttribute: ['value or'],
+        },
+      };
+      // The current search is emtpy
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+      // Applying the refinement should yield a new state with a disjunctive refinement
+      expect(searchParametersAfter).toMatchSnapshot();
+    });
+
+    test('should add the refinements according to the UI state provided (operator "and")', () => {
+      const [widget, helper] = getInitializedWidget({
+        operator: 'and',
+      });
+      // The user presses back (browser), and there is one value
+      const uiState = {
+        refinementList: {
+          facetAttribute: ['value and'],
+        },
+      };
+      // The current search is empty
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+      // Applying the refinement should yield a new state with a conjunctive refinement
+      expect(searchParametersAfter).toMatchSnapshot();
     });
   });
 });
