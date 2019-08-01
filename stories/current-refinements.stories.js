@@ -287,7 +287,8 @@ storiesOf('CurrentRefinements', module)
       instantSearchPriceAscTitle.innerHTML =
         '<code>instant_search_price_asc</code>';
       const instantSearchMediaTitle = document.createElement('h3');
-      instantSearchMediaTitle.innerHTML = '<code>instant_search_media</code>';
+      instantSearchMediaTitle.innerHTML =
+        '<code>instant_search_rating_asc</code>';
       const refinementListContainer1 = document.createElement('div');
       const refinementListContainer2 = document.createElement('div');
 
@@ -316,12 +317,12 @@ storiesOf('CurrentRefinements', module)
 
         instantsearch.widgets
           .index({
-            indexName: 'instant_search_media',
+            indexName: 'instant_search_rating_asc',
           })
           .addWidgets([
             instantsearch.widgets.refinementList({
               container: refinementListContainer2,
-              attribute: 'locations',
+              attribute: 'categories',
               limit: 3,
             }),
           ]),

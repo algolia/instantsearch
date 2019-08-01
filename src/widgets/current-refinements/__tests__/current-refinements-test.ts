@@ -131,6 +131,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
                 facets: {
                   facet: {
                     'facet-val1': 1,
+                    'facet-val2': 2,
+                  },
+                  extraFacet: {
+                    'extraFacet-val1': 42,
+                    'extraFacet-val2': 42,
                   },
                 },
               }),
