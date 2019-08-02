@@ -600,7 +600,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   describe('getWidgetState', () => {
-    test('returns the `uiState` emtpy', () => {
+    test('returns the `uiState` empty', () => {
       const [widget, helper] = getInitializedWidget();
 
       const actual = widget.getWidgetState(
