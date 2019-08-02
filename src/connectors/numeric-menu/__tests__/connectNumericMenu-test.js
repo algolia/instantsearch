@@ -600,98 +600,125 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   describe('getWidgetState', () => {
-    test('should give back the object unmodified if there are no refinements', () => {
+    test('returns the `uiState` emtpy', () => {
       const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
 
-      expect(uiStateAfter).toBe(uiStateBefore);
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({});
     });
 
-    test('should add an entry equal to the refinement (equal)', () => {
+    test('returns the `uiState` with a refinement (exact)', () => {
       const [widget, helper] = getInitializedWidget();
+
       helper.addNumericRefinement('numerics', '=', 20);
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
 
-      expect(uiStateAfter).toMatchSnapshot();
-    });
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
 
-    test('should add an entry equal to the refinement (range)', () => {
-      const [widget, helper] = getInitializedWidget();
-      helper.addNumericRefinement('numerics', '>=', 10);
-      helper.addNumericRefinement('numerics', '<=', 20);
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
-
-      expect(uiStateAfter).toMatchSnapshot();
-    });
-
-    test('should add an entry equal to the refinement (only min)', () => {
-      const [widget, helper] = getInitializedWidget();
-      helper.addNumericRefinement('numerics', '>=', 10);
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
-
-      expect(uiStateAfter).toMatchSnapshot();
-    });
-
-    test('should add an entry equal to the refinement (only max)', () => {
-      const [widget, helper] = getInitializedWidget();
-      helper.addNumericRefinement('numerics', '<=', 20);
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
-
-      expect(uiStateAfter).toMatchSnapshot();
-    });
-
-    test('should not override other values in the same namespace', () => {
-      const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {
+      expect(actual).toEqual({
         numericMenu: {
-          'numerics-2': '27:36',
+          numerics: '20',
         },
-      };
-      helper.addNumericRefinement('numerics', '>=', 10);
-      helper.addNumericRefinement('numerics', '<=', 20);
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
       });
-
-      expect(uiStateAfter).toMatchSnapshot();
     });
 
-    test('should give back the object unmodified if refinements are already set', () => {
+    test('returns the `uiState` with a refinement (only min)', () => {
       const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {
+
+      helper.addNumericRefinement('numerics', '>=', 10);
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({
+        numericMenu: {
+          numerics: '10:',
+        },
+      });
+    });
+
+    test('returns the `uiState` with a refinement (only max)', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      helper.addNumericRefinement('numerics', '<=', 20);
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({
+        numericMenu: {
+          numerics: ':20',
+        },
+      });
+    });
+
+    test('returns the `uiState` with a refinement (range)', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      helper.addNumericRefinement('numerics', '>=', 10);
+      helper.addNumericRefinement('numerics', '<=', 20);
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({
         numericMenu: {
           numerics: '10:20',
         },
-      };
+      });
+    });
+
+    test('returns the `uiState` without namespace overridden', () => {
+      const [widget, helper] = getInitializedWidget();
+
       helper.addNumericRefinement('numerics', '>=', 10);
       helper.addNumericRefinement('numerics', '<=', 20);
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
 
-      expect(uiStateAfter).toBe(uiStateBefore);
+      const actual = widget.getWidgetState(
+        {
+          numericMenu: {
+            numerics2: '27:36',
+          },
+        },
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({
+        numericMenu: {
+          numerics: '10:20',
+          numerics2: '27:36',
+        },
+      });
     });
   });
 
