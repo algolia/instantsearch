@@ -12,29 +12,31 @@ describe('connectRefinementList', () => {
     return { rendering, makeWidget };
   };
 
-  const getInitializedWidget = (config = {}) => {
-    const rendering = jest.fn();
-    const makeWidget = connectRefinementList(rendering);
+  // @TODO: once we've migrate away from `getConfiguration` update
+  // the function and use it at least for the lifecycle.
+  // const getInitializedWidget = (config = {}) => {
+  //   const rendering = jest.fn();
+  //   const makeWidget = connectRefinementList(rendering);
 
-    const widget = makeWidget({
-      attribute: 'facetAttribute',
-      ...config,
-    });
+  //   const widget = makeWidget({
+  //     attribute: 'facetAttribute',
+  //     ...config,
+  //   });
 
-    const initialConfig = widget.getConfiguration(new SearchParameters({}));
-    const helper = jsHelper({}, '', initialConfig);
-    helper.search = jest.fn();
+  //   const initialConfig = widget.getConfiguration(new SearchParameters({}));
+  //   const helper = jsHelper({}, '', initialConfig);
+  //   helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+  //   widget.init({
+  //     helper,
+  //     state: helper.state,
+  //     createURL: () => '#',
+  //   });
 
-    const { refine } = rendering.mock.calls[0][0];
+  //   const { refine } = rendering.mock.calls[0][0];
 
-    return [widget, helper, refine];
-  };
+  //   return [widget, helper, refine];
+  // };
 
   it('throws on bad usage', () => {
     expect(connectRefinementList).toThrowErrorMatchingInlineSnapshot(`
@@ -1971,57 +1973,86 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   describe('getWidgetState', () => {
-    test('should give back the object unmodified if the default value is selected', () => {
-      const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
+    test('returns the `uiState` emtpy', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectRefinementList(render);
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
       });
-      expect(uiStateAfter).toBe(uiStateBefore);
-    });
 
-    test('should add an entry equal to the refinement', () => {
-      const [widget, helper, refine] = getInitializedWidget();
-      refine('value');
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
-      expect(uiStateAfter).toMatchSnapshot();
-    });
-
-    test('should not override other values in the same namespace', () => {
-      const [widget, helper, refine] = getInitializedWidget();
-      refine('value');
-      const uiStateBefore = {
-        refinementList: {
-          otherFacetAttribute: ['val'],
-        },
-      };
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
-      expect(uiStateAfter).toMatchSnapshot();
-    });
-
-    test('should return the same instance if the value is already in the UI state', () => {
-      const [widget, helper, refine] = getInitializedWidget();
-      refine('value');
-      const uiStateBefore = widget.getWidgetState(
+      const actual = widget.getWidgetState(
         {},
         {
           searchParameters: helper.state,
-          helper,
         }
       );
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
+
+      expect(actual).toEqual({});
+    });
+
+    test('returns the `uiState` with a refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectRefinementList(render);
+      const helper = jsHelper({}, '', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
       });
-      expect(uiStateAfter).toBe(uiStateBefore);
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        refinementList: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+    });
+
+    test('returns the `uiState` without namespace overridden', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectRefinementList(render);
+      const helper = jsHelper({}, '', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetState(
+        {
+          refinementList: {
+            categories: ['Phone', 'Tablet'],
+          },
+        },
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        refinementList: {
+          categories: ['Phone', 'Tablet'],
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
     });
   });
 

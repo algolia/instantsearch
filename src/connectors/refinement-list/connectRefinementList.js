@@ -1,7 +1,6 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  isEqual,
   noop,
 } from '../../lib/utils';
 import {
@@ -417,11 +416,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
             ? searchParameters.getDisjunctiveRefinements(attribute)
             : searchParameters.getConjunctiveRefinements(attribute);
 
-        if (
-          values.length === 0 ||
-          (uiState.refinementList &&
-            isEqual(values, uiState.refinementList[attribute]))
-        ) {
+        if (!values.length) {
           return uiState;
         }
 
