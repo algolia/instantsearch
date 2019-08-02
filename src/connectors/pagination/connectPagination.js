@@ -169,7 +169,7 @@ export default function connectPagination(renderFn, unmountFn = noop) {
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (page === 0 || page + 1 === uiState.page) {
+        if (!page) {
           return uiState;
         }
 
@@ -180,13 +180,9 @@ export default function connectPagination(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const uiPage = uiState.page;
+        const page = uiState.page ? uiState.page - 1 : 0;
 
-        if (uiPage) {
-          return searchParameters.setQueryParameter('page', uiState.page - 1);
-        }
-
-        return searchParameters.setQueryParameter('page', undefined);
+        return searchParameters.setQueryParameter('page', page);
       },
     };
   };
