@@ -169,7 +169,7 @@ export default function connectPagination(renderFn, unmountFn = noop) {
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (page === 0 || page + 1 === uiState.page) {
+        if (!page) {
           return uiState;
         }
 

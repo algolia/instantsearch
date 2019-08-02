@@ -381,41 +381,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   describe('getWidgetState', () => {
-    test('should give back the object unmodified if the default value is selected', () => {
+    test('returns the `uiState` emtpy', () => {
       const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
 
-      expect(uiStateAfter).toBe(uiStateBefore);
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({});
     });
 
-    test('should add an entry equal to the refinement', () => {
-      const [widget, helper, refine] = getInitializedWidget();
-      refine(4);
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
+    test('returns the `uiState` with a refinement', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      helper.setQueryParameter('page', 4);
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({
+        page: 5, // page + 1
       });
-
-      expect(uiStateAfter).toMatchSnapshot();
-    });
-
-    test('should give back the object unmodified if refinements are already set', () => {
-      const [widget, helper, refine] = getInitializedWidget();
-      refine(4);
-      const uiStateBefore = {
-        page: 5,
-      };
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
-
-      expect(uiStateAfter).toBe(uiStateBefore);
     });
   });
 
