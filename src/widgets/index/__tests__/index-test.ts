@@ -160,7 +160,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(createInitOptions());
 
         expect(instance.getHelper()!.state).toEqual(
-          algoliasearchHelper.SearchParameters.make({
+          new SearchParameters({
             index: 'indexName',
             query: 'Apple',
           })
@@ -169,7 +169,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.addWidgets([createPagination()]);
 
         expect(instance.getHelper()!.state).toEqual(
-          algoliasearchHelper.SearchParameters.make({
+          new SearchParameters({
             index: 'indexName',
             query: 'Apple',
             page: 5,
@@ -342,7 +342,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(createInitOptions());
 
         expect(instance.getHelper()!.state).toEqual(
-          algoliasearchHelper.SearchParameters.make({
+          new SearchParameters({
             index: 'indexName',
             query: 'Apple',
             page: 5,
@@ -352,7 +352,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.removeWidgets([pagination]);
 
         expect(instance.getHelper()!.state).toEqual(
-          algoliasearchHelper.SearchParameters.make({
+          new SearchParameters({
             index: 'indexName',
             query: 'Apple',
           })
@@ -535,7 +535,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
 
       expect(instance.getHelper()!.state).toEqual(
-        algoliasearchHelper.SearchParameters.make({
+        new SearchParameters({
           index: 'indexName',
           hitsPerPage: 5,
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
@@ -563,7 +563,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
 
       expect(subLevelInstance.getHelper()!.state).toEqual(
-        algoliasearchHelper.SearchParameters.make({
+        new SearchParameters({
           index: 'subLevelIndexName',
         })
       );
