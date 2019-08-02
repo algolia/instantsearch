@@ -696,122 +696,160 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   describe('getWidgetSearchParameters', () => {
-    test('should return the same SP if there are no refinements in the UI state', () => {
+    test('returns the `SearchParameters` with the default value', () => {
       const [widget, helper] = getInitializedWidget();
-      // The URL contains no parameters
-      const uiState = {};
-      // The current search is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          numericRefinements: {
+            numerics: {},
+          },
+        })
       );
-      // Applying empty parameters should yield the previous object
-      expect(searchParametersAfter).toBe(searchParametersBefore);
     });
 
-    test('should add the refinements according to the UI state provided (only min)', () => {
+    test('returns the `SearchParameters` with the default value without the previous refinement', () => {
       const [widget, helper] = getInitializedWidget();
-      // The URL state has some parameters
-      const uiState = {
-        numericMenu: {
-          numerics: '10:',
-        },
-      };
-      // The current search is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+
+      helper.addNumericRefinement('numerics', '=', [5, 10]);
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          numericRefinements: {
+            numerics: {},
+          },
+        })
       );
-      // The new search state should have the new parameters
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '>=')[0]
-      ).toBe(10);
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '=')
-      ).toBeUndefined();
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '<=')
-      ).toBeUndefined();
     });
 
-    test('should add the refinements according to the UI state provided (only max)', () => {
+    test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
       const [widget, helper] = getInitializedWidget();
-      // The URL state has some parameters
-      const uiState = {
-        numericMenu: {
-          numerics: ':20',
+
+      helper
+        .addNumericRefinement('numerics', '>=', [10])
+        .addNumericRefinement('numerics', '<=', [20]);
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          numericMenu: {
+            numerics: '10',
+          },
         },
-      };
-      // The current search is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          numericRefinements: {
+            numerics: {
+              '=': [10],
+            },
+          },
+        })
       );
-      // The new search state should have the new parameters
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '<=')[0]
-      ).toBe(20);
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '=')
-      ).toBeUndefined();
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '>=')
-      ).toBeUndefined();
     });
 
-    test('should add the refinements according to the UI state provided (range)', () => {
+    test('returns the `SearchParameters` with the value from `uiState` (only min)', () => {
       const [widget, helper] = getInitializedWidget();
-      // The URL state has some parameters
-      const uiState = {
-        numericMenu: {
-          numerics: '10:20',
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          numericMenu: {
+            numerics: '10:',
+          },
         },
-      };
-      // The current search is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          numericRefinements: {
+            numerics: {
+              '>=': [10],
+            },
+          },
+        })
       );
-      // The new search state should have the new parameters
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '>=')[0]
-      ).toBe(10);
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '<=')[0]
-      ).toBe(20);
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '=')
-      ).toBeUndefined();
     });
 
-    test('should add the refinements according to the UI state provided', () => {
+    test('returns the `SearchParameters` with the value from `uiState` (only max)', () => {
       const [widget, helper] = getInitializedWidget();
-      // The URL state has some parameters
-      const uiState = {
-        numericMenu: {
-          numerics: '10',
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          numericMenu: {
+            numerics: ':20',
+          },
         },
-      };
-      // The current search is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          numericRefinements: {
+            numerics: {
+              '<=': [20],
+            },
+          },
+        })
       );
-      // The new search state should have the new parameters
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '=')[0]
-      ).toBe(10);
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '>=')
-      ).toBeUndefined();
-      expect(
-        searchParametersAfter.getNumericRefinement('numerics', '<=')
-      ).toBeUndefined();
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState` (range)', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          numericMenu: {
+            numerics: '10:20',
+          },
+        },
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          numericRefinements: {
+            numerics: {
+              '>=': [10],
+              '<=': [20],
+            },
+          },
+        })
+      );
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState` (exact)', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          numericMenu: {
+            numerics: '10',
+          },
+        },
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          numericRefinements: {
+            numerics: {
+              '=': [10],
+            },
+          },
+        })
+      );
     });
   });
 });

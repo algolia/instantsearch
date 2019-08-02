@@ -208,42 +208,36 @@ export default function connectNumericMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        let clearedParams = searchParameters.clearRefinements(attribute);
         const value = uiState.numericMenu && uiState.numericMenu[attribute];
 
+        const withoutRefinements = searchParameters.clearRefinements(attribute);
+
         if (!value) {
-          return clearedParams;
+          return withoutRefinements.setQueryParameters({
+            numericRefinements: {
+              ...withoutRefinements.numericRefinements,
+              [attribute]: {},
+            },
+          });
         }
 
-        const valueAsEqual = value.indexOf(':') === -1 && value;
+        const isExact = value.indexOf(':') === -1;
 
-        if (valueAsEqual) {
-          return clearedParams.addNumericRefinement(
-            attribute,
-            '=',
-            valueAsEqual
-          );
+        if (isExact) {
+          return withoutRefinements.addNumericRefinement(attribute, '=', value);
         }
 
-        const [lowerBound, upperBound] = value.split(':').map(parseFloat);
+        const [min, max] = value.split(':').map(parseFloat);
 
-        if (isFiniteNumber(lowerBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
-            attribute,
-            '>=',
-            lowerBound
-          );
-        }
+        const withMinRefinement = isFiniteNumber(min)
+          ? withoutRefinements.addNumericRefinement(attribute, '>=', min)
+          : withoutRefinements;
 
-        if (isFiniteNumber(upperBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
-            attribute,
-            '<=',
-            upperBound
-          );
-        }
+        const withMaxRefinement = isFiniteNumber(max)
+          ? withMinRefinement.addNumericRefinement(attribute, '<=', max)
+          : withMinRefinement;
 
-        return clearedParams;
+        return withMaxRefinement;
       },
     };
   };
