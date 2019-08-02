@@ -102,25 +102,35 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
 
     return {
       init({ helper, instantSearchInstance }) {
-        const initialIndex = helper.state.index;
+        const currentIndex = helper.state.index;
         const isInitialIndexInItems = find(
           items,
-          item => item.value === initialIndex
+          item => item.value === currentIndex
         );
 
-        this.initialIndex = initialIndex;
+        // The `initialIndex` is the one set at the top level not the one used
+        // at `init`. The value of `index` at `init` could come from the URL. We
+        // want the "real" initial value, this one should never change. If it changes
+        // between the lifecycles of the widget the current refinement won't be
+        // pushed into the `uiState`. Because we never push the "initial" value to
+        // avoid to pollute the URL.
+        // Note that it might be interesting to manage this at the state mapping
+        // level and always push the index value into  the `uiState`. It is a
+        // breaking change.
+        // @MAJOR
+        this.initialIndex = instantSearchInstance.indexName;
         this.setIndex = indexName => {
           helper.setIndex(indexName).search();
         };
 
         warning(
           isInitialIndexInItems,
-          `The index named "${initialIndex}" is not listed in the \`items\` of \`sortBy\`.`
+          `The index named "${currentIndex}" is not listed in the \`items\` of \`sortBy\`.`
         );
 
         renderFn(
           {
-            currentRefinement: initialIndex,
+            currentRefinement: currentIndex,
             options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: true,
