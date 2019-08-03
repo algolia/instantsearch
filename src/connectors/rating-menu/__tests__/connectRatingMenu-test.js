@@ -398,7 +398,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
   });
 
   describe('getWidgetState', () => {
-    test('returns the `uiState` emtpy', () => {
+    test('returns the `uiState` empty', () => {
       // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
