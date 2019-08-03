@@ -170,80 +170,67 @@ export default function connectNumericMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const currentRefinements = searchParameters.getNumericRefinements(
-          attribute
-        );
-        const equal = currentRefinements['='] && currentRefinements['='][0];
+        const values = searchParameters.getNumericRefinements(attribute);
+
+        const equal = values['='] && values['='][0];
+
         if (equal || equal === 0) {
           return {
             ...uiState,
             numericMenu: {
               ...uiState.numericMenu,
-              [attribute]: `${currentRefinements['=']}`,
+              [attribute]: `${values['=']}`,
             },
           };
         }
 
-        const lowerBound =
-          (currentRefinements['>='] && currentRefinements['>='][0]) || '';
-        const upperBound =
-          (currentRefinements['<='] && currentRefinements['<='][0]) || '';
+        const min = (values['>='] && values['>='][0]) || '';
+        const max = (values['<='] && values['<='][0]) || '';
 
-        if (lowerBound !== '' || upperBound !== '') {
-          if (
-            uiState.numericMenu &&
-            uiState.numericMenu[attribute] === `${lowerBound}:${upperBound}`
-          )
-            return uiState;
-          return {
-            ...uiState,
-            numericMenu: {
-              ...uiState.numericMenu,
-              [attribute]: `${lowerBound}:${upperBound}`,
-            },
-          };
+        if (min === '' && max === '') {
+          return uiState;
         }
 
-        return uiState;
+        return {
+          ...uiState,
+          numericMenu: {
+            ...uiState.numericMenu,
+            [attribute]: `${min}:${max}`,
+          },
+        };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        let clearedParams = searchParameters.clearRefinements(attribute);
         const value = uiState.numericMenu && uiState.numericMenu[attribute];
 
+        const withoutRefinements = searchParameters.clearRefinements(attribute);
+
         if (!value) {
-          return clearedParams;
+          return withoutRefinements.setQueryParameters({
+            numericRefinements: {
+              ...withoutRefinements.numericRefinements,
+              [attribute]: {},
+            },
+          });
         }
 
-        const valueAsEqual = value.indexOf(':') === -1 && value;
+        const isExact = value.indexOf(':') === -1;
 
-        if (valueAsEqual) {
-          return clearedParams.addNumericRefinement(
-            attribute,
-            '=',
-            valueAsEqual
-          );
+        if (isExact) {
+          return withoutRefinements.addNumericRefinement(attribute, '=', value);
         }
 
-        const [lowerBound, upperBound] = value.split(':').map(parseFloat);
+        const [min, max] = value.split(':').map(parseFloat);
 
-        if (isFiniteNumber(lowerBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
-            attribute,
-            '>=',
-            lowerBound
-          );
-        }
+        const withMinRefinement = isFiniteNumber(min)
+          ? withoutRefinements.addNumericRefinement(attribute, '>=', min)
+          : withoutRefinements;
 
-        if (isFiniteNumber(upperBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
-            attribute,
-            '<=',
-            upperBound
-          );
-        }
+        const withMaxRefinement = isFiniteNumber(max)
+          ? withMinRefinement.addNumericRefinement(attribute, '<=', max)
+          : withMinRefinement;
 
-        return clearedParams;
+        return withMaxRefinement;
       },
     };
   };

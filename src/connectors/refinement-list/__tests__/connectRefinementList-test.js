@@ -1973,7 +1973,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   describe('getWidgetState', () => {
-    test('returns the `uiState` emtpy', () => {
+    test('returns the `uiState` empty', () => {
       // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRefinementList(render);
