@@ -1,0 +1,16 @@
+{
+  "name": "instantsearch-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-2-End test suite for InstantSearch",
+  "homepage": "https://github.com/algolia/instantsearch-e2e-tests",
+  "keywords": [
+    "algolia",
+    "instantsearch",
+    "test",
+    "webdriverio"
+  ],
+  "author": "Algolia <support@algolia.com>",
+  "license": "MIT",
+  "repository": "algolia/instantsearch-e2e-tests",
+  "sideEffects": false
+}
