@@ -496,6 +496,11 @@ declare namespace algoliasearchHelper {
     ): SearchParameters;
     removeHierarchicalFacet(facet: string): SearchParameters;
     removeHierarchicalFacetRefinement(facet: string): SearchParameters;
+    removeNumericRefinement(
+      attribute: string,
+      operator?: string,
+      value?: string
+    ): SearchParameters;
     removeTagRefinement(tag: string): SearchParameters;
     setDisjunctiveFacets(facets: string[]): SearchParameters;
     setFacets(facets: string[]): SearchParameters;
