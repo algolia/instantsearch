@@ -12,5 +12,21 @@
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
   "repository": "algolia/instantsearch-e2e-tests",
-  "sideEffects": false
+  "sideEffects": false,
+  "scripts": {
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "lint:fix": "eslint --ext .js,.ts,.tsx --fix ."
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "1.13.0",
+    "@typescript-eslint/parser": "1.13.0",
+    "eslint": "6.1.0",
+    "eslint-config-algolia": "13.4.0",
+    "eslint-config-prettier": "6.0.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-prettier": "3.1.0",
+    "eslint-plugin-wdio": "5.11.0",
+    "prettier": "1.18.2",
+    "typescript": "3.5.3"
+  }
 }
