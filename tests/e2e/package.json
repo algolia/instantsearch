@@ -21,6 +21,7 @@
     "type-check:watch": "yarn type-check --watch"
   },
   "dependencies": {
+    "dotenv": "^8.0.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
   },
