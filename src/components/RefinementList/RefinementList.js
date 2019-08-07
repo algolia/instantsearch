@@ -30,9 +30,11 @@ class RefinementList extends Component {
     let subItems;
     const hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
+      const cssClasses = { ...this.props.cssClasses, root: '' };
       subItems = (
         <RefinementList
           {...this.props}
+          cssClasses={cssClasses}
           depth={this.props.depth + 1}
           facetValues={facetValue.data}
           showMore={false}
