@@ -68,12 +68,11 @@ module.exports = {
    * Hooks
    * https://webdriver.io/docs/options.html#hooks
    */
-
-  /*
-   * `before` hook (executed before test execution begins) registering TypeScript to compile our `.ts` files
-   * https://webdriver.io/docs/typescript.html
-   */
   before() {
+    /*
+     * Register TypeScript to compile our `.ts` files
+     * https://webdriver.io/docs/typescript.html
+     */
     require('ts-node').register({
       files: true,
       transpileOnly: true,
@@ -81,5 +80,11 @@ module.exports = {
       // instead of the directory from which `wdio` was called
       project: path.join(__dirname, './tsconfig.json'),
     });
+
+    /*
+     * Register helpers
+     * https://webdriver.io/docs/customcommands.html
+     */
+    require('./helpers');
   },
 };

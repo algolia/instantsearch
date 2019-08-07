@@ -19,6 +19,14 @@ module.exports = {
       },
     },
     {
+      files: ['helpers/**/*.ts'],
+      extends: ['plugin:wdio/recommended'],
+      plugins: ['wdio'],
+      rules: {
+        '@typescript-eslint/no-namespace': 0,
+      },
+    },
+    {
       files: ['**/*.js'],
       rules: {
         'import/no-commonjs': 0,
