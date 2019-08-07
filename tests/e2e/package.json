@@ -15,9 +15,16 @@
   "sideEffects": false,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.tsx .",
-    "lint:fix": "eslint --ext .js,.ts,.tsx --fix ."
+    "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
+    "type-check": "tsc",
+    "type-check:watch": "yarn type-check --watch"
+  },
+  "dependencies": {
+    "typescript": "^3.5.3"
   },
   "devDependencies": {
+    "@types/jasmine": "3.3.16",
+    "@types/node": "12.7.0",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
     "eslint": "6.1.0",
@@ -27,6 +34,6 @@
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-wdio": "5.11.0",
     "prettier": "1.18.2",
-    "typescript": "3.5.3"
+    "webdriverio": "5.11.13"
   }
 }
