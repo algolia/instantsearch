@@ -139,11 +139,11 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
               'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
             );
 
-            return {};
+            return currentConfiguration;
           }
         }
 
-        const widgetConfiguration = {
+        return currentConfiguration.setQueryParameters({
           hierarchicalFacets: [
             {
               name: hierarchicalFacetName,
@@ -153,17 +153,11 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
               showParentLevel,
             },
           ],
-        };
-
-        const currentMaxValuesPerFacet =
-          currentConfiguration.maxValuesPerFacet || 0;
-
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        return widgetConfiguration;
+          maxValuesPerFacet: Math.max(
+            currentConfiguration.maxValuesPerFacet || 0,
+            showMore ? showMoreLimit : limit
+          ),
+        });
       },
 
       init({ helper, createURL, instantSearchInstance }) {
@@ -259,25 +253,11 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       dispose({ state }) {
-        // unmount widget from DOM
         unmountFn();
 
-        // compute nextState for the search
-        let nextState = state;
-
-        if (state.isHierarchicalFacetRefined(hierarchicalFacetName)) {
-          nextState = state.removeHierarchicalFacetRefinement(
-            hierarchicalFacetName
-          );
-        }
-
-        nextState = nextState.removeHierarchicalFacet(hierarchicalFacetName);
-
-        if (nextState.maxValuesPerFacet === limit) {
-          nextState.setQueryParameters('maxValuesPerFacet', undefined);
-        }
-
-        return nextState;
+        return state
+          .removeHierarchicalFacet(hierarchicalFacetName)
+          .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {

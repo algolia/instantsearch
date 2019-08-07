@@ -42,35 +42,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     it('has defaults', () => {
-      expect(hierarchicalMenu(options).getConfiguration({})).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: null,
-            attributes: ['hello', 'world'],
-            separator: ' > ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
+      expect(
+        hierarchicalMenu(options).getConfiguration(new SearchParameters())
+      ).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'hello',
+              rootPath: null,
+              attributes: ['hello', 'world'],
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('understand the separator option', () => {
       expect(
-        hierarchicalMenu({ separator: ' ? ', ...options }).getConfiguration({})
-      ).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: null,
-            attributes: ['hello', 'world'],
-            separator: ' ? ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
+        hierarchicalMenu({ separator: ' ? ', ...options }).getConfiguration(
+          new SearchParameters()
+        )
+      ).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'hello',
+              rootPath: null,
+              attributes: ['hello', 'world'],
+              separator: ' ? ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('understand the showParentLevel option', () => {
@@ -78,57 +86,68 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         hierarchicalMenu({
           showParentLevel: false,
           ...options,
-        }).getConfiguration({})
-      ).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: null,
-            attributes: ['hello', 'world'],
-            separator: ' > ',
-            showParentLevel: false,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
+        }).getConfiguration(new SearchParameters())
+      ).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'hello',
+              rootPath: null,
+              attributes: ['hello', 'world'],
+              separator: ' > ',
+              showParentLevel: false,
+            },
+          ],
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('understand the rootPath option', () => {
       expect(
-        hierarchicalMenu({ rootPath: 'Beer', ...options }).getConfiguration({})
-      ).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: 'Beer',
-            attributes: ['hello', 'world'],
-            separator: ' > ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
+        hierarchicalMenu({ rootPath: 'Beer', ...options }).getConfiguration(
+          new SearchParameters()
+        )
+      ).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'hello',
+              rootPath: 'Beer',
+              attributes: ['hello', 'world'],
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     describe('limit option', () => {
       it('configures maxValuesPerFacet', () =>
         expect(
-          hierarchicalMenu({ limit: 20, ...options }).getConfiguration({})
-            .maxValuesPerFacet
+          hierarchicalMenu({ limit: 20, ...options }).getConfiguration(
+            new SearchParameters()
+          ).maxValuesPerFacet
         ).toBe(20));
 
       it('uses provided maxValuesPerFacet when higher', () =>
         expect(
-          hierarchicalMenu({ limit: 20, ...options }).getConfiguration({
-            maxValuesPerFacet: 30,
-          }).maxValuesPerFacet
+          hierarchicalMenu({ limit: 20, ...options }).getConfiguration(
+            new SearchParameters({
+              maxValuesPerFacet: 30,
+            })
+          ).maxValuesPerFacet
         ).toBe(30));
 
       it('ignores provided maxValuesPerFacet when lower', () =>
         expect(
-          hierarchicalMenu({ limit: 10, ...options }).getConfiguration({
-            maxValuesPerFacet: 3,
-          }).maxValuesPerFacet
+          hierarchicalMenu({ limit: 10, ...options }).getConfiguration(
+            new SearchParameters({
+              maxValuesPerFacet: 3,
+            })
+          ).maxValuesPerFacet
         ).toBe(10));
     });
   });

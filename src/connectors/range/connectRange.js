@@ -275,11 +275,9 @@ export default function connectRange(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        const nextState = state
+        return state
           .removeNumericRefinement(attribute)
           .removeDisjunctiveFacet(attribute);
-
-        return nextState;
       },
 
       getWidgetState(uiState, { searchParameters }) {
