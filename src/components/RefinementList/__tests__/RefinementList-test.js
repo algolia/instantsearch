@@ -19,7 +19,7 @@ describe('RefinementList', () => {
       facetValues: [],
       ...extraProps,
     };
-    return shallow(React.createElement(RefinementList, props));
+    return shallow(<RefinementList {...props} />);
   }
 
   describe('cssClasses', () => {
@@ -209,6 +209,11 @@ describe('RefinementList', () => {
             isRefined: false,
           },
         ],
+        templateProps: {
+          templates: {
+            item: item => item.value,
+          },
+        },
       };
 
       const root = shallowRender(props);
@@ -217,6 +222,32 @@ describe('RefinementList', () => {
 
       expect(root.props().children[2].props.className).toContain('depth-0');
       expect(subList.props().children[2].props.className).toContain('depth-1');
+    });
+
+    it('should not add root class for on sub lists', () => {
+      const props = {
+        ...defaultProps,
+        cssClasses: {
+          root: 'my-root',
+        },
+        facetValues: [
+          {
+            value: 'foo',
+            data: [
+              { value: 'bar', isRefined: false },
+              { value: 'baz', isRefined: false },
+            ],
+            isRefined: false,
+          },
+        ],
+      };
+
+      const root = shallowRender(props);
+      const mainItem = root.find(RefinementListItem).at(0);
+      const subList = shallow(mainItem.props().subItems);
+
+      expect(root.hasClass(props.cssClasses.root)).toBe(true);
+      expect(subList.hasClass(props.cssClasses.root)).toBe(false);
     });
   });
 
