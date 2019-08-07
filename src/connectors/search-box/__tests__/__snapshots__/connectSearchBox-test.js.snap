@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`connectSearchBox getWidgetState should add an entry equal to the refinement 1`] = `
-Object {
-  "query": "some query",
-}
-`;
