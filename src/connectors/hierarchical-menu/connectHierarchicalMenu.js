@@ -153,6 +153,12 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
               showParentLevel,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            [hierarchicalFacetName]:
+              currentConfiguration.hierarchicalFacetsRefinements[
+                hierarchicalFacetName
+              ] || [],
+          },
           maxValuesPerFacet: Math.max(
             currentConfiguration.maxValuesPerFacet || 0,
             showMore ? showMoreLimit : limit
@@ -252,6 +258,11 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         );
       },
 
+      // eslint-disable-next-line valid-jsdoc
+      /**
+       * @param {Object} param0
+       * @param {import('algoliasearch-helper').SearchParameters} param0.state
+       */
       dispose({ state }) {
         unmountFn();
 

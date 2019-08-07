@@ -93,6 +93,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               showParentLevel: true,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
           maxValuesPerFacet: 10,
         })
       );
@@ -119,6 +122,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               showParentLevel: true,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
           maxValuesPerFacet: 10,
         })
       );
@@ -145,6 +151,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               showParentLevel: true,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
           maxValuesPerFacet: 10,
         })
       );
@@ -171,6 +180,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               showParentLevel: false,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
           maxValuesPerFacet: 10,
         })
       );
@@ -208,6 +220,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               showParentLevel: true,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
           maxValuesPerFacet: 10,
         })
       );
@@ -243,6 +258,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
               showParentLevel: true,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
           maxValuesPerFacet: 10,
         })
       );
@@ -346,6 +364,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
                 showParentLevel: true,
               },
             ],
+            hierarchicalFacetsRefinements: {
+              category: [],
+            },
             maxValuesPerFacet: 100,
           })
         );
@@ -369,6 +390,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
                 showParentLevel: true,
               },
             ],
+            hierarchicalFacetsRefinements: {
+              category: [],
+            },
             maxValuesPerFacet: 101,
           })
         );
@@ -400,6 +424,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
                 showParentLevel: true,
               },
             ],
+            hierarchicalFacetsRefinements: {
+              category: [],
+            },
             maxValuesPerFacet: 6,
           })
         );
@@ -423,6 +450,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
                 showParentLevel: true,
               },
             ],
+            hierarchicalFacetsRefinements: {
+              category: [],
+            },
             maxValuesPerFacet: 101,
           })
         );
@@ -451,6 +481,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             showParentLevel: true,
           },
         ],
+        hierarchicalFacetsRefinements: {
+          category: [],
+        },
         maxValuesPerFacet: 10,
       })
     );
