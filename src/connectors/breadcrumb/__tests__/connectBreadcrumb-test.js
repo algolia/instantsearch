@@ -1,4 +1,7 @@
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import { warning } from '../../../lib/utils';
 import connectBreadcrumb from '../connectBreadcrumb';
 
@@ -69,20 +72,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         attributes: ['category', 'sub_category'],
       });
 
-      const previous = {};
+      const actual = widget.getConfiguration(new SearchParameters());
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            rootPath: null,
-            separator: ' > ',
-          },
-        ],
-      });
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              rootPath: null,
+              separator: ' > ',
+            },
+          ],
+        })
+      );
     });
 
     it('returns the configuration with custom `separator`', () => {
@@ -93,20 +96,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         separator: ' / ',
       });
 
-      const previous = {};
+      const actual = widget.getConfiguration(new SearchParameters());
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            rootPath: null,
-            separator: ' / ',
-          },
-        ],
-      });
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              rootPath: null,
+              separator: ' / ',
+            },
+          ],
+        })
+      );
     });
 
     it('returns the configuration with custom `rootPath`', () => {
@@ -117,20 +120,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         rootPath: 'TopLevel > SubLevel',
       });
 
-      const previous = {};
+      const actual = widget.getConfiguration(new SearchParameters());
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            rootPath: 'TopLevel > SubLevel',
-            separator: ' > ',
-          },
-        ],
-      });
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              rootPath: 'TopLevel > SubLevel',
+              separator: ' > ',
+            },
+          ],
+        })
+      );
     });
 
     it('returns the configuration with another `hierarchicalFacets` already defined', () => {
@@ -140,20 +143,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         attributes: ['category', 'sub_category'],
       });
 
-      const previous = {
-        hierarchicalFacets: [
-          {
-            name: 'country',
-            attributes: ['country', 'sub_country'],
-            separator: ' > ',
-            rootPath: null,
-          },
-        ],
-      };
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'country',
+              attributes: ['country', 'sub_country'],
+              separator: ' > ',
+              rootPath: null,
+            },
+          ],
+        })
+      );
 
-      const actual = widget.getConfiguration(previous);
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              separator: ' > ',
+              rootPath: null,
+            },
+          ],
+        })
+      );
+    });
 
-      expect(actual).toEqual({
+    it('returns an empty configuration with the same `hierarchicalFacets` already defined', () => {
+      const render = () => {};
+      const makeWidget = connectBreadcrumb(render);
+      const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+
+      const previous = new SearchParameters({
         hierarchicalFacets: [
           {
             name: 'category',
@@ -163,27 +185,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           },
         ],
       });
-    });
-
-    it('returns an empty configuration with the same `hierarchicalFacets` already defined', () => {
-      const render = () => {};
-      const makeWidget = connectBreadcrumb(render);
-      const widget = makeWidget({ attributes: ['category', 'sub_category'] });
-
-      const previous = {
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            separator: ' > ',
-            rootPath: null,
-          },
-        ],
-      };
-
       const actual = widget.getConfiguration(previous);
 
-      expect(actual).toEqual({});
+      expect(actual).toEqual(previous);
     });
 
     it('warns with the same `hierarchicalFacets` already defined with different `attributes`', () => {
@@ -191,16 +195,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const makeWidget = connectBreadcrumb(render);
       const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-      const previous = {
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category', 'sub_sub_category'],
-          },
-        ],
-      };
-
-      expect(() => widget.getConfiguration(previous)).toWarnDev();
+      expect(() =>
+        widget.getConfiguration(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                name: 'category',
+                attributes: ['category', 'sub_category', 'sub_sub_category'],
+              },
+            ],
+          })
+        )
+      ).toWarnDev();
     });
 
     it('warns with the same `hierarchicalFacets` already defined with different `separator`', () => {
@@ -211,17 +217,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         separator: ' / ',
       });
 
-      const previous = {
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            separator: ' > ',
-          },
-        ],
-      };
-
-      expect(() => widget.getConfiguration(previous)).toWarnDev();
+      expect(() =>
+        widget.getConfiguration(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                name: 'category',
+                attributes: ['category', 'sub_category'],
+                separator: ' > ',
+              },
+            ],
+          })
+        )
+      ).toWarnDev();
     });
 
     it('warns with the same `hierarchicalFacets` already defined with different `rootPath`', () => {
@@ -232,18 +240,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         rootPath: 'TopLevel',
       });
 
-      const previous = {
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            separator: ' > ',
-            rootPath: 'TopLevel > SubLevel',
-          },
-        ],
-      };
-
-      expect(() => widget.getConfiguration(previous)).toWarnDev();
+      expect(() =>
+        widget.getConfiguration(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                name: 'category',
+                attributes: ['category', 'sub_category'],
+                separator: ' > ',
+                rootPath: 'TopLevel > SubLevel',
+              },
+            ],
+          })
+        )
+      ).toWarnDev();
     });
   });
 
@@ -252,17 +262,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    const config = widget.getConfiguration({});
-    expect(config).toEqual({
-      hierarchicalFacets: [
-        {
-          attributes: ['category', 'sub_category'],
-          name: 'category',
-          rootPath: null,
-          separator: ' > ',
-        },
-      ],
-    });
+    const config = widget.getConfiguration(new SearchParameters({}));
+    expect(config).toEqual(
+      new SearchParameters({
+        hierarchicalFacets: [
+          {
+            attributes: ['category', 'sub_category'],
+            name: 'category',
+            rootPath: null,
+            separator: ' > ',
+          },
+        ],
+      })
+    );
 
     // Verify that the widget has not been rendered yet at this point
     expect(rendering.mock.calls).toHaveLength(0);
@@ -325,7 +337,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const makeWidget = connectBreadcrumb(() => {});
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    const partialConfiguration = widget.getConfiguration({
+    const previous = new SearchParameters({
       hierarchicalFacets: [
         {
           attributes: ['category', 'sub_category'],
@@ -335,8 +347,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         },
       ],
     });
+    const partialConfiguration = widget.getConfiguration(previous);
 
-    expect(partialConfiguration).toEqual({});
+    expect(partialConfiguration).toEqual(previous);
   });
 
   it('provides the correct facet values', () => {
@@ -344,7 +357,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    const config = widget.getConfiguration({});
+    const config = widget.getConfiguration(new SearchParameters());
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
@@ -400,7 +413,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       attributes: ['category', 'sub_category'],
     });
 
-    const config = widget.getConfiguration({});
+    const config = widget.getConfiguration(new SearchParameters());
     const helper = jsHelper({}, '', config);
 
     helper.search = jest.fn();
@@ -445,7 +458,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         items.map(item => ({ ...item, label: 'transformed' })),
     });
 
-    const config = widget.getConfiguration({});
+    const config = widget.getConfiguration(new SearchParameters());
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
@@ -499,7 +512,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    const config = widget.getConfiguration({});
+    const config = widget.getConfiguration(new SearchParameters());
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
@@ -558,7 +571,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       ],
     });
 
-    const config = widget.getConfiguration({});
+    const config = widget.getConfiguration(new SearchParameters());
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
@@ -718,7 +731,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const makeWidget = connectBreadcrumb(rendering);
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    const config = widget.getConfiguration({});
+    const config = widget.getConfiguration(new SearchParameters());
     const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
@@ -772,44 +785,52 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
     const makeWidget = connectBreadcrumb(() => {});
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    const partialConfiguration = widget.getConfiguration({});
+    const partialConfiguration = widget.getConfiguration(
+      new SearchParameters()
+    );
 
-    expect(partialConfiguration).toEqual({
-      hierarchicalFacets: [
-        {
-          attributes: ['category', 'sub_category'],
-          name: 'category',
-          rootPath: null,
-          separator: ' > ',
-        },
-      ],
-    });
+    expect(partialConfiguration).toEqual(
+      new SearchParameters({
+        hierarchicalFacets: [
+          {
+            attributes: ['category', 'sub_category'],
+            name: 'category',
+            rootPath: null,
+            separator: ' > ',
+          },
+        ],
+      })
+    );
   });
 
   it('Provides an additional configuration if the existing one is different', () => {
     const makeWidget = connectBreadcrumb(() => {});
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    const partialConfiguration = widget.getConfiguration({
-      hierarchicalFacets: [
-        {
-          attributes: ['otherCategory', 'otherSub_category'],
-          name: 'otherCategory',
-          separator: ' > ',
-        },
-      ],
-    });
+    const partialConfiguration = widget.getConfiguration(
+      new SearchParameters({
+        hierarchicalFacets: [
+          {
+            attributes: ['otherCategory', 'otherSub_category'],
+            name: 'otherCategory',
+            separator: ' > ',
+          },
+        ],
+      })
+    );
 
-    expect(partialConfiguration).toEqual({
-      hierarchicalFacets: [
-        {
-          attributes: ['category', 'sub_category'],
-          name: 'category',
-          rootPath: null,
-          separator: ' > ',
-        },
-      ],
-    });
+    expect(partialConfiguration).toEqual(
+      new SearchParameters({
+        hierarchicalFacets: [
+          {
+            attributes: ['category', 'sub_category'],
+            name: 'category',
+            rootPath: null,
+            separator: ' > ',
+          },
+        ],
+      })
+    );
   });
 
   it('does not throw without the unmount function', () => {
