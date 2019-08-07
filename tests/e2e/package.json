@@ -15,6 +15,8 @@
   "repository": "algolia/instantsearch-e2e-tests",
   "sideEffects": false,
   "scripts": {
+    "commit": "git-cz",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc",
@@ -30,6 +32,8 @@
     "@types/node": "12.7.0",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
+    "conventional-changelog-cli": "2.0.23",
+    "cz-conventional-changelog": "3.0.2",
     "eslint": "6.1.0",
     "eslint-config-algolia": "13.4.0",
     "eslint-config-prettier": "6.0.0",
@@ -47,5 +51,10 @@
     "@wdio/selenium-standalone-service": "^5.11.2",
     "@wdio/spec-reporter": "^5.11.7",
     "@wdio/static-server-service": "^5.11.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
