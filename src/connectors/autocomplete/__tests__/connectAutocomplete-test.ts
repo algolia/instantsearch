@@ -537,6 +537,7 @@ search.addWidgets([
         new SearchParameters({
           index: '',
           query: 'Apple',
+          ...TAG_PLACEHOLDER,
         })
       );
     });
@@ -558,6 +559,7 @@ search.addWidgets([
         new SearchParameters({
           index: '',
           query: '',
+          ...TAG_PLACEHOLDER,
         })
       );
     });

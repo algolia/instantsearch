@@ -174,7 +174,18 @@ search.addWidgets([
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQueryParameter('query', uiState.query || '');
+        const parameters = {
+          query: uiState.query || '',
+        };
+
+        if (!escapeHTML) {
+          return searchParameters.setQueryParameters(parameters);
+        }
+
+        return searchParameters.setQueryParameters({
+          ...parameters,
+          ...TAG_PLACEHOLDER,
+        });
       },
 
       dispose({ state }) {
