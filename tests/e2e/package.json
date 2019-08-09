@@ -12,6 +12,14 @@
   ],
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
+  "files": [
+    "index.js",
+    "wdio.base.conf.js",
+    "wdio.local.conf.js",
+    "wdio.saucelabs.conf.js",
+    "helpers",
+    "specs"
+  ],
   "repository": "algolia/instantsearch-e2e-tests",
   "sideEffects": false,
   "scripts": {
