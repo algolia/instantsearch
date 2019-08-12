@@ -8,7 +8,7 @@ Install `instantsearch-e2e-tests` and its peedDependencies in your InstantSearch
 
 ```bash
 yarn add --dev \
-instantsearch-e2e-tests \
+algolia/instantsearch-e2e-tests \
 @wdio/cli @wdio/jasmine-framework @wdio/spec-reporter \
 @wdio/static-server-service \
 @wdio/local-runner @wdio/selenium-standalone-service \
