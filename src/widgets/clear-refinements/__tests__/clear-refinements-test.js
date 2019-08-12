@@ -1,7 +1,11 @@
 import { render } from 'preact-compat';
-import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 import clearRefinements from '../clear-refinements';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
@@ -24,119 +28,87 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 });
 
 describe('clearRefinements()', () => {
-  let container;
-  let results;
-  let client;
-  let helper;
-  let createURL;
-
   beforeEach(() => {
-    createURL = jest.fn().mockReturnValue('#all-cleared');
-    container = document.createElement('div');
-    results = {};
-    client = algoliasearch('APP_ID', 'API_KEY');
-    helper = {
-      state: {
-        clearRefinements: jest.fn().mockReturnThis(),
-        clearTags: jest.fn().mockReturnThis(),
-      },
-      search: jest.fn(),
-    };
-
     render.mockClear();
   });
 
   describe('without refinements', () => {
-    beforeEach(() => {
-      helper.state.facetsRefinements = {};
-    });
-
     it('calls twice render(<ClearRefinements props />, container)', () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        facetsRefinements: {},
+      });
+      const container = document.createElement('div');
       const widget = clearRefinements({
         container,
       });
 
-      widget.init({
-        helper,
-        createURL,
-        instantSearchInstance: {
-          templatesConfig: {},
-        },
-      });
-      widget.render({
-        results,
-        helper,
-        state: helper.state,
-        createURL,
-        instantSearchInstance: {},
-      });
-      widget.render({
-        results,
-        helper,
-        state: helper.state,
-        createURL,
-        instantSearchInstance: {},
-      });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ helper, state: helper.state }));
+      widget.render(createRenderOptions({ helper, state: helper.state }));
 
       expect(render).toHaveBeenCalledTimes(2);
 
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
-      expect(render.mock.calls[0][1]).toEqual(container);
+      const [firstRender, secondRender] = render.mock.calls;
 
-      expect(render.mock.calls[1][0]).toMatchSnapshot();
-      expect(render.mock.calls[1][1]).toEqual(container);
+      expect(firstRender[0]).toMatchSnapshot();
+      expect(firstRender[1]).toEqual(container);
+
+      expect(secondRender[0]).toMatchSnapshot();
+      expect(secondRender[1]).toEqual(container);
     });
   });
 
   describe('with refinements', () => {
-    beforeEach(() => {
-      helper.state.facetsRefinements = { something: ['something'] };
-    });
-
     it('calls twice render(<ClearAll props />, container)', () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        facetsRefinements: {
+          facet: ['value'],
+        },
+      });
+      const container = document.createElement('div');
       const widget = clearRefinements({
         container,
       });
-      widget.init({
-        helper,
-        createURL,
-        instantSearchInstance: {
-          templatesConfig: {},
-        },
-      });
-      widget.render({ results, helper, state: helper.state, createURL });
-      widget.render({ results, helper, state: helper.state, createURL });
+
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ helper, state: helper.state }));
+      widget.render(createRenderOptions({ helper, state: helper.state }));
 
       expect(render).toHaveBeenCalledTimes(2);
 
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
-      expect(render.mock.calls[0][1]).toEqual(container);
+      const [firstRender, secondRender] = render.mock.calls;
 
-      expect(render.mock.calls[1][0]).toMatchSnapshot();
-      expect(render.mock.calls[1][1]).toEqual(container);
+      expect(firstRender[0]).toMatchSnapshot();
+      expect(firstRender[1]).toEqual(container);
+
+      expect(secondRender[0]).toMatchSnapshot();
+      expect(secondRender[1]).toEqual(container);
     });
   });
 
   describe('cssClasses', () => {
     it('should add the default CSS classes', () => {
-      helper = algoliasearchHelper(client, 'index_name');
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const container = document.createElement('div');
       const widget = clearRefinements({
         container,
       });
 
-      widget.init({
-        helper,
-        createURL,
-        instantSearchInstance: {
-          templatesConfig: {},
-        },
-      });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ helper, state: helper.state }));
 
-      widget.render({ results, helper, state: helper.state, createURL });
-      expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
+      expect(render.mock.calls[0][0].props.cssClasses).toMatchInlineSnapshot(`
+        Object {
+          "button": "ais-ClearRefinements-button",
+          "disabledButton": "ais-ClearRefinements-button--disabled",
+          "root": "ais-ClearRefinements",
+        }
+      `);
     });
 
     it('should allow overriding CSS classes', () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const container = document.createElement('div');
       const widget = clearRefinements({
         container,
         cssClasses: {
@@ -145,16 +117,17 @@ describe('clearRefinements()', () => {
           disabledButton: ['disabled'],
         },
       });
-      widget.init({
-        helper,
-        createURL,
-        instantSearchInstance: {
-          templatesConfig: {},
-        },
-      });
-      widget.render({ results, helper, state: helper.state, createURL });
 
-      expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ helper, state: helper.state }));
+
+      expect(render.mock.calls[0][0].props.cssClasses).toMatchInlineSnapshot(`
+        Object {
+          "button": "ais-ClearRefinements-button myButton myPrimaryButton",
+          "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+          "root": "ais-ClearRefinements myRoot",
+        }
+      `);
     });
   });
 });

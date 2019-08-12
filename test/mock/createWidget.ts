@@ -42,9 +42,11 @@ export const createRenderOptions = (
     results,
     scopedResults: [
       {
-        indexId: instantSearchInstance.helper!.state.index,
+        indexId: args.helper
+          ? args.helper.state.index
+          : instantSearchInstance.helper!.state.index,
         results,
-        helper: instantSearchInstance.helper!,
+        helper: args.helper || instantSearchInstance.helper!,
       },
     ],
     searchMetadata: {

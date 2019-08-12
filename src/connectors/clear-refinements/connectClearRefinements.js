@@ -4,6 +4,8 @@ import {
   getRefinements,
   createDocumentationMessageGenerator,
   noop,
+  uniq,
+  mergeSearchParameters,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -89,49 +91,12 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.clearRefinements',
 
-      init({ helper, instantSearchInstance, createURL }) {
-        const attributesToClear = getAttributesToClear({
-          helper,
-          includedAttributes,
-          excludedAttributes,
-          transformItems,
-        });
-        const hasRefinements = attributesToClear.length > 0;
-
-        this._refine = () => {
-          helper
-            .setState(
-              clearRefinements({
-                helper,
-                attributesToClear: getAttributesToClear({
-                  helper,
-                  includedAttributes,
-                  excludedAttributes,
-                  transformItems,
-                }),
-              })
-            )
-            .search();
-        };
-
-        this._createURL = () =>
-          createURL(
-            clearRefinements({
-              helper,
-              attributesToClear: getAttributesToClear({
-                helper,
-                includedAttributes,
-                excludedAttributes,
-                transformItems,
-              }),
-            })
-          );
-
+      init({ instantSearchInstance }) {
         renderFn(
           {
-            hasRefinements,
-            refine: this._refine,
-            createURL: this._createURL,
+            hasRefinements: false,
+            refine: noop,
+            createURL: noop,
             instantSearchInstance,
             widgetParams,
           },
@@ -139,20 +104,49 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
         );
       },
 
-      render({ helper, instantSearchInstance }) {
-        const attributesToClear = getAttributesToClear({
-          helper,
-          includedAttributes,
-          excludedAttributes,
-          transformItems,
-        });
-        const hasRefinements = attributesToClear.length > 0;
+      render({ scopedResults, createURL, instantSearchInstance }) {
+        const attributesToClear = scopedResults.reduce(
+          (results, scopedResult) => {
+            return results.concat(
+              getAttributesToClear({
+                scopedResult,
+                includedAttributes,
+                excludedAttributes,
+                transformItems,
+              })
+            );
+          },
+          []
+        );
 
         renderFn(
           {
-            hasRefinements,
-            refine: this._refine,
-            createURL: this._createURL,
+            hasRefinements: attributesToClear.some(
+              attributeToClear => attributeToClear.items.length > 0
+            ),
+            refine: () => {
+              attributesToClear.forEach(({ helper: indexHelper, items }) => {
+                indexHelper
+                  .setState(
+                    clearRefinements({
+                      helper: indexHelper,
+                      attributesToClear: items,
+                    })
+                  )
+                  .search();
+              });
+            },
+            createURL: () =>
+              createURL(
+                mergeSearchParameters(
+                  ...attributesToClear.map(({ helper: indexHelper, items }) => {
+                    return clearRefinements({
+                      helper: indexHelper,
+                      attributesToClear: items,
+                    });
+                  })
+                )
+              ),
             instantSearchInstance,
             widgetParams,
           },
@@ -168,7 +162,7 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
 }
 
 function getAttributesToClear({
-  helper,
+  scopedResult,
   includedAttributes,
   excludedAttributes,
   transformItems,
@@ -177,22 +171,31 @@ function getAttributesToClear({
     includedAttributes.indexOf('query') !== -1 ||
     excludedAttributes.indexOf('query') === -1;
 
-  return transformItems(
-    getRefinements(helper.lastResults || {}, helper.state, clearsQuery)
-      .map(refinement => refinement.attribute)
-      .filter(
-        attribute =>
-          // If the array is empty (default case), we keep all the attributes
-          includedAttributes.length === 0 ||
-          // Otherwise, only add the specified attributes
-          includedAttributes.indexOf(attribute) !== -1
+  return {
+    helper: scopedResult.helper,
+    items: transformItems(
+      uniq(
+        getRefinements(
+          scopedResult.results,
+          scopedResult.helper.state,
+          clearsQuery
+        )
+          .map(refinement => refinement.attribute)
+          .filter(
+            attribute =>
+              // If the array is empty (default case), we keep all the attributes
+              includedAttributes.length === 0 ||
+              // Otherwise, only add the specified attributes
+              includedAttributes.indexOf(attribute) !== -1
+          )
+          .filter(
+            attribute =>
+              // If the query is included, we ignore the default `excludedAttributes = ['query']`
+              (attribute === 'query' && clearsQuery) ||
+              // Otherwise, ignore the excluded attributes
+              excludedAttributes.indexOf(attribute) === -1
+          )
       )
-      .filter(
-        attribute =>
-          // If the query is included, we ignore the default `excludedAttributes = ['query']`
-          (attribute === 'query' && clearsQuery) ||
-          // Otherwise, ignore the excluded attributes
-          excludedAttributes.indexOf(attribute) === -1
-      )
-  );
+    ),
+  };
 }
