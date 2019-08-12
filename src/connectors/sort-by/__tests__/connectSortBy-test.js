@@ -373,6 +373,49 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         });
         expect(uiStateAfter).toBe(uiStateBefore);
       });
+
+      test('should use the top-level `indexName` for the initial index', () => {
+        const render = () => {};
+        const makeWidget = connectSortBy(render);
+        const instantSearchInstance = instantSearch({
+          indexName: 'initial_index_name',
+          searchClient: { search() {} },
+        });
+
+        const widget = makeWidget({
+          items: [
+            { label: 'Sort products', value: 'initial_index_name' },
+            { label: 'Sort products by price', value: 'index_name_price' },
+            { label: 'Sort products by magic', value: 'index_name_magic' },
+          ],
+        });
+
+        const helper = jsHelper({}, 'initial_index_name');
+        helper.search = jest.fn();
+
+        // Simulate an URLSync
+        helper.setQueryParameter('index', 'index_name_price');
+
+        widget.init({
+          helper,
+          state: helper.state,
+          createURL: () => '#',
+          onHistoryChange: () => {},
+          instantSearchInstance,
+        });
+
+        const actual = widget.getWidgetState(
+          {},
+          {
+            searchParameters: helper.state,
+            helper,
+          }
+        );
+
+        expect(actual).toEqual({
+          sortBy: 'index_name_price',
+        });
+      });
     });
 
     describe('getWidgetSearchParameters', () => {
