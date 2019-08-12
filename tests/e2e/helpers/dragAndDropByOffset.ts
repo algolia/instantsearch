@@ -44,9 +44,11 @@ browser.addCommand(
     await source.dragAndDrop(target);
 
     // Cleaning
-    await browser.execute(
-      browserTarget => document.body.removeChild(browserTarget),
-      target
-    );
+    await browser.execute(browserTargetId => {
+      const el = document.getElementById(browserTargetId);
+      if (el) {
+        document.body.removeChild(el);
+      }
+    }, targetId);
   }
 );
