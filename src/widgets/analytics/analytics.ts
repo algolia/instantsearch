@@ -73,7 +73,7 @@ function analytics(
   };
 
   const serializeNumericRefinements = function(
-    numericRefinements: QueryParameters['numericRefinements']
+    numericRefinements: SearchParameters['numericRefinements']
   ): string {
     const refinements: string[] = [];
 
