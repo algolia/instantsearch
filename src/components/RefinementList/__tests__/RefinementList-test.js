@@ -224,7 +224,7 @@ describe('RefinementList', () => {
       expect(subList.props().children[2].props.className).toContain('depth-1');
     });
 
-    it('should not add root class for on sub lists', () => {
+    it('should not add root class on sub lists', () => {
       const props = {
         ...defaultProps,
         cssClasses: {
