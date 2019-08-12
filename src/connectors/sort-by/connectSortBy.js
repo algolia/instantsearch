@@ -103,7 +103,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
     return {
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.state.index;
-        const isInitialIndexInItems = find(
+        const isCurrentIndexInItems = find(
           items,
           item => item.value === currentIndex
         );
@@ -124,7 +124,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
         };
 
         warning(
-          isInitialIndexInItems,
+          isCurrentIndexInItems,
           `The index named "${currentIndex}" is not listed in the \`items\` of \`sortBy\`.`
         );
 
