@@ -12,6 +12,6 @@ for example in examples/*; do
     name=$(basename "$example")
     echo "Building $name example..."
 
-    (cd "$example" && yarn && yarn build && rsync -r "dist/" "../../website/examples/$name/")
+    (cd "$example" && yarn && yarn build && cp -r "dist/" "../../website/examples/$name/")
   fi
 done
