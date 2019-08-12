@@ -84,6 +84,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
               separator: ' > ',
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
         })
       );
     });
@@ -108,6 +111,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
               separator: ' / ',
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
         })
       );
     });
@@ -132,6 +138,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
               separator: ' > ',
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
         })
       );
     });
@@ -153,6 +162,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
               rootPath: null,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            category: [],
+          },
         })
       );
 
@@ -166,6 +178,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
               rootPath: null,
             },
           ],
+          hierarchicalFacetsRefinements: { category: [] },
         })
       );
     });
@@ -273,6 +286,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             separator: ' > ',
           },
         ],
+        hierarchicalFacetsRefinements: { category: [] },
       })
     );
 
@@ -553,7 +567,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       createURL: state => state,
     });
     const createURL = rendering.mock.calls[1][0].createURL;
-    expect(helper.state.hierarchicalFacetsRefinements).toEqual({});
+    expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+      category: [],
+    });
     const stateForURL = createURL('Decoration > Candle holders & candles');
     expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
       category: ['Decoration > Candle holders & candles'],
@@ -799,6 +815,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             separator: ' > ',
           },
         ],
+        hierarchicalFacetsRefinements: { category: [] },
       })
     );
   });
@@ -829,6 +846,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             separator: ' > ',
           },
         ],
+        hierarchicalFacetsRefinements: { category: [] },
       })
     );
   });

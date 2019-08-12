@@ -94,6 +94,12 @@ export default function connectBreadcrumb(renderFn, unmountFn = noop) {
               rootPath,
             },
           ],
+          hierarchicalFacetsRefinements: {
+            [hierarchicalFacetName]:
+              currentConfiguration.hierarchicalFacetsRefinements[
+                hierarchicalFacetName
+              ] || [],
+          },
         });
       },
 
