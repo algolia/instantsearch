@@ -57,8 +57,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       // flag set accordingly
       const rendering = jest.fn();
       const customCurrentRefinements = connectCurrentRefinements(rendering);
-      const widgetParams = {};
-      const widget = customCurrentRefinements(widgetParams);
+      const widget = customCurrentRefinements({
+        includedAttributes: ['query'],
+      });
 
       expect(widget.getConfiguration).toBe(undefined);
       // test if widget is not rendered yet at this point
@@ -80,7 +81,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       expect(firstRenderingOptions.items).toEqual([]);
       expect(firstRenderingOptions.refine).toBeInstanceOf(Function);
       expect(firstRenderingOptions.createURL).toBeInstanceOf(Function);
-      expect(firstRenderingOptions.widgetParams).toBe(widgetParams);
+      expect(firstRenderingOptions.widgetParams).toEqual({
+        includedAttributes: ['query'],
+      });
 
       widget.render!(
         createRenderOptions({
@@ -102,7 +105,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       expect(secondRenderingOptions.items).toEqual([]);
       expect(secondRenderingOptions.refine).toBeInstanceOf(Function);
       expect(secondRenderingOptions.createURL).toBeInstanceOf(Function);
-      expect(secondRenderingOptions.widgetParams).toBe(widgetParams);
+      expect(secondRenderingOptions.widgetParams).toEqual({
+        includedAttributes: ['query'],
+      });
     });
 
     it('does not throw without the unmount function', () => {
