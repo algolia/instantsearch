@@ -93,7 +93,6 @@ search.addWidgets([
     );
 
     type ConnectorState = {
-      instantSearchInstance?: InstantSearch;
       refine?: (query: string) => void;
     };
 
@@ -118,7 +117,6 @@ search.addWidgets([
       },
 
       init({ instantSearchInstance, helper }) {
-        connectorState.instantSearchInstance = instantSearchInstance;
         connectorState.refine = (query: string) => {
           helper.setQuery(query).search();
         };
@@ -129,13 +127,13 @@ search.addWidgets([
             currentRefinement: helper.state.query || '',
             indices: [],
             refine: connectorState.refine,
-            instantSearchInstance: connectorState.instantSearchInstance,
+            instantSearchInstance,
           },
           true
         );
       },
 
-      render({ helper, scopedResults }) {
+      render({ helper, scopedResults, instantSearchInstance }) {
         const indices = scopedResults.map(scopedResult => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -156,10 +154,38 @@ search.addWidgets([
             currentRefinement: helper.state.query || '',
             indices,
             refine: connectorState.refine!,
-            instantSearchInstance: connectorState.instantSearchInstance!,
+            instantSearchInstance,
           },
           false
         );
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const query = searchParameters.query || '';
+
+        if (query === '' || (uiState && uiState.query === query)) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          query,
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const parameters = {
+          query: uiState.query || '',
+        };
+
+        if (!escapeHTML) {
+          return searchParameters.setQueryParameters(parameters);
+        }
+
+        return searchParameters.setQueryParameters({
+          ...parameters,
+          ...TAG_PLACEHOLDER,
+        });
       },
 
       dispose({ state }) {
