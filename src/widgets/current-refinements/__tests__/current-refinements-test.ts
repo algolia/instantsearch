@@ -140,16 +140,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       const renderParameters = {
         results: new SearchResults(helper.state, [
-          // @ts-ignore wrong types for `facets`
           createSingleSearchResponse({
-            facets: [
-              {
-                name: 'facet',
-                data: {
-                  'facet-val1': 1,
-                },
+            facets: {
+              facet: {
+                'facet-val1': 1,
               },
-            ],
+            },
           }),
         ]),
         helper,
@@ -248,35 +244,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           createRenderOptions({
             results: new SearchResults(helper.state, [
               createSingleSearchResponse({
-                facets: [
-                  {
-                    name: 'facet',
-                    exhaustive: true,
-                    data: {
-                      'facet-val1': 1,
-                      'facet-val2': 2,
-                    },
+                facets: {
+                  facet: {
+                    'facet-val1': 1,
+                    'facet-val2': 2,
                   },
-                  {
-                    name: 'extraFacet',
-                    exhaustive: true,
-                    data: {
-                      'extraFacet-val1': 42,
-                      'extraFacet-val2': 42,
-                    },
+                  extraFacet: {
+                    'extraFacet-val1': 42,
+                    'extraFacet-val2': 42,
                   },
-                ],
-                // @ts-ignore wrong types for `disjunctiveFacets`
-                disjunctiveFacets: [
-                  {
-                    name: 'disjunctiveFacet',
-                    exhaustive: true,
-                    data: {
-                      'disjunctiveFacet-val1': 3,
-                      'disjunctiveFacet-val2': 4,
-                    },
+                  disjunctiveFacet: {
+                    'disjunctiveFacet-val1': 3,
+                    'disjunctiveFacet-val2': 4,
                   },
-                ],
+                },
               }),
             ]),
             helper,
@@ -391,35 +372,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           createRenderOptions({
             results: new SearchResults(helper.state, [
               createSingleSearchResponse({
-                facets: [
-                  {
-                    name: 'facet',
-                    exhaustive: true,
-                    data: {
-                      'facet-val1': 1,
-                      'facet-val2': 2,
-                    },
+                facets: {
+                  facet: {
+                    'facet-val1': 1,
+                    'facet-val2': 2,
                   },
-                  {
-                    name: 'extraFacet',
-                    exhaustive: true,
-                    data: {
-                      'extraFacet-val1': 42,
-                      'extraFacet-val2': 42,
-                    },
+                  extraFacet: {
+                    'extraFacet-val1': 42,
+                    'extraFacet-val2': 42,
                   },
-                ],
-                // @ts-ignore wrong types for `disjunctiveFacets`
-                disjunctiveFacets: [
-                  {
-                    name: 'disjunctiveFacet',
-                    exhaustive: true,
-                    data: {
-                      'disjunctiveFacet-val1': 3,
-                      'disjunctiveFacet-val2': 4,
-                    },
+                  disjunctiveFacet: {
+                    'disjunctiveFacet-val1': 3,
+                    'disjunctiveFacet-val2': 4,
                   },
-                ],
+                },
               }),
             ]),
             helper,
@@ -513,6 +479,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           .addFacetRefinement('facet', 'facet-val1')
           .addFacetRefinement('facet', 'facet-val2')
           .addFacetRefinement('extraFacet', 'extraFacet-val1')
+          .addFacetRefinement('extraFacet', 'extraFacet-val2')
           .addFacetExclusion('facetExclude', 'facetExclude-val1')
           .addFacetExclusion('facetExclude', 'facetExclude-val2')
           .addDisjunctiveFacetRefinement(
@@ -539,65 +506,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
             helper,
           })
         );
+
         widget.render!(
           createRenderOptions({
             results: new SearchResults(helper.state, [
               createSingleSearchResponse({
-                facets: [
-                  {
-                    name: 'facet',
-                    exhaustive: true,
-                    data: {
-                      'facet-val1': 1,
-                      'facet-val2': 2,
-                      'facet-val3': 42,
-                    },
+                facets: {
+                  facet: {
+                    'facet-val1': 100,
+                    'facet-val2': 200,
                   },
-                  {
-                    name: 'extraFacet',
-                    exhaustive: true,
-                    data: {
-                      'extraFacet-val1': 42,
-                      'extraFacet-val2': 42,
-                    },
+                  extraFacet: {
+                    'extraFacet-val1': 100,
+                    'extraFacet-val2': 200,
                   },
-                ],
-                // @ts-ignore wrong types for `disjunctiveFacets`
-                disjunctiveFacets: [
-                  {
-                    name: 'disjunctiveFacet',
-                    exhaustive: true,
-                    data: {
-                      'disjunctiveFacet-val1': 3,
-                      'disjunctiveFacet-val2': 4,
-                      'disjunctiveFacet-val3': 42,
-                    },
+                  facetExclude: {
+                    'facetExclude-val1': 300,
+                    'facetExclude-val2': 400,
                   },
-                ],
-                hierarchicalFacets: [
-                  {
-                    name: 'hierarchicalFacet',
-                    data: [
-                      {
-                        name: 'hierarchicalFacet-val1',
-                        count: 5,
-                        exhaustive: true,
-                        data: [
-                          {
-                            name: 'hierarchicalFacet-val2',
-                            count: 6,
-                            exhaustive: true,
-                          },
-                        ],
-                      },
-                      {
-                        name: 'hierarchicalFacet-val2',
-                        count: 42,
-                        exhaustive: true,
-                      },
-                    ],
+                  disjunctiveFacet: {
+                    'disjunctiveFacet-val1': 300,
+                    'disjunctiveFacet-val2': 400,
                   },
-                ],
+                  hierarchicalFacet: {
+                    'hierarchicalFacet-val1': 500,
+                    'hierarchicalFacet-val2': 500,
+                    'hierarchicalFacet-val1 > hierarchicalFacet-val2': 500,
+                  },
+                },
               }),
             ]),
             helper,

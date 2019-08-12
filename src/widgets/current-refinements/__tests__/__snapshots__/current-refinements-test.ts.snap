@@ -22,12 +22,16 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "facet",
+            "count": 100,
+            "exhaustive": true,
             "label": "facet-val1",
             "type": "facet",
             "value": "facet-val1",
           },
           Object {
             "attribute": "facet",
+            "count": 200,
+            "exhaustive": true,
             "label": "facet-val2",
             "type": "facet",
             "value": "facet-val2",
@@ -41,9 +45,19 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "extraFacet",
+            "count": 100,
+            "exhaustive": true,
             "label": "extraFacet-val1",
             "type": "facet",
             "value": "extraFacet-val1",
+          },
+          Object {
+            "attribute": "extraFacet",
+            "count": 200,
+            "exhaustive": true,
+            "label": "extraFacet-val2",
+            "type": "facet",
+            "value": "extraFacet-val2",
           },
         ],
       },
@@ -73,12 +87,16 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
         "refinements": Array [
           Object {
             "attribute": "disjunctiveFacet",
+            "count": 300,
+            "exhaustive": true,
             "label": "disjunctiveFacet-val1",
             "type": "disjunctive",
             "value": "disjunctiveFacet-val1",
           },
           Object {
             "attribute": "disjunctiveFacet",
+            "count": 400,
+            "exhaustive": true,
             "label": "disjunctiveFacet-val2",
             "type": "disjunctive",
             "value": "disjunctiveFacet-val2",
@@ -222,6 +240,8 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
         "refinements": Array [
           Object {
             "attribute": "facet",
+            "count": 1,
+            "exhaustive": true,
             "label": "facet-val1",
             "type": "facet",
             "value": "facet-val1",
@@ -255,6 +275,8 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
         "refinements": Array [
           Object {
             "attribute": "facet",
+            "count": 1,
+            "exhaustive": true,
             "label": "facet-val1",
             "type": "facet",
             "value": "facet-val1",
