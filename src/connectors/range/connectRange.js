@@ -218,7 +218,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
           }
         }
 
-        return configuration;
+        return currentConfiguration.setQueryParameters(configuration);
       },
 
       init({ helper, instantSearchInstance }) {
