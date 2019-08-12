@@ -37,6 +37,7 @@ interface ConnectorNumericRefinement extends ConnectorRefinement {
 }
 
 export type Item = {
+  indexName: string;
   attribute: string;
   label: string;
   refinements: ItemRefinement[];
@@ -230,6 +231,7 @@ function getItems({
         (item: Item) => item.attribute !== currentItem.attribute
       ),
       {
+        indexName: helper.state.index,
         attribute: currentItem.attribute,
         label: currentItem.attribute,
         refinements: items
