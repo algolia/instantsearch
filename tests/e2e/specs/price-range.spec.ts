@@ -19,14 +19,12 @@ describe('InstantSearch - Search on specific price range', () => {
 
     await browser.dragAndDropByOffset(lowerHandle, 54);
 
+    // There is a difference between steps in browsers so we cannot assert on a strict value
     const tooltip = await browser.$(
-      '.ais-RangeSlider .rheostat-handle-lower .rheostat-tooltip'
+      '//*[contains(@class, "rheostat-tooltip") and normalize-space() = "971"]|//*[contains(@class, "rheostat-tooltip") and normalize-space() = "981"]'
     );
-    lowerBound = Number((await tooltip.getText()).replace(',', ''));
 
-    // There is a difference between steps in browsers so we cannot assert on a strict `lowerBound` value
-    expect(lowerBound >= 971).toBe(true);
-    expect(lowerBound <= 981).toBe(true);
+    lowerBound = Number((await tooltip.getText()).replace(',', ''));
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be > lowerBound)`, async () => {
@@ -47,14 +45,12 @@ describe('InstantSearch - Search on specific price range', () => {
 
     await browser.dragAndDropByOffset(upperHandle, -146);
 
+    // There is a difference between steps in browsers so we cannot assert on a strict value
     const tooltip = await browser.$(
-      '.ais-RangeSlider .rheostat-handle-upper .rheostat-tooltip'
+      '//*[contains(@class, "rheostat-tooltip") and normalize-space() = "1,971"]|//*[contains(@class, "rheostat-tooltip") and normalize-space() = "1,981"]'
     );
-    upperBound = Number((await tooltip.getText()).replace(',', ''));
 
-    // There is a difference between steps in browsers so we cannot assert on a strict `upperBound` value
-    expect(upperBound >= 1971).toBe(true);
-    expect(upperBound <= 1981).toBe(true);
+    upperBound = Number((await tooltip.getText()).replace(',', ''));
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be < upperBound)`, async () => {
