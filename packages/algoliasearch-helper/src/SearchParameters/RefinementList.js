@@ -99,9 +99,6 @@ var lib = {
       }
       return {};
     } else if (typeof attribute === 'string') {
-      if (!(refinementList[attribute] && refinementList[attribute].length > 0)) {
-        return refinementList;
-      }
       return omit(refinementList, attribute);
     } else if (typeof attribute === 'function') {
       var hasChanged = false;

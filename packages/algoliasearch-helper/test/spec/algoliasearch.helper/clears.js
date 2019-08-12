@@ -226,10 +226,10 @@ test('Clearing with no effect should not update the state, if used with an unkno
   // This operation should not update the reference to the state
   helper.clearRefinements('unknown');
 
-  expect(helper.state.numericRefinements).toBe(initialState.numericRefinements);
-  expect(helper.state.facetsRefinements).toBe(initialState.facetsRefinements);
-  expect(helper.state.disjunctiveFacetsRefinements).toBe(initialState.disjunctiveFacetsRefinements);
-  expect(helper.state.hierarchicalFacetsRefinements).toBe(initialState.hierarchicalFacetsRefinements);
+  expect(helper.state.numericRefinements).toEqual(initialState.numericRefinements);
+  expect(helper.state.facetsRefinements).toEqual(initialState.facetsRefinements);
+  expect(helper.state.disjunctiveFacetsRefinements).toEqual(initialState.disjunctiveFacetsRefinements);
+  expect(helper.state.hierarchicalFacetsRefinements).toEqual(initialState.hierarchicalFacetsRefinements);
 
-  expect(helper.state).toBe(initialState);
+  expect(helper.state).toEqual(initialState);
 });
