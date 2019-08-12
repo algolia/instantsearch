@@ -12,6 +12,32 @@ describe('connectRefinementList', () => {
     return { rendering, makeWidget };
   };
 
+  // @TODO: once we've migrate away from `getConfiguration` update
+  // the function and use it at least for the lifecycle.
+  // const getInitializedWidget = (config = {}) => {
+  //   const rendering = jest.fn();
+  //   const makeWidget = connectRefinementList(rendering);
+
+  //   const widget = makeWidget({
+  //     attribute: 'facetAttribute',
+  //     ...config,
+  //   });
+
+  //   const initialConfig = widget.getConfiguration(new SearchParameters({}));
+  //   const helper = jsHelper({}, '', initialConfig);
+  //   helper.search = jest.fn();
+
+  //   widget.init({
+  //     helper,
+  //     state: helper.state,
+  //     createURL: () => '#',
+  //   });
+
+  //   const { refine } = rendering.mock.calls[0][0];
+
+  //   return [widget, helper, refine];
+  // };
+
   it('throws on bad usage', () => {
     expect(connectRefinementList).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (got type \\"undefined\\").
@@ -1776,141 +1802,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 
-  describe('routing', () => {
-    const getInitializedWidget = (config = {}) => {
-      const rendering = jest.fn();
-      const makeWidget = connectRefinementList(rendering);
-
-      const widget = makeWidget({
-        attribute: 'facetAttribute',
-        ...config,
-      });
-
-      const initialConfig = widget.getConfiguration(new SearchParameters({}));
-      const helper = jsHelper({}, '', initialConfig);
-      helper.search = jest.fn();
-
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
-
-      const { refine } = rendering.mock.calls[0][0];
-
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if the default value is selected', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('value');
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should not override other values in the same namespace', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('value');
-        const uiStateBefore = {
-          refinementList: {
-            otherFacetAttribute: ['val'],
-          },
-        };
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should return the same instance if the value is already in the UI state', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine('value');
-        const uiStateBefore = widget.getWidgetState(
-          {},
-          {
-            searchParameters: helper.state,
-            helper,
-          }
-        );
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-    });
-
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if no value is in the UI state', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), the url is empty
-        const uiState = {};
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying nothing on an empty search should return the same object
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-
-      test('should add the refinements according to the UI state provided (operator "or")', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), the URL contains a diskunctive refinement
-        const uiState = {
-          refinementList: {
-            facetAttribute: ['value or'],
-          },
-        };
-        // The current search is emtpy
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the refinement should yield a new state with a disjunctive refinement
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-
-      test('should add the refinements according to the UI state provided (operator "and")', () => {
-        const [widget, helper] = getInitializedWidget({
-          operator: 'and',
-        });
-        // The user presses back (browser), and there is one value
-        const uiState = {
-          refinementList: {
-            facetAttribute: ['value and'],
-          },
-        };
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the refinement should yield a new state with a conjunctive refinement
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-    });
-  });
-
   describe('dispose', () => {
     it('removes refinements completely on dispose (and)', () => {
       const rendering = jest.fn();
@@ -2078,6 +1969,401 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           index: indexName,
         })
       );
+    });
+  });
+
+  describe('getWidgetState', () => {
+    test('returns the `uiState` empty', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectRefinementList(render);
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({});
+    });
+
+    test('returns the `uiState` with a refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectRefinementList(render);
+      const helper = jsHelper({}, '', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        refinementList: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+    });
+
+    test('returns the `uiState` without namespace overridden', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectRefinementList(render);
+      const helper = jsHelper({}, '', {
+        disjunctiveFacets: ['brand'],
+        disjunctiveFacetsRefinements: {
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetState(
+        {
+          refinementList: {
+            categories: ['Phone', 'Tablet'],
+          },
+        },
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        refinementList: {
+          categories: ['Phone', 'Tablet'],
+          brand: ['Apple', 'Microsoft'],
+        },
+      });
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    describe('with `maxValuesPerFacet`', () => {
+      test('returns the `SearchParameters` with default `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(10);
+      });
+
+      test('returns the `SearchParameters` with provided `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          limit: 5,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(5);
+      });
+
+      test('returns the `SearchParameters` with default `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          showMore: true,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(20);
+      });
+
+      test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          showMore: true,
+          showMoreLimit: 15,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(15);
+      });
+
+      test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(100);
+      });
+
+      test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+          limit: 110,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(110);
+      });
+    });
+
+    describe('with conjunctive facet', () => {
+      test('returns the `SearchParameters` with the default value', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          operator: 'and',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.facets).toEqual(['brand']);
+        expect(actual.facetsRefinements).toEqual({
+          brand: [],
+        });
+      });
+
+      test('returns the `SearchParameters` with the default value without the previous refinement', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '', {
+          facets: ['brand'],
+          facetsRefinements: {
+            brand: ['Apple', 'Samsung'],
+          },
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+          operator: 'and',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.facets).toEqual(['brand']);
+        expect(actual.facetsRefinements).toEqual({
+          brand: [],
+        });
+      });
+
+      test('returns the `SearchParameters` with the value from `uiState`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          operator: 'and',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {
+            refinementList: {
+              brand: ['Apple', 'Samsung'],
+            },
+          },
+        });
+
+        expect(actual.facets).toEqual(['brand']);
+        expect(actual.facetsRefinements).toEqual({
+          brand: ['Apple', 'Samsung'],
+        });
+      });
+
+      test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '', {
+          facets: ['brand'],
+          facetsRefinements: {
+            brand: ['Microsoft'],
+          },
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+          operator: 'and',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {
+            refinementList: {
+              brand: ['Apple', 'Samsung'],
+            },
+          },
+        });
+
+        expect(actual.facets).toEqual(['brand']);
+        expect(actual.facetsRefinements).toEqual({
+          brand: ['Apple', 'Samsung'],
+        });
+      });
+    });
+
+    describe('with disjunctive facet', () => {
+      test('returns the `SearchParameters` with the default value', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.disjunctiveFacets).toEqual(['brand']);
+        expect(actual.disjunctiveFacetsRefinements).toEqual({
+          brand: [],
+        });
+      });
+
+      test('returns the `SearchParameters` with the default value without the previous refinement', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '', {
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Apple', 'Samsung'],
+          },
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.disjunctiveFacets).toEqual(['brand']);
+        expect(actual.disjunctiveFacetsRefinements).toEqual({
+          brand: [],
+        });
+      });
+
+      test('returns the `SearchParameters` with the value from `uiState`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {
+            refinementList: {
+              brand: ['Apple', 'Samsung'],
+            },
+          },
+        });
+
+        expect(actual.disjunctiveFacets).toEqual(['brand']);
+        expect(actual.disjunctiveFacetsRefinements).toEqual({
+          brand: ['Apple', 'Samsung'],
+        });
+      });
+
+      test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectRefinementList(render);
+        const helper = jsHelper({}, '', {
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Microsoft'],
+          },
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {
+            refinementList: {
+              brand: ['Apple', 'Samsung'],
+            },
+          },
+        });
+
+        expect(actual.disjunctiveFacets).toEqual(['brand']);
+        expect(actual.disjunctiveFacetsRefinements).toEqual({
+          brand: ['Apple', 'Samsung'],
+        });
+      });
     });
   });
 });

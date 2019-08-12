@@ -418,7 +418,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         searchParameters: helper.state,
         helper,
       });
-      expect(uiStateAfter).toMatchSnapshot();
+      expect(uiStateAfter).toEqual({
+        query: 'some query',
+      });
     });
 
     test('should give back the same instance if the value is alreay in the uiState', () => {

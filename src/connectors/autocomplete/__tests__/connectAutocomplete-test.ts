@@ -11,8 +11,34 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
+import { Client } from 'algoliasearch/lite';
 
 describe('connectAutocomplete', () => {
+  const getInitializedWidget = (config = {}) => {
+    const renderFn = jest.fn();
+    const makeWidget = connectAutocomplete(renderFn);
+    const widget = makeWidget({
+      ...config,
+    });
+
+    const initialConfig = {};
+    const helper = algoliasearchHelper({} as Client, '', initialConfig);
+    helper.search = jest.fn();
+
+    widget.init!({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      instantSearchInstance: undefined as any,
+      parent: undefined as any,
+      templatesConfig: undefined as any,
+    });
+
+    const { refine } = renderFn.mock.calls[0][0];
+
+    return [widget, helper, refine];
+  };
+
   it('throws without render function', () => {
     expect(() => {
       // @ts-ignore
@@ -446,6 +472,96 @@ search.addWidgets([
 
       expect(nextState.highlightPreTag).toBe('<mark>');
       expect(nextState.highlightPostTag).toBe('</mark>');
+    });
+  });
+
+  describe('getWidgetState', () => {
+    test('should give back the object unmodified if the default value is selected', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+
+    test('should add an entry equal to the refinement', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('some query');
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toEqual({
+        query: 'some query',
+      });
+    });
+
+    test('should give back the same instance if the value is alreay in the uiState', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+      refine('query');
+      const uiStateBefore = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
+      );
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          query: 'Apple',
+        },
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: 'Apple',
+          ...TAG_PLACEHOLDER,
+        })
+      );
+    });
+
+    test('returns the `SearchParameters` with the default value', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
+      );
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: '',
+          ...TAG_PLACEHOLDER,
+        })
+      );
     });
   });
 });
