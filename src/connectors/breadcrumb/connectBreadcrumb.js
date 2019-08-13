@@ -81,11 +81,11 @@ export default function connectBreadcrumb(renderFn, unmountFn = noop) {
               'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
             );
 
-            return {};
+            return currentConfiguration;
           }
         }
 
-        return {
+        return currentConfiguration.setQueryParameters({
           hierarchicalFacets: [
             {
               attributes,
@@ -94,7 +94,13 @@ export default function connectBreadcrumb(renderFn, unmountFn = noop) {
               rootPath,
             },
           ],
-        };
+          hierarchicalFacetsRefinements: {
+            [hierarchicalFacetName]:
+              currentConfiguration.hierarchicalFacetsRefinements[
+                hierarchicalFacetName
+              ] || [],
+          },
+        });
       },
 
       init({ createURL, helper, instantSearchInstance }) {
