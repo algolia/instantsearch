@@ -82,7 +82,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'myFacet',
       });
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(widget.getConfiguration(new SearchParameters())).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -90,6 +90,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
               attributes: ['myFacet'],
             },
           ],
+          hierarchicalFacetsRefinements: {
+            myFacet: [],
+          },
           maxValuesPerFacet: 10,
         })
       );
@@ -101,7 +104,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         limit: 20,
       });
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(widget.getConfiguration(new SearchParameters())).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -109,6 +112,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
               attributes: ['myFacet'],
             },
           ],
+          hierarchicalFacetsRefinements: {
+            myFacet: [],
+          },
           maxValuesPerFacet: 20,
         })
       );
@@ -123,7 +129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       limit: 9,
     });
 
-    const config = widget.getConfiguration(new SearchParameters({}));
+    const config = widget.getConfiguration(new SearchParameters());
     expect(config).toEqual(
       new SearchParameters({
         hierarchicalFacets: [
@@ -132,6 +138,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
             attributes: ['myFacet'],
           },
         ],
+        hierarchicalFacetsRefinements: {
+          myFacet: [],
+        },
         maxValuesPerFacet: 9,
       })
     );
@@ -191,7 +200,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getConfiguration(new SearchParameters())
     );
     helper.search = jest.fn();
 
@@ -233,7 +242,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getConfiguration(new SearchParameters())
     );
     helper.search = jest.fn();
 
@@ -352,7 +361,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getConfiguration(new SearchParameters())
     );
     helper.search = jest.fn();
 
@@ -411,7 +420,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getConfiguration(new SearchParameters())
     );
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
@@ -424,7 +433,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         showMore: true,
       });
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(widget.getConfiguration(new SearchParameters())).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -432,6 +441,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
               attributes: ['myFacet'],
             },
           ],
+          hierarchicalFacetsRefinements: {
+            myFacet: [],
+          },
           maxValuesPerFacet: 20,
         })
       );
@@ -445,7 +457,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         showMoreLimit: 30,
       });
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(widget.getConfiguration(new SearchParameters())).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -453,6 +465,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
               attributes: ['myFacet'],
             },
           ],
+          hierarchicalFacetsRefinements: {
+            myFacet: [],
+          },
           maxValuesPerFacet: 30,
         })
       );
@@ -468,7 +483,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration(new SearchParameters({}));
+      const config = widget.getConfiguration(new SearchParameters());
       const helper = jsHelper({}, '', config);
       helper.search = jest.fn();
 
@@ -496,7 +511,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration(new SearchParameters({}));
+      const config = widget.getConfiguration(new SearchParameters());
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
@@ -560,7 +575,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration(new SearchParameters({}));
+      const config = widget.getConfiguration(new SearchParameters());
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
@@ -613,7 +628,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         {},
         '',
-        widget.getConfiguration(new SearchParameters({}))
+        widget.getConfiguration(new SearchParameters())
       );
       helper.search = jest.fn();
 
@@ -756,7 +771,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         {},
         indexName,
-        widget.getConfiguration(new SearchParameters({}))
+        widget.getConfiguration(new SearchParameters())
       );
       helper.search = jest.fn();
 
@@ -768,6 +783,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
               name: 'myFacet',
             },
           ],
+          hierarchicalFacetsRefinements: {
+            myFacet: [],
+          },
           maxValuesPerFacet: 20,
           index: indexName,
         })
@@ -832,8 +850,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       );
     });
 
+    it('removes unrefined state', () => {
+      const widget = makeWidget({
+        attribute: 'myFacet',
+        limit: 10,
+        showMore: true,
+      });
+      const indexName = 'instant_search';
+
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters())
+      );
+      helper.search = jest.fn();
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              attributes: ['myFacet'],
+              name: 'myFacet',
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            myFacet: [],
+          },
+          maxValuesPerFacet: 20,
+          index: indexName,
+        })
+      );
+
+      const newState = widget.dispose({ state: helper.state });
+
+      expect(newState).toEqual(
+        new SearchParameters({
+          index: indexName,
+        })
+      );
+    });
+
     it('leaves empty state intact', () => {
-      const state = new SearchParameters({});
+      const state = new SearchParameters();
       const widget = makeWidget({
         attribute: 'myFacet',
         limit: 10,
@@ -841,7 +899,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
       const newState = widget.dispose({ state });
 
-      expect(newState).toEqual(new SearchParameters({}));
+      expect(newState).toEqual(new SearchParameters());
     });
   });
 });

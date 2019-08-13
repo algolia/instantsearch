@@ -156,6 +156,10 @@ export default function connectMenu(renderFn, unmountFn = noop) {
               attributes: [attribute],
             },
           ],
+          hierarchicalFacetsRefinements: {
+            [attribute]:
+              configuration.hierarchicalFacetsRefinements[attribute] || [],
+          },
         };
 
         const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
