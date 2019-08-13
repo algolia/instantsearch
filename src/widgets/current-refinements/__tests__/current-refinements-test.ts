@@ -1,8 +1,5 @@
 import { render } from 'preact-compat';
-import algoliasearchHelper, {
-  AlgoliaSearchHelper,
-  SearchResults,
-} from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
@@ -21,7 +18,7 @@ jest.mock('preact-compat', () => {
 
 describe('currentRefinements()', () => {
   beforeEach(() => {
-    document.body.innerHTML = '';
+    render.mockClear();
   });
 
   describe('usage', () => {
@@ -106,31 +103,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
   });
 
   describe('render()', () => {
-    let helper: AlgoliaSearchHelper;
-
-    beforeEach(() => {
-      helper = algoliasearchHelper(createSearchClient(), 'index_name', {
-        facets: ['facet', 'facetExclude', 'numericFacet', 'extraFacet'],
-        disjunctiveFacets: ['disjunctiveFacet', 'numericDisjunctiveFacet'],
-        hierarchicalFacets: [
-          {
-            name: 'hierarchicalFacet',
-            attributes: ['hierarchicalFacet-val1', 'hierarchicalFacet-val2'],
-            separator: ' > ',
-          },
-        ],
-      });
-
-      render.mockClear();
-    });
-
     it('should render twice <CurrentRefinements ... />', () => {
+      const helper = algoliasearchHelper(createSearchClient(), 'index_name', {
+        facets: ['facet'],
+        facetsRefinements: {
+          facet: ['facet-val1'],
+        },
+      });
       const container = document.createElement('div');
       const widget = currentRefinements({
         container,
       });
-
-      helper.addFacetRefinement('facet', 'facet-val1');
 
       widget.init!(
         createInitOptions({
@@ -163,33 +146,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     describe('options.container', () => {
-      it('should render with a string container', () => {
-        const container = document.createElement('div');
-        container.id = 'container';
-        document.body.appendChild(container);
-
-        const widget = currentRefinements({
-          container: '#container',
-        });
-
-        widget.init!(
-          createInitOptions({
-            helper,
-          })
-        );
-        widget.render!(
-          createRenderOptions({
-            helper,
-            state: helper.state,
-          })
-        );
-
-        expect(render).toHaveBeenCalledTimes(1);
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
-        expect(render.mock.calls[0][1]).toBe(container);
-      });
-
       it('should render with a HTMLElement container', () => {
+        const helper = algoliasearchHelper(createSearchClient(), 'index_name');
         const container = document.createElement('div');
         const widget = currentRefinements({
           container,
@@ -215,25 +173,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
     describe('options.includedAttributes', () => {
       it('should only include the specified attributes', () => {
+        const helper = algoliasearchHelper(createSearchClient(), 'index_name', {
+          facets: ['facet', 'extraFacet'],
+          disjunctiveFacets: ['disjunctiveFacet'],
+          facetsRefinements: {
+            facet: ['facet-val1', 'facet-val2'],
+            extraFacet: ['extraFacet-val1', 'extraFacet-val2'],
+          },
+          disjunctiveFacetsRefinements: {
+            disjunctiveFacet: [
+              'disjunctiveFacet-val1',
+              'disjunctiveFacet-val2',
+            ],
+          },
+        });
         const widget = currentRefinements({
           container: document.createElement('div'),
           includedAttributes: ['disjunctiveFacet'],
         });
-
-        helper
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val1'
-          )
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val2'
-          )
-          // Add some unused refinements to make sure they're ignored
-          .addFacetRefinement('facet', 'facet-val1')
-          .addFacetRefinement('facet', 'facet-val2')
-          .addFacetRefinement('extraFacet', 'extraFacet-val1')
-          .addFacetRefinement('extraFacet', 'extraFacet-val2');
 
         widget.init!(
           createInitOptions({
@@ -273,23 +230,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         expect(item.refinements).toHaveLength(2);
       });
 
-      it('should ignore all attributes when empty array', () => {
+      it('should ignore all attributes when empty refinements', () => {
+        const helper = algoliasearchHelper(createSearchClient(), 'index_name', {
+          facets: ['facet', 'extraFacet'],
+          disjunctiveFacets: ['disjunctiveFacet'],
+          facetsRefinements: {
+            facet: [],
+            extraFacet: ['extraFacet-val1', 'extraFacet-val2'],
+          },
+          disjunctiveFacetsRefinements: {
+            disjunctiveFacet: [
+              'disjunctiveFacet-val1',
+              'disjunctiveFacet-val2',
+            ],
+          },
+        });
         const widget = currentRefinements({
           container: document.createElement('div'),
           includedAttributes: [],
         });
-
-        helper
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val1'
-          )
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val2'
-          )
-          .addFacetRefinement('extraFacet', 'extraFacet-val1')
-          .addFacetRefinement('extraFacet', 'extraFacet-val2');
 
         widget.init!(
           createInitOptions({
@@ -300,27 +259,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           createRenderOptions({
             results: new SearchResults(helper.state, [
               createSingleSearchResponse({
-                facets: [
-                  {
-                    name: 'extraFacet',
-                    exhaustive: true,
-                    data: {
-                      'extraFacet-val1': 42,
-                      'extraFacet-val2': 42,
-                    },
+                facets: {
+                  extraFacet: {
+                    'extraFacet-val1': 42,
+                    'extraFacet-val2': 42,
                   },
-                ],
-                // @ts-ignore wrong types for `disjunctiveFacets`
-                disjunctiveFacets: [
-                  {
-                    name: 'disjunctiveFacet',
-                    exhaustive: true,
-                    data: {
-                      'disjunctiveFacet-val1': 3,
-                      'disjunctiveFacet-val2': 4,
-                    },
+                  disjunctiveFacet: {
+                    'disjunctiveFacet-val1': 3,
+                    'disjunctiveFacet-val2': 4,
                   },
-                ],
+                },
               }),
             ]),
             helper,
@@ -337,6 +285,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
     describe('options.transformItems', () => {
       it('should transform passed items', () => {
+        const helper = algoliasearchHelper(createSearchClient(), 'index_name', {
+          facets: ['facet', 'extraFacet'],
+          disjunctiveFacets: ['disjunctiveFacet'],
+          facetsRefinements: {
+            facet: ['facet-val1', 'facet-val2'],
+            extraFacet: ['extraFacet-val1', 'extraFacet-val2'],
+          },
+          disjunctiveFacetsRefinements: {
+            disjunctiveFacet: [
+              'disjunctiveFacet-val1',
+              'disjunctiveFacet-val2',
+            ],
+          },
+        });
         const widget = currentRefinements({
           container: document.createElement('div'),
           transformItems: items =>
@@ -348,20 +310,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
               })),
             })),
         });
-
-        helper
-          .addFacetRefinement('facet', 'facet-val1')
-          .addFacetRefinement('facet', 'facet-val2')
-          .addFacetRefinement('extraFacet', 'facet-val1')
-          .addFacetRefinement('extraFacet', 'facet-val2')
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val1'
-          )
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val2'
-          );
 
         widget.init!(
           createInitOptions({
@@ -406,6 +354,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
     describe('options.cssClasses', () => {
       it('should be passed in the cssClasses', () => {
+        const helper = algoliasearchHelper(createSearchClient(), 'index_name');
         const widget = currentRefinements({
           container: document.createElement('div'),
           cssClasses: {
@@ -431,6 +380,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       });
 
       it('should work with an array', () => {
+        const helper = algoliasearchHelper(createSearchClient(), 'index_name');
         const widget = currentRefinements({
           container: document.createElement('div'),
           cssClasses: {
@@ -504,32 +454,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
             delete: 'delete',
           },
         });
-
-        // helper
-        //   .addFacetRefinement('facet', 'facet-val1')
-        //   .addFacetRefinement('facet', 'facet-val2')
-        //   .addFacetRefinement('extraFacet', 'extraFacet-val1')
-        //   .addFacetRefinement('extraFacet', 'extraFacet-val2')
-        //   .addFacetExclusion('facetExclude', 'facetExclude-val1')
-        //   .addFacetExclusion('facetExclude', 'facetExclude-val2')
-        //   .addDisjunctiveFacetRefinement(
-        //     'disjunctiveFacet',
-        //     'disjunctiveFacet-val1'
-        //   )
-        //   .addDisjunctiveFacetRefinement(
-        //     'disjunctiveFacet',
-        //     'disjunctiveFacet-val2'
-        //   )
-        //   .toggleFacetRefinement(
-        //     'hierarchicalFacet',
-        //     'hierarchicalFacet-val1 > hierarchicalFacet-val2'
-        //   )
-        //   .addNumericRefinement('numericFacet', '>=', 1)
-        //   .addNumericRefinement('numericFacet', '<=', 2)
-        //   .addNumericRefinement('numericDisjunctiveFacet', '>=', 3)
-        //   .addNumericRefinement('numericDisjunctiveFacet', '<=', 4)
-        //   .addTag('tag1')
-        //   .addTag('tag2');
 
         widget.init!(
           createInitOptions({

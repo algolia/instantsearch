@@ -156,23 +156,6 @@ exports[`currentRefinements() render() options.container should render with a HT
 />
 `;
 
-exports[`currentRefinements() render() options.container should render with a string container 1`] = `
-<CurrentRefinements
-  cssClasses={
-    Object {
-      "category": "ais-CurrentRefinements-category",
-      "categoryLabel": "ais-CurrentRefinements-categoryLabel",
-      "delete": "ais-CurrentRefinements-delete",
-      "item": "ais-CurrentRefinements-item",
-      "label": "ais-CurrentRefinements-label",
-      "list": "ais-CurrentRefinements-list",
-      "root": "ais-CurrentRefinements",
-    }
-  }
-  items={Array []}
-/>
-`;
-
 exports[`currentRefinements() render() should render twice <CurrentRefinements ... /> 1`] = `
 <CurrentRefinements
   cssClasses={
