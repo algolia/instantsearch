@@ -272,7 +272,6 @@ function clearRefinementFromState(
         refinement.value
       );
     case 'numeric':
-      // @ts-ignore @TODO: fix non-existant `removeNumericRefinement` type in the helper typings
       return state.removeNumericRefinement(
         refinement.attribute,
         refinement.operator,
