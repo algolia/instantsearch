@@ -462,6 +462,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
     describe('DOM output', () => {
       it('renders correctly', () => {
+        const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+          facets: ['facet', 'facetExclude'],
+          disjunctiveFacets: ['rating', 'brand'],
+          hierarchicalFacets: [
+            {
+              name: 'hierarchicalCategories.lvl0',
+              attributes: [
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ],
+              separator: ' > ',
+            },
+          ],
+          facetsRefinements: {
+            facet: ['facetAttribute'],
+          },
+          facetsExcludes: {
+            facetExclude: ['facetExcludeAttribute'],
+          },
+          disjunctiveFacetsRefinements: {
+            rating: ['4', '5'],
+            brand: ['Samsung', 'Apple'],
+          },
+          numericRefinements: { price: { '>=': [100], '<=': [500] } },
+          tagRefinements: ['tag1', 'tag2'],
+          hierarchicalFacetsRefinements: {
+            'hierarchicalCategories.lvl0': ['Cell Phones'],
+          },
+        });
         const widget = currentRefinements({
           container: document.createElement('div'),
           cssClasses: {
@@ -475,31 +505,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           },
         });
 
-        helper
-          .addFacetRefinement('facet', 'facet-val1')
-          .addFacetRefinement('facet', 'facet-val2')
-          .addFacetRefinement('extraFacet', 'extraFacet-val1')
-          .addFacetRefinement('extraFacet', 'extraFacet-val2')
-          .addFacetExclusion('facetExclude', 'facetExclude-val1')
-          .addFacetExclusion('facetExclude', 'facetExclude-val2')
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val1'
-          )
-          .addDisjunctiveFacetRefinement(
-            'disjunctiveFacet',
-            'disjunctiveFacet-val2'
-          )
-          .toggleFacetRefinement(
-            'hierarchicalFacet',
-            'hierarchicalFacet-val1 > hierarchicalFacet-val2'
-          )
-          .addNumericRefinement('numericFacet', '>=', 1)
-          .addNumericRefinement('numericFacet', '<=', 2)
-          .addNumericRefinement('numericDisjunctiveFacet', '>=', 3)
-          .addNumericRefinement('numericDisjunctiveFacet', '<=', 4)
-          .addTag('tag1')
-          .addTag('tag2');
+        // helper
+        //   .addFacetRefinement('facet', 'facet-val1')
+        //   .addFacetRefinement('facet', 'facet-val2')
+        //   .addFacetRefinement('extraFacet', 'extraFacet-val1')
+        //   .addFacetRefinement('extraFacet', 'extraFacet-val2')
+        //   .addFacetExclusion('facetExclude', 'facetExclude-val1')
+        //   .addFacetExclusion('facetExclude', 'facetExclude-val2')
+        //   .addDisjunctiveFacetRefinement(
+        //     'disjunctiveFacet',
+        //     'disjunctiveFacet-val1'
+        //   )
+        //   .addDisjunctiveFacetRefinement(
+        //     'disjunctiveFacet',
+        //     'disjunctiveFacet-val2'
+        //   )
+        //   .toggleFacetRefinement(
+        //     'hierarchicalFacet',
+        //     'hierarchicalFacet-val1 > hierarchicalFacet-val2'
+        //   )
+        //   .addNumericRefinement('numericFacet', '>=', 1)
+        //   .addNumericRefinement('numericFacet', '<=', 2)
+        //   .addNumericRefinement('numericDisjunctiveFacet', '>=', 3)
+        //   .addNumericRefinement('numericDisjunctiveFacet', '<=', 4)
+        //   .addTag('tag1')
+        //   .addTag('tag2');
 
         widget.init!(
           createInitOptions({
@@ -512,26 +542,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
             results: new SearchResults(helper.state, [
               createSingleSearchResponse({
                 facets: {
-                  facet: {
-                    'facet-val1': 100,
-                    'facet-val2': 200,
+                  'hierarchicalCategories.lvl0': {
+                    'Cell Phones': 3291,
                   },
-                  extraFacet: {
-                    'extraFacet-val1': 100,
-                    'extraFacet-val2': 200,
+                  'hierarchicalCategories.lvl1': {
+                    'Cell Phones > All Cell Phones with Plans': 126,
+                    'Cell Phones > Cell Phone Accessories': 2836,
+                    'Cell Phones > Mobile Broadband': 1,
+                    'Cell Phones > Prepaid Phones': 55,
+                    'Cell Phones > Refurbished Phones': 27,
+                    'Cell Phones > Samsung Galaxy': 8,
+                    'Cell Phones > Unlocked Cell Phones': 198,
+                    'Cell Phones > iPhone': 35,
                   },
-                  facetExclude: {
-                    'facetExclude-val1': 300,
-                    'facetExclude-val2': 400,
-                  },
-                  disjunctiveFacet: {
-                    'disjunctiveFacet-val1': 300,
-                    'disjunctiveFacet-val2': 400,
-                  },
-                  hierarchicalFacet: {
-                    'hierarchicalFacet-val1': 500,
-                    'hierarchicalFacet-val2': 500,
-                    'hierarchicalFacet-val1 > hierarchicalFacet-val2': 500,
+                },
+              }),
+              createSingleSearchResponse({
+                facets: {
+                  'hierarchicalCategories.lvl0': {
+                    Appliances: 4306,
+                    Audio: 1570,
+                    'Cameras & Camcorders': 1369,
+                    'Car Electronics & GPS': 1208,
+                    'Cell Phones': 3291,
+                    'Computers & Tablets': 3563,
+                    'Health, Fitness & Beauty': 923,
+                    'Office & School Supplies': 617,
+                    'TV & Home Theater': 1201,
+                    'Video Games': 505,
                   },
                 },
               }),
