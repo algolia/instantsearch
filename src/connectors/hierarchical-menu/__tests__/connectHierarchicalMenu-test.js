@@ -80,22 +80,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['category', 'sub_category'],
       });
 
-      const previous = {};
+      const actual = widget.getConfiguration(new SearchParameters());
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            rootPath: null,
-            separator: ' > ',
-            showParentLevel: true,
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            category: [],
           },
-        ],
-        maxValuesPerFacet: 10,
-      });
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('returns the configuration with custom `separator`', () => {
@@ -106,22 +109,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         separator: ' / ',
       });
 
-      const previous = {};
+      const actual = widget.getConfiguration(new SearchParameters());
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            rootPath: null,
-            separator: ' / ',
-            showParentLevel: true,
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              rootPath: null,
+              separator: ' / ',
+              showParentLevel: true,
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            category: [],
           },
-        ],
-        maxValuesPerFacet: 10,
-      });
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('returns the configuration with custom `rootPath`', () => {
@@ -132,22 +138,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         rootPath: 'TopLevel > SubLevel',
       });
 
-      const previous = {};
+      const actual = widget.getConfiguration(new SearchParameters());
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            rootPath: 'TopLevel > SubLevel',
-            separator: ' > ',
-            showParentLevel: true,
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              rootPath: 'TopLevel > SubLevel',
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            category: [],
           },
-        ],
-        maxValuesPerFacet: 10,
-      });
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('returns the configuration with custom `showParentLevel`', () => {
@@ -158,22 +167,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         showParentLevel: false,
       });
 
-      const previous = {};
+      const actual = widget.getConfiguration(new SearchParameters());
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            rootPath: null,
-            separator: ' > ',
-            showParentLevel: false,
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: false,
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            category: [],
           },
-        ],
-        maxValuesPerFacet: 10,
-      });
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('returns the configuration with another `hierarchicalFacets` already defined', () => {
@@ -183,32 +195,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['category', 'sub_category'],
       });
 
-      const previous = {
-        hierarchicalFacets: [
-          {
-            name: 'country',
-            attributes: ['country', 'sub_country'],
-            separator: ' > ',
-            rootPath: null,
-            showParentLevel: true,
-          },
-        ],
-      };
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'country',
+              attributes: ['country', 'sub_country'],
+              separator: ' > ',
+              rootPath: null,
+              showParentLevel: true,
+            },
+          ],
+        })
+      );
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            separator: ' > ',
-            rootPath: null,
-            showParentLevel: true,
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              separator: ' > ',
+              rootPath: null,
+              showParentLevel: true,
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            category: [],
           },
-        ],
-        maxValuesPerFacet: 10,
-      });
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('returns an empty configuration with the same `hierarchicalFacets` already defined with same options', () => {
@@ -216,32 +233,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const makeWidget = connectHierarchicalMenu(render);
       const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-      const previous = {
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            separator: ' > ',
-            rootPath: null,
-            showParentLevel: true,
-          },
-        ],
-      };
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              separator: ' > ',
+              rootPath: null,
+              showParentLevel: true,
+            },
+          ],
+        })
+      );
 
-      const actual = widget.getConfiguration(previous);
-
-      expect(actual).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'sub_category'],
-            separator: ' > ',
-            rootPath: null,
-            showParentLevel: true,
+      expect(actual).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'sub_category'],
+              separator: ' > ',
+              rootPath: null,
+              showParentLevel: true,
+            },
+          ],
+          hierarchicalFacetsRefinements: {
+            category: [],
           },
-        ],
-        maxValuesPerFacet: 10,
-      });
+          maxValuesPerFacet: 10,
+        })
+      );
     });
 
     it('warns and returns an empty configuration with the same `hierarchicalFacets` already defined with different `attributes`', () => {
@@ -249,19 +271,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       const makeWidget = connectHierarchicalMenu(render);
       const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-      const previous = {
+      const previous = new SearchParameters({
         hierarchicalFacets: [
           {
             name: 'category',
             attributes: ['category', 'sub_category', 'sub_sub_category'],
           },
         ],
-      };
+      });
 
       expect(() => {
         const actual = widget.getConfiguration(previous);
 
-        expect(actual).toEqual({});
+        expect(actual).toEqual(previous);
       }).toWarnDev();
     });
 
@@ -273,7 +295,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         separator: ' / ',
       });
 
-      const previous = {
+      const previous = new SearchParameters({
         hierarchicalFacets: [
           {
             name: 'category',
@@ -281,12 +303,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             separator: ' > ',
           },
         ],
-      };
+      });
 
       expect(() => {
         const actual = widget.getConfiguration(previous);
 
-        expect(actual).toEqual({});
+        expect(actual).toEqual(previous);
       }).toWarnDev();
     });
 
@@ -299,7 +321,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         rootPath: 'TopLevel',
       });
 
-      const previous = {
+      const previous = new SearchParameters({
         hierarchicalFacets: [
           {
             name: 'category',
@@ -308,12 +330,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
             rootPath: 'TopLevel > SubLevel',
           },
         ],
-      };
+      });
 
       expect(() => {
         const actual = widget.getConfiguration(previous);
 
-        expect(actual).toEqual({});
+        expect(actual).toEqual(previous);
       }).toWarnDev();
     });
 
@@ -330,38 +352,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
       // when there is no other limit set
       {
-        const config = widget.getConfiguration({});
-        expect(config).toEqual({
-          hierarchicalFacets: [
-            {
-              attributes: ['category', 'sub_category'],
-              name: 'category',
-              rootPath: null,
-              separator: ' > ',
-              showParentLevel: true,
+        const config = widget.getConfiguration(new SearchParameters());
+        expect(config).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                attributes: ['category', 'sub_category'],
+                name: 'category',
+                rootPath: null,
+                separator: ' > ',
+                showParentLevel: true,
+              },
+            ],
+            hierarchicalFacetsRefinements: {
+              category: [],
             },
-          ],
-          maxValuesPerFacet: 100,
-        });
+            maxValuesPerFacet: 100,
+          })
+        );
       }
 
       // when there is a bigger already limit set
       {
-        const config = widget.getConfiguration({
-          maxValuesPerFacet: 101,
-        });
-        expect(config).toEqual({
-          hierarchicalFacets: [
-            {
-              attributes: ['category', 'sub_category'],
-              name: 'category',
-              rootPath: null,
-              separator: ' > ',
-              showParentLevel: true,
+        const config = widget.getConfiguration(
+          new SearchParameters({
+            maxValuesPerFacet: 101,
+          })
+        );
+        expect(config).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                attributes: ['category', 'sub_category'],
+                name: 'category',
+                rootPath: null,
+                separator: ' > ',
+                showParentLevel: true,
+              },
+            ],
+            hierarchicalFacetsRefinements: {
+              category: [],
             },
-          ],
-          maxValuesPerFacet: 101,
-        });
+            maxValuesPerFacet: 101,
+          })
+        );
       }
     });
 
@@ -378,38 +412,50 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
       // when there is no other limit set
       {
-        const config = widget.getConfiguration({});
-        expect(config).toEqual({
-          hierarchicalFacets: [
-            {
-              attributes: ['category', 'sub_category'],
-              name: 'category',
-              rootPath: null,
-              separator: ' > ',
-              showParentLevel: true,
+        const config = widget.getConfiguration(new SearchParameters());
+        expect(config).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                attributes: ['category', 'sub_category'],
+                name: 'category',
+                rootPath: null,
+                separator: ' > ',
+                showParentLevel: true,
+              },
+            ],
+            hierarchicalFacetsRefinements: {
+              category: [],
             },
-          ],
-          maxValuesPerFacet: 6,
-        });
+            maxValuesPerFacet: 6,
+          })
+        );
       }
 
       // when there is a bigger already limit set
       {
-        const config = widget.getConfiguration({
-          maxValuesPerFacet: 101,
-        });
-        expect(config).toEqual({
-          hierarchicalFacets: [
-            {
-              attributes: ['category', 'sub_category'],
-              name: 'category',
-              rootPath: null,
-              separator: ' > ',
-              showParentLevel: true,
+        const config = widget.getConfiguration(
+          new SearchParameters({
+            maxValuesPerFacet: 101,
+          })
+        );
+        expect(config).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [
+              {
+                attributes: ['category', 'sub_category'],
+                name: 'category',
+                rootPath: null,
+                separator: ' > ',
+                showParentLevel: true,
+              },
+            ],
+            hierarchicalFacetsRefinements: {
+              category: [],
             },
-          ],
-          maxValuesPerFacet: 101,
-        });
+            maxValuesPerFacet: 101,
+          })
+        );
       }
     });
   });
@@ -423,19 +469,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       attributes: ['category', 'sub_category'],
     });
 
-    const config = widget.getConfiguration({});
-    expect(config).toEqual({
-      hierarchicalFacets: [
-        {
-          attributes: ['category', 'sub_category'],
-          name: 'category',
-          rootPath: null,
-          separator: ' > ',
-          showParentLevel: true,
+    const config = widget.getConfiguration(new SearchParameters());
+    expect(config).toEqual(
+      new SearchParameters({
+        hierarchicalFacets: [
+          {
+            attributes: ['category', 'sub_category'],
+            name: 'category',
+            rootPath: null,
+            separator: ' > ',
+            showParentLevel: true,
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          category: [],
         },
-      ],
-      maxValuesPerFacet: 10,
-    });
+        maxValuesPerFacet: 10,
+      })
+    );
 
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
@@ -483,7 +534,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       attributes: ['category', 'sub_category'],
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters())
+    );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
@@ -523,7 +578,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       attributes: ['category', 'subCategory'],
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters())
+    );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -622,7 +681,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         })),
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters())
+    );
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -675,14 +738,75 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     );
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHierarchicalMenu(rendering);
-    const widget = makeWidget({
-      attributes: ['category'],
+  describe('dispose', () => {
+    it('does not throw without the unmount function', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const widget = makeWidget({
+        attributes: ['category'],
+      });
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters())
+      );
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
     });
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+
+    it('unsets maxValuesPerFacet fully', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const indexName = '';
+      const widget = makeWidget({
+        attributes: ['category'],
+        maxValuesPerFacet: 420,
+      });
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters())
+      );
+
+      expect(widget.dispose({ helper, state: helper.state })).toEqual(
+        new SearchParameters({ index: indexName })
+      );
+    });
+
+    it('unsets refinement', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const indexName = '';
+      const widget = makeWidget({
+        attributes: ['category'],
+        maxValuesPerFacet: 420,
+      });
+      const helper = jsHelper(
+        {},
+        indexName,
+        widget.getConfiguration(new SearchParameters())
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      });
+
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine } = firstRenderingOptions;
+      refine('zombo.com');
+
+      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+        category: ['zombo.com'],
+      });
+
+      expect(widget.dispose({ helper, state: helper.state })).toEqual(
+        new SearchParameters({ index: indexName })
+      );
+    });
   });
 
   describe('routing', () => {
@@ -693,7 +817,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['category', 'subCategory'],
       });
 
-      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters())
+      );
       helper.search = jest.fn();
 
       widget.init({
@@ -809,7 +937,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         showMore: true,
       });
 
-      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters())
+      );
       helper.search = jest.fn();
 
       widget.init({
@@ -920,7 +1052,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         showMoreLimit: 3,
       });
 
-      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getConfiguration(new SearchParameters())
+      );
       helper.search = jest.fn();
 
       widget.init({
