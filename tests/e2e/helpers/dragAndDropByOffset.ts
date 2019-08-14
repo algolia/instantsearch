@@ -23,13 +23,14 @@ browser.addCommand(
 
     // WebdriverIO `dragAndDrop` method only works with an existing element as target,
     // so we create a dummy element in the document to use as a target
+    /* eslint-disable prefer-template */
     const targetId = await browser.execute(
-      (browserSourceX, browserSourceY, browserOffsetX, browserOffsetY) => {
+      function(browserSourceX, browserSourceY, browserOffsetX, browserOffsetY) {
         const target = document.createElement('div');
-        target.id = `tmp-${Math.floor(Math.random() * 1e9)}`;
+        target.id = 'tmp-' + Math.floor(Math.random() * 1e9);
         target.style.position = 'absolute';
-        target.style.left = `${browserSourceX + browserOffsetX}px`;
-        target.style.top = `${browserSourceY + browserOffsetY}px`;
+        target.style.left = browserSourceX + browserOffsetX + 'px';
+        target.style.top = browserSourceY + browserOffsetY + 'px';
         document.body.appendChild(target);
         return target.id;
       },
@@ -38,13 +39,14 @@ browser.addCommand(
       offsetX,
       offsetY
     );
+    /* eslint-enable prefer-template */
     const target = await browser.$(`#${targetId}`);
 
     // @ts-ignore: Ignore bad `dragAndDrop` method definition
     await source.dragAndDrop(target);
 
     // Cleaning
-    await browser.execute(browserTargetId => {
+    await browser.execute(function(browserTargetId) {
       const el = document.getElementById(browserTargetId);
       if (el) {
         document.body.removeChild(el);
