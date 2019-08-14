@@ -56,7 +56,7 @@ describe('InstantSearch - Search on specific price range', () => {
   it(`waits for the results list to be updated (wait for all the prices to be < upperBound)`, async () => {
     await browser.waitUntil(async () => {
       const hits = await browser.$$('.hit-info-container strong');
-      const hitsText = await Promise.all(hits.map(hit => hit.getText()));
+      const hitsText = await browser.getTextFromElements(hits);
       return (
         hitsText.filter(text => Number(text.replace(',', '')) > upperBound)
           .length === 0
@@ -66,7 +66,7 @@ describe('InstantSearch - Search on specific price range', () => {
 
   it('must match the expected results', async () => {
     const hits = await browser.$$('.hit h1');
-    const hitsText = await Promise.all(hits.map(hit => hit.getText()));
+    const hitsText = await browser.getTextFromElements(hits);
 
     // Compare them to expected titles
     expect(hitsText).toEqual([
