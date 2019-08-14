@@ -2,7 +2,6 @@ import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
-  find,
   noop,
 } from '../../lib/utils';
 
