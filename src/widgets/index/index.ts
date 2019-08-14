@@ -90,6 +90,7 @@ function resolveScopedResultsFromWidgets(widgets: Widget[]): ScopedResult[] {
       {
         indexId: current.getIndexId(),
         results: current.getResults()!,
+        helper: current.getHelper()!,
       },
       ...resolveScopedResultsFromWidgets(current.getWidgets())
     );
