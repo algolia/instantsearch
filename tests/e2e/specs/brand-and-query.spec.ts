@@ -27,7 +27,7 @@ describe('InstantSearch - Search on specific brand and query filtering', () => {
 
   it('must match the expected results', async () => {
     const hits = await browser.$$('.hit h1');
-    const hitsText = await Promise.all(hits.map(hit => hit.getText()));
+    const hitsText = await browser.getTextFromElements(hits);
 
     // Compare them to expected titles
     expect(hitsText).toEqual([
