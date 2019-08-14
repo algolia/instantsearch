@@ -39,25 +39,3 @@ Array [
   },
 ]
 `;
-
-exports[`connectHitsPerPage routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
-SearchParameters {
-  "disjunctiveFacets": Array [],
-  "disjunctiveFacetsRefinements": Object {},
-  "facets": Array [],
-  "facetsExcludes": Object {},
-  "facetsRefinements": Object {},
-  "hierarchicalFacets": Array [],
-  "hierarchicalFacetsRefinements": Object {},
-  "hitsPerPage": 10,
-  "index": "",
-  "numericRefinements": Object {},
-  "tagRefinements": Array [],
-}
-`;
-
-exports[`connectHitsPerPage routing getWidgetState should add an entry equal to the refinement 1`] = `
-Object {
-  "hitsPerPage": 10,
-}
-`;

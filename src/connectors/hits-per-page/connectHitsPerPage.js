@@ -108,25 +108,25 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
       );
     }
 
-    const defaultValues = items.filter(item => item.default);
-    if (defaultValues.length > 1) {
+    const defaultItems = items.filter(item => item.default);
+    if (defaultItems.length > 1) {
       throw new Error(
         withUsage('More than one default value is specified in `items`.')
       );
     }
 
-    const defaultValue = find(userItems, item => item.default === true);
+    const defaultItem = find(userItems, item => item.default === true);
 
     return {
       $$type: 'ais.hitsPerPage',
 
       getConfiguration(state) {
-        if (!defaultValue) {
+        if (!defaultItem) {
           return state;
         }
 
         return state.setQueryParameters({
-          hitsPerPage: state.hitsPerPage || defaultValue.value,
+          hitsPerPage: state.hitsPerPage || defaultItem.value,
         });
       },
 
@@ -214,11 +214,8 @@ You may want to add another entry to the \`items\` option with this value.`
 
       getWidgetState(uiState, { searchParameters }) {
         const hitsPerPage = searchParameters.hitsPerPage;
-        if (
-          (defaultValue && hitsPerPage === defaultValue.value) ||
-          hitsPerPage === undefined ||
-          uiState.hitsPerPage === hitsPerPage
-        ) {
+
+        if (hitsPerPage === undefined) {
           return uiState;
         }
 
@@ -229,19 +226,12 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const hitsPerPage = uiState.hitsPerPage;
-        if (hitsPerPage)
-          return searchParameters.setQueryParameter(
-            'hitsPerPage',
-            uiState.hitsPerPage
-          );
-        if (defaultValue) {
-          return searchParameters.setQueryParameter(
-            'hitsPerPage',
-            defaultValue.value
-          );
-        }
-        return searchParameters.setQueryParameter('hitsPerPage', undefined);
+        const hitsPerPage =
+          uiState.hitsPerPage || (defaultItem && defaultItem.value);
+
+        return searchParameters.setQueryParameters({
+          hitsPerPage,
+        });
       },
     };
   };
