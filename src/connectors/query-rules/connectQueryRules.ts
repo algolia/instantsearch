@@ -96,8 +96,7 @@ function getRuleContextsFromTrackedFilters({
         sharedHelperState
       )
         .filter(
-          (refinement: InternalRefinement) =>
-            refinement.attributeName === facetName
+          (refinement: InternalRefinement) => refinement.attribute === facetName
         )
         .map(
           (refinement: InternalRefinement) =>
