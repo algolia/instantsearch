@@ -30,12 +30,12 @@ describe('InstantSearch - Search on specific price range', () => {
   it(`waits for the results list to be updated (wait for all the prices to be > lowerBound)`, async () => {
     await browser.waitUntil(async () => {
       const hits = await browser.$$('.hit-info-container strong');
-      const hitsText = await Promise.all(hits.map(hit => hit.getText()));
+      const hitsText = await browser.getTextFromElements(hits);
       return (
         hitsText.filter(text => Number(text.replace(',', '')) < lowerBound)
           .length === 0
       );
-    }, 10000);
+    });
   });
 
   it('drag and drop upper handle to the left', async () => {
@@ -61,7 +61,7 @@ describe('InstantSearch - Search on specific price range', () => {
         hitsText.filter(text => Number(text.replace(',', '')) > upperBound)
           .length === 0
       );
-    }, 10000);
+    });
   });
 
   it('must match the expected results', async () => {
