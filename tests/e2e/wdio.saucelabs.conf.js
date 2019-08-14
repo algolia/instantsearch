@@ -67,5 +67,21 @@ module.exports = {
         seleniumVersion: '3.11.0',
       },
     },
+    {
+      browserName: 'internet explorer',
+      browserVersion: '11.285',
+      /*
+       * Sauce Labs specific options
+       * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
+       */
+      'sauce:options': {
+        screenResolution: '1680x1050',
+      },
+      'se:ieOptions': {
+        // Required for drag and drop to work
+        // https://stackoverflow.com/questions/14299392/selenium-webdriver-draganddrop-for-ie9
+        requireWindowFocus: true,
+      },
+    },
   ],
 };
