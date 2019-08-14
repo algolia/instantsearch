@@ -1,4 +1,5 @@
 import React from 'react';
+import { ItemRefinement } from '../../../connectors/current-refinements/connectCurrentRefinements';
 import CurrentRefinements from '../CurrentRefinements';
 import { mount } from 'enzyme';
 
@@ -11,7 +12,6 @@ describe('CurrentRefinements', () => {
     category: 'category',
     categoryLabel: 'categoryLabel',
     delete: 'delete',
-    reset: 'reset',
   };
 
   it('renders', () => {
@@ -24,13 +24,13 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'facet',
+              type: 'facet' as ItemRefinement['type'],
               attribute: 'facet',
               value: 'facet-val1',
               label: 'facet-val1',
             },
             {
-              type: 'facet',
+              type: 'facet' as ItemRefinement['type'],
               attribute: 'facet',
               value: 'facet-val2',
               label: 'facet-val2',
@@ -43,7 +43,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'exclude',
+              type: 'exclude' as ItemRefinement['type'],
               attribute: 'facetExclude',
               value: 'disjunctiveFacet-val1',
               label: 'disjunctiveFacet-val1',
@@ -57,7 +57,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'disjunctive',
+              type: 'disjunctive' as ItemRefinement['type'],
               attribute: 'disjunctiveFacet',
               value: 'disjunctiveFacet-val1',
               label: 'disjunctiveFacet-val1',
@@ -70,7 +70,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'hierarchical',
+              type: 'hierarchical' as ItemRefinement['type'],
               attribute: 'hierarchicalFacet',
               value: 'hierarchicalFacet-val1',
               label: 'hierarchicalFacet-val1',
@@ -83,7 +83,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'numeric',
+              type: 'numeric' as ItemRefinement['type'],
               attribute: 'numericFacet',
               value: 'numericFacet-val1',
               label: 'numericFacet-val1',
@@ -97,7 +97,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'tag',
+              type: 'tag' as ItemRefinement['type'],
               attribute: '_tags',
               value: 'tag1',
               label: 'tag1',
@@ -124,7 +124,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customFacet',
-                type: 'facet',
+                type: 'facet' as ItemRefinement['type'],
                 value: 'val1',
                 label: 'val1',
               },
@@ -149,7 +149,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customExcludeFacet',
-                type: 'exclude',
+                type: 'exclude' as ItemRefinement['type'],
                 value: 'val1',
                 label: 'val1',
                 exclude: true,
@@ -175,7 +175,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customDisjunctiveFacet',
-                type: 'disjunctive',
+                type: 'disjunctive' as ItemRefinement['type'],
                 value: 'val1',
                 label: 'val1',
               },
@@ -200,7 +200,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customHierarchicalFacet',
-                type: 'hierarchical',
+                type: 'hierarchical' as ItemRefinement['type'],
                 value: 'val1',
                 label: 'val1',
               },
@@ -225,7 +225,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric',
+                type: 'numeric' as ItemRefinement['type'],
                 operator: '=',
                 value: 'val1',
                 label: 'val1',
@@ -239,7 +239,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric',
+                type: 'numeric' as ItemRefinement['type'],
                 operator: '<=',
                 value: 'val2',
                 label: 'val2',
@@ -253,7 +253,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric',
+                type: 'numeric' as ItemRefinement['type'],
                 operator: '>=',
                 value: 'val3',
                 label: 'val3',
@@ -279,7 +279,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: '_tags',
-                type: 'tag',
+                type: 'tag' as ItemRefinement['type'],
                 value: 'tag1',
                 label: 'tag1',
               },
@@ -304,7 +304,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'query',
-                type: 'query',
+                type: 'query' as ItemRefinement['type'],
                 value: 'search1',
                 label: 'search1',
               },

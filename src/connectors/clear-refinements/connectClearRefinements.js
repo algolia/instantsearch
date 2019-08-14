@@ -179,7 +179,7 @@ function getAttributesToClear({
 
   return transformItems(
     getRefinements(helper.lastResults || {}, helper.state, clearsQuery)
-      .map(refinement => refinement.attributeName)
+      .map(refinement => refinement.attribute)
       .filter(
         attribute =>
           // If the array is empty (default case), we keep all the attributes

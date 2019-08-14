@@ -1,14 +1,30 @@
 import React from 'preact-compat';
-import PropTypes from 'prop-types';
 import { isSpecialClick, capitalize } from '../../lib/utils';
+import { Item } from '../../connectors/current-refinements/connectCurrentRefinements';
+import { CurrentRefinementsComponentCSSClasses } from '../../widgets/current-refinements/current-refinements';
 
-const createItemKey = ({ attribute, value, type, operator }) =>
+type CurrentRefinementsProps = {
+  items: Item[];
+  cssClasses: CurrentRefinementsComponentCSSClasses;
+};
+
+const createItemKey = ({
+  attribute,
+  value,
+  type,
+  operator,
+}: {
+  attribute: string;
+  value: string;
+  type: string;
+  operator?: string;
+}): string =>
   [attribute, type, value, operator]
     .map(key => key)
     .filter(Boolean)
     .join(':');
 
-const handleClick = callback => event => {
+const handleClick = (callback: () => void) => (event: any) => {
   if (isSpecialClick(event)) {
     return;
   }
@@ -17,7 +33,7 @@ const handleClick = callback => event => {
   callback();
 };
 
-const CurrentRefinements = ({ items, cssClasses }) => (
+const CurrentRefinements = ({ items, cssClasses }: CurrentRefinementsProps) => (
   <div className={cssClasses.root}>
     <ul className={cssClasses.list}>
       {items.map((item, index) => (
@@ -50,31 +66,5 @@ const CurrentRefinements = ({ items, cssClasses }) => (
     </ul>
   </div>
 );
-
-const RefinementPropTypes = PropTypes.shape({
-  attribute: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-});
-
-const ItemPropTypes = PropTypes.shape({
-  attribute: PropTypes.string.isRequired,
-  refine: PropTypes.func.isRequired,
-  refinements: PropTypes.arrayOf(RefinementPropTypes).isRequired,
-});
-
-CurrentRefinements.propTypes = {
-  cssClasses: PropTypes.shape({
-    root: PropTypes.string.isRequired,
-    list: PropTypes.string.isRequired,
-    item: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    categoryLabel: PropTypes.string.isRequired,
-    delete: PropTypes.string.isRequired,
-  }).isRequired,
-  items: PropTypes.arrayOf(ItemPropTypes).isRequired,
-};
 
 export default CurrentRefinements;
