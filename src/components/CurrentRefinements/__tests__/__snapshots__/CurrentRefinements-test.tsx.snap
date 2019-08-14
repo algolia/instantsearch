@@ -9,7 +9,7 @@ exports[`CurrentRefinements options.refinements can be used with a disjunctive f
   >
     <li
       className="item"
-      key="customDisjunctiveFacet-0"
+      key="indexName-customDisjunctiveFacet-0"
     >
       <span
         className="label"
@@ -47,7 +47,7 @@ exports[`CurrentRefinements options.refinements can be used with a facet 1`] = `
   >
     <li
       className="item"
-      key="customFacet-0"
+      key="indexName-customFacet-0"
     >
       <span
         className="label"
@@ -85,7 +85,7 @@ exports[`CurrentRefinements options.refinements can be used with a hierarchical 
   >
     <li
       className="item"
-      key="customHierarchicalFacet-0"
+      key="indexName-customHierarchicalFacet-0"
     >
       <span
         className="label"
@@ -123,7 +123,7 @@ exports[`CurrentRefinements options.refinements can be used with a query 1`] = `
   >
     <li
       className="item"
-      key="query-0"
+      key="indexName-query-0"
     >
       <span
         className="label"
@@ -163,7 +163,7 @@ exports[`CurrentRefinements options.refinements can be used with a tag 1`] = `
   >
     <li
       className="item"
-      key="_tags-0"
+      key="indexName-_tags-0"
     >
       <span
         className="label"
@@ -201,7 +201,7 @@ exports[`CurrentRefinements options.refinements can be used with an exclude 1`] 
   >
     <li
       className="item"
-      key="customExcludeFacet-0"
+      key="indexName-customExcludeFacet-0"
     >
       <span
         className="label"
@@ -239,7 +239,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
   >
     <li
       className="item"
-      key="customNumericFilter-0"
+      key="indexName-customNumericFilter-0"
     >
       <span
         className="label"
@@ -266,7 +266,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
     </li>
     <li
       className="item"
-      key="customNumericFilter-1"
+      key="indexName-customNumericFilter-1"
     >
       <span
         className="label"
@@ -293,7 +293,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
     </li>
     <li
       className="item"
-      key="customNumericFilter-2"
+      key="indexName-customNumericFilter-2"
     >
       <span
         className="label"
@@ -331,7 +331,7 @@ exports[`CurrentRefinements renders 1`] = `
   >
     <li
       className="item"
-      key="facet-0"
+      key="indexName-facet-0"
     >
       <span
         className="label"
@@ -374,7 +374,7 @@ exports[`CurrentRefinements renders 1`] = `
     </li>
     <li
       className="item"
-      key="facetExclude-1"
+      key="indexName-facetExclude-1"
     >
       <span
         className="label"
@@ -401,7 +401,7 @@ exports[`CurrentRefinements renders 1`] = `
     </li>
     <li
       className="item"
-      key="disjunctive-2"
+      key="indexName-disjunctive-2"
     >
       <span
         className="label"
@@ -428,7 +428,7 @@ exports[`CurrentRefinements renders 1`] = `
     </li>
     <li
       className="item"
-      key="hierarchical-3"
+      key="indexName-hierarchical-3"
     >
       <span
         className="label"
@@ -455,7 +455,7 @@ exports[`CurrentRefinements renders 1`] = `
     </li>
     <li
       className="item"
-      key="numeric-4"
+      key="indexName-numeric-4"
     >
       <span
         className="label"
@@ -482,7 +482,7 @@ exports[`CurrentRefinements renders 1`] = `
     </li>
     <li
       className="item"
-      key="tag-5"
+      key="indexName-tag-5"
     >
       <span
         className="label"

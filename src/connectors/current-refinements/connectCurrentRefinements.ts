@@ -37,6 +37,7 @@ interface ConnectorNumericRefinement extends ConnectorRefinement {
 }
 
 export type Item = {
+  indexName: string;
   attribute: string;
   label: string;
   refinements: ItemRefinement[];
@@ -146,7 +147,6 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
         const items = transformItems(
           getItems({
             results: {} as SearchResults,
-            state: helper.state,
             helper,
             includedAttributes,
             excludedAttributes,
@@ -166,16 +166,19 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
         );
       },
 
-      render({ results, helper, state, createURL, instantSearchInstance }) {
-        const items = transformItems(
-          getItems({
-            results,
-            state,
-            helper,
-            includedAttributes,
-            excludedAttributes,
-          })
-        );
+      render({ scopedResults, helper, createURL, instantSearchInstance }) {
+        const items = scopedResults.reduce<Item[]>((results, scopedResult) => {
+          return results.concat(
+            transformItems(
+              getItems({
+                results: scopedResult.results,
+                helper: scopedResult.helper,
+                includedAttributes,
+                excludedAttributes,
+              })
+            )
+          );
+        }, []);
 
         renderFn(
           {
@@ -199,13 +202,11 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
 
 function getItems({
   results,
-  state,
   helper,
   includedAttributes,
   excludedAttributes,
 }: {
   results: SearchResults;
-  state: SearchParameters;
   helper: AlgoliaSearchHelper;
   includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];
   excludedAttributes: CurrentRefinementsConnectorParams['excludedAttributes'];
@@ -220,7 +221,7 @@ function getItems({
     : (item: ConnectorRefinement) =>
         excludedAttributes!.indexOf(item.attribute) === -1;
 
-  const items = getRefinements(results, state, clearsQuery)
+  const items = getRefinements(results, helper.state, clearsQuery)
     .map(normalizeRefinement)
     .filter(filterFunction);
 
@@ -230,6 +231,7 @@ function getItems({
         (item: Item) => item.attribute !== currentItem.attribute
       ),
       {
+        indexName: helper.state.index,
         attribute: currentItem.attribute,
         label: currentItem.attribute,
         refinements: items

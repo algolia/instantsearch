@@ -122,15 +122,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       );
 
       const renderParameters = {
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse({
-            facets: {
-              facet: {
-                'facet-val1': 1,
-              },
-            },
-          }),
-        ]),
+        scopedResults: [
+          {
+            indexId: 'index_name',
+            helper,
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse({
+                facets: {
+                  facet: {
+                    'facet-val1': 1,
+                    'facet-val2': 2,
+                  },
+                  extraFacet: {
+                    'extraFacet-val1': 42,
+                    'extraFacet-val2': 42,
+                  },
+                },
+              }),
+            ]),
+          },
+        ],
         helper,
         state: helper.state,
       };
@@ -199,24 +210,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         );
         widget.render!(
           createRenderOptions({
-            results: new SearchResults(helper.state, [
-              createSingleSearchResponse({
-                facets: {
-                  facet: {
-                    'facet-val1': 1,
-                    'facet-val2': 2,
-                  },
-                  extraFacet: {
-                    'extraFacet-val1': 42,
-                    'extraFacet-val2': 42,
-                  },
-                  disjunctiveFacet: {
-                    'disjunctiveFacet-val1': 3,
-                    'disjunctiveFacet-val2': 4,
-                  },
-                },
-              }),
-            ]),
+            scopedResults: [
+              {
+                indexId: 'index_name',
+                helper,
+                results: new SearchResults(helper.state, [
+                  createSingleSearchResponse({
+                    facets: {
+                      facet: {
+                        'facet-val1': 1,
+                        'facet-val2': 2,
+                      },
+                      extraFacet: {
+                        'extraFacet-val1': 42,
+                        'extraFacet-val2': 42,
+                      },
+                      disjunctiveFacet: {
+                        'disjunctiveFacet-val1': 3,
+                        'disjunctiveFacet-val2': 4,
+                      },
+                    },
+                  }),
+                ]),
+              },
+            ],
             helper,
             state: helper.state,
           })
@@ -257,20 +274,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         );
         widget.render!(
           createRenderOptions({
-            results: new SearchResults(helper.state, [
-              createSingleSearchResponse({
-                facets: {
-                  extraFacet: {
-                    'extraFacet-val1': 42,
-                    'extraFacet-val2': 42,
-                  },
-                  disjunctiveFacet: {
-                    'disjunctiveFacet-val1': 3,
-                    'disjunctiveFacet-val2': 4,
-                  },
-                },
-              }),
-            ]),
+            scopedResults: [
+              {
+                indexId: 'index_name',
+                helper,
+                results: new SearchResults(helper.state, [
+                  createSingleSearchResponse({
+                    facets: {
+                      extraFacet: {
+                        'extraFacet-val1': 42,
+                        'extraFacet-val2': 42,
+                      },
+                      disjunctiveFacet: {
+                        'disjunctiveFacet-val1': 3,
+                        'disjunctiveFacet-val2': 4,
+                      },
+                    },
+                  }),
+                ]),
+              },
+            ],
             helper,
             state: helper.state,
           })
@@ -318,24 +341,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
         );
         widget.render!(
           createRenderOptions({
-            results: new SearchResults(helper.state, [
-              createSingleSearchResponse({
-                facets: {
-                  facet: {
-                    'facet-val1': 1,
-                    'facet-val2': 2,
-                  },
-                  extraFacet: {
-                    'extraFacet-val1': 42,
-                    'extraFacet-val2': 42,
-                  },
-                  disjunctiveFacet: {
-                    'disjunctiveFacet-val1': 3,
-                    'disjunctiveFacet-val2': 4,
-                  },
-                },
-              }),
-            ]),
+            scopedResults: [
+              {
+                indexId: 'index_name',
+                helper,
+                results: new SearchResults(helper.state, [
+                  createSingleSearchResponse({
+                    facets: {
+                      facet: {
+                        'facet-val1': 1,
+                        'facet-val2': 2,
+                      },
+                      extraFacet: {
+                        'extraFacet-val1': 42,
+                        'extraFacet-val2': 42,
+                      },
+                      disjunctiveFacet: {
+                        'disjunctiveFacet-val1': 3,
+                        'disjunctiveFacet-val2': 4,
+                      },
+                    },
+                  }),
+                ]),
+              },
+            ],
             helper,
             state: helper.state,
           })
@@ -463,41 +492,47 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
         widget.render!(
           createRenderOptions({
-            results: new SearchResults(helper.state, [
-              createSingleSearchResponse({
-                facets: {
-                  'hierarchicalCategories.lvl0': {
-                    'Cell Phones': 3291,
-                  },
-                  'hierarchicalCategories.lvl1': {
-                    'Cell Phones > All Cell Phones with Plans': 126,
-                    'Cell Phones > Cell Phone Accessories': 2836,
-                    'Cell Phones > Mobile Broadband': 1,
-                    'Cell Phones > Prepaid Phones': 55,
-                    'Cell Phones > Refurbished Phones': 27,
-                    'Cell Phones > Samsung Galaxy': 8,
-                    'Cell Phones > Unlocked Cell Phones': 198,
-                    'Cell Phones > iPhone': 35,
-                  },
-                },
-              }),
-              createSingleSearchResponse({
-                facets: {
-                  'hierarchicalCategories.lvl0': {
-                    Appliances: 4306,
-                    Audio: 1570,
-                    'Cameras & Camcorders': 1369,
-                    'Car Electronics & GPS': 1208,
-                    'Cell Phones': 3291,
-                    'Computers & Tablets': 3563,
-                    'Health, Fitness & Beauty': 923,
-                    'Office & School Supplies': 617,
-                    'TV & Home Theater': 1201,
-                    'Video Games': 505,
-                  },
-                },
-              }),
-            ]),
+            scopedResults: [
+              {
+                indexId: 'index_name',
+                helper,
+                results: new SearchResults(helper.state, [
+                  createSingleSearchResponse({
+                    facets: {
+                      'hierarchicalCategories.lvl0': {
+                        'Cell Phones': 3291,
+                      },
+                      'hierarchicalCategories.lvl1': {
+                        'Cell Phones > All Cell Phones with Plans': 126,
+                        'Cell Phones > Cell Phone Accessories': 2836,
+                        'Cell Phones > Mobile Broadband': 1,
+                        'Cell Phones > Prepaid Phones': 55,
+                        'Cell Phones > Refurbished Phones': 27,
+                        'Cell Phones > Samsung Galaxy': 8,
+                        'Cell Phones > Unlocked Cell Phones': 198,
+                        'Cell Phones > iPhone': 35,
+                      },
+                    },
+                  }),
+                  createSingleSearchResponse({
+                    facets: {
+                      'hierarchicalCategories.lvl0': {
+                        Appliances: 4306,
+                        Audio: 1570,
+                        'Cameras & Camcorders': 1369,
+                        'Car Electronics & GPS': 1208,
+                        'Cell Phones': 3291,
+                        'Computers & Tablets': 3563,
+                        'Health, Fitness & Beauty': 923,
+                        'Office & School Supplies': 617,
+                        'TV & Home Theater': 1201,
+                        'Video Games': 505,
+                      },
+                    },
+                  }),
+                ]),
+              },
+            ],
             helper,
             state: helper.state,
           })
