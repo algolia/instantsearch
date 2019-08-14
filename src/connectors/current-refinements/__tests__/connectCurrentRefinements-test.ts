@@ -51,7 +51,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
   describe('Lifecycle', () => {
     it('renders during init and render', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {});
       helper.search = jest.fn();
       // test that the dummyRendering is called with the isFirstRendering
       // flag set accordingly
@@ -111,7 +111,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {});
       const rendering = () => {};
       const customCurrentRefinements = connectCurrentRefinements(rendering);
       const widget = customCurrentRefinements({});
@@ -126,7 +126,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     let helper: AlgoliaSearchHelper;
 
     beforeEach(() => {
-      helper = algoliasearchHelper(createSearchClient(), '', {
+      helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2', 'facet3'],
       });
       helper.search = jest.fn();
@@ -447,7 +447,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     let helper: AlgoliaSearchHelper;
 
     beforeEach(() => {
-      helper = algoliasearchHelper(createSearchClient(), '', {
+      helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2', 'facet3'],
       });
       helper.search = jest.fn();
@@ -470,6 +470,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       const firstRenderingOptions = rendering.mock.calls[0][0];
       expect(firstRenderingOptions.items).toEqual([
         {
+          indexName: 'indexName',
           attribute: 'facet1',
           label: 'facet1',
           refinements: [
@@ -490,9 +491,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse(),
-          ]),
+          scopedResults: [
+            {
+              indexId: 'firstIndex',
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  index: 'firstIndex',
+                }),
+              ]),
+            },
+          ],
           state: helper.state,
           helper,
         })
@@ -500,8 +509,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
       const items: Item[] = secondRenderingOptions.items;
+
+      expect(items).toHaveLength(2);
       expect(items).toEqual([
         {
+          indexName: 'indexName',
           attribute: 'facet1',
           label: 'facet1',
           refinements: [
@@ -515,6 +527,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           refine: expect.any(Function),
         },
         {
+          indexName: 'indexName',
           attribute: 'facet2',
           label: 'facet2',
           refinements: [
@@ -531,7 +544,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       expect(helper.state).toEqual(
         new SearchParameters({
-          index: '',
+          index: 'indexName',
           facets: ['facet1', 'facet2', 'facet3'],
           facetsRefinements: { facet1: ['facetValue'], facet2: ['facetValue'] },
         })
@@ -546,11 +559,119 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
 
       expect(helper.state).toEqual(
         new SearchParameters({
-          index: '',
+          index: 'indexName',
           facets: ['facet1', 'facet2', 'facet3'],
           facetsRefinements: { facet1: [], facet2: ['facetValue'] },
         })
       );
+    });
+
+    it('provides the items from multiple scoped results', () => {
+      const rendering = jest.fn();
+      const customCurrentRefinements = connectCurrentRefinements(rendering);
+      const widget = customCurrentRefinements({});
+
+      helper.addFacetRefinement('facet1', 'facetValue');
+
+      widget.init!(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+
+      helper
+        .addFacetRefinement('facet1', 'facetValue')
+        .addFacetRefinement('facet2', 'facetValue');
+
+      widget.render!(
+        createRenderOptions({
+          scopedResults: [
+            {
+              indexId: 'firstIndex',
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  index: 'firstIndex',
+                }),
+              ]),
+            },
+            {
+              indexId: 'secondIndex',
+              helper,
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse({
+                  index: 'secondIndex',
+                }),
+              ]),
+            },
+          ],
+          state: helper.state,
+          helper,
+        })
+      );
+
+      const secondRenderingOptions = rendering.mock.calls[1][0];
+      const items: Item[] = secondRenderingOptions.items;
+      expect(items).toHaveLength(4);
+      expect(items).toEqual([
+        {
+          indexName: 'indexName',
+          attribute: 'facet1',
+          label: 'facet1',
+          refinements: [
+            {
+              attribute: 'facet1',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+        {
+          indexName: 'indexName',
+          attribute: 'facet2',
+          label: 'facet2',
+          refinements: [
+            {
+              attribute: 'facet2',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+        {
+          indexName: 'indexName',
+          attribute: 'facet1',
+          label: 'facet1',
+          refinements: [
+            {
+              attribute: 'facet1',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+        {
+          indexName: 'indexName',
+          attribute: 'facet2',
+          label: 'facet2',
+          refinements: [
+            {
+              attribute: 'facet2',
+              label: 'facetValue',
+              type: 'facet',
+              value: 'facetValue',
+            },
+          ],
+          refine: expect.any(Function),
+        },
+      ]);
     });
   });
 });

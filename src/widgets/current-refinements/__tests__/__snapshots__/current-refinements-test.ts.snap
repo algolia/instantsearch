@@ -17,6 +17,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
     Array [
       Object {
         "attribute": "facet",
+        "indexName": "indexName",
         "label": "facet",
         "refine": [Function],
         "refinements": Array [
@@ -30,6 +31,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "facetExclude",
+        "indexName": "indexName",
         "label": "facetExclude",
         "refine": [Function],
         "refinements": Array [
@@ -43,6 +45,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "rating",
+        "indexName": "indexName",
         "label": "rating",
         "refine": [Function],
         "refinements": Array [
@@ -62,6 +65,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "brand",
+        "indexName": "indexName",
         "label": "brand",
         "refine": [Function],
         "refinements": Array [
@@ -81,6 +85,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "hierarchicalCategories.lvl0",
+        "indexName": "indexName",
         "label": "hierarchicalCategories.lvl0",
         "refine": [Function],
         "refinements": Array [
@@ -96,6 +101,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "price",
+        "indexName": "indexName",
         "label": "price",
         "refine": [Function],
         "refinements": Array [
@@ -117,6 +123,7 @@ exports[`currentRefinements() render() DOM output renders correctly 1`] = `
       },
       Object {
         "attribute": "_tags",
+        "indexName": "indexName",
         "label": "_tags",
         "refine": [Function],
         "refinements": Array [
@@ -173,6 +180,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
     Array [
       Object {
         "attribute": "facet",
+        "indexName": "index_name",
         "label": "facet",
         "refine": [Function],
         "refinements": Array [
@@ -208,6 +216,7 @@ exports[`currentRefinements() render() should render twice <CurrentRefinements .
     Array [
       Object {
         "attribute": "facet",
+        "indexName": "index_name",
         "label": "facet",
         "refine": [Function],
         "refinements": Array [

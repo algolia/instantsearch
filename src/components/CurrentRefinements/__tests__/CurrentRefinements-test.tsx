@@ -19,6 +19,7 @@ describe('CurrentRefinements', () => {
       cssClasses,
       items: [
         {
+          indexName: 'indexName',
           attribute: 'facet',
           label: 'facet',
           refine: () => {},
@@ -38,6 +39,7 @@ describe('CurrentRefinements', () => {
           ],
         },
         {
+          indexName: 'indexName',
           attribute: 'facetExclude',
           label: 'facetExclude',
           refine: () => {},
@@ -52,6 +54,7 @@ describe('CurrentRefinements', () => {
           ],
         },
         {
+          indexName: 'indexName',
           attribute: 'disjunctive',
           label: 'disjunctive',
           refine: () => {},
@@ -65,6 +68,7 @@ describe('CurrentRefinements', () => {
           ],
         },
         {
+          indexName: 'indexName',
           attribute: 'hierarchical',
           label: 'hierarchical',
           refine: () => {},
@@ -78,6 +82,7 @@ describe('CurrentRefinements', () => {
           ],
         },
         {
+          indexName: 'indexName',
           attribute: 'numeric',
           label: 'numeric',
           refine: () => {},
@@ -92,6 +97,7 @@ describe('CurrentRefinements', () => {
           ],
         },
         {
+          indexName: 'indexName',
           attribute: 'tag',
           label: 'tag',
           refine: () => {},
@@ -118,6 +124,7 @@ describe('CurrentRefinements', () => {
         cssClasses,
         items: [
           {
+            indexName: 'indexName',
             attribute: 'customFacet',
             label: 'customFacet',
             refine: () => {},
@@ -143,6 +150,7 @@ describe('CurrentRefinements', () => {
         cssClasses,
         items: [
           {
+            indexName: 'indexName',
             attribute: 'customExcludeFacet',
             label: 'customExcludeFacet',
             refine: () => {},
@@ -169,6 +177,7 @@ describe('CurrentRefinements', () => {
         cssClasses,
         items: [
           {
+            indexName: 'indexName',
             attribute: 'customDisjunctiveFacet',
             label: 'customDisjunctiveFacet',
             refine: () => {},
@@ -194,6 +203,7 @@ describe('CurrentRefinements', () => {
         cssClasses,
         items: [
           {
+            indexName: 'indexName',
             attribute: 'customHierarchicalFacet',
             label: 'customHierarchicalFacet',
             refine: () => {},
@@ -219,6 +229,7 @@ describe('CurrentRefinements', () => {
         cssClasses,
         items: [
           {
+            indexName: 'indexName',
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
@@ -233,6 +244,7 @@ describe('CurrentRefinements', () => {
             ],
           },
           {
+            indexName: 'indexName',
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
@@ -247,6 +259,7 @@ describe('CurrentRefinements', () => {
             ],
           },
           {
+            indexName: 'indexName',
             attribute: 'customNumericFilter',
             label: 'customNumericFilter',
             refine: () => {},
@@ -273,6 +286,7 @@ describe('CurrentRefinements', () => {
         cssClasses,
         items: [
           {
+            indexName: 'indexName',
             attribute: '_tags',
             label: '_tags',
             refine: () => {},
@@ -298,6 +312,7 @@ describe('CurrentRefinements', () => {
         cssClasses,
         items: [
           {
+            indexName: 'indexName',
             attribute: 'query',
             label: 'query',
             refine: () => {},

@@ -18,6 +18,7 @@ export interface InitOptions {
 export interface ScopedResult {
   indexId: string;
   results: SearchResults;
+  helper: Helper;
 }
 
 export interface RenderOptions {
