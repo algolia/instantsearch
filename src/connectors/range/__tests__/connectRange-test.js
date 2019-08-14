@@ -960,253 +960,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     });
   });
 
-  describe('routing', () => {
-    const getInitializedWidget = () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRange(rendering);
-      const widget = makeWidget({
-        attribute: 'price',
-      });
-
-      const config = widget.getConfiguration(new SearchParameters());
-      const helper = jsHelper({}, '', config);
-      helper.search = jest.fn();
-
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
-
-      const { refine } = rendering.mock.calls[0][0];
-
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if the default value is selected', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine([20, 30]);
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should not override other values in the same namespace', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine([10, 20]);
-        const uiStateBefore = {
-          range: {
-            'price-2': '15:20',
-          },
-        };
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should return the same instance if the value is already in the UI state', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine([10, 20]);
-        const uiStateBefore = {
-          range: {
-            price: '10:20',
-          },
-        };
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-    });
-
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if no value is in the UI state', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {};
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying empty parameters on an empty should return the same search parameters
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-      test('should return the same SP if the values are the same', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {
-          range: {
-            price: '10:20',
-          },
-        };
-        refine([10, 20]);
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying empty parameters on an empty should return the same search parameters
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-      test('should return the same SP if the values are the same (only min)', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {
-          range: {
-            price: '10:',
-          },
-        };
-        refine([10, undefined]);
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying empty parameters on an empty should return the same search parameters
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-      test('should return the same SP if the values are the same (only max)', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {
-          range: {
-            price: ':20',
-          },
-        };
-        refine([undefined, 20]);
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying empty parameters on an empty should return the same search parameters
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-
-      test('should keep the unmodified value (max modified)', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {
-          range: {
-            price: '10:20',
-          },
-        };
-        refine([10, 25]);
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying empty parameters on an empty should return the same search parameters
-        expect(
-          searchParametersAfter.getNumericRefinement('price', '>=')[0]
-        ).toBe(10);
-        expect(
-          searchParametersAfter.getNumericRefinement('price', '<=')[0]
-        ).toBe(20);
-      });
-
-      test('should keep the unmodified value (min modified)', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {
-          range: {
-            price: '10:20',
-          },
-        };
-        refine([15, 20]);
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying empty parameters on an empty should return the same search parameters
-        expect(
-          searchParametersAfter.getNumericRefinement('price', '>=')[0]
-        ).toBe(10);
-        expect(
-          searchParametersAfter.getNumericRefinement('price', '<=')[0]
-        ).toBe(20);
-      });
-
-      test('should add the refinements according to the UI state provided (min and max)', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), and the URL contains a min and a max
-        const uiState = {
-          range: {
-            price: '20:40',
-          },
-        };
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the new parameter should set the min and the max
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-      test('should add the refinements according to the UI state provided (only max)', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {
-          range: {
-            price: ':30',
-          },
-        };
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the new parameter should set the max
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-      test('should add the refinements according to the UI state provided (only min)', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The user presses back (browser), and the URL is empty
-        const uiState = {
-          range: {
-            price: '10:',
-          },
-        };
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the new parameter should set the min
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-    });
-  });
-
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
       const rendering = () => {};
@@ -1280,6 +1033,290 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const newState = widget.dispose({ helper, state: helper.state });
 
       expect(newState).toEqual(new SearchParameters({ index: indexName }));
+    });
+  });
+});
+
+describe('getWidgetState', () => {
+  test('returns the `uiState` empty', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName');
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({});
+  });
+
+  test('returns the `uiState` with a refinement', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [1000],
+          '>=': [100],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({
+      range: {
+        price: '100:1000',
+      },
+    });
+  });
+
+  test('returns the `uiState` without namespace overridden', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [1000],
+          '>=': [100],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {
+        range: {
+          age: '16:',
+        },
+      },
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({
+      range: {
+        age: '16:',
+        price: '100:1000',
+      },
+    });
+  });
+});
+
+describe('getWidgetSearchParameters', () => {
+  test('returns the `SearchParameters` with the default value without the previous refinement', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [1000],
+          '>=': [100],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {},
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      price: {},
+    });
+  });
+
+  test('returns the `SearchParameters` with the value from `uiState`', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName');
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {
+        range: {
+          price: '100:1000',
+        },
+      },
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      price: {
+        '<=': [1000],
+        '>=': [100],
+      },
+    });
+  });
+
+  test('returns the `SearchParameters` with only the min value from `uiState`', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName');
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {
+        range: {
+          price: '100:',
+        },
+      },
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      price: {
+        '>=': [100],
+      },
+    });
+  });
+
+  test('returns the `SearchParameters` with only the max value from `uiState`', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName');
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {
+        range: {
+          price: ':1000',
+        },
+      },
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      price: {
+        '<=': [1000],
+      },
+    });
+  });
+
+  test('returns the default `SearchParameters` with an undefined value from `uiState`', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName');
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {
+        range: {},
+      },
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      price: {},
+    });
+  });
+
+  test('returns the default `SearchParameters` with non-number values from `uiState`', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName');
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {
+        range: {
+          price: 'min:max',
+        },
+      },
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      price: {},
+    });
+  });
+
+  test('returns the default `SearchParameters` with a malformatted value from `uiState`', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName');
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {
+        range: {
+          price: 'wrong-format',
+        },
+      },
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      price: {},
+    });
+  });
+
+  test('returns the `SearchParameters` with the other numeric refinements from `SearchParameters`', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      numericRefinements: {
+        age: {
+          '>=': [16],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {
+        range: {
+          price: '100:1000',
+        },
+      },
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price']);
+    expect(actual.numericRefinements).toEqual({
+      age: {
+        '>=': [16],
+      },
+      price: {
+        '<=': [1000],
+        '>=': [100],
+      },
     });
   });
 });
