@@ -634,143 +634,223 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
   });
 
-  describe('routing', () => {
-    const getInitializedWidget = (config = {}) => {
-      const rendering = jest.fn();
-      const makeWidget = connectToggleRefinement(rendering);
-
-      const attribute = 'isShippingFree';
+  describe('getWidgetState', () => {
+    test('returns the `uiState` empty', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName');
       const widget = makeWidget({
-        attribute,
-        ...config,
+        attribute: 'free_shipping',
       });
 
-      const initialConfig = widget.getConfiguration(new SearchParameters({}));
-      const helper = jsHelper({}, '', initialConfig);
-      helper.search = jest.fn();
-
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
-
-      const { refine } = rendering.mock.calls[
-        rendering.mock.calls.length - 1
-      ][0];
-
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if the default value is selected', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const actual = widget.getWidgetState(
+        {},
+        {
           searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
+        }
+      );
+
+      expect(actual).toEqual({});
+    });
+
+    test('returns the `uiState` with a refinement', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['freeShipping'],
+        disjunctiveFacetsRefinements: {
+          freeShipping: ['true'],
+        },
+      });
+      const widget = makeWidget({
+        attribute: 'freeShipping',
       });
 
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine({ isRefined: false }); // refinement is based on the previous value (the one passed)
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const actual = widget.getWidgetState(
+        {},
+        {
           searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toMatchSnapshot();
-      });
+        }
+      );
 
-      test('should return the same UI state if the value if the refinement is the same', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine({ isRefined: false });
-        const uiStateBefore = widget.getWidgetState(
-          {},
-          {
-            searchParameters: helper.state,
-            helper,
-          }
-        );
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-        expect(uiStateAfter).toBe(uiStateBefore);
+      expect(actual).toEqual({
+        toggle: {
+          freeShipping: true,
+        },
       });
     });
 
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if no value is in the UI state (one value)', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiState = {};
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toBe(searchParametersBefore);
+    test('returns the `uiState` without namespace overridden', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['freeShipping'],
+        disjunctiveFacetsRefinements: {
+          freeShipping: ['true'],
+        },
+      });
+      const widget = makeWidget({
+        attribute: 'freeShipping',
       });
 
-      test('should enforce the default value if no value is in the UI state (two values)', () => {
-        const [widget, helper] = getInitializedWidget({
-          on: 'free-shipping',
-          off: 'paid-shipping',
-        });
-        const uiState = {};
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-
-      test('should remove the refinement (one value)', () => {
-        const [widget, helper, refine] = getInitializedWidget();
-        refine({ isRefined: false });
-        const uiState = {};
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-
-      test('should update the SP base on the UI state (two values)', () => {
-        const [widget, helper, refine] = getInitializedWidget({
-          on: 'free-shipping',
-          off: 'paid-shipping',
-        });
-        refine({ isRefined: false });
-        const uiState = {};
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toMatchSnapshot();
-      });
-
-      test('should update the SP base on the UI state - toggled (two values)', () => {
-        const [widget, helper] = getInitializedWidget({
-          on: 'free-shipping',
-          off: 'paid-shipping',
-        });
-        const uiState = {
+      const actual = widget.getWidgetState(
+        {
           toggle: {
-            isShippingFree: true,
+            discount: true,
           },
-        };
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        expect(searchParametersAfter).toMatchSnapshot();
+        },
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        toggle: {
+          discount: true,
+          freeShipping: true,
+        },
+      });
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    test('returns the `SearchParameters` with the default value without the previous refinement', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, '', {
+        disjunctiveFacets: ['freeShipping'],
+        disjunctiveFacetsRefinements: {
+          freeShipping: ['true'],
+        },
+      });
+      const widget = makeWidget({
+        attribute: 'freeShipping',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping']);
+      expect(actual.disjunctiveFacetsRefinements).toEqual({
+        freeShipping: [],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName');
+      const widget = makeWidget({
+        attribute: 'freeShipping',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          toggle: {
+            freeShipping: true,
+          },
+        },
+      });
+
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping']);
+      expect(actual.disjunctiveFacetsRefinements).toEqual({
+        freeShipping: ['true'],
+      });
+    });
+
+    test('returns the `SearchParameters` with the `off` value when `uiState` is empty', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName');
+      const widget = makeWidget({
+        attribute: 'freeShipping',
+        on: 'free-shipping',
+        off: 'paid-shipping',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping']);
+      expect(actual.disjunctiveFacetsRefinements).toEqual({
+        freeShipping: ['paid-shipping'],
+      });
+    });
+
+    test('returns the `SearchParameters` with the `on` value when the `uiState` is `true`', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName');
+      const widget = makeWidget({
+        attribute: 'freeShipping',
+        on: 'free-shipping',
+        off: 'paid-shipping',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          toggle: {
+            freeShipping: true,
+          },
+        },
+      });
+
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping']);
+      expect(actual.disjunctiveFacetsRefinements).toEqual({
+        freeShipping: ['free-shipping'],
+      });
+    });
+
+    test('returns the `SearchParameters` with the `off` value when the `uiState` is `false`', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName');
+      const widget = makeWidget({
+        attribute: 'freeShipping',
+        on: 'free-shipping',
+        off: 'paid-shipping',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          toggle: {
+            freeShipping: false,
+          },
+        },
+      });
+
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping']);
+      expect(actual.disjunctiveFacetsRefinements).toEqual({
+        freeShipping: ['paid-shipping'],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, 'indexName', {
+        disjunctiveFacets: ['freeShipping'],
+        disjunctiveFacetsRefinements: {
+          freeShipping: ['false'],
+        },
+      });
+      const widget = makeWidget({
+        attribute: 'freeShipping',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          toggle: {
+            freeShipping: true,
+          },
+        },
+      });
+
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping']);
+      expect(actual.disjunctiveFacetsRefinements).toEqual({
+        freeShipping: ['true'],
       });
     });
   });
