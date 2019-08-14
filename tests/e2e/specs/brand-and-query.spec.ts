@@ -1,7 +1,7 @@
 describe('InstantSearch - Search on specific brand and query filtering', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     if (!browser.isMobile) {
-      browser.maximizeWindow();
+      await browser.maximizeWindow();
     }
   });
 
