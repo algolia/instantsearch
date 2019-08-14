@@ -108,14 +108,15 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
       );
     }
 
-    const defaultItems = items.filter(item => item.default);
+    const defaultItems = items.filter(item => item.default === true);
+
     if (defaultItems.length > 1) {
       throw new Error(
         withUsage('More than one default value is specified in `items`.')
       );
     }
 
-    const defaultItem = find(userItems, item => item.default === true);
+    const defaultItem = defaultItems[0];
 
     return {
       $$type: 'ais.hitsPerPage',
