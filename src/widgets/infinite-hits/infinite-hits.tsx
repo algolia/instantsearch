@@ -19,6 +19,7 @@ import {
   Template,
   Hit,
   InsightsClientWrapper,
+  SearchResults,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -66,15 +67,15 @@ export type InfiniteHitsTemplates = {
   /**
    * The template to use when there are no results.
    */
-  empty: Template<void>;
+  empty: Template<{ results: SearchResults }>;
   /**
    * The template to use for the “Show previous” label.
    */
-  showPreviousText: Template<void>;
+  showPreviousText: Template;
   /**
    * The template to use for the “Show more” label.
    */
-  showMoreText: Template<void>;
+  showMoreText: Template;
   /**
    * The template to use for each result.
    */
