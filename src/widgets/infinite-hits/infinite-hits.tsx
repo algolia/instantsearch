@@ -67,8 +67,17 @@ export type InfiniteHitsRendererWidgetParams = {
 };
 
 interface InfiniteHitsWidgetParams extends InfiniteHitsRendererWidgetParams {
+  /**
+   * The CSS Selector or `HTMLElement` to insert the widget into.
+   */
   container: string | HTMLElement;
+  /**
+   * The CSS classes to override.
+   */
   cssClasses?: Partial<InfiniteHitsCSSClasses>;
+  /**
+   * The templates to use for the widget.
+   */
   templates?: Partial<InfiniteHitsTemplates>;
 }
 
