@@ -1,9 +1,9 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import getContainerNode from '../../../lib/utils/getContainerNode';
 import pagination from '../pagination';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 

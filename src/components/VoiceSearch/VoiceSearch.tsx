@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import Template from '../Template/Template';
 
 import { VoiceSearchTemplates } from '../../widgets/voice-search/voice-search';

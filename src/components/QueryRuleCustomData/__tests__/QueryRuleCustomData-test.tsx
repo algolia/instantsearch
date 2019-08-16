@@ -1,4 +1,7 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
+// import React from 'react';
 import { shallow } from 'enzyme';
 import QueryRuleCustomData from '../QueryRuleCustomData';
 

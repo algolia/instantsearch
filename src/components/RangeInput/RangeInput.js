@@ -1,4 +1,4 @@
-import React, { Component } from 'preact-compat';
+import React, { Component } from 'preact';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';

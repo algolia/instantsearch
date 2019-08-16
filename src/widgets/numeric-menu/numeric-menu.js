@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu';
@@ -151,7 +153,7 @@ export default function numericMenu({
   });
 
   const makeNumericMenu = connectNumericMenu(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeNumericMenu({

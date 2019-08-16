@@ -1,5 +1,7 @@
+/** @jsx h */
+
+import { h, Component } from 'preact';
 import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
 import { isEqual } from '../../lib/utils';
 import Template from '../Template/Template';
 

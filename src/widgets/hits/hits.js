@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import connectHits from '../../connectors/hits/connectHits';
 import Hits from '../../components/Hits/Hits';
@@ -125,7 +127,7 @@ You may want to migrate using \`connectHits\`: ${createDocumentationLink({
   });
 
   const makeHits = withInsights(connectHits)(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeHits({ escapeHTML, transformItems });

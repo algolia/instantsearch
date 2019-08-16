@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { unmountComponentAtNode } from 'preact-compat';
+import { render } from 'preact';
 import {
   getContainerNode,
   renderTemplate,
@@ -210,11 +210,7 @@ const geoSearch = ({
     : customHTMLMarker;
 
   const makeGeoSearch = connectGeoSearch(renderer, () => {
-    unmountComponentAtNode(containerNode.querySelector(`.${cssClasses.tree}`));
-
-    while (containerNode.firstChild) {
-      containerNode.removeChild(containerNode.firstChild);
-    }
+    render(null, containerNode);
   });
 
   return makeGeoSearch({

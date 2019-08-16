@@ -18,14 +18,14 @@ module.exports = api => {
 
   const testPlugins = [
     '@babel/plugin-proposal-class-properties',
-    [
-      'module-resolver',
-      {
-        alias: {
-          'preact-compat': 'react',
-        },
-      },
-    ],
+    // [
+    //   'module-resolver',
+    //   {
+    //     alias: {
+    //       preact: 'react',
+    //     },
+    //   },
+    // ],
   ];
 
   const buildPlugins = clean([

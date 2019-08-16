@@ -1,4 +1,6 @@
-import React, { Component } from 'preact-compat';
+/** @jsx h */
+
+import { h, Component, createElement } from 'preact';
 import PropTypes from 'prop-types';
 import { isEqual } from '../../lib/utils';
 
@@ -37,7 +39,7 @@ class PaginationLink extends Component {
       };
     }
 
-    const element = React.createElement(tagName, attributes);
+    const element = createElement(tagName, attributes);
 
     return <li className={cssClasses.item}>{element}</li>;
   }

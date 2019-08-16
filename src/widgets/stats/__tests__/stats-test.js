@@ -1,8 +1,8 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import stats from '../stats';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 

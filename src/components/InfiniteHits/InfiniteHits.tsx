@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import { SearchResults } from 'algoliasearch-helper';

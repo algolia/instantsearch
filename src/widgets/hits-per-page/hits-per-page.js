@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
@@ -104,7 +106,7 @@ export default function hitsPerPage({
   });
 
   const makeHitsPerPage = connectHitsPerPage(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeHitsPerPage({ items, transformItems });

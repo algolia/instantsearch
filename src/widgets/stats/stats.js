@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Stats from '../../components/Stats/Stats';
 import connectStats from '../../connectors/stats/connectStats';
@@ -123,7 +125,7 @@ export default function stats({
   });
 
   const makeWidget = connectStats(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget();

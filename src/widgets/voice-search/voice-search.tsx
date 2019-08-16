@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import {
   getContainerNode,
@@ -95,7 +97,7 @@ const voiceSearch: VoiceSearch = (
   };
 
   const makeWidget = connectVoiceSearch(renderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({

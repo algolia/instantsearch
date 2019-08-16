@@ -1,14 +1,13 @@
-import { render, unmountComponentAtNode } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import createHTMLMarker from '../createHTMLMarker';
 import renderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
-  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -128,7 +127,6 @@ describe('GeoSearch', () => {
   beforeEach(() => {
     render.mockClear();
     renderer.mockClear();
-    unmountComponentAtNode.mockClear();
   });
 
   describe('Usage', () => {
@@ -343,12 +341,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
+    expect(render).toHaveBeenCalledTimes(1);
+
     widget.dispose({
       helper,
       state: helper.state,
     });
 
-    expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledWith(null, container);
   });
 
   describe('setup events', () => {

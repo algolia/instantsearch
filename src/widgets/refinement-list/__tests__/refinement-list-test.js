@@ -1,9 +1,9 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import refinementList from '../refinement-list';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 

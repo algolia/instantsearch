@@ -9189,7 +9189,7 @@ postcss@^7.0.16:
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-preact-compat@^3.17.0, preact-compat@^3.18.0:
+preact-compat@^3.17.0:
   version "3.18.5"
   resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.18.5.tgz#45b801de75e3016bebe8cd446f51f60d2b948bb9"
   integrity sha512-F174NW6PI5GU+T28B0ZHblhxMsFaPVaSBiaE++xrxdDVunsO0mARYfOSZizTdb/PFLqXDzcQ1IWdnEt/vIiUvw==
@@ -9222,7 +9222,12 @@ preact-transition-group@^1.1.1:
   resolved "https://registry.yarnpkg.com/preact-transition-group/-/preact-transition-group-1.1.1.tgz#f0a49327ea515ece34ea2be864c4a7d29e5d6e10"
   integrity sha1-8KSTJ+pRXs406ivoZMSn0p5dbhA=
 
-preact@^8.2.5, preact@^8.3.0:
+preact@^10.0.0-rc.1:
+  version "10.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.0.0-rc.1.tgz#bae4419f8e289c327504d4ee6e734c377983548c"
+  integrity sha512-DyG8ySCbrQZ8w4cSyxnofM6yH/hzyYLHmIrE3xL1FjSCX4DpvVmP7DTpkV535FSQX0d2zOscb7DCIY+crBtxow==
+
+preact@^8.2.5:
   version "8.4.2"
   resolved "https://registry.yarnpkg.com/preact/-/preact-8.4.2.tgz#1263b974a17d1ea80b66590e41ef786ced5d6a23"
   integrity sha512-TsINETWiisfB6RTk0wh3/mvxbGRvx+ljeBccZ4Z6MPFKgu/KFGyf2Bmw3Z/jlXhL5JlNKY6QAbA9PVyzIy9//A==

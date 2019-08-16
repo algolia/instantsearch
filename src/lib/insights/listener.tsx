@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
 import { InsightsClientWrapper } from '../../types';
 

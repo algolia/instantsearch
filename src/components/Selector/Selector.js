@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
+import React, { Component } from 'preact';
 import cx from 'classnames';
 
 class Selector extends Component {

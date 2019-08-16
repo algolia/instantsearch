@@ -1,10 +1,10 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import sortBy from '../sort-by';
 import instantSearch from '../../../lib/main';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 

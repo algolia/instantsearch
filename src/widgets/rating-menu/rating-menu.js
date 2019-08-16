@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
@@ -158,7 +160,7 @@ export default function ratingMenu({
   });
 
   const makeWidget = connectRatingMenu(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ attribute, max });
