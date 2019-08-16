@@ -111,6 +111,6 @@ export type WidgetFactory<TWidgetParams> = (
   widgetParams: TWidgetParams
 ) => Widget;
 
-export type Template<TTemplateItem> =
+export type Template<TTemplateData = void> =
   | string
-  | ((item: TTemplateItem) => string);
+  | ((data: TTemplateData) => string);
