@@ -244,13 +244,13 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       dispose({ state }) {
         unmountFn();
 
-        const stateWithoutQuery = state.setQueryParameter('page', undefined);
+        const stateWithoutPage = state.setQueryParameter('page', undefined);
 
         if (!escapeHTML) {
-          return stateWithoutQuery;
+          return stateWithoutPage;
         }
 
-        return stateWithoutQuery.setQueryParameters(
+        return stateWithoutPage.setQueryParameters(
           Object.keys(TAG_PLACEHOLDER).reduce(
             (acc, key) => ({
               ...acc,
@@ -262,30 +262,40 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page || 0;
-
-        if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
+        if (!hasShowPrevious) {
           return uiState;
         }
 
+        // The page in the UI state is incremented by one
+        // to expose the user value (not `0`).
+        const page = (searchParameters.page || 0) + 1;
+
         return {
           ...uiState,
-          page: page + 1,
+          page,
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (!hasShowPrevious) {
-          return searchParameters;
+        let state = searchParameters;
+
+        if (escapeHTML) {
+          state = searchParameters.setQueryParameters(TAG_PLACEHOLDER);
         }
 
-        const uiPage = uiState.page;
+        if (hasShowPrevious) {
+          const uiPage = uiState.page;
 
-        if (uiPage) {
-          return searchParameters.setQueryParameter('page', uiPage - 1);
+          if (uiPage) {
+            // The page in the search parameters is decremented by one
+            // to get to the actual parameter value from the UI state.
+            state = searchParameters.setQueryParameter('page', uiPage - 1);
+          } else {
+            state = searchParameters.setQueryParameter('page', undefined);
+          }
         }
 
-        return searchParameters.setQueryParameter('page', undefined);
+        return state;
       },
     };
   };
