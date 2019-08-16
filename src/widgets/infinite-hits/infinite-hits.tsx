@@ -28,20 +28,56 @@ const suit = component('InfiniteHits');
 const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
 export type InfiniteHitsCSSClasses = {
+  /**
+   * The root element of the widget.
+   */
   root: string | string[];
+  /**
+   * The root container without results.
+   */
   emptyRoot: string | string[];
-  item: string | string[];
+  /**
+   * The list of results.
+   */
   list: string | string[];
+  /**
+   * The list item.
+   */
+  item: string | string[];
+  /**
+   * The “Show previous” button.
+   */
   loadPrevious: string | string[];
+  /**
+   * The disabled “Show previous” button.
+   */
   disabledLoadPrevious: string | string[];
+  /**
+   * The “Show more” button.
+   */
   loadMore: string | string[];
+  /**
+   * The disabled “Show more” button.
+   */
   disabledLoadMore: string | string[];
 };
 
 export type InfiniteHitsTemplates = {
+  /**
+   * The template to use when there are no results.
+   */
   empty: Template<void>;
+  /**
+   * The template to use for the “Show previous” label.
+   */
   showPreviousText: Template<void>;
+  /**
+   * The template to use for the “Show more” label.
+   */
   showMoreText: Template<void>;
+  /**
+   * The template to use for each result.
+   */
   item: Template<Hit>;
 };
 
@@ -60,7 +96,6 @@ export type InfiniteHitsRendererWidgetParams = {
   showPrevious: boolean;
   /**
    * Receives the items, and is called before displaying them.
-   * Should return a new array with the same shape as the original array.
    * Useful for mapping over the items to transform, and remove or reorder them.
    */
   transformItems: (items: any[]) => any[];
