@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/react-instantsearch
   docker:
-    - image: circleci/node:8.16.0@sha256:f7642f8ce84d0953b9a25d2d53356d9578cbb1e5785c66b0fc2019cb7e4135ea
+    - image: circleci/node:8.16.1@sha256:20be36c5b8e4d2493fda12d39aa10d4757b378cae739fbb92e715ca8c6d73274
 
 version: 2
 jobs:
@@ -60,7 +60,7 @@ jobs:
   test_e2e:
     <<: *defaults
     docker:
-      - image: circleci/node:8.16.0-browsers@sha256:31c877ef04347da0db73bd49d6084464c6663896f53891854a9f23333d6b8d0e
+      - image: circleci/node:8.16.1-browsers@sha256:f0c539aace243acfbe7f9c676bf0dc6d4a0ddf132b6faeb95b7d359053ca466e
     steps:
       - checkout
       - run: *install_yarn_version
