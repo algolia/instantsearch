@@ -116,7 +116,7 @@
     "style-loader": "1.0.0",
     "typescript": "3.5.3",
     "webpack": "4.39.2",
-    "webpack-cli": "3.3.6"
+    "webpack-cli": "3.3.7"
   },
   "engines": {
     "node": "8.16.1",
