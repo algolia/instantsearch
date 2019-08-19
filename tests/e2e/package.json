@@ -24,7 +24,7 @@
   "sideEffects": false,
   "scripts": {
     "commit": "git-cz",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "version": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file && git add CHANGELOG.md",
     "lint": "eslint --ext .js,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.ts,.tsx --fix .",
     "type-check": "tsc",
