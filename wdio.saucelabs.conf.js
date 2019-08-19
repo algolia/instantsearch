@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs, no-console */
+/* eslint-disable import/no-commonjs */
 
 const { saucelabs } = require('instantsearch-e2e-tests');
 
