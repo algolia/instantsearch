@@ -1,9 +1,9 @@
-const filtersButtons = [
-  ...document.querySelectorAll('[data-action="open-overlay"]'),
-];
-const closeOverlayButtons = [
-  ...document.querySelectorAll('[data-action="close-overlay"]'),
-];
+const filtersButtons = Array.prototype.slice.call(
+  document.querySelectorAll('[data-action="open-overlay"]')
+);
+const closeOverlayButtons = Array.prototype.slice.call(
+  document.querySelectorAll('[data-action="close-overlay"]')
+);
 const header = document.querySelector('#header');
 const resultsContainer = document.querySelector('.container-results');
 
