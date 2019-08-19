@@ -19,6 +19,7 @@ import {
   Template,
   Hit,
   InsightsClientWrapper,
+  SearchResults,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -28,32 +29,91 @@ const suit = component('InfiniteHits');
 const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
 export type InfiniteHitsCSSClasses = {
+  /**
+   * The root element of the widget.
+   */
   root: string | string[];
+  /**
+   * The root container without results.
+   */
   emptyRoot: string | string[];
-  item: string | string[];
+  /**
+   * The list of results.
+   */
   list: string | string[];
+  /**
+   * The list item.
+   */
+  item: string | string[];
+  /**
+   * The “Show previous” button.
+   */
   loadPrevious: string | string[];
+  /**
+   * The disabled “Show previous” button.
+   */
   disabledLoadPrevious: string | string[];
+  /**
+   * The “Show more” button.
+   */
   loadMore: string | string[];
+  /**
+   * The disabled “Show more” button.
+   */
   disabledLoadMore: string | string[];
 };
 
 export type InfiniteHitsTemplates = {
-  empty: Template<void>;
-  showPreviousText: Template<void>;
-  showMoreText: Template<void>;
+  /**
+   * The template to use when there are no results.
+   */
+  empty: Template<{ results: SearchResults }>;
+  /**
+   * The template to use for the “Show previous” label.
+   */
+  showPreviousText: Template;
+  /**
+   * The template to use for the “Show more” label.
+   */
+  showMoreText: Template;
+  /**
+   * The template to use for each result.
+   */
   item: Template<Hit>;
 };
 
 export type InfiniteHitsRendererWidgetParams = {
+  /**
+   * Escapes HTML entities from hits string values.
+   *
+   * @default `true`
+   */
   escapeHTML: boolean;
-  transformItems: (items: any[]) => any[];
+  /**
+   * Enable the button to load previous results.
+   *
+   * @default `false`
+   */
   showPrevious: boolean;
+  /**
+   * Receives the items, and is called before displaying them.
+   * Useful for mapping over the items to transform, and remove or reorder them.
+   */
+  transformItems: (items: any[]) => any[];
 };
 
 interface InfiniteHitsWidgetParams extends InfiniteHitsRendererWidgetParams {
+  /**
+   * The CSS Selector or `HTMLElement` to insert the widget into.
+   */
   container: string | HTMLElement;
+  /**
+   * The CSS classes to override.
+   */
   cssClasses?: Partial<InfiniteHitsCSSClasses>;
+  /**
+   * The templates to use for the widget.
+   */
   templates?: Partial<InfiniteHitsTemplates>;
 }
 
@@ -104,56 +164,6 @@ const renderer = ({
   );
 };
 
-/**
- * @typedef {Object} InfiniteHitsTemplates
- * @property {string|function} [empty = "No results"] Template used when there are no results.
- * @property {string|function} [showMoreText = "Show more results"] Template used for the "load more" button.
- * @property {string|function} [item = ""] Template used for each result. This template will receive an object containing a single record.
- */
-
-/**
- * @typedef {object} InfiniteHitsCSSClasses
- * @property {string|string[]} [root] CSS class to add to the wrapping element.
- * @property {string|string[]} [emptyRoot] CSS class to add to the wrapping element when no results.
- * @property {string|string[]} [list] CSS class to add to the list of results.
- * @property {string|string[]} [item] CSS class to add to each result.
- * @property {string|string[]} [loadMore] CSS class to add to the load more button.
- * @property {string|string[]} [disabledLoadMore] CSS class to add to the load more button when disabled.
- */
-
-/**
- * @typedef {Object} InfiniteHitsWidgetOptions
- * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget.
- * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
- * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
-
-/**
- * Display the list of results (hits) from the current search.
- *
- * This widget uses the infinite hits pattern. It contains a button that
- * will let the user load more results to the list. This is particularly
- * handy on mobile implementations.
- * @type {WidgetFactory}
- * @devNovel InfiniteHits
- * @category basic
- * @param {InfiniteHitsWidgetOptions} $0 The options for the InfiniteHits widget.
- * @return {Widget} Creates a new instance of the InfiniteHits widget.
- * @example
- * search.addWidget(
- *   instantsearch.widgets.infiniteHits({
- *     container: '#infinite-hits-container',
- *     templates: {
- *       empty: 'No results',
- *       showMoreText: 'Show more results',
- *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
- *     },
- *     transformItems: items => items.map(item => item),
- *   })
- * );
- */
 const infiniteHits: InfiniteHits = (
   {
     container,
