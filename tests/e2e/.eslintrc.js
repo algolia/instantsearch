@@ -8,6 +8,10 @@ module.exports = {
       'error',
       { argsIgnorePattern: '^_', ignoreRestSiblings: true },
     ],
+    '@typescript-eslint/no-floating-promises': 'error',
+  },
+  parserOptions: {
+    project: './tsconfig.json',
   },
   overrides: [
     {
