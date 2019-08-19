@@ -24,7 +24,7 @@ export const hitsPerPage = hitsPerPageWidget({
 export function getFallbackHitsPerPageRoutingValue(
   hitsPerPageValue: string
 ): string | undefined {
-  if (items.map(item => item.value).includes(Number(hitsPerPageValue))) {
+  if (items.map(item => item.value).indexOf(Number(hitsPerPageValue)) !== -1) {
     return hitsPerPageValue;
   }
 
