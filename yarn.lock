@@ -1926,14 +1926,14 @@
     lodash.unescape "4.0.1"
     semver "5.5.0"
 
-"@wdio/cli@5.12.1":
-  version "5.12.1"
-  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-5.12.1.tgz#9fd7e0651d5574f01850b2510adb11b4f88128a7"
-  integrity sha512-wmsyy1YKoct2rKQJ7wM5aNOMeM4PwZchVbyS21zjKFfabBwzUj2+dTmnmTQj4L4le4mexurlFZH0N8cwna9DQQ==
+"@wdio/cli@5.11.14":
+  version "5.11.14"
+  resolved "https://registry.yarnpkg.com/@wdio/cli/-/cli-5.11.14.tgz#84d8f00aa32350e68e71d6cd31db7a619efa1e74"
+  integrity sha512-CVIcDtttU9Mr6Ooh3BI11dMhpLqI+RDJZE0rZkgRQbgxmNeWm2aaO625VjBxuzTBJg/ebIQ/7iCg8O1a184r/A==
   dependencies:
-    "@wdio/config" "^5.12.1"
-    "@wdio/logger" "^5.12.1"
-    "@wdio/utils" "^5.12.1"
+    "@wdio/config" "^5.11.0"
+    "@wdio/logger" "^5.11.0"
+    "@wdio/utils" "^5.11.1"
     async-exit-hook "^2.0.1"
     chalk "^2.3.2"
     chokidar "^3.0.0"
@@ -1946,11 +1946,11 @@
     lodash.pickby "^4.6.0"
     lodash.union "^4.6.0"
     log-update "^3.2.0"
-    webdriverio "^5.12.1"
+    webdriverio "^5.11.14"
     yargs "^13.2.4"
     yarn-install "^1.0.0"
 
-"@wdio/config@^5.12.1":
+"@wdio/config@^5.11.0", "@wdio/config@^5.12.1":
   version "5.12.1"
   resolved "https://registry.yarnpkg.com/@wdio/config/-/config-5.12.1.tgz#e7a1158302d49378de0b47d465dc441525590148"
   integrity sha512-8pZOA0yInNlztcixftf9U4Cc/GSC5b8X2VfWhdhlr0IWekJ5HJ4l6UsLaIRaxGjIHsRsv4Zt2/dc52Q4f3SVrw==
@@ -1979,7 +1979,7 @@
     async-exit-hook "^2.0.1"
     stream-buffers "^3.0.2"
 
-"@wdio/logger@^5.12.1":
+"@wdio/logger@^5.11.0", "@wdio/logger@^5.12.1":
   version "5.12.1"
   resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-5.12.1.tgz#1f753b0fa0c1dae455c2a485553890661150fc01"
   integrity sha512-KUmdS0Scj0T5UQGtcWFiQRqc0NpFLQ/vSvRxlDzzkoeGwwPINqTRkLT103KL7Lyitlm9uLfaFfYc2KSzynTung==
@@ -2054,7 +2054,7 @@
     fs-extra "^0.30.0"
     morgan "^1.7.0"
 
-"@wdio/utils@^5.12.1":
+"@wdio/utils@^5.11.1", "@wdio/utils@^5.12.1":
   version "5.12.1"
   resolved "https://registry.yarnpkg.com/@wdio/utils/-/utils-5.12.1.tgz#077602989a0060198ea7ec0a13c3b69c76221115"
   integrity sha512-LrUPEdINyWHrPYY3mXfsrEzEtgB+xXvIKPj6y9P3sVk90cw6FUHHbkZOiMiBkcPaCmIyf8bFwQCiLHxIQzhHiQ==
@@ -13203,7 +13203,7 @@ webdriver@^5.12.1:
     lodash.merge "^4.6.1"
     request "^2.83.0"
 
-webdriverio@^5.12.1:
+webdriverio@^5.11.14, webdriverio@^5.12.1:
   version "5.12.1"
   resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-5.12.1.tgz#b1a4b600fa8337b5433efa9aa205a81a554e76ba"
   integrity sha512-ZeNRP0KO4y84APKsLdCJZctW41Pm3CQ3Ve2+ZJsM3Z6TthJ3O+egZMirhB41gZBc1XraD9fjZxtQUHVl1NCMEw==
