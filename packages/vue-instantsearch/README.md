@@ -39,7 +39,7 @@ We welcome all contributors, from casual to regular. You are only
 one command away to start the developer environment,
 [read our CONTRIBUTING guide](.github/CONTRIBUTING.md).
 
-[logo]: https://raw.githubusercontent.com/algolia/vue-instantsearch/master/vue-instantsearch-readme.png
+[logo]: .github/vue-instantsearch-readme.png
 [website]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/
 [getting-started-guide]: https://www.algolia.com/doc/guides/building-search-ui/getting-started/vue/
 [algolia-website]: https://www.algolia.com/
