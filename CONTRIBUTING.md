@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/">
-    <img alt="React InstantSearch" src="./website/assets/react-instantsearch.svg" width="250">
+    <img alt="React InstantSearch" src=".github/react-instantsearch-banner.png">
   </a>
 </p>
 
