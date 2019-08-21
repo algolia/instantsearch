@@ -31,3 +31,6 @@ import './changeToggleRefinementStatus';
 // RatingMenu
 import './getRatingMenuValue';
 import './setRatingMenuValue';
+
+// ClearRefinements
+import './clearRefinements';
