@@ -275,11 +275,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         const path = searchParameters.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );
-        if (!path || path.length === 0) return uiState;
-        if (
-          uiState.hierarchicalMenu &&
-          isEqual(path, uiState.hierarchicalMenu[hierarchicalFacetName])
-        ) {
+
+        if (!path.length) {
           return uiState;
         }
 
