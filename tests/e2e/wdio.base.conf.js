@@ -100,4 +100,10 @@ module.exports = {
      */
     require('./helpers');
   },
+
+  async beforeSuite() {
+    if (!browser.isMobile) {
+      await browser.maximizeWindow();
+    }
+  },
 };
