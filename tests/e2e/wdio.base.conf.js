@@ -7,7 +7,16 @@ module.exports = {
    * https://github.com/webdriverio/webdriverio/tree/master/packages/wdio-static-server-service
    */
   services: ['static-server'],
-  staticServerFolders: [{ mount: '/', path: './website' }],
+  staticServerFolders: [
+    {
+      mount: '/',
+      path: './website',
+    },
+    {
+      mount: '/examples/e-commerce/*',
+      path: './website/examples/e-commerce',
+    },
+  ],
   staticServerPort: 5000,
   /*
    * Set the static server, started above, as the base URL
