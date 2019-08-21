@@ -34,3 +34,6 @@ import './setRatingMenuValue';
 
 // ClearRefinements
 import './clearRefinements';
+
+// Pagination
+import './getPage';
