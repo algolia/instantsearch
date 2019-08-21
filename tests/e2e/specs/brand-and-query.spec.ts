@@ -1,10 +1,4 @@
 describe('InstantSearch - Search on specific brand and query filtering', () => {
-  beforeAll(async () => {
-    if (!browser.isMobile) {
-      await browser.maximizeWindow();
-    }
-  });
-
   it('navigates to the e-commerce demo', async () => {
     await browser.url('examples/e-commerce/');
   });

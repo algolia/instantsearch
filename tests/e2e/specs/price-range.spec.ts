@@ -2,12 +2,6 @@ describe('InstantSearch - Search on specific price range', () => {
   let lowerBound: number;
   let upperBound: number;
 
-  beforeAll(async () => {
-    if (!browser.isMobile) {
-      await browser.maximizeWindow();
-    }
-  });
-
   it('navigates to the e-commerce demo', async () => {
     await browser.url('examples/e-commerce/');
   });

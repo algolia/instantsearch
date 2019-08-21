@@ -23,7 +23,7 @@ module.exports = {
       },
     },
     {
-      files: ['helpers/**/*.ts'],
+      files: ['helpers/**/*.ts', 'wdio.*.conf.js'],
       extends: ['plugin:wdio/recommended'],
       plugins: ['wdio'],
       rules: {
