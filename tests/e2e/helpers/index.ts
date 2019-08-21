@@ -23,3 +23,6 @@ import './getRangeSliderLowerBound';
 import './setRangeSliderLowerBound';
 import './getRangeSliderUpperBound';
 import './setRangeSliderUpperBound';
+
+// ToggleRefinement
+import './getToggleRefinementStatus';
