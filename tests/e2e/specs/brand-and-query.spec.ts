@@ -4,14 +4,7 @@ describe('InstantSearch - Search on specific brand and query filtering', () => {
   });
 
   it('selects "Apple" brand in list', async () => {
-    const brand = await browser.$('.ais-RefinementList-labelText=Apple');
-    await brand.click();
-
-    // Changing the URL will also change the page element IDs in Internet Explorer
-    // Not waiting for the URL to be properly updated before continuing can make the tests to fail
-    await browser.waitUntil(async () =>
-      (await browser.getUrl()).includes('brands=Apple')
-    );
+    await browser.setSelectedRefinementListItem('Apple');
   });
 
   it('fills search input with "macbook"', async () => {
