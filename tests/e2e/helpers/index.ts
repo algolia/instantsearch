@@ -45,3 +45,4 @@ import './setHitsPerPage';
 
 // SortBy
 import './getSortByValue';
+import './setSortByValue';
