@@ -30,3 +30,4 @@ import './changeToggleRefinementStatus';
 
 // RatingMenu
 import './getRatingMenuValue';
+import './setRatingMenuValue';
