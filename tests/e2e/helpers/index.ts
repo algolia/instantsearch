@@ -38,6 +38,7 @@ import './clearRefinements';
 // Pagination
 import './getPage';
 import './setPage';
+import './setNextPage';
 
 // HitsPerPage
 import './getHitsPerPage';
