@@ -26,9 +26,7 @@ describe('InstantSearch - Search on specific brand and query filtering', () => {
   });
 
   it('waits for the results list to be updated (wait for the "macbook" word to be highlighted)', async () => {
-    await browser.waitUntil(
-      async () => (await browser.$$('mark=MacBook')).length > 0
-    );
+    await browser.waitForElement('mark=MacBook');
   });
 
   it('must match the expected results', async () => {
