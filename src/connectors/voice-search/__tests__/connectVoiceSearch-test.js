@@ -232,41 +232,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   });
 
   describe('getWidgetState', () => {
-    it('returns the same state if query is an empty string', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      const uiStateBefore = { foo: 'bar' };
-      refine('');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toBe(uiStateBefore);
-    });
+    test('returns the `uiState` empty', () => {
+      const { widget, helper } = getInitializedWidget();
 
-    it('returns the same state if query is same', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      refine('myQuery');
-      const uiStateBefore = widget.getWidgetState(
+      const actual = widget.getWidgetState(
         {},
         {
           searchParameters: helper.state,
         }
       );
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toBe(uiStateBefore);
+
+      expect(actual).toEqual({});
     });
 
-    it('returns new state with query after refine', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      const uiStateBefore = { foo: 'bar' };
-      refine('myQuery');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toEqual({
-        foo: 'bar',
-        query: 'myQuery',
+    test('returns the `uiState` with a refinement', () => {
+      const { widget, helper } = getInitializedWidget();
+
+      helper.setQueryParameter('query', 'Apple');
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        query: 'Apple',
       });
     });
   });

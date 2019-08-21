@@ -125,7 +125,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       getWidgetState(uiState, { searchParameters }) {
         const query = searchParameters.query || '';
 
-        if (query === '' || (uiState && uiState.query === query)) {
+        if (!query) {
           return uiState;
         }
 
