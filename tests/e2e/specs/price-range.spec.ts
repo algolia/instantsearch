@@ -22,18 +22,7 @@ describe('InstantSearch - Search on specific price range', () => {
   });
 
   it('drag and drop upper handle to the left', async () => {
-    const upperHandle = await browser.$(
-      '.ais-RangeSlider .rheostat-handle-upper'
-    );
-
-    await browser.dragAndDropByOffset(upperHandle, -146);
-
-    // There is a difference between steps in browsers so we cannot assert on a strict value
-    const tooltip = await browser.$(
-      '//*[contains(@class, "rheostat-tooltip") and normalize-space() = "1,971"]|//*[contains(@class, "rheostat-tooltip") and normalize-space() = "1,981"]'
-    );
-
-    upperBound = Number((await tooltip.getText()).replace(',', ''));
+    upperBound = await browser.setRangeSliderUpperBound(1971);
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be < upperBound)`, async () => {
