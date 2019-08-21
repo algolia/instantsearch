@@ -14,30 +14,31 @@ describe('connectMenu', () => {
     makeWidget = connectMenu(rendering);
   });
 
-  const getInitializedWidget = () => {
-    const rendering2 = jest.fn();
-    const makeWidget2 = connectMenu(rendering2);
-    const widget = makeWidget2({
-      attribute: 'category',
-    });
+  // @TODO: once we've migrate away from `getConfiguration` update
+  // const getInitializedWidget = () => {
+  //   const rendering2 = jest.fn();
+  //   const makeWidget2 = connectMenu(rendering2);
+  //   const widget = makeWidget2({
+  //     attribute: 'category',
+  //   });
 
-    const helper = jsHelper(
-      {},
-      '',
-      widget.getConfiguration(new SearchParameters())
-    );
-    helper.search = jest.fn();
+  //   const helper = jsHelper(
+  //     {},
+  //     '',
+  //     widget.getConfiguration(new SearchParameters())
+  //   );
+  //   helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+  //   widget.init({
+  //     helper,
+  //     state: helper.state,
+  //     createURL: () => '#',
+  //   });
 
-    const { refine } = rendering2.mock.calls[0][0];
+  //   const { refine } = rendering2.mock.calls[0][0];
 
-    return [widget, helper, refine];
-  };
+  //   return [widget, helper, refine];
+  // };
 
   describe('Usage', () => {
     it('throws without render function', () => {
@@ -643,68 +644,90 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
   });
 
   describe('getWidgetState', () => {
-    test('should give back the object unmodified if there are no refinements', () => {
-      const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
+    test('returns the `uiState` empty', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
       });
 
-      expect(uiStateAfter).toBe(uiStateBefore);
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({});
     });
 
-    test('should add an entry equal to the refinement', () => {
-      const [widget, helper] = getInitializedWidget();
-      helper.toggleRefinement('category', 'pants');
-      const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
+    test('returns the `uiState` with a refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Apple'],
+        },
       });
 
-      expect(uiStateAfter).toEqual({
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
         menu: {
-          category: 'pants',
+          brand: 'Apple',
         },
       });
     });
 
-    test('should not override other values in the same namespace', () => {
-      const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {
-        menu: {
-          othercategory: 'not-pants',
-        },
-      };
-      helper.toggleRefinement('category', 'pants');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
-      });
-
-      expect(uiStateAfter).toEqual({
-        menu: {
-          category: 'pants',
-          othercategory: 'not-pants',
+    test('returns the `uiState` without namespace overridden', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Apple'],
         },
       });
-    });
 
-    test('should give back the object unmodified if refinements are already set', () => {
-      const [widget, helper] = getInitializedWidget();
-      const uiStateBefore = {
-        menu: {
-          category: 'pants',
-        },
-      };
-      helper.toggleRefinement('category', 'pants');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-        helper,
+      const widget = makeWidget({
+        attribute: 'brand',
       });
 
-      expect(uiStateAfter).toBe(uiStateBefore);
+      const actual = widget.getWidgetState(
+        {
+          menu: {
+            categories: 'Phone',
+          },
+        },
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        menu: {
+          categories: 'Phone',
+          brand: 'Apple',
+        },
+      });
     });
   });
 

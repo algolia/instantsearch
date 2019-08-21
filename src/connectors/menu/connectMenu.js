@@ -242,14 +242,11 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
+        const [value] = searchParameters.getHierarchicalFacetBreadcrumb(
           attribute
         );
 
-        if (
-          !refinedItem ||
-          (uiState.menu && uiState.menu[attribute] === refinedItem)
-        ) {
+        if (!value) {
           return uiState;
         }
 
@@ -257,7 +254,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           ...uiState,
           menu: {
             ...uiState.menu,
-            [attribute]: refinedItem,
+            [attribute]: value,
           },
         };
       },
