@@ -14,6 +14,9 @@ import './getHitsTitles';
 import './getSelectedRefinementListItem';
 import './setSelectedRefinementListItem';
 
+// HierarchicalMenu
+import './getSelectedHierarchicalMenuItems';
+
 // RangeSlider
 import './setRangeSliderLowerBound';
 import './setRangeSliderUpperBound';
