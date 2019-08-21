@@ -21,4 +21,5 @@ import './setSelectedHierarchicalMenuItem';
 // RangeSlider
 import './getRangeSliderLowerBound';
 import './setRangeSliderLowerBound';
+import './getRangeSliderUpperBound';
 import './setRangeSliderUpperBound';
