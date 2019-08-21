@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf ./dist/ && rsync -r . ./dist/"
+    "build": "rm -rf ./dist/ ./dist/ && rsync -r . ./dist/ && rsync -r ../../dist/ ./dist/"
   }
 }
