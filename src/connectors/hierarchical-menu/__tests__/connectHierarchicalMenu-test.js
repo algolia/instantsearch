@@ -892,36 +892,391 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   describe('getWidgetSearchParameters', () => {
-    test('should return the same SP if there are no refinements in the UI state', () => {
-      const [widget, helper] = getInitializedWidget();
-      // User presses back in the browser and the URL state contains no parameters
-      const uiState = {};
-      // The current state is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
-      );
-      // Applying an empty UI state should not change the object
-      expect(searchParametersAfter).toBe(searchParametersBefore);
+    beforeEach(() => {
+      warning.cache = {};
     });
 
-    test('should add the refinements according to the UI state provided', () => {
-      const [widget, helper] = getInitializedWidget();
-      // User presses back in the browser, and the URL contains the following:
-      const uiState = {
-        hierarchicalMenu: {
-          category: ['path'],
+    test('returns the `SearchParameters` with the default value', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attributes: ['categoriesLvl0', 'categoriesLvl1'],
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'categoriesLvl0',
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          separator: ' > ',
+          rootPath: null,
+          showParentLevel: true,
         },
-      };
-      // The current state is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      // The state after the UI is applied on it
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
-      );
-      expect(searchParametersAfter).toMatchSnapshot();
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        categoriesLvl0: [],
+      });
+    });
+
+    test('returns the `SearchParameters` with the default value without the previous refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'categoriesLvl0',
+            attributes: ['categoriesLvl0', 'categoriesLvl1'],
+            separator: ' > ',
+            rootPath: null,
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          categoriesLvl0: ['TopLevel > SubLevel'],
+        },
+      });
+
+      const widget = makeWidget({
+        attributes: ['categoriesLvl0', 'categoriesLvl1'],
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'categoriesLvl0',
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          separator: ' > ',
+          rootPath: null,
+          showParentLevel: true,
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        categoriesLvl0: [],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attributes: ['categoriesLvl0', 'categoriesLvl1'],
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          hierarchicalMenu: {
+            categoriesLvl0: ['TopLevel', 'SubLevel'],
+          },
+        },
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'categoriesLvl0',
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          separator: ' > ',
+          rootPath: null,
+          showParentLevel: true,
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        categoriesLvl0: ['TopLevel > SubLevel'],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'categoriesLvl0',
+            attributes: ['categoriesLvl0', 'categoriesLvl1'],
+            separator: ' > ',
+            rootPath: null,
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          categoriesLvl0: ['AnotherTopLevel > AnotherSubLevel'],
+        },
+      });
+
+      const widget = makeWidget({
+        attributes: ['categoriesLvl0', 'categoriesLvl1'],
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          hierarchicalMenu: {
+            categoriesLvl0: ['TopLevel', 'SubLevel'],
+          },
+        },
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'categoriesLvl0',
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          separator: ' > ',
+          rootPath: null,
+          showParentLevel: true,
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        categoriesLvl0: ['TopLevel > SubLevel'],
+      });
+    });
+
+    test('returns the `SearchParameters` with a custom `separator`', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attributes: ['categoriesLvl0', 'categoriesLvl1'],
+        separator: ' / ',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets[0].separator).toBe(' / ');
+    });
+
+    test('returns the `SearchParameters` with a custom `rootPath`', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attributes: ['categoriesLvl0', 'categoriesLvl1'],
+        rootPath: 'TopLevel > SubLevel',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets[0].rootPath).toBe('TopLevel > SubLevel');
+    });
+
+    test('returns the `SearchParameters` with a custom `showParentLevel`', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attributes: ['categoriesLvl0', 'categoriesLvl1'],
+        showParentLevel: true,
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets[0].showParentLevel).toBe(true);
+    });
+
+    it('warns with the same `hierarchicalFacets` already defined with different `attributes`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category', 'sub_sub_category'],
+            separator: ' > ',
+            rootPath: null,
+          },
+        ],
+      });
+
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+      });
+
+      expect(() =>
+        widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        })
+      ).toWarnDev();
+    });
+
+    it('warns with the same `hierarchicalFacets` already defined with different `separator`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            separator: ' > ',
+            rootPath: null,
+          },
+        ],
+      });
+
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        separator: ' / ',
+      });
+
+      expect(() =>
+        widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        })
+      ).toWarnDev();
+    });
+
+    it('warns with the same `hierarchicalFacets` already defined with different `rootPath`', () => {
+      const render = () => {};
+      const makeWidget = connectHierarchicalMenu(render);
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'category',
+            attributes: ['category', 'sub_category'],
+            separator: ' > ',
+            rootPath: 'TopLevel > SubLevel',
+          },
+        ],
+      });
+
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        rootPath: 'TopLevel',
+      });
+
+      expect(() =>
+        widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        })
+      ).toWarnDev();
+    });
+
+    describe('with `maxValuesPerFacet`', () => {
+      test('returns the `SearchParameters` with default `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectHierarchicalMenu(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(10);
+      });
+
+      test('returns the `SearchParameters` with provided `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectHierarchicalMenu(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          limit: 5,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(5);
+      });
+
+      test('returns the `SearchParameters` with default `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectHierarchicalMenu(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          showMore: true,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(20);
+      });
+
+      test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectHierarchicalMenu(render);
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          showMore: true,
+          showMoreLimit: 15,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(15);
+      });
+
+      test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectHierarchicalMenu(render);
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(100);
+      });
+
+      test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const render = () => {};
+        const makeWidget = connectHierarchicalMenu(render);
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attributes: ['categoriesLvl0', 'categoriesLvl1'],
+          limit: 110,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(110);
+      });
     });
   });
 

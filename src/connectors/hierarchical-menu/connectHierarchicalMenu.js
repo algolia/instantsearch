@@ -293,19 +293,59 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (
+        const values =
           uiState.hierarchicalMenu &&
-          uiState.hierarchicalMenu[hierarchicalFacetName]
-        ) {
-          return searchParameters
-            .clearRefinements(hierarchicalFacetName)
-            .toggleRefinement(
-              hierarchicalFacetName,
-              uiState.hierarchicalMenu[hierarchicalFacetName].join(separator)
-            );
-        } else {
-          return searchParameters;
+          uiState.hierarchicalMenu[hierarchicalFacetName];
+
+        if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
+          const facet = searchParameters.getHierarchicalFacetByName(
+            hierarchicalFacetName
+          );
+
+          warning(
+            isEqual(facet.attributes, attributes) &&
+              facet.separator === separator &&
+              facet.rootPath === rootPath,
+            'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
+          );
         }
+
+        const withFacetConfiguration = searchParameters
+          .removeHierarchicalFacet(hierarchicalFacetName)
+          .addHierarchicalFacet({
+            name: hierarchicalFacetName,
+            attributes,
+            separator,
+            rootPath,
+            showParentLevel,
+          });
+
+        const currentMaxValuesPerFacet =
+          withFacetConfiguration.maxValuesPerFacet || 0;
+
+        const nextMaxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+          'maxValuesPerFacet',
+          nextMaxValuesPerFacet
+        );
+
+        if (!values) {
+          return withMaxValuesPerFacet.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+              [hierarchicalFacetName]: [],
+            },
+          });
+        }
+
+        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
+          hierarchicalFacetName,
+          values.join(separator)
+        );
       },
     };
   };
