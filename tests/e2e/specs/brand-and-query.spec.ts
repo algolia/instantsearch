@@ -29,12 +29,10 @@ describe('InstantSearch - Search on specific brand and query filtering', () => {
     await browser.waitForElement('mark=MacBook');
   });
 
-  it('must match the expected results', async () => {
-    const hits = await browser.$$('.hit h1');
-    const hitsText = await browser.getTextFromElements(hits);
+  it('must have the expected results', async () => {
+    const hitsTitles = await browser.getHitsTitles();
 
-    // Compare them to expected titles
-    expect(hitsText).toEqual([
+    expect(hitsTitles).toEqual([
       'Apple - MacBook Air® (Latest Model) - 13.3" Display - Intel Core i5 - 8GB Memory - 128GB Flash Storage - Silver',
       'Apple - MacBook Air® (Latest Model) - 13.3" Display - Intel Core i5 - 8GB Memory - 256GB Flash Storage - Silver',
       'Apple - Macbook® (Latest Model) - 12" Display - Intel Core M3 - 8GB Memory - 256GB Flash Storage - Space Gray',
