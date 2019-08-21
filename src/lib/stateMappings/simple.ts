@@ -1,15 +1,19 @@
-import { UiState, RouteState, StateMapping } from '../../types';
+import { UiState, StateMapping } from '../../types';
 
-class SimpleUIStateMapping implements StateMapping {
-  public stateToRoute(uiState: UiState): RouteState {
-    return uiState;
-  }
+export type SimpleRouteState = Omit<UiState, 'configure'>;
 
-  public routeToState(routeState: RouteState): UiState {
-    return routeState;
-  }
-}
+export default function SimpleStateMapping(): StateMapping<SimpleRouteState> {
+  return {
+    stateToRoute(uiState: UiState): SimpleRouteState {
+      const { configure, ...trackedRouteState } = uiState;
+      return trackedRouteState;
+    },
 
-export default function(): SimpleUIStateMapping {
-  return new SimpleUIStateMapping();
+    routeToState(routeState: SimpleRouteState): UiState {
+      // users can still make a url containing the key "configure", we don't want
+      // to take it in account by default.
+      const { configure, ...trackedUiState } = routeState as UiState;
+      return trackedUiState;
+    },
+  };
 }

@@ -219,4 +219,181 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       })
     );
   });
+
+  describe('getWidgetState', () => {
+    it('adds default parameters', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          analytics: true,
+        },
+      });
+
+      expect(
+        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+      ).toEqual({
+        configure: { analytics: true },
+      });
+    });
+
+    it('adds refined parameters', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectConfigure(renderFn);
+      const widget = makeWidget({
+        searchParameters: {
+          analytics: true,
+        },
+      });
+
+      widget.init!(createInitOptions({ helper }));
+      const { refine } = renderFn.mock.calls[0][0];
+
+      refine({ analytics: false });
+
+      expect(
+        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+      ).toEqual({
+        configure: { analytics: false },
+      });
+    });
+
+    it('adds refined (new) parameters', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectConfigure(renderFn);
+      const widget = makeWidget({
+        searchParameters: {
+          analytics: true,
+        },
+      });
+
+      widget.init!(createInitOptions({ helper }));
+      const { refine } = renderFn.mock.calls[0][0];
+
+      refine({ query: 'unsafe toys' });
+
+      expect(
+        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+      ).toEqual({
+        configure: { query: 'unsafe toys' },
+      });
+    });
+
+    it('overwrites existing configuration', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          analytics: true,
+        },
+      });
+
+      expect(
+        widget.getWidgetState!(
+          { configure: { analytics: false } },
+          { helper, searchParameters: helper.state }
+        )
+      ).toEqual({
+        configure: { analytics: true },
+      });
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    it('returns parameters set by default', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          analytics: true,
+        },
+      });
+
+      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+        uiState: {},
+      });
+
+      expect(sp).toEqual(new SearchParameters({ analytics: true }));
+    });
+
+    it('returns parameters set by uiState', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({ searchParameters: {} });
+
+      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+        uiState: {
+          configure: {
+            analytics: false,
+          },
+        },
+      });
+
+      expect(sp).toEqual(new SearchParameters({ analytics: false }));
+    });
+
+    it('overrides parameters set by uiState', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          analytics: true,
+        },
+      });
+
+      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+        uiState: {
+          configure: {
+            analytics: false,
+          },
+        },
+      });
+
+      expect(sp).toEqual(new SearchParameters({ analytics: true }));
+    });
+
+    it('merges parameters set by uiState', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          analyticsTags: ['best-website-in-the-world'],
+        },
+      });
+
+      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+        uiState: {
+          configure: {
+            analytics: false,
+          },
+        },
+      });
+
+      expect(sp).toEqual(
+        new SearchParameters({
+          analytics: false,
+          analyticsTags: ['best-website-in-the-world'],
+        })
+      );
+    });
+
+    it('stores refined state', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectConfigure(renderFn);
+      const widget = makeWidget({
+        searchParameters: {
+          analyticsTags: ['best-website-in-the-world'],
+        },
+      });
+
+      widget.init!(createInitOptions({ helper }));
+      const { refine } = renderFn.mock.calls[0][0];
+
+      refine({ analyticsTags: ['worst-site-now'] });
+
+      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
+        uiState: {},
+      });
+
+      expect(sp).toEqual(
+        new SearchParameters({
+          analyticsTags: ['worst-site-now'],
+        })
+      );
+    });
+  });
 });
