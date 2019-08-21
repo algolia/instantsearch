@@ -39,6 +39,7 @@ import './clearRefinements';
 import './getPage';
 import './setPage';
 import './setNextPage';
+import './setPreviousPage';
 
 // HitsPerPage
 import './getHitsPerPage';
