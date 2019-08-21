@@ -6,5 +6,8 @@ import './waitForElement';
 // RefinementList
 import './setSelectedRefinementListItem';
 
+// SearchBox
+import './setSearchBoxValue';
+
 // Hits
 import './getHitsTitles';

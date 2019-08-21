@@ -8,14 +8,7 @@ describe('InstantSearch - Search on specific brand and query filtering', () => {
   });
 
   it('fills search input with "macbook"', async () => {
-    const searchInput = await browser.$('[type=search]');
-    // In Internet Explorer the input must be focused before updating its value
-    await searchInput.click();
-    await searchInput.setValue('macbook');
-
-    await browser.waitUntil(async () =>
-      (await browser.getUrl()).includes('query=macbook')
-    );
+    await browser.setSearchBoxValue('macbook');
   });
 
   it('waits for the results list to be updated (wait for the "macbook" word to be highlighted)', async () => {
