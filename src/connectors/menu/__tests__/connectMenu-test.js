@@ -709,51 +709,223 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
   });
 
   describe('getWidgetSearchParameters', () => {
-    test('should return the same SP if there are no refinements in the UI state', () => {
-      const [widget, helper] = getInitializedWidget();
-      // User presses back in the browser and there are no parameters
-      const uiState = {};
-      // The current state is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
-      );
-      // Applying no parameters should return the same
-      expect(searchParametersAfter).toBe(searchParametersBefore);
+    test('returns the `SearchParameters` with the default value', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: [],
+      });
     });
 
-    test('should add the refinements according to the UI state provided', () => {
-      const [widget, helper] = getInitializedWidget();
-      // The URL contains some menu parameters
-      const uiState = {
-        menu: {
-          category: 'pants',
-        },
-      };
-      // The current search is empty
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
-      );
-
-      // It should apply the new parameters on the search
-      expect(searchParametersAfter).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              attributes: ['category'],
-              name: 'category',
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            category: ['pants'],
+    test('returns the `SearchParameters` with the default value without the previous refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
           },
-          maxValuesPerFacet: 10,
-          index: helper.state.index,
-        })
-      );
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Apple'],
+        },
+      });
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: [],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          menu: {
+            brand: 'Apple',
+          },
+        },
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: ['Apple'],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Samsung'],
+        },
+      });
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          menu: {
+            brand: 'Apple',
+          },
+        },
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: ['Apple'],
+      });
+    });
+
+    describe('with `maxValuesPerFacet`', () => {
+      test('returns the `SearchParameters` with default `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(10);
+      });
+
+      test('returns the `SearchParameters` with provided `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          limit: 5,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(5);
+      });
+
+      test('returns the `SearchParameters` with default `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          showMore: true,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(20);
+      });
+
+      test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          showMore: true,
+          showMoreLimit: 15,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(15);
+      });
+
+      test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(100);
+      });
+
+      test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+          limit: 110,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(110);
+      });
     });
   });
 
