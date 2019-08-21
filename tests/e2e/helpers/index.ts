@@ -11,3 +11,6 @@ import './setSearchBoxValue';
 
 // Hits
 import './getHitsTitles';
+
+// RangeSlider
+import './setRangeSliderLowerBound';
