@@ -42,3 +42,6 @@ import './setPage';
 // HitsPerPage
 import './getHitsPerPage';
 import './setHitsPerPage';
+
+// SortBy
+import './getSortByValue';
