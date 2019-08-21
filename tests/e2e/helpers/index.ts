@@ -3,14 +3,15 @@ import './dragAndDropByOffset';
 import './getTextFromElements';
 import './waitForElement';
 
-// RefinementList
-import './setSelectedRefinementListItem';
-
 // SearchBox
+import './getSearchBoxValue';
 import './setSearchBoxValue';
 
 // Hits
 import './getHitsTitles';
+
+// RefinementList
+import './setSelectedRefinementListItem';
 
 // RangeSlider
 import './setRangeSliderLowerBound';
