@@ -14,3 +14,4 @@ import './getHitsTitles';
 
 // RangeSlider
 import './setRangeSliderLowerBound';
+import './setRangeSliderUpperBound';
