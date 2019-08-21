@@ -27,3 +27,6 @@ import './setRangeSliderUpperBound';
 // ToggleRefinement
 import './getToggleRefinementStatus';
 import './changeToggleRefinementStatus';
+
+// RatingMenu
+import './getRatingMenuValue';
