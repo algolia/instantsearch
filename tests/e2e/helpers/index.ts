@@ -41,3 +41,4 @@ import './setPage';
 
 // HitsPerPage
 import './getHitsPerPage';
+import './setHitsPerPage';
