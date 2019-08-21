@@ -16,6 +16,7 @@ import './setSelectedRefinementListItem';
 
 // HierarchicalMenu
 import './getSelectedHierarchicalMenuItems';
+import './setSelectedHierarchicalMenuItem';
 
 // RangeSlider
 import './setRangeSliderLowerBound';
