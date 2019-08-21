@@ -14,6 +14,31 @@ describe('connectMenu', () => {
     makeWidget = connectMenu(rendering);
   });
 
+  const getInitializedWidget = () => {
+    const rendering2 = jest.fn();
+    const makeWidget2 = connectMenu(rendering2);
+    const widget = makeWidget2({
+      attribute: 'category',
+    });
+
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getConfiguration(new SearchParameters())
+    );
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const { refine } = rendering2.mock.calls[0][0];
+
+    return [widget, helper, refine];
+  };
+
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -617,145 +642,118 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
   });
 
-  describe('routing', () => {
-    const getInitializedWidget = () => {
-      const rendering2 = jest.fn();
-      const makeWidget2 = connectMenu(rendering2);
-      const widget = makeWidget2({
-        attribute: 'category',
-      });
-
-      const helper = jsHelper(
-        {},
-        '',
-        widget.getConfiguration(new SearchParameters())
-      );
-      helper.search = jest.fn();
-
-      widget.init({
+  describe('getWidgetState', () => {
+    test('should give back the object unmodified if there are no refinements', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
         helper,
-        state: helper.state,
-        createURL: () => '#',
       });
 
-      const { refine } = rendering2.mock.calls[0][0];
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
 
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if there are no refinements', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
+    test('should add an entry equal to the refinement', () => {
+      const [widget, helper] = getInitializedWidget();
+      helper.toggleRefinement('category', 'pants');
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
       });
 
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper] = getInitializedWidget();
-        helper.toggleRefinement('category', 'pants');
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toEqual({
-          menu: {
-            category: 'pants',
-          },
-        });
-      });
-
-      test('should not override other values in the same namespace', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {
-          menu: {
-            othercategory: 'not-pants',
-          },
-        };
-        helper.toggleRefinement('category', 'pants');
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toEqual({
-          menu: {
-            category: 'pants',
-            othercategory: 'not-pants',
-          },
-        });
-      });
-
-      test('should give back the object unmodified if refinements are already set', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {
-          menu: {
-            category: 'pants',
-          },
-        };
-        helper.toggleRefinement('category', 'pants');
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
+      expect(uiStateAfter).toEqual({
+        menu: {
+          category: 'pants',
+        },
       });
     });
 
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if there are no refinements in the UI state', () => {
-        const [widget, helper] = getInitializedWidget();
-        // User presses back in the browser and there are no parameters
-        const uiState = {};
-        // The current state is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying no parameters should return the same
-        expect(searchParametersAfter).toBe(searchParametersBefore);
+    test('should not override other values in the same namespace', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiStateBefore = {
+        menu: {
+          othercategory: 'not-pants',
+        },
+      };
+      helper.toggleRefinement('category', 'pants');
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
       });
 
-      test('should add the refinements according to the UI state provided', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The URL contains some menu parameters
-        const uiState = {
-          menu: {
-            category: 'pants',
-          },
-        };
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
+      expect(uiStateAfter).toEqual({
+        menu: {
+          category: 'pants',
+          othercategory: 'not-pants',
+        },
+      });
+    });
 
-        // It should apply the new parameters on the search
-        expect(searchParametersAfter).toEqual(
-          new SearchParameters({
-            hierarchicalFacets: [
-              {
-                attributes: ['category'],
-                name: 'category',
-              },
-            ],
-            hierarchicalFacetsRefinements: {
-              category: ['pants'],
+    test('should give back the object unmodified if refinements are already set', () => {
+      const [widget, helper] = getInitializedWidget();
+      const uiStateBefore = {
+        menu: {
+          category: 'pants',
+        },
+      };
+      helper.toggleRefinement('category', 'pants');
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    test('should return the same SP if there are no refinements in the UI state', () => {
+      const [widget, helper] = getInitializedWidget();
+      // User presses back in the browser and there are no parameters
+      const uiState = {};
+      // The current state is empty
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+      // Applying no parameters should return the same
+      expect(searchParametersAfter).toBe(searchParametersBefore);
+    });
+
+    test('should add the refinements according to the UI state provided', () => {
+      const [widget, helper] = getInitializedWidget();
+      // The URL contains some menu parameters
+      const uiState = {
+        menu: {
+          category: 'pants',
+        },
+      };
+      // The current search is empty
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+
+      // It should apply the new parameters on the search
+      expect(searchParametersAfter).toEqual(
+        new SearchParameters({
+          hierarchicalFacets: [
+            {
+              attributes: ['category'],
+              name: 'category',
             },
-            maxValuesPerFacet: 10,
-            index: helper.state.index,
-          })
-        );
-      });
+          ],
+          hierarchicalFacetsRefinements: {
+            category: ['pants'],
+          },
+          maxValuesPerFacet: 10,
+          index: helper.state.index,
+        })
+      );
     });
   });
 
