@@ -11,6 +11,7 @@ import './setSearchBoxValue';
 import './getHitsTitles';
 
 // RefinementList
+import './getSelectedRefinementListItem';
 import './setSelectedRefinementListItem';
 
 // RangeSlider
