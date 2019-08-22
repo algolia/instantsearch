@@ -688,10 +688,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       level0.addWidgets([
-        createWidget({
-          getWidgetSearchParameters(searchParameters) {
-            return searchParameters.setQueryParameter('hitsPerPage', 5);
-          },
+        createConfigure({
+          hitsPerPage: 5,
         }),
 
         createSearchBox({
@@ -902,10 +900,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         level0.addWidgets([
-          createWidget({
-            getWidgetSearchParameters(searchParameters) {
-              return searchParameters.setQueryParameter('hitsPerPage', 5);
-            },
+          createConfigure({
+            hitsPerPage: 5,
           }),
 
           createSearchBox({
@@ -1120,10 +1116,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         level0.addWidgets([
-          createWidget({
-            getWidgetSearchParameters(searchParameters) {
-              return searchParameters.setQueryParameter('hitsPerPage', 5);
-            },
+          createConfigure({
+            hitsPerPage: 5,
           }),
 
           createSearchBox({
@@ -1251,10 +1245,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         level0.addWidgets([
-          createWidget({
-            getWidgetSearchParameters(searchParameters) {
-              return searchParameters.setQueryParameter('hitsPerPage', 5);
-            },
+          createConfigure({
+            hitsPerPage: 5,
           }),
 
           createSearchBox({
