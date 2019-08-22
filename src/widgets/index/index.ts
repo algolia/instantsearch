@@ -202,7 +202,10 @@ const index = (props?: IndexProps): Index => {
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         helper!.setState(
-          localWidgets.reduce(enhanceConfiguration, helper!.state)
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: helper!.state,
+          })
         );
 
         widgets.forEach(widget => {

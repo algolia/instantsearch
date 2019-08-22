@@ -14,11 +14,6 @@ import index from '../index';
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      getConfiguration: jest.fn(() => {
-        return new SearchParameters({
-          query: 'Apple',
-        });
-      }),
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('query', undefined);
       }),
@@ -43,11 +38,6 @@ describe('index', () => {
 
   const createPagination = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      getConfiguration: jest.fn(() => {
-        return new SearchParameters({
-          page: 5,
-        });
-      }),
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('page', undefined);
       }),
