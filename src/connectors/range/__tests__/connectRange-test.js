@@ -1056,7 +1056,65 @@ describe('getWidgetState', () => {
     expect(actual).toEqual({});
   });
 
-  test('returns the `uiState` with a refinement', () => {
+  test('returns the `uiState` with a lower refinement', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '>=': [100],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({
+      range: {
+        price: '100:',
+      },
+    });
+  });
+
+  test('returns the `uiState` with an upper refinement', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [1000],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({
+      range: {
+        price: ':1000',
+      },
+    });
+  });
+
+  test('returns the `uiState` with a lower and upper refinement', () => {
     const render = jest.fn();
     const makeWidget = connectRange(render);
     const helper = jsHelper({}, 'indexName', {
