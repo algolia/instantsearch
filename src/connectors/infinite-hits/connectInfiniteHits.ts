@@ -262,17 +262,17 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        if (!hasShowPrevious) {
+        const page = searchParameters.page || 0;
+
+        if (!hasShowPrevious || !page) {
           return uiState;
         }
 
-        // The page in the UI state is incremented by one
-        // to expose the user value (not `0`).
-        const page = (searchParameters.page || 0) + 1;
-
         return {
           ...uiState,
-          page,
+          // The page in the UI state is incremented by one
+          // to expose the user value (not `0`).
+          page: page + 1,
         };
       },
 
