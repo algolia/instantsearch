@@ -1,4 +1,7 @@
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  PlainSearchParameters,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -54,6 +57,39 @@ describe('index', () => {
       getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) => {
         return searchParameters.setQueryParameter('page', uiState.page || 5);
       }),
+      ...args,
+    });
+
+  const createConfigure = (
+    params: PlainSearchParameters,
+    args: Partial<Widget> = {}
+  ): Widget =>
+    createWidget({
+      dispose: jest.fn(({ state }) => {
+        return state.setQueryParameters(
+          Object.keys(params).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
+      }),
+      getWidgetState(uiState) {
+        return {
+          configure: {
+            ...uiState.configure,
+            ...params,
+          },
+        };
+      },
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQueryParameters({
+          ...uiState.configure,
+          ...params,
+        });
+      },
       ...args,
     });
 
@@ -354,6 +390,47 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           new SearchParameters({
             index: 'indexName',
             query: 'Apple',
+          })
+        );
+      });
+
+      it('updates the local `uiState` with removed widgets', () => {
+        const instance = index({ indexName: 'indexName' });
+        const configureTopLevel = createConfigure({
+          distinct: true,
+        });
+
+        const configureSubLevel = createConfigure({
+          hitsPerPage: 5,
+        });
+
+        instance.addWidgets([
+          configureTopLevel,
+          configureSubLevel,
+          createSearchBox(),
+        ]);
+
+        instance.init(createInitOptions());
+
+        // Simulate a state change
+        instance.getHelper()!.setQueryParameter('query', 'Apple iPhone');
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            query: 'Apple iPhone',
+            hitsPerPage: 5,
+            distinct: true,
+          })
+        );
+
+        instance.removeWidgets([configureSubLevel]);
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            query: 'Apple iPhone',
+            distinct: true,
           })
         );
       });
