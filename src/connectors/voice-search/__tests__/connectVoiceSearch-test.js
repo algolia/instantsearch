@@ -232,80 +232,80 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   });
 
   describe('getWidgetState', () => {
-    it('returns the same state if query is an empty string', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      const uiStateBefore = { foo: 'bar' };
-      refine('');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toBe(uiStateBefore);
-    });
+    test('returns the `uiState` empty', () => {
+      const { widget, helper } = getInitializedWidget();
 
-    it('returns the same state if query is same', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      refine('myQuery');
-      const uiStateBefore = widget.getWidgetState(
+      const actual = widget.getWidgetState(
         {},
         {
           searchParameters: helper.state,
         }
       );
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toBe(uiStateBefore);
+
+      expect(actual).toEqual({});
     });
 
-    it('returns new state with query after refine', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      const uiStateBefore = { foo: 'bar' };
-      refine('myQuery');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toEqual({
-        foo: 'bar',
-        query: 'myQuery',
+    test('returns the `uiState` with a refinement', () => {
+      const { widget, helper } = getInitializedWidget();
+
+      helper.setQueryParameter('query', 'Apple');
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        query: 'Apple',
       });
     });
   });
 
   describe('getWidgetSearchParameters', () => {
-    it('should return the same SearchParameters if no value is in the UI state', () => {
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
       const { widget, helper } = getInitializedWidget();
-      const uiState = {};
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
       );
-      expect(searchParametersAfter).toBe(searchParametersBefore);
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          query: 'Apple',
+        },
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: 'Apple',
+        })
+      );
     });
 
-    it('should add the refinement according to the UI state provided', () => {
+    test('returns the `SearchParameters` with the default value', () => {
       const { widget, helper } = getInitializedWidget();
-      const uiState = {
-        query: 'my search',
-      };
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
-      );
-      expect(searchParametersAfter.query).toEqual(uiState.query);
-    });
 
-    it('should enforce the default value if the ui state is empty', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      refine('previous search');
-      const uiState = {};
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
       );
-      expect(searchParametersAfter.query).toBeUndefined();
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: '',
+        })
+      );
     });
   });
 });
