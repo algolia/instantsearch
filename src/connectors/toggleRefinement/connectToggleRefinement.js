@@ -277,6 +277,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
         const withFacetConfiguration = searchParameters.setQueryParameters({
           disjunctiveFacets: [attribute],
           disjunctiveFacetsRefinements: {
+            ...searchParameters.disjunctiveFacetsRefinements,
             [attribute]: [],
           },
         });
