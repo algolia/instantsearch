@@ -300,7 +300,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        let withFacetConfiguration = searchParameters.setQueryParameters({
+        let widgetSearchParameters = searchParameters.setQueryParameters({
           disjunctiveFacets: [attribute],
           numericRefinements: {
             ...searchParameters.numericRefinements,
@@ -311,13 +311,13 @@ export default function connectRange(renderFn, unmountFn = noop) {
         const value = uiState.range && uiState.range[attribute];
 
         if (!value || value.indexOf(':') === -1) {
-          return withFacetConfiguration;
+          return widgetSearchParameters;
         }
 
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
         if (isFiniteNumber(lowerBound)) {
-          withFacetConfiguration = withFacetConfiguration.addNumericRefinement(
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '>=',
             lowerBound
@@ -325,14 +325,14 @@ export default function connectRange(renderFn, unmountFn = noop) {
         }
 
         if (isFiniteNumber(upperBound)) {
-          withFacetConfiguration = withFacetConfiguration.addNumericRefinement(
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '<=',
             upperBound
           );
         }
 
-        return withFacetConfiguration;
+        return widgetSearchParameters;
       },
     };
   };
