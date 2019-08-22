@@ -274,39 +274,28 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const withFacetConfiguration = searchParameters.setQueryParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            ...searchParameters.disjunctiveFacetsRefinements,
-            [attribute]: [],
-          },
-        });
+        const state = searchParameters
+          .setQueryParameters({
+            disjunctiveFacets: [attribute],
+            disjunctiveFacetsRefinements: {
+              ...searchParameters.disjunctiveFacetsRefinements,
+              [attribute]: [],
+            },
+          })
+          .removeDisjunctiveFacetRefinement(attribute, off)
+          .removeDisjunctiveFacetRefinement(attribute, on);
 
         const isRefined = Boolean(uiState.toggle && uiState.toggle[attribute]);
 
         if (isRefined) {
-          if (hasAnOffValue) {
-            return withFacetConfiguration
-              .removeDisjunctiveFacetRefinement(attribute, off)
-              .addDisjunctiveFacetRefinement(attribute, on);
-          }
-
-          return withFacetConfiguration.addDisjunctiveFacetRefinement(
-            attribute,
-            on
-          );
+          return state.addDisjunctiveFacetRefinement(attribute, on);
         }
 
         if (hasAnOffValue) {
-          return withFacetConfiguration
-            .removeDisjunctiveFacetRefinement(attribute, on)
-            .addDisjunctiveFacetRefinement(attribute, off);
+          return state.addDisjunctiveFacetRefinement(attribute, off);
         }
 
-        return withFacetConfiguration.removeDisjunctiveFacetRefinement(
-          attribute,
-          on
-        );
+        return state;
       },
     };
   };
