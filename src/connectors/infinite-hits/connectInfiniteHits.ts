@@ -290,8 +290,6 @@ const connectInfiniteHits: InfiniteHitsConnector = (
             // The page in the search parameters is decremented by one
             // to get to the actual parameter value from the UI state.
             state = searchParameters.setQueryParameter('page', uiPage - 1);
-          } else {
-            state = searchParameters.setQueryParameter('page', undefined);
           }
         }
 
