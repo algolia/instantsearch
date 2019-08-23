@@ -277,10 +277,12 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        let state = searchParameters;
+        let widgetSearchParameters = searchParameters;
 
         if (escapeHTML) {
-          state = searchParameters.setQueryParameters(TAG_PLACEHOLDER);
+          widgetSearchParameters = searchParameters.setQueryParameters(
+            TAG_PLACEHOLDER
+          );
         }
 
         if (hasShowPrevious) {
@@ -289,11 +291,11 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           if (uiPage) {
             // The page in the search parameters is decremented by one
             // to get to the actual parameter value from the UI state.
-            state = searchParameters.setQueryParameter('page', uiPage - 1);
+            return widgetSearchParameters.setQueryParameter('page', uiPage - 1);
           }
         }
 
-        return state;
+        return widgetSearchParameters.setQueryParameter('page', 0);
       },
     };
   };

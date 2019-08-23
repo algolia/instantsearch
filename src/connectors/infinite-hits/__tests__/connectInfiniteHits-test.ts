@@ -978,7 +978,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       expect(actual.highlightPostTag).toBeUndefined();
     });
 
-    test('return Search Parameters without page when `showPrevious` without `page` in the UI state', () => {
+    test('return Search Parameters with empty page when `showPrevious` without `page` in the UI state', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName');
@@ -990,7 +990,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         uiState: {},
       });
 
-      expect(actual.page).toBeUndefined();
+      expect(actual.page).toEqual(0);
+    });
+
+    test('return Search Parameters with empty page when `showPrevious` and `page` is 0 in the UI state', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const widget = makeWidget({
+        showPrevious: true,
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {
+          page: 0,
+        },
+      });
+
+      expect(actual.page).toEqual(0);
     });
 
     test('return Search Parameters with page decreased when `showPrevious` and `page` in the UI state', () => {
