@@ -276,12 +276,12 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const state = searchParameters
           .setQueryParameters({
-            disjunctiveFacets: [attribute],
             disjunctiveFacetsRefinements: {
               ...searchParameters.disjunctiveFacetsRefinements,
               [attribute]: [],
             },
           })
+          .addDisjunctiveFacet(attribute)
           .removeDisjunctiveFacetRefinement(attribute, off)
           .removeDisjunctiveFacetRefinement(attribute, on);
 

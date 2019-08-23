@@ -737,6 +737,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
     });
 
+    test('returns the `SearchParameters` without overriding the disjunctive facets', () => {
+      const render = jest.fn();
+      const makeWidget = connectToggleRefinement(render);
+      const helper = jsHelper({}, '', {
+        disjunctiveFacets: ['freeShipping', 'onSale'],
+        disjunctiveFacetsRefinements: {
+          freeShipping: ['true'],
+        },
+      });
+      const widget = makeWidget({
+        attribute: 'freeShipping',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping', 'onSale']);
+      expect(actual.disjunctiveFacetsRefinements).toEqual({
+        freeShipping: [],
+      });
+    });
+
     test('returns the `SearchParameters` without overriding the other refinements', () => {
       const render = jest.fn();
       const makeWidget = connectToggleRefinement(render);
