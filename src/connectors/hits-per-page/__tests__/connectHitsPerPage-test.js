@@ -529,7 +529,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page' },
-          { value: 10, label: '10 items per page' },
+          { value: 22, label: '22 items per page' },
         ],
       });
 
@@ -552,7 +552,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page' },
-          { value: 10, label: '10 items per page' },
+          { value: 22, label: '22 items per page' },
         ],
       });
 
@@ -577,7 +577,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page' },
-          { value: 10, label: '10 items per page' },
+          { value: 22, label: '22 items per page' },
         ],
       });
 
@@ -595,7 +595,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page' },
+          { value: 22, label: '22 items per page' },
         ],
       });
 
@@ -612,8 +612,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const helper = algoliasearchHelper({}, 'indexName');
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page' },
+          { value: 3, label: '3 items per page' },
+          { value: 22, label: '22 items per page' },
         ],
       });
 
@@ -635,7 +635,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page' },
-          { value: 10, label: '10 items per page' },
+          { value: 22, label: '22 items per page' },
         ],
       });
 
