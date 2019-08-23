@@ -300,13 +300,14 @@ export default function connectRange(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        let widgetSearchParameters = searchParameters.setQueryParameters({
-          disjunctiveFacets: [attribute],
-          numericRefinements: {
-            ...searchParameters.numericRefinements,
-            [attribute]: {},
-          },
-        });
+        let widgetSearchParameters = searchParameters
+          .setQueryParameters({
+            numericRefinements: {
+              ...searchParameters.numericRefinements,
+              [attribute]: {},
+            },
+          })
+          .addDisjunctiveFacet(attribute);
 
         const value = uiState.range && uiState.range[attribute];
 

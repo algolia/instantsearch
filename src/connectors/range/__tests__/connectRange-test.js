@@ -1207,6 +1207,32 @@ describe('getWidgetSearchParameters', () => {
     });
   });
 
+  test('returns the `SearchParameters` without overriding previous disjunctive facets', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price', 'brand'],
+      numericRefinements: {
+        price: {
+          '<=': [1000],
+          '>=': [100],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetSearchParameters(helper.state, {
+      uiState: {},
+    });
+
+    expect(actual.disjunctiveFacets).toEqual(['price', 'brand']);
+    expect(actual.numericRefinements).toEqual({
+      price: {},
+    });
+  });
+
   test('returns the `SearchParameters` with the value from `uiState`', () => {
     const render = jest.fn();
     const makeWidget = connectRange(render);
