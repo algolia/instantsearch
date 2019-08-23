@@ -230,6 +230,8 @@ You may want to add another entry to the \`items\` option with this value.`
           uiState.hitsPerPage || (defaultItem && defaultItem.value);
 
         return searchParameters.setQueryParameters({
+          // @TODO: make this value deterministic by enforcing a default value
+          // in the `items` option.
           hitsPerPage,
         });
       },
