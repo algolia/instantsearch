@@ -585,7 +585,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         uiState: {},
       });
 
-      expect(actual.hitsPerPage).toEqual(undefined);
+      expect(actual.hitsPerPage).toBeUndefined();
     });
 
     test('returns the `SearchParameters` with the default value', () => {
