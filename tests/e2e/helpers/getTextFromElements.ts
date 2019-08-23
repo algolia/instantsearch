@@ -6,12 +6,12 @@ declare namespace WebdriverIOAsync {
   }
 }
 
-browser.addCommand('getTextFromElements', function(
+browser.addCommand('getTextFromElements', async function(
   elements: WebdriverIOAsync.Element[]
 ) {
-  return browser.execute(function(browserElements) {
-    return browserElements.map(function(browserElement: Element) {
-      return browserElement.textContent || '';
-    });
-  }, elements);
+  const texts = [];
+  for (const element of elements) {
+    texts.push(await element.getText());
+  }
+  return texts;
 });
