@@ -107,7 +107,7 @@ function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
 }
 
 const index = (props: IndexProps): Index => {
-  const { indexName = null, indexId = null } = props || {};
+  const { indexName = null, indexId = indexName } = props || {};
 
   let localWidgets: Widget[] = [];
   let localUiState: UiState = {};
@@ -124,7 +124,7 @@ const index = (props: IndexProps): Index => {
     $$type: 'ais.index',
 
     getIndexId() {
-      return indexId || indexName;
+      return indexId;
     },
 
     getHelper() {
