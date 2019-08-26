@@ -18,12 +18,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 `);
     });
 
-    it('does not throw without items', () => {
+    it('throws with empty items', () => {
       expect(() => {
         connectHitsPerPage(() => {})({
           items: [],
         });
-      }).not.toThrow();
+      }).toThrowErrorMatchingInlineSnapshot(`
+"A default value must be specified in \`items\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
+`);
     });
 
     it('throws without default item', () => {
@@ -72,7 +76,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const unmount = jest.fn();
 
       const customHitsPerPage = connectHitsPerPage(render, unmount);
-      const widget = customHitsPerPage({ items: [] });
+      const widget = customHitsPerPage({
+        items: [{ label: '10 items per page', value: 10, default: true }],
+      });
 
       expect(widget).toEqual(
         expect.objectContaining({

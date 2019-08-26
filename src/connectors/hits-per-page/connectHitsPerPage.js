@@ -110,7 +110,7 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
     const defaultItems = items.filter(item => item.default === true);
     const defaultItemsCount = defaultItems.length;
 
-    if (items.length && defaultItemsCount === 0) {
+    if (defaultItemsCount === 0) {
       throw new Error(
         withUsage(`A default value must be specified in \`items\`.`)
       );
