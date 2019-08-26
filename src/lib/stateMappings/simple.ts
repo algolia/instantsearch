@@ -9,10 +9,10 @@ export default function SimpleStateMapping(): StateMapping<SimpleRouteState> {
       return trackedRouteState;
     },
 
-    routeToState(routeState: SimpleRouteState): UiState {
-      // users can still make a url containing the key "configure", we don't want
-      // to take it in account by default.
-      const { configure, ...trackedUiState } = routeState as UiState;
+    // technically a URL could contain any key, since users provide it,
+    // which is why the input to this function is UiState, not RouteState
+    routeToState(routeState: UiState): UiState {
+      const { configure, ...trackedUiState } = routeState;
       return trackedUiState;
     },
   };
