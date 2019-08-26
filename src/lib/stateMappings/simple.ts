@@ -1,17 +1,16 @@
 import { UiState, StateMapping } from '../../types';
 
-export type SimpleRouteState = Omit<UiState, 'configure'>;
-
-export default function SimpleStateMapping(): StateMapping<SimpleRouteState> {
+// technically a URL could contain any key, since users provide it,
+// which is why the input to this function is UiState, not something
+// which excludes "configure" as this function does.
+export default function SimpleStateMapping(): StateMapping<UiState> {
   return {
-    stateToRoute(uiState: UiState): SimpleRouteState {
+    stateToRoute(uiState) {
       const { configure, ...trackedRouteState } = uiState;
       return trackedRouteState;
     },
 
-    // technically a URL could contain any key, since users provide it,
-    // which is why the input to this function is UiState, not RouteState
-    routeToState(routeState: UiState): UiState {
+    routeToState(routeState) {
       const { configure, ...trackedUiState } = routeState;
       return trackedUiState;
     },

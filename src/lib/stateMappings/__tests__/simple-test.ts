@@ -1,4 +1,4 @@
-import simpleStateMapping, { SimpleRouteState } from '../simple';
+import simpleStateMapping from '../simple';
 import { UiState } from '../../../types';
 
 describe('simpleStateMapping', () => {
@@ -40,7 +40,6 @@ describe('simpleStateMapping', () => {
       });
     });
 
-    // @TODO: do we want to change this?
     it('passes non-UiState through', () => {
       const stateMapping = simpleStateMapping();
       expect(
@@ -90,7 +89,7 @@ describe('simpleStateMapping', () => {
           configure: {
             advancedSyntax: false,
           },
-        } as SimpleRouteState)
+        })
       ).toEqual({
         query: 'zamboni',
         refinementList: {
@@ -99,7 +98,6 @@ describe('simpleStateMapping', () => {
       });
     });
 
-    // @TODO: do we want to change this?
     it('passes non-UiState through', () => {
       const stateMapping = simpleStateMapping();
       expect(
