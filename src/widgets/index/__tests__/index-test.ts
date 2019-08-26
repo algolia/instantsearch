@@ -1007,21 +1007,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           .setQueryParameter('page', 4);
 
         expect(level0.getWidgetState({})).toEqual({
-          level0IndexName: {
-            query: 'Apple',
-            page: 1,
-          },
-          level1IndexName: {
-            query: 'Apple iPhone',
-            page: 2,
-          },
-          level2IndexName: {
-            query: 'Apple iPhone XS',
-            page: 3,
-          },
-          level3IndexName: {
-            query: 'Apple iPhone XS Red',
-            page: 4,
+          indices: {
+            level0IndexName: {
+              query: 'Apple',
+              page: 1,
+            },
+            level1IndexName: {
+              query: 'Apple iPhone',
+              page: 2,
+            },
+            level2IndexName: {
+              query: 'Apple iPhone XS',
+              page: 3,
+            },
+            level3IndexName: {
+              query: 'Apple iPhone XS Red',
+              page: 4,
+            },
           },
         });
 
@@ -1032,17 +1034,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           .search();
 
         expect(level0.getWidgetState({})).toEqual({
-          level0IndexName: {
-            query: 'Hey',
-          },
-          level1IndexName: {
-            query: 'Apple iPhone',
-          },
-          level2IndexName: {
-            query: 'Apple iPhone XS',
-          },
-          level3IndexName: {
-            query: 'Apple iPhone XS Red',
+          indices: {
+            level0IndexName: {
+              query: 'Hey',
+            },
+            level1IndexName: {
+              query: 'Apple iPhone',
+            },
+            level2IndexName: {
+              query: 'Apple iPhone XS',
+            },
+            level3IndexName: {
+              query: 'Apple iPhone XS Red',
+            },
           },
         });
       });
@@ -1328,9 +1332,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           .setQueryParameter('page', 5);
 
         expect(instance.getWidgetState({})).toEqual({
-          indexName: {
-            query: 'Apple',
-            page: 5,
+          indices: {
+            indexName: {
+              query: 'Apple',
+              page: 5,
+            },
           },
         });
       });
@@ -1362,7 +1368,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         );
 
         expect(instance.getWidgetState({})).toEqual({
-          indexName: {},
+          indices: {
+            indexName: {},
+          },
         });
       });
 
@@ -1427,43 +1435,49 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           .setQueryParameter('page', 9);
 
         expect(level0.getWidgetState({})).toEqual({
-          level0IndexName: {
-            query: 'Apple',
-            page: 5,
+          indices: {
+            level0IndexName: {
+              query: 'Apple',
+              page: 5,
+            },
+            level1IndexName: {
+              query: 'Apple iPhone',
+              page: 7,
+            },
+            level2IndexName: {
+              query: 'Apple iPhone 5S',
+              page: 9,
+            },
+            level3IndexName: {},
           },
-          level1IndexName: {
-            query: 'Apple iPhone',
-            page: 7,
-          },
-          level2IndexName: {
-            query: 'Apple iPhone 5S',
-            page: 9,
-          },
-          level3IndexName: {},
         });
 
         expect(level1.getWidgetState({})).toEqual({
-          level1IndexName: {
-            query: 'Apple iPhone',
-            page: 7,
+          indices: {
+            level1IndexName: {
+              query: 'Apple iPhone',
+              page: 7,
+            },
+            level2IndexName: {
+              query: 'Apple iPhone 5S',
+              page: 9,
+            },
+            level3IndexName: {},
           },
-          level2IndexName: {
-            query: 'Apple iPhone 5S',
-            page: 9,
-          },
-          level3IndexName: {},
         });
 
         expect(level2.getWidgetState({})).toEqual({
-          level2IndexName: {
-            query: 'Apple iPhone 5S',
-            page: 9,
+          indices: {
+            level2IndexName: {
+              query: 'Apple iPhone 5S',
+              page: 9,
+            },
+            level3IndexName: {},
           },
-          level3IndexName: {},
         });
 
         expect(level3.getWidgetState({})).toEqual({
-          level3IndexName: {},
+          indices: { level3IndexName: {} },
         });
       });
     });

@@ -101,6 +101,9 @@ export type UiState = {
   sortBy?: string;
   page?: number;
   hitsPerPage?: number;
+  indices?: {
+    [indexId: string]: UiState;
+  };
 };
 
 /**

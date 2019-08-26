@@ -393,7 +393,10 @@ const index = (props: IndexProps): Index => {
             innerIndex.getWidgetState(previousUiState),
           {
             ...uiState,
-            [this.getIndexId()]: localUiState,
+            indices: {
+              ...uiState.indices,
+              [this.getIndexId()]: localUiState,
+            },
           }
         );
     },
