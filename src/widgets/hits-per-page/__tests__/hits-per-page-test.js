@@ -61,7 +61,7 @@ describe('hitsPerPage()', () => {
     render.mockClear();
   });
 
-  it('does configures the default hits per page', () => {
+  it('configures the default hits per page', () => {
     const widgetWithDefaults = hitsPerPage({
       container: document.createElement('div'),
       items: [
