@@ -108,8 +108,13 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
     }
 
     const defaultItems = items.filter(item => item.default === true);
+    const defaultItemsCount = defaultItems.length;
 
-    if (defaultItems.length > 1) {
+    if (items.length && defaultItemsCount === 0) {
+      throw new Error(
+        withUsage(`A default value must be specified in \`items\`.`)
+      );
+    } else if (defaultItemsCount > 1) {
       throw new Error(
         withUsage('More than one default value is specified in `items`.')
       );
@@ -121,10 +126,6 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
       $$type: 'ais.hitsPerPage',
 
       getConfiguration(state) {
-        if (!defaultItem) {
-          return state;
-        }
-
         return state.setQueryParameters({
           hitsPerPage: state.hitsPerPage || defaultItem.value,
         });
@@ -226,13 +227,8 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const hitsPerPage =
-          uiState.hitsPerPage || (defaultItem && defaultItem.value);
-
         return searchParameters.setQueryParameters({
-          // @TODO: make this value deterministic by enforcing a default value
-          // in the `items` option.
-          hitsPerPage,
+          hitsPerPage: uiState.hitsPerPage || defaultItem.value,
         });
       },
     };
