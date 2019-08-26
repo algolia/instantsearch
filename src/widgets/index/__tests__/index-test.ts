@@ -1335,7 +1335,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
       });
 
-      it('indexId is used for scope key', () => {
+      it('uses `indexId` for scope key', () => {
         const instance = index({ indexName: 'indexName', indexId: 'indexId' });
         const widgets = [createSearchBox(), createPagination()];
 
