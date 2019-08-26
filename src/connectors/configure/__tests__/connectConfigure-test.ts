@@ -278,6 +278,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
     });
 
+    it('merges with existing configuration', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          analytics: true,
+        },
+      });
+
+      expect(
+        widget.getWidgetState!(
+          { configure: { queryType: 'prefixAll' } },
+          { helper, searchParameters: helper.state }
+        )
+      ).toEqual({
+        configure: { analytics: true, queryType: 'prefixAll' },
+      });
+    });
+
     it('overwrites existing configuration', () => {
       const makeWidget = connectConfigure();
       const widget = makeWidget({

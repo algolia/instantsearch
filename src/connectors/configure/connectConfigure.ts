@@ -151,8 +151,11 @@ const connectConfigure: ConfigureConnector = (
       getWidgetState(uiState) {
         return {
           ...uiState,
-          // widgetParams gets updated by refine
-          configure: widgetParams.searchParameters,
+          configure: {
+            ...uiState.configure,
+            // widgetParams gets updated by refine
+            ...widgetParams.searchParameters,
+          },
         };
       },
     };
