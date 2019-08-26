@@ -27,6 +27,7 @@ const withUsage = createDocumentationMessageGenerator({
 
 type IndexProps = {
   indexName: string;
+  indexId?: string;
 };
 
 type IndexInitOptions = Pick<InitOptions, 'instantSearchInstance' | 'parent'>;
@@ -106,7 +107,7 @@ function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
 }
 
 const index = (props: IndexProps): Index => {
-  const { indexName = null } = props || {};
+  const { indexName = null, indexId = null } = props || {};
 
   let localWidgets: Widget[] = [];
   let localUiState: UiState = {};
@@ -123,7 +124,7 @@ const index = (props: IndexProps): Index => {
     $$type: 'ais.index',
 
     getIndexId() {
-      return indexName;
+      return indexId || indexName;
     },
 
     getHelper() {

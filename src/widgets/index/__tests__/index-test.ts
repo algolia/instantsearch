@@ -1335,6 +1335,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
       });
 
+      it('indexId is used for scope key', () => {
+        const instance = index({ indexName: 'indexName', indexId: 'indexId' });
+        const widgets = [createSearchBox(), createPagination()];
+
+        instance.addWidgets(widgets);
+
+        instance.init(createInitOptions());
+
+        // Simulate a state change
+        instance
+          .getHelper()!
+          .setQueryParameter('query', 'Apple')
+          .setQueryParameter('page', 5);
+
+        expect(instance.getWidgetState({})).toEqual({
+          indexId: {
+            query: 'Apple',
+            page: 5,
+          },
+        });
+      });
+
       it('does not update the local `uiState` on state changes in `init`', () => {
         const instance = index({ indexName: 'indexName' });
         const widgets = [
@@ -1557,20 +1579,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const level0 = index({ indexName: 'level0IndexName' });
       const level1 = index({ indexName: 'level1IndexName' });
       const level2 = index({ indexName: 'level2IndexName' });
-      const level21 = index({ indexName: 'level21IndeName' });
+      const level21 = index({ indexName: 'level21IndexName' });
       const level22 = index({ indexName: 'level22IndexName' });
       const level221 = index({ indexName: 'level221IndexName' });
       const level3 = index({ indexName: 'level3IndexName' });
       const searchBoxLevel0 = createSearchBox();
       const searchBoxLevel1 = createSearchBox();
-      const seachBoxLevel21 = createSearchBox();
+      const searchBoxLevel21 = createSearchBox();
 
       level0.addWidgets([
         searchBoxLevel0,
         level1.addWidgets([searchBoxLevel1]),
         level2.addWidgets([
           createSearchBox(),
-          level21.addWidgets([seachBoxLevel21]),
+          level21.addWidgets([searchBoxLevel21]),
           level22.addWidgets([
             createSearchBox(),
             level221.addWidgets([createSearchBox()]),
@@ -1609,7 +1631,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               helper: level2.getHelper(),
             },
             {
-              indexId: 'level21IndeName',
+              indexId: 'level21IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
               helper: level21.getHelper(),
             },
@@ -1633,14 +1655,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
 
       // Sibling index
-      expect(seachBoxLevel21.render).toHaveBeenCalledTimes(1);
-      expect(seachBoxLevel21.render).toHaveBeenCalledWith(
+      expect(searchBoxLevel21.render).toHaveBeenCalledTimes(1);
+      expect(searchBoxLevel21.render).toHaveBeenCalledWith(
         expect.objectContaining({
           scopedResults: [
             // Root index
             {
-              indexId: 'level21IndeName',
-              results: (seachBoxLevel21.render as jest.Mock).mock.calls[0][0]
+              indexId: 'level21IndexName',
+              results: (searchBoxLevel21.render as jest.Mock).mock.calls[0][0]
                 .results,
               helper: level21.getHelper(),
             },
@@ -1684,7 +1706,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               helper: level2.getHelper(),
             },
             {
-              indexId: 'level21IndeName',
+              indexId: 'level21IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
               helper: level21.getHelper(),
             },
@@ -1793,14 +1815,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       // Save the Helper to be able to simulate a change
       const helper = instance.getHelper()!;
 
-      // Simuate a state change
+      // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone');
 
       expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
 
       instance.dispose(createDisposeOptions());
 
-      // Simuate a state change
+      // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone 5S');
 
       expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
