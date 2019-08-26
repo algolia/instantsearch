@@ -114,7 +114,9 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
       throw new Error(
         withUsage(`A default value must be specified in \`items\`.`)
       );
-    } else if (defaultItemsCount > 1) {
+    }
+
+    if (defaultItemsCount > 1) {
       throw new Error(
         withUsage('More than one default value is specified in `items`.')
       );
