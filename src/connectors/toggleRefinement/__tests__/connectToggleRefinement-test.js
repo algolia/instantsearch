@@ -764,10 +764,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       const render = jest.fn();
       const makeWidget = connectToggleRefinement(render);
       const helper = jsHelper({}, '', {
-        disjunctiveFacets: ['freeShipping'],
+        disjunctiveFacets: ['freeShipping', 'onSale'],
         disjunctiveFacetsRefinements: {
-          onSale: ['true'],
           freeShipping: ['true'],
+          onSale: ['true'],
         },
       });
       const widget = makeWidget({
@@ -778,7 +778,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         uiState: {},
       });
 
-      expect(actual.disjunctiveFacets).toEqual(['freeShipping']);
+      expect(actual.disjunctiveFacets).toEqual(['freeShipping', 'onSale']);
       expect(actual.disjunctiveFacetsRefinements).toEqual({
         onSale: ['true'],
         freeShipping: [],
