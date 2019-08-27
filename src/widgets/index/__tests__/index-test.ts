@@ -1354,28 +1354,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     describe('with uiState', () => {
-      it('updates the local `uiState` when the state changes', () => {
-        const instance = index({ indexName: 'indexName' });
-        const widgets = [createSearchBox(), createPagination()];
-
-        instance.addWidgets(widgets);
-
-        instance.init(createInitOptions());
-
-        // Simulate a state change
-        instance
-          .getHelper()!
-          .setQueryParameter('query', 'Apple')
-          .setQueryParameter('page', 5);
-
-        expect(instance.getWidgetState({})).toEqual({
-          indexName: {
-            query: 'Apple',
-            page: 5,
-          },
-        });
-      });
-
       it('uses `indexId` for scope key', () => {
         const instance = index({ indexName: 'indexName', indexId: 'indexId' });
         const widgets = [createSearchBox(), createPagination()];
@@ -1392,6 +1370,86 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         expect(instance.getWidgetState({})).toEqual({
           indexId: {
+            query: 'Apple',
+            page: 5,
+          },
+        });
+      });
+
+      it('uses `uiState` for the local `uiState`', () => {
+        const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+        const subLevelInstance = index({ indexName: 'subLevelIndexName' });
+
+        topLevelInstance.addWidgets([subLevelInstance]);
+
+        topLevelInstance.init(
+          createInitOptions({
+            uiState: {
+              // @TODO: remove once we have updated UiState
+              // @ts-ignore
+              topLevelIndexName: {
+                configure: {
+                  hitsPerPage: 5,
+                },
+                refinementList: {
+                  brand: ['Apple'],
+                },
+              },
+              // @ts-ignore
+              subLevelIndexName: {
+                configure: {
+                  hitsPerPage: 2,
+                },
+                menu: {
+                  categgories: 'Phone',
+                },
+                refinementList: {
+                  brand: ['Samsung'],
+                },
+              },
+            },
+          })
+        );
+
+        expect(topLevelInstance.getWidgetState({})).toEqual({
+          topLevelIndexName: {
+            configure: {
+              hitsPerPage: 5,
+            },
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
+          subLevelIndexName: {
+            configure: {
+              hitsPerPage: 2,
+            },
+            menu: {
+              categgories: 'Phone',
+            },
+            refinementList: {
+              brand: ['Samsung'],
+            },
+          },
+        });
+      });
+
+      it('updates the local `uiState` when the state changes', () => {
+        const instance = index({ indexName: 'indexName' });
+        const widgets = [createSearchBox(), createPagination()];
+
+        instance.addWidgets(widgets);
+
+        instance.init(createInitOptions());
+
+        // Simulate a state change
+        instance
+          .getHelper()!
+          .setQueryParameter('query', 'Apple')
+          .setQueryParameter('page', 5);
+
+        expect(instance.getWidgetState({})).toEqual({
+          indexName: {
             query: 'Apple',
             page: 5,
           },

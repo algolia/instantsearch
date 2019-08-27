@@ -276,9 +276,10 @@ const index = (props: IndexProps): Index => {
       return this;
     },
 
-    init({ instantSearchInstance, parent }: IndexInitOptions) {
+    init({ instantSearchInstance, parent, uiState }: IndexInitOptions) {
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
+      localUiState = uiState[indexId] || {};
 
       // The `mainHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
@@ -357,9 +358,9 @@ const index = (props: IndexProps): Index => {
       localWidgets.forEach(widget => {
         if (widget.init) {
           widget.init({
+            uiState,
             helper: helper!,
             parent: this,
-            uiState: localUiState,
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
