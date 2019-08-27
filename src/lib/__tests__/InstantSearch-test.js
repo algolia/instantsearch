@@ -429,6 +429,30 @@ describe('start', () => {
     );
   });
 
+  it('forwards the `initialUiState` to the main index', () => {
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          refinementList: {
+            brand: ['Apple'],
+          },
+        },
+      },
+    });
+
+    search.start();
+
+    expect(search.mainIndex.getWidgetState()).toEqual({
+      indexName: {
+        refinementList: {
+          brand: ['Apple'],
+        },
+      },
+    });
+  });
+
   it('calls `init` on the added widgets', () => {
     const search = new InstantSearch({
       indexName: 'indexName',

@@ -16,7 +16,7 @@ export const createInitOptions = (
   return {
     instantSearchInstance,
     parent: null,
-    uiState: {},
+    uiState: instantSearchInstance._initialUiState,
     templatesConfig: instantSearchInstance.templatesConfig,
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,

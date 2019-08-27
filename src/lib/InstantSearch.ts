@@ -403,7 +403,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
-      uiState: {},
+      uiState: this._initialUiState,
     });
 
     mainHelper.search();
