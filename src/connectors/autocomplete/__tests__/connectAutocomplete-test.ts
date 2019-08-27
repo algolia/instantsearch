@@ -25,14 +25,12 @@ describe('connectAutocomplete', () => {
     const helper = algoliasearchHelper({} as Client, '', initialConfig);
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      instantSearchInstance: undefined as any,
-      parent: undefined as any,
-      templatesConfig: undefined as any,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const { refine } = renderFn.mock.calls[0][0];
 
