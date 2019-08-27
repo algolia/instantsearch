@@ -88,6 +88,11 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
       transformItems = items => items,
     } = widgetParams;
 
+    const connectorState = {
+      refine: noop,
+      createURL: noop,
+    };
+
     return {
       $$type: 'ais.clearRefinements',
 
@@ -95,8 +100,8 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
         renderFn(
           {
             hasRefinements: false,
-            refine: noop,
-            createURL: noop,
+            refine: connectorState.refine,
+            createURL: connectorState.createURL,
             instantSearchInstance,
             widgetParams,
           },
@@ -119,34 +124,38 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
           []
         );
 
+        connectorState.refine = () => {
+          attributesToClear.forEach(({ helper: indexHelper, items }) => {
+            indexHelper
+              .setState(
+                clearRefinements({
+                  helper: indexHelper,
+                  attributesToClear: items,
+                })
+              )
+              .search();
+          });
+        };
+
+        connectorState.createURL = () =>
+          createURL(
+            mergeSearchParameters(
+              ...attributesToClear.map(({ helper: indexHelper, items }) => {
+                return clearRefinements({
+                  helper: indexHelper,
+                  attributesToClear: items,
+                });
+              })
+            )
+          );
+
         renderFn(
           {
             hasRefinements: attributesToClear.some(
               attributeToClear => attributeToClear.items.length > 0
             ),
-            refine: () => {
-              attributesToClear.forEach(({ helper: indexHelper, items }) => {
-                indexHelper
-                  .setState(
-                    clearRefinements({
-                      helper: indexHelper,
-                      attributesToClear: items,
-                    })
-                  )
-                  .search();
-              });
-            },
-            createURL: () =>
-              createURL(
-                mergeSearchParameters(
-                  ...attributesToClear.map(({ helper: indexHelper, items }) => {
-                    return clearRefinements({
-                      helper: indexHelper,
-                      attributesToClear: items,
-                    });
-                  })
-                )
-              ),
+            refine: connectorState.refine,
+            createURL: connectorState.createURL,
             instantSearchInstance,
             widgetParams,
           },
