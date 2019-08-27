@@ -2,6 +2,7 @@ import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
   PlainSearchParameters,
+  SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
 import { Client } from 'algoliasearch';
@@ -12,12 +13,12 @@ import {
   InitOptions,
   RenderOptions,
   WidgetStateOptions,
+  WidgetSearchParametersOptions,
   ScopedResult,
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
-  enhanceConfiguration,
   mergeSearchParameters,
 } from '../../lib/utils';
 
@@ -32,6 +33,10 @@ type IndexProps = {
 
 type IndexInitOptions = Pick<InitOptions, 'instantSearchInstance' | 'parent'>;
 type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
+
+type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
+  initialSearchParameters: SearchParameters;
+};
 
 export type Index = Widget & {
   getIndexId(): string;
@@ -64,6 +69,23 @@ function getLocalWidgetsState(
 
       return widget.getWidgetState(uiState, widgetStateOptions);
     }, {});
+}
+
+function getLocalWidgetsSearchParameters(
+  widgets: Widget[],
+  widgetSearchParametersOptions: LocalWidgetSearchParametersOptions
+): SearchParameters {
+  const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
+
+  return widgets
+    .filter(widget => !isIndexWidget(widget))
+    .reduce<SearchParameters>((state, widget) => {
+      if (!widget.getWidgetSearchParameters) {
+        return state;
+      }
+
+      return widget.getWidgetSearchParameters(state, rest);
+    }, initialSearchParameters);
 }
 
 function resetPageFromWidgets(widgets: Widget[]): void {
@@ -179,7 +201,10 @@ const index = (props?: IndexProps): Index => {
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         helper!.setState(
-          localWidgets.reduce(enhanceConfiguration, helper!.state)
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: helper!.state,
+          })
         );
 
         widgets.forEach(widget => {
@@ -226,7 +251,17 @@ const index = (props?: IndexProps): Index => {
           return next || state;
         }, helper!.state);
 
-        helper!.setState(localWidgets.reduce(enhanceConfiguration, nextState));
+        localUiState = getLocalWidgetsState(localWidgets, {
+          searchParameters: nextState,
+          helper: helper!,
+        });
+
+        helper!.setState(
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: nextState,
+          })
+        );
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();
@@ -257,7 +292,10 @@ const index = (props?: IndexProps): Index => {
       helper = algoliasearchHelper(
         {} as Client,
         indexName,
-        localWidgets.reduce(enhanceConfiguration, initialSearchParameters)
+        getLocalWidgetsSearchParameters(localWidgets, {
+          uiState: localUiState,
+          initialSearchParameters,
+        })
       );
 
       // We forward the call to `search` to the "main" instance of the Helper
