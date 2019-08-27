@@ -247,7 +247,7 @@ describe('RoutingManager', () => {
         search.mainIndex.getHelper()!.state.setQuery('test')
       );
 
-      expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
+      expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(2);
       expect(widget.getWidgetSearchParameters).toHaveBeenCalledWith(
         search.mainIndex.getHelper()!.state,
         {
