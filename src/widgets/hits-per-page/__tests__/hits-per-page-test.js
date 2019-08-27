@@ -34,7 +34,7 @@ describe('hitsPerPage()', () => {
   beforeEach(() => {
     container = document.createElement('div');
     items = [
-      { value: 10, label: '10 results' },
+      { value: 10, label: '10 results', default: true },
       { value: 20, label: '20 results' },
     ];
     cssClasses = {
@@ -61,14 +61,7 @@ describe('hitsPerPage()', () => {
     render.mockClear();
   });
 
-  it('does not configure the default hits per page if not specified', () => {
-    expect(typeof widget.getConfiguration).toEqual('function');
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({})
-    );
-  });
-
-  it('does configures the default hits per page if specified', () => {
+  it('configures the default hits per page', () => {
     const widgetWithDefaults = hitsPerPage({
       container: document.createElement('div'),
       items: [
