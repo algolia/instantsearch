@@ -3,6 +3,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
+  PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 
@@ -101,6 +102,7 @@ export type UiState = {
   sortBy?: string;
   page?: number;
   hitsPerPage?: number;
+  configure?: PlainSearchParameters;
 };
 
 /**
