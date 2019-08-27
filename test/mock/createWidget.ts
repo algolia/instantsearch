@@ -70,7 +70,6 @@ export const createDisposeOptions = (
 };
 
 export const createWidget = (args: Partial<Widget> = {}): Widget => ({
-  getConfiguration: jest.fn(),
   init: jest.fn(),
   render: jest.fn(),
   dispose: jest.fn(),
