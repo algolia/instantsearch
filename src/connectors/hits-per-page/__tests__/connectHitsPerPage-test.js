@@ -18,6 +18,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 `);
     });
 
+    it('throws with empty items', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: [],
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"A default value must be specified in \`items\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
+`);
+    });
+
+    it('throws without default item', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: [
+            { value: 3, label: '3 items per page' },
+            { value: 10, label: '10 items per page' },
+          ],
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"A default value must be specified in \`items\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
+`);
+    });
+
     it('throws with multiple default items', () => {
       expect(() => {
         connectHitsPerPage(() => {})({
@@ -33,12 +60,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 `);
     });
 
+    it('does not throw with items and one default value', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: [
+            { value: 3, label: '3 items per page', default: true },
+            { value: 10, label: '10 items per page' },
+          ],
+        });
+      }).not.toThrow();
+    });
+
     it('is a widget', () => {
       const render = jest.fn();
       const unmount = jest.fn();
 
       const customHitsPerPage = connectHitsPerPage(render, unmount);
-      const widget = customHitsPerPage({ items: [] });
+      const widget = customHitsPerPage({
+        items: [{ label: '10 items per page', value: 10, default: true }],
+      });
 
       expect(widget).toEqual(
         expect.objectContaining({
@@ -59,13 +99,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
 
     expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({})
+      new SearchParameters({
+        hitsPerPage: 3,
+      })
     );
 
     expect(renderFn).toHaveBeenCalledTimes(0);
@@ -86,7 +128,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       expect.objectContaining({
         widgetParams: {
           items: [
-            { value: 3, label: '3 items per page' },
+            { value: 3, label: '3 items per page', default: true },
             { value: 10, label: '10 items per page' },
           ],
         },
@@ -106,7 +148,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       expect.objectContaining({
         widgetParams: {
           items: [
-            { value: 3, label: '3 items per page' },
+            { value: 3, label: '3 items per page', default: true },
             { value: 10, label: '10 items per page' },
           ],
         },
@@ -120,7 +162,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
       transformItems: items =>
@@ -200,21 +242,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     );
   });
 
-  it('Does not configures the search when there is no default value', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectHitsPerPage(renderFn);
-    const widget = makeWidget({
-      items: [
-        { value: 3, label: '3 items per page' },
-        { value: 10, label: '10 items per page' },
-      ],
-    });
-
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({})
-    );
-  });
-
   it('Provide a function to change the current hits per page, and provide the current value', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHitsPerPage(renderFn);
@@ -222,7 +249,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       items: [
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
-        { value: 11, label: '' },
+        { value: 11, label: '11 items per page', default: true },
       ],
     });
 
@@ -266,7 +293,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       items: [
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
-        { value: 20, label: '20 items per page' },
+        { value: 20, label: '20 items per page', default: true },
       ],
     });
 
@@ -304,7 +331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       items: [
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
-        { value: 7, label: '' },
+        { value: 7, label: '7 items per page', default: true },
       ],
     });
 
@@ -339,7 +366,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
@@ -381,7 +408,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
@@ -423,7 +450,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
@@ -469,7 +496,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 10, label: '10 items per page' },
         ],
       });
@@ -488,7 +515,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const makeWidget = connectHitsPerPage(renderFn);
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 10, label: '10 items per page' },
         ],
       });
@@ -508,7 +535,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 10, label: '10 items per page' },
         ],
       });
@@ -528,7 +555,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const helper = algoliasearchHelper({}, 'indexName');
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 22, label: '22 items per page' },
         ],
       });
@@ -551,7 +578,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       });
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 22, label: '22 items per page' },
         ],
       });
@@ -570,24 +597,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
   });
 
   describe('getWidgetSearchParameters', () => {
-    test('returns the `SearchParameters` with the initial value', () => {
-      const render = jest.fn();
-      const makeWidget = connectHitsPerPage(render);
-      const helper = algoliasearchHelper({}, 'indexName');
-      const widget = makeWidget({
-        items: [
-          { value: 3, label: '3 items per page' },
-          { value: 22, label: '22 items per page' },
-        ],
-      });
-
-      const actual = widget.getWidgetSearchParameters(helper.state, {
-        uiState: {},
-      });
-
-      expect(actual.hitsPerPage).toBeUndefined();
-    });
-
     test('returns the `SearchParameters` with the default value', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
@@ -612,7 +621,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const helper = algoliasearchHelper({}, 'indexName');
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 22, label: '22 items per page' },
         ],
       });
@@ -634,7 +643,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       });
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 22, label: '22 items per page' },
         ],
       });
