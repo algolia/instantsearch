@@ -123,7 +123,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
-        getConfiguration: expect.any(Function),
+
         getWidgetState: expect.any(Function),
         getWidgetSearchParameters: expect.any(Function),
       })
