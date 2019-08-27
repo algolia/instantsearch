@@ -27,6 +27,7 @@ const withUsage = createDocumentationMessageGenerator({
 
 type IndexProps = {
   indexName: string;
+  indexId?: string;
 };
 
 type IndexInitOptions = Pick<InitOptions, 'instantSearchInstance' | 'parent'>;
@@ -105,8 +106,12 @@ function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
   return resolveScopedResultsFromWidgets(widgetSiblings);
 }
 
-const index = (props: IndexProps): Index => {
-  const { indexName = null } = props || {};
+const index = (props?: IndexProps): Index => {
+  if (props === undefined || props.indexName === undefined) {
+    throw new Error(withUsage('The `indexName` option is required.'));
+  }
+
+  const { indexName, indexId = indexName } = props;
 
   let localWidgets: Widget[] = [];
   let localUiState: UiState = {};
@@ -115,15 +120,11 @@ const index = (props: IndexProps): Index => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
 
-  if (indexName === null) {
-    throw new Error(withUsage('The `indexName` option is required.'));
-  }
-
   return {
     $$type: 'ais.index',
 
     getIndexId() {
-      return indexName;
+      return indexId;
     },
 
     getHelper() {
