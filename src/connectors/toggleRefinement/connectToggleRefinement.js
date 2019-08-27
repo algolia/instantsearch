@@ -274,29 +274,6 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        // const state = searchParameters
-        //   .setQueryParameters({
-        //     disjunctiveFacetsRefinements: {
-        //       ...searchParameters.disjunctiveFacetsRefinements,
-        //       [attribute]: [],
-        //     },
-        //   })
-        //   .addDisjunctiveFacet(attribute)
-        //   .removeDisjunctiveFacetRefinement(attribute, off)
-        //   .removeDisjunctiveFacetRefinement(attribute, on);
-
-        // const isRefined = Boolean(uiState.toggle && uiState.toggle[attribute]);
-
-        // if (isRefined) {
-        //   return state.addDisjunctiveFacetRefinement(attribute, on);
-        // }
-
-        // if (hasAnOffValue) {
-        //   return state.addDisjunctiveFacetRefinement(attribute, off);
-        // }
-
-        // return state;
-
         const withFacetConfiguration = searchParameters
           .clearRefinements(attribute)
           .addDisjunctiveFacet(attribute);
