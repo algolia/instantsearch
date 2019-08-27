@@ -148,29 +148,6 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getConfiguration(configuration) {
-        const widgetConfiguration = {
-          hierarchicalFacets: [
-            {
-              name: attribute,
-              attributes: [attribute],
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            [attribute]:
-              configuration.hierarchicalFacetsRefinements[attribute] || [],
-          },
-        };
-
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        return configuration.setQueryParameters(widgetConfiguration);
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 

@@ -105,15 +105,6 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.toggleRefinement',
 
-      getConfiguration(state) {
-        return state.setQueryParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            [attribute]: [],
-          },
-        });
-      },
-
       _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {

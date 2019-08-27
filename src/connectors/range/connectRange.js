@@ -187,40 +187,6 @@ export default function connectRange(renderFn, unmountFn = noop) {
         };
       },
 
-      getConfiguration(currentConfiguration) {
-        const configuration = {
-          disjunctiveFacets: [attribute],
-        };
-
-        const isBoundsDefined = hasMinBound || hasMaxBound;
-
-        const boundsAlreadyDefined =
-          currentConfiguration &&
-          currentConfiguration.numericRefinements &&
-          currentConfiguration.numericRefinements[attribute] !== undefined;
-
-        const isMinBoundValid = isFiniteNumber(minBound);
-        const isMaxBoundValid = isFiniteNumber(maxBound);
-        const isAbleToRefine =
-          isMinBoundValid && isMaxBoundValid
-            ? minBound < maxBound
-            : isMinBoundValid || isMaxBoundValid;
-
-        if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
-          configuration.numericRefinements = { [attribute]: {} };
-
-          if (hasMinBound) {
-            configuration.numericRefinements[attribute]['>='] = [minBound];
-          }
-
-          if (hasMaxBound) {
-            configuration.numericRefinements[attribute]['<='] = [maxBound];
-          }
-        }
-
-        return currentConfiguration.setQueryParameters(configuration);
-      },
-
       init({ helper, instantSearchInstance }) {
         const stats = {};
         const currentRange = this._getCurrentRange(stats);

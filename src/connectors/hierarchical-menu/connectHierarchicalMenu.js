@@ -116,56 +116,6 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      getConfiguration(currentConfiguration) {
-        if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = find(
-            currentConfiguration.hierarchicalFacets,
-            ({ name }) => name === hierarchicalFacetName
-          );
-
-          const isAttributesEqual =
-            isFacetSet && isEqual(isFacetSet.attributes, attributes);
-          const isSeparatorEqual =
-            isFacetSet && isFacetSet.separator === separator;
-          const isRootPathEqual =
-            isFacetSet && isFacetSet.rootPath === rootPath;
-
-          const isHierarchicalOptionsEqual =
-            isAttributesEqual && isSeparatorEqual && isRootPathEqual;
-
-          if (isFacetSet && !isHierarchicalOptionsEqual) {
-            warning(
-              false,
-              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
-            );
-
-            return currentConfiguration;
-          }
-        }
-
-        return currentConfiguration.setQueryParameters({
-          hierarchicalFacets: [
-            {
-              name: hierarchicalFacetName,
-              attributes,
-              separator,
-              rootPath,
-              showParentLevel,
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            [hierarchicalFacetName]:
-              currentConfiguration.hierarchicalFacetsRefinements[
-                hierarchicalFacetName
-              ] || [],
-          },
-          maxValuesPerFacet: Math.max(
-            currentConfiguration.maxValuesPerFacet || 0,
-            showMore ? showMoreLimit : limit
-          ),
-        });
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
