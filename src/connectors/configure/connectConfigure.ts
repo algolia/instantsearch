@@ -153,7 +153,6 @@ const connectConfigure: ConfigureConnector = (
           ...uiState,
           configure: {
             ...uiState.configure,
-            // widgetParams gets updated by refine
             ...widgetParams.searchParameters,
           },
         };
