@@ -285,14 +285,13 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           );
         }
 
-        if (hasShowPrevious) {
-          const uiPage = uiState.page;
-
-          if (uiPage) {
-            // The page in the search parameters is decremented by one
-            // to get to the actual parameter value from the UI state.
-            return widgetSearchParameters.setQueryParameter('page', uiPage - 1);
-          }
+        if (hasShowPrevious && uiState.page) {
+          // The page in the search parameters is decremented by one
+          // to get to the actual parameter value from the UI state.
+          return widgetSearchParameters.setQueryParameter(
+            'page',
+            uiState.page - 1
+          );
         }
 
         return widgetSearchParameters.setQueryParameter('page', 0);
