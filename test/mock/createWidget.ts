@@ -11,7 +11,7 @@ import { createInstantSearch } from './createInstantSearch';
 export const createInitOptions = (
   args: Partial<InitOptions> = {}
 ): InitOptions => {
-  const instantSearchInstance = createInstantSearch();
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
 
   return {
     instantSearchInstance,
@@ -21,14 +21,14 @@ export const createInitOptions = (
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
     createURL: jest.fn(() => '#'),
-    ...args,
+    ...rest,
   };
 };
 
 export const createRenderOptions = (
   args: Partial<RenderOptions> = {}
 ): RenderOptions => {
-  const instantSearchInstance = createInstantSearch();
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
   const response = createMultiSearchResponse();
   const results = new algolisearchHelper.SearchResults(
     instantSearchInstance.helper!.state,
@@ -52,7 +52,7 @@ export const createRenderOptions = (
       isSearchStalled: false,
     },
     createURL: jest.fn(() => '#'),
-    ...args,
+    ...rest,
   };
 };
 
