@@ -31,7 +31,11 @@ type IndexProps = {
   indexId?: string;
 };
 
-type IndexInitOptions = Pick<InitOptions, 'instantSearchInstance' | 'parent'>;
+type IndexInitOptions = Pick<
+  InitOptions,
+  'instantSearchInstance' | 'parent' | 'uiState'
+>;
+
 type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
 
 type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
@@ -212,6 +216,7 @@ const index = (props: IndexProps): Index => {
             widget.init({
               helper: helper!,
               parent: this,
+              uiState: {},
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
@@ -354,6 +359,7 @@ const index = (props: IndexProps): Index => {
           widget.init({
             helper: helper!,
             parent: this,
+            uiState: localUiState,
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,

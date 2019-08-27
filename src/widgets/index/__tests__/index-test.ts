@@ -234,6 +234,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           expect(widget.init).toHaveBeenCalledWith({
             instantSearchInstance,
             parent: instance,
+            uiState: {},
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
@@ -879,6 +880,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.init).toHaveBeenCalledWith({
           instantSearchInstance,
           parent: instance,
+          uiState: {},
           helper: instance.getHelper(),
           state: instance.getHelper()!.state,
           templatesConfig: instantSearchInstance.templatesConfig,

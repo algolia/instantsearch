@@ -10,6 +10,7 @@ import { InstantSearch } from './instantsearch';
 export interface InitOptions {
   instantSearchInstance: InstantSearch;
   parent: Index | null;
+  uiState: UiState;
   state: SearchParameters;
   helper: Helper;
   templatesConfig: object;
