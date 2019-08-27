@@ -140,6 +140,23 @@ const connectConfigure: ConfigureConnector = (
 
         return getInitialSearchParameters(state, widgetParams);
       },
+
+      getWidgetSearchParameters(state, { uiState }) {
+        return state.setQueryParameters({
+          ...uiState.configure,
+          ...widgetParams.searchParameters,
+        });
+      },
+
+      getWidgetState(uiState) {
+        return {
+          ...uiState,
+          configure: {
+            ...uiState.configure,
+            ...widgetParams.searchParameters,
+          },
+        };
+      },
     };
   };
 };

@@ -14,6 +14,32 @@ describe('connectMenu', () => {
     makeWidget = connectMenu(rendering);
   });
 
+  // @TODO: once we've migrate away from `getConfiguration` update
+  // const getInitializedWidget = () => {
+  //   const rendering2 = jest.fn();
+  //   const makeWidget2 = connectMenu(rendering2);
+  //   const widget = makeWidget2({
+  //     attribute: 'category',
+  //   });
+
+  //   const helper = jsHelper(
+  //     {},
+  //     '',
+  //     widget.getConfiguration(new SearchParameters())
+  //   );
+  //   helper.search = jest.fn();
+
+  //   widget.init({
+  //     helper,
+  //     state: helper.state,
+  //     createURL: () => '#',
+  //   });
+
+  //   const { refine } = rendering2.mock.calls[0][0];
+
+  //   return [widget, helper, refine];
+  // };
+
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -617,144 +643,311 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
   });
 
-  describe('routing', () => {
-    const getInitializedWidget = () => {
-      const rendering2 = jest.fn();
-      const makeWidget2 = connectMenu(rendering2);
-      const widget = makeWidget2({
-        attribute: 'category',
+  describe('getWidgetState', () => {
+    test('returns the `uiState` empty', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
       });
 
-      const helper = jsHelper(
+      const actual = widget.getWidgetState(
         {},
-        '',
-        widget.getConfiguration(new SearchParameters())
+        {
+          searchParameters: helper.state,
+        }
       );
-      helper.search = jest.fn();
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
+      expect(actual).toEqual({});
+    });
+
+    test('returns the `uiState` with a refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Apple'],
+        },
       });
 
-      const { refine } = rendering2.mock.calls[0][0];
-
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if there are no refinements', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
+      const widget = makeWidget({
+        attribute: 'brand',
       });
 
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper] = getInitializedWidget();
-        helper.toggleRefinement('category', 'pants');
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const actual = widget.getWidgetState(
+        {},
+        {
           searchParameters: helper.state,
-          helper,
-        });
+        }
+      );
 
-        expect(uiStateAfter).toEqual({
-          menu: {
-            category: 'pants',
-          },
-        });
-      });
-
-      test('should not override other values in the same namespace', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {
-          menu: {
-            othercategory: 'not-pants',
-          },
-        };
-        helper.toggleRefinement('category', 'pants');
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toEqual({
-          menu: {
-            category: 'pants',
-            othercategory: 'not-pants',
-          },
-        });
-      });
-
-      test('should give back the object unmodified if refinements are already set', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {
-          menu: {
-            category: 'pants',
-          },
-        };
-        helper.toggleRefinement('category', 'pants');
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
+      expect(actual).toEqual({
+        menu: {
+          brand: 'Apple',
+        },
       });
     });
 
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if there are no refinements in the UI state', () => {
-        const [widget, helper] = getInitializedWidget();
-        // User presses back in the browser and there are no parameters
-        const uiState = {};
-        // The current state is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying no parameters should return the same
-        expect(searchParametersAfter).toBe(searchParametersBefore);
+    test('returns the `uiState` without namespace overridden', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Apple'],
+        },
       });
 
-      test('should add the refinements according to the UI state provided', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The URL contains some menu parameters
-        const uiState = {
-          menu: {
-            category: 'pants',
-          },
-        };
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
 
-        // It should apply the new parameters on the search
-        expect(searchParametersAfter).toEqual(
-          new SearchParameters({
-            hierarchicalFacets: [
-              {
-                attributes: ['category'],
-                name: 'category',
-              },
-            ],
-            hierarchicalFacetsRefinements: {
-              category: ['pants'],
-            },
-            maxValuesPerFacet: 10,
-            index: helper.state.index,
-          })
-        );
+      const actual = widget.getWidgetState(
+        {
+          menu: {
+            categories: 'Phone',
+          },
+        },
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        menu: {
+          categories: 'Phone',
+          brand: 'Apple',
+        },
+      });
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    test('returns the `SearchParameters` with the default value', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: [],
+      });
+    });
+
+    test('returns the `SearchParameters` with the default value without the previous refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Apple'],
+        },
+      });
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: [],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '');
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          menu: {
+            brand: 'Apple',
+          },
+        },
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: ['Apple'],
+      });
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
+      // Uses the function getInitializedWidget once we've removed `getConfiguration`
+      const helper = jsHelper({}, '', {
+        hierarchicalFacets: [
+          {
+            name: 'brand',
+            attributes: ['brand'],
+          },
+        ],
+        hierarchicalFacetsRefinements: {
+          brand: ['Samsung'],
+        },
+      });
+
+      const widget = makeWidget({
+        attribute: 'brand',
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          menu: {
+            brand: 'Apple',
+          },
+        },
+      });
+
+      expect(actual.hierarchicalFacets).toEqual([
+        {
+          name: 'brand',
+          attributes: ['brand'],
+        },
+      ]);
+
+      expect(actual.hierarchicalFacetsRefinements).toEqual({
+        brand: ['Apple'],
+      });
+    });
+
+    describe('with `maxValuesPerFacet`', () => {
+      test('returns the `SearchParameters` with default `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(10);
+      });
+
+      test('returns the `SearchParameters` with provided `limit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          limit: 5,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(5);
+      });
+
+      test('returns the `SearchParameters` with default `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          showMore: true,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(20);
+      });
+
+      test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '');
+        const widget = makeWidget({
+          attribute: 'brand',
+          showMore: true,
+          showMoreLimit: 15,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(15);
+      });
+
+      test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(100);
+      });
+
+      test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
+        // Uses the function getInitializedWidget once we've removed `getConfiguration`
+        const helper = jsHelper({}, '', {
+          maxValuesPerFacet: 100,
+        });
+
+        const widget = makeWidget({
+          attribute: 'brand',
+          limit: 110,
+        });
+
+        const actual = widget.getWidgetSearchParameters(helper.state, {
+          uiState: {},
+        });
+
+        expect(actual.maxValuesPerFacet).toBe(110);
       });
     });
   });

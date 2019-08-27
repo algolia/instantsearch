@@ -441,7 +441,6 @@ describe('start', () => {
 
     search.start();
 
-    expect(widget.getConfiguration).toHaveBeenCalledTimes(1);
     expect(widget.init).toHaveBeenCalledTimes(1);
   });
 
