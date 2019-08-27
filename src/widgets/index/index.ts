@@ -128,7 +128,7 @@ function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
   return resolveScopedResultsFromWidgets(widgetSiblings);
 }
 
-const index = (props?: IndexProps): Index => {
+const index = (props: IndexProps): Index => {
   if (props === undefined || props.indexName === undefined) {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
