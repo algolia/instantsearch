@@ -286,12 +286,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
           '<=': max = '',
         } = searchParameters.getNumericRefinements(attribute);
 
-        if (
-          (min === '' && max === '') ||
-          (uiState &&
-            uiState.range &&
-            uiState.range[attribute] === `${min}:${max}`)
-        ) {
+        if (min === '' && max === '') {
           return uiState;
         }
 
@@ -305,28 +300,25 @@ export default function connectRange(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const value = uiState && uiState.range && uiState.range[attribute];
+        let widgetSearchParameters = searchParameters
+          .setQueryParameters({
+            numericRefinements: {
+              ...searchParameters.numericRefinements,
+              [attribute]: {},
+            },
+          })
+          .addDisjunctiveFacet(attribute);
+
+        const value = uiState.range && uiState.range[attribute];
 
         if (!value || value.indexOf(':') === -1) {
-          return searchParameters;
+          return widgetSearchParameters;
         }
 
-        const {
-          '>=': previousMin = [NaN],
-          '<=': previousMax = [NaN],
-        } = searchParameters.getNumericRefinements(attribute);
-        let clearedParams = searchParameters.clearRefinements(attribute);
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
-        if (
-          previousMin.includes(lowerBound) &&
-          previousMax.includes(upperBound)
-        ) {
-          return searchParameters;
-        }
-
         if (isFiniteNumber(lowerBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '>=',
             lowerBound
@@ -334,14 +326,14 @@ export default function connectRange(renderFn, unmountFn = noop) {
         }
 
         if (isFiniteNumber(upperBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '<=',
             upperBound
           );
         }
 
-        return clearedParams;
+        return widgetSearchParameters;
       },
     };
   };
