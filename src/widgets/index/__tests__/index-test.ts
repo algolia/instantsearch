@@ -1385,8 +1385,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         topLevelInstance.init(
           createInitOptions({
             uiState: {
-              // @TODO: remove once we have updated UiState
-              // @ts-ignore
               topLevelIndexName: {
                 configure: {
                   hitsPerPage: 5,
@@ -1395,7 +1393,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
                   brand: ['Apple'],
                 },
               },
-              // @ts-ignore
               subLevelIndexName: {
                 configure: {
                   hitsPerPage: 2,
