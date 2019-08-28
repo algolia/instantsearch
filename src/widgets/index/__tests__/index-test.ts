@@ -1376,7 +1376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
       });
 
-      it('uses `uiState` for the local `uiState`', () => {
+      it('uses the provided `uiState` for the local `uiState`', () => {
         const topLevelInstance = index({ indexName: 'topLevelIndexName' });
         const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
