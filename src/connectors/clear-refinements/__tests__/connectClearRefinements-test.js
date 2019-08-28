@@ -204,6 +204,46 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(helper.state.query).toBe('');
     });
 
+    it('provides the same `refine` and `createURL` function references during the lifecycle', () => {
+      const helper = jsHelper({}, 'indexName');
+      helper.search = () => {};
+
+      const rendering = jest.fn();
+      const makeWidget = connectClearRefinements(rendering);
+      const widget = makeWidget({});
+
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const [firstRender, secondRender, thirdRender] = rendering.mock.calls;
+
+      expect(secondRender[0].refine).toBe(firstRender[0].refine);
+      expect(thirdRender[0].refine).toBe(secondRender[0].refine);
+
+      expect(secondRender[0].createURL).toBe(firstRender[0].createURL);
+      expect(thirdRender[0].createURL).toBe(secondRender[0].createURL);
+    });
+
     it('gets refinements from results', () => {
       const helper = jsHelper({}, undefined, {
         facets: ['aFacet'],
@@ -615,10 +655,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
               results: new SearchResults(helper.state, [{}]),
               helper,
               state: helper.state,
+              createURL: state => state,
             })
           );
 
-          const { createURL, refine } = rendering.mock.calls[1][0];
+          const { createURL, refine } = rendering.mock.calls[2][0];
 
           const createURLState = createURL();
           refine();

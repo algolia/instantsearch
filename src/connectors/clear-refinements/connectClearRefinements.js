@@ -90,8 +90,11 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
 
     const connectorState = {
       refine: noop,
-      createURL: noop,
+      createURL: () => '',
     };
+
+    const cachedRefine = () => connectorState.refine();
+    const cachedCreateURL = () => connectorState.createURL();
 
     return {
       $$type: 'ais.clearRefinements',
@@ -100,8 +103,8 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
         renderFn(
           {
             hasRefinements: false,
-            refine: connectorState.refine,
-            createURL: connectorState.createURL,
+            refine: cachedRefine,
+            createURL: cachedCreateURL,
             instantSearchInstance,
             widgetParams,
           },
@@ -154,8 +157,8 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
             hasRefinements: attributesToClear.some(
               attributeToClear => attributeToClear.items.length > 0
             ),
-            refine: connectorState.refine,
-            createURL: connectorState.createURL,
+            refine: cachedRefine,
+            createURL: cachedCreateURL,
             instantSearchInstance,
             widgetParams,
           },
