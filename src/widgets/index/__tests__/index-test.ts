@@ -1401,7 +1401,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
                   hitsPerPage: 2,
                 },
                 menu: {
-                  categgories: 'Phone',
+                  categories: 'Phone',
                 },
                 refinementList: {
                   brand: ['Samsung'],
@@ -1425,7 +1425,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               hitsPerPage: 2,
             },
             menu: {
-              categgories: 'Phone',
+              categories: 'Phone',
             },
             refinementList: {
               brand: ['Samsung'],
