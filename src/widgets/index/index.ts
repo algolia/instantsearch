@@ -261,6 +261,7 @@ const index = (props: IndexProps): Index => {
           searchParameters: nextState,
           helper: helper!,
         });
+        localInstantSearchInstance.onChange();
 
         helper!.setState(
           getLocalWidgetsSearchParameters(localWidgets, {
@@ -281,6 +282,7 @@ const index = (props: IndexProps): Index => {
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
       localUiState = uiState[indexId] || {};
+      instantSearchInstance.onChange();
 
       // The `mainHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
@@ -381,6 +383,7 @@ const index = (props: IndexProps): Index => {
           searchParameters: state,
           helper: helper!,
         });
+        instantSearchInstance.onChange();
       });
     },
 

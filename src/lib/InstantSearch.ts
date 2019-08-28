@@ -471,6 +471,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
   }
 
+  public onChange = defer(() => {
+    // @TODO: Provide `nextUiState` to all middlewares (eg. routing)
+    // const nextUiState = this.mainIndex.getWidgetState({});
+  });
+
   public createURL(params: PlainSearchParameters): string {
     if (!this._createURL) {
       throw new Error(
