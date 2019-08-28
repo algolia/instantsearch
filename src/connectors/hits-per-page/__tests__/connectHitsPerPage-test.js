@@ -86,7 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
+
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -104,7 +104,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    ).toEqual(
       new SearchParameters({
         hitsPerPage: 3,
       })
@@ -216,14 +220,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    ).toEqual(
       new SearchParameters({
         hitsPerPage: 10,
       })
     );
   });
 
-  it('Configures the search with the previous hitsPerPage', () => {
+  it('Overrides previous hitsPerPage', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
@@ -234,10 +242,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     expect(
-      widget.getConfiguration(new SearchParameters({ hitsPerPage: 20 }))
+      widget.getWidgetSearchParameters(
+        new SearchParameters({ hitsPerPage: 20 }),
+        { uiState: {} }
+      )
     ).toEqual(
       new SearchParameters({
-        hitsPerPage: 20,
+        hitsPerPage: 10,
       })
     );
   });
