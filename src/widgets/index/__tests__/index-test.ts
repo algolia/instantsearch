@@ -1483,7 +1483,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
       });
 
-      it('updates the local `uiState` only with widgets not indices', () => {
+      it('updates the local `uiState` only with widgets', () => {
         const level0 = index({ indexName: 'level0IndexName' });
         const level1 = index({ indexName: 'level1IndexName' });
         const widgets = [createSearchBox(), createPagination()];
@@ -1505,6 +1505,113 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         expect(level1.getWidgetState).toHaveBeenCalledTimes(0);
+      });
+
+      it('updates the local `uiState` when they differ on first render', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          onStateChange: jest.fn(),
+        });
+
+        instance.addWidgets([createSearchBox()]);
+
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        expect(instance.getWidgetState({})).toEqual({
+          indexName: {},
+        });
+
+        // Simulate a change that does not emit (like `searchFunction`)
+        instance.getHelper()!.overrideStateWithoutTriggeringChangeEvent({
+          ...instance.getHelper()!.state,
+          query: 'Apple iPhone',
+        });
+
+        instance.render(
+          createRenderOptions({
+            instantSearchInstance,
+          })
+        );
+
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(1);
+        expect(instance.getWidgetState({})).toEqual({
+          indexName: {
+            query: 'Apple iPhone',
+          },
+        });
+
+        // Simulate a change that does not emit (like `searchFunction`)
+        instance.getHelper()!.overrideStateWithoutTriggeringChangeEvent({
+          ...instance.getHelper()!.state,
+          query: 'Apple iPhone XS',
+        });
+
+        instance.render(
+          createRenderOptions({
+            instantSearchInstance,
+          })
+        );
+
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(1);
+        expect(instance.getWidgetState({})).toEqual({
+          indexName: {
+            query: 'Apple iPhone',
+          },
+        });
+      });
+
+      it('does not update the local `uiState` on first render for children indices', async () => {
+        const topLevelIndex = index({ indexName: 'topLevelIndexName' });
+        const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+        const instantSearchInstance = createInstantSearch({
+          onStateChange: jest.fn(),
+        });
+
+        topLevelIndex.addWidgets([
+          createSearchBox(),
+          subLevelIndex.addWidgets([createSearchBox()]),
+        ]);
+
+        topLevelIndex.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        expect(subLevelIndex.getWidgetState({})).toEqual({
+          subLevelIndexName: {},
+        });
+
+        subLevelIndex
+          .getHelper()!
+          // Simulate a change that does not emit (like `searchFunction`)
+          .overrideStateWithoutTriggeringChangeEvent({
+            ...subLevelIndex.getHelper()!.state,
+            query: 'Apple iPhone',
+          })
+          // Simulate a call to search from a widget - this step is required otherwise
+          // the DerivedHelper does not contain the results. The `lastResults` attribute
+          // is set once the `result` event is emitted.
+          .search();
+
+        await runAllMicroTasks();
+
+        topLevelIndex.render(
+          createRenderOptions({
+            instantSearchInstance,
+          })
+        );
+
+        expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
+        expect(subLevelIndex.getWidgetState({})).toEqual({
+          subLevelIndexName: {},
+        });
       });
 
       it('retrieves the `uiState` for the children indices', () => {
