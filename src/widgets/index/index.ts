@@ -418,16 +418,16 @@ const index = (props: IndexProps): Index => {
         isFirstRender = false;
         // Compare initial state and first render state to see if the query has been
         // changed by the `searchFunction`. It's required because the helper of the
-        // `searchFunction` does not trigger change event (not the same instance).
+        // `searchFunction` does not trigger change events (not the same instance).
         const firstRenderState = getLocalWidgetsState(localWidgets, {
           helper: helper!,
           searchParameters: helper!.state,
         });
 
         if (!isEqual(localUiState, firstRenderState)) {
-          // Force update the URL, if the state has changed since the initial read.
-          // We do this in order to make the URL update when there is `searchFunction`
-          // that prevents the search of the initial rendering.
+          // Force update the URL if the state has changed since the initial read.
+          // We do this to trigger a URL update when `searchFunction` prevents
+          // the search on the initial render.
           // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
           localUiState = firstRenderState;
 
