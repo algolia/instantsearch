@@ -5,32 +5,33 @@ import jsHelper, {
 import connectRatingMenu from '../connectRatingMenu';
 
 describe('connectRatingMenu', () => {
-  // @TODO: once we've migrate away from `getConfiguration` update
-  // the function and use it at least for the lifecycle.
-  // const getInitializedWidget = (config = {}) => {
-  //   const rendering = jest.fn();
-  //   const makeWidget = connectRatingMenu(rendering);
+  const getInitializedWidget = (config = {}, unmount) => {
+    const rendering = jest.fn();
+    const makeWidget = connectRatingMenu(rendering, unmount);
 
-  //   const attribute = 'grade';
-  //   const widget = makeWidget({
-  //     attribute,
-  //     ...config,
-  //   });
+    const attribute = 'grade';
+    const widget = makeWidget({
+      attribute,
+      ...config,
+    });
 
-  //   const initialConfig = widget.getConfiguration(new SearchParameters({}));
-  //   const helper = jsHelper({}, '', initialConfig);
-  //   helper.search = jest.fn();
+    const initialConfig = widget.getWidgetSearchParameters(
+      new SearchParameters({}),
+      { uiState: {} }
+    );
+    const helper = jsHelper({}, '', initialConfig);
+    helper.search = jest.fn();
 
-  //   widget.init({
-  //     helper,
-  //     state: helper.state,
-  //     createURL: () => '#',
-  //   });
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
 
-  //   const { refine } = rendering.mock.calls[0][0];
+    const { refine } = rendering.mock.calls[0][0];
 
-  //   return [widget, helper, refine];
-  // };
+    return { widget, helper, refine, rendering };
+  };
 
   describe('Usage', () => {
     it('throws without render function', () => {
@@ -66,7 +67,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -75,34 +75,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
   });
 
   it('Renders during init and render', () => {
-    // test that the dummyRendering is called with the isFirstRendering
-    // flag set accordingly
-    const rendering = jest.fn();
-    const makeWidget = connectRatingMenu(rendering);
-
     const attribute = 'grade';
-    const widget = makeWidget({
-      attribute,
-    });
-
-    const config = widget.getConfiguration(new SearchParameters({}));
-    expect(config).toEqual(
-      new SearchParameters({
-        disjunctiveFacets: [attribute],
-        disjunctiveFacetsRefinements: {
-          grade: [],
-        },
-      })
-    );
-
-    const helper = jsHelper({}, '', config);
-    helper.search = jest.fn();
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    const { widget, helper, rendering } = getInitializedWidget({ attribute });
 
     {
       // should call the rendering once with isFirstRendering to true
@@ -177,38 +151,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     }
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = () => {};
-    const makeWidget = connectRatingMenu(rendering);
-    const attribute = 'grade';
-    const widget = makeWidget({
-      attribute,
-    });
-    const config = widget.getConfiguration(new SearchParameters({}));
-    const helper = jsHelper({}, '', config);
-
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
-  });
-
   it('Provides a function to update the index at each step', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectRatingMenu(rendering);
-
-    const attribute = 'grade';
-    const widget = makeWidget({
-      attribute,
-    });
-
-    const config = widget.getConfiguration(new SearchParameters({}));
-
-    const helper = jsHelper({}, '', config);
-    helper.search = jest.fn();
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    const attribute = 'swag';
+    const { rendering, helper, widget } = getInitializedWidget({ attribute });
 
     {
       // first rendering
@@ -293,67 +238,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     }
   });
 
-  describe('getConfiguration', () => {
-    test('returns initial search parameters', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRatingMenu(rendering);
-
-      const attribute = 'grade';
-      const widget = makeWidget({
-        attribute,
-      });
-
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-        new SearchParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            grade: [],
-          },
-        })
-      );
-    });
-
-    test('supports previous disjunctive facets refinements', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRatingMenu(rendering);
-
-      const attribute = 'grade';
-      const widget = makeWidget({
-        attribute,
-      });
-
-      expect(
-        widget.getConfiguration(
-          new SearchParameters({
-            disjunctiveFacets: [attribute],
-            disjunctiveFacetsRefinements: {
-              grade: [4],
-            },
-          })
-        )
-      ).toEqual(
-        new SearchParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            grade: [4],
-          },
-        })
-      );
-    });
-  });
-
   describe('dispose', () => {
-    test('calls the unmount function', () => {
-      const render = jest.fn();
-      const unmount = jest.fn();
-      const makeWidget = connectRatingMenu(render, unmount);
-      const helper = jsHelper({}, '', {});
-      helper.search = jest.fn();
+    it('does not throw without the unmount function', () => {
+      const { widget, helper } = getInitializedWidget();
 
-      const attribute = 'grade';
-      const widget = makeWidget({
-        attribute,
-      });
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
+    });
+
+    test('calls the unmount function', () => {
+      const unmount = jest.fn();
+      const { widget, helper } = getInitializedWidget({}, unmount);
 
       widget.dispose({ state: helper.state });
 
