@@ -4,7 +4,11 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 
 import connectSortBy from '../connectSortBy';
+import index from '../../../widgets/index/index';
 import instantSearch from '../../../lib/main';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import { createInitOptions } from '../../../../test/mock/createWidget';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {
@@ -352,32 +356,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     };
 
     describe('getWidgetState', () => {
-      test('should give back the object unmodified if the default value is selected', () => {
+      test('should return the same `uiState` when the default value is selected', () => {
         const [widget, helper] = getInitializedWidget();
+
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
-        expect(uiStateAfter).toBe(uiStateBefore);
+
+        expect(uiStateAfter).toEqual(uiStateBefore);
       });
 
-      test('should add an entry equal to the refinement', () => {
+      test('should add an entry on refine', () => {
         const [widget, helper, refine] = getInitializedWidget();
+
         refine('priceASC');
+
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
+
         expect(uiStateAfter).toEqual({
           sortBy: 'priceASC',
         });
       });
 
-      test('should give back the object unmodified if the value is already in the ui state', () => {
+      test('should return the same `uiState` when the value is already present', () => {
         const [widget, helper, refine] = getInitializedWidget();
+
         refine('priceASC');
+
         const uiStateBefore = widget.getWidgetState(
           {},
           {
@@ -389,19 +400,104 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           searchParameters: helper.state,
           helper,
         });
-        expect(uiStateAfter).toBe(uiStateBefore);
+
+        expect(uiStateAfter).toEqual(uiStateBefore);
+      });
+
+      test('should use the top-level `indexName` for the initial index', () => {
+        const render = jest.fn();
+        const makeWidget = connectSortBy(render);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'initial_index_name',
+        });
+
+        const widget = makeWidget({
+          items: [
+            { label: 'Sort products', value: 'initial_index_name' },
+            { label: 'Sort products by price', value: 'index_name_price' },
+          ],
+        });
+
+        const helper = jsHelper(createSearchClient(), 'initial_index_name');
+        helper.search = jest.fn();
+
+        // Simulate an URLSync
+        helper.setQueryParameter('index', 'index_name_price');
+
+        widget.init(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const actual = widget.getWidgetState(
+          {},
+          {
+            searchParameters: helper.state,
+            helper,
+          }
+        );
+
+        expect(actual).toEqual({
+          sortBy: 'index_name_price',
+        });
+      });
+
+      test('should return the same `uiState` when the default value from a parent index is selected', () => {
+        const parent = index({ indexName: 'index_name_parent' });
+        const render = jest.fn();
+        const makeWidget = connectSortBy(render);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'initial_index_name',
+        });
+
+        const widget = makeWidget({
+          items: [
+            { label: 'Sort products', value: 'initial_index_name' },
+            {
+              label: 'Sort products by parent',
+              value: 'index_name_parent',
+            },
+          ],
+        });
+
+        const helper = jsHelper(createSearchClient(), 'index_name_parent');
+        helper.search = jest.fn();
+
+        widget.init(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+            parent,
+          })
+        );
+
+        const actual = widget.getWidgetState(
+          {},
+          {
+            searchParameters: helper.state,
+            helper,
+          }
+        );
+
+        expect(actual).toEqual({});
       });
     });
 
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if no value is in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+
         const uiState = {};
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
@@ -411,11 +507,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const uiState = {
           sortBy: newIndexName,
         };
+
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+
         expect(searchParametersAfter).toEqual(
           new SearchParameters({
             index: newIndexName,
@@ -425,13 +523,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
       test('should enforce the default value on empty UiState', () => {
         const [widget, helper, refine] = getInitializedWidget();
+
         refine('other');
+
         const uiState = {};
         const searchParametersBefore = new SearchParameters(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+
         expect(searchParametersAfter).toEqual(
           new SearchParameters({
             // note that this isn't the refined value, but the default
