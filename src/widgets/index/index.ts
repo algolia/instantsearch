@@ -9,6 +9,7 @@ import { Client } from 'algoliasearch';
 import {
   InstantSearch,
   UiState,
+  IndexUiState,
   Widget,
   InitOptions,
   RenderOptions,
@@ -63,10 +64,10 @@ function isIndexWidget(widget: Widget): widget is Index {
 function getLocalWidgetsState(
   widgets: Widget[],
   widgetStateOptions: WidgetStateOptions
-): UiState {
+): IndexUiState {
   return widgets
     .filter(widget => !isIndexWidget(widget))
-    .reduce<UiState>((uiState, widget) => {
+    .reduce<IndexUiState>((uiState, widget) => {
       if (!widget.getWidgetState) {
         return uiState;
       }
@@ -140,7 +141,7 @@ const index = (props: IndexProps): Index => {
   const { indexName, indexId = indexName } = props;
 
   let localWidgets: Widget[] = [];
-  let localUiState: UiState = {};
+  let localUiState: IndexUiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
   let localParent: Index | null = null;
   let helper: Helper | null = null;
