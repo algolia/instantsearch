@@ -1,4 +1,9 @@
-import { UiState, StateMapping } from '../../types';
+import { UiState, IndexUiState, StateMapping } from '../../types';
+
+function indexStateWithoutConfigure(uiState: IndexUiState): IndexUiState {
+  const { configure, ...trackedUiState } = uiState;
+  return trackedUiState;
+}
 
 // technically a URL could contain any key, since users provide it,
 // which is why the input to this function is UiState, not something
@@ -6,13 +11,23 @@ import { UiState, StateMapping } from '../../types';
 export default function simpleStateMapping(): StateMapping<UiState> {
   return {
     stateToRoute(uiState) {
-      const { configure, ...trackedRouteState } = uiState;
-      return trackedRouteState;
+      return Object.keys(uiState).reduce<UiState>(
+        (state, indexId) => ({
+          ...state,
+          [indexId]: indexStateWithoutConfigure(uiState[indexId]),
+        }),
+        {}
+      );
     },
 
     routeToState(routeState) {
-      const { configure, ...trackedUiState } = routeState;
-      return trackedUiState;
+      return Object.keys(routeState).reduce<UiState>(
+        (state, indexId) => ({
+          ...state,
+          [indexId]: indexStateWithoutConfigure(routeState[indexId]),
+        }),
+        {}
+      );
     },
   };
 }
