@@ -3,6 +3,7 @@ import { isEqual } from './utils';
 import {
   InstantSearch,
   UiState,
+  IndexUiState,
   Router,
   StateMapping,
   Widget,
@@ -21,6 +22,7 @@ class RoutingManager implements Widget {
   private readonly stateMapping: StateMapping;
 
   private isFirstRender: boolean = true;
+  private indexId: string;
   private currentUiState: UiState;
   private initState?: UiState;
   private renderURLFromState?: (event: HelperChangeEvent) => void;
@@ -33,6 +35,7 @@ class RoutingManager implements Widget {
     this.router = router;
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
+    this.indexId = this.instantSearchInstance.indexName;
     this.currentUiState = this.stateMapping.routeToState(this.router.read());
   }
 
@@ -44,6 +47,7 @@ class RoutingManager implements Widget {
     uiState: UiState;
   }): SearchParameters {
     const widgets = this.instantSearchInstance.mainIndex.getWidgets();
+    const indexUiState = uiState[this.indexId] || {};
 
     return widgets.reduce((parameters, widget) => {
       if (!widget.getWidgetSearchParameters) {
@@ -51,7 +55,7 @@ class RoutingManager implements Widget {
       }
 
       return widget.getWidgetSearchParameters(parameters, {
-        uiState,
+        uiState: indexUiState,
       });
     }, currentSearchParameters);
   }
@@ -64,16 +68,18 @@ class RoutingManager implements Widget {
     const widgets = this.instantSearchInstance.mainIndex.getWidgets();
     const helper = this.instantSearchInstance.mainIndex.getHelper()!;
 
-    return widgets.reduce<UiState>((state, widget) => {
-      if (!widget.getWidgetState) {
-        return state;
-      }
+    return {
+      [this.indexId]: widgets.reduce<IndexUiState>((state, widget) => {
+        if (!widget.getWidgetState) {
+          return state;
+        }
 
-      return widget.getWidgetState(state, {
-        helper,
-        searchParameters,
-      });
-    }, {});
+        return widget.getWidgetState(state, {
+          helper,
+          searchParameters,
+        });
+      }, {}),
+    };
   }
 
   private setupRouting(state: SearchParameters): void {
