@@ -1,6 +1,6 @@
 import { UiState, IndexUiState, StateMapping } from '../../types';
 
-function indexStateWithoutConfigure(uiState: IndexUiState): IndexUiState {
+function getIndexStateWithoutConfigure(uiState: IndexUiState): IndexUiState {
   const { configure, ...trackedUiState } = uiState;
   return trackedUiState;
 }
@@ -14,7 +14,7 @@ export default function simpleStateMapping(): StateMapping<UiState> {
       return Object.keys(uiState).reduce<UiState>(
         (state, indexId) => ({
           ...state,
-          [indexId]: indexStateWithoutConfigure(uiState[indexId]),
+          [indexId]: getIndexStateWithoutConfigure(uiState[indexId]),
         }),
         {}
       );
@@ -24,7 +24,7 @@ export default function simpleStateMapping(): StateMapping<UiState> {
       return Object.keys(routeState).reduce<UiState>(
         (state, indexId) => ({
           ...state,
-          [indexId]: indexStateWithoutConfigure(routeState[indexId]),
+          [indexId]: getIndexStateWithoutConfigure(routeState[indexId]),
         }),
         {}
       );
