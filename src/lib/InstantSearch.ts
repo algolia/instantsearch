@@ -104,6 +104,14 @@ export type InstantSearchOptions<TRouteState = UiState> = {
   searchParameters?: PlainSearchParameters;
 
   /**
+   * Injects a `uiState` to the `instantsearch` instance. You can use this option
+   * to provide an initial state to a widget. Note that the state is only used
+   * for the first search. To unconditionally pass additional parameters to the
+   * Algolia API, take a look at the `configure` widget.
+   */
+  initialUiState?: UiState;
+
+  /**
    * Time before a search is considered stalled. The default is 200ms
    */
   stalledSearchDelay?: number;
@@ -139,6 +147,7 @@ class InstantSearch extends EventEmitter {
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
   public _searchParameters: PlainSearchParameters;
+  public _initialUiState: UiState;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _createURL?: (params: SearchParameters) => string;
   public _createAbsoluteURL?: (params: SearchParameters) => string;
@@ -151,7 +160,8 @@ class InstantSearch extends EventEmitter {
     const {
       indexName = null,
       numberLocale,
-      searchParameters,
+      searchParameters = {},
+      initialUiState = {},
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -234,6 +244,7 @@ See ${createDocumentationLink({
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
+    this._initialUiState = initialUiState;
     this._searchParameters = {
       ...searchParameters,
       index: indexName,
@@ -411,6 +422,7 @@ See ${createDocumentationLink({
     this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
+      uiState: this._initialUiState,
     });
 
     mainHelper.search();
