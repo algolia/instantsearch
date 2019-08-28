@@ -102,7 +102,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
   searchParameters?: PlainSearchParameters;
 
   /**
-   * Injects an `uiState` to the `instantsearch` instance. You can use this option
+   * Injects a `uiState` to the `instantsearch` instance. You can use this option
    * to provide an initial state to a widget. Note that the state is only used
    * for the first search. To unconditionally pass additional parameters to the
    * Algolia API, take a look at the `configure` widget.
