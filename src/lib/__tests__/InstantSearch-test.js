@@ -1021,7 +1021,9 @@ describe('createURL', () => {
 
     expect(search.createURL()).toBe('http://algolia.com');
     expect(router.createURL).toHaveBeenCalledWith({
-      query: 'Apple',
+      indexName: {
+        query: 'Apple',
+      },
     });
   });
 
@@ -1052,8 +1054,10 @@ describe('createURL', () => {
 
     expect(search.createURL({ page: 5 })).toBe('http://algolia.com');
     expect(router.createURL).toHaveBeenCalledWith({
-      query: 'Apple',
-      page: 5,
+      indexName: {
+        query: 'Apple',
+        page: 5,
+      },
     });
   });
 });
