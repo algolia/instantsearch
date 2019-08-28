@@ -139,22 +139,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('returns the instance to be able to chain the calls', () => {
-      const topLevelIndex = index({ indexName: 'topLevelIndexName' });
-      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
-      topLevelIndex.addWidgets([
-        subLevelIndex.addWidgets([createSearchBox(), createPagination()]),
+      topLevelInstance.addWidgets([
+        subLevelInstance.addWidgets([createSearchBox(), createPagination()]),
       ]);
 
-      expect(topLevelIndex.getWidgets()).toHaveLength(1);
-      expect(topLevelIndex.getWidgets()).toEqual([subLevelIndex]);
+      expect(topLevelInstance.getWidgets()).toHaveLength(1);
+      expect(topLevelInstance.getWidgets()).toEqual([subLevelInstance]);
     });
 
     it('does not throw an error without the `init` step', () => {
-      const topLevelIndex = index({ indexName: 'topLevelIndexName' });
-      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
-      expect(() => topLevelIndex.addWidgets([subLevelIndex])).not.toThrow();
+      expect(() =>
+        topLevelInstance.addWidgets([subLevelInstance])
+      ).not.toThrow();
     });
 
     it('throws an error with a value different than `array`', () => {
@@ -333,12 +335,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     it('does not throw an error without the `init` step', () => {
       const topLevelInstance = index({ indexName: 'topLevelIndexName' });
-      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
-      topLevelInstance.addWidgets([subLevelIndex]);
+      topLevelInstance.addWidgets([subLevelInstance]);
 
       expect(() =>
-        topLevelInstance.removeWidgets([subLevelIndex])
+        topLevelInstance.removeWidgets([subLevelInstance])
       ).not.toThrow();
     });
 
@@ -1566,33 +1568,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       it('does not update the local `uiState` on first render for children indices', async () => {
-        const topLevelIndex = index({ indexName: 'topLevelIndexName' });
-        const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+        const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+        const subLevelInstance = index({ indexName: 'subLevelIndexName' });
         const instantSearchInstance = createInstantSearch({
           onStateChange: jest.fn(),
         });
 
-        topLevelIndex.addWidgets([
+        topLevelInstance.addWidgets([
           createSearchBox(),
-          subLevelIndex.addWidgets([createSearchBox()]),
+          subLevelInstance.addWidgets([createSearchBox()]),
         ]);
 
-        topLevelIndex.init(
+        topLevelInstance.init(
           createInitOptions({
             instantSearchInstance,
             parent: null,
           })
         );
 
-        expect(subLevelIndex.getWidgetState({})).toEqual({
+        expect(subLevelInstance.getWidgetState({})).toEqual({
           subLevelIndexName: {},
         });
 
-        subLevelIndex
+        subLevelInstance
           .getHelper()!
           // Simulate a change that does not emit (like `searchFunction`)
           .overrideStateWithoutTriggeringChangeEvent({
-            ...subLevelIndex.getHelper()!.state,
+            ...subLevelInstance.getHelper()!.state,
             query: 'Apple iPhone',
           })
           // Simulate a call to search from a widget - this step is required otherwise
@@ -1602,14 +1604,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         await runAllMicroTasks();
 
-        topLevelIndex.render(
+        topLevelInstance.render(
           createRenderOptions({
             instantSearchInstance,
           })
         );
 
         expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
-        expect(subLevelIndex.getWidgetState({})).toEqual({
+        expect(subLevelInstance.getWidgetState({})).toEqual({
           subLevelIndexName: {},
         });
       });
