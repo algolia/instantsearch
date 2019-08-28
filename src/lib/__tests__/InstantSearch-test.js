@@ -172,7 +172,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
   it('throws if createURL is called before start', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -185,7 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
   it('throws if refresh is called before start', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -205,7 +205,7 @@ describe('InstantSearch', () => {
 
     // eslint-disable-next-line no-new
     new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -218,7 +218,7 @@ describe('InstantSearch', () => {
   it('does not call algoliasearchHelper', () => {
     // eslint-disable-next-line no-new
     new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -228,7 +228,7 @@ describe('InstantSearch', () => {
   it('does store insightsClient on the instance', () => {
     const insightsClient = () => {};
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
       insightsClient,
     });
@@ -242,7 +242,7 @@ describe('InstantSearch', () => {
     const facetsRefinements = disjunctiveFacetsRefinements;
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
       searchParameters: {
         disjunctiveFacetsRefinements,
@@ -272,7 +272,7 @@ describe('addWidget(s)', () => {
   it('forwards the call to `addWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -286,7 +286,7 @@ describe('addWidget(s)', () => {
   it('forwards the call to `addWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -302,7 +302,7 @@ describe('removeWidget(s)', () => {
   it('forwards the call to `removeWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -320,7 +320,7 @@ describe('removeWidget(s)', () => {
   it('forwards the call to `removeWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -339,7 +339,7 @@ describe('removeWidget(s)', () => {
 describe('start', () => {
   it('creates two Helper one for the instance + one for the index', () => {
     const searchClient = createSearchClient();
-    const indexName = 'my_index_name';
+    const indexName = 'indexName';
     const search = new InstantSearch({
       indexName,
       searchClient,
@@ -356,7 +356,7 @@ describe('start', () => {
   it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -371,7 +371,7 @@ describe('start', () => {
     const searchFunction = jest.fn(helper => helper.setQuery('test').search());
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchFunction,
       searchClient,
     });
@@ -389,7 +389,7 @@ describe('start', () => {
   it('calls the provided `searchFunction` with multiple requests', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
       searchFunction(helper) {
         helper.addDisjunctiveFacetRefinement('brand', 'Apple');
@@ -408,7 +408,7 @@ describe('start', () => {
 
   it('forwards the `searchParameters` to the main index', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
       searchParameters: {
         hitsPerPage: 5,
@@ -421,7 +421,7 @@ describe('start', () => {
 
     expect(search.mainIndex.getHelper().state).toEqual(
       algoliasearchHelper.SearchParameters.make({
-        index: 'index_name',
+        index: 'indexName',
         hitsPerPage: 5,
         disjunctiveFacetsRefinements: { brand: ['Apple'] },
         disjunctiveFacets: ['brand'],
@@ -429,9 +429,33 @@ describe('start', () => {
     );
   });
 
+  it('forwards the `initialUiState` to the main index', () => {
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          refinementList: {
+            brand: ['Apple'],
+          },
+        },
+      },
+    });
+
+    search.start();
+
+    expect(search.mainIndex.getWidgetState()).toEqual({
+      indexName: {
+        refinementList: {
+          brand: ['Apple'],
+        },
+      },
+    });
+  });
+
   it('calls `init` on the added widgets', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -447,7 +471,7 @@ describe('start', () => {
   it('triggers a search without errors', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -464,7 +488,7 @@ describe('start', () => {
     });
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -482,7 +506,7 @@ describe('start', () => {
   it('does start without widgets', () => {
     const searchClient = createSearchClient();
     const instance = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -492,7 +516,7 @@ describe('start', () => {
   it('does not to start twice', () => {
     const searchClient = createSearchClient();
     const instance = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -510,7 +534,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 describe('dispose', () => {
   it('cancels the scheduled search', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -533,7 +557,7 @@ describe('dispose', () => {
 
   it('cancels the scheduled render', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -556,7 +580,7 @@ describe('dispose', () => {
   it('cancels the scheduled stalled render', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -586,7 +610,7 @@ describe('dispose', () => {
 
   it('removes the widgets from the main index', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -603,7 +627,7 @@ describe('dispose', () => {
 
   it('calls `dispose` on the main index', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -620,7 +644,7 @@ describe('dispose', () => {
 
   it('stops the instance', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -638,7 +662,7 @@ describe('dispose', () => {
   it('removes the listeners on the main Helper', () => {
     const onEventName = jest.fn();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -662,7 +686,7 @@ describe('dispose', () => {
   it('removes the listeners on the instance', async () => {
     const onRender = jest.fn();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -689,7 +713,7 @@ describe('dispose', () => {
 
   it('removes the Helpers references', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -713,7 +737,7 @@ describe('dispose', () => {
 describe('scheduleSearch', () => {
   it('defers the call to the `search` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -734,7 +758,7 @@ describe('scheduleSearch', () => {
 
   it('deduplicates the calls to the `search` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -760,7 +784,7 @@ describe('scheduleSearch', () => {
 describe('scheduleRender', () => {
   it('defers the call to the `render` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -779,7 +803,7 @@ describe('scheduleRender', () => {
 
   it('deduplicates the calls to the `render` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -803,7 +827,7 @@ describe('scheduleRender', () => {
 
   it('emits a `render` event once the render is complete', done => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -826,7 +850,7 @@ describe('scheduleStalledRender', () => {
   it('calls the `render` method on the main index', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -859,7 +883,7 @@ describe('scheduleStalledRender', () => {
   it('deduplicates the calls to the `render` method', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -895,7 +919,7 @@ describe('scheduleStalledRender', () => {
   it('triggers a `render` once the search expires the delay', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -976,7 +1000,7 @@ describe('createURL', () => {
     router.createURL.mockImplementation(() => 'http://algolia.com');
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
       routing: {
         router,
@@ -1006,7 +1030,7 @@ describe('createURL', () => {
     router.createURL.mockImplementation(() => 'http://algolia.com');
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
       routing: {
         router,
@@ -1042,7 +1066,7 @@ describe('refresh', () => {
     });
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -1058,7 +1082,7 @@ describe('refresh', () => {
   it('triggers a `search` with the cache emptied', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
