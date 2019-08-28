@@ -255,7 +255,7 @@
                   <img :src="item.image" :alt="item.name" class="hit-image">
                 </header>
 
-                <main class="hit-info-container">
+                <div class="hit-info-container">
                   <p class="hit-category">{{ item.categories[0] }}</p>
                   <h1>
                     <ais-highlight attribute="name" :hit="item"/>
@@ -284,7 +284,7 @@
                       </span>
                     </p>
                   </footer>
-                </main>
+                </div>
               </article>
             </div>
           </ais-hits>
