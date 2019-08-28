@@ -43,7 +43,7 @@ const Hit = ({ hit }) => (
       <img src={hit.image} alt={hit.name} className="hit-image" />
     </header>
 
-    <main className="hit-info-container">
+    <div className="hit-info-container">
       <p className="hit-category">{hit.categories[0]}</p>
       <h1>
         <Highlight attribute="name" tagName="mark" hit={hit} />
@@ -73,7 +73,7 @@ const Hit = ({ hit }) => (
           </span>
         </p>
       </footer>
-    </main>
+    </div>
   </article>
 );
 
