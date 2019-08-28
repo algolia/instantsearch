@@ -413,24 +413,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const render = jest.fn();
         const makeWidget = connectSortBy(render);
         const instantSearchInstance = createInstantSearch({
-          indexName: 'initial_index_name',
+          indexName: 'initialIndexName',
         });
 
         const widget = makeWidget({
           items: [
-            { label: 'Sort products', value: 'initial_index_name' },
-            { label: 'Sort products by price', value: 'index_name_price' },
+            { label: 'Sort products', value: 'initialIndexName' },
+            { label: 'Sort products by price', value: 'indexNamePrice' },
           ],
         });
 
         const helper = algoliasearchHelper(
           createSearchClient(),
-          'initial_index_name'
+          'initialIndexName'
         );
         helper.search = jest.fn();
 
         // Simulate an URLSync
-        helper.setQueryParameter('index', 'index_name_price');
+        helper.setQueryParameter('index', 'indexNamePrice');
 
         widget.init(
           createInitOptions({
@@ -449,31 +449,31 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         );
 
         expect(actual).toEqual({
-          sortBy: 'index_name_price',
+          sortBy: 'indexNamePrice',
         });
       });
 
       test('should return the same `uiState` when the default value from a parent index is selected', () => {
-        const parent = index({ indexName: 'index_name_parent' });
+        const parent = index({ indexName: 'indexNameParent' });
         const render = jest.fn();
         const makeWidget = connectSortBy(render);
         const instantSearchInstance = createInstantSearch({
-          indexName: 'initial_index_name',
+          indexName: 'initialIndexName',
         });
 
         const widget = makeWidget({
           items: [
-            { label: 'Sort products', value: 'initial_index_name' },
+            { label: 'Sort products', value: 'initialIndexName' },
             {
               label: 'Sort products by parent',
-              value: 'index_name_parent',
+              value: 'indexNameParent',
             },
           ],
         });
 
         const helper = algoliasearchHelper(
           createSearchClient(),
-          'index_name_parent'
+          'indexNameParent'
         );
         helper.search = jest.fn();
 
