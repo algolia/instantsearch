@@ -8,7 +8,7 @@ export const createInstantSearch = (
   args: Partial<InstantSearch> = {}
 ): InstantSearch => {
   const searchClient = createSearchClient();
-  const indexName = 'index_name';
+  const indexName = args.indexName === undefined ? 'indexName' : args.indexName;
   const mainHelper = algoliasearchHelper(searchClient, indexName, {});
   const mainIndex = index({ indexName });
 

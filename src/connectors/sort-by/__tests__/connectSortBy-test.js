@@ -1,14 +1,16 @@
-import jsHelper, {
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
 
 import connectSortBy from '../connectSortBy';
 import index from '../../../widgets/index/index';
-import instantSearch from '../../../lib/main';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
-import { createInitOptions } from '../../../../test/mock/createWidget';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {
@@ -67,9 +69,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     // flag set accordingly
     const rendering = jest.fn();
     const makeWidget = connectSortBy(rendering);
-    const instantSearchInstance = instantSearch({
+    const instantSearchInstance = createInstantSearch({
       indexName: 'defaultIndex',
-      searchClient: { search() {} },
     });
 
     const items = [
@@ -80,15 +81,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper({}, items[0].value);
+    const helper = algoliasearchHelper({}, items[0].value);
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      instantSearchInstance,
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        instantSearchInstance,
+      })
+    );
 
     // should call the rendering once with isFirstRendering to true
     expect(rendering).toHaveBeenCalledTimes(1);
@@ -104,12 +106,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       true
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [{}]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     // Should call the rendering a second time, with isFirstRendering to false
     expect(rendering).toHaveBeenCalledTimes(2);
@@ -134,7 +137,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       { label: 'Sort products by price', value: 'priceASC' },
     ];
     const widget = makeWidget({ items });
-    const helper = jsHelper({}, items[0].value);
+    const helper = algoliasearchHelper({}, items[0].value);
 
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
@@ -142,9 +145,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   it('Renders with transformed items', () => {
     const rendering = jest.fn();
     const makeWidget = connectSortBy(rendering);
-    const instantSearchInstance = instantSearch({
+    const instantSearchInstance = createInstantSearch({
       indexName: 'defaultIndex',
-      searchClient: { search() {} },
     });
 
     const items = [
@@ -157,14 +159,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         allItems.map(item => ({ ...item, label: 'transformed' })),
     });
 
-    const helper = jsHelper({}, items[0].value);
+    const helper = algoliasearchHelper({}, items[0].value);
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      instantSearchInstance,
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        instantSearchInstance,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -176,12 +180,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect.anything()
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      helper,
-      state: helper.state,
-      instantSearchInstance,
-    });
+    widget.render(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [{}]),
+        helper,
+        state: helper.state,
+        instantSearchInstance,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -197,9 +203,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
   it('Provides a function to update the index at each step', () => {
     const rendering = jest.fn();
     const makeWidget = connectSortBy(rendering);
-    const instantSearchInstance = instantSearch({
+    const instantSearchInstance = createInstantSearch({
       indexName: 'defaultIndex',
-      searchClient: { search() {} },
     });
 
     const items = [
@@ -210,15 +215,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       items,
     });
 
-    const helper = jsHelper({}, items[0].value);
+    const helper = algoliasearchHelper({}, items[0].value);
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      instantSearchInstance,
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        instantSearchInstance,
+      })
+    );
 
     {
       // first rendering
@@ -232,12 +238,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [{}]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     {
       // Second rendering
@@ -257,11 +264,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       test('uses the helper index by default', () => {
         const renderFn = jest.fn();
         const customSortBy = connectSortBy(renderFn);
-        const instantSearchInstance = instantSearch({
+        const instantSearchInstance = createInstantSearch({
           indexName: '',
-          searchClient: { search() {} },
         });
-        const helper = jsHelper({}, 'index_featured');
+        const helper = algoliasearchHelper({}, 'index_featured');
         helper.search = jest.fn();
 
         const items = [
@@ -271,12 +277,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         ];
         const widget = customSortBy({ items });
 
-        widget.init({
-          helper,
-          state: helper.state,
-          createURL: () => '#',
-          instantSearchInstance,
-        });
+        widget.init(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
 
         expect(renderFn).toHaveBeenCalledTimes(1);
         const [renderOptions] = renderFn.mock.calls[0];
@@ -287,11 +294,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       test('warns and falls back to the helper index if not present in the items', () => {
         const renderFn = jest.fn();
         const customSortBy = connectSortBy(renderFn);
-        const instantSearchInstance = instantSearch({
+        const instantSearchInstance = createInstantSearch({
           indexName: '',
-          searchClient: { search() {} },
         });
-        const helper = jsHelper({}, 'index_initial');
+        const helper = algoliasearchHelper({}, 'index_initial');
         helper.search = jest.fn();
 
         const items = [
@@ -302,12 +308,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const widget = customSortBy({ items });
 
         expect(() => {
-          widget.init({
-            helper,
-            state: helper.state,
-            createURL: () => '#',
-            instantSearchInstance,
-          });
+          widget.init(
+            createInitOptions({
+              helper,
+              state: helper.state,
+              instantSearchInstance,
+            })
+          );
         }).toWarnDev(
           '[InstantSearch.js]: The index named "index_initial" is not listed in the `items` of `sortBy`.'
         );
@@ -324,31 +331,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
       const makeWidget = connectSortBy(rendering);
-      const instantSearchInstance = instantSearch({
+      const instantSearchInstance = createInstantSearch({
         indexName: 'relevance',
-        searchClient: { search() {} },
       });
-      const items = [
-        { label: 'Sort products by relevance', value: 'relevance' },
-        { label: 'Sort products by price', value: 'priceASC' },
-        { label: 'Sort products by magic', value: 'other' },
-      ];
 
       const widget = makeWidget({
-        items,
+        items: [
+          { label: 'Sort products by relevance', value: 'relevance' },
+          { label: 'Sort products by price', value: 'priceASC' },
+          { label: 'Sort products by magic', value: 'other' },
+        ],
         ...config,
       });
 
-      const initialConfig = {};
-      const helper = jsHelper({}, 'relevance', initialConfig);
+      const helper = algoliasearchHelper({}, 'relevance');
       helper.search = jest.fn();
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-        instantSearchInstance,
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+          instantSearchInstance,
+        })
+      );
 
       const { refine } = rendering.mock.calls[0][0];
 
@@ -418,7 +423,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           ],
         });
 
-        const helper = jsHelper(createSearchClient(), 'initial_index_name');
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'initial_index_name'
+        );
         helper.search = jest.fn();
 
         // Simulate an URLSync
@@ -463,7 +471,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           ],
         });
 
-        const helper = jsHelper(createSearchClient(), 'index_name_parent');
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'index_name_parent'
+        );
         helper.search = jest.fn();
 
         widget.init(
