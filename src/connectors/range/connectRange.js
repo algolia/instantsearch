@@ -241,9 +241,17 @@ export default function connectRange(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        return state
-          .removeNumericRefinement(attribute)
-          .removeDisjunctiveFacet(attribute);
+        const stateWithoutDisjunctive = state.removeDisjunctiveFacet(attribute);
+
+        // can not use setQueryParameters || removeNumericRefinements, because
+        // they both keep the old value. This isn't immutable, but it is fine
+        // since it's already a copy.
+        stateWithoutDisjunctive.numericRefinements = {
+          ...state.numericRefinements,
+          [attribute]: undefined,
+        };
+
+        return stateWithoutDisjunctive;
       },
 
       getWidgetState(uiState, { searchParameters }) {
