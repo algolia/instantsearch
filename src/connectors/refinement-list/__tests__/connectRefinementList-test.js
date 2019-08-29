@@ -12,32 +12,6 @@ describe('connectRefinementList', () => {
     return { rendering, makeWidget };
   };
 
-  // @TODO: once we've migrate away from `getConfiguration` update
-  // the function and use it at least for the lifecycle.
-  // const getInitializedWidget = (config = {}) => {
-  //   const rendering = jest.fn();
-  //   const makeWidget = connectRefinementList(rendering);
-
-  //   const widget = makeWidget({
-  //     attribute: 'facetAttribute',
-  //     ...config,
-  //   });
-
-  //   const initialConfig = widget.getConfiguration(new SearchParameters({}));
-  //   const helper = jsHelper({}, '', initialConfig);
-  //   helper.search = jest.fn();
-
-  //   widget.init({
-  //     helper,
-  //     state: helper.state,
-  //     createURL: () => '#',
-  //   });
-
-  //   const { refine } = rendering.mock.calls[0][0];
-
-  //   return [widget, helper, refine];
-  // };
-
   it('throws on bad usage', () => {
     expect(connectRefinementList).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (got type \\"undefined\\").
@@ -137,7 +111,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'myFacet',
       });
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           disjunctiveFacets: ['myFacet'],
           disjunctiveFacetsRefinements: { myFacet: [] },
@@ -153,7 +131,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         limit: 20,
       });
 
-      expect(widget.getConfiguration(new SearchParameters())).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           disjunctiveFacets: ['myFacet'],
           disjunctiveFacetsRefinements: { myFacet: [] },
@@ -162,8 +144,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       );
 
       expect(
-        widget.getConfiguration(
-          new SearchParameters({ maxValuesPerFacet: 100 })
+        widget.getWidgetSearchParameters(
+          new SearchParameters({ maxValuesPerFacet: 100 }),
+          { uiState: {} }
         )
       ).toEqual(
         new SearchParameters({
@@ -186,7 +169,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         {},
         '',
-        widget.getConfiguration(new SearchParameters({}))
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
       );
       helper.search = jest.fn();
 
@@ -228,7 +213,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const secondRenderingOptions = rendering.mock.calls[1][0];
       secondRenderingOptions.toggleShowMore();
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           disjunctiveFacets: ['myFacet'],
           disjunctiveFacetsRefinements: { myFacet: [] },
@@ -237,8 +226,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       );
 
       expect(
-        widget.getConfiguration(
-          new SearchParameters({ maxValuesPerFacet: 100 })
+        widget.getWidgetSearchParameters(
+          new SearchParameters({ maxValuesPerFacet: 100 }),
+          { uiState: {} }
         )
       ).toEqual(
         new SearchParameters({
@@ -260,7 +250,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         {},
         '',
-        widget.getConfiguration(new SearchParameters({}))
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
       );
       helper.search = jest.fn();
 
@@ -302,7 +294,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const secondRenderingOptions = rendering.mock.calls[1][0];
       secondRenderingOptions.toggleShowMore();
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           disjunctiveFacets: ['myFacet'],
           disjunctiveFacetsRefinements: { myFacet: [] },
@@ -318,7 +314,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         operator: 'and',
       });
 
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           facets: ['myFacet'],
           facetsRefinements: { myFacet: [] },
@@ -337,7 +337,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 9,
     });
 
-    const config = widget.getConfiguration(new SearchParameters({}));
+    const config = widget.getWidgetSearchParameters(new SearchParameters({}), {
+      uiState: {},
+    });
     expect(config).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['myFacet'],
@@ -389,7 +391,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
-  it('can render before getConfiguration', () => {
+  it('can render before getWidgetSearchParameters', () => {
     const { makeWidget, rendering } = createWidgetFactory();
 
     const widget = makeWidget({
@@ -430,7 +432,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -490,7 +494,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -534,7 +540,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -580,7 +588,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -629,7 +639,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -684,7 +696,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -739,7 +753,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -797,7 +813,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -896,7 +914,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
@@ -991,7 +1011,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration(new SearchParameters({})),
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      }),
       maxValuesPerFacet: 10,
     });
     helper.search = jest.fn();
@@ -1105,7 +1127,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration(new SearchParameters({})),
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      }),
       maxValuesPerFacet: 10,
     });
     helper.search = jest.fn();
@@ -1217,7 +1241,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
 
@@ -1295,7 +1321,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration(new SearchParameters({})),
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      }),
       maxValuesPerFacet: 3,
     });
     helper.search = jest.fn();
@@ -1378,7 +1406,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
@@ -1494,7 +1524,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
@@ -1593,7 +1625,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration(new SearchParameters({})),
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      }),
       // Here we simulate that another widget has set some highlight tags
       ...TAG_PLACEHOLDER,
     });
@@ -1696,7 +1730,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     const helper = jsHelper({}, '', {
-      ...widget.getConfiguration(new SearchParameters({})),
+      ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      }),
       // Here we simulate that another widget has set some highlight tags
       ...TAG_PLACEHOLDER,
     });
@@ -1796,7 +1832,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
 
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
@@ -1816,7 +1854,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         {},
         indexName,
-        widget.getConfiguration(new SearchParameters({}))
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
       );
       helper.search = jest.fn();
 
@@ -1900,7 +1940,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const helper = jsHelper(
         {},
         indexName,
-        widget.getConfiguration(new SearchParameters({}))
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
       );
       helper.search = jest.fn();
 
@@ -1974,7 +2016,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
   describe('getWidgetState', () => {
     test('returns the `uiState` empty', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRefinementList(render);
       const helper = jsHelper({}, '');
@@ -1993,7 +2034,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     test('returns the `uiState` with a refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRefinementList(render);
       const helper = jsHelper({}, '', {
@@ -2022,7 +2062,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     test('returns the `uiState` without namespace overridden', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRefinementList(render);
       const helper = jsHelper({}, '', {
@@ -2059,7 +2098,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   describe('getWidgetSearchParameters', () => {
     describe('with `maxValuesPerFacet`', () => {
       test('returns the `SearchParameters` with default `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2075,7 +2113,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with provided `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2092,7 +2129,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with default `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2109,7 +2145,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2127,7 +2162,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '', {
@@ -2146,7 +2180,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '', {
@@ -2168,7 +2201,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     describe('with conjunctive facet', () => {
       test('returns the `SearchParameters` with the default value', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2188,7 +2220,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with the default value without the previous refinement', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '', {
@@ -2214,7 +2245,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with the value from `uiState`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2238,7 +2268,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '', {
@@ -2270,7 +2299,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     describe('with disjunctive facet', () => {
       test('returns the `SearchParameters` with the default value', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2289,7 +2317,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with the default value without the previous refinement', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '', {
@@ -2314,7 +2341,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with the value from `uiState`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '');
@@ -2337,7 +2363,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectRefinementList(render);
         const helper = jsHelper({}, '', {
