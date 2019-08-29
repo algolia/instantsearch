@@ -93,15 +93,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
     });
   });
 
-  describe('getConfiguration()', () => {
-    it('configures nothing', () => {
-      const widget = currentRefinements({
-        container: document.createElement('div'),
-      });
-      expect(widget.getConfiguration).toEqual(undefined);
-    });
-  });
-
   describe('render()', () => {
     it('should render twice <CurrentRefinements ... />', () => {
       const helper = algoliasearchHelper(createSearchClient(), 'index_name', {
