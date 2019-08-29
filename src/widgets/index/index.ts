@@ -221,7 +221,13 @@ const index = (props: IndexProps): Index => {
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
-              createURL: localInstantSearchInstance._createAbsoluteURL!,
+              createURL: (nextState: SearchParameters) =>
+                localInstantSearchInstance!._createURL!({
+                  [this.getIndexId()]: getLocalWidgetsState(localWidgets, {
+                    searchParameters: nextState,
+                    helper: helper!,
+                  }),
+                }),
             });
           }
         });
@@ -365,7 +371,13 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL: (nextState: SearchParameters) =>
+              instantSearchInstance._createURL!({
+                [this.getIndexId()]: getLocalWidgetsState(localWidgets, {
+                  searchParameters: nextState,
+                  helper: helper!,
+                }),
+              }),
           });
         }
       });
@@ -401,7 +413,13 @@ const index = (props: IndexProps): Index => {
             scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL: (nextState: SearchParameters) =>
+              instantSearchInstance._createURL!({
+                [this.getIndexId()]: getLocalWidgetsState(localWidgets, {
+                  searchParameters: nextState,
+                  helper: helper!,
+                }),
+              }),
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },

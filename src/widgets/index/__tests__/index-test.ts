@@ -238,7 +238,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            createURL: expect.any(Function),
           });
         });
       });
@@ -884,7 +884,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           helper: instance.getHelper(),
           state: instance.getHelper()!.state,
           templatesConfig: instantSearchInstance.templatesConfig,
-          createURL: instantSearchInstance._createAbsoluteURL,
+          createURL: expect.any(Function),
         });
       });
     });
@@ -1638,7 +1638,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           state: expect.any(algoliasearchHelper.SearchParameters),
           helper: instance.getHelper(),
           templatesConfig: instantSearchInstance.templatesConfig,
-          createURL: instantSearchInstance._createAbsoluteURL,
+          createURL: expect.any(Function),
           searchMetadata: {
             isSearchStalled: instantSearchInstance._isSearchStalled,
           },

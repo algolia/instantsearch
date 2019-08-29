@@ -39,7 +39,6 @@ export const createInstantSearch = (
     _searchParameters: {},
     _initialUiState: {},
     _createURL: jest.fn(() => '#'),
-    _createAbsoluteURL: jest.fn(() => '#'),
     createURL: jest.fn(() => '#'),
     routing: undefined,
     addWidget: jest.fn(),
