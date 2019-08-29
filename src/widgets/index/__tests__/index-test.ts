@@ -397,9 +397,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       it('updates the local `uiState` with removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch({
-          onChange: jest.fn() as any,
-        });
+        const instantSearchInstance = createInstantSearch();
 
         const configureTopLevel = createConfigure({
           distinct: true,
@@ -1446,9 +1444,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       it('updates the local `uiState` when the state changes', () => {
         const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch({
-          onChange: jest.fn() as any,
-        });
+        const instantSearchInstance = createInstantSearch();
         const widgets = [createSearchBox(), createPagination()];
 
         instance.addWidgets(widgets);
@@ -1480,9 +1476,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       it('does not update the local `uiState` on state changes in `init`', () => {
         const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch({
-          onChange: jest.fn() as any,
-        });
+        const instantSearchInstance = createInstantSearch();
 
         const widgets = [
           createSearchBox(),
