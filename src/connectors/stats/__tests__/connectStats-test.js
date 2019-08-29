@@ -43,8 +43,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       foo: 'bar', // dummy param to test `widgetParams`
     });
 
-    expect(widget.getConfiguration).toEqual(undefined);
-
     const helper = jsHelper({});
     helper.search = jest.fn();
 
