@@ -1,7 +1,6 @@
 import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
-import { MemoryRouter } from '../.storybook/MemoryRouter';
 import insights from '../src/helpers/insights';
 
 storiesOf('InfiniteHits', module)
@@ -120,8 +119,10 @@ storiesOf('InfiniteHits', module)
         );
       },
       {
-        routing: {
-          router: new MemoryRouter({ page: 3 }),
+        initialUiState: {
+          instant_search: {
+            page: 3,
+          },
         },
       }
     )
