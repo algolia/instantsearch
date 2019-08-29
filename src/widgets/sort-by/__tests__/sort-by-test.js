@@ -66,10 +66,6 @@ describe('sortBy()', () => {
     widget.init(createInitOptions({ helper, instantSearchInstance }));
   });
 
-  it("doesn't configure anything", () => {
-    expect(widget.getConfiguration).toEqual(undefined);
-  });
-
   it('calls twice render(<Selector props />, container)', () => {
     widget.render(createRenderOptions({ helper, results }));
     widget.render(createRenderOptions({ helper, results }));
