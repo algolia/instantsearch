@@ -403,7 +403,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       const [widget, helper] = getInitializedWidget();
 
       helper.setPage(200);
-      expect(helper.page).toBe(200);
+      expect(helper.state.page).toBe(200);
 
       const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},
