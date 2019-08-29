@@ -443,12 +443,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           })
         );
 
-        // `instantSearchInstance` must have been notified 4 times of the `uiState` changes:
-        // 1. By the widget, for the widget initialization
-        // 2. By the helper `change` event callback, for the change to the query parameters
-        // 3. By the widget, for the children widget disposal
-        // 4. By the helper `change` event callback, also for the children widget disposal
-        expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(4);
+        // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
+        // 1. By the helper `change` event callback, for the change to the query parameters
+        // 2. By the helper `change` event callback, for the children widget disposal
+        expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(2);
       });
 
       it('calls `dispose` on the removed widgets', () => {
@@ -1474,11 +1472,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           },
         });
 
-        // `instantSearchInstance` must have been notified 3 times of the `uiState` changes:
-        // 1. By the widget, for the widget initialization
-        // 2. By the helper `change` event callback, for the 1st change to the query parameters
-        // 3. By the helper `change` event callback, for the 2nd change to the query parameters
-        expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(3);
+        // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
+        // 1. By the helper `change` event callback, for the 1st change to the query parameters
+        // 2. By the helper `change` event callback, for the 2nd change to the query parameters
+        expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(2);
       });
 
       it('does not update the local `uiState` on state changes in `init`', () => {
@@ -1519,7 +1516,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           indexName: {},
         });
 
-        expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(1);
+        expect(instantSearchInstance.onChange).not.toHaveBeenCalled();
       });
 
       it('updates the local `uiState` only with widgets not indices', () => {
