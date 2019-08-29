@@ -443,7 +443,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
         // 1. By the helper `change` event callback, for the change to the query parameters
-        // 2. By the helper `change` event callback, for the children widget disposal
+        // 2. By the helper `change` event callback, for the child widgets being disposed
         expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(2);
       });
 
