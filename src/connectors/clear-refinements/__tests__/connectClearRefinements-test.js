@@ -60,7 +60,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         foo: 'bar', // dummy param to test `widgetParams`
       });
 
-      expect(widget.getConfiguration).toBe(undefined);
+      // test if widget is not rendered yet at this point
       expect(rendering).toHaveBeenCalledTimes(0);
 
       widget.init(
