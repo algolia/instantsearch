@@ -397,6 +397,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       it('updates the local `uiState` with removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+
         const configureTopLevel = createConfigure({
           distinct: true,
         });
@@ -411,7 +413,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           createSearchBox(),
         ]);
 
-        instance.init(createInitOptions());
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
 
         // Simulate a state change
         instance.getHelper()!.setQueryParameter('query', 'Apple iPhone');
@@ -434,6 +440,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             distinct: true,
           })
         );
+
+        // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
+        // 1. By the helper `change` event callback, for the change to the query parameters
+        // 2. By the helper `change` event callback, for the child widgets being disposed
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
       });
 
       it('calls `dispose` on the removed widgets', () => {
@@ -1382,11 +1393,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       it('updates the local `uiState` when the state changes', () => {
         const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
         const widgets = [createSearchBox(), createPagination()];
 
         instance.addWidgets(widgets);
 
-        instance.init(createInitOptions());
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
 
         // Simulate a state change
         instance
@@ -1400,10 +1416,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             page: 5,
           },
         });
+
+        // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
+        // 1. By the helper `change` event callback, for the 1st change to the query parameters
+        // 2. By the helper `change` event callback, for the 2nd change to the query parameters
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
       });
 
       it('does not update the local `uiState` on state changes in `init`', () => {
         const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+
         const widgets = [
           createSearchBox(),
           createPagination(),
@@ -1418,7 +1441,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets(widgets);
 
-        instance.init(createInitOptions());
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+          })
+        );
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -1431,6 +1458,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(instance.getWidgetState({})).toEqual({
           indexName: {},
         });
+
+        expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
       });
 
       it('updates the local `uiState` only with widgets not indices', () => {
