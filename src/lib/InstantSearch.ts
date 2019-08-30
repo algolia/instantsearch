@@ -139,6 +139,7 @@ class InstantSearch extends EventEmitter {
   public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public routing?: Routing;
+  public routingManager?;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -321,15 +322,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     if (this.routing) {
-      const routingManager = new RoutingManager({
+      this.routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
       });
-      this._createURL = routingManager.createURL.bind(routingManager);
-      // We don't use `addWidgets` because we have to ensure that `RoutingManager`
-      // is the last widget added. Otherwise we have an issue with the `routing`.
-      // https://github.com/algolia/instantsearch.js/pull/3149
-      this.mainIndex.getWidgets().push(routingManager);
+      this._createURL = this.routingManager.createURL;
     } else {
       this._createURL = defaultCreateURL;
     }
@@ -366,6 +363,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
           mainIndexHelper!.overrideStateWithoutTriggeringChangeEvent(state);
           this._mainHelperSearch!();
         });
+        // Forward state changes from `searchFunctionHelper` to `mainIndexHelper`
+        searchFunctionHelper.on('change', ({ state }) => {
+          mainIndexHelper!.setState(state);
+        });
         this._searchFunction!(searchFunctionHelper);
         return mainHelper;
       };
@@ -386,6 +387,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       parent: null,
       uiState: this._initialUiState,
     });
+
+    if (this.routing) {
+      this.routingManager.setupRouting();
+    }
 
     mainHelper.search();
 
@@ -423,6 +428,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this.mainHelper!.removeAllListeners();
     this.mainHelper = null;
     this.helper = null;
+
+    if (this.routing) {
+      this.routingManager.dispose();
+    }
   }
 
   public scheduleSearch = defer(() => {
@@ -453,8 +462,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   }
 
   public onStateChange = () => {
-    // @TODO: Provide `nextUiState` to all middlewares (eg. routing)
-    // const nextUiState = this.mainIndex.getWidgetState({});
+    const nextUiState = this.mainIndex.getWidgetState({});
+    if (this.routing) {
+      this.routingManager.write({ state: nextUiState });
+    }
   };
 
   public createURL(nextState: UiState = {}): string {
