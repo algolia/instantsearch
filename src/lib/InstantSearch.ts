@@ -96,10 +96,12 @@ export type InstantSearchOptions<TRouteState = UiState> = {
   searchFunction?: (helper: AlgoliaSearchHelper) => void;
 
   /**
-   * Additional parameters to unconditionally pass to the Algolia API. See also
-   * the `configure` widget for dynamically passing search parameters.
+   * Injects a `uiState` to the `instantsearch` instance. You can use this option
+   * to provide an initial state to a widget. Note that the state is only used
+   * for the first search. To unconditionally pass additional parameters to the
+   * Algolia API, take a look at the `configure` widget.
    */
-  searchParameters?: PlainSearchParameters;
+  initialUiState?: UiState;
 
   /**
    * Time before a search is considered stalled. The default is 200ms
@@ -136,7 +138,7 @@ class InstantSearch extends EventEmitter {
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
-  public _searchParameters: PlainSearchParameters;
+  public _initialUiState: UiState;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _createURL?: (params: SearchParameters) => string;
   public _createAbsoluteURL?: (params: SearchParameters) => string;
@@ -149,7 +151,7 @@ class InstantSearch extends EventEmitter {
     const {
       indexName = null,
       numberLocale,
-      searchParameters = {},
+      initialUiState = {},
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -215,10 +217,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
-    this._searchParameters = {
-      ...searchParameters,
-      index: indexName,
-    };
+    this._initialUiState = initialUiState;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -392,6 +391,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
+      uiState: this._initialUiState,
     });
 
     mainHelper.search();
@@ -458,6 +458,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       }, this._stalledSearchDelay);
     }
   }
+
+  public onStateChange = () => {
+    // @TODO: Provide `nextUiState` to all middlewares (eg. routing)
+    // const nextUiState = this.mainIndex.getWidgetState({});
+  };
 
   public createURL(params: PlainSearchParameters): string {
     if (!this._createURL) {

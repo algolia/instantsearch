@@ -244,13 +244,13 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       dispose({ state }) {
         unmountFn();
 
-        const stateWithoutQuery = state.setQueryParameter('page', undefined);
+        const stateWithoutPage = state.setQueryParameter('page', undefined);
 
         if (!escapeHTML) {
-          return stateWithoutQuery;
+          return stateWithoutPage;
         }
 
-        return stateWithoutQuery.setQueryParameters(
+        return stateWithoutPage.setQueryParameters(
           Object.keys(TAG_PLACEHOLDER).reduce(
             (acc, key) => ({
               ...acc,
@@ -264,28 +264,37 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
+        if (!hasShowPrevious || !page) {
           return uiState;
         }
 
         return {
           ...uiState,
+          // The page in the UI state is incremented by one
+          // to expose the user value (not `0`).
           page: page + 1,
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (!hasShowPrevious) {
-          return searchParameters;
+        let widgetSearchParameters = searchParameters;
+
+        if (escapeHTML) {
+          widgetSearchParameters = searchParameters.setQueryParameters(
+            TAG_PLACEHOLDER
+          );
         }
 
-        const uiPage = uiState.page;
-
-        if (uiPage) {
-          return searchParameters.setQueryParameter('page', uiPage - 1);
+        if (hasShowPrevious && uiState.page) {
+          // The page in the search parameters is decremented by one
+          // to get to the actual parameter value from the UI state.
+          return widgetSearchParameters.setQueryParameter(
+            'page',
+            uiState.page - 1
+          );
         }
 
-        return searchParameters.setQueryParameter('page', undefined);
+        return widgetSearchParameters.setQueryParameter('page', 0);
       },
     };
   };

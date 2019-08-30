@@ -18,6 +18,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 `);
     });
 
+    it('throws with empty items', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: [],
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"A default value must be specified in \`items\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
+`);
+    });
+
+    it('throws without default item', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: [
+            { value: 3, label: '3 items per page' },
+            { value: 10, label: '10 items per page' },
+          ],
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"A default value must be specified in \`items\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
+`);
+    });
+
     it('throws with multiple default items', () => {
       expect(() => {
         connectHitsPerPage(() => {})({
@@ -33,12 +60,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 `);
     });
 
+    it('does not throw with items and one default value', () => {
+      expect(() => {
+        connectHitsPerPage(() => {})({
+          items: [
+            { value: 3, label: '3 items per page', default: true },
+            { value: 10, label: '10 items per page' },
+          ],
+        });
+      }).not.toThrow();
+    });
+
     it('is a widget', () => {
       const render = jest.fn();
       const unmount = jest.fn();
 
       const customHitsPerPage = connectHitsPerPage(render, unmount);
-      const widget = customHitsPerPage({ items: [] });
+      const widget = customHitsPerPage({
+        items: [{ label: '10 items per page', value: 10, default: true }],
+      });
 
       expect(widget).toEqual(
         expect.objectContaining({
@@ -59,13 +99,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
 
     expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({})
+      new SearchParameters({
+        hitsPerPage: 3,
+      })
     );
 
     expect(renderFn).toHaveBeenCalledTimes(0);
@@ -86,7 +128,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       expect.objectContaining({
         widgetParams: {
           items: [
-            { value: 3, label: '3 items per page' },
+            { value: 3, label: '3 items per page', default: true },
             { value: 10, label: '10 items per page' },
           ],
         },
@@ -106,7 +148,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       expect.objectContaining({
         widgetParams: {
           items: [
-            { value: 3, label: '3 items per page' },
+            { value: 3, label: '3 items per page', default: true },
             { value: 10, label: '10 items per page' },
           ],
         },
@@ -120,7 +162,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
       transformItems: items =>
@@ -200,21 +242,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     );
   });
 
-  it('Does not configures the search when there is no default value', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectHitsPerPage(renderFn);
-    const widget = makeWidget({
-      items: [
-        { value: 3, label: '3 items per page' },
-        { value: 10, label: '10 items per page' },
-      ],
-    });
-
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({})
-    );
-  });
-
   it('Provide a function to change the current hits per page, and provide the current value', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHitsPerPage(renderFn);
@@ -222,7 +249,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       items: [
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
-        { value: 11, label: '' },
+        { value: 11, label: '11 items per page', default: true },
       ],
     });
 
@@ -266,7 +293,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       items: [
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
-        { value: 20, label: '20 items per page' },
+        { value: 20, label: '20 items per page', default: true },
       ],
     });
 
@@ -304,7 +331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       items: [
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
-        { value: 7, label: '' },
+        { value: 7, label: '7 items per page', default: true },
       ],
     });
 
@@ -339,7 +366,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
@@ -381,7 +408,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
@@ -423,7 +450,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
       items: [
-        { value: 3, label: '3 items per page' },
+        { value: 3, label: '3 items per page', default: true },
         { value: 10, label: '10 items per page' },
       ],
     });
@@ -469,7 +496,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 10, label: '10 items per page' },
         ],
       });
@@ -488,7 +515,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const makeWidget = connectHitsPerPage(renderFn);
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 10, label: '10 items per page' },
         ],
       });
@@ -508,7 +535,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       const makeWidget = connectHitsPerPage(renderFn, unmountFn);
       const widget = makeWidget({
         items: [
-          { value: 3, label: '3 items per page' },
+          { value: 3, label: '3 items per page', default: true },
           { value: 10, label: '10 items per page' },
         ],
       });
@@ -521,129 +548,137 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHitsPerPage(rendering);
-    const widget = makeWidget({
-      items: [
-        { value: 3, label: '3 items per page', default: true },
-        { value: 10, label: '10 items per page' },
-      ],
-    });
-    const helper = algoliasearchHelper({}, '', {});
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
-  });
-
-  describe('routing', () => {
-    const getInitializedWidget = () => {
-      const renderFn = jest.fn();
-      const makeWidget = connectHitsPerPage(renderFn);
+  describe('getWidgetState', () => {
+    test('returns the `uiState` empty', () => {
+      const render = jest.fn();
+      const makeWidget = connectHitsPerPage(render);
+      const helper = algoliasearchHelper({}, 'indexName');
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page' },
+          { value: 22, label: '22 items per page' },
         ],
       });
 
-      const helper = algoliasearchHelper(
+      const actual = widget.getWidgetState(
         {},
-        '',
-        widget.getConfiguration(new SearchParameters({}))
+        {
+          searchParameters: helper.state,
+        }
       );
-      helper.search = jest.fn();
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
-
-      const { refine } = renderFn.mock.calls[0][0];
-
-      return [widget, helper, refine];
-    };
-
-    describe('getWidgetState', () => {
-      test('should give back the object unmodified if there are no refinements', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-
-      test('should not add an entry when the default value is selected', () => {
-        const [widget, helper] = getInitializedWidget();
-        helper.setQueryParameter('hitsPerPage', 3);
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-
-      test('should add an entry equal to the refinement', () => {
-        const [widget, helper] = getInitializedWidget();
-        helper.setQueryParameter('hitsPerPage', 10);
-        const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      test('should give back the object unmodified if refinements are already set', () => {
-        const [widget, helper] = getInitializedWidget();
-        const uiStateBefore = {
-          hitsPerPage: 10,
-        };
-        helper.setQueryParameter('hitsPerPage', 10);
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
+      expect(actual).toEqual({});
     });
 
-    describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if there are no refinements in the UI state', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The URL contains nothing
-        const uiState = {};
-        // The current search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the empty UI state should not create a new object
-        expect(searchParametersAfter).toBe(searchParametersBefore);
+    test('returns the `uiState` empty with default value selected', () => {
+      const render = jest.fn();
+      const makeWidget = connectHitsPerPage(render);
+      const helper = algoliasearchHelper({}, 'indexName', {
+        hitsPerPage: 3,
       });
 
-      test('should add the refinements according to the UI state provided', () => {
-        const [widget, helper] = getInitializedWidget();
-        // The URL contains some values for the widget
-        const uiState = {
-          hitsPerPage: 10,
-        };
-        // Current the search is empty
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters(
-          searchParametersBefore,
-          { uiState }
-        );
-        // Applying the UI state should add the new configuration
-        expect(searchParametersAfter).toMatchSnapshot();
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 22, label: '22 items per page' },
+        ],
       });
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({});
+    });
+
+    test('returns the `uiState` with a refinement', () => {
+      const render = jest.fn();
+      const makeWidget = connectHitsPerPage(render);
+      const helper = algoliasearchHelper({}, 'indexName', {
+        hitsPerPage: '22',
+      });
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 22, label: '22 items per page' },
+        ],
+      });
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        hitsPerPage: 22,
+      });
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    test('returns the `SearchParameters` with the default value', () => {
+      const render = jest.fn();
+      const makeWidget = connectHitsPerPage(render);
+      const helper = algoliasearchHelper({}, 'indexName');
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 22, label: '22 items per page' },
+        ],
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.hitsPerPage).toEqual(3);
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
+      const render = jest.fn();
+      const makeWidget = connectHitsPerPage(render);
+      const helper = algoliasearchHelper({}, 'indexName');
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 22, label: '22 items per page' },
+        ],
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          hitsPerPage: 22,
+        },
+      });
+
+      expect(actual.hitsPerPage).toEqual(22);
+    });
+
+    test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
+      const render = jest.fn();
+      const makeWidget = connectHitsPerPage(render);
+      const helper = algoliasearchHelper({}, 'indexName', {
+        hitsPerPage: 22,
+      });
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 22, label: '22 items per page' },
+        ],
+      });
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          hitsPerPage: 33,
+        },
+      });
+
+      expect(actual.hitsPerPage).toEqual(33);
     });
   });
 });

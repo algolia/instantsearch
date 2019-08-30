@@ -10,6 +10,7 @@ import { InstantSearch } from './instantsearch';
 export interface InitOptions {
   instantSearchInstance: InstantSearch;
   parent: Index | null;
+  uiState: UiState;
   state: SearchParameters;
   helper: Helper;
   templatesConfig: object;
@@ -46,10 +47,10 @@ export interface WidgetStateOptions {
 }
 
 export interface WidgetSearchParametersOptions {
-  uiState: UiState;
+  uiState: IndexUiState;
 }
 
-export type UiState = {
+export type IndexUiState = {
   query?: string;
   refinementList?: {
     [attribute: string]: string[];
@@ -105,6 +106,10 @@ export type UiState = {
   configure?: PlainSearchParameters;
 };
 
+export type UiState = {
+  [indexId: string]: IndexUiState;
+};
+
 /**
  * Widgets are the building blocks of InstantSearch.js. Any valid widget must
  * have at least a `render` or a `init` function.
@@ -126,9 +131,9 @@ export interface Widget {
   dispose?(options: DisposeOptions): SearchParameters | void;
   getConfiguration?(previousConfiguration: SearchParameters): SearchParameters;
   getWidgetState?(
-    uiState: UiState,
+    uiState: IndexUiState,
     widgetStateOptions: WidgetStateOptions
-  ): UiState;
+  ): IndexUiState;
   getWidgetSearchParameters?(
     state: SearchParameters,
     widgetSearchParametersOptions: WidgetSearchParametersOptions

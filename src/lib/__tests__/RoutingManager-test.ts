@@ -4,7 +4,7 @@ import qs from 'qs';
 import { createSearchClient } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
-import { Router, Widget, StateMapping, RouteState } from '../../types';
+import { Router, Widget, UiState, StateMapping, RouteState } from '../../types';
 import historyRouter from '../routers/history';
 import RoutingManager from '../RoutingManager';
 import instantsearch from '../main';
@@ -119,7 +119,7 @@ describe('RoutingManager', () => {
     test('reads the state of widgets with a getWidgetState implementation', () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient,
       });
 
@@ -135,7 +135,9 @@ describe('RoutingManager', () => {
       search.addWidget(widget);
 
       const actualInitialState = {
-        query: 'query',
+        indexName: {
+          query: 'query',
+        },
       };
 
       search.start();
@@ -156,7 +158,9 @@ describe('RoutingManager', () => {
         searchParameters: search.mainIndex.getHelper()!.state,
       });
 
-      expect(uiStates).toEqual(widgetState);
+      expect(uiStates).toEqual({
+        indexName: widgetState,
+      });
 
       expect(widget.getWidgetState).toHaveBeenCalledTimes(1);
       expect(widget.getWidgetState).toHaveBeenCalledWith(
@@ -171,7 +175,7 @@ describe('RoutingManager', () => {
     test('Does not read UI state from widgets without an implementation of getWidgetState', () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient,
       });
 
@@ -182,7 +186,9 @@ describe('RoutingManager', () => {
       search.start();
 
       const actualInitialState = {
-        query: 'query',
+        indexName: {
+          query: 'query',
+        },
       };
 
       const router = new RoutingManager({
@@ -201,7 +207,9 @@ describe('RoutingManager', () => {
         searchParameters: search.mainIndex.getHelper()!.state,
       });
 
-      expect(uiStates).toEqual({});
+      expect(uiStates).toEqual({
+        indexName: {},
+      });
     });
   });
 
@@ -209,7 +217,7 @@ describe('RoutingManager', () => {
     test('should get searchParameters from widget that implements getWidgetSearchParameters', () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient,
       });
 
@@ -221,7 +229,9 @@ describe('RoutingManager', () => {
       search.addWidget(widget);
 
       const actualInitialState = {
-        query: 'query',
+        indexName: {
+          query: 'query',
+        },
       };
 
       search.start();
@@ -247,7 +257,7 @@ describe('RoutingManager', () => {
         search.mainIndex.getHelper()!.state.setQuery('test')
       );
 
-      expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
+      expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(2);
       expect(widget.getWidgetSearchParameters).toHaveBeenCalledWith(
         search.mainIndex.getHelper()!.state,
         {
@@ -299,7 +309,7 @@ describe('RoutingManager', () => {
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           router,
@@ -330,7 +340,9 @@ describe('RoutingManager', () => {
 
         expect(router.write).toHaveBeenCalledTimes(1);
         expect(router.write).toHaveBeenCalledWith({
-          q: 'q',
+          indexName: {
+            q: 'q',
+          },
         });
 
         done();
@@ -340,7 +352,7 @@ describe('RoutingManager', () => {
     test('should update the searchParameters on router state update', done => {
       const searchClient = createSearchClient();
 
-      let onRouterUpdateCallback: (args: object) => void;
+      let onRouterUpdateCallback: (args: UiState) => void;
       const router = createFakeRouter({
         onUpdate: fn => {
           onRouterUpdateCallback = fn;
@@ -348,7 +360,7 @@ describe('RoutingManager', () => {
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           router,
@@ -358,9 +370,10 @@ describe('RoutingManager', () => {
       const widget = {
         render: jest.fn(),
         getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) =>
-          searchParameters.setQuery(uiState.q)
+          searchParameters.setQuery(uiState.query)
         ),
       };
+
       search.addWidget(widget);
 
       search.start();
@@ -370,9 +383,11 @@ describe('RoutingManager', () => {
 
         expect(search.mainIndex.getHelper()!.state.query).toBeUndefined();
 
-        // this simulates a router update with a uiState of {q: 'a'}
+        // this simulates a router update with a uiState of {query: 'a'}
         onRouterUpdateCallback({
-          q: 'a',
+          indexName: {
+            query: 'a',
+          },
         });
 
         search.once('render', () => {
@@ -393,14 +408,21 @@ describe('RoutingManager', () => {
 
       const stateMapping = createFakeStateMapping({
         stateToRoute(uiState) {
-          return {
-            query: uiState.query && uiState.query.toUpperCase(),
-          };
+          return Object.keys(uiState).reduce((state, indexId) => {
+            const indexState = uiState[indexId];
+
+            return {
+              ...state,
+              [indexId]: {
+                query: indexState.query && indexState.query.toUpperCase(),
+              },
+            };
+          }, {});
         },
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchFunction: helper => {
           helper.setQuery('test').search();
         },
@@ -431,7 +453,9 @@ describe('RoutingManager', () => {
         expect(search.mainIndex.getHelper()!.state.query).toEqual('test');
 
         expect(router.write).toHaveBeenLastCalledWith({
-          query: 'TEST',
+          indexName: {
+            query: 'TEST',
+          },
         });
 
         done();
@@ -446,7 +470,7 @@ describe('RoutingManager', () => {
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           stateMapping,
@@ -469,7 +493,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
 
       await runAllMicroTasks();
@@ -481,7 +507,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
     });
 
@@ -493,7 +521,7 @@ describe('RoutingManager', () => {
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchFunction(helper) {
           // Force the value of the query
           helper.setQuery('Apple iPhone').search();
@@ -518,7 +546,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple iPhone',
+        indexName: {
+          query: 'Apple iPhone',
+        },
       });
 
       // Trigger getConfiguration
@@ -528,7 +558,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple iPhone',
+        indexName: {
+          query: 'Apple iPhone',
+        },
       });
     });
 
@@ -548,7 +580,7 @@ describe('RoutingManager', () => {
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           router,
@@ -571,7 +603,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
 
       // Trigger an update - push a change
@@ -579,7 +613,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple iPhone',
+        indexName: {
+          query: 'Apple iPhone',
+        },
       });
 
       await runAllMicroTasks();
@@ -596,7 +632,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(3);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
     });
   });
