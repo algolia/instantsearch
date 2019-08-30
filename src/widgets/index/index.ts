@@ -21,6 +21,7 @@ import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
+  isEqual,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -147,6 +148,7 @@ const index = (props: IndexProps): Index => {
   let localParent: Index | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
+  let isFirstRender = true;
 
   return {
     $$type: 'ais.index',
@@ -380,6 +382,7 @@ const index = (props: IndexProps): Index => {
           searchParameters: state,
           helper: helper!,
         });
+
         instantSearchInstance.onStateChange();
       });
     },
@@ -408,6 +411,29 @@ const index = (props: IndexProps): Index => {
           });
         }
       });
+
+      // Hack for backward compatibily with `searchFunction` + `routing`
+      // https://github.com/algolia/instantsearch.js/blob/509513c0feafaad522f6f18d87a441559f4aa050/src/lib/RoutingManager.ts#L113-L130
+      if (localParent === null && isFirstRender) {
+        isFirstRender = false;
+        // Compare initial state and first render state to see if the query has been
+        // changed by the `searchFunction`. It's required because the helper of the
+        // `searchFunction` does not trigger change events (not the same instance).
+        const firstRenderState = getLocalWidgetsState(localWidgets, {
+          helper: helper!,
+          searchParameters: helper!.state,
+        });
+
+        if (!isEqual(localUiState, firstRenderState)) {
+          // Force update the URL if the state has changed since the initial read.
+          // We do this to trigger a URL update when `searchFunction` prevents
+          // the search on the initial render.
+          // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
+          localUiState = firstRenderState;
+
+          instantSearchInstance.onStateChange();
+        }
+      }
     },
 
     dispose() {
