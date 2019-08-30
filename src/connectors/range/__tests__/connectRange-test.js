@@ -140,8 +140,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     }
   });
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('Accepts some user bounds', () => {
+  it('Accepts some user bounds', () => {
     const makeWidget = connectRange(() => {});
 
     const attribute = 'price';
@@ -266,8 +265,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     }
   });
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('should add numeric refinement when refining min boundary without previous configuration', () => {
+  it('should add numeric refinement when refining min boundary without previous configuration', () => {
     const rendering = jest.fn();
     const makeWidget = connectRange(rendering);
 
@@ -307,8 +305,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     }
   });
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('should add numeric refinement when refining min boundary with previous configuration', () => {
+  it('should add numeric refinement when refining min boundary with previous configuration', () => {
     const rendering = jest.fn();
     const makeWidget = connectRange(rendering);
 
@@ -1303,8 +1300,7 @@ describe('getWidgetSearchParameters', () => {
   const attribute = 'price';
   const rendering = () => {};
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('expect to return default configuration', () => {
+  it('expect to return default configuration', () => {
     const widget = connectRange(rendering)({
       attribute,
     });
@@ -1314,12 +1310,16 @@ describe('getWidgetSearchParameters', () => {
     });
 
     expect(actual).toEqual(
-      new SearchParameters({ disjunctiveFacets: ['price'] })
+      new SearchParameters({
+        disjunctiveFacets: ['price'],
+        numericRefinements: {
+          price: {},
+        },
+      })
     );
   });
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('expect to return default configuration if previous one has already numeric refinements', () => {
+  it('expect to return default configuration if previous one has already numeric refinements', () => {
     const widget = connectRange(rendering)({
       attribute,
       max: 500,
@@ -1366,8 +1366,7 @@ describe('getWidgetSearchParameters', () => {
     expect(actual).toEqual(expectation);
   });
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('expect to return configuration with min numeric refinement', () => {
+  it('expect to return configuration with min numeric refinement', () => {
     const widget = connectRange(rendering)({
       attribute,
       min: 10,
@@ -1389,8 +1388,7 @@ describe('getWidgetSearchParameters', () => {
     expect(actual).toEqual(expectation);
   });
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('expect to return configuration with max numeric refinement', () => {
+  it('expect to return configuration with max numeric refinement', () => {
     const widget = connectRange(rendering)({
       attribute,
       max: 10,
@@ -1412,8 +1410,7 @@ describe('getWidgetSearchParameters', () => {
     expect(actual).toEqual(expectation);
   });
 
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('expect to return configuration with both numeric refinements', () => {
+  it('expect to return configuration with both numeric refinements', () => {
     const widget = connectRange(rendering)({
       attribute,
       min: 10,

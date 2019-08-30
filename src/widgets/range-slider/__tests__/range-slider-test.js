@@ -62,8 +62,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
     });
 
     describe('min option', () => {
-      // @TODO: gWSP does not yet take min & max in account
-      it.skip('refines when no previous configuration', () => {
+      it('refines when no previous configuration', () => {
         widget = rangeSlider({
           container,
           attribute,
@@ -83,33 +82,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         );
       });
 
-      it('does not refine when previous configuration', () => {
-        widget = rangeSlider({
-          container,
-          attribute: 'aNumAttr',
-          min: 100,
-          step: 1,
-          cssClasses: { root: '' },
-        });
-        expect(
-          widget.getWidgetSearchParameters(
-            new SearchParameters({
-              numericRefinements: { [attribute]: {} },
-            }),
-            { uiState: {} }
-          )
-        ).toEqual(
-          new SearchParameters({
-            disjunctiveFacets: [attribute],
-            numericRefinements: {
-              aNumAttr: {},
-            },
-          })
-        );
-      });
-
-      // @TODO: gWSP does not yet take min & max in account
-      it.skip('works along with max option', () => {
+      it('works along with max option', () => {
         widget = rangeSlider({
           container,
           attribute,
@@ -191,8 +164,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
     });
 
     describe('max option', () => {
-      // @TODO: gWSP does not yet take min & max in account
-      it.skip('refines when no previous configuration', () => {
+      it('refines when no previous configuration', () => {
         widget = rangeSlider({
           container,
           attribute,
@@ -208,29 +180,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           new SearchParameters({
             disjunctiveFacets: [attribute],
             numericRefinements: { [attribute]: { '<=': [100] } },
-          })
-        );
-      });
-
-      it('does not refine when previous configuration', () => {
-        widget = rangeSlider({
-          container,
-          attribute,
-          max: 100,
-          step: 1,
-          cssClasses: { root: '' },
-        });
-        expect(
-          widget.getWidgetSearchParameters(
-            new SearchParameters({
-              numericRefinements: { [attribute]: {} },
-            }),
-            { uiState: {} }
-          )
-        ).toEqual(
-          new SearchParameters({
-            disjunctiveFacets: [attribute],
-            numericRefinements: { [attribute]: {} },
           })
         );
       });

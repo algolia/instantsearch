@@ -275,13 +275,29 @@ export default function connectRange(renderFn, unmountFn = noop) {
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         let widgetSearchParameters = searchParameters
+          .addDisjunctiveFacet(attribute)
           .setQueryParameters({
             numericRefinements: {
               ...searchParameters.numericRefinements,
               [attribute]: {},
             },
-          })
-          .addDisjunctiveFacet(attribute);
+          });
+
+        if (hasMinBound) {
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
+            attribute,
+            '>=',
+            minBound
+          );
+        }
+
+        if (hasMaxBound) {
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
+            attribute,
+            '<=',
+            maxBound
+          );
+        }
 
         const value = uiState.range && uiState.range[attribute];
 
