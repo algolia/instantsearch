@@ -397,7 +397,70 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
   });
 
-  it('when the state is cleared, the "no value" value should be refined', () => {
+  it('when only the refinement is cleared, the "no value" value should be refined', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericMenu(rendering);
+    const listOptions = [
+      { label: 'below 10', end: 10 },
+      { label: '10 - 20', start: 10, end: 20 },
+      { label: 'more than 20', start: 20 },
+      { label: '42', start: 42, end: 42 },
+      { label: 'void' },
+    ];
+    const widget = makeWidget({
+      attribute: 'numerics',
+      items: listOptions,
+    });
+
+    const helper = jsHelper({});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const refine =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0].refine;
+    // a user selects a value in the refinement list
+    refine(encodeValue(listOptions[0].start, listOptions[0].end));
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // No option should be selected
+    const expectedResults0 = [...listOptions].map(mapOptionsToItems);
+    expectedResults0[0].isRefined = true;
+
+    const renderingParameters0 =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0];
+    expect(renderingParameters0.items).toEqual(expectedResults0);
+
+    // Only the current refinement is cleared by a third party
+    helper.removeNumericRefinement('numerics', '<=', 10);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // No option should be selected
+    const expectedResults1 = [...listOptions].map(mapOptionsToItems);
+    expectedResults1[4].isRefined = true;
+
+    const renderingParameters1 =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0];
+    expect(renderingParameters1.items).toEqual(expectedResults1);
+  });
+
+  it('when all the refinements are cleared, the "no value" value should be refined', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
@@ -442,11 +505,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(renderingParameters0.items).toEqual(expectedResults0);
 
     // All the refinements are cleared by a third party
-    helper.setState(
-      helper.state.setQueryParameter('numericRefinements', {
-        numerics: {},
-      })
-    );
+    helper.clearRefinements('numerics');
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
