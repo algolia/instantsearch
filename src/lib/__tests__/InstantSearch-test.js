@@ -1001,6 +1001,8 @@ describe('createURL', () => {
 
   it('at top-level returns the default URL for the main index state', () => {
     const router = createRouter();
+    router.createURL.mockImplementation(() => 'https://algolia.com');
+
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
@@ -1011,11 +1013,13 @@ describe('createURL', () => {
 
     search.start();
 
-    expect(search.createURL()).toBe('#');
+    expect(search.createURL()).toBe('https://algolia.com');
   });
 
   it('at top-level returns a custom URL for the main index state', () => {
     const router = createRouter();
+    router.createURL.mockImplementation(() => 'https://algolia.com');
+
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
@@ -1027,7 +1031,9 @@ describe('createURL', () => {
     search.addWidget(connectSearchBox(noop)({}));
     search.start();
 
-    expect(search.createURL({ indexName: { query: 'Apple' } })).toBe('#');
+    expect(search.createURL({ indexName: { query: 'Apple' } })).toBe(
+      'https://algolia.com'
+    );
   });
 
   it('returns the default URL for the main index state', () => {
