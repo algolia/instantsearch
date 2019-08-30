@@ -570,6 +570,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       expect(actual).toEqual({});
     });
 
+    test('returns the `uiState` empty with default value selected', () => {
+      const render = jest.fn();
+      const makeWidget = connectHitsPerPage(render);
+      const helper = algoliasearchHelper({}, 'indexName', {
+        hitsPerPage: 3,
+      });
+
+      const widget = makeWidget({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 22, label: '22 items per page' },
+        ],
+      });
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({});
+    });
+
     test('returns the `uiState` with a refinement', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
