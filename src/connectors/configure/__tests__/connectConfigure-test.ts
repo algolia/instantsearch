@@ -389,6 +389,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       );
     });
 
+    it('merges with the previous parameters', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Apple'],
+          },
+        },
+      });
+
+      const sp = widget.getWidgetSearchParameters!(
+        new SearchParameters({
+          disjunctiveFacets: ['categories'],
+          disjunctiveFacetsRefinements: {
+            categories: ['Phone'],
+          },
+        }),
+        {
+          uiState: {},
+        }
+      );
+
+      expect(sp).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['categories', 'brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Apple'],
+            categories: ['Phone'],
+          },
+        })
+      );
+    });
+
     it('stores refined state', () => {
       const renderFn = jest.fn();
       const makeWidget = connectConfigure(renderFn);
