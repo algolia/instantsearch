@@ -217,7 +217,7 @@ You may want to add another entry to the \`items\` option with this value.`
       getWidgetState(uiState, { searchParameters }) {
         const hitsPerPage = searchParameters.hitsPerPage;
 
-        if (hitsPerPage === undefined) {
+        if (hitsPerPage === undefined || hitsPerPage === defaultItem.value) {
           return uiState;
         }
 
