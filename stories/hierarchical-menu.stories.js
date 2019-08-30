@@ -49,11 +49,13 @@ storiesOf('HierarchicalMenu', module)
         );
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }
