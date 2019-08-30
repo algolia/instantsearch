@@ -31,10 +31,7 @@ describe('index', () => {
         };
       }),
       getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) => {
-        return searchParameters.setQueryParameter(
-          'query',
-          uiState.query || 'Apple'
-        );
+        return searchParameters.setQueryParameter('query', uiState.query || '');
       }),
       ...args,
     });
@@ -55,7 +52,7 @@ describe('index', () => {
         };
       }),
       getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) => {
-        return searchParameters.setQueryParameter('page', uiState.page || 5);
+        return searchParameters.setQueryParameter('page', uiState.page || 0);
       }),
       ...args,
     });
@@ -192,7 +189,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('updates the internal state with added widgets', () => {
         const instance = index({ indexName: 'indexName' });
 
-        instance.addWidgets([createSearchBox()]);
+        instance.addWidgets([
+          createSearchBox({
+            getWidgetSearchParameters(state) {
+              return state.setQueryParameter('query', 'Apple');
+            },
+          }),
+        ]);
 
         instance.init(createInitOptions({ parent: null }));
 
@@ -203,7 +206,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           })
         );
 
-        instance.addWidgets([createPagination()]);
+        instance.addWidgets([
+          createPagination({
+            getWidgetSearchParameters(state) {
+              return state.setQueryParameter('page', 5);
+            },
+          }),
+        ]);
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -376,9 +385,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     describe('with a started instance', () => {
       it('updates the internal state with removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
-        const pagination = createPagination();
+        const pagination = createPagination({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('page', 5);
+          },
+        });
 
-        instance.addWidgets([createSearchBox(), pagination]);
+        instance.addWidgets([
+          createSearchBox({
+            getWidgetSearchParameters(state) {
+              return state.setQueryParameter('query', 'Apple');
+            },
+          }),
+          pagination,
+        ]);
 
         instance.init(createInitOptions({ parent: null }));
 
@@ -625,7 +645,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         mainHelper,
       });
 
-      instance.addWidgets([createSearchBox(), createPagination()]);
+      instance.addWidgets([
+        createSearchBox({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('query', 'Apple');
+          },
+        }),
+        createPagination({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('page', 5);
+          },
+        }),
+      ]);
 
       instance.init(
         createInitOptions({
@@ -753,7 +784,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         mainHelper,
       });
 
-      instance.addWidgets([createSearchBox(), createPagination()]);
+      instance.addWidgets([
+        createSearchBox({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('query', 'Apple');
+          },
+        }),
+        createPagination({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('page', 5);
+          },
+        }),
+      ]);
 
       instance.init(
         createInitOptions({
