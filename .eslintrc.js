@@ -10,6 +10,10 @@ module.exports = {
       'error',
       { argsIgnorePattern: '^_', ignoreRestSiblings: true },
     ],
+    '@typescript-eslint/camelcase': [
+      'error',
+      { allow: ['instant_search', 'instant_search_movies'] },
+    ],
   },
   overrides: [
     {

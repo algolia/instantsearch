@@ -36,7 +36,6 @@ export const createInstantSearch = (
     _isSearchStalled: true,
     _stalledSearchDelay: 200,
     _searchStalledTimer: null,
-    _searchParameters: {},
     _initialUiState: {},
     _createURL: jest.fn(() => '#'),
     _createAbsoluteURL: jest.fn(() => '#'),

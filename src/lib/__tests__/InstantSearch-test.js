@@ -235,37 +235,6 @@ describe('InstantSearch', () => {
 
     expect(search.insightsClient).toBe(insightsClient);
   });
-
-  // https://github.com/algolia/instantsearch.js/pull/1148
-  it('does not mutate the provided `searchParameters`', () => {
-    const disjunctiveFacetsRefinements = { fruits: ['apple'] };
-    const facetsRefinements = disjunctiveFacetsRefinements;
-
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient: createSearchClient(),
-      searchParameters: {
-        disjunctiveFacetsRefinements,
-        facetsRefinements,
-      },
-    });
-
-    search.addWidget(
-      createWidget({
-        getConfiguration: () => ({
-          disjunctiveFacetsRefinements: {
-            fruits: ['orange'],
-          },
-        }),
-      })
-    );
-
-    search.start();
-
-    expect(search.mainIndex.getHelper().state.facetsRefinements).toEqual({
-      fruits: ['apple'],
-    });
-  });
 });
 
 describe('addWidget(s)', () => {
@@ -392,41 +361,17 @@ describe('start', () => {
       indexName: 'indexName',
       searchClient,
       searchFunction(helper) {
-        helper.addDisjunctiveFacetRefinement('brand', 'Apple');
-        helper.search();
-      },
-      searchParameters: {
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
+        const nextState = helper.state
+          .addDisjunctiveFacet('brand')
+          .addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        helper.setState(nextState).search();
       },
     });
 
     expect(() => {
       search.start();
     }).not.toThrow();
-  });
-
-  it('forwards the `searchParameters` to the main index', () => {
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient: createSearchClient(),
-      searchParameters: {
-        hitsPerPage: 5,
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
-      },
-    });
-
-    search.start();
-
-    expect(search.mainIndex.getHelper().state).toEqual(
-      algoliasearchHelper.SearchParameters.make({
-        index: 'indexName',
-        hitsPerPage: 5,
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
-      })
-    );
   });
 
   it('forwards the `initialUiState` to the main index', () => {

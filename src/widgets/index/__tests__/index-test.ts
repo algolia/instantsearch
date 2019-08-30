@@ -606,57 +606,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
     });
 
-    it('uses `searchParameters` for the top level index', () => {
-      const instance = index({ indexName: 'indexName' });
-      const instantSearchInstance = createInstantSearch({
-        _searchParameters: {
-          hitsPerPage: 5,
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
-        },
-      });
-
-      instance.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      expect(instance.getHelper()!.state).toEqual(
-        new SearchParameters({
-          index: 'indexName',
-          hitsPerPage: 5,
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
-        })
-      );
-    });
-
-    it('does not use `searchParameters` for sub level indices ', () => {
-      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
-      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
-      const instantSearchInstance = createInstantSearch({
-        _searchParameters: {
-          hitsPerPage: 5,
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
-        },
-      });
-
-      subLevelInstance.init(
-        createInitOptions({
-          instantSearchInstance,
-          parent: topLevelInstance,
-        })
-      );
-
-      expect(subLevelInstance.getHelper()!.state).toEqual(
-        new SearchParameters({
-          index: 'subLevelIndexName',
-        })
-      );
-    });
-
     it('uses the internal state for the queries', () => {
       const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
