@@ -1078,13 +1078,7 @@ describe('createURL', () => {
     });
 
     search.addWidgets([
-      createWidget({
-        getWidgetState(_uiState, { searchParameters }) {
-          return {
-            query: searchParameters.query,
-          };
-        },
-      }),
+      connectSearchBox(noop)({}),
       index({ indexName: 'indexNameLvl1' }).addWidgets([
         connectSearchBox(noop)({}),
         index({ indexName: 'indexNameLvl2' }).addWidgets([
