@@ -1,9 +1,9 @@
-import compatibilityStateMapping from '../compat';
+import singleIndexStateMapping from '../singleIndex';
 
-describe('compatibilityStateMapping', () => {
+describe('singleIndexStateMapping', () => {
   describe('stateToRoute', () => {
     it('passes normal state through', () => {
-      const stateMapping = compatibilityStateMapping('indexName');
+      const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.stateToRoute({
         indexName: {
           query: 'zamboni',
@@ -22,7 +22,7 @@ describe('compatibilityStateMapping', () => {
     });
 
     it('removes configure', () => {
-      const stateMapping = compatibilityStateMapping('indexName');
+      const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.stateToRoute({
         indexName: {
           query: 'zamboni',
@@ -44,7 +44,7 @@ describe('compatibilityStateMapping', () => {
     });
 
     it('passes non-UiState through', () => {
-      const stateMapping = compatibilityStateMapping('indexName');
+      const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.stateToRoute({
         indexName: {
           query: 'zamboni',
@@ -68,7 +68,7 @@ describe('compatibilityStateMapping', () => {
 
   describe('routeToState', () => {
     it('passes normal state through', () => {
-      const stateMapping = compatibilityStateMapping('indexName');
+      const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.routeToState({
         query: 'zamboni',
         refinementList: {
@@ -87,7 +87,7 @@ describe('compatibilityStateMapping', () => {
     });
 
     it('removes configure', () => {
-      const stateMapping = compatibilityStateMapping('indexName');
+      const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.routeToState({
         query: 'zamboni',
         refinementList: {
@@ -109,7 +109,7 @@ describe('compatibilityStateMapping', () => {
     });
 
     it('passes non-UiState through', () => {
-      const stateMapping = compatibilityStateMapping('indexName');
+      const stateMapping = singleIndexStateMapping('indexName');
       const actual = stateMapping.routeToState({
         query: 'zamboni',
         refinementList: {

@@ -7,7 +7,7 @@ import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
 import RoutingManager from './RoutingManager';
-import compatibilityStateMapping from './stateMappings/compat';
+import simpleStateMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
@@ -24,7 +24,6 @@ import {
   StateMapping,
   Router,
   UiState,
-  IndexUiState,
 } from '../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -35,7 +34,7 @@ function defaultCreateURL() {
   return '#';
 }
 
-export type Routing<TRouteState = UiState | IndexUiState> = {
+export type Routing<TRouteState = UiState> = {
   router: Router<TRouteState>;
   stateMapping: StateMapping<TRouteState>;
 };
@@ -43,7 +42,7 @@ export type Routing<TRouteState = UiState | IndexUiState> = {
 /**
  * Global options for an InstantSearch instance.
  */
-export type InstantSearchOptions<TRouteState = UiState | IndexUiState> = {
+export type InstantSearchOptions<TRouteState = UiState> = {
   /**
    * The name of the main index
    */
@@ -139,7 +138,7 @@ class InstantSearch extends EventEmitter {
   public _createURL?: (params: SearchParameters) => string;
   public _createAbsoluteURL?: (params: SearchParameters) => string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  public routing?: Routing<UiState | IndexUiState>;
+  public routing?: Routing;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -220,7 +219,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     const defaultRoutingOptions = {
-      stateMapping: compatibilityStateMapping(indexName),
+      stateMapping: simpleStateMapping(),
       router: historyRouter(),
     };
 

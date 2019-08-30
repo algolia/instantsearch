@@ -5,7 +5,7 @@ function getIndexStateWithoutConfigure(uiState: IndexUiState): IndexUiState {
   return trackedUiState;
 }
 
-export default function compatibilityStateMapping(
+export default function singleIndexStateMapping(
   rootIndexName: string
 ): StateMapping<IndexUiState> {
   return {
