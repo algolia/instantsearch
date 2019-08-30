@@ -147,6 +147,14 @@ const index = (props: IndexProps): Index => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
 
+  const createURL = (nextState: SearchParameters) =>
+    localInstantSearchInstance!._createURL!({
+      [indexId]: getLocalWidgetsState(localWidgets, {
+        searchParameters: nextState,
+        helper: helper!,
+      }),
+    });
+
   return {
     $$type: 'ais.index',
 
@@ -221,13 +229,7 @@ const index = (props: IndexProps): Index => {
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
-              createURL: (nextState: SearchParameters) =>
-                localInstantSearchInstance!._createURL!({
-                  [this.getIndexId()]: getLocalWidgetsState(localWidgets, {
-                    searchParameters: nextState,
-                    helper: helper!,
-                  }),
-                }),
+              createURL,
             });
           }
         });
@@ -371,13 +373,7 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: (nextState: SearchParameters) =>
-              instantSearchInstance._createURL!({
-                [this.getIndexId()]: getLocalWidgetsState(localWidgets, {
-                  searchParameters: nextState,
-                  helper: helper!,
-                }),
-              }),
+            createURL,
           });
         }
       });
@@ -413,13 +409,7 @@ const index = (props: IndexProps): Index => {
             scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: (nextState: SearchParameters) =>
-              instantSearchInstance._createURL!({
-                [this.getIndexId()]: getLocalWidgetsState(localWidgets, {
-                  searchParameters: nextState,
-                  helper: helper!,
-                }),
-              }),
+            createURL,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },
