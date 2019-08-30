@@ -44,6 +44,7 @@ type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
 };
 
 export type Index = Widget & {
+  getIndexName(): string;
   getIndexId(): string;
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
@@ -157,6 +158,10 @@ const index = (props: IndexProps): Index => {
 
   return {
     $$type: 'ais.index',
+
+    getIndexName() {
+      return indexName;
+    },
 
     getIndexId() {
       return indexId;
