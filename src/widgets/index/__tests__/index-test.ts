@@ -444,7 +444,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
         // 1. By the helper `change` event callback, for the change to the query parameters
         // 2. By the helper `change` event callback, for the child widgets being disposed
-        expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(2);
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
       });
 
       it('calls `dispose` on the removed widgets', () => {
@@ -1471,7 +1471,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
         // 1. By the helper `change` event callback, for the 1st change to the query parameters
         // 2. By the helper `change` event callback, for the 2nd change to the query parameters
-        expect(instantSearchInstance.onChange).toHaveBeenCalledTimes(2);
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
       });
 
       it('does not update the local `uiState` on state changes in `init`', () => {
@@ -1510,7 +1510,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           indexName: {},
         });
 
-        expect(instantSearchInstance.onChange).not.toHaveBeenCalled();
+        expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
       });
 
       it('updates the local `uiState` only with widgets not indices', () => {

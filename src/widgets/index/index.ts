@@ -381,7 +381,7 @@ const index = (props: IndexProps): Index => {
           searchParameters: state,
           helper: helper!,
         });
-        instantSearchInstance.onChange();
+        instantSearchInstance.onStateChange();
       });
     },
 

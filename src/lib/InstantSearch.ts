@@ -471,7 +471,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
   }
 
-  public onChange = () => {
+  public onStateChange = () => {
     // @TODO: Provide `nextUiState` to all middlewares (eg. routing)
     // const nextUiState = this.mainIndex.getWidgetState({});
   };
