@@ -112,7 +112,7 @@
     "rollup-plugin-node-globals": "1.4.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
-    "rollup-plugin-uglify": "6.0.2",
+    "rollup-plugin-uglify": "6.0.3",
     "style-loader": "1.0.0",
     "typescript": "3.5.3",
     "webpack": "4.39.3",
