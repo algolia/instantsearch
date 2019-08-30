@@ -478,6 +478,11 @@ See ${createDocumentationLink({
     }
   }
 
+  public onStateChange = () => {
+    // @TODO: Provide `nextUiState` to all middlewares (eg. routing)
+    // const nextUiState = this.mainIndex.getWidgetState({});
+  };
+
   public createURL(params: PlainSearchParameters): string {
     if (!this._createURL) {
       throw new Error(
