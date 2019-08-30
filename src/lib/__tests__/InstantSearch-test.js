@@ -400,41 +400,17 @@ describe('start', () => {
       indexName: 'indexName',
       searchClient,
       searchFunction(helper) {
-        helper.addDisjunctiveFacetRefinement('brand', 'Apple');
-        helper.search();
-      },
-      searchParameters: {
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
+        const nextState = helper.state
+          .addDisjunctiveFacet('brand')
+          .addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        helper.setState(nextState).search();
       },
     });
 
     expect(() => {
       search.start();
     }).not.toThrow();
-  });
-
-  it('forwards the `searchParameters` to the main index', () => {
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient: createSearchClient(),
-      searchParameters: {
-        hitsPerPage: 5,
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
-      },
-    });
-
-    search.start();
-
-    expect(search.mainIndex.getHelper().state).toEqual(
-      algoliasearchHelper.SearchParameters.make({
-        index: 'indexName',
-        hitsPerPage: 5,
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
-      })
-    );
   });
 
   it('forwards the `initialUiState` to the main index', () => {

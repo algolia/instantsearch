@@ -7,14 +7,25 @@ import injectScript from 'scriptjs';
 
 const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
 
-const wrapWithHitsAndConfiguration = (story, searchParameters) =>
-  withHits(story, {
-    indexName: 'airbnb',
-    searchParameters: {
-      hitsPerPage: 20,
-      ...searchParameters,
+const withHitsAndConfigure = (fn, options) =>
+  withHits(
+    args => {
+      const { search, instantsearch } = args;
+
+      search.addWidgets([
+        instantsearch.widgets.configure({
+          aroundLatLngViaIP: true,
+          hitsPerPage: 20,
+        }),
+      ]);
+
+      fn(args);
     },
-  });
+    {
+      ...options,
+      indexName: 'airbnb',
+    }
+  );
 
 const injectGoogleMaps = fn => {
   injectScript(
@@ -32,14 +43,8 @@ const initialPosition = {
 
 stories.add(
   'default',
-  wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+  withHitsAndConfigure(({ search, container, instantsearch }) =>
     injectGoogleMaps(() => {
-      search.addWidget(
-        instantsearch.widgets.configure({
-          aroundLatLngViaIP: true,
-        })
-      );
-
       search.addWidget(
         instantsearch.widgets.geoSearch({
           googleReference: window.google,
@@ -54,14 +59,8 @@ stories.add(
 stories
   .add(
     'with IP',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -75,21 +74,20 @@ stories
   )
   .add(
     'with position',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.configure({
+            aroundLatLngViaIP: false,
             aroundLatLng: '37.7793, -122.419',
-          })
-        );
+          }),
 
-        search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
             container,
             initialZoom,
-          })
-        );
+          }),
+        ]);
       })
     )
   );
@@ -97,7 +95,7 @@ stories
 // With Places
 stories.add(
   'with position from Places',
-  wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+  withHitsAndConfigure(({ search, container, instantsearch }) =>
     injectGoogleMaps(() => {
       const placesElement = document.createElement('input');
       const mapElement = document.createElement('div');
@@ -106,27 +104,23 @@ stories.add(
       container.appendChild(placesElement);
       container.appendChild(mapElement);
 
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.configure({
           aroundRadius: 20000,
-        })
-      );
+        }),
 
-      search.addWidget(
         instantsearchPlacesWidget({
           container: placesElement,
           defaultPosition: ['37.7793', '-122.419'],
-        })
-      );
+        }),
 
-      search.addWidget(
         instantsearch.widgets.geoSearch({
           googleReference: window.google,
           container: mapElement,
           enableClearMapRefinement: false,
           initialZoom,
-        })
-      );
+        }),
+      ]);
     })
   )
 );
@@ -135,14 +129,8 @@ stories.add(
 stories
   .add(
     'with refine disabled',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -157,14 +145,8 @@ stories
   )
   .add(
     'with control & refine on map move',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -180,14 +162,8 @@ stories
   )
   .add(
     'with control & disable refine on map move',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -203,14 +179,8 @@ stories
   )
   .add(
     'without control & refine on map move',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -226,14 +196,8 @@ stories
   )
   .add(
     'without control & disable refine on map move',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -249,14 +213,8 @@ stories
   )
   .add(
     'with custom templates for controls',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -275,14 +233,8 @@ stories
   )
   .add(
     'with custom map options',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -299,15 +251,9 @@ stories
   )
   .add(
     'with built-in marker options',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         const logger = action('[GeoSearch] click: builtInMarker');
-
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
 
         search.addWidget(
           instantsearch.widgets.geoSearch({
@@ -333,15 +279,9 @@ stories
   )
   .add(
     'with built-in marker & InfoWindow',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         const InfoWindow = new window.google.maps.InfoWindow();
-
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
 
         search.addWidget(
           instantsearch.widgets.geoSearch({
@@ -369,7 +309,7 @@ stories
   )
   .add(
     'with built-in marker & InfoBox',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         const InfoBox = createInfoBox(window.google);
         const InfoBoxInstance = new InfoBox();
@@ -384,12 +324,6 @@ stories
             ),
           });
         });
-
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
 
         search.addWidget(
           instantsearch.widgets.geoSearch({
@@ -421,15 +355,9 @@ stories
   )
   .add(
     'with HTML marker options',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         const logger = action('[GeoSearch] click: HTMLMarker');
-
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
 
         search.addWidget(
           instantsearch.widgets.geoSearch({
@@ -464,17 +392,11 @@ stories
   )
   .add(
     'with HTML marker & InfoWindow',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         const InfoWindow = new window.google.maps.InfoWindow({
           pixelOffset: new window.google.maps.Size(0, -30),
         });
-
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
 
         search.addWidget(
           instantsearch.widgets.geoSearch({
@@ -515,7 +437,7 @@ stories
   )
   .add(
     'with HTML marker & InfoBox',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         const InfoBox = createInfoBox(window.google);
         const InfoBoxInstance = new InfoBox();
@@ -530,12 +452,6 @@ stories
             ),
           });
         });
-
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
 
         search.addWidget(
           instantsearch.widgets.geoSearch({
@@ -580,7 +496,7 @@ stories
   )
   .add(
     'with Hits communication (custom)',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         const containerElement = document.querySelector(
           '#results-hits-container'
@@ -617,12 +533,6 @@ stories
         containerElement.addEventListener('mouseleave', () => {
           removeActiveMarkerClassNames();
         });
-
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
 
         search.addWidget(
           instantsearch.widgets.geoSearch({
@@ -666,15 +576,9 @@ stories
   )
   .add(
     'with routing (simulate)',
-    wrapWithHitsAndConfiguration(
+    withHitsAndConfigure(
       ({ search, container, instantsearch }) =>
         injectGoogleMaps(() => {
-          search.addWidget(
-            instantsearch.widgets.configure({
-              aroundLatLngViaIP: true,
-            })
-          );
-
           search.addWidget(
             instantsearch.widgets.geoSearch({
               googleReference: window.google,
@@ -685,27 +589,21 @@ stories
           );
         }),
       {
-        insideBoundingBox: [
-          [
-            48.84174222399724,
-            2.367719162523599,
-            48.81614630305218,
-            2.284205902635904,
-          ],
-        ],
+        initialUiState: {
+          airbnb: {
+            geoSearch: {
+              boundingBox:
+                '48.84174222399724, 2.367719162523599, 48.81614630305218, 2.284205902635904',
+            },
+          },
+        },
       }
     )
   )
   .add(
     'with transformed items',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         search.addWidget(
           instantsearch.widgets.geoSearch({
             googleReference: window.google,
@@ -727,14 +625,8 @@ stories
   )
   .add(
     'with add/remove',
-    wrapWithHitsAndConfiguration(({ search, container, instantsearch }) =>
+    withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
-        search.addWidget(
-          instantsearch.widgets.configure({
-            aroundLatLngViaIP: true,
-          })
-        );
-
         withLifecycle(search, container, node =>
           instantsearch.widgets.geoSearch({
             googleReference: window.google,

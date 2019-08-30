@@ -13,9 +13,12 @@ storiesOf('ClearRefinements', module)
         );
       },
       {
-        searchParameters: {
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
+        initialUiState: {
+          instant_search: {
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
         },
       }
     )
@@ -49,9 +52,12 @@ storiesOf('ClearRefinements', module)
         );
       },
       {
-        searchParameters: {
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
+        initialUiState: {
+          instant_search: {
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
         },
       }
     )
@@ -73,9 +79,12 @@ storiesOf('ClearRefinements', module)
         );
       },
       {
-        searchParameters: {
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
+        initialUiState: {
+          instant_search: {
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
         },
       }
     )

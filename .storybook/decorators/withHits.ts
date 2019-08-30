@@ -19,7 +19,6 @@ export const withHits = (
     appId = 'latency',
     apiKey = '6be0576ff61c053d5f9a3225e2a90f76',
     indexName = 'instant_search',
-    searchParameters = {},
     playground = defaultPlayground,
     ...instantsearchOptions
   } = searchOptions || {};
@@ -69,6 +68,14 @@ export const withHits = (
   const rightPanelPlaygroundElement = document.createElement('div');
   rightPanelPlaygroundElement.classList.add('panel-right');
   playgroundElement.appendChild(rightPanelPlaygroundElement);
+
+  search.addWidget(
+    instantsearch.widgets.configure({
+      hitsPerPage: 4,
+      attributesToSnippet: ['description:15'],
+      snippetEllipsisText: '[…]',
+    })
+  );
 
   playground({
     search,
