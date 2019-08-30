@@ -26,6 +26,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 `);
     });
 
+    it('throws with `max` lower than `min`', () => {
+      expect(() => {
+        connectRange(() => {})({ attribute: 'price', min: 100, max: 50 });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`max\` option can't be lower than \`min\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
+`);
+    });
+
     it('is a widget', () => {
       const render = jest.fn();
       const unmount = jest.fn();
@@ -1346,24 +1356,6 @@ describe('getWidgetSearchParameters', () => {
         },
       })
     );
-  });
-
-  // @TODO: gWSP does not yet take min & max in account
-  it.skip('expect to return default configuration if the given min bound are greater than max bound', () => {
-    const widget = connectRange(rendering)({
-      attribute,
-      min: 1000,
-      max: 500,
-    });
-
-    const expectation = new SearchParameters({
-      disjunctiveFacets: ['price'],
-    });
-    const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
-      uiState: {},
-    });
-
-    expect(actual).toEqual(expectation);
   });
 
   it('expect to return configuration with min numeric refinement', () => {

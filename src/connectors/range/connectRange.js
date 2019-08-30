@@ -53,12 +53,16 @@ export default function connectRange(renderFn, unmountFn = noop) {
       precision = 0,
     } = widgetParams;
 
+    const hasMinBound = isFiniteNumber(minBound);
+    const hasMaxBound = isFiniteNumber(maxBound);
+
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    const hasMinBound = isFiniteNumber(minBound);
-    const hasMaxBound = isFiniteNumber(maxBound);
+    if (hasMinBound && hasMaxBound && minBound > maxBound) {
+      throw new Error(withUsage("The `max` option can't be lower than `min`."));
+    }
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
