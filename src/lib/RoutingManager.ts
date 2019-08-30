@@ -12,14 +12,14 @@ import {
 
 type RoutingManagerProps = {
   instantSearchInstance: InstantSearch;
-  router: Router;
-  stateMapping: StateMapping;
+  router: Router<any>;
+  stateMapping: StateMapping<any>;
 };
 
 class RoutingManager implements Widget {
   private readonly instantSearchInstance: InstantSearch;
-  private readonly router: Router;
-  private readonly stateMapping: StateMapping;
+  private readonly router: Router<any>;
+  private readonly stateMapping: StateMapping<any>;
 
   private isFirstRender: boolean = true;
   private indexId: string;

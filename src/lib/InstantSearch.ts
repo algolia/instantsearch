@@ -7,7 +7,7 @@ import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
 import RoutingManager from './RoutingManager';
-import simpleMapping from './stateMappings/simple';
+import compatibilityStateMapping from './stateMappings/compat';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
@@ -24,22 +24,18 @@ import {
   StateMapping,
   Router,
   UiState,
+  IndexUiState,
 } from '../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
 });
 
-const ROUTING_DEFAULT_OPTIONS = {
-  stateMapping: simpleMapping(),
-  router: historyRouter(),
-};
-
 function defaultCreateURL() {
   return '#';
 }
 
-export type Routing<TRouteState = UiState> = {
+export type Routing<TRouteState = UiState | IndexUiState> = {
   router: Router<TRouteState>;
   stateMapping: StateMapping<TRouteState>;
 };
@@ -47,7 +43,7 @@ export type Routing<TRouteState = UiState> = {
 /**
  * Global options for an InstantSearch instance.
  */
-export type InstantSearchOptions<TRouteState = UiState> = {
+export type InstantSearchOptions<TRouteState = UiState | IndexUiState> = {
   /**
    * The name of the main index
    */
@@ -143,7 +139,7 @@ class InstantSearch extends EventEmitter {
   public _createURL?: (params: SearchParameters) => string;
   public _createAbsoluteURL?: (params: SearchParameters) => string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  public routing?: Routing;
+  public routing?: Routing<UiState | IndexUiState>;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -223,11 +219,16 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       this._searchFunction = searchFunction;
     }
 
+    const defaultRoutingOptions = {
+      stateMapping: compatibilityStateMapping(indexName),
+      router: historyRouter(),
+    };
+
     if (routing === true) {
-      this.routing = ROUTING_DEFAULT_OPTIONS;
+      this.routing = defaultRoutingOptions;
     } else if (isPlainObject(routing)) {
       this.routing = {
-        ...ROUTING_DEFAULT_OPTIONS,
+        ...defaultRoutingOptions,
         ...routing,
       };
     }
