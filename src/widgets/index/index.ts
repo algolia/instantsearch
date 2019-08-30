@@ -295,12 +295,6 @@ const index = (props: IndexProps): Index => {
       // step.
       const mainHelper = instantSearchInstance.mainHelper!;
 
-      const initialSearchParameters = new algoliasearchHelper.SearchParameters(
-        // Uses the `searchParameters` for the top level index only, it allows
-        // us to have the exact same behaviour than before for the mono-index.
-        parent === null ? instantSearchInstance._searchParameters : {}
-      );
-
       // This Helper is only used for state management we do not care about the
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
@@ -309,7 +303,7 @@ const index = (props: IndexProps): Index => {
         indexName,
         getLocalWidgetsSearchParameters(localWidgets, {
           uiState: localUiState,
-          initialSearchParameters,
+          initialSearchParameters: new algoliasearchHelper.SearchParameters(),
         })
       );
 
@@ -389,6 +383,7 @@ const index = (props: IndexProps): Index => {
           searchParameters: state,
           helper: helper!,
         });
+        instantSearchInstance.onStateChange();
       });
     },
 

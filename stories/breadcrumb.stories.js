@@ -1,5 +1,17 @@
 import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
+import { connectHierarchicalMenu } from '../src/connectors';
+import { noop } from '../src/lib/utils';
+
+const virtualHierarchicalMenu = (args = {}) =>
+  connectHierarchicalMenu(noop, noop)({
+    attributes: [
+      'hierarchicalCategories.lvl0',
+      'hierarchicalCategories.lvl1',
+      'hierarchicalCategories.lvl2',
+    ],
+    ...args,
+  });
 
 storiesOf('Breadcrumb', module)
   .add(
@@ -9,7 +21,9 @@ storiesOf('Breadcrumb', module)
         const breadcrumb = document.createElement('div');
         container.appendChild(breadcrumb);
 
-        search.addWidget(
+        search.addWidgets([
+          virtualHierarchicalMenu(),
+
           instantsearch.widgets.breadcrumb({
             container: breadcrumb,
             attributes: [
@@ -17,15 +31,17 @@ storiesOf('Breadcrumb', module)
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-          })
-        );
+          }),
+        ]);
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }
@@ -38,26 +54,30 @@ storiesOf('Breadcrumb', module)
         const breadcrumb = document.createElement('div');
         container.appendChild(breadcrumb);
 
-        search.addWidget(
+        search.addWidgets([
+          virtualHierarchicalMenu(),
+
           instantsearch.widgets.breadcrumb({
             container: breadcrumb,
-            templates: {
-              separator: ' + ',
-            },
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-          })
-        );
+            templates: {
+              separator: ' + ',
+            },
+          }),
+        ]);
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }
@@ -70,7 +90,9 @@ storiesOf('Breadcrumb', module)
         const breadcrumb = document.createElement('div');
         container.appendChild(breadcrumb);
 
-        search.addWidget(
+        search.addWidgets([
+          virtualHierarchicalMenu(),
+
           instantsearch.widgets.breadcrumb({
             container: breadcrumb,
             attributes: [
@@ -81,15 +103,17 @@ storiesOf('Breadcrumb', module)
             templates: {
               home: 'Home Page',
             },
-          })
-        );
+          }),
+        ]);
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }
@@ -100,11 +124,12 @@ storiesOf('Breadcrumb', module)
     withHits(
       ({ search, container, instantsearch }) => {
         const breadcrumb = document.createElement('div');
-        container.appendChild(breadcrumb);
         const hierarchicalMenu = document.createElement('div');
+
+        container.appendChild(breadcrumb);
         container.appendChild(hierarchicalMenu);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.breadcrumb({
             container: breadcrumb,
             attributes: [
@@ -113,12 +138,9 @@ storiesOf('Breadcrumb', module)
               'hierarchicalCategories.lvl2',
             ],
             rootPath: 'Cameras & Camcorders',
-          })
-        );
+          }),
 
-        search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
-            showParentLevel: false,
             container: hierarchicalMenu,
             attributes: [
               'hierarchicalCategories.lvl0',
@@ -126,15 +148,17 @@ storiesOf('Breadcrumb', module)
               'hierarchicalCategories.lvl2',
             ],
             rootPath: 'Cameras & Camcorders',
-          })
-        );
+          }),
+        ]);
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }
@@ -149,7 +173,7 @@ storiesOf('Breadcrumb', module)
         const hierarchicalMenu = document.createElement('div');
         container.appendChild(hierarchicalMenu);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.breadcrumb({
             container: breadcrumb,
             attributes: [
@@ -157,10 +181,8 @@ storiesOf('Breadcrumb', module)
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-          })
-        );
+          }),
 
-        search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
             container: hierarchicalMenu,
             attributes: [
@@ -168,15 +190,17 @@ storiesOf('Breadcrumb', module)
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-          })
-        );
+          }),
+        ]);
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }
@@ -189,7 +213,9 @@ storiesOf('Breadcrumb', module)
         const breadcrumb = document.createElement('div');
         container.appendChild(breadcrumb);
 
-        search.addWidget(
+        search.addWidgets([
+          virtualHierarchicalMenu(),
+
           instantsearch.widgets.breadcrumb({
             container: breadcrumb,
             attributes: [
@@ -202,15 +228,17 @@ storiesOf('Breadcrumb', module)
                 ...item,
                 label: `${item.label} (transformed)`,
               })),
-          })
-        );
+          }),
+        ]);
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }
@@ -220,6 +248,8 @@ storiesOf('Breadcrumb', module)
     'with add/remove',
     withHits(
       ({ search, container, instantsearch }) => {
+        search.addWidgets([virtualHierarchicalMenu()]);
+
         withLifecycle(search, container, node =>
           instantsearch.widgets.breadcrumb({
             container: node,
@@ -232,11 +262,13 @@ storiesOf('Breadcrumb', module)
         );
       },
       {
-        searchParameters: {
-          hierarchicalFacetsRefinements: {
-            'hierarchicalCategories.lvl0': [
-              'Cameras & Camcorders > Digital Cameras',
-            ],
+        initialUiState: {
+          instant_search: {
+            hierarchicalMenu: {
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
           },
         },
       }

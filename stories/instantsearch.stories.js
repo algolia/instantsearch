@@ -20,7 +20,6 @@ storiesOf('InstantSearch', module)
     'with initialUiState',
     withHits(() => {}, {
       initialUiState: {
-        // eslint-disable-next-line @typescript-eslint/camelcase
         instant_search: {
           refinementList: {
             brand: ['Apple'],
