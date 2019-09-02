@@ -1,12 +1,16 @@
 import algoliasearchHelper from 'algoliasearch-helper';
+import InstantSearch from '../InstantSearch';
+import version from '../version';
+import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import connectPagination from '../../connectors/pagination/connectPagination';
+import index from '../../widgets/index/index';
+import { noop } from '../../lib/utils';
 import {
   createSearchClient,
   createControlledSearchClient,
 } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
-import InstantSearch from '../InstantSearch';
-import version from '../version';
 
 jest.useFakeTimers();
 
@@ -940,9 +944,9 @@ describe('createURL', () => {
     createURL: jest.fn(() => '#'),
   });
 
-  it('returns the URL for the main index state', () => {
+  it('at top-level returns the default URL for the main index state', () => {
     const router = createRouter();
-    router.createURL.mockImplementation(() => 'http://algolia.com');
+    router.createURL.mockImplementation(() => 'https://algolia.com');
 
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -952,19 +956,50 @@ describe('createURL', () => {
       },
     });
 
-    search.addWidget(
-      createWidget({
-        getWidgetState() {
-          return {
-            query: 'Apple',
-          };
-        },
-      })
-    );
-
     search.start();
 
-    expect(search.createURL()).toBe('http://algolia.com');
+    expect(search.createURL()).toBe('https://algolia.com');
+  });
+
+  it('at top-level returns a custom URL for the main index state', () => {
+    const router = createRouter();
+    router.createURL.mockImplementation(() => 'https://algolia.com');
+
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      routing: {
+        router,
+      },
+    });
+
+    search.addWidget(connectSearchBox(noop)({}));
+    search.start();
+
+    expect(search.createURL({ indexName: { query: 'Apple' } })).toBe(
+      'https://algolia.com'
+    );
+  });
+
+  it('returns the default URL for the main index state', () => {
+    const router = createRouter();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'Apple',
+        },
+      },
+      routing: {
+        router,
+      },
+    });
+
+    search.addWidget(connectSearchBox(noop)({}));
+    search.start();
+    search.createURL();
+
     expect(router.createURL).toHaveBeenCalledWith({
       indexName: {
         query: 'Apple',
@@ -972,36 +1007,59 @@ describe('createURL', () => {
     });
   });
 
-  it('returns the URL with the given `SearchParameters` applied', () => {
+  it('returns the URL for nested index states', async () => {
     const router = createRouter();
-    router.createURL.mockImplementation(() => 'http://algolia.com');
-
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'Google',
+        },
+        indexNameLvl1: {
+          query: 'Samsung',
+        },
+        indexNameLvl2: {
+          query: 'Google',
+        },
+      },
       routing: {
         router,
       },
     });
 
-    search.addWidget(
-      createWidget({
-        getWidgetState(_, { searchParameters }) {
-          return {
-            query: 'Apple',
-            page: searchParameters.page,
-          };
-        },
-      })
-    );
+    search.addWidgets([
+      connectSearchBox(noop)({}),
+      index({ indexName: 'indexNameLvl1' }).addWidgets([
+        connectSearchBox(noop)({}),
+        index({ indexName: 'indexNameLvl2' }).addWidgets([
+          connectSearchBox(noop)({}),
+          connectPagination(noop)({}),
+          createWidget({
+            render({ helper, createURL }) {
+              createURL(helper.state.setPage(3).setQuery('Apple'));
+            },
+          }),
+        ]),
+      ]),
+    ]);
 
     search.start();
 
-    expect(search.createURL({ page: 5 })).toBe('http://algolia.com');
+    // We need to run all micro tasks for the `render` method of the last
+    // widget to be called and its `createURL` to be triggered.
+    await runAllMicroTasks();
+
     expect(router.createURL).toHaveBeenCalledWith({
       indexName: {
+        query: 'Google',
+      },
+      indexNameLvl1: {
+        query: 'Samsung',
+      },
+      indexNameLvl2: {
         query: 'Apple',
-        page: 5,
+        page: 4,
       },
     });
   });

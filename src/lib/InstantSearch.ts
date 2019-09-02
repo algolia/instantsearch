@@ -1,8 +1,4 @@
-import algoliasearchHelper, {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
+import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
@@ -140,8 +136,7 @@ class InstantSearch extends EventEmitter {
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
-  public _createURL?: (params: SearchParameters) => string;
-  public _createAbsoluteURL?: (params: SearchParameters) => string;
+  public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public routing?: Routing;
 
@@ -331,14 +326,12 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         instantSearchInstance: this,
       });
       this._createURL = routingManager.createURL.bind(routingManager);
-      this._createAbsoluteURL = this._createURL;
       // We don't use `addWidgets` because we have to ensure that `RoutingManager`
       // is the last widget added. Otherwise we have an issue with the `routing`.
       // https://github.com/algolia/instantsearch.js/pull/3149
       this.mainIndex.getWidgets().push(routingManager);
     } else {
       this._createURL = defaultCreateURL;
-      this._createAbsoluteURL = defaultCreateURL;
     }
 
     // This Helper is used for the queries, we don't care about its state. The
@@ -464,16 +457,14 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     // const nextUiState = this.mainIndex.getWidgetState({});
   };
 
-  public createURL(params: PlainSearchParameters): string {
+  public createURL(nextState: UiState = {}): string {
     if (!this._createURL) {
       throw new Error(
         withUsage('The `start` method needs to be called before `createURL`.')
       );
     }
 
-    return this._createURL(
-      this.mainIndex.getHelper()!.state.setQueryParameters(params)
-    );
+    return this._createURL(nextState);
   }
 
   public refresh() {
