@@ -173,10 +173,14 @@ class RoutingManager implements Widget {
     }
   }
 
-  public createURL(state: SearchParameters): string {
-    const uiState = this.getAllUiStates({
-      searchParameters: state,
-    });
+  public createURL(nextState: UiState): string {
+    const uiState = Object.keys(nextState).reduce(
+      (acc, indexId) => ({
+        ...acc,
+        [indexId]: nextState[indexId],
+      }),
+      this.instantSearchInstance.mainIndex.getWidgetState({})
+    );
 
     const route = this.stateMapping.stateToRoute(uiState);
 

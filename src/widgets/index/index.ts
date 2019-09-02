@@ -150,6 +150,14 @@ const index = (props: IndexProps): Index => {
   let derivedHelper: DerivedHelper | null = null;
   let isFirstRender = true;
 
+  const createURL = (nextState: SearchParameters) =>
+    localInstantSearchInstance!._createURL!({
+      [indexId]: getLocalWidgetsState(localWidgets, {
+        searchParameters: nextState,
+        helper: helper!,
+      }),
+    });
+
   return {
     $$type: 'ais.index',
 
@@ -228,7 +236,7 @@ const index = (props: IndexProps): Index => {
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
-              createURL: localInstantSearchInstance._createAbsoluteURL!,
+              createURL,
             });
           }
         });
@@ -366,7 +374,7 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL,
           });
         }
       });
@@ -404,7 +412,7 @@ const index = (props: IndexProps): Index => {
             scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },
