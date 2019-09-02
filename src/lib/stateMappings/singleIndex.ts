@@ -6,15 +6,15 @@ function getIndexStateWithoutConfigure(uiState: IndexUiState): IndexUiState {
 }
 
 export default function singleIndexStateMapping(
-  rootIndexName: string
+  indexName: string
 ): StateMapping<IndexUiState> {
   return {
     stateToRoute(uiState) {
-      return getIndexStateWithoutConfigure(uiState[rootIndexName] || {});
+      return getIndexStateWithoutConfigure(uiState[indexName] || {});
     },
     routeToState(routeState = {}) {
       return {
-        [rootIndexName]: getIndexStateWithoutConfigure(routeState),
+        [indexName]: getIndexStateWithoutConfigure(routeState),
       };
     },
   };
