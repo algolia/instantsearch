@@ -6,33 +6,6 @@ import { warning } from '../../../lib/utils';
 import connectHierarchicalMenu from '../connectHierarchicalMenu';
 
 describe('connectHierarchicalMenu', () => {
-  // @TODO: once we've migrate away from `getConfiguration` update
-  // the function and use it at least for the lifecycle.
-  // const getInitializedWidget = () => {
-  //   const rendering = jest.fn();
-  //   const makeWidget = connectHierarchicalMenu(rendering);
-  //   const widget = makeWidget({
-  //     attributes: ['category', 'subCategory'],
-  //   });
-
-  //   const helper = jsHelper(
-  //     {},
-  //     '',
-  //     widget.getWidgetSearchParameters(new SearchParameters(),{uiState:{}})
-  //   );
-  //   helper.search = jest.fn();
-
-  //   widget.init({
-  //     helper,
-  //     state: helper.state,
-  //     createURL: () => '#',
-  //   });
-
-  //   const { refine } = rendering.mock.calls[0][0];
-
-  //   return [widget, helper, refine];
-  // };
-
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -454,7 +427,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
   describe('getWidgetState', () => {
     test('returns the `uiState` empty', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '');
@@ -473,7 +445,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `uiState` with a refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '', {
@@ -510,7 +481,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `uiState` without namespace overridden', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '', {
@@ -558,7 +528,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `SearchParameters` with the default value', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '');
@@ -586,7 +555,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `SearchParameters` with the default value without the previous refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '', {
@@ -627,7 +595,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `SearchParameters` with the value from `uiState`', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '');
@@ -659,7 +626,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '', {
@@ -704,7 +670,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `SearchParameters` with a custom `separator`', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '');
@@ -721,7 +686,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `SearchParameters` with a custom `rootPath`', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '');
@@ -738,7 +702,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
 
     test('returns the `SearchParameters` with a custom `showParentLevel`', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
       const helper = jsHelper({}, '');
@@ -833,7 +796,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
     describe('with `maxValuesPerFacet`', () => {
       test('returns the `SearchParameters` with default `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectHierarchicalMenu(render);
         const helper = jsHelper({}, '');
@@ -849,7 +811,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       test('returns the `SearchParameters` with provided `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectHierarchicalMenu(render);
         const helper = jsHelper({}, '');
@@ -866,7 +827,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       test('returns the `SearchParameters` with default `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectHierarchicalMenu(render);
         const helper = jsHelper({}, '');
@@ -883,7 +843,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectHierarchicalMenu(render);
         const helper = jsHelper({}, '');
@@ -901,7 +860,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectHierarchicalMenu(render);
         const helper = jsHelper({}, '', {
@@ -920,7 +878,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       });
 
       test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const render = () => {};
         const makeWidget = connectHierarchicalMenu(render);
         const helper = jsHelper({}, '', {
