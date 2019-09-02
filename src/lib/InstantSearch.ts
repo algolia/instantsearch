@@ -141,6 +141,7 @@ class InstantSearch extends EventEmitter {
   public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public routing?: Routing;
+  private _routingManager?;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -340,15 +341,11 @@ See ${createDocumentationLink({
     }
 
     if (this.routing) {
-      const routingManager = new RoutingManager({
+      this._routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
       });
-      this._createURL = routingManager.createURL.bind(routingManager);
-      // We don't use `addWidgets` because we have to ensure that `RoutingManager`
-      // is the last widget added. Otherwise we have an issue with the `routing`.
-      // https://github.com/algolia/instantsearch.js/pull/3149
-      this.mainIndex.getWidgets().push(routingManager);
+      this._createURL = this._routingManager.createURL;
     } else {
       this._createURL = defaultCreateURL;
     }
@@ -385,6 +382,10 @@ See ${createDocumentationLink({
           mainIndexHelper!.overrideStateWithoutTriggeringChangeEvent(state);
           this._mainHelperSearch!();
         });
+        // Forward state changes from `searchFunctionHelper` to `mainIndexHelper`
+        searchFunctionHelper.on('change', ({ state }) => {
+          mainIndexHelper!.setState(state);
+        });
         this._searchFunction!(searchFunctionHelper);
         return mainHelper;
       };
@@ -405,6 +406,10 @@ See ${createDocumentationLink({
       parent: null,
       uiState: this._initialUiState,
     });
+
+    if (this.routing) {
+      this._routingManager.applyStateFromRoute();
+    }
 
     mainHelper.search();
 
@@ -442,6 +447,10 @@ See ${createDocumentationLink({
     this.mainHelper!.removeAllListeners();
     this.mainHelper = null;
     this.helper = null;
+
+    if (this.routing) {
+      this._routingManager.dispose();
+    }
   }
 
   public scheduleSearch = defer(() => {
@@ -472,8 +481,10 @@ See ${createDocumentationLink({
   }
 
   public onStateChange = () => {
-    // @TODO: Provide `nextUiState` to all middlewares (eg. routing)
-    // const nextUiState = this.mainIndex.getWidgetState({});
+    const nextUiState = this.mainIndex.getWidgetState({});
+    if (this.routing) {
+      this._routingManager.write({ state: nextUiState });
+    }
   };
 
   public createURL(nextState: UiState = {}): string {
