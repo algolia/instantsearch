@@ -139,7 +139,7 @@ class InstantSearch extends EventEmitter {
   public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public routing?: Routing;
-  public routingManager?;
+  private _routingManager?;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -322,11 +322,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     if (this.routing) {
-      this.routingManager = new RoutingManager({
+      this._routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
       });
-      this._createURL = this.routingManager.createURL;
+      this._createURL = this._routingManager.createURL;
     } else {
       this._createURL = defaultCreateURL;
     }
@@ -389,7 +389,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     });
 
     if (this.routing) {
-      this.routingManager.setupRouting();
+      this._routingManager.setupRouting();
     }
 
     mainHelper.search();
@@ -430,7 +430,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this.helper = null;
 
     if (this.routing) {
-      this.routingManager.dispose();
+      this._routingManager.dispose();
     }
   }
 
@@ -464,7 +464,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   public onStateChange = () => {
     const nextUiState = this.mainIndex.getWidgetState({});
     if (this.routing) {
-      this.routingManager.write({ state: nextUiState });
+      this._routingManager.write({ state: nextUiState });
     }
   };
 
