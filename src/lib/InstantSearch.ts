@@ -389,7 +389,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     });
 
     if (this.routing) {
-      this._routingManager.setupRouting();
+      this._routingManager.applyStateFromRoute();
     }
 
     mainHelper.search();

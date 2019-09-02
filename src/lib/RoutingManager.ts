@@ -24,8 +24,6 @@ class RoutingManager {
   private readonly router: Router;
   private readonly stateMapping: StateMapping;
 
-  private currentUiState: UiState;
-
   public constructor({
     router,
     stateMapping,
@@ -34,15 +32,16 @@ class RoutingManager {
     this.router = router;
     this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
-    this.currentUiState = this.stateMapping.routeToState(this.router.read());
 
     this.createURL = this.createURL.bind(this);
   }
 
-  public setupRouting(): void {
+  public applyStateFromRoute(): void {
+    const currentUiState = this.stateMapping.routeToState(this.router.read());
+
     walk(this.instantSearchInstance.mainIndex, current => {
       const widgets = current.getWidgets();
-      const indexUiState = this.currentUiState[current.getIndexId()] || {};
+      const indexUiState = currentUiState[current.getIndexId()] || {};
 
       const searchParameters = widgets.reduce((parameters, widget) => {
         if (!widget.getWidgetSearchParameters) {
