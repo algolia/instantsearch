@@ -14,32 +14,6 @@ describe('connectMenu', () => {
     makeWidget = connectMenu(rendering);
   });
 
-  // @TODO: once we've migrate away from `getConfiguration` update
-  // const getInitializedWidget = () => {
-  //   const rendering2 = jest.fn();
-  //   const makeWidget2 = connectMenu(rendering2);
-  //   const widget = makeWidget2({
-  //     attribute: 'category',
-  //   });
-
-  //   const helper = jsHelper(
-  //     {},
-  //     '',
-  //     widget.getWidgetSearchParameters(new SearchParameters(),{uiState:{}})
-  //   );
-  //   helper.search = jest.fn();
-
-  //   widget.init({
-  //     helper,
-  //     state: helper.state,
-  //     createURL: () => '#',
-  //   });
-
-  //   const { refine } = rendering2.mock.calls[0][0];
-
-  //   return [widget, helper, refine];
-  // };
-
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -669,7 +643,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
   describe('getWidgetState', () => {
     test('returns the `uiState` empty', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '');
       const widget = makeWidget({
         attribute: 'brand',
@@ -686,7 +659,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `uiState` with a refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -718,7 +690,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `uiState` without namespace overridden', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -757,7 +728,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
   describe('getWidgetSearchParameters', () => {
     test('returns the `SearchParameters` with the default value', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '');
       const widget = makeWidget({
         attribute: 'brand',
@@ -780,7 +750,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `SearchParameters` with the default value without the previous refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -814,7 +783,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `SearchParameters` with the value from `uiState`', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '');
       const widget = makeWidget({
         attribute: 'brand',
@@ -841,7 +809,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -880,7 +847,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
     describe('with `maxValuesPerFacet`', () => {
       test('returns the `SearchParameters` with default `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -894,7 +860,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with provided `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -909,7 +874,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with default `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -924,7 +888,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -940,7 +903,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '', {
           maxValuesPerFacet: 100,
         });
@@ -957,7 +919,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '', {
           maxValuesPerFacet: 100,
         });

@@ -295,7 +295,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
   describe('getWidgetState', () => {
     test('returns the `uiState` empty', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '');
@@ -315,7 +314,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     test('returns the `uiState` with a refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '', {
@@ -345,7 +343,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     test('returns the `uiState` without namespace overridden', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '', {
@@ -382,7 +379,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
   describe('getWidgetSearchParameters', () => {
     test('returns the `SearchParameters` with the default value', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '');
@@ -406,7 +402,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     test('returns the `SearchParameters` without the previous value', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '', {
@@ -435,7 +430,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     test('returns the `SearchParameters` with the value from `uiState`', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
       const helper = jsHelper({}, '');
