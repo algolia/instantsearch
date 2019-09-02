@@ -34,10 +34,13 @@ class RoutingManager {
     this.instantSearchInstance = instantSearchInstance;
 
     this.createURL = this.createURL.bind(this);
+    this.applyStateFromRoute = this.applyStateFromRoute.bind(this);
+
+    this.router.onUpdate(this.applyStateFromRoute);
   }
 
-  public applyStateFromRoute(): void {
-    const currentUiState = this.stateMapping.routeToState(this.router.read());
+  public applyStateFromRoute(route: UiState): void {
+    const currentUiState = this.stateMapping.routeToState(route);
 
     walk(this.instantSearchInstance.mainIndex, current => {
       const widgets = current.getWidgets();
@@ -59,9 +62,6 @@ class RoutingManager {
 
       this.instantSearchInstance.scheduleSearch();
     });
-
-    // @TODO: Update state on external route update (popState)
-    // this.router.onUpdate(route => {});
   }
 
   public write({ state }: { state: UiState }) {
