@@ -1570,8 +1570,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           indexName: {},
         });
 
-        // Simulate a change that does not emit (like `searchFunction`)
-        instance.getHelper()!.overrideStateWithoutTriggeringChangeEvent({
+        // Simulate a change
+        instance.getHelper()!.setState({
           ...instance.getHelper()!.state,
           query: 'Apple iPhone',
         });
@@ -1589,8 +1589,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           },
         });
 
-        // Simulate a change that does not emit (like `searchFunction`)
-        instance.getHelper()!.overrideStateWithoutTriggeringChangeEvent({
+        // Simulate a change
+        instance.getHelper()!.setState({
           ...instance.getHelper()!.state,
           query: 'Apple iPhone XS',
         });
@@ -1601,10 +1601,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           })
         );
 
-        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(1);
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
         expect(instance.getWidgetState({})).toEqual({
           indexName: {
-            query: 'Apple iPhone',
+            query: 'Apple iPhone XS',
           },
         });
       });
