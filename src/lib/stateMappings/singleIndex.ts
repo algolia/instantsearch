@@ -10,9 +10,9 @@ export default function singleIndexStateMapping(
 ): StateMapping<IndexUiState> {
   return {
     stateToRoute(uiState) {
-      return getIndexStateWithoutConfigure(uiState[rootIndexName]);
+      return getIndexStateWithoutConfigure(uiState[rootIndexName] || {});
     },
-    routeToState(routeState) {
+    routeToState(routeState = {}) {
       return {
         [rootIndexName]: getIndexStateWithoutConfigure(routeState),
       };

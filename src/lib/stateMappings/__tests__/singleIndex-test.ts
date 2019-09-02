@@ -64,6 +64,53 @@ describe('singleIndexStateMapping', () => {
         spy: ['stealing', 'all', 'your', 'searches'],
       });
     });
+
+    it('picks the correct index', () => {
+      const stateMapping = singleIndexStateMapping('indexName');
+      const actual = stateMapping.stateToRoute({
+        indexName: {
+          query: 'zamboni',
+          refinementList: {
+            color: ['red'],
+          },
+        },
+        anotherIndex: {
+          // @ts-ignore
+          totally: 'ignored',
+          refinementList: {
+            color: ['blue'],
+          },
+        },
+      });
+
+      expect(actual).toEqual({
+        query: 'zamboni',
+        refinementList: {
+          color: ['red'],
+        },
+      });
+    });
+
+    it('empty object if there is no matching index', () => {
+      const stateMapping = singleIndexStateMapping('magicIndex');
+      const actual = stateMapping.stateToRoute({
+        indexName: {
+          query: 'zamboni',
+          refinementList: {
+            color: ['red'],
+          },
+        },
+        anotherIndex: {
+          // @ts-ignore
+          totally: 'ignored',
+          refinementList: {
+            color: ['blue'],
+          },
+        },
+      });
+
+      expect(actual).toEqual({});
+    });
   });
 
   describe('routeToState', () => {
@@ -127,6 +174,41 @@ describe('singleIndexStateMapping', () => {
           },
           spy: ['stealing', 'all', 'your', 'searches'],
         },
+      });
+    });
+
+    it('returns wrong data if used with nested state', () => {
+      const stateMapping = singleIndexStateMapping('indexName');
+      const actual = stateMapping.routeToState({
+        // @ts-ignore (we are passing wrong data)
+        indexName: {
+          query: 'zamboni',
+          refinementList: {
+            color: ['red'],
+          },
+        },
+        anotherIndex: {},
+      });
+
+      expect(actual).toEqual({
+        indexName: {
+          indexName: {
+            query: 'zamboni',
+            refinementList: {
+              color: ['red'],
+            },
+          },
+          anotherIndex: {},
+        },
+      });
+    });
+
+    it('keeps empty index empty', () => {
+      const stateMapping = singleIndexStateMapping('indexName');
+      const actual = stateMapping.routeToState({});
+
+      expect(actual).toEqual({
+        indexName: {},
       });
     });
   });

@@ -20,7 +20,7 @@ export default function simpleStateMapping(): StateMapping<UiState> {
       );
     },
 
-    routeToState(routeState) {
+    routeToState(routeState = {}) {
       return Object.keys(routeState).reduce<UiState>(
         (state, indexId) => ({
           ...state,
