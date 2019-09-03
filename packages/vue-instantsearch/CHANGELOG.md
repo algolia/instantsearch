@@ -1,3 +1,12 @@
+# [2.4.0](https://github.com/algolia/vue-instantsearch/compare/v2.3.0...v2.4.0) (2019-09-03)
+
+
+### Features
+
+* **searchbox:** Adds events to hook on to focus, blur, and reset ([#711](https://github.com/algolia/vue-instantsearch/issues/711)) ([0149d2f](https://github.com/algolia/vue-instantsearch/commit/0149d2f))
+
+
+
 # [2.3.0](https://github.com/algolia/vue-instantsearch/compare/v2.2.2...v2.3.0) (2019-07-30)
 
 
