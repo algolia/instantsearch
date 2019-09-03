@@ -7,30 +7,33 @@ import connectRatingMenu from '../connectRatingMenu';
 describe('connectRatingMenu', () => {
   // @TODO: once we've migrate away from `getConfiguration` update
   // the function and use it at least for the lifecycle.
-  // const getInitializedWidget = (config = {}) => {
-  //   const rendering = jest.fn();
-  //   const makeWidget = connectRatingMenu(rendering);
+  const getInitializedWidget = (config = {}) => {
+    const rendering = jest.fn();
+    const makeWidget = connectRatingMenu(rendering);
 
-  //   const attribute = 'grade';
-  //   const widget = makeWidget({
-  //     attribute,
-  //     ...config,
-  //   });
+    const attribute = 'grade';
+    const widget = makeWidget({
+      attribute,
+      ...config,
+    });
 
-  //   const initialConfig = widget.getConfiguration(new SearchParameters({}));
-  //   const helper = jsHelper({}, '', initialConfig);
-  //   helper.search = jest.fn();
+    const initialConfig = widget.getWidgetSearchParameters(
+      new SearchParameters({}),
+      { uiState: {} }
+    );
+    const helper = jsHelper({}, '', initialConfig);
+    helper.search = jest.fn();
 
-  //   widget.init({
-  //     helper,
-  //     state: helper.state,
-  //     createURL: () => '#',
-  //   });
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
 
-  //   const { refine } = rendering.mock.calls[0][0];
+    const { refine } = rendering.mock.calls[0][0];
 
-  //   return [widget, helper, refine];
-  // };
+    return { widget, helper, refine, rendering };
+  };
 
   describe('Usage', () => {
     it('throws without render function', () => {
@@ -191,40 +194,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
   });
 
   it('Provides a function to update the index at each step', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectRatingMenu(rendering);
-
-    const attribute = 'grade';
-    const widget = makeWidget({
+    const attribute = 'swag';
+    const { rendering, helper, widget, refine } = getInitializedWidget({
       attribute,
     });
 
-    const config = widget.getConfiguration(new SearchParameters({}));
-
-    const helper = jsHelper({}, '', config);
-    helper.search = jest.fn();
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
-
-    {
-      // first rendering
-      const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
-      const { refine, items } = renderOptions;
-      expect(items).toEqual([]);
-      expect(helper.getRefinements(attribute)).toEqual([]);
-      refine('3');
-      expect(helper.getRefinements(attribute)).toEqual([
-        { type: 'disjunctive', value: '3' },
-        { type: 'disjunctive', value: '4' },
-        { type: 'disjunctive', value: '5' },
-      ]);
-      expect(helper.search).toHaveBeenCalledTimes(1);
-    }
+    // first rendering
+    expect(helper.getRefinements(attribute)).toEqual([]);
+    refine('3');
+    expect(helper.getRefinements(attribute)).toEqual([
+      { type: 'disjunctive', value: '3' },
+      { type: 'disjunctive', value: '4' },
+      { type: 'disjunctive', value: '5' },
+    ]);
+    expect(helper.search).toHaveBeenCalledTimes(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -248,7 +231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       // Second rendering
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
-      const { refine, items } = renderOptions;
+      const { items } = renderOptions;
       expect(items).toEqual([
         {
           count: 1000,
@@ -291,6 +274,52 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       ]);
       expect(helper.search).toHaveBeenCalledTimes(2);
     }
+  });
+
+  it('empties the refinements if called with the same value', () => {
+    const attribute = 'swag';
+    const { helper, widget, refine } = getInitializedWidget({
+      attribute,
+    });
+
+    // First rendering
+    expect(helper.getRefinements(attribute)).toEqual([]);
+    refine('3');
+    expect(helper.getRefinements(attribute)).toEqual([
+      { type: 'disjunctive', value: '3' },
+      { type: 'disjunctive', value: '4' },
+      { type: 'disjunctive', value: '5' },
+    ]);
+    expect(helper.search).toHaveBeenCalledTimes(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            [attribute]: { 3: 50, 4: 900, 5: 100 },
+          },
+        },
+        {
+          facets: {
+            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // Second rendering
+    expect(helper.getRefinements(attribute)).toEqual([
+      { type: 'disjunctive', value: '3' },
+      { type: 'disjunctive', value: '4' },
+      { type: 'disjunctive', value: '5' },
+    ]);
+    refine('3');
+    expect(helper.getRefinements(attribute)).toEqual([]);
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual({ swag: [] });
+    expect(helper.search).toHaveBeenCalledTimes(2);
   });
 
   describe('getConfiguration', () => {

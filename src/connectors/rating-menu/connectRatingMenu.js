@@ -232,7 +232,9 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       _toggleRefinement(helper, facetValue) {
         const isRefined =
           this._getRefinedStar(helper.state) === Number(facetValue);
-        helper.clearRefinements(attribute);
+        helper.setState(
+          helper.state.removeDisjunctiveFacetRefinement(attribute)
+        );
         if (!isRefined) {
           for (let val = Number(facetValue); val <= max; ++val) {
             helper.addDisjunctiveFacetRefinement(attribute, val);

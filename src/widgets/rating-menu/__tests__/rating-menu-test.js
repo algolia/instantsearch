@@ -51,6 +51,7 @@ describe('ratingMenu()', () => {
     jest.spyOn(helper, 'clearRefinements');
     jest.spyOn(helper, 'addDisjunctiveFacetRefinement');
     jest.spyOn(helper, 'getRefinements');
+    jest.spyOn(helper, 'setState');
     helper.search = jest.fn();
 
     state = {
@@ -124,7 +125,7 @@ describe('ratingMenu()', () => {
   it('refines the search', () => {
     helper.getRefinements = jest.fn().mockReturnValue([]);
     widget._toggleRefinement('3');
-    expect(helper.clearRefinements).toHaveBeenCalledTimes(1);
+    expect(helper.setState).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(3);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
@@ -133,7 +134,7 @@ describe('ratingMenu()', () => {
     helper.addDisjunctiveFacetRefinement(attribute, 2);
     helper.addDisjunctiveFacetRefinement.mockReset();
     widget._toggleRefinement('2');
-    expect(helper.clearRefinements).toHaveBeenCalledTimes(1);
+    expect(helper.setState).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(0);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
@@ -141,7 +142,7 @@ describe('ratingMenu()', () => {
   it('toggles the refinements with another facet', () => {
     helper.getRefinements = jest.fn().mockReturnValue([{ value: '2' }]);
     widget._toggleRefinement('4');
-    expect(helper.clearRefinements).toHaveBeenCalledTimes(1);
+    expect(helper.setState).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(2);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });

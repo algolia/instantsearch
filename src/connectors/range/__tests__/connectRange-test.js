@@ -373,7 +373,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
-      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([]);
       expect(helper.search).toHaveBeenCalledTimes(2);
 
       refine([0, 100]);
@@ -648,9 +648,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const createHelper = () => {
       const helper = jsHelper({});
       helper.search = jest.fn();
-      const initialClearRefinements = helper.clearRefinements;
-      helper.clearRefinements = jest.fn((...args) =>
-        initialClearRefinements.apply(helper, args)
+      const removeNumericRefinement = helper.removeNumericRefinement;
+      helper.removeNumericRefinement = jest.fn((...args) =>
+        removeNumericRefinement.apply(helper, args)
       );
 
       return helper;
@@ -668,7 +668,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -682,7 +682,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -696,7 +696,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -710,7 +710,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([11]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([491]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -727,7 +727,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -744,7 +744,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -759,9 +759,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       widget._refine(helper, range)(values);
 
-      expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
+      expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -777,8 +777,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget._refine(helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
-      expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -793,9 +793,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       widget._refine(helper, range)(values);
 
-      expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
+      expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -811,8 +811,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget._refine(helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
-      expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -826,9 +826,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       widget._refine(helper, range)(values);
 
-      expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
+      expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -843,8 +843,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget._refine(helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
-      expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attribute);
+      expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
+      expect(helper.removeNumericRefinement).toHaveBeenCalledWith(attribute);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -863,7 +863,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -882,7 +882,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([250]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -896,7 +896,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -910,7 +910,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -924,7 +924,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -941,7 +941,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
@@ -955,7 +955,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
-      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.removeNumericRefinement).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
   });
