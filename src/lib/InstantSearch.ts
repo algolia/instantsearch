@@ -213,7 +213,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
-    this._initialUiState = initialUiState;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -226,6 +225,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
+    }
+
+    if (this.routing) {
+      this._initialUiState = {
+        ...initialUiState,
+        ...this.routing.stateMapping.routeToState(this.routing.router.read()),
+      };
+    } else {
+      this._initialUiState = initialUiState;
     }
   }
 
