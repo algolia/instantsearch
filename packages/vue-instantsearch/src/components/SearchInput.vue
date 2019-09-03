@@ -21,6 +21,8 @@
       :autofocus="autofocus"
       :class="suit('input')"
       :value="value"
+      @focus="$emit('focus', $event)"
+      @blur="$emit('blur', $event)"
       @input="$emit('input', $event.target.value)"
       ref="input"
     >
@@ -166,6 +168,7 @@ export default {
     },
     onFormReset() {
       this.$emit('input', '');
+      this.$emit('reset');
     },
   },
 };
