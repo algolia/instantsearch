@@ -232,7 +232,6 @@ See ${createDocumentationLink({
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
-    this._initialUiState = initialUiState;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -245,6 +244,15 @@ See ${createDocumentationLink({
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
+    }
+
+    if (this.routing) {
+      this._initialUiState = {
+        ...initialUiState,
+        ...this.routing.stateMapping.routeToState(this.routing.router.read()),
+      };
+    } else {
+      this._initialUiState = initialUiState;
     }
   }
 
