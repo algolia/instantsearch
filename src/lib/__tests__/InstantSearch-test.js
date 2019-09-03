@@ -402,6 +402,39 @@ describe('start', () => {
     });
   });
 
+  it('forwards the router state to the main index', () => {
+    const router = {
+      read: jest.fn(() => ({
+        indexName: {
+          hierarchicalMenu: {
+            'hierarchicalCategories.lvl0': ['Cell Phones'],
+          },
+        },
+      })),
+      write: jest.fn(),
+      onUpdate: jest.fn(),
+      createURL: jest.fn(() => '#'),
+    };
+
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      routing: {
+        router,
+      },
+    });
+
+    search.start();
+
+    expect(search.mainIndex.getWidgetState()).toEqual({
+      indexName: {
+        hierarchicalMenu: {
+          'hierarchicalCategories.lvl0': ['Cell Phones'],
+        },
+      },
+    });
+  });
+
   it('calls `init` on the added widgets', () => {
     const search = new InstantSearch({
       indexName: 'indexName',
