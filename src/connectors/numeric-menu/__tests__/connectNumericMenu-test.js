@@ -78,7 +78,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       const unmount = jest.fn();
 
       const customNumericMenu = connectNumericMenu(render, unmount);
-      const widget = customNumericMenu({ attribute: 'facet', items: [] });
+      const widget = customNumericMenu({
+        attribute: 'facet',
+        items: [{ label: 'x', start: 0 }],
+      });
 
       expect(widget).toEqual(
         expect.objectContaining({
