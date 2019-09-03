@@ -139,7 +139,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(lastReceivedPage + 1).search();
     };
-    const filterEmptyRefinements = refinements => {
+    const filterEmptyRefinements = (refinements = {}) => {
       return Object.keys(refinements)
         .filter(key => refinements[key].length)
         .reduce((obj, key) => {
