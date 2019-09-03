@@ -408,7 +408,7 @@ See ${createDocumentationLink({
     });
 
     if (this.routing) {
-      this._routingManager.applyStateFromRoute();
+      this._routingManager.applyStateFromRoute(this.routing.router.read());
     }
 
     mainHelper.search();
