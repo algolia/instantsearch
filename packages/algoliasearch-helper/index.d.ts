@@ -481,7 +481,7 @@ declare namespace algoliasearchHelper {
     isHierarchicalFacet(facet: string): boolean;
     isNumericRefined(
       attribute: string,
-      operator: SearchParameters.Operator,
+      operator?: SearchParameters.Operator,
       value?: string
     ): boolean;
     isTagRefined(tag: string): boolean;
