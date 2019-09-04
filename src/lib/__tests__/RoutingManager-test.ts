@@ -305,7 +305,7 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
@@ -356,7 +356,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
@@ -430,7 +430,7 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();

@@ -155,21 +155,6 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     return {
       $$type: 'ais.infiniteHits',
 
-      getConfiguration(config) {
-        const parameters = {
-          page: config.page || 0,
-        };
-
-        if (!escapeHTML) {
-          return config.setQueryParameters(parameters);
-        }
-
-        return config.setQueryParameters({
-          ...parameters,
-          ...TAG_PLACEHOLDER,
-        });
-      },
-
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
