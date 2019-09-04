@@ -47,7 +47,7 @@
     "es"
   ],
   "dependencies": {
-    "algoliasearch-helper": "0.0.0-94f40da",
+    "algoliasearch-helper": "0.0.0-5a0352a",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
