@@ -139,6 +139,18 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(lastReceivedPage + 1).search();
     };
+    const filterEmptyRefinements = (refinements = {}) => {
+      return Object.keys(refinements)
+        .filter(key =>
+          Array.isArray(refinements[key])
+            ? refinements[key].length
+            : Object.keys(refinements[key]).length
+        )
+        .reduce((obj, key) => {
+          obj[key] = refinements[key];
+          return obj;
+        }, {});
+    };
 
     return {
       $$type: 'ais.infiniteHits',
@@ -186,7 +198,22 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // We're doing this to "reset" the widget if a refinement or the
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
-        const { page = 0, ...currentState } = state;
+        const {
+          page = 0,
+          hierarchicalFacets,
+          disjunctiveFacets,
+          ...currentState
+        } = state;
+
+        currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
+          currentState.hierarchicalFacetsRefinements
+        );
+        currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
+          currentState.disjunctiveFacetsRefinements
+        );
+        currentState.numericRefinements = filterEmptyRefinements(
+          currentState.numericRefinements
+        );
 
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
@@ -285,7 +312,11 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           );
         }
 
-        if (hasShowPrevious && uiState.page) {
+        if (!hasShowPrevious) {
+          return widgetSearchParameters;
+        }
+
+        if (uiState.page) {
           // The page in the search parameters is decremented by one
           // to get to the actual parameter value from the UI state.
           return widgetSearchParameters.setQueryParameter(
