@@ -1096,7 +1096,7 @@ SearchParameters.prototype = {
    */
   removeHierarchicalFacetRefinement: function(facet) {
     if (!this.isHierarchicalFacetRefined(facet)) {
-      throw new Error(facet + ' is not refined.');
+      return this;
     }
     var mod = {};
     mod[facet] = [];
