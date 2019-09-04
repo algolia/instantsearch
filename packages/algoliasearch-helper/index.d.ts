@@ -149,7 +149,7 @@ declare namespace algoliasearchHelper {
       facet: string,
       query: string,
       maxFacetHits: number,
-      userState: PlainSearchParameters
+      userState?: PlainSearchParameters
     ): Promise<SearchForFacetValues.Result>;
 
     /**
@@ -276,7 +276,7 @@ declare namespace algoliasearchHelper {
     hasPendingRequests(...args: any[]): any;
   }
 
-  interface DerivedHelper extends EventEmitter  {
+  interface DerivedHelper extends EventEmitter {
     on(
       event: 'search',
       cb: (res: { state: SearchParameters; results: SearchResults }) => void
@@ -285,6 +285,7 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
+    on( event: 'error', cb: (res: { error: Error }) => void): this;
 
     lastResults: SearchResults | null;
     detach(): void;
@@ -505,6 +506,7 @@ declare namespace algoliasearchHelper {
     setDisjunctiveFacets(facets: string[]): SearchParameters;
     setFacets(facets: string[]): SearchParameters;
     setHitsPerPage(n: number): SearchParameters;
+    setIndex(index: string): SearchParameters;
     setPage(newPage: number): SearchParameters;
     setQueryParameters(params: PlainSearchParameters): SearchParameters;
     setQueryParameter(parameter: string, value: any): SearchParameters;
