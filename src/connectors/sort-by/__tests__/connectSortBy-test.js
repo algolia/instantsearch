@@ -79,8 +79,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     ];
     const widget = makeWidget({ items });
 
-    expect(widget.getConfiguration).toBe(undefined);
-
     const helper = algoliasearchHelper({}, items[0].value);
     helper.search = jest.fn();
 

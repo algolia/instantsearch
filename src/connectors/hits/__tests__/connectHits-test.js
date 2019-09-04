@@ -36,7 +36,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
-        getConfiguration: expect.any(Function),
       })
     );
   });
@@ -45,13 +44,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const renderFn = jest.fn();
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
-
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({
-        highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
-        highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
-      })
-    );
 
     // test if widget is not rendered yet at this point
     expect(renderFn).toHaveBeenCalledTimes(0);
@@ -82,19 +74,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({ widgetParams: { escapeHTML: true } }),
       false
-    );
-  });
-
-  it('sets the default configuration', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectHits(renderFn);
-    const widget = makeWidget();
-
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({
-        highlightPreTag: TAG_PLACEHOLDER.highlightPreTag,
-        highlightPostTag: TAG_PLACEHOLDER.highlightPostTag,
-      })
     );
   });
 

@@ -126,12 +126,6 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.hitsPerPage',
 
-      getConfiguration(state) {
-        return state.setQueryParameters({
-          hitsPerPage: state.hitsPerPage || defaultItem.value,
-        });
-      },
-
       init({ helper, createURL, state, instantSearchInstance }) {
         const isCurrentInOptions = items.some(
           item => Number(state.hitsPerPage) === Number(item.value)

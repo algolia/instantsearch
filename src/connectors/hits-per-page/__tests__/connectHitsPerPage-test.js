@@ -86,7 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
+
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -104,7 +104,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    ).toEqual(
       new SearchParameters({
         hitsPerPage: 3,
       })
@@ -216,14 +220,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    ).toEqual(
       new SearchParameters({
         hitsPerPage: 10,
       })
     );
   });
 
-  it('Configures the search with the previous hitsPerPage', () => {
+  it('Overrides previous hitsPerPage', () => {
     const renderFn = jest.fn();
     const makeWidget = connectHitsPerPage(renderFn);
     const widget = makeWidget({
@@ -234,10 +242,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     expect(
-      widget.getConfiguration(new SearchParameters({ hitsPerPage: 20 }))
+      widget.getWidgetSearchParameters(
+        new SearchParameters({ hitsPerPage: 20 }),
+        { uiState: {} }
+      )
     ).toEqual(
       new SearchParameters({
-        hitsPerPage: 20,
+        hitsPerPage: 10,
       })
     );
   });
@@ -347,7 +358,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
-    expect(firstRenderOptions.items).toMatchSnapshot();
+    expect(firstRenderOptions.items).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "isRefined": false,
+          "label": "3 items per page",
+          "value": 3,
+        },
+        Object {
+          "isRefined": false,
+          "label": "10 items per page",
+          "value": 10,
+        },
+        Object {
+          "default": true,
+          "isRefined": true,
+          "label": "7 items per page",
+          "value": 7,
+        },
+      ]
+    `);
     firstRenderOptions.refine(3);
 
     widget.render({
@@ -358,7 +388,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
-    expect(secondRenderOptions.items).toMatchSnapshot();
+    expect(secondRenderOptions.items).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "isRefined": true,
+          "label": "3 items per page",
+          "value": 3,
+        },
+        Object {
+          "isRefined": false,
+          "label": "10 items per page",
+          "value": 10,
+        },
+        Object {
+          "default": true,
+          "isRefined": false,
+          "label": "7 items per page",
+          "value": 7,
+        },
+      ]
+    `);
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {

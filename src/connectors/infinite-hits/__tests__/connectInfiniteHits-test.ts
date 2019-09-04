@@ -45,7 +45,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
-        getConfiguration: expect.any(Function),
+
         getWidgetState: expect.any(Function),
         getWidgetSearchParameters: expect.any(Function),
       })
@@ -652,73 +652,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     expect((results.hits as any).__escaped).toBe(true);
-  });
-
-  describe('getConfiguration', () => {
-    it('returns `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(widget.getConfiguration!(new SearchParameters())).toBeInstanceOf(
-        SearchParameters
-      );
-    });
-
-    it('adds a `page` to the `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(widget.getConfiguration!(new SearchParameters()).page).toEqual(0);
-    });
-
-    it('supports previous `page` from the `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(
-        widget.getConfiguration!(new SearchParameters({ page: 0 })).page
-      ).toEqual(0);
-
-      expect(
-        widget.getConfiguration!(new SearchParameters({ page: 6 })).page
-      ).toEqual(6);
-    });
-
-    it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      const nextConfiguration = widget.getConfiguration!(
-        new SearchParameters()
-      );
-
-      expect(nextConfiguration.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(nextConfiguration.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-    });
-
-    it('does not add the TAG_PLACEHOLDER to the `SearchParameters` with `escapeHTML` disabled', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      const nextConfiguration = widget.getConfiguration!(
-        new SearchParameters()
-      );
-
-      expect(nextConfiguration.highlightPreTag).toBeUndefined();
-      expect(nextConfiguration.highlightPostTag).toBeUndefined();
-    });
   });
 
   describe('dispose', () => {
