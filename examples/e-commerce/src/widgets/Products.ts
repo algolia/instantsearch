@@ -9,7 +9,7 @@ export const products = hits({
     <img src="{{image}}" alt="{{name}}" class="hit-image">
   </header>
 
-  <main class="hit-info-container">
+  <div class="hit-info-container">
     <p class="hit-category">{{categories.0}}</p>
     <h1>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</h1>
     <p class="hit-description">{{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}</p>
@@ -25,7 +25,7 @@ export const products = hits({
         </span>
       </p>
     </footer>
-  </main>
+  </div>
 </article>
 `,
     empty(searchResults) {
