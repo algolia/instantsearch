@@ -19,18 +19,12 @@ function clearRefinements({
   let finalState = helper.state.setPage(0);
 
   attributesToClear.forEach(attribute => {
-    if (
-      finalState.isHierarchicalFacet(attribute) &&
-      // `removeHierarchicalFacetRefinement` throws an error if the hierarchical facet is not refined
-      // https://github.com/algolia/algoliasearch-helper-js/blob/f4dab89dcce68d46596d5b8a5e88f18f28b13330/src/SearchParameters/index.js#L1324
-      finalState.isHierarchicalFacetRefined(attribute)
-    ) {
+    if (finalState.isHierarchicalFacet(attribute)) {
       finalState = finalState.removeHierarchicalFacetRefinement(attribute);
     } else if (finalState.isDisjunctiveFacet(attribute)) {
       finalState = finalState.removeDisjunctiveFacetRefinement(attribute);
     } else if (finalState.isConjunctiveFacet(attribute)) {
       finalState = finalState.removeFacetRefinement(attribute);
-      // @ts-ignore: error is TS definition file, `operator` attribute is optional
     } else if (finalState.isNumericRefined(attribute)) {
       finalState = finalState.removeNumericRefinement(attribute);
     }
