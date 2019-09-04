@@ -141,7 +141,11 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     };
     const filterEmptyRefinements = (refinements = {}) => {
       return Object.keys(refinements)
-        .filter(key => refinements[key].length)
+        .filter(key =>
+          Array.isArray(refinements[key])
+            ? refinements[key].length
+            : Object.keys(refinements[key]).length
+        )
         .reduce((obj, key) => {
           obj[key] = refinements[key];
           return obj;
@@ -206,6 +210,9 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         );
         currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
           currentState.disjunctiveFacetsRefinements
+        );
+        currentState.numericRefinements = filterEmptyRefinements(
+          currentState.numericRefinements
         );
 
         if (!isEqual(currentState, prevState)) {
