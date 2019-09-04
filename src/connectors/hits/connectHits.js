@@ -60,14 +60,6 @@ export default function connectHits(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.hits',
 
-      getConfiguration(state) {
-        if (!escapeHTML) {
-          return state;
-        }
-
-        return state.setQueryParameters(TAG_PLACEHOLDER);
-      },
-
       init({ instantSearchInstance }) {
         renderFn(
           {

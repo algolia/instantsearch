@@ -107,8 +107,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       ],
     });
 
-    expect(widget.getConfiguration).toBe(undefined);
-
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
 

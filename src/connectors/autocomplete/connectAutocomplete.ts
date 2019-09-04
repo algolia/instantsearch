@@ -101,21 +101,6 @@ search.addWidgets([
     return {
       $$type: 'ais.autocomplete',
 
-      getConfiguration(previousParameters) {
-        const parameters = {
-          query: previousParameters.query || '',
-        };
-
-        if (!escapeHTML) {
-          return previousParameters.setQueryParameters(parameters);
-        }
-
-        return previousParameters.setQueryParameters({
-          ...parameters,
-          ...TAG_PLACEHOLDER,
-        });
-      },
-
       init({ instantSearchInstance, helper }) {
         connectorState.refine = (query: string) => {
           helper.setQuery(query).search();

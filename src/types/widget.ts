@@ -129,11 +129,24 @@ export interface Widget {
    * during this widget's initialization and life time.
    */
   dispose?(options: DisposeOptions): SearchParameters | void;
-  getConfiguration?(previousConfiguration: SearchParameters): SearchParameters;
+  /**
+   * This function is required for a widget to be taken in account for routing.
+   * It will derive a uiState for this widget based on the existing uiState and
+   * the search parameters applied.
+   * @param uiState current state
+   * @param widgetStateOptions extra information to calculate uiState
+   */
   getWidgetState?(
     uiState: IndexUiState,
     widgetStateOptions: WidgetStateOptions
   ): IndexUiState;
+  /**
+   * This function is required for a widget to behave correctly when a URL is
+   * loaded via e.g. routing. It receives the current UiState and applied search
+   * parameters, and is expected to return a new search parameters.
+   * @param state applied search parameters
+   * @param widgetSearchParametersOptions extra information to calculate next searchParameters
+   */
   getWidgetSearchParameters?(
     state: SearchParameters,
     widgetSearchParametersOptions: WidgetSearchParametersOptions

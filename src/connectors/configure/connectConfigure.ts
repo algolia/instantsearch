@@ -107,10 +107,6 @@ const connectConfigure: ConfigureConnector = (
     return {
       $$type: 'ais.configure',
 
-      getConfiguration(state: SearchParameters) {
-        return state.setQueryParameters(widgetParams.searchParameters);
-      },
-
       init({ instantSearchInstance, helper }) {
         connectorState.refine = refine(helper);
 

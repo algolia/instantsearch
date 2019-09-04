@@ -300,34 +300,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         return getLimit(this.isShowingMore);
       },
 
-      getConfiguration(configuration) {
-        let widgetConfiguration;
-        if (operator === 'and') {
-          widgetConfiguration = {
-            facets: [attribute],
-            facetsRefinements: {
-              [attribute]: configuration.facetsRefinements[attribute] || [],
-            },
-          };
-        } else {
-          widgetConfiguration = {
-            disjunctiveFacets: [attribute],
-            disjunctiveFacetsRefinements: {
-              [attribute]: configuration.facetsRefinements[attribute] || [],
-            },
-          };
-        }
-
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        return configuration.setQueryParameters(widgetConfiguration);
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
