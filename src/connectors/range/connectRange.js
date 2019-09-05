@@ -168,7 +168,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
           const hasMaxChange = max !== newNextMax;
 
           if ((hasMinChange || hasMaxChange) && (isMinValid && isMaxValid)) {
-            helper.clearRefinements(attribute);
+            helper.removeNumericRefinement(attribute);
 
             if (isValidNewNextMin) {
               helper.addNumericRefinement(

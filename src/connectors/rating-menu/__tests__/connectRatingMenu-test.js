@@ -153,23 +153,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
 
   it('Provides a function to update the index at each step', () => {
     const attribute = 'swag';
-    const { rendering, helper, widget } = getInitializedWidget({ attribute });
+    const { rendering, helper, widget, refine } = getInitializedWidget({
+      attribute,
+    });
 
-    {
-      // first rendering
-      const renderOptions =
-        rendering.mock.calls[rendering.mock.calls.length - 1][0];
-      const { refine, items } = renderOptions;
-      expect(items).toEqual([]);
-      expect(helper.getRefinements(attribute)).toEqual([]);
-      refine('3');
-      expect(helper.getRefinements(attribute)).toEqual([
-        { type: 'disjunctive', value: '3' },
-        { type: 'disjunctive', value: '4' },
-        { type: 'disjunctive', value: '5' },
-      ]);
-      expect(helper.search).toHaveBeenCalledTimes(1);
-    }
+    // first rendering
+    expect(helper.getRefinements(attribute)).toEqual([]);
+    refine('3');
+    expect(helper.getRefinements(attribute)).toEqual([
+      { type: 'disjunctive', value: '3' },
+      { type: 'disjunctive', value: '4' },
+      { type: 'disjunctive', value: '5' },
+    ]);
+    expect(helper.search).toHaveBeenCalledTimes(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -193,7 +189,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       // Second rendering
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
-      const { refine, items } = renderOptions;
+      const { items } = renderOptions;
       expect(items).toEqual([
         {
           count: 1000,
@@ -236,6 +232,52 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       ]);
       expect(helper.search).toHaveBeenCalledTimes(2);
     }
+  });
+
+  it('empties the refinements if called with the same value', () => {
+    const attribute = 'swag';
+    const { helper, widget, refine } = getInitializedWidget({
+      attribute,
+    });
+
+    // First rendering
+    expect(helper.getRefinements(attribute)).toEqual([]);
+    refine('3');
+    expect(helper.getRefinements(attribute)).toEqual([
+      { type: 'disjunctive', value: '3' },
+      { type: 'disjunctive', value: '4' },
+      { type: 'disjunctive', value: '5' },
+    ]);
+    expect(helper.search).toHaveBeenCalledTimes(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            [attribute]: { 3: 50, 4: 900, 5: 100 },
+          },
+        },
+        {
+          facets: {
+            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // Second rendering
+    expect(helper.getRefinements(attribute)).toEqual([
+      { type: 'disjunctive', value: '3' },
+      { type: 'disjunctive', value: '4' },
+      { type: 'disjunctive', value: '5' },
+    ]);
+    refine('3');
+    expect(helper.getRefinements(attribute)).toEqual([]);
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual({ swag: [] });
+    expect(helper.search).toHaveBeenCalledTimes(2);
   });
 
   describe('dispose', () => {
