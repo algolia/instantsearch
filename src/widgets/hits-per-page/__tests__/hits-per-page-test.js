@@ -109,10 +109,7 @@ describe('hitsPerPage()', () => {
   it('sets the underlying hitsPerPage', () => {
     widget.init({ helper, state: helper.state });
     widget.setHitsPerPage(helper, helper.state, 10);
-    expect(helper.setQueryParameter).toHaveBeenCalledTimes(
-      1,
-      'setQueryParameter called once'
-    );
+    expect(helper.setQueryParameter).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
