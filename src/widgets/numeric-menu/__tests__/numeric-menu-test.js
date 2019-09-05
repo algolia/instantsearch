@@ -62,7 +62,6 @@ describe('numericMenu()', () => {
     };
     state = {
       getNumericRefinements: jest.fn().mockReturnValue([]),
-      clearRefinements: jest.fn().mockReturnThis(),
       removeNumericRefinement: jest.fn().mockReturnThis(),
       addNumericRefinement: jest.fn().mockReturnThis(),
     };
