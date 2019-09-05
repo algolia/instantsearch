@@ -18,17 +18,21 @@ function clearRefinements({
 }) {
   let finalState = helper.state.setPage(0);
 
-  attributesToClear.forEach(attribute => {
+  finalState = attributesToClear.reduce((state, attribute) => {
     if (finalState.isHierarchicalFacet(attribute)) {
-      finalState = finalState.removeHierarchicalFacetRefinement(attribute);
-    } else if (finalState.isDisjunctiveFacet(attribute)) {
-      finalState = finalState.removeDisjunctiveFacetRefinement(attribute);
-    } else if (finalState.isConjunctiveFacet(attribute)) {
-      finalState = finalState.removeFacetRefinement(attribute);
-    } else if (finalState.isNumericRefined(attribute)) {
-      finalState = finalState.removeNumericRefinement(attribute);
+      return state.removeHierarchicalFacetRefinement(attribute);
     }
-  });
+    if (finalState.isDisjunctiveFacet(attribute)) {
+      return state.removeDisjunctiveFacetRefinement(attribute);
+    }
+    if (finalState.isConjunctiveFacet(attribute)) {
+      return state.removeFacetRefinement(attribute);
+    }
+    if (finalState.isNumericRefined(attribute)) {
+      return state.removeNumericRefinement(attribute);
+    }
+    return state;
+  }, finalState);
 
   if (attributesToClear.indexOf('query') !== -1) {
     finalState = finalState.setQuery('');
