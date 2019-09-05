@@ -3,7 +3,7 @@ import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
 import RoutingManager from './RoutingManager';
-import simpleMapping from './stateMappings/simple';
+import simpleStateMapping from './stateMappings/simple';
 import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
@@ -25,11 +25,6 @@ import {
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
 });
-
-const ROUTING_DEFAULT_OPTIONS = {
-  stateMapping: simpleMapping(),
-  router: historyRouter(),
-};
 
 function defaultCreateURL() {
   return '#';
@@ -218,11 +213,16 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       this._searchFunction = searchFunction;
     }
 
+    const defaultRoutingOptions = {
+      stateMapping: simpleStateMapping(),
+      router: historyRouter(),
+    };
+
     if (routing === true) {
-      this.routing = ROUTING_DEFAULT_OPTIONS;
+      this.routing = defaultRoutingOptions;
     } else if (isPlainObject(routing)) {
       this.routing = {
-        ...ROUTING_DEFAULT_OPTIONS,
+        ...defaultRoutingOptions,
         ...routing,
       };
     }
