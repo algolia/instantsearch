@@ -241,14 +241,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
     refine(items[2].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '<=': [],
       '>=': [20],
     });
     refine(items[3].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '<=': [],
       '=': [42],
+      '>=': [],
     });
     refine(items[4].value);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '<=': [],
+      '=': [],
+      '>=': [],
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -262,26 +269,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       refine: renderToggleRefinement,
       items: renderFacetValues,
     } = secondRenderingOptions;
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '<=': [],
+      '=': [],
+      '>=': [],
+    });
     renderToggleRefinement(renderFacetValues[0].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '<=': [10],
+      '=': [],
+      '>=': [],
     });
     renderToggleRefinement(renderFacetValues[1].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '>=': [10],
+      '=': [],
       '<=': [20],
     });
     renderToggleRefinement(renderFacetValues[2].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '<=': [],
+      '=': [],
       '>=': [20],
     });
     renderToggleRefinement(renderFacetValues[3].value);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '<=': [],
       '=': [42],
+      '>=': [],
     });
     renderToggleRefinement(renderFacetValues[4].value);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '<=': [],
+      '=': [],
+      '>=': [],
+    });
   });
 
   it('provides the correct facet values', () => {

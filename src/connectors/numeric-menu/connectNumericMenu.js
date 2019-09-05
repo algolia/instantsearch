@@ -271,11 +271,11 @@ function refine(state, attribute, items, facetValue) {
   const currentRefinements = resolvedState.getNumericRefinements(attribute);
 
   if (refinedOption.start === undefined && refinedOption.end === undefined) {
-    return resolvedState.clearRefinements(attribute);
+    return resolvedState.removeNumericRefinement(attribute);
   }
 
   if (!isRefined(resolvedState, attribute, refinedOption)) {
-    resolvedState = resolvedState.clearRefinements(attribute);
+    resolvedState = resolvedState.removeNumericRefinement(attribute);
   }
 
   if (refinedOption.start !== undefined && refinedOption.end !== undefined) {
