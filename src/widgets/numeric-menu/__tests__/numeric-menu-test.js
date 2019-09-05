@@ -62,14 +62,16 @@ describe('numericMenu()', () => {
     };
     state = {
       getNumericRefinements: jest.fn().mockReturnValue([]),
-      clearRefinements: jest.fn().mockReturnThis(),
+      removeNumericRefinement: jest.fn().mockReturnThis(),
       addNumericRefinement: jest.fn().mockReturnThis(),
     };
     results = {
       hits: [],
     };
 
-    helper.state.clearRefinements = jest.fn().mockReturnValue(helper.state);
+    helper.state.removeNumericRefinement = jest
+      .fn()
+      .mockReturnValue(helper.state);
     helper.state.addNumericRefinement = jest.fn().mockReturnValue(helper.state);
     createURL = () => '#';
     widget.init({ helper, instantSearchInstance: {} });
@@ -103,7 +105,7 @@ describe('numericMenu()', () => {
 
   it("doesn't call the refinement functions if not refined", () => {
     widget.render({ state, results, createURL });
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
       0,
       'clearRefinements called one'
     );
@@ -116,7 +118,7 @@ describe('numericMenu()', () => {
 
   it('calls the refinement functions if refined with "4"', () => {
     widget._refine(encodeValue(4, 4));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
       1,
       'clearRefinements called once'
     );
@@ -135,7 +137,7 @@ describe('numericMenu()', () => {
 
   it('calls the refinement functions if refined with "between 5 and 10"', () => {
     widget._refine(encodeValue(5, 10));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
       1,
       'clearRefinements called once'
     );
@@ -160,7 +162,7 @@ describe('numericMenu()', () => {
 
   it('calls two times the refinement functions if refined with "less than 4"', () => {
     widget._refine(encodeValue(undefined, 4));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
       1,
       'clearRefinements called once'
     );
@@ -179,21 +181,15 @@ describe('numericMenu()', () => {
 
   it('calls two times the refinement functions if refined with "more than 10"', () => {
     widget._refine(encodeValue(10));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'addNumericRefinement called once'
-    );
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(1);
     expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
       1,
       'price',
       '>=',
       10
     );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
+    expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
   it('does not alter the initial items when rendering', () => {
