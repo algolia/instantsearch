@@ -545,11 +545,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const createHelper = () => {
       const helper = jsHelper({});
       helper.search = jest.fn();
-      const removeNumericRefinement = helper.removeNumericRefinement;
-      helper.removeNumericRefinement = jest.fn((...args) =>
-        removeNumericRefinement.apply(helper, args)
-      );
-
+      jest.spyOn(helper, 'removeNumericRefinement');
       return helper;
     };
 
