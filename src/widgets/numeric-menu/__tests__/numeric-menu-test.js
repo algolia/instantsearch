@@ -105,27 +105,15 @@ describe('numericMenu()', () => {
 
   it("doesn't call the refinement functions if not refined", () => {
     widget.render({ state, results, createURL });
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
-      0,
-      'clearRefinements called one'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      0,
-      'addNumericRefinement never called'
-    );
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(0);
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(0);
     expect(helper.search).toHaveBeenCalledTimes(0, 'search never called');
   });
 
   it('calls the refinement functions if refined with "4"', () => {
     widget._refine(encodeValue(4, 4));
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'addNumericRefinement called once'
-    );
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(1);
     expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
       1,
       'price',
@@ -137,14 +125,8 @@ describe('numericMenu()', () => {
 
   it('calls the refinement functions if refined with "between 5 and 10"', () => {
     widget._refine(encodeValue(5, 10));
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      2,
-      'addNumericRefinement called twice'
-    );
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(2);
     expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
       1,
       'price',
@@ -162,14 +144,8 @@ describe('numericMenu()', () => {
 
   it('calls two times the refinement functions if refined with "less than 4"', () => {
     widget._refine(encodeValue(undefined, 4));
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'addNumericRefinement called once'
-    );
+    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(1);
     expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
       1,
       'price',
