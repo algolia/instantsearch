@@ -26,6 +26,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 `);
     });
 
+    it('throws with `max` lower than `min`', () => {
+      expect(() => {
+        connectRange(() => {})({ attribute: 'price', min: 100, max: 50 });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`max\` option can't be lower than \`min\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
+`);
+    });
+
     it('is a widget', () => {
       const render = jest.fn();
       const unmount = jest.fn();
@@ -39,7 +49,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
+
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -58,9 +68,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       attribute,
     });
 
-    const config = widget.getConfiguration(new SearchParameters());
+    const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+      uiState: {},
+    });
     expect(config).toEqual(
       new SearchParameters({
+        numericRefinements: { price: {} },
         disjunctiveFacets: [attribute],
       })
     );
@@ -143,7 +156,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const attribute = 'price';
 
     expect(
-      makeWidget({ attribute, min: 0 }).getConfiguration(new SearchParameters())
+      makeWidget({ attribute, min: 0 }).getWidgetSearchParameters(
+        new SearchParameters(),
+        { uiState: {} }
+      )
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: [attribute],
@@ -154,8 +170,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     );
 
     expect(
-      makeWidget({ attribute, max: 100 }).getConfiguration(
-        new SearchParameters()
+      makeWidget({ attribute, max: 100 }).getWidgetSearchParameters(
+        new SearchParameters(),
+        { uiState: {} }
       )
     ).toEqual(
       new SearchParameters({
@@ -167,8 +184,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     );
 
     expect(
-      makeWidget({ attribute, min: 0, max: 100 }).getConfiguration(
-        new SearchParameters()
+      makeWidget({ attribute, min: 0, max: 100 }).getWidgetSearchParameters(
+        new SearchParameters(),
+        { uiState: {} }
       )
     ).toEqual(
       new SearchParameters({
@@ -195,7 +213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters())
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -267,7 +285,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters())
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -303,10 +321,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
     const attribute = 'price';
     const widget = makeWidget({ attribute, min: 0, max: 500 });
-    const configuration = widget.getConfiguration(
+    const configuration = widget.getWidgetSearchParameters(
       new SearchParameters({
         indexName: 'movie',
-      })
+      }),
+      { uiState: {} }
     );
 
     const helper = jsHelper({}, '', configuration);
@@ -348,7 +367,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters())
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -381,128 +400,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
       expect(helper.search).toHaveBeenCalledTimes(3);
     }
-  });
-
-  describe('getConfiguration', () => {
-    const attribute = 'price';
-    const rendering = () => {};
-
-    it('expect to return default configuration', () => {
-      const widget = connectRange(rendering)({
-        attribute,
-      });
-
-      const actual = widget.getConfiguration(new SearchParameters());
-
-      expect(actual).toEqual(
-        new SearchParameters({ disjunctiveFacets: ['price'] })
-      );
-    });
-
-    it('expect to return default configuration if previous one has already numeric refinements', () => {
-      const currentConfiguration = new SearchParameters({
-        numericRefinements: {
-          price: {
-            '<=': [500],
-          },
-        },
-      });
-
-      const widget = connectRange(rendering)({
-        attribute,
-        max: 500,
-      });
-
-      const actual = widget.getConfiguration(currentConfiguration);
-
-      expect(actual).toEqual(
-        new SearchParameters({
-          disjunctiveFacets: ['price'],
-          numericRefinements: {
-            price: {
-              '<=': [500],
-            },
-          },
-        })
-      );
-    });
-
-    it('expect to return default configuration if the given min bound are greater than max bound', () => {
-      const widget = connectRange(rendering)({
-        attribute,
-        min: 1000,
-        max: 500,
-      });
-
-      const expectation = new SearchParameters({
-        disjunctiveFacets: ['price'],
-      });
-      const actual = widget.getConfiguration(new SearchParameters());
-
-      expect(actual).toEqual(expectation);
-    });
-
-    it('expect to return configuration with min numeric refinement', () => {
-      const widget = connectRange(rendering)({
-        attribute,
-        min: 10,
-      });
-
-      const expectation = new SearchParameters({
-        disjunctiveFacets: ['price'],
-        numericRefinements: {
-          price: {
-            '>=': [10],
-          },
-        },
-      });
-
-      const actual = widget.getConfiguration(new SearchParameters());
-
-      expect(actual).toEqual(expectation);
-    });
-
-    it('expect to return configuration with max numeric refinement', () => {
-      const widget = connectRange(rendering)({
-        attribute,
-        max: 10,
-      });
-
-      const expectation = new SearchParameters({
-        disjunctiveFacets: ['price'],
-        numericRefinements: {
-          price: {
-            '<=': [10],
-          },
-        },
-      });
-
-      const actual = widget.getConfiguration(new SearchParameters());
-
-      expect(actual).toEqual(expectation);
-    });
-
-    it('expect to return configuration with both numeric refinements', () => {
-      const widget = connectRange(rendering)({
-        attribute,
-        min: 10,
-        max: 500,
-      });
-
-      const expectation = new SearchParameters({
-        disjunctiveFacets: ['price'],
-        numericRefinements: {
-          price: {
-            '>=': [10],
-            '<=': [500],
-          },
-        },
-      });
-
-      const actual = widget.getConfiguration(new SearchParameters());
-
-      expect(actual).toEqual(expectation);
-    });
   });
 
   describe('_getCurrentRange', () => {
@@ -969,7 +866,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(
         {},
         '',
-        widget.getConfiguration(new SearchParameters())
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
       );
       expect(() =>
         widget.dispose({ helper, state: helper.state })
@@ -985,7 +884,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(
         {},
         indexName,
-        widget.getConfiguration(new SearchParameters())
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
       );
 
       const newState = widget.dispose({ helper, state: helper.state });
@@ -1002,7 +903,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = jsHelper(
         {},
         indexName,
-        widget.getConfiguration(new SearchParameters())
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
       );
       helper.search = jest.fn();
 
@@ -1402,5 +1305,124 @@ describe('getWidgetSearchParameters', () => {
         '>=': [100],
       },
     });
+  });
+
+  const attribute = 'price';
+  const rendering = () => {};
+
+  it('expect to return default configuration', () => {
+    const widget = connectRange(rendering)({
+      attribute,
+    });
+
+    const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
+      uiState: {},
+    });
+
+    expect(actual).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: ['price'],
+        numericRefinements: {
+          price: {},
+        },
+      })
+    );
+  });
+
+  it('expect to return default configuration if previous one has already numeric refinements', () => {
+    const widget = connectRange(rendering)({
+      attribute,
+      max: 500,
+    });
+
+    const actual = widget.getWidgetSearchParameters(
+      new SearchParameters({
+        numericRefinements: {
+          price: {
+            '<=': [500],
+          },
+        },
+      }),
+      { uiState: {} }
+    );
+
+    expect(actual).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: ['price'],
+        numericRefinements: {
+          price: {
+            '<=': [500],
+          },
+        },
+      })
+    );
+  });
+
+  it('expect to return configuration with min numeric refinement', () => {
+    const widget = connectRange(rendering)({
+      attribute,
+      min: 10,
+    });
+
+    const expectation = new SearchParameters({
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '>=': [10],
+        },
+      },
+    });
+
+    const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
+      uiState: {},
+    });
+
+    expect(actual).toEqual(expectation);
+  });
+
+  it('expect to return configuration with max numeric refinement', () => {
+    const widget = connectRange(rendering)({
+      attribute,
+      max: 10,
+    });
+
+    const expectation = new SearchParameters({
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [10],
+        },
+      },
+    });
+
+    const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
+      uiState: {},
+    });
+
+    expect(actual).toEqual(expectation);
+  });
+
+  it('expect to return configuration with both numeric refinements', () => {
+    const widget = connectRange(rendering)({
+      attribute,
+      min: 10,
+      max: 500,
+    });
+
+    const expectation = new SearchParameters({
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '>=': [10],
+          '<=': [500],
+        },
+      },
+    });
+
+    const actual = widget.getWidgetSearchParameters(new SearchParameters(), {
+      uiState: {},
+    });
+
+    expect(actual).toEqual(expectation);
   });
 });

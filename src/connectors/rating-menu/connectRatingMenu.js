@@ -107,15 +107,6 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.ratingMenu',
 
-      getConfiguration(state) {
-        return state.setQueryParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            [attribute]: state.disjunctiveFacetsRefinements[attribute] || [],
-          },
-        });
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
         this._toggleRefinement = this._toggleRefinement.bind(this, helper);
         this._createURL = state => facetValue =>

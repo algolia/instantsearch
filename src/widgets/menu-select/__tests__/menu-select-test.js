@@ -84,17 +84,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
           container,
         });
 
-        helper.setState(widget.getConfiguration(new SearchParameters({})));
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters({}), {
+            uiState: {
+              menu: {
+                amazingBrand: 'algolia',
+              },
+            },
+          })
+        );
+
+        expect(helper.state).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
+            hierarchicalFacetsRefinements: { test: [] },
+            maxValuesPerFacet: 10,
+          })
+        );
 
         expect(unmountComponentAtNode).toHaveBeenCalledTimes(0);
 
-        widget.dispose({
+        const newState = widget.dispose({
           state: helper.state,
           helper,
         });
 
         expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
         expect(unmountComponentAtNode).toHaveBeenCalledWith(container);
+
+        expect(newState).toEqual(new SearchParameters());
       });
     });
   });

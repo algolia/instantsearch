@@ -71,7 +71,9 @@ describe('hitsPerPage()', () => {
     });
 
     expect(
-      widgetWithDefaults.getConfiguration(new SearchParameters({}))
+      widgetWithDefaults.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     ).toEqual(
       new SearchParameters({
         hitsPerPage: 20,

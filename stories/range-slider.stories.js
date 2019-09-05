@@ -22,27 +22,6 @@ storiesOf('RangeSlider', module)
     })
   )
   .add(
-    'disabled',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.rangeSlider({
-          container,
-          attribute: 'price',
-          templates: {
-            header: 'Price',
-          },
-          min: 100,
-          max: 50,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
-        })
-      );
-    })
-  )
-  .add(
     'with step',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(

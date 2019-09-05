@@ -34,9 +34,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
     const makeWidget = connectPoweredBy(rendering);
     const widget = makeWidget();
 
-    // does not have a getConfiguration method
-    expect(widget.getConfiguration).toBe(undefined);
-
     widget.init({});
 
     expect(rendering).toHaveBeenCalledTimes(1);

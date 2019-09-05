@@ -39,10 +39,6 @@ describe('poweredBy', () => {
     widget.init({});
   });
 
-  it('configures nothing', () => {
-    expect(widget.getConfiguration).toEqual(undefined);
-  });
-
   it('renders only once at init', () => {
     widget.render({});
     widget.render({});

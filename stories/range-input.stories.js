@@ -14,19 +14,6 @@ storiesOf('RangeInput', module)
     })
   )
   .add(
-    'disabled',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
-        instantsearch.widgets.rangeInput({
-          container,
-          attribute: 'price',
-          min: 500,
-          max: 0,
-        })
-      );
-    })
-  )
-  .add(
     'with floating number',
     withHits(({ search, container, instantsearch }) => {
       search.addWidget(

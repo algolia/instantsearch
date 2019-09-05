@@ -46,7 +46,9 @@ describe('ratingMenu()', () => {
     helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters({}))
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     jest.spyOn(helper, 'clearRefinements');
     jest.spyOn(helper, 'addDisjunctiveFacetRefinement');
@@ -69,7 +71,9 @@ describe('ratingMenu()', () => {
   });
 
   it('configures the underlying disjunctive facet', () => {
-    expect(widget.getConfiguration(new SearchParameters())).toEqual(
+    expect(
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+    ).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['anAttrName'],
         disjunctiveFacetsRefinements: {
@@ -156,7 +160,9 @@ describe('ratingMenu()', () => {
     const _helper = jsHelper(
       {},
       '',
-      _widget.getConfiguration(new SearchParameters({}))
+      _widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     );
     _helper.search = jest.fn();
 
