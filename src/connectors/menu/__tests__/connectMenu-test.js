@@ -14,32 +14,6 @@ describe('connectMenu', () => {
     makeWidget = connectMenu(rendering);
   });
 
-  // @TODO: once we've migrate away from `getConfiguration` update
-  // const getInitializedWidget = () => {
-  //   const rendering2 = jest.fn();
-  //   const makeWidget2 = connectMenu(rendering2);
-  //   const widget = makeWidget2({
-  //     attribute: 'category',
-  //   });
-
-  //   const helper = jsHelper(
-  //     {},
-  //     '',
-  //     widget.getConfiguration(new SearchParameters())
-  //   );
-  //   helper.search = jest.fn();
-
-  //   widget.init({
-  //     helper,
-  //     state: helper.state,
-  //     createURL: () => '#',
-  //   });
-
-  //   const { refine } = rendering2.mock.calls[0][0];
-
-  //   return [widget, helper, refine];
-  // };
-
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
@@ -95,7 +69,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
-        getConfiguration: expect.any(Function),
+
         getWidgetState: expect.any(Function),
         getWidgetSearchParameters: expect.any(Function),
       })
@@ -108,7 +82,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         attribute: 'myFacet',
       });
 
-      expect(widget.getConfiguration(new SearchParameters())).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -130,7 +108,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         limit: 20,
       });
 
-      expect(widget.getConfiguration(new SearchParameters())).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -155,7 +137,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       limit: 9,
     });
 
-    const config = widget.getConfiguration(new SearchParameters());
+    const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+      uiState: {},
+    });
     expect(config).toEqual(
       new SearchParameters({
         hierarchicalFacets: [
@@ -226,7 +210,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters())
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -268,7 +252,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters())
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -387,7 +371,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters())
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     helper.search = jest.fn();
 
@@ -446,7 +430,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     const helper = jsHelper(
       {},
       '',
-      widget.getConfiguration(new SearchParameters())
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     );
     expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
@@ -459,7 +443,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         showMore: true,
       });
 
-      expect(widget.getConfiguration(new SearchParameters())).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -483,7 +471,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         showMoreLimit: 30,
       });
 
-      expect(widget.getConfiguration(new SearchParameters())).toEqual(
+      expect(
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      ).toEqual(
         new SearchParameters({
           hierarchicalFacets: [
             {
@@ -509,7 +501,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration(new SearchParameters());
+      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+        uiState: {},
+      });
       const helper = jsHelper({}, '', config);
       helper.search = jest.fn();
 
@@ -537,7 +531,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration(new SearchParameters());
+      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+        uiState: {},
+      });
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
@@ -601,7 +597,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       // When
-      const config = widget.getConfiguration(new SearchParameters());
+      const config = widget.getWidgetSearchParameters(new SearchParameters(), {
+        uiState: {},
+      });
       const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
@@ -645,7 +643,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
   describe('getWidgetState', () => {
     test('returns the `uiState` empty', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '');
       const widget = makeWidget({
         attribute: 'brand',
@@ -662,7 +659,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `uiState` with a refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -694,7 +690,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `uiState` without namespace overridden', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -733,7 +728,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
   describe('getWidgetSearchParameters', () => {
     test('returns the `SearchParameters` with the default value', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '');
       const widget = makeWidget({
         attribute: 'brand',
@@ -756,7 +750,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `SearchParameters` with the default value without the previous refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -790,7 +783,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `SearchParameters` with the value from `uiState`', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '');
       const widget = makeWidget({
         attribute: 'brand',
@@ -817,7 +809,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
-      // Uses the function getInitializedWidget once we've removed `getConfiguration`
       const helper = jsHelper({}, '', {
         hierarchicalFacets: [
           {
@@ -856,7 +847,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
 
     describe('with `maxValuesPerFacet`', () => {
       test('returns the `SearchParameters` with default `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -870,7 +860,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with provided `limit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -885,7 +874,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with default `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -900,7 +888,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '');
         const widget = makeWidget({
           attribute: 'brand',
@@ -916,7 +903,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '', {
           maxValuesPerFacet: 100,
         });
@@ -933,7 +919,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       });
 
       test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
-        // Uses the function getInitializedWidget once we've removed `getConfiguration`
         const helper = jsHelper({}, '', {
           maxValuesPerFacet: 100,
         });
@@ -964,7 +949,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         {},
         indexName,
-        widget.getConfiguration(new SearchParameters())
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
       );
       helper.search = jest.fn();
 
@@ -1054,7 +1041,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       const helper = jsHelper(
         {},
         indexName,
-        widget.getConfiguration(new SearchParameters())
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
       );
       helper.search = jest.fn();
 

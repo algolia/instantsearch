@@ -6,7 +6,6 @@ import { createWidget } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
 import { Router, Widget, UiState, StateMapping, RouteState } from '../../types';
 import historyRouter from '../routers/history';
-import RoutingManager from '../RoutingManager';
 import instantsearch from '../main';
 
 const createFakeRouter = (args: Partial<Router> = {}): Router => ({
@@ -107,200 +106,6 @@ const createFakeHitsPerPage = (): Widget =>
   });
 
 describe('RoutingManager', () => {
-  const defaultRouter: Router = {
-    onUpdate: (..._args) => {},
-    read: () => ({}),
-    write: () => {},
-    createURL: () => '#',
-    dispose: () => {},
-  };
-
-  describe('getAllUiStates', () => {
-    test('reads the state of widgets with a getWidgetState implementation', () => {
-      const searchClient = createSearchClient();
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchClient,
-      });
-
-      const widgetState = {
-        query: 'query',
-      };
-
-      const widget = {
-        render: () => {},
-        getWidgetState: jest.fn(() => widgetState),
-      };
-
-      search.addWidget(widget);
-
-      const actualInitialState = {
-        indexName: {
-          query: 'query',
-        },
-      };
-
-      search.start();
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => actualInitialState,
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const uiStates = router.getAllUiStates({
-        searchParameters: search.mainIndex.getHelper()!.state,
-      });
-
-      expect(uiStates).toEqual({
-        indexName: widgetState,
-      });
-
-      expect(widget.getWidgetState).toHaveBeenCalledTimes(1);
-      expect(widget.getWidgetState).toHaveBeenCalledWith(
-        {},
-        {
-          helper: search.mainIndex.getHelper(),
-          searchParameters: search.mainIndex.getHelper()!.state,
-        }
-      );
-    });
-
-    test('Does not read UI state from widgets without an implementation of getWidgetState', () => {
-      const searchClient = createSearchClient();
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchClient,
-      });
-
-      search.addWidget({
-        render: () => {},
-      });
-
-      search.start();
-
-      const actualInitialState = {
-        indexName: {
-          query: 'query',
-        },
-      };
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => actualInitialState,
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const uiStates = router.getAllUiStates({
-        searchParameters: search.mainIndex.getHelper()!.state,
-      });
-
-      expect(uiStates).toEqual({
-        indexName: {},
-      });
-    });
-  });
-
-  describe('getAllSearchParameters', () => {
-    test('should get searchParameters from widget that implements getWidgetSearchParameters', () => {
-      const searchClient = createSearchClient();
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchClient,
-      });
-
-      const widget = {
-        render: () => {},
-        getWidgetSearchParameters: jest.fn(sp => sp.setQuery('test')),
-      };
-
-      search.addWidget(widget);
-
-      const actualInitialState = {
-        indexName: {
-          query: 'query',
-        },
-      };
-
-      search.start();
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => actualInitialState,
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const searchParameters = router.getAllSearchParameters({
-        currentSearchParameters: search.mainIndex.getHelper()!.state,
-        uiState: {},
-      });
-
-      expect(searchParameters).toEqual(
-        search.mainIndex.getHelper()!.state.setQuery('test')
-      );
-
-      expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(2);
-      expect(widget.getWidgetSearchParameters).toHaveBeenCalledWith(
-        search.mainIndex.getHelper()!.state,
-        {
-          uiState: {},
-        }
-      );
-    });
-
-    test('should not change the searchParameters if no widget has a getWidgetSearchParameters', () => {
-      const searchClient = createSearchClient();
-      const search = instantsearch({
-        indexName: '',
-        searchClient,
-      });
-
-      const widget = {
-        render: () => {},
-      };
-      search.addWidget(widget);
-
-      search.start();
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => ({}),
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const searchParameters = router.getAllSearchParameters({
-        currentSearchParameters: search.mainIndex.getHelper()!.state,
-        uiState: {},
-      });
-
-      expect(searchParameters).toEqual(search.mainIndex.getHelper()!.state);
-    });
-  });
-
   describe('within instantsearch', () => {
     test('should write in the router on searchParameters change', done => {
       const searchClient = createSearchClient();
@@ -332,7 +137,7 @@ describe('RoutingManager', () => {
       search.once('render', () => {
         // initialization is done at this point
         expect(widget.render).toHaveBeenCalledTimes(1);
-        expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
+        expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(2);
 
         expect(router.write).toHaveBeenCalledTimes(0);
 
@@ -500,7 +305,7 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
@@ -551,7 +356,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
@@ -625,7 +430,7 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();

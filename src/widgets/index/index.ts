@@ -44,6 +44,7 @@ type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
 };
 
 export type Index = Widget & {
+  getIndexName(): string;
   getIndexId(): string;
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
@@ -147,8 +148,20 @@ const index = (props: IndexProps): Index => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
 
+  const createURL = (nextState: SearchParameters) =>
+    localInstantSearchInstance!._createURL!({
+      [indexId]: getLocalWidgetsState(localWidgets, {
+        searchParameters: nextState,
+        helper: helper!,
+      }),
+    });
+
   return {
     $$type: 'ais.index',
+
+    getIndexName() {
+      return indexName;
+    },
 
     getIndexId() {
       return indexId;
@@ -191,18 +204,7 @@ const index = (props: IndexProps): Index => {
         );
       }
 
-      // The routing manager widget is always added manually at the last position.
-      // By removing it from the last position and adding it back after, we ensure
-      // it keeps this position.
-      // fixes #3148
-      const lastWidget = localWidgets.pop();
-
       localWidgets = localWidgets.concat(widgets);
-
-      if (lastWidget) {
-        // Second part of the fix for #3148
-        localWidgets = localWidgets.concat(lastWidget);
-      }
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         helper!.setState(
@@ -221,7 +223,7 @@ const index = (props: IndexProps): Index => {
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
-              createURL: localInstantSearchInstance._createAbsoluteURL!,
+              createURL,
             });
           }
         });
@@ -359,7 +361,7 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL,
           });
         }
       });
@@ -375,6 +377,8 @@ const index = (props: IndexProps): Index => {
           searchParameters: state,
           helper: helper!,
         });
+
+        instantSearchInstance.onStateChange();
       });
     },
 
@@ -395,7 +399,7 @@ const index = (props: IndexProps): Index => {
             scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },

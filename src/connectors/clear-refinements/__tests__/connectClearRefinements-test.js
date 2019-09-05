@@ -1,4 +1,8 @@
 import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 import connectClearRefinements from '../connectClearRefinements';
 
 describe('connectClearRefinements', () => {
@@ -48,57 +52,68 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
   describe('Lifecycle', () => {
     it('renders during init and render', () => {
-      const helper = jsHelper({});
+      const helper = jsHelper({}, 'indexName');
       helper.search = () => {};
-      // test that the dummyRendering is called with the isFirstRendering
-      // flag set accordingly
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
         foo: 'bar', // dummy param to test `widgetParams`
       });
 
-      expect(widget.getConfiguration).toBe(undefined);
       // test if widget is not rendered yet at this point
       expect(rendering).toHaveBeenCalledTimes(0);
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
       // test that rendering has been called during init with isFirstRendering = true
       expect(rendering).toHaveBeenCalledTimes(1);
-      // test if isFirstRendering is true during init
-      expect(rendering.mock.calls[0][1]).toBe(true);
 
-      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const [
+        firstRenderingOptions,
+        isFirstRenderAtInit,
+      ] = rendering.mock.calls[0];
+
+      expect(isFirstRenderAtInit).toBe(true);
+      expect(firstRenderingOptions.createURL).toBeInstanceOf(Function);
+      expect(firstRenderingOptions.refine).toBeInstanceOf(Function);
       expect(firstRenderingOptions.hasRefinements).toBe(false);
       expect(firstRenderingOptions.widgetParams).toEqual({
         foo: 'bar', // dummy param to test `widgetParams`
       });
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       // test that rendering has been called during init with isFirstRendering = false
       expect(rendering).toHaveBeenCalledTimes(2);
-      expect(rendering.mock.calls[1][1]).toBe(false);
 
-      const secondRenderingOptions = rendering.mock.calls[1][0];
+      const [
+        secondRenderingOptions,
+        isFirstRenderAtRender,
+      ] = rendering.mock.calls[1];
+
+      expect(isFirstRenderAtRender).toBe(false);
+      expect(secondRenderingOptions.createURL).toBeInstanceOf(Function);
+      expect(secondRenderingOptions.refine).toBeInstanceOf(Function);
       expect(secondRenderingOptions.hasRefinements).toBe(false);
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = jsHelper({});
+      const helper = jsHelper({}, 'indexName');
       const rendering = () => {};
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget();
+
       expect(() =>
         widget.dispose({ helper, state: helper.state })
       ).not.toThrow();
@@ -107,7 +122,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
   describe('Instance options', () => {
     it('provides a function to clear the refinements', () => {
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper({}, 'indexName', {
         facets: ['myFacet'],
       });
       helper.search = () => {};
@@ -118,39 +133,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
-      expect(helper.hasRefinements('myFacet')).toBe(true);
-      expect(helper.state.query).toBe('not empty');
-      const initClearMethod = rendering.mock.calls[0][0].refine;
-      initClearMethod();
-
-      expect(helper.hasRefinements('myFacet')).toBe(false);
-      expect(helper.state.query).toBe('not empty');
+      expect(rendering.mock.calls[0][0].refine).toBeInstanceOf(Function);
 
       helper.toggleRefinement('myFacet', 'someOtherValue');
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('myFacet')).toBe(true);
       expect(helper.state.query).toBe('not empty');
-      const renderClearMethod = rendering.mock.calls[1][0].refine;
-      renderClearMethod();
+
+      const refine = rendering.mock.calls[1][0].refine;
+      refine();
+
       expect(helper.hasRefinements('myFacet')).toBe(false);
       expect(helper.state.query).toBe('not empty');
     });
 
     it('provides a function to clear the refinements and the query', () => {
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper({}, 'indexName', {
         facets: ['myFacet'],
       });
       helper.search = () => {};
@@ -161,36 +174,74 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({ excludedAttributes: [] });
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
-      expect(helper.hasRefinements('myFacet')).toBe(true);
-      expect(helper.state.query).toBe('a query');
-      const initClearMethod = rendering.mock.calls[0][0].refine;
-      initClearMethod();
-
-      expect(helper.hasRefinements('myFacet')).toBe(false);
-      expect(helper.state.query).toBe('');
+      expect(rendering.mock.calls[0][0].refine).toBeInstanceOf(Function);
 
       helper.toggleRefinement('myFacet', 'someOtherValue');
       helper.setQuery('another query');
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('myFacet')).toBe(true);
       expect(helper.state.query).toBe('another query');
-      const renderClearMethod = rendering.mock.calls[1][0].refine;
-      renderClearMethod();
+
+      const refine = rendering.mock.calls[1][0].refine;
+      refine();
+
       expect(helper.hasRefinements('myFacet')).toBe(false);
       expect(helper.state.query).toBe('');
+    });
+
+    it('provides the same `refine` and `createURL` function references during the lifecycle', () => {
+      const helper = jsHelper({}, 'indexName');
+      helper.search = () => {};
+
+      const rendering = jest.fn();
+      const makeWidget = connectClearRefinements(rendering);
+      const widget = makeWidget({});
+
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const [firstRender, secondRender, thirdRender] = rendering.mock.calls;
+
+      expect(secondRender[0].refine).toBe(firstRender[0].refine);
+      expect(thirdRender[0].refine).toBe(secondRender[0].refine);
+
+      expect(secondRender[0].createURL).toBe(firstRender[0].createURL);
+      expect(thirdRender[0].createURL).toBe(secondRender[0].createURL);
     });
 
     it('gets refinements from results', () => {
@@ -204,20 +255,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget();
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
-      expect(rendering.mock.calls[0][0].hasRefinements).toBe(true);
+      expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
     });
@@ -237,20 +290,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         excludedAttributes: [],
       });
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
-      expect(rendering.mock.calls[0][0].hasRefinements).toBe(true);
+      expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
     });
@@ -267,26 +322,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         excludedAttributes: [],
       });
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
     });
 
     it('without includedAttributes or excludedAttributes and with a query has no refinements', () => {
-      const helper = jsHelper({});
+      const helper = jsHelper({}, 'indexName');
       helper.setQuery('not empty');
       helper.search = () => {};
 
@@ -294,26 +351,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
     });
 
     it('includes only includedAttributes', () => {
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper({}, 'indexName', {
         facets: ['facet1', 'facet2'],
       });
       helper.search = () => {};
@@ -327,30 +386,42 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         .toggleRefinement('facet2', 'value')
         .setQuery('not empty');
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('facet1')).toBe(true);
       expect(helper.hasRefinements('facet2')).toBe(true);
 
-      const refine = rendering.mock.calls[0][0].refine;
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const refine = rendering.mock.calls[1][0].refine;
       refine();
-      widget.render({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('facet1')).toBe(false);
       expect(helper.hasRefinements('facet2')).toBe(true);
-      expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
+      expect(rendering.mock.calls[2][0].hasRefinements).toBe(false);
     });
 
     it('includes only includedAttributes (with query)', () => {
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper({}, 'indexName', {
         facets: ['facet1'],
       });
       helper.search = () => {};
@@ -361,30 +432,42 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       helper.toggleRefinement('facet1', 'value').setQuery('not empty');
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('facet1')).toBe(true);
       expect(helper.state.query).toBe('not empty');
 
-      const refine = rendering.mock.calls[0][0].refine;
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const refine = rendering.mock.calls[1][0].refine;
       refine();
-      widget.render({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('facet1')).toBe(false);
       expect(helper.state.query).toBe('');
-      expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
+      expect(rendering.mock.calls[2][0].hasRefinements).toBe(false);
     });
 
     it('excludes excludedAttributes', () => {
-      const helper = jsHelper({}, '', {
+      const helper = jsHelper({}, 'indexName', {
         facets: ['facet1', 'facet2'],
       });
       helper.search = () => {};
@@ -402,48 +485,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       {
         helper.setQuery('not empty');
 
-        widget.init({
-          helper,
-          state: helper.state,
-          createURL: () => '#',
-        });
+        widget.init(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
 
         expect(helper.hasRefinements('facet1')).toBe(true);
         expect(helper.hasRefinements('facet2')).toBe(true);
 
-        const refine = rendering.mock.calls[0][0].refine;
-        refine();
-
-        expect(helper.hasRefinements('facet1')).toBe(false);
-        expect(helper.hasRefinements('facet2')).toBe(true);
-
-        expect(rendering.mock.calls[0][0].hasRefinements).toBe(true);
-      }
-
-      {
-        // facet has not been cleared and it is still refined with value
-        helper.setQuery('not empty');
-
-        widget.render({
-          helper,
-          state: helper.state,
-          results: new SearchResults(helper.state, [{}]),
-          createURL: () => '#',
-        });
-
-        expect(helper.hasRefinements('facet1')).toBe(false);
-        expect(helper.hasRefinements('facet2')).toBe(true);
+        widget.render(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [{}]),
+            helper,
+            state: helper.state,
+          })
+        );
 
         const refine = rendering.mock.calls[1][0].refine;
         refine();
 
         expect(helper.hasRefinements('facet1')).toBe(false);
         expect(helper.hasRefinements('facet2')).toBe(true);
+
+        expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
+      }
+
+      {
+        // facet has not been cleared and it is still refined with value
+        helper.setQuery('not empty');
+
+        widget.render(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [{}]),
+            helper,
+            state: helper.state,
+          })
+        );
+
+        expect(helper.hasRefinements('facet1')).toBe(false);
+        expect(helper.hasRefinements('facet2')).toBe(true);
+
+        const refine = rendering.mock.calls[2][0].refine;
+        refine();
+
+        widget.render(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [{}]),
+            helper,
+            state: helper.state,
+          })
+        );
+
+        expect(helper.hasRefinements('facet1')).toBe(false);
+        expect(helper.hasRefinements('facet2')).toBe(true);
       }
     });
 
-    describe('transformItems is called', () => {
-      const helper = jsHelper({}, '', {
+    it('transformItems is called', () => {
+      const helper = jsHelper({}, 'indexName', {
         facets: ['facet1', 'facet2', 'facet3'],
       });
       helper.search = () => {};
@@ -464,35 +565,47 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         .toggleRefinement('facet3', 'value')
         .setQuery('not empty');
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('facet1')).toBe(true);
       expect(helper.hasRefinements('facet2')).toBe(true);
       expect(helper.hasRefinements('facet3')).toBe(true);
       expect(helper.state.query).toBe('not empty');
 
-      const refine = rendering.mock.calls[0][0].refine;
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const refine = rendering.mock.calls[1][0].refine;
       refine();
-      widget.render({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
 
       expect(helper.hasRefinements('facet1')).toBe(true);
       expect(helper.hasRefinements('facet2')).toBe(true);
       expect(helper.hasRefinements('facet3')).toBe(false);
       expect(helper.state.query).toBe('');
-      expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
+      expect(rendering.mock.calls[2][0].hasRefinements).toBe(false);
     });
 
     describe('createURL', () => {
       it('consistent with the list of excludedAttributes', () => {
-        const helper = jsHelper({}, '', {
+        const helper = jsHelper({}, 'indexName', {
           facets: ['facet', 'otherFacet'],
         });
         helper.search = () => {};
@@ -509,13 +622,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         {
           helper.setQuery('not empty');
 
-          widget.init({
-            helper,
-            state: helper.state,
-            createURL: opts => opts,
-          });
+          widget.init(
+            createInitOptions({
+              helper,
+              state: helper.state,
+            })
+          );
 
-          const { createURL, refine } = rendering.mock.calls[0][0];
+          widget.render(
+            createRenderOptions({
+              results: new SearchResults(helper.state, [{}]),
+              helper,
+              state: helper.state,
+              createURL: state => state,
+            })
+          );
+
+          const { createURL, refine } = rendering.mock.calls[1][0];
 
           // The state represented by the URL should be equal to a state
           // after refining.
@@ -527,14 +650,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         }
 
         {
-          widget.render({
-            helper,
-            state: helper.state,
-            results: new SearchResults(helper.state, [{}]),
-            createURL: () => '#',
-          });
+          widget.render(
+            createRenderOptions({
+              results: new SearchResults(helper.state, [{}]),
+              helper,
+              state: helper.state,
+              createURL: state => state,
+            })
+          );
 
-          const { createURL, refine } = rendering.mock.calls[1][0];
+          const { createURL, refine } = rendering.mock.calls[2][0];
 
           const createURLState = createURL();
           refine();
@@ -546,7 +671,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('reset the page to 0', () => {
-      const helper = jsHelper({}, '', {});
+      const helper = jsHelper({}, 'indexName', {});
       helper.search = () => {};
       helper.setQuery('not empty');
 
@@ -554,15 +679,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-      });
-      const clearRefinements = rendering.mock.calls[0][0].refine;
+      widget.init(
+        createInitOptions({
+          helper,
+          state: helper.state,
+        })
+      );
+
+      widget.render(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [{}]),
+          helper,
+          state: helper.state,
+        })
+      );
+
+      const refine = rendering.mock.calls[1][0].refine;
 
       helper.setPage(2);
-      clearRefinements();
+      refine();
+
       expect(helper.state.page).toBe(0);
     });
   });

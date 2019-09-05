@@ -15,7 +15,7 @@ export const createInitOptions = (
 
   return {
     instantSearchInstance,
-    parent: null,
+    parent: instantSearchInstance.mainIndex,
     uiState: instantSearchInstance._initialUiState,
     templatesConfig: instantSearchInstance.templatesConfig,
     helper: instantSearchInstance.helper!,
@@ -30,6 +30,7 @@ export const createRenderOptions = (
 ): RenderOptions => {
   const { instantSearchInstance = createInstantSearch(), ...rest } = args;
   const response = createMultiSearchResponse();
+  const helper = args.helper || instantSearchInstance.helper!;
   const results = new algolisearchHelper.SearchResults(
     instantSearchInstance.helper!.state,
     response.results
@@ -38,14 +39,14 @@ export const createRenderOptions = (
   return {
     instantSearchInstance,
     templatesConfig: instantSearchInstance.templatesConfig,
-    helper: instantSearchInstance.helper!,
-    state: instantSearchInstance.helper!.state,
+    helper,
+    state: helper.state,
     results,
     scopedResults: [
       {
-        indexId: instantSearchInstance.helper!.state.index,
+        indexId: helper.state.index,
+        helper,
         results,
-        helper: instantSearchInstance.helper!,
       },
     ],
     searchMetadata: {
@@ -69,7 +70,6 @@ export const createDisposeOptions = (
 };
 
 export const createWidget = (args: Partial<Widget> = {}): Widget => ({
-  getConfiguration: jest.fn(),
   init: jest.fn(),
   render: jest.fn(),
   dispose: jest.fn(),

@@ -75,7 +75,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
-        getConfiguration: expect.any(Function),
       })
     );
   });
@@ -88,7 +87,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       },
     });
 
-    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: {},
+      })
+    ).toEqual(
       new SearchParameters({
         analytics: true,
       })
@@ -104,10 +107,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     expect(
-      widget.getConfiguration!(
+      widget.getWidgetSearchParameters!(
         new SearchParameters({
           analytics: false,
-        })
+        }),
+        { uiState: { configure: { analytics: true } } }
       )
     ).toEqual(
       new SearchParameters({
@@ -116,11 +120,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
 
     expect(
-      widget.getConfiguration!(
+      widget.getWidgetSearchParameters!(
         new SearchParameters({
           analytics: false,
           clickAnalytics: true,
-        })
+        }),
+        { uiState: { configure: { analytics: true } } }
       )
     ).toEqual(
       new SearchParameters({
@@ -140,17 +145,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     helper.setState(
-      widget.getConfiguration!(
+      widget.getWidgetSearchParameters!(
         new SearchParameters({
           // This facet is added outside of the widget params
           // so it shouldn't be overridden when calling `refine`.
           facets: ['brand'],
-        })
+        }),
+        { uiState: { configure: { analytics: true } } }
       )
     );
     widget.init!(createInitOptions({ helper }));
 
-    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: { configure: { analytics: true } },
+      })
+    ).toEqual(
       new SearchParameters({
         analytics: true,
       })
@@ -166,7 +176,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
     refine({ hitsPerPage: 3, facets: ['rating'] });
 
-    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: { configure: { hitsPerPage: 3, facets: ['rating'] } },
+      })
+    ).toEqual(
       new SearchParameters({
         hitsPerPage: 3,
         facets: ['rating'],
@@ -189,15 +203,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     helper.setState(
-      widget.getConfiguration!(
+      widget.getWidgetSearchParameters!(
         new SearchParameters({
           clickAnalytics: true,
-        })
+        }),
+        { uiState: { configure: { analytics: true } } }
       )
     );
     widget.init!(createInitOptions({ helper }));
 
-    expect(widget.getConfiguration!(new SearchParameters({}))).toEqual(
+    expect(
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: { configure: { analytics: true } },
+      })
+    ).toEqual(
       new SearchParameters({
         analytics: true,
       })
@@ -385,6 +404,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         new SearchParameters({
           analytics: false,
           analyticsTags: ['best-website-in-the-world'],
+        })
+      );
+    });
+
+    it('merges with the previous parameters', () => {
+      const makeWidget = connectConfigure();
+      const widget = makeWidget({
+        searchParameters: {
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Apple'],
+          },
+        },
+      });
+
+      const sp = widget.getWidgetSearchParameters!(
+        new SearchParameters({
+          disjunctiveFacets: ['categories'],
+          disjunctiveFacetsRefinements: {
+            categories: ['Phone'],
+          },
+        }),
+        {
+          uiState: {},
+        }
+      );
+
+      expect(sp).toEqual(
+        new SearchParameters({
+          disjunctiveFacets: ['categories', 'brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Apple'],
+            categories: ['Phone'],
+          },
         })
       );
     });

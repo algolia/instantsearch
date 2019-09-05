@@ -59,7 +59,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
+
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -131,40 +131,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     expect(helper.setQuery).toHaveBeenCalledTimes(1);
     expect(helper.setQuery).toHaveBeenCalledWith('foo');
     expect(helper.search).toHaveBeenCalledTimes(1);
-  });
-
-  describe('getConfiguration', () => {
-    it('adds a `query` to the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      const nextConfiguration = widget.getConfiguration(new SearchParameters());
-
-      expect(nextConfiguration).toEqual(
-        new SearchParameters({
-          query: '',
-        })
-      );
-    });
-
-    it('support previous `query` from the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      const nextConfiguration = widget.getConfiguration(
-        new SearchParameters({
-          query: 'Previous query',
-        })
-      );
-
-      expect(nextConfiguration).toEqual(
-        new SearchParameters({
-          query: 'Previous query',
-        })
-      );
-    });
   });
 
   describe('dispose', () => {

@@ -49,10 +49,6 @@ describe('stats()', () => {
     render.mockClear();
   });
 
-  it('configures nothing', () => {
-    expect(widget.getConfiguration).toEqual(undefined);
-  });
-
   it('calls twice render(<Stats props />, container)', () => {
     widget.render({ results, instantSearchInstance });
     widget.render({ results, instantSearchInstance });

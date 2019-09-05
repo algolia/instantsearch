@@ -107,10 +107,6 @@ const connectConfigure: ConfigureConnector = (
     return {
       $$type: 'ais.configure',
 
-      getConfiguration(state: SearchParameters) {
-        return state.setQueryParameters(widgetParams.searchParameters);
-      },
-
       init({ instantSearchInstance, helper }) {
         connectorState.refine = refine(helper);
 
@@ -142,10 +138,13 @@ const connectConfigure: ConfigureConnector = (
       },
 
       getWidgetSearchParameters(state, { uiState }) {
-        return state.setQueryParameters({
-          ...uiState.configure,
-          ...widgetParams.searchParameters,
-        });
+        return mergeSearchParameters(
+          state,
+          new algoliasearchHelper.SearchParameters({
+            ...uiState.configure,
+            ...widgetParams.searchParameters,
+          })
+        );
       },
 
       getWidgetState(uiState) {

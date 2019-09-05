@@ -1,8 +1,4 @@
-import algoliasearchHelper, {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
+import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
@@ -135,10 +131,10 @@ class InstantSearch extends EventEmitter {
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
-  public _createURL?: (params: SearchParameters) => string;
-  public _createAbsoluteURL?: (params: SearchParameters) => string;
+  public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public routing?: Routing;
+  private _routingManager?;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -212,7 +208,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
-    this._initialUiState = initialUiState;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -230,6 +225,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         ...defaultRoutingOptions,
         ...routing,
       };
+    }
+
+    if (this.routing) {
+      this._initialUiState = {
+        ...initialUiState,
+        ...this.routing.stateMapping.routeToState(this.routing.router.read()),
+      };
+    } else {
+      this._initialUiState = initialUiState;
     }
   }
 
@@ -326,19 +330,13 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     if (this.routing) {
-      const routingManager = new RoutingManager({
+      this._routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
       });
-      this._createURL = routingManager.createURL.bind(routingManager);
-      this._createAbsoluteURL = this._createURL;
-      // We don't use `addWidgets` because we have to ensure that `RoutingManager`
-      // is the last widget added. Otherwise we have an issue with the `routing`.
-      // https://github.com/algolia/instantsearch.js/pull/3149
-      this.mainIndex.getWidgets().push(routingManager);
+      this._createURL = this._routingManager.createURL;
     } else {
       this._createURL = defaultCreateURL;
-      this._createAbsoluteURL = defaultCreateURL;
     }
 
     // This Helper is used for the queries, we don't care about its state. The
@@ -373,6 +371,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
           mainIndexHelper!.overrideStateWithoutTriggeringChangeEvent(state);
           this._mainHelperSearch!();
         });
+        // Forward state changes from `searchFunctionHelper` to `mainIndexHelper`
+        searchFunctionHelper.on('change', ({ state }) => {
+          mainIndexHelper!.setState(state);
+        });
         this._searchFunction!(searchFunctionHelper);
         return mainHelper;
       };
@@ -393,6 +395,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       parent: null,
       uiState: this._initialUiState,
     });
+
+    if (this.routing) {
+      this._routingManager.applyStateFromRoute(this.routing.router.read());
+    }
 
     mainHelper.search();
 
@@ -430,6 +436,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this.mainHelper!.removeAllListeners();
     this.mainHelper = null;
     this.helper = null;
+
+    if (this.routing) {
+      this._routingManager.dispose();
+    }
   }
 
   public scheduleSearch = defer(() => {
@@ -459,16 +469,21 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
   }
 
-  public createURL(params: PlainSearchParameters): string {
+  public onStateChange = () => {
+    const nextUiState = this.mainIndex.getWidgetState({});
+    if (this.routing) {
+      this._routingManager.write({ state: nextUiState });
+    }
+  };
+
+  public createURL(nextState: UiState = {}): string {
     if (!this._createURL) {
       throw new Error(
         withUsage('The `start` method needs to be called before `createURL`.')
       );
     }
 
-    return this._createURL(
-      this.mainIndex.getHelper()!.state.setQueryParameters(params)
-    );
+    return this._createURL(nextState);
   }
 
   public refresh() {
