@@ -280,55 +280,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     expect(helper.search).toHaveBeenCalledTimes(2);
   });
 
-  describe('getConfiguration', () => {
-    test('returns initial search parameters', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRatingMenu(rendering);
-
-      const attribute = 'grade';
-      const widget = makeWidget({
-        attribute,
-      });
-
-      expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-        new SearchParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            grade: [],
-          },
-        })
-      );
-    });
-
-    test('supports previous disjunctive facets refinements', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRatingMenu(rendering);
-
-      const attribute = 'grade';
-      const widget = makeWidget({
-        attribute,
-      });
-
-      expect(
-        widget.getConfiguration(
-          new SearchParameters({
-            disjunctiveFacets: [attribute],
-            disjunctiveFacetsRefinements: {
-              grade: [4],
-            },
-          })
-        )
-      ).toEqual(
-        new SearchParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            grade: [4],
-          },
-        })
-      );
-    });
-  });
-
   describe('dispose', () => {
     it('does not throw without the unmount function', () => {
       const { widget, helper } = getInitializedWidget();
