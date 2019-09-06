@@ -7,7 +7,7 @@ describe('InstantSearch - Search on specific price range', () => {
   });
 
   it('drag and drop lower handle to the right', async () => {
-    lowerBound = await browser.setRangeSliderLowerBound(30);
+    lowerBound = await browser.dragRangeSliderLowerBoundTo(30);
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be > lowerBound)`, async () => {
@@ -22,7 +22,7 @@ describe('InstantSearch - Search on specific price range', () => {
   });
 
   it('drag and drop upper handle to the left', async () => {
-    upperBound = await browser.setRangeSliderUpperBound(70);
+    upperBound = await browser.dragRangeSliderUpperBoundTo(70);
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be < upperBound)`, async () => {

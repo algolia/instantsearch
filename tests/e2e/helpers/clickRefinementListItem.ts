@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setSelectedRefinementListItem(label: string): Promise<boolean>;
+    clickRefinementListItem(label: string): Promise<boolean>;
   }
 }
 
-browser.addCommand('setSelectedRefinementListItem', async (label: string) => {
+browser.addCommand('clickRefinementListItem', async (label: string) => {
   const oldUrl = await browser.getUrl();
   const item = await browser.$(`.ais-RefinementList-labelText=${label}`);
   // Assures us that the element is in the viewport

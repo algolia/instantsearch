@@ -4,7 +4,7 @@ describe('InstantSearch - Search on specific brand and query filtering', () => {
   });
 
   it('selects "Apple" brand in list', async () => {
-    await browser.setSelectedRefinementListItem('Apple');
+    await browser.clickRefinementListItem('Apple');
   });
 
   it('fills search input with "macbook"', async () => {

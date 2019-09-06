@@ -4,11 +4,11 @@ describe('InstantSearch - Search on specific category', () => {
   });
 
   it('selects "Appliances" category in list', async () => {
-    await browser.setSelectedHierarchicalMenuItem('Appliances');
+    await browser.clickHierarchicalMenuItem('Appliances');
   });
 
   it('selects "Small Kitchen Appliances" category in list', async () => {
-    await browser.setSelectedHierarchicalMenuItem('Small Kitchen Appliances');
+    await browser.clickHierarchicalMenuItem('Small Kitchen Appliances');
   });
 
   it('must have the expected results for "Small Kitchen Appliances"', async () => {
@@ -35,7 +35,7 @@ describe('InstantSearch - Search on specific category', () => {
   });
 
   it('unselects "Small Kitchen Appliances" category in list', async () => {
-    await browser.setSelectedHierarchicalMenuItem('Small Kitchen Appliances');
+    await browser.clickHierarchicalMenuItem('Small Kitchen Appliances');
   });
 
   it('must have the expected results for "Appliances"', async () => {

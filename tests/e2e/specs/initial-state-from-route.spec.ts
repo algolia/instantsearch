@@ -37,8 +37,8 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('must have lower price set to $50 and the upper price set to $350 in the price range', async () => {
-      const lowerPrice = await browser.getRangeSliderLowerBound();
-      const upperPrice = await browser.getRangeSliderUpperBound();
+      const lowerPrice = await browser.getRangeSliderLowerBoundValue();
+      const upperPrice = await browser.getRangeSliderUpperBoundValue();
 
       expect(lowerPrice).toEqual(50);
       expect(upperPrice).toEqual(350);
@@ -51,7 +51,7 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('must have rating "4 & up" selected in the rating menu', async () => {
-      const rating = await browser.getRatingMenuValue();
+      const rating = await browser.getSelectedRatingMenuItem();
 
       expect(rating).toEqual('4 & up');
     });
@@ -69,7 +69,7 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('must have page 2 selected in the pagination', async () => {
-      const page = await browser.getPage();
+      const page = await browser.getCurrentPage();
 
       expect(page).toEqual(2);
     });
@@ -98,24 +98,24 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('deselects "KitchenAid" brand in the brands menu', async () => {
-      await browser.setSelectedRefinementListItem('KitchenAid');
+      await browser.clickRefinementListItem('KitchenAid');
     });
 
     it('deselects "Small Kitchen Appliances" items and select "Ranges, Cooktops & Ovens" in the category menu', async () => {
-      await browser.setSelectedHierarchicalMenuItem('Small Kitchen Appliances');
-      await browser.setSelectedHierarchicalMenuItem('Ranges, Cooktops & Ovens');
+      await browser.clickHierarchicalMenuItem('Small Kitchen Appliances');
+      await browser.clickHierarchicalMenuItem('Ranges, Cooktops & Ovens');
     });
 
     it('selects "Whirlpool" brand in the brands menu', async () => {
-      await browser.setSelectedRefinementListItem('Whirlpool');
+      await browser.clickRefinementListItem('Whirlpool');
     });
 
     it('unchecks free shipping box', async () => {
-      await browser.changeToggleRefinementStatus();
+      await browser.clickToggleRefinement();
     });
 
     it('selects rating "3 & up" in the rating menu', async () => {
-      await browser.setRatingMenuValue('3 & up');
+      await browser.clickRatingMenuItem('3 & up');
     });
 
     it('selects "Price ascending" in the sort select', async () => {
@@ -123,8 +123,8 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('sets lower price to $250 and the upper price to $1250 in the price range', async () => {
-      await browser.setRangeSliderLowerBound(250);
-      await browser.setRangeSliderUpperBound(1250);
+      await browser.dragRangeSliderLowerBoundTo(250);
+      await browser.dragRangeSliderUpperBoundTo(1250);
     });
 
     it('selects "64 hits per page" in the hits per page select', async () => {
@@ -132,7 +132,7 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('selects page 2 in the pagination', async () => {
-      await browser.setPage(2);
+      await browser.clickPage(2);
     });
 
     it('must have the expected url', async () => {

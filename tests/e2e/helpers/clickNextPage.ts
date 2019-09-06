@@ -1,11 +1,11 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setNextPage(): Promise<boolean>;
+    clickNextPage(): Promise<boolean>;
   }
 }
 
-browser.addCommand('setNextPage', async () => {
-  const pageNumber = await browser.getPage();
+browser.addCommand('clickNextPage', async () => {
+  const pageNumber = await browser.getCurrentPage();
   const page = await browser.$(
     `.ais-Pagination-item--nextPage .ais-Pagination-link`
   );

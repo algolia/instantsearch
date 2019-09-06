@@ -4,7 +4,7 @@ describe('InstantSearch - Page navigation', () => {
   });
 
   it('navigates to next page', async () => {
-    await browser.setNextPage();
+    await browser.clickNextPage();
   });
 
   it('must have the expected results for page 2', async () => {
@@ -31,11 +31,11 @@ describe('InstantSearch - Page navigation', () => {
   });
 
   it('selects "Appliances" in the category menu', async () => {
-    await browser.setSelectedHierarchicalMenuItem('Appliances');
+    await browser.clickHierarchicalMenuItem('Appliances');
   });
 
   it('must reset the page to 1', async () => {
-    const page = await browser.getPage();
+    const page = await browser.getCurrentPage();
 
     expect(page).toEqual(1);
   });
@@ -64,7 +64,7 @@ describe('InstantSearch - Page navigation', () => {
   });
 
   it('navigates to page 3', async () => {
-    await browser.setPage(3);
+    await browser.clickPage(3);
   });
 
   it('must have the expected results for page 3', async () => {

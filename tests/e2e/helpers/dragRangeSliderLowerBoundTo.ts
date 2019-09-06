@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setRangeSliderLowerBound(value: number): Promise<number>;
+    dragRangeSliderLowerBoundTo(value: number): Promise<number>;
   }
 }
 
-browser.addCommand('setRangeSliderLowerBound', async (value: number) => {
+browser.addCommand('dragRangeSliderLowerBoundTo', async (value: number) => {
   const slider = await browser.$('.rheostat-horizontal');
   let lowerHandle = await browser.$('.ais-RangeSlider .rheostat-handle-lower');
   const upperHandle = await browser.$(
