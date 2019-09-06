@@ -1,5 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
+import { PlainSearchParameters } from 'algoliasearch-helper';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -42,6 +43,10 @@ type VoiceSearchWidgetParams = {
   cssClasses?: Partial<VoiceSearchCSSClasses>;
   templates?: Partial<VoiceSearchTemplates>;
   searchAsYouSpeak?: boolean;
+  language?: string;
+  additionalQueryParameters?: (params: {
+    query: string;
+  }) => PlainSearchParameters | void;
 };
 
 interface VoiceSearchRendererWidgetParams extends VoiceSearchWidgetParams {
@@ -79,7 +84,9 @@ const voiceSearch: VoiceSearch = (
     container,
     cssClasses: userCssClasses = {} as VoiceSearchCSSClasses,
     templates,
-    searchAsYouSpeak,
+    searchAsYouSpeak = false,
+    language,
+    additionalQueryParameters,
   } = {} as VoiceSearchWidgetParams
 ) => {
   if (!container) {
@@ -103,6 +110,8 @@ const voiceSearch: VoiceSearch = (
     cssClasses,
     templates: { ...defaultTemplates, ...templates },
     searchAsYouSpeak,
+    language,
+    additionalQueryParameters,
   });
 };
 

@@ -16,12 +16,12 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
   };
 });
 
-function getInitializedWidget() {
+function getInitializedWidget({ widgetParams = {} } = {}) {
   const helper = algoliasearchHelper({}, '');
 
   const renderFn = () => {};
   const makeWidget = connectVoiceSearch(renderFn);
-  const widget = makeWidget({});
+  const widget = makeWidget(widgetParams);
 
   helper.search = () => {};
   widget.init({ helper });
@@ -30,7 +30,7 @@ function getInitializedWidget() {
     renderFn,
     widget,
     helper,
-    refine: query => widget._refine(query),
+    refine: widget._refine,
   };
 }
 
@@ -270,6 +270,115 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         new SearchParameters({
           index: '',
           query: '',
+        })
+      );
+    });
+  });
+
+  describe('additional search parameters', () => {
+    it('applies default search parameters if given', () => {
+      const { helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => {},
+        },
+      });
+
+      refine('query');
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          ignorePlurals: true,
+          removeStopWords: true,
+          optionalWords: 'query',
+          queryLanguages: undefined,
+          index: '',
+          query: 'query',
+        })
+      );
+    });
+
+    it('applies queryLanguages if language given', () => {
+      const { helper, refine } = getInitializedWidget({
+        widgetParams: {
+          language: 'en-US',
+          additionalQueryParameters: () => {},
+        },
+      });
+
+      refine('query');
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          queryLanguages: ['en'],
+          // regular
+          removeStopWords: true,
+          optionalWords: 'query',
+          ignorePlurals: true,
+          query: 'query',
+          index: '',
+        })
+      );
+    });
+
+    it('applies additional parameters if language given', () => {
+      const { helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => ({
+            distinct: true,
+          }),
+        },
+      });
+
+      refine('query');
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          ignorePlurals: true,
+          removeStopWords: true,
+          optionalWords: 'query',
+          queryLanguages: undefined,
+          index: '',
+          query: 'query',
+          distinct: true,
+        })
+      );
+    });
+
+    it('removes additional parameters when disposed', () => {
+      const { widget, helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => {},
+        },
+      });
+
+      refine('query');
+      const newState = widget.dispose({ state: helper.state });
+      expect(newState).toEqual(
+        new SearchParameters({
+          ignorePlurals: undefined,
+          removeStopWords: undefined,
+          optionalWords: undefined,
+          queryLanguages: undefined,
+          index: '',
+        })
+      );
+    });
+
+    it('removes additional parameters and extra parameters when disposed', () => {
+      const { widget, helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => ({
+            distinct: true,
+          }),
+        },
+      });
+
+      refine('query');
+      const newState = widget.dispose({ state: helper.state });
+      expect(newState).toEqual(
+        new SearchParameters({
+          ignorePlurals: undefined,
+          removeStopWords: undefined,
+          optionalWords: undefined,
+          queryLanguages: undefined,
+          index: '',
         })
       );
     });
