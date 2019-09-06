@@ -7,6 +7,9 @@ declare namespace WebdriverIOAsync {
 browser.addCommand('setSelectedRefinementListItem', async (label: string) => {
   const oldUrl = await browser.getUrl();
   const item = await browser.$(`.ais-RefinementList-labelText=${label}`);
+  // Assures us that the element is in the viewport
+  await item.scrollIntoView();
+
   await item.click();
 
   // Changing the URL will also change the page element IDs in Internet Explorer
