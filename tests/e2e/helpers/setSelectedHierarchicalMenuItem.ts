@@ -7,6 +7,9 @@ declare namespace WebdriverIOAsync {
 browser.addCommand('setSelectedHierarchicalMenuItem', async (label: string) => {
   const oldUrl = await browser.getUrl();
   const item = await browser.$(`.ais-HierarchicalMenu-label=${label}`);
+  // Assures us that the element is in the viewport
+  await item.scrollIntoView();
+
   await item.click();
 
   // Changing the URL will also change the page element IDs in Internet Explorer

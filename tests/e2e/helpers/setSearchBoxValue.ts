@@ -7,6 +7,8 @@ declare namespace WebdriverIOAsync {
 browser.addCommand('setSearchBoxValue', async (value: string) => {
   const oldUrl = await browser.getUrl();
   const searchBox = await browser.$('.ais-SearchBox [type=search]');
+  // Assures us that the element is in the viewport
+  await searchBox.scrollIntoView();
   // In Internet Explorer the input must be focused before updating its value
   await searchBox.click();
   await searchBox.setValue(value);

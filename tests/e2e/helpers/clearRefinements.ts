@@ -6,6 +6,8 @@ declare namespace WebdriverIOAsync {
 
 browser.addCommand('clearRefinements', async () => {
   const clearButton = await browser.$(`.ais-ClearRefinements-button`);
+  // Assures us that the element is in the viewport
+  await clearButton.scrollIntoView();
 
   await clearButton.click();
 
