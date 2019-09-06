@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getRangeSliderUpperBound(): Promise<number>;
+    getRangeSliderUpperBoundValue(): Promise<number>;
   }
 }
 
-browser.addCommand('getRangeSliderUpperBound', async () => {
+browser.addCommand('getRangeSliderUpperBoundValue', async () => {
   const upperHandle = await browser.$(
     '.ais-RangeSlider .rheostat-handle-upper'
   );

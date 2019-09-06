@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getPage(): Promise<number>;
+    getCurrentPage(): Promise<number>;
   }
 }
 
-browser.addCommand('getPage', async () => {
+browser.addCommand('getCurrentPage', async () => {
   const page = await browser.$('.ais-Pagination-item--selected');
 
   return Number(await page.getText());

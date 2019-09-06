@@ -12,34 +12,34 @@ import './getHitsTitles';
 
 // RefinementList
 import './getSelectedRefinementListItem';
-import './setSelectedRefinementListItem';
+import './clickRefinementListItem';
 
 // HierarchicalMenu
 import './getSelectedHierarchicalMenuItems';
-import './setSelectedHierarchicalMenuItem';
+import './clickHierarchicalMenuItem';
 
 // RangeSlider
-import './getRangeSliderLowerBound';
-import './setRangeSliderLowerBound';
-import './getRangeSliderUpperBound';
-import './setRangeSliderUpperBound';
+import './getRangeSliderLowerBoundValue';
+import './dragRangeSliderLowerBoundTo';
+import './getRangeSliderUpperBoundValue';
+import './dragRangeSliderUpperBoundTo';
 
 // ToggleRefinement
 import './getToggleRefinementStatus';
-import './changeToggleRefinementStatus';
+import './clickToggleRefinement';
 
 // RatingMenu
-import './getRatingMenuValue';
-import './setRatingMenuValue';
+import './getSelectedRatingMenuItem';
+import './clickRatingMenuItem';
 
 // ClearRefinements
-import './clearRefinements';
+import './clickClearRefinements';
 
 // Pagination
-import './getPage';
-import './setPage';
-import './setNextPage';
-import './setPreviousPage';
+import './getCurrentPage';
+import './clickPage';
+import './clickNextPage';
+import './clickPreviousPage';
 
 // HitsPerPage
 import './getHitsPerPage';

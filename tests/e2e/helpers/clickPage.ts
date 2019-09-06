@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setPage(number: number): Promise<boolean>;
+    clickPage(number: number): Promise<boolean>;
   }
 }
 
-browser.addCommand('setPage', async (number: number) => {
+browser.addCommand('clickPage', async (number: number) => {
   const page = await browser.$(`.ais-Pagination-link=${number}`);
   // Assures us that the element is in the viewport
   await page.scrollIntoView();

@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setSelectedHierarchicalMenuItem(label: string): Promise<boolean>;
+    clickHierarchicalMenuItem(label: string): Promise<boolean>;
   }
 }
 
-browser.addCommand('setSelectedHierarchicalMenuItem', async (label: string) => {
+browser.addCommand('clickHierarchicalMenuItem', async (label: string) => {
   const oldUrl = await browser.getUrl();
   const item = await browser.$(`.ais-HierarchicalMenu-label=${label}`);
   // Assures us that the element is in the viewport

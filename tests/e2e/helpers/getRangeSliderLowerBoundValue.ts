@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getRangeSliderLowerBound(): Promise<number>;
+    getRangeSliderLowerBoundValue(): Promise<number>;
   }
 }
 
-browser.addCommand('getRangeSliderLowerBound', async () => {
+browser.addCommand('getRangeSliderLowerBoundValue', async () => {
   const lowerHandle = await browser.$(
     '.ais-RangeSlider .rheostat-handle-lower'
   );

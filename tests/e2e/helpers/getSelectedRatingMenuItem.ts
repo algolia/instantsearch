@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getRatingMenuValue(): Promise<string>;
+    getSelectedRatingMenuItem(): Promise<string>;
   }
 }
 
-browser.addCommand('getRatingMenuValue', async () => {
+browser.addCommand('getSelectedRatingMenuItem', async () => {
   const rating = await browser.$(
     '.ais-RatingMenu-item--selected .ais-RatingMenu-link'
   );

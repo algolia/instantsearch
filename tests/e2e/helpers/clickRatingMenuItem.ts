@@ -1,10 +1,10 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setRatingMenuValue(label: string): Promise<boolean>;
+    clickRatingMenuItem(label: string): Promise<boolean>;
   }
 }
 
-browser.addCommand('setRatingMenuValue', async (label: string) => {
+browser.addCommand('clickRatingMenuItem', async (label: string) => {
   const rating = await browser.$(`.ais-RatingMenu-link[aria-label="${label}"]`);
   // Assures us that the element is in the viewport
   await rating.scrollIntoView();
