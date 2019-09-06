@@ -186,4 +186,24 @@ storiesOf('VoiceSearch', module)
         })
       );
     })
+  )
+  .add(
+    'with additional parameters',
+    withHits(({ search, container }) => {
+      const descContainer = document.createElement('div');
+      const realContainer = document.createElement('div');
+      container.appendChild(descContainer);
+      container.appendChild(realContainer);
+      descContainer.innerHTML = `
+        <p>Sets the default additional parameters, as well as a language</p>
+      `;
+
+      search.addWidget(
+        voiceSearch({
+          container: realContainer,
+          language: 'en-US',
+          additionalQueryParameters: () => {},
+        })
+      );
+    })
   );
