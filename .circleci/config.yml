@@ -68,6 +68,20 @@ jobs:
           name: Unit tests
           command: yarn run test --maxWorkers=4
 
+  test_e2e:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: End-2-End tests
+          command: |
+            yarn run website:build
+            yarn run test:e2e:saucelabs
+
 workflows:
   version: 2
   ci:
@@ -75,3 +89,4 @@ workflows:
       - test_build
       - test_unit
       - test_lint
+      - test_e2e
