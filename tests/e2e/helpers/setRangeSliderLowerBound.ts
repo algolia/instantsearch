@@ -25,7 +25,7 @@ browser.addCommand('setRangeSliderLowerBound', async (value: number) => {
   // Get the horizontal difference between the handle and the slider (can happen if the handle have some margins)
   const xDifference = sliderX - lowerHandleX;
   // Calculate the final offset
-  const offset = value * step + xDifference;
+  const offset = (value - lowerHandleMin) * step + xDifference;
 
   await browser.dragAndDropByOffset(lowerHandle, offset);
 
