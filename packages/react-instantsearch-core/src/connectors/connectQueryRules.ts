@@ -110,14 +110,16 @@ function getRuleContextsFromTrackedFilters({
   return ruleContexts;
 }
 
+const defaultProps: QueryRulesProps = {
+  transformItems: items => items,
+  transformRuleContexts: ruleContexts => ruleContexts,
+  trackedFilters: {},
+};
+
 export default createConnector({
   displayName: 'AlgoliaQueryRules',
 
-  defaultProps: {
-    transformItems: items => items,
-    transformRuleContexts: ruleContexts => ruleContexts,
-    trackedFilters: {},
-  } as QueryRulesProps,
+  defaultProps,
 
   getProvidedProps(props: QueryRulesProps, _1: any, searchResults: any) {
     const results = getResults(searchResults, this.context);
