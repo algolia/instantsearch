@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.0...v1.2.1) (2019-09-11)
+
+
+### Bug Fixes
+
+* **helper:** fix helpers to handle RangeSlider in react-instantsearch ([#9](https://github.com/algolia/instantsearch-e2e-tests/issues/9)) ([c2de700](https://github.com/algolia/instantsearch-e2e-tests/commit/c2de700))
+
+
+
 # [1.2.0](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.1.0...v1.2.0) (2019-09-06)
 
 ### Bug Fixes
