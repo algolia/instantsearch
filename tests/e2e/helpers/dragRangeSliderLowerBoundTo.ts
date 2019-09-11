@@ -5,11 +5,13 @@ declare namespace WebdriverIOAsync {
 }
 
 browser.addCommand('dragRangeSliderLowerBoundTo', async (value: number) => {
-  const slider = await browser.$('.rheostat-horizontal');
-  let lowerHandle = await browser.$('.ais-RangeSlider .rheostat-handle-lower');
-  const upperHandle = await browser.$(
-    '.ais-RangeSlider .rheostat-handle-upper'
+  const slider = await browser.$('.slider-rail, .rheostat-background');
+
+  await browser.waitForElement('.slider-handle, .rheostat-handle');
+  let [lowerHandle, upperHandle] = await browser.$$(
+    '.slider-handle, .rheostat-handle'
   );
+
   const { width: sliderWidth } = await slider.getSize();
   const { x: lowerHandleX } = await lowerHandle.getLocation();
   const { x: sliderX } = await slider.getLocation();
@@ -32,6 +34,9 @@ browser.addCommand('dragRangeSliderLowerBoundTo', async (value: number) => {
   // Depending of the steps calculation there can be a difference between
   // the wanted value and the actual value of the slider, so we return
   // the actual value in case we need it in the rest of the tests
-  lowerHandle = await browser.$('.ais-RangeSlider .rheostat-handle-lower');
+  await browser.waitForElement('.slider-handle, .rheostat-handle');
+  [lowerHandle, upperHandle] = await browser.$$(
+    '.slider-handle, .rheostat-handle'
+  );
   return Number(await lowerHandle.getAttribute('aria-valuenow'));
 });

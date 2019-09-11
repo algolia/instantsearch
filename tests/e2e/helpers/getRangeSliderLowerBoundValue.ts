@@ -5,8 +5,7 @@ declare namespace WebdriverIOAsync {
 }
 
 browser.addCommand('getRangeSliderLowerBoundValue', async () => {
-  const lowerHandle = await browser.$(
-    '.ais-RangeSlider .rheostat-handle-lower'
-  );
+  await browser.waitForElement('.slider-handle, .rheostat-handle');
+  const [lowerHandle] = await browser.$$('.slider-handle, .rheostat-handle');
   return Number(await lowerHandle.getAttribute('aria-valuenow'));
 });
