@@ -4,7 +4,7 @@
   "license": "MIT",
   "workspaces": [
     "packages/*",
-    "website/examples/*"
+    "examples/@(default-theme|e-commerce|media|tourism)"
   ],
   "scripts": {
     "postinstall": "lerna run build:cjs --scope react-instantsearch-*",
@@ -25,8 +25,8 @@
     "test:argos": "argos upload integration/screenshots --token $ARGOS_TOKEN || true",
     "test:size": "bundlesize",
     "storybook": "start-storybook -p 6006 -c storybook -s storybook/public",
-    "storybook:build": "build-storybook -s storybook/public -o website/dist/storybook -c storybook",
-    "website:build": "yarn storybook:build --quiet && yarn webpack --config website/webpack.config.js"
+    "storybook:build": "build-storybook -s storybook/public -o website/storybook -c storybook",
+    "website:build": "yarn build && yarn webpack --config website/webpack.config.js"
   },
   "devDependencies": {
     "@babel/cli": "7.4.4",
@@ -117,10 +117,6 @@
     "typescript": "3.5.3",
     "webpack": "4.39.3",
     "webpack-cli": "3.3.7"
-  },
-  "engines": {
-    "node": "8.16.1",
-    "yarn": "1.16.0"
   },
   "bundlesize": [
     {
