@@ -113,6 +113,21 @@ const widget = {
       disjunctiveFacets: ['myAttribute'],
     };
   },
+  getWidgetSearchParameters(searchParameters, { uiState }) {
+    return searchParameters
+      .addDisjunctiveFacetRefinement(
+        'myAttribute',
+        uiState.myWidgetName.myAttribute
+      );
+  },
+  getWidgetState(uiState, { searchParameters }) {
+    return {
+      ...uiState,
+      myWidgetName: {
+        myAttribute: searchParameters.getDisjunctiveRefinements('myAttribute')
+      }
+    };
+  }
 };
 ```
 
@@ -138,8 +153,6 @@ const widget = {
   }
 };
 ```
-
-While this looks longer, more of the functions are now together than before, and it isn't possible anymore to get into a state where `getConfiguration` is called multiple times and isn't behaving as you would want.
 
 ## connectAutoComplete
 
