@@ -45,7 +45,50 @@ Is now:
 
 If you are using the default stateMapping with the current version, you can replace that with `singleIndexStateMapping('yourIndexName')` (import from `instantsearch.js/es/lib/stateMappings`).
 
-If you were using a custom stateMapping, you need to loop over the outer level of index, and add this extra level back in `routeToState`. You can check the [source](https://github.com/algolia/instantsearch.js/blob/next/src/lib/stateMappings/singleIndex.ts) for reference on how to implement this.
+If you were using a custom stateMapping, you need to loop over the outer level of index, and add this extra level back in `routeToState`. You can check the [source](https://github.com/algolia/instantsearch.js/blob/next/src/lib/stateMappings/singleIndex.ts) for reference on how to implement this. A stateMapping where you map only some of the properties for example would change like this:
+
+```js
+// before
+const stateMapping = {
+  stateToRoute(uiState) {
+    return {
+      query: uiState.query,
+      page: uiState.page,
+      // ...
+    };
+  },
+
+  routeToState(routeState) {
+    return {
+      query: routeState.query,
+      page: routeState.page,
+      // ...
+    };
+  },
+};
+
+// after
+const stateMapping = {
+  stateToRoute(uiState) {
+    const indexUiState = uiState[indexName];
+    return {
+      query: indexUiState.query,
+      page: indexUiState.page,
+      // ...
+    };
+  },
+
+  routeToState(routeState) {
+    return {
+      [indexName]: {
+        query: routeState.query,
+        page: routeState.page,
+        // ...
+      },
+    };
+  },
+};
+```
 
 ### Configure
 
