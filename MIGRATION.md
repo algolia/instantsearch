@@ -100,7 +100,7 @@ This release includes v3 of the `algoliasearch-helper` package. If you are using
 
 ## Custom widgets
 
-As mentioned earlier, any reference of the helper now contains the "new helper", as well as the `getConfiguration` life cycle no longer being used. You can replace its usage with `getWidgetSearchParameters` and `getWidgetState`. Note that this means that your custom widget will also take part in routing from then on. You can still exclude it from the URL via `stateMapping`.
+As mentioned earlier, any reference to the helper now contains the "new helper", as well as the `getConfiguration` life cycle no longer being used. You can replace its usage with `getWidgetSearchParameters` and `getWidgetState`. Note that this means that your custom widget will also take part in routing from then on. You can still exclude it from the URL via `stateMapping`.
 
 ### getConfiguration
 
