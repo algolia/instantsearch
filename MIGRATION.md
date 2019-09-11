@@ -170,4 +170,13 @@ search.addWidgets([
 
 ## onHistoryChange
 
-This was a function which wasn't documented, and has been a no-op since InstantSearch v2, it has now been removed. Listening to changes in the URL can be done by creating a custom `router` and listening in the `write` hook.
+This was a function which wasn't documented, and has been a no-op since InstantSearch v2, it has now been removed. Listening to changes in the URL can be done by creating a custom `router` and listening in the `write` hook. An example of this strategy is:
+
+```js
+const router = historyRouter()
+const originalWrite = router.write.bind(router)
+router.write = state => {
+  console.log('listen to route state here');
+  originalWrite(state)
+}
+```
