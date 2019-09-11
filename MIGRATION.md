@@ -96,7 +96,7 @@ The `configure` widget is now included in the UiState. If you want to exclude th
 
 ## Helper
 
-This release includes v3 of the `algoliasearch-helper` package. If you are using the built-in widgets, nothing will change for you. This version no longer includes `lodash`, having two main places of impact for users. The main difference will be in bundle size, which is now significantly smaller. If you are using any methods from the `helper` or `searchResults`, please see the detailed changelog [here](https://github.com/algolia/algoliasearch-helper-js/blob/next/documentation-src/metalsmith/content/upgrade.md).
+This release includes v3 of the `algoliasearch-helper` package. If you are using the built-in widgets, nothing will change for you. This version no longer includes `lodash`, having two main places of impact for users. The main difference will be in bundle size, which is now significantly smaller (`algoliasearch-helper` standalone has gone from 27.5 kB gz to now 9.1 kB gz). If you are using any methods from the `helper` or `searchResults`, please see the detailed changelog [here](https://github.com/algolia/algoliasearch-helper-js/blob/next/documentation-src/metalsmith/content/upgrade.md).
 
 ## Custom widgets
 
