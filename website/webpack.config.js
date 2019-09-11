@@ -3,23 +3,39 @@ const glob = require('glob');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const outputPath = path.join(__dirname, 'dist');
-const examples = glob.sync(path.join('examples', '*'), {
-  cwd: __dirname,
-});
+const outputPath = __dirname;
+const examples = glob.sync(
+  path.join('examples', '@(default-theme|e-commerce|media|tourism)'),
+  {
+    cwd: path.join(__dirname, '..'),
+  }
+);
 
 module.exports = {
   mode: 'production',
   entry: examples.reduce(
     (acc, example) => ({
       ...acc,
-      [example]: path.join(__dirname, example, 'index.js'),
+      [example]: path.join(__dirname, '..', example, 'index.js'),
     }),
     {}
   ),
   output: {
     filename: '[name]/index.[chunkhash].js',
+    publicPath: '/',
     path: outputPath,
+  },
+  resolve: {
+    alias: {
+      'react-instantsearch-dom': path.resolve(
+        __dirname,
+        '../packages/react-instantsearch-dom'
+      ),
+      'react-instantsearch-dom-maps': path.resolve(
+        __dirname,
+        '../packages/react-instantsearch-dom-maps'
+      ),
+    },
   },
   module: {
     rules: [
@@ -45,8 +61,9 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              publicPath: 'assets',
-              context: __dirname,
+              publicPath: (filename, absolutePath, context) =>
+                `/${path.relative(context, absolutePath)}`,
+              context: path.join(__dirname, '..'),
               outputPath(_url, resourcePath, context) {
                 return path.relative(context, resourcePath);
               },
@@ -64,21 +81,20 @@ module.exports = {
     ...examples.map(
       example =>
         new HTMLWebpackPlugin({
-          template: path.join(__dirname, example, 'index.html'),
+          template: path.join(__dirname, '..', example, 'index.html'),
           filename: path.join(outputPath, example, 'index.html'),
           chunks: [example],
         })
     ),
     new CopyWebpackPlugin([
       ...examples.map(example => ({
-        from: path.join(__dirname, example, 'assets'),
+        from: path.join(__dirname, '..', example, 'assets'),
         to: path.join(outputPath, example, 'assets'),
       })),
       {
-        from: path.join(__dirname, 'assets'),
+        from: path.join(__dirname, '..', 'assets'),
         to: 'assets/',
       },
-      path.join(__dirname, '_redirects'),
     ]),
   ],
 };

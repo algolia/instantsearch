@@ -9,5 +9,9 @@ build/
 preview.zip
 .happypack/
 
+# Generated files
+/website/examples
+/website/storybook
+
 # Argos CI screenshots
 integration/screenshots/

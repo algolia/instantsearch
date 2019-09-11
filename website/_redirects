@@ -100,3 +100,4 @@
 /examples https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react/
 /examples/Demos.html https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react/
 /examples/Recipes.html https://www.algolia.com/doc/guides/building-search-ui/resources/ui-and-ux-patterns/react/
+/examples/:name/search/*   /examples/:name/index.html   200
