@@ -18,7 +18,7 @@ import {
   searchBox,
   sortBy,
 } from './widgets';
-import routing from './routing';
+import getRouting from './routing';
 
 const searchClient = algoliasearch(
   'latency',
@@ -28,7 +28,7 @@ const searchClient = algoliasearch(
 const search = instantsearch({
   searchClient,
   indexName: 'instant_search',
-  routing,
+  routing: getRouting({ indexName: 'instant_search' }),
 });
 
 search.addWidgets([
