@@ -147,7 +147,7 @@ describe('InstantSearch - State and route', () => {
           searchParams.get('page') === '2' &&
           searchParams.get('brands') === 'Whirlpool' &&
           searchParams.get('rating') === '3' &&
-          /^(24[0-9]|250):(124[0-9]|1250)$/.test(
+          /^(23[0-9]|24[0-9]|250):(124[0-9]|1250)$/.test(
             searchParams.get('price') || ''
           ) &&
           searchParams.get('sortBy') === 'instant_search_price_asc' &&

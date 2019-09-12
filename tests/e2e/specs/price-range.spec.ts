@@ -7,7 +7,7 @@ describe('InstantSearch - Search on specific price range', () => {
   });
 
   it('drag and drop lower handle to the right', async () => {
-    lowerBound = await browser.dragRangeSliderLowerBoundTo(30);
+    lowerBound = await browser.dragRangeSliderLowerBoundTo(971);
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be > lowerBound)`, async () => {
@@ -22,7 +22,7 @@ describe('InstantSearch - Search on specific price range', () => {
   });
 
   it('drag and drop upper handle to the left', async () => {
-    upperBound = await browser.dragRangeSliderUpperBoundTo(70);
+    upperBound = await browser.dragRangeSliderUpperBoundTo(1971);
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be < upperBound)`, async () => {
@@ -40,22 +40,22 @@ describe('InstantSearch - Search on specific price range', () => {
     const hitsTitles = await browser.getHitsTitles();
 
     expect(hitsTitles).toEqual([
-      'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
-      'Google - Chromecast - Black',
-      'Amazon - Echo Dot',
-      'LG - Ultra Slim 8x Max. DVD Write Speed External USB DVD±RW/CD-RW Drive - Black',
-      'AT&T GoPhone - Samsung Galaxy Express 3 4G LTE with 8GB Memory Prepaid Cell Phone',
-      'Amazon - Echo Dot',
-      'Insignia™ - Portable Wireless Speaker - Black',
-      'SanDisk - Ultra Plus 32GB microSDHC Class 10 UHS-1 Memory Card - Gray/Red',
-      'Philips - Hue White and Color Ambiance A19 Add-on Smart LED bulb (3rd Gen) - Multicolor',
-      'SanDisk - Ultra Plus 32GB SDHC Class 10 UHS-1 Memory Card - Black/Gray/Red',
-      'HP - 61 2-Pack Ink Cartridges - Black/Cyan/Magenta/Yellow',
-      'HP - 62 2-Pack Ink Cartridges - Black/Tricolor',
-      'SanDisk - Pixtor 32GB microSDHC Class 10 UHS-1 Memory Card - Gray/Red',
-      'Amazon - Fire - 7" Tablet - 8GB - Black',
-      'HP - 63 2-Pack Ink Cartridges - Black/Cyan/Magenta/Yellow',
-      'DigiLand - 7" - Tablet - 16GB',
+      'Apple - MacBook Air® (Latest Model) - 13.3" Display - Intel Core i5 - 8GB Memory - 128GB Flash Storage - Silver',
+      'Apple - MacBook Pro with Retina display - 13.3" Display - 8GB Memory - 128GB Flash Storage - Silver',
+      'Apple - MacBook Air® (Latest Model) - 13.3" Display - Intel Core i5 - 8GB Memory - 256GB Flash Storage - Silver',
+      'Sony - 65" Class (64.5" Diag.) - 2160p - Smart - 4K Ultra HD TV with High Dynamic Range - Black',
+      'Apple - MacBook Pro® - 13" Display - Intel Core i5 - 8 GB Memory - 256GB Flash Storage (latest model) - Space Gray',
+      'Samsung - 65" Class (64.5" Diag.) - LED - 2160p - Smart - 4K Ultra HD TV - with High Dynamic Range - Silver',
+      'Sony - 55" Class (54.6" Diag.) - 2160p - Smart - 4K Ultra HD TV with High Dynamic Range - Black',
+      'HP - Spectre x360 2-in-1 15.6" 4K Ultra HD Touch-Screen Laptop - Intel Core i7 - 16GB Memory - 256GB Solid State Drive - Natural Silver',
+      'Microsoft - Surface Pro 4 - 12.3" - 128GB - Intel Core i5 - Silver',
+      'Samsung - 49" Class - (48.5" Diag.) - LED - 2160p - Smart - 4K Ultra HD TV - with High Dynamic Range - Silver',
+      'Samsung - 55" Class - (54.6" Diag.) - LED - 2160p - Smart - 4K Ultra HD TV - with High Dynamic Range - Silver',
+      'HP - ENVY 17.3" Touch-Screen Laptop - Intel Core i7 - 16GB Memory - 1TB Hard Drive - Natural Silver',
+      'HP - Pavilion 27" Touch-Screen All-In-One - Intel Core i7 - 12GB Memory - 1TB Hard Drive - HP finish in turbo silver',
+      'Samsung - 65" Class - (64.5" Diag.) - LED - 2160p - Smart - 4K Ultra HD TV with High Dynamic Range - Black',
+      'Sony - 55" Class (54.6" diag) - LED - 2160p - Smart - 3D - 4K Ultra HD TV with High Dynamic Range - Black',
+      'HP - OMEN 17.3" Laptop - Intel Core i7 - 12GB Memory - NVIDIA GeForce GTX 965M - 1TB HDD + 256GB Solid State Drive - Onyx Black/Twinkle Black',
     ]);
   });
 });
