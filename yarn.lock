@@ -7118,9 +7118,10 @@ insert-css@^2.0.0:
   resolved "https://registry.yarnpkg.com/insert-css/-/insert-css-2.0.0.tgz#eb5d1097b7542f4c79ea3060d3aee07d053880f4"
   integrity sha1-610Ql7dUL0x56jBg067gfQU4gPQ=
 
-instantsearch-e2e-tests@algolia/instantsearch-e2e-tests#v1.2.0:
-  version "1.2.0"
-  resolved "https://codeload.github.com/algolia/instantsearch-e2e-tests/tar.gz/f92fbc13999dd6a511f63f0a02ffe3ebaadcdc39"
+instantsearch-e2e-tests@algolia/instantsearch-e2e-tests#v1.2.2:
+  version "1.2.2"
+  uid "4339bcea72b17cd6c5c0a0fb016424e10dcb0195"
+  resolved "https://codeload.github.com/algolia/instantsearch-e2e-tests/tar.gz/4339bcea72b17cd6c5c0a0fb016424e10dcb0195"
   dependencies:
     dotenv "^8.0.0"
     ts-node "^8.3.0"
