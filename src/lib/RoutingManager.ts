@@ -64,6 +64,12 @@ class RoutingManager {
     });
   }
 
+  public read(): UiState {
+    const route = this.router.read();
+
+    return this.stateMapping.routeToState(route);
+  }
+
   public write({ state }: { state: UiState }) {
     const route = this.stateMapping.stateToRoute(state);
 
