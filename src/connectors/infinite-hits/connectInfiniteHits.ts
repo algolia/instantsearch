@@ -130,11 +130,16 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // if we only change pages.
         const {
           page = 0,
+          facets,
           hierarchicalFacets,
           disjunctiveFacets,
+          maxValuesPerFacet,
           ...currentState
         } = state;
 
+        currentState.facetsRefinements = filterEmptyRefinements(
+          currentState.facetsRefinements
+        );
         currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
           currentState.hierarchicalFacetsRefinements
         );
@@ -242,20 +247,11 @@ const connectInfiniteHits: InfiniteHitsConnector = (
           );
         }
 
-        if (!hasShowPrevious) {
-          return widgetSearchParameters;
-        }
+        // The page in the search parameters is decremented by one
+        // to get to the actual parameter value from the UI state.
+        const page = hasShowPrevious && uiState.page ? uiState.page - 1 : 0;
 
-        if (uiState.page) {
-          // The page in the search parameters is decremented by one
-          // to get to the actual parameter value from the UI state.
-          return widgetSearchParameters.setQueryParameter(
-            'page',
-            uiState.page - 1
-          );
-        }
-
-        return widgetSearchParameters.setQueryParameter('page', 0);
+        return widgetSearchParameters.setQueryParameter('page', page);
       },
     };
   };
