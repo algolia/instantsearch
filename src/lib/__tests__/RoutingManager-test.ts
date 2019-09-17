@@ -127,7 +127,9 @@ describe('RoutingManager', () => {
           ...uiState,
           q: searchParameters.query,
         })),
-        getWidgetSearchParameters: jest.fn(),
+        getWidgetSearchParameters: jest.fn(
+          searchParameters => searchParameters
+        ),
       };
 
       search.addWidget(widget);
@@ -240,13 +242,15 @@ describe('RoutingManager', () => {
 
       search.addWidget(
         createWidget({
-          getWidgetSearchParameters: jest.fn(),
           getWidgetState(uiState, { searchParameters }) {
             return {
               ...uiState,
               query: searchParameters.query,
             };
           },
+          getWidgetSearchParameters: jest.fn(
+            searchParameters => searchParameters
+          ),
         })
       );
 
