@@ -132,10 +132,9 @@ class InstantSearch extends EventEmitter {
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
+  public _createURL: (nextState: UiState) => string;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
-  public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  public routing?: Routing;
   private _routingManager?: RoutingManager;
 
   public constructor(options: InstantSearchOptions) {
@@ -228,6 +227,9 @@ See ${createDocumentationLink({
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
 
+    this._createURL = defaultCreateURL;
+    this._initialUiState = initialUiState;
+
     if (searchFunction) {
       this._searchFunction = searchFunction;
     }
@@ -237,22 +239,27 @@ See ${createDocumentationLink({
       router: historyRouter(),
     };
 
+    let routingOptions: Routing | null = null;
     if (routing === true) {
-      this.routing = defaultRoutingOptions;
+      routingOptions = defaultRoutingOptions;
     } else if (isPlainObject(routing)) {
-      this.routing = {
+      routingOptions = {
         ...defaultRoutingOptions,
         ...routing,
       };
     }
 
-    if (this.routing) {
+    if (routingOptions) {
+      this._routingManager = new RoutingManager({
+        ...routingOptions,
+        instantSearchInstance: this,
+      });
+
+      this._createURL = this._routingManager.createURL;
       this._initialUiState = {
         ...initialUiState,
-        ...this.routing.stateMapping.routeToState(this.routing.router.read()),
+        ...this._routingManager.read(),
       };
-    } else {
-      this._initialUiState = initialUiState;
     }
   }
 
@@ -348,16 +355,6 @@ See ${createDocumentationLink({
       );
     }
 
-    if (this.routing) {
-      this._routingManager = new RoutingManager({
-        ...this.routing,
-        instantSearchInstance: this,
-      });
-      this._createURL = this._routingManager.createURL;
-    } else {
-      this._createURL = defaultCreateURL;
-    }
-
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
@@ -415,8 +412,9 @@ See ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    if (this._routingManager && this.routing) {
-      this._routingManager.applyStateFromRoute(this.routing.router.read());
+    if (this._routingManager) {
+      this._routingManager.applySearchParameters(this._routingManager.read());
+      this._routingManager.subscribe();
     }
 
     mainHelper.search();
@@ -497,7 +495,7 @@ See ${createDocumentationLink({
   };
 
   public createURL(nextState: UiState = {}): string {
-    if (!this._createURL) {
+    if (!this.started) {
       throw new Error(
         withUsage('The `start` method needs to be called before `createURL`.')
       );
