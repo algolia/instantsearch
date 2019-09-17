@@ -158,14 +158,6 @@ class InstantSearch extends EventEmitter {
       throw new Error(withUsage('The `searchClient` option is required.'));
     }
 
-    if (typeof (options as any).urlSync !== 'undefined') {
-      throw new Error(
-        withUsage(
-          'The `urlSync` option was removed in InstantSearch.js 3. You may want to use the `routing` option.'
-        )
-      );
-    }
-
     if (typeof (searchClient as any).search !== 'function') {
       throw new Error(
         `The \`searchClient\` must implement a \`search\` method.
