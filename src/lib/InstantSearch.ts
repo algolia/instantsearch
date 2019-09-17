@@ -388,8 +388,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       uiState: this._initialUiState,
     });
 
-    if (this._routingManager && this.routing) {
-      this._routingManager.applyStateFromRoute(this.routing.router.read());
+    if (this._routingManager) {
+      this._routingManager.applySearchParameters(this._routingManager.read());
       this._routingManager.subscribe();
     }
 
