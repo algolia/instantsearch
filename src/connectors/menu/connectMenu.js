@@ -1,3 +1,4 @@
+import { createShowMore } from '../../lib/enhancers';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -114,28 +115,18 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       );
     }
 
+    const {
+      toggleShowMore,
+      setToggleShowMore,
+      isShowingMore,
+      getCurrentLimit,
+    } = createShowMore({
+      limit,
+      showMoreLimit,
+    });
+
     return {
       $$type: 'ais.menu',
-
-      isShowingMore: false,
-
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        this.toggleShowMore();
-      },
-
-      createToggleShowMore({ results, instantSearchInstance }) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render({ results, instantSearchInstance });
-        };
-      },
-
-      getLimit() {
-        return this.isShowingMore ? showMoreLimit : limit;
-      },
 
       refine(helper) {
         return facetValue => {
@@ -149,8 +140,6 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       init({ helper, createURL, instantSearchInstance }) {
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-
         this._createURL = facetValue =>
           createURL(helper.state.toggleRefinement(attribute, facetValue));
 
@@ -164,8 +153,8 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             instantSearchInstance,
             canRefine: false,
             widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
+            isShowingMore: isShowingMore(),
+            toggleShowMore,
             canToggleShowMore: false,
           },
           true
@@ -173,24 +162,24 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       render({ results, instantSearchInstance }) {
+        setToggleShowMore(
+          this.render.bind(this, { results, instantSearchInstance })
+        );
+
+        const currentLimit = getCurrentLimit();
         const facetValues = results.getFacetValues(attribute, { sortBy });
         const facetItems =
           facetValues && facetValues.data ? facetValues.data : [];
 
         const items = transformItems(
           facetItems
-            .slice(0, this.getLimit())
+            .slice(0, currentLimit)
             .map(({ name: label, path: value, ...item }) => ({
               ...item,
               label,
               value,
             }))
         );
-
-        this.toggleShowMore = this.createToggleShowMore({
-          results,
-          instantSearchInstance,
-        });
 
         renderFn(
           {
@@ -200,11 +189,10 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             instantSearchInstance,
             canRefine: items.length > 0,
             widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
+            isShowingMore: isShowingMore(),
+            toggleShowMore,
             canToggleShowMore:
-              showMore &&
-              (this.isShowingMore || facetItems.length > this.getLimit()),
+              showMore && (isShowingMore() || facetItems.length > currentLimit),
           },
           false
         );

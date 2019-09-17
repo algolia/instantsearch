@@ -1,3 +1,4 @@
+import { createShowMore } from '../../lib/enhancers';
 import {
   checkRendering,
   warning,
@@ -92,31 +93,20 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
 
+    const {
+      toggleShowMore,
+      setToggleShowMore,
+      isShowingMore,
+      getCurrentLimit,
+    } = createShowMore({
+      limit,
+      showMoreLimit,
+    });
+
     return {
       $$type: 'ais.hierarchicalMenu',
 
-      isShowingMore: false,
-
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        this.toggleShowMore();
-      },
-
-      createToggleShowMore(renderOptions) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render(renderOptions);
-        };
-      },
-
-      getLimit() {
-        return this.isShowingMore ? showMoreLimit : limit;
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
@@ -135,26 +125,17 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             refine: this._refine,
             instantSearchInstance,
             widgetParams,
-            isShowingMore: false,
-            toggleShowMore: this.cachedToggleShowMore,
+            isShowingMore: isShowingMore(),
+            toggleShowMore,
             canToggleShowMore: false,
           },
           true
         );
       },
 
-      _prepareFacetValues(facetValues, state) {
-        return facetValues
-          .slice(0, this.getLimit())
-          .map(({ name: label, path: value, ...subValue }) => {
-            if (Array.isArray(subValue.data)) {
-              subValue.data = this._prepareFacetValues(subValue.data, state);
-            }
-            return { ...subValue, label, value };
-          });
-      },
-
       render(renderOptions) {
+        setToggleShowMore(this.render.bind(this, renderOptions));
+
         const {
           results,
           state,
@@ -162,11 +143,11 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           instantSearchInstance,
         } = renderOptions;
 
+        const currentLimit = getCurrentLimit();
         const facetValues =
           results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [];
         const items = transformItems(
-          this._prepareFacetValues(facetValues),
-          state
+          formatFacetValues(facetValues, currentLimit)
         );
 
         // Bind createURL to this specific attribute
@@ -177,19 +158,16 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         }
 
         const maxValuesPerFacetConfig = state.maxValuesPerFacet;
-        const currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
         // if the facets are exhaustive. The only moment we are sure it is exhaustive
         // is when it is strictly under the number requested unless we know that another
-        // widget has requested more values (maxValuesPerFacet > getLimit()).
+        // widget has requested more values (maxValuesPerFacet > getCurrentLimit()).
         // Because this is used for making the search of facets unable or not, it is important
         // to be conservative here.
         const hasExhaustiveItems =
           maxValuesPerFacetConfig > currentLimit
             ? facetValues.length <= currentLimit
             : facetValues.length < currentLimit;
-
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
         renderFn(
           {
@@ -198,10 +176,10 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             createURL: _createURL,
             instantSearchInstance,
             widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
+            isShowingMore: isShowingMore(),
+            toggleShowMore,
             canToggleShowMore:
-              showMore && (this.isShowingMore || !hasExhaustiveItems),
+              showMore && (isShowingMore() || !hasExhaustiveItems),
           },
           false
         );
@@ -295,4 +273,20 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
     };
   };
+}
+
+function formatFacetValues(facetValues, currentLimit) {
+  return facetValues
+    .slice(0, currentLimit)
+    .map(({ name: label, path: value, ...props }) => {
+      if (Array.isArray(props.data)) {
+        props.data = formatFacetValues(props.data, currentLimit);
+      }
+
+      return {
+        ...props,
+        label,
+        value,
+      };
+    });
 }

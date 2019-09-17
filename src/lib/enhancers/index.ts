@@ -1,0 +1,1 @@
+export { createShowMore } from './createShowMore';

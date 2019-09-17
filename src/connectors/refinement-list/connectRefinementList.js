@@ -1,3 +1,4 @@
+import { createShowMore } from '../../lib/enhancers';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -152,12 +153,21 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       value: label,
       highlighted: label,
     });
-    const getLimit = isShowingMore => (isShowingMore ? showMoreLimit : limit);
 
     let lastResultsFromMainSearch = [];
     let hasExhaustiveItems = true;
     let searchForFacetValues;
     let triggerRefine;
+
+    const {
+      toggleShowMore,
+      setToggleShowMore,
+      isShowingMore,
+      getCurrentLimit,
+    } = createShowMore({
+      limit,
+      showMoreLimit,
+    });
 
     const render = ({
       items,
@@ -167,8 +177,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       refine,
       isFromSearch,
       isFirstSearch,
-      isShowingMore,
-      toggleShowMore,
       instantSearchInstance,
     }) => {
       // Compute a specific createURL method able to link to any facet value state change
@@ -185,11 +193,11 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           helperSpecializedSearchFacetValues,
           refine,
           instantSearchInstance,
-          isShowingMore
+          isShowingMore()
         );
 
       const canShowLess =
-        isShowingMore && lastResultsFromMainSearch.length > limit;
+        isShowingMore() && lastResultsFromMainSearch.length > limit;
       const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
 
       const canToggleShowMore = canShowLess || canShowMore;
@@ -204,7 +212,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           isFromSearch,
           canRefine: isFromSearch || items.length > 0,
           widgetParams,
-          isShowingMore,
+          isShowingMore: isShowingMore(),
           canToggleShowMore,
           toggleShowMore,
           hasExhaustiveItems,
@@ -214,13 +222,12 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     };
 
     /* eslint-disable max-params */
-    const createSearchForFacetValues = (helper, toggleShowMore) => (
+    const createSearchForFacetValues = helper => (
       state,
       createURL,
       helperSpecializedSearchFacetValues,
       toggleRefinement,
-      instantSearchInstance,
-      isShowingMore
+      instantSearchInstance
     ) => query => {
       if (query === '' && lastResultsFromMainSearch) {
         // render with previous data from the helper.
@@ -233,8 +240,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           isFromSearch: false,
           isFirstSearch: false,
           instantSearchInstance,
-          toggleShowMore, // and yet it will be
-          isShowingMore, // so we need to restore in the state of show more as well
         });
       } else {
         const tags = {
@@ -247,7 +252,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         };
 
         helper
-          .searchForFacetValues(attribute, query, getLimit(isShowingMore), tags)
+          .searchForFacetValues(attribute, query, getCurrentLimit(), tags)
           .then(results => {
             const facetValues = escapeFacetValues
               ? escapeFacets(results.facetHits)
@@ -270,7 +275,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
               isFromSearch: true,
               isFirstSearch: false,
               instantSearchInstance,
-              isShowingMore,
             });
           });
       }
@@ -280,36 +284,11 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.refinementList',
 
-      isShowingMore: false,
-
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        this.toggleShowMore();
-      },
-
-      createToggleShowMore(renderOptions) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render(renderOptions);
-        };
-      },
-
-      getLimit() {
-        return getLimit(this.isShowingMore);
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-
         triggerRefine = facetValue =>
           helper.toggleRefinement(attribute, facetValue).search();
 
-        searchForFacetValues = createSearchForFacetValues(
-          helper,
-          this.cachedToggleShowMore
-        );
+        searchForFacetValues = createSearchForFacetValues(helper);
 
         render({
           items: [],
@@ -320,12 +299,13 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           isFromSearch: false,
           isFirstSearch: true,
           instantSearchInstance,
-          isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
+          toggleShowMore,
         });
       },
 
       render(renderOptions) {
+        setToggleShowMore(this.render.bind(this, renderOptions));
+
         const {
           results,
           state,
@@ -333,17 +313,17 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
         } = renderOptions;
 
+        const currentLimit = getCurrentLimit();
         const facetValues = results.getFacetValues(attribute, { sortBy }) || [];
         const items = transformItems(
-          facetValues.slice(0, this.getLimit()).map(formatItems)
+          facetValues.slice(0, currentLimit).map(formatItems)
         );
 
         const maxValuesPerFacetConfig = state.maxValuesPerFacet;
-        const currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
         // if the facets are exhaustive. The only moment we are sure it is exhaustive
         // is when it is strictly under the number requested unless we know that another
-        // widget has requested more values (maxValuesPerFacet > getLimit()).
+        // widget has requested more values (maxValuesPerFacet > currentLimit).
         // Because this is used for making the search of facets unable or not, it is important
         // to be conservative here.
         hasExhaustiveItems =
@@ -352,8 +332,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
             : facetValues.length < currentLimit;
 
         lastResultsFromMainSearch = items;
-
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
         render({
           items,
@@ -364,8 +342,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           isFromSearch: false,
           isFirstSearch: false,
           instantSearchInstance,
-          isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
         });
       },
 
