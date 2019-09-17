@@ -3,6 +3,7 @@ dist/
 build/
 *.log
 .DS_Store
+.env
 .eslintcache
 .idea/
 *.iml
