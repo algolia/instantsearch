@@ -120,7 +120,7 @@ export interface Router<TRouteState = UiState> {
   /**
    * Called when InstantSearch is disposed. Used to remove subscriptions.
    */
-  dispose?(): void;
+  dispose(): void;
 }
 
 /**

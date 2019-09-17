@@ -71,9 +71,7 @@ class RoutingManager {
   }
 
   public dispose(): void {
-    if (this.router.dispose) {
-      this.router.dispose();
-    }
+    this.router.dispose();
   }
 
   public createURL(nextState: UiState): string {
