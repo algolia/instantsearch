@@ -193,3 +193,17 @@ router.write = state => {
   originalWrite(state)
 }
 ```
+
+## router
+
+The `dispose` function on the `router` interface is now required. Its signature has also be updated (see below). Those changes shouldn't impact most codebases because the implementation of a custom router is not that common. The previous signature was tied to how widgets are working but a router is not a widget. We've updated the API to use a simpler signature that matches the actual usage better.
+
+```ts
+interface Router {
+  // ...
+  // Before
+  dispose?({ helper, state }: { helper: AlgoliaSearchHelper, state: SearchParameters }): SearchParameters | void
+  // After
+  dispose(): void
+}
+```
