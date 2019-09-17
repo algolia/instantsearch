@@ -136,7 +136,7 @@ class InstantSearch extends EventEmitter {
   public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public routing?: Routing;
-  private _routingManager?;
+  private _routingManager?: RoutingManager;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -415,7 +415,7 @@ See ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    if (this.routing) {
+    if (this._routingManager && this.routing) {
       this._routingManager.applyStateFromRoute(this.routing.router.read());
     }
 
@@ -456,7 +456,7 @@ See ${createDocumentationLink({
     this.mainHelper = null;
     this.helper = null;
 
-    if (this.routing) {
+    if (this._routingManager) {
       this._routingManager.dispose();
     }
   }
@@ -490,7 +490,8 @@ See ${createDocumentationLink({
 
   public onStateChange = () => {
     const nextUiState = this.mainIndex.getWidgetState({});
-    if (this.routing) {
+
+    if (this._routingManager) {
       this._routingManager.write({ state: nextUiState });
     }
   };

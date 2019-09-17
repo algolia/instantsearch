@@ -70,10 +70,8 @@ class RoutingManager {
     this.router.write(route);
   }
 
-  public dispose({ helper, state }): void {
-    if (this.router.dispose) {
-      this.router.dispose({ helper, state });
-    }
+  public dispose(): void {
+    this.router.dispose();
   }
 
   public createURL(nextState: UiState): string {
