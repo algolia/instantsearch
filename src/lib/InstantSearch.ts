@@ -130,10 +130,9 @@ class InstantSearch extends EventEmitter {
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
+  public _createURL: (nextState: UiState) => string;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
-  public _createURL?(nextState: UiState): string;
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  public routing?: Routing;
   private _routingManager?: RoutingManager;
 
   public constructor(options: InstantSearchOptions) {
@@ -209,6 +208,9 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
 
+    this._createURL = defaultCreateURL;
+    this._initialUiState = initialUiState;
+
     if (searchFunction) {
       this._searchFunction = searchFunction;
     }
@@ -218,22 +220,27 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       router: historyRouter(),
     };
 
+    let routingOptions: Routing | null = null;
     if (routing === true) {
-      this.routing = defaultRoutingOptions;
+      routingOptions = defaultRoutingOptions;
     } else if (isPlainObject(routing)) {
-      this.routing = {
+      routingOptions = {
         ...defaultRoutingOptions,
         ...routing,
       };
     }
 
-    if (this.routing) {
+    if (routingOptions) {
+      this._routingManager = new RoutingManager({
+        ...routingOptions,
+        instantSearchInstance: this,
+      });
+
+      this._createURL = this._routingManager.createURL;
       this._initialUiState = {
         ...initialUiState,
-        ...this.routing.stateMapping.routeToState(this.routing.router.read()),
+        ...this._routingManager.read(),
       };
-    } else {
-      this._initialUiState = initialUiState;
     }
   }
 
@@ -327,16 +334,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       throw new Error(
         withUsage('The `start` method has already been called once.')
       );
-    }
-
-    if (this.routing) {
-      this._routingManager = new RoutingManager({
-        ...this.routing,
-        instantSearchInstance: this,
-      });
-      this._createURL = this._routingManager.createURL;
-    } else {
-      this._createURL = defaultCreateURL;
     }
 
     // This Helper is used for the queries, we don't care about its state. The
@@ -479,7 +476,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   };
 
   public createURL(nextState: UiState = {}): string {
-    if (!this._createURL) {
+    if (!this.started) {
       throw new Error(
         withUsage('The `start` method needs to be called before `createURL`.')
       );
