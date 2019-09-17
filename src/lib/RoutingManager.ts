@@ -34,30 +34,6 @@ class RoutingManager {
     this.instantSearchInstance = instantSearchInstance;
 
     this.createURL = this.createURL.bind(this);
-    this.applySearchParameters = this.applySearchParameters.bind(this);
-  }
-
-  public applySearchParameters(uiState: UiState): void {
-    walk(this.instantSearchInstance.mainIndex, current => {
-      const widgets = current.getWidgets();
-      const indexUiState = uiState[current.getIndexId()] || {};
-
-      const searchParameters = widgets.reduce((parameters, widget) => {
-        if (!widget.getWidgetSearchParameters) {
-          return parameters;
-        }
-
-        return widget.getWidgetSearchParameters(parameters, {
-          uiState: indexUiState,
-        });
-      }, current.getHelper()!.state);
-
-      current
-        .getHelper()!
-        .overrideStateWithoutTriggeringChangeEvent(searchParameters);
-
-      this.instantSearchInstance.scheduleSearch();
-    });
   }
 
   public read(): UiState {
@@ -76,7 +52,26 @@ class RoutingManager {
     this.router.onUpdate(route => {
       const uiState = this.stateMapping.routeToState(route);
 
-      this.applySearchParameters(uiState);
+      walk(this.instantSearchInstance.mainIndex, current => {
+        const widgets = current.getWidgets();
+        const indexUiState = uiState[current.getIndexId()] || {};
+
+        const searchParameters = widgets.reduce((parameters, widget) => {
+          if (!widget.getWidgetSearchParameters) {
+            return parameters;
+          }
+
+          return widget.getWidgetSearchParameters(parameters, {
+            uiState: indexUiState,
+          });
+        }, current.getHelper()!.state);
+
+        current
+          .getHelper()!
+          .overrideStateWithoutTriggeringChangeEvent(searchParameters);
+
+        this.instantSearchInstance.scheduleSearch();
+      });
     });
   }
 
