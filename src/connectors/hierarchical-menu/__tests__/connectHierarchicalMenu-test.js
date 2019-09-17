@@ -952,66 +952,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         createURL: () => '#',
       });
 
-      const { toggleShowMore } = rendering.mock.calls[1][0];
+      const firstRenderProps = rendering.mock.calls[1][0];
 
-      expect(rendering).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          items: [
-            {
-              label: 'a',
-              value: 'a',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-            {
-              label: 'b',
-              value: 'b',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-          ],
-        }),
-        expect.anything()
-      );
+      expect(firstRenderProps.isShowingMore).toEqual(false);
+      expect(firstRenderProps.items).toEqual([
+        {
+          label: 'a',
+          value: 'a',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+        {
+          label: 'b',
+          value: 'b',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+      ]);
 
-      toggleShowMore();
+      firstRenderProps.toggleShowMore();
 
-      expect(rendering).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          items: [
-            {
-              label: 'a',
-              value: 'a',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-            {
-              label: 'b',
-              value: 'b',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-            {
-              label: 'c',
-              value: 'c',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-            {
-              label: 'd',
-              value: 'd',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-          ],
-        }),
-        expect.anything()
+      const secondRenderProps = rendering.mock.calls[2][0];
+
+      expect(secondRenderProps.isShowingMore).toEqual(true);
+      expect(secondRenderProps.items).toEqual([
+        {
+          label: 'a',
+          value: 'a',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+        {
+          label: 'b',
+          value: 'b',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+        {
+          label: 'c',
+          value: 'c',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+        {
+          label: 'd',
+          value: 'd',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+      ]);
+
+      // The reference of the function should stay the same
+      // to bind the function only once userland.
+      expect(firstRenderProps.toggleShowMore).toBe(
+        secondRenderProps.toggleShowMore
       );
     });
 
@@ -1069,60 +1069,54 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         createURL: () => '#',
       });
 
-      const { toggleShowMore } = rendering.mock.calls[1][0];
+      const firstRenderProps = rendering.mock.calls[1][0];
 
-      expect(rendering).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          items: [
-            {
-              label: 'a',
-              value: 'a',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-            {
-              label: 'b',
-              value: 'b',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-          ],
-        }),
-        expect.anything()
-      );
+      expect(firstRenderProps.isShowingMore).toEqual(false);
+      expect(firstRenderProps.items).toEqual([
+        {
+          label: 'a',
+          value: 'a',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+        {
+          label: 'b',
+          value: 'b',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+      ]);
 
-      toggleShowMore();
+      firstRenderProps.toggleShowMore();
 
-      expect(rendering).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          items: [
-            {
-              label: 'a',
-              value: 'a',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-            {
-              label: 'b',
-              value: 'b',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-            {
-              label: 'c',
-              value: 'c',
-              count: 880,
-              isRefined: false,
-              data: null,
-            },
-          ],
-        }),
-        expect.anything()
-      );
+      const secondRenderProps = rendering.mock.calls[2][0];
+
+      expect(secondRenderProps.isShowingMore).toEqual(true);
+      expect(secondRenderProps.items).toEqual([
+        {
+          label: 'a',
+          value: 'a',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+        {
+          label: 'b',
+          value: 'b',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+        {
+          label: 'c',
+          value: 'c',
+          count: 880,
+          isRefined: false,
+          data: null,
+        },
+      ]);
     });
   });
 });

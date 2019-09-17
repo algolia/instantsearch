@@ -1,3 +1,4 @@
+import { createWithShowMore } from '../../lib/enhancers/withShowMore';
 import {
   checkRendering,
   warning,
@@ -62,6 +63,8 @@ const withUsage = createDocumentationMessageGenerator({
 export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
+  const withShowMore = createWithShowMore();
+
   return (widgetParams = {}) => {
     const {
       attributes,
@@ -92,207 +95,193 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
 
-    return {
-      $$type: 'ais.hierarchicalMenu',
+    return withShowMore(
+      ({ toggleShowMore, isShowingMore, onToggleShowMore }) => ({
+        $$type: 'ais.hierarchicalMenu',
 
-      isShowingMore: false,
+        init({ helper, createURL, instantSearchInstance }) {
+          this._refine = function(facetValue) {
+            helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+          };
 
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      toggleShowMore() {},
-      cachedToggleShowMore() {
-        this.toggleShowMore();
-      },
+          // Bind createURL to this specific attribute
+          function _createURL(facetValue) {
+            return createURL(
+              helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
+            );
+          }
 
-      createToggleShowMore(renderOptions) {
-        return () => {
-          this.isShowingMore = !this.isShowingMore;
-          this.render(renderOptions);
-        };
-      },
-
-      getLimit() {
-        return this.isShowingMore ? showMoreLimit : limit;
-      },
-
-      init({ helper, createURL, instantSearchInstance }) {
-        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
-        this._refine = function(facetValue) {
-          helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
-        };
-
-        // Bind createURL to this specific attribute
-        function _createURL(facetValue) {
-          return createURL(
-            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
+          renderFn(
+            {
+              items: [],
+              createURL: _createURL,
+              refine: this._refine,
+              instantSearchInstance,
+              widgetParams,
+              isShowingMore: isShowingMore(),
+              toggleShowMore,
+              canToggleShowMore: false,
+            },
+            true
           );
-        }
+        },
 
-        renderFn(
-          {
-            items: [],
-            createURL: _createURL,
-            refine: this._refine,
+        render(renderOptions) {
+          onToggleShowMore(this.render.bind(this, renderOptions));
+
+          const {
+            results,
+            state,
+            createURL,
             instantSearchInstance,
-            widgetParams,
-            isShowingMore: false,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore: false,
-          },
-          true
-        );
-      },
+          } = renderOptions;
 
-      _prepareFacetValues(facetValues, state) {
-        return facetValues
-          .slice(0, this.getLimit())
-          .map(({ name: label, path: value, ...subValue }) => {
-            if (Array.isArray(subValue.data)) {
-              subValue.data = this._prepareFacetValues(subValue.data, state);
-            }
-            return { ...subValue, label, value };
-          });
-      },
-
-      render(renderOptions) {
-        const {
-          results,
-          state,
-          createURL,
-          instantSearchInstance,
-        } = renderOptions;
-
-        const facetValues =
-          results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [];
-        const items = transformItems(
-          this._prepareFacetValues(facetValues),
-          state
-        );
-
-        // Bind createURL to this specific attribute
-        function _createURL(facetValue) {
-          return createURL(
-            state.toggleRefinement(hierarchicalFacetName, facetValue)
+          const currentLimit = isShowingMore() ? showMoreLimit : limit;
+          const facetValues =
+            results.getFacetValues(hierarchicalFacetName, { sortBy }).data ||
+            [];
+          const items = transformItems(
+            formatFacetValues(facetValues, currentLimit)
           );
-        }
 
-        const maxValuesPerFacetConfig = state.maxValuesPerFacet;
-        const currentLimit = this.getLimit();
-        // If the limit is the max number of facet retrieved it is impossible to know
-        // if the facets are exhaustive. The only moment we are sure it is exhaustive
-        // is when it is strictly under the number requested unless we know that another
-        // widget has requested more values (maxValuesPerFacet > getLimit()).
-        // Because this is used for making the search of facets unable or not, it is important
-        // to be conservative here.
-        const hasExhaustiveItems =
-          maxValuesPerFacetConfig > currentLimit
-            ? facetValues.length <= currentLimit
-            : facetValues.length < currentLimit;
+          // Bind createURL to this specific attribute
+          function _createURL(facetValue) {
+            return createURL(
+              state.toggleRefinement(hierarchicalFacetName, facetValue)
+            );
+          }
 
-        this.toggleShowMore = this.createToggleShowMore(renderOptions);
+          const maxValuesPerFacetConfig = state.maxValuesPerFacet;
+          // If the limit is the max number of facet retrieved it is impossible to know
+          // if the facets are exhaustive. The only moment we are sure it is exhaustive
+          // is when it is strictly under the number requested unless we know that another
+          // widget has requested more values (maxValuesPerFacet > getLimit()).
+          // Because this is used for making the search of facets unable or not, it is important
+          // to be conservative here.
+          const hasExhaustiveItems =
+            maxValuesPerFacetConfig > currentLimit
+              ? facetValues.length <= currentLimit
+              : facetValues.length < currentLimit;
 
-        renderFn(
-          {
-            items,
-            refine: this._refine,
-            createURL: _createURL,
-            instantSearchInstance,
-            widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore:
-              showMore && (this.isShowingMore || !hasExhaustiveItems),
-          },
-          false
-        );
-      },
+          renderFn(
+            {
+              items,
+              refine: this._refine,
+              createURL: _createURL,
+              instantSearchInstance,
+              widgetParams,
+              isShowingMore: isShowingMore(),
+              toggleShowMore,
+              canToggleShowMore:
+                showMore && (isShowingMore() || !hasExhaustiveItems),
+            },
+            false
+          );
+        },
 
-      // eslint-disable-next-line valid-jsdoc
-      /**
-       * @param {Object} param0
-       * @param {import('algoliasearch-helper').SearchParameters} param0.state
-       */
-      dispose({ state }) {
-        unmountFn();
+        // eslint-disable-next-line valid-jsdoc
+        /**
+         * @param {Object} param0
+         * @param {import('algoliasearch-helper').SearchParameters} param0.state
+         */
+        dispose({ state }) {
+          unmountFn();
 
-        return state
-          .removeHierarchicalFacet(hierarchicalFacetName)
-          .setQueryParameter('maxValuesPerFacet', undefined);
-      },
+          return state
+            .removeHierarchicalFacet(hierarchicalFacetName)
+            .setQueryParameter('maxValuesPerFacet', undefined);
+        },
 
-      getWidgetState(uiState, { searchParameters }) {
-        const path = searchParameters.getHierarchicalFacetBreadcrumb(
-          hierarchicalFacetName
-        );
-
-        if (!path.length) {
-          return uiState;
-        }
-
-        return {
-          ...uiState,
-          hierarchicalMenu: {
-            ...uiState.hierarchicalMenu,
-            [hierarchicalFacetName]: path,
-          },
-        };
-      },
-
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        const values =
-          uiState.hierarchicalMenu &&
-          uiState.hierarchicalMenu[hierarchicalFacetName];
-
-        if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
-          const facet = searchParameters.getHierarchicalFacetByName(
+        getWidgetState(uiState, { searchParameters }) {
+          const path = searchParameters.getHierarchicalFacetBreadcrumb(
             hierarchicalFacetName
           );
 
-          warning(
-            isEqual(facet.attributes, attributes) &&
-              facet.separator === separator &&
-              facet.rootPath === rootPath,
-            'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
-          );
-        }
+          if (!path.length) {
+            return uiState;
+          }
 
-        const withFacetConfiguration = searchParameters
-          .removeHierarchicalFacet(hierarchicalFacetName)
-          .addHierarchicalFacet({
-            name: hierarchicalFacetName,
-            attributes,
-            separator,
-            rootPath,
-            showParentLevel,
-          });
-
-        const currentMaxValuesPerFacet =
-          withFacetConfiguration.maxValuesPerFacet || 0;
-
-        const nextMaxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
-          'maxValuesPerFacet',
-          nextMaxValuesPerFacet
-        );
-
-        if (!values) {
-          return withMaxValuesPerFacet.setQueryParameters({
-            hierarchicalFacetsRefinements: {
-              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
-              [hierarchicalFacetName]: [],
+          return {
+            ...uiState,
+            hierarchicalMenu: {
+              ...uiState.hierarchicalMenu,
+              [hierarchicalFacetName]: path,
             },
-          });
-        }
+          };
+        },
 
-        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
-          hierarchicalFacetName,
-          values.join(separator)
-        );
-      },
-    };
+        getWidgetSearchParameters(searchParameters, { uiState }) {
+          const values =
+            uiState.hierarchicalMenu &&
+            uiState.hierarchicalMenu[hierarchicalFacetName];
+
+          if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
+            const facet = searchParameters.getHierarchicalFacetByName(
+              hierarchicalFacetName
+            );
+
+            warning(
+              isEqual(facet.attributes, attributes) &&
+                facet.separator === separator &&
+                facet.rootPath === rootPath,
+              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
+            );
+          }
+
+          const withFacetConfiguration = searchParameters
+            .removeHierarchicalFacet(hierarchicalFacetName)
+            .addHierarchicalFacet({
+              name: hierarchicalFacetName,
+              attributes,
+              separator,
+              rootPath,
+              showParentLevel,
+            });
+
+          const currentMaxValuesPerFacet =
+            withFacetConfiguration.maxValuesPerFacet || 0;
+
+          const nextMaxValuesPerFacet = Math.max(
+            currentMaxValuesPerFacet,
+            showMore ? showMoreLimit : limit
+          );
+
+          const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+            'maxValuesPerFacet',
+            nextMaxValuesPerFacet
+          );
+
+          if (!values) {
+            return withMaxValuesPerFacet.setQueryParameters({
+              hierarchicalFacetsRefinements: {
+                ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+                [hierarchicalFacetName]: [],
+              },
+            });
+          }
+
+          return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
+            hierarchicalFacetName,
+            values.join(separator)
+          );
+        },
+      })
+    );
   };
+}
+
+function formatFacetValues(facetValues, currentLimit) {
+  return facetValues
+    .slice(0, currentLimit)
+    .map(({ name: label, path: value, ...props }) => {
+      if (Array.isArray(props.data)) {
+        props.data = formatFacetValues(props.data, currentLimit);
+      }
+
+      return {
+        ...props,
+        label,
+        value,
+      };
+    });
 }
