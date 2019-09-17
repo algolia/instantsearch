@@ -70,9 +70,9 @@ class RoutingManager {
     this.router.write(route);
   }
 
-  public dispose({ helper, state }): void {
+  public dispose(): void {
     if (this.router.dispose) {
-      this.router.dispose({ helper, state });
+      this.router.dispose();
     }
   }
 
