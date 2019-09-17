@@ -398,6 +398,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     if (this._routingManager && this.routing) {
       this._routingManager.applyStateFromRoute(this.routing.router.read());
+      this._routingManager.subscribe();
     }
 
     mainHelper.search();

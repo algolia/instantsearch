@@ -35,8 +35,6 @@ class RoutingManager {
 
     this.createURL = this.createURL.bind(this);
     this.applyStateFromRoute = this.applyStateFromRoute.bind(this);
-
-    this.router.onUpdate(this.applyStateFromRoute);
   }
 
   public applyStateFromRoute(route: UiState): void {
@@ -74,6 +72,10 @@ class RoutingManager {
     const route = this.stateMapping.stateToRoute(state);
 
     this.router.write(route);
+  }
+
+  public subscribe(): void {
+    this.router.onUpdate(this.applyStateFromRoute);
   }
 
   public dispose(): void {
