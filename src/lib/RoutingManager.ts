@@ -34,17 +34,13 @@ class RoutingManager {
     this.instantSearchInstance = instantSearchInstance;
 
     this.createURL = this.createURL.bind(this);
-    this.applyStateFromRoute = this.applyStateFromRoute.bind(this);
-
-    this.router.onUpdate(this.applyStateFromRoute);
+    this.applySearchParameters = this.applySearchParameters.bind(this);
   }
 
-  public applyStateFromRoute(route: UiState): void {
-    const currentUiState = this.stateMapping.routeToState(route);
-
+  public applySearchParameters(uiState: UiState): void {
     walk(this.instantSearchInstance.mainIndex, current => {
       const widgets = current.getWidgets();
-      const indexUiState = currentUiState[current.getIndexId()] || {};
+      const indexUiState = uiState[current.getIndexId()] || {};
 
       const searchParameters = widgets.reduce((parameters, widget) => {
         if (!widget.getWidgetSearchParameters) {
@@ -64,10 +60,24 @@ class RoutingManager {
     });
   }
 
+  public read(): UiState {
+    const route = this.router.read();
+
+    return this.stateMapping.routeToState(route);
+  }
+
   public write({ state }: { state: UiState }) {
     const route = this.stateMapping.stateToRoute(state);
 
     this.router.write(route);
+  }
+
+  public subscribe(): void {
+    this.router.onUpdate(route => {
+      const uiState = this.stateMapping.routeToState(route);
+
+      this.applySearchParameters(uiState);
+    });
   }
 
   public dispose(): void {
