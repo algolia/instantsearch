@@ -226,7 +226,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (!hasShowPrevious || !page) {
+        if (!page) {
           return uiState;
         }
 
@@ -249,7 +249,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
 
         // The page in the search parameters is decremented by one
         // to get to the actual parameter value from the UI state.
-        const page = hasShowPrevious && uiState.page ? uiState.page - 1 : 0;
+        const page = uiState.page ? uiState.page - 1 : 0;
 
         return widgetSearchParameters.setQueryParameter('page', page);
       },
