@@ -530,7 +530,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         );
       });
 
-      test('should enforce the default value on empty UiState', () => {
+      test('should retrun the initial index on empty UiState with widget initialized', () => {
         const [widget, helper, refine] = getInitializedWidget();
 
         refine('other');
@@ -545,6 +545,32 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         expect(searchParametersAfter).toEqual(
           new SearchParameters({
             // note that this isn't the refined value, but the default
+            index: 'relevance',
+          })
+        );
+      });
+
+      test('should retrun the current index on empty UiState without widget initialized', () => {
+        const sortBy = connectSortBy(() => {});
+        const widget = sortBy({
+          items: [
+            { label: 'Sort products by relevance', value: 'relevance' },
+            { label: 'Sort products by price', value: 'priceASC' },
+            { label: 'Sort products by magic', value: 'other' },
+          ],
+        });
+
+        const actual = widget.getWidgetSearchParameters(
+          new SearchParameters({
+            index: 'relevance',
+          }),
+          {
+            uiState: {},
+          }
+        );
+
+        expect(actual).toEqual(
+          new SearchParameters({
             index: 'relevance',
           })
         );

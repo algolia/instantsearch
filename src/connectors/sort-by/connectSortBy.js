@@ -170,7 +170,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameter(
           'index',
-          uiState.sortBy || this.initialIndex
+          uiState.sortBy || this.initialIndex || searchParameters.index
         );
       },
     };
