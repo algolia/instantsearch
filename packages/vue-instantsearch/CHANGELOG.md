@@ -1,3 +1,12 @@
+# [2.5.0](https://github.com/algolia/vue-instantsearch/compare/v2.4.0...v2.5.0) (2019-09-18)
+
+
+### Features
+
+* expose `createSuitMixin` to use for class names in custom widgets ([#721](https://github.com/algolia/vue-instantsearch/issues/721)) ([5063ce1](https://github.com/algolia/vue-instantsearch/commit/5063ce1))
+
+
+
 # [2.4.0](https://github.com/algolia/vue-instantsearch/compare/v2.3.0...v2.4.0) (2019-09-03)
 
 
