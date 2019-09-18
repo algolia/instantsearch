@@ -530,7 +530,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         );
       });
 
-      test('should retrun the initial index on empty UiState with widget initialized', () => {
+      test('should return the initial index on empty UiState with widget initialized', () => {
         const [widget, helper, refine] = getInitializedWidget();
 
         refine('other');
@@ -550,7 +550,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         );
       });
 
-      test('should retrun the current index on empty UiState without widget initialized', () => {
+      test('should return the current index on empty UiState without widget initialized', () => {
         const sortBy = connectSortBy(() => {});
         const widget = sortBy({
           items: [
