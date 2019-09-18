@@ -488,6 +488,23 @@ describe('start', () => {
     expect(widget.init).toHaveBeenCalledTimes(1);
   });
 
+  it('triggers a single search with `routing`', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      routing: true,
+      searchClient,
+    });
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
+
+    search.start();
+
+    await runAllMicroTasks();
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+  });
+
   it('triggers a search without errors', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
