@@ -59,7 +59,7 @@ export type NumericMenuConnectorParams = {
   /**
    * Function to transform the items passed to the templates
    */
-  transformItems: ParamTransformItems;
+  transformItems?: ParamTransformItems;
 };
 
 type Refine = (facetValue: string) => void;
