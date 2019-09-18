@@ -226,7 +226,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (!page) {
+        if (!hasShowPrevious || !page) {
           return uiState;
         }
 
