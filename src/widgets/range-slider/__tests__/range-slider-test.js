@@ -1,9 +1,9 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import AlgoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import rangeSlider from '../range-slider';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 

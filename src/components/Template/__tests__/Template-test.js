@@ -1,5 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import Template from '../Template';
 import { mount } from 'enzyme';
 
@@ -45,37 +46,37 @@ describe('Template', () => {
         data: { hello: 'mom' },
         rootProps: { className: 'myCssClass' },
       });
-      component = ReactDOM.render(<Template {...props} />, container);
+      component = render(<Template {...props} />, container);
       jest.spyOn(component, 'render');
     });
 
     it('does not call render when no change in data', () => {
-      ReactDOM.render(<Template {...props} />, container);
+      render(<Template {...props} />, container);
       expect(component.render).not.toHaveBeenCalled();
     });
 
     it('calls render when data changes', () => {
       props.data = { hello: 'dad' };
-      ReactDOM.render(<Template {...props} />, container);
+      render(<Template {...props} />, container);
       expect(component.render).toHaveBeenCalled();
     });
 
     it('calls render when templateKey changes', () => {
       props.templateKey += '-rerender';
       props.templates = { [props.templateKey]: '' };
-      ReactDOM.render(<Template {...props} />, container);
+      render(<Template {...props} />, container);
       expect(component.render).toHaveBeenCalled();
     });
 
     it('calls render when rootProps changes', () => {
       props.rootProps = { className: 'myCssClass mySecondCssClass' };
-      ReactDOM.render(<Template {...props} />, container);
+      render(<Template {...props} />, container);
       expect(component.render).toHaveBeenCalled();
     });
 
     it('does not call render when rootProps remain unchanged', () => {
       props.rootProps = { className: 'myCssClass' };
-      ReactDOM.render(<Template {...props} />, container);
+      render(<Template {...props} />, container);
       expect(component.render).not.toHaveBeenCalled();
     });
   });

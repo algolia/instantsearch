@@ -54,7 +54,7 @@
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
-    "preact": "^10.0.0-rc.1",
+    "preact": "^10.0.0-rc.3",
     "preact-rheostat": "^2.1.1",
     "prop-types": "^15.5.10",
     "qs": "^6.5.1"
@@ -103,6 +103,7 @@
     "conventional-changelog-cli": "2.0.23",
     "doctoc": "1.4.0",
     "enzyme": "3.10.0",
+    "enzyme-adapter-preact-pure": "2.0.2",
     "enzyme-adapter-react-16": "1.14.0",
     "enzyme-to-json": "3.4.0",
     "eslint": "6.2.2",

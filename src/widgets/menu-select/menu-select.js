@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import connectMenu from '../../connectors/menu/connectMenu';
 import MenuSelect from '../../components/MenuSelect/MenuSelect';

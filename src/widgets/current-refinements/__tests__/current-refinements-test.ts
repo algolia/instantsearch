@@ -1,4 +1,4 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -8,8 +8,8 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 

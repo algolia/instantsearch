@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { shallow, mount } from 'enzyme';
 import { highlight } from '../../../helpers';
 import { TAG_REPLACEMENT } from '../../../lib/escape-highlight';
@@ -19,7 +21,8 @@ describe('Hits', () => {
       templateProps: {},
       ...extraProps,
     };
-    return shallow(React.createElement(Hits, props));
+
+    return shallow(<Hits {...props} />);
   }
 
   describe('no results', () => {

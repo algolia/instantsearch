@@ -1,4 +1,6 @@
-import React, { Component } from 'preact';
+/** @jsx h */
+
+import { h, Component } from 'preact';
 import Rheostat from 'preact-rheostat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';

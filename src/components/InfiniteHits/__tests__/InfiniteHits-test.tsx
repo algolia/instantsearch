@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { mount } from 'enzyme';
 import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../InfiniteHits';

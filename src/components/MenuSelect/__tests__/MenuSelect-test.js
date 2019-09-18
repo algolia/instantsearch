@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import MenuSelect from '../MenuSelect';
 import { mount } from 'enzyme';
 import defaultTemplates from '../../../widgets/menu-select/defaultTemplates';

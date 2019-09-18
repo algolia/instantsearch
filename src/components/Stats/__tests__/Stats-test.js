@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { shallow, mount } from 'enzyme';
 import Stats from '../Stats';
 import defaultTemplates from '../../../widgets/stats/defaultTemplates';

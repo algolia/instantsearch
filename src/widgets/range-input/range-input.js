@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput';
 import connectRange from '../../connectors/range/connectRange';
@@ -154,7 +156,7 @@ export default function rangeInput({
   });
 
   const makeWidget = connectRange(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({

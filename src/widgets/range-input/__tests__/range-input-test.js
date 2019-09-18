@@ -1,12 +1,13 @@
-import ReactDOM from 'preact-compat';
+/** @jsx h */
+
+import { render } from 'preact';
 import AlgoliasearchHelper from 'algoliasearch-helper';
 import rangeInput from '../range-input';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
-  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -27,8 +28,7 @@ describe('rangeInput', () => {
     );
 
   afterEach(() => {
-    ReactDOM.render.mockReset();
-    ReactDOM.unmountComponentAtNode.mockReset();
+    render.mockReset();
   });
 
   describe('Usage', () => {
@@ -52,15 +52,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           container,
         });
 
-        expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledTimes(0);
+        expect(render).toHaveBeenCalledTimes(1);
 
         widget.dispose({
           state: helper.state,
           helper,
         });
 
-        expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledTimes(1);
-        expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledWith(container);
+        expect(render).toHaveBeenCalledTimes(2);
+        expect(render).toHaveBeenCalledWith(null, container);
       });
     });
   });
@@ -88,10 +88,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0].props.min).toBe(10);
-    expect(ReactDOM.render.mock.calls[0][0].props.max).toBe(500);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0].props.min).toBe(10);
+    expect(render.mock.calls[0][0].props.max).toBe(500);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('expect to render without results', () => {
@@ -107,8 +107,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('expect to render with custom classNames', () => {
@@ -135,8 +135,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('expect to render with custom templates', () => {
@@ -156,8 +156,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('expect to render with min', () => {
@@ -174,8 +174,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0].props.min).toBe(20);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0].props.min).toBe(20);
   });
 
   it('expect to render with max', () => {
@@ -192,8 +192,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0].props.max).toBe(480);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0].props.max).toBe(480);
   });
 
   it('expect to render with refinement', () => {
@@ -222,9 +222,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[0][0].props.values).toEqual({
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][0].props.values).toEqual({
       min: 25,
       max: 475,
     });
@@ -248,9 +248,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    expect(ReactDOM.render.mock.calls[0][0].props.values).toEqual({
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(render.mock.calls[0][0].props.values).toEqual({
       min: undefined,
       max: undefined,
     });
@@ -274,7 +274,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
-    ReactDOM.render.mock.calls[0][0].props.refine([25, 475]);
+    render.mock.calls[0][0].props.refine([25, 475]);
 
     expect(refine).toHaveBeenCalledWith([25, 475]);
   });
@@ -294,8 +294,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget.init({ helper, instantSearchInstance });
       widget.render({ results, helper });
 
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0].props.step).toBe(0.01);
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].props.step).toBe(0.01);
     });
 
     it('expect to render with precision of 0', () => {
@@ -312,8 +312,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget.init({ helper, instantSearchInstance });
       widget.render({ results, helper });
 
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0].props.step).toBe(1);
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].props.step).toBe(1);
     });
 
     it('expect to render with precision of 1', () => {
@@ -330,8 +330,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       widget.init({ helper, instantSearchInstance });
       widget.render({ results, helper });
 
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0].props.step).toBe(0.1);
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].props.step).toBe(0.1);
     });
   });
 });

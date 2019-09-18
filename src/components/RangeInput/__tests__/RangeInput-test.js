@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { shallow } from 'enzyme';
 import RangeInput from '../RangeInput';
 

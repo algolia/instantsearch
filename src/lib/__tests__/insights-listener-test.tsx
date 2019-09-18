@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import withInsightsListener from '../insights/listener';
 import { mount } from 'enzyme';
 

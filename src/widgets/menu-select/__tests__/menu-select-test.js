@@ -1,9 +1,9 @@
-import { render, unmountComponentAtNode } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
   module.unmountComponentAtNode = jest.fn();
@@ -102,15 +102,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
           })
         );
 
-        expect(unmountComponentAtNode).toHaveBeenCalledTimes(0);
+        expect(render).toHaveBeenCalledTimes(1);
 
         const newState = widget.dispose({
           state: helper.state,
           helper,
         });
 
-        expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
-        expect(unmountComponentAtNode).toHaveBeenCalledWith(container);
+        expect(render).toHaveBeenCalledTimes(2);
+        expect(render).toHaveBeenCalledWith(null, container);
 
         expect(newState).toEqual(new SearchParameters());
       });

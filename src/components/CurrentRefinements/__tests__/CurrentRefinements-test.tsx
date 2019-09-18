@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { ItemRefinement } from '../../../connectors/current-refinements/connectCurrentRefinements';
 import CurrentRefinements from '../CurrentRefinements';
 import { mount } from 'enzyme';
