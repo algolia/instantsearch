@@ -681,6 +681,42 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
     });
 
+    it('uses the index set by the widget for the queries', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.addWidgets([
+        createWidget({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('index', 'widgetIndexName');
+          },
+        }),
+      ]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      // Simulate a call to search from a widget
+      instance.getHelper()!.search();
+
+      expect(searchClient.search).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          {
+            indexName: 'widgetIndexName',
+            params: expect.any(Object),
+          },
+        ])
+      );
+    });
+
     it('inherits from the parent states for the queries', () => {
       const level0 = index({ indexName: 'level0IndexName' });
       const level1 = index({ indexName: 'level1IndexName' });
