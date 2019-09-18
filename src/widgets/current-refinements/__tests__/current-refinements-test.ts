@@ -1,4 +1,4 @@
-import { render } from 'preact';
+import { render } from 'preact-compat';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import currentRefinements from '../current-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -8,8 +8,8 @@ import {
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
-jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
 
@@ -90,15 +90,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         ).not.toThrow();
       });
-    });
-  });
-
-  describe('getConfiguration()', () => {
-    it('configures nothing', () => {
-      const widget = currentRefinements({
-        container: document.createElement('div'),
-      });
-      expect(widget.getConfiguration).toEqual(undefined);
     });
   });
 

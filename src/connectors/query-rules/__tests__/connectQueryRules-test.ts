@@ -205,10 +205,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
 
       widget.init!(
         createInitOptions({
-          helper,
           state: helper.state,
+          helper,
         })
       );
+
       expect(() =>
         widget.dispose!({ helper, state: helper.state })
       ).not.toThrow();

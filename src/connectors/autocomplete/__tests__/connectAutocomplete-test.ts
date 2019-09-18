@@ -25,14 +25,12 @@ describe('connectAutocomplete', () => {
     const helper = algoliasearchHelper({} as Client, '', initialConfig);
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      instantSearchInstance: undefined as any,
-      parent: undefined as any,
-      templatesConfig: undefined as any,
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const { refine } = renderFn.mock.calls[0][0];
 
@@ -93,7 +91,6 @@ search.addWidgets([
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
-        getConfiguration: expect.any(Function),
       })
     );
   });
@@ -314,61 +311,6 @@ search.addWidgets([
     expect(rendering.indices[0].results.hits).toEqual(hits);
   });
 
-  describe('getConfiguration', () => {
-    it('takes the existing `query` from the `SearchParameters`', () => {
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      const nextConfiguation = widget.getConfiguration!(
-        new SearchParameters({
-          query: 'First query',
-        })
-      );
-
-      expect(nextConfiguation.query).toBe('First query');
-    });
-
-    it('adds a `query` to the `SearchParameters`', () => {
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      const nextConfiguation = widget.getConfiguration!(new SearchParameters());
-
-      expect(nextConfiguation.query).toBe('');
-    });
-
-    it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      const nextConfiguation = widget.getConfiguration!(new SearchParameters());
-
-      expect(nextConfiguation.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(nextConfiguation.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-    });
-
-    it('does not add the TAG_PLACEHOLDER to the `SearchParameters` with `escapeHTML` disabled', () => {
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      const nextConfiguation = widget.getConfiguration!(new SearchParameters());
-
-      expect(nextConfiguation.highlightPreTag).toBeUndefined();
-      expect(nextConfiguation.highlightPostTag).toBeUndefined();
-    });
-  });
-
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const searchClient = createSearchClient();
@@ -503,7 +445,7 @@ search.addWidgets([
       });
     });
 
-    test('should give back the same instance if the value is alreay in the uiState', () => {
+    test('should give back the same instance if the value is already in the uiState', () => {
       const [widget, helper, refine] = getInitializedWidget();
       refine('query');
       const uiStateBefore = widget.getWidgetState(
@@ -552,6 +494,54 @@ search.addWidgets([
       expect(helper.state).toEqual(
         new SearchParameters({
           index: '',
+        })
+      );
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: '',
+          ...TAG_PLACEHOLDER,
+        })
+      );
+    });
+
+    test('does not add highlight tags if escapeHTML is false', () => {
+      const [widget, helper] = getInitializedWidget({
+        escapeHTML: false,
+      });
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
+      );
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: '',
+        })
+      );
+    });
+
+    test('overrides query from search parameters', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      helper.setQuery('Zeppelin manufacturer');
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+          query: 'Zeppelin manufacturer',
         })
       );
 

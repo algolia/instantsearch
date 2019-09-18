@@ -24,7 +24,7 @@ export const sortBy = sortByWidget({
 export function getFallbackSortByRoutingValue(
   sortByValue: string
 ): string | undefined {
-  if (items.map(item => item.value).includes(sortByValue)) {
+  if (items.map(item => item.value).indexOf(sortByValue) !== -1) {
     return sortByValue;
   }
 

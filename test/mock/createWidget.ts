@@ -11,24 +11,26 @@ import { createInstantSearch } from './createInstantSearch';
 export const createInitOptions = (
   args: Partial<InitOptions> = {}
 ): InitOptions => {
-  const instantSearchInstance = createInstantSearch();
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
 
   return {
     instantSearchInstance,
-    parent: null,
+    parent: instantSearchInstance.mainIndex,
+    uiState: instantSearchInstance._initialUiState,
     templatesConfig: instantSearchInstance.templatesConfig,
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
     createURL: jest.fn(() => '#'),
-    ...args,
+    ...rest,
   };
 };
 
 export const createRenderOptions = (
   args: Partial<RenderOptions> = {}
 ): RenderOptions => {
-  const instantSearchInstance = createInstantSearch();
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
   const response = createMultiSearchResponse();
+  const helper = args.helper || instantSearchInstance.helper!;
   const results = new algolisearchHelper.SearchResults(
     instantSearchInstance.helper!.state,
     response.results
@@ -37,21 +39,21 @@ export const createRenderOptions = (
   return {
     instantSearchInstance,
     templatesConfig: instantSearchInstance.templatesConfig,
-    helper: instantSearchInstance.helper!,
-    state: instantSearchInstance.helper!.state,
+    helper,
+    state: helper.state,
     results,
     scopedResults: [
       {
-        indexId: instantSearchInstance.helper!.state.index,
+        indexId: helper.state.index,
+        helper,
         results,
-        helper: instantSearchInstance.helper!,
       },
     ],
     searchMetadata: {
       isSearchStalled: false,
     },
     createURL: jest.fn(() => '#'),
-    ...args,
+    ...rest,
   };
 };
 
@@ -68,7 +70,6 @@ export const createDisposeOptions = (
 };
 
 export const createWidget = (args: Partial<Widget> = {}): Widget => ({
-  getConfiguration: jest.fn(),
   init: jest.fn(),
   render: jest.fn(),
   dispose: jest.fn(),

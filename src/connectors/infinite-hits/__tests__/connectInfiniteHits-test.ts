@@ -11,6 +11,7 @@ import {
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectInfiniteHits from '../connectInfiniteHits';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
@@ -44,7 +45,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
-        getConfiguration: expect.any(Function),
+
         getWidgetState: expect.any(Function),
         getWidgetSearchParameters: expect.any(Function),
       })
@@ -351,35 +352,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(secondRenderOptions.results).toEqual(results);
   });
 
-  it('keeps the __escaped mark', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectInfiniteHits(rendering);
-    const widget = makeWidget({});
-
-    const helper = algoliasearchHelper({} as Client, '', {});
-    helper.search = jest.fn();
-
-    widget.init!(
-      createInitOptions({
-        helper,
-        state: helper.state,
-      })
-    );
-
-    const results = new SearchResults(helper.state, [
-      createSingleSearchResponse({ hits: [{ whatever: 'i like kittens' }] }),
-    ]);
-    widget.render!(
-      createRenderOptions({
-        results,
-        state: helper.state,
-        helper,
-      })
-    );
-
-    expect((results.hits as any).__escaped).toBe(true);
-  });
-
   it('transform items if requested', () => {
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
@@ -650,113 +622,39 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
   });
 
-  describe('getConfiguration', () => {
-    it('returns `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
+  it('keeps the __escaped mark', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({});
 
-      expect(widget.getConfiguration!(new SearchParameters())).toBeInstanceOf(
-        SearchParameters
-      );
-    });
+    const helper = algoliasearchHelper({} as Client, '', {});
+    helper.search = jest.fn();
 
-    it('adds a `page` to the `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
+    createInitOptions();
 
-      expect(widget.getConfiguration!(new SearchParameters()).page).toEqual(0);
-    });
+    widget.init!(
+      createInitOptions({
+        state: helper.state,
+        helper,
+      })
+    );
 
-    it('supports previous `page` from the `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ hits: [{ whatever: 'i like kittens' }] }),
+    ]);
 
-      expect(
-        widget.getConfiguration!(new SearchParameters({ page: 0 })).page
-      ).toEqual(0);
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results,
+        helper,
+      })
+    );
 
-      expect(
-        widget.getConfiguration!(new SearchParameters({ page: 6 })).page
-      ).toEqual(6);
-    });
-
-    it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      const nextConfiguration = widget.getConfiguration!(
-        new SearchParameters()
-      );
-
-      expect(nextConfiguration.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(nextConfiguration.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-    });
-
-    it('does not add the TAG_PLACEHOLDER to the `SearchParameters` with `escapeHTML` disabled', () => {
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      const nextConfiguration = widget.getConfiguration!(
-        new SearchParameters()
-      );
-
-      expect(nextConfiguration.highlightPreTag).toBeUndefined();
-      expect(nextConfiguration.highlightPostTag).toBeUndefined();
-    });
-
-    it('keeps the __escaped mark', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectInfiniteHits(rendering);
-      const widget = makeWidget({});
-
-      const helper = algoliasearchHelper({} as Client, '', {});
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({ hits: [{ whatever: 'i like kittens' }] }),
-      ]);
-      widget.render!(
-        createRenderOptions({
-          results,
-          state: helper.state,
-          helper,
-        })
-      );
-
-      expect((results.hits as any).__escaped).toBe(true);
-    });
+    expect((results.hits as any).__escaped).toBe(true);
   });
 
   describe('dispose', () => {
-    it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({} as Client, '', {});
-      const rendering = () => {};
-      const makeWidget = connectInfiniteHits(rendering);
-      const widget = makeWidget({});
-      expect(() =>
-        widget.dispose!({ helper, state: helper.state })
-      ).not.toThrow();
-    });
-
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({} as Client, '', {});
 
@@ -770,6 +668,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       widget.dispose!({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({} as Client, '', {});
+
+      const renderFn = (): void => {};
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({});
+
+      expect(() =>
+        widget.dispose!({ helper, state: helper.state })
+      ).not.toThrow();
     });
 
     it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
@@ -842,220 +752,188 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
   });
 
-  describe('routing', () => {
-    describe('getWidgetState', () => {
-      it('should give back the object unmodified if the default value is selected', () => {
-        const renderFn = jest.fn();
-        const makeWidget = connectInfiniteHits(renderFn);
-        const widget = makeWidget({ showPrevious: true });
-
-        const helper = algoliasearchHelper({} as Client, '', {});
-        helper.search = jest.fn();
-
-        widget.init!(
-          createInitOptions({
-            state: helper.state,
-            helper,
-          })
-        );
-
-        const uiStateBefore = { page: 1 };
-        const uiStateAfter = widget.getWidgetState!(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
+  describe('getWidgetState', () => {
+    test('returns the `uiState` empty without `showPrevious` option', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        page: 1,
       });
+      const widget = makeWidget({});
 
-      it('should add an entry equal to the refinement', () => {
-        const renderFn = jest.fn();
-        const makeWidget = connectInfiniteHits(renderFn);
-        const widget = makeWidget({ showPrevious: true });
-
-        const helper = algoliasearchHelper({} as Client, '', {});
-        helper.search = jest.fn();
-
-        widget.init!(
-          createInitOptions({
-            state: helper.state,
-            helper,
-          })
-        );
-
-        const { showMore } = renderFn.mock.calls[0][0];
-
-        showMore();
-
-        const uiStateBefore = { page: 1 };
-        const uiStateAfter = widget.getWidgetState!(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toMatchSnapshot();
-      });
-
-      it('should give back the object unmodified if showPrevious is disabled', () => {
-        const renderFn = jest.fn();
-        const makeWidget = connectInfiniteHits(renderFn);
-        const widget = makeWidget({ showPrevious: false });
-
-        const helper = algoliasearchHelper({} as Client, '', {});
-        helper.search = jest.fn();
-
-        widget.init!(
-          createInitOptions({
-            state: helper.state,
-            helper,
-          })
-        );
-
-        const { showMore } = renderFn.mock.calls[0][0];
-
-        showMore();
-
-        const uiStateBefore = { page: 1 };
-        const uiStateAfter = widget.getWidgetState!(uiStateBefore, {
-          searchParameters: helper.state,
-          helper,
-        });
-
-        expect(uiStateAfter).toBe(uiStateBefore);
-      });
-    });
-
-    describe('getWidgetSearchParameters', () => {
-      it('should return the same SP if there are no refinements in the UI state', () => {
-        const renderFn = jest.fn();
-        const makeWidget = connectInfiniteHits(renderFn);
-        const widget = makeWidget({ showPrevious: true });
-
-        const helper = algoliasearchHelper({} as Client, '', {});
-        helper.search = jest.fn();
-
-        widget.init!(
-          createInitOptions({
-            state: helper.state,
-            helper,
-          })
-        );
-
-        // The user presses back (browser), and the URL contains no parameters
-        const uiState = {};
-        // The current state is empty (and page is set to 0 by default)
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters!(
-          searchParametersBefore,
-          { uiState }
-        );
-
-        // Applying the same values should not return a new object
-        expect(searchParametersAfter).toBe(searchParametersBefore);
-      });
-
-      it('should enforce the default value if no value is in the UI State', () => {
-        const renderFn = jest.fn();
-        const makeWidget = connectInfiniteHits(renderFn);
-        const widget = makeWidget({ showPrevious: true });
-
-        const helper = algoliasearchHelper({} as Client, '', {});
-        helper.search = jest.fn();
-
-        widget.init!(
-          createInitOptions({
-            state: helper.state,
-            helper,
-          })
-        );
-
-        const { showMore } = renderFn.mock.calls[0][0];
-
-        // The user presses back (browser), and the URL contains no parameters
-        const uiState = {};
-        // The current state is set to next page
-        showMore();
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters!(
-          searchParametersBefore,
-          {
-            uiState,
-          }
-        );
-        // Applying an empty state, should force back to page 0
-        expect(searchParametersAfter).toMatchSnapshot();
-        expect(searchParametersAfter.page).toBeUndefined();
-      });
-
-      it('should add the refinements according to the UI state provided', () => {
-        (global as any).window = { location: { pathname: null } };
-        const renderFn = jest.fn();
-        const makeWidget = connectInfiniteHits(renderFn);
-        const widget = makeWidget({ showPrevious: true });
-
-        const helper = algoliasearchHelper({} as Client, '', {});
-        helper.search = jest.fn();
-
-        widget.init!(
-          createInitOptions({
-            state: helper.state,
-            helper,
-          })
-        );
-
-        const { showMore } = renderFn.mock.calls[0][0];
-
-        // The user presses back (browser), and the URL contains some parameters
-        const uiState = {
-          page: 2,
-        };
-        // The current state is set to next page
-        showMore();
-        const searchParametersBefore = SearchParameters.make(helper.state);
-        const searchParametersAfter = widget.getWidgetSearchParameters!(
-          searchParametersBefore,
-          {
-            uiState,
-          }
-        );
-        // Applying a state with new parameters should apply them on the search
-        expect(searchParametersAfter).toMatchSnapshot();
-        expect(searchParametersAfter.page).toBe(1);
-      });
-    });
-
-    it('should return the same SP if showPrevious is disabled', () => {
-      (global as any).window = { location: { pathname: null } };
-      const renderFn = jest.fn();
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({ showPrevious: false });
-
-      const helper = algoliasearchHelper({} as Client, '', {});
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          state: helper.state,
-          helper,
-        })
-      );
-
-      const { showMore } = renderFn.mock.calls[0][0];
-
-      // The user presses back (browser), and the URL contains some parameters
-      const uiState = {
-        page: 4,
-      };
-      // The current state is set to next page
-      showMore();
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters!(
-        searchParametersBefore,
+      const actual = widget.getWidgetState!(
+        {},
         {
-          uiState,
+          searchParameters: helper.state,
+          helper,
         }
       );
-      expect(searchParametersAfter).toBe(searchParametersBefore);
+
+      expect(actual).toEqual({});
+    });
+
+    test('returns the `uiState` empty with `showPrevious` option on first page', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        page: 0,
+      });
+      const widget = makeWidget({
+        showPrevious: true,
+      });
+
+      const actual = widget.getWidgetState!(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({});
+    });
+
+    test('returns the `uiState` containing `page` with `showPrevious` option', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        page: 1,
+      });
+      const widget = makeWidget({
+        showPrevious: true,
+      });
+
+      const actual = widget.getWidgetState!(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({
+        page: 2,
+      });
+    });
+
+    test('returns the `uiState` containing a page number incremented by one with `showPrevious` option and `page` search parameter', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        page: 3,
+      });
+      const widget = makeWidget({
+        showPrevious: true,
+      });
+
+      const actual = widget.getWidgetState!(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      expect(actual).toEqual({
+        page: 4,
+      });
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    test('return default Search Parameters with highlighted tags by default', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const widget = makeWidget({});
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.highlightPreTag).toEqual(TAG_PLACEHOLDER.highlightPreTag);
+      expect(actual.highlightPostTag).toEqual(TAG_PLACEHOLDER.highlightPostTag);
+    });
+
+    test('return Search Parameters with highlighted tags with `escapeHTML`', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const widget = makeWidget({
+        escapeHTML: true,
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.highlightPreTag).toEqual(TAG_PLACEHOLDER.highlightPreTag);
+      expect(actual.highlightPostTag).toEqual(TAG_PLACEHOLDER.highlightPostTag);
+    });
+
+    test('return Search Parameters without highlighted tags when `escapeHTML` is `false`', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const widget = makeWidget({
+        escapeHTML: false,
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.highlightPreTag).toBeUndefined();
+      expect(actual.highlightPostTag).toBeUndefined();
+    });
+
+    test('return Search Parameters with resetted page when `showPrevious` without `page` in the UI state', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const widget = makeWidget({
+        showPrevious: true,
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual.page).toEqual(0);
+    });
+
+    test('return Search Parameters with resetted page when `showPrevious` and `page` is 0 in the UI state', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const widget = makeWidget({
+        showPrevious: true,
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {
+          page: 0,
+        },
+      });
+
+      expect(actual.page).toEqual(0);
+    });
+
+    test('return Search Parameters with page decreased when `showPrevious` and `page` in the UI state', () => {
+      const render = jest.fn();
+      const makeWidget = connectInfiniteHits(render);
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
+      const widget = makeWidget({
+        showPrevious: true,
+      });
+
+      const actual = widget.getWidgetSearchParameters!(helper.state, {
+        uiState: {
+          page: 3,
+        },
+      });
+
+      expect(actual.page).toEqual(2);
     });
   });
 });

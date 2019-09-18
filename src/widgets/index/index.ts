@@ -2,22 +2,24 @@ import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
   PlainSearchParameters,
+  SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
 import { Client } from 'algoliasearch';
 import {
   InstantSearch,
   UiState,
+  IndexUiState,
   Widget,
   InitOptions,
   RenderOptions,
   WidgetStateOptions,
+  WidgetSearchParametersOptions,
   ScopedResult,
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
-  enhanceConfiguration,
   mergeSearchParameters,
 } from '../../lib/utils';
 
@@ -27,12 +29,22 @@ const withUsage = createDocumentationMessageGenerator({
 
 type IndexProps = {
   indexName: string;
+  indexId?: string;
 };
 
-type IndexInitOptions = Pick<InitOptions, 'instantSearchInstance' | 'parent'>;
+type IndexInitOptions = Pick<
+  InitOptions,
+  'instantSearchInstance' | 'parent' | 'uiState'
+>;
+
 type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
 
+type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
+  initialSearchParameters: SearchParameters;
+};
+
 export type Index = Widget & {
+  getIndexName(): string;
   getIndexId(): string;
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
@@ -53,16 +65,33 @@ function isIndexWidget(widget: Widget): widget is Index {
 function getLocalWidgetsState(
   widgets: Widget[],
   widgetStateOptions: WidgetStateOptions
-): UiState {
+): IndexUiState {
   return widgets
     .filter(widget => !isIndexWidget(widget))
-    .reduce<UiState>((uiState, widget) => {
+    .reduce<IndexUiState>((uiState, widget) => {
       if (!widget.getWidgetState) {
         return uiState;
       }
 
       return widget.getWidgetState(uiState, widgetStateOptions);
     }, {});
+}
+
+function getLocalWidgetsSearchParameters(
+  widgets: Widget[],
+  widgetSearchParametersOptions: LocalWidgetSearchParametersOptions
+): SearchParameters {
+  const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
+
+  return widgets
+    .filter(widget => !isIndexWidget(widget))
+    .reduce<SearchParameters>((state, widget) => {
+      if (!widget.getWidgetSearchParameters) {
+        return state;
+      }
+
+      return widget.getWidgetSearchParameters(state, rest);
+    }, initialSearchParameters);
 }
 
 function resetPageFromWidgets(widgets: Widget[]): void {
@@ -106,24 +135,36 @@ function resolveScopedResultsFromIndex(widget: Index): ScopedResult[] {
 }
 
 const index = (props: IndexProps): Index => {
-  const { indexName = null } = props || {};
+  if (props === undefined || props.indexName === undefined) {
+    throw new Error(withUsage('The `indexName` option is required.'));
+  }
+
+  const { indexName, indexId = indexName } = props;
 
   let localWidgets: Widget[] = [];
-  let localUiState: UiState = {};
+  let localUiState: IndexUiState = {};
   let localInstantSearchInstance: InstantSearch | null = null;
   let localParent: Index | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
 
-  if (indexName === null) {
-    throw new Error(withUsage('The `indexName` option is required.'));
-  }
+  const createURL = (nextState: SearchParameters) =>
+    localInstantSearchInstance!._createURL!({
+      [indexId]: getLocalWidgetsState(localWidgets, {
+        searchParameters: nextState,
+        helper: helper!,
+      }),
+    });
 
   return {
     $$type: 'ais.index',
 
-    getIndexId() {
+    getIndexName() {
       return indexName;
+    },
+
+    getIndexId() {
+      return indexId;
     },
 
     getHelper() {
@@ -163,22 +204,14 @@ const index = (props: IndexProps): Index => {
         );
       }
 
-      // The routing manager widget is always added manually at the last position.
-      // By removing it from the last position and adding it back after, we ensure
-      // it keeps this position.
-      // fixes #3148
-      const lastWidget = localWidgets.pop();
-
       localWidgets = localWidgets.concat(widgets);
-
-      if (lastWidget) {
-        // Second part of the fix for #3148
-        localWidgets = localWidgets.concat(lastWidget);
-      }
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         helper!.setState(
-          localWidgets.reduce(enhanceConfiguration, helper!.state)
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: helper!.state,
+          })
         );
 
         widgets.forEach(widget => {
@@ -186,10 +219,11 @@ const index = (props: IndexProps): Index => {
             widget.init({
               helper: helper!,
               parent: this,
+              uiState: {},
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
-              createURL: localInstantSearchInstance._createAbsoluteURL!,
+              createURL,
             });
           }
         });
@@ -225,7 +259,17 @@ const index = (props: IndexProps): Index => {
           return next || state;
         }, helper!.state);
 
-        helper!.setState(localWidgets.reduce(enhanceConfiguration, nextState));
+        localUiState = getLocalWidgetsState(localWidgets, {
+          searchParameters: nextState,
+          helper: helper!,
+        });
+
+        helper!.setState(
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: nextState,
+          })
+        );
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();
@@ -235,29 +279,26 @@ const index = (props: IndexProps): Index => {
       return this;
     },
 
-    init({ instantSearchInstance, parent }: IndexInitOptions) {
+    init({ instantSearchInstance, parent, uiState }: IndexInitOptions) {
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
+      localUiState = uiState[indexId] || {};
 
       // The `mainHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
       const mainHelper = instantSearchInstance.mainHelper!;
-
-      const initialSearchParameters = new algoliasearchHelper.SearchParameters(
-        // Uses the `searchParameters` for the top level index only, it allows
-        // us to have the exact same behaviour than before for the mono-index.
-        parent === null ? instantSearchInstance._searchParameters : {}
-      );
+      const parameters = getLocalWidgetsSearchParameters(localWidgets, {
+        uiState: localUiState,
+        initialSearchParameters: new algoliasearchHelper.SearchParameters({
+          index: indexName,
+        }),
+      });
 
       // This Helper is only used for state management we do not care about the
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
-      helper = algoliasearchHelper(
-        {} as Client,
-        indexName,
-        localWidgets.reduce(enhanceConfiguration, initialSearchParameters)
-      );
+      helper = algoliasearchHelper({} as Client, parameters.index, parameters);
 
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is
@@ -313,12 +354,13 @@ const index = (props: IndexProps): Index => {
       localWidgets.forEach(widget => {
         if (widget.init) {
           widget.init({
+            uiState,
             helper: helper!,
             parent: this,
             instantSearchInstance,
             state: helper!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL,
           });
         }
       });
@@ -334,6 +376,8 @@ const index = (props: IndexProps): Index => {
           searchParameters: state,
           helper: helper!,
         });
+
+        instantSearchInstance.onStateChange();
       });
     },
 
@@ -354,7 +398,7 @@ const index = (props: IndexProps): Index => {
             scopedResults: resolveScopedResultsFromIndex(this),
             state: derivedHelper!.lastResults._state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL!,
+            createURL,
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,
             },

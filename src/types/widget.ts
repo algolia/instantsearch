@@ -3,12 +3,14 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
+  PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 
 export interface InitOptions {
   instantSearchInstance: InstantSearch;
   parent: Index | null;
+  uiState: UiState;
   state: SearchParameters;
   helper: Helper;
   templatesConfig: object;
@@ -45,10 +47,10 @@ export interface WidgetStateOptions {
 }
 
 export interface WidgetSearchParametersOptions {
-  uiState: UiState;
+  uiState: IndexUiState;
 }
 
-export type UiState = {
+export type IndexUiState = {
   query?: string;
   refinementList?: {
     [attribute: string]: string[];
@@ -101,6 +103,11 @@ export type UiState = {
   sortBy?: string;
   page?: number;
   hitsPerPage?: number;
+  configure?: PlainSearchParameters;
+};
+
+export type UiState = {
+  [indexId: string]: IndexUiState;
 };
 
 /**
@@ -122,11 +129,24 @@ export interface Widget {
    * during this widget's initialization and life time.
    */
   dispose?(options: DisposeOptions): SearchParameters | void;
-  getConfiguration?(previousConfiguration: SearchParameters): SearchParameters;
+  /**
+   * This function is required for a widget to be taken in account for routing.
+   * It will derive a uiState for this widget based on the existing uiState and
+   * the search parameters applied.
+   * @param uiState current state
+   * @param widgetStateOptions extra information to calculate uiState
+   */
   getWidgetState?(
-    uiState: UiState,
+    uiState: IndexUiState,
     widgetStateOptions: WidgetStateOptions
-  ): UiState;
+  ): IndexUiState;
+  /**
+   * This function is required for a widget to behave correctly when a URL is
+   * loaded via e.g. routing. It receives the current UiState and applied search
+   * parameters, and is expected to return a new search parameters.
+   * @param state applied search parameters
+   * @param widgetSearchParametersOptions extra information to calculate next searchParameters
+   */
   getWidgetSearchParameters?(
     state: SearchParameters,
     widgetSearchParametersOptions: WidgetSearchParametersOptions
@@ -137,6 +157,6 @@ export type WidgetFactory<TWidgetParams> = (
   widgetParams: TWidgetParams
 ) => Widget;
 
-export type Template<TTemplateItem> =
+export type Template<TTemplateData = void> =
   | string
-  | ((item: TTemplateItem) => string);
+  | ((data: TTemplateData) => string);

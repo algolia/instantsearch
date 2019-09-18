@@ -105,15 +105,6 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.toggleRefinement',
 
-      getConfiguration(state) {
-        return state.setQueryParameters({
-          disjunctiveFacets: [attribute],
-          disjunctiveFacetsRefinements: {
-            [attribute]: [],
-          },
-        });
-      },
-
       _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
@@ -260,10 +251,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
           on
         );
 
-        if (
-          !isRefined ||
-          (uiState && uiState.toggle && uiState.toggle[attribute] === isRefined)
-        ) {
+        if (!isRefined) {
           return uiState;
         }
 
@@ -277,23 +265,34 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        const withFacetConfiguration = searchParameters
+          .clearRefinements(attribute)
+          .addDisjunctiveFacet(attribute);
+
         const isRefined = Boolean(uiState.toggle && uiState.toggle[attribute]);
 
         if (isRefined) {
-          if (hasAnOffValue)
-            return searchParameters
-              .removeDisjunctiveFacetRefinement(attribute, off)
-              .addDisjunctiveFacetRefinement(attribute, on);
-
-          return searchParameters.addDisjunctiveFacetRefinement(attribute, on);
+          return withFacetConfiguration.addDisjunctiveFacetRefinement(
+            attribute,
+            on
+          );
         }
 
-        if (hasAnOffValue)
-          return searchParameters
-            .removeDisjunctiveFacetRefinement(attribute, on)
-            .addDisjunctiveFacetRefinement(attribute, off);
+        // It's not refined with an `off` value
+        if (hasAnOffValue) {
+          return withFacetConfiguration.addDisjunctiveFacetRefinement(
+            attribute,
+            off
+          );
+        }
 
-        return searchParameters.removeDisjunctiveFacetRefinement(attribute, on);
+        // It's not refined without an `off` value
+        return withFacetConfiguration.setQueryParameters({
+          disjunctiveFacetsRefinements: {
+            ...searchParameters.disjunctiveFacetsRefinements,
+            [attribute]: [],
+          },
+        });
       },
     };
   };

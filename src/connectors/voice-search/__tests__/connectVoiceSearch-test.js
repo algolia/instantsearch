@@ -16,12 +16,12 @@ jest.mock('../../../lib/voiceSearchHelper', () => {
   };
 });
 
-function getInitializedWidget() {
+function getInitializedWidget({ widgetParams = {} } = {}) {
   const helper = algoliasearchHelper({}, '');
 
   const renderFn = () => {};
   const makeWidget = connectVoiceSearch(renderFn);
-  const widget = makeWidget({});
+  const widget = makeWidget(widgetParams);
 
   helper.search = () => {};
   widget.init({ helper });
@@ -30,7 +30,7 @@ function getInitializedWidget() {
     renderFn,
     widget,
     helper,
-    refine: query => widget._refine(query),
+    refine: widget._refine,
   };
 }
 
@@ -59,7 +59,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
+
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -133,52 +133,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
-  describe('getConfiguration', () => {
-    it('adds a `query` to the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      const nextConfiguration = widget.getConfiguration(new SearchParameters());
-
-      expect(nextConfiguration).toEqual(
-        new SearchParameters({
-          query: '',
-        })
-      );
-    });
-
-    it('support previous `query` from the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      const nextConfiguration = widget.getConfiguration(
-        new SearchParameters({
-          query: 'Previous query',
-        })
-      );
-
-      expect(nextConfiguration).toEqual(
-        new SearchParameters({
-          query: 'Previous query',
-        })
-      );
-    });
-  });
-
   describe('dispose', () => {
-    it('does not throw without the unmount function', () => {
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-      const helper = algoliasearchHelper({});
-      widget.init({ helper });
-      expect(() =>
-        widget.dispose({ helper, state: helper.state })
-      ).not.toThrow();
-    });
-
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({}, '');
 
@@ -194,6 +149,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectVoiceSearch(renderFn);
+      const widget = makeWidget({});
+
+      widget.init({ helper });
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
     });
 
     it('removes event listeners on the voice helper', () => {
@@ -232,80 +201,189 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   });
 
   describe('getWidgetState', () => {
-    it('returns the same state if query is an empty string', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      const uiStateBefore = { foo: 'bar' };
-      refine('');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toBe(uiStateBefore);
-    });
+    test('returns the `uiState` empty', () => {
+      const { widget, helper } = getInitializedWidget();
 
-    it('returns the same state if query is same', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      refine('myQuery');
-      const uiStateBefore = widget.getWidgetState(
+      const actual = widget.getWidgetState(
         {},
         {
           searchParameters: helper.state,
         }
       );
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toBe(uiStateBefore);
+
+      expect(actual).toEqual({});
     });
 
-    it('returns new state with query after refine', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      const uiStateBefore = { foo: 'bar' };
-      refine('myQuery');
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-        searchParameters: helper.state,
-      });
-      expect(uiStateAfter).toEqual({
-        foo: 'bar',
-        query: 'myQuery',
+    test('returns the `uiState` with a refinement', () => {
+      const { widget, helper } = getInitializedWidget();
+
+      helper.setQueryParameter('query', 'Apple');
+
+      const actual = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+        }
+      );
+
+      expect(actual).toEqual({
+        query: 'Apple',
       });
     });
   });
 
   describe('getWidgetSearchParameters', () => {
-    it('should return the same SearchParameters if no value is in the UI state', () => {
+    test('returns the `SearchParameters` with the value from `uiState`', () => {
       const { widget, helper } = getInitializedWidget();
-      const uiState = {};
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
       );
-      expect(searchParametersAfter).toBe(searchParametersBefore);
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          query: 'Apple',
+        },
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: 'Apple',
+        })
+      );
     });
 
-    it('should add the refinement according to the UI state provided', () => {
+    test('returns the `SearchParameters` with the default value', () => {
       const { widget, helper } = getInitializedWidget();
-      const uiState = {
-        query: 'my search',
-      };
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
       );
-      expect(searchParametersAfter.query).toEqual(uiState.query);
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: '',
+        })
+      );
+    });
+  });
+
+  describe('additional search parameters', () => {
+    it('applies default search parameters if given', () => {
+      const { helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => {},
+        },
+      });
+
+      refine('query');
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          ignorePlurals: true,
+          removeStopWords: true,
+          optionalWords: 'query',
+          queryLanguages: undefined,
+          index: '',
+          query: 'query',
+        })
+      );
     });
 
-    it('should enforce the default value if the ui state is empty', () => {
-      const { widget, helper, refine } = getInitializedWidget();
-      refine('previous search');
-      const uiState = {};
-      const searchParametersBefore = SearchParameters.make(helper.state);
-      const searchParametersAfter = widget.getWidgetSearchParameters(
-        searchParametersBefore,
-        { uiState }
+    it('applies queryLanguages if language given', () => {
+      const { helper, refine } = getInitializedWidget({
+        widgetParams: {
+          language: 'en-US',
+          additionalQueryParameters: () => {},
+        },
+      });
+
+      refine('query');
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          queryLanguages: ['en'],
+          // regular
+          removeStopWords: true,
+          optionalWords: 'query',
+          ignorePlurals: true,
+          query: 'query',
+          index: '',
+        })
       );
-      expect(searchParametersAfter.query).toBeUndefined();
+    });
+
+    it('applies additional parameters if language given', () => {
+      const { helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => ({
+            distinct: true,
+          }),
+        },
+      });
+
+      refine('query');
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          ignorePlurals: true,
+          removeStopWords: true,
+          optionalWords: 'query',
+          queryLanguages: undefined,
+          index: '',
+          query: 'query',
+          distinct: true,
+        })
+      );
+    });
+
+    it('removes additional parameters when disposed', () => {
+      const { widget, helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => {},
+        },
+      });
+
+      refine('query');
+      const newState = widget.dispose({ state: helper.state });
+      expect(newState).toEqual(
+        new SearchParameters({
+          ignorePlurals: undefined,
+          removeStopWords: undefined,
+          optionalWords: undefined,
+          queryLanguages: undefined,
+          index: '',
+        })
+      );
+    });
+
+    it('removes additional parameters and extra parameters when disposed', () => {
+      const { widget, helper, refine } = getInitializedWidget({
+        widgetParams: {
+          additionalQueryParameters: () => ({
+            distinct: true,
+          }),
+        },
+      });
+
+      refine('query');
+      const newState = widget.dispose({ state: helper.state });
+      expect(newState).toEqual(
+        new SearchParameters({
+          ignorePlurals: undefined,
+          removeStopWords: undefined,
+          optionalWords: undefined,
+          queryLanguages: undefined,
+          index: '',
+        })
+      );
     });
   });
 });

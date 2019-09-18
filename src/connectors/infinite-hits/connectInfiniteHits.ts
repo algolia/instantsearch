@@ -52,61 +52,6 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-/**
- * @typedef {Object} InfiniteHitsRenderingOptions
- * @property {Array<Object>} hits The aggregated matched hits from Algolia API of all pages.
- * @property {Object} results The complete results response from Algolia API.
- * @property {function} showMore Loads the next page of hits.
- * @property {boolean} isLastPage Indicates if the last page of hits has been reached.
- * @property {Object} widgetParams All original widget options forwarded to the `renderFn`.
- */
-
-/**
- * @typedef {Object} CustomInfiniteHitsWidgetOptions
- * @property {boolean} [escapeHTML = true] Whether to escape HTML tags from `hits[i]._highlightResult`.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
-
-/**
- * **InfiniteHits** connector provides the logic to create custom widgets that will render an continuous list of results retrieved from Algolia.
- *
- * This connector provides a `InfiniteHitsRenderingOptions.showMore()` function to load next page of matched results.
- * @type {Connector}
- * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn Rendering function for the custom **InfiniteHits** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomInfiniteHitsWidgetOptions)} Re-usable widget factory for a custom **InfiniteHits** widget.
- * @example
- * // custom `renderFn` to render the custom InfiniteHits widget
- * function renderFn(InfiniteHitsRenderingOptions, isFirstRendering) {
- *   if (isFirstRendering) {
- *     InfiniteHitsRenderingOptions.widgetParams.containerNode
- *       .html('<div id="hits"></div><button id="show-more">Load more</button>');
- *
- *     InfiniteHitsRenderingOptions.widgetParams.containerNode
- *       .find('#show-more')
- *       .on('click', function(event) {
- *         event.preventDefault();
- *         InfiniteHitsRenderingOptions.showMore();
- *       });
- *   }
- *
- *   InfiniteHitsRenderingOptions.widgetParams.containerNode.find('#hits').html(
- *     InfiniteHitsRenderingOptions.hits.map(function(hit) {
- *       return '<div>' + hit._highlightResult.name.value + '</div>';
- *     })
- *   );
- * };
- *
- * // connect `renderFn` to InfiniteHits logic
- * var customInfiniteHits = instantsearch.connectors.connectInfiniteHits(renderFn);
- *
- * // mount widget on the page
- * search.addWidget(
- *   customInfiniteHits({
- *     containerNode: $('#custom-infinite-hits-container'),
- *   })
- * );
- */
 const connectInfiniteHits: InfiniteHitsConnector = (
   renderFn,
   unmountFn = noop
@@ -139,24 +84,21 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(lastReceivedPage + 1).search();
     };
+    const filterEmptyRefinements = (refinements = {}) => {
+      return Object.keys(refinements)
+        .filter(key =>
+          Array.isArray(refinements[key])
+            ? refinements[key].length
+            : Object.keys(refinements[key]).length
+        )
+        .reduce((obj, key) => {
+          obj[key] = refinements[key];
+          return obj;
+        }, {});
+    };
 
     return {
       $$type: 'ais.infiniteHits',
-
-      getConfiguration(config) {
-        const parameters = {
-          page: config.page || 0,
-        };
-
-        if (!escapeHTML) {
-          return config.setQueryParameters(parameters);
-        }
-
-        return config.setQueryParameters({
-          ...parameters,
-          ...TAG_PLACEHOLDER,
-        });
-      },
 
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
@@ -186,7 +128,22 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // We're doing this to "reset" the widget if a refinement or the
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
-        const { page = 0, ...currentState } = state;
+        const {
+          page = 0,
+          hierarchicalFacets,
+          disjunctiveFacets,
+          ...currentState
+        } = state;
+
+        currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
+          currentState.hierarchicalFacetsRefinements
+        );
+        currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
+          currentState.disjunctiveFacetsRefinements
+        );
+        currentState.numericRefinements = filterEmptyRefinements(
+          currentState.numericRefinements
+        );
 
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
@@ -215,7 +172,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // hits widgets mounted on the page.
         (results.hits as any).__escaped = initialEscaped;
 
-        if (lastReceivedPage < page! || !hitsCache.length) {
+        if (lastReceivedPage < page || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
           lastReceivedPage = page;
         } else if (firstReceivedPage > page) {
@@ -244,13 +201,13 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       dispose({ state }) {
         unmountFn();
 
-        const stateWithoutQuery = state.setQueryParameter('page', undefined);
+        const stateWithoutPage = state.setQueryParameter('page', undefined);
 
         if (!escapeHTML) {
-          return stateWithoutQuery;
+          return stateWithoutPage;
         }
 
-        return stateWithoutQuery.setQueryParameters(
+        return stateWithoutPage.setQueryParameters(
           Object.keys(TAG_PLACEHOLDER).reduce(
             (acc, key) => ({
               ...acc,
@@ -264,28 +221,41 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
+        if (!hasShowPrevious || !page) {
           return uiState;
         }
 
         return {
           ...uiState,
+          // The page in the UI state is incremented by one
+          // to expose the user value (not `0`).
           page: page + 1,
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        let widgetSearchParameters = searchParameters;
+
+        if (escapeHTML) {
+          widgetSearchParameters = searchParameters.setQueryParameters(
+            TAG_PLACEHOLDER
+          );
+        }
+
         if (!hasShowPrevious) {
-          return searchParameters;
+          return widgetSearchParameters;
         }
 
-        const uiPage = uiState.page;
-
-        if (uiPage) {
-          return searchParameters.setQueryParameter('page', uiPage - 1);
+        if (uiState.page) {
+          // The page in the search parameters is decremented by one
+          // to get to the actual parameter value from the UI state.
+          return widgetSearchParameters.setQueryParameter(
+            'page',
+            uiState.page - 1
+          );
         }
 
-        return searchParameters.setQueryParameter('page', undefined);
+        return widgetSearchParameters.setQueryParameter('page', 0);
       },
     };
   };

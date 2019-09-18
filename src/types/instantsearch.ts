@@ -1,6 +1,6 @@
 import { SearchParameters } from 'algoliasearch-helper';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
-import { Widget, UiState } from './widget';
+import { UiState } from './widget';
 export {
   default as InstantSearch,
   InstantSearchOptions,
@@ -90,7 +90,7 @@ export type Refinement = FacetRefinement | NumericRefinement;
  * The router is the part that saves and reads the object from the storage.
  * Usually this is the URL.
  */
-export interface Router<TRouteState = UiState> extends Widget {
+export interface Router<TRouteState = UiState> {
   /**
    * onUpdate Sets an event listener that is triggered when the storage is updated.
    * The function should accept a callback to trigger when the update happens.
@@ -116,6 +116,11 @@ export interface Router<TRouteState = UiState> extends Widget {
    * return a string. It may return an empty string.
    */
   createURL(state: TRouteState): string;
+
+  /**
+   * Called when InstantSearch is disposed. Used to remove subscriptions.
+   */
+  dispose(): void;
 }
 
 /**

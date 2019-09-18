@@ -1,4 +1,4 @@
-import { render } from 'preact';
+import { render, unmountComponentAtNode } from 'preact-compat';
 import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
 } from 'algoliasearch-helper';
@@ -6,10 +6,11 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInitOptions } from '../../../../test/mock/createWidget';
 import queryRuleCustomData from '../query-rule-custom-data';
 
-jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
+  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -27,6 +28,7 @@ describe('queryRuleCustomData', () => {
 
   beforeEach(() => {
     render.mockClear();
+    unmountComponentAtNode.mockClear();
   });
 
   describe('Usage', () => {
@@ -175,15 +177,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
           })
         );
 
-        expect(render).toHaveBeenCalledTimes(1);
-
         widget.dispose!({
           helper,
           state: helper.state,
         });
 
-        expect(render).toHaveBeenCalledTimes(2);
-        expect(render).toHaveBeenCalledWith(null, container);
+        expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
       });
     });
   });

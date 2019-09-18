@@ -1,9 +1,9 @@
-import { render } from 'preact';
+import { render } from 'preact-compat';
 import { SearchParameters } from 'algoliasearch-helper';
 import hitsPerPage from '../hits-per-page';
 
-jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
 
@@ -34,7 +34,7 @@ describe('hitsPerPage()', () => {
   beforeEach(() => {
     container = document.createElement('div');
     items = [
-      { value: 10, label: '10 results' },
+      { value: 10, label: '10 results', default: true },
       { value: 20, label: '20 results' },
     ];
     cssClasses = {
@@ -61,14 +61,7 @@ describe('hitsPerPage()', () => {
     render.mockClear();
   });
 
-  it('does not configure the default hits per page if not specified', () => {
-    expect(typeof widget.getConfiguration).toEqual('function');
-    expect(widget.getConfiguration(new SearchParameters({}))).toEqual(
-      new SearchParameters({})
-    );
-  });
-
-  it('does configures the default hits per page if specified', () => {
+  it('configures the default hits per page', () => {
     const widgetWithDefaults = hitsPerPage({
       container: document.createElement('div'),
       items: [
@@ -78,7 +71,9 @@ describe('hitsPerPage()', () => {
     });
 
     expect(
-      widgetWithDefaults.getConfiguration(new SearchParameters({}))
+      widgetWithDefaults.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
     ).toEqual(
       new SearchParameters({
         hitsPerPage: 20,
@@ -114,10 +109,7 @@ describe('hitsPerPage()', () => {
   it('sets the underlying hitsPerPage', () => {
     widget.init({ helper, state: helper.state });
     widget.setHitsPerPage(helper, helper.state, 10);
-    expect(helper.setQueryParameter).toHaveBeenCalledTimes(
-      1,
-      'setQueryParameter called once'
-    );
+    expect(helper.setQueryParameter).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 

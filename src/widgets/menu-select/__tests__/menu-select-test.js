@@ -1,11 +1,12 @@
-import { render } from 'preact';
+import { render, unmountComponentAtNode } from 'preact-compat';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import menuSelect from '../menu-select';
 
-jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
+  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -83,17 +84,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
           container,
         });
 
-        helper.setState(widget.getConfiguration(new SearchParameters({})));
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters({}), {
+            uiState: {
+              menu: {
+                amazingBrand: 'algolia',
+              },
+            },
+          })
+        );
 
-        expect(render).toHaveBeenCalledTimes(0);
+        expect(helper.state).toEqual(
+          new SearchParameters({
+            hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
+            hierarchicalFacetsRefinements: { test: [] },
+            maxValuesPerFacet: 10,
+          })
+        );
 
-        widget.dispose({
+        expect(unmountComponentAtNode).toHaveBeenCalledTimes(0);
+
+        const newState = widget.dispose({
           state: helper.state,
           helper,
         });
 
-        expect(render).toHaveBeenCalledTimes(1);
-        expect(render).toHaveBeenCalledWith(null, container);
+        expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
+        expect(unmountComponentAtNode).toHaveBeenCalledWith(container);
+
+        expect(newState).toEqual(new SearchParameters());
       });
     });
   });

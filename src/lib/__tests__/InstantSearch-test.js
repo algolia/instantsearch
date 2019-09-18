@@ -1,12 +1,16 @@
 import algoliasearchHelper from 'algoliasearch-helper';
+import InstantSearch from '../InstantSearch';
+import version from '../version';
+import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import connectPagination from '../../connectors/pagination/connectPagination';
+import index from '../../widgets/index/index';
+import { noop } from '../../lib/utils';
 import {
   createSearchClient,
   createControlledSearchClient,
 } from '../../../test/mock/createSearchClient';
 import { createWidget } from '../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
-import InstantSearch from '../InstantSearch';
-import version from '../version';
 
 jest.useFakeTimers();
 
@@ -172,7 +176,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
   it('throws if createURL is called before start', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -185,7 +189,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
   it('throws if refresh is called before start', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -205,7 +209,7 @@ describe('InstantSearch', () => {
 
     // eslint-disable-next-line no-new
     new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -218,7 +222,7 @@ describe('InstantSearch', () => {
   it('does not call algoliasearchHelper', () => {
     // eslint-disable-next-line no-new
     new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -228,43 +232,12 @@ describe('InstantSearch', () => {
   it('does store insightsClient on the instance', () => {
     const insightsClient = () => {};
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
       insightsClient,
     });
 
     expect(search.insightsClient).toBe(insightsClient);
-  });
-
-  // https://github.com/algolia/instantsearch.js/pull/1148
-  it('does not mutate the provided `searchParameters`', () => {
-    const disjunctiveFacetsRefinements = { fruits: ['apple'] };
-    const facetsRefinements = disjunctiveFacetsRefinements;
-
-    const search = new InstantSearch({
-      indexName: 'index_name',
-      searchClient: createSearchClient(),
-      searchParameters: {
-        disjunctiveFacetsRefinements,
-        facetsRefinements,
-      },
-    });
-
-    search.addWidget(
-      createWidget({
-        getConfiguration: () => ({
-          disjunctiveFacetsRefinements: {
-            fruits: ['orange'],
-          },
-        }),
-      })
-    );
-
-    search.start();
-
-    expect(search.mainIndex.getHelper().state.facetsRefinements).toEqual({
-      fruits: ['apple'],
-    });
   });
 });
 
@@ -272,7 +245,7 @@ describe('addWidget(s)', () => {
   it('forwards the call to `addWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -286,7 +259,7 @@ describe('addWidget(s)', () => {
   it('forwards the call to `addWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -302,7 +275,7 @@ describe('removeWidget(s)', () => {
   it('forwards the call to `removeWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -320,7 +293,7 @@ describe('removeWidget(s)', () => {
   it('forwards the call to `removeWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -339,7 +312,7 @@ describe('removeWidget(s)', () => {
 describe('start', () => {
   it('creates two Helper one for the instance + one for the index', () => {
     const searchClient = createSearchClient();
-    const indexName = 'my_index_name';
+    const indexName = 'indexName';
     const search = new InstantSearch({
       indexName,
       searchClient,
@@ -356,7 +329,7 @@ describe('start', () => {
   it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -371,7 +344,7 @@ describe('start', () => {
     const searchFunction = jest.fn(helper => helper.setQuery('test').search());
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchFunction,
       searchClient,
     });
@@ -389,15 +362,14 @@ describe('start', () => {
   it('calls the provided `searchFunction` with multiple requests', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
       searchFunction(helper) {
-        helper.addDisjunctiveFacetRefinement('brand', 'Apple');
-        helper.search();
-      },
-      searchParameters: {
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
+        const nextState = helper.state
+          .addDisjunctiveFacet('brand')
+          .addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        helper.setState(nextState).search();
       },
     });
 
@@ -406,32 +378,66 @@ describe('start', () => {
     }).not.toThrow();
   });
 
-  it('forwards the `searchParameters` to the main index', () => {
+  it('forwards the `initialUiState` to the main index', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
-      searchParameters: {
-        hitsPerPage: 5,
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
+      initialUiState: {
+        indexName: {
+          refinementList: {
+            brand: ['Apple'],
+          },
+        },
       },
     });
 
     search.start();
 
-    expect(search.mainIndex.getHelper().state).toEqual(
-      algoliasearchHelper.SearchParameters.make({
-        index: 'index_name',
-        hitsPerPage: 5,
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
-      })
-    );
+    expect(search.mainIndex.getWidgetState()).toEqual({
+      indexName: {
+        refinementList: {
+          brand: ['Apple'],
+        },
+      },
+    });
+  });
+
+  it('forwards the router state to the main index', () => {
+    const router = {
+      read: jest.fn(() => ({
+        indexName: {
+          hierarchicalMenu: {
+            'hierarchicalCategories.lvl0': ['Cell Phones'],
+          },
+        },
+      })),
+      write: jest.fn(),
+      onUpdate: jest.fn(),
+      createURL: jest.fn(() => '#'),
+    };
+
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      routing: {
+        router,
+      },
+    });
+
+    search.start();
+
+    expect(search.mainIndex.getWidgetState()).toEqual({
+      indexName: {
+        hierarchicalMenu: {
+          'hierarchicalCategories.lvl0': ['Cell Phones'],
+        },
+      },
+    });
   });
 
   it('calls `init` on the added widgets', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -441,14 +447,30 @@ describe('start', () => {
 
     search.start();
 
-    expect(widget.getConfiguration).toHaveBeenCalledTimes(1);
     expect(widget.init).toHaveBeenCalledTimes(1);
+  });
+
+  it('triggers a single search with `routing`', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      routing: true,
+      searchClient,
+    });
+
+    expect(searchClient.search).toHaveBeenCalledTimes(0);
+
+    search.start();
+
+    await runAllMicroTasks();
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
   });
 
   it('triggers a search without errors', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -465,7 +487,7 @@ describe('start', () => {
     });
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -483,7 +505,7 @@ describe('start', () => {
   it('does start without widgets', () => {
     const searchClient = createSearchClient();
     const instance = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -493,7 +515,7 @@ describe('start', () => {
   it('does not to start twice', () => {
     const searchClient = createSearchClient();
     const instance = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -511,7 +533,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 describe('dispose', () => {
   it('cancels the scheduled search', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -534,7 +556,7 @@ describe('dispose', () => {
 
   it('cancels the scheduled render', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -557,7 +579,7 @@ describe('dispose', () => {
   it('cancels the scheduled stalled render', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -587,7 +609,7 @@ describe('dispose', () => {
 
   it('removes the widgets from the main index', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -604,7 +626,7 @@ describe('dispose', () => {
 
   it('calls `dispose` on the main index', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -621,7 +643,7 @@ describe('dispose', () => {
 
   it('stops the instance', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -639,7 +661,7 @@ describe('dispose', () => {
   it('removes the listeners on the main Helper', () => {
     const onEventName = jest.fn();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -663,7 +685,7 @@ describe('dispose', () => {
   it('removes the listeners on the instance', async () => {
     const onRender = jest.fn();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -690,7 +712,7 @@ describe('dispose', () => {
 
   it('removes the Helpers references', () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -714,7 +736,7 @@ describe('dispose', () => {
 describe('scheduleSearch', () => {
   it('defers the call to the `search` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -735,7 +757,7 @@ describe('scheduleSearch', () => {
 
   it('deduplicates the calls to the `search` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -761,7 +783,7 @@ describe('scheduleSearch', () => {
 describe('scheduleRender', () => {
   it('defers the call to the `render` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -780,7 +802,7 @@ describe('scheduleRender', () => {
 
   it('deduplicates the calls to the `render` method', async () => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -804,7 +826,7 @@ describe('scheduleRender', () => {
 
   it('emits a `render` event once the render is complete', done => {
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
     });
 
@@ -827,7 +849,7 @@ describe('scheduleStalledRender', () => {
   it('calls the `render` method on the main index', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -860,7 +882,7 @@ describe('scheduleStalledRender', () => {
   it('deduplicates the calls to the `render` method', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -896,7 +918,7 @@ describe('scheduleStalledRender', () => {
   it('triggers a `render` once the search expires the delay', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -972,65 +994,123 @@ describe('createURL', () => {
     createURL: jest.fn(() => '#'),
   });
 
-  it('returns the URL for the main index state', () => {
+  it('at top-level returns the default URL for the main index state', () => {
     const router = createRouter();
-    router.createURL.mockImplementation(() => 'http://algolia.com');
+    router.createURL.mockImplementation(() => 'https://algolia.com');
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
       routing: {
         router,
       },
     });
 
-    search.addWidget(
-      createWidget({
-        getWidgetState() {
-          return {
-            query: 'Apple',
-          };
-        },
-      })
-    );
-
     search.start();
 
-    expect(search.createURL()).toBe('http://algolia.com');
+    expect(search.createURL()).toBe('https://algolia.com');
+  });
+
+  it('at top-level returns a custom URL for the main index state', () => {
+    const router = createRouter();
+    router.createURL.mockImplementation(() => 'https://algolia.com');
+
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      routing: {
+        router,
+      },
+    });
+
+    search.addWidget(connectSearchBox(noop)({}));
+    search.start();
+
+    expect(search.createURL({ indexName: { query: 'Apple' } })).toBe(
+      'https://algolia.com'
+    );
+  });
+
+  it('returns the default URL for the main index state', () => {
+    const router = createRouter();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'Apple',
+        },
+      },
+      routing: {
+        router,
+      },
+    });
+
+    search.addWidget(connectSearchBox(noop)({}));
+    search.start();
+    search.createURL();
+
     expect(router.createURL).toHaveBeenCalledWith({
-      query: 'Apple',
+      indexName: {
+        query: 'Apple',
+      },
     });
   });
 
-  it('returns the URL with the given `SearchParameters` applied', () => {
+  it('returns the URL for nested index states', async () => {
     const router = createRouter();
-    router.createURL.mockImplementation(() => 'http://algolia.com');
-
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'Google',
+        },
+        indexNameLvl1: {
+          query: 'Samsung',
+        },
+        indexNameLvl2: {
+          query: 'Google',
+        },
+      },
       routing: {
         router,
       },
     });
 
-    search.addWidget(
-      createWidget({
-        getWidgetState(_, { searchParameters }) {
-          return {
-            query: 'Apple',
-            page: searchParameters.page,
-          };
-        },
-      })
-    );
+    search.addWidgets([
+      connectSearchBox(noop)({}),
+      index({ indexName: 'indexNameLvl1' }).addWidgets([
+        connectSearchBox(noop)({}),
+        index({ indexName: 'indexNameLvl2' }).addWidgets([
+          connectSearchBox(noop)({}),
+          connectPagination(noop)({}),
+          createWidget({
+            render({ helper, createURL }) {
+              createURL(helper.state.setPage(3).setQuery('Apple'));
+            },
+          }),
+        ]),
+      ]),
+    ]);
 
     search.start();
 
-    expect(search.createURL({ page: 5 })).toBe('http://algolia.com');
+    // We need to run all micro tasks for the `render` method of the last
+    // widget to be called and its `createURL` to be triggered.
+    await runAllMicroTasks();
+
     expect(router.createURL).toHaveBeenCalledWith({
-      query: 'Apple',
-      page: 5,
+      indexName: {
+        query: 'Google',
+      },
+      indexNameLvl1: {
+        query: 'Samsung',
+      },
+      indexNameLvl2: {
+        query: 'Apple',
+        page: 4,
+      },
     });
   });
 });
@@ -1043,7 +1123,7 @@ describe('refresh', () => {
     });
 
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 
@@ -1059,7 +1139,7 @@ describe('refresh', () => {
   it('triggers a `search` with the cache emptied', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
-      indexName: 'index_name',
+      indexName: 'indexName',
       searchClient,
     });
 

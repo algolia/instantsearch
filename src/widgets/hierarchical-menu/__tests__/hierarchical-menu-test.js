@@ -1,9 +1,9 @@
-import { render } from 'preact';
+import { render } from 'preact-compat';
 import { SearchParameters } from 'algoliasearch-helper';
 import hierarchicalMenu from '../hierarchical-menu';
 
-jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
 
@@ -33,134 +33,6 @@ describe('hierarchicalMenu()', () => {
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/"
 `);
-    });
-  });
-
-  describe('getConfiguration', () => {
-    beforeEach(() => {
-      options = { container, attributes };
-    });
-
-    it('has defaults', () => {
-      expect(
-        hierarchicalMenu(options).getConfiguration(new SearchParameters())
-      ).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              name: 'hello',
-              rootPath: null,
-              attributes: ['hello', 'world'],
-              separator: ' > ',
-              showParentLevel: true,
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            hello: [],
-          },
-          maxValuesPerFacet: 10,
-        })
-      );
-    });
-
-    it('understand the separator option', () => {
-      expect(
-        hierarchicalMenu({ separator: ' ? ', ...options }).getConfiguration(
-          new SearchParameters()
-        )
-      ).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              name: 'hello',
-              rootPath: null,
-              attributes: ['hello', 'world'],
-              separator: ' ? ',
-              showParentLevel: true,
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            hello: [],
-          },
-          maxValuesPerFacet: 10,
-        })
-      );
-    });
-
-    it('understand the showParentLevel option', () => {
-      expect(
-        hierarchicalMenu({
-          showParentLevel: false,
-          ...options,
-        }).getConfiguration(new SearchParameters())
-      ).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              name: 'hello',
-              rootPath: null,
-              attributes: ['hello', 'world'],
-              separator: ' > ',
-              showParentLevel: false,
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            hello: [],
-          },
-          maxValuesPerFacet: 10,
-        })
-      );
-    });
-
-    it('understand the rootPath option', () => {
-      expect(
-        hierarchicalMenu({ rootPath: 'Beer', ...options }).getConfiguration(
-          new SearchParameters()
-        )
-      ).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              name: 'hello',
-              rootPath: 'Beer',
-              attributes: ['hello', 'world'],
-              separator: ' > ',
-              showParentLevel: true,
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            hello: [],
-          },
-          maxValuesPerFacet: 10,
-        })
-      );
-    });
-
-    describe('limit option', () => {
-      it('configures maxValuesPerFacet', () =>
-        expect(
-          hierarchicalMenu({ limit: 20, ...options }).getConfiguration(
-            new SearchParameters()
-          ).maxValuesPerFacet
-        ).toBe(20));
-
-      it('uses provided maxValuesPerFacet when higher', () =>
-        expect(
-          hierarchicalMenu({ limit: 20, ...options }).getConfiguration(
-            new SearchParameters({
-              maxValuesPerFacet: 30,
-            })
-          ).maxValuesPerFacet
-        ).toBe(30));
-
-      it('ignores provided maxValuesPerFacet when lower', () =>
-        expect(
-          hierarchicalMenu({ limit: 10, ...options }).getConfiguration(
-            new SearchParameters({
-              maxValuesPerFacet: 3,
-            })
-          ).maxValuesPerFacet
-        ).toBe(10));
     });
   });
 

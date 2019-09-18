@@ -104,9 +104,10 @@ describe('connectInfiniteHitsWithInsights', () => {
   });
 
   it('does not throw without the unmount function', () => {
-    const helper = algoliasearchHelper(createSearchClient(), '', {});
     const rendering = () => {};
-    const makeWidget = connectInfiniteHitsWithInsights(rendering, jest.fn());
+    // @ts-ignore:next-line
+    const makeWidget = connectInfiniteHitsWithInsights(rendering);
+    const helper = algoliasearchHelper(createSearchClient(), '', {});
     const widget = makeWidget({});
     expect(() =>
       widget.dispose!({ helper, state: helper.state })

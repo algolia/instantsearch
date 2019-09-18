@@ -3,7 +3,6 @@ import {
   warning,
   createDocumentationMessageGenerator,
   isEqual,
-  find,
   noop,
 } from '../../lib/utils';
 
@@ -116,56 +115,6 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      getConfiguration(currentConfiguration) {
-        if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = find(
-            currentConfiguration.hierarchicalFacets,
-            ({ name }) => name === hierarchicalFacetName
-          );
-
-          const isAttributesEqual =
-            isFacetSet && isEqual(isFacetSet.attributes, attributes);
-          const isSeparatorEqual =
-            isFacetSet && isFacetSet.separator === separator;
-          const isRootPathEqual =
-            isFacetSet && isFacetSet.rootPath === rootPath;
-
-          const isHierarchicalOptionsEqual =
-            isAttributesEqual && isSeparatorEqual && isRootPathEqual;
-
-          if (isFacetSet && !isHierarchicalOptionsEqual) {
-            warning(
-              false,
-              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
-            );
-
-            return currentConfiguration;
-          }
-        }
-
-        return currentConfiguration.setQueryParameters({
-          hierarchicalFacets: [
-            {
-              name: hierarchicalFacetName,
-              attributes,
-              separator,
-              rootPath,
-              showParentLevel,
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            [hierarchicalFacetName]:
-              currentConfiguration.hierarchicalFacetsRefinements[
-                hierarchicalFacetName
-              ] || [],
-          },
-          maxValuesPerFacet: Math.max(
-            currentConfiguration.maxValuesPerFacet || 0,
-            showMore ? showMoreLimit : limit
-          ),
-        });
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
@@ -275,11 +224,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         const path = searchParameters.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );
-        if (!path || path.length === 0) return uiState;
-        if (
-          uiState.hierarchicalMenu &&
-          isEqual(path, uiState.hierarchicalMenu[hierarchicalFacetName])
-        ) {
+
+        if (!path.length) {
           return uiState;
         }
 
@@ -293,19 +239,59 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (
+        const values =
           uiState.hierarchicalMenu &&
-          uiState.hierarchicalMenu[hierarchicalFacetName]
-        ) {
-          return searchParameters
-            .clearRefinements(hierarchicalFacetName)
-            .toggleRefinement(
-              hierarchicalFacetName,
-              uiState.hierarchicalMenu[hierarchicalFacetName].join(separator)
-            );
-        } else {
-          return searchParameters;
+          uiState.hierarchicalMenu[hierarchicalFacetName];
+
+        if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
+          const facet = searchParameters.getHierarchicalFacetByName(
+            hierarchicalFacetName
+          );
+
+          warning(
+            isEqual(facet.attributes, attributes) &&
+              facet.separator === separator &&
+              facet.rootPath === rootPath,
+            'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
+          );
         }
+
+        const withFacetConfiguration = searchParameters
+          .removeHierarchicalFacet(hierarchicalFacetName)
+          .addHierarchicalFacet({
+            name: hierarchicalFacetName,
+            attributes,
+            separator,
+            rootPath,
+            showParentLevel,
+          });
+
+        const currentMaxValuesPerFacet =
+          withFacetConfiguration.maxValuesPerFacet || 0;
+
+        const nextMaxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+          'maxValuesPerFacet',
+          nextMaxValuesPerFacet
+        );
+
+        if (!values) {
+          return withMaxValuesPerFacet.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+              [hierarchicalFacetName]: [],
+            },
+          });
+        }
+
+        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
+          hierarchicalFacetName,
+          values.join(separator)
+        );
       },
     };
   };

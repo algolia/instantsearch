@@ -3,7 +3,6 @@ import {
   warning,
   createDocumentationMessageGenerator,
   isEqual,
-  find,
   noop,
 } from '../../lib/utils';
 
@@ -65,43 +64,6 @@ export default function connectBreadcrumb(renderFn, unmountFn = noop) {
 
     return {
       $$type: 'ais.breadcrumb',
-
-      getConfiguration: currentConfiguration => {
-        if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = find(
-            currentConfiguration.hierarchicalFacets,
-            ({ name }) => name === hierarchicalFacetName
-          );
-
-          if (isFacetSet) {
-            warning(
-              isEqual(isFacetSet.attributes, attributes) &&
-                isFacetSet.separator === separator &&
-                isFacetSet.rootPath === rootPath,
-              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
-            );
-
-            return currentConfiguration;
-          }
-        }
-
-        return currentConfiguration.setQueryParameters({
-          hierarchicalFacets: [
-            {
-              attributes,
-              name: hierarchicalFacetName,
-              separator,
-              rootPath,
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            [hierarchicalFacetName]:
-              currentConfiguration.hierarchicalFacetsRefinements[
-                hierarchicalFacetName
-              ] || [],
-          },
-        });
-      },
 
       init({ createURL, helper, instantSearchInstance }) {
         this._createURL = facetValue => {
@@ -173,6 +135,30 @@ export default function connectBreadcrumb(renderFn, unmountFn = noop) {
 
       dispose() {
         unmountFn();
+      },
+
+      getWidgetSearchParameters(searchParameters) {
+        if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
+          const facet = searchParameters.getHierarchicalFacetByName(
+            hierarchicalFacetName
+          );
+
+          warning(
+            isEqual(facet.attributes, attributes) &&
+              facet.separator === separator &&
+              facet.rootPath === rootPath,
+            'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
+          );
+
+          return searchParameters;
+        }
+
+        return searchParameters.addHierarchicalFacet({
+          name: hierarchicalFacetName,
+          attributes,
+          separator,
+          rootPath,
+        });
       },
     };
   };

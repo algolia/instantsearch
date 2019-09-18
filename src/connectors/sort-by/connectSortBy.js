@@ -103,26 +103,26 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
     return {
       $$type: 'ais.sortBy',
 
-      init({ helper, instantSearchInstance }) {
-        const initialIndex = helper.state.index;
-        const isInitialIndexInItems = find(
+      init({ helper, instantSearchInstance, parent }) {
+        const currentIndex = helper.state.index;
+        const isCurrentIndexInItems = find(
           items,
-          item => item.value === initialIndex
+          item => item.value === currentIndex
         );
 
-        this.initialIndex = initialIndex;
+        this.initialIndex = parent.getIndexName();
         this.setIndex = indexName => {
           helper.setIndex(indexName).search();
         };
 
         warning(
-          isInitialIndexInItems,
-          `The index named "${initialIndex}" is not listed in the \`items\` of \`sortBy\`.`
+          isCurrentIndexInItems,
+          `The index named "${currentIndex}" is not listed in the \`items\` of \`sortBy\`.`
         );
 
         renderFn(
           {
-            currentRefinement: initialIndex,
+            currentRefinement: currentIndex,
             options: transformItems(items),
             refine: this.setIndex,
             hasNoResults: true,
@@ -157,7 +157,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
         const currentIndex = searchParameters.index;
         const isInitialIndex = currentIndex === this.initialIndex;
 
-        if (isInitialIndex || (uiState && uiState.sortBy === currentIndex)) {
+        if (isInitialIndex) {
           return uiState;
         }
 
@@ -170,7 +170,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameter(
           'index',
-          uiState.sortBy || this.initialIndex
+          uiState.sortBy || this.initialIndex || searchParameters.index
         );
       },
     };

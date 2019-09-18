@@ -148,29 +148,6 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getConfiguration(configuration) {
-        const widgetConfiguration = {
-          hierarchicalFacets: [
-            {
-              name: attribute,
-              attributes: [attribute],
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            [attribute]:
-              configuration.hierarchicalFacetsRefinements[attribute] || [],
-          },
-        };
-
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        return configuration.setQueryParameters(widgetConfiguration);
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
@@ -242,14 +219,11 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
+        const [value] = searchParameters.getHierarchicalFacetBreadcrumb(
           attribute
         );
 
-        if (
-          !refinedItem ||
-          (uiState.menu && uiState.menu[attribute] === refinedItem)
-        ) {
+        if (!value) {
           return uiState;
         }
 
@@ -257,31 +231,47 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           ...uiState,
           menu: {
             ...uiState.menu,
-            [attribute]: refinedItem,
+            [attribute]: value,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (uiState.menu && uiState.menu[attribute]) {
-          const uiStateRefinedItem = uiState.menu[attribute];
-          const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
-            attribute,
-            uiStateRefinedItem
-          );
-          if (isAlreadyRefined) return searchParameters;
-          return searchParameters.toggleRefinement(
-            attribute,
-            uiStateRefinedItem
-          );
+        const value = uiState.menu && uiState.menu[attribute];
+
+        const withFacetConfiguration = searchParameters
+          .removeHierarchicalFacet(attribute)
+          .addHierarchicalFacet({
+            name: attribute,
+            attributes: [attribute],
+          });
+
+        const currentMaxValuesPerFacet =
+          withFacetConfiguration.maxValuesPerFacet || 0;
+
+        const nextMaxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+          'maxValuesPerFacet',
+          nextMaxValuesPerFacet
+        );
+
+        if (!value) {
+          return withMaxValuesPerFacet.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+              [attribute]: [],
+            },
+          });
         }
-        if (searchParameters.isHierarchicalFacetRefined(attribute)) {
-          const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
-            attribute
-          );
-          return searchParameters.toggleRefinement(attribute, refinedItem);
-        }
-        return searchParameters;
+
+        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
+          attribute,
+          value
+        );
       },
     };
   };

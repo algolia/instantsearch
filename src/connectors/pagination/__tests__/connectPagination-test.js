@@ -49,7 +49,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
+
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -287,67 +287,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
     }
   });
 
-  describe('getConfiguration', () => {
-    it('adds a `page` to the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectPagination(renderFn);
-      const widget = makeWidget();
-
-      const nextConfiguation = widget.getConfiguration(
-        new SearchParameters({})
-      );
-
-      expect(nextConfiguation).toEqual(
-        new SearchParameters({
-          page: 0,
-        })
-      );
-    });
-
-    it('takes the previous `page` from the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectPagination(renderFn);
-      const widget = makeWidget();
-
-      const nextConfiguation1 = widget.getConfiguration(
-        new SearchParameters({
-          page: 0,
-        })
-      );
-
-      expect(nextConfiguation1).toEqual(
-        new SearchParameters({
-          page: 0,
-        })
-      );
-
-      const nextConfiguation2 = widget.getConfiguration(
-        new SearchParameters({
-          page: 6,
-        })
-      );
-
-      expect(nextConfiguation2).toEqual(
-        new SearchParameters({
-          page: 6,
-        })
-      );
-    });
-  });
-
   describe('dispose', () => {
-    it('does not throw without the unmount function', () => {
-      const rendering = () => {};
-      const makeWidget = connectPagination(rendering);
-      const widget = makeWidget({
-        padding: 5,
-      });
-      const helper = algoliasearchHelper({});
-      expect(() =>
-        widget.dispose({ helper, state: helper.state })
-      ).not.toThrow();
-    });
-
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({}, '');
 
@@ -361,6 +301,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
       widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not throw without the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const makeWidget = connectPagination(renderFn);
+      const widget = makeWidget();
+
+      expect(() =>
+        widget.dispose({ helper, state: helper.state })
+      ).not.toThrow();
     });
 
     it('removes the `page` from the `SearchParameters`', () => {
@@ -434,6 +386,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
 
     test('returns the `SearchParameters` with the default value', () => {
       const [widget, helper] = getInitializedWidget();
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          page: 0,
+        })
+      );
+    });
+
+    test('overrides original `SearchParameters` with the default value', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      helper.setPage(200);
+      expect(helper.state.page).toBe(200);
 
       const actual = widget.getWidgetSearchParameters(helper.state, {
         uiState: {},

@@ -51,7 +51,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getConfiguration: expect.any(Function),
+
           getWidgetState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -100,14 +100,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       }),
       false
     );
-  });
-
-  it('does not throw without the unmount function', () => {
-    const rendering = () => {};
-    const makeWidget = connectSearchBox(rendering);
-    const widget = makeWidget({});
-    const helper = algoliasearchHelper({});
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
   });
 
   it('Provides a function to update the refinements at each step', () => {
@@ -318,42 +310,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
-  describe('getConfiguration', () => {
-    it('adds a `query` to the `SearchParameters`', () => {
-      const renderFn = () => {};
-      const makeWidget = connectSearchBox(renderFn);
-      const widget = makeWidget();
-
-      const nextConfiguration = widget.getConfiguration(
-        new SearchParameters({})
-      );
-
-      expect(nextConfiguration).toEqual(
-        new SearchParameters({
-          query: '',
-        })
-      );
-    });
-
-    it('takes the default `query` from the `SearchParameters` passed', () => {
-      const renderFn = () => {};
-      const makeWidget = connectSearchBox(renderFn);
-      const widget = makeWidget();
-
-      const nextConfiguration = widget.getConfiguration(
-        new SearchParameters({
-          query: 'Previous query',
-        })
-      );
-
-      expect(nextConfiguration).toEqual(
-        new SearchParameters({
-          query: 'Previous query',
-        })
-      );
-    });
-  });
-
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({}, '');
@@ -471,6 +427,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       expect(helper.state).toEqual(
         new SearchParameters({
           index: '',
+        })
+      );
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: '',
+        })
+      );
+    });
+
+    test('overrides the `SearchParameters` with the default value', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      helper.setQuery('samba dancing for pros');
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+          query: 'samba dancing for pros',
         })
       );
 

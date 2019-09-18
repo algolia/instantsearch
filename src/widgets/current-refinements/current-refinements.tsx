@@ -1,6 +1,4 @@
-/** @jsx h */
-
-import { h, render } from 'preact';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
 import connectCurrentRefinements, {
@@ -113,7 +111,7 @@ const currentRefinements: CurrentRefinements = ({
   };
 
   const makeWidget = connectCurrentRefinements(renderer, () =>
-    render(null, containerNode)
+    unmountComponentAtNode(containerNode)
   );
 
   return makeWidget({

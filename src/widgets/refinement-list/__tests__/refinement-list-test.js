@@ -1,9 +1,9 @@
-import { render } from 'preact';
+import { render } from 'preact-compat';
 import { SearchParameters } from 'algoliasearch-helper';
 import refinementList from '../refinement-list';
 
-jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
 
@@ -179,38 +179,44 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
   describe('show more', () => {
     it('should return a configuration with the same top-level limit value (default value)', () => {
-      const opts = {
+      const wdgt = refinementList({
         container,
         attribute: 'attribute',
         limit: 1,
-      };
-      const wdgt = refinementList(opts);
-      const partialConfig = wdgt.getConfiguration(new SearchParameters({}));
+      });
+      const partialConfig = wdgt.getWidgetSearchParameters(
+        new SearchParameters({}),
+        { uiState: {} }
+      );
       expect(partialConfig.maxValuesPerFacet).toBe(1);
     });
 
     it('should return a configuration with the highest limit value (custom value)', () => {
-      const opts = {
+      const showMoreLimit = 99;
+      const wdgt = refinementList({
         container,
         attribute: 'attribute',
         limit: 1,
         showMore: true,
-        showMoreLimit: 99,
-      };
-      const wdgt = refinementList(opts);
-      const partialConfig = wdgt.getConfiguration(new SearchParameters({}));
-      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMoreLimit);
+        showMoreLimit,
+      });
+      const partialConfig = wdgt.getWidgetSearchParameters(
+        new SearchParameters({}),
+        { uiState: {} }
+      );
+      expect(partialConfig.maxValuesPerFacet).toBe(showMoreLimit);
     });
 
     it('should not accept a show more limit that is < limit', () => {
-      const opts = {
-        container,
-        attribute: 'attribute',
-        limit: 100,
-        showMore: true,
-        showMoreLimit: 1,
-      };
-      expect(() => refinementList(opts)).toThrow();
+      expect(() =>
+        refinementList({
+          container,
+          attribute: 'attribute',
+          limit: 100,
+          showMore: true,
+          showMoreLimit: 1,
+        })
+      ).toThrow();
     });
   });
 });

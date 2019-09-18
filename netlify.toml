@@ -1,5 +1,5 @@
 [build]
-  command="yarn run website:build"
+  command="yarn run storybook:build && yarn run website:build"
   publish="website"
 
 [build.environment]

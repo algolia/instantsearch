@@ -8,7 +8,7 @@ export const createInstantSearch = (
   args: Partial<InstantSearch> = {}
 ): InstantSearch => {
   const searchClient = createSearchClient();
-  const indexName = 'index_name';
+  const { indexName = 'indexName' } = args;
   const mainHelper = algoliasearchHelper(searchClient, indexName, {});
   const mainIndex = index({ indexName });
 
@@ -36,11 +36,10 @@ export const createInstantSearch = (
     _isSearchStalled: true,
     _stalledSearchDelay: 200,
     _searchStalledTimer: null,
-    _searchParameters: {},
+    _initialUiState: {},
     _createURL: jest.fn(() => '#'),
-    _createAbsoluteURL: jest.fn(() => '#'),
+    onStateChange: jest.fn(),
     createURL: jest.fn(() => '#'),
-    routing: undefined,
     addWidget: jest.fn(),
     addWidgets: jest.fn(),
     removeWidget: jest.fn(),

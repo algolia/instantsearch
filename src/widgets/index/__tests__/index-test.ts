@@ -1,4 +1,7 @@
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  PlainSearchParameters,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
@@ -14,11 +17,6 @@ import index from '../index';
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      getConfiguration: jest.fn(() => {
-        return new SearchParameters({
-          query: 'Apple',
-        });
-      }),
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('query', undefined);
       }),
@@ -32,16 +30,14 @@ describe('index', () => {
           query: searchParameters.query,
         };
       }),
+      getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) => {
+        return searchParameters.setQueryParameter('query', uiState.query || '');
+      }),
       ...args,
     });
 
   const createPagination = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      getConfiguration: jest.fn(() => {
-        return new SearchParameters({
-          page: 5,
-        });
-      }),
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('page', undefined);
       }),
@@ -55,6 +51,42 @@ describe('index', () => {
           page: searchParameters.page,
         };
       }),
+      getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) => {
+        return searchParameters.setQueryParameter('page', uiState.page || 0);
+      }),
+      ...args,
+    });
+
+  const createConfigure = (
+    params: PlainSearchParameters,
+    args: Partial<Widget> = {}
+  ): Widget =>
+    createWidget({
+      dispose: jest.fn(({ state }) => {
+        return state.setQueryParameters(
+          Object.keys(params).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
+      }),
+      getWidgetState(uiState) {
+        return {
+          configure: {
+            ...uiState.configure,
+            ...params,
+          },
+        };
+      },
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQueryParameters({
+          ...uiState.configure,
+          ...params,
+        });
+      },
       ...args,
     });
 
@@ -104,22 +136,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     it('returns the instance to be able to chain the calls', () => {
-      const topLevelIndex = index({ indexName: 'topLevelIndexName' });
-      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
-      topLevelIndex.addWidgets([
-        subLevelIndex.addWidgets([createSearchBox(), createPagination()]),
+      topLevelInstance.addWidgets([
+        subLevelInstance.addWidgets([createSearchBox(), createPagination()]),
       ]);
 
-      expect(topLevelIndex.getWidgets()).toHaveLength(1);
-      expect(topLevelIndex.getWidgets()).toEqual([subLevelIndex]);
+      expect(topLevelInstance.getWidgets()).toHaveLength(1);
+      expect(topLevelInstance.getWidgets()).toEqual([subLevelInstance]);
     });
 
     it('does not throw an error without the `init` step', () => {
-      const topLevelIndex = index({ indexName: 'topLevelIndexName' });
-      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
-      expect(() => topLevelIndex.addWidgets([subLevelIndex])).not.toThrow();
+      expect(() =>
+        topLevelInstance.addWidgets([subLevelInstance])
+      ).not.toThrow();
     });
 
     it('throws an error with a value different than `array`', () => {
@@ -155,9 +189,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       it('updates the internal state with added widgets', () => {
         const instance = index({ indexName: 'indexName' });
 
-        instance.addWidgets([createSearchBox()]);
+        instance.addWidgets([
+          createSearchBox({
+            getWidgetSearchParameters(state) {
+              return state.setQueryParameter('query', 'Apple');
+            },
+          }),
+        ]);
 
-        instance.init(createInitOptions());
+        instance.init(createInitOptions({ parent: null }));
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -166,7 +206,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           })
         );
 
-        instance.addWidgets([createPagination()]);
+        instance.addWidgets([
+          createPagination({
+            getWidgetSearchParameters(state) {
+              return state.setQueryParameter('page', 5);
+            },
+          }),
+        ]);
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -185,6 +231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -199,10 +246,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           expect(widget.init).toHaveBeenCalledWith({
             instantSearchInstance,
             parent: instance,
+            uiState: {},
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
             templatesConfig: instantSearchInstance.templatesConfig,
-            createURL: instantSearchInstance._createAbsoluteURL,
+            createURL: expect.any(Function),
           });
         });
       });
@@ -216,6 +264,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -235,6 +284,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -294,12 +344,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
     it('does not throw an error without the `init` step', () => {
       const topLevelInstance = index({ indexName: 'topLevelIndexName' });
-      const subLevelIndex = index({ indexName: 'subLevelIndexName' });
+      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
 
-      topLevelInstance.addWidgets([subLevelIndex]);
+      topLevelInstance.addWidgets([subLevelInstance]);
 
       expect(() =>
-        topLevelInstance.removeWidgets([subLevelIndex])
+        topLevelInstance.removeWidgets([subLevelInstance])
       ).not.toThrow();
     });
 
@@ -335,11 +385,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     describe('with a started instance', () => {
       it('updates the internal state with removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
-        const pagination = createPagination();
+        const pagination = createPagination({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('page', 5);
+          },
+        });
 
-        instance.addWidgets([createSearchBox(), pagination]);
+        instance.addWidgets([
+          createSearchBox({
+            getWidgetSearchParameters(state) {
+              return state.setQueryParameter('query', 'Apple');
+            },
+          }),
+          pagination,
+        ]);
 
-        instance.init(createInitOptions());
+        instance.init(createInitOptions({ parent: null }));
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -359,6 +420,59 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         );
       });
 
+      it('updates the local `uiState` with removed widgets', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+
+        const configureTopLevel = createConfigure({
+          distinct: true,
+        });
+
+        const configureSubLevel = createConfigure({
+          hitsPerPage: 5,
+        });
+
+        instance.addWidgets([
+          configureTopLevel,
+          configureSubLevel,
+          createSearchBox(),
+        ]);
+
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        // Simulate a state change
+        instance.getHelper()!.setQueryParameter('query', 'Apple iPhone');
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            query: 'Apple iPhone',
+            hitsPerPage: 5,
+            distinct: true,
+          })
+        );
+
+        instance.removeWidgets([configureSubLevel]);
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            query: 'Apple iPhone',
+            distinct: true,
+          })
+        );
+
+        // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
+        // 1. By the helper `change` event callback, for the change to the query parameters
+        // 2. By the helper `change` event callback, for the child widgets being disposed
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
+      });
+
       it('calls `dispose` on the removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
         const widgets = [
@@ -372,7 +486,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets(widgets);
 
-        instance.init(createInitOptions());
+        instance.init(createInitOptions({ parent: null }));
 
         widgets.forEach(widget => {
           expect(widget.dispose).toHaveBeenCalledTimes(0);
@@ -402,6 +516,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -425,6 +540,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -448,6 +564,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         instance.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -473,6 +590,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -496,6 +614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -518,57 +637,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
     });
 
-    it('uses `searchParameters` for the top level index', () => {
-      const instance = index({ indexName: 'indexName' });
-      const instantSearchInstance = createInstantSearch({
-        _searchParameters: {
-          hitsPerPage: 5,
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
-        },
-      });
-
-      instance.init(
-        createInitOptions({
-          instantSearchInstance,
-        })
-      );
-
-      expect(instance.getHelper()!.state).toEqual(
-        new SearchParameters({
-          index: 'indexName',
-          hitsPerPage: 5,
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
-        })
-      );
-    });
-
-    it('does not use `searchParameters` for sub level indices ', () => {
-      const topLevelInstance = index({ indexName: 'topLevelIndexName' });
-      const subLevelInstance = index({ indexName: 'subLevelIndexName' });
-      const instantSearchInstance = createInstantSearch({
-        _searchParameters: {
-          hitsPerPage: 5,
-          disjunctiveFacetsRefinements: { brand: ['Apple'] },
-          disjunctiveFacets: ['brand'],
-        },
-      });
-
-      subLevelInstance.init(
-        createInitOptions({
-          instantSearchInstance,
-          parent: topLevelInstance,
-        })
-      );
-
-      expect(subLevelInstance.getHelper()!.state).toEqual(
-        new SearchParameters({
-          index: 'subLevelIndexName',
-        })
-      );
-    });
-
     it('uses the internal state for the queries', () => {
       const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
@@ -577,11 +645,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         mainHelper,
       });
 
-      instance.addWidgets([createSearchBox(), createPagination()]);
+      instance.addWidgets([
+        createSearchBox({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('query', 'Apple');
+          },
+        }),
+        createPagination({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('page', 5);
+          },
+        }),
+      ]);
 
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -601,6 +681,42 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
     });
 
+    it('uses the index set by the widget for the queries', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.addWidgets([
+        createWidget({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('index', 'widgetIndexName');
+          },
+        }),
+      ]);
+
+      instance.init(
+        createInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      // Simulate a call to search from a widget
+      instance.getHelper()!.search();
+
+      expect(searchClient.search).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          {
+            indexName: 'widgetIndexName',
+            params: expect.any(Object),
+          },
+        ])
+      );
+    });
+
     it('inherits from the parent states for the queries', () => {
       const level0 = index({ indexName: 'level0IndexName' });
       const level1 = index({ indexName: 'level1IndexName' });
@@ -612,53 +728,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       });
 
       level0.addWidgets([
-        createWidget({
-          getConfiguration() {
-            return new SearchParameters({
-              hitsPerPage: 5,
-            });
-          },
+        createConfigure({
+          hitsPerPage: 5,
         }),
 
         createSearchBox({
-          getConfiguration() {
-            return new SearchParameters({
-              query: 'Apple',
-            });
+          getWidgetSearchParameters(searchParameters) {
+            return searchParameters.setQueryParameter('query', 'Apple');
           },
         }),
 
         createPagination({
-          getConfiguration() {
-            return new SearchParameters({
-              page: 1,
-            });
+          getWidgetSearchParameters(searchParameters) {
+            return searchParameters.setQueryParameter('page', 1);
           },
         }),
 
         level1.addWidgets([
           createSearchBox({
-            getConfiguration() {
-              return new SearchParameters({
-                query: 'Apple iPhone',
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter(
+                'query',
+                'Apple iPhone'
+              );
             },
           }),
 
           createPagination({
-            getConfiguration() {
-              return new SearchParameters({
-                page: 2,
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter('page', 2);
             },
           }),
 
           level2.addWidgets([
             createSearchBox({
-              getConfiguration() {
-                return new SearchParameters({
-                  query: 'Apple iPhone XS',
-                });
+              getWidgetSearchParameters(searchParameters) {
+                return searchParameters.setQueryParameter(
+                  'query',
+                  'Apple iPhone XS'
+                );
               },
             }),
           ]),
@@ -668,6 +776,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       level0.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -711,11 +820,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         mainHelper,
       });
 
-      instance.addWidgets([createSearchBox(), createPagination()]);
+      instance.addWidgets([
+        createSearchBox({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('query', 'Apple');
+          },
+        }),
+        createPagination({
+          getWidgetSearchParameters(state) {
+            return state.setQueryParameter('page', 5);
+          },
+        }),
+      ]);
 
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -752,6 +873,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -774,6 +896,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -803,6 +926,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -811,10 +935,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.init).toHaveBeenCalledWith({
           instantSearchInstance,
           parent: instance,
+          uiState: {},
           helper: instance.getHelper(),
           state: instance.getHelper()!.state,
           templatesConfig: instantSearchInstance.templatesConfig,
-          createURL: instantSearchInstance._createAbsoluteURL,
+          createURL: expect.any(Function),
         });
       });
     });
@@ -832,78 +957,67 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         level0.addWidgets([
-          createWidget({
-            getConfiguration() {
-              return new SearchParameters({
-                hitsPerPage: 5,
-              });
-            },
+          createConfigure({
+            hitsPerPage: 5,
           }),
 
           createSearchBox({
-            getConfiguration() {
-              return new SearchParameters({
-                query: 'Apple',
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter('query', 'Apple');
             },
           }),
 
           createPagination({
-            getConfiguration() {
-              return new SearchParameters({
-                page: 1,
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter('page', 1);
             },
           }),
 
           level1.addWidgets([
             createSearchBox({
-              getConfiguration() {
-                return new SearchParameters({
-                  query: 'Apple iPhone',
-                });
+              getWidgetSearchParameters(searchParameters) {
+                return searchParameters.setQueryParameter(
+                  'query',
+                  'Apple iPhone'
+                );
               },
             }),
 
             createPagination({
-              getConfiguration() {
-                return new SearchParameters({
-                  page: 2,
-                });
+              getWidgetSearchParameters(searchParameters) {
+                return searchParameters.setQueryParameter('page', 2);
               },
             }),
 
             level2.addWidgets([
               createSearchBox({
-                getConfiguration() {
-                  return new SearchParameters({
-                    query: 'Apple iPhone XS',
-                  });
+                getWidgetSearchParameters(searchParameters) {
+                  return searchParameters.setQueryParameter(
+                    'query',
+                    'Apple iPhone XS'
+                  );
                 },
               }),
 
               createPagination({
-                getConfiguration() {
-                  return new SearchParameters({
-                    page: 3,
-                  });
+                getWidgetSearchParameters(searchParameters) {
+                  return searchParameters.setQueryParameter('page', 3);
                 },
               }),
 
               level3.addWidgets([
                 createSearchBox({
-                  getConfiguration() {
-                    return new SearchParameters({
-                      query: 'Apple iPhone XS Red',
-                    });
+                  getWidgetSearchParameters(searchParameters) {
+                    return searchParameters.setQueryParameter(
+                      'query',
+                      'Apple iPhone XS Red'
+                    );
                   },
                 }),
 
                 createPagination({
-                  getConfiguration() {
-                    return new SearchParameters({
-                      page: 4,
-                    });
+                  getWidgetSearchParameters(searchParameters) {
+                    return searchParameters.setQueryParameter('page', 4);
                   },
                 }),
               ]),
@@ -914,6 +1028,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         level0.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -984,7 +1099,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           ]),
         ]);
 
-        level0.init(createInitOptions());
+        level0.init(createInitOptions({ parent: null }));
 
         level0
           .getHelper()!
@@ -1059,78 +1174,67 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         level0.addWidgets([
-          createWidget({
-            getConfiguration() {
-              return new SearchParameters({
-                hitsPerPage: 5,
-              });
-            },
+          createConfigure({
+            hitsPerPage: 5,
           }),
 
           createSearchBox({
-            getConfiguration() {
-              return new SearchParameters({
-                query: 'Apple',
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter('query', 'Apple');
             },
           }),
 
           createPagination({
-            getConfiguration() {
-              return new SearchParameters({
-                page: 1,
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter('page', 1);
             },
           }),
 
           level1.addWidgets([
             createSearchBox({
-              getConfiguration() {
-                return new SearchParameters({
-                  query: 'Apple iPhone',
-                });
+              getWidgetSearchParameters(searchParameters) {
+                return searchParameters.setQueryParameter(
+                  'query',
+                  'Apple iPhone'
+                );
               },
             }),
 
             createPagination({
-              getConfiguration() {
-                return new SearchParameters({
-                  page: 2,
-                });
+              getWidgetSearchParameters(searchParameters) {
+                return searchParameters.setQueryParameter('page', 2);
               },
             }),
 
             level2.addWidgets([
               createSearchBox({
-                getConfiguration() {
-                  return new SearchParameters({
-                    query: 'Apple iPhone XS',
-                  });
+                getWidgetSearchParameters(searchParameters) {
+                  return searchParameters.setQueryParameter(
+                    'query',
+                    'Apple iPhone XS'
+                  );
                 },
               }),
 
               createPagination({
-                getConfiguration() {
-                  return new SearchParameters({
-                    page: 3,
-                  });
+                getWidgetSearchParameters(searchParameters) {
+                  return searchParameters.setQueryParameter('page', 3);
                 },
               }),
 
               level3.addWidgets([
                 createSearchBox({
-                  getConfiguration() {
-                    return new SearchParameters({
-                      query: 'Apple iPhone XS Red',
-                    });
+                  getWidgetSearchParameters(searchParameters) {
+                    return searchParameters.setQueryParameter(
+                      'query',
+                      'Apple iPhone XS Red'
+                    );
                   },
                 }),
 
                 createPagination({
-                  getConfiguration() {
-                    return new SearchParameters({
-                      page: 4,
-                    });
+                  getWidgetSearchParameters(searchParameters) {
+                    return searchParameters.setQueryParameter('page', 4);
                   },
                 }),
               ]),
@@ -1141,6 +1245,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         level0.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -1199,62 +1304,55 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         level0.addWidgets([
-          createWidget({
-            getConfiguration() {
-              return new SearchParameters({
-                hitsPerPage: 5,
-              });
-            },
+          createConfigure({
+            hitsPerPage: 5,
           }),
 
           createSearchBox({
-            getConfiguration() {
-              return new SearchParameters({
-                query: 'Apple',
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter('query', 'Apple');
             },
           }),
 
           createPagination({
-            getConfiguration() {
-              return new SearchParameters({
-                page: 1,
-              });
+            getWidgetSearchParameters(searchParameters) {
+              return searchParameters.setQueryParameter('page', 1);
             },
           }),
 
           level1.addWidgets([
             createSearchBox({
-              getConfiguration() {
-                return new SearchParameters({
-                  query: 'Apple iPhone',
-                });
+              getWidgetSearchParameters(searchParameters) {
+                return searchParameters.setQueryParameter(
+                  'query',
+                  'Apple iPhone'
+                );
               },
             }),
 
             createPagination({
-              getConfiguration() {
-                return new SearchParameters({
-                  page: 2,
-                });
+              getWidgetSearchParameters(searchParameters) {
+                return searchParameters.setQueryParameter('page', 2);
               },
             }),
 
             level2.addWidgets([
               createSearchBox({
-                getConfiguration() {
-                  return new SearchParameters({
-                    query: 'Apple iPhone XS',
-                  });
+                getWidgetSearchParameters(searchParameters) {
+                  return searchParameters.setQueryParameter(
+                    'query',
+                    'Apple iPhone XS'
+                  );
                 },
               }),
 
               level3.addWidgets([
                 createSearchBox({
-                  getConfiguration() {
-                    return new SearchParameters({
-                      query: 'Apple iPhone XS Red',
-                    });
+                  getWidgetSearchParameters(searchParameters) {
+                    return searchParameters.setQueryParameter(
+                      'query',
+                      'Apple iPhone XS Red'
+                    );
                   },
                 }),
               ]),
@@ -1265,6 +1363,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         level0.init(
           createInitOptions({
             instantSearchInstance,
+            parent: null,
           })
         );
 
@@ -1313,13 +1412,97 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     });
 
     describe('with uiState', () => {
-      it('updates the local `uiState` when the state changes', () => {
-        const instance = index({ indexName: 'indexName' });
+      it('uses `indexId` for scope key', () => {
+        const instance = index({ indexName: 'indexName', indexId: 'indexId' });
         const widgets = [createSearchBox(), createPagination()];
 
         instance.addWidgets(widgets);
 
-        instance.init(createInitOptions());
+        instance.init(createInitOptions({ parent: null }));
+
+        // Simulate a state change
+        instance
+          .getHelper()!
+          .setQueryParameter('query', 'Apple')
+          .setQueryParameter('page', 5);
+
+        expect(instance.getWidgetState({})).toEqual({
+          indexId: {
+            query: 'Apple',
+            page: 5,
+          },
+        });
+      });
+
+      it('uses the provided `uiState` for the local `uiState`', () => {
+        const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+        const subLevelInstance = index({ indexName: 'subLevelIndexName' });
+
+        topLevelInstance.addWidgets([subLevelInstance]);
+
+        topLevelInstance.init(
+          createInitOptions({
+            parent: null,
+            uiState: {
+              topLevelIndexName: {
+                configure: {
+                  hitsPerPage: 5,
+                },
+                refinementList: {
+                  brand: ['Apple'],
+                },
+              },
+              subLevelIndexName: {
+                configure: {
+                  hitsPerPage: 2,
+                },
+                menu: {
+                  categories: 'Phone',
+                },
+                refinementList: {
+                  brand: ['Samsung'],
+                },
+              },
+            },
+          })
+        );
+
+        expect(topLevelInstance.getWidgetState({})).toEqual({
+          topLevelIndexName: {
+            configure: {
+              hitsPerPage: 5,
+            },
+            refinementList: {
+              brand: ['Apple'],
+            },
+          },
+          subLevelIndexName: {
+            configure: {
+              hitsPerPage: 2,
+            },
+            menu: {
+              categories: 'Phone',
+            },
+            refinementList: {
+              brand: ['Samsung'],
+            },
+          },
+        });
+      });
+
+      it('updates the local `uiState` when the state changes', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+        const widgets = [createSearchBox(), createPagination()];
+
+        instance.addWidgets(widgets);
+
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
 
         // Simulate a state change
         instance
@@ -1333,10 +1516,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
             page: 5,
           },
         });
+
+        // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
+        // 1. By the helper `change` event callback, for the 1st change to the query parameters
+        // 2. By the helper `change` event callback, for the 2nd change to the query parameters
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
       });
 
       it('does not update the local `uiState` on state changes in `init`', () => {
         const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+
         const widgets = [
           createSearchBox(),
           createPagination(),
@@ -1351,7 +1541,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         instance.addWidgets(widgets);
 
-        instance.init(createInitOptions());
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
@@ -1364,9 +1559,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(instance.getWidgetState({})).toEqual({
           indexName: {},
         });
+
+        expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
       });
 
-      it('updates the local `uiState` only with widgets not indices', () => {
+      it('updates the local `uiState` only with widgets', () => {
         const level0 = index({ indexName: 'level0IndexName' });
         const level1 = index({ indexName: 'level1IndexName' });
         const widgets = [createSearchBox(), createPagination()];
@@ -1375,7 +1572,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
         level0.addWidgets([...widgets, level1]);
 
-        level0.init(createInitOptions());
+        level0.init(createInitOptions({ parent: null }));
 
         // Simulate a state change
         level0
@@ -1388,6 +1585,113 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         });
 
         expect(level1.getWidgetState).toHaveBeenCalledTimes(0);
+      });
+
+      it('updates the local `uiState` when they differ on first render', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          onStateChange: jest.fn(),
+        });
+
+        instance.addWidgets([createSearchBox()]);
+
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        expect(instance.getWidgetState({})).toEqual({
+          indexName: {},
+        });
+
+        // Simulate a change
+        instance.getHelper()!.setState({
+          ...instance.getHelper()!.state,
+          query: 'Apple iPhone',
+        });
+
+        instance.render(
+          createRenderOptions({
+            instantSearchInstance,
+          })
+        );
+
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(1);
+        expect(instance.getWidgetState({})).toEqual({
+          indexName: {
+            query: 'Apple iPhone',
+          },
+        });
+
+        // Simulate a change
+        instance.getHelper()!.setState({
+          ...instance.getHelper()!.state,
+          query: 'Apple iPhone XS',
+        });
+
+        instance.render(
+          createRenderOptions({
+            instantSearchInstance,
+          })
+        );
+
+        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
+        expect(instance.getWidgetState({})).toEqual({
+          indexName: {
+            query: 'Apple iPhone XS',
+          },
+        });
+      });
+
+      it('does not update the local `uiState` on first render for children indices', async () => {
+        const topLevelInstance = index({ indexName: 'topLevelIndexName' });
+        const subLevelInstance = index({ indexName: 'subLevelIndexName' });
+        const instantSearchInstance = createInstantSearch({
+          onStateChange: jest.fn(),
+        });
+
+        topLevelInstance.addWidgets([
+          createSearchBox(),
+          subLevelInstance.addWidgets([createSearchBox()]),
+        ]);
+
+        topLevelInstance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        expect(subLevelInstance.getWidgetState({})).toEqual({
+          subLevelIndexName: {},
+        });
+
+        subLevelInstance
+          .getHelper()!
+          // Simulate a change that does not emit (like `searchFunction`)
+          .overrideStateWithoutTriggeringChangeEvent({
+            ...subLevelInstance.getHelper()!.state,
+            query: 'Apple iPhone',
+          })
+          // Simulate a call to search from a widget - this step is required otherwise
+          // the DerivedHelper does not contain the results. The `lastResults` attribute
+          // is set once the `result` event is emitted.
+          .search();
+
+        await runAllMicroTasks();
+
+        topLevelInstance.render(
+          createRenderOptions({
+            instantSearchInstance,
+          })
+        );
+
+        expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
+        expect(subLevelInstance.getWidgetState({})).toEqual({
+          subLevelIndexName: {},
+        });
       });
 
       it('retrieves the `uiState` for the children indices', () => {
@@ -1408,7 +1712,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           ]),
         ]);
 
-        level0.init(createInitOptions());
+        level0.init(createInitOptions({ parent: null }));
 
         // Simulate a state change
         level0
@@ -1485,6 +1789,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -1520,7 +1825,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
           state: expect.any(algoliasearchHelper.SearchParameters),
           helper: instance.getHelper(),
           templatesConfig: instantSearchInstance.templatesConfig,
-          createURL: instantSearchInstance._createAbsoluteURL,
+          createURL: expect.any(Function),
           searchMetadata: {
             isSearchStalled: instantSearchInstance._isSearchStalled,
           },
@@ -1540,7 +1845,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         expect(widget.render).toHaveBeenCalledTimes(0);
       });
 
-      instance.init(createInitOptions());
+      instance.init(createInitOptions({ parent: null }));
 
       widgets.forEach(widget => {
         expect(widget.render).toHaveBeenCalledTimes(0);
@@ -1557,20 +1862,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       const level0 = index({ indexName: 'level0IndexName' });
       const level1 = index({ indexName: 'level1IndexName' });
       const level2 = index({ indexName: 'level2IndexName' });
-      const level21 = index({ indexName: 'level21IndeName' });
+      const level21 = index({ indexName: 'level21IndexName' });
       const level22 = index({ indexName: 'level22IndexName' });
       const level221 = index({ indexName: 'level221IndexName' });
       const level3 = index({ indexName: 'level3IndexName' });
       const searchBoxLevel0 = createSearchBox();
       const searchBoxLevel1 = createSearchBox();
-      const seachBoxLevel21 = createSearchBox();
+      const searchBoxLevel21 = createSearchBox();
 
       level0.addWidgets([
         searchBoxLevel0,
         level1.addWidgets([searchBoxLevel1]),
         level2.addWidgets([
           createSearchBox(),
-          level21.addWidgets([seachBoxLevel21]),
+          level21.addWidgets([searchBoxLevel21]),
           level22.addWidgets([
             createSearchBox(),
             level221.addWidgets([createSearchBox()]),
@@ -1579,7 +1884,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
         level3.addWidgets([createSearchBox()]),
       ]);
 
-      level0.init(createInitOptions());
+      level0.init(createInitOptions({ parent: null }));
 
       // Simulate a call to search from a widget - this step is required otherwise
       // the DerivedHelper does not contain the results. The `lastResults` attribute
@@ -1609,7 +1914,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               helper: level2.getHelper(),
             },
             {
-              indexId: 'level21IndeName',
+              indexId: 'level21IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
               helper: level21.getHelper(),
             },
@@ -1633,14 +1938,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       );
 
       // Sibling index
-      expect(seachBoxLevel21.render).toHaveBeenCalledTimes(1);
-      expect(seachBoxLevel21.render).toHaveBeenCalledWith(
+      expect(searchBoxLevel21.render).toHaveBeenCalledTimes(1);
+      expect(searchBoxLevel21.render).toHaveBeenCalledWith(
         expect.objectContaining({
           scopedResults: [
             // Root index
             {
-              indexId: 'level21IndeName',
-              results: (seachBoxLevel21.render as jest.Mock).mock.calls[0][0]
+              indexId: 'level21IndexName',
+              results: (searchBoxLevel21.render as jest.Mock).mock.calls[0][0]
                 .results,
               helper: level21.getHelper(),
             },
@@ -1684,7 +1989,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
               helper: level2.getHelper(),
             },
             {
-              indexId: 'level21IndeName',
+              indexId: 'level21IndexName',
               results: expect.any(algoliasearchHelper.SearchResults),
               helper: level21.getHelper(),
             },
@@ -1720,6 +2025,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -1757,6 +2063,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -1773,7 +2080,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       topLevelInstance.addWidgets([subLevelInstance]);
 
-      topLevelInstance.init(createInitOptions());
+      topLevelInstance.init(createInitOptions({ parent: null }));
 
       expect(subLevelInstance.getHelper()).toBeDefined();
 
@@ -1788,19 +2095,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
 
       instance.addWidgets([searchBox]);
 
-      instance.init(createInitOptions());
+      instance.init(createInitOptions({ parent: null }));
 
       // Save the Helper to be able to simulate a change
       const helper = instance.getHelper()!;
 
-      // Simuate a state change
+      // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone');
 
       expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
 
       instance.dispose(createDisposeOptions());
 
-      // Simuate a state change
+      // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone 5S');
 
       expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
@@ -1809,7 +2116,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     it('removes the internal Helper', () => {
       const instance = index({ indexName: 'indexName' });
 
-      instance.init(createInitOptions());
+      instance.init(createInitOptions({ parent: null }));
 
       expect(instance.getHelper()).toBeDefined();
 
@@ -1827,6 +2134,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 
@@ -1856,6 +2164,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       instance.init(
         createInitOptions({
           instantSearchInstance,
+          parent: null,
         })
       );
 

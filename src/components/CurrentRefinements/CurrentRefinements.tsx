@@ -1,6 +1,4 @@
-/** @jsx h */
-
-import { h } from 'preact';
+import React from 'preact-compat';
 import { isSpecialClick, capitalize } from '../../lib/utils';
 import { Item } from '../../connectors/current-refinements/connectCurrentRefinements';
 import { CurrentRefinementsComponentCSSClasses } from '../../widgets/current-refinements/current-refinements';

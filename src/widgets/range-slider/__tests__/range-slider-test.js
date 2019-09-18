@@ -1,9 +1,9 @@
-import { render } from 'preact';
+import { render } from 'preact-compat';
 import AlgoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import rangeSlider from '../range-slider';
 
-jest.mock('preact', () => {
-  const module = require.requireActual('preact');
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
 
@@ -70,34 +70,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        expect(widget.getConfiguration(new SearchParameters())).toEqual(
-          new SearchParameters({
-            disjunctiveFacets: [attribute],
-            numericRefinements: { [attribute]: { '>=': [100] } },
-          })
-        );
-      });
-
-      it('does not refine when previous configuration', () => {
-        widget = rangeSlider({
-          container,
-          attribute: 'aNumAttr',
-          min: 100,
-          step: 1,
-          cssClasses: { root: '' },
-        });
         expect(
-          widget.getConfiguration(
-            new SearchParameters({
-              numericRefinements: { [attribute]: {} },
-            })
-          )
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
         ).toEqual(
           new SearchParameters({
             disjunctiveFacets: [attribute],
-            numericRefinements: {
-              aNumAttr: {},
-            },
+            numericRefinements: { [attribute]: { '>=': [100] } },
           })
         );
       });
@@ -111,7 +91,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        expect(widget.getConfiguration(new SearchParameters())).toEqual(
+        expect(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        ).toEqual(
           new SearchParameters({
             disjunctiveFacets: [attribute],
             numericRefinements: {
@@ -133,7 +117,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        helper.setState(widget.getConfiguration(new SearchParameters()));
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        );
         widget.init({ helper, instantSearchInstance });
         widget.render({ results: {}, helper });
 
@@ -161,7 +149,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        helper.setState(widget.getConfiguration(new SearchParameters()));
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        );
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
@@ -180,32 +172,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        expect(widget.getConfiguration(new SearchParameters())).toEqual(
-          new SearchParameters({
-            disjunctiveFacets: [attribute],
-            numericRefinements: { [attribute]: { '<=': [100] } },
-          })
-        );
-      });
-
-      it('does not refine when previous configuration', () => {
-        widget = rangeSlider({
-          container,
-          attribute,
-          max: 100,
-          step: 1,
-          cssClasses: { root: '' },
-        });
         expect(
-          widget.getConfiguration(
-            new SearchParameters({
-              numericRefinements: { [attribute]: {} },
-            })
-          )
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
         ).toEqual(
           new SearchParameters({
             disjunctiveFacets: [attribute],
-            numericRefinements: { [attribute]: {} },
+            numericRefinements: { [attribute]: { '<=': [100] } },
           })
         );
       });
@@ -230,7 +204,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        helper.setState(widget.getConfiguration(new SearchParameters()));
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        );
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
@@ -268,9 +246,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       });
 
       it('configures the disjunctiveFacets', () => {
-        expect(widget.getConfiguration(new SearchParameters())).toEqual(
+        expect(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        ).toEqual(
           new SearchParameters({
             disjunctiveFacets: ['aNumAttr'],
+            // @TODO: gWSP does not yet take min & max in account (so is this correct?)
+            numericRefinements: {
+              aNumAttr: {},
+            },
           })
         );
       });
