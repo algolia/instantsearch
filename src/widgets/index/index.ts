@@ -288,18 +288,17 @@ const index = (props: IndexProps): Index => {
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
       const mainHelper = instantSearchInstance.mainHelper!;
+      const parameters = getLocalWidgetsSearchParameters(localWidgets, {
+        uiState: localUiState,
+        initialSearchParameters: new algoliasearchHelper.SearchParameters({
+          index: indexName,
+        }),
+      });
 
       // This Helper is only used for state management we do not care about the
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
-      helper = algoliasearchHelper(
-        {} as Client,
-        indexName,
-        getLocalWidgetsSearchParameters(localWidgets, {
-          uiState: localUiState,
-          initialSearchParameters: new algoliasearchHelper.SearchParameters(),
-        })
-      );
+      helper = algoliasearchHelper({} as Client, parameters.index, parameters);
 
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is
