@@ -394,7 +394,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     });
 
     if (this._routingManager) {
-      this._routingManager.applySearchParameters(this._routingManager.read());
       this._routingManager.subscribe();
     }
 

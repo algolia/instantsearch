@@ -139,7 +139,7 @@ describe('RoutingManager', () => {
       search.once('render', () => {
         // initialization is done at this point
         expect(widget.render).toHaveBeenCalledTimes(1);
-        expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(2);
+        expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
 
         expect(router.write).toHaveBeenCalledTimes(0);
 
