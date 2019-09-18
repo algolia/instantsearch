@@ -115,7 +115,7 @@ export default function menuSelect({
   });
 
   const makeWidget = connectMenu(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ attribute, limit, sortBy, transformItems });
