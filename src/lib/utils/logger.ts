@@ -20,7 +20,6 @@ type Warning = {
  * @returns {undefined}
  */
 let warning = noop as Warning;
-warning.cache = {};
 
 if (__DEV__) {
   warn = message => {
