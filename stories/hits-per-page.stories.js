@@ -51,19 +51,4 @@ storiesOf('HitsPerPage', module)
         })
       );
     })
-  )
-  .add(
-    'with add/remove',
-    withHits(({ search, container, instantsearch }) => {
-      withLifecycle(search, container, node =>
-        instantsearch.widgets.hitsPerPage({
-          container: node,
-          items: [
-            { value: 3, label: '3 per page', default: true },
-            { value: 5, label: '5 per page' },
-            { value: 10, label: '10 per page' },
-          ],
-        })
-      );
-    })
   );

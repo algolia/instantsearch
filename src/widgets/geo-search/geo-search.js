@@ -209,9 +209,9 @@ const geoSearch = ({
     ? builtInMarker
     : customHTMLMarker;
 
-  const makeGeoSearch = connectGeoSearch(renderer, () => {
-    render(null, containerNode);
-  });
+  const makeGeoSearch = connectGeoSearch(renderer, () =>
+    render(null, containerNode)
+  );
 
   return makeGeoSearch({
     ...widgetParams,
