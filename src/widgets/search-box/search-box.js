@@ -2,8 +2,6 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import {
   getContainerNode,
-  warning,
-  createDocumentationLink,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
@@ -118,22 +116,6 @@ export default function searchBox({
   }
 
   const containerNode = getContainerNode(container);
-
-  if (containerNode.tagName === 'INPUT') {
-    throw new Error(
-      `The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
-
-You may want to migrate using \`connectSearchBox\`: ${createDocumentationLink({
-        name: 'searchbox',
-        connector: true,
-      })}.`
-    );
-  }
-
-  warning(
-    typeof autofocus === 'boolean',
-    'The `autofocus` option only supports boolean values since InstantSearch.js 3.'
-  );
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
