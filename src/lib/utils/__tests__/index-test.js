@@ -149,6 +149,82 @@ describe('utils.renderTemplate', () => {
     expect(actual).toBe(expectation);
   });
 
+  it('expect to process templates as string using a partial', () => {
+    const templateKey = 'test';
+    const templates = {
+      test: '{{> partial}}',
+      partial: 'it works with {{type}} using partial',
+    };
+    const data = { type: 'strings' };
+
+    const actual = utils.renderTemplate({
+      templateKey,
+      templates,
+      data,
+    });
+
+    const expectation = 'it works with strings using partial';
+
+    expect(actual).toBe(expectation);
+  });
+
+  it('expect to process templates as function using render', () => {
+    const templateKey = 'test';
+    const templates = {
+      test: (data, render) => render(`it works with {{ type }} using render`),
+    };
+    const data = { type: 'functions' };
+
+    const actual = utils.renderTemplate({
+      templateKey,
+      templates,
+      data,
+    });
+
+    const expectation = 'it works with functions using render';
+
+    expect(actual).toBe(expectation);
+  });
+
+  it('expect to process templates as function using render to render a string using a partial', () => {
+    const templateKey = 'test';
+    const templates = {
+      test: (data, render) =>
+        render(`it works with {{> partial }} using render and partial`),
+      partial: `{{ type }}`,
+    };
+    const data = { type: 'functions' };
+
+    const actual = utils.renderTemplate({
+      templateKey,
+      templates,
+      data,
+    });
+
+    const expectation = 'it works with functions using render and partial';
+
+    expect(actual).toBe(expectation);
+  });
+
+  it('expect to process templates as function using render passing new data context', () => {
+    const templateKey = 'test';
+    const templates = {
+      test: (data, render) =>
+        render(`it works with {{ typeName }} using render and data`, data.type),
+    };
+    const data = { type: { typeName: 'functions' } };
+
+    const actual = utils.renderTemplate({
+      templateKey,
+      templates,
+      data,
+    });
+
+    const expectation = 'it works with functions using render and data';
+
+    expect(actual).toBe(expectation);
+  });
+
   it('expect to use custom compiler options', () => {
     const templateKey = 'test';
     const templates = { test: 'it works with <%options%>' };
