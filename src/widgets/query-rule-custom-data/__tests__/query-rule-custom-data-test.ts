@@ -1,10 +1,13 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
 } from 'algoliasearch-helper';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createInitOptions } from '../../../../test/mock/createWidget';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import queryRuleCustomData from '../query-rule-custom-data';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');

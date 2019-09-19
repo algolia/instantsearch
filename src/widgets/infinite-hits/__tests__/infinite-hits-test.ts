@@ -1,7 +1,10 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { Client } from 'algoliasearch';
 import infiniteHits from '../infinite-hits';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');

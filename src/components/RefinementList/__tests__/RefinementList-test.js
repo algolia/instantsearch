@@ -429,7 +429,7 @@ describe('RefinementList', () => {
       expect(wrapper).toMatchSnapshot();
     });
 
-    it.skip('should not refine on click on already refined items', () => {
+    it('should not refine on click on already refined items', () => {
       const toggleRefinement = jest.fn();
       const props = {
         container: document.createElement('div'),

@@ -1,4 +1,4 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {
   AlgoliaSearchHelper as Helper,
@@ -10,8 +10,11 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { Widget } from '../../../types';
 import voiceSearch from '../voice-search';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
