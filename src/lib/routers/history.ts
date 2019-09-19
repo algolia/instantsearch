@@ -32,7 +32,7 @@ const defaultCreateURL: CreateURL = ({ qsModule, routeState, location }) => {
   const portWithPrefix = port === '' ? '' : `:${port}`;
 
   // IE <= 11 has no proper `location.origin` so we cannot rely on it.
-  if (!routeState || Object.keys(routeState).length === 0) {
+  if (!queryString) {
     return `${protocol}//${hostname}${portWithPrefix}${pathname}${hash}`;
   }
 
