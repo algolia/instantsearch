@@ -113,7 +113,7 @@ class Pagination extends Component {
     return (
       <div
         className={cx(this.props.cssClasses.root, {
-          [this.props.cssClasses.noRefinementRoot]: this.props.isFirstPage,
+          [this.props.cssClasses.noRefinementRoot]: this.props.nbPages <= 1,
         })}
       >
         <ul className={this.props.cssClasses.list}>

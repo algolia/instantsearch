@@ -1,5 +1,121 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Pagination should add the noRefinement CSS class with a single page 1`] = `
+<div
+  className="root noRefinementRoot"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item pageItem selectedItem"
+    >
+      <a
+        aria-label={1}
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": 1,
+          }
+        }
+        href="[0]"
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item pageItem"
+    >
+      <a
+        aria-label={2}
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": 2,
+          }
+        }
+        href="[1]"
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item pageItem"
+    >
+      <a
+        aria-label={3}
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": 3,
+          }
+        }
+        href="[2]"
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item pageItem"
+    >
+      <a
+        aria-label={4}
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": 4,
+          }
+        }
+        href="[3]"
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item pageItem"
+    >
+      <a
+        aria-label={5}
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": 5,
+          }
+        }
+        href="[4]"
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item pageItem"
+    >
+      <a
+        aria-label={6}
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": 6,
+          }
+        }
+        href="[5]"
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item pageItem"
+    >
+      <a
+        aria-label={7}
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": 7,
+          }
+        }
+        href="[6]"
+        onClick={[Function]}
+      />
+    </li>
+  </ul>
+</div>
+`;
+
 exports[`Pagination should disable last page if already on it 1`] = `
 <div
   className="root"
@@ -172,7 +288,7 @@ exports[`Pagination should disable last page if already on it 1`] = `
 
 exports[`Pagination should display the first/last link 1`] = `
 <div
-  className="root noRefinementRoot"
+  className="root"
 >
   <ul
     className="list"
@@ -389,7 +505,7 @@ exports[`Pagination should have all buttons disabled if there are no results 1`]
 
 exports[`Pagination should render five elements 1`] = `
 <div
-  className="root noRefinementRoot"
+  className="root"
 >
   <ul
     className="list"
