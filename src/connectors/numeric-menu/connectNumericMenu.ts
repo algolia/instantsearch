@@ -152,7 +152,7 @@ const connectNumericMenu: NumericMenuConnector = (
         renderFn(
           {
             createURL: connectorState.createURL(helper.state),
-            items: transformItems(connectorState.prepareItems!(helper.state)),
+            items: transformItems(connectorState.prepareItems(helper.state)),
             hasNoResults: true,
             refine: connectorState.refine,
             instantSearchInstance,
@@ -247,11 +247,6 @@ const connectNumericMenu: NumericMenuConnector = (
           : withMinRefinement;
 
         return withMaxRefinement;
-      },
-
-      // @TODO: remove this (used in widget test now)
-      _getRefine() {
-        return connectorState.refine;
       },
     };
   };

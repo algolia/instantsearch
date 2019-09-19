@@ -4,7 +4,8 @@ import { InsightsClient } from './insights';
 
 export type RendererOptions<TWidgetParams = unknown> = {
   /**
-   * Original parameters for this widget, in case rendering depends on them.
+   * Original parameters for this widget.
+   * Useful for giving back the render parameters to the renderer.
    */
   widgetParams: TWidgetParams;
   instantSearchInstance: InstantSearch;
