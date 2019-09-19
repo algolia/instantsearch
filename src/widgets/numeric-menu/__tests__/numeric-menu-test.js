@@ -13,9 +13,6 @@ jest.mock('preact-compat', () => {
   return module;
 });
 
-const encodeValue = (start, end) =>
-  window.encodeURI(JSON.stringify({ start, end }));
-
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
