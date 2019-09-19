@@ -242,7 +242,7 @@ describe('InstantSearch', () => {
 });
 
 describe('addWidget(s)', () => {
-  it('forwards the call to `addWidget` to the main index', () => {
+  it('forwards the call of `addWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -251,12 +251,12 @@ describe('addWidget(s)', () => {
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
 
-    search.addWidget(createWidget());
+    expect(() => search.addWidget(createWidget())).toWarnDev();
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
   });
 
-  it('forwards the call to `addWidgets` to the main index', () => {
+  it('forwards the call of `addWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -281,11 +281,11 @@ describe('removeWidget(s)', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
 
-    search.removeWidget(widget);
+    expect(() => search.removeWidget(widget)).toWarnDev();
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
   });
@@ -443,7 +443,7 @@ describe('start', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -740,7 +740,7 @@ describe('scheduleSearch', () => {
       searchClient: createSearchClient(),
     });
 
-    search.addWidget(createWidget());
+    search.addWidgets([createWidget()]);
 
     search.start();
 
@@ -761,7 +761,7 @@ describe('scheduleSearch', () => {
       searchClient: createSearchClient(),
     });
 
-    search.addWidget(createWidget());
+    search.addWidgets([createWidget()]);
 
     search.start();
 
@@ -789,7 +789,7 @@ describe('scheduleRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -808,7 +808,7 @@ describe('scheduleRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -832,7 +832,7 @@ describe('scheduleRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -855,7 +855,7 @@ describe('scheduleStalledRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -888,7 +888,7 @@ describe('scheduleStalledRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -924,7 +924,7 @@ describe('scheduleStalledRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     expect(widget.render).toHaveBeenCalledTimes(0);
 
@@ -1023,7 +1023,7 @@ describe('createURL', () => {
       },
     });
 
-    search.addWidget(connectSearchBox(noop)({}));
+    search.addWidgets([connectSearchBox(noop)({})]);
     search.start();
 
     expect(search.createURL({ indexName: { query: 'Apple' } })).toBe(
@@ -1046,7 +1046,7 @@ describe('createURL', () => {
       },
     });
 
-    search.addWidget(connectSearchBox(noop)({}));
+    search.addWidgets([connectSearchBox(noop)({})]);
     search.start();
     search.createURL();
 
