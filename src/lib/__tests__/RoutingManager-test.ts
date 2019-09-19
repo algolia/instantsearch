@@ -564,4 +564,32 @@ describe('RoutingManager', () => {
       expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
     });
   });
+
+  describe('createURL', () => {
+    it('returns an URL for a `routeState` with refinements', () => {
+      const router = historyRouter();
+      const actual = router.createURL({
+        query: 'iPhone',
+        page: 5,
+      });
+
+      expect(actual).toBe('https://website.com/?query=iPhone&page=5');
+    });
+
+    it('returns an URL for an empty `routeState` with index', () => {
+      const router = historyRouter();
+      const actual = router.createURL({
+        indexName: {},
+      });
+
+      expect(actual).toBe('https://website.com/');
+    });
+
+    it('returns an URL for an empty `routeState`', () => {
+      const router = historyRouter();
+      const actual = router.createURL({});
+
+      expect(actual).toBe('https://website.com/');
+    });
+  });
 });
