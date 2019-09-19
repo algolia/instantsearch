@@ -47,6 +47,15 @@ describe('Pagination', () => {
   it('should display the first/last link', () => {
     const wrapper = mount(<Pagination {...defaultProps} showFirst showLast />);
 
+    expect(wrapper.find('.firstPageItem')).toHaveLength(1);
+    expect(wrapper.find('.lastPageItem')).toHaveLength(1);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('should add the noRefinement CSS class with a single page', () => {
+    const wrapper = mount(<Pagination {...defaultProps} nbPages={1} />);
+
+    expect(wrapper.find('.noRefinementRoot')).toHaveLength(1);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -65,6 +74,7 @@ describe('Pagination', () => {
       />
     );
 
+    expect(wrapper.find('.lastPageItem').hasClass('disabledItem')).toBe(true);
     expect(wrapper).toMatchSnapshot();
   });
 
