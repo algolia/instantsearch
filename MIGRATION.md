@@ -98,6 +98,10 @@ The `configure` widget is now included in the UiState. If you want to exclude th
 
 This release includes v3 of the `algoliasearch-helper` package. If you are using the built-in widgets, nothing will change for you. This version no longer includes `lodash`, having two main places of impact for users. The main difference will be in bundle size, which is now significantly smaller (`algoliasearch-helper` standalone has gone from 27.5 kB gz to now 9.1 kB gz). If you are using any methods from the `helper` or `searchResults`, please see the detailed changelog [here](https://github.com/algolia/algoliasearch-helper-js/blob/next/documentation-src/metalsmith/content/upgrade.md).
 
+## `addWidget` & `removeWidget`
+
+The function `search.addWidget(myWidget)` is now deprecated. You can replace it with `search.addWidgets([myWidget])`. This makes it simpler to see the structure of nested applications. The identical migration also happens for `removeWidget(myWidget)` to `removeWidgets([myWidget])`.
+
 ## Custom widgets
 
 As mentioned earlier, any reference to the helper now contains the "new helper", as well as the `getConfiguration` life cycle no longer being used. You can replace its usage with `getWidgetSearchParameters` and `getWidgetState`. Note that this means that your custom widget will also take part in routing from then on. You can still exclude it from the URL via `stateMapping`.
