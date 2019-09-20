@@ -3,21 +3,29 @@ import noop from './noop';
 type Deprecate<TCallback = (...args: any[]) => any> = (
   fn: TCallback,
   message: string
-) => TCallback | void;
-let deprecate: Deprecate = noop;
+) => TCallback;
 
 type Warn = (message: string) => void;
-let warn: Warn = noop;
 
 type Warning = {
   (condition: boolean, message: string): void;
   cache: { [message: string]: boolean };
 };
+
+/**
+ * Logs a warning when this function is called, in development environment only.
+ */
+let deprecate: Deprecate = fn => fn;
+
+/**
+ * Logs a warning
+ * This is used to log issues in development environment only.
+ */
+let warn: Warn = noop;
+
 /**
  * Logs a warning if the condition is not met.
  * This is used to log issues in development environment only.
- *
- * @returns {undefined}
  */
 let warning = noop as Warning;
 
@@ -27,7 +35,7 @@ if (__DEV__) {
     console.warn(`[InstantSearch.js]: ${message.trim()}`);
   };
 
-  deprecate = (fn: (...args: any[]) => any, message: string) => {
+  deprecate = (fn, message) => {
     let hasAlreadyPrinted = false;
 
     return function(...args) {
