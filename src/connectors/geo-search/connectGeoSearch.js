@@ -1,6 +1,5 @@
 import {
   checkRendering,
-  warning,
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
   createDocumentationMessageGenerator,
