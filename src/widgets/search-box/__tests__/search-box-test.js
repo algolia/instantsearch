@@ -36,18 +36,6 @@ describe('searchBox()', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/"
 `);
     });
-
-    it('throws with an `input` container', () => {
-      expect(() => {
-        searchBox({
-          container: document.createElement('input'),
-        });
-      }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
-
-You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/api-reference/widgets/searchbox/js/#connector."
-`);
-    });
   });
 
   describe('Rendering', () => {
