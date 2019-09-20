@@ -6,8 +6,6 @@ import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
   getContainerNode,
-  warning,
-  createDocumentationLink,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
@@ -98,16 +96,6 @@ export default function hits({
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
-
-  warning(
-    typeof templates.allItems === 'undefined',
-    `The template \`allItems\` does not exist since InstantSearch.js 3.
-
-You may want to migrate using \`connectHits\`: ${createDocumentationLink({
-      name: 'hits',
-      connector: true,
-    })}.`
-  );
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
