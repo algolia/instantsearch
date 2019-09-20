@@ -211,3 +211,7 @@ interface Router {
   dispose(): void
 }
 ```
+
+## pagination
+
+The `noRefinementRoot` class now gets added once there is no more possible refinements, and thus only if there's a single page, no longer if it's the first page, which was incorrect behavior.
