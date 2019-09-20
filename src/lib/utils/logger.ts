@@ -11,7 +11,7 @@ let warn: Warn = noop;
 
 type Warning = {
   (condition: boolean, message: string): void;
-  cache: object;
+  cache: { [message: string]: boolean };
 };
 /**
  * Logs a warning if the condition is not met.
