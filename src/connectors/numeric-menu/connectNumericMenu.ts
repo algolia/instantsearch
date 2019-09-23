@@ -125,8 +125,14 @@ const connectNumericMenu: NumericMenuConnector = (
     type ConnectorState = {
       refine?: Refine;
       createURL?: (state: SearchParameters) => (facetValue: string) => string;
-      prepareItems?: (state: SearchParameters) => Item[];
     };
+
+    const prepareItems = (state: SearchParameters) =>
+      items.map(({ start, end, label }) => ({
+        label,
+        value: (window as any).encodeURI(JSON.stringify({ start, end })),
+        isRefined: isRefined(state, attribute, { start, end, label }),
+      }));
 
     const connectorState: ConnectorState = {};
 
@@ -142,17 +148,10 @@ const connectNumericMenu: NumericMenuConnector = (
         connectorState.createURL = state => facetValue =>
           createURL(refine(state, attribute, facetValue));
 
-        connectorState.prepareItems = state =>
-          items.map(({ start, end, label }) => ({
-            label,
-            value: (window as any).encodeURI(JSON.stringify({ start, end })),
-            isRefined: isRefined(state, attribute, { start, end, label }),
-          }));
-
         renderFn(
           {
             createURL: connectorState.createURL(helper.state),
-            items: transformItems(connectorState.prepareItems(helper.state)),
+            items: transformItems(prepareItems(helper.state)),
             hasNoResults: true,
             refine: connectorState.refine,
             instantSearchInstance,
@@ -166,7 +165,7 @@ const connectNumericMenu: NumericMenuConnector = (
         renderFn(
           {
             createURL: connectorState.createURL!(state),
-            items: transformItems(connectorState.prepareItems!(state)),
+            items: transformItems(prepareItems!(state)),
             hasNoResults: results.nbHits === 0,
             refine: connectorState.refine!,
             instantSearchInstance,
