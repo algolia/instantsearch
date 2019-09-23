@@ -293,7 +293,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
   /**
    * Removes a widget from the search instance.
-   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`
+   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`
    * @param widget The widget instance to remove from InstantSearch.
    *
    * The widget must implement a `dispose()` method to clear its state.
