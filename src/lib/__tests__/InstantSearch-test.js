@@ -1203,3 +1203,61 @@ describe('refresh', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 });
+
+describe('UI state', () => {
+  it('warns if UI state contains unmounted widgets in development mode', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      initialUiState: {
+        indexName: {
+          query: 'First query',
+          page: 3,
+          refinementList: {
+            brand: ['Apple'],
+          },
+          hierarchicalMenu: {
+            categories: 'Mobile',
+          },
+        },
+      },
+    });
+
+    const searchBox = connectSearchBox(() => null)({});
+    const customWidget = { render() {} };
+
+    search.addWidgets([searchBox, customWidget]);
+
+    expect(() => {
+      search.start();
+    })
+      .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
+
+This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in query parameters not being sent to the API.
+
+To fully reflect the state, some widgets need to be added to the index "indexName":
+
+- \`page\` needs one of these widgets: "pagination", "infiniteHits"
+- \`refinementList\` needs one of these widgets: "refinementList"
+- \`hierarchicalMenu\` needs one of these widgets: "hierarchicalMenu"
+
+If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
+
+\`\`\`
+const virtualPagination = connectPagination(() => null);
+const virtualRefinementList = connectRefinementList(() => null);
+const virtualHierarchicalMenu = connectHierarchicalMenu(() => null);
+
+search.addWidgets([
+  virtualPagination({ /* ... */ }),
+  virtualRefinementList({ /* ... */ }),
+  virtualHierarchicalMenu({ /* ... */ })
+]);
+\`\`\`
+
+If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
+
+See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
+  });
+});
