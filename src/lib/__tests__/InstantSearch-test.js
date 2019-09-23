@@ -251,7 +251,9 @@ describe('addWidget(s)', () => {
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
 
-    expect(() => search.addWidget(createWidget())).toWarnDev();
+    expect(() => search.addWidget(createWidget())).toWarnDev(
+      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+    );
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
   });
@@ -285,7 +287,9 @@ describe('removeWidget(s)', () => {
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
 
-    expect(() => search.removeWidget(widget)).toWarnDev();
+    expect(() => search.removeWidget(widget)).toWarnDev(
+      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
+    );
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
   });
