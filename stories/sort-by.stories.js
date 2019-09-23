@@ -5,7 +5,7 @@ storiesOf('SortBy', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.sortBy({
           container,
           items: [
@@ -13,14 +13,14 @@ storiesOf('SortBy', module)
             { value: 'instant_search_price_asc', label: 'Lowest price' },
             { value: 'instant_search_price_desc', label: 'Highest price' },
           ],
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with transformed items',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.sortBy({
           container,
           items: [
@@ -33,8 +33,8 @@ storiesOf('SortBy', module)
               ...item,
               label: item.label.toUpperCase(),
             })),
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
