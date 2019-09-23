@@ -17,7 +17,7 @@ const searchOptions = {
   playground: moviesPlayground,
 };
 
-storiesOf('QueryRuleContext', module)
+storiesOf('Metadata|QueryRuleContext', module)
   .add(
     'default',
     withHits(({ search, container }) => {
