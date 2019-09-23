@@ -310,7 +310,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
    * Removes multiple widgets from the search instance.
    * @param widgets Array of widgets instances to remove from InstantSearch.
    *
-  * The widgets must implement a `dispose()` method to clear their states.
+   * The widgets must implement a `dispose()` method to clear their states.
    */
   public removeWidgets(widgets: Widget[]) {
     if (!Array.isArray(widgets)) {
