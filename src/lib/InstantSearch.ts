@@ -246,21 +246,23 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   }
 
   /**
-   * Adds a widget. This can be done before and after InstantSearch has been started.
+   * Adds a widget to the search instance.
+   * A widget can be added either before or after InstantSearch has started.
    * @param widget The widget to add to InstantSearch.
    *
-   * This method is deprecated, and `addWidget(widget)` can be replaced by `addWidgets([widget])`
+   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`.
    */
   public addWidget(widget: Widget) {
     warning(
       false,
-      'addWidget(widget) is replaced by addWidgets([widgets]) to help see the structure'
+      'addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
     );
     this.addWidgets([widget]);
   }
 
   /**
-   * Adds multiple widgets. This can be done before and after the InstantSearch has been started.
+   * Adds multiple widgets to the search instance.
+   * Widgets can be added either before or after InstantSearch has started.
    * @param widgets The array of widgets to add to InstantSearch.
    */
   public addWidgets(widgets: Widget[]) {
@@ -290,26 +292,25 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   }
 
   /**
-   * Removes a widget. This can be done after the InstantSearch has been started.
-   *
+   * Removes a widget from the search instance.
+   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`
    * @param widget The widget instance to remove from InstantSearch.
    *
-   * This widget must implement a `dispose()` method in order to be gracefully removed.
+   * The widget must implement a `dispose()` method to clear its state.
    */
   public removeWidget(widget: Widget) {
     warning(
       false,
-      'removeWidget(widget) is replaced by removeWidgets([widgets]) to help see the structure'
+      'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
     );
     this.removeWidgets([widget]);
   }
 
   /**
-   * Removes multiple widgets. This can be done only after the InstantSearch has been started.
-   *
+   * Removes multiple widgets from the search instance.
    * @param widgets Array of widgets instances to remove from InstantSearch.
    *
-   * These widget must implement a `dispose()` method in order to be gracefully removed.
+  * The widgets must implement a `dispose()` method to clear their states.
    */
   public removeWidgets(widgets: Widget[]) {
     if (!Array.isArray(widgets)) {
