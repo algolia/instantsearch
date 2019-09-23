@@ -70,12 +70,6 @@ describe('hits()', () => {
     expect(render.mock.calls[0][0]).toMatchSnapshot();
   });
 
-  it('does not accept both item and allItems templates', () => {
-    expect(
-      hits.bind({ container, templates: { item: '', allItems: '' } })
-    ).toThrow();
-  });
-
   it('should add __position key with absolute position', () => {
     results = { ...results, page: 4, hitsPerPage: 10 };
     const state = { page: results.page };
