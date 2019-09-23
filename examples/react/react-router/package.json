@@ -9,7 +9,7 @@
     "test": "CI=true react-scripts test"
   },
   "devDependencies": {
-    "history": "4.9.0",
+    "history": "4.10.1",
     "react-scripts": "3.1.2",
     "react-test-renderer": "16.8.6"
   },
