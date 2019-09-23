@@ -130,7 +130,7 @@ const connectNumericMenu: NumericMenuConnector = (
     const prepareItems = (state: SearchParameters) =>
       items.map(({ start, end, label }) => ({
         label,
-        value: (window as any).encodeURI(JSON.stringify({ start, end })),
+        value: window.encodeURI(JSON.stringify({ start, end })),
         isRefined: isRefined(state, attribute, { start, end, label }),
       }));
 
