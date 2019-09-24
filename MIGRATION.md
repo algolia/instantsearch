@@ -165,13 +165,13 @@ The `indices` option has been removed, in favour of using `index` widgets (see t
 ```js
 const autocomplete = connectAutocomplete(() => {/* ... */});
 
-search.addWidget(
+search.addWidgets([
   autocomplete({
     indices: [{
       name: "additional"
     }]
   })
-);
+]);
 ```
 
 Will be replaced with this:
