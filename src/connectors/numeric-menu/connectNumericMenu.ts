@@ -165,7 +165,7 @@ const connectNumericMenu: NumericMenuConnector = (
         renderFn(
           {
             createURL: connectorState.createURL!(state),
-            items: transformItems(prepareItems!(state)),
+            items: transformItems(prepareItems(state)),
             hasNoResults: results.nbHits === 0,
             refine: connectorState.refine!,
             instantSearchInstance,
