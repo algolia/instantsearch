@@ -1,5 +1,9 @@
 import { render } from 'preact-compat';
 import numericMenu from '../numeric-menu';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 
 jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
@@ -8,9 +12,6 @@ jest.mock('preact-compat', () => {
 
   return module;
 });
-
-const encodeValue = (start, end) =>
-  window.encodeURI(JSON.stringify({ start, end }));
 
 describe('Usage', () => {
   it('throws without container', () => {
@@ -52,27 +53,18 @@ describe('numericMenu()', () => {
       items,
       cssClasses: { root: ['root', 'cx'] },
     });
-    helper = {
-      state: {
-        getNumericRefinements: jest.fn().mockReturnValue([]),
-      },
-      addNumericRefinement: jest.fn(),
-      search: jest.fn(),
-      setState: jest.fn().mockReturnThis(),
-    };
-    state = {
-      getNumericRefinements: jest.fn().mockReturnValue([]),
-      removeNumericRefinement: jest.fn().mockReturnThis(),
-      addNumericRefinement: jest.fn().mockReturnThis(),
-    };
-    results = {
-      hits: [],
-    };
 
-    helper.state.removeNumericRefinement = jest
-      .fn()
-      .mockReturnValue(helper.state);
-    helper.state.addNumericRefinement = jest.fn().mockReturnValue(helper.state);
+    helper = algoliasearchHelper(
+      {},
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+    );
+
+    jest.spyOn(helper, 'search');
+
+    state = helper.state;
+    results = new SearchResults(helper.state, [{ nbHits: 0 }]);
+
     createURL = () => '#';
     widget.init({ helper, instantSearchInstance: {} });
   });
@@ -101,71 +93,6 @@ describe('numericMenu()', () => {
     widget.render({ state, results, createURL });
 
     expect(render.mock.calls[0][0]).toMatchSnapshot();
-  });
-
-  it("doesn't call the refinement functions if not refined", () => {
-    widget.render({ state, results, createURL });
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(0);
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(0);
-    expect(helper.search).toHaveBeenCalledTimes(0, 'search never called');
-  });
-
-  it('calls the refinement functions if refined with "4"', () => {
-    widget._refine(encodeValue(4, 4));
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '=',
-      4
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
-  });
-
-  it('calls the refinement functions if refined with "between 5 and 10"', () => {
-    widget._refine(encodeValue(5, 10));
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(2);
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '>=',
-      5
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      2,
-      'price',
-      '<=',
-      10
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
-  });
-
-  it('calls two times the refinement functions if refined with "less than 4"', () => {
-    widget._refine(encodeValue(undefined, 4));
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '<=',
-      4
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
-  });
-
-  it('calls two times the refinement functions if refined with "more than 10"', () => {
-    widget._refine(encodeValue(10));
-    expect(helper.state.removeNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(1);
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '>=',
-      10
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
   it('does not alter the initial items when rendering', () => {
