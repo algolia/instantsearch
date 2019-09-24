@@ -39,37 +39,29 @@ function renderTemplate({
     );
   }
 
-  function internalRender(_template, _data) {
-    if (_data === undefined) {
-      _data = data;
-    }
-
-    const transformedHelpers = transformHelpersToHogan(
-      helpers,
-      compileOptions,
-      data
-    );
-
-    return hogan
-      .compile(_template, compileOptions)
-      .render(
-        {
-          ..._data,
-          helpers: transformedHelpers,
-        },
-        templates
-      )
-      .replace(/[ \n\r\t\f\xA0]+/g, spaces =>
-        spaces.replace(/(^|\xA0+)[^\xA0]+/g, '$1 ')
-      )
-      .trim();
-  }
-
   if (isTemplateFunction) {
-    return template(data, internalRender);
-  } else {
-    return internalRender(template);
+    return template(data);
   }
+
+  const transformedHelpers = transformHelpersToHogan(
+    helpers,
+    compileOptions,
+    data
+  );
+
+  return hogan
+    .compile(template, compileOptions)
+    .render(
+      {
+        ...data,
+        helpers: transformedHelpers,
+      },
+      templates
+    )
+    .replace(/[ \n\r\t\f\xA0]+/g, spaces =>
+      spaces.replace(/(^|\xA0+)[^\xA0]+/g, '$1 ')
+    )
+    .trim();
 }
 
 export default renderTemplate;
