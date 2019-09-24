@@ -45,11 +45,11 @@ const withUsage = createDocumentationMessageGenerator({
  * var customHits = instantsearch.connectors.connectHits(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customHits({
  *     containerNode: $('#custom-hits-container'),
  *   })
- * );
+ * ]);
  */
 export default function connectHits(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

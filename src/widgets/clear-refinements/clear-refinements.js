@@ -72,14 +72,14 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @param {ClearRefinementsWidgetOptions} $0 The ClearRefinements widget options.
  * @returns {Widget} A new instance of the ClearRefinements widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.clearRefinements({
  *     container: '#clear-all',
  *     templates: {
  *       resetLabel: 'Reset everything'
  *     },
  *   })
- * );
+ * ]);
  */
 export default function clearRefinements({
   container,

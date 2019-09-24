@@ -77,7 +77,7 @@ const withUsage = createDocumentationMessageGenerator({
  * var customSortBy = instantsearch.connectors.connectSortBy(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customSortBy({
  *     containerNode: $('#custom-sort-by-container'),
  *     items: [
@@ -86,7 +86,7 @@ const withUsage = createDocumentationMessageGenerator({
  *       { value: 'instant_search_price_desc', label: 'Highest price' },
  *     ],
  *   })
- * );
+ * ]);
  */
 export default function connectSortBy(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

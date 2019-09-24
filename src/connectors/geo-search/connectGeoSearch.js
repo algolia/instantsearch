@@ -95,11 +95,11 @@ const withUsage = createDocumentationMessageGenerator({
  * const customGeoSearch = instantsearch.connectors.connectGeoSearch(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customGeoSearch({
  *     container: document.getElementById('custom-geo-search'),
  *   })
- * );
+ * ]);
  */
 const connectGeoSearch = (renderFn, unmountFn = noop) => {
   checkRendering(renderFn, withUsage());

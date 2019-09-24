@@ -77,13 +77,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customPagination = instantsearch.connectors.connectPagination(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customPagination({
  *     containerNode: $('#custom-pagination-container'),
  *     totalPages: 20,
  *     padding: 4,
  *   })
- * );
+ * ]);
  */
 export default function connectPagination(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

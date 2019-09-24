@@ -80,12 +80,12 @@ const withUsage = createDocumentationMessageGenerator({
  * var customToggle = instantsearch.connectors.connectToggleRefinement(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customToggle({
  *     containerNode: $('#custom-toggle-container'),
  *     attribute: 'free_shipping',
  *   })
- * );
+ * ]);
  */
 export default function connectToggleRefinement(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

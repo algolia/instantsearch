@@ -98,12 +98,12 @@ const suit = component('GeoSearch');
  * @param {GeoSearchWidgetOptions} $0 Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
  * @staticExample
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.geoSearch({
  *     container: '#geo-search-container',
  *     googleReference: window.google,
  *   })
- * );
+ * ]);
  */
 const geoSearch = ({
   initialZoom = 1,

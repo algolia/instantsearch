@@ -105,13 +105,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customRefinementList = instantsearch.connectors.connectRefinementList(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customRefinementList({
  *     containerNode: $('#custom-refinement-list-container'),
  *     attribute: 'categories',
  *     limit: 10,
  *   })
- * );
+ * ]);
  */
 export default function connectRefinementList(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
