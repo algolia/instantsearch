@@ -5,32 +5,32 @@ storiesOf('ToggleRefinement', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.toggleRefinement({
           container,
           attribute: 'free_shipping',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with label',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.toggleRefinement({
           container,
           attribute: 'free_shipping',
           templates: {
             labelText: 'Free Shipping (toggle single value)',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with on & off values',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.toggleRefinement({
           container,
           attribute: 'brand',
@@ -39,8 +39,8 @@ storiesOf('ToggleRefinement', module)
           templates: {
             labelText: 'Canon (not checked) or sony (checked)',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(

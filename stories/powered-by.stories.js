@@ -5,7 +5,7 @@ storiesOf('PoweredBy', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(instantsearch.widgets.poweredBy({ container }));
+      search.addWidgets([instantsearch.widgets.poweredBy({ container })]);
     })
   )
   .add(
@@ -13,11 +13,11 @@ storiesOf('PoweredBy', module)
     withHits(({ search, container, instantsearch }) => {
       container.style.backgroundColor = '#282c34';
 
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.poweredBy({
           container,
           theme: 'dark',
-        })
-      );
+        }),
+      ]);
     })
   );

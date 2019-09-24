@@ -95,7 +95,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.rangeSlider({
  *     container: '#price',
  *     attribute: 'price',
@@ -105,7 +105,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  *       }
  *     }
  *   })
- * );
+ * ]);
  */
 export default function rangeSlider({
   container,

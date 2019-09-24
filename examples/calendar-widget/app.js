@@ -6,14 +6,12 @@ const search = instantsearch({
   routing: true,
 });
 
-search.addWidget(
+search.addWidgets([
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search events',
-  })
-);
+  }),
 
-search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {
@@ -31,8 +29,8 @@ search.addWidget(
         </li>
       `,
     },
-  })
-);
+  }),
+]);
 
 const makeRangeWidget = instantsearch.connectors.connectRange(
   (options, isFirstRendering) => {
@@ -65,6 +63,6 @@ const dateRangeWidget = makeRangeWidget({
   attribute: 'date',
 });
 
-search.addWidget(dateRangeWidget);
+search.addWidgets([dateRangeWidget]);
 
 search.start();

@@ -9,7 +9,7 @@ storiesOf('Analytics', module).add(
     description.innerText = 'Search for something, look into Action Logger';
     container.appendChild(description);
 
-    search.addWidget(
+    search.addWidgets([
       instantsearch.widgets.analytics({
         pushFunction(formattedParameters, state, results) {
           action('pushFunction[formattedParameters]')(formattedParameters);
@@ -18,7 +18,7 @@ storiesOf('Analytics', module).add(
         },
         triggerOnUIInteraction: true,
         pushInitialSearch: false,
-      })
-    );
+      }),
+    ]);
   })
 );

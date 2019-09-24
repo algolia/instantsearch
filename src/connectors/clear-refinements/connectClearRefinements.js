@@ -64,11 +64,11 @@ const withUsage = createDocumentationMessageGenerator({
  * var customClearRefinementsWidget = instantsearch.connectors.connectClearRefinements(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customClearRefinementsWidget({
  *     containerNode: $('#custom-clear-all-container'),
  *   })
- * );
+ * ]);
  */
 export default function connectClearRefinements(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

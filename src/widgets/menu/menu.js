@@ -110,13 +110,13 @@ const renderer = ({
  * @param {MenuWidgetOptions} $0 The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.menu({
  *     container: '#categories',
  *     attribute: 'hierarchicalCategories.lvl0',
  *     limit: 10,
  *   })
- * );
+ * ]);
  */
 export default function menu({
   container,

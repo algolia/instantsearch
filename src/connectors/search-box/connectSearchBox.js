@@ -58,11 +58,11 @@ const withUsage = createDocumentationMessageGenerator({
  * var customSearchBox = instantsearch.connectors.connectSearchBox(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customSearchBox({
  *     containerNode: $('#custom-searchbox'),
  *   })
- * );
+ * ]);
  */
 export default function connectSearchBox(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

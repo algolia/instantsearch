@@ -6,7 +6,7 @@ var search = instantsearch({
   routing: true,
 });
 
-search.addWidget(
+search.addWidgets([
   instantsearch.widgets.searchBox({
     container: '#searchbox',
     showReset: false,
@@ -17,14 +17,12 @@ search.addWidget(
       submit: 'btn btn-default',
       reset: 'btn btn-default',
     },
-  })
-);
+  }),
 
-search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
-  })
-);
+  }),
+]);
 
 var hitTemplate =
   '<div class="hit media">' +
@@ -40,7 +38,7 @@ var hitTemplate =
 var noResultsTemplate =
   '<div class="text-center">No results found matching <strong>{{query}}</strong>.</div>';
 
-search.addWidget(
+search.addWidgets([
   instantsearch.widgets.hits({
     container: '#hits',
     hitsPerPage: 10,
@@ -62,8 +60,8 @@ search.addWidget(
     cssClasses: {
       list: 'list',
     },
-  })
-);
+  }),
+]);
 
 const genreList = instantsearch.widgets.panel({
   templates: {
@@ -74,7 +72,7 @@ const genreList = instantsearch.widgets.panel({
   },
 })(instantsearch.widgets.refinementList);
 
-search.addWidget(
+search.addWidgets([
   genreList({
     container: '#genres',
     attribute: 'genre',
@@ -86,8 +84,8 @@ search.addWidget(
       selectedItem: 'active',
       item: 'item',
     },
-  })
-);
+  }),
+]);
 
 const ratingList = instantsearch.widgets.panel({
   templates: {
@@ -98,7 +96,7 @@ const ratingList = instantsearch.widgets.panel({
   },
 })(instantsearch.widgets.ratingMenu);
 
-search.addWidget(
+search.addWidgets([
   ratingList({
     container: '#ratings',
     attribute: 'rating',
@@ -110,10 +108,8 @@ search.addWidget(
       starIcon: 'starIcon',
       count: 'badge pull-right',
     },
-  })
-);
+  }),
 
-search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
     cssClasses: {
@@ -122,7 +118,7 @@ search.addWidget(
       disabledItem: 'disabledItem',
       selectedItem: 'selectedItem',
     },
-  })
-);
+  }),
+]);
 
 search.start();

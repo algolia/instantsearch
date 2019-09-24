@@ -89,7 +89,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @param {ToggleWidgetOptions} $0 Options for the ToggleRefinement widget.
  * @return {Widget} A new instance of the ToggleRefinement widget
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.toggleRefinement({
  *     container: '#free-shipping',
  *     attribute: 'free_shipping',
@@ -98,7 +98,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *       labelText: 'Free shipping'
  *     }
  *   })
- * );
+ * ]);
  */
 export default function toggleRefinement({
   container,

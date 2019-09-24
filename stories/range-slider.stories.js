@@ -5,7 +5,7 @@ storiesOf('RangeSlider', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
@@ -17,14 +17,14 @@ storiesOf('RangeSlider', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with step',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
@@ -34,14 +34,14 @@ storiesOf('RangeSlider', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'without pips',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
@@ -51,14 +51,14 @@ storiesOf('RangeSlider', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with 0 as first pit',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
@@ -71,14 +71,14 @@ storiesOf('RangeSlider', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with min boundaries',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
@@ -91,14 +91,14 @@ storiesOf('RangeSlider', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with max boundaries',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
@@ -111,14 +111,14 @@ storiesOf('RangeSlider', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with min / max boundaries',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
@@ -132,7 +132,7 @@ storiesOf('RangeSlider', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   );

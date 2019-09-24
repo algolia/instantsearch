@@ -32,15 +32,15 @@ storiesOf('QueryRuleContext', module)
       container.appendChild(description);
       container.appendChild(widgetContainer);
 
-      search.addWidget(
+      search.addWidgets([
         queryRuleContext({
           trackedFilters: {
             genre: () => ['Thriller', 'Drama'],
           },
-        })
-      );
+        }),
+      ]);
 
-      search.addWidget(
+      search.addWidgets([
         queryRuleCustomData({
           container: widgetContainer,
           transformItems(items: CustomDataItem[]) {
@@ -53,19 +53,19 @@ storiesOf('QueryRuleContext', module)
                   const { title, banner, link } = item;
 
                   return `
-                    <section>
-                      <h2>${title}</h2>
+                  <section>
+                    <h2>${title}</h2>
 
-                      <a href="${link}">
-                        <img src="${banner}" alt="${title}">
-                      </a>
-                    </section>
-                  `;
+                    <a href="${link}">
+                      <img src="${banner}" alt="${title}">
+                    </a>
+                  </section>
+                `;
                 })
                 .join(''),
           },
-        })
-      );
+        }),
+      ]);
     }, searchOptions)
   )
   .add(
@@ -83,15 +83,15 @@ storiesOf('QueryRuleContext', module)
         container.appendChild(description);
         container.appendChild(widgetContainer);
 
-        search.addWidget(
+        search.addWidgets([
           queryRuleContext({
             trackedFilters: {
               genre: () => ['Thriller', 'Drama'],
             },
-          })
-        );
+          }),
+        ]);
 
-        search.addWidget(
+        search.addWidgets([
           queryRuleCustomData({
             container: widgetContainer,
             transformItems(items: CustomDataItem[]) {
@@ -104,19 +104,19 @@ storiesOf('QueryRuleContext', module)
                     const { title, banner, link } = item;
 
                     return `
-                  <section>
-                    <h2>${title}</h2>
+                <section>
+                  <h2>${title}</h2>
 
-                    <a href="${link}">
-                      <img src="${banner}" alt="${title}">
-                    </a>
-                  </section>
-                `;
+                  <a href="${link}">
+                    <img src="${banner}" alt="${title}">
+                  </a>
+                </section>
+              `;
                   })
                   .join(''),
             },
-          })
-        );
+          }),
+        ]);
       },
       {
         ...searchOptions,

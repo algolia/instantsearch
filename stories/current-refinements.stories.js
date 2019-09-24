@@ -9,11 +9,11 @@ storiesOf('CurrentRefinements', module)
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -36,11 +36,11 @@ storiesOf('CurrentRefinements', module)
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -63,18 +63,18 @@ storiesOf('CurrentRefinements', module)
         const menuContainer = document.createElement('div');
         container.appendChild(menuContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.menu({
             container: menuContainer,
             attribute: 'categories',
-          })
-        );
+          }),
+        ]);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -97,21 +97,21 @@ storiesOf('CurrentRefinements', module)
         const hierarchicalMenuContainer = document.createElement('div');
         container.appendChild(hierarchicalMenuContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.hierarchicalMenu({
             container: hierarchicalMenuContainer,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
             ],
-          })
-        );
+          }),
+        ]);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -135,21 +135,21 @@ storiesOf('CurrentRefinements', module)
       const toggleRefinementContainer = document.createElement('div');
       container.appendChild(toggleRefinementContainer);
 
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.toggleRefinement({
           container: toggleRefinementContainer,
           attribute: 'free_shipping',
           templates: {
             labelText: 'Free Shipping',
           },
-        })
-      );
+        }),
+      ]);
 
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.currentRefinements({
           container: currentRefinementsContainer,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -159,11 +159,11 @@ storiesOf('CurrentRefinements', module)
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -186,18 +186,18 @@ storiesOf('CurrentRefinements', module)
         const rangeInputContainer = document.createElement('div');
         container.appendChild(rangeInputContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.rangeInput({
             container: rangeInputContainer,
             attribute: 'price',
-          })
-        );
+          }),
+        ]);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -217,12 +217,12 @@ storiesOf('CurrentRefinements', module)
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             includedAttributes: ['price'],
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -242,12 +242,12 @@ storiesOf('CurrentRefinements', module)
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             excludedAttributes: ['query', 'price'],
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -270,12 +270,12 @@ storiesOf('CurrentRefinements', module)
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             excludedAttributes: [],
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -298,7 +298,7 @@ storiesOf('CurrentRefinements', module)
         const currentRefinementsContainer = document.createElement('div');
         container.appendChild(currentRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.currentRefinements({
             container: currentRefinementsContainer,
             transformItems: items =>
@@ -309,8 +309,8 @@ storiesOf('CurrentRefinements', module)
                   label: item.label.toUpperCase(),
                 })),
               })),
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {

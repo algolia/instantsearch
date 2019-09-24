@@ -5,7 +5,7 @@ storiesOf('HierarchicalMenu', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hierarchicalMenu({
           container,
           attributes: [
@@ -13,14 +13,14 @@ storiesOf('HierarchicalMenu', module)
             'hierarchicalCategories.lvl1',
             'hierarchicalCategories.lvl2',
           ],
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'only show current level options',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hierarchicalMenu({
           container,
           showParentLevel: false,
@@ -29,15 +29,15 @@ storiesOf('HierarchicalMenu', module)
             'hierarchicalCategories.lvl1',
             'hierarchicalCategories.lvl2',
           ],
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with default selected item',
     withHits(
       ({ search, container, instantsearch }) => {
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.hierarchicalMenu({
             container,
             attributes: [
@@ -45,8 +45,8 @@ storiesOf('HierarchicalMenu', module)
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -64,7 +64,7 @@ storiesOf('HierarchicalMenu', module)
   .add(
     'with root path',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hierarchicalMenu({
           container,
           attributes: [
@@ -73,14 +73,14 @@ storiesOf('HierarchicalMenu', module)
             'hierarchicalCategories.lvl2',
           ],
           rootPath: 'Cameras & Camcorders',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with show more',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hierarchicalMenu({
           container,
           attributes: [
@@ -91,14 +91,14 @@ storiesOf('HierarchicalMenu', module)
           ],
           limit: 3,
           showMore: true,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with show more and showMoreLimit',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hierarchicalMenu({
           container,
           attributes: [
@@ -110,14 +110,14 @@ storiesOf('HierarchicalMenu', module)
           limit: 3,
           showMore: true,
           showMoreLimit: 6,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with show more (exhaustive display)',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hierarchicalMenu({
           container,
           attributes: [
@@ -129,14 +129,14 @@ storiesOf('HierarchicalMenu', module)
           limit: 200,
           showMore: true,
           showMoreLimit: 1000,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with transformed items',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hierarchicalMenu({
           container,
           attributes: [
@@ -149,8 +149,8 @@ storiesOf('HierarchicalMenu', module)
               ...item,
               label: `${item.label} (transformed)`,
             })),
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
