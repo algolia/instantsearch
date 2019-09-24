@@ -83,7 +83,7 @@ const withUsage = createDocumentationMessageGenerator({
  * var customHitsPerPage = instantsearch.connectors.connectHitsPerPage(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customHitsPerPage({
  *     containerNode: $('#custom-hits-per-page-container'),
  *     items: [
@@ -92,7 +92,7 @@ const withUsage = createDocumentationMessageGenerator({
  *       {value: 24, label: '24 per page'},
  *     ],
  *   })
- * );
+ * ]);
  */
 export default function connectHitsPerPage(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

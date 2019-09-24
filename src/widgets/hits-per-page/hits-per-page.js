@@ -69,7 +69,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @param {HitsPerPageWidgetOptions} $0 The options of the HitPerPageSelector widget.
  * @return {Widget} A new instance of the HitPerPageSelector widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.hitsPerPage({
  *     container: '#hits-per-page',
  *     items: [
@@ -78,7 +78,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  *       {value: 12, label: '12 per page'},
  *     ]
  *   })
- * );
+ * ]);
  */
 export default function hitsPerPage({
   container,

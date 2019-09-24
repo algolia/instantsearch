@@ -5,18 +5,18 @@ storiesOf('MenuSelect', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.menuSelect({
           container,
           attribute: 'categories',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with custom item template',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.menuSelect({
           container,
           attribute: 'categories',
@@ -24,14 +24,14 @@ storiesOf('MenuSelect', module)
           templates: {
             item: '{{label}}',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with custom default option template',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.menuSelect({
           container,
           attribute: 'categories',
@@ -39,8 +39,8 @@ storiesOf('MenuSelect', module)
           templates: {
             defaultOption: 'Default choice',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(

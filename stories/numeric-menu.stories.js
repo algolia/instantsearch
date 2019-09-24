@@ -5,7 +5,7 @@ storiesOf('NumericMenu', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.numericMenu({
           container,
           attribute: 'price',
@@ -21,14 +21,14 @@ storiesOf('NumericMenu', module)
             count: 'facet-count pull-right',
             selectedItem: 'facet-active',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with transformed items',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.numericMenu({
           container,
           attribute: 'price',
@@ -49,7 +49,7 @@ storiesOf('NumericMenu', module)
               ...item,
               label: `${item.label} (transformed)`,
             })),
-        })
-      );
+        }),
+      ]);
     })
   );

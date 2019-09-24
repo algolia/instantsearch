@@ -39,11 +39,11 @@ export const withLifecycle = (
 
   const widget = fn(node);
 
-  search.addWidget(widget);
+  search.addWidgets([widget]);
   setDisabledState(add, true);
 
   add.addEventListener('click', () => {
-    search.addWidget(widget);
+    search.addWidgets([widget]);
     setDisabledState(add, true);
     setDisabledState(remove, false);
   });

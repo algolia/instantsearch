@@ -111,7 +111,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @param {BreadcrumbWidgetOptions} $0 The Breadcrumb widget options.
  * @return {Widget} A new Breadcrumb widget instance.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
@@ -119,7 +119,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *     separator: ' / ',
  *     rootPath: 'Cameras & Camcorders > Digital Cameras',
  *   })
- * );
+ * ]);
  */
 
 export default function breadcrumb({

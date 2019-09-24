@@ -86,13 +86,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customStarRating = instantsearch.connectors.connectRatingMenu(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customStarRating({
  *     containerNode: $('#custom-rating-menu-container'),
  *     attribute: 'rating',
  *     max: 5,
  *   })
- * );
+ * ]);
  */
 export default function connectRatingMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
