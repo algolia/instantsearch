@@ -1234,7 +1234,7 @@ describe('UI state', () => {
     })
       .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
 
-This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in query parameters not being sent to the API.
+This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
 
 To fully reflect the state, some widgets need to be added to the index "indexName":
 
