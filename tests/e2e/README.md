@@ -4,7 +4,7 @@ This repository contains the end-2-end test suite for [InstantSearch](https://gi
 
 ## Installation
 
-Install `instantsearch-e2e-tests` and its peedDependencies in your InstantSearch project:
+Install `instantsearch-e2e-tests` and its peerDependencies in your InstantSearch project:
 
 ```bash
 yarn add --dev \
