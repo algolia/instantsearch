@@ -377,8 +377,8 @@ const index = (props: IndexProps): Index => {
               stateToWidgetsMap[parameter];
 
             if (
-              requiredWidgets.every(
-                requiredWidget => !mountedWidgets.includes(requiredWidget)
+              !requiredWidgets.some(requiredWidget =>
+                mountedWidgets.includes(requiredWidget)
               )
             ) {
               acc.push({
