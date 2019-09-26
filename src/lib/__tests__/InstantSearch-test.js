@@ -309,6 +309,26 @@ describe('addWidget(s)', () => {
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
   });
+
+  it('returns the search instance when calling `addWidget`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    expect(search.addWidget(createWidget())).toBe(search);
+  });
+
+  it('returns the search instance when calling `addWidgets`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    expect(search.addWidgets([createWidget()])).toBe(search);
+  });
 });
 
 describe('removeWidget(s)', () => {
@@ -348,6 +368,32 @@ describe('removeWidget(s)', () => {
     search.removeWidgets([widget]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
+  });
+
+  it('returns the search instance when calling `removeWidget`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const widget = createWidget();
+    search.addWidget(widget);
+
+    expect(search.removeWidget(widget)).toBe(search);
+  });
+
+  it('returns the search instance when calling `removeWidgets`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const widget = createWidget();
+    search.addWidgets([widget]);
+
+    expect(search.removeWidgets([widget])).toBe(search);
   });
 });
 

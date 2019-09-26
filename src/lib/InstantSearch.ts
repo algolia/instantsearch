@@ -275,7 +275,8 @@ See ${createDocumentationLink({
       false,
       'addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
     );
-    this.addWidgets([widget]);
+
+    return this.addWidgets([widget]);
   }
 
   /**
@@ -307,6 +308,8 @@ See ${createDocumentationLink({
     }
 
     this.mainIndex.addWidgets(widgets);
+
+    return this;
   }
 
   /**
@@ -321,7 +324,8 @@ See ${createDocumentationLink({
       false,
       'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
     );
-    this.removeWidgets([widget]);
+
+    return this.removeWidgets([widget]);
   }
 
   /**
@@ -346,6 +350,8 @@ See ${createDocumentationLink({
     }
 
     this.mainIndex.removeWidgets(widgets);
+
+    return this;
   }
 
   /**
