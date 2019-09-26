@@ -257,7 +257,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       false,
       'addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
     );
-    this.addWidgets([widget]);
+
+    return this.addWidgets([widget]);
   }
 
   /**
@@ -289,6 +290,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     this.mainIndex.addWidgets(widgets);
+
+    return this;
   }
 
   /**
@@ -303,7 +306,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       false,
       'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
     );
-    this.removeWidgets([widget]);
+
+    return this.removeWidgets([widget]);
   }
 
   /**
@@ -328,6 +332,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     this.mainIndex.removeWidgets(widgets);
+
+    return this;
   }
 
   /**
