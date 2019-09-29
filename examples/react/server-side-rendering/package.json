@@ -19,7 +19,7 @@
     "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
     "jest": "24.9.0",
-    "nodemon": "1.19.1",
+    "nodemon": "1.19.3",
     "react-test-renderer": "16.8.6",
     "webpack": "4.40.2",
     "webpack-cli": "3.3.7",
