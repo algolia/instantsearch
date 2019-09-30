@@ -7,10 +7,12 @@ import version from './version';
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
+  createDocumentationLink,
   findIndex,
   isPlainObject,
   mergeDeep,
   noop,
+  warning,
 } from './utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -48,7 +50,7 @@ class InstantSearch extends EventEmitter {
     const {
       indexName = null,
       numberLocale,
-      searchParameters = {},
+      searchParameters,
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -87,6 +89,15 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     if (insightsClient && typeof insightsClient !== 'function') {
       throw new Error('The provided `insightsClient` must be a function.');
     }
+
+    warning(
+      !searchParameters,
+      `The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
+
+You can replace it with the \`configure\` widget: ${createDocumentationLink({
+        name: 'configure',
+      })}`
+    );
 
     this.client = searchClient;
     this.insightsClient = insightsClient;
