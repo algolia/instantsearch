@@ -348,6 +348,7 @@ const index = (props: IndexProps): Index => {
         if (__DEV__) {
           // Some connectors are responsible for multiple widgets so we need
           // to map them.
+          // eslint-disable-next-line no-inner-declarations
           function getWidgetNames(connectorName: string): string[] {
             switch (connectorName) {
               case 'range':
