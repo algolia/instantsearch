@@ -11,7 +11,7 @@ function babelTransform(code) {
 describe('wrap-warning-with-dev-check', () => {
   test('should wrap warning calls', () => {
     expect(babelTransform("warning(condition, 'message');")).toEqual(
-      "__DEV__ ? !condition ? warning(false, 'message') : void 0 : void 0;"
+      "__DEV__ ? warning(condition, 'message') : void 0;"
     );
   });
 

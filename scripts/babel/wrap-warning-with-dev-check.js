@@ -17,9 +17,7 @@
  *
  * ```
  * if (__DEV__) {
- *   if (!condition) {
- *     warning(false, message);
- *   }
+ *   warning(condition, message);
  * }
  * ```
  */
@@ -41,23 +39,12 @@ function wrapWarningInDevCheck(babel) {
           }
 
           if (path.get('callee').isIdentifier({ name: 'warning' })) {
-            const [condition, message] = node.arguments;
-            const newNode = t.callExpression(
-              node.callee,
-              [t.booleanLiteral(false)].concat(message)
-            );
-
-            newNode[SEEN_SYMBOL] = true;
+            node[SEEN_SYMBOL] = true;
 
             path.replaceWith(
               t.ifStatement(
                 DEV_EXPRESSION,
-                t.blockStatement([
-                  t.ifStatement(
-                    t.unaryExpression('!', condition),
-                    t.expressionStatement(newNode)
-                  ),
-                ])
+                t.blockStatement([t.expressionStatement(node)])
               )
             );
           }
