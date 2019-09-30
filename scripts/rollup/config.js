@@ -4,7 +4,6 @@ import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import { uglify } from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
-import wrapWarningWithDevCheck from '../babel/wrap-warning-with-dev-check';
 
 const version =
   process.env.VERSION || `UNRELEASED (${new Date().toUTCString()})`;
@@ -21,7 +20,6 @@ const plugins = [
   babel({
     exclude: 'node_modules/**',
     extensions: ['.js', '.ts', '.tsx'],
-    plugins: [wrapWarningWithDevCheck],
   }),
   commonjs(),
   filesize({

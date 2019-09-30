@@ -1,3 +1,5 @@
+/* eslint-disable import/no-commonjs */
+
 /**
  * Babel plugin that wraps `warning` calls with development check to be
  * completely stripped from the production bundle.
@@ -65,4 +67,4 @@ function wrapWarningInDevCheck(babel) {
   };
 }
 
-export default wrapWarningInDevCheck;
+module.exports = wrapWarningInDevCheck;
