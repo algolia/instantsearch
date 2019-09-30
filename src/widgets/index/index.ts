@@ -346,6 +346,18 @@ const index = (props: IndexProps): Index => {
         instantSearchInstance.scheduleStalledRender();
 
         if (__DEV__) {
+          // Some connectors are responsible for multiple widgets so we need
+          // to map them.
+          function getWidgetNames(connectorName: string): string[] {
+            switch (connectorName) {
+              case 'range':
+                return ['rangeInput', 'rangeSlider'];
+
+              default:
+                return [connectorName];
+            }
+          }
+
           type StateToWidgets = {
             [TParameter in keyof IndexUiState]: Array<Widget['$$type']>;
           };
@@ -370,8 +382,10 @@ const index = (props: IndexProps): Index => {
             .map(widget => widget.$$type)
             .filter(Boolean);
 
+          type MissingWidgets = Array<[string, Array<Widget['$$type']>]>;
+
           const missingWidgets = Object.keys(localUiState).reduce<
-            Array<Partial<StateToWidgets>>
+            MissingWidgets
           >((acc, parameter) => {
             const requiredWidgets: Array<Widget['$$type']> =
               stateToWidgetsMap[parameter];
@@ -381,9 +395,13 @@ const index = (props: IndexProps): Index => {
                 mountedWidgets.includes(requiredWidget)
               )
             ) {
-              acc.push({
-                [parameter]: stateToWidgetsMap[parameter],
-              });
+              acc.push([
+                parameter,
+                stateToWidgetsMap[parameter].map(
+                  (widgetIdentifier: string) =>
+                    widgetIdentifier.split('ais.')[1]
+                ),
+              ]);
             }
 
             return acc;
@@ -398,15 +416,11 @@ This can happen when the UI state is specified via \`initialUiState\` or \`routi
 To fully reflect the state, some widgets need to be added to the index "${this.getIndexId()}":
 
 ${missingWidgets
-  .map(widget => {
-    const stateParameter = Object.keys(widget)[0];
-    const neededWidgets = stateToWidgetsMap[stateParameter]
-      .map(
-        (widgetIdentifier: string) => `"${widgetIdentifier.split('ais.')[1]}"`
-      )
-      .join(', ');
-
-    return `- \`${stateParameter}\` needs one of these widgets: ${neededWidgets}`;
+  .map(([stateParameter, widgets]) => {
+    return `- \`${stateParameter}\` needs one of these widgets: ${([] as string[])
+      .concat(...widgets.map(name => getWidgetNames(name!)))
+      .map((name: string) => `"${name}"`)
+      .join(', ')}`;
   })
   .join('\n')}
 
@@ -414,11 +428,8 @@ If you do not wish to display widgets but still want to support their search par
 
 \`\`\`
 ${missingWidgets
-  .map(widget => {
-    const stateParameter = Object.keys(widget)[0];
-    const capitalizedWidget = capitalize(
-      stateToWidgetsMap[stateParameter][0].split('ais.')[1]
-    );
+  .map(([_stateParameter, widgets]) => {
+    const capitalizedWidget = capitalize(widgets[0]!);
 
     return `const virtual${capitalizedWidget} = connect${capitalizedWidget}(() => null);`;
   })
@@ -426,11 +437,8 @@ ${missingWidgets
 
 search.addWidgets([
   ${missingWidgets
-    .map(widget => {
-      const stateParameter = Object.keys(widget)[0];
-      const capitalizedWidget = capitalize(
-        stateToWidgetsMap[stateParameter][0].split('ais.')[1]
-      );
+    .map(([_stateParameter, widgets]) => {
+      const capitalizedWidget = capitalize(widgets[0]!);
 
       return `virtual${capitalizedWidget}({ /* ... */ })`;
     })
