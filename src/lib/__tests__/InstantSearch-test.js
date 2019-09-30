@@ -1223,6 +1223,9 @@ describe('UI state', () => {
           range: {
             price: '100:200',
           },
+          menu: {
+            category: 'Hardware',
+          },
         },
       },
     });
@@ -1245,6 +1248,7 @@ To fully reflect the state, some widgets need to be added to the index "indexNam
 - \`refinementList\` needs one of these widgets: "refinementList"
 - \`hierarchicalMenu\` needs one of these widgets: "hierarchicalMenu"
 - \`range\` needs one of these widgets: "rangeInput", "rangeSlider"
+- \`menu\` needs one of these widgets: "menu", "menuSelect"
 
 If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
 
@@ -1253,12 +1257,14 @@ const virtualPagination = connectPagination(() => null);
 const virtualRefinementList = connectRefinementList(() => null);
 const virtualHierarchicalMenu = connectHierarchicalMenu(() => null);
 const virtualRange = connectRange(() => null);
+const virtualMenu = connectMenu(() => null);
 
 search.addWidgets([
   virtualPagination({ /* ... */ }),
   virtualRefinementList({ /* ... */ }),
   virtualHierarchicalMenu({ /* ... */ }),
-  virtualRange({ /* ... */ })
+  virtualRange({ /* ... */ }),
+  virtualMenu({ /* ... */ })
 ]);
 \`\`\`
 

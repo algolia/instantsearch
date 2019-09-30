@@ -354,6 +354,9 @@ const index = (props: IndexProps): Index => {
               case 'range':
                 return ['rangeInput', 'rangeSlider'];
 
+              case 'menu':
+                return ['menu', 'menuSelect'];
+
               default:
                 return [connectorName];
             }
