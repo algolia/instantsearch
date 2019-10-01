@@ -10,16 +10,13 @@ const search = instantsearch({
   searchClient,
 });
 
-search.addWidget(
+search.addWidgets([
   instantsearch.widgets.searchBox({
     container: '#searchbox',
     {{#if searchPlaceholder}}
     placeholder: '{{searchPlaceholder}}',
     {{/if}}
-  })
-);
-
-search.addWidget(
+  }),
   instantsearch.widgets.hits({
     container: '#hits',
     {{#if attributesToDisplay}}
@@ -36,22 +33,16 @@ search.addWidget(
 `,
     },
     {{/if}}
-  })
-);
-
-{{#each attributesForFaceting}}
-search.addWidget(
+  }),
+  {{#each attributesForFaceting}}
   instantsearch.widgets.refinementList({
     container: '#{{this}}-list',
     attribute: '{{this}}',
-  })
-);
-
-{{/each}}
-search.addWidget(
+  }),
+  {{/each}}
   instantsearch.widgets.pagination({
     container: '#pagination',
   })
-);
+]);
 
 search.start();
