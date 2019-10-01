@@ -115,7 +115,31 @@ export type UiState = {
  * have at least a `render` or a `init` function.
  */
 export interface Widget {
-  $$type?: string;
+  $$type?:
+    | 'ais.autocomplete'
+    | 'ais.breadcrumb'
+    | 'ais.clearRefinements'
+    | 'ais.configure'
+    | 'ais.currentRefinements'
+    | 'ais.geoSearch'
+    | 'ais.hierarchicalMenu'
+    | 'ais.hits'
+    | 'ais.hitsPerPage'
+    | 'ais.index'
+    | 'ais.infiniteHits'
+    | 'ais.menu'
+    | 'ais.numericMenu'
+    | 'ais.pagination'
+    | 'ais.poweredBy'
+    | 'ais.queryRules'
+    | 'ais.range'
+    | 'ais.ratingMenu'
+    | 'ais.refinementList'
+    | 'ais.searchBox'
+    | 'ais.sortBy'
+    | 'ais.stats'
+    | 'ais.toggleRefinement'
+    | 'ais.voiceSearch';
   /**
    * Called once before the first search
    */
