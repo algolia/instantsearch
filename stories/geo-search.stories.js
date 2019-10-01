@@ -92,7 +92,8 @@ stories
     )
   );
 
-// // With Places
+// With Places
+// @TODO reactivate story once the widget is compatible with 4.x.
 // stories.add(
 //   'with position from Places',
 //   withHitsAndConfigure(({ search, container, instantsearch }) =>
