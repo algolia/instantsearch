@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h, Component } from 'preact';
-import Rheostat from 'preact-rheostat';
+import Rheostat from './Rheostat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { range } from '../../lib/utils';

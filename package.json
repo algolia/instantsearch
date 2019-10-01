@@ -55,7 +55,6 @@
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
     "preact": "^10.0.0-rc.3",
-    "preact-rheostat": "^2.1.1",
     "prop-types": "^15.5.10",
     "qs": "^6.5.1"
   },
