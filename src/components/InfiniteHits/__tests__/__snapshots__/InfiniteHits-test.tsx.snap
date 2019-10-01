@@ -1,191 +1,235 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = `
-<div
-  className="root"
->
-  <ol
-    className="list"
+Array [
+  <div
+    className="root"
   >
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
+    <ol
+      className="list"
+    >
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+    </ol>
+    Array [
+      <button
+        className="loadMore"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "showMoreText",
+          }
         }
-      }
-    />
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
-        }
-      }
-    />
-  </ol>
-  <button
-    className="loadMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showMoreText",
-      }
-    }
-    disabled={false}
-    onClick={[Function]}
-  />
-</div>
+        disabled={false}
+        onClick={[Function]}
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
-<div
-  className="root"
->
-  <ol
-    className="list"
+Array [
+  <div
+    className="root"
   >
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
+    <ol
+      className="list"
+    >
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+    </ol>
+    Array [
+      <button
+        className="loadMore disabledLoadMore"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "showMoreText",
+          }
         }
-      }
-    />
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
-        }
-      }
-    />
-  </ol>
-  <button
-    className="loadMore disabledLoadMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showMoreText",
-      }
-    }
-    disabled={true}
-    onClick={[Function]}
-  />
-</div>
+        disabled={true}
+        onClick={[Function]}
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on first page 1`] = `
-<div
-  className="root"
->
-  <button
-    className="loadPrevious disabledLoadPrevious"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showPreviousText",
-      }
-    }
-    disabled={true}
-    onClick={[Function]}
-  />
-  <ol
-    className="list"
+Array [
+  <div
+    className="root"
   >
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
+    Array [
+      <button
+        className="loadPrevious disabledLoadPrevious"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "showPreviousText",
+          }
         }
-      }
-    />
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
+        disabled={true}
+        onClick={[Function]}
+      />,
+    ]
+    <ol
+      className="list"
+    >
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+    </ol>
+    Array [
+      <button
+        className="loadMore"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "showMoreText",
+          }
         }
-      }
-    />
-  </ol>
-  <button
-    className="loadMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showMoreText",
-      }
-    }
-    disabled={false}
-    onClick={[Function]}
-  />
-</div>
+        disabled={false}
+        onClick={[Function]}
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on last page 1`] = `
-<div
-  className="root"
->
-  <button
-    className="loadPrevious"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showPreviousText",
-      }
-    }
-    disabled={false}
-    onClick={[Function]}
-  />
-  <ol
-    className="list"
+Array [
+  <div
+    className="root"
   >
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
+    Array [
+      <button
+        className="loadPrevious"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "showPreviousText",
+          }
         }
-      }
-    />
-    <li
-      className="item"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "item",
+        disabled={false}
+        onClick={[Function]}
+      />,
+    ]
+    <ol
+      className="list"
+    >
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+      Array [
+        <li
+          className="item"
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "item",
+            }
+          }
+        />,
+      ]
+    </ol>
+    Array [
+      <button
+        className="loadMore disabledLoadMore"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "showMoreText",
+          }
         }
-      }
-    />
-  </ol>
-  <button
-    className="loadMore disabledLoadMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "showMoreText",
-      }
-    }
-    disabled={true}
-    onClick={[Function]}
-  />
-</div>
+        disabled={true}
+        onClick={[Function]}
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> without hits on first page 1`] = `
-<div
-  className="root emptyRoot"
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "empty",
-    }
-  }
-/>
+Array [
+  Array [
+    <div
+      className="root emptyRoot"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "empty",
+        }
+      }
+    />,
+  ],
+]
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> without hits on last page 1`] = `
-<div
-  className="root emptyRoot"
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "empty",
-    }
-  }
-/>
+Array [
+  Array [
+    <div
+      className="root emptyRoot"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "empty",
+        }
+      }
+    />,
+  ],
+]
 `;
