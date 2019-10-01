@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import createInfoBox from '../.storybook/utils/create-info-box';
-import instantsearchPlacesWidget from 'places.js/instantsearchWidget';
+// import instantsearchPlacesWidget from 'places.js/instantsearchWidget';
 import injectScript from 'scriptjs';
 
 const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
@@ -92,38 +92,38 @@ stories
     )
   );
 
-// With Places
-stories.add(
-  'with position from Places',
-  withHitsAndConfigure(({ search, container, instantsearch }) =>
-    injectGoogleMaps(() => {
-      const placesElement = document.createElement('input');
-      const mapElement = document.createElement('div');
-      mapElement.style.marginTop = '20px';
+// // With Places
+// stories.add(
+//   'with position from Places',
+//   withHitsAndConfigure(({ search, container, instantsearch }) =>
+//     injectGoogleMaps(() => {
+//       const placesElement = document.createElement('input');
+//       const mapElement = document.createElement('div');
+//       mapElement.style.marginTop = '20px';
 
-      container.appendChild(placesElement);
-      container.appendChild(mapElement);
+//       container.appendChild(placesElement);
+//       container.appendChild(mapElement);
 
-      search.addWidgets([
-        instantsearch.widgets.configure({
-          aroundRadius: 20000,
-        }),
+//       search.addWidgets([
+//         instantsearch.widgets.configure({
+//           aroundRadius: 20000,
+//         }),
 
-        instantsearchPlacesWidget({
-          container: placesElement,
-          defaultPosition: ['37.7793', '-122.419'],
-        }),
+//         instantsearchPlacesWidget({
+//           container: placesElement,
+//           defaultPosition: ['37.7793', '-122.419'],
+//         }),
 
-        instantsearch.widgets.geoSearch({
-          googleReference: window.google,
-          container: mapElement,
-          enableClearMapRefinement: false,
-          initialZoom,
-        }),
-      ]);
-    })
-  )
-);
+//         instantsearch.widgets.geoSearch({
+//           googleReference: window.google,
+//           container: mapElement,
+//           enableClearMapRefinement: false,
+//           initialZoom,
+//         }),
+//       ]);
+//     })
+//   )
+// );
 
 // Only UI
 stories
