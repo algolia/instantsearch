@@ -1,6 +1,7 @@
 import algoliaSearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
+import { warning } from '../utils';
 
 jest.mock('algoliasearch-helper', () => {
   const module = require.requireActual('algoliasearch-helper');
@@ -215,6 +216,44 @@ describe('InstantSearch lifecycle', () => {
 
   it('does not call algoliasearchHelper', () => {
     expect(algoliaSearchHelper).not.toHaveBeenCalled();
+  });
+
+  it('warns deprecated usage of `searchParameters`', () => {
+    warning.cache = {};
+
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName,
+        searchClient: algoliasearch(appId, apiKey),
+        searchParameters: {
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung'],
+          },
+        },
+      });
+    })
+      .toWarnDev(`[InstantSearch.js]: The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
+
+You can replace it with the \`configure\` widget:
+
+\`\`\`
+search.addWidgets([
+  configure({
+  "disjunctiveFacets": [
+    "brand"
+  ],
+  "disjunctiveFacetsRefinements": {
+    "brand": [
+      "Samsung"
+    ]
+  }
+})
+]);
+\`\`\`
+
+See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   it('does not fail when passing same references inside multiple searchParameters props', () => {
