@@ -1,6 +1,6 @@
 ## Codemods
 
-These codemods (code transformers) can be ran with `npx`. If you installed the `instantsearch.js` package already with `yarn`, you can ru`yarn instantsearch-scripts`).
+These codemods (code transformers) can be ran with `npx`. If you installed the `instantsearch.js` package already with `yarn`, you can run them like this: `yarn instantsearch-scripts`).
 
 ### `addWidget-to-addWidgetss`
 
