@@ -136,7 +136,7 @@ class Rheostat extends Component {
     this.updateNewValues = this.updateNewValues.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { className, disabled, min, max, orientation } = this.props;
     const { values, slidingIndex } = this.state;
 

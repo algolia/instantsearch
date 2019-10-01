@@ -141,7 +141,7 @@ class RefinementList extends Component {
     this.refine(facetValueToRefine, isRefined);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.searchBox && !nextProps.isFromSearch) {
       this.searchBox.resetInput();
     }

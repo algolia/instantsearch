@@ -15,7 +15,7 @@ class RangeInput extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       min: nextProps.values.min,
       max: nextProps.values.max,

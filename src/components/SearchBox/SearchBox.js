@@ -59,7 +59,7 @@ class SearchBox extends Component {
    * This public method is used in the RefinementList SFFV search box
    * to reset the input state when an item is selected.
    *
-   * @see RefinementList#componentWillReceiveProps
+   * @see RefinementList#UNSAFE_componentWillReceiveProps
    * @return {undefined}
    */
   resetInput() {
