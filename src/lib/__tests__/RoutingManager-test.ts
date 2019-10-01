@@ -132,7 +132,7 @@ describe('RoutingManager', () => {
         ),
       };
 
-      search.addWidget(widget);
+      search.addWidgets([widget]);
 
       search.start();
 
@@ -181,7 +181,7 @@ describe('RoutingManager', () => {
         ),
       };
 
-      search.addWidget(widget);
+      search.addWidgets([widget]);
 
       search.start();
 
@@ -240,7 +240,7 @@ describe('RoutingManager', () => {
         },
       });
 
-      search.addWidget(
+      search.addWidgets([
         createWidget({
           getWidgetState(uiState, { searchParameters }) {
             return {
@@ -251,8 +251,8 @@ describe('RoutingManager', () => {
           getWidgetSearchParameters: jest.fn(
             searchParameters => searchParameters
           ),
-        })
-      );
+        }),
+      ]);
 
       search.start();
 
@@ -290,8 +290,7 @@ describe('RoutingManager', () => {
       const fakeSearchBox: any = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
-      search.addWidget(fakeSearchBox);
-      search.addWidget(fakeHitsPerPage);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
       search.start();
 
@@ -345,8 +344,7 @@ describe('RoutingManager', () => {
       const fakeSearchBox = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
-      search.addWidget(fakeSearchBox);
-      search.addWidget(fakeHitsPerPage);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
       // Trigger the call to `searchFunction` -> Apple iPhone
       search.start();
@@ -400,8 +398,7 @@ describe('RoutingManager', () => {
       const fakeSearchBox: any = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
-      search.addWidget(fakeSearchBox);
-      search.addWidget(fakeHitsPerPage);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
       search.start();
 
@@ -474,7 +471,7 @@ describe('RoutingManager', () => {
 
       const fakeSearchBox = createFakeSearchBox();
 
-      search.addWidget(fakeSearchBox);
+      search.addWidgets([fakeSearchBox]);
       search.start();
 
       await runAllMicroTasks();

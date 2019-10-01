@@ -66,7 +66,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @param {SortByWidgetOptions} $0 Options for the SortBy widget
  * @return {Widget} Creates a new instance of the SortBy widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.sortBy({
  *     container: '#sort-by-container',
  *     items: [
@@ -75,7 +75,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  *       {value: 'instant_search_price_desc', label: 'Highest price'}
  *     ]
  *   })
- * );
+ * ]);
  */
 export default function sortBy({
   container,

@@ -165,13 +165,13 @@ The `indices` option has been removed, in favour of using `index` widgets (see t
 ```js
 const autocomplete = connectAutocomplete(() => {/* ... */});
 
-search.addWidget(
+search.addWidgets([
   autocomplete({
     indices: [{
       name: "additional"
     }]
   })
-);
+]);
 ```
 
 Will be replaced with this:
@@ -211,3 +211,7 @@ interface Router {
   dispose(): void
 }
 ```
+
+## pagination
+
+The `noRefinementRoot` class now gets added once there is no more possible refinements, and thus only if there's a single page, no longer if it's the first page, which was incorrect behavior.

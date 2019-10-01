@@ -127,6 +127,7 @@ search.addWidgets([
             : scopedResult.results.hits;
 
           return {
+            indexId: scopedResult.indexId,
             indexName: scopedResult.results.index,
             hits: scopedResult.results.hits,
             results: scopedResult.results,

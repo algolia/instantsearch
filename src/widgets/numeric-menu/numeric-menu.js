@@ -97,7 +97,7 @@ const renderer = ({
  * @param {NumericMenuWidgetOptions} $0 The NumericMenu widget items
  * @return {Widget} Creates a new instance of the NumericMenu widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.numericMenu({
  *     container: '#popularity',
  *     attribute: 'popularity',
@@ -108,7 +108,7 @@ const renderer = ({
  *       { start: 2000, label: 'more than 2000' }
  *     ]
  *   })
- * );
+ * ]);
  */
 export default function numericMenu({
   container,

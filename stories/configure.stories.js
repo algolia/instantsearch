@@ -13,11 +13,11 @@ storiesOf('Configure', module)
 
       container.appendChild(description);
 
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.configure({
           hitsPerPage: 1,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(

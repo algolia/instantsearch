@@ -95,7 +95,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @param {RangeInputWidgetOptions} $0 The RangeInput widget options.
  * @return {Widget} A new instance of RangeInput widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.rangeInput({
  *     container: '#range-input',
  *     attribute: 'price',
@@ -104,7 +104,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *       submitText: 'Go'
  *     },
  *   })
- * );
+ * ]);
  */
 export default function rangeInput({
   container,

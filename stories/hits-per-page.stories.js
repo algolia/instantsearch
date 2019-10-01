@@ -5,7 +5,7 @@ storiesOf('HitsPerPage', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hitsPerPage({
           container,
           items: [
@@ -13,14 +13,14 @@ storiesOf('HitsPerPage', module)
             { value: 5, label: '5 per page' },
             { value: 10, label: '10 per page' },
           ],
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with transformed items',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.hitsPerPage({
           container,
           items: [
@@ -33,8 +33,8 @@ storiesOf('HitsPerPage', module)
               ...item,
               label: `${item.label} (transformed)`,
             })),
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(

@@ -51,12 +51,12 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @param {PoweredByWidgetOptions} $0 PoweredBy widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new poweredBy widget instance
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.poweredBy({
  *     container: '#poweredBy-container',
  *     theme: 'dark',
  *   })
- * );
+ * ]);
  */
 export default function poweredBy({
   container,

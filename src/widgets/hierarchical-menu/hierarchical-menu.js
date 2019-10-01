@@ -165,12 +165,12 @@ const renderer = ({
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.hierarchicalMenu({
  *     container: '#hierarchical-categories',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
  *   })
- * );
+ * ]);
  */
 export default function hierarchicalMenu({
   container,

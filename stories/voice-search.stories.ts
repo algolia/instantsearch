@@ -14,24 +14,24 @@ storiesOf('VoiceSearch', module)
         <p>To see this button disabled, test it on unsupported browsers like Safari, Firefox, etc.</p>
       `;
 
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container: realContainer,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'without status',
     withHits(({ search, container }) => {
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container,
           templates: {
             status: ``,
           },
-        })
-      );
+        }),
+      ]);
     })
   )
 
@@ -43,16 +43,16 @@ storiesOf('VoiceSearch', module)
       container.appendChild(subContainer1);
       container.appendChild(subContainer2);
 
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container: subContainer1,
-        })
-      );
-      search.addWidget(
+        }),
+      ]);
+      search.addWidgets([
         instantsearch.widgets.searchBox({
           container: subContainer2,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -66,7 +66,7 @@ storiesOf('VoiceSearch', module)
       }`,
       ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
 
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container,
           templates: {
@@ -77,14 +77,14 @@ storiesOf('VoiceSearch', module)
           cssClasses: {
             button: 'custom-button',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with full status',
     withHits(({ search, container }) => {
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container,
           templates: {
@@ -97,14 +97,14 @@ storiesOf('VoiceSearch', module)
               <p>isBrowserSupported: {{isBrowserSupported}}</p>
             `,
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'search as you speak',
     withHits(({ search, container }) => {
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container,
           searchAsYouSpeak: true,
@@ -116,10 +116,10 @@ storiesOf('VoiceSearch', module)
               <p>transcript: {{transcript}}</p>
               <p>isSpeechFinal: {{isSpeechFinal}}</p>
               <p>isBrowserSupported: {{isBrowserSupported}}</p>
-          `,
+            `,
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -160,7 +160,7 @@ storiesOf('VoiceSearch', module)
         }`,
       ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
 
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container: subContainer1,
           cssClasses: {
@@ -170,21 +170,21 @@ storiesOf('VoiceSearch', module)
           templates: {
             status({ isListening, transcript }) {
               return `
-                <div class="layer listening-${isListening}">
-                  <span>${transcript}</span>
-                </div>
-              `;
+              <div class="layer listening-${isListening}">
+                <span>${transcript}</span>
+              </div>
+            `;
             },
           },
-        })
-      );
-      search.addWidget(
+        }),
+      ]);
+      search.addWidgets([
         instantsearch.widgets.searchBox({
           container: subContainer2,
           showReset: false,
           showLoadingIndicator: false,
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -198,12 +198,12 @@ storiesOf('VoiceSearch', module)
         <p>Sets the default additional parameters, as well as a language</p>
       `;
 
-      search.addWidget(
+      search.addWidgets([
         voiceSearch({
           container: realContainer,
           language: 'en-US',
           additionalQueryParameters: () => {},
-        })
-      );
+        }),
+      ]);
     })
   );

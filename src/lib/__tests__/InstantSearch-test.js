@@ -242,7 +242,7 @@ describe('InstantSearch', () => {
 });
 
 describe('addWidget(s)', () => {
-  it('forwards the call to `addWidget` to the main index', () => {
+  it('forwards the call of `addWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -251,12 +251,14 @@ describe('addWidget(s)', () => {
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
 
-    search.addWidget(createWidget());
+    expect(() => search.addWidget(createWidget())).toWarnDev(
+      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+    );
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
   });
 
-  it('forwards the call to `addWidgets` to the main index', () => {
+  it('forwards the call of `addWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -268,6 +270,26 @@ describe('addWidget(s)', () => {
     search.addWidgets([createWidget()]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
+  });
+
+  it('returns the search instance when calling `addWidget`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    expect(search.addWidget(createWidget())).toBe(search);
+  });
+
+  it('returns the search instance when calling `addWidgets`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    expect(search.addWidgets([createWidget()])).toBe(search);
   });
 });
 
@@ -281,11 +303,13 @@ describe('removeWidget(s)', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
 
-    search.removeWidget(widget);
+    expect(() => search.removeWidget(widget)).toWarnDev(
+      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
+    );
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
   });
@@ -306,6 +330,32 @@ describe('removeWidget(s)', () => {
     search.removeWidgets([widget]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
+  });
+
+  it('returns the search instance when calling `removeWidget`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const widget = createWidget();
+    search.addWidget(widget);
+
+    expect(search.removeWidget(widget)).toBe(search);
+  });
+
+  it('returns the search instance when calling `removeWidgets`', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    const widget = createWidget();
+    search.addWidgets([widget]);
+
+    expect(search.removeWidgets([widget])).toBe(search);
   });
 });
 
@@ -443,7 +493,7 @@ describe('start', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -740,7 +790,7 @@ describe('scheduleSearch', () => {
       searchClient: createSearchClient(),
     });
 
-    search.addWidget(createWidget());
+    search.addWidgets([createWidget()]);
 
     search.start();
 
@@ -761,7 +811,7 @@ describe('scheduleSearch', () => {
       searchClient: createSearchClient(),
     });
 
-    search.addWidget(createWidget());
+    search.addWidgets([createWidget()]);
 
     search.start();
 
@@ -789,7 +839,7 @@ describe('scheduleRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -808,7 +858,7 @@ describe('scheduleRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -832,7 +882,7 @@ describe('scheduleRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -855,7 +905,7 @@ describe('scheduleStalledRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -888,7 +938,7 @@ describe('scheduleStalledRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     search.start();
 
@@ -924,7 +974,7 @@ describe('scheduleStalledRender', () => {
 
     const widget = createWidget();
 
-    search.addWidget(widget);
+    search.addWidgets([widget]);
 
     expect(widget.render).toHaveBeenCalledTimes(0);
 
@@ -1023,7 +1073,7 @@ describe('createURL', () => {
       },
     });
 
-    search.addWidget(connectSearchBox(noop)({}));
+    search.addWidgets([connectSearchBox(noop)({})]);
     search.start();
 
     expect(search.createURL({ indexName: { query: 'Apple' } })).toBe(
@@ -1046,7 +1096,7 @@ describe('createURL', () => {
       },
     });
 
-    search.addWidget(connectSearchBox(noop)({}));
+    search.addWidgets([connectSearchBox(noop)({})]);
     search.start();
     search.createURL();
 
@@ -1151,5 +1201,75 @@ describe('refresh', () => {
     search.refresh();
 
     expect(searchClient.search).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('UI state', () => {
+  it('warns if UI state contains unmounted widgets in development mode', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      initialUiState: {
+        indexName: {
+          query: 'First query',
+          page: 3,
+          refinementList: {
+            brand: ['Apple'],
+          },
+          hierarchicalMenu: {
+            categories: 'Mobile',
+          },
+          range: {
+            price: '100:200',
+          },
+          menu: {
+            category: 'Hardware',
+          },
+        },
+      },
+    });
+
+    const searchBox = connectSearchBox(() => null)({});
+    const customWidget = { render() {} };
+
+    search.addWidgets([searchBox, customWidget]);
+
+    expect(() => {
+      search.start();
+    })
+      .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
+
+This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
+
+To fully reflect the state, some widgets need to be added to the index "indexName":
+
+- \`page\` needs one of these widgets: "pagination", "infiniteHits"
+- \`refinementList\` needs one of these widgets: "refinementList"
+- \`hierarchicalMenu\` needs one of these widgets: "hierarchicalMenu"
+- \`range\` needs one of these widgets: "rangeInput", "rangeSlider"
+- \`menu\` needs one of these widgets: "menu", "menuSelect"
+
+If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
+
+\`\`\`
+const virtualPagination = connectPagination(() => null);
+const virtualRefinementList = connectRefinementList(() => null);
+const virtualHierarchicalMenu = connectHierarchicalMenu(() => null);
+const virtualRange = connectRange(() => null);
+const virtualMenu = connectMenu(() => null);
+
+search.addWidgets([
+  virtualPagination({ /* ... */ }),
+  virtualRefinementList({ /* ... */ }),
+  virtualHierarchicalMenu({ /* ... */ }),
+  virtualRange({ /* ... */ }),
+  virtualMenu({ /* ... */ })
+]);
+\`\`\`
+
+If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
+
+See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
   });
 });

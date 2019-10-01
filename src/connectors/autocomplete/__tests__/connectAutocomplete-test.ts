@@ -156,20 +156,20 @@ search.addWidgets([
     const secondIndexHits = [{ name: 'Hit 1' }, { name: 'Hit 2' }];
     const scopedResults = [
       {
-        indexId: 'index0',
+        indexId: 'indexId0',
         results: new SearchResults(helper.state, [
           createSingleSearchResponse({
-            index: 'index0',
+            index: 'indexName0',
             hits: firstIndexHits,
           }),
         ]),
         helper,
       },
       {
-        indexId: 'index1',
+        indexId: 'indexId1',
         results: new SearchResults(helper.state, [
           createSingleSearchResponse({
-            index: 'index1',
+            index: 'indexName1',
             hits: secondIndexHits,
           }),
         ]),
@@ -183,13 +183,15 @@ search.addWidgets([
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(secondRenderOptions.indices).toHaveLength(2);
-    expect(secondRenderOptions.indices[0].indexName).toEqual('index0');
+    expect(secondRenderOptions.indices[0].indexId).toEqual('indexId0');
+    expect(secondRenderOptions.indices[0].indexName).toEqual('indexName0');
     expect(secondRenderOptions.indices[0].hits).toEqual(firstIndexHits);
-    expect(secondRenderOptions.indices[0].results.index).toEqual('index0');
+    expect(secondRenderOptions.indices[0].results.index).toEqual('indexName0');
     expect(secondRenderOptions.indices[0].results.hits).toEqual(firstIndexHits);
-    expect(secondRenderOptions.indices[1].indexName).toEqual('index1');
+    expect(secondRenderOptions.indices[1].indexId).toEqual('indexId1');
+    expect(secondRenderOptions.indices[1].indexName).toEqual('indexName1');
     expect(secondRenderOptions.indices[1].hits).toEqual(secondIndexHits);
-    expect(secondRenderOptions.indices[1].results.index).toEqual('index1');
+    expect(secondRenderOptions.indices[1].results.index).toEqual('indexName1');
     expect(secondRenderOptions.indices[1].results.hits).toEqual(
       secondIndexHits
     );

@@ -6,11 +6,11 @@ storiesOf('ClearRefinements', module)
     'default',
     withHits(
       ({ search, container, instantsearch }) => {
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.clearRefinements({
             container,
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -26,30 +26,30 @@ storiesOf('ClearRefinements', module)
   .add(
     'with query only (via includedAttributes)',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.clearRefinements({
           container,
           includedAttributes: ['query'],
           templates: {
             resetLabel: 'Clear query',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with refinements and query (via excludedAttributes)',
     withHits(
       ({ search, container, instantsearch }) => {
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.clearRefinements({
             container,
             excludedAttributes: [],
             templates: {
               resetLabel: 'Clear refinements and query',
             },
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {
@@ -69,14 +69,14 @@ storiesOf('ClearRefinements', module)
         const clearRefinementsContainer = document.createElement('div');
         container.appendChild(clearRefinementsContainer);
 
-        search.addWidget(
+        search.addWidgets([
           instantsearch.widgets.clearRefinements({
             container: clearRefinementsContainer,
             excludedAttributes: [],
             transformItems: items =>
               items.filter(attribute => attribute !== 'brand'),
-          })
-        );
+          }),
+        ]);
       },
       {
         initialUiState: {

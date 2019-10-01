@@ -75,12 +75,12 @@ const renderer = ({
  *   },
  * })(instantsearch.widgets.refinementList);
  *
- * search.addWidget(
+ * search.addWidgets([
  *   refinementListWithPanel({
  *     container: '#refinement-list',
  *     attribute: 'brand',
  *   })
- * );
+ * ]);
  */
 export default function panel({
   templates = {},

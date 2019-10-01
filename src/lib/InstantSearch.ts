@@ -12,6 +12,7 @@ import {
   isPlainObject,
   defer,
   noop,
+  warning,
 } from './utils';
 import {
   InsightsClient as AlgoliaInsightsClient,
@@ -245,23 +246,25 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
   }
 
   /**
-   * Adds a widget. This can be done before and after InstantSearch has been started. Adding a
-   * widget after InstantSearch started is considered **EXPERIMENTAL** and therefore
-   * it is possibly buggy, if you find anything please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20hot%20addWidget).
-   * @param  widget The widget to add to InstantSearch. Widgets are simple objects
-   * that have methods that map the search life cycle in a UI perspective. Usually widgets are
-   * created by [widget factories](widgets.html) like the one provided with InstantSearch.js.
+   * Adds a widget to the search instance.
+   * A widget can be added either before or after InstantSearch has started.
+   * @param widget The widget to add to InstantSearch.
+   *
+   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`.
    */
   public addWidget(widget: Widget) {
-    this.addWidgets([widget]);
+    warning(
+      false,
+      'addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+    );
+
+    return this.addWidgets([widget]);
   }
 
   /**
-   * Adds multiple widgets. This can be done before and after the InstantSearch has been started. This feature
-   * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
-   * @param {Widget[]} widgets The array of widgets to add to InstantSearch.
+   * Adds multiple widgets to the search instance.
+   * Widgets can be added either before or after InstantSearch has started.
+   * @param widgets The array of widgets to add to InstantSearch.
    */
   public addWidgets(widgets: Widget[]) {
     if (!Array.isArray(widgets)) {
@@ -287,23 +290,31 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     this.mainIndex.addWidgets(widgets);
+
+    return this;
   }
 
   /**
-   * Removes a widget. This can be done after the InstantSearch has been started. This feature
-   * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20removeWidget).
-   * @param  {Widget} widget The widget instance to remove from InstantSearch. This widget must implement a `dispose()` method in order to be gracefully removed.
+   * Removes a widget from the search instance.
+   * @deprecated This method will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`
+   * @param widget The widget instance to remove from InstantSearch.
+   *
+   * The widget must implement a `dispose()` method to clear its state.
    */
   public removeWidget(widget: Widget) {
-    this.removeWidgets([widget]);
+    warning(
+      false,
+      'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
+    );
+
+    return this.removeWidgets([widget]);
   }
 
   /**
-   * Removes multiple widgets. This can be done only after the InstantSearch has been started. This feature
-   * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
-   * @param {Widget[]} widgets Array of widgets instances to remove from InstantSearch.
+   * Removes multiple widgets from the search instance.
+   * @param widgets Array of widgets instances to remove from InstantSearch.
+   *
+   * The widgets must implement a `dispose()` method to clear their states.
    */
   public removeWidgets(widgets: Widget[]) {
     if (!Array.isArray(widgets)) {
@@ -321,6 +332,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     this.mainIndex.removeWidgets(widgets);
+
+    return this;
   }
 
   /**

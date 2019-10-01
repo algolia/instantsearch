@@ -10,8 +10,6 @@ import connectInfiniteHits, {
 import {
   prepareTemplateProps,
   getContainerNode,
-  warning,
-  createDocumentationLink,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
@@ -179,17 +177,6 @@ const infiniteHits: InfiniteHits = (
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
-
-  warning(
-    // @ts-ignore: We have this specific check because unlike `hits`, `infiniteHits` does not support
-    // the `allItems` template. This can be misleading as they are very similar.
-    typeof templates.allItems === 'undefined',
-    `The template \`allItems\` does not exist since InstantSearch.js 3.
-
- You may want to migrate using \`connectInfiniteHits\`: ${createDocumentationLink(
-   { name: 'infinite-hits', connector: true }
- )}.`
-  );
 
   const containerNode = getContainerNode(container);
   const cssClasses = {

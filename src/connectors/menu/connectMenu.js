@@ -83,13 +83,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customMenu = instantsearch.connectors.connectMenu(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customMenu({
  *     containerNode: $('#custom-menu-container'),
  *     attribute: 'categories',
  *     limit: 10,
  *   })
- * );
+ * ]);
  */
 export default function connectMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());

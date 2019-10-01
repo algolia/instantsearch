@@ -75,13 +75,13 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @param {MenuSelectWidgetOptions} $0 The Menu select widget options.
  * @return {Widget} Creates a new instance of the Menu select widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.menuSelect({
  *     container: '#categories-menuSelect',
  *     attribute: 'hierarchicalCategories.lvl0',
  *     limit: 10,
  *   })
- * );
+ * ]);
  */
 export default function menuSelect({
   container,

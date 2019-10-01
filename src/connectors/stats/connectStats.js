@@ -41,11 +41,11 @@ const withUsage = createDocumentationMessageGenerator({
  * var customStatsWidget = instantsearch.connectors.connectStats(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customStatsWidget({
  *     containerNode: $('#custom-stats-container'),
  *   })
- * );
+ * ]);
  */
 export default function connectStats(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
