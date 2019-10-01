@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable no-shadow */
+/* eslint-disable no-console,no-shadow */
 
 export default function transform(file, api, options) {
   const j = api.jscodeshift;
@@ -10,18 +9,12 @@ export default function transform(file, api, options) {
   const replaceSingularToPlural = (from, to) => root =>
     root
       .find(j.CallExpression, { callee: { property: { name: from } } })
-      .forEach(path => {
-        j(path).replaceWith(
-          j.callExpression(
-            j.memberExpression(
-              path.value.callee.object,
-              j.identifier(to),
-              false
-            ),
-            [j.arrayExpression(path.value.arguments)]
-          )
-        );
-      });
+      .replaceWith(path =>
+        j.callExpression(
+          j.memberExpression(path.value.callee.object, j.identifier(to), false),
+          [j.arrayExpression(path.value.arguments)]
+        )
+      );
 
   const replaceAddWidget = replaceSingularToPlural('addWidget', 'addWidgets');
   const replaceRemoveWidget = replaceSingularToPlural(
@@ -29,7 +22,8 @@ export default function transform(file, api, options) {
     'removeWidgets'
   );
 
-  return replaceRemoveWidget(replaceAddWidget(root)).toSource(printOptions);
-}
+  replaceAddWidget(root);
+  replaceRemoveWidget(root);
 
-export const parser = 'ts';
+  return root.toSource(printOptions);
+}
