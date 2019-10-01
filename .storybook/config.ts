@@ -28,9 +28,7 @@ addParameters({
         return 0;
       }
 
-      return categories.indexOf(categoryA) < categories.indexOf(categoryB)
-        ? -1
-        : 1;
+      return categories.indexOf(categoryA) - categories.indexOf(categoryB);
     },
   },
 });
