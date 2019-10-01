@@ -227,6 +227,7 @@ describe('InstantSearch lifecycle', () => {
         indexName,
         searchClient: algoliasearch(appId, apiKey),
         searchParameters: {
+          disjunctiveFacets: ['brand'],
           disjunctiveFacetsRefinements: {
             brand: ['Samsung'],
           },
@@ -235,7 +236,24 @@ describe('InstantSearch lifecycle', () => {
     })
       .toWarnDev(`[InstantSearch.js]: The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
 
-You can replace it with the \`configure\` widget: https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
+You can replace it with the \`configure\` widget:
+
+\`\`\`
+search.addWidgets([
+  configure({
+  "disjunctiveFacets": [
+    "brand"
+  ],
+  "disjunctiveFacetsRefinements": {
+    "brand": [
+      "Samsung"
+    ]
+  }
+})
+]);
+\`\`\`
+
+See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   it('does not fail when passing same references inside multiple searchParameters props', () => {
