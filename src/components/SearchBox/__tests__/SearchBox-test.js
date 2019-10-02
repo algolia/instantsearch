@@ -2,7 +2,13 @@
 
 import { h } from 'preact';
 import { mount } from 'enzyme';
+import {
+  fireEvent,
+  render,
+  getByPlaceholderText,
+} from 'preact-testing-library';
 import SearchBox from '../SearchBox';
+import { getByRole, getByTitle } from '@testing-library/dom';
 
 const defaultProps = {
   placeholder: '',
@@ -178,61 +184,66 @@ describe('SearchBox', () => {
 
   describe('Events', () => {
     describe('searchAsYouType to true', () => {
-      test('refines input value on change', () => {
+      test('refines input value on input', () => {
         const refine = jest.fn();
         const props = {
           ...defaultProps,
           searchAsYouType: true,
+          placeholder: 'Search',
           refine,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+        fireEvent.input(getByPlaceholderText(container, 'Search'), {
+          target: { value: 'hello' },
+        });
 
-        expect(refine.mock.calls).toHaveLength(1);
-        expect(refine.mock.calls[0][0]).toBe('hello');
+        expect(refine).toHaveBeenCalledTimes(1);
+        expect(refine).toHaveBeenLastCalledWith('hello');
       });
     });
 
     describe('searchAsYouType to false', () => {
-      test('updates DOM input value on change', () => {
+      test('updates DOM input value on input', () => {
         const props = {
           ...defaultProps,
           query: 'Query 1',
+          placeholder: 'Search',
           searchAsYouType: false,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const input = getByPlaceholderText(container, 'Search');
 
-        expect(wrapper.find('input').props().value).toBe('Query 1');
+        expect(input.value).toEqual('Query 1');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'Query 2' } });
+        fireEvent.input(input, {
+          target: { value: 'Query 2' },
+        });
 
-        expect(wrapper.find('input').props().value).toBe('Query 2');
+        expect(input.value).toEqual('Query 2');
       });
 
       test('refines query on submit', () => {
         const refine = jest.fn();
         const props = {
           ...defaultProps,
+          placeholder: 'Search',
           searchAsYouType: false,
           refine,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const input = getByPlaceholderText(container, 'Search');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+        fireEvent.input(input, {
+          target: { value: 'hello' },
+        });
 
-        expect(refine.mock.calls).toHaveLength(0);
+        expect(refine).toHaveBeenCalledTimes(0);
 
-        wrapper.find('form').simulate('submit');
+        fireEvent.submit(getByRole(container, 'search'));
 
-        expect(refine.mock.calls).toHaveLength(1);
-        expect(refine.mock.calls[0][0]).toBe('hello');
+        expect(refine).toHaveBeenCalledTimes(1);
+        expect(refine).toHaveBeenLastCalledWith('hello');
       });
     });
 
@@ -241,13 +252,15 @@ describe('SearchBox', () => {
         const onChange = jest.fn();
         const props = {
           ...defaultProps,
+          placeholder: 'Search',
           onChange,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const input = getByPlaceholderText(container, 'Search');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+        fireEvent.input(input, {
+          target: { value: 'hello' },
+        });
 
         expect(onChange).toHaveBeenCalledTimes(1);
       });
@@ -260,49 +273,53 @@ describe('SearchBox', () => {
           ...defaultProps,
           onSubmit,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
 
-        wrapper.find('form').simulate('submit');
+        fireEvent.submit(getByRole(container, 'search'));
 
         expect(onSubmit).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('onReset', () => {
-      test('resets the input value with searchAsYouType to true', () => {
+      test.only('resets the input value with searchAsYouType to true', () => {
         const props = {
           ...defaultProps,
+          placeholder: 'Search',
           searchAsYouType: true,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const form = getByRole(container, 'search');
+        const input = getByPlaceholderText(container, 'Search');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+        fireEvent.input(input, {
+          target: { value: 'hello' },
+        });
 
-        wrapper.find('form').simulate('reset');
+        fireEvent.click(getByTitle(container, /Clear/));
 
-        expect(wrapper.find('input').props().value).toBe('');
+        expect(input.value).toEqual('');
         expect(document.activeElement.tagName).toBe('INPUT');
       });
 
       test('resets the input value with searchAsYouType to false', () => {
         const props = {
           ...defaultProps,
+          placeholder: 'Search',
           searchAsYouType: false,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const form = getByRole(container, 'search');
+        const input = getByPlaceholderText(container, 'Search');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
-        wrapper.find('form').simulate('submit');
+        fireEvent.input(input, { target: { value: 'hello' } });
+        fireEvent.submit(form);
 
-        expect(wrapper.find('input').props().value).not.toBe('');
+        expect(input.value).toEqual('');
 
-        wrapper.find('form').simulate('reset');
+        form.reset();
 
-        expect(wrapper.find('input').props().value).toBe('');
+        expect(input.value).toEqual('');
         expect(document.activeElement.tagName).toBe('INPUT');
       });
 
@@ -312,9 +329,10 @@ describe('SearchBox', () => {
           ...defaultProps,
           onReset,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const form = getByRole(container, 'search');
 
-        wrapper.find('form').simulate('reset');
+        form.reset();
 
         expect(onReset).toHaveBeenCalledTimes(1);
       });
