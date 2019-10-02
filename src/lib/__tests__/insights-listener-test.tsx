@@ -1,8 +1,8 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import withInsightsListener from '../insights/listener';
 import { mount } from 'enzyme';
+import withInsightsListener from '../insights/listener';
 
 describe('withInsightsListener', () => {
   it('should capture clicks performed on inner elements with data-insights-method defined', () => {
@@ -52,6 +52,7 @@ describe('withInsightsListener', () => {
     );
 
     wrapper.find('button').simulate('click');
+
     expect(insights).toHaveBeenCalledTimes(1);
     expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
       eventName: 'Add to Cart',

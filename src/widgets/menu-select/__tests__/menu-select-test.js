@@ -54,7 +54,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
         });
         widget.render({ results, createURL: () => '#', state });
 
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        const [firstRender] = render.mock.calls;
+
+        expect(firstRender[0].props).toMatchSnapshot();
       });
 
       it('renders transformed items correctly', () => {
@@ -72,7 +74,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
         });
         widget.render({ results, createURL: () => '#', state });
 
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        const [firstRender] = render.mock.calls;
+
+        expect(firstRender[0].props).toMatchSnapshot();
       });
     });
 
@@ -102,16 +106,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu-select
           })
         );
 
-        expect(render).toHaveBeenCalledTimes(1);
+        expect(render).toHaveBeenCalledTimes(0);
 
         const newState = widget.dispose({
           state: helper.state,
           helper,
         });
 
-        expect(render).toHaveBeenCalledTimes(2);
-        expect(render).toHaveBeenCalledWith(null, container);
-
+        expect(render).toHaveBeenCalledTimes(1);
+        expect(render).toHaveBeenLastCalledWith(null, container);
         expect(newState).toEqual(new SearchParameters());
       });
     });

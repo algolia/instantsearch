@@ -168,8 +168,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
+    const [firstRender] = render.mock.calls;
+
     expect(container.innerHTML).toMatchSnapshot();
-    expect(render.mock.calls[0]).toMatchSnapshot();
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toBe(container.querySelector('.ais-GeoSearch-tree'));
   });
 
   it('expect to render with custom classNames', () => {
@@ -208,8 +211,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
+    const [firstRender] = render.mock.calls;
+
     expect(container.innerHTML).toMatchSnapshot();
-    expect(render.mock.calls[0]).toMatchSnapshot();
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toBe(container.querySelector('.ais-GeoSearch-tree'));
   });
 
   it('expect to render with custom template', () => {
@@ -240,16 +246,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
-    const actual = renderer.mock.calls[0][0].widgetParams.templates;
+    const [firstRender] = render.mock.calls;
 
-    const expectation = {
+    expect(firstRender[0].props.templateProps.templates).toEqual({
       HTMLMarker: '<p>Your custom HTML Marker</p>',
       reset: 'Clear the map refinement',
       toggle: 'Search when the map move',
       redo: 'Redo search here',
-    };
-
-    expect(actual).toEqual(expectation);
+    });
   });
 
   it('expect to render the map with default options', () => {

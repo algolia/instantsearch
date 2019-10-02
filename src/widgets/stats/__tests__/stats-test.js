@@ -53,10 +53,12 @@ describe('stats()', () => {
     widget.render({ results, instantSearchInstance });
     widget.render({ results, instantSearchInstance });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[1]).toEqual(container);
   });
 });

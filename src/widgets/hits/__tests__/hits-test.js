@@ -50,11 +50,13 @@ describe('hits()', () => {
     widget.render({ results });
     widget.render({ results });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('renders transformed items', () => {
@@ -67,13 +69,17 @@ describe('hits()', () => {
     widget.init({ instantSearchInstance: {} });
     widget.render({ results });
 
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    const [firstRender] = render.mock.calls;
+
+    expect(firstRender[0].props).toMatchSnapshot();
   });
 
   it('should add __position key with absolute position', () => {
     results = { ...results, page: 4, hitsPerPage: 10 };
     const state = { page: results.page };
+
     widget.render({ results, state });
+
     expect(results.hits[0].__position).toEqual(41);
   });
 });

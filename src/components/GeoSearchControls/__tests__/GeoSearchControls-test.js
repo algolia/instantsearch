@@ -2,6 +2,7 @@
 
 import { h } from 'preact';
 import { shallow } from 'enzyme';
+import { fireEvent, render } from 'preact-testing-library';
 import GeoSearchControls from '../GeoSearchControls';
 
 describe('GeoSearchControls', () => {
@@ -26,7 +27,13 @@ describe('GeoSearchControls', () => {
     onRefineToggle: () => {},
     onRefineClick: () => {},
     onClearClick: () => {},
-    templateProps: {},
+    templateProps: {
+      templates: {
+        toggle: 'toggle',
+        redo: 'redo',
+        reset: 'reset',
+      },
+    },
   };
 
   it('expect to render nothing with refine disabled', () => {
@@ -102,11 +109,11 @@ describe('GeoSearchControls', () => {
         onRefineToggle: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
       expect(props.onRefineToggle).not.toHaveBeenCalled();
 
-      wrapper.find('GeoSearchToggle').simulate('toggle');
+      fireEvent.change(container.querySelector('input'));
 
       expect(props.onRefineToggle).toHaveBeenCalled();
     });
@@ -120,11 +127,11 @@ describe('GeoSearchControls', () => {
         onRefineClick: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
       expect(props.onRefineClick).not.toHaveBeenCalled();
 
-      wrapper.find('GeoSearchButton').simulate('click');
+      fireEvent.click(container.querySelector('button'));
 
       expect(props.onRefineClick).toHaveBeenCalled();
     });
@@ -178,11 +185,11 @@ describe('GeoSearchControls', () => {
         onRefineClick: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
       expect(props.onRefineClick).not.toHaveBeenCalled();
 
-      wrapper.find('GeoSearchButton').simulate('click');
+      fireEvent.click(container.querySelector('button'));
 
       expect(props.onRefineClick).toHaveBeenCalled();
     });
@@ -237,11 +244,11 @@ describe('GeoSearchControls', () => {
         onClearClick: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
       expect(props.onClearClick).not.toHaveBeenCalled();
 
-      wrapper.find('.reset').simulate('click');
+      fireEvent.click(container.querySelector('.reset'));
 
       expect(props.onClearClick).toHaveBeenCalled();
     });

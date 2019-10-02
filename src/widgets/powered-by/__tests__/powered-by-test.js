@@ -42,8 +42,11 @@ describe('poweredBy', () => {
   it('renders only once at init', () => {
     widget.render({});
     widget.render({});
+
+    const [firstRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(1);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
   });
 });

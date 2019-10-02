@@ -16,7 +16,7 @@ exports[`RangeInput expect to render 1`] = `
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={0}
         step={1}
         type="number"
@@ -31,7 +31,12 @@ exports[`RangeInput expect to render 1`] = `
       }
       rootTagName="span"
       templateKey="separatorText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -43,7 +48,7 @@ exports[`RangeInput expect to render 1`] = `
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={500}
         step={1}
         type="number"
@@ -60,7 +65,12 @@ exports[`RangeInput expect to render 1`] = `
       }
       rootTagName="button"
       templateKey="submitText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -84,7 +94,7 @@ exports[`RangeInput expect to render with disabled state 1`] = `
         disabled={true}
         max={20}
         min={480}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={480}
         step={1}
         type="number"
@@ -99,7 +109,12 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       }
       rootTagName="span"
       templateKey="separatorText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -111,7 +126,7 @@ exports[`RangeInput expect to render with disabled state 1`] = `
         disabled={true}
         max={20}
         min={480}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={20}
         step={1}
         type="number"
@@ -128,7 +143,12 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       }
       rootTagName="button"
       templateKey="submitText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -152,7 +172,7 @@ exports[`RangeInput expect to render with values 1`] = `
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={0}
         step={1}
         type="number"
@@ -168,7 +188,12 @@ exports[`RangeInput expect to render with values 1`] = `
       }
       rootTagName="span"
       templateKey="separatorText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -180,7 +205,7 @@ exports[`RangeInput expect to render with values 1`] = `
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={500}
         step={1}
         type="number"
@@ -198,145 +223,12 @@ exports[`RangeInput expect to render with values 1`] = `
       }
       rootTagName="button"
       templateKey="submitText"
-      templates={Object {}}
-      templatesConfig={Object {}}
-      useCustomCompileOptions={Object {}}
-    />
-  </form>
-</div>
-`;
-
-exports[`RangeInput onChange expect to update the state when max change 1`] = `
-<div
-  className="root"
->
-  <form
-    className="form"
-    onSubmit={[Function]}
-  >
-    <label
-      className="label"
-    >
-      <input
-        className="input inputMin"
-        disabled={false}
-        max={500}
-        min={0}
-        onChange={[Function]}
-        placeholder={0}
-        step={1}
-        type="number"
-      />
-    </label>
-    <Template
-      data={Object {}}
-      rootProps={
+      templates={
         Object {
-          "className": "separator",
+          "separatorText": "to",
+          "submitText": "Go",
         }
       }
-      rootTagName="span"
-      templateKey="separatorText"
-      templates={Object {}}
-      templatesConfig={Object {}}
-      useCustomCompileOptions={Object {}}
-    />
-    <label
-      className="label"
-    >
-      <input
-        className="input inputMax"
-        disabled={false}
-        max={500}
-        min={0}
-        onChange={[Function]}
-        placeholder={500}
-        step={1}
-        type="number"
-        value={480}
-      />
-    </label>
-    <Template
-      data={Object {}}
-      rootProps={
-        Object {
-          "className": "submit",
-          "disabled": false,
-          "type": "submit",
-        }
-      }
-      rootTagName="button"
-      templateKey="submitText"
-      templates={Object {}}
-      templatesConfig={Object {}}
-      useCustomCompileOptions={Object {}}
-    />
-  </form>
-</div>
-`;
-
-exports[`RangeInput onChange expect to update the state when min change 1`] = `
-<div
-  className="root"
->
-  <form
-    className="form"
-    onSubmit={[Function]}
-  >
-    <label
-      className="label"
-    >
-      <input
-        className="input inputMin"
-        disabled={false}
-        max={500}
-        min={0}
-        onChange={[Function]}
-        placeholder={0}
-        step={1}
-        type="number"
-        value={20}
-      />
-    </label>
-    <Template
-      data={Object {}}
-      rootProps={
-        Object {
-          "className": "separator",
-        }
-      }
-      rootTagName="span"
-      templateKey="separatorText"
-      templates={Object {}}
-      templatesConfig={Object {}}
-      useCustomCompileOptions={Object {}}
-    />
-    <label
-      className="label"
-    >
-      <input
-        className="input inputMax"
-        disabled={false}
-        max={500}
-        min={0}
-        onChange={[Function]}
-        placeholder={500}
-        step={1}
-        type="number"
-      />
-    </label>
-    <Template
-      data={Object {}}
-      rootProps={
-        Object {
-          "className": "submit",
-          "disabled": false,
-          "type": "submit",
-        }
-      }
-      rootTagName="button"
-      templateKey="submitText"
-      templates={Object {}}
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -360,7 +252,7 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={0}
         step={1}
         type="number"
@@ -375,7 +267,12 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       rootTagName="span"
       templateKey="separatorText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -387,7 +284,7 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={500}
         step={1}
         type="number"
@@ -404,7 +301,12 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       rootTagName="button"
       templateKey="submitText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -428,7 +330,7 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={0}
         step={1}
         type="number"
@@ -444,7 +346,12 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       rootTagName="span"
       templateKey="separatorText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -456,7 +363,7 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={500}
         step={1}
         type="number"
@@ -474,7 +381,12 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       }
       rootTagName="button"
       templateKey="submitText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -498,7 +410,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={0}
         step={1}
         type="number"
@@ -514,7 +426,12 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       rootTagName="span"
       templateKey="separatorText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -526,7 +443,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={500}
         step={1}
         type="number"
@@ -544,7 +461,12 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       rootTagName="button"
       templateKey="submitText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -568,7 +490,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={0}
         step={1}
         type="number"
@@ -584,7 +506,12 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       rootTagName="span"
       templateKey="separatorText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />
@@ -596,7 +523,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         disabled={false}
         max={500}
         min={0}
-        onChange={[Function]}
+        onInput={[Function]}
         placeholder={500}
         step={1}
         type="number"
@@ -614,7 +541,12 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       }
       rootTagName="button"
       templateKey="submitText"
-      templates={Object {}}
+      templates={
+        Object {
+          "separatorText": "to",
+          "submitText": "Go",
+        }
+      }
       templatesConfig={Object {}}
       useCustomCompileOptions={Object {}}
     />

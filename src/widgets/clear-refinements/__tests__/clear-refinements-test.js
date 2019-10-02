@@ -50,10 +50,10 @@ describe('clearRefinements()', () => {
 
       const [firstRender, secondRender] = render.mock.calls;
 
-      expect(firstRender[0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
       expect(firstRender[1]).toEqual(container);
 
-      expect(secondRender[0]).toMatchSnapshot();
+      expect(secondRender[0].props).toMatchSnapshot();
       expect(secondRender[1]).toEqual(container);
     });
   });
@@ -78,10 +78,10 @@ describe('clearRefinements()', () => {
 
       const [firstRender, secondRender] = render.mock.calls;
 
-      expect(firstRender[0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
       expect(firstRender[1]).toEqual(container);
 
-      expect(secondRender[0]).toMatchSnapshot();
+      expect(secondRender[0].props).toMatchSnapshot();
       expect(secondRender[1]).toEqual(container);
     });
   });

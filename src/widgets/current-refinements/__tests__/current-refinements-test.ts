@@ -143,11 +143,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       widget.render!(createRenderOptions(renderParameters));
       widget.render!(createRenderOptions(renderParameters));
 
+      const [firstRender, secondRender] = render.mock.calls;
+
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
-      expect(render.mock.calls[0][1]).toBe(container);
-      expect(render.mock.calls[1][0]).toMatchSnapshot();
-      expect(render.mock.calls[1][1]).toBe(container);
+      expect(firstRender[0].props).toMatchSnapshot();
+      expect(firstRender[1]).toBe(container);
+      expect(secondRender[0].props).toMatchSnapshot();
+      expect(secondRender[1]).toBe(container);
     });
 
     describe('options.container', () => {
@@ -170,9 +172,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
+        const [firstRender] = render.mock.calls;
+
         expect(render).toHaveBeenCalledTimes(1);
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
-        expect(render.mock.calls[0][1]).toBe(container);
+        expect(firstRender[0].props).toMatchSnapshot();
+        expect(firstRender[1]).toBe(container);
       });
     });
 
@@ -233,7 +237,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const renderedItems = render.mock.calls[0][0].props.items;
+        const [firstRender] = render.mock.calls;
+
+        const renderedItems = firstRender[0].props.items;
         expect(renderedItems).toHaveLength(1);
 
         const [item] = renderedItems;
@@ -293,7 +299,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const renderedItems = render.mock.calls[0][0].props.items;
+        const [firstRender] = render.mock.calls;
+
+        const renderedItems = firstRender[0].props.items;
         expect(renderedItems).toHaveLength(0);
       });
     });
@@ -364,7 +372,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        const renderedItems = render.mock.calls[0][0].props.items;
+        const [firstRender] = render.mock.calls;
+
+        const renderedItems = firstRender[0].props.items;
 
         expect(renderedItems[0].refinements[0].transformed).toBe(true);
         expect(renderedItems[0].refinements[1].transformed).toBe(true);
@@ -397,9 +407,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
-          'customRoot'
-        );
+        const [firstRender] = render.mock.calls;
+
+        expect(firstRender[0].props.cssClasses.root).toContain('customRoot');
       });
 
       it('should work with an array', () => {
@@ -423,13 +433,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
-          'customRoot1'
-        );
+        const [firstRender] = render.mock.calls;
 
-        expect(render.mock.calls[0][0].props.cssClasses.root).toContain(
-          'customRoot2'
-        );
+        expect(firstRender[0].props.cssClasses.root).toContain('customRoot1');
+
+        expect(firstRender[0].props.cssClasses.root).toContain('customRoot2');
       });
     });
 
@@ -532,7 +540,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
           })
         );
 
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        const [firstRender] = render.mock.calls;
+
+        expect(firstRender[0].props).toMatchSnapshot();
       });
     });
   });

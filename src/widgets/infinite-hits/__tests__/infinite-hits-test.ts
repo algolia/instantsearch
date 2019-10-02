@@ -57,14 +57,17 @@ describe('infiniteHits()', () => {
 
   it('calls twice render(<Hits props />, container)', () => {
     const state = { page: 0 };
+
     widget.render({ results, state });
     widget.render({ results, state });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('renders transformed items', () => {
@@ -86,7 +89,9 @@ describe('infiniteHits()', () => {
       instantSearchInstance: {},
     });
 
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    const [firstRender] = render.mock.calls;
+
+    expect(firstRender[0].props).toMatchSnapshot();
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
@@ -100,20 +105,25 @@ describe('infiniteHits()', () => {
       state,
     });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('updates the search state properly when showMore is called', () => {
     expect(helper.state.page).toBeUndefined();
 
     const state = { page: 0 };
+
     widget.render({ results, state });
 
-    const { showMore } = render.mock.calls[0][0].props;
+    const [firstRender] = render.mock.calls;
+
+    const { showMore } = firstRender[0].props;
 
     showMore();
 
@@ -124,12 +134,15 @@ describe('infiniteHits()', () => {
   it('should add __position key with absolute position', () => {
     results = { ...results, page: 4, hitsPerPage: 10 };
     const state = { page: results.page };
+
     widget.render({ results, state });
+
     expect(results.hits[0].__position).toEqual(41);
   });
 
   it('if it is the first page, then the props should contain isFirstPage true', () => {
     const state = { page: 0 };
+
     widget.render({
       results: { ...results, page: 0, nbPages: 2 },
       state,
@@ -141,20 +154,16 @@ describe('infiniteHits()', () => {
 
     expect(render).toHaveBeenCalledTimes(2);
 
-    const [
-      firstRenderingParameters,
-      secondRenderingParameters,
-    ] = render.mock.calls;
+    const [firstRender, secondRender] = render.mock.calls;
 
-    expect(firstRenderingParameters[0].props.isFirstPage).toEqual(true);
-    expect(firstRenderingParameters[1]).toEqual(container);
+    expect(firstRender[0].props.isFirstPage).toEqual(true);
+    expect(firstRender[1]).toEqual(container);
 
-    expect(secondRenderingParameters[0].props.isFirstPage).toEqual(true);
-    expect(secondRenderingParameters[1]).toEqual(container);
+    expect(secondRender[0].props.isFirstPage).toEqual(true);
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('if it is not the first page, then the props should contain isFirstPage false', () => {
-    // Init widget at page 1
     helper.setPage(1);
     widget.init({ helper, instantSearchInstance: {} });
 
@@ -164,9 +173,10 @@ describe('infiniteHits()', () => {
       state,
     });
 
-    expect(render).toHaveBeenCalledTimes(1);
+    const [firstRender] = render.mock.calls;
 
-    expect(render.mock.calls[0][0].props.isFirstPage).toEqual(false);
-    expect(render.mock.calls[0][1]).toEqual(container);
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(firstRender[0].props.isFirstPage).toEqual(false);
+    expect(firstRender[1]).toEqual(container);
   });
 });

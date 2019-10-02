@@ -173,7 +173,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
       widget.render({ results, helper, state });
 
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props).toMatchSnapshot();
     });
   });
 

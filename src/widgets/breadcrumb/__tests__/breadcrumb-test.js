@@ -109,7 +109,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         instantSearchInstance: {},
       });
 
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props).toMatchSnapshot();
     });
   });
 });
