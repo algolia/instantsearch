@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { fireEvent, render } from 'preact-testing-library';
+import { render, fireEvent } from 'preact-testing-library';
 import GeoSearchControls from '../GeoSearchControls';
 
 describe('GeoSearchControls', () => {

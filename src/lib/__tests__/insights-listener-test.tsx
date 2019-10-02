@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { render, fireEvent } from 'preact-testing-library';
 import withInsightsListener from '../insights/listener';
 
 describe('withInsightsListener', () => {
@@ -10,7 +10,7 @@ describe('withInsightsListener', () => {
       JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
     );
 
-    const Hits = (): React.ReactNode => (
+    const Hits = () => (
       <div>
         <button
           data-insights-method="clickedObjectIDsAfterSearch"
@@ -42,7 +42,7 @@ describe('withInsightsListener', () => {
       insightsClient: jest.fn(),
     };
     const HitsWithInsightsListener: any = withInsightsListener(Hits);
-    const wrapper = mount(
+    const { container } = render(
       <HitsWithInsightsListener
         hits={hits}
         results={results}
@@ -50,8 +50,9 @@ describe('withInsightsListener', () => {
         insights={insights}
       />
     );
+    const button = container.querySelector('button') as HTMLButtonElement;
 
-    wrapper.find('button').simulate('click');
+    fireEvent.click(button);
 
     expect(insights).toHaveBeenCalledTimes(1);
     expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
@@ -65,7 +66,7 @@ describe('withInsightsListener', () => {
       JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
     );
 
-    const Hits = (): React.ReactNode => (
+    const Hits = () => (
       <div>
         <button data-insights-payload={payload}>Add to Cart</button>
       </div>
@@ -92,7 +93,7 @@ describe('withInsightsListener', () => {
       insightsClient: jest.fn(),
     };
     const HitsWithInsightsListener: any = withInsightsListener(Hits);
-    const wrapper = mount(
+    const { container } = render(
       <HitsWithInsightsListener
         hits={hits}
         results={results}
@@ -100,8 +101,10 @@ describe('withInsightsListener', () => {
         insights={insights}
       />
     );
+    const button = container.querySelector('button') as HTMLButtonElement;
 
-    wrapper.find('button').simulate('click');
+    fireEvent.click(button);
+
     expect(insights).toHaveBeenCalledTimes(0);
   });
 });

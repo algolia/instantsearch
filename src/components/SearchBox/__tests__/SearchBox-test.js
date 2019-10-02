@@ -2,13 +2,8 @@
 
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import {
-  fireEvent,
-  render,
-  getByPlaceholderText,
-} from 'preact-testing-library';
+import { render, fireEvent } from 'preact-testing-library';
 import SearchBox from '../SearchBox';
-import { getByRole, getByTitle } from '@testing-library/dom';
 
 const defaultProps = {
   placeholder: '',
@@ -189,12 +184,12 @@ describe('SearchBox', () => {
         const props = {
           ...defaultProps,
           searchAsYouType: true,
-          placeholder: 'Search',
           refine,
         };
         const { container } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
 
-        fireEvent.input(getByPlaceholderText(container, 'Search'), {
+        fireEvent.input(input, {
           target: { value: 'hello' },
         });
 
@@ -208,11 +203,10 @@ describe('SearchBox', () => {
         const props = {
           ...defaultProps,
           query: 'Query 1',
-          placeholder: 'Search',
           searchAsYouType: false,
         };
         const { container } = render(<SearchBox {...props} />);
-        const input = getByPlaceholderText(container, 'Search');
+        const input = container.querySelector('input');
 
         expect(input.value).toEqual('Query 1');
 
@@ -227,12 +221,12 @@ describe('SearchBox', () => {
         const refine = jest.fn();
         const props = {
           ...defaultProps,
-          placeholder: 'Search',
           searchAsYouType: false,
           refine,
         };
         const { container } = render(<SearchBox {...props} />);
-        const input = getByPlaceholderText(container, 'Search');
+        const form = container.querySelector('form');
+        const input = container.querySelector('input');
 
         fireEvent.input(input, {
           target: { value: 'hello' },
@@ -240,7 +234,7 @@ describe('SearchBox', () => {
 
         expect(refine).toHaveBeenCalledTimes(0);
 
-        fireEvent.submit(getByRole(container, 'search'));
+        fireEvent.submit(form);
 
         expect(refine).toHaveBeenCalledTimes(1);
         expect(refine).toHaveBeenLastCalledWith('hello');
@@ -252,11 +246,10 @@ describe('SearchBox', () => {
         const onChange = jest.fn();
         const props = {
           ...defaultProps,
-          placeholder: 'Search',
           onChange,
         };
         const { container } = render(<SearchBox {...props} />);
-        const input = getByPlaceholderText(container, 'Search');
+        const input = container.querySelector('input');
 
         fireEvent.input(input, {
           target: { value: 'hello' },
@@ -274,29 +267,29 @@ describe('SearchBox', () => {
           onSubmit,
         };
         const { container } = render(<SearchBox {...props} />);
+        const form = container.querySelector('form');
 
-        fireEvent.submit(getByRole(container, 'search'));
+        fireEvent.submit(form);
 
         expect(onSubmit).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('onReset', () => {
-      test.only('resets the input value with searchAsYouType to true', () => {
+      test('resets the input value with searchAsYouType to true', () => {
         const props = {
           ...defaultProps,
-          placeholder: 'Search',
           searchAsYouType: true,
         };
         const { container } = render(<SearchBox {...props} />);
-        const form = getByRole(container, 'search');
-        const input = getByPlaceholderText(container, 'Search');
+        const input = container.querySelector('input');
+        const resetButton = container.querySelector('button[type="reset"]');
 
-        fireEvent.input(input, {
+        fireEvent.change(input, {
           target: { value: 'hello' },
         });
 
-        fireEvent.click(getByTitle(container, /Clear/));
+        fireEvent.click(resetButton);
 
         expect(input.value).toEqual('');
         expect(document.activeElement.tagName).toBe('INPUT');
@@ -305,12 +298,11 @@ describe('SearchBox', () => {
       test('resets the input value with searchAsYouType to false', () => {
         const props = {
           ...defaultProps,
-          placeholder: 'Search',
           searchAsYouType: false,
         };
         const { container } = render(<SearchBox {...props} />);
-        const form = getByRole(container, 'search');
-        const input = getByPlaceholderText(container, 'Search');
+        const form = container.querySelector('form');
+        const input = container.querySelector('input');
 
         fireEvent.input(input, { target: { value: 'hello' } });
         fireEvent.submit(form);
@@ -330,9 +322,9 @@ describe('SearchBox', () => {
           onReset,
         };
         const { container } = render(<SearchBox {...props} />);
-        const form = getByRole(container, 'search');
+        const resetButton = container.querySelector('button[type="reset"]');
 
-        form.reset();
+        fireEvent.click(resetButton);
 
         expect(onReset).toHaveBeenCalledTimes(1);
       });

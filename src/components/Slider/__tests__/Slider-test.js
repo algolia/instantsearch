@@ -1,13 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { act } from 'preact/test-utils';
-import { shallow, mount } from 'enzyme';
-import {
-  fireEvent,
-  render,
-  getByPlaceholderText,
-} from 'preact-testing-library';
+import { shallow } from 'enzyme';
 import Slider from '../Slider';
 
 describe('Slider', () => {
@@ -86,20 +80,11 @@ describe('Slider', () => {
       },
     };
 
-    // act(() => {
-    shallow(<Slider {...props} />)
-      .find('Rheostat')
-      .simulate('change', {
-        values: [0, 100],
-      });
-    // });
+    const Rheostat = shallow(<Slider {...props} />).find('Rheostat');
 
-    // const { container } = render(<Slider {...props} />);
+    Rheostat.props().onChange({ values: [0, 100] });
 
-    // fireEvent.input(getByPlaceholderText(container, 'Search'), {
-    //   target: { value: 'hello' },
-    // });
-
+    expect(props.refine).toHaveBeenCalledTimes(1);
     expect(props.refine).toHaveBeenCalledWith([0, 100]);
   });
 });

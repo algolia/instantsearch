@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { fireEvent, render, waitForDomChange } from 'preact-testing-library';
+import { render, fireEvent, waitForDomChange } from 'preact-testing-library';
 import RangeInput from '../RangeInput';
 
 describe('RangeInput', () => {
