@@ -1,5 +1,6 @@
 module.exports = {
   extends: ['algolia', 'algolia/jest', 'algolia/react', 'algolia/typescript'],
+  plugins: ['react-hooks'],
   rules: {
     'no-param-reassign': 0,
     'import/no-extraneous-dependencies': 0,
