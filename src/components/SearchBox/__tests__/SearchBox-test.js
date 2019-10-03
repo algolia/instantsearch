@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import { render, fireEvent } from 'preact-testing-library';
+import { render, fireEvent, waitForDomChange } from 'preact-testing-library';
 import SearchBox from '../SearchBox';
 
 const defaultProps = {
@@ -222,7 +222,7 @@ describe('SearchBox', () => {
         expect(input.value).toEqual('Query 2');
       });
 
-      test('refines query on submit', () => {
+      test('refines query on submit', async () => {
         const refine = jest.fn();
         const props = {
           ...defaultProps,
@@ -236,6 +236,8 @@ describe('SearchBox', () => {
         fireEvent.input(input, {
           target: { value: 'hello' },
         });
+
+        await waitForDomChange({ container });
 
         expect(refine).toHaveBeenCalledTimes(0);
 
