@@ -1,235 +1,146 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ol
-      className="list"
+      class="list"
     >
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
+      <li
+        class="item"
+      >
+        item
+      </li>
+      <li
+        class="item"
+      >
+        item
+      </li>
     </ol>
-    Array [
-      <button
-        className="loadMore"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "showMoreText",
-          }
-        }
-        disabled={false}
-        onClick={[Function]}
-      />,
-    ]
-  </div>,
-]
+    <button
+      class="loadMore"
+    >
+      showMoreText
+    </button>
+  </div>
+</div>
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ol
-      className="list"
+      class="list"
     >
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
+      <li
+        class="item"
+      >
+        item
+      </li>
+      <li
+        class="item"
+      >
+        item
+      </li>
     </ol>
-    Array [
-      <button
-        className="loadMore disabledLoadMore"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "showMoreText",
-          }
-        }
-        disabled={true}
-        onClick={[Function]}
-      />,
-    ]
-  </div>,
-]
+    <button
+      class="loadMore disabledLoadMore"
+      disabled=""
+    >
+      showMoreText
+    </button>
+  </div>
+</div>
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on first page 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
-    Array [
-      <button
-        className="loadPrevious disabledLoadPrevious"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "showPreviousText",
-          }
-        }
-        disabled={true}
-        onClick={[Function]}
-      />,
-    ]
-    <ol
-      className="list"
+    <button
+      class="loadPrevious disabledLoadPrevious"
+      disabled=""
     >
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
+      showPreviousText
+    </button>
+    <ol
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        item
+      </li>
+      <li
+        class="item"
+      >
+        item
+      </li>
     </ol>
-    Array [
-      <button
-        className="loadMore"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "showMoreText",
-          }
-        }
-        disabled={false}
-        onClick={[Function]}
-      />,
-    ]
-  </div>,
-]
+    <button
+      class="loadMore"
+    >
+      showMoreText
+    </button>
+  </div>
+</div>
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> with "Show previous" button on last page 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
-    Array [
-      <button
-        className="loadPrevious"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "showPreviousText",
-          }
-        }
-        disabled={false}
-        onClick={[Function]}
-      />,
-    ]
-    <ol
-      className="list"
+    <button
+      class="loadPrevious"
     >
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
-      Array [
-        <li
-          className="item"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "item",
-            }
-          }
-        />,
-      ]
+      showPreviousText
+    </button>
+    <ol
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        item
+      </li>
+      <li
+        class="item"
+      >
+        item
+      </li>
     </ol>
-    Array [
-      <button
-        className="loadMore disabledLoadMore"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "showMoreText",
-          }
-        }
-        disabled={true}
-        onClick={[Function]}
-      />,
-    ]
-  </div>,
-]
+    <button
+      class="loadMore disabledLoadMore"
+      disabled=""
+    >
+      showMoreText
+    </button>
+  </div>
+</div>
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> without hits on first page 1`] = `
-Array [
-  Array [
-    <div
-      className="root emptyRoot"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "empty",
-        }
-      }
-    />,
-  ],
-]
+<div>
+  <div
+    class="root emptyRoot"
+  >
+    empty
+  </div>
+</div>
 `;
 
 exports[`InfiniteHits markup should render <InfiniteHits /> without hits on last page 1`] = `
-Array [
-  Array [
-    <div
-      className="root emptyRoot"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "empty",
-        }
-      }
-    />,
-  ],
-]
+<div>
+  <div
+    class="root emptyRoot"
+  >
+    empty
+  </div>
+</div>
 `;
