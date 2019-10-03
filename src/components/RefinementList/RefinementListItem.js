@@ -2,25 +2,16 @@
 
 import { h, Component } from 'preact';
 import PropTypes from 'prop-types';
-import { isEqual } from '../../lib/utils';
 import Template from '../Template/Template';
 
 class RefinementListItem extends Component {
-  componentWillMount() {
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props, nextProps);
-  }
-
-  handleClick(originalEvent) {
+  handleClick = originalEvent => {
     this.props.handleClick({
       facetValueToRefine: this.props.facetValueToRefine,
       isRefined: this.props.isRefined,
       originalEvent,
     });
-  }
+  };
 
   render() {
     return (

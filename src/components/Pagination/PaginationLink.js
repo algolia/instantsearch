@@ -2,20 +2,11 @@
 
 import { h, Component, createElement } from 'preact';
 import PropTypes from 'prop-types';
-import { isEqual } from '../../lib/utils';
 
 class PaginationLink extends Component {
-  componentWillMount() {
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props, nextProps);
-  }
-
-  handleClick(e) {
-    this.props.handleClick(this.props.pageNumber, e);
-  }
+  handleClick = event => {
+    this.props.handleClick(this.props.pageNumber, event);
+  };
 
   render() {
     const { cssClasses, label, ariaLabel, url, isDisabled } = this.props;
