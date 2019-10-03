@@ -3,10 +3,10 @@
     "target": "ESNEXT",
     "module": "es2015",
     "moduleResolution": "node",
-    "jsx": "preserve",
-    "jsxFactory": "h",
     "noEmit": true,
     "strict": true,
+    "jsx": "react",
+    "jsxFactory": "h",
     // @TODO: It's mandatory to disable this strict check at the moment,
     // otherwise we have to type every import we use. The migration is an
     // incremental process so we import JavaScript modules from TypeScript ones.
@@ -16,7 +16,8 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "exclude": ["examples"]
 }
