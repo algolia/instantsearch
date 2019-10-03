@@ -294,7 +294,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
 
-        const [firstRender, secondRender] = render.mock.calls;
+        const [firstRender] = render.mock.calls;
         const { refine } = firstRender[0].props;
 
         expect(typeof refine).toEqual('function');

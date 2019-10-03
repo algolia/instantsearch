@@ -272,8 +272,8 @@ class Rheostat extends Component {
 
     const stepMultiplier = {
       [KEYS.LEFT]: v => v * -1,
-      [KEYS.RIGHT]: v => v * 1,
-      [KEYS.UP]: v => v * 1,
+      [KEYS.RIGHT]: v => v,
+      [KEYS.UP]: v => v,
       [KEYS.DOWN]: v => v * -1,
       [KEYS.PAGE_DOWN]: v => (v > 1 ? -v : v * -10),
       [KEYS.PAGE_UP]: v => (v > 1 ? v : v * 10),
