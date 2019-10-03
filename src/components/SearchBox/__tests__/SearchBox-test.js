@@ -168,7 +168,7 @@ describe('SearchBox', () => {
       const { container } = render(<SearchBox {...props} />);
       const input = container.querySelector('input');
 
-      expect(document.activeElement).toBe(input);
+      expect(input).toHaveFocus();
     });
 
     test('disables the input with disabled to true', () => {
@@ -300,7 +300,7 @@ describe('SearchBox', () => {
         fireEvent.click(resetButton);
 
         expect(input.value).toEqual('');
-        expect(document.activeElement).toBe(input);
+        expect(input).toHaveFocus();
       });
 
       test('resets the input value with searchAsYouType to false', () => {
@@ -321,7 +321,7 @@ describe('SearchBox', () => {
         fireEvent.click(resetButton);
 
         expect(input.value).toEqual('');
-        expect(document.activeElement).toBe(input);
+        expect(input).toHaveFocus();
       });
 
       test('calls custom onReset', () => {
