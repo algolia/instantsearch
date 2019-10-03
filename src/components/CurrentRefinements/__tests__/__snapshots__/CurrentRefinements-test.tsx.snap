@@ -1,528 +1,481 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CurrentRefinements options.refinements can be used with a disjunctive facet 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-customDisjunctiveFacet-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           CustomDisjunctiveFacet
           :
         </span>
         <span
-          className="category"
-          key="customDisjunctiveFacet:disjunctive:val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`CurrentRefinements options.refinements can be used with a facet 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-customFacet-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           CustomFacet
           :
         </span>
         <span
-          className="category"
-          key="customFacet:facet:val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`CurrentRefinements options.refinements can be used with a hierarchical facet 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-customHierarchicalFacet-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           CustomHierarchicalFacet
           :
         </span>
         <span
-          className="category"
-          key="customHierarchicalFacet:hierarchical:val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`CurrentRefinements options.refinements can be used with a query 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-query-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           Query
           :
         </span>
         <span
-          className="category"
-          key="query:query:search1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             <q>
               search1
             </q>
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`CurrentRefinements options.refinements can be used with a tag 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-_tags-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           _tags
           :
         </span>
         <span
-          className="category"
-          key="_tags:tag:tag1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             tag1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`CurrentRefinements options.refinements can be used with an exclude 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-customExcludeFacet-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           CustomExcludeFacet
           :
         </span>
         <span
-          className="category"
-          key="customExcludeFacet:exclude:val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`CurrentRefinements options.refinements can be used with numeric filters 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-customNumericFilter-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           CustomNumericFilter
           :
         </span>
         <span
-          className="category"
-          key="customNumericFilter:numeric:val1:="
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
       <li
-        className="item"
-        key="indexName-customNumericFilter-1"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           CustomNumericFilter
           :
         </span>
         <span
-          className="category"
-          key="customNumericFilter:numeric:val2:<="
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             val2
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
       <li
-        className="item"
-        key="indexName-customNumericFilter-2"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           CustomNumericFilter
           :
         </span>
         <span
-          className="category"
-          key="customNumericFilter:numeric:val3:>="
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             val3
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`CurrentRefinements renders 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <ul
-      className="list"
+      class="list"
     >
       <li
-        className="item"
-        key="indexName-facet-0"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           Facet
           :
         </span>
         <span
-          className="category"
-          key="facet:facet:facet-val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             facet-val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
         <span
-          className="category"
-          key="facet:facet:facet-val2"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             facet-val2
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
       <li
-        className="item"
-        key="indexName-facetExclude-1"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           FacetExclude
           :
         </span>
         <span
-          className="category"
-          key="facetExclude:exclude:disjunctiveFacet-val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             disjunctiveFacet-val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
       <li
-        className="item"
-        key="indexName-disjunctive-2"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           Disjunctive
           :
         </span>
         <span
-          className="category"
-          key="disjunctiveFacet:disjunctive:disjunctiveFacet-val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             disjunctiveFacet-val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
       <li
-        className="item"
-        key="indexName-hierarchical-3"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           Hierarchical
           :
         </span>
         <span
-          className="category"
-          key="hierarchicalFacet:hierarchical:hierarchicalFacet-val1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             hierarchicalFacet-val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
       <li
-        className="item"
-        key="indexName-numeric-4"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           Numeric
           :
         </span>
         <span
-          className="category"
-          key="numericFacet:numeric:numericFacet-val1:>="
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             numericFacet-val1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
       <li
-        className="item"
-        key="indexName-tag-5"
+        class="item"
       >
         <span
-          className="label"
+          class="label"
         >
           Tag
           :
         </span>
         <span
-          className="category"
-          key="_tags:tag:tag1"
+          class="category"
         >
           <span
-            className="categoryLabel"
+            class="categoryLabel"
           >
             tag1
           </span>
           <button
-            className="delete"
-            onClick={[Function]}
+            class="delete"
           >
             ✕
           </button>
         </span>
       </li>
     </ul>
-  </div>,
-]
+  </div>
+</div>
 `;
