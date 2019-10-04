@@ -299,6 +299,8 @@ describe('SearchBox', () => {
           target: { value: 'hello' },
         });
 
+        expect(input.value).toEqual('hello');
+
         fireEvent.click(resetButton);
 
         expect(input.value).toEqual('');
