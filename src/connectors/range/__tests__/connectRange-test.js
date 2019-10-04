@@ -955,6 +955,32 @@ describe('getWidgetState', () => {
     expect(actual).toEqual({});
   });
 
+  test('returns the `uiState` empty with empty refinements', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '<=': [],
+          '>=': [],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({});
+  });
+
   test('returns the `uiState` with a lower refinement', () => {
     const render = jest.fn();
     const makeWidget = connectRange(render);
