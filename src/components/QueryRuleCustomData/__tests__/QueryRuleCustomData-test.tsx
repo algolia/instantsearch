@@ -1,43 +1,52 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from 'enzyme';
+import { render } from 'preact-testing-library';
 import QueryRuleCustomData from '../QueryRuleCustomData';
+
+type QueryRuleItem = {
+  banner: string;
+};
+
+function defaultTemplate({ items }: { items: QueryRuleItem[] }) {
+  return items.map(item => item.banner).join(' ');
+}
 
 describe('QueryRuleCustomData', () => {
   test('renders with empty items', () => {
-    const items = [];
+    const items: QueryRuleItem[] = [];
     const props = {
       items,
+      templates: {
+        default: defaultTemplate,
+      },
       cssClasses: {
         root: 'root',
       },
-      templates: {
-        default: 'default',
-      },
     };
 
-    const wrapper = shallow(<QueryRuleCustomData {...props} />);
+    const { container } = render(<QueryRuleCustomData {...props} />);
 
-    expect(wrapper.props().data).toEqual({ items });
-    expect(wrapper).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   test('renders with items', () => {
-    const items = [{ banner: 'image-1.png' }, { banner: 'image-2.png' }];
+    const items: QueryRuleItem[] = [
+      { banner: 'image-1.png' },
+      { banner: 'image-2.png' },
+    ];
     const props = {
       items,
+      templates: {
+        default: defaultTemplate,
+      },
       cssClasses: {
         root: 'root',
       },
-      templates: {
-        default: 'default',
-      },
     };
 
-    const wrapper = shallow(<QueryRuleCustomData {...props} />);
+    const { container } = render(<QueryRuleCustomData {...props} />);
 
-    expect(wrapper.props().data).toEqual({ items });
-    expect(wrapper).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });
