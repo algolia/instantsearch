@@ -41,12 +41,13 @@ export default {
             'See https://www.algolia.com/doc/api-reference/api-parameters/attributesToSnippet/.'
         );
       }
+
       return attributeValue
         .replace(
-          new RegExp('<em>', 'g'),
+          new RegExp('<mark>', 'g'),
           `<${this.highlightedTagName} class="${this.suit('highlighted')}">`
         )
-        .replace(new RegExp('</em>', 'g'), `</${this.highlightedTagName}>`);
+        .replace(new RegExp('</mark>', 'g'), `</${this.highlightedTagName}>`);
     },
   },
 };

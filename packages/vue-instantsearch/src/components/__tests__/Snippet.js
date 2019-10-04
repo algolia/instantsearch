@@ -9,7 +9,7 @@ test('renders proper HTML', () => {
   const hit = {
     _snippetResult: {
       attr: {
-        value: `con<em>ten</em>t`,
+        value: `con<mark>ten</mark>t`,
       },
     },
   };
@@ -28,7 +28,7 @@ test('renders proper HTML with highlightTagName', () => {
   const hit = {
     _snippetResult: {
       attr: {
-        value: `con<em>ten</em>t`,
+        value: `con<mark>ten</mark>t`,
       },
     },
   };
@@ -83,7 +83,7 @@ test('allows usage of dot delimited path to access nested attribute', () => {
     _snippetResult: {
       attr: {
         nested: {
-          value: `nested <em>val</em>`,
+          value: `nested <mark>val</mark>`,
         },
       },
     },
