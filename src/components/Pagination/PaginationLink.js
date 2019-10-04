@@ -1,39 +1,43 @@
 /** @jsx h */
 
-import { h, Component, createElement } from 'preact';
+import { h } from 'preact';
 import PropTypes from 'prop-types';
 
-class PaginationLink extends Component {
-  handleClick = event => {
-    this.props.handleClick(this.props.pageNumber, event);
-  };
-
-  render() {
-    const { cssClasses, label, ariaLabel, url, isDisabled } = this.props;
-
-    let tagName = 'span';
-    let attributes = {
-      className: cssClasses.link,
-      dangerouslySetInnerHTML: {
-        __html: label,
-      },
-    };
-
-    // "Enable" the element, by making it a link
-    if (!isDisabled) {
-      tagName = 'a';
-      attributes = {
-        ...attributes,
-        'aria-label': ariaLabel,
-        href: url,
-        onClick: this.handleClick,
-      };
-    }
-
-    const element = createElement(tagName, attributes);
-
-    return <li className={cssClasses.item}>{element}</li>;
+function PaginationLink({
+  cssClasses,
+  label,
+  ariaLabel,
+  url,
+  isDisabled,
+  handleClick,
+  pageNumber,
+}) {
+  if (isDisabled) {
+    return (
+      <li className={cssClasses.item}>
+        <span
+          className={cssClasses.link}
+          dangerouslySetInnerHTML={{
+            __html: label,
+          }}
+        />
+      </li>
+    );
   }
+
+  return (
+    <li className={cssClasses.item}>
+      <a
+        className={cssClasses.link}
+        aria-label={ariaLabel}
+        href={url}
+        onClick={event => handleClick(pageNumber, event)}
+        dangerouslySetInnerHTML={{
+          __html: label,
+        }}
+      />
+    </li>
+  );
 }
 
 PaginationLink.propTypes = {
