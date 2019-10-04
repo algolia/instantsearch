@@ -6,7 +6,6 @@ jest.mock('preact', () => {
   const module = require.requireActual('preact');
 
   module.render = jest.fn();
-  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
