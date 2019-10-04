@@ -1,39 +1,27 @@
 /** @jsx h */
 
-import { h, Component } from 'preact';
+import { h } from 'preact';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-class Selector extends Component {
-  componentWillMount() {
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
-    this.props.setValue(event.target.value);
-  }
-
-  render() {
-    const { currentValue, options } = this.props;
-
-    return (
-      <select
-        className={cx(this.props.cssClasses.select)}
-        onChange={this.handleChange}
-        value={`${currentValue}`}
-      >
-        {options.map(option => (
-          <option
-            className={cx(this.props.cssClasses.option)}
-            key={option.label + option.value}
-            value={`${option.value}`}
-          >
-            {option.label}
-          </option>
-        ))}
-      </select>
-    );
-  }
+function Selector({ currentValue, options, cssClasses, setValue }) {
+  return (
+    <select
+      className={cx(cssClasses.select)}
+      onChange={event => setValue(event.target.value)}
+      value={`${currentValue}`}
+    >
+      {options.map(option => (
+        <option
+          className={cx(cssClasses.option)}
+          key={option.label + option.value}
+          value={`${option.value}`}
+        >
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
 }
 
 Selector.propTypes = {
