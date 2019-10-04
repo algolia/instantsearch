@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { render, fireEvent } from 'preact-testing-library';
 import VoiceSearch, { VoiceSearchProps } from '../VoiceSearch';
 
 const defaultProps: VoiceSearchProps = {
@@ -31,15 +31,21 @@ describe('VoiceSearch', () => {
         ...defaultProps,
         toggleListening: jest.fn(),
       };
-      const wrapper = mount(<VoiceSearch {...props} />);
-      wrapper.find('button').simulate('click');
+
+      const { container } = render(<VoiceSearch {...props} />);
+      const button = container.querySelector('button') as HTMLButtonElement;
+
+      fireEvent.click(button);
+
       expect(props.toggleListening).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Rendering', () => {
     it('with default props', () => {
-      expect(mount(<VoiceSearch {...defaultProps} />)).toMatchSnapshot();
+      const { container } = render(<VoiceSearch {...defaultProps} />);
+
+      expect(container).toMatchSnapshot();
     });
 
     it('button disabled in unsupported browser', () => {
@@ -47,8 +53,11 @@ describe('VoiceSearch', () => {
         ...defaultProps,
         isBrowserSupported: false,
       };
-      const wrapper = mount(<VoiceSearch {...props} />);
-      expect(wrapper.find('button').props().disabled).toBe(true);
+
+      const { container } = render(<VoiceSearch {...props} />);
+      const button = container.querySelector('button') as HTMLButtonElement;
+
+      expect(button).toBeDisabled();
     });
 
     it('with custom template for buttonText (1)', () => {
@@ -60,8 +69,11 @@ describe('VoiceSearch', () => {
           status: ``,
         },
       };
-      const wrapper = mount(<VoiceSearch {...props} />);
-      expect(wrapper.find('button').text()).toBe('Stop');
+
+      const { container } = render(<VoiceSearch {...props} />);
+      const button = container.querySelector('button') as HTMLButtonElement;
+
+      expect(button).toHaveTextContent('Stop');
     });
 
     it('with custom template for buttonText (2)', () => {
@@ -73,8 +85,11 @@ describe('VoiceSearch', () => {
           status: ``,
         },
       };
-      const wrapper = mount(<VoiceSearch {...props} />);
-      expect(wrapper.find('button').text()).toBe('Start');
+
+      const { container } = render(<VoiceSearch {...props} />);
+      const button = container.querySelector('button') as HTMLButtonElement;
+
+      expect(button).toHaveTextContent('Start');
     });
 
     it('with custom template for status', () => {
@@ -99,8 +114,11 @@ describe('VoiceSearch', () => {
           `,
         },
       };
-      const wrapper = mount(<VoiceSearch {...props} />);
-      expect(wrapper.find('.status')).toMatchSnapshot();
+
+      const { container } = render(<VoiceSearch {...props} />);
+      const status = container.querySelector('.status');
+
+      expect(status).toMatchSnapshot();
     });
   });
 });

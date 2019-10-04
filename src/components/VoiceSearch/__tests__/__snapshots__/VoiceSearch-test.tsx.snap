@@ -2,44 +2,51 @@
 
 exports[`VoiceSearch Rendering with custom template for status 1`] = `
 <div
-  className="status"
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "<p>status: recognizing</p> <p>errorCode: </p> <p>isListening: true</p> <p>transcript: Hello</p> <p>isSpeechFinal: false</p> <p>isBrowserSupported: true</p>",
-    }
-  }
-/>
+  class="status"
+>
+  <p>
+    status: recognizing
+  </p>
+   
+  <p>
+    errorCode: 
+  </p>
+   
+  <p>
+    isListening: true
+  </p>
+   
+  <p>
+    transcript: Hello
+  </p>
+   
+  <p>
+    isSpeechFinal: false
+  </p>
+   
+  <p>
+    isBrowserSupported: true
+  </p>
+</div>
 `;
 
 exports[`VoiceSearch Rendering with default props 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
-    Array [
-      <button
-        className="button"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "button",
-          }
-        }
-        disabled={false}
-        onClick={[Function]}
-        title="Search by voice"
-        type="button"
-      />,
-    ]
-    Array [
-      <div
-        className="status"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "status",
-          }
-        }
-      />,
-    ]
-  </div>,
-]
+    <button
+      class="button"
+      title="Search by voice"
+      type="button"
+    >
+      button
+    </button>
+    <div
+      class="status"
+    >
+      status
+    </div>
+  </div>
+</div>
 `;
