@@ -15,7 +15,7 @@ class RefinementList extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const isStateDifferent = nextState !== this.state;
+    const isStateDifferent = this.state !== nextState;
     const areFacetValuesDifferent = !isEqual(
       this.props.facetValues,
       nextProps.facetValues
