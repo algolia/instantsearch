@@ -1,25 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PoweredBy default 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <a
       aria-label="Search by Algolia"
-      className="link"
+      class="link"
       href="url"
       rel="noopener noreferrer"
       target="_blank"
     >
       <svg
-        className="logo"
+        class="logo"
         height="1.2em"
-        style={
-          Object {
-            "width": "auto",
-          }
-        }
+        style="width: auto;"
         viewBox="0 0 168 24"
       >
         <path
@@ -40,30 +36,26 @@ Array [
         />
       </svg>
     </a>
-  </div>,
-]
+  </div>
+</div>
 `;
 
 exports[`PoweredBy with dark theme 1`] = `
-Array [
+<div>
   <div
-    className="root"
+    class="root"
   >
     <a
       aria-label="Search by Algolia"
-      className="link"
+      class="link"
       href="url"
       rel="noopener noreferrer"
       target="_blank"
     >
       <svg
-        className="logo"
+        class="logo"
         height="1.2em"
-        style={
-          Object {
-            "width": "auto",
-          }
-        }
+        style="width: auto;"
         viewBox="0 0 168 24"
       >
         <path
@@ -84,6 +76,6 @@ Array [
         />
       </svg>
     </a>
-  </div>,
-]
+  </div>
+</div>
 `;

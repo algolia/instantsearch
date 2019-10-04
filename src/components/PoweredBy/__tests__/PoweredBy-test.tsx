@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { mount } from 'enzyme';
+import { render } from 'preact-testing-library';
 
 import PoweredBy from '../PoweredBy';
 
@@ -13,18 +13,18 @@ const cssClasses = {
 
 describe('PoweredBy', () => {
   it('default', () => {
-    const tree = mount(
+    const { container } = render(
       <PoweredBy cssClasses={cssClasses} theme="light" url="url" />
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('with dark theme', () => {
-    const tree = mount(
+    const { container } = render(
       <PoweredBy cssClasses={cssClasses} theme="dark" url="url" />
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });
