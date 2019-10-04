@@ -6,9 +6,8 @@
 </template>
 
 <script>
+import instantsearch from 'instantsearch.js/es';
 import { createSuitMixin } from '../mixins/suit';
-import { getPropertyByPath } from '../util/object';
-import { warn } from '../util/warn';
 
 export default {
   name: 'AisHighlight',
@@ -29,27 +28,11 @@ export default {
   },
   computed: {
     innerHTML() {
-      const attributeValue =
-        getPropertyByPath(
-          this.hit,
-          `_highlightResult.${this.attribute}.value`
-        ) || '';
-
-      if (process.env.NODE_ENV !== 'production' && attributeValue === '') {
-        warn(
-          `The "${
-            this.attribute
-          }" attribute might currently not be configured to be highlighted in Algolia.` +
-            'See https://www.algolia.com/doc/api-reference/api-parameters/attributesToHighlight/.'
-        );
-      }
-
-      return attributeValue
-        .replace(
-          new RegExp('<mark>', 'g'),
-          `<${this.highlightedTagName} class="${this.suit('highlighted')}">`
-        )
-        .replace(new RegExp('</mark>', 'g'), `</${this.highlightedTagName}>`);
+      return instantsearch.highlight({
+        attribute: this.attribute,
+        hit: this.hit,
+        highlightedTagName: this.highlightedTagName,
+      });
     },
   },
 };

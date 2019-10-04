@@ -3,10 +3,10 @@ import { previewWrapper } from './utils';
 
 storiesOf('ais-highlight', module)
   .addDecorator(previewWrapper())
-  .add('Existing items', () => ({
+  .add('default', () => ({
     template: `
     <div>
-      <ais-hits :escape-HTML="true">
+      <ais-hits>
         <div slot="item" slot-scope="{ item }">
           <h2><ais-highlight attribute="name" :hit="item"></ais-highlight></h2>
           <small><ais-highlight attribute="description" :hit="item"></ais-highlight></small>
@@ -15,14 +15,17 @@ storiesOf('ais-highlight', module)
     </div>
   `,
   }))
-  .add('Non-existing items', () => ({
+  .add('with highlighted tag name', () => ({
     template: `
     <div>
-      <ais-hits :escape-HTML="true">
+      <ais-hits>
         <div slot="item" slot-scope="{ item }">
-          <h2><ais-highlight attribute="name" :hit="item"></ais-highlight></h2>
-          <p>nose: <ais-highlight attribute="nose" :hit="item"></ais-highlight></p>
-          <p>something: <ais-highlight attribute="something" :hit="item"></ais-highlight></p>
+          <h2>
+            <ais-highlight attribute="name" :hit="item" highlighted-tag-name="span"></ais-highlight>
+          </h2>
+          <small>
+            <ais-highlight attribute="description" :hit="item" highlighted-tag-name="span"></ais-highlight>
+          </small>
         </div>
       </ais-hits>
     </div>

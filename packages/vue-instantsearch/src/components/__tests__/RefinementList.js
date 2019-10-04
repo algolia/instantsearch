@@ -1,6 +1,8 @@
 import { mount } from '@vue/test-utils';
 import RefinementList from '../RefinementList.vue';
 import { __setState } from '../../mixins/widget';
+
+jest.unmock('instantsearch.js/es');
 jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');
 
