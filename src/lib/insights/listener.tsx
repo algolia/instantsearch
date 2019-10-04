@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { h, AnyComponent } from 'preact';
+import { h } from 'preact';
 import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
 import { InsightsClientWrapper } from '../../types';
 
@@ -9,22 +9,23 @@ type WithInsightsListenerProps = {
   insights: InsightsClientWrapper;
 };
 
-export default (BaseComponent: AnyComponent<any, any>) => {
-  function WithInsightsListener(
-    props: WithInsightsListenerProps
-  ): React.ReactNode {
+const insightsListener = (BaseComponent: any) => {
+  function WithInsightsListener(props: WithInsightsListenerProps) {
     const handleClick = (event: MouseEvent): void => {
       if (!hasDataAttributes(event.target as HTMLElement)) {
         return;
       }
+
       if (!props.insights) {
         throw new Error(
           'The `insightsClient` option has not been provided to `instantsearch`.'
         );
       }
+
       const { method, payload } = readDataAttributes(
         event.target as HTMLElement
       );
+
       props.insights(method, payload);
     };
 
@@ -37,3 +38,5 @@ export default (BaseComponent: AnyComponent<any, any>) => {
 
   return WithInsightsListener;
 };
+
+export default insightsListener;

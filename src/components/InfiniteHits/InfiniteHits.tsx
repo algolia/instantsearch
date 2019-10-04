@@ -43,7 +43,7 @@ const InfiniteHits = ({
   isLastPage,
   cssClasses,
   templateProps,
-}: InfiniteHitsProps): React.ReactNode => {
+}: InfiniteHitsProps) => {
   if (results.hits.length === 0) {
     return (
       <Template

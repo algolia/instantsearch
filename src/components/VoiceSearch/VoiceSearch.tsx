@@ -32,7 +32,7 @@ const VoiceSearch = ({
   toggleListening,
   voiceListeningState,
   templates,
-}: VoiceSearchProps): React.ReactNode => {
+}: VoiceSearchProps) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     event.currentTarget.blur();
     toggleListening();
