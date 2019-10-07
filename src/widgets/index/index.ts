@@ -21,6 +21,8 @@ import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
+  warning,
+  capitalize,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -342,6 +344,117 @@ const index = (props: IndexProps): Index => {
         // it at the index level because it's either: all of them or none of them
         // that are stalled. The queries are performed into a single network request.
         instantSearchInstance.scheduleStalledRender();
+
+        if (__DEV__) {
+          // Some connectors are responsible for multiple widgets so we need
+          // to map them.
+          // eslint-disable-next-line no-inner-declarations
+          function getWidgetNames(connectorName: string): string[] {
+            switch (connectorName) {
+              case 'range':
+                return ['rangeInput', 'rangeSlider'];
+
+              case 'menu':
+                return ['menu', 'menuSelect'];
+
+              default:
+                return [connectorName];
+            }
+          }
+
+          type StateToWidgets = {
+            [TParameter in keyof IndexUiState]: Array<Widget['$$type']>;
+          };
+
+          const stateToWidgetsMap: StateToWidgets = {
+            query: ['ais.searchBox', 'ais.autocomplete', 'ais.voiceSearch'],
+            refinementList: ['ais.refinementList'],
+            menu: ['ais.menu'],
+            hierarchicalMenu: ['ais.hierarchicalMenu'],
+            numericMenu: ['ais.numericMenu'],
+            ratingMenu: ['ais.ratingMenu'],
+            range: ['ais.range'],
+            toggle: ['ais.toggleRefinement'],
+            geoSearch: ['ais.geoSearch'],
+            sortBy: ['ais.sortBy'],
+            page: ['ais.pagination', 'ais.infiniteHits'],
+            hitsPerPage: ['ais.hitsPerPage'],
+            configure: ['ais.configure'],
+          };
+
+          const mountedWidgets = this.getWidgets()
+            .map(widget => widget.$$type)
+            .filter(Boolean);
+
+          type MissingWidgets = Array<[string, Array<Widget['$$type']>]>;
+
+          const missingWidgets = Object.keys(localUiState).reduce<
+            MissingWidgets
+          >((acc, parameter) => {
+            const requiredWidgets: Array<Widget['$$type']> =
+              stateToWidgetsMap[parameter];
+
+            if (
+              !requiredWidgets.some(requiredWidget =>
+                mountedWidgets.includes(requiredWidget)
+              )
+            ) {
+              acc.push([
+                parameter,
+                stateToWidgetsMap[parameter].map(
+                  (widgetIdentifier: string) =>
+                    widgetIdentifier.split('ais.')[1]
+                ),
+              ]);
+            }
+
+            return acc;
+          }, []);
+
+          warning(
+            missingWidgets.length === 0,
+            `The UI state for the index "${this.getIndexId()}" is not consistent with the widgets mounted.
+
+This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
+
+To fully reflect the state, some widgets need to be added to the index "${this.getIndexId()}":
+
+${missingWidgets
+  .map(([stateParameter, widgets]) => {
+    return `- \`${stateParameter}\` needs one of these widgets: ${([] as string[])
+      .concat(...widgets.map(name => getWidgetNames(name!)))
+      .map((name: string) => `"${name}"`)
+      .join(', ')}`;
+  })
+  .join('\n')}
+
+If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
+
+\`\`\`
+${missingWidgets
+  .map(([_stateParameter, widgets]) => {
+    const capitalizedWidget = capitalize(widgets[0]!);
+
+    return `const virtual${capitalizedWidget} = connect${capitalizedWidget}(() => null);`;
+  })
+  .join('\n')}
+
+search.addWidgets([
+  ${missingWidgets
+    .map(([_stateParameter, widgets]) => {
+      const capitalizedWidget = capitalize(widgets[0]!);
+
+      return `virtual${capitalizedWidget}({ /* ... */ })`;
+    })
+    .join(',\n  ')}
+]);
+\`\`\`
+
+If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
+
+See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`
+          );
+        }
       });
 
       derivedHelper.on('result', () => {

@@ -1230,3 +1230,73 @@ describe('refresh', () => {
     expect(searchClient.search).toHaveBeenCalledTimes(2);
   });
 });
+
+describe('UI state', () => {
+  it('warns if UI state contains unmounted widgets in development mode', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      initialUiState: {
+        indexName: {
+          query: 'First query',
+          page: 3,
+          refinementList: {
+            brand: ['Apple'],
+          },
+          hierarchicalMenu: {
+            categories: 'Mobile',
+          },
+          range: {
+            price: '100:200',
+          },
+          menu: {
+            category: 'Hardware',
+          },
+        },
+      },
+    });
+
+    const searchBox = connectSearchBox(() => null)({});
+    const customWidget = { render() {} };
+
+    search.addWidgets([searchBox, customWidget]);
+
+    expect(() => {
+      search.start();
+    })
+      .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
+
+This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
+
+To fully reflect the state, some widgets need to be added to the index "indexName":
+
+- \`page\` needs one of these widgets: "pagination", "infiniteHits"
+- \`refinementList\` needs one of these widgets: "refinementList"
+- \`hierarchicalMenu\` needs one of these widgets: "hierarchicalMenu"
+- \`range\` needs one of these widgets: "rangeInput", "rangeSlider"
+- \`menu\` needs one of these widgets: "menu", "menuSelect"
+
+If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
+
+\`\`\`
+const virtualPagination = connectPagination(() => null);
+const virtualRefinementList = connectRefinementList(() => null);
+const virtualHierarchicalMenu = connectHierarchicalMenu(() => null);
+const virtualRange = connectRange(() => null);
+const virtualMenu = connectMenu(() => null);
+
+search.addWidgets([
+  virtualPagination({ /* ... */ }),
+  virtualRefinementList({ /* ... */ }),
+  virtualHierarchicalMenu({ /* ... */ }),
+  virtualRange({ /* ... */ }),
+  virtualMenu({ /* ... */ })
+]);
+\`\`\`
+
+If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
+
+See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
+  });
+});

@@ -1,5 +1,7 @@
 /* eslint-disable import/no-commonjs */
 
+const wrapWarningWithDevCheck = require('./scripts/babel/wrap-warning-with-dev-check');
+
 const isCJS = process.env.BABEL_ENV === 'cjs';
 const isES = process.env.BABEL_ENV === 'es';
 
@@ -18,6 +20,7 @@ module.exports = api => {
 
   const testPlugins = [
     '@babel/plugin-proposal-class-properties',
+    wrapWarningWithDevCheck,
     [
       'module-resolver',
       {
@@ -33,6 +36,7 @@ module.exports = api => {
     '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-remove-prop-types',
     'babel-plugin-transform-react-pure-class-to-function',
+    wrapWarningWithDevCheck,
     (isCJS || isES) && [
       'inline-replace-variables',
       {

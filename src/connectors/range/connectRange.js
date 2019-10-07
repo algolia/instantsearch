@@ -260,11 +260,11 @@ export default function connectRange(renderFn, unmountFn = noop) {
 
       getWidgetState(uiState, { searchParameters }) {
         const {
-          '>=': min = '',
-          '<=': max = '',
+          '>=': min = [],
+          '<=': max = [],
         } = searchParameters.getNumericRefinements(attribute);
 
-        if (min === '' && max === '') {
+        if (min.length === 0 && max.length === 0) {
           return uiState;
         }
 
