@@ -47,7 +47,9 @@
   "files": [
     "dist",
     "cjs",
-    "es"
+    "es",
+    "scripts/index.js",
+    "scripts/transforms"
   ],
   "dependencies": {
     "algoliasearch-helper": "0.0.0-5a0352a",
