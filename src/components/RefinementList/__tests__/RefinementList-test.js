@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { shallow, mount } from 'enzyme';
-import { render, fireEvent } from 'preact-testing-library';
+import { render, fireEvent } from '@testing-library/preact';
 import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 

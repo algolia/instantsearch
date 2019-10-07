@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { render, fireEvent } from 'preact-testing-library';
+import { render, fireEvent } from '@testing-library/preact';
 import VoiceSearch, { VoiceSearchProps } from '../VoiceSearch';
 
 const defaultProps: VoiceSearchProps = {

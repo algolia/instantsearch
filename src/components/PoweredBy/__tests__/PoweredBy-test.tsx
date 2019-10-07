@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { render } from 'preact-testing-library';
+import { render } from '@testing-library/preact';
 
 import PoweredBy from '../PoweredBy';
 

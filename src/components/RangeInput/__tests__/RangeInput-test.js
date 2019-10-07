@@ -2,7 +2,7 @@
 
 import { h } from 'preact';
 import { shallow } from 'enzyme';
-import { render, fireEvent, waitForDomChange } from 'preact-testing-library';
+import { render, fireEvent } from '@testing-library/preact';
 import RangeInput from '../RangeInput';
 
 describe('RangeInput', () => {
@@ -122,33 +122,29 @@ describe('RangeInput', () => {
   });
 
   describe('onChange', () => {
-    it('expect to update the state when min change', async () => {
+    it('expect to update the state when min change', () => {
       const props = {};
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
       const [minInput] = container.querySelectorAll('input[type="number"]');
 
       fireEvent.input(minInput, { target: { value: 20 } });
 
-      await waitForDomChange({ container });
-
       expect(minInput.value).toEqual('20');
     });
 
-    it('expect to update the state when max change', async () => {
+    it('expect to update the state when max change', () => {
       const props = {};
       const { container } = render(<RangeInput {...defaultProps} {...props} />);
       const [, maxInput] = container.querySelectorAll('input[type="number"]');
 
       fireEvent.input(maxInput, { target: { value: 480 } });
 
-      await waitForDomChange({ container });
-
       expect(maxInput.value).toEqual('480');
     });
   });
 
   describe('onSubmit', () => {
-    it('expect to call refine with min, max as integer', async () => {
+    it('expect to call refine with min, max as integer', () => {
       const props = {
         refine: jest.fn(),
       };
@@ -165,14 +161,12 @@ describe('RangeInput', () => {
         target: { value: 480 },
       });
 
-      await waitForDomChange({ container });
-
       fireEvent.submit(container.querySelector('form'));
 
       expect(props.refine).toHaveBeenCalledWith([20, 480]);
     });
 
-    it('expect to call refine with min, max as float', async () => {
+    it('expect to call refine with min, max as float', () => {
       const props = {
         refine: jest.fn(),
       };
@@ -189,14 +183,12 @@ describe('RangeInput', () => {
         target: { value: 480.05 },
       });
 
-      await waitForDomChange({ container });
-
       fireEvent.submit(container.querySelector('form'));
 
       expect(props.refine).toHaveBeenCalledWith([20.05, 480.05]);
     });
 
-    it('expect to call refine with min only', async () => {
+    it('expect to call refine with min only', () => {
       const props = {
         refine: jest.fn(),
       };
@@ -208,14 +200,12 @@ describe('RangeInput', () => {
         target: { value: 20 },
       });
 
-      await waitForDomChange({ container });
-
       fireEvent.submit(container.querySelector('form'));
 
       expect(props.refine).toHaveBeenCalledWith([20, undefined]);
     });
 
-    it('expect to call refine with max only', async () => {
+    it('expect to call refine with max only', () => {
       const props = {
         refine: jest.fn(),
       };
@@ -226,8 +216,6 @@ describe('RangeInput', () => {
       fireEvent.input(maxInput, {
         target: { value: 480 },
       });
-
-      await waitForDomChange({ container });
 
       fireEvent.submit(container.querySelector('form'));
 
