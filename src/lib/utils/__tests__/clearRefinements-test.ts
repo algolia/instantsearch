@@ -162,6 +162,7 @@ describe('clearRefinements', () => {
     expect(
       clearRefinements({
         helper: algoliasearchHelper({} as Client, '', {
+          disjunctiveFacets: ['attr'],
           numericRefinements: {
             attr: {
               '=': [42],
@@ -172,6 +173,7 @@ describe('clearRefinements', () => {
       })
     ).toEqual(
       new SearchParameters({
+        disjunctiveFacets: ['attr'],
         numericRefinements: {
           attr: {
             '=': [],
@@ -187,6 +189,7 @@ describe('clearRefinements', () => {
     expect(
       clearRefinements({
         helper: algoliasearchHelper({} as Client, '', {
+          disjunctiveFacets: ['attr'],
           numericRefinements: {
             attr: {
               '=': [],
@@ -197,6 +200,7 @@ describe('clearRefinements', () => {
       })
     ).toEqual(
       new SearchParameters({
+        disjunctiveFacets: ['attr'],
         numericRefinements: {
           attr: {
             '=': [],
@@ -212,6 +216,7 @@ describe('clearRefinements', () => {
     expect(
       clearRefinements({
         helper: algoliasearchHelper({} as Client, '', {
+          disjunctiveFacets: ['attr'],
           numericRefinements: {
             attr: {
               '=': [42],
@@ -223,6 +228,7 @@ describe('clearRefinements', () => {
       })
     ).toEqual(
       new SearchParameters({
+        disjunctiveFacets: ['attr'],
         numericRefinements: {
           attr: {
             '=': [],

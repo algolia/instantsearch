@@ -1,9 +1,9 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('InstantSearch', module)
+storiesOf('Basics|InstantSearch', module)
   .add(
-    'with searchfunction to prevent search',
+    'with searchFunction to prevent search',
     withHits(() => {}, {
       searchFunction: helper => {
         const query = helper.state.query;
@@ -26,5 +26,21 @@ storiesOf('InstantSearch', module)
           },
         },
       },
+    })
+  )
+  .add(
+    'with refresh to reload',
+    withHits(({ search, container, instantsearch }) => {
+      const button = document.createElement('button');
+      button.addEventListener('click', () => search.refresh());
+      button.innerHTML = 'Refresh InstantSearch';
+      const searchBoxContainer = document.createElement('div');
+
+      search.addWidget(
+        instantsearch.widgets.searchBox({ container: searchBoxContainer })
+      );
+
+      container.appendChild(button);
+      container.appendChild(searchBoxContainer);
     })
   );

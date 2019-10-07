@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('SearchBox', module)
+storiesOf('Basics|SearchBox', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
