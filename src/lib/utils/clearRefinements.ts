@@ -19,6 +19,9 @@ function clearRefinements({
   let finalState = helper.state.setPage(0);
 
   finalState = attributesToClear.reduce((state, attribute) => {
+    if (finalState.isNumericRefined(attribute)) {
+      return state.removeNumericRefinement(attribute);
+    }
     if (finalState.isHierarchicalFacet(attribute)) {
       return state.removeHierarchicalFacetRefinement(attribute);
     }
@@ -28,9 +31,7 @@ function clearRefinements({
     if (finalState.isConjunctiveFacet(attribute)) {
       return state.removeFacetRefinement(attribute);
     }
-    if (finalState.isNumericRefined(attribute)) {
-      return state.removeNumericRefinement(attribute);
-    }
+
     return state;
   }, finalState);
 

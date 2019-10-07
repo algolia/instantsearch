@@ -955,6 +955,32 @@ describe('getWidgetState', () => {
     expect(actual).toEqual({});
   });
 
+  test('returns the `uiState` empty with empty refinements', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '>=': [],
+          '<=': [],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({});
+  });
+
   test('returns the `uiState` with a lower refinement', () => {
     const render = jest.fn();
     const makeWidget = connectRange(render);
@@ -1039,6 +1065,66 @@ describe('getWidgetState', () => {
     expect(actual).toEqual({
       range: {
         price: '100:1000',
+      },
+    });
+  });
+
+  test('returns the `uiState` with an empty upper refinement', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '>=': [100],
+          '<=': [],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({
+      range: {
+        price: '100:',
+      },
+    });
+  });
+
+  test('returns the `uiState` with an empty lower refinement', () => {
+    const render = jest.fn();
+    const makeWidget = connectRange(render);
+    const helper = jsHelper({}, 'indexName', {
+      disjunctiveFacets: ['price'],
+      numericRefinements: {
+        price: {
+          '>=': [],
+          '<=': [1000],
+        },
+      },
+    });
+    const widget = makeWidget({
+      attribute: 'price',
+    });
+
+    const actual = widget.getWidgetState(
+      {},
+      {
+        searchParameters: helper.state,
+      }
+    );
+
+    expect(actual).toEqual({
+      range: {
+        price: ':1000',
       },
     });
   });
