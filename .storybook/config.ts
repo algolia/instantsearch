@@ -6,10 +6,10 @@ import { create } from '@storybook/theming';
 // See https://www.algolia.com/doc/api-reference/widgets/js/
 const categories = [
   'Basics',
-  'Metadata',
-  'Pagination',
-  'Refinements',
   'Results',
+  'Refinements',
+  'Pagination',
+  'Metadata',
   'Sorting',
 ];
 
