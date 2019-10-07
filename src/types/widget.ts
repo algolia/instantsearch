@@ -104,6 +104,15 @@ export type IndexUiState = {
   page?: number;
   hitsPerPage?: number;
   configure?: PlainSearchParameters;
+  places?: {
+    query: string;
+    /**
+     * The central geolocation.
+     *
+     * @example '48.8546,2.3477'
+     */
+    position: string;
+  };
 };
 
 export type UiState = {
@@ -130,6 +139,7 @@ export interface Widget {
     | 'ais.menu'
     | 'ais.numericMenu'
     | 'ais.pagination'
+    | 'ais.places'
     | 'ais.poweredBy'
     | 'ais.queryRules'
     | 'ais.range'

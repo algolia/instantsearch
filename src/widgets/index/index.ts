@@ -380,6 +380,7 @@ const index = (props: IndexProps): Index => {
             page: ['ais.pagination', 'ais.infiniteHits'],
             hitsPerPage: ['ais.hitsPerPage'],
             configure: ['ais.configure'],
+            places: ['ais.places'],
           };
 
           const mountedWidgets = this.getWidgets()
