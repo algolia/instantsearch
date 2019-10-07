@@ -1,7 +1,6 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow } from 'enzyme';
 import { render, fireEvent } from 'preact-testing-library';
 import GeoSearchControls from '../GeoSearchControls';
 
