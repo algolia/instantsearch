@@ -69,6 +69,7 @@
     "@storybook/addon-actions": "5.2.3",
     "@storybook/html": "5.2.3",
     "@storybook/theming": "5.2.3",
+    "@testing-library/jest-dom": "4.1.0",
     "@types/algoliasearch": "3.30.16",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
