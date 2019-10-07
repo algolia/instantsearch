@@ -196,7 +196,6 @@ function run() {
         message: 'On which files or directory should the codemods be applied?',
         when: !cli.input[1],
         default: '.',
-        // validate: () =>
         filter: files => files.trim(),
       },
       {
