@@ -24,16 +24,18 @@
  */
 
 /* eslint-disable no-process-exit,import/no-commonjs,no-console */
+const path = require('path');
+
 const globby = require('globby');
 const inquirer = require('inquirer');
 const meow = require('meow');
-const path = require('path');
 const execa = require('execa');
-const chalk = require('chalk');
 const isGitClean = require('is-git-clean');
 
 const jscodeshiftExecutable = require.resolve('.bin/jscodeshift');
 const transformsDirectory = path.join(__dirname, './');
+
+const YELLOW = '\x1b[33m%s\x1b[0m';
 
 function checkGitStatus(force) {
   let clean = false;
@@ -53,9 +55,8 @@ function checkGitStatus(force) {
     } else {
       console.log('Thank you for using InstantSearch codemods!');
       console.log(
-        chalk.yellow(
-          '\nBut before we continue, please stash or commit your git changes.'
-        )
+        YELLOW,
+        '\nBut before we continue, please stash or commit your git changes.'
       );
       console.log(
         '\nYou may use the --force flag to override this safety check.'
