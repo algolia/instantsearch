@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
 
-storiesOf('InfiniteHits', module)
+storiesOf('Results|InfiniteHits', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {

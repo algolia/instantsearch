@@ -13,7 +13,7 @@ const virtualHierarchicalMenu = (args = {}) =>
     ...args,
   });
 
-storiesOf('Breadcrumb', module)
+storiesOf('Metadata|Breadcrumb', module)
   .add(
     'default',
     withHits(
