@@ -1,56 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`QueryRuleCustomData renders with empty items 1`] = `
-<Template
-  data={
-    Object {
-      "items": Array [],
-    }
-  }
-  rootProps={
-    Object {
-      "className": "root",
-    }
-  }
-  rootTagName="div"
-  templateKey="default"
-  templates={
-    Object {
-      "default": "default",
-    }
-  }
-  templatesConfig={Object {}}
-  useCustomCompileOptions={Object {}}
-/>
+<div>
+  <div
+    class="root"
+  />
+</div>
 `;
 
 exports[`QueryRuleCustomData renders with items 1`] = `
-<Template
-  data={
-    Object {
-      "items": Array [
-        Object {
-          "banner": "image-1.png",
-        },
-        Object {
-          "banner": "image-2.png",
-        },
-      ],
-    }
-  }
-  rootProps={
-    Object {
-      "className": "root",
-    }
-  }
-  rootTagName="div"
-  templateKey="default"
-  templates={
-    Object {
-      "default": "default",
-    }
-  }
-  templatesConfig={Object {}}
-  useCustomCompileOptions={Object {}}
-/>
+<div>
+  <div
+    class="root"
+  >
+    image-1.png image-2.png
+  </div>
+</div>
 `;

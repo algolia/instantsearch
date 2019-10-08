@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Template from '../Template/Template';

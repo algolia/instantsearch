@@ -1,9 +1,9 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import hitsPerPage from '../hits-per-page';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -85,8 +85,13 @@ describe('hitsPerPage()', () => {
     widget.init({ helper, state: helper.state });
     widget.render({ results, state });
     widget.render({ results, state });
+
+    const [firstRender] = render.mock.calls;
+    const { children, ...rootProps } = firstRender[0].props;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    expect(rootProps).toMatchSnapshot();
+    expect(firstRender[0].props.children.props).toMatchSnapshot();
   });
 
   it('renders transformed items', () => {
@@ -103,12 +108,29 @@ describe('hitsPerPage()', () => {
     widget.init({ helper, state: helper.state });
     widget.render({ results, state });
 
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    const [firstRender] = render.mock.calls;
+
+    expect(firstRender[0].props.children.props.options).toEqual([
+      {
+        isRefined: true,
+        label: '10 results',
+        transformed: true,
+        value: 10,
+      },
+      {
+        default: true,
+        isRefined: false,
+        label: '20 results',
+        transformed: true,
+        value: 20,
+      },
+    ]);
   });
 
   it('sets the underlying hitsPerPage', () => {
     widget.init({ helper, state: helper.state });
     widget.setHitsPerPage(helper, helper.state, 10);
+
     expect(helper.setQueryParameter).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
@@ -140,6 +162,7 @@ You may want to add another entry to the \`items\` option with this value.`
 
   it('should not throw an error if state does not have a `hitsPerPage`', () => {
     delete helper.state.hitsPerPage;
+
     expect(() => {
       widget.init({ state: helper.state, helper });
     }).not.toThrow(/No item in `items`/);

@@ -1,12 +1,12 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import numericMenu from '../numeric-menu';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -73,11 +73,13 @@ describe('numericMenu()', () => {
     widget.render({ state, results, createURL });
     widget.render({ state, results, createURL });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('renders with transformed items', () => {
@@ -92,7 +94,40 @@ describe('numericMenu()', () => {
     widget.init({ helper, instantSearchInstance: {} });
     widget.render({ state, results, createURL });
 
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    const [firstRender] = render.mock.calls;
+
+    expect(firstRender[0].props.facetValues).toEqual([
+      {
+        isRefined: true,
+        label: 'All',
+        transformed: true,
+        value: '%7B%7D',
+      },
+      {
+        isRefined: false,
+        label: 'less than 4',
+        transformed: true,
+        value: '%7B%22end%22:4%7D',
+      },
+      {
+        isRefined: false,
+        label: '4',
+        transformed: true,
+        value: '%7B%22start%22:4,%22end%22:4%7D',
+      },
+      {
+        isRefined: false,
+        label: 'between 5 and 10',
+        transformed: true,
+        value: '%7B%22start%22:5,%22end%22:10%7D',
+      },
+      {
+        isRefined: false,
+        label: 'more than 10',
+        transformed: true,
+        value: '%7B%22start%22:10%7D',
+      },
+    ]);
   });
 
   it('does not alter the initial items when rendering', () => {

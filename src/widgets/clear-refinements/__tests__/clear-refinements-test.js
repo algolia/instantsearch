@@ -1,4 +1,4 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createInitOptions,
@@ -7,8 +7,8 @@ import {
 import clearRefinements from '../clear-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -50,10 +50,10 @@ describe('clearRefinements()', () => {
 
       const [firstRender, secondRender] = render.mock.calls;
 
-      expect(firstRender[0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
       expect(firstRender[1]).toEqual(container);
 
-      expect(secondRender[0]).toMatchSnapshot();
+      expect(secondRender[0].props).toMatchSnapshot();
       expect(secondRender[1]).toEqual(container);
     });
   });
@@ -78,10 +78,10 @@ describe('clearRefinements()', () => {
 
       const [firstRender, secondRender] = render.mock.calls;
 
-      expect(firstRender[0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
       expect(firstRender[1]).toEqual(container);
 
-      expect(secondRender[0]).toMatchSnapshot();
+      expect(secondRender[0].props).toMatchSnapshot();
       expect(secondRender[1]).toEqual(container);
     });
   });

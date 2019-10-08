@@ -1,8 +1,8 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import breadcrumb from '../breadcrumb';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -109,7 +109,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         instantSearchInstance: {},
       });
 
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props).toMatchSnapshot();
     });
   });
 });

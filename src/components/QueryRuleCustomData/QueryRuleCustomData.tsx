@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import {
   QueryRuleCustomDataCSSClasses,
   QueryRuleCustomDataTemplates,
@@ -15,7 +17,7 @@ const QueryRuleCustomData = ({
   cssClasses,
   templates,
   items,
-}: QueryRuleCustomDataProps): React.ReactNode => (
+}: QueryRuleCustomDataProps) => (
   <Template
     templateKey="default"
     templates={templates}
