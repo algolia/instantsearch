@@ -3,7 +3,7 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
-import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement';
+import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,

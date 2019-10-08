@@ -24,7 +24,7 @@ export { default as ratingMenu } from './rating-menu/rating-menu';
 export { default as stats } from './stats/stats';
 export {
   default as toggleRefinement,
-} from './toggleRefinement/toggleRefinement';
+} from './toggle-refinement/toggle-refinement';
 export { default as analytics } from './analytics/analytics';
 export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as menuSelect } from './menu-select/menu-select';

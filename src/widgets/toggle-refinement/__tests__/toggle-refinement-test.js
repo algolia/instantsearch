@@ -1,6 +1,6 @@
 import { render } from 'preact';
 import jsHelper, { SearchParameters } from 'algoliasearch-helper';
-import toggleRefinement from '../toggleRefinement';
+import toggleRefinement from '../toggle-refinement';
 import RefinementList from '../../../components/RefinementList/RefinementList';
 
 jest.mock('preact', () => {
