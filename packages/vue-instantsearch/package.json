@@ -18,10 +18,12 @@
   "license": "MIT",
   "version": "2.5.0",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "main": "dist/vue-instantsearch.common.js",
   "module": "dist/vue-instantsearch.esm.js",
+  "sideEffects": false,
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
     "build": "rollup -c",
