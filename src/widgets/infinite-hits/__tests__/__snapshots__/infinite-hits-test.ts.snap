@@ -1,310 +1,275 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+    "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
+    "emptyRoot": "ais-InfiniteHits--empty",
+    "item": "ais-InfiniteHits-item",
+    "list": "ais-InfiniteHits-list",
+    "loadMore": "ais-InfiniteHits-loadMore",
+    "loadPrevious": "ais-InfiniteHits-loadPrevious",
+    "root": "ais-InfiniteHits root cx",
+  },
+  "hasShowPrevious": false,
+  "hits": Array [
     Object {
-      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
-      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
-      "emptyRoot": "ais-InfiniteHits--empty",
-      "item": "ais-InfiniteHits-item",
-      "list": "ais-InfiniteHits-list",
-      "loadMore": "ais-InfiniteHits-loadMore",
-      "loadPrevious": "ais-InfiniteHits-loadPrevious",
-      "root": "ais-InfiniteHits root cx",
-    }
-  }
-  hasShowPrevious={false}
-  hits={
-    Array [
+      "__position": 3,
+      "first": "hit",
+      "second": "hit",
+    },
+  ],
+  "insights": undefined,
+  "isFirstPage": true,
+  "isLastPage": false,
+  "results": Object {
+    "hits": Array [
       Object {
         "__position": 3,
         "first": "hit",
         "second": "hit",
       },
-    ]
-  }
-  isFirstPage={true}
-  isLastPage={false}
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 3,
-          "first": "hit",
-          "second": "hit",
-        },
-      ],
-      "hitsPerPage": 2,
-      "page": 1,
-    }
-  }
-  showMore={[Function]}
-  showPrevious={[Function]}
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-        "showMoreText": "Show more results",
-        "showPreviousText": "Show previous results",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-        "showMoreText": false,
-        "showPreviousText": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 2,
+    "page": 1,
+  },
+  "showMore": [Function],
+  "showPrevious": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+      "showMoreText": "Show more results",
+      "showPreviousText": "Show previous results",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+      "showMoreText": false,
+      "showPreviousText": false,
+    },
+  },
+}
 `;
 
 exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+    "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
+    "emptyRoot": "ais-InfiniteHits--empty",
+    "item": "ais-InfiniteHits-item",
+    "list": "ais-InfiniteHits-list",
+    "loadMore": "ais-InfiniteHits-loadMore",
+    "loadPrevious": "ais-InfiniteHits-loadPrevious",
+    "root": "ais-InfiniteHits root cx",
+  },
+  "hasShowPrevious": false,
+  "hits": Array [
     Object {
-      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
-      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
-      "emptyRoot": "ais-InfiniteHits--empty",
-      "item": "ais-InfiniteHits-item",
-      "list": "ais-InfiniteHits-list",
-      "loadMore": "ais-InfiniteHits-loadMore",
-      "loadPrevious": "ais-InfiniteHits-loadPrevious",
-      "root": "ais-InfiniteHits root cx",
-    }
-  }
-  hasShowPrevious={false}
-  hits={
-    Array [
+      "__position": 3,
+      "first": "hit",
+      "second": "hit",
+    },
+  ],
+  "insights": undefined,
+  "isFirstPage": true,
+  "isLastPage": false,
+  "results": Object {
+    "hits": Array [
       Object {
         "__position": 3,
         "first": "hit",
         "second": "hit",
       },
-    ]
-  }
-  isFirstPage={true}
-  isLastPage={false}
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 3,
-          "first": "hit",
-          "second": "hit",
-        },
-      ],
-      "hitsPerPage": 2,
-      "page": 1,
-    }
-  }
-  showMore={[Function]}
-  showPrevious={[Function]}
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-        "showMoreText": "Show more results",
-        "showPreviousText": "Show previous results",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-        "showMoreText": false,
-        "showPreviousText": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 2,
+    "page": 1,
+  },
+  "showMore": [Function],
+  "showPrevious": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+      "showMoreText": "Show more results",
+      "showPreviousText": "Show previous results",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+      "showMoreText": false,
+      "showPreviousText": false,
+    },
+  },
+}
 `;
 
 exports[`infiniteHits() if it is the last page, then the props should contain isLastPage true 1`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+    "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
+    "emptyRoot": "ais-InfiniteHits--empty",
+    "item": "ais-InfiniteHits-item",
+    "list": "ais-InfiniteHits-list",
+    "loadMore": "ais-InfiniteHits-loadMore",
+    "loadPrevious": "ais-InfiniteHits-loadPrevious",
+    "root": "ais-InfiniteHits root cx",
+  },
+  "hasShowPrevious": false,
+  "hits": Array [
     Object {
-      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
-      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
-      "emptyRoot": "ais-InfiniteHits--empty",
-      "item": "ais-InfiniteHits-item",
-      "list": "ais-InfiniteHits-list",
-      "loadMore": "ais-InfiniteHits-loadMore",
-      "loadPrevious": "ais-InfiniteHits-loadPrevious",
-      "root": "ais-InfiniteHits root cx",
-    }
-  }
-  hasShowPrevious={false}
-  hits={
-    Array [
+      "__position": 1,
+      "first": "hit",
+      "second": "hit",
+    },
+  ],
+  "insights": undefined,
+  "isFirstPage": true,
+  "isLastPage": false,
+  "results": Object {
+    "hits": Array [
       Object {
         "__position": 1,
         "first": "hit",
         "second": "hit",
       },
-    ]
-  }
-  isFirstPage={true}
-  isLastPage={false}
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 1,
-          "first": "hit",
-          "second": "hit",
-        },
-      ],
-      "hitsPerPage": 2,
-      "nbPages": 2,
-      "page": 0,
-    }
-  }
-  showMore={[Function]}
-  showPrevious={[Function]}
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-        "showMoreText": "Show more results",
-        "showPreviousText": "Show previous results",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-        "showMoreText": false,
-        "showPreviousText": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 2,
+    "nbPages": 2,
+    "page": 0,
+  },
+  "showMore": [Function],
+  "showPrevious": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+      "showMoreText": "Show more results",
+      "showPreviousText": "Show previous results",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+      "showMoreText": false,
+      "showPreviousText": false,
+    },
+  },
+}
 `;
 
 exports[`infiniteHits() if it is the last page, then the props should contain isLastPage true 2`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+    "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
+    "emptyRoot": "ais-InfiniteHits--empty",
+    "item": "ais-InfiniteHits-item",
+    "list": "ais-InfiniteHits-list",
+    "loadMore": "ais-InfiniteHits-loadMore",
+    "loadPrevious": "ais-InfiniteHits-loadPrevious",
+    "root": "ais-InfiniteHits root cx",
+  },
+  "hasShowPrevious": false,
+  "hits": Array [
     Object {
-      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
-      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
-      "emptyRoot": "ais-InfiniteHits--empty",
-      "item": "ais-InfiniteHits-item",
-      "list": "ais-InfiniteHits-list",
-      "loadMore": "ais-InfiniteHits-loadMore",
-      "loadPrevious": "ais-InfiniteHits-loadPrevious",
-      "root": "ais-InfiniteHits root cx",
-    }
-  }
-  hasShowPrevious={false}
-  hits={
-    Array [
+      "__position": 1,
+      "first": "hit",
+      "second": "hit",
+    },
+  ],
+  "insights": undefined,
+  "isFirstPage": true,
+  "isLastPage": true,
+  "results": Object {
+    "hits": Array [
       Object {
-        "__position": 1,
+        "__position": 3,
         "first": "hit",
         "second": "hit",
       },
-    ]
-  }
-  isFirstPage={true}
-  isLastPage={true}
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 3,
-          "first": "hit",
-          "second": "hit",
-        },
-      ],
-      "hitsPerPage": 2,
-      "nbPages": 2,
-      "page": 1,
-    }
-  }
-  showMore={[Function]}
-  showPrevious={[Function]}
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-        "showMoreText": "Show more results",
-        "showPreviousText": "Show previous results",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-        "showMoreText": false,
-        "showPreviousText": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 2,
+    "nbPages": 2,
+    "page": 1,
+  },
+  "showMore": [Function],
+  "showPrevious": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+      "showMoreText": "Show more results",
+      "showPreviousText": "Show previous results",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+      "showMoreText": false,
+      "showPreviousText": false,
+    },
+  },
+}
 `;
 
 exports[`infiniteHits() renders transformed items 1`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
+    "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
+    "emptyRoot": "ais-InfiniteHits--empty",
+    "item": "ais-InfiniteHits-item",
+    "list": "ais-InfiniteHits-list",
+    "loadMore": "ais-InfiniteHits-loadMore",
+    "loadPrevious": "ais-InfiniteHits-loadPrevious",
+    "root": "ais-InfiniteHits",
+  },
+  "hasShowPrevious": false,
+  "hits": Array [
     Object {
-      "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
-      "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
-      "emptyRoot": "ais-InfiniteHits--empty",
-      "item": "ais-InfiniteHits-item",
-      "list": "ais-InfiniteHits-list",
-      "loadMore": "ais-InfiniteHits-loadMore",
-      "loadPrevious": "ais-InfiniteHits-loadPrevious",
-      "root": "ais-InfiniteHits",
-    }
-  }
-  hasShowPrevious={false}
-  hits={
-    Array [
+      "__position": 3,
+      "first": "hit",
+      "second": "hit",
+      "transformed": true,
+    },
+  ],
+  "insights": undefined,
+  "isFirstPage": true,
+  "isLastPage": false,
+  "results": Object {
+    "hits": Array [
       Object {
         "__position": 3,
         "first": "hit",
         "second": "hit",
         "transformed": true,
       },
-    ]
-  }
-  isFirstPage={true}
-  isLastPage={false}
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 3,
-          "first": "hit",
-          "second": "hit",
-          "transformed": true,
-        },
-      ],
-      "hitsPerPage": 2,
-      "page": 1,
-    }
-  }
-  showMore={[Function]}
-  showPrevious={[Function]}
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-        "showMoreText": "Show more results",
-        "showPreviousText": "Show previous results",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-        "showMoreText": false,
-        "showPreviousText": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 2,
+    "page": 1,
+  },
+  "showMore": [Function],
+  "showPrevious": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+      "showMoreText": "Show more results",
+      "showPreviousText": "Show previous results",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+      "showMoreText": false,
+      "showPreviousText": false,
+    },
+  },
+}
 `;

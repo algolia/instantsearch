@@ -1,47 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`breadcrumb() render renders transformed items correctly 1`] = `
-<Breadcrumb
-  canRefine={true}
-  createURL={[Function]}
-  cssClasses={
+Object {
+  "canRefine": true,
+  "createURL": [Function],
+  "cssClasses": Object {
+    "item": "ais-Breadcrumb-item",
+    "link": "ais-Breadcrumb-link",
+    "list": "ais-Breadcrumb-list",
+    "noRefinementRoot": "ais-Breadcrumb--noRefinement",
+    "root": "ais-Breadcrumb",
+    "selectedItem": "ais-Breadcrumb-item--selected",
+    "separator": "ais-Breadcrumb-separator",
+  },
+  "items": Array [
     Object {
-      "item": "ais-Breadcrumb-item",
-      "link": "ais-Breadcrumb-link",
-      "list": "ais-Breadcrumb-list",
-      "noRefinementRoot": "ais-Breadcrumb--noRefinement",
-      "root": "ais-Breadcrumb",
-      "selectedItem": "ais-Breadcrumb-item--selected",
-      "separator": "ais-Breadcrumb-separator",
-    }
-  }
-  items={
-    Array [
-      Object {
-        "label": "Cameras & Camcorders",
-        "transformed": true,
-        "value": "Cameras & Camcorders > Digital Cameras",
-      },
-      Object {
-        "label": "Digital Cameras",
-        "transformed": true,
-        "value": null,
-      },
-    ]
-  }
-  refine={[Function]}
-  templateProps={
+      "label": "Cameras & Camcorders",
+      "transformed": true,
+      "value": "Cameras & Camcorders > Digital Cameras",
+    },
     Object {
-      "templates": Object {
-        "home": "Home",
-        "separator": ">",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "home": false,
-        "separator": false,
-      },
-    }
-  }
-/>
+      "label": "Digital Cameras",
+      "transformed": true,
+      "value": null,
+    },
+  ],
+  "refine": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "home": "Home",
+      "separator": ">",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "home": false,
+      "separator": false,
+    },
+  },
+}
 `;

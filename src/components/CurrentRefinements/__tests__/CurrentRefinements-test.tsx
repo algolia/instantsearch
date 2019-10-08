@@ -1,7 +1,9 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
+import { render } from '@testing-library/preact';
 import { ItemRefinement } from '../../../connectors/current-refinements/connectCurrentRefinements';
 import CurrentRefinements from '../CurrentRefinements';
-import { mount } from 'enzyme';
 
 describe('CurrentRefinements', () => {
   const cssClasses = {
@@ -113,9 +115,9 @@ describe('CurrentRefinements', () => {
       ],
     };
 
-    const tree = mount(<CurrentRefinements {...props} />);
+    const { container } = render(<CurrentRefinements {...props} />);
 
-    expect(tree).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   describe('options.refinements', () => {
@@ -140,9 +142,9 @@ describe('CurrentRefinements', () => {
         ],
       };
 
-      const tree = mount(<CurrentRefinements {...props} />);
+      const { container } = render(<CurrentRefinements {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('can be used with an exclude', () => {
@@ -167,9 +169,9 @@ describe('CurrentRefinements', () => {
         ],
       };
 
-      const tree = mount(<CurrentRefinements {...props} />);
+      const { container } = render(<CurrentRefinements {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('can be used with a disjunctive facet', () => {
@@ -193,9 +195,9 @@ describe('CurrentRefinements', () => {
         ],
       };
 
-      const tree = mount(<CurrentRefinements {...props} />);
+      const { container } = render(<CurrentRefinements {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('can be used with a hierarchical facet', () => {
@@ -219,9 +221,9 @@ describe('CurrentRefinements', () => {
         ],
       };
 
-      const tree = mount(<CurrentRefinements {...props} />);
+      const { container } = render(<CurrentRefinements {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('can be used with numeric filters', () => {
@@ -276,9 +278,9 @@ describe('CurrentRefinements', () => {
         ],
       };
 
-      const tree = mount(<CurrentRefinements {...props} />);
+      const { container } = render(<CurrentRefinements {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('can be used with a tag', () => {
@@ -302,9 +304,9 @@ describe('CurrentRefinements', () => {
         ],
       };
 
-      const tree = mount(<CurrentRefinements {...props} />);
+      const { container } = render(<CurrentRefinements {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('can be used with a query', () => {
@@ -328,10 +330,12 @@ describe('CurrentRefinements', () => {
         ],
       };
 
-      const tree = mount(<CurrentRefinements {...props} />);
+      const { container } = render(<CurrentRefinements {...props} />);
+      const categoryLabel = container.querySelector('.categoryLabel')!
+        .innerHTML;
 
-      expect(tree.find('.categoryLabel').contains(<q>search1</q>)).toBe(true);
-      expect(tree).toMatchSnapshot();
+      expect(categoryLabel).toEqual('<q>search1</q>');
+      expect(container).toMatchSnapshot();
     });
   });
 });

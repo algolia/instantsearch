@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Pagination from '../../components/Pagination/Pagination';
 import connectPagination from '../../connectors/pagination/connectPagination';
@@ -214,7 +216,7 @@ export default function pagination({
   });
 
   const makeWidget = connectPagination(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ totalPages, padding });

@@ -1,5 +1,7 @@
-import React from 'preact-compat';
-import { shallow } from 'enzyme';
+/** @jsx h */
+
+import { h } from 'preact';
+import { render, fireEvent } from '@testing-library/preact';
 import GeoSearchControls from '../GeoSearchControls';
 
 describe('GeoSearchControls', () => {
@@ -24,7 +26,13 @@ describe('GeoSearchControls', () => {
     onRefineToggle: () => {},
     onRefineClick: () => {},
     onClearClick: () => {},
-    templateProps: {},
+    templateProps: {
+      templates: {
+        toggle: 'toggle',
+        redo: 'redo',
+        reset: 'reset',
+      },
+    },
   };
 
   it('expect to render nothing with refine disabled', () => {
@@ -33,9 +41,9 @@ describe('GeoSearchControls', () => {
       enableRefine: false,
     };
 
-    const wrapper = shallow(<GeoSearchControls {...props} />);
+    const { container } = render(<GeoSearchControls {...props} />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   describe('Control enabled', () => {
@@ -47,9 +55,9 @@ describe('GeoSearchControls', () => {
         hasMapMoveSinceLastRefine: false,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to render the toggle checked when refine on map move is enabled even when the map has moved', () => {
@@ -60,9 +68,9 @@ describe('GeoSearchControls', () => {
         hasMapMoveSinceLastRefine: true,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to render the toggle unchecked when refine on map move is disabled and the map has not moved', () => {
@@ -73,9 +81,9 @@ describe('GeoSearchControls', () => {
         hasMapMoveSinceLastRefine: false,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to render the button when refine on map move is disabled and the map has moved', () => {
@@ -86,9 +94,9 @@ describe('GeoSearchControls', () => {
         hasMapMoveSinceLastRefine: true,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to call onRefineToggle when the toggle is toggled', () => {
@@ -100,13 +108,13 @@ describe('GeoSearchControls', () => {
         onRefineToggle: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(props.onRefineToggle).not.toHaveBeenCalled();
+      expect(props.onRefineToggle).toHaveBeenCalledTimes(0);
 
-      wrapper.find('GeoSearchToggle').simulate('toggle');
+      fireEvent.change(container.querySelector('input'));
 
-      expect(props.onRefineToggle).toHaveBeenCalled();
+      expect(props.onRefineToggle).toHaveBeenCalledTimes(1);
     });
 
     it('expect to call onRefineClick when the button is clicked', () => {
@@ -118,13 +126,13 @@ describe('GeoSearchControls', () => {
         onRefineClick: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(props.onRefineClick).not.toHaveBeenCalled();
+      expect(props.onRefineClick).toHaveBeenCalledTimes(0);
 
-      wrapper.find('GeoSearchButton').simulate('click');
+      fireEvent.click(container.querySelector('button'));
 
-      expect(props.onRefineClick).toHaveBeenCalled();
+      expect(props.onRefineClick).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -137,9 +145,9 @@ describe('GeoSearchControls', () => {
         hasMapMoveSinceLastRefine: true,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to render the button disabled when refine on map move is disabled and the map has not moved', () => {
@@ -150,9 +158,9 @@ describe('GeoSearchControls', () => {
         hasMapMoveSinceLastRefine: false,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to render nothing when refine on map move is enabled', () => {
@@ -162,9 +170,9 @@ describe('GeoSearchControls', () => {
         isRefineOnMapMove: true,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to call onRefineClick whe the button is clicked', () => {
@@ -176,13 +184,13 @@ describe('GeoSearchControls', () => {
         onRefineClick: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(props.onRefineClick).not.toHaveBeenCalled();
+      expect(props.onRefineClick).toHaveBeenCalledTimes(0);
 
-      wrapper.find('GeoSearchButton').simulate('click');
+      fireEvent.click(container.querySelector('button'));
 
-      expect(props.onRefineClick).toHaveBeenCalled();
+      expect(props.onRefineClick).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -195,9 +203,9 @@ describe('GeoSearchControls', () => {
         isRefinedWithMap: true,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to not render the button when the refinement is not coming from the map', () => {
@@ -208,9 +216,9 @@ describe('GeoSearchControls', () => {
         isRefinedWithMap: false,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to not render the button when the options is disabled', () => {
@@ -221,9 +229,9 @@ describe('GeoSearchControls', () => {
         isRefinedWithMap: true,
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('expect to call onClearClick when the reset button is clicked', () => {
@@ -235,13 +243,13 @@ describe('GeoSearchControls', () => {
         onClearClick: jest.fn(),
       };
 
-      const wrapper = shallow(<GeoSearchControls {...props} />);
+      const { container } = render(<GeoSearchControls {...props} />);
 
-      expect(props.onClearClick).not.toHaveBeenCalled();
+      expect(props.onClearClick).toHaveBeenCalledTimes(0);
 
-      wrapper.find('.reset').simulate('click');
+      fireEvent.click(container.querySelector('.reset'));
 
-      expect(props.onClearClick).toHaveBeenCalled();
+      expect(props.onClearClick).toHaveBeenCalledTimes(1);
     });
   });
 });

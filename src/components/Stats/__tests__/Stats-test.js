@@ -1,5 +1,7 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme';
+/** @jsx h */
+
+import { h } from 'preact';
+import { mount } from 'enzyme';
 import Stats from '../Stats';
 import defaultTemplates from '../../../widgets/stats/defaultTemplates';
 
@@ -10,7 +12,9 @@ describe('Stats', () => {
   };
 
   it('should render <Template data= />', () => {
-    const wrapper = shallow(<Stats {...getProps()} templateProps={{}} />);
+    const wrapper = mount(
+      <Stats {...getProps()} templateProps={{ templates: defaultTemplates }} />
+    );
 
     const defaultProps = {
       cssClasses,
@@ -19,7 +23,7 @@ describe('Stats', () => {
       hasOneResult: false,
     };
 
-    expect(wrapper.props().children.props.data).toMatchObject(defaultProps);
+    expect(wrapper.find('Template').props().data).toMatchObject(defaultProps);
     expect(wrapper).toMatchSnapshot();
   });
 

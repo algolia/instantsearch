@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 
 type CSSClasses = {
   root: string;
@@ -12,7 +14,7 @@ type Props = {
   cssClasses: CSSClasses;
 };
 
-const PoweredBy = ({ url, theme, cssClasses }: Props): React.ReactNode => (
+const PoweredBy = ({ url, theme, cssClasses }: Props) => (
   <div className={cssClasses.root}>
     <a
       href={url}

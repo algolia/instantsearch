@@ -12,12 +12,12 @@ declare global {
   namespace jest {
     // eslint-disable-next-line @typescript-eslint/generic-type-naming
     interface Matchers<R> {
-      toWarnDev(expectedMessage?: string): R;
+      toWarnDev(expectedMessage?: string): CustomMatcherResult;
     }
   }
 }
 
-const matcher = {
+const matcher: jest.ExpectExtendMap = {
   toWarnDev: (callback: () => void, expectedMessage: string) => {
     if (expectedMessage !== undefined && typeof expectedMessage !== 'string') {
       throw new Error(
@@ -28,7 +28,7 @@ const matcher = {
     if (!__DEV__) {
       callback();
 
-      return { pass: true };
+      return { pass: true, message: '' };
     }
 
     const originalWarnMethod = console.warn;
@@ -65,7 +65,7 @@ ${jestDiff(expectedMessage, actualWarning)}`,
       };
     }
 
-    return { pass: true };
+    return { pass: true, message: '' };
   },
 };
 

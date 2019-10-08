@@ -1,158 +1,188 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Panel collapsible should render component with \`collapsible\` and \`collapsed\` props 1`] = `
-<div
-  className="root collapsibleRoot collapsedRoot"
-  hidden={false}
->
+Array [
   <div
-    className="header"
+    className="root collapsibleRoot collapsedRoot"
+    hidden={false}
   >
-    <span
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "Header",
-        }
-      }
-    />
-    <button
-      aria-expanded={false}
-      className="collapseButton"
-      onClick={[Function]}
+    <div
+      className="header"
     >
-      <span
+      Array [
+        <span
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "Header",
+            }
+          }
+        />,
+      ]
+      <button
+        aria-expanded={false}
+        className="collapseButton"
+        onClick={[Function]}
+      >
+        Array [
+          <span
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "More",
+              }
+            }
+          />,
+        ]
+      </button>
+    </div>
+    <div
+      className="body"
+    />
+    Array [
+      <div
+        className="footer"
         dangerouslySetInnerHTML={
           Object {
-            "__html": "More",
+            "__html": "Footer",
           }
         }
-      />
-    </button>
-  </div>
-  <div
-    className="body"
-  />
-  <div
-    className="footer"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Footer",
-      }
-    }
-  />
-</div>
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`Panel collapsible should render component with \`collapsible\` prop 1`] = `
-<div
-  className="root collapsibleRoot"
-  hidden={false}
->
+Array [
   <div
-    className="header"
+    className="root collapsibleRoot"
+    hidden={false}
   >
-    <span
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "Header",
-        }
-      }
-    />
-    <button
-      aria-expanded={true}
-      className="collapseButton"
-      onClick={[Function]}
+    <div
+      className="header"
     >
-      <span
+      Array [
+        <span
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "Header",
+            }
+          }
+        />,
+      ]
+      <button
+        aria-expanded={true}
+        className="collapseButton"
+        onClick={[Function]}
+      >
+        Array [
+          <span
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "Less",
+              }
+            }
+          />,
+        ]
+      </button>
+    </div>
+    <div
+      className="body"
+    />
+    Array [
+      <div
+        className="footer"
         dangerouslySetInnerHTML={
           Object {
-            "__html": "Less",
+            "__html": "Footer",
           }
         }
-      />
-    </button>
-  </div>
-  <div
-    className="body"
-  />
-  <div
-    className="footer"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Footer",
-      }
-    }
-  />
-</div>
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`Panel default should render component with default props 1`] = `
-<div
-  className="root"
-  hidden={false}
->
+Array [
   <div
-    className="body"
-  />
-</div>
+    className="root"
+    hidden={false}
+  >
+    <div
+      className="body"
+    />
+  </div>,
+]
 `;
 
 exports[`Panel hidden should render component with \`hidden\` prop 1`] = `
-<div
-  className="root noRefinementRoot"
-  hidden={true}
->
+Array [
   <div
-    className="header"
+    className="root noRefinementRoot"
+    hidden={true}
   >
-    <span
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "Header",
-        }
-      }
+    <div
+      className="header"
+    >
+      Array [
+        <span
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "Header",
+            }
+          }
+        />,
+      ]
+    </div>
+    <div
+      className="body"
     />
-  </div>
-  <div
-    className="body"
-  />
-  <div
-    className="footer"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Footer",
-      }
-    }
-  />
-</div>
+    Array [
+      <div
+        className="footer"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "Footer",
+          }
+        }
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`Panel templates should render component with custom templates 1`] = `
-<div
-  className="root"
-  hidden={false}
->
+Array [
   <div
-    className="header"
+    className="root"
+    hidden={false}
   >
-    <span
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "Header",
-        }
-      }
+    <div
+      className="header"
+    >
+      Array [
+        <span
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "Header",
+            }
+          }
+        />,
+      ]
+    </div>
+    <div
+      className="body"
     />
-  </div>
-  <div
-    className="body"
-  />
-  <div
-    className="footer"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "Footer",
-      }
-    }
-  />
-</div>
+    Array [
+      <div
+        className="footer"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "Footer",
+          }
+        }
+      />,
+    ]
+  </div>,
+]
 `;

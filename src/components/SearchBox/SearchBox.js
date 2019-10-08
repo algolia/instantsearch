@@ -1,4 +1,6 @@
-import React, { Component } from 'preact-compat';
+/** @jsx h */
+
+import { h, Component } from 'preact';
 import PropTypes from 'prop-types';
 import { noop } from '../../lib/utils';
 import Template from '../Template/Template';
@@ -64,7 +66,7 @@ class SearchBox extends Component {
     this.setState({ query: '' });
   }
 
-  onChange = event => {
+  onInput = event => {
     const { searchAsYouType, refine, onChange } = this.props;
     const query = event.target.value;
 
@@ -146,7 +148,7 @@ class SearchBox extends Component {
             autoCapitalize="off"
             spellCheck={false}
             maxLength={512}
-            onChange={this.onChange}
+            onInput={this.onInput}
           />
 
           <Template

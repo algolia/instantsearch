@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import {
   getContainerNode,
@@ -176,7 +178,7 @@ export default function panel({
     return {
       ...widget,
       dispose(...args) {
-        unmountComponentAtNode(getContainerNode(container));
+        render(null, getContainerNode(container));
 
         if (typeof widget.dispose === 'function') {
           return widget.dispose.call(this, ...args);

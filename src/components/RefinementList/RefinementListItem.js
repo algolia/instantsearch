@@ -1,37 +1,38 @@
+/** @jsx h */
+
+import { h } from 'preact';
 import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
-import { isEqual } from '../../lib/utils';
 import Template from '../Template/Template';
 
-class RefinementListItem extends Component {
-  componentWillMount() {
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props, nextProps);
-  }
-
-  handleClick(originalEvent) {
-    this.props.handleClick({
-      facetValueToRefine: this.props.facetValueToRefine,
-      isRefined: this.props.isRefined,
-      originalEvent,
-    });
-  }
-
-  render() {
-    return (
-      <li className={this.props.className} onClick={this.handleClick}>
-        <Template
-          {...this.props.templateProps}
-          templateKey={this.props.templateKey}
-          data={this.props.templateData}
-        />
-        {this.props.subItems}
-      </li>
-    );
-  }
+function RefinementListItem({
+  className,
+  handleClick,
+  facetValueToRefine,
+  isRefined,
+  templateProps,
+  templateKey,
+  templateData,
+  subItems,
+}) {
+  return (
+    <li
+      className={className}
+      onClick={originalEvent => {
+        handleClick({
+          facetValueToRefine,
+          isRefined,
+          originalEvent,
+        });
+      }}
+    >
+      <Template
+        {...templateProps}
+        templateKey={templateKey}
+        data={templateData}
+      />
+      {subItems}
+    </li>
+  );
 }
 
 RefinementListItem.propTypes = {

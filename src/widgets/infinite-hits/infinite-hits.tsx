@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
@@ -207,7 +209,7 @@ const infiniteHits: InfiniteHits = (
 
   const makeInfiniteHits = withInsights(connectInfiniteHits)(
     specializedRenderer,
-    () => unmountComponentAtNode(containerNode)
+    () => render(null, containerNode)
   );
 
   return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });

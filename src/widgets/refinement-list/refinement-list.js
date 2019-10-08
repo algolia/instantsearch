@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
@@ -295,7 +297,7 @@ export default function refinementList({
   });
 
   const makeWidget = connectRefinementList(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({
