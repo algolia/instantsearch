@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Template can configure custom rootTagName 1`] = `
+<div>
+  <span>
+    Template content
+  </span>
+</div>
+`;
+
+exports[`Template forward rootProps to the first node 1`] = `
+<div>
+  <div
+    class="className"
+  >
+    Template content
+  </div>
+</div>
+`;

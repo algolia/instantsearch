@@ -18,7 +18,7 @@ export type QueryRuleCustomDataCSSClasses = {
 };
 
 export type QueryRuleCustomDataTemplates = {
-  default?: string | (({ items }: { items: any }) => string);
+  default: string | (({ items }: { items: any }) => string);
 };
 
 type QueryRuleCustomDataWidgetParams = {
