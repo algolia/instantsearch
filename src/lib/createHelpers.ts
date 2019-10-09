@@ -5,7 +5,7 @@ import {
   SnippetOptions,
 } from '../helpers';
 
-type HoganRenderer = (value: any) => string;
+export type HoganRenderer = (value: any) => string;
 
 interface HoganHelpers {
   formatNumber: (value: number, render: HoganRenderer) => string;

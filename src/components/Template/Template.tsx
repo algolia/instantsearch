@@ -4,10 +4,13 @@ import { createElement } from 'preact';
 import { memo } from 'preact/compat';
 import { renderTemplate, isEqual } from '../../lib/utils';
 import { Template as WidgetTemplate } from '../../types';
+import { HoganRenderer } from '../../lib/createHelpers';
 
-export type TemplateProps<TTemplateData> = {
-  template: WidgetTemplate<TTemplateData>;
-  templateHelpers?: any;
+export type TemplateProps<TTemplateData = void> = {
+  template: WidgetTemplate<any>;
+  templateHelpers?: {
+    [helper: string]: (value: unknown, render: HoganRenderer) => string;
+  };
   rootTagName?: string;
   rootProps?: object;
   data?: TTemplateData;

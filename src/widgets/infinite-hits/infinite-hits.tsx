@@ -67,7 +67,7 @@ export type InfiniteHitsTemplates = {
   /**
    * The template to use when there are no results.
    */
-  empty: Template<{ results: SearchResults }>;
+  empty: Template<SearchResults>;
   /**
    * The template to use for the “Show previous” label.
    */
