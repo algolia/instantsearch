@@ -26,7 +26,7 @@ function renderTemplate({
   templateKey,
   compileOptions,
   helpers,
-  data,
+  data = {},
 }) {
   const template = templates[templateKey];
   const templateType = typeof template;
@@ -35,7 +35,7 @@ function renderTemplate({
 
   if (!isTemplateString && !isTemplateFunction) {
     throw new Error(
-      `Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`
+      `Template must be 'string' or 'function', was '${templateType}' (key: "${templateKey}").`
     );
   }
 

@@ -3,7 +3,10 @@
 import { h } from 'preact';
 import Template from '../Template/Template';
 
-import { VoiceSearchTemplates } from '../../widgets/voice-search/voice-search';
+import {
+  VoiceSearchTemplates,
+  VoiceSearchTemplateProps,
+} from '../../widgets/voice-search/voice-search';
 
 import {
   VoiceListeningState,
@@ -39,10 +42,21 @@ const VoiceSearch = ({
   };
 
   const { status, transcript, isSpeechFinal, errorCode } = voiceListeningState;
+  const templateData: VoiceSearchTemplateProps = {
+    status,
+    errorCode,
+    isListening,
+    transcript,
+    isSpeechFinal,
+    isBrowserSupported,
+  };
+
   return (
     <div className={cssClasses.root}>
       <Template
         templateKey="buttonText"
+        templates={templates}
+        data={templateData}
         rootTagName="button"
         rootProps={{
           className: cssClasses.button,
@@ -53,30 +67,15 @@ const VoiceSearch = ({
           onClick: handleClick,
           disabled: !isBrowserSupported,
         }}
-        data={{
-          status,
-          errorCode,
-          isListening,
-          transcript,
-          isSpeechFinal,
-          isBrowserSupported,
-        }}
-        templates={templates}
       />
+
       <Template
         templateKey="status"
+        templates={templates}
+        data={templateData}
         rootProps={{
           className: cssClasses.status,
         }}
-        data={{
-          status,
-          errorCode,
-          isListening,
-          transcript,
-          isSpeechFinal,
-          isBrowserSupported,
-        }}
-        templates={templates}
       />
     </div>
   );

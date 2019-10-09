@@ -5,21 +5,21 @@ import { memo } from 'preact/compat';
 import { renderTemplate, isEqual } from '../../lib/utils';
 import { Template as WidgetTemplate } from '../../types';
 
-export type TemplateProps = {
+export type TemplateProps<TData> = {
   templateKey: string;
   templates: { [templateKey: string]: WidgetTemplate<any> };
   rootTagName?: string;
   rootProps?: object;
-  data?: any;
+  data?: TData;
 };
 
-function Template({
-  data = {},
+function Template<TData = any>({
   templateKey,
+  templates,
+  data,
   rootProps,
   rootTagName = 'div',
-  templates,
-}: TemplateProps) {
+}: TemplateProps<TData>) {
   const content: string = renderTemplate({
     templates,
     templateKey,
@@ -33,7 +33,10 @@ function Template({
   });
 }
 
-function areEqual(prevProps: TemplateProps, nextProps: TemplateProps) {
+function areEqual<TData>(
+  prevProps: TemplateProps<TData>,
+  nextProps: TemplateProps<TData>
+) {
   return (
     prevProps.templateKey === nextProps.templateKey &&
     isEqual(prevProps.data, nextProps.data) &&

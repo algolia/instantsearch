@@ -26,9 +26,9 @@ export type VoiceSearchCSSClasses = {
   status: string | string[];
 };
 
-type VoiceSearchTemplateProps = {
+export type VoiceSearchTemplateProps = {
   status: string;
-  errorCode: string;
+  errorCode: SpeechRecognitionErrorCode | undefined;
   isListening: boolean;
   transcript: string;
   isSpeechFinal: boolean;

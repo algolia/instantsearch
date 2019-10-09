@@ -4,7 +4,7 @@ import { h } from 'preact';
 import Template, { TemplateProps } from '../Template';
 import { render } from '@testing-library/preact';
 
-const defaultProps: TemplateProps = {
+const defaultProps: TemplateProps<undefined> = {
   templates: {
     test: 'Template content',
   },
