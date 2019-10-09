@@ -13,8 +13,7 @@ const ClearRefinements = ({
 }) => (
   <div className={cssClasses.root}>
     <Template
-      {...templateProps}
-      templateKey="resetLabel"
+      template={templateProps.templates.resetLabel}
       rootTagName="button"
       rootProps={{
         className: cx(cssClasses.button, {

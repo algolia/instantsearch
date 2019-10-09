@@ -47,8 +47,7 @@ const InfiniteHits = ({
   if (results.hits.length === 0) {
     return (
       <Template
-        {...templateProps}
-        templateKey="empty"
+        template={templateProps.templates.empty}
         rootProps={{
           className: cx(cssClasses.root, cssClasses.emptyRoot),
         }}
@@ -61,8 +60,7 @@ const InfiniteHits = ({
     <div className={cssClasses.root}>
       {hasShowPrevious && (
         <Template
-          {...templateProps}
-          templateKey="showPreviousText"
+          template={templateProps.templates.showPreviousText}
           rootTagName="button"
           rootProps={{
             className: cx(cssClasses.loadPrevious, {
@@ -77,8 +75,7 @@ const InfiniteHits = ({
       <ol className={cssClasses.list}>
         {hits.map((hit, position) => (
           <Template
-            {...templateProps}
-            templateKey="item"
+            template={templateProps.templates.item}
             rootTagName="li"
             rootProps={{ className: cssClasses.item }}
             key={hit.objectID}
@@ -91,8 +88,7 @@ const InfiniteHits = ({
       </ol>
 
       <Template
-        {...templateProps}
-        templateKey="showMoreText"
+        template={templateProps.templates.showMoreText}
         rootTagName="button"
         rootProps={{
           className: cx(cssClasses.loadMore, {

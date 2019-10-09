@@ -9,8 +9,7 @@ const Hits = ({ results, hits, cssClasses, templateProps }) => {
   if (results.hits.length === 0) {
     return (
       <Template
-        {...templateProps}
-        templateKey="empty"
+        template={templateProps.templates.empty}
         rootProps={{
           className: cx(cssClasses.root, cssClasses.emptyRoot),
         }}
@@ -24,8 +23,7 @@ const Hits = ({ results, hits, cssClasses, templateProps }) => {
       <ol className={cssClasses.list}>
         {hits.map((hit, position) => (
           <Template
-            {...templateProps}
-            templateKey="item"
+            template={templateProps.templates.item}
             rootTagName="li"
             rootProps={{ className: cssClasses.item }}
             key={hit.objectID}

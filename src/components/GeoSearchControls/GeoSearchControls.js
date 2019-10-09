@@ -34,7 +34,7 @@ const GeoSearchControls = ({
               onToggle={onRefineToggle}
             >
               <Template
-                {...templateProps}
+                template={templateProps.templates.toggle}
                 templateKey="toggle"
                 rootTagName="span"
               />
@@ -46,8 +46,7 @@ const GeoSearchControls = ({
               onClick={onRefineClick}
             >
               <Template
-                {...templateProps}
-                templateKey="redo"
+                template={templateProps.templates.redo}
                 rootTagName="span"
               />
             </GeoSearchButton>
@@ -65,8 +64,7 @@ const GeoSearchControls = ({
             onClick={onRefineClick}
           >
             <Template
-              {...templateProps}
-              templateKey="redo"
+              template={templateProps.templates.redo}
               rootTagName="span"
             />
           </GeoSearchButton>
@@ -75,7 +73,10 @@ const GeoSearchControls = ({
 
       {enableClearMapRefinement && isRefinedWithMap && (
         <GeoSearchButton className={cssClasses.reset} onClick={onClearClick}>
-          <Template {...templateProps} templateKey="reset" rootTagName="span" />
+          <Template
+            template={templateProps.templates.reset}
+            rootTagName="span"
+          />
         </GeoSearchButton>
       )}
     </div>

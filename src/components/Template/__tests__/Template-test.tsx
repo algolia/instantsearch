@@ -4,11 +4,15 @@ import { h } from 'preact';
 import Template, { TemplateProps } from '../Template';
 import { render } from '@testing-library/preact';
 
-const defaultProps: TemplateProps<undefined> = {
-  templates: {
-    test: 'Template content',
+type TemplateData = {
+  items: string[];
+};
+
+const defaultProps: TemplateProps<TemplateData> = {
+  template: 'Template content',
+  data: {
+    items: [],
   },
-  templateKey: 'test',
 };
 
 describe('Template', () => {
@@ -45,14 +49,9 @@ describe('Template', () => {
     it('does not render when `data` does not change', () => {
       const props = {
         ...defaultProps,
-        data: {
-          items: [],
-        },
-        templates: {
-          test: () => {
-            renderCount++;
-            return 'test';
-          },
+        template: () => {
+          renderCount++;
+          return 'test';
         },
       };
 
@@ -65,14 +64,9 @@ describe('Template', () => {
     it('renders when `data` changes', () => {
       const props = {
         ...defaultProps,
-        data: {
-          items: [],
-        },
-        templates: {
-          test: () => {
-            renderCount++;
-            return 'test';
-          },
+        template: () => {
+          renderCount++;
+          return 'test';
         },
       };
 
@@ -82,38 +76,7 @@ describe('Template', () => {
 
       const newProps = {
         ...props,
-        data: { items: [1] },
-      };
-
-      rerender(<Template {...newProps} />);
-
-      expect(renderCount).toEqual(2);
-    });
-
-    it('renders when `templateKey` changes', () => {
-      const props = {
-        ...defaultProps,
-        templates: {
-          test: () => {
-            renderCount++;
-            return 'test';
-          },
-        },
-      };
-
-      const { rerender } = render(<Template {...props} />);
-
-      expect(renderCount).toEqual(1);
-
-      const newProps = {
-        ...props,
-        templateKey: 'newTemplateKey',
-        templates: {
-          newTemplateKey: () => {
-            renderCount++;
-            return 'test';
-          },
-        },
+        data: { items: ['1'] },
       };
 
       rerender(<Template {...newProps} />);
@@ -124,11 +87,9 @@ describe('Template', () => {
     it('renders when `rootProps` changes', () => {
       const props = {
         ...defaultProps,
-        templates: {
-          test: () => {
-            renderCount++;
-            return 'test';
-          },
+        template: () => {
+          renderCount++;
+          return 'test';
         },
       };
 
@@ -154,11 +115,9 @@ describe('Template', () => {
         rootProps: {
           className: 'initialClassName',
         },
-        templates: {
-          test: () => {
-            renderCount++;
-            return 'test';
-          },
+        template: () => {
+          renderCount++;
+          return 'test';
         },
       };
 

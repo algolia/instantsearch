@@ -63,8 +63,7 @@ class RangeInput extends Component {
           </label>
 
           <Template
-            {...templateProps}
-            templateKey="separatorText"
+            template={templateProps.templates.separatorText}
             rootTagName="span"
             rootProps={{
               className: cssClasses.separator,
@@ -86,8 +85,7 @@ class RangeInput extends Component {
           </label>
 
           <Template
-            {...templateProps}
-            templateKey="submitText"
+            template={templateProps.templates.submitText}
             rootTagName="button"
             rootProps={{
               type: 'submit',

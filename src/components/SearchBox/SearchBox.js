@@ -152,7 +152,7 @@ class SearchBox extends Component {
           />
 
           <Template
-            templateKey="submit"
+            template={templates.submit}
             rootTagName="button"
             rootProps={{
               className: cssClasses.submit,
@@ -160,12 +160,11 @@ class SearchBox extends Component {
               title: 'Submit the search query.',
               hidden: !showSubmit,
             }}
-            templates={templates}
             data={{ cssClasses }}
           />
 
           <Template
-            templateKey="reset"
+            template={templates.reset}
             rootTagName="button"
             rootProps={{
               className: cssClasses.reset,
@@ -173,19 +172,17 @@ class SearchBox extends Component {
               title: 'Clear the search query.',
               hidden: !(showReset && query.trim() && !isSearchStalled),
             }}
-            templates={templates}
             data={{ cssClasses }}
           />
 
           {showLoadingIndicator && (
             <Template
-              templateKey="loadingIndicator"
+              template={templates.loadingIndicator}
               rootTagName="span"
               rootProps={{
                 className: cssClasses.loadingIndicator,
                 hidden: !isSearchStalled,
               }}
-              templates={templates}
               data={{ cssClasses }}
             />
           )}

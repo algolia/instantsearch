@@ -54,8 +54,7 @@ const VoiceSearch = ({
   return (
     <div className={cssClasses.root}>
       <Template
-        templateKey="buttonText"
-        templates={templates}
+        template={templates.buttonText}
         data={templateData}
         rootTagName="button"
         rootProps={{
@@ -70,8 +69,7 @@ const VoiceSearch = ({
       />
 
       <Template
-        templateKey="status"
-        templates={templates}
+        template={templates.status}
         data={templateData}
         rootProps={{
           className: cssClasses.status,

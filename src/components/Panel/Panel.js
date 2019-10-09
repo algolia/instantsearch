@@ -40,8 +40,7 @@ class Panel extends Component {
         {templateProps.templates.header && (
           <div className={cssClasses.header}>
             <Template
-              {...templateProps}
-              templateKey="header"
+              template={templateProps.templates.header}
               rootTagName="span"
               data={data}
             />
@@ -60,8 +59,7 @@ class Panel extends Component {
                 }}
               >
                 <Template
-                  {...templateProps}
-                  templateKey="collapseButtonText"
+                  template={templateProps.templates.collapseButtonText}
                   rootTagName="span"
                   data={{ collapsed: this.state.collapsed }}
                 />
@@ -74,8 +72,7 @@ class Panel extends Component {
 
         {templateProps.templates.footer && (
           <Template
-            {...templateProps}
-            templateKey="footer"
+            template={templateProps.templates.footer}
             rootProps={{
               className: cssClasses.footer,
             }}

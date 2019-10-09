@@ -19,8 +19,7 @@ const QueryRuleCustomData = ({
   items,
 }: QueryRuleCustomDataProps) => (
   <Template
-    templateKey="default"
-    templates={templates}
+    template={templates.default}
     rootProps={{ className: cssClasses.root }}
     data={{ items }}
   />

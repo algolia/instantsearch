@@ -9,9 +9,9 @@ function RefinementListItem({
   handleClick,
   facetValueToRefine,
   isRefined,
-  templateProps,
-  templateKey,
+  template,
   templateData,
+  templateHelpers,
   subItems,
 }) {
   return (
@@ -26,8 +26,8 @@ function RefinementListItem({
       }}
     >
       <Template
-        {...templateProps}
-        templateKey={templateKey}
+        template={template}
+        templateHelpers={templateHelpers}
         data={templateData}
       />
       {subItems}
@@ -40,9 +40,9 @@ RefinementListItem.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isRefined: PropTypes.bool.isRequired,
   subItems: PropTypes.object,
+  template: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  templateHelpers: PropTypes.object.isRequired,
   templateData: PropTypes.object.isRequired,
-  templateKey: PropTypes.string.isRequired,
-  templateProps: PropTypes.object.isRequired,
   className: PropTypes.string.isRequired,
 };
 

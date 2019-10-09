@@ -5,26 +5,25 @@ import { memo } from 'preact/compat';
 import { renderTemplate, isEqual } from '../../lib/utils';
 import { Template as WidgetTemplate } from '../../types';
 
-export type TemplateProps<TData> = {
-  templateKey: string;
-  templates: { [templateKey: string]: WidgetTemplate<any> };
+export type TemplateProps<TTemplateData> = {
+  template: WidgetTemplate<TTemplateData>;
+  templateHelpers?: any;
   rootTagName?: string;
   rootProps?: object;
-  data?: TData;
+  data?: TTemplateData;
 };
 
-function Template<TData = any>({
-  templateKey,
-  templates,
+function Template<TTemplateData = void>({
+  template,
+  templateHelpers,
   data,
   rootProps,
   rootTagName = 'div',
-}: TemplateProps<TData>) {
+}: TemplateProps<TTemplateData>) {
   const content: string = renderTemplate({
-    templates,
-    templateKey,
+    template,
     data,
-    helpers: {},
+    helpers: templateHelpers,
   });
 
   return createElement(rootTagName, {
@@ -33,12 +32,11 @@ function Template<TData = any>({
   });
 }
 
-function areEqual<TData>(
-  prevProps: TemplateProps<TData>,
-  nextProps: TemplateProps<TData>
+function areEqual<TTemplateData>(
+  prevProps: TemplateProps<TTemplateData>,
+  nextProps: TemplateProps<TTemplateData>
 ) {
   return (
-    prevProps.templateKey === nextProps.templateKey &&
     isEqual(prevProps.data, nextProps.data) &&
     isEqual(prevProps.rootProps, nextProps.rootProps)
   );

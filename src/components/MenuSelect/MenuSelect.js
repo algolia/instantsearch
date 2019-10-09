@@ -41,8 +41,7 @@ class MenuSelect extends Component {
           onChange={this.handleSelectChange}
         >
           <Template
-            {...templateProps}
-            templateKey="defaultOption"
+            template={templateProps.templates.defaultOption}
             rootTagName="option"
             rootProps={{
               value: '',
@@ -52,8 +51,7 @@ class MenuSelect extends Component {
 
           {items.map(item => (
             <Template
-              {...templateProps}
-              templateKey="item"
+              template={templateProps.templates.item}
               rootTagName="option"
               rootProps={{
                 value: item.value,

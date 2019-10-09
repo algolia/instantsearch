@@ -53,8 +53,7 @@ const Breadcrumb = ({
         })}
       >
         <Template
-          {...templateProps}
-          templateKey="home"
+          template={templateProps.templates.home}
           rootTagName="a"
           rootProps={{
             className: cssClasses.link,
@@ -78,8 +77,7 @@ const Breadcrumb = ({
             })}
           >
             <Template
-              {...templateProps}
-              templateKey="separator"
+              template={templateProps.templates.separator}
               rootTagName="span"
               rootProps={{
                 className: cssClasses.separator,

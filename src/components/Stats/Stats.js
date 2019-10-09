@@ -16,8 +16,7 @@ const Stats = ({
 }) => (
   <div className={cssClasses.root}>
     <Template
-      {...templateProps}
-      templateKey="text"
+      template={templateProps.templates.text}
       rootTagName="span"
       rootProps={{ className: cssClasses.text }}
       data={{

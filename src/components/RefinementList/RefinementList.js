@@ -62,9 +62,10 @@ class RefinementList extends Component {
       key += `/${facetValue.count}`;
     }
 
+    console.log(this.props.templateProps);
+
     return (
       <RefinementListItem
-        templateKey="item"
         key={key}
         facetValueToRefine={facetValue.value}
         handleClick={this.handleItemClick}
@@ -75,8 +76,9 @@ class RefinementList extends Component {
           [this.props.cssClasses.parentItem]: hasChildren,
         })}
         subItems={subItems}
+        template={this.props.templateProps.templates.item}
+        templateHelpers={this.props.templateProps.templatesConfig.helpers}
         templateData={templateData}
-        templateProps={this.props.templateProps}
       />
     );
   }
@@ -170,8 +172,7 @@ class RefinementList extends Component {
 
     const showMoreButton = this.props.showMore === true && (
       <Template
-        {...this.props.templateProps}
-        templateKey="showMoreText"
+        template={this.props.templateProps.templates.showMoreText}
         rootTagName="button"
         rootProps={{
           className: showMoreButtonClassName,
@@ -217,8 +218,7 @@ class RefinementList extends Component {
       this.props.isFromSearch &&
       this.props.facetValues.length === 0 && (
         <Template
-          {...this.props.templateProps}
-          templateKey="searchableNoResults"
+          template={this.props.templateProps.templates.searchableNoResults}
           rootProps={{ className: this.props.cssClasses.noResults }}
         />
       );

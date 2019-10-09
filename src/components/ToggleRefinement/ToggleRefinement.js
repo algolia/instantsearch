@@ -20,10 +20,9 @@ const ToggleRefinement = ({
       />
 
       <Template
-        {...templateProps}
+        template={templateProps.templates.labelText}
         rootTagName="span"
         rootProps={{ className: cssClasses.labelText }}
-        templateKey="labelText"
         data={currentRefinement}
       />
     </label>

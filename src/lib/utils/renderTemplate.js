@@ -21,21 +21,14 @@ function transformHelpersToHogan(helpers = {}, compileOptions, data) {
   );
 }
 
-function renderTemplate({
-  templates,
-  templateKey,
-  compileOptions,
-  helpers,
-  data = {},
-}) {
-  const template = templates[templateKey];
+function renderTemplate({ template, compileOptions, helpers, data = {} }) {
   const templateType = typeof template;
   const isTemplateString = templateType === 'string';
   const isTemplateFunction = templateType === 'function';
 
   if (!isTemplateString && !isTemplateFunction) {
     throw new Error(
-      `Template must be 'string' or 'function', was '${templateType}' (key: "${templateKey}").`
+      `Template must be 'string' or 'function', was '${templateType}'.`
     );
   }
 
