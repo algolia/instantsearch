@@ -1,3 +1,12 @@
+## [1.2.3](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.2...v1.2.3) (2019-10-14)
+
+
+### Bug Fixes
+
+* **helper:** fix helpers to handle RangeSlider in vue-instantsearch ([#12](https://github.com/algolia/instantsearch-e2e-tests/issues/12)) ([143a59b](https://github.com/algolia/instantsearch-e2e-tests/commit/143a59b))
+
+
+
 ## [1.2.2](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.1...v1.2.2) (2019-09-12)
 
 
