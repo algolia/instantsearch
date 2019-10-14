@@ -1,3 +1,17 @@
+# [2.6.0](https://github.com/algolia/vue-instantsearch/compare/v2.5.0...v2.6.0) (2019-10-14)
+
+
+### Bug Fixes
+
+* **Snippet:** switch tag replacement to mark ([#729](https://github.com/algolia/vue-instantsearch/issues/729)) ([7f30331](https://github.com/algolia/vue-instantsearch/commit/7f30331)), closes [#727](https://github.com/algolia/vue-instantsearch/issues/727)
+
+
+### Features
+
+* **core:** expose source files ([#726](https://github.com/algolia/vue-instantsearch/issues/726)) ([ede5852](https://github.com/algolia/vue-instantsearch/commit/ede5852))
+
+
+
 # [2.5.0](https://github.com/algolia/vue-instantsearch/compare/v2.4.0...v2.5.0) (2019-09-18)
 
 
