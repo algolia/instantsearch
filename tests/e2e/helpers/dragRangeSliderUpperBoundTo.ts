@@ -1,15 +1,20 @@
-declare namespace WebdriverIOAsync {
+import {
+  RANGE_SLIDER_RAIL_SELECTOR,
+  RANGE_SLIDER_HANDLE_SELECTOR,
+} from './selectors';
+
+declare module 'webdriverio' {
   interface Browser {
     dragRangeSliderUpperBoundTo(value: number): Promise<number>;
   }
 }
 
 browser.addCommand('dragRangeSliderUpperBoundTo', async (value: number) => {
-  const slider = await browser.$('.slider-rail, .rheostat-background');
+  const slider = await browser.$(RANGE_SLIDER_RAIL_SELECTOR);
 
-  await browser.waitForElement('.slider-handle, .rheostat-handle');
+  await browser.waitForElement(RANGE_SLIDER_HANDLE_SELECTOR);
   let [lowerHandle, upperHandle] = await browser.$$(
-    '.slider-handle, .rheostat-handle'
+    RANGE_SLIDER_HANDLE_SELECTOR
   );
 
   const { width: sliderWidth } = await slider.getSize();
@@ -34,9 +39,7 @@ browser.addCommand('dragRangeSliderUpperBoundTo', async (value: number) => {
   // Depending of the steps calculation there can be a difference between
   // the wanted value and the actual value of the slider, so we return
   // the actual value in case we need it in the rest of the tests
-  await browser.waitForElement('.slider-handle, .rheostat-handle');
-  [lowerHandle, upperHandle] = await browser.$$(
-    '.slider-handle, .rheostat-handle'
-  );
+  await browser.waitForElement(RANGE_SLIDER_HANDLE_SELECTOR);
+  [lowerHandle, upperHandle] = await browser.$$(RANGE_SLIDER_HANDLE_SELECTOR);
   return Number(await upperHandle.getAttribute('aria-valuenow'));
 });
