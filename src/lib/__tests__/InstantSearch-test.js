@@ -1226,10 +1226,10 @@ describe('UI state', () => {
           menu: {
             category: 'Hardware',
           },
-          // `places` is a UI parameter that is not supported by default but that
+          // This is a UI parameter that is not supported by default but that
           // can be added when using custom widgets. Having it in `initialUiState`
           // makes sure that it doesn't throw if it happens.
-          places: {
+          anotherWidget: {
             query: 'Paris',
             location: ['1', '1'],
           },
