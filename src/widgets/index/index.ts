@@ -394,6 +394,10 @@ const index = (props: IndexProps): Index => {
             const requiredWidgets: Array<Widget['$$type']> =
               stateToWidgetsMap[parameter];
 
+            if (!requiredWidgets) {
+              return acc;
+            }
+
             if (
               !requiredWidgets.some(requiredWidget =>
                 mountedWidgets.includes(requiredWidget)
