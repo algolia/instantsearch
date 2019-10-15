@@ -111,7 +111,7 @@ stories.add(
         }),
 
         places({
-          placesClient: algoliaPlaces,
+          placesReference: algoliaPlaces,
           container: placesElement,
           defaultPosition: ['37.7793', '-122.419'],
         }),

@@ -38,7 +38,7 @@ const createFakeHelper = (
 describe('places', () => {
   const container = document.createElement('input');
   const defaultOptions = {
-    placesClient: algoliaPlaces,
+    placesReference: algoliaPlaces,
     container,
   };
 
@@ -60,7 +60,7 @@ describe('places', () => {
     test('throws without parameters', () => {
       // @ts-ignore
       expect(() => places()).toThrowErrorMatchingInlineSnapshot(
-        `"The \`placesClient\` option requires a valid Places.js reference."`
+        `"The \`placesReference\` option requires a valid Places.js reference."`
       );
     });
   });

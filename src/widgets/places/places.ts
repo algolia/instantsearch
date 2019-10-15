@@ -8,11 +8,11 @@ import { WidgetFactory } from '../../types';
 
 interface PlacesWidgetOptions extends StaticOptions {
   /**
-   * The Algolia Places client to use.
+   * The Algolia Places reference to use.
    *
    * @see https://github.com/algolia/places
    */
-  placesClient: (
+  placesReference: (
     options: StaticOptions & ReconfigurableOptions
   ) => PlacesInstance;
   /**
@@ -34,16 +34,19 @@ interface PlacesWidgetState {
 const placesWidget: WidgetFactory<PlacesWidgetOptions> = (
   widgetOptions: PlacesWidgetOptions
 ) => {
-  const { placesClient = undefined, defaultPosition = [], ...placesOptions } =
-    widgetOptions || {};
+  const {
+    placesReference = undefined,
+    defaultPosition = [],
+    ...placesOptions
+  } = widgetOptions || {};
 
-  if (typeof placesClient !== 'function') {
+  if (typeof placesReference !== 'function') {
     throw new Error(
-      'The `placesClient` option requires a valid Places.js reference.'
+      'The `placesReference` option requires a valid Places.js reference.'
     );
   }
 
-  const placesAutocomplete = placesClient(placesOptions);
+  const placesAutocomplete = placesReference(placesOptions);
 
   const state: PlacesWidgetState = {
     query: '',
