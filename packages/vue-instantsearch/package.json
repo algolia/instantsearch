@@ -28,10 +28,10 @@
   "scripts": {
     "build": "rollup -c",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook:build": "build-storybook -c .storybook -o docs/dist/stories",
+    "storybook:build": "build-storybook -c .storybook -o website/stories",
     "examples:build": "./examples/build.sh",
-    "docs:build": "cd docs && yarn && yarn build",
-    "docs:build:dev": "cd docs && yarn && yarn build:dev",
+    "docs:build": "yarn build && cd docs && yarn && yarn build",
+    "docs:build:dev": "yarn build && cd docs && yarn && yarn build:dev",
     "docs:watch": "cd docs && yarn && yarn dev",
     "docs:deploy": "cd docs && yarn && yarn deploy",
     "test": "jest",

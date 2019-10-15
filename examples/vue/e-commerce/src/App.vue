@@ -135,6 +135,9 @@
                         :duration="0"
                         @change="refine({ min: $event[0], max: $event[1] })"
                       >
+                        <template slot="dot" slot-scope="{ index, value }">
+                          <div :aria-valuemin="range.min" :aria-valuemax="range.max" :aria-valuenow="value" :data-handle-key="index" class="vue-slider-dot-handle" role="slider" tabindex="0" />
+                        </template>
                         <template slot="tooltip" slot-scope="{ value }">
                           {{ formatNumber(value) }}
                         </template>
@@ -170,6 +173,7 @@
                       >
                         <a
                           class="ais-RatingMenu-link"
+                          :aria-label="item.value + ' & up'"
                           :href="createURL(item.value)"
                           @click.prevent="refine(item.value)"
                         >
@@ -223,8 +227,8 @@
               class="container-option"
               :items="[
                 { value: 'instant_search', label: 'Featured' },
-                { value: 'instant_search_price_asc', label: 'Price asc.' },
-                { value: 'instant_search_price_desc', label: 'Price desc.' },
+                { value: 'instant_search_price_asc', label: 'Price ascending' },
+                { value: 'instant_search_price_desc', label: 'Price descending' },
               ]"
             />
 
@@ -234,15 +238,17 @@
                 {
                   label: '16 hits per page',
                   value: 16,
-                  default: true,
+                  default: getSelectedHitsPerPageValue() === 16 || !getSelectedHitsPerPageValue(),
                 },
                 {
                   label: '32 hits per page',
                   value: 32,
+                  default: getSelectedHitsPerPageValue() === 32,
                 },
                 {
                   label: '64 hits per page',
                   value: 64,
+                  default: getSelectedHitsPerPageValue() === 64,
                 },
               ]"
             />
@@ -457,13 +463,12 @@
 
 <script>
 import algoliasearch from 'algoliasearch/lite';
-import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
-import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
 import VueSlider from 'vue-slider-component';
 import cx from 'classnames';
 import ClearRefinements from './widgets/ClearRefinements.vue';
 import NoResults from './widgets/NoResults.vue';
 import { formatNumber } from './utils';
+import routing from './routing';
 
 import './Theme.css';
 import './App.css';
@@ -503,10 +508,7 @@ export default {
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
-      routing: {
-        router: historyRouter(),
-        stateMapping: simpleMapping(),
-      },
+      routing
     };
   },
   methods: {
@@ -516,6 +518,10 @@ export default {
         value.min !== null ? value.min : range.min,
         value.max !== null ? value.max : range.max,
       ];
+    },
+    getSelectedHitsPerPageValue() {
+      const [, hitsPerPage] = document.location.search.match(/hitsPerPage=([0-9]+)/) || [];
+      return Number(hitsPerPage);
     },
     openFilters() {
       document.body.classList.add('filtering');

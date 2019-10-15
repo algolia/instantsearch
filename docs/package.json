@@ -2,10 +2,9 @@
   "name": "vue-instantsearch-docgen",
   "version": "0.1.0",
   "main": "index.js",
-  "license": "MIT",
   "scripts": {
     "dev": "babel-node start.js",
-    "build:dev": "babel-node build.js && (cd .. && yarn storybook:build && yarn examples:build) && cp _redirects ./dist/",
+    "build:dev": "babel-node build.js && (cd .. && yarn storybook:build && yarn examples:build) && cp _redirects ../website/",
     "build": "NODE_ENV='production' babel-node build.js && cd .. && yarn storybook:build && yarn examples:build",
     "deploy": "yarn run build && gh-pages -d dist"
   },

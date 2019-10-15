@@ -1,1 +1,4 @@
 / https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/
+
+# Examples
+/examples/:name/search/*   /examples/:name/index.html   200
