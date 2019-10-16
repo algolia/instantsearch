@@ -4,6 +4,7 @@ node_modules/
 coverage
 .DS_store
 .nuxt
+.env
 
 # Generated files
 /website
