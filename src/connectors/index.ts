@@ -47,3 +47,6 @@ export { default as connectQueryRules } from './query-rules/connectQueryRules';
 export {
   default as connectVoiceSearch,
 } from './voice-search/connectVoiceSearch';
+export {
+  default as connectRelatedHits,
+} from './related-hits/connectRelatedHits';

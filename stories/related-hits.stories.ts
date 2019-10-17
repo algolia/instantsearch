@@ -1,11 +1,11 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import index from '../src/widgets/index/index';
-import relatedItems from '../src/widgets/related-items/related-items';
+import relatedHits from '../src/widgets/related-hits/related-hits';
 import configure from '../src/widgets/configure/configure';
 import hits from '../src/widgets/hits/hits';
 
-storiesOf('Results|RelatedItems', module).add(
+storiesOf('Results|RelatedHits', module).add(
   'default',
   withHits(({ search, container }) => {
     const productContainer = document.createElement('div');
@@ -15,7 +15,7 @@ storiesOf('Results|RelatedItems', module).add(
     container.appendChild(relatedContainer);
 
     const relatedIndex = index({ indexName: 'instant_search' });
-    let isFirstRender = true;
+    let relatedItem;
 
     search.addWidgets([
       index({ indexName: 'instant_search' }).addWidgets([
@@ -25,15 +25,15 @@ storiesOf('Results|RelatedItems', module).add(
         hits({
           container: productContainer,
           transformItems: items => {
-            if (isFirstRender) {
-              isFirstRender = false;
+            if (!relatedItem) {
+              relatedItem = items[0];
 
               relatedIndex.addWidgets([
-                relatedItems({
+                relatedHits({
                   container: relatedContainer,
-                  hit: items[0],
+                  hit: relatedItem,
                   limit: 5,
-                  relatedAttributes: {
+                  matchingPatterns: {
                     brand: [{ score: 3 }],
                     type: [{ score: 10 }],
                     categories: [{ score: 2 }],

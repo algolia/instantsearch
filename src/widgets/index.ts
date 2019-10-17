@@ -39,3 +39,4 @@ export {
 } from './query-rule-context/query-rule-context';
 export { default as index } from './index/index';
 export { default as places } from './places/places';
+export { default as relatedHits } from './related-hits/related-hits';
