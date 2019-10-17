@@ -64,6 +64,8 @@ export type Hit = {
   __queryID?: string;
 };
 
+export type ResultHit = Omit<Omit<Hit, '__position'>, '__queryID'>;
+
 export type Hits = Hit[];
 
 export type FacetHit = {

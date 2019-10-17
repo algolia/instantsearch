@@ -9,7 +9,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Template from '../../components/Template/Template';
-import { WidgetFactory, Renderer, RenderOptions } from '../../types';
+import { WidgetFactory, Renderer, RenderOptions, ResultHit } from '../../types';
 
 export type RelatedItemsCSSClasses = {
   root: string;
@@ -20,7 +20,7 @@ export type RelatedItemsTemplates = {
 };
 
 type RelatedAttribute = {
-  value: any;
+  value?: any;
   score?: number;
   operator?: string;
 };
@@ -30,9 +30,9 @@ type RelatedAttributes = {
 };
 
 type RelatedItemsWidgetParams = {
-  objectID: string;
+  hit: ResultHit;
   limit: number;
-  relatedAttributes: RelatedAttributes;
+  relatedAttributes?: RelatedAttributes;
   container: string | HTMLElement;
   cssClasses?: RelatedItemsCSSClasses;
   templates?: RelatedItemsTemplates;
@@ -58,7 +58,18 @@ const suit = component('RelatedItems');
 function RelatedItems({ items, templates, cssClasses }) {
   const defaultTemplate = ({ items }) => {
     return `<ul>${items
-      .map(item => `<li>${item.name} | ${item.price}</li>`)
+      .map(
+        item => `
+<li>
+  <strong>${item.name}</strong>
+
+  <ul>
+    <li>price: ${item.price}</li>
+    <li>rating: ${item.rating}</li>
+    <li>categories: [${item.categories.join(', ')}]</li>
+  </ul>
+</li>`
+      )
       .join('')}</ul>`;
   };
 
@@ -91,8 +102,12 @@ const renderer: RelatedItemsRenderer<RelatedItemsRendererWidgetParams> = ({
 const relatedItems: RelatedItems = (
   {
     container,
-    objectID,
-    relatedAttributes = {},
+    hit,
+    relatedAttributes = Object.keys(hit).reduce((acc, key) => {
+      acc[key] = [{}];
+
+      return acc;
+    }, {}),
     limit = 5,
     cssClasses: userCssClasses = {} as RelatedItemsCSSClasses,
     templates: userTemplates = {},
@@ -103,8 +118,8 @@ const relatedItems: RelatedItems = (
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  if (!objectID) {
-    throw new Error(withUsage('The `objectID` option is required.'));
+  if (!hit) {
+    throw new Error(withUsage('The `hit` option is required.'));
   }
 
   const cssClasses = {
@@ -126,7 +141,7 @@ const relatedItems: RelatedItems = (
 
   return makeRelatedItems({
     container: containerNode,
-    objectID,
+    hit,
     relatedAttributes,
     limit,
     cssClasses,
@@ -137,7 +152,7 @@ const relatedItems: RelatedItems = (
 
 const connectRelatedItems = (renderFn, unmountFn = noop) => {
   return widgetParams => {
-    const { objectID, limit, relatedAttributes } = widgetParams || {};
+    const { hit, limit, relatedAttributes } = widgetParams || {};
 
     return {
       init({}) {
@@ -166,13 +181,30 @@ const connectRelatedItems = (renderFn, unmountFn = noop) => {
             const filters = attributes.map((attribute: RelatedAttribute) => {
               const operator =
                 attribute.operator !== undefined ? attribute.operator : ':';
-              const filter = `${attributeName}${operator}${attribute.value}`;
-              const score =
-                attribute.score !== undefined
-                  ? `<score=${attribute.score}>`
-                  : '';
+              const value =
+                attribute.value !== undefined
+                  ? attribute.value
+                  : hit[attributeName];
 
-              return `${filter}${score}`;
+              if (Array.isArray(value)) {
+                return value.map(filterValue => {
+                  const filter = `${attributeName}${operator}${filterValue}`;
+                  const score =
+                    attribute.score !== undefined
+                      ? `<score=${attribute.score}>`
+                      : '';
+
+                  return `${filter}${score}`;
+                });
+              } else {
+                const filter = `${attributeName}${operator}${value}`;
+                const score =
+                  attribute.score !== undefined
+                    ? `<score=${attribute.score}>`
+                    : '';
+
+                return `${filter}${score}`;
+              }
             });
 
             acc.push(filters);
@@ -182,25 +214,16 @@ const connectRelatedItems = (renderFn, unmountFn = noop) => {
           []
         );
 
-        console.log(
-          JSON.stringify(
-            state.setQueryParameters({
-              hitsPerPage: limit,
-              sumOrFiltersScores: true,
-              filters: `NOT objectID:${objectID}`,
-              optionalFilters,
-            }),
-            null,
-            2
-          )
-        );
-
-        return state.setQueryParameters({
+        const searchParameters = state.setQueryParameters({
           hitsPerPage: limit,
           sumOrFiltersScores: true,
-          filters: `NOT objectID:${objectID}`,
+          filters: `NOT objectID:${hit.objectID}`,
           optionalFilters,
         });
+
+        console.log(JSON.stringify(searchParameters, null, 2));
+
+        return searchParameters;
       },
     };
   };
