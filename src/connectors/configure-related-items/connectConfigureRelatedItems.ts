@@ -1,0 +1,155 @@
+import algoliasearchHelper, {
+  SearchParameters,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
+import { Unmounter, WidgetFactory, ResultHit } from '../../types';
+import { createDocumentationMessageGenerator, warning } from '../../lib/utils';
+import connectConfigure, {
+  ConfigureRenderer,
+  ConfigureConnectorParams,
+} from '../configure/connectConfigure';
+
+export type MatchingPatterns = {
+  [attribute: string]: {
+    /**
+     * The score of the optional filter.
+     *
+     * @see https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/in-depth/optional-filters/
+     */
+    score: number;
+  };
+};
+
+export interface ConfigureRelatedItemsConnectorParams {
+  /**
+   * The reference hit to extract the filters from.
+   */
+  hit: ResultHit;
+  /**
+   * The schema to create the optional filters.
+   * Each key represents an attribute from the hit.
+   */
+  matchingPatterns: MatchingPatterns;
+  /**
+   * Function called to transform the search parameters generated.
+   */
+  transformSearchParameters?(
+    searchParameters: SearchParameters
+  ): PlainSearchParameters;
+}
+
+type ConfigureConfigureRelatedItemsWidgetFactory<
+  TConfigureRelatedItemsWidgetParams
+> = WidgetFactory<
+  ConfigureRelatedItemsConnectorParams & TConfigureRelatedItemsWidgetParams
+>;
+
+type ConfigureRelatedItemsConnector = <TConfigureRelatedItemsWidgetParams>(
+  render?: ConfigureRenderer<ConfigureConnectorParams>,
+  unmount?: Unmounter
+) => ConfigureConfigureRelatedItemsWidgetFactory<
+  TConfigureRelatedItemsWidgetParams
+>;
+
+const withUsage = createDocumentationMessageGenerator({
+  name: 'configure-related-items',
+  connector: true,
+});
+
+function createOptionalFilter({
+  attributeName,
+  attributeValue,
+  attributeScore,
+}) {
+  return `${attributeName}:${attributeValue}<score=${attributeScore || 1}>`;
+}
+
+const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = (
+  renderFn,
+  unmountFn
+) => {
+  warning(
+    false,
+    'ConfigureRelatedItems is an experimental widget that is subject to change in next minor versions.'
+  );
+
+  return widgetParams => {
+    const { hit, matchingPatterns, transformSearchParameters = x => x } =
+      widgetParams || ({} as typeof widgetParams);
+
+    if (!hit) {
+      throw new Error(withUsage('The `hit` option is required.'));
+    }
+
+    if (!matchingPatterns) {
+      throw new Error(withUsage('The `matchingPatterns` option is required.'));
+    }
+
+    const optionalFilters = Object.keys(matchingPatterns).reduce<
+      Array<string | string[]>
+    >((acc, attributeName) => {
+      const attribute = matchingPatterns[attributeName];
+      const attributeValue = hit[attributeName];
+      const attributeScore = attribute.score;
+
+      if (Array.isArray(attributeValue)) {
+        acc.push(
+          attributeValue.map(attributeSubValue => {
+            return createOptionalFilter({
+              attributeName,
+              attributeValue: attributeSubValue,
+              attributeScore,
+            });
+          })
+        );
+      } else if (typeof attributeValue === 'string') {
+        acc.push(
+          createOptionalFilter({
+            attributeName,
+            attributeValue,
+            attributeScore,
+          })
+        );
+      } else {
+        warning(
+          false,
+          `
+The \`matchingPatterns\` option returned a value of type \`${typeof attributeValue}\` for the "${attributeName}" key. This value was not sent to Algolia because it's not supported by \`optionalFilters\`.
+
+You can remove the "${attributeName}" key from the \`matchingPatterns\` option.
+
+See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
+            `
+        );
+      }
+
+      return acc;
+    }, []);
+
+    const searchParameters: PlainSearchParameters = {
+      ...transformSearchParameters(
+        new algoliasearchHelper.SearchParameters({
+          // @ts-ignore @TODO algoliasearch-helper@3.0.1 will contain the type
+          // `sumOrFiltersScores`.
+          // See https://github.com/algolia/algoliasearch-helper-js/pull/753
+          sumOrFiltersScores: true,
+          filters: `NOT objectID:${hit.objectID}`,
+          // @ts-ignore @TODO algoliasearch-helper@3.0.1 will contain the type
+          // `optionalFilters`.
+          // See https://github.com/algolia/algoliasearch-helper-js/pull/754
+          optionalFilters,
+        })
+      ),
+    };
+
+    const makeConfigure = connectConfigure(renderFn, unmountFn);
+
+    return {
+      ...makeConfigure({ searchParameters }),
+
+      $$type: 'ais.configureRelatedItems',
+    };
+  };
+};
+
+export default connectConfigureRelatedItems;

@@ -16,7 +16,14 @@ module.exports = {
     ],
     '@typescript-eslint/camelcase': [
       'error',
-      { allow: ['instant_search', 'instant_search_movies', '^EXPERIMENTAL_'] },
+      {
+        allow: [
+          'instant_search',
+          'instant_search_movies',
+          'free_shipping',
+          '^EXPERIMENTAL_',
+        ],
+      },
     ],
   },
   overrides: [
