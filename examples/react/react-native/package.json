@@ -18,6 +18,7 @@
     "lodash": "4.17.15",
     "prop-types": "15.7.2",
     "react": "16.5.0",
+    "react-instantsearch": "6.0.0-beta.1",
     "react-instantsearch-native": "6.0.0-beta.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-modal-dropdown": "0.6.2",
