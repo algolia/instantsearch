@@ -23,12 +23,17 @@ import NumericMenu from '../components/NumericMenu';
  * @translationkey all - The label of the largest range added automatically by react instantsearch
  * @example
  * import React from 'react';
+ * import algoliasearch from 'algoliasearch/lite';
  * import { InstantSearch, NumericMenu } from 'react-instantsearch-dom';
+ *
+ * const searchClient = algoliasearch(
+ *   'latency',
+ *   '6be0576ff61c053d5f9a3225e2a90f76'
+ * );
  *
  * const App = () => (
  *   <InstantSearch
- *     appId="latency"
- *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     searchClient
  *     indexName="instant_search"
  *   >
  *     <NumericMenu

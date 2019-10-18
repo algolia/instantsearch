@@ -6,6 +6,7 @@ import {
   createFakeMapInstance,
 } from '../../test/mockGoogleMaps';
 import GoogleMaps from '../GoogleMaps';
+import GoogleMapsContext from '../GoogleMapsContext';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -40,17 +41,12 @@ describe('GoogleMaps', () => {
 
     const wrapper = shallow(
       <GoogleMaps {...props}>
-        <div>This is the children</div>
-      </GoogleMaps>,
-      {
-        disableLifecycleMethods: true,
-      }
+        <div testId="children">This is the children</div>
+      </GoogleMaps>
     );
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.state()).toEqual({
-      isMapReady: false,
-    });
+    expect(wrapper.find('[testId]').exists()).toBe(false);
   });
 
   it('expect render correctly with the map rendered', () => {
@@ -63,30 +59,17 @@ describe('GoogleMaps', () => {
 
     const wrapper = shallow(
       <GoogleMaps {...props}>
-        <div>This is the children</div>
-      </GoogleMaps>,
-      {
-        disableLifecycleMethods: true,
-      }
+        <div testId="children">This is the children</div>
+      </GoogleMaps>
     );
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.state()).toEqual({
-      isMapReady: false,
-    });
-
-    // Simulate didMount
-    wrapper.instance().componentDidMount();
+    expect(wrapper.find('[testId]').exists()).toBe(false);
 
     simulateMapReadyEvent(google);
 
-    // Trigger the update
-    wrapper.update();
-
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.state()).toEqual({
-      isMapReady: true,
-    });
+    expect(wrapper.find('[testId]').exists()).toBe(true);
   });
 
   describe('creation', () => {
@@ -112,7 +95,7 @@ describe('GoogleMaps', () => {
       });
     });
 
-    it('expect to create the GoogleMaps on didMount witht the given options', () => {
+    it('expect to create the GoogleMaps on didMount with the given options', () => {
       const google = createFakeGoogleReference();
 
       const props = {
@@ -307,24 +290,40 @@ describe('GoogleMaps', () => {
   });
 
   describe('context', () => {
-    it('expect to expose the google object through context', () => {
-      const google = createFakeGoogleReference();
+    it('expect to not expose the context when the map is not ready', () => {
+      const google = createFakeGoogleReference({});
 
       const props = {
         ...defaultProps,
         google,
       };
 
-      const wrapper = shallow(<GoogleMaps {...props} />, {
-        disableLifecycleMethods: true,
-      });
+      const wrapper = shallow(
+        <GoogleMaps {...props}>
+          <GoogleMapsContext.Consumer>{() => null}</GoogleMapsContext.Consumer>
+        </GoogleMaps>
+      );
 
-      expect(wrapper.instance().getChildContext()).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        __ais_geo_search__google_maps__: expect.objectContaining({
-          google,
-        }),
-      });
+      expect(wrapper.find(GoogleMapsContext.Consumer).exists()).toBe(false);
+    });
+
+    it('expect to expose the context only when the map is created', () => {
+      const google = createFakeGoogleReference({});
+
+      const props = {
+        ...defaultProps,
+        google,
+      };
+
+      const wrapper = shallow(
+        <GoogleMaps {...props}>
+          <GoogleMapsContext.Consumer>{() => null}</GoogleMapsContext.Consumer>
+        </GoogleMaps>
+      );
+
+      simulateMapReadyEvent(google);
+
+      expect(wrapper.find(GoogleMapsContext.Consumer).exists()).toBe(true);
     });
 
     it('expect to expose the map instance through context only when created', () => {
@@ -338,26 +337,17 @@ describe('GoogleMaps', () => {
         google,
       };
 
-      const wrapper = shallow(<GoogleMaps {...props} />, {
-        disableLifecycleMethods: true,
-      });
+      const renderFn = jest.fn(() => null);
 
-      expect(wrapper.instance().getChildContext()).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        __ais_geo_search__google_maps__: expect.objectContaining({
-          instance: undefined,
-        }),
-      });
+      mount(
+        <GoogleMaps {...props}>
+          <GoogleMapsContext.Consumer>{renderFn}</GoogleMapsContext.Consumer>
+        </GoogleMaps>
+      );
 
-      // Simulate didMount
-      wrapper.instance().componentDidMount();
+      simulateMapReadyEvent(google);
 
-      expect(wrapper.instance().getChildContext()).toEqual({
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        __ais_geo_search__google_maps__: expect.objectContaining({
-          instance: mapInstance,
-        }),
-      });
+      expect(renderFn).toHaveBeenCalledWith({ google, instance: mapInstance });
     });
   });
 
@@ -515,20 +505,20 @@ describe('GoogleMaps', () => {
 
       const wrapper = shallow(
         <GoogleMaps {...props}>
-          <div>This is the children</div>
+          <div className="children">This is the children</div>
         </GoogleMaps>
       );
 
       simulateMapReadyEvent(google);
       simulateEvent(mapInstance, 'center_changed');
 
-      expect(wrapper).toMatchSnapshot();
+      expect(wrapper.find('.children')).toMatchSnapshot();
 
       wrapper.setProps({
-        children: <div>This is the children updated</div>,
+        children: <div className="children">This is the children updated</div>,
       });
 
-      expect(wrapper).toMatchSnapshot();
+      expect(wrapper.find('.children')).toMatchSnapshot();
     });
   });
 

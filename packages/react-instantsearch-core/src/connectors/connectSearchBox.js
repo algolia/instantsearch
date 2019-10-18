@@ -57,42 +57,60 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     return {
-      currentRefinement: getCurrentRefinement(props, searchState, this.context),
+      currentRefinement: getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
       isSearchStalled: searchResults.isSearchStalled,
     };
   },
 
   refine(props, searchState, nextRefinement) {
-    return refine(props, searchState, nextRefinement, this.context);
+    return refine(props, searchState, nextRefinement, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   cleanUp(props, searchState) {
-    return cleanUp(props, searchState, this.context);
+    return cleanUp(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   getSearchParameters(searchParameters, props, searchState) {
     return searchParameters.setQuery(
-      getCurrentRefinement(props, searchState, this.context)
+      getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      })
     );
   },
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(
-      props,
-      searchState,
-      this.context
-    );
+    const currentRefinement = getCurrentRefinement(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
     return {
       id,
-      index: getIndexId(this.context),
+      index: getIndexId({
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
       items:
         currentRefinement === null
           ? []
           : [
               {
                 label: `${id}: ${currentRefinement}`,
-                value: nextState => refine(props, nextState, '', this.context),
+                value: nextState =>
+                  refine(props, nextState, '', {
+                    ais: props.contextValue,
+                    multiIndexContext: props.indexContextValue,
+                  }),
                 currentRefinement,
               },
             ],

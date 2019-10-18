@@ -10,6 +10,7 @@ import {
   Keyboard,
   TouchableHighlight,
 } from 'react-native';
+import algoliasearch from 'algoliasearch/lite';
 import {
   connectSearchBox,
   connectInfiniteHits,
@@ -20,6 +21,11 @@ import { InstantSearch, Configure, Index } from 'react-instantsearch/native';
 import Highlight from './Highlight';
 import { omit } from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -150,15 +156,10 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <InstantSearch
-          appId="latency"
-          apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+          searchClient={searchClient}
           indexName="instant_search"
           onSearchStateChange={this.onSearchStateChange}
           searchState={this.state.searchState}
-          root={{
-            Root: View,
-            props: { flex: 1 },
-          }}
         >
           <ConnectedSearchBox
             displaySuggestions={this.displaySuggestions}
@@ -171,13 +172,7 @@ export default class App extends React.Component {
             <Configure hitsPerPage={5} />
             {suggestions}
           </Index>
-          <Index
-            indexName="instant_search"
-            root={{
-              Root: View,
-              props: { flex: 1 },
-            }}
-          >
+          <Index indexName="instant_search">
             <Configure hitsPerPage={15} />
             <VirtualRefinementList
               attribute="categories"

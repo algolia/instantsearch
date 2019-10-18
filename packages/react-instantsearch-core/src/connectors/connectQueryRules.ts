@@ -1,4 +1,4 @@
-import createConnector from '../core/createConnector';
+import createConnector, { ConnectedProps } from '../core/createConnector';
 import { getResults, getIndexId, hasMultipleIndices } from '../core/indexUtils';
 
 type SearchState = any;
@@ -121,8 +121,15 @@ export default createConnector({
 
   defaultProps,
 
-  getProvidedProps(props: QueryRulesProps, _1: any, searchResults: any) {
-    const results = getResults(searchResults, this.context);
+  getProvidedProps(
+    props: ConnectedProps<QueryRulesProps>,
+    _1: any,
+    searchResults: any
+  ) {
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     if (results === null) {
       return {
@@ -143,15 +150,23 @@ export default createConnector({
 
   getSearchParameters(
     searchParameters: SearchParameters,
-    props: QueryRulesProps,
+    props: ConnectedProps<QueryRulesProps>,
     searchState: SearchState
   ) {
     if (Object.keys(props.trackedFilters).length === 0) {
       return searchParameters;
     }
 
-    const indexSearchState = hasMultipleIndices(this.context)
-      ? searchState.indices[getIndexId(this.context)]
+    const indexSearchState = hasMultipleIndices({
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    })
+      ? searchState.indices[
+          getIndexId({
+            ais: props.contextValue,
+            multiIndexContext: props.indexContextValue,
+          })
+        ]
       : searchState;
 
     const newRuleContexts = getRuleContextsFromTrackedFilters({

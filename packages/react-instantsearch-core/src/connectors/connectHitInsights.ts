@@ -69,7 +69,11 @@ export default (insightsClient: InsightsClient) =>
     displayName: 'AlgoliaInsights',
 
     getProvidedProps(props, _, searchResults) {
-      const results: Results = getResults(searchResults, this.context);
+      const results: Results = getResults(searchResults, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      });
+
       const insights = wrapInsightsClient(insightsClient, results, props.hit);
       return { insights };
     },

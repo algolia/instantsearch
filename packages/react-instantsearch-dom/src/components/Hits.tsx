@@ -33,7 +33,7 @@ const DefaultHitComponent: React.FC<HitProps> = props => (
   </div>
 );
 
-const Hits: React.SFC<Props> = ({
+const Hits: React.FC<Props> = ({
   hits,
   className = '',
   hitComponent: HitComponent = DefaultHitComponent,

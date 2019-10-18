@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translatable } from 'react-instantsearch-core';
@@ -67,23 +66,33 @@ class RefinementList extends Component {
   };
 
   render() {
+    const {
+      translate,
+      items,
+      showMore,
+      limit,
+      showMoreLimit,
+      isFromSearch,
+      searchForItems,
+      searchable,
+      canRefine,
+      className,
+    } = this.props;
     return (
       <List
         renderItem={this.renderItem}
         selectItem={this.selectItem}
         cx={cx}
-        {...pick(this.props, [
-          'translate',
-          'items',
-          'showMore',
-          'limit',
-          'showMoreLimit',
-          'isFromSearch',
-          'searchForItems',
-          'searchable',
-          'canRefine',
-          'className',
-        ])}
+        translate={translate}
+        items={items}
+        showMore={showMore}
+        limit={limit}
+        showMoreLimit={showMoreLimit}
+        isFromSearch={isFromSearch}
+        searchForItems={searchForItems}
+        searchable={searchable}
+        canRefine={canRefine}
+        className={className}
         query={this.state.query}
       />
     );

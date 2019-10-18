@@ -7,8 +7,8 @@ import {
   Configure,
   Highlight,
   Pagination,
+  InstantSearch,
 } from 'react-instantsearch-dom';
-import { InstantSearch } from './instantsearch';
 
 const HitComponent = ({ hit }) => (
   <div className="hit">
@@ -43,18 +43,20 @@ export default class extends React.Component {
     resultsState: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onSearchStateChange: PropTypes.func,
     createURL: PropTypes.func,
+    indexName: PropTypes.string,
+    searchClient: PropTypes.object,
   };
 
   render() {
     return (
       <InstantSearch
-        appId="latency"
-        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="instant_search"
+        searchClient={this.props.searchClient}
         resultsState={this.props.resultsState}
         onSearchStateChange={this.props.onSearchStateChange}
         searchState={this.props.searchState}
         createURL={this.props.createURL}
+        indexName={this.props.indexName}
+        {...this.props}
       >
         <Configure hitsPerPage={12} />
         <header>

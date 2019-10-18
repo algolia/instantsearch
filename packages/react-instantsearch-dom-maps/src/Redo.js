@@ -1,49 +1,52 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { createClassNames, translatable } from 'react-instantsearch-dom';
-import { STATE_CONTEXT } from './Provider';
+import GeoSearchContext from './GeoSearchContext';
 import withGoogleMaps from './withGoogleMaps';
 
 const cx = createClassNames('GeoSearch');
+const RedoPropTypes = {
+  googleMapsInstance: PropTypes.object.isRequired,
+  translate: PropTypes.func.isRequired,
+};
 
-export class Redo extends Component {
-  static propTypes = {
-    googleMapsInstance: PropTypes.object.isRequired,
-    translate: PropTypes.func.isRequired,
-  };
+export const Redo = ({
+  googleMapsInstance,
+  translate,
+  hasMapMoveSinceLastRefine,
+  refineWithInstance,
+}) => (
+  <div className={cx('control')}>
+    <button
+      className={cx('redo', !hasMapMoveSinceLastRefine && 'redo--disabled')}
+      disabled={!hasMapMoveSinceLastRefine}
+      onClick={() => refineWithInstance(googleMapsInstance)}
+    >
+      {translate('redo')}
+    </button>
+  </div>
+);
 
-  static contextTypes = {
-    [STATE_CONTEXT]: PropTypes.shape({
-      hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
-      refineWithInstance: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+Redo.propTypes = {
+  ...RedoPropTypes,
+  hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
+  refineWithInstance: PropTypes.func.isRequired,
+};
 
-  getStateContext() {
-    return this.context[STATE_CONTEXT];
-  }
+const RedoWrapper = props => (
+  <GeoSearchContext.Consumer>
+    {({ hasMapMoveSinceLastRefine, refineWithInstance }) => (
+      <Redo
+        {...props}
+        hasMapMoveSinceLastRefine={hasMapMoveSinceLastRefine}
+        refineWithInstance={refineWithInstance}
+      />
+    )}
+  </GeoSearchContext.Consumer>
+);
 
-  render() {
-    const { googleMapsInstance, translate } = this.props;
-    const {
-      hasMapMoveSinceLastRefine,
-      refineWithInstance,
-    } = this.getStateContext();
-
-    return (
-      <div className={cx('control')}>
-        <button
-          className={cx('redo', !hasMapMoveSinceLastRefine && 'redo--disabled')}
-          disabled={!hasMapMoveSinceLastRefine}
-          onClick={() => refineWithInstance(googleMapsInstance)}
-        >
-          {translate('redo')}
-        </button>
-      </div>
-    );
-  }
-}
+RedoWrapper.propTypes = RedoPropTypes;
 
 export default translatable({
   redo: 'Redo search here',
-})(withGoogleMaps(Redo));
+})(withGoogleMaps(RedoWrapper));

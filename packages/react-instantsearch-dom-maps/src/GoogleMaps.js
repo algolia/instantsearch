@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { createClassNames } from 'react-instantsearch-dom';
 import { LatLngPropType, BoundingBoxPropType } from './propTypes';
+import GoogleMapsContext from './GoogleMapsContext';
 
 const cx = createClassNames('GeoSearch');
 
@@ -19,38 +20,19 @@ class GoogleMaps extends Component {
     children: PropTypes.node,
   };
 
-  static childContextTypes = {
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    __ais_geo_search__google_maps__: PropTypes.shape({
-      google: PropTypes.object,
-      instance: PropTypes.object,
-    }),
-  };
-
   isUserInteraction = true;
   isPendingRefine = false;
   listeners = [];
+  mapRef = createRef();
 
   state = {
     isMapReady: false,
   };
 
-  getChildContext() {
-    const { google } = this.props;
-
-    return {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      __ais_geo_search__google_maps__: {
-        instance: this.instance,
-        google,
-      },
-    };
-  }
-
   componentDidMount() {
     const { google, mapOptions } = this.props;
 
-    this.instance = new google.maps.Map(this.element, {
+    this.instance = new google.maps.Map(this.mapRef.current, {
       mapTypeControl: false,
       fullscreenControl: false,
       streetViewControl: false,
@@ -113,9 +95,13 @@ class GoogleMaps extends Component {
   setupListenersWhenMapIsReady = () => {
     this.listeners = [];
 
-    this.setState(() => ({
+    this.setState({
       isMapReady: true,
-    }));
+      value: {
+        google: this.props.google,
+        instance: this.instance,
+      },
+    });
 
     const onChange = () => {
       if (this.isUserInteraction) {
@@ -150,8 +136,12 @@ class GoogleMaps extends Component {
 
     return (
       <div className={cx('')}>
-        <div ref={c => (this.element = c)} className={cx('map')} />
-        {isMapReady && children}
+        <div ref={this.mapRef} className={cx('map')} />
+        {isMapReady && (
+          <GoogleMapsContext.Provider value={this.state.value}>
+            {children}
+          </GoogleMapsContext.Provider>
+        )}
       </div>
     );
   }

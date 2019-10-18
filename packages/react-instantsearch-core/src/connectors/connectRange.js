@@ -1,4 +1,3 @@
-import { isFinite as _isFinite } from 'lodash';
 import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import {
@@ -41,18 +40,18 @@ function getCurrentRange(boundaries, stats, precision) {
   const pow = Math.pow(10, precision);
 
   let min;
-  if (_isFinite(boundaries.min)) {
+  if (typeof boundaries.min === 'number' && isFinite(boundaries.min)) {
     min = boundaries.min;
-  } else if (_isFinite(stats.min)) {
+  } else if (typeof stats.min === 'number' && isFinite(stats.min)) {
     min = stats.min;
   } else {
     min = undefined;
   }
 
   let max;
-  if (_isFinite(boundaries.max)) {
+  if (typeof boundaries.max === 'number' && isFinite(boundaries.max)) {
     max = boundaries.max;
-  } else if (_isFinite(stats.max)) {
+  } else if (typeof stats.max === 'number' && isFinite(stats.max)) {
     max = stats.max;
   } else {
     max = undefined;
@@ -145,8 +144,8 @@ function refine(props, searchState, nextRefinement, currentRange, context) {
   const nextMinAsNumber = !isMinReset ? parseFloat(nextMin) : undefined;
   const nextMaxAsNumber = !isMaxReset ? parseFloat(nextMax) : undefined;
 
-  const isNextMinValid = isMinReset || _isFinite(nextMinAsNumber);
-  const isNextMaxValid = isMaxReset || _isFinite(nextMaxAsNumber);
+  const isNextMinValid = isMinReset || isFinite(nextMinAsNumber);
+  const isNextMaxValid = isMaxReset || isFinite(nextMaxAsNumber);
 
   if (!isNextMinValid || !isNextMaxValid) {
     throw Error("You can't provide non finite values to the range connector.");
@@ -209,7 +208,10 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const { attribute, precision, min: minBound, max: maxBound } = props;
-    const results = getResults(searchResults, this.context);
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
     const hasFacet = results && results.getFacetByName(attribute);
     const stats = hasFacet ? results.getFacetStats(attribute) || {} : {};
     const facetValues = hasFacet ? results.getFacetValues(attribute) : [];
@@ -227,7 +229,7 @@ export default createConnector({
 
     // The searchState is not always in sync with the helper state. For example
     // when we set boundaries on the first render the searchState don't have
-    // the correct refinement. If this behaviour change in the upcoming version
+    // the correct refinement. If this behavior change in the upcoming version
     // we could store the range inside the searchState instead of rely on `this`.
     this._currentRange = {
       min: rangeMin,
@@ -238,7 +240,7 @@ export default createConnector({
       props,
       searchState,
       this._currentRange,
-      this.context
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue }
     );
 
     return {
@@ -255,17 +257,17 @@ export default createConnector({
   },
 
   refine(props, searchState, nextRefinement) {
-    return refine(
-      props,
-      searchState,
-      nextRefinement,
-      this._currentRange,
-      this.context
-    );
+    return refine(props, searchState, nextRefinement, this._currentRange, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   cleanUp(props, searchState) {
-    return cleanUp(props, searchState, this.context);
+    return cleanUp(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   getSearchParameters(params, props, searchState) {
@@ -274,7 +276,7 @@ export default createConnector({
       props,
       searchState,
       this._currentRange,
-      this.context
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue }
     );
 
     params = params.addDisjunctiveFacet(attribute);
@@ -296,7 +298,7 @@ export default createConnector({
       props,
       searchState,
       this._currentRange,
-      this.context
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue }
     );
 
     const items = [];
@@ -316,7 +318,10 @@ export default createConnector({
         label: fragments.join(''),
         attribute: props.attribute,
         value: nextState =>
-          refine(props, nextState, {}, this._currentRange, this.context),
+          refine(props, nextState, {}, this._currentRange, {
+            ais: props.contextValue,
+            multiIndexContext: props.indexContextValue,
+          }),
         currentRefinement: getCurrentRefinementWithRange(
           { min: minValue, max: maxValue },
           { min: minRange, max: maxRange }
@@ -326,7 +331,10 @@ export default createConnector({
 
     return {
       id: getId(props),
-      index: getIndexId(this.context),
+      index: getIndexId({
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
       items,
     };
   },

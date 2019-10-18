@@ -1,6 +1,4 @@
 // Core
-export { default as createInstantSearch } from './core/createInstantSearch';
-export { default as createIndex } from './core/createIndex';
 export { default as createConnector } from './core/createConnector';
 
 // Utils
@@ -11,6 +9,8 @@ export { default as translatable } from './core/translatable';
 // Widgets
 export { default as Configure } from './widgets/Configure';
 export { default as QueryRuleContext } from './widgets/QueryRuleContext';
+export { default as Index } from './widgets/Index';
+export { default as InstantSearch } from './widgets/InstantSearch';
 
 // Connectors
 export {

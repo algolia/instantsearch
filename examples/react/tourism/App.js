@@ -1,3 +1,4 @@
+import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
   ClearRefinements,
@@ -21,10 +22,14 @@ import Rheostat from 'rheostat';
 import withURLSync from './URLSync';
 import './App.css';
 
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
+
 const App = props => (
   <InstantSearch
-    appId="latency"
-    apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+    searchClient={searchClient}
     indexName="airbnb"
     searchState={props.searchState}
     createURL={props.createURL}
@@ -291,12 +296,16 @@ class Range extends Component {
 
   state = { currentValues: { min: this.props.min, max: this.props.max } };
 
-  componentWillReceiveProps(sliderState) {
-    if (sliderState.canRefine) {
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.canRefine &&
+      (prevProps.currentRefinement.min !== this.props.currentRefinement.min ||
+        prevProps.currentRefinement.max !== this.props.currentRefinement.max)
+    ) {
       this.setState({
         currentValues: {
-          min: sliderState.currentRefinement.min,
-          max: sliderState.currentRefinement.max,
+          min: this.props.currentRefinement.min,
+          max: this.props.currentRefinement.max,
         },
       });
     }

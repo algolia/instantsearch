@@ -1,19 +1,24 @@
-import { omit } from 'lodash';
+import { omit } from './utils';
 
 export function getIndexId(context) {
-  return context && context.multiIndexContext
+  return hasMultipleIndices(context)
     ? context.multiIndexContext.targetedIndex
     : context.ais.mainTargetedIndex;
 }
 
 export function getResults(searchResults, context) {
-  if (searchResults.results && !searchResults.results.hits) {
-    return searchResults.results[getIndexId(context)]
-      ? searchResults.results[getIndexId(context)]
-      : null;
-  } else {
-    return searchResults.results ? searchResults.results : null;
+  if (searchResults.results) {
+    if (searchResults.results.hits) {
+      return searchResults.results;
+    }
+
+    const indexId = getIndexId(context);
+    if (searchResults.results[indexId]) {
+      return searchResults.results[indexId];
+    }
   }
+
+  return null;
 }
 
 export function hasMultipleIndices(context) {
@@ -169,7 +174,10 @@ function hasRefinements({
       searchState.indices &&
       searchState.indices[indexId] &&
       searchState.indices[indexId][namespace] &&
-      searchState.indices[indexId][namespace].hasOwnProperty(attributeName)
+      Object.hasOwnProperty.call(
+        searchState.indices[indexId][namespace],
+        attributeName
+      )
     );
   }
 
@@ -177,18 +185,18 @@ function hasRefinements({
     return (
       searchState.indices &&
       searchState.indices[indexId] &&
-      searchState.indices[indexId].hasOwnProperty(id)
+      Object.hasOwnProperty.call(searchState.indices[indexId], id)
     );
   }
 
   if (namespace) {
     return (
       searchState[namespace] &&
-      searchState[namespace].hasOwnProperty(attributeName)
+      Object.hasOwnProperty.call(searchState[namespace], attributeName)
     );
   }
 
-  return searchState.hasOwnProperty(id);
+  return Object.hasOwnProperty.call(searchState, id);
 }
 
 function getRefinements({
@@ -248,7 +256,7 @@ export function cleanUpValue(searchState, context, id) {
   const { namespace, attributeName } = getNamespaceAndAttributeName(id);
 
   if (hasMultipleIndices(context) && Boolean(searchState.indices)) {
-    return cleanUpValueWithMutliIndex({
+    return cleanUpValueWithMultiIndex({
       attribute: attributeName,
       searchState,
       indexId,
@@ -274,14 +282,14 @@ function cleanUpValueWithSingleIndex({
   if (namespace) {
     return {
       ...searchState,
-      [namespace]: omit(searchState[namespace], attribute),
+      [namespace]: omit(searchState[namespace], [attribute]),
     };
   }
 
-  return omit(searchState, id);
+  return omit(searchState, [id]);
 }
 
-function cleanUpValueWithMutliIndex({
+function cleanUpValueWithMultiIndex({
   searchState,
   indexId,
   id,
@@ -297,11 +305,21 @@ function cleanUpValueWithMutliIndex({
         ...searchState.indices,
         [indexId]: {
           ...indexSearchState,
-          [namespace]: omit(indexSearchState[namespace], attribute),
+          [namespace]: omit(indexSearchState[namespace], [attribute]),
         },
       },
     };
   }
 
-  return omit(searchState, `indices.${indexId}.${id}`);
+  if (indexSearchState) {
+    return {
+      ...searchState,
+      indices: {
+        ...searchState.indices,
+        [indexId]: omit(indexSearchState, [id]),
+      },
+    };
+  }
+
+  return searchState;
 }

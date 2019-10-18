@@ -1,9 +1,8 @@
-import { find, fill } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { translatable } from 'react-instantsearch-core';
-import { createClassNames } from '../core/utils';
+import { createClassNames, find, range } from '../core/utils';
 
 const cx = createClassNames('RatingMenu');
 
@@ -139,14 +138,13 @@ class RatingMenu extends Component {
     const limitMin = min !== undefined && min >= 0 ? min : 1;
     const limitMax = max !== undefined && max >= 0 ? max : 0;
     const inclusiveLength = limitMax - limitMin + 1;
-    const safeInclusiveLength = Math.max(inclusiveLength, 0);
 
     const values = count
       .map(item => ({ ...item, value: parseFloat(item.value) }))
       .filter(item => item.value >= limitMin && item.value <= limitMax);
 
-    const range = fill(new Array(safeInclusiveLength), null)
-      .map((_, index) => {
+    const items = range({ start: 0, end: Math.max(inclusiveLength, 0) })
+      .map(index => {
         const element = find(values, item => item.value === limitMax - index);
         const placeholder = { value: limitMax - index, count: 0, total: 0 };
 
@@ -159,18 +157,17 @@ class RatingMenu extends Component {
             total: index === 0 ? item.count : acc[index - 1].total + item.count,
           }),
         []
+      )
+      .map((item, index, arr) =>
+        this.buildItem({
+          lowerBound: item.value,
+          count: item.total,
+          isLastSelectableItem: arr.length - 1 === index,
+          max: limitMax,
+          translate,
+          createURL,
+        })
       );
-
-    const items = range.map((item, index) =>
-      this.buildItem({
-        lowerBound: item.value,
-        count: item.total,
-        isLastSelectableItem: range.length - 1 === index,
-        max: limitMax,
-        translate,
-        createURL,
-      })
-    );
 
     return (
       <div

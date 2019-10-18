@@ -8,13 +8,15 @@ import {
   Highlight,
   connectAutoComplete,
 } from 'react-instantsearch-dom';
+import algoliasearch from 'algoliasearch/lite';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
 const App = () => (
-  <InstantSearch
-    appId="latency"
-    apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-    indexName="instant_search"
-  >
+  <InstantSearch searchClient={searchClient} indexName="instant_search">
     <AutoComplete />
     <Configure hitsPerPage={1} />
     <Index indexName="bestbuy" />

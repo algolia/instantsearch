@@ -1,4 +1,3 @@
-import { pick } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translatable } from 'react-instantsearch-core';
@@ -51,20 +50,26 @@ class HierarchicalMenu extends Component {
   };
 
   render() {
+    const {
+      translate,
+      items,
+      showMore,
+      limit,
+      showMoreLimit,
+      canRefine,
+      className,
+    } = this.props;
     return (
       <List
         renderItem={this.renderItem}
         cx={cx}
-        {...pick(this.props, [
-          'translate',
-          'items',
-          'showMore',
-          'limit',
-          'showMoreLimit',
-          'isEmpty',
-          'canRefine',
-          'className',
-        ])}
+        translate={translate}
+        items={items}
+        showMore={showMore}
+        limit={limit}
+        showMoreLimit={showMoreLimit}
+        canRefine={canRefine}
+        className={className}
       />
     );
   }

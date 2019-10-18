@@ -34,12 +34,17 @@ import Menu from '../components/Menu';
  * @translationkey noResults - The label of the no results text when no search for facet values results are found.
  * @example
  * import React from 'react';
+ * import algoliasearch from 'algoliasearch/lite';
  * import { InstantSearch, Menu } from 'react-instantsearch-dom';
+ *
+ * const searchClient = algoliasearch(
+ *   'latency',
+ *   '6be0576ff61c053d5f9a3225e2a90f76'
+ * );
  *
  * const App = () => (
  *   <InstantSearch
- *     appId="latency"
- *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     searchClient={searchClient}
  *     indexName="instant_search"
  *   >
  *     <Menu attribute="categories" />

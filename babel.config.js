@@ -28,7 +28,6 @@ module.exports = api => {
     ],
     plugins: clean([
       '@babel/plugin-proposal-class-properties',
-      'babel-plugin-lodash',
       isRollup && 'babel-plugin-transform-react-remove-prop-types',
     ]),
     overrides: [

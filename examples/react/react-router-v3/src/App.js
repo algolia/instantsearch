@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import qs from 'qs';
+import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
   HierarchicalMenu,
@@ -16,50 +17,55 @@ import {
   ClearRefinements,
 } from 'react-instantsearch-dom';
 
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
+
+const THRESHOLD = 700;
+const createURL = state => `?${qs.stringify(state)}`;
+
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { searchState: { ...qs.parse(props.router.location.query) } };
-    this.onSearchStateChange = this.onSearchStateChange.bind(this);
-    this.createURL = this.createURL.bind(this);
-  }
+  state = {
+    searchState: qs.parse(this.props.router.location.query),
+  };
 
-  componentWillReceiveProps() {
-    this.setState({ searchState: qs.parse(this.props.router.location.query) });
-  }
+  static getDerivedStateFromProps(props, state) {
+    const newSearchState = qs.parse(props.router.location.query);
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(this.state.searchState, nextState.searchState);
-  }
-
-  onSearchStateChange(nextSearchState) {
-    const THRESHOLD = 700;
-    const newPush = Date.now();
-    this.setState({ lastPush: newPush, searchState: nextSearchState });
-    if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
-      this.props.router.replace(
-        nextSearchState ? `?${qs.stringify(nextSearchState)}` : ''
-      );
-    } else {
-      this.props.router.push(
-        nextSearchState ? `?${qs.stringify(nextSearchState)}` : ''
-      );
+    if (!isEqual(newSearchState, state.searchState)) {
+      return {
+        searchState: newSearchState,
+      };
     }
+
+    return null;
   }
 
-  createURL(state) {
-    return `?${qs.stringify(state)}`;
-  }
+  onSearchStateChange = nextSearchState => {
+    const newPush = Date.now();
+
+    this.setState({ lastPush: newPush, searchState: nextSearchState }, () => {
+      if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
+        this.props.router.replace(
+          nextSearchState ? `?${qs.stringify(nextSearchState)}` : ''
+        );
+      } else {
+        this.props.router.push(
+          nextSearchState ? `?${qs.stringify(nextSearchState)}` : ''
+        );
+      }
+    });
+  };
 
   render() {
     return (
       <InstantSearch
-        appId="latency"
-        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+        searchClient={searchClient}
         indexName="instant_search"
         searchState={this.state.searchState}
         onSearchStateChange={this.onSearchStateChange}
-        createURL={this.createURL}
+        createURL={createURL}
       >
         <div>
           <div
@@ -74,6 +80,7 @@ class App extends Component {
             <SearchBox />
             <PoweredBy />
           </div>
+
           <div style={{ display: 'flex' }}>
             <div style={{ padding: '0px 20px' }}>
               <p>Hierarchical Menu</p>
@@ -92,6 +99,7 @@ class App extends Component {
               <p>Range Ratings</p>
               <RatingMenu attribute="rating" max={6} />
             </div>
+
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <ClearRefinements />

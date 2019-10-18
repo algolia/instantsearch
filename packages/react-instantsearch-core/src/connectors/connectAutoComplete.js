@@ -4,6 +4,7 @@ import {
   refineValue,
   getCurrentRefinementValue,
 } from '../core/indexUtils';
+import { addQueryID, addAbsolutePositions } from '../core/utils';
 
 const getId = () => 'query';
 
@@ -29,14 +30,25 @@ function getHits(searchResults) {
       searchResults.results.hits &&
       Array.isArray(searchResults.results.hits)
     ) {
-      return searchResults.results.hits;
+      return addAbsolutePositions(
+        addQueryID(searchResults.results.hits, searchResults.results.queryID),
+        searchResults.results.hitsPerPage,
+        searchResults.results.page
+      );
     } else {
       return Object.keys(searchResults.results).reduce(
         (hits, index) => [
           ...hits,
           {
             index,
-            hits: searchResults.results[index].hits,
+            hits: addAbsolutePositions(
+              addQueryID(
+                searchResults.results[index].hits,
+                searchResults.results[index].queryID
+              ),
+              searchResults.results[index].hitsPerPage,
+              searchResults.results[index].page
+            ),
           },
         ],
         []
@@ -79,25 +91,44 @@ export default createConnector({
   getProvidedProps(props, searchState, searchResults) {
     return {
       hits: getHits(searchResults),
-      currentRefinement: getCurrentRefinement(props, searchState, this.context),
+      currentRefinement: getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
     };
   },
 
   refine(props, searchState, nextRefinement) {
-    return refine(props, searchState, nextRefinement, this.context);
+    return refine(props, searchState, nextRefinement, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   cleanUp(props, searchState) {
-    return cleanUp(props, searchState, this.context);
+    return cleanUp(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
-  /* connectAutoComplete needs to be considered as a widget to trigger a search if no others widgets are used.
-   * To be considered as a widget you need either getSearchParameters, getMetadata or getTransitionState
-   * See createConnector.js
-   * */
+  /**
+   * AutoComplete needs to be considered as a widget to trigger a search,
+   * even if no other widgets are used.
+   *
+   * To be considered as a widget you need either:
+   * - getSearchParameters
+   * - getMetadata
+   * - transitionState
+   *
+   * See: createConnector.tsx
+   */
   getSearchParameters(searchParameters, props, searchState) {
     return searchParameters.setQuery(
-      getCurrentRefinement(props, searchState, this.context)
+      getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      })
     );
   },
 });

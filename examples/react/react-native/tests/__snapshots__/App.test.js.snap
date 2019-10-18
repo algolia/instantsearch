@@ -44,7 +44,6 @@ exports[`renders correctly 1`] = `
     >
       <View
         accessibilityElementsHidden={false}
-        collapsable={undefined}
         pointerEvents="auto"
         style={
           Object {
@@ -81,225 +80,190 @@ exports[`renders correctly 1`] = `
             }
           }
         >
-          <View>
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#162331",
+                "flexDirection": "row",
+              }
+            }
+          >
             <View
               style={
                 Object {
-                  "alignItems": "center",
-                  "backgroundColor": "#162331",
-                  "flexDirection": "row",
+                  "bottom": 20,
+                  "left": 690,
+                  "position": "absolute",
+                  "zIndex": 2,
                 }
               }
             >
-              <View
-                style={
-                  Object {
-                    "bottom": 20,
-                    "left": 690,
-                    "position": "absolute",
-                    "zIndex": 2,
-                  }
-                }
-              >
-                <ActivityIndicator
-                  animating={false}
-                  color="#999999"
-                  hidesWhenStopped={true}
-                  size="small"
-                />
-              </View>
-              <TextInput
-                allowFontScaling={true}
-                autoCapitalize="none"
-                autoCorrect={false}
-                clearButtonMode="always"
-                onChangeText={[Function]}
-                placeholder="Search a product..."
-                spellCheck={false}
-                style={
-                  Object {
-                    "backgroundColor": "white",
-                    "borderRadius": 5,
-                    "borderWidth": 1,
-                    "flexGrow": 1,
-                    "height": 40,
-                    "margin": 10,
-                    "padding": 10,
-                  }
-                }
-                underlineColorAndroid="white"
-                value=""
+              <ActivityIndicator
+                animating={false}
+                color="#999999"
+                hidesWhenStopped={true}
+                size="small"
               />
             </View>
+            <TextInput
+              allowFontScaling={true}
+              autoCapitalize="none"
+              autoCorrect={false}
+              clearButtonMode="always"
+              onChangeText={[Function]}
+              placeholder="Search a product..."
+              spellCheck={false}
+              style={
+                Object {
+                  "backgroundColor": "white",
+                  "borderRadius": 5,
+                  "borderWidth": 1,
+                  "flexGrow": 1,
+                  "height": 40,
+                  "margin": 10,
+                  "padding": 10,
+                }
+              }
+              underlineColorAndroid="white"
+              value=""
+            />
+          </View>
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "white",
+                "borderBottomColor": "gray",
+                "borderBottomWidth": 1,
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "padding": 5,
+              }
+            }
+          >
             <View
               style={
                 Object {
                   "alignItems": "center",
-                  "backgroundColor": "white",
-                  "borderBottomColor": "gray",
-                  "borderBottomWidth": 1,
                   "flexDirection": "row",
                   "justifyContent": "space-between",
-                  "padding": 5,
+                  "paddingLeft": 8,
                 }
               }
             >
               <View
-                style={
+                animated={false}
+                defaultIndex={-1}
+                defaultValue="Featured"
+                disabled={false}
+                dropdownStyle={
                   Object {
-                    "alignItems": "center",
-                    "flexDirection": "row",
-                    "justifyContent": "space-between",
-                    "paddingLeft": 8,
+                    "height": 110,
+                    "width": 200,
+                  }
+                }
+                keyboardShouldPersistTaps="never"
+                onSelect={[Function]}
+                options={
+                  Array [
+                    "Featured",
+                    "Price desc",
+                    "Price asc",
+                  ]
+                }
+                renderRow={[Function]}
+                scrollEnabled={true}
+                showsVerticalScrollIndicator={true}
+                textStyle={
+                  Object {
+                    "fontSize": 15,
                   }
                 }
               >
                 <View
-                  animated={false}
-                  defaultIndex={-1}
-                  defaultValue="Featured"
-                  disabled={false}
-                  dropdownStyle={
+                  accessible={true}
+                  isTVSelectable={true}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
+                  style={
                     Object {
-                      "height": 110,
-                      "width": 200,
-                    }
-                  }
-                  keyboardShouldPersistTaps="never"
-                  onSelect={[Function]}
-                  options={
-                    Array [
-                      "Featured",
-                      "Price desc",
-                      "Price asc",
-                    ]
-                  }
-                  renderRow={[Function]}
-                  scrollEnabled={true}
-                  showsVerticalScrollIndicator={true}
-                  textStyle={
-                    Object {
-                      "fontSize": 15,
+                      "opacity": 1,
                     }
                   }
                 >
                   <View
-                    accessibilityComponentType={undefined}
-                    accessibilityLabel={undefined}
-                    accessibilityTraits={undefined}
-                    accessible={true}
-                    collapsable={undefined}
-                    hasTVPreferredFocus={undefined}
-                    hitSlop={undefined}
-                    isTVSelectable={true}
-                    nativeID={undefined}
-                    onLayout={undefined}
-                    onResponderGrant={[Function]}
-                    onResponderMove={[Function]}
-                    onResponderRelease={[Function]}
-                    onResponderTerminate={[Function]}
-                    onResponderTerminationRequest={[Function]}
-                    onStartShouldSetResponder={[Function]}
                     style={
                       Object {
-                        "opacity": 1,
+                        "justifyContent": "center",
                       }
                     }
-                    testID={undefined}
-                    tvParallaxProperties={undefined}
                   >
-                    <View
+                    <Text
+                      numberOfLines={1}
                       style={
-                        Object {
-                          "justifyContent": "center",
-                        }
+                        Array [
+                          Object {
+                            "fontSize": 12,
+                          },
+                          Object {
+                            "fontSize": 15,
+                          },
+                        ]
                       }
                     >
-                      <Text
-                        accessible={true}
-                        allowFontScaling={true}
-                        ellipsizeMode="tail"
-                        numberOfLines={1}
-                        style={
-                          Array [
-                            Object {
-                              "fontSize": 12,
-                            },
-                            Object {
-                              "fontSize": 15,
-                            },
-                          ]
-                        }
-                      >
-                        Featured
-                      </Text>
-                    </View>
+                      Featured
+                    </Text>
                   </View>
                 </View>
-                <Text
-                  accessible={true}
-                  allowFontScaling={true}
-                  ellipsizeMode="tail"
-                />
               </View>
+              <Text />
+            </View>
+            <View
+              accessibilityRole="button"
+              accessibilityStates={Array []}
+              accessible={true}
+              isTVSelectable={true}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                Object {
+                  "opacity": 1,
+                }
+              }
+            >
               <View
-                accessibilityComponentType="button"
-                accessibilityLabel={undefined}
-                accessibilityTraits={
+                style={
                   Array [
-                    "button",
+                    Object {},
                   ]
                 }
-                accessible={true}
-                collapsable={undefined}
-                hasTVPreferredFocus={undefined}
-                hitSlop={undefined}
-                isTVSelectable={true}
-                nativeID={undefined}
-                onLayout={undefined}
-                onResponderGrant={[Function]}
-                onResponderMove={[Function]}
-                onResponderRelease={[Function]}
-                onResponderTerminate={[Function]}
-                onResponderTerminationRequest={[Function]}
-                onStartShouldSetResponder={[Function]}
-                style={
-                  Object {
-                    "opacity": 1,
-                  }
-                }
-                testID={undefined}
-                tvParallaxProperties={undefined}
               >
-                <View
+                <Text
                   style={
                     Array [
-                      Object {},
+                      Object {
+                        "color": "#007AFF",
+                        "fontSize": 18,
+                        "padding": 8,
+                        "textAlign": "center",
+                      },
+                      Object {
+                        "color": "#162331",
+                      },
                     ]
                   }
                 >
-                  <Text
-                    accessible={true}
-                    allowFontScaling={true}
-                    disabled={undefined}
-                    ellipsizeMode="tail"
-                    style={
-                      Array [
-                        Object {
-                          "color": "#007AFF",
-                          "fontSize": 18,
-                          "padding": 8,
-                          "textAlign": "center",
-                        },
-                        Object {
-                          "color": "#162331",
-                        },
-                      ]
-                    }
-                  >
-                    Filters (0)
-                  </Text>
-                </View>
+                  Filters (0)
+                </Text>
               </View>
             </View>
           </View>
@@ -319,7 +283,6 @@ exports[`renders correctly 1`] = `
       }
     >
       <View
-        collapsable={undefined}
         style={
           Object {
             "backgroundColor": "#162331",
@@ -332,7 +295,6 @@ exports[`renders correctly 1`] = `
         }
       >
         <View
-          collapsable={undefined}
           onLayout={[Function]}
           pointerEvents="box-none"
           style={
@@ -369,7 +331,6 @@ exports[`renders correctly 1`] = `
               }
             >
               <View
-                collapsable={undefined}
                 pointerEvents="box-none"
                 style={
                   Object {
@@ -390,8 +351,6 @@ exports[`renders correctly 1`] = `
                   accessibilityTraits="header"
                   accessible={false}
                   allowFontScaling={true}
-                  collapsable={undefined}
-                  ellipsizeMode="tail"
                   numberOfLines={1}
                   onLayout={[Function]}
                   style={

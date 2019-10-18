@@ -8,15 +8,20 @@ import {
   View,
   TouchableHighlight,
 } from 'react-native';
-import { InstantSearch } from 'react-instantsearch/native';
+import algoliasearch from 'algoliasearch/lite';
 import {
+  InstantSearch,
   connectRefinementList,
   connectSearchBox,
   connectRange,
   connectMenu,
-} from 'react-instantsearch/connectors';
+} from 'react-instantsearch-native';
 import Stats from './components/Stats';
-import { isEmpty } from 'lodash';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -43,8 +48,7 @@ class Filters extends Component {
     return (
       <View style={styles.mainContainer}>
         <InstantSearch
-          appId="latency"
-          apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+          searchClient={searchClient}
           indexName="instant_search"
           onSearchStateChange={this.onSearchStateChange}
           searchState={this.state.searchState}
@@ -146,7 +150,8 @@ class Rating extends Component {
     const { refine, min, max, count, createURL } = this.props;
     const items = [];
     for (let i = max; i >= min; i--) {
-      const hasCount = !isEmpty(count.filter(item => Number(item.value) === i));
+      const hasCount =
+        count.filter(item => Number(item.value) === i).length > 0;
       const lastSelectableItem = count.reduce(
         (acc, item) =>
           item.value < acc.value || (!acc.value && hasCount) ? item : acc,

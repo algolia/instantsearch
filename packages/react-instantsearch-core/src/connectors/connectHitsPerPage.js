@@ -54,11 +54,10 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState) {
-    const currentRefinement = getCurrentRefinement(
-      props,
-      searchState,
-      this.context
-    );
+    const currentRefinement = getCurrentRefinement(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
     const items = props.items.map(item =>
       item.value === currentRefinement
         ? { ...item, isRefined: true }
@@ -74,16 +73,28 @@ export default createConnector({
     const id = getId();
     const nextValue = { [id]: nextRefinement };
     const resetPage = true;
-    return refineValue(searchState, nextValue, this.context, resetPage);
+    return refineValue(
+      searchState,
+      nextValue,
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue },
+      resetPage
+    );
   },
 
   cleanUp(props, searchState) {
-    return cleanUpValue(searchState, this.context, getId());
+    return cleanUpValue(
+      searchState,
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue },
+      getId()
+    );
   },
 
   getSearchParameters(searchParameters, props, searchState) {
     return searchParameters.setHitsPerPage(
-      getCurrentRefinement(props, searchState, this.context)
+      getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      })
     );
   },
 

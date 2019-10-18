@@ -1,28 +1,21 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { PanelConsumer } from './Panel';
 
 class PanelCallbackHandler extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     canRefine: PropTypes.bool.isRequired,
+    setCanRefine: PropTypes.func.isRequired,
   };
 
-  static contextTypes = {
-    setCanRefine: PropTypes.func,
-  };
-
-  componentWillMount() {
-    if (this.context.setCanRefine) {
-      this.context.setCanRefine(this.props.canRefine);
-    }
+  componentDidMount() {
+    this.props.setCanRefine(this.props.canRefine);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      this.context.setCanRefine &&
-      this.props.canRefine !== nextProps.canRefine
-    ) {
-      this.context.setCanRefine(nextProps.canRefine);
+  componentDidUpdate(prevProps) {
+    if (prevProps.canRefine !== this.props.canRefine) {
+      this.props.setCanRefine(this.props.canRefine);
     }
   }
 
@@ -31,4 +24,19 @@ class PanelCallbackHandler extends Component {
   }
 }
 
-export default PanelCallbackHandler;
+const PanelWrapper = ({ canRefine, children }) => (
+  <PanelConsumer>
+    {setCanRefine => (
+      <PanelCallbackHandler setCanRefine={setCanRefine} canRefine={canRefine}>
+        {children}
+      </PanelCallbackHandler>
+    )}
+  </PanelConsumer>
+);
+
+PanelWrapper.propTypes = {
+  canRefine: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+export default PanelWrapper;

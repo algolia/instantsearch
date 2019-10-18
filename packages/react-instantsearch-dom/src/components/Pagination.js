@@ -1,9 +1,8 @@
-import { range } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { translatable } from 'react-instantsearch-core';
-import { createClassNames, capitalize } from '../core/utils';
+import { createClassNames, capitalize, range } from '../core/utils';
 import LinkList from './LinkList';
 
 const cx = createClassNames('Pagination');
@@ -29,7 +28,7 @@ function calculatePaddingLeft(currentPage, padding, maxPages, size) {
 function getPages(currentPage, maxPages, padding) {
   const size = calculateSize(padding, maxPages);
   // If the widget size is equal to the max number of pages, return the entire page range
-  if (size === maxPages) return range(1, maxPages + 1);
+  if (size === maxPages) return range({ start: 1, end: maxPages + 1 });
 
   const paddingLeft = calculatePaddingLeft(
     currentPage,
@@ -41,7 +40,7 @@ function getPages(currentPage, maxPages, padding) {
 
   const first = currentPage - paddingLeft;
   const last = currentPage + paddingRight;
-  return range(first + 1, last + 1);
+  return range({ start: first + 1, end: last + 1 });
 }
 
 class Pagination extends Component {

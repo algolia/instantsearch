@@ -69,12 +69,17 @@ import HierarchicalMenu from '../components/HierarchicalMenu';
  * @translationKey showMore - The label of the show more button. Accepts one parameter, a boolean that is true if the values are expanded
  * @example
  * import React from 'react';
+ * import algoliasearch from 'algoliasearch/lite';
  * import { InstantSearch, HierarchicalMenu } from 'react-instantsearch-dom';
+ *
+ * const searchClient = algoliasearch(
+ *   'latency',
+ *   '6be0576ff61c053d5f9a3225e2a90f76'
+ * );
  *
  * const App = () => (
  *   <InstantSearch
- *     appId="latency"
- *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     searchClient={searchClient}
  *     indexName="instant_search"
  *   >
  *     <HierarchicalMenu

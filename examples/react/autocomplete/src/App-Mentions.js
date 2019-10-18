@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Mention from 'antd/lib/mention';
+import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, connectAutoComplete } from 'react-instantsearch-dom';
 import 'antd/lib/mention/style/css';
 
@@ -22,12 +23,13 @@ AsyncMention.propTypes = {
 
 const ConnectedAsyncMention = connectAutoComplete(AsyncMention);
 
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
+
 const App = () => (
-  <InstantSearch
-    appId="latency"
-    apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-    indexName="actors"
-  >
+  <InstantSearch searchClient={searchClient} indexName="actors">
     <ConnectedAsyncMention />
   </InstantSearch>
 );

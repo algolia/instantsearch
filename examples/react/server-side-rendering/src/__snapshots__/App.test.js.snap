@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Server-side rendering recipes App renders without crashing 1`] = `
-<div
-  className="ais-InstantSearch__root"
->
+Array [
   <div
     className="ais-SearchBox"
   >
@@ -65,16 +63,16 @@ exports[`Server-side rendering recipes App renders without crashing 1`] = `
         </svg>
       </button>
     </form>
-  </div>
+  </div>,
+  <div
+    className="ais-RefinementList ais-RefinementList--noRefinement"
+  />,
   <div
     className="ais-Hits"
   >
     <ul
       className="ais-Hits-list"
     />
-  </div>
-  <div
-    className="ais-RefinementList ais-RefinementList--noRefinement"
-  />
-</div>
+  </div>,
+]
 `;

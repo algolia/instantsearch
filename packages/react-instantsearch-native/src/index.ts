@@ -6,6 +6,8 @@ export { translatable } from 'react-instantsearch-core';
 // Widget
 export { Configure } from 'react-instantsearch-core';
 export { QueryRuleContext } from 'react-instantsearch-core';
+export { Index } from 'react-instantsearch-core';
+export { InstantSearch } from 'react-instantsearch-core';
 
 // Connectors
 export { connectAutoComplete } from 'react-instantsearch-core';
@@ -32,7 +34,3 @@ export { connectSortBy } from 'react-instantsearch-core';
 export { connectStateResults } from 'react-instantsearch-core';
 export { connectStats } from 'react-instantsearch-core';
 export { connectToggleRefinement } from 'react-instantsearch-core';
-
-// Native
-export { default as InstantSearch } from './widgets/InstantSearch';
-export { default as Index } from './widgets/Index';

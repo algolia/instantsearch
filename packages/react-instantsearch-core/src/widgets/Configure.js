@@ -16,12 +16,17 @@ import connectConfigure from '../connectors/connectConfigure';
  * @kind widget
  * @example
  * import React from 'react';
+ * import algoliasearch from 'algoliasearch/lite';
  * import { InstantSearch, Configure, Hits } from 'react-instantsearch-dom';
+ *
+ * const searchClient = algoliasearch(
+ *   'latency',
+ *   '6be0576ff61c053d5f9a3225e2a90f76'
+ * );
  *
  * const App = () => (
  *   <InstantSearch
- *     appId="latency"
- *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     searchClient={searchClient}
  *     indexName="instant_search"
  *   >
  *     <Configure hitsPerPage={5} />
@@ -30,4 +35,6 @@ import connectConfigure from '../connectors/connectConfigure';
  * );
  */
 
-export default connectConfigure(() => null);
+export default connectConfigure(function Configure() {
+  return null;
+});

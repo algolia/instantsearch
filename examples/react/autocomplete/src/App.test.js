@@ -3,7 +3,13 @@ import MultiIndex from './App-Multi-Index';
 import Mentions from './App-Mentions';
 import renderer from 'react-test-renderer';
 
-jest.mock('antd/lib/mention');
+jest.mock('antd/lib/mention', () => {
+  return ({ placeholder, suggestions }) =>
+    `<Mention>
+  ${placeholder}
+  ${suggestions.join('\n')}
+</Mention>`;
+});
 
 describe('autocomplete recipe', () => {
   it('MultiIndex renders without crashing', () => {
