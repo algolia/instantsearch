@@ -13,7 +13,10 @@ export default createConnector({
   displayName: 'AlgoliaStats',
 
   getProvidedProps(props, searchState, searchResults) {
-    const results = getResults(searchResults, this.context);
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     if (!results) {
       return null;

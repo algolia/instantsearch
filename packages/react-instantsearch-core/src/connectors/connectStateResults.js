@@ -17,7 +17,13 @@ import { getResults } from '../core/indexUtils';
  * @providedPropType {object} props - component props.
  * @example
  * import React from 'react';
+ * import algoliasearch from 'algoliasearch/lite';
  * import { InstantSearch, SearchBox, Hits, connectStateResults } from 'react-instantsearch-dom';
+ *
+ * const searchClient = algoliasearch(
+ *   'latency',
+ *   '6be0576ff61c053d5f9a3225e2a90f76'
+ * );
  *
  * const Content = connectStateResults(({ searchState, searchResults }) => {
  *   const hasResults = searchResults && searchResults.nbHits !== 0;
@@ -36,8 +42,7 @@ import { getResults } from '../core/indexUtils';
  *
  * const App = () => (
  *   <InstantSearch
- *      appId="latency"
- *      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *      searchClient={searchClient}
  *      indexName="instant_search"
  *    >
  *      <SearchBox />
@@ -49,7 +54,10 @@ export default createConnector({
   displayName: 'AlgoliaStateResults',
 
   getProvidedProps(props, searchState, searchResults) {
-    const results = getResults(searchResults, this.context);
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     return {
       searchState,

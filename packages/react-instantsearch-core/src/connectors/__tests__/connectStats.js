@@ -5,33 +5,38 @@ jest.mock('../../core/createConnector', () => x => x);
 let props;
 describe('connectStats', () => {
   describe('single index', () => {
-    const context = { context: { ais: { mainTargetedIndex: 'index' } } };
-    const getProvidedProps = connect.getProvidedProps.bind(context);
+    const contextValue = { mainTargetedIndex: 'index' };
+
     it('provides the correct props to the component', () => {
-      props = getProvidedProps(null, null, {});
+      props = connect.getProvidedProps({ contextValue }, null, {});
       expect(props).toBe(null);
 
-      props = getProvidedProps(null, null, {
+      props = connect.getProvidedProps({ contextValue }, null, {
         results: { nbHits: 666, processingTimeMS: 1, hits: [] },
       });
       expect(props).toEqual({ nbHits: 666, processingTimeMS: 1 });
     });
   });
+
   describe('multi index', () => {
-    const context = {
-      context: {
-        ais: { mainTargetedIndex: 'first' },
-        multiIndexContext: { targetedIndex: 'second' },
-      },
-    };
-    const getProvidedProps = connect.getProvidedProps.bind(context);
+    const contextValue = { mainTargetedIndex: 'first' };
+    const indexContextValue = { targetedIndex: 'second' };
+
     it('provides the correct props to the component', () => {
-      props = getProvidedProps(null, null, {});
+      props = connect.getProvidedProps(
+        { contextValue, indexContextValue },
+        null,
+        {}
+      );
       expect(props).toBe(null);
 
-      props = getProvidedProps(null, null, {
-        results: { second: { nbHits: 666, processingTimeMS: 1 } },
-      });
+      props = connect.getProvidedProps(
+        { contextValue, indexContextValue },
+        null,
+        {
+          results: { second: { nbHits: 666, processingTimeMS: 1 } },
+        }
+      );
       expect(props).toEqual({ nbHits: 666, processingTimeMS: 1 });
     });
   });

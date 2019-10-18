@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isSpecialClick } from '../core/utils';
@@ -17,6 +16,6 @@ export default class Link extends Component {
   };
 
   render() {
-    return <a {...omit(this.props, 'onClick')} onClick={this.onClick} />;
+    return <a {...this.props} onClick={this.onClick} />;
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { storiesOf } from '@storybook/react';
 import Autosuggest from 'react-autosuggest';
+import algoliasearch from 'algoliasearch/lite';
 import {
   Configure,
   InstantSearch,
@@ -15,15 +16,16 @@ import {
   connectStateResults,
 } from 'react-instantsearch-dom';
 
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
+
 const stories = storiesOf('<Index>', module);
 
 stories
   .add('MultiHits', () => (
-    <InstantSearch
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="instant_search"
-    >
+    <InstantSearch searchClient={searchClient} indexName="instant_search">
       <SearchBox />
 
       <Index indexName="bestbuy">
@@ -68,11 +70,7 @@ stories
     </InstantSearch>
   ))
   .add('AutoComplete', () => (
-    <InstantSearch
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="categories"
-    >
+    <InstantSearch searchClient={searchClient} indexName="categories">
       <Configure hitsPerPage={3} />
       <Index indexName="brands" />
       <Index indexName="products">
@@ -82,11 +80,7 @@ stories
     </InstantSearch>
   ))
   .add('with SortBy nested in same Index as Root', () => (
-    <InstantSearch
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="categories"
-    >
+    <InstantSearch searchClient={searchClient} indexName="categories">
       <SearchBox />
 
       <div className="multi-index_content">
@@ -123,11 +117,7 @@ stories
     </InstantSearch>
   ))
   .add('with conditional rendering', () => (
-    <InstantSearch
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="categories"
-    >
+    <InstantSearch searchClient={searchClient} indexName="categories">
       <SearchBox />
       <Results>
         <div className="multi-index_content">
@@ -167,11 +157,7 @@ stories
     </InstantSearch>
   ))
   .add('with Hits & Configure', () => (
-    <InstantSearch
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="brands"
-    >
+    <InstantSearch searchClient={searchClient} indexName="brands">
       <Configure hitsPerPage={5} />
       <SearchBox />
 
@@ -181,30 +167,6 @@ stories
       <Index indexName="products">
         <CustomProducts />
         <Pagination />
-      </Index>
-    </InstantSearch>
-  ))
-  .add('with custom root', () => (
-    <InstantSearch
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="instant_search"
-    >
-      <Configure hitsPerPage={5} />
-
-      <SearchBox />
-      <Index
-        indexName="products"
-        root={{
-          Root: 'div',
-          props: {
-            style: {
-              border: '1px solid red',
-            },
-          },
-        }}
-      >
-        <CustomProducts />
       </Index>
     </InstantSearch>
   ));

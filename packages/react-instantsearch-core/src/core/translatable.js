@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { has } from 'lodash';
 
 const withKeysPropType = keys => (props, propName, componentName) => {
   const prop = props[propName];
@@ -23,7 +22,7 @@ export default function translatable(defaultTranslations) {
         const { translations } = this.props;
 
         const translation =
-          translations && has(translations, key)
+          translations && translations.hasOwnProperty(key)
             ? translations[key]
             : defaultTranslations[key];
 

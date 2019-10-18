@@ -4,12 +4,9 @@ jest.mock('../../core/createConnector', () => x => x);
 
 const { refine } = connect;
 
-const context = { context: { ais: { mainTargetedIndex: 'index' } } };
-const getProvidedProps = connect.getProvidedProps.bind(context);
-
 describe('connectCurrentRefinements', () => {
   it('provides the correct props to the component', () => {
-    let props = getProvidedProps({}, null, null, [
+    let props = connect.getProvidedProps({}, null, null, [
       { items: [{ label: 'one' }], id: 1, index: 'something' },
       { items: [{ label: 'two' }], id: 2, index: 'something' },
       { items: [{ label: 'three' }], id: 'query', index: 'something' },
@@ -19,11 +16,11 @@ describe('connectCurrentRefinements', () => {
       { id: 2, index: 'something', label: 'two' },
     ]);
 
-    props = getProvidedProps({}, null, null, []);
+    props = connect.getProvidedProps({}, null, null, []);
     expect(props).toEqual({ canRefine: false, items: [] });
 
     const transformItems = jest.fn(() => ['items']);
-    props = getProvidedProps({ transformItems }, null, null, [
+    props = connect.getProvidedProps({ transformItems }, null, null, [
       { items: [{ label: 'one' }], id: 1, index: 'something' },
       { items: [{ label: 'two' }], id: 2, index: 'something' },
       { items: [{ label: 'three' }], id: 3, index: 'something' },
@@ -43,9 +40,12 @@ describe('connectCurrentRefinements', () => {
       },
     };
 
-    const props = getProvidedProps({ clearsQuery: true }, null, { results }, [
-      { items: [{ currentRefinement: 'query' }], id: 'query', index: '' },
-    ]);
+    const props = connect.getProvidedProps(
+      { clearsQuery: true },
+      null,
+      { results },
+      [{ items: [{ currentRefinement: 'query' }], id: 'query', index: '' }]
+    );
 
     expect(props.items).toEqual([
       { currentRefinement: 'query', id: 'query', index: '' },
@@ -59,9 +59,12 @@ describe('connectCurrentRefinements', () => {
       },
     };
 
-    const props = getProvidedProps({ clearsQuery: true }, null, { results }, [
-      { items: [{ currentRefinement: '' }], id: 'query' },
-    ]);
+    const props = connect.getProvidedProps(
+      { clearsQuery: true },
+      null,
+      { results },
+      [{ items: [{ currentRefinement: '' }], id: 'query' }]
+    );
 
     expect(props.items).toEqual([]);
   });
@@ -99,7 +102,7 @@ describe('connectCurrentRefinements', () => {
         // eslint-disable-next-line no-unused-vars
         .map(({ __dedupe, ...item }) => item);
 
-    const props = getProvidedProps({ transformItems }, null, null, [
+    const props = connect.getProvidedProps({ transformItems }, null, null, [
       { items: [{ label: 'abra' }], id: 1, index: 'something' },
       { items: [{ label: 'cadabra' }], id: 2, index: 'something' },
       { items: [{ label: 'cadabra' }], id: 2, index: 'something' },
@@ -113,7 +116,7 @@ describe('connectCurrentRefinements', () => {
 
   it('computes canRefine based on the length of the transformed items list', () => {
     const transformItems = () => [];
-    const props = getProvidedProps({ transformItems }, null, null, [
+    const props = connect.getProvidedProps({ transformItems }, null, null, [
       { items: [{ label: 'one' }], id: 1, index: 'something' },
     ]);
 

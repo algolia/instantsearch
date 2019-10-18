@@ -25,9 +25,11 @@ describe('translatable', () => {
     const defaultTranslations = {
       sup: 'hey',
       thing: n => `${n} things`,
+      fallbackThing: 'hi',
     };
     const translations = {
       sup: 'hoy',
+      fallbackThing: undefined,
     };
     const Translated = translatable(defaultTranslations)(Dummy);
     const { translate } = shallow(<Translated translations={translations} />)
@@ -35,5 +37,6 @@ describe('translatable', () => {
       .props();
     expect(translate('sup')).toBe('hoy');
     expect(translate('thing', 20)).toBe('20 things');
+    expect(translate('fallbackThing')).toBe(undefined);
   });
 });

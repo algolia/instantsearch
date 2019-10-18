@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'fast-deep-equal';
 
 import createConnector from '../core/createConnector';
 import {
@@ -43,7 +43,10 @@ export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
 
   getProvidedProps(props, searchState, searchResults) {
-    const results = getResults(searchResults, this.context);
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     this._allResults = this._allResults || [];
     this._prevState = this._prevState || {};
@@ -108,7 +111,11 @@ export default createConnector({
 
   getSearchParameters(searchParameters, props, searchState) {
     return searchParameters.setQueryParameters({
-      page: getCurrentRefinement(props, searchState, this.context) - 1,
+      page:
+        getCurrentRefinement(props, searchState, {
+          ais: props.contextValue,
+          multiIndexContext: props.indexContextValue,
+        }) - 1,
     });
   },
 
@@ -116,11 +123,20 @@ export default createConnector({
     if (index === undefined && this._lastReceivedPage !== undefined) {
       index = this._lastReceivedPage + 1;
     } else if (index === undefined) {
-      index = getCurrentRefinement(props, searchState, this.context);
+      index = getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      });
     }
+
     const id = getId();
-    const nextValue = { [id]: index + 1 }; // `index` is indexed from 0 but page number is indexed from 1
+    const nextValue = { [id]: index + 1 };
     const resetPage = false;
-    return refineValue(searchState, nextValue, this.context, resetPage);
+    return refineValue(
+      searchState,
+      nextValue,
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue },
+      resetPage
+    );
   },
 });

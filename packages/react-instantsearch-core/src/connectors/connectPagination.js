@@ -54,7 +54,10 @@ export default createConnector({
   displayName: 'AlgoliaPagination',
 
   getProvidedProps(props, searchState, searchResults) {
-    const results = getResults(searchResults, this.context);
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     if (!results) {
       return null;
@@ -63,22 +66,35 @@ export default createConnector({
     const nbPages = results.nbPages;
     return {
       nbPages,
-      currentRefinement: getCurrentRefinement(props, searchState, this.context),
+      currentRefinement: getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
       canRefine: nbPages > 1,
     };
   },
 
   refine(props, searchState, nextPage) {
-    return refine(props, searchState, nextPage, this.context);
+    return refine(props, searchState, nextPage, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   cleanUp(props, searchState) {
-    return cleanUpValue(searchState, this.context, getId());
+    return cleanUpValue(
+      searchState,
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue },
+      getId()
+    );
   },
 
   getSearchParameters(searchParameters, props, searchState) {
     return searchParameters.setPage(
-      getCurrentRefinement(props, searchState, this.context) - 1
+      getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }) - 1
     );
   },
 

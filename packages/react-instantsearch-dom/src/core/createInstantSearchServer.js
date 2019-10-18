@@ -1,20 +1,26 @@
-import { isEmpty, zipWith } from 'lodash';
-import React, { Component } from 'react';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
-import PropTypes from 'prop-types';
 import algoliasearchHelper from 'algoliasearch-helper';
-import {
-  createInstantSearch,
-  version,
-  HIGHLIGHT_TAGS,
-} from 'react-instantsearch-core';
+import { version, HIGHLIGHT_TAGS } from 'react-instantsearch-core';
+
+const hasMultipleIndices = context => context && context.multiIndexContext;
 
 const getIndexId = context =>
-  context && context.multiIndexContext
+  hasMultipleIndices(context)
     ? context.multiIndexContext.targetedIndex
     : context.ais.mainTargetedIndex;
 
-const hasMultipleIndices = context => context && context.multiIndexContext;
+const createSearchParametersCollector = accumulator => {
+  return (getWidgetSearchParameters, context, props, searchState) => {
+    accumulator.push({
+      getSearchParameters: getWidgetSearchParameters,
+      index: getIndexId(context),
+      context,
+      props,
+      searchState,
+    });
+  };
+};
 
 const getSearchParameters = (indexName, searchParameters) => {
   const sharedParameters = searchParameters
@@ -53,7 +59,11 @@ const getSearchParameters = (indexName, searchParameters) => {
   };
 };
 
-const singleIndexSearch = (helper, parameters) => helper.searchOnce(parameters);
+const singleIndexSearch = (helper, parameters) =>
+  helper.searchOnce(parameters).then(res => ({
+    rawResults: res.content._rawResults,
+    state: res.content._state,
+  }));
 
 const multiIndexSearch = (
   indexName,
@@ -62,165 +72,84 @@ const multiIndexSearch = (
   sharedParameters,
   { [indexName]: mainParameters, ...derivedParameters }
 ) => {
-  const search = [
+  const indexIds = Object.keys(derivedParameters);
+
+  const searches = [
     helper.searchOnce({
       ...sharedParameters,
       ...mainParameters,
     }),
-  ];
-
-  const indexIds = Object.keys(derivedParameters);
-
-  search.push(
     ...indexIds.map(indexId => {
       const parameters = derivedParameters[indexId];
 
       return algoliasearchHelper(client, parameters.index).searchOnce(
         parameters
       );
-    })
-  );
+    }),
+  ];
 
-  return Promise.all(search).then(results =>
-    zipWith([indexName, ...indexIds], results, (indexId, result) =>
-      // We attach `indexId` on the results to be able to reconstruct the
-      // object client side. We cannot rely on `state.index` anymore because
-      // we may have multiple times the same index.
-      ({
-        ...result,
-        _internalIndexId: indexId,
-      })
-    )
+  // We attach `indexId` on the results to be able to reconstruct the object
+  // on the client side. We cannot rely on `state.index` anymore because we
+  // may have multiple times the same index.
+  return Promise.all(searches).then(results =>
+    [indexName, ...indexIds].map((indexId, i) => ({
+      rawResults: results[i].content._rawResults,
+      state: results[i].content._state,
+      _internalIndexId: indexId,
+    }))
   );
 };
 
-const createInstantSearchServer = algoliasearch => {
-  const InstantSearch = createInstantSearch(algoliasearch, {
-    Root: 'div',
-    props: {
-      className: 'ais-InstantSearch__root',
-    },
-  });
-
-  let client = null;
-  let indexName = '';
-  let searchParameters = [];
-
-  const findResultsState = function(App, props) {
-    searchParameters = [];
-
-    renderToString(<App {...props} />);
-
-    const { sharedParameters, derivedParameters } = getSearchParameters(
-      indexName,
-      searchParameters
+export const findResultsState = function(App, props) {
+  if (!props) {
+    throw new Error(
+      'The function `findResultsState` must be called with props: `findResultsState(App, props)`'
     );
-
-    const helper = algoliasearchHelper(client, sharedParameters.index);
-
-    if (isEmpty(derivedParameters)) {
-      return singleIndexSearch(helper, sharedParameters);
-    }
-
-    return multiIndexSearch(
-      indexName,
-      client,
-      helper,
-      sharedParameters,
-      derivedParameters
-    );
-  };
-
-  class CreateInstantSearchServer extends Component {
-    static propTypes = {
-      algoliaClient: PropTypes.object,
-      searchClient: PropTypes.object,
-      appId: PropTypes.string,
-      apiKey: PropTypes.string,
-      indexName: PropTypes.string.isRequired,
-      resultsState: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    };
-
-    constructor(...args) {
-      super(...args);
-
-      if (this.props.searchClient) {
-        if (this.props.appId || this.props.apiKey || this.props.algoliaClient) {
-          throw new Error(
-            'react-instantsearch:: `searchClient` cannot be used with `appId`, `apiKey` or `algoliaClient`.'
-          );
-        }
-      }
-
-      if (this.props.algoliaClient) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          '`algoliaClient` option was renamed `searchClient`. Please use this new option before the next major version.'
-        );
-      }
-
-      client =
-        this.props.searchClient ||
-        this.props.algoliaClient ||
-        algoliasearch(this.props.appId, this.props.apiKey);
-
-      if (typeof client.addAlgoliaAgent === 'function') {
-        client.addAlgoliaAgent(`react (${React.version})`);
-        client.addAlgoliaAgent(`react-instantsearch (${version})`);
-      }
-
-      indexName = this.props.indexName;
-    }
-
-    onSearchParameters(getWidgetSearchParameters, context, props, searchState) {
-      searchParameters.push({
-        getSearchParameters: getWidgetSearchParameters,
-        index: getIndexId(context),
-        context,
-        props,
-        searchState,
-      });
-    }
-
-    hydrateResultsState() {
-      const { resultsState = [] } = this.props;
-
-      if (Array.isArray(resultsState)) {
-        return resultsState.reduce(
-          (acc, result) => ({
-            ...acc,
-            [result._internalIndexId]: new algoliasearchHelper.SearchResults(
-              new algoliasearchHelper.SearchParameters(result.state),
-              result._originalResponse.results
-            ),
-          }),
-          {}
-        );
-      }
-
-      return new algoliasearchHelper.SearchResults(
-        new algoliasearchHelper.SearchParameters(resultsState.state),
-        resultsState._originalResponse.results
-      );
-    }
-
-    render() {
-      const resultsState = this.hydrateResultsState();
-
-      return (
-        <InstantSearch
-          {...this.props}
-          resultsState={resultsState}
-          onSearchParameters={this.onSearchParameters}
-        />
-      );
-    }
   }
 
-  return {
-    InstantSearch: CreateInstantSearchServer,
-    findResultsState,
-  };
-};
+  if (!props.searchClient) {
+    throw new Error(
+      'The props provided to `findResultsState` must have a `searchClient`'
+    );
+  }
 
-export default createInstantSearchServer;
+  if (!props.indexName) {
+    throw new Error(
+      'The props provided to `findResultsState` must have an `indexName`'
+    );
+  }
+
+  const { indexName, searchClient } = props;
+
+  const searchParameters = [];
+
+  renderToString(
+    <App
+      {...props}
+      onSearchParameters={createSearchParametersCollector(searchParameters)}
+    />
+  );
+
+  const { sharedParameters, derivedParameters } = getSearchParameters(
+    indexName,
+    searchParameters
+  );
+
+  const helper = algoliasearchHelper(searchClient, sharedParameters.index);
+
+  if (typeof searchClient.addAlgoliaAgent === 'function') {
+    searchClient.addAlgoliaAgent(`react-instantsearch-server (${version})`);
+  }
+
+  if (Object.keys(derivedParameters).length === 0) {
+    return singleIndexSearch(helper, sharedParameters);
+  }
+
+  return multiIndexSearch(
+    indexName,
+    searchClient,
+    helper,
+    sharedParameters,
+    derivedParameters
+  );
+};

@@ -1,5 +1,6 @@
 import qs from 'qs';
 import React, { Component, Fragment } from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Configure } from 'react-instantsearch-dom';
 import {
   GoogleMapsLoader,
@@ -7,6 +8,14 @@ import {
   Control,
   Marker,
 } from 'react-instantsearch-dom-maps';
+
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76',
+  {
+    _useRequestCache: true,
+  }
+);
 
 const updateAfter = 700;
 const searchStateToUrl = searchState =>
@@ -16,15 +25,8 @@ class App extends Component {
   constructor() {
     super();
 
-    // retrieve searchState and aroundLatLng properties from the URL at first rendering
-    const initialSearchState = qs.parse(window.location.search.slice(1));
-    const aroundLatLng = initialSearchState.configure
-      ? initialSearchState.configure.aroundLatLng
-      : null;
-
     this.state = {
-      searchState: initialSearchState,
-      aroundLatLng,
+      searchState: qs.parse(window.location.search.slice(1)),
     };
 
     window.addEventListener('popstate', ({ state: searchState }) => {
@@ -44,13 +46,11 @@ class App extends Component {
     }, updateAfter);
 
     this.setState(previousState => {
-      // when a new query is performed, removed the aroundLatLng + boundingBox
       const hasQueryChanged =
         previousState.searchState.query !== searchState.query;
 
       return {
         ...previousState,
-        aroundLatLng: !hasQueryChanged ? previousState.aroundLatLng : null,
         searchState: {
           ...searchState,
           boundingBox: !hasQueryChanged ? searchState.boundingBox : null,
@@ -60,20 +60,17 @@ class App extends Component {
   };
 
   render() {
-    const { aroundLatLng, searchState } = this.state;
+    const { searchState } = this.state;
 
     const parameters = {};
-    if (aroundLatLng && !searchState.boundingBox) {
-      parameters.aroundLatLng = aroundLatLng;
-    } else if (!searchState.boundingBox) {
+    if (!searchState.boundingBox) {
       parameters.aroundLatLngViaIP = true;
       parameters.aroundRadius = 'all';
     }
 
     return (
       <InstantSearch
-        appId="latency"
-        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+        searchClient={searchClient}
         indexName="airbnb"
         searchState={searchState}
         onSearchStateChange={this.onSearchStateChange}

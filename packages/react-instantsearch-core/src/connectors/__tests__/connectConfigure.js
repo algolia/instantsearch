@@ -5,29 +5,44 @@ jest.mock('../../core/createConnector', () => x => x);
 
 describe('connectConfigure', () => {
   describe('single index', () => {
-    const context = { context: { ais: { mainTargetedIndex: 'index' } } };
-    const getSearchParameters = connect.getSearchParameters.bind(context);
-    const transitionState = connect.transitionState.bind(context);
-    const cleanUp = connect.cleanUp.bind(context);
+    const contextValue = { mainTargetedIndex: 'index' };
 
-    it('propagates the props to the SearchParameters without children', () => {
-      const searchParameters = getSearchParameters(
+    it('propagates the props to the SearchParameters without children & contextValue', () => {
+      const searchParameters = connect.getSearchParameters.call(
+        {},
         new SearchParameters(),
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+        { distinct: 1, whatever: 'please', children: 'whatever', contextValue },
         {}
       );
-      expect(searchParameters.getQueryParameter('distinct')).toEqual(1);
-      expect(searchParameters.getQueryParameter('whatever')).toEqual('please');
-      expect(
-        searchParameters.getQueryParameter.bind(searchParameters, 'children')
-      ).toThrow();
+
+      expect(searchParameters).toEqual(
+        expect.objectContaining({
+          distinct: 1,
+          whatever: 'please',
+        })
+      );
+      expect(searchParameters).not.toEqual(
+        expect.objectContaining({
+          children: 'whatever',
+          contextValue,
+        })
+      );
+      expect(searchParameters.distinct).toEqual(1);
+      expect(searchParameters.whatever).toEqual('please');
+      expect(searchParameters.children).toBeUndefined();
+      expect(searchParameters.contextValue).toBeUndefined();
     });
 
     it('calling transitionState should add configure parameters to the search state', () => {
-      const providedThis = {};
-      let searchState = transitionState.call(
-        providedThis,
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+      const instance = {};
+      let searchState = connect.transitionState.call(
+        instance,
+        {
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue,
+        },
         {},
         {}
       );
@@ -35,9 +50,9 @@ describe('connectConfigure', () => {
         configure: { distinct: 1, whatever: 'please' },
       });
 
-      searchState = transitionState.call(
-        providedThis,
-        { whatever: 'other', children: 'whatever' },
+      searchState = connect.transitionState.call(
+        instance,
+        { whatever: 'other', children: 'whatever', contextValue },
         { configure: { distinct: 1, whatever: 'please' } },
         { configure: { distinct: 1, whatever: 'please' } }
       );
@@ -46,48 +61,68 @@ describe('connectConfigure', () => {
     });
 
     it('calling cleanUp should remove configure parameters from the search state', () => {
-      let searchState = cleanUp(
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+      let searchState = connect.cleanUp.call(
+        {},
         {
-          configure: { distinct: 1, whatever: 'please', another: 'parameters' },
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue,
+        },
+        {
+          configure: {
+            distinct: 1,
+            whatever: 'please',
+            another: 'parameters',
+          },
         }
       );
       expect(searchState).toEqual({ configure: { another: 'parameters' } });
 
-      searchState = cleanUp(
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+      searchState = connect.cleanUp.call(
+        {},
+        { distinct: 1, whatever: 'please', children: 'whatever', contextValue },
         { configure: { distinct: 1, whatever: 'please' } }
       );
       expect(searchState).toEqual({ configure: {} });
     });
   });
+
   describe('multi index', () => {
-    let context = {
-      context: {
-        ais: { mainTargetedIndex: 'first' },
-        multiIndexContext: { targetedIndex: 'second' },
-      },
-    };
-    let cleanUp = connect.cleanUp.bind(context);
-    const getSearchParameters = connect.getSearchParameters.bind(context);
+    const contextValue = { mainTargetedIndex: 'first' };
+    const indexContextValue = { targetedIndex: 'second' };
 
     it('it propagates the props to the SearchParameters without children', () => {
-      const searchParameters = getSearchParameters(
+      const searchParameters = connect.getSearchParameters.call(
+        {},
         new SearchParameters(),
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+        {
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue,
+          indexContextValue,
+        },
         {}
       );
-      expect(searchParameters.getQueryParameter('distinct')).toEqual(1);
-      expect(searchParameters.getQueryParameter('whatever')).toEqual('please');
-      expect(
-        searchParameters.getQueryParameter.bind(searchParameters, 'children')
-      ).toThrow();
+      expect(searchParameters.distinct).toEqual(1);
+      expect(searchParameters.whatever).toEqual('please');
+      expect(searchParameters.children).toBeUndefined();
+      expect(searchParameters.contextValue).toBeUndefined();
+      expect(searchParameters.indexContextValue).toBeUndefined();
     });
 
     it('calling transitionState should add configure parameters to the search state', () => {
-      let transitionState = connect.transitionState.bind(context);
-      let searchState = transitionState(
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+      const instance = {};
+      let searchState = connect.transitionState.call(
+        instance,
+        {
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue,
+          indexContextValue,
+        },
         {},
         {}
       );
@@ -95,8 +130,14 @@ describe('connectConfigure', () => {
         indices: { second: { configure: { distinct: 1, whatever: 'please' } } },
       });
 
-      searchState = transitionState(
-        { whatever: 'other', children: 'whatever' },
+      searchState = connect.transitionState.call(
+        instance,
+        {
+          whatever: 'other',
+          children: 'whatever',
+          contextValue,
+          indexContextValue,
+        },
         {
           indices: {
             second: { configure: { distinct: 1, whatever: 'please' } },
@@ -113,16 +154,15 @@ describe('connectConfigure', () => {
         indices: { second: { configure: { whatever: 'other' } } },
       });
 
-      context = {
-        context: {
-          ais: { mainTargetedIndex: 'first' },
-          multiIndexContext: { targetedIndex: 'first' },
+      searchState = connect.transitionState.call(
+        instance,
+        {
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue: { mainTargetedIndex: 'first' },
+          indexContextValue: { targetedIndex: 'first' },
         },
-      };
-      transitionState = connect.transitionState.bind(context);
-
-      searchState = transitionState(
-        { distinct: 1, whatever: 'please', children: 'whatever' },
         { indices: { second: { configure: { whatever: 'other' } } } },
         { indices: { second: { configure: { whatever: 'other' } } } }
       );
@@ -134,8 +174,14 @@ describe('connectConfigure', () => {
         },
       });
 
-      searchState = transitionState(
-        { whatever: 'other', children: 'whatever' },
+      searchState = connect.transitionState.call(
+        instance,
+        {
+          whatever: 'other',
+          children: 'whatever',
+          contextValue: { mainTargetedIndex: 'first' },
+          indexContextValue: { targetedIndex: 'first' },
+        },
         {
           indices: {
             second: { configure: { whatever: 'other' } },
@@ -159,8 +205,16 @@ describe('connectConfigure', () => {
     });
 
     it('calling cleanUp should remove configure parameters from the search state', () => {
-      let searchState = cleanUp(
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+      const instance = {};
+      let searchState = connect.cleanUp.call(
+        instance,
+        {
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue,
+          indexContextValue,
+        },
         {
           indices: {
             second: { configure: { whatever: 'other' } },
@@ -175,16 +229,15 @@ describe('connectConfigure', () => {
         },
       });
 
-      context = {
-        context: {
-          ais: { mainTargetedIndex: 'first' },
-          multiIndexContext: { targetedIndex: 'first' },
+      searchState = connect.cleanUp.call(
+        instance,
+        {
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue: { mainTargetedIndex: 'first' },
+          indexContextValue: { targetedIndex: 'first' },
         },
-      };
-      cleanUp = connect.cleanUp.bind(context);
-
-      searchState = cleanUp(
-        { distinct: 1, whatever: 'please', children: 'whatever' },
         {
           indices: {
             first: { configure: { distinct: 1, whatever: 'please' } },
@@ -196,8 +249,15 @@ describe('connectConfigure', () => {
         indices: { first: { configure: {} }, second: { configure: {} } },
       });
 
-      searchState = cleanUp(
-        { distinct: 1, whatever: 'please', children: 'whatever' },
+      searchState = connect.cleanUp.call(
+        instance,
+        {
+          distinct: 1,
+          whatever: 'please',
+          children: 'whatever',
+          contextValue: { mainTargetedIndex: 'first' },
+          indexContextValue: { targetedIndex: 'first' },
+        },
         { indices: {} }
       );
       expect(searchState).toEqual({

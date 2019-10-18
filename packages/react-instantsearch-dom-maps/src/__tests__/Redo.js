@@ -2,7 +2,6 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { createFakeMapInstance } from '../../test/mockGoogleMaps';
-import { STATE_CONTEXT } from '../Provider';
 import { Redo } from '../Redo';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -11,29 +10,17 @@ describe('Redo', () => {
   const defaultProps = {
     googleMapsInstance: createFakeMapInstance(),
     translate: x => x,
-  };
 
-  const defaultContext = {
-    [STATE_CONTEXT]: {
-      hasMapMoveSinceLastRefine: false,
-      refineWithInstance: () => {},
-    },
+    hasMapMoveSinceLastRefine: false,
+    refineWithInstance: () => {},
   };
-
-  const getStateContext = context => context[STATE_CONTEXT];
 
   it('expect to render correctly', () => {
     const props = {
       ...defaultProps,
     };
 
-    const context = {
-      ...defaultContext,
-    };
-
-    const wrapper = shallow(<Redo {...props} />, {
-      context,
-    });
+    const wrapper = shallow(<Redo {...props} />);
 
     expect(wrapper.find('button').prop('disabled')).toBe(true);
     expect(wrapper).toMatchSnapshot();
@@ -42,19 +29,10 @@ describe('Redo', () => {
   it('expect to render correctly when map has moved', () => {
     const props = {
       ...defaultProps,
+      hasMapMoveSinceLastRefine: true,
     };
 
-    const context = {
-      ...defaultContext,
-      [STATE_CONTEXT]: {
-        ...getStateContext(defaultContext),
-        hasMapMoveSinceLastRefine: true,
-      },
-    };
-
-    const wrapper = shallow(<Redo {...props} />, {
-      context,
-    });
+    const wrapper = shallow(<Redo {...props} />);
 
     expect(wrapper.find('button').prop('disabled')).toBe(false);
     expect(wrapper).toMatchSnapshot();
@@ -66,27 +44,16 @@ describe('Redo', () => {
     const props = {
       ...defaultProps,
       googleMapsInstance: mapInstance,
+      refineWithInstance: jest.fn(),
     };
 
-    const context = {
-      ...defaultContext,
-      [STATE_CONTEXT]: {
-        ...getStateContext(defaultContext),
-        refineWithInstance: jest.fn(),
-      },
-    };
+    const wrapper = shallow(<Redo {...props} />);
 
-    const wrapper = shallow(<Redo {...props} />, {
-      context,
-    });
-
-    const { refineWithInstance } = getStateContext(context);
-
-    expect(refineWithInstance).toHaveBeenCalledTimes(0);
+    expect(props.refineWithInstance).toHaveBeenCalledTimes(0);
 
     wrapper.find('button').simulate('click');
 
-    expect(refineWithInstance).toHaveBeenCalledTimes(1);
-    expect(refineWithInstance).toHaveBeenCalledWith(mapInstance);
+    expect(props.refineWithInstance).toHaveBeenCalledTimes(1);
+    expect(props.refineWithInstance).toHaveBeenCalledWith(mapInstance);
   });
 });

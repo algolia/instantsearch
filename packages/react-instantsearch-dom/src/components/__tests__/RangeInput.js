@@ -167,7 +167,7 @@ describe('RawRangeInput', () => {
     expect(component).toMatchSnapshot();
   });
 
-  describe('willReceiveProps', () => {
+  describe('didUpdate', () => {
     it('expect to update state when props have changed ', () => {
       const props = {
         canRefine: false,

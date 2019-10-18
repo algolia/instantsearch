@@ -1,8 +1,7 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { LatLngPropType, BoundingBoxPropType } from './propTypes';
-
-export const STATE_CONTEXT = '__ais_geo_search__state__';
+import GeoSearchContext from './GeoSearchContext';
 
 class Provider extends Component {
   static propTypes = {
@@ -19,38 +18,45 @@ class Provider extends Component {
     currentRefinement: BoundingBoxPropType,
   };
 
-  static childContextTypes = {
-    [STATE_CONTEXT]: PropTypes.shape({
-      isRefineOnMapMove: PropTypes.bool.isRequired,
-      hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
-      toggleRefineOnMapMove: PropTypes.func.isRequired,
-      setMapMoveSinceLastRefine: PropTypes.func.isRequired,
-      refineWithInstance: PropTypes.func.isRequired,
-    }).isRequired,
-  };
-
   isPendingRefine = false;
   boundingBox = null;
   previousBoundingBox = null;
 
-  getChildContext() {
-    const {
-      isRefineOnMapMove,
-      hasMapMoveSinceLastRefine,
-      toggleRefineOnMapMove,
-      setMapMoveSinceLastRefine,
-    } = this.props;
+  refineWithInstance = instance => {
+    const { refine } = this.props;
 
-    return {
-      [STATE_CONTEXT]: {
-        refineWithInstance: this.refineWithInstance,
-        toggleRefineOnMapMove,
-        setMapMoveSinceLastRefine,
-        isRefineOnMapMove,
-        hasMapMoveSinceLastRefine,
-      },
-    };
-  }
+    const bounds = instance.getBounds();
+
+    refine({
+      northEast: bounds.getNorthEast().toJSON(),
+      southWest: bounds.getSouthWest().toJSON(),
+    });
+  };
+
+  mapValue = {
+    isRefineOnMapMove: this.props.isRefineOnMapMove,
+    hasMapMoveSinceLastRefine: this.props.hasMapMoveSinceLastRefine,
+    toggleRefineOnMapMove: this.props.toggleRefineOnMapMove,
+    setMapMoveSinceLastRefine: this.props.setMapMoveSinceLastRefine,
+    refineWithInstance: this.refineWithInstance,
+  };
+
+  getMapValue = () => {
+    const haveContextValuesChanges =
+      this.mapValue.isRefineOnMapMove !== this.props.isRefineOnMapMove ||
+      this.mapValue.hasMapMoveSinceLastRefine !==
+        this.props.hasMapMoveSinceLastRefine;
+
+    if (haveContextValuesChanges) {
+      this.mapValue = {
+        ...this.mapValue,
+        isRefineOnMapMove: this.props.isRefineOnMapMove,
+        hasMapMoveSinceLastRefine: this.props.hasMapMoveSinceLastRefine,
+      };
+    }
+
+    return this.mapValue;
+  };
 
   createBoundingBoxFromHits(hits) {
     const { google } = this.props;
@@ -65,17 +71,6 @@ class Provider extends Component {
       southWest: latLngBounds.getSouthWest().toJSON(),
     };
   }
-
-  refineWithInstance = instance => {
-    const { refine } = this.props;
-
-    const bounds = instance.getBounds();
-
-    refine({
-      northEast: bounds.getNorthEast().toJSON(),
-      southWest: bounds.getSouthWest().toJSON(),
-    });
-  };
 
   onChange = () => {
     const {
@@ -121,13 +116,17 @@ class Provider extends Component {
         ? this.createBoundingBoxFromHits(hits)
         : currentRefinement;
 
-    return children({
-      onChange: this.onChange,
-      onIdle: this.onIdle,
-      shouldUpdate: this.shouldUpdate,
-      boundingBox,
-      boundingBoxPadding,
-    });
+    return (
+      <GeoSearchContext.Provider value={this.getMapValue()}>
+        {children({
+          onChange: this.onChange,
+          onIdle: this.onIdle,
+          shouldUpdate: this.shouldUpdate,
+          boundingBox,
+          boundingBoxPadding,
+        })}
+      </GeoSearchContext.Provider>
+    );
   }
 }
 

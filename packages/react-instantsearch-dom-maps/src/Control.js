@@ -1,65 +1,75 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { createClassNames, translatable } from 'react-instantsearch-dom';
-import { STATE_CONTEXT } from './Provider';
+import GeoSearchContext from './GeoSearchContext';
 import withGoogleMaps from './withGoogleMaps';
 
 const cx = createClassNames('GeoSearch');
+const ControlPropTypes = {
+  googleMapsInstance: PropTypes.object.isRequired,
+  translate: PropTypes.func.isRequired,
+};
 
-export class Control extends Component {
-  static propTypes = {
-    googleMapsInstance: PropTypes.object.isRequired,
-    translate: PropTypes.func.isRequired,
-  };
+export const Control = ({
+  googleMapsInstance,
+  translate,
+  isRefineOnMapMove,
+  hasMapMoveSinceLastRefine,
+  toggleRefineOnMapMove,
+  refineWithInstance,
+}) => (
+  <div className={cx('control')}>
+    {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
+      <label className={cx('label')}>
+        <input
+          className={cx('input')}
+          type="checkbox"
+          checked={isRefineOnMapMove}
+          onChange={toggleRefineOnMapMove}
+        />
+        {translate('control')}
+      </label>
+    ) : (
+      <button
+        className={cx('redo')}
+        onClick={() => refineWithInstance(googleMapsInstance)}
+      >
+        {translate('redo')}
+      </button>
+    )}
+  </div>
+);
 
-  static contextTypes = {
-    [STATE_CONTEXT]: PropTypes.shape({
-      isRefineOnMapMove: PropTypes.bool.isRequired,
-      toggleRefineOnMapMove: PropTypes.func.isRequired,
-      hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
-      refineWithInstance: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+Control.propTypes = {
+  ...ControlPropTypes,
+  isRefineOnMapMove: PropTypes.bool.isRequired,
+  toggleRefineOnMapMove: PropTypes.func.isRequired,
+  hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
+  refineWithInstance: PropTypes.func.isRequired,
+};
 
-  getStateContext() {
-    return this.context[STATE_CONTEXT];
-  }
-
-  render() {
-    const { googleMapsInstance, translate } = this.props;
-    const {
+const ControlWrapper = props => (
+  <GeoSearchContext.Consumer>
+    {({
       isRefineOnMapMove,
       hasMapMoveSinceLastRefine,
       toggleRefineOnMapMove,
       refineWithInstance,
-    } = this.getStateContext();
+    }) => (
+      <Control
+        {...props}
+        isRefineOnMapMove={isRefineOnMapMove}
+        hasMapMoveSinceLastRefine={hasMapMoveSinceLastRefine}
+        toggleRefineOnMapMove={toggleRefineOnMapMove}
+        refineWithInstance={refineWithInstance}
+      />
+    )}
+  </GeoSearchContext.Consumer>
+);
 
-    return (
-      <div className={cx('control')}>
-        {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
-          <label className={cx('label')}>
-            <input
-              className={cx('input')}
-              type="checkbox"
-              checked={isRefineOnMapMove}
-              onChange={toggleRefineOnMapMove}
-            />
-            {translate('control')}
-          </label>
-        ) : (
-          <button
-            className={cx('redo')}
-            onClick={() => refineWithInstance(googleMapsInstance)}
-          >
-            {translate('redo')}
-          </button>
-        )}
-      </div>
-    );
-  }
-}
+ControlWrapper.propTypes = ControlPropTypes;
 
 export default translatable({
   control: 'Search as I move the map',
   redo: 'Redo search here',
-})(withGoogleMaps(Control));
+})(withGoogleMaps(ControlWrapper));

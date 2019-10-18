@@ -1,9 +1,8 @@
-import { find } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { translatable } from 'react-instantsearch-core';
-import { createClassNames } from '../core/utils';
+import { createClassNames, find } from '../core/utils';
 
 const cx = createClassNames('MenuSelect');
 
@@ -31,7 +30,10 @@ class MenuSelect extends Component {
   };
 
   get selectedValue() {
-    const { value } = find(this.props.items, { isRefined: true }) || {
+    const { value } = find(
+      this.props.items,
+      item => item.isRefined === true
+    ) || {
       value: 'ais__see__all__option',
     };
     return value;

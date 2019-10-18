@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { createClassNames } from '../core/utils';
 
 const cx = createClassNames('Panel');
+
+export const {
+  Consumer: PanelConsumer,
+  Provider: PanelProvider,
+} = createContext(function setCanRefine() {});
 
 class Panel extends Component {
   static propTypes = {
@@ -11,10 +16,6 @@ class Panel extends Component {
     className: PropTypes.string,
     header: PropTypes.node,
     footer: PropTypes.node,
-  };
-
-  static childContextTypes = {
-    setCanRefine: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -26,12 +27,6 @@ class Panel extends Component {
   state = {
     canRefine: true,
   };
-
-  getChildContext() {
-    return {
-      setCanRefine: this.setCanRefine,
-    };
-  }
 
   setCanRefine = nextCanRefine => {
     this.setState({ canRefine: nextCanRefine });
@@ -47,7 +42,9 @@ class Panel extends Component {
       >
         {header && <div className={cx('header')}>{header}</div>}
 
-        <div className={cx('body')}>{children}</div>
+        <div className={cx('body')}>
+          <PanelProvider value={this.setCanRefine}>{children}</PanelProvider>
+        </div>
 
         {footer && <div className={cx('footer')}>{footer}</div>}
       </div>

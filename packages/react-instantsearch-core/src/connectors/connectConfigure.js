@@ -1,4 +1,4 @@
-import { omit, difference, keys } from 'lodash';
+import { omit } from '../core/utils';
 import createConnector from '../core/createConnector';
 import {
   refineValue,
@@ -16,37 +16,55 @@ export default createConnector({
     return {};
   },
   getSearchParameters(searchParameters, props) {
-    const items = omit(props, 'children');
+    const { children, contextValue, indexContextValue, ...items } = props;
     return searchParameters.setQueryParameters(items);
   },
   transitionState(props, prevSearchState, nextSearchState) {
     const id = getId();
-    const items = omit(props, 'children');
+    const { children, contextValue, indexContextValue, ...items } = props;
+    const propKeys = Object.keys(props);
     const nonPresentKeys = this._props
-      ? difference(keys(this._props), keys(props))
+      ? Object.keys(this._props).filter(prop => propKeys.indexOf(prop) === -1)
       : [];
     this._props = props;
     const nextValue = {
       [id]: { ...omit(nextSearchState[id], nonPresentKeys), ...items },
     };
-    return refineValue(nextSearchState, nextValue, this.context);
+    return refineValue(nextSearchState, nextValue, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
   cleanUp(props, searchState) {
     const id = getId();
-    const indexId = getIndexId(this.context);
+    const indexId = getIndexId({
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
+
     const subState =
-      hasMultipleIndices(this.context) && searchState.indices
+      hasMultipleIndices({
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }) && searchState.indices
         ? searchState.indices[indexId]
         : searchState;
+
     const configureKeys =
       subState && subState[id] ? Object.keys(subState[id]) : [];
+
     const configureState = configureKeys.reduce((acc, item) => {
       if (!props[item]) {
         acc[item] = subState[id][item];
       }
       return acc;
     }, {});
+
     const nextValue = { [id]: configureState };
-    return refineValue(searchState, nextValue, this.context);
+
+    return refineValue(searchState, nextValue, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 });

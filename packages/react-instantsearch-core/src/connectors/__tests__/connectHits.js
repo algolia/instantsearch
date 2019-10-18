@@ -6,11 +6,11 @@ const { getSearchParameters } = connect;
 
 describe('connectHits', () => {
   describe('single index', () => {
-    const context = { context: { ais: { mainTargetedIndex: 'index' } } };
-    const getProvidedProps = connect.getProvidedProps.bind(context);
+    const contextValue = { mainTargetedIndex: 'index' };
+
     it('provides the current hits to the component', () => {
       const hits = [{}];
-      const props = getProvidedProps(null, null, {
+      const props = connect.getProvidedProps({ contextValue }, null, {
         results: { hits, hitsPerPage: 2, page: 2 },
       });
       expect(props).toEqual({
@@ -20,7 +20,7 @@ describe('connectHits', () => {
 
     it('adds positions to the hits provided to the component', () => {
       const hits = [{}];
-      const props = getProvidedProps(null, null, {
+      const props = connect.getProvidedProps({ contextValue }, null, {
         results: { hits, hitsPerPage: 2, page: 2 },
       });
       expect(props).toEqual({
@@ -30,7 +30,7 @@ describe('connectHits', () => {
 
     it('adds queryID to the hits provided to the component', () => {
       const hits = [{}];
-      const props = getProvidedProps(null, null, {
+      const props = connect.getProvidedProps({ contextValue }, null, {
         results: { hits, hitsPerPage: 2, page: 2, queryID: 'theQueryID' },
       });
       expect(props).toEqual({
@@ -39,7 +39,9 @@ describe('connectHits', () => {
     });
 
     it("doesn't render when no hits are available", () => {
-      const props = getProvidedProps(null, null, { results: null });
+      const props = connect.getProvidedProps({ contextValue }, null, {
+        results: null,
+      });
       expect(props).toEqual({ hits: [] });
     });
 
@@ -48,19 +50,20 @@ describe('connectHits', () => {
       expect(searchParameters).toEqual({ hitsPerPage: 10 });
     });
   });
+
   describe('multi index', () => {
-    const context = {
-      context: {
-        ais: { mainTargetedIndex: 'first' },
-        multiIndexContext: { targetedIndex: 'second' },
-      },
-    };
-    const getProvidedProps = connect.getProvidedProps.bind(context);
+    const contextValue = { mainTargetedIndex: 'first' };
+    const indexContextValue = { targetedIndex: 'second' };
+
     it('provides the current hits to the component', () => {
       const hits = [{}];
-      const props = getProvidedProps(null, null, {
-        results: { second: { hits, hitsPerPage: 2, page: 2 } },
-      });
+      const props = connect.getProvidedProps(
+        { contextValue, indexContextValue },
+        null,
+        {
+          results: { second: { hits, hitsPerPage: 2, page: 2 } },
+        }
+      );
       expect(props).toEqual({
         hits: hits.map(hit => expect.objectContaining(hit)),
       });
@@ -68,9 +71,13 @@ describe('connectHits', () => {
 
     it('adds positions to the hits provided to the component', () => {
       const hits = [{}];
-      const props = getProvidedProps(null, null, {
-        results: { second: { hits, hitsPerPage: 2, page: 2 } },
-      });
+      const props = connect.getProvidedProps(
+        { contextValue, indexContextValue },
+        null,
+        {
+          results: { second: { hits, hitsPerPage: 2, page: 2 } },
+        }
+      );
       expect(props).toEqual({
         hits: [{ __position: 5 }],
       });
@@ -78,18 +85,26 @@ describe('connectHits', () => {
 
     it('adds queryID to the hits provided to the component', () => {
       const hits = [{}];
-      const props = getProvidedProps(null, null, {
-        results: {
-          second: { hits, hitsPerPage: 2, page: 2, queryID: 'theQueryID' },
-        },
-      });
+      const props = connect.getProvidedProps(
+        { contextValue, indexContextValue },
+        null,
+        {
+          results: {
+            second: { hits, hitsPerPage: 2, page: 2, queryID: 'theQueryID' },
+          },
+        }
+      );
       expect(props).toEqual({
         hits: [expect.objectContaining({ __queryID: 'theQueryID' })],
       });
     });
 
     it("doesn't render when no hits are available", () => {
-      const props = getProvidedProps(null, null, { results: { second: null } });
+      const props = connect.getProvidedProps(
+        { contextValue, indexContextValue },
+        null,
+        { results: { second: null } }
+      );
       expect(props).toEqual({ hits: [] });
     });
 

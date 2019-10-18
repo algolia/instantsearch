@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Multi index recipe App renders without crashing 1`] = `
-<div
-  className="ais-InstantSearch__root"
->
+Array [
   <div
     className="ais-SearchBox"
   >
@@ -65,30 +63,26 @@ exports[`Multi index recipe App renders without crashing 1`] = `
         </svg>
       </button>
     </form>
-  </div>
+  </div>,
   <p>
     Results in first dataset
-  </p>
+  </p>,
   <div
     className="ais-Hits"
   >
     <ul
       className="ais-Hits-list"
     />
-  </div>
+  </div>,
+  <p>
+    Results in second dataset
+  </p>,
   <div
-    className="ais-MultiIndex__root"
+    className="ais-Hits"
   >
-    <p>
-      Results in second dataset
-    </p>
-    <div
-      className="ais-Hits"
-    >
-      <ul
-        className="ais-Hits-list"
-      />
-    </div>
-  </div>
-</div>
+    <ul
+      className="ais-Hits-list"
+    />
+  </div>,
+]
 `;

@@ -29,12 +29,16 @@ class Range extends Component {
 
   state = { currentValues: { min: this.props.min, max: this.props.max } };
 
-  componentWillReceiveProps(sliderState) {
-    if (sliderState.canRefine) {
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.canRefine &&
+      (prevProps.currentRefinement.min !== this.props.currentRefinement.min ||
+        prevProps.currentRefinement.max !== this.props.currentRefinement.max)
+    ) {
       this.setState({
         currentValues: {
-          min: sliderState.currentRefinement.min,
-          max: sliderState.currentRefinement.max,
+          min: this.props.currentRefinement.min,
+          max: this.props.currentRefinement.max,
         },
       });
     }

@@ -1,3 +1,80 @@
+# [6.0.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v5.7.0...v6.0.0-beta.0) (2019-08-21)
+
+[Migration guide](MIGRATION.md)
+
+### Bug Fixes
+
+* **react 17 compat:** upgrade RangeInput lifecycle ([#2289](https://github.com/algolia/react-instantsearch/issues/2289)) ([110b1af](https://github.com/algolia/react-instantsearch/commit/110b1af))
+* **react 17 compat:** upgrade RangeSlider lifecycle ([#2290](https://github.com/algolia/react-instantsearch/issues/2290)) ([69a7f53](https://github.com/algolia/react-instantsearch/commit/69a7f53))
+* **connectToggleRefinement:** cast currentRefinement to boolean ([#2701](https://github.com/algolia/react-instantsearch/issues/2701)) ([db934fd](https://github.com/algolia/react-instantsearch/commit/db934fd))
+* **core:** searchState can be non-Object object ([#2722](https://github.com/algolia/react-instantsearch/issues/2722)) ([dea493c](https://github.com/algolia/react-instantsearch/commit/dea493c)), closes [#2568](https://github.com/algolia/react-instantsearch/issues/2568)
+* **createConnector:** new React life cycles ([#2357](https://github.com/algolia/react-instantsearch/issues/2357)) ([fc10640](https://github.com/algolia/react-instantsearch/commit/fc10640))
+* **createInstantSearchManager:** do not trigger search on index update ([#2552](https://github.com/algolia/react-instantsearch/issues/2552)) ([e209362](https://github.com/algolia/react-instantsearch/commit/e209362))
+* **geo:** check for undefined in isEqual ([#2643](https://github.com/algolia/react-instantsearch/issues/2643)) ([a544231](https://github.com/algolia/react-instantsearch/commit/a544231)), closes [#2467](https://github.com/algolia/react-instantsearch/issues/2467)
+* **geo:** remove lifecycle compat ([#2644](https://github.com/algolia/react-instantsearch/issues/2644)) ([2b2b898](https://github.com/algolia/react-instantsearch/commit/2b2b898)), closes [#2626](https://github.com/algolia/react-instantsearch/issues/2626)
+* **highlight:** switch to index as key ([#2690](https://github.com/algolia/react-instantsearch/issues/2690)) ([51de682](https://github.com/algolia/react-instantsearch/commit/51de682)), closes [#2688](https://github.com/algolia/react-instantsearch/issues/2688)
+* **peerDependencies:** update React ([#2626](https://github.com/algolia/react-instantsearch/issues/2626)) ([6ccad49](https://github.com/algolia/react-instantsearch/commit/6ccad49))
+* **ssr:** avoid duplicate serializing ([#2726](https://github.com/algolia/react-instantsearch/issues/2726)) ([c768b1a](https://github.com/algolia/react-instantsearch/commit/c768b1a))
+* **voiceSearch:** fix incorrect status on stop ([#2535](https://github.com/algolia/react-instantsearch/issues/2535)) ([824dc22](https://github.com/algolia/react-instantsearch/commit/824dc22))
+
+
+### Code Refactoring
+
+* **lodash:** get ([#2461](https://github.com/algolia/react-instantsearch/issues/2461)) ([527b879](https://github.com/algolia/react-instantsearch/commit/527b879))
+* **lodash:** has ([#2434](https://github.com/algolia/react-instantsearch/issues/2434)) ([75a4a15](https://github.com/algolia/react-instantsearch/commit/75a4a15))
+* **lodash:** has been fully removed
+
+### Features
+
+* **autocomplete:** add queryID & position to provided hits ([#2687](https://github.com/algolia/react-instantsearch/issues/2687)) ([e453dab](https://github.com/algolia/react-instantsearch/commit/e453dab))
+* **client:** remove algoliaClient, appId & apiKey ([#2338](https://github.com/algolia/react-instantsearch/issues/2338)) ([b84a0b5](https://github.com/algolia/react-instantsearch/commit/b84a0b5)) (use searchClient exclusively now)
+* **context:** migrate to new React context ([#2178](https://github.com/algolia/react-instantsearch/issues/2178)) ([0a1abea](https://github.com/algolia/react-instantsearch/commit/0a1abea)), closes [#2179](https://github.com/algolia/react-instantsearch/issues/2179) [#2180](https://github.com/algolia/react-instantsearch/issues/2180) [#2181](https://github.com/algolia/react-instantsearch/issues/2181) [#2185](https://github.com/algolia/react-instantsearch/issues/2185) [#2192](https://github.com/algolia/react-instantsearch/issues/2192) [#2189](https://github.com/algolia/react-instantsearch/issues/2189) [#2190](https://github.com/algolia/react-instantsearch/issues/2190) [#2179](https://github.com/algolia/react-instantsearch/issues/2179) [#2180](https://github.com/algolia/react-instantsearch/issues/2180) [#2181](https://github.com/algolia/react-instantsearch/issues/2181) [#2185](https://github.com/algolia/react-instantsearch/issues/2185) [#2192](https://github.com/algolia/react-instantsearch/issues/2192) [#2190](https://github.com/algolia/react-instantsearch/issues/2190)
+* **ssr:** update the SSR API ([#2555](https://github.com/algolia/react-instantsearch/issues/2555)) ([925bdb8](https://github.com/algolia/react-instantsearch/commit/925bdb8)), closes [#2536](https://github.com/algolia/react-instantsearch/issues/2536) [#2537](https://github.com/algolia/react-instantsearch/issues/2537)
+
+
+### BREAKING CHANGES
+
+* **searchClient:** argument is the only option now.
+
+Previously there were three options to pass a search client: searchClient, appId & apiKey, algoliaClient. The latter two have been removed, and now only `searchClient` is accepted. This searchClient is an instance of the `algoliasearch` module:
+
+```js
+import algoliasearch from 'algoliasearch/lite';
+
+const searchClient = algoliasearch(
+  'myAppId',
+  'myApiKey',
+  { _useRequestCache: true }
+);
+
+// ...
+<InstantSearch searchClient={searchClient} />
+```
+
+If you were relying on duplicate requests not being fired when using appId & apiKey before, you need to enable the `_useRequestCache` option now.
+
+* **SSR:** imports have changed
+
+In the server, you now directly import `findResultsState`, which now requires a `searchClient` in the second argument.
+
+In the App, you now use a regular `InstantSearch` component.
+
+* **Index & InstantSearch:** Remove `root` DOM element
+
+These elements now are pure containers for their children, and don't add a `div` to the DOM anymore. If you were relying on those for styling, wrap the `InstantSearch` and `Index` element with a `div` with an appropriate class.
+
+* **Index & InstantSearch:** Remove support for `root` prop
+
+Since these two arguments now no longer wrap their children in an element, they no longer accept a `root` prop.
+
+* **Highlight:** some paths will no longer be accepted
+
+We only accept paths separated with a dot or bracket now, like before. It's possible that a different type of path worked undocumented, but no longer does.
+
+* **algoliasearch-helper:** updating to the next major version
+
+This library is mostly internal, but it has had a major refactor (including removing lodash). This has no impact, unless you are dealing with it using `createConnector`. See the [migration guide](https://github.com/algolia/algoliasearch-helper-js/blob/next/documentation-src/metalsmith/content/upgrade.md) for the v3 of algoliasearch-helper for more information.
+
 # [5.7.0](https://github.com/algolia/react-instantsearch/compare/v5.6.0...v5.7.0) (2019-06-04)
 
 

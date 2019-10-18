@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { objectHasKeys } from '../core/utils';
 import createConnector from '../core/createConnector';
 import {
   getResults,
@@ -73,7 +73,7 @@ const getCurrentRefinement = (props, searchState, context) => {
     {}
   );
 
-  if (isEmpty(refinement)) {
+  if (!objectHasKeys(refinement)) {
     return;
   }
 
@@ -128,13 +128,18 @@ export default createConnector({
   displayName: 'AlgoliaGeoSearch',
 
   getProvidedProps(props, searchState, searchResults) {
-    const results = getResults(searchResults, this.context);
+    const context = {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    };
+
+    const results = getResults(searchResults, context);
 
     // We read it from both because the SearchParameters & the searchState are not always
     // in sync. When we set the refinement the searchState is used but when we clear the refinement
     // the SearchParameters is used. In the first case when we render, the results are not there
     // so we can't find the value from the results. The most up to date value is the searchState.
-    // But when we clear the refinement the searchState is immediatly cleared even when the items
+    // But when we clear the refinement the searchState is immediately cleared even when the items
     // retrieved are still the one from the previous query with the bounding box. It leads to some
     // issue with the position of the map. We should rely on 1 source of truth or at least always
     // be sync.
@@ -142,7 +147,7 @@ export default createConnector({
     const currentRefinementFromSearchState = getCurrentRefinement(
       props,
       searchState,
-      this.context
+      context
     );
 
     const currentRefinementFromSearchParameters =
@@ -154,7 +159,7 @@ export default createConnector({
     const currentPositionFromSearchState = getCurrentPosition(
       props,
       searchState,
-      this.context
+      context
     );
 
     const currentPositionFromSearchParameters =
@@ -178,15 +183,17 @@ export default createConnector({
   },
 
   refine(props, searchState, nextValue) {
-    return refine(searchState, nextValue, this.context);
+    return refine(searchState, nextValue, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    const currentRefinement = getCurrentRefinement(
-      props,
-      searchState,
-      this.context
-    );
+    const currentRefinement = getCurrentRefinement(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     if (!currentRefinement) {
       return searchParameters;
@@ -199,24 +206,28 @@ export default createConnector({
   },
 
   cleanUp(props, searchState) {
-    return cleanUpValue(searchState, this.context, getBoundingBoxId());
+    return cleanUpValue(
+      searchState,
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue },
+      getBoundingBoxId()
+    );
   },
 
   getMetadata(props, searchState) {
     const items = [];
     const id = getBoundingBoxId();
-    const index = getIndexId(this.context);
+    const context = {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    };
+    const index = getIndexId(context);
     const nextRefinement = {};
-    const currentRefinement = getCurrentRefinement(
-      props,
-      searchState,
-      this.context
-    );
+    const currentRefinement = getCurrentRefinement(props, searchState, context);
 
     if (currentRefinement) {
       items.push({
         label: `${id}: ${currentRefinementToString(currentRefinement)}`,
-        value: nextState => refine(nextState, nextRefinement, this.context),
+        value: nextState => refine(nextState, nextRefinement, context),
         currentRefinement,
       });
     }

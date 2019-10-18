@@ -1,5 +1,5 @@
-import { find } from 'lodash';
 import PropTypes from 'prop-types';
+import { find } from '../core/utils';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
@@ -76,12 +76,14 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const { attribute, value } = props;
-    const results = getResults(searchResults, this.context);
-    const currentRefinement = getCurrentRefinement(
-      props,
-      searchState,
-      this.context
-    );
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
+    const currentRefinement = getCurrentRefinement(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     const allFacetValues =
       results && results.getFacetByName(attribute)
@@ -120,16 +122,25 @@ export default createConnector({
   },
 
   refine(props, searchState, nextRefinement) {
-    return refine(props, searchState, nextRefinement, this.context);
+    return refine(props, searchState, nextRefinement, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   cleanUp(props, searchState) {
-    return cleanUp(props, searchState, this.context);
+    return cleanUp(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   getSearchParameters(searchParameters, props, searchState) {
     const { attribute, value, filter } = props;
-    const checked = getCurrentRefinement(props, searchState, this.context);
+    const checked = getCurrentRefinement(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     let nextSearchParameters = searchParameters.addDisjunctiveFacet(attribute);
 
@@ -149,16 +160,26 @@ export default createConnector({
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const checked = getCurrentRefinement(props, searchState, this.context);
+    const checked = getCurrentRefinement(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
     const items = [];
-    const index = getIndexId(this.context);
+    const index = getIndexId({
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     if (checked) {
       items.push({
         label: props.label,
         currentRefinement: checked,
         attribute: props.attribute,
-        value: nextState => refine(props, nextState, false, this.context),
+        value: nextState =>
+          refine(props, nextState, false, {
+            ais: props.contextValue,
+            multiIndexContext: props.indexContextValue,
+          }),
       });
     }
 

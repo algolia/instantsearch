@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GeoSearch Connector expect to render 1`] = `
-<AlgoliaGeoSearch(Connector)
+<ConnectorWrapper
   defaultRefinement={null}
   enableRefineOnMapMove={true}
   testID="Connector"
 >
   <Component />
-</AlgoliaGeoSearch(Connector)>
+</ConnectorWrapper>
 `;
 
 exports[`GeoSearch Connector expect to render with defaultRefinement 1`] = `
-<AlgoliaGeoSearch(Connector)
+<ConnectorWrapper
   defaultRefinement={
     Object {
       "northEast": Object {
@@ -28,17 +28,17 @@ exports[`GeoSearch Connector expect to render with defaultRefinement 1`] = `
   testID="Connector"
 >
   <Component />
-</AlgoliaGeoSearch(Connector)>
+</ConnectorWrapper>
 `;
 
 exports[`GeoSearch Connector expect to render with enableRefineOnMapMove 1`] = `
-<AlgoliaGeoSearch(Connector)
+<ConnectorWrapper
   defaultRefinement={null}
   enableRefineOnMapMove={false}
   testID="Connector"
 >
   <Component />
-</AlgoliaGeoSearch(Connector)>
+</ConnectorWrapper>
 `;
 
 exports[`GeoSearch GoogleMaps expect to render 1`] = `

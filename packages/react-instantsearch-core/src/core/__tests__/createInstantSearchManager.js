@@ -1,4 +1,17 @@
+import React from 'react';
+import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { mount } from 'enzyme';
+import algoliasearch from 'algoliasearch/lite';
+import { SearchResults } from 'algoliasearch-helper';
 import createInstantSearchManager from '../createInstantSearchManager';
+import {
+  InstantSearch,
+  Index,
+  SortBy,
+  Configure,
+} from 'react-instantsearch-dom';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 jest.useFakeTimers();
 
@@ -49,21 +62,239 @@ describe('createInstantSearchManager', () => {
     expect(ism.getWidgetsIds()).toEqual([]);
   });
 
-  it('initializes with results', () => {
-    const ism = createInstantSearchManager({
-      indexName: 'index',
-      resultsState: { some: 'results' },
-      searchClient: createSearchClient(),
+  describe('client hydratation', () => {
+    it('hydrates the `searchClient` for a single index results', () => {
+      const searchClient = algoliasearch('appId', 'apiKey', {
+        _cache: true, // cache is not enabled by default inside Node
+      });
+
+      const resultsState = {
+        rawResults: [
+          {
+            index: 'index',
+            query: 'query',
+          },
+        ],
+        state: {
+          index: 'index',
+          query: 'query',
+        },
+      };
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+
+      createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+        resultsState,
+      });
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(1);
+      Object.keys(searchClient.cache).forEach(key => {
+        expect(searchClient.cache[key]).toEqual({
+          results: [
+            {
+              index: 'index',
+              query: 'query',
+            },
+          ],
+        });
+      });
     });
 
-    expect(ism.store.getState()).toEqual({
-      error: null,
-      metadata: [],
-      results: { some: 'results' },
-      searching: false,
-      searchingForFacetValues: false,
-      widgets: {},
-      isSearchStalled: true,
+    it('hydrates the `searchClient` for a multi index results', () => {
+      const searchClient = algoliasearch('appId', 'apiKey', {
+        _cache: true, // cache is not enabled by default inside Node
+      });
+
+      const resultsState = [
+        {
+          _internalIndexId: 'index1',
+          rawResults: [
+            {
+              index: 'index1',
+              query: 'query1',
+            },
+          ],
+          state: {
+            index: 'index1',
+            query: 'query1',
+          },
+        },
+        {
+          _internalIndexId: 'index2',
+          rawResults: [
+            {
+              index: 'index2',
+              query: 'query2',
+            },
+          ],
+          state: {
+            index: 'index2',
+            query: 'query2',
+          },
+        },
+      ];
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+
+      createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+        resultsState,
+      });
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(1);
+      Object.keys(searchClient.cache).forEach(key => {
+        expect(searchClient.cache[key]).toEqual({
+          results: [
+            {
+              index: 'index1',
+              query: 'query1',
+            },
+            {
+              index: 'index2',
+              query: 'query2',
+            },
+          ],
+        });
+      });
+    });
+
+    it('does not hydrate the `searchClient` without results', () => {
+      const searchClient = algoliasearch('appId', 'apiKey');
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+
+      createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+      });
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+    });
+
+    it("does not hydrate the `searchClient` if it's not an Algolia client", () => {
+      const searchClient = {
+        _useCache: true,
+        cache: {},
+      };
+
+      const resultsState = {
+        rawResults: [
+          {
+            index: 'indexName',
+            query: 'query',
+          },
+        ],
+        state: {
+          index: 'indexName',
+          query: 'query',
+        },
+      };
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+
+      createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+        resultsState,
+      });
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+    });
+
+    it('does not hydrate the `searchClient` without cache enabled', () => {
+      const searchClient = algoliasearch('appId', 'apiKey', {
+        _cache: false,
+      });
+
+      const resultsState = {
+        rawResults: [
+          {
+            index: 'indexName',
+            query: 'query',
+          },
+        ],
+        state: {
+          index: 'indexName',
+          query: 'query',
+        },
+      };
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+
+      createInstantSearchManager({
+        indexName: 'index',
+        searchClient,
+        resultsState,
+      });
+
+      expect(Object.keys(searchClient.cache)).toHaveLength(0);
+    });
+  });
+
+  describe('results hydratation', () => {
+    it('initializes the manager with a single index hydrated results', () => {
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+        resultsState: {
+          rawResults: [
+            {
+              index: 'indexName',
+              query: 'query',
+            },
+          ],
+          state: {
+            index: 'indexName',
+            query: 'query',
+          },
+        },
+      });
+
+      expect(ism.store.getState().results).toBeInstanceOf(SearchResults);
+      expect(ism.store.getState().results.query).toEqual('query');
+    });
+
+    it('initializes the manager with a multi index hydrated results', () => {
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        searchClient: createSearchClient(),
+        resultsState: [
+          {
+            _internalIndexId: 'index1',
+            rawResults: [
+              {
+                index: 'index1',
+                query: 'query1',
+              },
+            ],
+            state: {
+              index: 'index1',
+              query: 'query1',
+            },
+          },
+          {
+            _internalIndexId: 'index2',
+            rawResults: [
+              {
+                index: 'index2',
+                query: 'query2',
+              },
+            ],
+            state: {
+              index: 'index2',
+              query: 'query2',
+            },
+          },
+        ],
+      });
+
+      expect(ism.store.getState().results.index1.query).toBe('query1');
+      expect(ism.store.getState().results.index1).toBeInstanceOf(SearchResults);
+      expect(ism.store.getState().results.index2.query).toBe('query2');
+      expect(ism.store.getState().results.index2).toBeInstanceOf(SearchResults);
     });
   });
 
@@ -339,7 +570,6 @@ describe('createInstantSearchManager', () => {
         getSearchParameters(state) {
           return state.setIndex('index');
         },
-        context: {},
         props: {
           indexId: 'index_with_refinement',
         },
@@ -352,12 +582,11 @@ describe('createInstantSearchManager', () => {
         getSearchParameters(state) {
           return state.setQuery('derived');
         },
-        context: {
-          multiIndexContext: {
+        props: {
+          indexContextValue: {
             targetedIndex: 'index_with_refinement',
           },
         },
-        props: {},
       });
 
       const { mainParameters, derivedParameters } = ism.getSearchParameters();
@@ -365,7 +594,6 @@ describe('createInstantSearchManager', () => {
       expect(mainParameters).toEqual(
         expect.objectContaining({
           index: 'index',
-          query: '',
         })
       );
 
@@ -377,6 +605,126 @@ describe('createInstantSearchManager', () => {
             query: 'derived',
           }),
         },
+      ]);
+    });
+
+    it('expects widgets main parameters and derived parameters to be correctly calculated within a multi index context', () => {
+      const wrapper = mount(
+        <InstantSearch indexName="index1" searchClient={createSearchClient()}>
+          <Index indexName="bestbuy" />
+          <Index indexName="instant_search" />
+
+          <Index indexId="instant_search_apple" indexName="instant_search">
+            <Configure filters="brand:Apple" />
+          </Index>
+
+          <Index indexId="instant_search_samsung" indexName="instant_search">
+            <Configure filters="brand:Samsung" />
+          </Index>
+
+          <Index indexId="instant_search_microsoft" indexName="instant_search">
+            <Configure filters="brand:Microsoft" />
+          </Index>
+        </InstantSearch>
+      );
+
+      const {
+        mainParameters,
+        derivedParameters,
+      } = wrapper.instance().state.instantSearchManager.getSearchParameters();
+
+      expect(mainParameters).toEqual(
+        expect.objectContaining({
+          index: 'index1',
+        })
+      );
+
+      expect(derivedParameters).toEqual([
+        expect.objectContaining({
+          indexId: 'bestbuy',
+          parameters: expect.objectContaining({
+            index: 'bestbuy',
+          }),
+        }),
+        expect.objectContaining({
+          indexId: 'instant_search',
+          parameters: expect.objectContaining({
+            index: 'instant_search',
+          }),
+        }),
+        expect.objectContaining({
+          indexId: 'instant_search_apple',
+          parameters: expect.objectContaining({
+            index: 'instant_search',
+            filters: 'brand:Apple',
+          }),
+        }),
+        expect.objectContaining({
+          indexId: 'instant_search_samsung',
+          parameters: expect.objectContaining({
+            index: 'instant_search',
+            filters: 'brand:Samsung',
+          }),
+        }),
+        expect.objectContaining({
+          indexId: 'instant_search_microsoft',
+          parameters: expect.objectContaining({
+            index: 'instant_search',
+            filters: 'brand:Microsoft',
+          }),
+        }),
+      ]);
+    });
+
+    it('expects widgets main parameters and derived parameters to be correctly calculated with SortBy within a multi index context', () => {
+      const wrapper = mount(
+        <InstantSearch indexName="index1" searchClient={createSearchClient()}>
+          <Index indexName="categories">
+            <SortBy
+              defaultRefinement="bestbuy"
+              items={[
+                { value: 'categories', label: 'Categories' },
+                { value: 'bestbuy', label: 'Best buy' },
+              ]}
+            />
+          </Index>
+
+          <Index indexName="products">
+            <SortBy
+              defaultRefinement="brands"
+              items={[
+                { value: 'products', label: 'Products' },
+                { value: 'brands', label: 'Brands' },
+              ]}
+            />
+          </Index>
+        </InstantSearch>
+      );
+
+      const {
+        mainParameters,
+        derivedParameters,
+      } = wrapper.instance().state.instantSearchManager.getSearchParameters();
+
+      expect(mainParameters).toEqual(
+        expect.objectContaining({
+          index: 'index1',
+        })
+      );
+
+      expect(derivedParameters).toEqual([
+        expect.objectContaining({
+          indexId: 'categories',
+          parameters: expect.objectContaining({
+            index: 'bestbuy',
+          }),
+        }),
+        expect.objectContaining({
+          indexId: 'products',
+          parameters: expect.objectContaining({
+            index: 'brands',
+          }),
+        }),
       ]);
     });
   });

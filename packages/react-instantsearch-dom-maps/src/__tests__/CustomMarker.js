@@ -9,6 +9,7 @@ import {
 } from '../../test/mockGoogleMaps';
 import createHTMLMarker from '../elements/createHTMLMarker';
 import * as utils from '../utils';
+import GoogleMapsContext from '../GoogleMapsContext';
 import Connected, { CustomMarker } from '../CustomMarker';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -570,18 +571,16 @@ describe('CustomMarker', () => {
       };
 
       mount(
-        <Connected {...props}>
-          <span>This is the children.</span>
-        </Connected>,
-        {
-          context: {
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            __ais_geo_search__google_maps__: {
-              instance: mapInstance,
-              google,
-            },
-          },
-        }
+        <GoogleMapsContext.Provider
+          value={{
+            instance: mapInstance,
+            google,
+          }}
+        >
+          <Connected {...props}>
+            <span>This is the children.</span>
+          </Connected>
+        </GoogleMapsContext.Provider>
       );
 
       expect(createHTMLMarker).toHaveBeenCalledWith(google);

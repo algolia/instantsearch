@@ -7,13 +7,9 @@ describe('connectGeoSearch', () => {
   const empty = {};
 
   describe('single index', () => {
-    const createSingleIndexInstance = () => ({
-      context: {
-        ais: {
-          mainTargetedIndex: 'index',
-        },
-      },
-    });
+    const contextValue = {
+      mainTargetedIndex: 'index',
+    };
 
     const createSingleIndexSearchResults = (hits = [], state) => ({
       results: new SearchResults(new SearchParameters(state), [
@@ -25,13 +21,11 @@ describe('connectGeoSearch', () => {
 
     describe('getProvidedProps', () => {
       it('expect to return default provided props', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {};
         const searchResults = empty;
 
-        const actual = connector.getProvidedProps.call(
-          instance,
+        const actual = connector.getProvidedProps(
           props,
           searchState,
           searchResults
@@ -55,13 +49,11 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults(hits);
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -83,13 +75,11 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults(hits);
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -104,13 +94,11 @@ describe('connectGeoSearch', () => {
         });
 
         it("expect to return empty hits when we don't have results", () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = empty;
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -124,8 +112,7 @@ describe('connectGeoSearch', () => {
 
       describe('position', () => {
         it('expect to return the position from the searchState (aroundLatLng)', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchResults = createSingleIndexSearchResults();
           const searchState = {
             aroundLatLng: {
@@ -134,8 +121,7 @@ describe('connectGeoSearch', () => {
             },
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -148,8 +134,7 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the position from the searchState (configure.aroundLatLng)', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchResults = createSingleIndexSearchResults();
           const searchState = {
             configure: {
@@ -157,8 +142,7 @@ describe('connectGeoSearch', () => {
             },
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -171,15 +155,13 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the position from the SearchResults', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults([], {
             aroundLatLng: '10, 12',
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -192,13 +174,11 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return undefined from an empty searchState', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults();
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -208,10 +188,10 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return undefined with the default refinement', () => {
-          const instance = createSingleIndexInstance();
           const searchState = {};
           const searchResults = createSingleIndexSearchResults();
           const props = {
+            contextValue,
             defaultRefinement: {
               northEast: {
                 lat: 10,
@@ -224,8 +204,7 @@ describe('connectGeoSearch', () => {
             },
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -237,8 +216,7 @@ describe('connectGeoSearch', () => {
 
       describe('currentRefinement', () => {
         it('expect to return the boundingBox from the searchState', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchResults = createSingleIndexSearchResults();
           const searchState = {
             boundingBox: {
@@ -253,8 +231,7 @@ describe('connectGeoSearch', () => {
             },
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -273,8 +250,7 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the boundingBox from the searchState with string values', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchResults = createSingleIndexSearchResults();
           const searchState = {
             boundingBox: {
@@ -289,8 +265,7 @@ describe('connectGeoSearch', () => {
             },
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -309,15 +284,13 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the boundingBox from the SearchResults', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults([], {
             insideBoundingBox: '10, 12, 12, 14',
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -336,10 +309,10 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the default refinement', () => {
-          const instance = createSingleIndexInstance();
           const searchState = {};
           const searchResults = createSingleIndexSearchResults();
           const props = {
+            contextValue,
             defaultRefinement: {
               northEast: {
                 lat: 10,
@@ -352,8 +325,7 @@ describe('connectGeoSearch', () => {
             },
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -372,13 +344,11 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return undefined from an empty searchState', () => {
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults();
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -396,8 +366,7 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchResults = createSingleIndexSearchResults(hits);
           const searchState = {
             boundingBox: {
@@ -412,8 +381,7 @@ describe('connectGeoSearch', () => {
             },
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -429,15 +397,13 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults(hits, {
             insideBoundingBox: '10, 12, 12, 14',
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -453,13 +419,11 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createSingleIndexInstance();
-          const props = {};
+          const props = { contextValue };
           const searchState = {};
           const searchResults = createSingleIndexSearchResults(hits);
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -472,8 +436,7 @@ describe('connectGeoSearch', () => {
 
     describe('refine', () => {
       it('expect to set the boundingBox when boundingBox is provided', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {};
         const nextRefinement = {
           northEast: {
@@ -486,14 +449,9 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.refine.call(
-          instance,
-          props,
-          searchState,
-          nextRefinement
-        );
+        const actual = connector.refine(props, searchState, nextRefinement);
 
-        const expectation = {
+        expect(actual).toEqual({
           page: 1,
           boundingBox: {
             northEast: {
@@ -505,14 +463,11 @@ describe('connectGeoSearch', () => {
               lng: 14,
             },
           },
-        };
-
-        expect(actual).toEqual(expectation);
+        });
       });
 
       it('expect to replace the previous value when boundingBox is provided', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {
           boundingBox: {
             northEast: {
@@ -537,14 +492,9 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.refine.call(
-          instance,
-          props,
-          searchState,
-          nextRefinement
-        );
+        const actual = connector.refine(props, searchState, nextRefinement);
 
-        const expectation = {
+        expect(actual).toEqual({
           page: 1,
           boundingBox: {
             northEast: {
@@ -556,14 +506,11 @@ describe('connectGeoSearch', () => {
               lng: 14,
             },
           },
-        };
-
-        expect(actual).toEqual(expectation);
+        });
       });
 
       it('expect to clear the previous value when boundingBox is omit', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {
           boundingBox: {
             northEast: {
@@ -577,7 +524,7 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.refine.call(instance, props, searchState);
+        const actual = connector.refine(props, searchState);
 
         const expectation = {
           page: 1,
@@ -588,10 +535,9 @@ describe('connectGeoSearch', () => {
     });
 
     describe('getSearchParameters', () => {
-      it('expect to set the paremeter "insideBoundingBox" when boundingBox is provided', () => {
-        const instance = createSingleIndexInstance();
+      it('expect to set the parameter "insideBoundingBox" when boundingBox is provided', () => {
         const searchParameters = new SearchParameters();
-        const props = {};
+        const props = { contextValue };
         const searchState = {
           boundingBox: {
             northEast: {
@@ -605,8 +551,7 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.getSearchParameters.call(
-          instance,
+        const actual = connector.getSearchParameters(
           searchParameters,
           props,
           searchState
@@ -618,13 +563,11 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to return the given searchParameters when boundingBox is omit', () => {
-        const instance = createSingleIndexInstance();
         const searchParameters = new SearchParameters();
-        const props = {};
+        const props = { contextValue };
         const searchState = {};
 
-        const actual = connector.getSearchParameters.call(
-          instance,
+        const actual = connector.getSearchParameters(
           searchParameters,
           props,
           searchState
@@ -636,8 +579,7 @@ describe('connectGeoSearch', () => {
 
     describe('cleanUp', () => {
       it('expect to remove the refinement from the searchState when boundingBox is provided', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {
           query: 'studio',
           boundingBox: {
@@ -652,7 +594,7 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.cleanUp.call(instance, props, searchState);
+        const actual = connector.cleanUp(props, searchState);
 
         const expectation = {
           query: 'studio',
@@ -662,13 +604,12 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to return the given searchState when boundingBox is omit', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {
           query: 'studio',
         };
 
-        const actual = connector.cleanUp.call(instance, props, searchState);
+        const actual = connector.cleanUp(props, searchState);
 
         const expectation = {
           query: 'studio',
@@ -680,8 +621,7 @@ describe('connectGeoSearch', () => {
 
     describe('getMetadata', () => {
       it('expect to return the meta when boundingBox is provided', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {
           boundingBox: {
             northEast: {
@@ -695,7 +635,7 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.getMetadata.call(instance, props, searchState);
+        const actual = connector.getMetadata(props, searchState);
 
         const expectation = {
           id: 'boundingBox',
@@ -722,24 +662,20 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to return an empty meta when boundingBox is omit', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {};
 
-        const actual = connector.getMetadata.call(instance, props, searchState);
+        const actual = connector.getMetadata(props, searchState);
 
-        const expectation = {
+        expect(actual).toEqual({
           id: 'boundingBox',
           index: 'index',
           items: [],
-        };
-
-        expect(actual).toEqual(expectation);
+        });
       });
 
       it('expect to clear the boundingBox when value is called', () => {
-        const instance = createSingleIndexInstance();
-        const props = {};
+        const props = { contextValue };
         const searchState = {
           query: 'studio',
           boundingBox: {
@@ -754,35 +690,21 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const metadata = connector.getMetadata.call(
-          instance,
-          props,
-          searchState
-        );
+        const metadata = connector.getMetadata(props, searchState);
         const actual = metadata.items[0].value(searchState);
 
-        const expectation = {
+        expect(actual).toEqual({
           query: 'studio',
           boundingBox: {},
           page: 1,
-        };
-
-        expect(actual).toEqual(expectation);
+        });
       });
     });
   });
 
   describe('multi index', () => {
-    const createMultiIndexInstance = () => ({
-      context: {
-        ais: {
-          mainTargetedIndex: 'first',
-        },
-        multiIndexContext: {
-          targetedIndex: 'second',
-        },
-      },
-    });
+    const contextValue = { mainTargetedIndex: 'first' };
+    const indexContextValue = { targetedIndex: 'second' };
 
     const createMultiIndexSearchState = (state = {}) => ({
       indices: {
@@ -802,13 +724,12 @@ describe('connectGeoSearch', () => {
 
     describe('getProvidedProps', () => {
       it('expect to return default provided props', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
         const searchState = createMultiIndexSearchState();
+        const props = { contextValue, indexContextValue };
+
         const searchResults = empty;
 
-        const actual = connector.getProvidedProps.call(
-          instance,
+        const actual = connector.getProvidedProps(
           props,
           searchState,
           searchResults
@@ -832,13 +753,11 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults(hits);
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -860,13 +779,11 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults(hits);
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -881,13 +798,11 @@ describe('connectGeoSearch', () => {
         });
 
         it("expect to return empty hits when we don't have results", () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = createMultiIndexSearchState();
           const searchResults = empty;
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -901,8 +816,7 @@ describe('connectGeoSearch', () => {
 
       describe('position', () => {
         it('expect to return the position from the searchState (aroundLatLng)', () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchResults = createMultiIndexSearchResults();
           const searchState = createMultiIndexSearchState({
             aroundLatLng: {
@@ -911,8 +825,7 @@ describe('connectGeoSearch', () => {
             },
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -925,8 +838,7 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the position from the searchState (configure.aroungLatLng)', () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchResults = createMultiIndexSearchResults();
           const searchState = createMultiIndexSearchState({
             configure: {
@@ -934,8 +846,7 @@ describe('connectGeoSearch', () => {
             },
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -948,13 +859,11 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return undefined from an empty searchState', () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults();
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -964,7 +873,6 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return undefined with the default refinement', () => {
-          const instance = createMultiIndexInstance();
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults();
           const props = {
@@ -978,10 +886,11 @@ describe('connectGeoSearch', () => {
                 lng: 14,
               },
             },
+            contextValue,
+            indexContextValue,
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -993,8 +902,7 @@ describe('connectGeoSearch', () => {
 
       describe('currentRefinement', () => {
         it('expect to return the boundingBox from the searchState', () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchResults = createMultiIndexSearchResults();
           const searchState = createMultiIndexSearchState({
             boundingBox: {
@@ -1009,8 +917,7 @@ describe('connectGeoSearch', () => {
             },
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1029,8 +936,7 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the boundingBox from the searchState with string values', () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchResults = createMultiIndexSearchResults();
           const searchState = createMultiIndexSearchState({
             boundingBox: {
@@ -1045,8 +951,7 @@ describe('connectGeoSearch', () => {
             },
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1065,15 +970,13 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the boundingBox from the SearchResults', () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = {};
           const searchResults = createMultiIndexSearchResults([], {
             insideBoundingBox: '10, 12, 12, 14',
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1092,7 +995,6 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return the default refinement', () => {
-          const instance = createMultiIndexInstance();
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults();
           const props = {
@@ -1106,10 +1008,11 @@ describe('connectGeoSearch', () => {
                 lng: 14,
               },
             },
+            contextValue,
+            indexContextValue,
           };
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1128,13 +1031,11 @@ describe('connectGeoSearch', () => {
         });
 
         it('expect to return an undefined from an empty searchState', () => {
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults();
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1152,8 +1053,7 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchResults = createMultiIndexSearchResults(hits);
           const searchState = createMultiIndexSearchState({
             boundingBox: {
@@ -1168,8 +1068,7 @@ describe('connectGeoSearch', () => {
             },
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1185,15 +1084,13 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults(hits, {
             insideBoundingBox: '10, 12, 12, 14',
           });
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1209,13 +1106,11 @@ describe('connectGeoSearch', () => {
             { objectID: '789', _geoloc: true },
           ];
 
-          const instance = createMultiIndexInstance();
-          const props = {};
+          const props = { contextValue, indexContextValue };
           const searchState = createMultiIndexSearchState();
           const searchResults = createMultiIndexSearchResults(hits);
 
-          const actual = connector.getProvidedProps.call(
-            instance,
+          const actual = connector.getProvidedProps(
             props,
             searchState,
             searchResults
@@ -1228,8 +1123,7 @@ describe('connectGeoSearch', () => {
 
     describe('refine', () => {
       it('expect to set the boundingBox when boundingBox is provided', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState();
         const nextRefinement = {
           northEast: {
@@ -1242,12 +1136,7 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.refine.call(
-          instance,
-          props,
-          searchState,
-          nextRefinement
-        );
+        const actual = connector.refine(props, searchState, nextRefinement);
 
         const expectation = {
           indices: {
@@ -1271,8 +1160,7 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to replace the previous value when boundingBox is provided', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState({
           boundingBox: {
             northEast: {
@@ -1297,12 +1185,7 @@ describe('connectGeoSearch', () => {
           },
         };
 
-        const actual = connector.refine.call(
-          instance,
-          props,
-          searchState,
-          nextRefinement
-        );
+        const actual = connector.refine(props, searchState, nextRefinement);
 
         const expectation = {
           indices: {
@@ -1326,8 +1209,7 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to clear the previous value when boundingBox is omit', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState({
           boundingBox: {
             northEast: {
@@ -1341,7 +1223,7 @@ describe('connectGeoSearch', () => {
           },
         });
 
-        const actual = connector.refine.call(instance, props, searchState);
+        const actual = connector.refine(props, searchState);
 
         const expectation = {
           indices: {
@@ -1356,10 +1238,9 @@ describe('connectGeoSearch', () => {
     });
 
     describe('getSearchParameters', () => {
-      it('expect to set the paremeter "insideBoundingBox" when boundingBox is provided', () => {
-        const instance = createMultiIndexInstance();
+      it('expect to set the parameter "insideBoundingBox" when boundingBox is provided', () => {
         const searchParameters = new SearchParameters();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState({
           boundingBox: {
             northEast: {
@@ -1373,8 +1254,7 @@ describe('connectGeoSearch', () => {
           },
         });
 
-        const actual = connector.getSearchParameters.call(
-          instance,
+        const actual = connector.getSearchParameters(
           searchParameters,
           props,
           searchState
@@ -1386,13 +1266,11 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to return the given searchParameters when boundingBox is omit', () => {
-        const instance = createMultiIndexInstance();
         const searchParameters = new SearchParameters();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = {};
 
-        const actual = connector.getSearchParameters.call(
-          instance,
+        const actual = connector.getSearchParameters(
           searchParameters,
           props,
           searchState
@@ -1404,8 +1282,7 @@ describe('connectGeoSearch', () => {
 
     describe('cleanUp', () => {
       it('expect to remove the refinement from the searchState when boundingBox is provided', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState({
           query: 'studio',
           boundingBox: {
@@ -1420,7 +1297,7 @@ describe('connectGeoSearch', () => {
           },
         });
 
-        const actual = connector.cleanUp.call(instance, props, searchState);
+        const actual = connector.cleanUp(props, searchState);
 
         const expectation = {
           indices: {
@@ -1434,13 +1311,12 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to return the given searchState when boundingBox is omit', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState({
           query: 'studio',
         });
 
-        const actual = connector.cleanUp.call(instance, props, searchState);
+        const actual = connector.cleanUp(props, searchState);
 
         const expectation = {
           indices: {
@@ -1456,8 +1332,7 @@ describe('connectGeoSearch', () => {
 
     describe('getMetadata', () => {
       it('expect to return the meta when boundingBox is provided', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState({
           boundingBox: {
             northEast: {
@@ -1471,7 +1346,7 @@ describe('connectGeoSearch', () => {
           },
         });
 
-        const actual = connector.getMetadata.call(instance, props, searchState);
+        const actual = connector.getMetadata(props, searchState);
 
         const expectation = {
           id: 'boundingBox',
@@ -1498,11 +1373,10 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to return an empty meta when boundingBox is omit', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState();
 
-        const actual = connector.getMetadata.call(instance, props, searchState);
+        const actual = connector.getMetadata(props, searchState);
 
         const expectation = {
           id: 'boundingBox',
@@ -1514,8 +1388,7 @@ describe('connectGeoSearch', () => {
       });
 
       it('expect to clear the boundingBox when value is called', () => {
-        const instance = createMultiIndexInstance();
-        const props = {};
+        const props = { contextValue, indexContextValue };
         const searchState = createMultiIndexSearchState({
           query: 'studio',
           boundingBox: {
@@ -1530,11 +1403,7 @@ describe('connectGeoSearch', () => {
           },
         });
 
-        const metadata = connector.getMetadata.call(
-          instance,
-          props,
-          searchState
-        );
+        const metadata = connector.getMetadata(props, searchState);
 
         const actual = metadata.items[0].value(searchState);
 

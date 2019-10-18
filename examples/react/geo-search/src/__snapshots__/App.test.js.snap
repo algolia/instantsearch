@@ -1,10 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`geo-search recipe App renders without crashing 1`] = `
-<div
-  className="ais-InstantSearch__root"
->
-  Type a destination or move the map to see the closest apartment.
+Array [
+  "Type a destination or move the map to see the closest apartment.",
   <div
     className="ais-SearchBox"
   >
@@ -66,6 +64,6 @@ exports[`geo-search recipe App renders without crashing 1`] = `
         </svg>
       </button>
     </form>
-  </div>
-</div>
+  </div>,
+]
 `;

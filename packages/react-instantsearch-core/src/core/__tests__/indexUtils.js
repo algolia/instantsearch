@@ -96,68 +96,115 @@ describe('utility method for manipulating the search state', () => {
       });
     });
 
-    it('retrieve the current refinement value', () => {
-      const searchState = {
-        page: 1,
-        last: 'last',
-        refinement: 'refinement',
-        another: 'another',
-        namespace: {
+    describe('getCurrentRefinementValue', () => {
+      it('retrieves the current refinement value', () => {
+        const searchState = {
+          page: 1,
+          last: 'last',
+          refinement: 'refinement',
+          another: 'another',
+          namespace: {
+            refinement: 'refinement',
+            another: 'another',
+            'nested.another': 'nested.another',
+          },
+        };
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'refinement',
+            null
+          )
+        ).toEqual('refinement');
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.another',
+            null
+          )
+        ).toEqual('another');
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.nested.another',
+            null
+          )
+        ).toEqual('nested.another');
+      });
+
+      it('retrieves default value', () => {
+        expect(
+          getCurrentRefinementValue(
+            {},
+            {},
+            context,
+            'refinement',
+            'defaultValue'
+          )
+        ).toEqual('defaultValue');
+
+        expect(
+          getCurrentRefinementValue(
+            { defaultRefinement: 'defaultRefinement' },
+            {},
+            context,
+            'refinement',
+            null
+          )
+        ).toEqual('defaultRefinement');
+      });
+
+      it('retrieves from objects without prototype', () => {
+        const searchState = Object.create(null);
+        searchState.page = 1;
+        searchState.last = 'last';
+        searchState.refinement = 'refinement';
+        searchState.another = 'another';
+        searchState.namespace = {
           refinement: 'refinement',
           another: 'another',
           'nested.another': 'nested.another',
-        },
-      };
+        };
 
-      let value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'refinement',
-        null
-      );
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'refinement',
+            null
+          )
+        ).toEqual('refinement');
 
-      expect(value).toEqual('refinement');
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.another',
+            null
+          )
+        ).toEqual('another');
 
-      value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'namespace.another',
-        null
-      );
-
-      expect(value).toEqual('another');
-
-      value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'namespace.nested.another',
-        null
-      );
-
-      expect(value).toEqual('nested.another');
-
-      value = getCurrentRefinementValue(
-        {},
-        {},
-        context,
-        'refinement',
-        'defaultValue'
-      );
-
-      expect(value).toEqual('defaultValue');
-
-      value = getCurrentRefinementValue(
-        { defaultRefinement: 'defaultRefinement' },
-        {},
-        context,
-        'refinement',
-        null
-      );
-
-      expect(value).toEqual('defaultRefinement');
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.nested.another',
+            null
+          )
+        ).toEqual('nested.another');
+      });
     });
 
     it('clean up values', () => {
@@ -220,6 +267,7 @@ describe('utility method for manipulating the search state', () => {
         namespace: {},
       });
     });
+
     it('get results', () => {
       const searchResults = { results: { hits: ['some'] } };
 
@@ -324,11 +372,120 @@ describe('utility method for manipulating the search state', () => {
       });
     });
 
-    it('retrieve the current refinement value', () => {
-      const searchState = {
-        page: 1,
-        refinement: 'refinement',
-        indices: {
+    describe('getCurrentRefinementValue', () => {
+      it('retrieves the current refinement value', () => {
+        const searchState = {
+          page: 1,
+          refinement: 'refinement',
+          indices: {
+            first: {
+              refinement: 'refinement',
+              namespace: {
+                refinement: 'refinement',
+                another: 'another',
+                'nested.another': 'nested.another',
+              },
+            },
+          },
+        };
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'refinement',
+            null
+          )
+        ).toEqual('refinement');
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.refinement',
+            null
+          )
+        ).toEqual('refinement');
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.another',
+            null
+          )
+        ).toEqual('another');
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.nested.another',
+            null
+          )
+        ).toEqual('nested.another');
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            {},
+            context,
+            'refinement',
+            'defaultValue'
+          )
+        ).toEqual('defaultValue');
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'anotherNamespace.refinement.top',
+            'defaultValue'
+          )
+        ).toEqual('defaultValue');
+
+        expect(
+          getCurrentRefinementValue(
+            { defaultRefinement: 'defaultRefinement' },
+            {},
+            context,
+            'refinement',
+            null
+          )
+        ).toEqual('defaultRefinement');
+      });
+
+      it('retrieves default value', () => {
+        const searchState = {
+          page: 1,
+          refinement: 'refinement',
+          indices: {},
+        };
+
+        const defaultRefinement = null;
+
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'refinement',
+            defaultRefinement
+          )
+        ).toBe(defaultRefinement);
+      });
+
+      it('retrieves from objects without prototype', () => {
+        const searchState = Object.create(null);
+
+        searchState.page = 1;
+        searchState.refinement = 'refinement';
+        searchState.indices = {
           first: {
             refinement: 'refinement',
             namespace: {
@@ -337,98 +494,78 @@ describe('utility method for manipulating the search state', () => {
               'nested.another': 'nested.another',
             },
           },
-        },
-      };
+        };
 
-      let value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'refinement',
-        null
-      );
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'refinement',
+            null
+          )
+        ).toEqual('refinement');
 
-      expect(value).toEqual('refinement');
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.refinement',
+            null
+          )
+        ).toEqual('refinement');
 
-      value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'namespace.refinement',
-        null
-      );
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.another',
+            null
+          )
+        ).toEqual('another');
 
-      expect(value).toEqual('refinement');
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'namespace.nested.another',
+            null
+          )
+        ).toEqual('nested.another');
 
-      value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'namespace.another',
-        null
-      );
+        expect(
+          getCurrentRefinementValue(
+            {},
+            {},
+            context,
+            'refinement',
+            'defaultValue'
+          )
+        ).toEqual('defaultValue');
 
-      expect(value).toEqual('another');
+        expect(
+          getCurrentRefinementValue(
+            {},
+            searchState,
+            context,
+            'anotherNamespace.refinement.top',
+            'defaultValue'
+          )
+        ).toEqual('defaultValue');
 
-      value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'namespace.nested.another',
-        null
-      );
-
-      expect(value).toEqual('nested.another');
-
-      value = getCurrentRefinementValue(
-        {},
-        {},
-        context,
-        'refinement',
-        'defaultValue'
-      );
-
-      expect(value).toEqual('defaultValue');
-
-      value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'anotherNamespace.refinement.top',
-        'defaultValue'
-      );
-
-      expect(value).toEqual('defaultValue');
-
-      value = getCurrentRefinementValue(
-        { defaultRefinement: 'defaultRefinement' },
-        {},
-        context,
-        'refinement',
-        null
-      );
-
-      expect(value).toEqual('defaultRefinement');
-    });
-
-    it('retrieve the default refinement value there is no current refinement', () => {
-      const searchState = {
-        page: 1,
-        refinement: 'refinement',
-        indices: {},
-      };
-
-      const defaultRefinement = null;
-
-      const value = getCurrentRefinementValue(
-        {},
-        searchState,
-        context,
-        'refinement',
-        defaultRefinement
-      );
-
-      expect(value).toBe(defaultRefinement);
+        expect(
+          getCurrentRefinementValue(
+            { defaultRefinement: 'defaultRefinement' },
+            {},
+            context,
+            'refinement',
+            null
+          )
+        ).toEqual('defaultRefinement');
+      });
     });
 
     it('clean up values', () => {
