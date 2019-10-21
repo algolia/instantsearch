@@ -144,7 +144,7 @@
     "webpack": "4.39.2"
   },
   "bin": {
-    "instantsearch-scripts": "./scripts/index.js"
+    "instantsearch-scripts": "./scripts/transforms/index.js"
   },
   "bundlesize": [
     {
