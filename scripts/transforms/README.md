@@ -12,7 +12,7 @@ npx instantsearch.js addWidget-to-addWidgets <path>
 
 ### Notes
 
-If you are using Prettier or eslint, make sure to run its autofixing after this transformation, since it's possible that code should be formatted differently after it has been transformed. For example in our repository using prettier that would be:
+If you are using Prettier or ESLint, make sure to run its autofixing after this transformation, since code can be formatted differently after it has been transformed. For example, in our repository, the Prettier command would be:
 
 ```
 yarn prettier --write '{examples,stories,.storybook}/**/*.{js,ts,tsx}'
