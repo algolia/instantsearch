@@ -1,139 +1,115 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`rangeSlider Lifecycle max option will use the results min when only max is passed 1`] = `
-<Slider
-  cssClasses={
-    Object {
-      "disabledRoot": "ais-RangeSlider--disabled",
-      "root": "ais-RangeSlider",
-    }
-  }
-  max={100}
-  min={1}
-  pips={true}
-  refine={[Function]}
-  step={1}
-  tooltips={true}
-  values={
-    Array [
-      1,
-      100,
-    ]
-  }
-/>
+Object {
+  "cssClasses": Object {
+    "disabledRoot": "ais-RangeSlider--disabled",
+    "root": "ais-RangeSlider",
+  },
+  "max": 100,
+  "min": 1,
+  "pips": true,
+  "refine": [Function],
+  "step": 1,
+  "tooltips": true,
+  "values": Array [
+    1,
+    100,
+  ],
+}
 `;
 
 exports[`rangeSlider Lifecycle min option sets the right range 1`] = `
-<Slider
-  cssClasses={
-    Object {
-      "disabledRoot": "ais-RangeSlider--disabled",
-      "root": "ais-RangeSlider",
-    }
-  }
-  max={200}
-  min={100}
-  pips={true}
-  refine={[Function]}
-  step={1}
-  tooltips={true}
-  values={
-    Array [
-      100,
-      200,
-    ]
-  }
-/>
+Object {
+  "cssClasses": Object {
+    "disabledRoot": "ais-RangeSlider--disabled",
+    "root": "ais-RangeSlider",
+  },
+  "max": 200,
+  "min": 100,
+  "pips": true,
+  "refine": [Function],
+  "step": 1,
+  "tooltips": true,
+  "values": Array [
+    100,
+    200,
+  ],
+}
 `;
 
 exports[`rangeSlider Lifecycle min option will use the results max when only min passed 1`] = `
-<Slider
-  cssClasses={
-    Object {
-      "disabledRoot": "ais-RangeSlider--disabled",
-      "root": "ais-RangeSlider",
-    }
-  }
-  max={5000}
-  min={100}
-  pips={true}
-  refine={[Function]}
-  step={1}
-  tooltips={true}
-  values={
-    Array [
-      100,
-      5000,
-    ]
-  }
-/>
+Object {
+  "cssClasses": Object {
+    "disabledRoot": "ais-RangeSlider--disabled",
+    "root": "ais-RangeSlider",
+  },
+  "max": 5000,
+  "min": 100,
+  "pips": true,
+  "refine": [Function],
+  "step": 1,
+  "tooltips": true,
+  "values": Array [
+    100,
+    5000,
+  ],
+}
 `;
 
 exports[`rangeSlider Lifecycle should render without results 1`] = `
-<Slider
-  cssClasses={
-    Object {
-      "disabledRoot": "ais-RangeSlider--disabled",
-      "root": "ais-RangeSlider root cx",
-    }
-  }
-  max={0}
-  min={0}
-  pips={true}
-  refine={[Function]}
-  step={1}
-  tooltips={true}
-  values={
-    Array [
-      0,
-      0,
-    ]
-  }
-/>
+Object {
+  "cssClasses": Object {
+    "disabledRoot": "ais-RangeSlider--disabled",
+    "root": "ais-RangeSlider root cx",
+  },
+  "max": 0,
+  "min": 0,
+  "pips": true,
+  "refine": [Function],
+  "step": 1,
+  "tooltips": true,
+  "values": Array [
+    0,
+    0,
+  ],
+}
 `;
 
 exports[`rangeSlider Lifecycle with results calls twice render 1`] = `
-<Slider
-  cssClasses={
-    Object {
-      "disabledRoot": "ais-RangeSlider--disabled",
-      "root": "ais-RangeSlider",
-    }
-  }
-  max={5000}
-  min={1}
-  pips={true}
-  refine={[Function]}
-  step={1}
-  tooltips={true}
-  values={
-    Array [
-      1,
-      5000,
-    ]
-  }
-/>
+Object {
+  "cssClasses": Object {
+    "disabledRoot": "ais-RangeSlider--disabled",
+    "root": "ais-RangeSlider",
+  },
+  "max": 5000,
+  "min": 1,
+  "pips": true,
+  "refine": [Function],
+  "step": 1,
+  "tooltips": true,
+  "values": Array [
+    1,
+    5000,
+  ],
+}
 `;
 
 exports[`rangeSlider Lifecycle with results calls twice render 2`] = `
-<Slider
-  cssClasses={
-    Object {
-      "disabledRoot": "ais-RangeSlider--disabled",
-      "root": "ais-RangeSlider",
-    }
-  }
-  max={5000}
-  min={1}
-  pips={true}
-  refine={[Function]}
-  step={1}
-  tooltips={true}
-  values={
-    Array [
-      1,
-      5000,
-    ]
-  }
-/>
+Object {
+  "cssClasses": Object {
+    "disabledRoot": "ais-RangeSlider--disabled",
+    "root": "ais-RangeSlider",
+  },
+  "max": 5000,
+  "min": 1,
+  "pips": true,
+  "refine": [Function],
+  "step": 1,
+  "tooltips": true,
+  "values": Array [
+    1,
+    5000,
+  ],
+}
 `;

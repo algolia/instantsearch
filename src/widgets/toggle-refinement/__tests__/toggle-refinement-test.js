@@ -1,10 +1,10 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import jsHelper, { SearchParameters } from 'algoliasearch-helper';
-import toggleRefinement from '../toggleRefinement';
+import toggleRefinement from '../toggle-refinement';
 import RefinementList from '../../../components/RefinementList/RefinementList';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -88,9 +88,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.init({ helper, state, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
+
+        const [firstRender, secondRender] = render.mock.calls;
+
         expect(render).toHaveBeenCalledTimes(2);
-        expect(render.mock.calls[0][1]).toEqual(containerNode);
-        expect(render.mock.calls[1][1]).toEqual(containerNode);
+        expect(firstRender[1]).toEqual(containerNode);
+        expect(secondRender[1]).toEqual(containerNode);
       });
 
       it('understands cssClasses', () => {
@@ -121,7 +124,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         });
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
+
+        const [firstRender] = render.mock.calls;
+
+        expect(firstRender[0].props).toMatchSnapshot();
       });
 
       it('with facet values', () => {
@@ -148,8 +154,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
 
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
-        expect(render.mock.calls[1][0]).toMatchSnapshot();
+        const [firstRender, secondRender] = render.mock.calls;
+
+        expect(firstRender[0].props).toMatchSnapshot();
+        expect(secondRender[0].props).toMatchSnapshot();
       });
 
       it('supports negative numeric off or on values', () => {
@@ -187,9 +195,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.render({ results, helper: altHelper, state });
         widget.render({ results, helper: altHelper, state });
 
+        const [firstRender, secondRender] = render.mock.calls;
+
         // The first call is not the one expected, because of the new init rendering..
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
-        expect(render.mock.calls[1][0]).toMatchSnapshot();
+        expect(firstRender[0].props).toMatchSnapshot();
+        expect(secondRender[0].props).toMatchSnapshot();
 
         widget.toggleRefinement({ isRefined: true });
 
@@ -220,8 +230,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
 
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
-        expect(render.mock.calls[1][0]).toMatchSnapshot();
+        const [firstRender, secondRender] = render.mock.calls;
+
+        expect(firstRender[0].props).toMatchSnapshot();
+        expect(secondRender[0].props).toMatchSnapshot();
       });
 
       it('when refined', () => {
@@ -253,8 +265,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
 
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
-        expect(render.mock.calls[1][0]).toMatchSnapshot();
+        const [firstRender, secondRender] = render.mock.calls;
+
+        expect(firstRender[0].props).toMatchSnapshot();
+        expect(secondRender[0].props).toMatchSnapshot();
       });
 
       it('using props.refine', () => {
@@ -279,7 +293,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         });
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
-        const { refine } = render.mock.calls[0][0].props;
+
+        const [firstRender] = render.mock.calls;
+        const { refine } = firstRender[0].props;
+
         expect(typeof refine).toEqual('function');
         refine();
         expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);

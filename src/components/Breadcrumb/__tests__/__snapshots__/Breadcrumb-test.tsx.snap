@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Breadcrumb Rendering renders with a single item 1`] = `
+<div>
+  <div
+    class="root"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <a
+          class="link"
+        >
+          home
+        </a>
+      </li>
+      <li
+        class="item selectedItem"
+      >
+        <span
+          aria-hidden="true"
+          class="separator"
+        >
+          &gt;
+        </span>
+        Label 0
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`Breadcrumb Rendering renders with multiple items 1`] = `
+<div>
+  <div
+    class="root"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <a
+          class="link"
+        >
+          home
+        </a>
+      </li>
+      <li
+        class="item"
+      >
+        <span
+          aria-hidden="true"
+          class="separator"
+        >
+          &gt;
+        </span>
+        <a
+          class="link"
+          href="value-0"
+        >
+          Label 0
+        </a>
+      </li>
+      <li
+        class="item selectedItem"
+      >
+        <span
+          aria-hidden="true"
+          class="separator"
+        >
+          &gt;
+        </span>
+        Label 1
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`Breadcrumb Rendering renders without items 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item selectedItem"
+      >
+        <a
+          class="link"
+        >
+          home
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

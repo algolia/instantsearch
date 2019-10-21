@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { shallow } from 'enzyme';
 import Slider from '../Slider';
 
@@ -78,12 +80,11 @@ describe('Slider', () => {
       },
     };
 
-    shallow(<Slider {...props} />)
-      .find('Rheostat')
-      .simulate('change', {
-        values: [0, 100],
-      });
+    const Rheostat = shallow(<Slider {...props} />).find('Rheostat');
 
+    Rheostat.props().onChange({ values: [0, 100] });
+
+    expect(props.refine).toHaveBeenCalledTimes(1);
     expect(props.refine).toHaveBeenCalledWith([0, 100]);
   });
 });

@@ -21,14 +21,6 @@ module.exports = api => {
   const testPlugins = [
     '@babel/plugin-proposal-class-properties',
     wrapWarningWithDevCheck,
-    [
-      'module-resolver',
-      {
-        alias: {
-          'preact-compat': 'react',
-        },
-      },
-    ],
   ];
 
   const buildPlugins = clean([

@@ -1,4 +1,4 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import sortBy from '../sort-by';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
@@ -8,8 +8,8 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -70,11 +70,14 @@ describe('sortBy()', () => {
     widget.render(createRenderOptions({ helper, results }));
     widget.render(createRenderOptions({ helper, results }));
 
+    const [firstRender, secondRender] = render.mock.calls;
+    const { children, ...rootProps } = firstRender[0].props;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(rootProps).toMatchSnapshot();
+    expect(children.props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('renders transformed items', () => {
@@ -88,7 +91,20 @@ describe('sortBy()', () => {
     widget.init(createInitOptions({ helper }));
     widget.render(createRenderOptions({ helper, results }));
 
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    const [firstRender] = render.mock.calls;
+
+    expect(firstRender[0].props.children.props.options).toEqual([
+      {
+        label: 'Index A',
+        transformed: true,
+        value: 'index-a',
+      },
+      {
+        label: 'Index B',
+        transformed: true,
+        value: 'index-b',
+      },
+    ]);
   });
 
   it('sets the underlying index', () => {

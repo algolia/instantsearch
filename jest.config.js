@@ -3,7 +3,7 @@
 module.exports = {
   rootDir: process.cwd(),
   testEnvironment: 'jest-environment-jsdom-global',
-  setupFilesAfterEnv: ['./scripts/jest/setupTests.js'],
+  setupFilesAfterEnv: ['./scripts/jest/setupTests.ts'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/dist*',

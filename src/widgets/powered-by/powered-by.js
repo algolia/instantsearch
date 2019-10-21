@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import PoweredBy from '../../components/PoweredBy/PoweredBy';
 import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
@@ -83,7 +85,7 @@ export default function poweredBy({
   });
 
   const makeWidget = connectPoweredBy(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ theme });

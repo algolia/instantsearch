@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
 import { SearchResults } from 'algoliasearch-helper';
@@ -41,7 +43,7 @@ const InfiniteHits = ({
   isLastPage,
   cssClasses,
   templateProps,
-}: InfiniteHitsProps): React.ReactNode => {
+}: InfiniteHitsProps) => {
   if (results.hits.length === 0) {
     return (
       <Template

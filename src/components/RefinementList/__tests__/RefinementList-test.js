@@ -1,10 +1,19 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { shallow, mount } from 'enzyme';
+import { render, fireEvent } from '@testing-library/preact';
 import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
 const defaultProps = {
-  templateProps: {},
+  templateProps: {
+    templates: {
+      item: 'item',
+      templateKey: 'templateKey',
+      searchableNoResults: 'searchableNoResults',
+    },
+  },
   toggleRefinement: () => {},
 };
 
@@ -19,6 +28,7 @@ describe('RefinementList', () => {
       facetValues: [],
       ...extraProps,
     };
+
     return shallow(<RefinementList {...props} />);
   }
 
@@ -169,8 +179,14 @@ describe('RefinementList', () => {
 
   describe('sublist', () => {
     it('should create a subList with the sub values', () => {
+      const toggleRefinement = jest.fn();
       const props = {
         ...defaultProps,
+        toggleRefinement,
+        createURL: () => {},
+        cssClasses: {
+          item: 'item',
+        },
         facetValues: [
           {
             value: 'foo',
@@ -183,19 +199,27 @@ describe('RefinementList', () => {
         ],
       };
 
-      const root = shallowRender(props);
-      const mainItem = root.find(RefinementListItem).at(0);
-      const subList = shallow(mainItem.props().subItems);
-      const subItems = subList.find(RefinementListItem);
+      const { container } = render(<RefinementList {...props} />);
+      const [
+        mainItem,
+        firstSubItem,
+        secondISubtem,
+      ] = container.querySelectorAll('.item');
 
-      expect(mainItem.props().facetValueToRefine).toEqual('foo');
-      expect(subItems.at(0).props().facetValueToRefine).toEqual('bar');
-      expect(subItems.at(1).props().facetValueToRefine).toEqual('baz');
+      fireEvent.click(mainItem);
+      expect(toggleRefinement).toHaveBeenCalledWith('foo', false);
+
+      fireEvent.click(firstSubItem);
+      expect(toggleRefinement).toHaveBeenCalledWith('bar', false);
+
+      fireEvent.click(secondISubtem);
+      expect(toggleRefinement).toHaveBeenCalledWith('baz', false);
     });
 
     it('should add depth class for each depth', () => {
       const props = {
         ...defaultProps,
+        createURL: () => {},
         cssClasses: {
           depth: 'depth-',
         },
@@ -216,17 +240,18 @@ describe('RefinementList', () => {
         },
       };
 
-      const root = shallowRender(props);
-      const mainItem = root.find(RefinementListItem).at(0);
-      const subList = shallow(mainItem.props().subItems);
+      const { container } = render(<RefinementList {...props} />);
+      const mainItem = container.querySelector('ul');
+      const subItem = container.querySelector('ul ul');
 
-      expect(root.props().children[2].props.className).toContain('depth-0');
-      expect(subList.props().children[2].props.className).toContain('depth-1');
+      expect(mainItem).toHaveClass('depth-0');
+      expect(subItem).toHaveClass('depth-1');
     });
 
     it('should not add root class on sub lists', () => {
       const props = {
         ...defaultProps,
+        createURL: () => {},
         cssClasses: {
           root: 'my-root',
         },
@@ -242,12 +267,13 @@ describe('RefinementList', () => {
         ],
       };
 
-      const root = shallowRender(props);
-      const mainItem = root.find(RefinementListItem).at(0);
-      const subList = shallow(mainItem.props().subItems);
+      const { container } = render(<RefinementList {...props} />);
+      const root = container.querySelector('div');
 
-      expect(root.hasClass(props.cssClasses.root)).toBe(true);
-      expect(subList.hasClass(props.cssClasses.root)).toBe(false);
+      expect(root).toHaveClass(props.cssClasses.root);
+      expect(
+        container.querySelectorAll(`.${props.cssClasses.root}`)
+      ).toHaveLength(1);
     });
   });
 
@@ -467,11 +493,14 @@ describe('RefinementList', () => {
           { value: 'bar', isRefined: true },
           { value: 'baz', isRefined: false },
         ],
+        cssClasses: {
+          item: 'item',
+        },
         templateProps: {
           templates: {
             item: item => `
               <label>
-                <input type="radio" checked=${item.isRefined} />
+                <input type="radio" checked="${item.isRefined}" />
                 ${item.value}
               </span>
             `,
@@ -480,14 +509,13 @@ describe('RefinementList', () => {
         toggleRefinement,
         createURL: () => {},
       };
-      const wrapper = mount(<RefinementList {...props} />);
 
-      const items = wrapper.find(RefinementListItem);
-      const secondItem = items.at(1);
+      const { container } = render(<RefinementList {...props} />);
+      const checkedItem = container.querySelector('.item [checked="true"]');
 
-      secondItem.simulate('click');
+      fireEvent.click(checkedItem);
 
-      expect(toggleRefinement).not.toHaveBeenCalled();
+      expect(toggleRefinement).toHaveBeenCalledTimes(0);
     });
   });
 });

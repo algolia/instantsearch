@@ -1,7 +1,9 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
-import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement';
+import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
@@ -132,7 +134,7 @@ export default function toggleRefinement({
   });
 
   const makeWidget = connectToggleRefinement(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ attribute, on, off });

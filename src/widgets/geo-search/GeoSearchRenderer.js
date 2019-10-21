@@ -1,4 +1,6 @@
-import React, { render } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import { prepareTemplateProps } from '../../lib/utils';
 import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
 

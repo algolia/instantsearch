@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
 import cx from 'classnames';
 import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
@@ -112,7 +114,7 @@ export default function clearRefinements({
   });
 
   const makeWidget = connectClearRefinements(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({

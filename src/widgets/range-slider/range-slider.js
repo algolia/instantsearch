@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Slider from '../../components/Slider/Slider';
 import connectRange from '../../connectors/range/connectRange';
@@ -141,7 +143,7 @@ export default function rangeSlider({
   });
 
   const makeWidget = connectRange(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ attribute, min, max, precision });

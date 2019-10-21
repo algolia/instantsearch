@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectSortBy from '../../connectors/sort-by/connectSortBy';
@@ -99,7 +101,7 @@ export default function sortBy({
   });
 
   const makeWidget = connectSortBy(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ items, transformItems });

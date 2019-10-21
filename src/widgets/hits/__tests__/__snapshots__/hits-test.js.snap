@@ -1,147 +1,126 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`hits() calls twice render(<Hits props />, container) 1`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "emptyRoot": "ais-Hits--empty",
+    "item": "ais-Hits-item",
+    "list": "ais-Hits-list",
+    "root": "ais-Hits root cx",
+  },
+  "hits": Array [
     Object {
-      "emptyRoot": "ais-Hits--empty",
-      "item": "ais-Hits-item",
-      "list": "ais-Hits-list",
-      "root": "ais-Hits root cx",
-    }
-  }
-  hits={
-    Array [
+      "__position": 9,
+      "first": "hit",
+      "second": "hit",
+    },
+  ],
+  "insights": undefined,
+  "results": Object {
+    "hits": Array [
       Object {
         "__position": 9,
         "first": "hit",
         "second": "hit",
       },
-    ]
-  }
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 9,
-          "first": "hit",
-          "second": "hit",
-        },
-      ],
-      "hitsPerPage": 4,
-      "page": 2,
-    }
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 4,
+    "page": 2,
+  },
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+    },
+  },
+}
 `;
 
 exports[`hits() calls twice render(<Hits props />, container) 2`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "emptyRoot": "ais-Hits--empty",
+    "item": "ais-Hits-item",
+    "list": "ais-Hits-list",
+    "root": "ais-Hits root cx",
+  },
+  "hits": Array [
     Object {
-      "emptyRoot": "ais-Hits--empty",
-      "item": "ais-Hits-item",
-      "list": "ais-Hits-list",
-      "root": "ais-Hits root cx",
-    }
-  }
-  hits={
-    Array [
+      "__position": 9,
+      "first": "hit",
+      "second": "hit",
+    },
+  ],
+  "insights": undefined,
+  "results": Object {
+    "hits": Array [
       Object {
         "__position": 9,
         "first": "hit",
         "second": "hit",
       },
-    ]
-  }
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 9,
-          "first": "hit",
-          "second": "hit",
-        },
-      ],
-      "hitsPerPage": 4,
-      "page": 2,
-    }
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 4,
+    "page": 2,
+  },
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+    },
+  },
+}
 `;
 
 exports[`hits() renders transformed items 1`] = `
-<WithInsightsListener
-  cssClasses={
+Object {
+  "cssClasses": Object {
+    "emptyRoot": "ais-Hits--empty",
+    "item": "ais-Hits-item",
+    "list": "ais-Hits-list",
+    "root": "ais-Hits",
+  },
+  "hits": Array [
     Object {
-      "emptyRoot": "ais-Hits--empty",
-      "item": "ais-Hits-item",
-      "list": "ais-Hits-list",
-      "root": "ais-Hits",
-    }
-  }
-  hits={
-    Array [
+      "__position": 9,
+      "first": "hit",
+      "second": "hit",
+      "transformed": true,
+    },
+  ],
+  "insights": undefined,
+  "results": Object {
+    "hits": Array [
       Object {
         "__position": 9,
         "first": "hit",
         "second": "hit",
         "transformed": true,
       },
-    ]
-  }
-  results={
-    Object {
-      "hits": Array [
-        Object {
-          "__position": 9,
-          "first": "hit",
-          "second": "hit",
-          "transformed": true,
-        },
-      ],
-      "hitsPerPage": 4,
-      "page": 2,
-    }
-  }
-  templateProps={
-    Object {
-      "templates": Object {
-        "empty": "No results",
-        "item": [Function],
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "empty": false,
-        "item": false,
-      },
-    }
-  }
-/>
+    ],
+    "hitsPerPage": 4,
+    "page": 2,
+  },
+  "templateProps": Object {
+    "templates": Object {
+      "empty": "No results",
+      "item": [Function],
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "empty": false,
+      "item": false,
+    },
+  },
+}
 `;

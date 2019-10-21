@@ -391,10 +391,11 @@ const index = (props: IndexProps): Index => {
           const missingWidgets = Object.keys(localUiState).reduce<
             MissingWidgets
           >((acc, parameter) => {
-            const requiredWidgets: Array<Widget['$$type']> =
+            const requiredWidgets: Array<Widget['$$type']> | undefined =
               stateToWidgetsMap[parameter];
 
             if (
+              requiredWidgets &&
               !requiredWidgets.some(requiredWidget =>
                 mountedWidgets.includes(requiredWidget)
               )
