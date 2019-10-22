@@ -45,7 +45,6 @@ export const withHits = (
       hitsPerPage: 4,
       attributesToSnippet: ['description:15'],
       snippetEllipsisText: '[…]',
-      ...searchParameters,
     })
   );
 
