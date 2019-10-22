@@ -4,7 +4,7 @@ import version from '../version';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import connectPagination from '../../connectors/pagination/connectPagination';
 import index from '../../widgets/index/index';
-import { noop } from '../../lib/utils';
+import { noop, warning } from '../utils';
 import {
   createSearchClient,
   createControlledSearchClient,
@@ -374,6 +374,42 @@ describe('start', () => {
 
     expect(algoliasearchHelper).toHaveBeenCalledTimes(2);
     expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
+  });
+
+  it('warns deprecated usage of `searchParameters`', () => {
+    warning.cache = {};
+
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+        searchParameters: {
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung'],
+          },
+        },
+      });
+    })
+      .toWarnDev(`[InstantSearch.js]: The \`searchParameters\` option is deprecated, but you can replace it with the \`configure\` widget:
+
+\`\`\`
+search.addWidgets([
+  configure({
+  "disjunctiveFacets": [
+    "brand"
+  ],
+  "disjunctiveFacetsRefinements": {
+    "brand": [
+      "Samsung"
+    ]
+  }
+})
+]);
+\`\`\`
+
+See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', () => {

@@ -40,6 +40,15 @@ export const withHits = (
     ...instantsearchOptions,
   });
 
+  search.addWidget(
+    instantsearch.widgets.configure({
+      hitsPerPage: 4,
+      attributesToSnippet: ['description:15'],
+      snippetEllipsisText: '[…]',
+      ...searchParameters,
+    })
+  );
+
   const containerElement = document.createElement('div');
 
   // Add the preview container to add the stories in

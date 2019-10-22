@@ -1,3 +1,24 @@
+# [3.7.0](https://github.com/algolia/instantsearch.js/compare/v3.5.4...v3.7.0) (2019-10-08)
+
+
+### Bug Fixes
+
+* **clearRefinements:** reset page to 0 ([#3936](https://github.com/algolia/instantsearch.js/issues/3936)) ([7378a0a](https://github.com/algolia/instantsearch.js/commit/7378a0a))
+* **connectSortBy:** never update the initial index ([#4015](https://github.com/algolia/instantsearch.js/issues/4015)) ([bc0f9e2](https://github.com/algolia/instantsearch.js/commit/bc0f9e2))
+* **deps:** update dependency instantsearch.js to v3.5.4 ([#3929](https://github.com/algolia/instantsearch.js/issues/3929)) ([eff84c5](https://github.com/algolia/instantsearch.js/commit/eff84c5))
+* **deps:** update dependency instantsearch.js to v3.6.0 ([#4021](https://github.com/algolia/instantsearch.js/issues/4021)) ([7719bba](https://github.com/algolia/instantsearch.js/commit/7719bba))
+* **enhanceConfiguration:** deduplicate the hierarchicalFacets ([#3966](https://github.com/algolia/instantsearch.js/issues/3966)) ([baf8a35](https://github.com/algolia/instantsearch.js/commit/baf8a35))
+* **examples:** fix IE11 compatibility for e-commerce demo ([#4049](https://github.com/algolia/instantsearch.js/issues/4049)) ([dc6f350](https://github.com/algolia/instantsearch.js/commit/dc6f350))
+* **examples:** fix missing polyfill in e-commerce demo ([#4076](https://github.com/algolia/instantsearch.js/issues/4076)) ([4bf3ab3](https://github.com/algolia/instantsearch.js/commit/4bf3ab3))
+* **hierarchicalFacets:** prevent different rootPath on same attribute ([#3965](https://github.com/algolia/instantsearch.js/issues/3965)) ([5ee79fa](https://github.com/algolia/instantsearch.js/commit/5ee79fa))
+* **instantsearch:** warn deprecated usage of `searchParameters` ([#4151](https://github.com/algolia/instantsearch.js/issues/4151)) ([18e1c36](https://github.com/algolia/instantsearch.js/commit/18e1c36))
+* **menuSelect:** unmount component ([#3911](https://github.com/algolia/instantsearch.js/issues/3911)) ([f6debce](https://github.com/algolia/instantsearch.js/commit/f6debce))
+* **rangeInput:** unmount component ([#3910](https://github.com/algolia/instantsearch.js/issues/3910)) ([f6c29e8](https://github.com/algolia/instantsearch.js/commit/f6c29e8))
+* **refinementList:** fix showMore button to work after search ([#3082](https://github.com/algolia/instantsearch.js/issues/3082)) ([23e46b6](https://github.com/algolia/instantsearch.js/commit/23e46b6))
+* pass noop as default value to unmountFn at connectors ([#3955](https://github.com/algolia/instantsearch.js/issues/3955)) ([7c38744](https://github.com/algolia/instantsearch.js/commit/7c38744))
+
+
+
 # [3.6.0](https://github.com/algolia/instantsearch.js/compare/v3.5.4...v3.6.0) (2019-07-30)
 
 
