@@ -121,7 +121,7 @@
     "jscodeshift": "0.6.4",
     "jsdom-global": "3.0.2",
     "mversion": "1.13.0",
-    "places.js": "1.16.4",
+    "places.js": "1.16.6",
     "prettier": "1.18.2",
     "rollup": "1.21.4",
     "rollup-plugin-babel": "4.3.3",
@@ -139,7 +139,7 @@
   "bundlesize": [
     {
       "path": "./dist/instantsearch.production.min.js",
-      "maxSize": "62 kB"
+      "maxSize": "63 kB"
     },
     {
       "path": "./dist/instantsearch.development.js",

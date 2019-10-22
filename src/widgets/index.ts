@@ -38,3 +38,4 @@ export {
   default as queryRuleContext,
 } from './query-rule-context/query-rule-context';
 export { default as index } from './index/index';
+export { default as places } from './places/places';
