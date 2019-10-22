@@ -239,6 +239,24 @@ describe('InstantSearch', () => {
 
     expect(search.insightsClient).toBe(insightsClient);
   });
+
+  it("exposes helper's last results", async () => {
+    const searchClient = createSearchClient();
+
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    expect(search.helper).toBe(null);
+
+    search.start();
+
+    await runAllMicroTasks();
+
+    // could be null if we don't pretend the main helper is the one who searched
+    expect(search.helper.lastResults).not.toBe(null);
+  });
 });
 
 describe('addWidget(s)', () => {

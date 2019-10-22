@@ -459,11 +459,16 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
         }
       });
 
-      derivedHelper.on('result', () => {
+      derivedHelper.on('result', ({ results }) => {
         // The index does not render the results it schedules a new render
         // to let all the other indices emit their own results. It allows us to
         // run the render process in one pass.
         instantSearchInstance.scheduleRender();
+
+        // the derived helper is the one which actually searches, but the 'main'
+        // helper is exposed e.g. via instance.helper, which needs to have the
+        // results accessible as well.
+        helper!.lastResults = results;
       });
 
       localWidgets.forEach(widget => {
