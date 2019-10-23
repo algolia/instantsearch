@@ -204,6 +204,7 @@ See ${createDocumentationLink({
         name: 'configure',
       })}`
     );
+
     this.client = searchClient;
     this.insightsClient = insightsClient;
 

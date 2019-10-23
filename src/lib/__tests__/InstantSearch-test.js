@@ -360,7 +360,13 @@ describe('removeWidget(s)', () => {
     const widget = createWidget();
     search.addWidget(widget);
 
-    expect(search.removeWidget(widget)).toBe(search);
+    warning.cache = {};
+    expect(() => {
+      const result = search.removeWidget(widget);
+      expect(result).toBe(search);
+    }).toWarnDev(
+      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
+    );
   });
 
   it('returns the search instance when calling `removeWidgets`', () => {
@@ -768,6 +774,8 @@ describe('dispose', () => {
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
+
+    search.addWidgets([createWidget(), createWidget()]);
 
     search.start();
 
