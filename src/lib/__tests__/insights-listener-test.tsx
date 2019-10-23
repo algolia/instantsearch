@@ -1,6 +1,8 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
+import { render, fireEvent } from '@testing-library/preact';
 import withInsightsListener from '../insights/listener';
-import { mount } from 'enzyme';
 
 describe('withInsightsListener', () => {
   it('should capture clicks performed on inner elements with data-insights-method defined', () => {
@@ -8,7 +10,7 @@ describe('withInsightsListener', () => {
       JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
     );
 
-    const Hits = (): React.ReactNode => (
+    const Hits = () => (
       <div>
         <button
           data-insights-method="clickedObjectIDsAfterSearch"
@@ -40,7 +42,7 @@ describe('withInsightsListener', () => {
       insightsClient: jest.fn(),
     };
     const HitsWithInsightsListener: any = withInsightsListener(Hits);
-    const wrapper = mount(
+    const { container } = render(
       <HitsWithInsightsListener
         hits={hits}
         results={results}
@@ -48,8 +50,10 @@ describe('withInsightsListener', () => {
         insights={insights}
       />
     );
+    const button = container.querySelector('button') as HTMLButtonElement;
 
-    wrapper.find('button').simulate('click');
+    fireEvent.click(button);
+
     expect(insights).toHaveBeenCalledTimes(1);
     expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
       eventName: 'Add to Cart',
@@ -62,7 +66,7 @@ describe('withInsightsListener', () => {
       JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
     );
 
-    const Hits = (): React.ReactNode => (
+    const Hits = () => (
       <div>
         <button data-insights-payload={payload}>Add to Cart</button>
       </div>
@@ -89,7 +93,7 @@ describe('withInsightsListener', () => {
       insightsClient: jest.fn(),
     };
     const HitsWithInsightsListener: any = withInsightsListener(Hits);
-    const wrapper = mount(
+    const { container } = render(
       <HitsWithInsightsListener
         hits={hits}
         results={results}
@@ -97,8 +101,10 @@ describe('withInsightsListener', () => {
         insights={insights}
       />
     );
+    const button = container.querySelector('button') as HTMLButtonElement;
 
-    wrapper.find('button').simulate('click');
+    fireEvent.click(button);
+
     expect(insights).toHaveBeenCalledTimes(0);
   });
 });

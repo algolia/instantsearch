@@ -1,10 +1,15 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import sortBy from '../sort-by';
-import instantSearch from '../../../lib/main';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -34,11 +39,8 @@ describe('sortBy()', () => {
   beforeEach(() => {
     render.mockClear();
 
-    const instantSearchInstance = instantSearch({
+    const instantSearchInstance = createInstantSearch({
       indexName: '',
-      searchClient: {
-        search() {},
-      },
     });
 
     container = document.createElement('div');
@@ -53,7 +55,7 @@ describe('sortBy()', () => {
     };
     widget = sortBy({ container, items, cssClasses });
 
-    helper = algoliasearchHelper({}, 'index-a');
+    helper = algoliasearchHelper(createSearchClient(), 'index-a');
     helper.setIndex = jest.fn().mockReturnThis();
     helper.search = jest.fn();
 
@@ -61,22 +63,21 @@ describe('sortBy()', () => {
       hits: [],
       nbHits: 0,
     };
-    widget.init({ helper, instantSearchInstance });
-  });
-
-  it("doesn't configure anything", () => {
-    expect(widget.getConfiguration).toEqual(undefined);
+    widget.init(createInitOptions({ helper, instantSearchInstance }));
   });
 
   it('calls twice render(<Selector props />, container)', () => {
-    widget.render({ helper, results });
-    widget.render({ helper, results });
+    widget.render(createRenderOptions({ helper, results }));
+    widget.render(createRenderOptions({ helper, results }));
+
+    const [firstRender, secondRender] = render.mock.calls;
+    const { children, ...rootProps } = firstRender[0].props;
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(rootProps).toMatchSnapshot();
+    expect(children.props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('renders transformed items', () => {
@@ -87,10 +88,23 @@ describe('sortBy()', () => {
         allItems.map(item => ({ ...item, transformed: true })),
     });
 
-    widget.init({ helper, instantSearchInstance: {} });
-    widget.render({ helper, results });
+    widget.init(createInitOptions({ helper }));
+    widget.render(createRenderOptions({ helper, results }));
 
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
+    const [firstRender] = render.mock.calls;
+
+    expect(firstRender[0].props.children.props.options).toEqual([
+      {
+        label: 'Index A',
+        transformed: true,
+        value: 'index-a',
+      },
+      {
+        label: 'Index B',
+        transformed: true,
+        value: 'index-b',
+      },
+    ]);
   });
 
   it('sets the underlying index', () => {

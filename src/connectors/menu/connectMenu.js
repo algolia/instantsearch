@@ -83,13 +83,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customMenu = instantsearch.connectors.connectMenu(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customMenu({
  *     containerNode: $('#custom-menu-container'),
  *     attribute: 'categories',
  *     limit: 10,
  *   })
- * );
+ * ]);
  */
 export default function connectMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -115,6 +115,8 @@ export default function connectMenu(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.menu',
+
       isShowingMore: false,
 
       // Provide the same function to the `renderFn` so that way the user
@@ -146,25 +148,6 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         };
       },
 
-      getConfiguration(configuration) {
-        const widgetConfiguration = {
-          hierarchicalFacets: [
-            {
-              name: attribute,
-              attributes: [attribute],
-            },
-          ],
-        };
-
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        return widgetConfiguration;
-      },
-
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
@@ -190,8 +173,10 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       render({ results, instantSearchInstance }) {
+        const facetValues = results.getFacetValues(attribute, { sortBy });
         const facetItems =
-          results.getFacetValues(attribute, { sortBy }).data || [];
+          facetValues && facetValues.data ? facetValues.data : [];
+
         const items = transformItems(
           facetItems
             .slice(0, this.getLimit())
@@ -228,33 +213,17 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        let nextState = state;
-
-        if (state.isHierarchicalFacetRefined(attribute)) {
-          nextState = state.removeHierarchicalFacetRefinement(attribute);
-        }
-
-        nextState = nextState.removeHierarchicalFacet(attribute);
-
-        if (
-          nextState.maxValuesPerFacet === limit ||
-          (showMoreLimit && nextState.maxValuesPerFacet === showMoreLimit)
-        ) {
-          nextState.setQueryParameters('maxValuesPerFacet', undefined);
-        }
-
-        return nextState;
+        return state
+          .removeHierarchicalFacet(attribute)
+          .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
+        const [value] = searchParameters.getHierarchicalFacetBreadcrumb(
           attribute
         );
 
-        if (
-          !refinedItem ||
-          (uiState.menu && uiState.menu[attribute] === refinedItem)
-        ) {
+        if (!value) {
           return uiState;
         }
 
@@ -262,31 +231,47 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           ...uiState,
           menu: {
             ...uiState.menu,
-            [attribute]: refinedItem,
+            [attribute]: value,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (uiState.menu && uiState.menu[attribute]) {
-          const uiStateRefinedItem = uiState.menu[attribute];
-          const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
-            attribute,
-            uiStateRefinedItem
-          );
-          if (isAlreadyRefined) return searchParameters;
-          return searchParameters.toggleRefinement(
-            attribute,
-            uiStateRefinedItem
-          );
+        const value = uiState.menu && uiState.menu[attribute];
+
+        const withFacetConfiguration = searchParameters
+          .removeHierarchicalFacet(attribute)
+          .addHierarchicalFacet({
+            name: attribute,
+            attributes: [attribute],
+          });
+
+        const currentMaxValuesPerFacet =
+          withFacetConfiguration.maxValuesPerFacet || 0;
+
+        const nextMaxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+          'maxValuesPerFacet',
+          nextMaxValuesPerFacet
+        );
+
+        if (!value) {
+          return withMaxValuesPerFacet.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+              [attribute]: [],
+            },
+          });
         }
-        if (searchParameters.isHierarchicalFacetRefined(attribute)) {
-          const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
-            attribute
-          );
-          return searchParameters.toggleRefinement(attribute, refinedItem);
-        }
-        return searchParameters;
+
+        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
+          attribute,
+          value
+        );
       },
     };
   };

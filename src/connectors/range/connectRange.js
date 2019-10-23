@@ -50,15 +50,19 @@ export default function connectRange(renderFn, unmountFn = noop) {
       attribute,
       min: minBound,
       max: maxBound,
-      precision = 2, // @MAJOR: the `precision` default value should be 0
+      precision = 0,
     } = widgetParams;
+
+    const hasMinBound = isFiniteNumber(minBound);
+    const hasMaxBound = isFiniteNumber(maxBound);
 
     if (!attribute) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
-    const hasMinBound = isFiniteNumber(minBound);
-    const hasMaxBound = isFiniteNumber(maxBound);
+    if (hasMinBound && hasMaxBound && minBound > maxBound) {
+      throw new Error(withUsage("The `max` option can't be lower than `min`."));
+    }
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -68,6 +72,8 @@ export default function connectRange(renderFn, unmountFn = noop) {
     };
 
     return {
+      $$type: 'ais.range',
+
       _getCurrentRange(stats) {
         const pow = Math.pow(10, precision);
 
@@ -162,7 +168,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
           const hasMaxChange = max !== newNextMax;
 
           if ((hasMinChange || hasMaxChange) && (isMinValid && isMaxValid)) {
-            helper.clearRefinements(attribute);
+            helper.removeNumericRefinement(attribute);
 
             if (isValidNewNextMin) {
               helper.addNumericRefinement(
@@ -183,40 +189,6 @@ export default function connectRange(renderFn, unmountFn = noop) {
             helper.search();
           }
         };
-      },
-
-      getConfiguration(currentConfiguration) {
-        const configuration = {
-          disjunctiveFacets: [attribute],
-        };
-
-        const isBoundsDefined = hasMinBound || hasMaxBound;
-
-        const boundsAlreadyDefined =
-          currentConfiguration &&
-          currentConfiguration.numericRefinements &&
-          currentConfiguration.numericRefinements[attribute] !== undefined;
-
-        const isMinBoundValid = isFiniteNumber(minBound);
-        const isMaxBoundValid = isFiniteNumber(maxBound);
-        const isAbleToRefine =
-          isMinBoundValid && isMaxBoundValid
-            ? minBound < maxBound
-            : isMinBoundValid || isMaxBoundValid;
-
-        if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
-          configuration.numericRefinements = { [attribute]: {} };
-
-          if (hasMinBound) {
-            configuration.numericRefinements[attribute]['>='] = [minBound];
-          }
-
-          if (hasMaxBound) {
-            configuration.numericRefinements[attribute]['<='] = [maxBound];
-          }
-        }
-
-        return configuration;
       },
 
       init({ helper, instantSearchInstance }) {
@@ -273,25 +245,26 @@ export default function connectRange(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeNumericRefinement(attribute)
-          .removeDisjunctiveFacet(attribute);
+        const stateWithoutDisjunctive = state.removeDisjunctiveFacet(attribute);
 
-        return nextState;
+        // can not use setQueryParameters || removeNumericRefinement, because
+        // they both keep the old value. This isn't immutable, but it is fine
+        // since it's already a copy.
+        stateWithoutDisjunctive.numericRefinements = {
+          ...state.numericRefinements,
+          [attribute]: undefined,
+        };
+
+        return stateWithoutDisjunctive;
       },
 
       getWidgetState(uiState, { searchParameters }) {
         const {
-          '>=': min = '',
-          '<=': max = '',
+          '>=': min = [],
+          '<=': max = [],
         } = searchParameters.getNumericRefinements(attribute);
 
-        if (
-          (min === '' && max === '') ||
-          (uiState &&
-            uiState.range &&
-            uiState.range[attribute] === `${min}:${max}`)
-        ) {
+        if (min.length === 0 && max.length === 0) {
           return uiState;
         }
 
@@ -305,28 +278,41 @@ export default function connectRange(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const value = uiState && uiState.range && uiState.range[attribute];
+        let widgetSearchParameters = searchParameters
+          .addDisjunctiveFacet(attribute)
+          .setQueryParameters({
+            numericRefinements: {
+              ...searchParameters.numericRefinements,
+              [attribute]: {},
+            },
+          });
+
+        if (hasMinBound) {
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
+            attribute,
+            '>=',
+            minBound
+          );
+        }
+
+        if (hasMaxBound) {
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
+            attribute,
+            '<=',
+            maxBound
+          );
+        }
+
+        const value = uiState.range && uiState.range[attribute];
 
         if (!value || value.indexOf(':') === -1) {
-          return searchParameters;
+          return widgetSearchParameters;
         }
 
-        const {
-          '>=': previousMin = [NaN],
-          '<=': previousMax = [NaN],
-        } = searchParameters.getNumericRefinements(attribute);
-        let clearedParams = searchParameters.clearRefinements(attribute);
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
-        if (
-          previousMin.includes(lowerBound) &&
-          previousMax.includes(upperBound)
-        ) {
-          return searchParameters;
-        }
-
         if (isFiniteNumber(lowerBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '>=',
             lowerBound
@@ -334,14 +320,14 @@ export default function connectRange(renderFn, unmountFn = noop) {
         }
 
         if (isFiniteNumber(upperBound)) {
-          clearedParams = clearedParams.addNumericRefinement(
+          widgetSearchParameters = widgetSearchParameters.addNumericRefinement(
             attribute,
             '<=',
             upperBound
           );
         }
 
-        return clearedParams;
+        return widgetSearchParameters;
       },
     };
   };

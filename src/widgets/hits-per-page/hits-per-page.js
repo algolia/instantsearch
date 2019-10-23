@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
@@ -69,7 +71,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @param {HitsPerPageWidgetOptions} $0 The options of the HitPerPageSelector widget.
  * @return {Widget} A new instance of the HitPerPageSelector widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.hitsPerPage({
  *     container: '#hits-per-page',
  *     items: [
@@ -78,7 +80,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  *       {value: 12, label: '12 per page'},
  *     ]
  *   })
- * );
+ * ]);
  */
 export default function hitsPerPage({
   container,
@@ -104,7 +106,7 @@ export default function hitsPerPage({
   });
 
   const makeHitsPerPage = connectHitsPerPage(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeHitsPerPage({ items, transformItems });

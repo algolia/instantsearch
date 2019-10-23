@@ -1,83 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`menuSelect Lifecycle render renders correctly 1`] = `
-<MenuSelect
-  canRefine={true}
-  cssClasses={
+Object {
+  "canRefine": true,
+  "cssClasses": Object {
+    "noRefinementRoot": "ais-MenuSelect--noRefinement",
+    "option": "ais-MenuSelect-option",
+    "root": "ais-MenuSelect",
+    "select": "ais-MenuSelect-select",
+  },
+  "items": Array [
     Object {
-      "noRefinementRoot": "ais-MenuSelect--noRefinement",
-      "option": "ais-MenuSelect-option",
-      "root": "ais-MenuSelect",
-      "select": "ais-MenuSelect-select",
-    }
-  }
-  items={
-    Array [
-      Object {
-        "label": "foo",
-        "value": undefined,
-      },
-      Object {
-        "label": "bar",
-        "value": undefined,
-      },
-    ]
-  }
-  refine={[Function]}
-  templateProps={
+      "label": "foo",
+      "value": undefined,
+    },
     Object {
-      "templates": Object {
-        "defaultOption": "See all",
-        "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "defaultOption": false,
-        "item": false,
-      },
-    }
-  }
-/>
+      "label": "bar",
+      "value": undefined,
+    },
+  ],
+  "refine": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "defaultOption": "See all",
+      "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "defaultOption": false,
+      "item": false,
+    },
+  },
+}
 `;
 
 exports[`menuSelect Lifecycle render renders transformed items correctly 1`] = `
-<MenuSelect
-  canRefine={true}
-  cssClasses={
+Object {
+  "canRefine": true,
+  "cssClasses": Object {
+    "noRefinementRoot": "ais-MenuSelect--noRefinement",
+    "option": "ais-MenuSelect-option",
+    "root": "ais-MenuSelect",
+    "select": "ais-MenuSelect-select",
+  },
+  "items": Array [
     Object {
-      "noRefinementRoot": "ais-MenuSelect--noRefinement",
-      "option": "ais-MenuSelect-option",
-      "root": "ais-MenuSelect",
-      "select": "ais-MenuSelect-select",
-    }
-  }
-  items={
-    Array [
-      Object {
-        "label": "foo",
-        "transformed": true,
-        "value": undefined,
-      },
-      Object {
-        "label": "bar",
-        "transformed": true,
-        "value": undefined,
-      },
-    ]
-  }
-  refine={[Function]}
-  templateProps={
+      "label": "foo",
+      "transformed": true,
+      "value": undefined,
+    },
     Object {
-      "templates": Object {
-        "defaultOption": "See all",
-        "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
-      },
-      "templatesConfig": undefined,
-      "useCustomCompileOptions": Object {
-        "defaultOption": false,
-        "item": false,
-      },
-    }
-  }
-/>
+      "label": "bar",
+      "transformed": true,
+      "value": undefined,
+    },
+  ],
+  "refine": [Function],
+  "templateProps": Object {
+    "templates": Object {
+      "defaultOption": "See all",
+      "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
+    },
+    "templatesConfig": undefined,
+    "useCustomCompileOptions": Object {
+      "defaultOption": false,
+      "item": false,
+    },
+  },
+}
 `;

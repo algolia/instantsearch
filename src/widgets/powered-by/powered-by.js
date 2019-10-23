@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import PoweredBy from '../../components/PoweredBy/PoweredBy';
 import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
@@ -49,12 +51,12 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @param {PoweredByWidgetOptions} $0 PoweredBy widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new poweredBy widget instance
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.poweredBy({
  *     container: '#poweredBy-container',
  *     theme: 'dark',
  *   })
- * );
+ * ]);
  */
 export default function poweredBy({
   container,
@@ -83,7 +85,7 @@ export default function poweredBy({
   });
 
   const makeWidget = connectPoweredBy(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ theme });

@@ -1,22 +1,33 @@
+import { Index } from '../widgets/index/index';
 import {
-  Helper,
-  SearchResults,
-  InstantSearch,
+  AlgoliaSearchHelper as Helper,
   SearchParameters,
-} from './instantsearch';
+  SearchResults,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
+import { InstantSearch } from './instantsearch';
 
-interface InitOptions {
+export interface InitOptions {
   instantSearchInstance: InstantSearch;
+  parent: Index | null;
+  uiState: UiState;
   state: SearchParameters;
   helper: Helper;
   templatesConfig: object;
   createURL(state: SearchParameters): string;
 }
 
-interface RenderOptions {
+export interface ScopedResult {
+  indexId: string;
+  results: SearchResults;
+  helper: Helper;
+}
+
+export interface RenderOptions {
   instantSearchInstance: InstantSearch;
   templatesConfig: object;
   results: SearchResults;
+  scopedResults: ScopedResult[];
   state: SearchParameters;
   helper: Helper;
   searchMetadata: {
@@ -25,12 +36,21 @@ interface RenderOptions {
   createURL(state: SearchParameters): string;
 }
 
-interface DisposeOptions {
+export interface DisposeOptions {
   helper: Helper;
   state: SearchParameters;
 }
 
-export type UiState = {
+export interface WidgetStateOptions {
+  searchParameters: SearchParameters;
+  helper: Helper;
+}
+
+export interface WidgetSearchParametersOptions {
+  uiState: IndexUiState;
+}
+
+export type IndexUiState = {
   query?: string;
   refinementList?: {
     [attribute: string]: string[];
@@ -83,27 +103,87 @@ export type UiState = {
   sortBy?: string;
   page?: number;
   hitsPerPage?: number;
+  configure?: PlainSearchParameters;
+  places?: {
+    query: string;
+    /**
+     * The central geolocation.
+     *
+     * @example '48.8546,2.3477'
+     */
+    position: string;
+  };
 };
 
+export type UiState = {
+  [indexId: string]: IndexUiState;
+};
+
+/**
+ * Widgets are the building blocks of InstantSearch.js. Any valid widget must
+ * have at least a `render` or a `init` function.
+ */
 export interface Widget {
+  $$type?:
+    | 'ais.autocomplete'
+    | 'ais.breadcrumb'
+    | 'ais.clearRefinements'
+    | 'ais.configure'
+    | 'ais.currentRefinements'
+    | 'ais.geoSearch'
+    | 'ais.hierarchicalMenu'
+    | 'ais.hits'
+    | 'ais.hitsPerPage'
+    | 'ais.index'
+    | 'ais.infiniteHits'
+    | 'ais.menu'
+    | 'ais.numericMenu'
+    | 'ais.pagination'
+    | 'ais.places'
+    | 'ais.poweredBy'
+    | 'ais.queryRules'
+    | 'ais.range'
+    | 'ais.ratingMenu'
+    | 'ais.refinementList'
+    | 'ais.searchBox'
+    | 'ais.sortBy'
+    | 'ais.stats'
+    | 'ais.toggleRefinement'
+    | 'ais.voiceSearch';
+  /**
+   * Called once before the first search
+   */
   init?(options: InitOptions): void;
+  /**
+   * Called after each search response has been received
+   */
   render?(options: RenderOptions): void;
+  /**
+   * Called when this widget is unmounted. Used to remove refinements set by
+   * during this widget's initialization and life time.
+   */
   dispose?(options: DisposeOptions): SearchParameters | void;
-  getConfiguration?(
-    previousConfiguration?: Partial<SearchParameters>
-  ): Partial<SearchParameters>;
+  /**
+   * This function is required for a widget to be taken in account for routing.
+   * It will derive a uiState for this widget based on the existing uiState and
+   * the search parameters applied.
+   * @param uiState current state
+   * @param widgetStateOptions extra information to calculate uiState
+   */
   getWidgetState?(
-    uiState: UiState,
-    widgetStateOptions: {
-      searchParameters: SearchParameters;
-      helper: Helper;
-    }
-  ): UiState;
+    uiState: IndexUiState,
+    widgetStateOptions: WidgetStateOptions
+  ): IndexUiState;
+  /**
+   * This function is required for a widget to behave correctly when a URL is
+   * loaded via e.g. routing. It receives the current UiState and applied search
+   * parameters, and is expected to return a new search parameters.
+   * @param state applied search parameters
+   * @param widgetSearchParametersOptions extra information to calculate next searchParameters
+   */
   getWidgetSearchParameters?(
     state: SearchParameters,
-    widgetSearchParametersOptions: {
-      uiState: UiState;
-    }
+    widgetSearchParametersOptions: WidgetSearchParametersOptions
   ): SearchParameters;
 }
 

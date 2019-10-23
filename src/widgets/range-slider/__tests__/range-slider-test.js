@@ -1,9 +1,9 @@
-import { render } from 'preact-compat';
-import AlgoliasearchHelper from 'algoliasearch-helper';
+import { render } from 'preact';
+import AlgoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import rangeSlider from '../range-slider';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -57,8 +57,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       widget.init({ helper, instantSearchInstance });
       widget.render({ results: [], helper });
 
+      const [firstRender] = render.mock.calls;
+
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     describe('min option', () => {
@@ -70,27 +72,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attribute],
-          numericRefinements: { [attribute]: { '>=': [100] } },
-        });
-      });
 
-      it('does not refine when previous configuration', () => {
-        widget = rangeSlider({
-          container,
-          attribute: 'aNumAttr',
-          min: 100,
-          step: 1,
-          cssClasses: { root: '' },
-        });
         expect(
-          widget.getConfiguration({
-            numericRefinements: { [attribute]: {} },
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
           })
-        ).toEqual({
-          disjunctiveFacets: [attribute],
-        });
+        ).toEqual(
+          new SearchParameters({
+            disjunctiveFacets: [attribute],
+            numericRefinements: { [attribute]: { '>=': [100] } },
+          })
+        );
       });
 
       it('works along with max option', () => {
@@ -102,15 +94,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attribute],
-          numericRefinements: {
-            [attribute]: {
-              '>=': [100],
-              '<=': [200],
+
+        expect(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        ).toEqual(
+          new SearchParameters({
+            disjunctiveFacets: [attribute],
+            numericRefinements: {
+              [attribute]: {
+                '>=': [100],
+                '<=': [200],
+              },
             },
-          },
-        });
+          })
+        );
       });
 
       it('sets the right range', () => {
@@ -122,12 +121,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        helper.setState(widget.getConfiguration());
+
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        );
         widget.init({ helper, instantSearchInstance });
         widget.render({ results: {}, helper });
 
+        const [firstRender] = render.mock.calls;
+
         expect(render).toHaveBeenCalledTimes(1);
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(firstRender[0].props).toMatchSnapshot();
       });
 
       it('will use the results max when only min passed', () => {
@@ -142,7 +148,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
             },
           ],
         };
-
         widget = rangeSlider({
           container,
           attribute,
@@ -150,13 +155,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        helper.setState(widget.getConfiguration());
+
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        );
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
+        const [firstRender] = render.mock.calls;
+
         expect(render).toHaveBeenCalledTimes(1);
-        expect(render.mock.calls[0][0].props.max).toEqual(5000);
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(firstRender[0].props.max).toEqual(5000);
+        expect(firstRender[0].props).toMatchSnapshot();
       });
     });
 
@@ -169,27 +181,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attribute],
-          numericRefinements: { [attribute]: { '<=': [100] } },
-        });
-      });
 
-      it('does not refine when previous configuration', () => {
-        widget = rangeSlider({
-          container,
-          attribute,
-          max: 100,
-          step: 1,
-          cssClasses: { root: '' },
-        });
         expect(
-          widget.getConfiguration({
-            numericRefinements: { [attribute]: {} },
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
           })
-        ).toEqual({
-          disjunctiveFacets: [attribute],
-        });
+        ).toEqual(
+          new SearchParameters({
+            disjunctiveFacets: [attribute],
+            numericRefinements: { [attribute]: { '<=': [100] } },
+          })
+        );
       });
 
       it('will use the results min when only max is passed', () => {
@@ -212,13 +214,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           step: 1,
           cssClasses: { root: '' },
         });
-        helper.setState(widget.getConfiguration());
+        helper.setState(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        );
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
 
+        const [firstRender] = render.mock.calls;
+
         expect(render).toHaveBeenCalledTimes(1);
-        expect(render.mock.calls[0][0].props.min).toEqual(1);
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
+        expect(firstRender[0].props.min).toEqual(1);
+        expect(firstRender[0].props).toMatchSnapshot();
       });
     });
 
@@ -250,18 +258,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       });
 
       it('configures the disjunctiveFacets', () => {
-        expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attribute],
-        });
+        expect(
+          widget.getWidgetSearchParameters(new SearchParameters(), {
+            uiState: {},
+          })
+        ).toEqual(
+          new SearchParameters({
+            disjunctiveFacets: ['aNumAttr'],
+            // @TODO: gWSP does not yet take min & max in account (so is this correct?)
+            numericRefinements: {
+              aNumAttr: {},
+            },
+          })
+        );
       });
 
       it('calls twice render', () => {
         widget.render({ results, helper });
         widget.render({ results, helper });
 
+        const [firstRender, secondRender] = render.mock.calls;
+
         expect(render).toHaveBeenCalledTimes(2);
-        expect(render.mock.calls[0][0]).toMatchSnapshot();
-        expect(render.mock.calls[1][0]).toMatchSnapshot();
+        expect(firstRender[0].props).toMatchSnapshot();
+        expect(secondRender[0].props).toMatchSnapshot();
       });
 
       it('does not call the refinement functions if not refined', () => {
@@ -330,7 +350,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         widget.render({ results, helper });
 
-        expect(render.mock.calls[0][0].props.values[0]).toBe(5000);
+        const [firstRender] = render.mock.calls;
+
+        expect(firstRender[0].props.values[0]).toBe(5000);
       });
 
       it("expect to clamp the max value to the min range when it's lower than range", () => {
@@ -348,7 +370,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
 
         widget.render({ results, helper });
 
-        expect(render.mock.calls[0][0].props.values[1]).toBe(1);
+        const [firstRender] = render.mock.calls;
+
+        expect(firstRender[0].props.values[1]).toBe(1);
       });
     });
   });

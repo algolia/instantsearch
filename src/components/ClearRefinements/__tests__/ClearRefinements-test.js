@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import ClearRefinements from '../ClearRefinements';
 import { mount } from 'enzyme';
 

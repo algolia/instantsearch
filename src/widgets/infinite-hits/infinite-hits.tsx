@@ -1,15 +1,15 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
+import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
-import defaultTemplates from './defaultTemplates';
 import connectInfiniteHits, {
   InfiniteHitsRenderer,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
   getContainerNode,
-  warning,
-  createDocumentationLink,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
@@ -19,8 +19,8 @@ import {
   Template,
   Hit,
   InsightsClientWrapper,
-  SearchResults,
 } from '../../types';
+import defaultTemplates from './defaultTemplates';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -178,17 +178,6 @@ const infiniteHits: InfiniteHits = (
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  warning(
-    // @ts-ignore: We have this specific check because unlike `hits`, `infiniteHits` does not support
-    // the `allItems` template. This can be misleading as they are very similar.
-    typeof templates.allItems === 'undefined',
-    `The template \`allItems\` does not exist since InstantSearch.js 3.
-
- You may want to migrate using \`connectInfiniteHits\`: ${createDocumentationLink(
-   { name: 'infinite-hits', connector: true }
- )}.`
-  );
-
   const containerNode = getContainerNode(container);
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
@@ -220,7 +209,7 @@ const infiniteHits: InfiniteHits = (
 
   const makeInfiniteHits = withInsights(connectInfiniteHits)(
     specializedRenderer,
-    () => unmountComponentAtNode(containerNode)
+    () => render(null, containerNode)
   );
 
   return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });

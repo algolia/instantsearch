@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import Template from '../Template/Template';
 
 import { VoiceSearchTemplates } from '../../widgets/voice-search/voice-search';
@@ -30,7 +32,7 @@ const VoiceSearch = ({
   toggleListening,
   voiceListeningState,
   templates,
-}: VoiceSearchProps): React.ReactNode => {
+}: VoiceSearchProps) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>): void => {
     event.currentTarget.blur();
     toggleListening();

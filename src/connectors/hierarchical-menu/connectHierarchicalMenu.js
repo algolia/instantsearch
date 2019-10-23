@@ -3,7 +3,6 @@ import {
   warning,
   createDocumentationMessageGenerator,
   isEqual,
-  find,
   noop,
 } from '../../lib/utils';
 
@@ -94,6 +93,8 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     const [hierarchicalFacetName] = attributes;
 
     return {
+      $$type: 'ais.hierarchicalMenu',
+
       isShowingMore: false,
 
       // Provide the same function to the `renderFn` so that way the user
@@ -112,56 +113,6 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
 
       getLimit() {
         return this.isShowingMore ? showMoreLimit : limit;
-      },
-
-      getConfiguration(currentConfiguration) {
-        if (currentConfiguration.hierarchicalFacets) {
-          const isFacetSet = find(
-            currentConfiguration.hierarchicalFacets,
-            ({ name }) => name === hierarchicalFacetName
-          );
-
-          const isAttributesEqual =
-            isFacetSet && isEqual(isFacetSet.attributes, attributes);
-          const isSeparatorEqual =
-            isFacetSet && isFacetSet.separator === separator;
-          const isRootPathEqual =
-            isFacetSet && isFacetSet.rootPath === rootPath;
-
-          const isHierarchicalOptionsEqual =
-            isAttributesEqual && isSeparatorEqual && isRootPathEqual;
-
-          if (isFacetSet && !isHierarchicalOptionsEqual) {
-            warning(
-              false,
-              'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
-            );
-
-            return {};
-          }
-        }
-
-        const widgetConfiguration = {
-          hierarchicalFacets: [
-            {
-              name: hierarchicalFacetName,
-              attributes,
-              separator,
-              rootPath,
-              showParentLevel,
-            },
-          ],
-        };
-
-        const currentMaxValuesPerFacet =
-          currentConfiguration.maxValuesPerFacet || 0;
-
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        return widgetConfiguration;
       },
 
       init({ helper, createURL, instantSearchInstance }) {
@@ -225,9 +176,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           );
         }
 
-        const maxValuesPerFacetConfig = state.getQueryParameter(
-          'maxValuesPerFacet'
-        );
+        const maxValuesPerFacetConfig = state.maxValuesPerFacet;
         const currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
         // if the facets are exhaustive. The only moment we are sure it is exhaustive
@@ -258,37 +207,25 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         );
       },
 
+      // eslint-disable-next-line valid-jsdoc
+      /**
+       * @param {Object} param0
+       * @param {import('algoliasearch-helper').SearchParameters} param0.state
+       */
       dispose({ state }) {
-        // unmount widget from DOM
         unmountFn();
 
-        // compute nextState for the search
-        let nextState = state;
-
-        if (state.isHierarchicalFacetRefined(hierarchicalFacetName)) {
-          nextState = state.removeHierarchicalFacetRefinement(
-            hierarchicalFacetName
-          );
-        }
-
-        nextState = nextState.removeHierarchicalFacet(hierarchicalFacetName);
-
-        if (nextState.maxValuesPerFacet === limit) {
-          nextState.setQueryParameters('maxValuesPerFacet', undefined);
-        }
-
-        return nextState;
+        return state
+          .removeHierarchicalFacet(hierarchicalFacetName)
+          .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
         const path = searchParameters.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );
-        if (!path || path.length === 0) return uiState;
-        if (
-          uiState.hierarchicalMenu &&
-          isEqual(path, uiState.hierarchicalMenu[hierarchicalFacetName])
-        ) {
+
+        if (!path.length) {
           return uiState;
         }
 
@@ -302,19 +239,59 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (
+        const values =
           uiState.hierarchicalMenu &&
-          uiState.hierarchicalMenu[hierarchicalFacetName]
-        ) {
-          return searchParameters
-            .clearRefinements(hierarchicalFacetName)
-            .toggleRefinement(
-              hierarchicalFacetName,
-              uiState.hierarchicalMenu[hierarchicalFacetName].join(separator)
-            );
-        } else {
-          return searchParameters;
+          uiState.hierarchicalMenu[hierarchicalFacetName];
+
+        if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
+          const facet = searchParameters.getHierarchicalFacetByName(
+            hierarchicalFacetName
+          );
+
+          warning(
+            isEqual(facet.attributes, attributes) &&
+              facet.separator === separator &&
+              facet.rootPath === rootPath,
+            'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
+          );
         }
+
+        const withFacetConfiguration = searchParameters
+          .removeHierarchicalFacet(hierarchicalFacetName)
+          .addHierarchicalFacet({
+            name: hierarchicalFacetName,
+            attributes,
+            separator,
+            rootPath,
+            showParentLevel,
+          });
+
+        const currentMaxValuesPerFacet =
+          withFacetConfiguration.maxValuesPerFacet || 0;
+
+        const nextMaxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+          'maxValuesPerFacet',
+          nextMaxValuesPerFacet
+        );
+
+        if (!values) {
+          return withMaxValuesPerFacet.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withMaxValuesPerFacet.hierarchicalFacetsRefinements,
+              [hierarchicalFacetName]: [],
+            },
+          });
+        }
+
+        return withMaxValuesPerFacet.addHierarchicalFacetRefinement(
+          hierarchicalFacetName,
+          values.join(separator)
+        );
       },
     };
   };

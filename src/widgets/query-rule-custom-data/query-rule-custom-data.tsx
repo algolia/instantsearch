@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import {
   getContainerNode,
@@ -79,7 +81,7 @@ const queryRuleCustomData: QueryRuleCustomData = (
 
   const containerNode = getContainerNode(container);
   const makeQueryRuleCustomData = connectQueryRules(renderer, () => {
-    unmountComponentAtNode(containerNode);
+    render(null, containerNode);
   });
 
   return makeQueryRuleCustomData({

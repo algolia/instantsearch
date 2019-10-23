@@ -1,7 +1,12 @@
-import { Hits, InstantSearch, SearchResults } from './instantsearch';
+import { SearchResults } from 'algoliasearch-helper';
+import { Hits, InstantSearch } from './instantsearch';
 import { InsightsClient } from './insights';
 
-export type RenderOptions<TWidgetParams = unknown> = {
+export type RendererOptions<TWidgetParams = unknown> = {
+  /**
+   * Original parameters for this widget.
+   * Useful for giving back the render parameters to the renderer.
+   */
   widgetParams: TWidgetParams;
   instantSearchInstance: InstantSearch;
   results?: SearchResults;
@@ -9,7 +14,7 @@ export type RenderOptions<TWidgetParams = unknown> = {
   insights?: InsightsClient;
 };
 
-export type Renderer<TRenderOptions extends RenderOptions = any> = (
+export type Renderer<TRenderOptions extends RendererOptions = any> = (
   renderOptions: TRenderOptions,
   isFirstRender: boolean
 ) => void;

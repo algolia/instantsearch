@@ -1,16 +1,17 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import numericMenu from '../numeric-menu';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
   return module;
 });
-
-const encodeValue = (start, end) =>
-  window.encodeURI(JSON.stringify({ start, end }));
 
 describe('Usage', () => {
   it('throws without container', () => {
@@ -52,25 +53,18 @@ describe('numericMenu()', () => {
       items,
       cssClasses: { root: ['root', 'cx'] },
     });
-    helper = {
-      state: {
-        getNumericRefinements: jest.fn().mockReturnValue([]),
-      },
-      addNumericRefinement: jest.fn(),
-      search: jest.fn(),
-      setState: jest.fn().mockReturnThis(),
-    };
-    state = {
-      getNumericRefinements: jest.fn().mockReturnValue([]),
-      clearRefinements: jest.fn().mockReturnThis(),
-      addNumericRefinement: jest.fn().mockReturnThis(),
-    };
-    results = {
-      hits: [],
-    };
 
-    helper.state.clearRefinements = jest.fn().mockReturnValue(helper.state);
-    helper.state.addNumericRefinement = jest.fn().mockReturnValue(helper.state);
+    helper = algoliasearchHelper(
+      {},
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+    );
+
+    jest.spyOn(helper, 'search');
+
+    state = helper.state;
+    results = new SearchResults(helper.state, [{ nbHits: 0 }]);
+
     createURL = () => '#';
     widget.init({ helper, instantSearchInstance: {} });
   });
@@ -79,11 +73,13 @@ describe('numericMenu()', () => {
     widget.render({ state, results, createURL });
     widget.render({ state, results, createURL });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('renders with transformed items', () => {
@@ -98,102 +94,40 @@ describe('numericMenu()', () => {
     widget.init({ helper, instantSearchInstance: {} });
     widget.render({ state, results, createURL });
 
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-  });
+    const [firstRender] = render.mock.calls;
 
-  it("doesn't call the refinement functions if not refined", () => {
-    widget.render({ state, results, createURL });
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
-      0,
-      'clearRefinements called one'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      0,
-      'addNumericRefinement never called'
-    );
-    expect(helper.search).toHaveBeenCalledTimes(0, 'search never called');
-  });
-
-  it('calls the refinement functions if refined with "4"', () => {
-    widget._refine(encodeValue(4, 4));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'addNumericRefinement called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '=',
-      4
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
-  });
-
-  it('calls the refinement functions if refined with "between 5 and 10"', () => {
-    widget._refine(encodeValue(5, 10));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      2,
-      'addNumericRefinement called twice'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '>=',
-      5
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      2,
-      'price',
-      '<=',
-      10
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
-  });
-
-  it('calls two times the refinement functions if refined with "less than 4"', () => {
-    widget._refine(encodeValue(undefined, 4));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'addNumericRefinement called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '<=',
-      4
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
-  });
-
-  it('calls two times the refinement functions if refined with "more than 10"', () => {
-    widget._refine(encodeValue(10));
-    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
-      1,
-      'clearRefinements called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
-      1,
-      'addNumericRefinement called once'
-    );
-    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
-      1,
-      'price',
-      '>=',
-      10
-    );
-    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
+    expect(firstRender[0].props.facetValues).toEqual([
+      {
+        isRefined: true,
+        label: 'All',
+        transformed: true,
+        value: '%7B%7D',
+      },
+      {
+        isRefined: false,
+        label: 'less than 4',
+        transformed: true,
+        value: '%7B%22end%22:4%7D',
+      },
+      {
+        isRefined: false,
+        label: '4',
+        transformed: true,
+        value: '%7B%22start%22:4,%22end%22:4%7D',
+      },
+      {
+        isRefined: false,
+        label: 'between 5 and 10',
+        transformed: true,
+        value: '%7B%22start%22:5,%22end%22:10%7D',
+      },
+      {
+        isRefined: false,
+        label: 'more than 10',
+        transformed: true,
+        value: '%7B%22start%22:10%7D',
+      },
+    ]);
   });
 
   it('does not alter the initial items when rendering', () => {

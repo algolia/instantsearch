@@ -1,4 +1,6 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import PropTypes from 'prop-types';
 
 const GeoSearchToggle = ({

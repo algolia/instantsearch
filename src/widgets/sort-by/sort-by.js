@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectSortBy from '../../connectors/sort-by/connectSortBy';
@@ -64,7 +66,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  * @param {SortByWidgetOptions} $0 Options for the SortBy widget
  * @return {Widget} Creates a new instance of the SortBy widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.sortBy({
  *     container: '#sort-by-container',
  *     items: [
@@ -73,7 +75,7 @@ const renderer = ({ containerNode, cssClasses }) => (
  *       {value: 'instant_search_price_desc', label: 'Highest price'}
  *     ]
  *   })
- * );
+ * ]);
  */
 export default function sortBy({
   container,
@@ -99,7 +101,7 @@ export default function sortBy({
   });
 
   const makeWidget = connectSortBy(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ items, transformItems });

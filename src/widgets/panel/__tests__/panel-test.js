@@ -1,11 +1,10 @@
-import { render, unmountComponentAtNode } from 'preact-compat';
+import { render } from 'preact';
 import panel from '../panel';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
-  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -159,7 +158,6 @@ describe('Templates', () => {
 describe('Lifecycle', () => {
   beforeEach(() => {
     render.mockClear();
-    unmountComponentAtNode.mockClear();
   });
 
   test('calls the inner widget lifecycle', () => {

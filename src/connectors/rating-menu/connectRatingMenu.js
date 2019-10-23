@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  range,
   noop,
 } from '../../lib/utils';
 
@@ -85,13 +86,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customStarRating = instantsearch.connectors.connectRatingMenu(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customStarRating({
  *     containerNode: $('#custom-rating-menu-container'),
  *     attribute: 'rating',
  *     max: 5,
  *   })
- * );
+ * ]);
  */
 export default function connectRatingMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -104,9 +105,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     }
 
     return {
-      getConfiguration() {
-        return { disjunctiveFacets: [attribute] };
-      },
+      $$type: 'ais.ratingMenu',
 
       init({ helper, createURL, instantSearchInstance }) {
         this._toggleRefinement = this._toggleRefinement.bind(this, helper);
@@ -132,7 +131,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         for (let v = max; v >= 0; --v) {
           allValues[v] = 0;
         }
-        results.getFacetValues(attribute).forEach(facet => {
+        (results.getFacetValues(attribute) || []).forEach(facet => {
           const val = Math.round(facet.name);
           if (!val || val > max) {
             return;
@@ -178,56 +177,53 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeDisjunctiveFacetRefinement(attribute)
-          .removeDisjunctiveFacet(attribute);
-
-        return nextState;
+        return state.removeDisjunctiveFacet(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const refinedStar = this._getRefinedStar(searchParameters);
-        if (
-          refinedStar === undefined ||
-          (uiState &&
-            uiState.ratingMenu &&
-            uiState.ratingMenu[attribute] === refinedStar)
-        )
+        const value = this._getRefinedStar(searchParameters);
+
+        if (typeof value !== 'number') {
           return uiState;
+        }
+
         return {
           ...uiState,
           ratingMenu: {
             ...uiState.ratingMenu,
-            [attribute]: refinedStar,
+            [attribute]: value,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const starRatingFromURL =
-          uiState.ratingMenu && uiState.ratingMenu[attribute];
-        const refinedStar = this._getRefinedStar(searchParameters);
+        const value = uiState.ratingMenu && uiState.ratingMenu[attribute];
 
-        if (starRatingFromURL === refinedStar) return searchParameters;
+        const withoutRefinements = searchParameters.clearRefinements(attribute);
+        const withDisjunctiveFacet = withoutRefinements.addDisjunctiveFacet(
+          attribute
+        );
 
-        let clearedSearchParam = searchParameters.clearRefinements(attribute);
-
-        if (starRatingFromURL !== undefined) {
-          for (let val = Number(starRatingFromURL); val <= max; ++val) {
-            clearedSearchParam = clearedSearchParam.addDisjunctiveFacetRefinement(
-              attribute,
-              val
-            );
-          }
+        if (!value) {
+          return withDisjunctiveFacet.setQueryParameters({
+            disjunctiveFacetsRefinements: {
+              ...withDisjunctiveFacet.disjunctiveFacetsRefinements,
+              [attribute]: [],
+            },
+          });
         }
 
-        return clearedSearchParam;
+        return range({ start: Number(value), end: max + 1 }).reduce(
+          (parameters, number) =>
+            parameters.addDisjunctiveFacetRefinement(attribute, number),
+          withDisjunctiveFacet
+        );
       },
 
       _toggleRefinement(helper, facetValue) {
         const isRefined =
           this._getRefinedStar(helper.state) === Number(facetValue);
-        helper.clearRefinements(attribute);
+        helper.removeDisjunctiveFacetRefinement(attribute);
         if (!isRefined) {
           for (let val = Number(facetValue); val <= max; ++val) {
             helper.addDisjunctiveFacetRefinement(attribute, val);
@@ -236,17 +232,14 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         helper.search();
       },
 
-      _getRefinedStar(searchParameters) {
-        let refinedStar = undefined;
-        const refinements = searchParameters.getDisjunctiveRefinements(
-          attribute
-        );
-        refinements.forEach(r => {
-          if (!refinedStar || Number(r) < refinedStar) {
-            refinedStar = Number(r);
-          }
-        });
-        return refinedStar;
+      _getRefinedStar(state) {
+        const refinements = state.getDisjunctiveRefinements(attribute);
+
+        if (!refinements.length) {
+          return undefined;
+        }
+
+        return Math.min(...refinements.map(Number));
       },
     };
   };

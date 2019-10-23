@@ -1,7 +1,10 @@
-import React from 'react';
-import { mount } from 'enzyme';
+/** @jsx h */
+
+import { h } from 'preact';
+import { render } from '@testing-library/preact';
+import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../InfiniteHits';
-import { Hits, SearchResults } from '../../../types';
+import { Hits } from '../../../types';
 
 describe('InfiniteHits', () => {
   const cssClasses = {
@@ -49,9 +52,9 @@ describe('InfiniteHits', () => {
         cssClasses,
       };
 
-      const tree = mount(<InfiniteHits {...props} />);
+      const { container } = render(<InfiniteHits {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('should render <InfiniteHits /> on last page', () => {
@@ -87,9 +90,9 @@ describe('InfiniteHits', () => {
         cssClasses,
       };
 
-      const tree = mount(<InfiniteHits {...props} />);
+      const { container } = render(<InfiniteHits {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('should render <InfiniteHits /> without hits on first page', () => {
@@ -114,9 +117,9 @@ describe('InfiniteHits', () => {
         cssClasses,
       };
 
-      const tree = mount(<InfiniteHits {...props} />);
+      const { container } = render(<InfiniteHits {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('should render <InfiniteHits /> without hits on last page', () => {
@@ -141,9 +144,9 @@ describe('InfiniteHits', () => {
         cssClasses,
       };
 
-      const tree = mount(<InfiniteHits {...props} />);
+      const { container } = render(<InfiniteHits {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('should render <InfiniteHits /> with "Show previous" button on first page', () => {
@@ -179,14 +182,14 @@ describe('InfiniteHits', () => {
         cssClasses,
       };
 
-      const tree = mount(<InfiniteHits {...props} />);
+      const { container } = render(<InfiniteHits {...props} />);
 
-      const previousButton = tree.find('.loadPrevious');
+      const previousButton = container.querySelector('.loadPrevious');
 
-      expect(previousButton.exists()).toEqual(true);
-      expect(previousButton.hasClass('disabledLoadPrevious')).toEqual(true);
-      expect(previousButton.props().disabled).toEqual(true);
-      expect(tree).toMatchSnapshot();
+      expect(previousButton).toBeInTheDocument();
+      expect(previousButton).toHaveClass('disabledLoadPrevious');
+      expect(previousButton).toBeDisabled();
+      expect(container).toMatchSnapshot();
     });
 
     it('should render <InfiniteHits /> with "Show previous" button on last page', () => {
@@ -222,14 +225,14 @@ describe('InfiniteHits', () => {
         cssClasses,
       };
 
-      const tree = mount(<InfiniteHits {...props} />);
+      const { container } = render(<InfiniteHits {...props} />);
 
-      const previousButton = tree.find('.loadPrevious');
+      const previousButton = container.querySelector('.loadPrevious');
 
-      expect(previousButton.exists()).toEqual(true);
-      expect(previousButton.hasClass('disabledLoadPrevious')).toEqual(false);
-      expect(previousButton.props().disabled).toEqual(false);
-      expect(tree).toMatchSnapshot();
+      expect(previousButton).toBeInTheDocument();
+      expect(previousButton).not.toHaveClass('disabledLoadPrevious');
+      expect(previousButton).not.toBeDisabled();
+      expect(container).toMatchSnapshot();
     });
   });
 });

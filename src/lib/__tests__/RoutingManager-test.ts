@@ -1,19 +1,12 @@
 /* globals jsdom */
+
 import qs from 'qs';
-import instantsearch from '../main';
-import RoutingManager from '../RoutingManager';
+import { createSearchClient } from '../../../test/mock/createSearchClient';
+import { createWidget } from '../../../test/mock/createWidget';
+import { runAllMicroTasks } from '../../../test/utils/runAllMicroTasks';
+import { Router, Widget, UiState, StateMapping, RouteState } from '../../types';
 import historyRouter from '../routers/history';
-import { Router, Widget, StateMapping, RouteState } from '../../types';
-
-const runAllMicroTasks = (): Promise<any> => new Promise(setImmediate);
-
-type FakeSearchClient = {
-  search: (query: string) => Promise<{ results: object[] }>;
-};
-
-const createFakeSearchClient = (): FakeSearchClient => ({
-  search: () => Promise.resolve({ results: [{}] }),
-});
+import instantsearch from '../main';
 
 const createFakeRouter = (args: Partial<Router> = {}): Router => ({
   onUpdate(..._args) {},
@@ -78,224 +71,50 @@ const createFakeHistory = (
   };
 };
 
-const createFakeSearchBox = (): Widget => ({
-  render({ helper }) {
-    (this as any).refine = (value: string) => {
-      helper.setQuery(value).search();
-    };
-  },
-  dispose({ state }) {
-    return state.setQuery('');
-  },
-  getWidgetSearchParameters(searchParameters, { uiState }) {
-    return searchParameters.setQuery(uiState.query || '');
-  },
-  getWidgetState(uiState, { searchParameters }) {
-    return {
-      ...uiState,
-      query: searchParameters.query,
-    };
-  },
-});
+const createFakeSearchBox = (): Widget =>
+  createWidget({
+    render({ helper }) {
+      (this as any).refine = (value: string) => {
+        helper.setQuery(value).search();
+      };
+    },
+    dispose({ state }) {
+      return state.setQuery('');
+    },
+    getWidgetSearchParameters(searchParameters, { uiState }) {
+      return searchParameters.setQuery(uiState.query || '');
+    },
+    getWidgetState(uiState, { searchParameters }) {
+      return {
+        ...uiState,
+        query: searchParameters.query,
+      };
+    },
+  });
 
-const createFakeHitsPerPage = (): Widget => ({
-  render() {},
-  dispose({ state }) {
-    return state;
-  },
-  getWidgetSearchParameters(parameters) {
-    return parameters;
-  },
-  getWidgetState(uiState) {
-    return uiState;
-  },
-});
+const createFakeHitsPerPage = (): Widget =>
+  createWidget({
+    dispose({ state }) {
+      return state;
+    },
+    getWidgetSearchParameters(parameters) {
+      return parameters;
+    },
+    getWidgetState(uiState) {
+      return uiState;
+    },
+  });
 
 describe('RoutingManager', () => {
-  const defaultRouter: Router = {
-    onUpdate: (..._args) => {},
-    read: () => ({}),
-    write: () => {},
-    createURL: () => '#',
-    dispose: () => {},
-  };
-
-  describe('getAllUiStates', () => {
-    test('reads the state of widgets with a getWidgetState implementation', () => {
-      const searchClient = createFakeSearchClient();
-      const search = instantsearch({
-        indexName: '',
-        searchClient,
-      });
-
-      const widgetState = {
-        query: 'query',
-      };
-      const widget = {
-        render: () => {},
-        getWidgetState: jest.fn(() => widgetState),
-      };
-      search.addWidget(widget);
-
-      const actualInitialState = {
-        query: 'query',
-      };
-
-      search.start();
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => actualInitialState,
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const uiStates = router.getAllUiStates({
-        searchParameters: search.helper.state,
-      });
-      expect(uiStates).toEqual(widgetState);
-
-      expect(widget.getWidgetState).toHaveBeenCalledTimes(1);
-      expect(widget.getWidgetState).toHaveBeenCalledWith(
-        {},
-        {
-          helper: search.helper,
-          searchParameters: search.helper.state,
-        }
-      );
-    });
-
-    test('Does not read UI state from widgets without an implementation of getWidgetState', () => {
-      const searchClient = createFakeSearchClient();
-      const search = instantsearch({
-        indexName: '',
-        searchClient,
-      });
-
-      search.addWidget({
-        render: () => {},
-      });
-
-      search.start();
-
-      const actualInitialState = {
-        query: 'query',
-      };
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => actualInitialState,
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const uiStates = router.getAllUiStates({
-        searchParameters: search.helper.state,
-      });
-      expect(uiStates).toEqual({});
-    });
-  });
-
-  describe('getAllSearchParameters', () => {
-    test('should get searchParameters from widget that implements getWidgetSearchParameters', () => {
-      const searchClient = createFakeSearchClient();
-      const search = instantsearch({
-        indexName: '',
-        searchClient,
-      });
-
-      const widget = {
-        render: () => {},
-        getWidgetSearchParameters: jest.fn(sp => sp.setQuery('test')),
-      };
-      search.addWidget(widget);
-
-      const actualInitialState = {
-        query: 'query',
-      };
-
-      search.start();
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => actualInitialState,
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const searchParameters = router.getAllSearchParameters({
-        currentSearchParameters: search.helper.state,
-        uiState: {},
-      });
-      expect(searchParameters).toEqual(search.helper.state.setQuery('test'));
-
-      expect(widget.getWidgetSearchParameters).toHaveBeenCalledTimes(1);
-      expect(widget.getWidgetSearchParameters).toHaveBeenCalledWith(
-        search.helper.state,
-        {
-          uiState: {},
-        }
-      );
-    });
-
-    test('should not change the searchParameters if no widget has a getWidgetSearchParameters', () => {
-      const searchClient = createFakeSearchClient();
-      const search = instantsearch({
-        indexName: '',
-        searchClient,
-      });
-
-      const widget = {
-        render: () => {},
-      };
-      search.addWidget(widget);
-
-      search.start();
-
-      const router = new RoutingManager({
-        instantSearchInstance: search,
-        stateMapping: createFakeStateMapping({}),
-        router: {
-          ...defaultRouter,
-          read: () => ({}),
-        },
-      });
-
-      // @ts-ignore: This method is considered private but we still use it
-      // in the test after the TypeScript migration.
-      // In a next refactor, we can consider changing this test implementation.
-      const searchParameters = router.getAllSearchParameters({
-        currentSearchParameters: search.helper.state,
-        uiState: {},
-      });
-      expect(searchParameters).toEqual(search.helper.state);
-    });
-  });
-
   describe('within instantsearch', () => {
     test('should write in the router on searchParameters change', done => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const router = createFakeRouter({
         write: jest.fn(),
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           router,
@@ -308,9 +127,12 @@ describe('RoutingManager', () => {
           ...uiState,
           q: searchParameters.query,
         })),
-        getWidgetSearchParameters: jest.fn(),
+        getWidgetSearchParameters: jest.fn(
+          searchParameters => searchParameters
+        ),
       };
-      search.addWidget(widget);
+
+      search.addWidgets([widget]);
 
       search.start();
 
@@ -321,11 +143,13 @@ describe('RoutingManager', () => {
 
         expect(router.write).toHaveBeenCalledTimes(0);
 
-        search.helper.setQuery('q'); // routing write updates on change
+        search.mainIndex.getHelper()!.setQuery('q'); // routing write updates on change
 
         expect(router.write).toHaveBeenCalledTimes(1);
         expect(router.write).toHaveBeenCalledWith({
-          q: 'q',
+          indexName: {
+            q: 'q',
+          },
         });
 
         done();
@@ -333,9 +157,9 @@ describe('RoutingManager', () => {
     });
 
     test('should update the searchParameters on router state update', done => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
 
-      let onRouterUpdateCallback: (args: object) => void;
+      let onRouterUpdateCallback: (args: UiState) => void;
       const router = createFakeRouter({
         onUpdate: fn => {
           onRouterUpdateCallback = fn;
@@ -343,7 +167,7 @@ describe('RoutingManager', () => {
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           router,
@@ -353,34 +177,37 @@ describe('RoutingManager', () => {
       const widget = {
         render: jest.fn(),
         getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) =>
-          searchParameters.setQuery(uiState.q)
+          searchParameters.setQuery(uiState.query)
         ),
       };
-      search.addWidget(widget);
+
+      search.addWidgets([widget]);
 
       search.start();
 
       search.once('render', () => {
         // initialization is done at this point
 
-        expect(search.helper.state.query).toEqual('');
+        expect(search.mainIndex.getHelper()!.state.query).toBeUndefined();
 
-        // this simulates a router update with a uiState of {q: 'a'}
+        // this simulates a router update with a uiState of {query: 'a'}
         onRouterUpdateCallback({
-          q: 'a',
+          indexName: {
+            query: 'a',
+          },
         });
 
         search.once('render', () => {
           // the router update triggers a new search
           // and given that the widget reads q as a query parameter
-          expect(search.helper.state.query).toEqual('a');
+          expect(search.mainIndex.getHelper()!.state.query).toEqual('a');
           done();
         });
       });
     });
 
     test('should apply state mapping on differences after searchfunction', done => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
 
       const router = createFakeRouter({
         write: jest.fn(),
@@ -388,14 +215,21 @@ describe('RoutingManager', () => {
 
       const stateMapping = createFakeStateMapping({
         stateToRoute(uiState) {
-          return {
-            query: uiState.query && uiState.query.toUpperCase(),
-          };
+          return Object.keys(uiState).reduce((state, indexId) => {
+            const indexState = uiState[indexId];
+
+            return {
+              ...state,
+              [indexId]: {
+                query: indexState.query && indexState.query.toUpperCase(),
+              },
+            };
+          }, {});
         },
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchFunction: helper => {
           helper.setQuery('test').search();
         },
@@ -406,27 +240,31 @@ describe('RoutingManager', () => {
         },
       });
 
-      const widget: Widget = {
-        render: jest.fn(),
-        getWidgetSearchParameters: jest.fn(),
-        getWidgetState(uiState, { searchParameters }) {
-          return {
-            ...uiState,
-            query: searchParameters.query,
-          };
-        },
-      };
-      search.addWidget(widget);
+      search.addWidgets([
+        createWidget({
+          getWidgetState(uiState, { searchParameters }) {
+            return {
+              ...uiState,
+              query: searchParameters.query,
+            };
+          },
+          getWidgetSearchParameters: jest.fn(
+            searchParameters => searchParameters
+          ),
+        }),
+      ]);
 
       search.start();
 
       search.once('render', () => {
         // initialization is done at this point
 
-        expect(search.helper.state.query).toEqual('test');
+        expect(search.mainIndex.getHelper()!.state.query).toEqual('test');
 
         expect(router.write).toHaveBeenLastCalledWith({
-          query: 'TEST',
+          indexName: {
+            query: 'TEST',
+          },
         });
 
         done();
@@ -434,14 +272,14 @@ describe('RoutingManager', () => {
     });
 
     test('should keep the UI state up to date on state changes', async () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
         write: jest.fn(),
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           stateMapping,
@@ -452,8 +290,7 @@ describe('RoutingManager', () => {
       const fakeSearchBox: any = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
-      search.addWidget(fakeSearchBox);
-      search.addWidget(fakeHitsPerPage);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
       search.start();
 
@@ -464,31 +301,35 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
 
       await runAllMicroTasks();
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
     });
 
     test('should keep the UI state up to date on first render', async () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = createFakeRouter({
         write: jest.fn(),
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchFunction(helper) {
           // Force the value of the query
           helper.setQuery('Apple iPhone').search();
@@ -503,8 +344,7 @@ describe('RoutingManager', () => {
       const fakeSearchBox = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
-      search.addWidget(fakeSearchBox);
-      search.addWidget(fakeHitsPerPage);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
       // Trigger the call to `searchFunction` -> Apple iPhone
       search.start();
@@ -513,22 +353,26 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple iPhone',
+        indexName: {
+          query: 'Apple iPhone',
+        },
       });
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple iPhone',
+        indexName: {
+          query: 'Apple iPhone',
+        },
       });
     });
 
     test('should keep the UI state up to date on router.update', async () => {
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const history = createFakeHistory();
       const router = createFakeRouter({
@@ -543,7 +387,7 @@ describe('RoutingManager', () => {
       });
 
       const search = instantsearch({
-        indexName: 'instant_search',
+        indexName: 'indexName',
         searchClient,
         routing: {
           router,
@@ -554,8 +398,7 @@ describe('RoutingManager', () => {
       const fakeSearchBox: any = createFakeSearchBox();
       const fakeHitsPerPage = createFakeHitsPerPage();
 
-      search.addWidget(fakeSearchBox);
-      search.addWidget(fakeHitsPerPage);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
 
       search.start();
 
@@ -566,7 +409,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(1);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
 
       // Trigger an update - push a change
@@ -574,7 +419,9 @@ describe('RoutingManager', () => {
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple iPhone',
+        indexName: {
+          query: 'Apple iPhone',
+        },
       });
 
       await runAllMicroTasks();
@@ -584,14 +431,16 @@ describe('RoutingManager', () => {
 
       await runAllMicroTasks();
 
-      // Trigger getConfiguration
+      // Trigger change
       search.removeWidget(fakeHitsPerPage);
 
       await runAllMicroTasks();
 
       expect(router.write).toHaveBeenCalledTimes(3);
       expect(router.write).toHaveBeenLastCalledWith({
-        query: 'Apple',
+        indexName: {
+          query: 'Apple',
+        },
       });
     });
   });
@@ -603,7 +452,7 @@ describe('RoutingManager', () => {
       });
 
       const setWindowTitle = jest.spyOn(window.document, 'title', 'set');
-      const searchClient = createFakeSearchClient();
+      const searchClient = createSearchClient();
       const stateMapping = createFakeStateMapping({});
       const router = historyRouter({
         windowTitle(routeState: RouteState) {
@@ -622,7 +471,7 @@ describe('RoutingManager', () => {
 
       const fakeSearchBox = createFakeSearchBox();
 
-      search.addWidget(fakeSearchBox);
+      search.addWidgets([fakeSearchBox]);
       search.start();
 
       await runAllMicroTasks();
@@ -710,6 +559,34 @@ describe('RoutingManager', () => {
       });
 
       expect(parsedUrl.refinementList.brand).toBeInstanceOf(Array);
+    });
+  });
+
+  describe('createURL', () => {
+    it('returns an URL for a `routeState` with refinements', () => {
+      const router = historyRouter();
+      const actual = router.createURL({
+        query: 'iPhone',
+        page: 5,
+      });
+
+      expect(actual).toBe('https://website.com/?query=iPhone&page=5');
+    });
+
+    it('returns an URL for an empty `routeState` with index', () => {
+      const router = historyRouter();
+      const actual = router.createURL({
+        indexName: {},
+      });
+
+      expect(actual).toBe('https://website.com/');
+    });
+
+    it('returns an URL for an empty `routeState`', () => {
+      const router = historyRouter();
+      const actual = router.createURL({});
+
+      expect(actual).toBe('https://website.com/');
     });
   });
 });

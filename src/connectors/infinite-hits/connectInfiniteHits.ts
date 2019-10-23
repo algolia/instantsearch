@@ -1,12 +1,14 @@
 import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
+  AlgoliaSearchHelper as Helper,
+  SearchParameters,
+} from 'algoliasearch-helper';
+import {
   Renderer,
-  RenderOptions,
+  RendererOptions,
   WidgetFactory,
   Hits,
   Unmounter,
-  Helper,
-  SearchParameters,
 } from '../../types';
 import {
   checkRendering,
@@ -22,8 +24,8 @@ export type InfiniteHitsConnectorParams = Partial<
   InfiniteHitsRendererWidgetParams
 >;
 
-export interface InfiniteHitsRenderOptions<TInfiniteHitsWidgetParams>
-  extends RenderOptions<TInfiniteHitsWidgetParams> {
+export interface InfiniteHitsRendererOptions<TInfiniteHitsWidgetParams>
+  extends RendererOptions<TInfiniteHitsWidgetParams> {
   showPrevious: () => void;
   showMore: () => void;
   isFirstPage: boolean;
@@ -31,7 +33,7 @@ export interface InfiniteHitsRenderOptions<TInfiniteHitsWidgetParams>
 }
 
 export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
-  InfiniteHitsRenderOptions<
+  InfiniteHitsRendererOptions<
     InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams
   >
 >;
@@ -82,17 +84,27 @@ const connectInfiniteHits: InfiniteHitsConnector = (
     const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(lastReceivedPage + 1).search();
     };
+    const filterEmptyRefinements = (refinements = {}) => {
+      return Object.keys(refinements)
+        .filter(key =>
+          Array.isArray(refinements[key])
+            ? refinements[key].length
+            : Object.keys(refinements[key]).length
+        )
+        .reduce((obj, key) => {
+          obj[key] = refinements[key];
+          return obj;
+        }, {});
+    };
 
     return {
-      getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : {};
-      },
+      $$type: 'ais.infiniteHits',
 
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
-        firstReceivedPage = helper.state.page!;
-        lastReceivedPage = helper.state.page!;
+        firstReceivedPage = helper.state.page || 0;
+        lastReceivedPage = helper.state.page || 0;
 
         renderFn(
           {
@@ -116,11 +128,32 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // We're doing this to "reset" the widget if a refinement or the
         // query changes between renders, but we want to keep it as is
         // if we only change pages.
-        const { page, ...currentState } = state;
+        const {
+          page = 0,
+          facets,
+          hierarchicalFacets,
+          disjunctiveFacets,
+          maxValuesPerFacet,
+          ...currentState
+        } = state;
+
+        currentState.facetsRefinements = filterEmptyRefinements(
+          currentState.facetsRefinements
+        );
+        currentState.hierarchicalFacetsRefinements = filterEmptyRefinements(
+          currentState.hierarchicalFacetsRefinements
+        );
+        currentState.disjunctiveFacetsRefinements = filterEmptyRefinements(
+          currentState.disjunctiveFacetsRefinements
+        );
+        currentState.numericRefinements = filterEmptyRefinements(
+          currentState.numericRefinements
+        );
+
         if (!isEqual(currentState, prevState)) {
           hitsCache = [];
-          firstReceivedPage = page!;
-          lastReceivedPage = page!;
+          firstReceivedPage = page;
+          lastReceivedPage = page;
           prevState = currentState;
         }
 
@@ -144,12 +177,12 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // hits widgets mounted on the page.
         (results.hits as any).__escaped = initialEscaped;
 
-        if (lastReceivedPage < page! || !hitsCache.length) {
+        if (lastReceivedPage < page || !hitsCache.length) {
           hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = page!;
-        } else if (firstReceivedPage > page!) {
+          lastReceivedPage = page;
+        } else if (firstReceivedPage > page) {
           hitsCache = [...results.hits, ...hitsCache];
-          firstReceivedPage = page!;
+          firstReceivedPage = page;
         }
 
         const isFirstPage = firstReceivedPage === 0;
@@ -170,32 +203,55 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        const stateWithoutPage = state.setQueryParameter('page', undefined);
+
+        if (!escapeHTML) {
+          return stateWithoutPage;
+        }
+
+        return stateWithoutPage.setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page!;
+        const page = searchParameters.page || 0;
 
-        if (!hasShowPrevious || page === 0 || page + 1 === uiState.page) {
+        if (!hasShowPrevious || !page) {
           return uiState;
         }
 
         return {
           ...uiState,
+          // The page in the UI state is incremented by one
+          // to expose the user value (not `0`).
           page: page + 1,
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (!hasShowPrevious) {
-          return searchParameters;
+        let widgetSearchParameters = searchParameters;
+
+        if (escapeHTML) {
+          widgetSearchParameters = searchParameters.setQueryParameters(
+            TAG_PLACEHOLDER
+          );
         }
-        const uiPage = uiState.page;
-        if (uiPage) {
-          return searchParameters.setQueryParameter('page', uiPage - 1);
-        }
-        return searchParameters.setQueryParameter('page', 0);
+
+        // The page in the search parameters is decremented by one
+        // to get to the actual parameter value from the UI state.
+        const page = uiState.page ? uiState.page - 1 : 0;
+
+        return widgetSearchParameters.setQueryParameter('page', page);
       },
     };
   };

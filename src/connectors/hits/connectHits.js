@@ -45,11 +45,11 @@ const withUsage = createDocumentationMessageGenerator({
  * var customHits = instantsearch.connectors.connectHits(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customHits({
  *     containerNode: $('#custom-hits-container'),
  *   })
- * );
+ * ]);
  */
 export default function connectHits(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -58,9 +58,7 @@ export default function connectHits(renderFn, unmountFn = noop) {
     const { escapeHTML = true, transformItems = items => items } = widgetParams;
 
     return {
-      getConfiguration() {
-        return escapeHTML ? TAG_PLACEHOLDER : undefined;
-      },
+      $$type: 'ais.hits',
 
       init({ instantSearchInstance }) {
         renderFn(
@@ -107,8 +105,30 @@ export default function connectHits(renderFn, unmountFn = noop) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        if (!escapeHTML) {
+          return state;
+        }
+
+        return state.setQueryParameters(
+          Object.keys(TAG_PLACEHOLDER).reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: undefined,
+            }),
+            {}
+          )
+        );
+      },
+
+      getWidgetSearchParameters(state) {
+        if (!escapeHTML) {
+          return state;
+        }
+
+        return state.setQueryParameters(TAG_PLACEHOLDER);
       },
     };
   };

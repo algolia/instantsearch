@@ -1,8 +1,8 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import searchBox from '../search-box';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -36,18 +36,6 @@ describe('searchBox()', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/"
 `);
     });
-
-    it('throws with an `input` container', () => {
-      expect(() => {
-        searchBox({
-          container: document.createElement('input'),
-        });
-      }).toThrowErrorMatchingInlineSnapshot(`
-"The \`container\` option doesn't accept \`input\` elements since InstantSearch.js 3.
-
-You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/api-reference/widgets/searchbox/js/#connector."
-`);
-    });
   });
 
   describe('Rendering', () => {
@@ -56,8 +44,10 @@ You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/
 
       widget.init({ helper });
 
+      const [firstRender] = render.mock.calls;
+
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     test('renders during render()', () => {
@@ -67,11 +57,13 @@ You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/
       widget.init({ helper });
       widget.render({ helper, searchMetadata: { isSearchStalled: false } });
 
+      const [firstRender, secondRender] = render.mock.calls;
+
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
-      expect(render.mock.calls[0][1]).toEqual(container);
-      expect(render.mock.calls[1][0]).toMatchSnapshot();
-      expect(render.mock.calls[1][1]).toEqual(container);
+      expect(firstRender[0].props).toMatchSnapshot();
+      expect(firstRender[1]).toEqual(container);
+      expect(secondRender[0].props).toMatchSnapshot();
+      expect(secondRender[1]).toEqual(container);
     });
 
     test('sets the correct CSS classes', () => {
@@ -81,7 +73,9 @@ You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/
 
       widget.init({ helper });
 
-      expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props.cssClasses).toMatchSnapshot();
     });
 
     test('sets isSearchStalled', () => {
@@ -90,7 +84,9 @@ You may want to migrate using \`connectSearchBox\`: https://www.algolia.com/doc/
       widget.init({ helper });
       widget.render({ helper, searchMetadata: { isSearchStalled: true } });
 
-      expect(render.mock.calls[1][0].props.isSearchStalled).toBe(true);
+      const [, secondRender] = render.mock.calls;
+
+      expect(secondRender[0].props.isSearchStalled).toBe(true);
     });
   });
 });

@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import Selector from '../Selector';
 import { mount } from 'enzyme';
 

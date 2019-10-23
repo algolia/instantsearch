@@ -1,564 +1,630 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RefinementList rendering with facets 1`] = `
-<div
-  className="root customClassName"
->
-  <ul
-    className="list"
+Array [
+  <div
+    className="root customClassName"
   >
-    <li
-      className="item"
-      onClick={[Function]}
+    <ul
+      className="list"
     >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": Object {
-              "attribute": "attribute",
-              "count": 1200,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": false,
-              "label": "Amazon",
-              "url": undefined,
-            },
-          }
-        }
-      />
-    </li>
-    <li
-      className="item selectedItem"
-      onClick={[Function]}
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": Object {
-              "attribute": "attribute",
-              "count": 1000,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": true,
-              "label": "Google",
-              "url": undefined,
-            },
-          }
-        }
-      />
-    </li>
-  </ul>
-</div>
+      Array [
+        <li
+          className="item"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1200,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": false,
+                    "label": "Amazon",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+      Array [
+        <li
+          className="item selectedItem"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1000,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": true,
+                    "label": "Google",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+    </ul>
+  </div>,
+]
 `;
 
 exports[`RefinementList rendering with facets and disabled show more 1`] = `
-<div
-  className="root customClassName"
->
-  <ul
-    className="list"
+Array [
+  <div
+    className="root customClassName"
   >
-    <li
-      className="item"
-      onClick={[Function]}
+    <ul
+      className="list"
     >
-      <div
+      Array [
+        <li
+          className="item"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1200,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": false,
+                    "label": "Amazon",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+      Array [
+        <li
+          className="item selectedItem"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1000,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": true,
+                    "label": "Google",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+    </ul>
+    Array [
+      <button
+        className="showMore disabledShowMore"
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
-              "attribute": "attribute",
-              "count": 1200,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": false,
-              "label": "Amazon",
-              "url": undefined,
+              "isShowingMore": false,
             },
           }
         }
-      />
-    </li>
-    <li
-      className="item selectedItem"
-      onClick={[Function]}
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": Object {
-              "attribute": "attribute",
-              "count": 1000,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": true,
-              "label": "Google",
-              "url": undefined,
-            },
-          }
-        }
-      />
-    </li>
-  </ul>
-  <button
-    className="showMore disabledShowMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": Object {
-          "isShowingMore": false,
-        },
-      }
-    }
-    disabled={true}
-  />
-</div>
+        disabled={true}
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`RefinementList rendering with facets and show more 1`] = `
-<div
-  className="root customClassName"
->
-  <ul
-    className="list"
+Array [
+  <div
+    className="root customClassName"
   >
-    <li
-      className="item"
-      onClick={[Function]}
+    <ul
+      className="list"
     >
-      <div
+      Array [
+        <li
+          className="item"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1200,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": false,
+                    "label": "Amazon",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+      Array [
+        <li
+          className="item selectedItem"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1000,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": true,
+                    "label": "Google",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+    </ul>
+    Array [
+      <button
+        className="showMore"
         dangerouslySetInnerHTML={
           Object {
             "__html": Object {
-              "attribute": "attribute",
-              "count": 1200,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": false,
-              "label": "Amazon",
-              "url": undefined,
+              "isShowingMore": false,
             },
           }
         }
-      />
-    </li>
-    <li
-      className="item selectedItem"
-      onClick={[Function]}
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": Object {
-              "attribute": "attribute",
-              "count": 1000,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": true,
-              "label": "Google",
-              "url": undefined,
-            },
-          }
-        }
-      />
-    </li>
-  </ul>
-  <button
-    className="showMore"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": Object {
-          "isShowingMore": false,
-        },
-      }
-    }
-    disabled={false}
-  />
-</div>
+        disabled={false}
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`RefinementList rendering with facets from search 1`] = `
-<div
-  className="root customClassName"
->
+Array [
   <div
-    className="searchBox"
+    className="root customClassName"
   >
     <div
-      className="root"
+      className="searchBox"
     >
-      <form
-        action=""
-        className="form"
-        noValidate={true}
-        onReset={[Function]}
-        onSubmit={[Function]}
-        role="search"
-      >
-        <input
-          autoCapitalize="off"
-          autoComplete="off"
-          autoCorrect="off"
-          autoFocus={false}
-          className="input"
-          disabled={false}
-          maxLength={512}
-          onChange={[Function]}
-          placeholder="Search"
-          spellCheck={false}
-          type="search"
-          value=""
-        />
-        <button
-          className="submit"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "submit",
-            }
-          }
-          hidden={false}
-          title="Submit the search query."
-          type="submit"
-        />
-        <button
-          className="reset"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "reset",
-            }
-          }
-          hidden={true}
-          title="Clear the search query."
-          type="reset"
-        />
-        <span
-          className="loadingIndicator"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "loadingIndicator",
-            }
-          }
-          hidden={true}
-        />
-      </form>
+      Array [
+        <div
+          className="root"
+        >
+          <form
+            action=""
+            className="form"
+            noValidate={true}
+            onReset={[Function]}
+            onSubmit={[Function]}
+            role="search"
+          >
+            <input
+              autoCapitalize="off"
+              autoComplete="off"
+              autoCorrect="off"
+              autoFocus={false}
+              className="input"
+              disabled={false}
+              maxLength={512}
+              onInput={[Function]}
+              placeholder="Search"
+              spellCheck={false}
+              type="search"
+              value=""
+            />
+            Array [
+              <button
+                className="submit"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "submit",
+                  }
+                }
+                hidden={false}
+                title="Submit the search query."
+                type="submit"
+              />,
+            ]
+            Array [
+              <button
+                className="reset"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "reset",
+                  }
+                }
+                hidden={true}
+                title="Clear the search query."
+                type="reset"
+              />,
+            ]
+            Array [
+              <span
+                className="loadingIndicator"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "loadingIndicator",
+                  }
+                }
+                hidden={true}
+              />,
+            ]
+          </form>
+        </div>,
+      ]
     </div>
-  </div>
-  <ul
-    className="list"
-  >
-    <li
-      className="item"
-      onClick={[Function]}
+    <ul
+      className="list"
     >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": Object {
-              "attribute": "attribute",
-              "count": 1200,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": false,
-              "label": "Amazon",
-              "url": undefined,
-            },
-          }
-        }
-      />
-    </li>
-    <li
-      className="item selectedItem"
-      onClick={[Function]}
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": Object {
-              "attribute": "attribute",
-              "count": 1000,
-              "cssClasses": Object {
-                "checkbox": "checkbox",
-                "count": "count",
-                "disabledShowMore": "disabledShowMore",
-                "item": "item",
-                "label": "label",
-                "labelText": "labelText",
-                "list": "list",
-                "noRefinementRoot": "noRefinementRoot",
-                "noResults": "noResults",
-                "root": "root",
-                "searchBox": "searchBox",
-                "searchable": Object {
-                  "form": "form",
-                  "input": "input",
-                  "loadingIcon": "loadingIcon",
-                  "loadingIndicator": "loadingIndicator",
-                  "reset": "reset",
-                  "resetIcon": "resetIcon",
-                  "root": "root",
-                  "submit": "submit",
-                  "submitIcon": "submitIcon",
-                },
-                "selectedItem": "selectedItem",
-                "showMore": "showMore",
-              },
-              "isRefined": true,
-              "label": "Google",
-              "url": undefined,
-            },
-          }
-        }
-      />
-    </li>
-  </ul>
-</div>
+      Array [
+        <li
+          className="item"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1200,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": false,
+                    "label": "Amazon",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+      Array [
+        <li
+          className="item selectedItem"
+          onClick={[Function]}
+        >
+          Array [
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": Object {
+                    "attribute": "attribute",
+                    "count": 1000,
+                    "cssClasses": Object {
+                      "checkbox": "checkbox",
+                      "count": "count",
+                      "disabledShowMore": "disabledShowMore",
+                      "item": "item",
+                      "label": "label",
+                      "labelText": "labelText",
+                      "list": "list",
+                      "noRefinementRoot": "noRefinementRoot",
+                      "noResults": "noResults",
+                      "root": "root",
+                      "searchBox": "searchBox",
+                      "searchable": Object {
+                        "form": "form",
+                        "input": "input",
+                        "loadingIcon": "loadingIcon",
+                        "loadingIndicator": "loadingIndicator",
+                        "reset": "reset",
+                        "resetIcon": "resetIcon",
+                        "root": "root",
+                        "submit": "submit",
+                        "submitIcon": "submitIcon",
+                      },
+                      "selectedItem": "selectedItem",
+                      "showMore": "showMore",
+                    },
+                    "isRefined": true,
+                    "label": "Google",
+                    "url": undefined,
+                  },
+                }
+              }
+            />,
+          ]
+        </li>,
+      ]
+    </ul>
+  </div>,
+]
 `;
 
 exports[`RefinementList rendering without facets 1`] = `
-<div
-  className="root noRefinementRoot customClassName"
-/>
+Array [
+  <div
+    className="root noRefinementRoot customClassName"
+  />,
+]
 `;
 
 exports[`RefinementList rendering without facets from search 1`] = `
-<div
-  className="root noRefinementRoot customClassName"
->
+Array [
   <div
-    className="searchBox"
+    className="root noRefinementRoot customClassName"
   >
     <div
-      className="root"
+      className="searchBox"
     >
-      <form
-        action=""
-        className="form"
-        noValidate={true}
-        onReset={[Function]}
-        onSubmit={[Function]}
-        role="search"
-      >
-        <input
-          autoCapitalize="off"
-          autoComplete="off"
-          autoCorrect="off"
-          autoFocus={false}
-          className="input"
-          disabled={false}
-          maxLength={512}
-          onChange={[Function]}
-          placeholder="Search"
-          spellCheck={false}
-          type="search"
-          value=""
-        />
-        <button
-          className="submit"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "submit",
-            }
-          }
-          hidden={false}
-          title="Submit the search query."
-          type="submit"
-        />
-        <button
-          className="reset"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "reset",
-            }
-          }
-          hidden={true}
-          title="Clear the search query."
-          type="reset"
-        />
-        <span
-          className="loadingIndicator"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "loadingIndicator",
-            }
-          }
-          hidden={true}
-        />
-      </form>
+      Array [
+        <div
+          className="root"
+        >
+          <form
+            action=""
+            className="form"
+            noValidate={true}
+            onReset={[Function]}
+            onSubmit={[Function]}
+            role="search"
+          >
+            <input
+              autoCapitalize="off"
+              autoComplete="off"
+              autoCorrect="off"
+              autoFocus={false}
+              className="input"
+              disabled={false}
+              maxLength={512}
+              onInput={[Function]}
+              placeholder="Search"
+              spellCheck={false}
+              type="search"
+              value=""
+            />
+            Array [
+              <button
+                className="submit"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "submit",
+                  }
+                }
+                hidden={false}
+                title="Submit the search query."
+                type="submit"
+              />,
+            ]
+            Array [
+              <button
+                className="reset"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "reset",
+                  }
+                }
+                hidden={true}
+                title="Clear the search query."
+                type="reset"
+              />,
+            ]
+            Array [
+              <span
+                className="loadingIndicator"
+                dangerouslySetInnerHTML={
+                  Object {
+                    "__html": "loadingIndicator",
+                  }
+                }
+                hidden={true}
+              />,
+            ]
+          </form>
+        </div>,
+      ]
     </div>
-  </div>
-  <div
-    className="noResults"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": Object {},
-      }
-    }
-  />
-</div>
+    Array [
+      <div
+        className="noResults"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {},
+          }
+        }
+      />,
+    ]
+  </div>,
+]
 `;

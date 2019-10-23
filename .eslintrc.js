@@ -1,14 +1,21 @@
 module.exports = {
   extends: ['algolia', 'algolia/jest', 'algolia/react', 'algolia/typescript'],
+  plugins: ['react-hooks'],
   rules: {
     'no-param-reassign': 0,
     'import/no-extraneous-dependencies': 0,
     'react/no-string-refs': 1,
     // Avoid errors about `UNSAFE` lifecycles (e.g. `UNSAFE_componentWillMount`)
     'react/no-deprecated': 0,
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     '@typescript-eslint/no-unused-vars': [
       'error',
       { argsIgnorePattern: '^_', ignoreRestSiblings: true },
+    ],
+    '@typescript-eslint/camelcase': [
+      'error',
+      { allow: ['instant_search', 'instant_search_movies'] },
     ],
   },
   overrides: [
@@ -22,6 +29,7 @@ module.exports = {
   settings: {
     react: {
       version: 'detect',
+      pragma: 'h',
     },
     'import/resolver': {
       node: {

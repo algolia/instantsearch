@@ -1,7 +1,6 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  isEqual,
   noop,
 } from '../../lib/utils';
 import {
@@ -106,13 +105,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customRefinementList = instantsearch.connectors.connectRefinementList(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customRefinementList({
  *     containerNode: $('#custom-refinement-list-container'),
  *     attribute: 'categories',
  *     limit: 10,
  *   })
- * );
+ * ]);
  */
 export default function connectRefinementList(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -279,6 +278,8 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     /* eslint-enable max-params */
 
     return {
+      $$type: 'ais.refinementList',
+
       isShowingMore: false,
 
       // Provide the same function to the `renderFn` so that way the user
@@ -297,21 +298,6 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
 
       getLimit() {
         return getLimit(this.isShowingMore);
-      },
-
-      getConfiguration: (configuration = {}) => {
-        const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
-        };
-
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
-        );
-
-        return widgetConfiguration;
       },
 
       init({ helper, createURL, instantSearchInstance }) {
@@ -347,14 +333,12 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
         } = renderOptions;
 
-        const facetValues = results.getFacetValues(attribute, { sortBy });
+        const facetValues = results.getFacetValues(attribute, { sortBy }) || [];
         const items = transformItems(
           facetValues.slice(0, this.getLimit()).map(formatItems)
         );
 
-        const maxValuesPerFacetConfig = state.getQueryParameter(
-          'maxValuesPerFacet'
-        );
+        const maxValuesPerFacetConfig = state.maxValuesPerFacet;
         const currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
         // if the facets are exhaustive. The only moment we are sure it is exhaustive
@@ -388,13 +372,14 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       dispose({ state }) {
         unmountFn();
 
+        const withoutMaxValuesPerFacet = state.setQueryParameter(
+          'maxValuesPerFacet',
+          undefined
+        );
         if (operator === 'and') {
-          return state.removeFacetRefinement(attribute).removeFacet(attribute);
-        } else {
-          return state
-            .removeDisjunctiveFacetRefinement(attribute)
-            .removeDisjunctiveFacet(attribute);
+          return withoutMaxValuesPerFacet.removeFacet(attribute);
         }
+        return withoutMaxValuesPerFacet.removeDisjunctiveFacet(attribute);
       },
 
       getWidgetState(uiState, { searchParameters }) {
@@ -403,11 +388,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
             ? searchParameters.getDisjunctiveRefinements(attribute)
             : searchParameters.getConjunctiveRefinements(attribute);
 
-        if (
-          values.length === 0 ||
-          (uiState.refinementList &&
-            isEqual(values, uiState.refinementList[attribute]))
-        ) {
+        if (!values.length) {
           return uiState;
         }
 
@@ -421,15 +402,47 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
+        const isDisjunctive = operator === 'or';
         const values =
           uiState.refinementList && uiState.refinementList[attribute];
-        if (values === undefined) return searchParameters;
+
+        const withoutRefinements = searchParameters.clearRefinements(attribute);
+        const withFacetConfiguration = isDisjunctive
+          ? withoutRefinements.addDisjunctiveFacet(attribute)
+          : withoutRefinements.addFacet(attribute);
+
+        const currentMaxValuesPerFacet =
+          withFacetConfiguration.maxValuesPerFacet || 0;
+
+        const nextMaxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMore ? showMoreLimit : limit
+        );
+
+        const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(
+          'maxValuesPerFacet',
+          nextMaxValuesPerFacet
+        );
+
+        if (!values) {
+          const key = isDisjunctive
+            ? 'disjunctiveFacetsRefinements'
+            : 'facetsRefinements';
+
+          return withMaxValuesPerFacet.setQueryParameters({
+            [key]: {
+              ...withMaxValuesPerFacet[key],
+              [attribute]: [],
+            },
+          });
+        }
+
         return values.reduce(
-          (sp, v) =>
-            operator === 'or'
-              ? sp.addDisjunctiveFacetRefinement(attribute, v)
-              : sp.addFacetRefinement(attribute, v),
-          searchParameters.clearRefinements(attribute)
+          (parameters, value) =>
+            isDisjunctive
+              ? parameters.addDisjunctiveFacetRefinement(attribute, value)
+              : parameters.addFacetRefinement(attribute, value),
+          withMaxValuesPerFacet
         );
       },
     };

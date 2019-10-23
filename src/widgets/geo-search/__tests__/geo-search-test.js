@@ -1,14 +1,13 @@
-import { render, unmountComponentAtNode } from 'preact-compat';
+import { render } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import createHTMLMarker from '../createHTMLMarker';
 import renderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
-  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -128,7 +127,6 @@ describe('GeoSearch', () => {
   beforeEach(() => {
     render.mockClear();
     renderer.mockClear();
-    unmountComponentAtNode.mockClear();
   });
 
   describe('Usage', () => {
@@ -170,8 +168,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
+    const [firstRender] = render.mock.calls;
+
     expect(container.innerHTML).toMatchSnapshot();
-    expect(render.mock.calls[0]).toMatchSnapshot();
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toBe(container.querySelector('.ais-GeoSearch-tree'));
   });
 
   it('expect to render with custom classNames', () => {
@@ -210,8 +211,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
+    const [firstRender] = render.mock.calls;
+
     expect(container.innerHTML).toMatchSnapshot();
-    expect(render.mock.calls[0]).toMatchSnapshot();
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toBe(container.querySelector('.ais-GeoSearch-tree'));
   });
 
   it('expect to render with custom template', () => {
@@ -242,16 +246,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
-    const actual = renderer.mock.calls[0][0].widgetParams.templates;
+    const [firstRender] = render.mock.calls;
 
-    const expectation = {
+    expect(firstRender[0].props.templateProps.templates).toEqual({
       HTMLMarker: '<p>Your custom HTML Marker</p>',
       reset: 'Clear the map refinement',
       toggle: 'Search when the map move',
       redo: 'Redo search here',
-    };
-
-    expect(actual).toEqual(expectation);
+    });
   });
 
   it('expect to render the map with default options', () => {
@@ -343,12 +345,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
+    expect(render).toHaveBeenCalledTimes(1);
+
     widget.dispose({
       helper,
       state: helper.state,
     });
 
-    expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledWith(null, container);
   });
 
   describe('setup events', () => {

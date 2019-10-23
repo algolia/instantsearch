@@ -16,7 +16,7 @@ const searchOptions = {
   playground: moviesPlayground,
 };
 
-storiesOf('QueryRuleCustomData', module)
+storiesOf('Metadata|QueryRuleCustomData', module)
   .add(
     'default',
     withHits(({ search, container }) => {
@@ -27,7 +27,7 @@ storiesOf('QueryRuleCustomData', module)
       container.appendChild(description);
       container.appendChild(widgetContainer);
 
-      search.addWidget(
+      search.addWidgets([
         queryRuleCustomData({
           container: widgetContainer,
           templates: {
@@ -41,19 +41,19 @@ storiesOf('QueryRuleCustomData', module)
                   }
 
                   return `
-                    <section>
-                      <h2>${title}</h2>
+                  <section>
+                    <h2>${title}</h2>
 
-                      <a href="${link}">
-                        <img src="${banner}" alt="${title}">
-                      </a>
-                    </section>
-                  `;
+                    <a href="${link}">
+                      <img src="${banner}" alt="${title}">
+                    </a>
+                  </section>
+                `;
                 })
                 .join(''),
           },
-        })
-      );
+        }),
+      ]);
     }, searchOptions)
   )
   .add(
@@ -66,25 +66,25 @@ storiesOf('QueryRuleCustomData', module)
       container.appendChild(description);
       container.appendChild(widgetContainer);
 
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
           templates: {
             default: `
-              {{#items}}
-                {{#banner}}
-                  <section>
-                    <h2>{{title}}</h2>
+            {{#items}}
+              {{#banner}}
+                <section>
+                  <h2>{{title}}</h2>
 
-                    <a href="{{link}}">
-                      <img src="{{banner}}" alt="{{title}}">
-                    </a>
-                  </section>
-                {{/banner}}
-              {{/items}}`,
+                  <a href="{{link}}">
+                    <img src="{{banner}}" alt="{{title}}">
+                  </a>
+                </section>
+              {{/banner}}
+            {{/items}}`,
           },
-        })
-      );
+        }),
+      ]);
     }, searchOptions)
   )
   .add(
@@ -98,7 +98,7 @@ storiesOf('QueryRuleCustomData', module)
       container.appendChild(description);
       container.appendChild(widgetContainer);
 
-      search.addWidget(
+      search.addWidgets([
         queryRuleCustomData({
           container: widgetContainer,
           transformItems: (items: CustomDataItem[]) => {
@@ -124,16 +124,16 @@ storiesOf('QueryRuleCustomData', module)
               const { title, banner, link } = items[0];
 
               return `
-                <h2>${title}</h2>
+              <h2>${title}</h2>
 
-                <a href="${link}">
-                  <img src="${banner}" alt="${title}">
-                </a>
-              `;
+              <a href="${link}">
+                <img src="${banner}" alt="${title}">
+              </a>
+            `;
             },
           },
-        })
-      );
+        }),
+      ]);
     }, searchOptions)
   )
   .add(
@@ -146,10 +146,10 @@ storiesOf('QueryRuleCustomData', module)
       container.appendChild(description);
       container.appendChild(widgetContainer);
 
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.queryRuleCustomData({
           container: widgetContainer,
-        })
-      );
+        }),
+      ]);
     }, searchOptions)
   );

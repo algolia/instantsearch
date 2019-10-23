@@ -1,52 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Stats should render <Stats /> with custom CSS classes 1`] = `
-<div
-  className="root"
->
-  <span
-    className="text"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "1 result found in ms",
-      }
-    }
-  />
-</div>
+Array [
+  <div
+    className="root"
+  >
+    Array [
+      <span
+        className="text"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "1 result found in ms",
+          }
+        }
+      />,
+    ]
+  </div>,
+]
 `;
 
 exports[`Stats should render <Template data= /> 1`] = `
-<div
-  className="root"
->
-  <Template
-    data={
-      Object {
-        "cssClasses": Object {
-          "root": "root",
-          "text": "text",
-        },
-        "hasManyResults": true,
-        "hasNoResults": false,
-        "hasOneResult": false,
-        "hitsPerPage": 10,
-        "nbHits": 1234,
-        "nbPages": 124,
-        "page": 0,
-        "processingTimeMS": 42,
-        "query": "a query",
-      }
-    }
-    rootProps={
-      Object {
-        "className": "text",
-      }
-    }
-    rootTagName="span"
-    templateKey="text"
-    templates={Object {}}
-    templatesConfig={Object {}}
-    useCustomCompileOptions={Object {}}
-  />
-</div>
+Array [
+  <div
+    className="root"
+  >
+    Array [
+      <span
+        className="text"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "results found in 42ms",
+          }
+        }
+      />,
+    ]
+  </div>,
+]
 `;

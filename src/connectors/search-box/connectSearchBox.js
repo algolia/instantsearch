@@ -58,11 +58,11 @@ const withUsage = createDocumentationMessageGenerator({
  * var customSearchBox = instantsearch.connectors.connectSearchBox(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customSearchBox({
  *     containerNode: $('#custom-searchbox'),
  *   })
- * );
+ * ]);
  */
 export default function connectSearchBox(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -78,7 +78,10 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
     }
 
     return {
+      $$type: 'ais.searchBox',
+
       _clear() {},
+
       _cachedClear() {
         this._clear();
       },
@@ -87,26 +90,24 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
 
-        this._refine = (() => {
-          let previousQuery;
+        const setQueryAndSearch = query => {
+          if (query !== helper.state.query) {
+            helper.setQuery(query).search();
+          }
+        };
 
-          const setQueryAndSearch = (q, doSearch = true) => {
-            if (q !== helper.state.query) {
-              previousQuery = helper.state.query;
-              helper.setQuery(q);
-            }
-            if (doSearch && previousQuery !== undefined && previousQuery !== q)
-              helper.search();
-          };
+        this._refine = query => {
+          if (queryHook) {
+            queryHook(query, setQueryAndSearch);
+            return;
+          }
 
-          return queryHook
-            ? q => queryHook(q, setQueryAndSearch)
-            : setQueryAndSearch;
-        })();
+          setQueryAndSearch(query);
+        };
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -121,7 +122,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            query: helper.state.query,
+            query: helper.state.query || '',
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -134,11 +135,12 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
       dispose({ state }) {
         unmountFn();
-        return state.setQuery('');
+
+        return state.setQueryParameter('query', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const query = searchParameters.query;
+        const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {
           return uiState;
@@ -151,7 +153,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
+        return searchParameters.setQueryParameter('query', uiState.query || '');
       },
     };
   };

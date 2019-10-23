@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import connectHits from '../../connectors/hits/connectHits';
 import Hits from '../../components/Hits/Hits';
@@ -6,8 +8,6 @@ import defaultTemplates from './defaultTemplates';
 import {
   prepareTemplateProps,
   getContainerNode,
-  warning,
-  createDocumentationLink,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
@@ -77,7 +77,7 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
  * @param {HitsWidgetOptions} $0 Options of the Hits widget.
  * @return {Widget} A new instance of Hits widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.hits({
  *     container: '#hits-container',
  *     templates: {
@@ -86,7 +86,7 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
  *     },
  *     transformItems: items => items.map(item => item),
  *   })
- * );
+ * ]);
  */
 export default function hits({
   container,
@@ -98,16 +98,6 @@ export default function hits({
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
-
-  warning(
-    typeof templates.allItems === 'undefined',
-    `The template \`allItems\` does not exist since InstantSearch.js 3.
-
-You may want to migrate using \`connectHits\`: ${createDocumentationLink({
-      name: 'hits',
-      connector: true,
-    })}.`
-  );
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
@@ -125,7 +115,7 @@ You may want to migrate using \`connectHits\`: ${createDocumentationLink({
   });
 
   const makeHits = withInsights(connectHits)(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeHits({ escapeHTML, transformItems });
