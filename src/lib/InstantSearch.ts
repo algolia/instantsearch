@@ -191,14 +191,14 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     }
 
     warning(
-      !searchParameters,
+      !(options as any).searchParameters,
       `The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
 
 You can replace it with the \`configure\` widget:
 
 \`\`\`
 search.addWidgets([
-  configure(${JSON.stringify(searchParameters, null, 2)})
+  configure(${JSON.stringify((options as any).searchParameters, null, 2)})
 ]);
 \`\`\`
 
