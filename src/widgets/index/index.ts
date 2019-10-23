@@ -465,9 +465,10 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
         // run the render process in one pass.
         instantSearchInstance.scheduleRender();
 
-        // the derived helper is the one which actually searches, but the 'main'
-        // helper is exposed e.g. via instance.helper, which needs to have the
-        // results accessible as well.
+        // the derived helper is the one which actually searches, but the helper
+        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // does not have access to lastResults, which it used to in pre-federated
+        // search behavior.
         helper!.lastResults = results;
       });
 
