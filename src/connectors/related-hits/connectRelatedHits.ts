@@ -2,6 +2,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
+  warning,
 } from '../../lib/utils';
 import {
   RendererOptions,
@@ -56,9 +57,13 @@ export type RelatedHitsConnector = <TRelatedHitsWidgetParams>(
   unmount?: Unmounter
 ) => RelatedHitsWidgetFactory<TRelatedHitsWidgetParams>;
 
+const attributesToIgnore = ['objectID', '_snippetResult', '_highlightResult'];
+
 function getDefaultMatchingPatterns(hit = {}) {
   return Object.keys(hit).reduce((acc, key) => {
-    acc[key] = [{}];
+    if (attributesToIgnore.indexOf(key) === -1) {
+      acc[key] = [{}];
+    }
 
     return acc;
   }, {});
@@ -69,6 +74,11 @@ const connectRelatedHits: RelatedHitsConnector = (
   unmountFn = noop
 ) => {
   checkRendering(renderFn, withUsage());
+
+  warning(
+    false,
+    'RelatedHits is an experimental widget that is subject to change in next minor versions.'
+  );
 
   return widgetParams => {
     const {
@@ -148,6 +158,8 @@ const connectRelatedHits: RelatedHitsConnector = (
           optionalFilters,
         });
 
+        console.log(JSON.stringify(hit, null, 2));
+        console.log(JSON.stringify(matchingPatterns, null, 2));
         console.log(JSON.stringify(searchParameters, null, 2));
 
         return searchParameters;

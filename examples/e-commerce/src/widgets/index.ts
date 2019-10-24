@@ -10,6 +10,7 @@ export * from './Pagination';
 export * from './PriceSlider';
 export * from './Products';
 export * from './Ratings';
+export * from './RelatedProduct';
 export * from './ResultsNumberMobile';
 export * from './SaveFiltersMobile';
 export * from './SearchBox';

@@ -24,21 +24,21 @@ export type RelatedHitsTemplates = {
   default?: WidgetTemplate<{ items: any }>;
 };
 
-type RelatedAttribute = {
+type MatchingPattern = {
   value?: any;
   score?: number;
   operator?: string;
 };
 
-type RelatedAttributes = {
-  [attribute: string]: Array<RelatedAttribute>;
+type MatchingPatterns = {
+  [attribute: string]: Array<MatchingPattern>;
 };
 
 type RelatedHitsWidgetParams = {
   container: string | HTMLElement;
   hit: ResultHit;
   limit?: number;
-  matchingPatterns?: RelatedAttributes;
+  matchingPatterns?: MatchingPatterns;
   cssClasses?: RelatedHitsCSSClasses;
   templates?: RelatedHitsTemplates;
   transformItems?: (items: any[]) => any;

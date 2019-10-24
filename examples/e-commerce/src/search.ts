@@ -1,5 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
+// import { relatedHits } from 'instantsearch.js/es/widgets';
 import {
   brands,
   categories,
@@ -17,6 +18,7 @@ import {
   saveFiltersMobile,
   searchBox,
   sortBy,
+  relatedProduct,
 } from './widgets';
 import getRouting from './routing';
 
