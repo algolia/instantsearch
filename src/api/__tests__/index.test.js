@@ -70,7 +70,7 @@ describe('Options', () => {
     }).toThrowErrorMatchingSnapshot();
   });
 
-  test('with unvalid name throws', () => {
+  test('with invalid name throws', () => {
     expect(() => {
       createInstantSearchApp('/tmp/test-app', {
         name: './WrongNpmName',
