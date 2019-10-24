@@ -91,7 +91,8 @@ describe('createInstantSearchManager', () => {
 
       expect(Object.keys(searchClient.cache)).toHaveLength(1);
       Object.keys(searchClient.cache).forEach(key => {
-        expect(searchClient.cache[key]).toEqual({
+        expect(typeof searchClient.cache[key]).toBe('string');
+        expect(JSON.parse(searchClient.cache[key])).toEqual({
           results: [
             {
               index: 'index',
@@ -146,7 +147,8 @@ describe('createInstantSearchManager', () => {
 
       expect(Object.keys(searchClient.cache)).toHaveLength(1);
       Object.keys(searchClient.cache).forEach(key => {
-        expect(searchClient.cache[key]).toEqual({
+        expect(typeof searchClient.cache[key]).toBe('string');
+        expect(JSON.parse(searchClient.cache[key])).toEqual({
           results: [
             {
               index: 'index1',
