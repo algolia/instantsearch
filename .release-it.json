@@ -2,10 +2,10 @@
   "increment": "conventional:angular",
   "scripts": {
     "beforeStart": "yarn run lint && yarn run test --colors && yarn run test:e2e",
-    "afterRelease": "yarn run release-templates",
-    "changelog": "yarn run changelog"
+    "afterRelease": "yarn run release-templates"
   },
   "git": {
+    "changelog": "yarn run changelog",
     "requireCleanWorkingDir": false,
     "commitMessage": "chore(release): %s"
   },
