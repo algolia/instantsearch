@@ -333,12 +333,12 @@ export default function createInstantSearchManager({
 
     client.cache = {
       ...client.cache,
-      [key]: {
+      [key]: JSON.stringify({
         results: results.reduce(
           (acc, result) => acc.concat(result.rawResults),
           []
         ),
-      },
+      }),
     };
   }
 
@@ -357,9 +357,9 @@ export default function createInstantSearchManager({
 
     client.cache = {
       ...client.cache,
-      [key]: {
+      [key]: JSON.stringify({
         results: results.rawResults,
-      },
+      }),
     };
   }
 
