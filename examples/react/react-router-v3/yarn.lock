@@ -9020,10 +9020,10 @@ react-error-overlay@^6.0.2:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.2.tgz#642bd6157c6a4b6e9ca4a816f7ed30b868c47f81"
   integrity sha512-DHRuRk3K4Lg9obI6J4Y+nKvtwjasYRU9CFL3ud42x9YJG1HbQjSNublapC/WBJOA726gNUbqbj0U2df9+uzspQ==
 
-react-instantsearch-core@^6.0.0-beta.1:
-  version "6.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-6.0.0-beta.1.tgz#9a72d642eddf49d5dacc065235c6c886129c708c"
-  integrity sha512-JLeoeEeWMKJ0KAUwnt9+QmNyuO2OZS6f2lw0FXxQ41MJ5RoOODQ9qaoEzmlvS58YXAlaE8B1e0lb7npBBCMAvg==
+react-instantsearch-core@^6.0.0-beta.2:
+  version "6.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-6.0.0-beta.2.tgz#e09ab94e1af26d05dbfb9b3b17c139ddd15a5f83"
+  integrity sha512-GYfZg180Kg6CZwdzfryJmUUPFACVvDXK5W1R2B/Bvwz6QZ346S7aAparPUKuJvZbnUDAHhDcjTTkkXf2TbQqEw==
   dependencies:
     "@babel/runtime" "^7.1.2"
     "@types/algoliasearch" "^3.30.16"
@@ -9031,16 +9031,16 @@ react-instantsearch-core@^6.0.0-beta.1:
     fast-deep-equal "^2.0.1"
     prop-types "^15.5.10"
 
-react-instantsearch-dom@6.0.0-beta.1:
-  version "6.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-6.0.0-beta.1.tgz#067859ae15f0d48ba7b2c94de4cf31b4d4ca55e1"
-  integrity sha512-gwV7kc04Y4VKFysZQWVC316VSZfOmAFKxznW+O8b91wBvN7PmVRQ5QCgtKV6aDkpPo9FPL23XNgW4VhbfYfVsQ==
+react-instantsearch-dom@6.0.0-beta.2:
+  version "6.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-6.0.0-beta.2.tgz#666161da2c933480dc8d6d8d946e953418c6e7e0"
+  integrity sha512-lu6P88coDaio5K5XtWh+G6UebHVJ7unF/9OAzyPXDBD28VdJmJ9J5HNXW2TThCBcOawRu4cGcK/4QIm5h1WpNg==
   dependencies:
     "@babel/runtime" "^7.1.2"
     algoliasearch-helper "0.0.0-27095c0"
     classnames "^2.2.5"
     prop-types "^15.5.10"
-    react-instantsearch-core "^6.0.0-beta.1"
+    react-instantsearch-core "^6.0.0-beta.2"
 
 react-is@^16.8.1:
   version "16.9.0"
