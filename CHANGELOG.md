@@ -1,3 +1,12 @@
+# [6.0.0-beta.2](https://github.com/algolia/react-instantsearch/compare/v6.0.0-beta.1...v6.0.0-beta.2) (2019-10-25)
+
+
+### Bug Fixes
+
+* serialize cache value on hydrate ([#2862](https://github.com/algolia/react-instantsearch/issues/2862)) ([3319665](https://github.com/algolia/react-instantsearch/commit/3319665)), closes [#2828](https://github.com/algolia/react-instantsearch/issues/2828)
+
+
+
 # [6.0.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v5.7.0...v6.0.0-beta.1) (2019-10-18)
 
 
