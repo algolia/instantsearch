@@ -1,3 +1,7 @@
+# [6.0.0](https://github.com/algolia/react-instantsearch/compare/v6.0.0-beta.2...v6.0.0) (2019-10-28)
+
+
+
 # [6.0.0-beta.2](https://github.com/algolia/react-instantsearch/compare/v6.0.0-beta.1...v6.0.0-beta.2) (2019-10-25)
 
 
