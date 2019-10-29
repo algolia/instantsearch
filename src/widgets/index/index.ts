@@ -26,7 +26,7 @@ import {
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'index',
+  name: 'index-widget',
 });
 
 type IndexProps = {
