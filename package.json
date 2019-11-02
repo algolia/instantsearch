@@ -100,7 +100,7 @@
     "doctoc": "1.4.0",
     "enzyme": "3.10.0",
     "enzyme-adapter-preact-pure": "2.1.0",
-    "enzyme-to-json": "3.4.0",
+    "enzyme-to-json": "3.4.3",
     "eslint": "6.6.0",
     "eslint-config-algolia": "13.4.0",
     "eslint-config-prettier": "6.3.0",
