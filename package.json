@@ -101,7 +101,7 @@
     "enzyme": "3.10.0",
     "enzyme-adapter-preact-pure": "2.0.2",
     "enzyme-to-json": "3.4.0",
-    "eslint": "6.2.2",
+    "eslint": "6.6.0",
     "eslint-config-algolia": "13.4.0",
     "eslint-config-prettier": "6.3.0",
     "eslint-import-resolver-webpack": "0.11.1",
