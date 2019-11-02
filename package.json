@@ -110,7 +110,7 @@
     "eslint-plugin-jest": "22.21.0",
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-react": "7.14.3",
-    "eslint-plugin-react-hooks": "2.1.1",
+    "eslint-plugin-react-hooks": "2.2.0",
     "inquirer": "6.5.2",
     "instantsearch-e2e-tests": "algolia/instantsearch-e2e-tests#v1.2.2",
     "jest": "24.9.0",
