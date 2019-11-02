@@ -9761,10 +9761,10 @@ pkg-up@2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@1.16.6:
-  version "1.16.6"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.16.6.tgz#bce243f7d1a1072f9d1a60c9dccdf1c739c82ae2"
-  integrity sha512-SGDYijNL8oPBr52avj81+HL/u//Igvv6V4KmL9umkbLufgh/hbT+tl0RyaCIxt4tKtnxoFInKFiewVq4xygqrQ==
+places.js@1.17.0:
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.17.0.tgz#e7b4767dd15fe034a50647d0275ba631b9cf74ae"
+  integrity sha512-eahnJ0eqXWmxwRNfSqamkNLE/Rzlyy2FK+mQdDjWYzCJSB8UTdoIu7IRDu/e5l+EHkYsHd/9q8Pz6SI3Ath+LA==
   dependencies:
     algolia-aerial "^1.5.3"
     algoliasearch "^3.31.0"
