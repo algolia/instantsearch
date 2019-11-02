@@ -5208,10 +5208,10 @@ envify@^4.0.0:
     esprima "^4.0.0"
     through "~2.3.4"
 
-enzyme-adapter-preact-pure@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/enzyme-adapter-preact-pure/-/enzyme-adapter-preact-pure-2.0.2.tgz#36a6a86337851c9c23aa7bd10a0eed42783369c3"
-  integrity sha512-BVfceFghPaYae/Sm2lT7AASLVc5r5aU8II0AyvmhWFR0AY5QERmOnO0BW3PTWVEagreEaZUWnLY6yO408u0WMA==
+enzyme-adapter-preact-pure@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/enzyme-adapter-preact-pure/-/enzyme-adapter-preact-pure-2.1.0.tgz#5b6b5afb60ed4e764bdcc1dba827eee0568084f3"
+  integrity sha512-C1kcVqqA9GuSIFTUdX3aXjLoTrr0Z6aUn6DZqFOBhjGtHXOXrCycwsdPaF0x+/y1286/LaZxQvi8iBaMay4/Ew==
   dependencies:
     array.prototype.flatmap "^1.2.1"
     preact-render-to-string "^4.1.0"

@@ -99,7 +99,7 @@
     "conventional-changelog-cli": "2.0.23",
     "doctoc": "1.4.0",
     "enzyme": "3.10.0",
-    "enzyme-adapter-preact-pure": "2.0.2",
+    "enzyme-adapter-preact-pure": "2.1.0",
     "enzyme-to-json": "3.4.0",
     "eslint": "6.2.2",
     "eslint-config-algolia": "13.4.0",
