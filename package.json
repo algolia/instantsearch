@@ -112,7 +112,7 @@
     "eslint-plugin-react": "7.14.3",
     "eslint-plugin-react-hooks": "2.1.1",
     "inquirer": "6.5.2",
-    "instantsearch-e2e-tests": "algolia/instantsearch-e2e-tests#v1.2.2",
+    "instantsearch-e2e-tests": "algolia/instantsearch-e2e-tests#v1.2.3",
     "jest": "24.9.0",
     "jest-diff": "24.9.0",
     "jest-environment-jsdom": "24.9.0",
