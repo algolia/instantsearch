@@ -90,6 +90,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 `);
   });
 
+  it('is able to detect insightsClient on window', () => {
+    global.aa = jest.fn();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+
+    expect(search.insightsClient).toBe(global.aa);
+    delete global.aa;
+  });
+
+  it('should not accept an invalid insightsClient', () => {
+    global.aa = 'something invalid';
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+    });
+
+    expect(search.insightsClient).toBe(null);
+    delete global.aa;
+  });
+
   it('throws if addWidgets is called with a single widget', () => {
     expect(() => {
       const search = new InstantSearch({
