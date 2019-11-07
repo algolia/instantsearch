@@ -17,12 +17,12 @@ const defaultProps = {
 };
 
 const defaultScopedSlots = `
-  <span slot-scope="{ searchParametrs }">
+  <span slot-scope="{ searchParameters }">
     hitsPerPage: {{ searchParameters.hitsPerPage }}
   </span>
 `;
 
-it('accepts SearchParamerters from attributes', () => {
+it('accepts SearchParameters from attributes', () => {
   const wrapper = mount(Configure, {
     propsData: {
       ...defaultProps,
