@@ -110,7 +110,7 @@ const connectNumericMenu: NumericMenuConnector = (
       attribute = '',
       items = [],
       transformItems = (x => x) as ParamTransformItems,
-    } = widgetParams || {};
+    } = widgetParams || ({} as NumericMenuConnectorParams);
 
     if (attribute === '') {
       throw new Error(withUsage('The `attribute` option is required.'));
