@@ -63,7 +63,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       escapeHTML = true,
       transformItems = (items: any[]) => items,
       showPrevious: hasShowPrevious = false,
-    } = widgetParams || ({} as Partial<InfiniteHitsRendererWidgetParams>);
+    } = widgetParams || ({} as InfiniteHitsConnectorParams);
     let hitsCache: Hits = [];
     let firstReceivedPage = Infinity;
     let lastReceivedPage = -1;
