@@ -4,7 +4,7 @@ These codemods (code transformers) can be ran with [jscodeshift]((https://github
 
 ### `addWidget-to-addWidgets`
 
-This will replace calls to `addWidget(widget)` to `addWidgets([widget])`, as well as `removeWidget(widget) to `removeWidgets([widget])`.
+This will replace calls of `addWidget(widget)` to `addWidgets([widget])`, as well as `removeWidget(widget) to `removeWidgets([widget])`.
 
 ```
 npx jscodeshift --transform scripts/transforms/addWidget-addWidgets.js --extensions='ts,js,tsx' <path>
