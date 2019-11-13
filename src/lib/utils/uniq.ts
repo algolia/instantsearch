@@ -1,4 +1,4 @@
-function uniq(array: any[]): any[] {
+function uniq<TItem = unknown>(array: TItem[]): TItem[] {
   return array.filter((value, index, self) => self.indexOf(value) === index);
 }
 
