@@ -61,6 +61,62 @@ describe('withInsightsListener', () => {
     });
   });
 
+  it('should capture clicks performed on inner elements whose parents have data-insights-method defined', () => {
+    const payload = btoa(
+      JSON.stringify({ objectIDs: ['1'], eventName: 'Product Clicked' })
+    );
+
+    const Hits = () => (
+      <div>
+        <a
+          data-insights-method="clickedObjectIDsAfterSearch"
+          data-insights-payload={payload}
+        >
+          <h1> Product 1 </h1>
+        </a>
+      </div>
+    );
+
+    const insights = jest.fn();
+
+    const hits = [
+      { objectID: '1' },
+      { objectID: '2' },
+      { objectID: '3' },
+      { objectID: '4' },
+      { objectID: '5' },
+    ];
+
+    const results = {
+      index: 'theIndex',
+      queryID: 'theQueryID',
+      hitsPerPage: 2,
+      page: 1,
+    };
+
+    const instantSearchInstance = {
+      insightsClient: jest.fn(),
+    };
+    const HitsWithInsightsListener: any = withInsightsListener(Hits);
+    const { container } = render(
+      <HitsWithInsightsListener
+        hits={hits}
+        results={results}
+        instantSearchInstance={instantSearchInstance}
+        insights={insights}
+      />
+    );
+    const innerChild = container.querySelector('h1') as HTMLElement;
+
+    fireEvent.click(innerChild);
+
+    expect(insights).toHaveBeenCalledTimes(1);
+    expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
+      eventName: 'Product Clicked',
+      objectIDs: ['1'],
+    });
+  });
+
   it('should not capture clicks performed on inner elements with no data-insights-method defined', () => {
     const payload = btoa(
       JSON.stringify({ objectIDs: ['1'], eventName: 'Add to Cart' })
