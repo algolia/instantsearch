@@ -1,10 +1,7 @@
 import uniq from './uniq';
+import { Templates } from '../../types';
 
 type TemplatesConfig = object;
-
-type Templates = {
-  [key: string]: string;
-};
 
 type TemplateProps = {
   defaultTemplates: Templates;

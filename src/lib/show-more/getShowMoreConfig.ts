@@ -1,11 +1,19 @@
 import templates from './defaultShowMoreTemplates';
+import { Templates } from '../../types';
 
 const defaultShowMoreConfig = {
   templates,
   limit: 100,
 };
 
-export default function getShowMoreConfig(showMoreOptions) {
+type ShowMoreConfig = {
+  templates: Templates;
+  limit: number;
+};
+
+export default function getShowMoreConfig(
+  showMoreOptions: boolean | ShowMoreConfig
+): ShowMoreConfig | null {
   if (!showMoreOptions) return null;
 
   if (showMoreOptions === true) {
