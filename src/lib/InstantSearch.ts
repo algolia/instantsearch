@@ -9,6 +9,7 @@ import version from './version';
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
+  createDocumentationLink,
   isPlainObject,
   defer,
   noop,
@@ -188,6 +189,21 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         withUsage('The `insightsClient` option should be a function.')
       );
     }
+
+    warning(
+      !(options as any).searchParameters,
+      `The \`searchParameters\` option is deprecated, but you can replace it with the \`configure\` widget:
+
+\`\`\`
+search.addWidgets([
+  configure(${JSON.stringify((options as any).searchParameters, null, 2)})
+]);
+\`\`\`
+
+See ${createDocumentationLink({
+        name: 'configure',
+      })}`
+    );
 
     this.client = searchClient;
     this.insightsClient = insightsClient;

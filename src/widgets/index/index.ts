@@ -26,7 +26,7 @@ import {
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'index',
+  name: 'index-widget',
 });
 
 type IndexProps = {
@@ -380,6 +380,7 @@ const index = (props: IndexProps): Index => {
             page: ['ais.pagination', 'ais.infiniteHits'],
             hitsPerPage: ['ais.hitsPerPage'],
             configure: ['ais.configure'],
+            places: ['ais.places'],
           };
 
           const mountedWidgets = this.getWidgets()
@@ -458,11 +459,17 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
         }
       });
 
-      derivedHelper.on('result', () => {
+      derivedHelper.on('result', ({ results }) => {
         // The index does not render the results it schedules a new render
         // to let all the other indices emit their own results. It allows us to
         // run the render process in one pass.
         instantSearchInstance.scheduleRender();
+
+        // the derived helper is the one which actually searches, but the helper
+        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // does not have access to lastResults, which it used to in pre-federated
+        // search behavior.
+        helper!.lastResults = results;
       });
 
       localWidgets.forEach(widget => {

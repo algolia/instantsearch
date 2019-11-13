@@ -4,7 +4,7 @@ import version from '../version';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import connectPagination from '../../connectors/pagination/connectPagination';
 import index from '../../widgets/index/index';
-import { noop, warning } from '../../lib/utils';
+import { noop, warning } from '../utils';
 import {
   createSearchClient,
   createControlledSearchClient,
@@ -239,6 +239,24 @@ describe('InstantSearch', () => {
 
     expect(search.insightsClient).toBe(insightsClient);
   });
+
+  it("exposes helper's last results", async () => {
+    const searchClient = createSearchClient();
+
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    expect(search.helper).toBe(null);
+
+    search.start();
+
+    await runAllMicroTasks();
+
+    // could be null if we don't pretend the main helper is the one who searched
+    expect(search.helper.lastResults).not.toBe(null);
+  });
 });
 
 describe('addWidget(s)', () => {
@@ -401,6 +419,42 @@ describe('start', () => {
 
     expect(algoliasearchHelper).toHaveBeenCalledTimes(2);
     expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
+  });
+
+  it('warns deprecated usage of `searchParameters`', () => {
+    warning.cache = {};
+
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+        searchParameters: {
+          disjunctiveFacets: ['brand'],
+          disjunctiveFacetsRefinements: {
+            brand: ['Samsung'],
+          },
+        },
+      });
+    })
+      .toWarnDev(`[InstantSearch.js]: The \`searchParameters\` option is deprecated, but you can replace it with the \`configure\` widget:
+
+\`\`\`
+search.addWidgets([
+  configure({
+  "disjunctiveFacets": [
+    "brand"
+  ],
+  "disjunctiveFacetsRefinements": {
+    "brand": [
+      "Samsung"
+    ]
+  }
+})
+]);
+\`\`\`
+
+See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', () => {
@@ -741,6 +795,8 @@ describe('dispose', () => {
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
+
+    search.addWidgets([createWidget(), createWidget()]);
 
     search.start();
 
