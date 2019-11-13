@@ -1,6 +1,6 @@
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
 
-export function aroundLatLngToPosition(value) {
+export function aroundLatLngToPosition(value: string) {
   const pattern = value.match(latLngRegExp);
 
   // Since the value provided is the one send with the request, the API should
@@ -15,7 +15,9 @@ export function aroundLatLngToPosition(value) {
   };
 }
 
-export function insideBoundingBoxArrayToBoundingBox(value) {
+type LatLng = Array<[number, number, number, number]>;
+
+export function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
   const [[neLat, neLng, swLat, swLng] = []] = value;
 
   // Since the value provided is the one send with the request, the API should
@@ -38,7 +40,7 @@ export function insideBoundingBoxArrayToBoundingBox(value) {
   };
 }
 
-export function insideBoundingBoxStringToBoundingBox(value) {
+export function insideBoundingBoxStringToBoundingBox(value: string) {
   const [neLat, neLng, swLat, swLng] = value.split(',').map(parseFloat);
 
   // Since the value provided is the one send with the request, the API should
@@ -61,7 +63,7 @@ export function insideBoundingBoxStringToBoundingBox(value) {
   };
 }
 
-export function insideBoundingBoxToBoundingBox(value) {
+export function insideBoundingBoxToBoundingBox(value: string | LatLng) {
   if (Array.isArray(value)) {
     return insideBoundingBoxArrayToBoundingBox(value);
   }
