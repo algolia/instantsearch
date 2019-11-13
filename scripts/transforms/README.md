@@ -1,13 +1,13 @@
 ## Codemods
 
-These codemods (code transformers) can be ran with `npx`. If you installed the `instantsearch.js` package already with `yarn`, you can run them like this: `yarn instantsearch-scripts`).
+These codemods (code transformers) can be ran with [jscodeshift]((https://github.com/facebook/jscodeshift).
 
 ### `addWidget-to-addWidgets`
 
-This will replace calls to `addWidget(widget)` to `addWidgets([widget])`.
+This will replace calls to `addWidget(widget)` to `addWidgets([widget])`, as well as `removeWidget(widget) to `removeWidgets([widget])`.
 
 ```
-npx instantsearch.js addWidget-to-addWidgets <path>
+npx jscodeshift --transform scripts/transforms/addWidget-addWidgets.js --extensions='ts,js,tsx' <path>
 ```
 
 ### Notes
