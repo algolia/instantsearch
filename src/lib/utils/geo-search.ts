@@ -18,7 +18,9 @@ export function aroundLatLngToPosition(value: string) {
 type LatLng = Array<[number, number, number, number]>;
 
 export function insideBoundingBoxArrayToBoundingBox(value: LatLng) {
-  const [[neLat, neLng, swLat, swLng] = []] = value;
+  const [
+    [neLat, neLng, swLat, swLng] = [undefined, undefined, undefined, undefined],
+  ] = value;
 
   // Since the value provided is the one send with the request, the API should
   // throw an error due to the wrong format. So throw an error should be safe.
