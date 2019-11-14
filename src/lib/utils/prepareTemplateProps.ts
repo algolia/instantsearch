@@ -1,7 +1,11 @@
 import uniq from './uniq';
-import { Templates } from '../../types';
+import { Template } from '../../types';
 
 type TemplatesConfig = object;
+
+type Templates = {
+  [key: string]: Template;
+};
 
 type TemplateProps = {
   defaultTemplates: Templates;
@@ -12,7 +16,7 @@ type TemplateProps = {
 type PreparedTemplateProps = {
   templatesConfig: TemplatesConfig;
   templates: Templates;
-  useCustomCompileOptions: object;
+  useCustomCompileOptions: { [key: string]: boolean };
 };
 
 function prepareTemplates(
@@ -38,7 +42,10 @@ function prepareTemplates(
 
       return config;
     },
-    { templates: {}, useCustomCompileOptions: {} }
+    {
+      templates: {} as Templates,
+      useCustomCompileOptions: {} as { [key: string]: boolean },
+    }
   );
 }
 
