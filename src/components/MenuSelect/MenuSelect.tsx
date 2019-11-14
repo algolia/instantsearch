@@ -48,12 +48,12 @@ function MenuSelect({ cssClasses, templateProps, items, refine }: Props) {
     value: '',
   };
 
-  const rootClassNames = cx(cssClasses.root, {
-    [cssClasses.noRefinementRoot]: items.length === 0,
-  });
-
   return (
-    <div className={rootClassNames}>
+    <div
+      className={cx(cssClasses.root, {
+        [cssClasses.noRefinementRoot]: items.length === 0,
+      })}
+    >
       <select
         className={cssClasses.select}
         value={selectedValue}
