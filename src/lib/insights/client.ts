@@ -48,11 +48,13 @@ export const inferPayload = ({
   results,
   hits,
   objectIDs,
+  filters
 }: {
   method: InsightsClientMethod;
   results: SearchResults;
   hits: Hits;
   objectIDs: string[];
+  filters: string[];
 }): Omit<InsightsClientPayload, 'eventName'> => {
   const { index } = results;
   const selectedHits = getSelectedHits(hits, objectIDs);
@@ -66,6 +68,16 @@ export const inferPayload = ({
 
     case 'convertedObjectIDsAfterSearch':
       return { index, queryID, objectIDs };
+
+    case 'convertedObjectIDs':
+    case 'clickedObjectIDs':
+    case 'viewedObjectIDs':
+      return { index, objectIDs };
+
+    case 'convertedFilters':
+    case 'clickedFilters':
+    case 'viewedFilters':
+      return { index, filters };
 
     default:
       throw new Error(`Unsupported method passed to insights: "${method}".`);

@@ -1,12 +1,19 @@
 export type InsightsClientMethod =
   | 'clickedObjectIDsAfterSearch'
-  | 'convertedObjectIDsAfterSearch';
+  | 'clickedObjectIDs'
+  | 'clickedFilters'
+  | 'convertedObjectIDsAfterSearch'
+  | 'convertedObjectIDs'
+  | 'convertedFilters'
+  | 'viewedObjectIDs'
+  | 'viewedFilters';
 
 export type InsightsClientPayload = {
   eventName: string;
-  queryID: string;
+  queryID?: string;
   index: string;
-  objectIDs: string[];
+  objectIDs?: string[];
+  filters?: string[];
   positions?: number[];
 };
 
