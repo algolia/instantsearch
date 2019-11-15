@@ -181,8 +181,9 @@ const connectPagination: PaginationConnector = (renderFn, unmountFn = noop) => {
       },
 
       // for tests, remove when refactored
-      refine: connectorState.refine!,
-      createURL: connectorState.createURL!,
+      refine: page => connectorState.refine!(page),
+      createURL: helper => connectorState.createURL!(helper),
+      getMaxPage,
     };
   };
 };

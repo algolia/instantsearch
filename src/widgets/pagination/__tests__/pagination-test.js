@@ -73,7 +73,7 @@ describe('pagination()', () => {
   });
 
   it('sets the page', () => {
-    widget.refine(helper, 42);
+    widget.refine(42);
     expect(helper.setPage).toHaveBeenCalledTimes(1);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
