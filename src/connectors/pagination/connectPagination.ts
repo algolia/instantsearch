@@ -179,6 +179,10 @@ const connectPagination: PaginationConnector = (renderFn, unmountFn = noop) => {
 
         return searchParameters.setQueryParameter('page', page);
       },
+
+      // for tests, remove when refactored
+      refine: connectorState.refine!,
+      createURL: connectorState.createURL!,
     };
   };
 };
