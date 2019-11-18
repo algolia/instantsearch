@@ -41,7 +41,7 @@ class Paginator {
     return range({ start: first, end: last });
   }
 
-  public calculatePaddingLeft(
+  private calculatePaddingLeft(
     current: number,
     padding: number,
     total: number,
@@ -58,7 +58,7 @@ class Paginator {
     return padding;
   }
 
-  public nbPagesDisplayed(padding: number, total: number) {
+  private nbPagesDisplayed(padding: number, total: number) {
     return Math.min(2 * padding + 1, total);
   }
 
