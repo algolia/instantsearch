@@ -1,5 +1,7 @@
 *Coming from V1 (or js client v2)?* Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V1-to-V2) to the new version of the Helper.
 
+*Coming from V2?* Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V2-to-V3) to the new version of the Helper.
+
 **The JavaScript helper is an advanced library we provide to our users. If you are looking to build a complete search interface, we recommend you to use [instantsearch.js](https://community.algolia.com/instantsearch.js/). If you want to build an autocomplete menu, see [autocomplete.js](https://github.com/algolia/autocomplete.js).**
 
 # algoliasearch-helper-js
