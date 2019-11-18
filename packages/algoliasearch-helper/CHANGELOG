@@ -1,3 +1,86 @@
+3.0.0 - 2019-11-18
+ *  fix(merge): change implementation  (#716) https://github.com/algolia/algoliasearch-helper-js/commit/29c213853de49e4f2a36d9c95886ddb13237047e
+ * chore: mention remaining changes https://github.com/algolia/algoliasearch-helper-js/commit/f756947a6b879869b3672360d0bff6ebada88540
+ * chore(deps): update circleci/node:8.15.1 docker digest to ef1a0c4 (#715) https://github.com/algolia/algoliasearch-helper-js/commit/f4dab89dcce68d46596d5b8a5e88f18f28b13330
+ * chore(lodash): remove _.omit (#655) https://github.com/algolia/algoliasearch-helper-js/commit/7db8b4ccf8a495a027b084765117fe9fb0e7791d
+ * chore(lodash): remove lodash from dependency list (#705) https://github.com/algolia/algoliasearch-helper-js/commit/a63ec6bae1fc240d38a9293a5062911985f20109, closes https://github.com/algolia/algoliasearch-helper-js/issues/552
+ * chore(release): allow canary release (#712) https://github.com/algolia/algoliasearch-helper-js/commit/3eb087ca887b3d1a8115d95a54807602232d1d4c
+ * chore(removeHierarchicalFacetRefinement): remove error if not refined (#747) https://github.com/algolia/algoliasearch-helper-js/commit/e68ecfe9897e630443ce72618a832291c0151df8
+ * chore: merge develop into master (#750) https://github.com/algolia/algoliasearch-helper-js/commit/53c7c62f239bc53174bae79ec84812776da582dc
+ * chore: remove Bower support (#711) https://github.com/algolia/algoliasearch-helper-js/commit/e7518e224ecb8af5f792746dbf250cd433caa7c0
+ * chore(ts): add methods https://github.com/algolia/algoliasearch-helper-js/commit/d051f79c9b3233318929e90c8d9908860889c348
+ * chore(ts): add ruleContexts to SP https://github.com/algolia/algoliasearch-helper-js/commit/4bdc4a404ae9289253244939622f541342c0e0b8
+ * chore(ts): add searchOnlyWithDerivedHelpers (#739) https://github.com/algolia/algoliasearch-helper-js/commit/c6aa31b027d5bf07bc7fa6f5ba158effe7881152
+ * chore(ts): publish definition file too https://github.com/algolia/algoliasearch-helper-js/commit/181346222733ea4b5bafe5b0b776640b9bc0bdcd
+ * chore(TS): isNumericRefined has only one required argument https://github.com/algolia/algoliasearch-helper-js/commit/cac8fc36943b72ae1d65bd8eda7c0e9b9e0a92aa
+ * chore(warn): remove unused function (lodash.bind) (#682) https://github.com/algolia/algoliasearch-helper-js/commit/c59b7e3b6411b86d5171f4646e8bbb553d65b87c
+ * chore: update release command https://github.com/algolia/algoliasearch-helper-js/commit/0989880eb0e3e7776d687bb3da5107daa4860477
+ * docs: add link to wiki https://github.com/algolia/algoliasearch-helper-js/commit/3598f2a90020e708cbc1823777019aafd66f4c65
+ * docs: update event signature (#701) https://github.com/algolia/algoliasearch-helper-js/commit/bbe4634ebc77ef4cf6c7362ecebc84d9b43dc152
+ * docs(migration): mention changed methods (#732) https://github.com/algolia/algoliasearch-helper-js/commit/f95e6801e173434ebc3009e07057e9de2c988105
+ * docs(next): add migration guide https://github.com/algolia/algoliasearch-helper-js/commit/8430137ecd5a53d69075ce61968181ad61d6981d
+ * docs(serverUsed): mention getRankingInfo (#706) https://github.com/algolia/algoliasearch-helper-js/commit/f258c2a72fd316f6306df7383242a022004b98b6, closes https://github.com/algolia/algoliasearch-helper-js/issues/500
+ * feat: implement dedicated reset page method (#673) https://github.com/algolia/algoliasearch-helper-js/commit/666501eb4149c1f0558ef1cdeb8239fc1bdc2d2f
+ * feat(getState): remove "filter" option (#707) https://github.com/algolia/algoliasearch-helper-js/commit/ac527915fee3dfaf29dce26fcedb5a8c7e2007b7
+ * feat(getState): remove getState (#708) https://github.com/algolia/algoliasearch-helper-js/commit/7de698cfa9fa9518e3a40cdb2caa34da7e9ba52e
+ * feat(requestBuilder): prevent needless extra requests for empty refinements (#737) https://github.com/algolia/algoliasearch-helper-js/commit/db0a3929ab236f0435a81544ca721dd6b9f9319a
+ * feat(search): allow the search only with Derived Helpers (#704) https://github.com/algolia/algoliasearch-helper-js/commit/aa128fc928a999438b8efaad050170f812f85b33
+ * feat(SearchParameters): avoid undefined values (#703) https://github.com/algolia/algoliasearch-helper-js/commit/9757e0a78d8e6fec64999e45d4452019d4a13a8f
+ * feat(typescript): move typings inline (#719) https://github.com/algolia/algoliasearch-helper-js/commit/a12272ead5ba87b32c1b8528deeeae555ace26e3
+ * fix(defaults): remove const https://github.com/algolia/algoliasearch-helper-js/commit/48a0c488a966c02230caf51c07e20b5cbf7a10d0
+ * fix(errors): remove isRefined (#731) https://github.com/algolia/algoliasearch-helper-js/commit/5761885f9b2f1f505d27cfce7f3845a0d5a7bbba
+ * fix(getConjunctiveRefinements): no error when requested facet is not conjunctive (#724) https://github.com/algolia/algoliasearch-helper-js/commit/cf852e7d8741f2a7f675deacaf0c4f6d3cc0ad4f
+ * fix(getDisjunctiveRefinements): remove error (#725) https://github.com/algolia/algoliasearch-helper-js/commit/211e390fd73b0fedecded5e64f29630c44fa15e5
+ * fix(getExcludeRefinements): replace error by default value (#726) https://github.com/algolia/algoliasearch-helper-js/commit/9d7ae871d6b4bec9117e69b90fc7bfa53e6cb3c1
+ * fix(getFacetStats): remove error (#721) https://github.com/algolia/algoliasearch-helper-js/commit/96b6ec8552289eca0ac484c04b303fe2c8bc1af8
+ * fix(getFacetValues): don't throw error when there's no facet (#720) https://github.com/algolia/algoliasearch-helper-js/commit/e15e39e88c7599b8ff92754fdee86d5ba4a1e44f
+ * fix(getHierarchicalFacetBreadcrumb): don't throw an error (#723) https://github.com/algolia/algoliasearch-helper-js/commit/40e1d61eba366bbfece5945c1693bc04d21427e4
+ * fix(isDisjunctiveFacetRefined): return false if not in disjunctiveFacets (#729) https://github.com/algolia/algoliasearch-helper-js/commit/13ec09bff8bbefcc1ad3200cd196c8832c816eca
+ * fix(isExcludeRefined): remove error in favor of false (#728) https://github.com/algolia/algoliasearch-helper-js/commit/3f0ab6b4800181d4b20ac9dae856ed480ef90001
+ * fix(isFacetRefined): return false if facet isn't declared (#727) https://github.com/algolia/algoliasearch-helper-js/commit/7151f56e4be9e71ef8b1427b2746f11b1edfb2f8
+ * fix(isHierarchicalFacetRefined): return false if refinement isn't a facet (#730) https://github.com/algolia/algoliasearch-helper-js/commit/89fa01087201290b4d26aa6a0780d0b505d17622
+ * fix(lodash/intersection): replace with custom implementation (#718) https://github.com/algolia/algoliasearch-helper-js/commit/00dfb4e67fc3b343ec96321b1cb5dd527d074419
+ * fix(removeXFacet): make sure this fully removes empty arrays (#743) https://github.com/algolia/algoliasearch-helper-js/commit/ea5a22a8afd64d9c68279a4aff284a1a5c023835
+ * fix(results): remove lodash looping over objects (#648) https://github.com/algolia/algoliasearch-helper-js/commit/bb025c27aa1af7c31763970151f90b7bb401b164, closes https://github.com/algolia/algoliasearch-helper-js/issues/258
+ * fix(sortBy): compare whole prefix instead of first character (#702) https://github.com/algolia/algoliasearch-helper-js/commit/b85fb502ea48d0142a1400887bf353645ab5fbda, closes https://github.com/algolia/algoliasearch-helper-js/issues/702
+ * fix(toggleRefinement): keep an empty array when clearing (#738) https://github.com/algolia/algoliasearch-helper-js/commit/5b3fc1189c93c480b3de5cdd0e37c8b86edfb89a
+ * fix(types): add state.removeNumericRefinement (#742) https://github.com/algolia/algoliasearch-helper-js/commit/e58c24ab5a858698ef27bd50c9f2d7ee93d6dd53
+ * refactor(addAgent): remove duplicate code (#657) https://github.com/algolia/algoliasearch-helper-js/commit/d023efd5651c63042d2b690863decf55ca92dbcf
+ * refactor(error): use object vs list of arguments (#700) https://github.com/algolia/algoliasearch-helper-js/commit/722ecebd4bea277417483dc6f468af549813d912
+ * refactor(lodash): compact (#689) https://github.com/algolia/algoliasearch-helper-js/commit/284efa53b12400359dc1e3f6c9f75be7b2ac7929
+ * refactor(lodash): forOwn (#697) https://github.com/algolia/algoliasearch-helper-js/commit/eae367ade72d685bed0873c5396926559c42de30
+ * refactor(lodash): intersection (#696) https://github.com/algolia/algoliasearch-helper-js/commit/25822a54dc5754cc1e53b6ff12261afb1d51c709
+ * refactor(lodash): map & trim (#679) https://github.com/algolia/algoliasearch-helper-js/commit/357fcb7cf1e2e413056d5079694efc20d3fe7ac0
+ * refactor(lodash): merge (#694) https://github.com/algolia/algoliasearch-helper-js/commit/92bced44cffc91bad70fc39a1e85590e50c4ff36
+ * refactor(lodash): partial & partialRight (#693) https://github.com/algolia/algoliasearch-helper-js/commit/7ceea2fe4d5fd4c0591a19e1b4cddea5d9cecebc
+ * refactor(lodash): remove filter (#685) https://github.com/algolia/algoliasearch-helper-js/commit/249d2e67f70569ce4f1ad67add50133fb4a6dc7c
+ * refactor(lodash): remove flatten (#695) https://github.com/algolia/algoliasearch-helper-js/commit/9da0e0864ade382a22035c23191f2cc0631b0c75
+ * refactor(lodash): remove forEach (#674) https://github.com/algolia/algoliasearch-helper-js/commit/8c93765963fa115b0ff01f7125a0df7d7960b5e2
+ * refactor(lodash): remove reduce (#678) https://github.com/algolia/algoliasearch-helper-js/commit/7907805fd5e1319aeb0d2d6cf236e2298e2f8ff4
+ * refactor(lodash): remove simple functions (#656) https://github.com/algolia/algoliasearch-helper-js/commit/c309ffa03b4e13023b4595da48aaea0f895e555d
+ * refactor(lodash): remove startsWith (#690) https://github.com/algolia/algoliasearch-helper-js/commit/bb00933bc30c0ff9bb6126e644d409ad59e205e5
+ * refactor(lodash): replace "defaults" with pure alternative (#692) https://github.com/algolia/algoliasearch-helper-js/commit/ee0713242f2ad80ffb5d280803e2e2fd829b12ea
+ * refactor(lodash): replace find & findIndex (#687) https://github.com/algolia/algoliasearch-helper-js/commit/92e7c2368fe4c45e7b10fb8be86b85516e2a7c8c
+ * refactor(lodash): replace orderBy (#698) https://github.com/algolia/algoliasearch-helper-js/commit/bb2b31e6cce7ef1dbb42757872cc9a18c3155a8e
+ * refactor(lodash): sumBy (#688) https://github.com/algolia/algoliasearch-helper-js/commit/a538bd9783b0acff5877be40ffb9c41c8c714856
+ * refactor(result): use object vs list of arguments (#699) https://github.com/algolia/algoliasearch-helper-js/commit/643f18eadda9d0a530578fa79dee19cb42303576
+ * refactor(search): emit object (#683) https://github.com/algolia/algoliasearch-helper-js/commit/46c7d7d16ce3b7b4fab54ca6ec7a1b5be81ae4e6
+ * refactor(searchForFacetValues): use object vs list of arguments (#684) https://github.com/algolia/algoliasearch-helper-js/commit/ab8e9c5dd1c774bd4263f65fa60b0278281e699a
+ * refactor: remove getQueryParameter (#713) https://github.com/algolia/algoliasearch-helper-js/commit/d9dfac4742b405904c36d03f4d8fdd876c185d6b
+ * refactor(searchOnce): use object vs list of arguments (#681) https://github.com/algolia/algoliasearch-helper-js/commit/42b40d38ce363afbf711c522cc536ac84fad7987
+ * refactor(SearchParameters): removes default values (#670) https://github.com/algolia/algoliasearch-helper-js/commit/b15696be08dfc7df739ec83e2f57f777e58727eb
+ * refactor(url): remove url helpers (#652) https://github.com/algolia/algoliasearch-helper-js/commit/52e22f464a903a674ff714cc4f914c458b53a973
+ * test(sffv): no longer test impossible responses (#686) https://github.com/algolia/algoliasearch-helper-js/commit/fd878e8f9de65ef18926f86460fe1a4e49b77e20
+
+
+### BREAKING CHANGE
+
+* getState(filters) is replaced my manually filtering the returned object
+* removed helper.isRefined, use helper.hasRefinements instead
+* SearchParameters.filter is removed
+
+* doc(filter): remove reference
+* use helper.state instead of helper.getState()
 2.28.0 - 2019-05-07
  * fix(results): revert changes done in #648
     * this will come back in the next major version, but has breaking changes for now
