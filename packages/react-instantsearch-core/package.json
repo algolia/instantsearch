@@ -40,7 +40,7 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "@types/algoliasearch": "^3.30.16",
-    "algoliasearch-helper": "0.0.0-6ac260d",
+    "algoliasearch-helper": "^3.0.0",
     "fast-deep-equal": "^2.0.1",
     "prop-types": "^15.5.10"
   },
