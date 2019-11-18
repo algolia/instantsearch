@@ -15,12 +15,13 @@ test('Adding refinements should add an entry to the refinements attribute', func
 
   expect(_.isEmpty(helper.state.facetsRefinements)).toBeTruthy();
   helper.addRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements) === 1).toBeTruthy();
+  expect(_.size(helper.state.facetsRefinements)).toBe(1);
   expect(helper.state.facetsRefinements.facet1).toEqual([facetValue]);
   helper.addRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements) === 1).toBeTruthy();
+  expect(_.size(helper.state.facetsRefinements)).toBe(1);
   helper.removeRefine(facetName, facetValue);
-  expect(_.size(helper.state.facetsRefinements) === 0).toBeTruthy();
+  expect(_.size(helper.state.facetsRefinements)).toBe(1);
+  expect(helper.state.facetsRefinements[facetName]).toEqual([]);
 });
 
 test('Adding several refinements for a single attribute should be handled', function() {
@@ -97,37 +98,19 @@ test('isDisjunctiveRefined', function() {
   expect(helper.isDisjunctiveRefined(facet, value)).toBe(false);
 });
 
-test('IsRefined should return true if the (facet, value ) is refined.', function() {
+test('hasRefinements(facet) should return true if the facet is refined.', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1']
   });
 
-  helper.addRefine('facet1', 'boom');
-
-  expect(helper.isRefined('facet1', 'boom')).toBe(true);
-
-  expect(helper.isRefined('facet1', 'booohh')).toBe(false);
-  expect(_.bind(helper.isRefined, helper, 'notAFacet', 'maoooh')).toThrow();
-  expect(_.bind(helper.isRefined, helper, null, null)).toThrow();
-});
-
-test('isRefined(facet)/hasRefinements should return true if the facet is refined.', function() {
-  var helper = algoliasearchHelper(emptyClient, null, {
-    facets: ['facet1']
-  });
-
-  expect(helper.isRefined('facet1')).toBe(false);
   expect(helper.hasRefinements('facet1')).toBe(false);
 
   helper.addRefine('facet1', 'boom');
 
-  expect(helper.isRefined('facet1')).toBe(true);
   expect(helper.hasRefinements('facet1')).toBe(true);
 
-  expect(_.bind(helper.isRefined, helper, 'notAFacet')).toThrow();
   // in complete honesty we should be able to detect numeric facets but we can't
   // t.throws(helper.hasRefinements.bind(helper, 'notAFacet'), 'not a facet');
-  expect(_.bind(helper.isRefined, null)).toThrow();
   expect(_.bind(helper.hasRefinements, null)).toThrow();
 });
 
@@ -185,17 +168,17 @@ test('[Conjunctive] Facets should be resilient to user attempt to use numbers', 
   });
 
   helper.addRefine('facet1', 42);
-  expect(helper.isRefined('facet1', 42)).toBe(true);
-  expect(helper.isRefined('facet1', '42')).toBe(true);
+  expect(helper.hasRefinements('facet1', 42)).toBe(true);
+  expect(helper.hasRefinements('facet1', '42')).toBe(true);
 
   var stateWithFacet1and42 = helper.state;
 
   helper.removeRefine('facet1', '42');
-  expect(helper.isRefined('facet1', '42')).toBe(false);
+  expect(helper.hasRefinements('facet1', '42')).toBe(false);
 
   helper.setState(stateWithFacet1and42);
   helper.removeRefine('facet1', 42);
-  expect(helper.isRefined('facet1', 42)).toBe(false);
+  expect(helper.hasRefinements('facet1', 42)).toBe(false);
 });
 
 test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function() {

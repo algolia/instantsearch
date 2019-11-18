@@ -35,40 +35,42 @@ test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their re
 
       var calls = 0;
 
-      helper.on('error', function(err) {
-        done.fail(err);
+      helper.on('error', function(event) {
+        done.fail(event.error);
       });
 
-      helper.on('result', function(content) {
+      helper.on('result', function(event) {
         calls++;
 
+        var results = event.results;
+
         if (calls === 1) {
-          expect(content.hits.length).toBe(4);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([0, 1, 2, 3]);
+          expect(results.hits.length).toBe(4);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([0, 1, 2, 3]);
           helper.setQueryParameter('numericFilters', 'n=6,n=10').search();
         }
 
         if (calls === 2) {
-          expect(content.hits.length).toBe(1);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([1]);
+          expect(results.hits.length).toBe(1);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([1]);
           helper.setQueryParameter('numericFilters', '(n=6,n>40)').search();
         }
 
         if (calls === 3) {
-          expect(content.hits.length).toBe(3);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([0, 1, 2]);
+          expect(results.hits.length).toBe(3);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([0, 1, 2]);
           helper.setQueryParameter('numericFilters', 'n:11 to 46').search();
         }
 
         if (calls === 4) {
-          expect(content.hits.length).toBe(2);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([2, 3]);
+          expect(results.hits.length).toBe(2);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([2, 3]);
           helper.setQueryParameter('numericFilters', 'n=5,(n=10,n=45)').search();
         }
 
         if (calls === 5) {
-          expect(content.hits.length).toBe(1);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([2]);
+          expect(results.hits.length).toBe(1);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([2]);
           client.deleteIndex(indexName);
           if (!process.browser) {
             client.destroy();
@@ -104,31 +106,33 @@ test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and thei
 
       var calls = 0;
 
-      helper.on('error', function(err) {
-        done.fail(err);
+      helper.on('error', function(event) {
+        done.fail(event.error);
       });
 
-      helper.on('result', function(content) {
+      helper.on('result', function(event) {
         calls++;
 
+        var results = event.results;
+
         if (calls === 1) {
-          expect(content.hits.length).toBe(4);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([0, 1, 2, 3]);
+          expect(results.hits.length).toBe(4);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([0, 1, 2, 3]);
           helper.addNumericRefinement('n', '=', '6');
           helper.addNumericRefinement('n', '=', '10');
           helper.search();
         }
 
         if (calls === 2) {
-          expect(content.hits.length).toBe(1);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([1]);
+          expect(results.hits.length).toBe(1);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([1]);
           helper.clearRefinements('n');
           helper.addNumericRefinement('n', '=', [6, 45]).search();
         }
 
         if (calls === 3) {
-          expect(content.hits.length).toBe(3);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([0, 1, 2]);
+          expect(results.hits.length).toBe(3);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([0, 1, 2]);
           helper.addNumericRefinement('n', '=', 5);
           helper.removeNumericRefinement('n', '=', [6, 45]);
           helper.addNumericRefinement('n', '=', [10, 45]);
@@ -136,8 +140,8 @@ test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and thei
         }
 
         if (calls === 4) {
-          expect(content.hits.length).toBe(1);
-          expect(map(content.hits, hitsToParsedID).sort()).toEqual([2]);
+          expect(results.hits.length).toBe(1);
+          expect(map(results.hits, hitsToParsedID).sort()).toEqual([2]);
           client.deleteIndex(indexName);
           if (!process.browser) {
             client.destroy();

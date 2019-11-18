@@ -60,8 +60,8 @@ test('searchOnce should call the algolia client according to the number of refin
     var queries = client.search.mock.calls[0][0];
     for (var i = 0; i < queries.length; i++) {
       var query = queries[i];
-      expect(query.query).toBe(undefined);
-      expect(query.params.query).toBe('');
+      expect(query.query).toBeUndefined();
+      expect(query.params.query).toBeUndefined();
     }
 
     done();
@@ -94,8 +94,8 @@ test('searchOnce should call the algolia client according to the number of refin
     var queries = client.search.mock.calls[0][0];
     for (var i = 0; i < queries.length; i++) {
       var query = queries[i];
-      expect(query.query).toBe(undefined);
-      expect(query.params.query).toBe('');
+      expect(query.query).toBeUndefined();
+      expect(query.params.query).toBeUndefined();
     }
 
     done();

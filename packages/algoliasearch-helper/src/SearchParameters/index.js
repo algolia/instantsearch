@@ -1,43 +1,45 @@
 'use strict';
 
-var keys = require('lodash/keys');
-var intersection = require('lodash/intersection');
-var forOwn = require('lodash/forOwn');
-var forEach = require('lodash/forEach');
-var filter = require('lodash/filter');
-var map = require('lodash/map');
-var reduce = require('lodash/reduce');
-var omit = require('lodash/omit');
-var indexOf = require('lodash/indexOf');
-var isNaN = require('lodash/isNaN');
-var isEmpty = require('lodash/isEmpty');
-var isEqual = require('lodash/isEqual');
-var isUndefined = require('lodash/isUndefined');
-var isString = require('lodash/isString');
-var isFunction = require('lodash/isFunction');
-var find = require('lodash/find');
-var trim = require('lodash/trim');
-
-var defaults = require('lodash/defaults');
-var merge = require('lodash/merge');
-
+var merge = require('../functions/merge');
+var defaultsPure = require('../functions/defaultsPure');
+var intersection = require('../functions/intersection');
+var find = require('../functions/find');
 var valToNumber = require('../functions/valToNumber');
-
-var filterState = require('./filterState');
+var omit = require('../functions/omit');
+var objectHasKeys = require('../functions/objectHasKeys');
 
 var RefinementList = require('./RefinementList');
 
 /**
- * like _.find but using _.isEqual to be able to use it
+ * isEqual, but only for numeric refinement values, possible values:
+ * - 5
+ * - [5]
+ * - [[5]]
+ * - [[5,5],[4]]
+ */
+function isEqualNumericRefinement(a, b) {
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return (
+      a.length === b.length &&
+      a.every(function(el, i) {
+        return isEqualNumericRefinement(b[i], el);
+      })
+    );
+  }
+  return a === b;
+}
+
+/**
+ * like _.find but using deep equality to be able to use it
  * to find arrays.
  * @private
- * @param {any[]} array array to search into
- * @param {any} searchedValue the value we're looking for
+ * @param {any[]} array array to search into (elements are base or array of base)
+ * @param {any} searchedValue the value we're looking for (base or array of base)
  * @return {any} the searched value or undefined
  */
 function findArray(array, searchedValue) {
   return find(array, function(currentValue) {
-    return isEqual(currentValue, searchedValue);
+    return isEqualNumericRefinement(currentValue, searchedValue);
   });
 }
 
@@ -91,21 +93,6 @@ function findArray(array, searchedValue) {
 function SearchParameters(newParameters) {
   var params = newParameters ? SearchParameters._parseNumbers(newParameters) : {};
 
-  /**
-   * Targeted index. This parameter is mandatory.
-   * @member {string}
-   */
-  this.index = params.index || '';
-
-  // Query
-  /**
-   * Query string of the instant search. The empty string is a valid query.
-   * @member {string}
-   * @see https://www.algolia.com/doc/rest#param-query
-   */
-  this.query = params.query || '';
-
-  // Facets
   /**
    * This attribute contains the list of all the conjunctive facets
    * used. This list will be added to requested facets in the
@@ -206,268 +193,13 @@ function SearchParameters(newParameters) {
    */
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
 
-  /**
-   * Contains the numeric filters in the raw format of the Algolia API. Setting
-   * this parameter is not compatible with the usage of numeric filters methods.
-   * @see https://www.algolia.com/doc/javascript#numericFilters
-   * @member {string}
-   */
-  this.numericFilters = params.numericFilters;
-
-  /**
-   * Contains the tag filters in the raw format of the Algolia API. Setting this
-   * parameter is not compatible with the of the add/remove/toggle methods of the
-   * tag api.
-   * @see https://www.algolia.com/doc/rest#param-tagFilters
-   * @member {string}
-   */
-  this.tagFilters = params.tagFilters;
-
-  /**
-   * Contains the optional tag filters in the raw format of the Algolia API.
-   * @see https://www.algolia.com/doc/rest#param-tagFilters
-   * @member {string}
-   */
-  this.optionalTagFilters = params.optionalTagFilters;
-
-  /**
-   * Contains the optional facet filters in the raw format of the Algolia API.
-   * @see https://www.algolia.com/doc/rest#param-tagFilters
-   * @member {string}
-   */
-  this.optionalFacetFilters = params.optionalFacetFilters;
-
-
-  // Misc. parameters
-  /**
-   * Number of hits to be returned by the search API
-   * @member {number}
-   * @see https://www.algolia.com/doc/rest#param-hitsPerPage
-   */
-  this.hitsPerPage = params.hitsPerPage;
-  /**
-   * Number of values for each faceted attribute
-   * @member {number}
-   * @see https://www.algolia.com/doc/rest#param-maxValuesPerFacet
-   */
-  this.maxValuesPerFacet = params.maxValuesPerFacet;
-  /**
-   * The current page number
-   * @member {number}
-   * @see https://www.algolia.com/doc/rest#param-page
-   */
-  this.page = params.page || 0;
-  /**
-   * How the query should be treated by the search engine.
-   * Possible values: prefixAll, prefixLast, prefixNone
-   * @see https://www.algolia.com/doc/rest#param-queryType
-   * @member {string}
-   */
-  this.queryType = params.queryType;
-  /**
-   * How the typo tolerance behave in the search engine.
-   * Possible values: true, false, min, strict
-   * @see https://www.algolia.com/doc/rest#param-typoTolerance
-   * @member {string}
-   */
-  this.typoTolerance = params.typoTolerance;
-
-  /**
-   * Number of characters to wait before doing one character replacement.
-   * @see https://www.algolia.com/doc/rest#param-minWordSizefor1Typo
-   * @member {number}
-   */
-  this.minWordSizefor1Typo = params.minWordSizefor1Typo;
-  /**
-   * Number of characters to wait before doing a second character replacement.
-   * @see https://www.algolia.com/doc/rest#param-minWordSizefor2Typos
-   * @member {number}
-   */
-  this.minWordSizefor2Typos = params.minWordSizefor2Typos;
-  /**
-   * Configure the precision of the proximity ranking criterion
-   * @see https://www.algolia.com/doc/rest#param-minProximity
-   */
-  this.minProximity = params.minProximity;
-  /**
-   * Should the engine allow typos on numerics.
-   * @see https://www.algolia.com/doc/rest#param-allowTyposOnNumericTokens
-   * @member {boolean}
-   */
-  this.allowTyposOnNumericTokens = params.allowTyposOnNumericTokens;
-  /**
-   * Should the plurals be ignored
-   * @see https://www.algolia.com/doc/rest#param-ignorePlurals
-   * @member {boolean}
-   */
-  this.ignorePlurals = params.ignorePlurals;
-  /**
-   * Restrict which attribute is searched.
-   * @see https://www.algolia.com/doc/rest#param-restrictSearchableAttributes
-   * @member {string}
-   */
-  this.restrictSearchableAttributes = params.restrictSearchableAttributes;
-  /**
-   * Enable the advanced syntax.
-   * @see https://www.algolia.com/doc/rest#param-advancedSyntax
-   * @member {boolean}
-   */
-  this.advancedSyntax = params.advancedSyntax;
-  /**
-   * Enable the analytics
-   * @see https://www.algolia.com/doc/rest#param-analytics
-   * @member {boolean}
-   */
-  this.analytics = params.analytics;
-  /**
-   * Tag of the query in the analytics.
-   * @see https://www.algolia.com/doc/rest#param-analyticsTags
-   * @member {string}
-   */
-  this.analyticsTags = params.analyticsTags;
-  /**
-   * Enable the synonyms
-   * @see https://www.algolia.com/doc/rest#param-synonyms
-   * @member {boolean}
-   */
-  this.synonyms = params.synonyms;
-  /**
-   * Should the engine replace the synonyms in the highlighted results.
-   * @see https://www.algolia.com/doc/rest#param-replaceSynonymsInHighlight
-   * @member {boolean}
-   */
-  this.replaceSynonymsInHighlight = params.replaceSynonymsInHighlight;
-  /**
-   * Add some optional words to those defined in the dashboard
-   * @see https://www.algolia.com/doc/rest#param-optionalWords
-   * @member {string}
-   */
-  this.optionalWords = params.optionalWords;
-  /**
-   * Possible values are "lastWords" "firstWords" "allOptional" "none" (default)
-   * @see https://www.algolia.com/doc/rest#param-removeWordsIfNoResults
-   * @member {string}
-   */
-  this.removeWordsIfNoResults = params.removeWordsIfNoResults;
-  /**
-   * List of attributes to retrieve
-   * @see https://www.algolia.com/doc/rest#param-attributesToRetrieve
-   * @member {string}
-   */
-  this.attributesToRetrieve = params.attributesToRetrieve;
-  /**
-   * List of attributes to highlight
-   * @see https://www.algolia.com/doc/rest#param-attributesToHighlight
-   * @member {string}
-   */
-  this.attributesToHighlight = params.attributesToHighlight;
-  /**
-   * Code to be embedded on the left part of the highlighted results
-   * @see https://www.algolia.com/doc/rest#param-highlightPreTag
-   * @member {string}
-   */
-  this.highlightPreTag = params.highlightPreTag;
-  /**
-   * Code to be embedded on the right part of the highlighted results
-   * @see https://www.algolia.com/doc/rest#param-highlightPostTag
-   * @member {string}
-   */
-  this.highlightPostTag = params.highlightPostTag;
-  /**
-   * List of attributes to snippet
-   * @see https://www.algolia.com/doc/rest#param-attributesToSnippet
-   * @member {string}
-   */
-  this.attributesToSnippet = params.attributesToSnippet;
-  /**
-   * Enable the ranking informations in the response, set to 1 to activate
-   * @see https://www.algolia.com/doc/rest#param-getRankingInfo
-   * @member {number}
-   */
-  this.getRankingInfo = params.getRankingInfo;
-  /**
-   * Remove duplicates based on the index setting attributeForDistinct
-   * @see https://www.algolia.com/doc/rest#param-distinct
-   * @member {boolean|number}
-   */
-  this.distinct = params.distinct;
-  /**
-   * Center of the geo search.
-   * @see https://www.algolia.com/doc/rest#param-aroundLatLng
-   * @member {string}
-   */
-  this.aroundLatLng = params.aroundLatLng;
-  /**
-   * Center of the search, retrieve from the user IP.
-   * @see https://www.algolia.com/doc/rest#param-aroundLatLngViaIP
-   * @member {boolean}
-   */
-  this.aroundLatLngViaIP = params.aroundLatLngViaIP;
-  /**
-   * Radius of the geo search.
-   * @see https://www.algolia.com/doc/rest#param-aroundRadius
-   * @member {number}
-   */
-  this.aroundRadius = params.aroundRadius;
-  /**
-   * Precision of the geo search.
-   * @see https://www.algolia.com/doc/rest#param-aroundPrecision
-   * @member {number}
-   */
-  this.minimumAroundRadius = params.minimumAroundRadius;
-  /**
-   * Precision of the geo search.
-   * @see https://www.algolia.com/doc/rest#param-minimumAroundRadius
-   * @member {number}
-   */
-  this.aroundPrecision = params.aroundPrecision;
-  /**
-   * Geo search inside a box.
-   * @see https://www.algolia.com/doc/rest#param-insideBoundingBox
-   * @member {string}
-   */
-  this.insideBoundingBox = params.insideBoundingBox;
-  /**
-   * Geo search inside a polygon.
-   * @see https://www.algolia.com/doc/rest#param-insidePolygon
-   * @member {string}
-   */
-  this.insidePolygon = params.insidePolygon;
-  /**
-   * Allows to specify an ellipsis character for the snippet when we truncate the text
-   * (added before and after if truncated).
-   * The default value is an empty string and we recommend to set it to "…"
-   * @see https://www.algolia.com/doc/rest#param-insidePolygon
-   * @member {string}
-   */
-  this.snippetEllipsisText = params.snippetEllipsisText;
-  /**
-   * Allows to specify some attributes name on which exact won't be applied.
-   * Attributes are separated with a comma (for example "name,address" ), you can also use a
-   * JSON string array encoding (for example encodeURIComponent('["name","address"]') ).
-   * By default the list is empty.
-   * @see https://www.algolia.com/doc/rest#param-disableExactOnAttributes
-   * @member {string|string[]}
-   */
-  this.disableExactOnAttributes = params.disableExactOnAttributes;
-  /**
-   * Applies 'exact' on single word queries if the word contains at least 3 characters
-   * and is not a stop word.
-   * Can take two values: true or false.
-   * By default, its set to false.
-   * @see https://www.algolia.com/doc/rest#param-enableExactOnSingleWordQuery
-   * @member {boolean}
-   */
-  this.enableExactOnSingleWordQuery = params.enableExactOnSingleWordQuery;
-
-  // Undocumented parameters, still needed otherwise we fail
-  this.offset = params.offset;
-  this.length = params.length;
-
   var self = this;
-  forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
-    if (SearchParameters.PARAMETERS.indexOf(paramName) === -1) {
-      self[paramName] = paramValue;
+  Object.keys(params).forEach(function(paramName) {
+    var isKeyKnown = SearchParameters.PARAMETERS.indexOf(paramName) !== -1;
+    var isValueDefined = params[paramName] !== undefined;
+
+    if (!isKeyKnown && isValueDefined) {
+      self[paramName] = params[paramName];
     }
   });
 }
@@ -477,7 +209,7 @@ function SearchParameters(newParameters) {
  * This doesn't contain any beta/hidden features.
  * @private
  */
-SearchParameters.PARAMETERS = keys(new SearchParameters());
+SearchParameters.PARAMETERS = Object.keys(new SearchParameters());
 
 /**
  * @private
@@ -504,10 +236,11 @@ SearchParameters._parseNumbers = function(partialState) {
     'minProximity'
   ];
 
-  forEach(numberKeys, function(k) {
+  numberKeys.forEach(function(k) {
     var value = partialState[k];
-    if (isString(value)) {
+    if (typeof value === 'string') {
       var parsedValue = parseFloat(value);
+      // global isNaN is ok to use here, value is only number or NaN
       numbers[k] = isNaN(parsedValue) ? value : parsedValue;
     }
   });
@@ -524,18 +257,20 @@ SearchParameters._parseNumbers = function(partialState) {
 
   if (partialState.numericRefinements) {
     var numericRefinements = {};
-    forEach(partialState.numericRefinements, function(operators, attribute) {
+    Object.keys(partialState.numericRefinements).forEach(function(attribute) {
+      var operators = partialState.numericRefinements[attribute] || {};
       numericRefinements[attribute] = {};
-      forEach(operators, function(values, operator) {
-        var parsedValues = map(values, function(v) {
+      Object.keys(operators).forEach(function(operator) {
+        var values = operators[operator];
+        var parsedValues = values.map(function(v) {
           if (Array.isArray(v)) {
-            return map(v, function(vPrime) {
-              if (isString(vPrime)) {
+            return v.map(function(vPrime) {
+              if (typeof vPrime === 'string') {
                 return parseFloat(vPrime);
               }
               return vPrime;
             });
-          } else if (isString(v)) {
+          } else if (typeof v === 'string') {
             return parseFloat(v);
           }
           return v;
@@ -558,7 +293,8 @@ SearchParameters._parseNumbers = function(partialState) {
 SearchParameters.make = function makeSearchParameters(newParameters) {
   var instance = new SearchParameters(newParameters);
 
-  forEach(newParameters.hierarchicalFacets, function(facet) {
+  var hierarchicalFacets = newParameters.hierarchicalFacets || [];
+  hierarchicalFacets.forEach(function(facet) {
     if (facet.rootPath) {
       var currentRefinement = instance.getHierarchicalRefinement(facet.name);
 
@@ -598,14 +334,19 @@ SearchParameters.validate = function(currentState, parameters) {
       'an error, if it is not, you should first clear the tags with clearTags method.');
   }
 
-  if (currentState.numericFilters && params.numericRefinements && !isEmpty(params.numericRefinements)) {
+  if (
+    currentState.numericFilters &&
+    params.numericRefinements &&
+    objectHasKeys(params.numericRefinements)
+  ) {
     return new Error(
       "[Numeric filters] Can't switch from the advanced to the managed API. It" +
-      ' is probably an error, if this is really what you want, you have to first' +
-      ' clear the numeric filters.');
+        ' is probably an error, if this is really what you want, you have to first' +
+        ' clear the numeric filters.'
+    );
   }
 
-  if (!isEmpty(currentState.numericRefinements) && params.numericFilters) {
+  if (objectHasKeys(currentState.numericRefinements) && params.numericFilters) {
     return new Error(
       "[Numeric filters] Can't switch from the managed API to the advanced. It" +
       ' is probably an error, if this is really what you want, you have to first' +
@@ -628,19 +369,36 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   clearRefinements: function clearRefinements(attribute) {
-    var clear = RefinementList.clearRefinement;
     var patch = {
       numericRefinements: this._clearNumericRefinements(attribute),
-      facetsRefinements: clear(this.facetsRefinements, attribute, 'conjunctiveFacet'),
-      facetsExcludes: clear(this.facetsExcludes, attribute, 'exclude'),
-      disjunctiveFacetsRefinements: clear(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet'),
-      hierarchicalFacetsRefinements: clear(this.hierarchicalFacetsRefinements, attribute, 'hierarchicalFacet')
+      facetsRefinements: RefinementList.clearRefinement(
+        this.facetsRefinements,
+        attribute,
+        'conjunctiveFacet'
+      ),
+      facetsExcludes: RefinementList.clearRefinement(
+        this.facetsExcludes,
+        attribute,
+        'exclude'
+      ),
+      disjunctiveFacetsRefinements: RefinementList.clearRefinement(
+        this.disjunctiveFacetsRefinements,
+        attribute,
+        'disjunctiveFacet'
+      ),
+      hierarchicalFacetsRefinements: RefinementList.clearRefinement(
+        this.hierarchicalFacetsRefinements,
+        attribute,
+        'hierarchicalFacet'
+      )
     };
-    if (patch.numericRefinements === this.numericRefinements &&
-        patch.facetsRefinements === this.facetsRefinements &&
-        patch.facetsExcludes === this.facetsExcludes &&
-        patch.disjunctiveFacetsRefinements === this.disjunctiveFacetsRefinements &&
-        patch.hierarchicalFacetsRefinements === this.hierarchicalFacetsRefinements) {
+    if (
+      patch.numericRefinements === this.numericRefinements &&
+      patch.facetsRefinements === this.facetsRefinements &&
+      patch.facetsExcludes === this.facetsExcludes &&
+      patch.disjunctiveFacetsRefinements === this.disjunctiveFacetsRefinements &&
+      patch.hierarchicalFacetsRefinements === this.hierarchicalFacetsRefinements
+    ) {
       return this;
     }
     return this.setQueryParameters(patch);
@@ -795,7 +553,7 @@ SearchParameters.prototype = {
    */
   getConjunctiveRefinements: function(facetName) {
     if (!this.isConjunctiveFacet(facetName)) {
-      throw new Error(facetName + ' is not defined in the facets attribute of the helper configuration');
+      return [];
     }
     return this.facetsRefinements[facetName] || [];
   },
@@ -806,9 +564,7 @@ SearchParameters.prototype = {
    */
   getDisjunctiveRefinements: function(facetName) {
     if (!this.isDisjunctiveFacet(facetName)) {
-      throw new Error(
-        facetName + ' is not defined in the disjunctiveFacets attribute of the helper configuration'
-      );
+      return [];
     }
     return this.disjunctiveFacetsRefinements[facetName] || [];
   },
@@ -829,7 +585,7 @@ SearchParameters.prototype = {
    */
   getExcludeRefinements: function(facetName) {
     if (!this.isConjunctiveFacet(facetName)) {
-      throw new Error(facetName + ' is not defined in the facets attribute of the helper configuration');
+      return [];
     }
     return this.facetsExcludes[facetName] || [];
   },
@@ -844,11 +600,16 @@ SearchParameters.prototype = {
    */
   removeNumericRefinement: function(attribute, operator, paramValue) {
     if (paramValue !== undefined) {
-      var paramValueAsNumber = valToNumber(paramValue);
-      if (!this.isNumericRefined(attribute, operator, paramValueAsNumber)) return this;
+      if (!this.isNumericRefined(attribute, operator, paramValue)) {
+        return this;
+      }
       return this.setQueryParameters({
         numericRefinements: this._clearNumericRefinements(function(value, key) {
-          return key === attribute && value.op === operator && isEqual(value.val, paramValueAsNumber);
+          return (
+            key === attribute &&
+            value.op === operator &&
+            isEqualNumericRefinement(value.val, valToNumber(paramValue))
+          );
         })
       });
     } else if (operator !== undefined) {
@@ -895,31 +656,38 @@ SearchParameters.prototype = {
    * @return {Object.<string, OperatorList>}
    */
   _clearNumericRefinements: function _clearNumericRefinements(attribute) {
-    if (isUndefined(attribute)) {
-      if (isEmpty(this.numericRefinements)) return this.numericRefinements;
+    if (attribute === undefined) {
+      if (!objectHasKeys(this.numericRefinements)) {
+        return this.numericRefinements;
+      }
       return {};
-    } else if (isString(attribute)) {
-      if (isEmpty(this.numericRefinements[attribute])) return this.numericRefinements;
+    } else if (typeof attribute === 'string') {
+      if (!objectHasKeys(this.numericRefinements[attribute])) {
+        return this.numericRefinements;
+      }
       return omit(this.numericRefinements, attribute);
-    } else if (isFunction(attribute)) {
+    } else if (typeof attribute === 'function') {
       var hasChanged = false;
-      var newNumericRefinements = reduce(this.numericRefinements, function(memo, operators, key) {
+      var numericRefinements = this.numericRefinements;
+      var newNumericRefinements = Object.keys(numericRefinements).reduce(function(memo, key) {
+        var operators = numericRefinements[key];
         var operatorList = {};
 
-        forEach(operators, function(values, operator) {
+        operators = operators || {};
+        Object.keys(operators).forEach(function(operator) {
+          var values = operators[operator] || [];
           var outValues = [];
-          forEach(values, function(value) {
+          values.forEach(function(value) {
             var predicateResult = attribute({val: value, op: operator}, key, 'numeric');
             if (!predicateResult) outValues.push(value);
           });
-          if (!isEmpty(outValues)) {
-            if (outValues.length !== values.length) hasChanged = true;
-            operatorList[operator] = outValues;
+          if (outValues.length !== values.length) {
+            hasChanged = true;
           }
-          else hasChanged = true;
+          operatorList[operator] = outValues;
         });
 
-        if (!isEmpty(operatorList)) memo[key] = operatorList;
+        memo[key] = operatorList;
 
         return memo;
       }, {});
@@ -1059,7 +827,7 @@ SearchParameters.prototype = {
     }
 
     return this.clearRefinements(facet).setQueryParameters({
-      facets: filter(this.facets, function(f) {
+      facets: this.facets.filter(function(f) {
         return f !== facet;
       })
     });
@@ -1077,7 +845,7 @@ SearchParameters.prototype = {
     }
 
     return this.clearRefinements(facet).setQueryParameters({
-      disjunctiveFacets: filter(this.disjunctiveFacets, function(f) {
+      disjunctiveFacets: this.disjunctiveFacets.filter(function(f) {
         return f !== facet;
       })
     });
@@ -1095,7 +863,7 @@ SearchParameters.prototype = {
     }
 
     return this.clearRefinements(facet).setQueryParameters({
-      hierarchicalFacets: filter(this.hierarchicalFacets, function(f) {
+      hierarchicalFacets: this.hierarchicalFacets.filter(function(f) {
         return f.name !== facet;
       })
     });
@@ -1165,7 +933,9 @@ SearchParameters.prototype = {
     if (!this.isTagRefined(tag)) return this;
 
     var modification = {
-      tagRefinements: filter(this.tagRefinements, function(t) { return t !== tag; })
+      tagRefinements: this.tagRefinements.filter(function(t) {
+        return t !== tag;
+      })
     };
 
     return this.setQueryParameters(modification);
@@ -1293,7 +1063,7 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+      hierarchicalFacetsRefinements: defaultsPure({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
 
@@ -1308,10 +1078,13 @@ SearchParameters.prototype = {
     if (this.isHierarchicalFacetRefined(facet)) {
       throw new Error(facet + ' is already refined.');
     }
+    if (!this.isHierarchicalFacet(facet)) {
+      throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration.');
+    }
     var mod = {};
     mod[facet] = [path];
     return this.setQueryParameters({
-      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+      hierarchicalFacetsRefinements: defaultsPure({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
 
@@ -1323,12 +1096,12 @@ SearchParameters.prototype = {
    */
   removeHierarchicalFacetRefinement: function(facet) {
     if (!this.isHierarchicalFacetRefined(facet)) {
-      throw new Error(facet + ' is not refined.');
+      return this;
     }
     var mod = {};
     mod[facet] = [];
     return this.setQueryParameters({
-      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+      hierarchicalFacetsRefinements: defaultsPure({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
   /**
@@ -1351,7 +1124,7 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isDisjunctiveFacet: function(facet) {
-    return indexOf(this.disjunctiveFacets, facet) > -1;
+    return this.disjunctiveFacets.indexOf(facet) > -1;
   },
   /**
    * Test if the facet name is from one of the hierarchical facets
@@ -1369,7 +1142,7 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isConjunctiveFacet: function(facet) {
-    return indexOf(this.facets, facet) > -1;
+    return this.facets.indexOf(facet) > -1;
   },
   /**
    * Returns true if the facet is refined, either for a specific value or in
@@ -1382,7 +1155,7 @@ SearchParameters.prototype = {
    */
   isFacetRefined: function isFacetRefined(facet, value) {
     if (!this.isConjunctiveFacet(facet)) {
-      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+      return false;
     }
     return RefinementList.isRefined(this.facetsRefinements, facet, value);
   },
@@ -1398,7 +1171,7 @@ SearchParameters.prototype = {
    */
   isExcludeRefined: function isExcludeRefined(facet, value) {
     if (!this.isConjunctiveFacet(facet)) {
-      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+      return false;
     }
     return RefinementList.isRefined(this.facetsExcludes, facet, value);
   },
@@ -1413,8 +1186,7 @@ SearchParameters.prototype = {
    */
   isDisjunctiveFacetRefined: function isDisjunctiveFacetRefined(facet, value) {
     if (!this.isDisjunctiveFacet(facet)) {
-      throw new Error(
-        facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+      return false;
     }
     return RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value);
   },
@@ -1429,8 +1201,7 @@ SearchParameters.prototype = {
    */
   isHierarchicalFacetRefined: function isHierarchicalFacetRefined(facet, value) {
     if (!this.isHierarchicalFacet(facet)) {
-      throw new Error(
-        facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
+      return false;
     }
 
     var refinements = this.getHierarchicalRefinement(facet);
@@ -1439,7 +1210,7 @@ SearchParameters.prototype = {
       return refinements.length > 0;
     }
 
-    return indexOf(refinements, value) !== -1;
+    return refinements.indexOf(value) !== -1;
   },
   /**
    * Test if the triple (attribute, operator, value) is already refined.
@@ -1452,21 +1223,22 @@ SearchParameters.prototype = {
    * @return {boolean} true if it is refined
    */
   isNumericRefined: function isNumericRefined(attribute, operator, value) {
-    if (isUndefined(value) && isUndefined(operator)) {
+    if (value === undefined && operator === undefined) {
       return !!this.numericRefinements[attribute];
     }
 
-    var isOperatorDefined = this.numericRefinements[attribute] &&
-      !isUndefined(this.numericRefinements[attribute][operator]);
+    var isOperatorDefined =
+      this.numericRefinements[attribute] &&
+      this.numericRefinements[attribute][operator] !== undefined;
 
-    if (isUndefined(value) || !isOperatorDefined) {
+    if (value === undefined || !isOperatorDefined) {
       return isOperatorDefined;
     }
 
     var parsedValue = valToNumber(value);
-    var isAttributeValueDefined = !isUndefined(
-      findArray(this.numericRefinements[attribute][operator], parsedValue)
-    );
+    var isAttributeValueDefined =
+      findArray(this.numericRefinements[attribute][operator], parsedValue) !==
+      undefined;
 
     return isOperatorDefined && isAttributeValueDefined;
   },
@@ -1477,7 +1249,7 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isTagRefined: function isTagRefined(tag) {
-    return indexOf(this.tagRefinements, tag) !== -1;
+    return this.tagRefinements.indexOf(tag) !== -1;
   },
   /**
    * Returns the list of all disjunctive facets refined
@@ -1487,13 +1259,19 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedDisjunctiveFacets: function getRefinedDisjunctiveFacets() {
+    var self = this;
+
     // attributes used for numeric filter can also be disjunctive
     var disjunctiveNumericRefinedFacets = intersection(
-      keys(this.numericRefinements),
+      Object.keys(this.numericRefinements).filter(function(facet) {
+        return Object.keys(self.numericRefinements[facet]).length > 0;
+      }),
       this.disjunctiveFacets
     );
 
-    return keys(this.disjunctiveFacetsRefinements)
+    return Object.keys(this.disjunctiveFacetsRefinements).filter(function(facet) {
+      return self.disjunctiveFacetsRefinements[facet].length > 0;
+    })
       .concat(disjunctiveNumericRefinedFacets)
       .concat(this.getRefinedHierarchicalFacets());
   },
@@ -1505,11 +1283,14 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedHierarchicalFacets: function getRefinedHierarchicalFacets() {
+    var self = this;
     return intersection(
       // enforce the order between the two arrays,
       // so that refinement name index === hierarchical facet index
-      map(this.hierarchicalFacets, 'name'),
-      keys(this.hierarchicalFacetsRefinements)
+      this.hierarchicalFacets.map(function(facet) { return facet.name; }),
+      Object.keys(this.hierarchicalFacetsRefinements).filter(function(facet) {
+        return self.hierarchicalFacetsRefinements[facet].length > 0;
+      })
     );
   },
   /**
@@ -1520,8 +1301,8 @@ SearchParameters.prototype = {
   getUnrefinedDisjunctiveFacets: function() {
     var refinedFacets = this.getRefinedDisjunctiveFacets();
 
-    return filter(this.disjunctiveFacets, function(f) {
-      return indexOf(refinedFacets, f) === -1;
+    return this.disjunctiveFacets.filter(function(f) {
+      return refinedFacets.indexOf(f) === -1;
     });
   },
 
@@ -1536,27 +1317,15 @@ SearchParameters.prototype = {
 
     var queryParams = {};
 
-    forOwn(this, function(paramValue, paramName) {
-      if (indexOf(managedParameters, paramName) === -1 && paramValue !== undefined) {
+    var self = this;
+    Object.keys(this).forEach(function(paramName) {
+      var paramValue = self[paramName];
+      if (managedParameters.indexOf(paramName) === -1 && paramValue !== undefined) {
         queryParams[paramName] = paramValue;
       }
     });
 
     return queryParams;
-  },
-  /**
-   * Let the user retrieve any parameter value from the SearchParameters
-   * @param {string} paramName name of the parameter
-   * @return {any} the value of the parameter
-   */
-  getQueryParameter: function getQueryParameter(paramName) {
-    if (!this.hasOwnProperty(paramName)) {
-      throw new Error(
-        "Parameter '" + paramName + "' is not an attribute of SearchParameters " +
-        '(http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
-    }
-
-    return this[paramName];
   },
   /**
    * Let the user set a specific value for a given parameter. Will return the
@@ -1592,42 +1361,46 @@ SearchParameters.prototype = {
       throw error;
     }
 
-    var parsedParams = SearchParameters._parseNumbers(params);
+    var self = this;
+    var nextWithNumbers = SearchParameters._parseNumbers(params);
+    var previousPlainObject = Object.keys(this).reduce(function(acc, key) {
+      acc[key] = self[key];
+      return acc;
+    }, {});
 
-    return this.mutateMe(function mergeWith(newInstance) {
-      var ks = keys(params);
+    var nextPlainObject = Object.keys(nextWithNumbers).reduce(
+      function(previous, key) {
+        var isPreviousValueDefined = previous[key] !== undefined;
+        var isNextValueDefined = nextWithNumbers[key] !== undefined;
 
-      forEach(ks, function(k) {
-        newInstance[k] = parsedParams[k];
-      });
+        if (isPreviousValueDefined && !isNextValueDefined) {
+          return omit(previous, [key]);
+        }
 
-      return newInstance;
-    });
+        if (isNextValueDefined) {
+          previous[key] = nextWithNumbers[key];
+        }
+
+        return previous;
+      },
+      previousPlainObject
+    );
+
+    return new this.constructor(nextPlainObject);
   },
 
   /**
-   * Returns an object with only the selected attributes.
-   * @param {string[]} filters filters to retrieve only a subset of the state. It
-   * accepts strings that can be either attributes of the SearchParameters (e.g. hitsPerPage)
-   * or attributes of the index with the notation 'attribute:nameOfMyAttribute'
-   * @return {object}
+   * Returns a new instance with the page reset. Two scenarios possible:
+   * the page is omitted -> return the given instance
+   * the page is set -> return a new instance with a page of 0
+   * @return {SearchParameters} a new updated instance
    */
-  filter: function(filters) {
-    return filterState(this, filters);
-  },
-  /**
-   * Helper function to make it easier to build new instances from a mutating
-   * function
-   * @private
-   * @param {function} fn newMutableState -> previousState -> () function that will
-   * change the value of the newMutable to the desired state
-   * @return {SearchParameters} a new instance with the specified modifications applied
-   */
-  mutateMe: function mutateMe(fn) {
-    var newState = new this.constructor(this);
+  resetPage: function() {
+    if (this.page === undefined) {
+      return this;
+    }
 
-    fn(newState, this);
-    return newState;
+    return this.setPage(0);
   },
 
   /**
@@ -1680,7 +1453,9 @@ SearchParameters.prototype = {
   getHierarchicalFacetByName: function(hierarchicalFacetName) {
     return find(
       this.hierarchicalFacets,
-      {name: hierarchicalFacetName}
+      function(f) {
+        return f.name === hierarchicalFacetName;
+      }
     );
   },
 
@@ -1691,8 +1466,7 @@ SearchParameters.prototype = {
    */
   getHierarchicalFacetBreadcrumb: function(facetName) {
     if (!this.isHierarchicalFacet(facetName)) {
-      throw new Error(
-        'Cannot get the breadcrumb of an unknown hierarchical facet: `' + facetName + '`');
+      return [];
     }
 
     var refinement = this.getHierarchicalRefinement(facetName)[0];
@@ -1702,7 +1476,9 @@ SearchParameters.prototype = {
       this.getHierarchicalFacetByName(facetName)
     );
     var path = refinement.split(separator);
-    return map(path, trim);
+    return path.map(function(part) {
+      return part.trim();
+    });
   },
 
   toString: function() {

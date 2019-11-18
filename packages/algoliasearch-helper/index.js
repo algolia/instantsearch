@@ -17,8 +17,8 @@ var SearchResults = require('./src/SearchResults');
  *   facets: ['shipping'],
  *   disjunctiveFacets: ['category']
  * });
- * helper.on('result', function(result) {
- *   console.log(result);
+ * helper.on('result', function(event) {
+ *   console.log(event.results);
  * });
  * helper
  *   .toggleFacetRefinement('category', 'Movies & TV Shows')
@@ -67,14 +67,5 @@ algoliasearchHelper.SearchParameters = SearchParameters;
  * @type {SearchResults}
  */
 algoliasearchHelper.SearchResults = SearchResults;
-
-/**
- * URL tools to generate query string and parse them from/into
- * SearchParameters
- * @member module:algoliasearchHelper.url
- * @type {object} {@link url}
- *
- */
-algoliasearchHelper.url = require('./src/url');
 
 module.exports = algoliasearchHelper;

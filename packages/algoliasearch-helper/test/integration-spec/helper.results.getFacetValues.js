@@ -30,14 +30,15 @@ test(
         }
       );
 
-      helper.on('result', function(rs) {
-        expect(rs.getFacetValues('f')).toEqual([]);
-        expect(rs.getFacetValues('df')).toEqual([]);
-        expect(rs.getFacetValues('products')).toEqual({
+      helper.on('result', function(event) {
+        expect(event.results.getFacetValues('f')).toEqual([]);
+        expect(event.results.getFacetValues('df')).toEqual([]);
+        expect(event.results.getFacetValues('products')).toEqual({
           name: 'products',
           count: null,
           isRefined: true,
           path: null,
+          exhaustive: true,
           data: null
         });
 

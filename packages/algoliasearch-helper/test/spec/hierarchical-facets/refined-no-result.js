@@ -28,6 +28,7 @@ test('hierarchical facets: no results', function(done) {
       'page': 0,
       'nbPages': 0,
       'hitsPerPage': 6,
+      'exhaustiveFacetsCount': true,
       'facets': {}
     }, {
       'query': 'badquery',
@@ -60,13 +61,14 @@ test('hierarchical facets: no results', function(done) {
 
   helper.setQuery('badquery').search();
 
-  helper.once('result', function(content) {
-    expect(content.hierarchicalFacets).toEqual([
+  helper.once('result', function(event) {
+    expect(event.results.hierarchicalFacets).toEqual([
       {
         name: 'categories',
         count: null,
         isRefined: true,
         path: null,
+        exhaustive: true,
         data: null
       }
     ]);

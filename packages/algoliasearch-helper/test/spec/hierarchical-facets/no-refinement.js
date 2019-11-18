@@ -26,6 +26,7 @@ test('hierarchical facets: no refinement', function(done) {
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
+      'exhaustiveFacetsCount': true,
       'facets': {
         'categories.lvl0': {'beers': 2, 'fruits': 3}
       }
@@ -37,17 +38,20 @@ test('hierarchical facets: no refinement', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
       'count': 2,
       'isRefined': false,
+      'exhaustive': true,
       'data': null
     }, {
       'name': 'fruits',
       'path': 'fruits',
       'count': 3,
       'isRefined': false,
+      'exhaustive': true,
       'data': null
     }]
   }];
@@ -57,7 +61,7 @@ test('hierarchical facets: no refinement', function(done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(content) {
+  helper.once('result', function(event) {
     var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
 
@@ -65,7 +69,7 @@ test('hierarchical facets: no refinement', function(done) {
     expect(client.search).toHaveBeenCalledTimes(1);
     expect(hitsQuery.params.facets).toEqual(['categories.lvl0']);
     expect(hitsQuery.params.facetFilters).toBe(undefined);
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

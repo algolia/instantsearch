@@ -1,9 +1,6 @@
 'use strict';
 
-var forEach = require('lodash/forEach');
-var map = require('lodash/map');
-var reduce = require('lodash/reduce');
-var merge = require('lodash/merge');
+var merge = require('./functions/merge');
 
 var requestBuilder = {
   /**
@@ -22,7 +19,7 @@ var requestBuilder = {
     });
 
     // One for each disjunctive facets
-    forEach(state.getRefinedDisjunctiveFacets(), function(refinedFacet) {
+    state.getRefinedDisjunctiveFacets().forEach(function(refinedFacet) {
       queries.push({
         indexName: index,
         params: requestBuilder._getDisjunctiveFacetSearchParams(state, refinedFacet)
@@ -30,7 +27,7 @@ var requestBuilder = {
     });
 
     // maybe more to get the root level of hierarchical facets when activated
-    forEach(state.getRefinedHierarchicalFacets(), function(refinedFacet) {
+    state.getRefinedHierarchicalFacets().forEach(function(refinedFacet) {
       var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
 
       var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
@@ -75,7 +72,7 @@ var requestBuilder = {
       additionalParams.numericFilters = numericFilters;
     }
 
-    return merge(state.getQueryParams(), additionalParams);
+    return merge({}, state.getQueryParams(), additionalParams);
   },
 
   /**
@@ -120,7 +117,7 @@ var requestBuilder = {
       additionalParams.facetFilters = facetFilters;
     }
 
-    return merge(state.getQueryParams(), additionalParams);
+    return merge({}, state.getQueryParams(), additionalParams);
   },
 
   /**
@@ -136,12 +133,14 @@ var requestBuilder = {
 
     var numericFilters = [];
 
-    forEach(state.numericRefinements, function(operators, attribute) {
-      forEach(operators, function(values, operator) {
+    Object.keys(state.numericRefinements).forEach(function(attribute) {
+      var operators = state.numericRefinements[attribute] || {};
+      Object.keys(operators).forEach(function(operator) {
+        var values = operators[operator] || [];
         if (facetName !== attribute) {
-          forEach(values, function(value) {
+          values.forEach(function(value) {
             if (Array.isArray(value)) {
-              var vs = map(value, function(v) {
+              var vs = value.map(function(v) {
                 return attribute + operator + v;
               });
               numericFilters.push(vs);
@@ -180,30 +179,40 @@ var requestBuilder = {
   _getFacetFilters: function(state, facet, hierarchicalRootLevel) {
     var facetFilters = [];
 
-    forEach(state.facetsRefinements, function(facetValues, facetName) {
-      forEach(facetValues, function(facetValue) {
+    var facetsRefinements = state.facetsRefinements || {};
+    Object.keys(facetsRefinements).forEach(function(facetName) {
+      var facetValues = facetsRefinements[facetName] || [];
+      facetValues.forEach(function(facetValue) {
         facetFilters.push(facetName + ':' + facetValue);
       });
     });
 
-    forEach(state.facetsExcludes, function(facetValues, facetName) {
-      forEach(facetValues, function(facetValue) {
+    var facetsExcludes = state.facetsExcludes || {};
+    Object.keys(facetsExcludes).forEach(function(facetName) {
+      var facetValues = facetsExcludes[facetName] || [];
+      facetValues.forEach(function(facetValue) {
         facetFilters.push(facetName + ':-' + facetValue);
       });
     });
 
-    forEach(state.disjunctiveFacetsRefinements, function(facetValues, facetName) {
-      if (facetName === facet || !facetValues || facetValues.length === 0) return;
+    var disjunctiveFacetsRefinements = state.disjunctiveFacetsRefinements || {};
+    Object.keys(disjunctiveFacetsRefinements).forEach(function(facetName) {
+      var facetValues = disjunctiveFacetsRefinements[facetName] || [];
+      if (facetName === facet || !facetValues || facetValues.length === 0) {
+        return;
+      }
       var orFilters = [];
 
-      forEach(facetValues, function(facetValue) {
+      facetValues.forEach(function(facetValue) {
         orFilters.push(facetName + ':' + facetValue);
       });
 
       facetFilters.push(orFilters);
     });
 
-    forEach(state.hierarchicalFacetsRefinements, function(facetValues, facetName) {
+    var hierarchicalFacetsRefinements = state.hierarchicalFacetsRefinements || {};
+    Object.keys(hierarchicalFacetsRefinements).forEach(function(facetName) {
+      var facetValues = hierarchicalFacetsRefinements[facetName] || [];
       var facetValue = facetValues[0];
 
       if (facetValue === undefined) {
@@ -251,8 +260,7 @@ var requestBuilder = {
   _getHitsHierarchicalFacetsAttributes: function(state) {
     var out = [];
 
-    return reduce(
-      state.hierarchicalFacets,
+    return state.hierarchicalFacets.reduce(
       // ask for as much levels as there's hierarchical refinements
       function getHitsAttributesForHierarchicalFacet(allAttributes, hierarchicalFacet) {
         var hierarchicalRefinement = state.getHierarchicalRefinement(hierarchicalFacet.name)[0];
@@ -302,8 +310,11 @@ var requestBuilder = {
     if (typeof maxFacetHits === 'number') {
       searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
     }
-    var queries = merge(requestBuilder._getHitsSearchParams(stateForSearchForFacetValues), searchForFacetSearchParameters);
-    return queries;
+    return merge(
+      {},
+      requestBuilder._getHitsSearchParams(stateForSearchForFacetValues),
+      searchForFacetSearchParameters
+    );
   }
 };
 

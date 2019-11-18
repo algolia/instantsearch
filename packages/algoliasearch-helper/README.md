@@ -37,7 +37,6 @@ track of the search parameters and provides a higher level API.
     - [Add the helper in your project](#add-the-helper-in-your-project)
     - [Regular `<script>` tag](#regular-script-tag)
     - [With NPM](#with-npm)
-    - [With bower](#with-bower)
     - [Init the helper](#init-the-helper)
     - [Helper lifecycle](#helper-lifecycle)
     - [Objects](#objects)
@@ -79,8 +78,8 @@ var helper = algoliasearchHelper(client, 'indexName', {
   disjunctiveFacets: ['director']
 });
 
-helper.on('result', function(data){
-  console.log(data.hits);
+helper.on('result', function(event){
+  console.log(event.results);
 });
 
 helper.addDisjunctiveFacetRefinement('director', 'Clint Eastwood');
@@ -110,9 +109,9 @@ angular.module('searchApp', ['ngSanitize', 'algoliasearch'])
     disjunctiveFacets: ['category', 'manufacturer'],
     hitsPerPage: 5,
   });
-  $scope.helper.on('result', function(content) {
+  $scope.helper.on('result', function(event) {
     $scope.$apply(function() {
-      $scope.content = content;
+      $scope.content = event.results;
     });
   });
   $scope.toggleRefine = function($event, facet, value) {
@@ -144,10 +143,6 @@ Use our [jsDelivr](http://www.jsdelivr.com/) build:
 
 `npm install algoliasearch-helper`
 
-### With bower
-
-`bower install algoliasearch-helper`
-
 ### Init the helper
 
 ```js
@@ -168,8 +163,8 @@ var helper = algoliasearchHelper(client, 'indexName'/*, parameters*/);
 
 3. read the results (with the event "result" handler) and update the UI with the results<br/>
         ```
-        helper.on('result', function(results) {
-          updateUI(results);
+        helper.on('result', function(event) {
+          updateUI(event.results);
         });
         ```
 
@@ -196,8 +191,8 @@ Example:
 var helper = algoliasearchHelper(client, indexName);
 
 // Let's monitor the results with the console
-helper.on('result', function(content) {
-  console.log(content);
+helper.on('result', function(event) {
+  console.log(event.results);
 });
 
 // Let's make an empty search
@@ -431,8 +426,8 @@ You will get a hierarchical presentation of your facet values: a navigation menu
 of your facet values.
 
 ```js
-helper.on('result', function(data){
-  console.log(data.hierarchicalFacets[0]);
+helper.on('result', function(event){
+  console.log(event.results.hierarchicalFacets[0]);
   // {
   //   'name': 'products',
   //   'count': null,
@@ -624,9 +619,9 @@ helper.clearRefinements(function(value, attribute, type) {
 #### Get the values of a facet with the default sort
 
 ```js
-helper.on('result', function(result) {
+helper.on('result', function(event) {
   // Get the facet values for the attribute age
-  result.getFacetValues('age');
+  event.results.getFacetValues('age');
   // It will be ordered :
   //  - refined facets first
   //  - then ordered by number of occurence (bigger count -> higher in the list)
@@ -637,9 +632,9 @@ helper.on('result', function(result) {
 #### Get the values of a facet with a custom sort
 
 ```js
-helper.on('result', function(result) {
+helper.on('result', function(event) {
   // Get the facet values for the attribute age
-  result.getFacetValues('age', {sortBy: ['count:asc']});
+  event.results.getFacetValues('age', {sortBy: ['count:asc']});
   // It will be ordered by number of occurence (lower number => higher position)
   // Elements that can be sorted : count, name, isRefined
   // Type of sort : 'asc' for ascending order, 'desc' for descending order
@@ -651,9 +646,9 @@ helper.on('result', function(result) {
 *This only apply on numeric based facets/attributes.*
 
 ```js
-helper.on('result', function(result) {
+helper.on('result', function(event) {
   // Get the facet values for the attribute age
-  result.getFacetStats('age');
+  event.results.getFacetStats('age');
 });
 ```
 
@@ -764,40 +759,6 @@ var state1 = helper.searchOnce({hitsPerPage: 1})
   //   state : SearchParameters (the one used for this specific search)
   // }
 });
-```
-
-### URL Helpers
-
-#### Set the state from a query string
-
-```js
-helper.setState(algoliasearchHelper.url.getStateFromQueryString(qs));
-```
-
-#### Get a plain object with a subset of the state
-
-```js
-// to an object with the query and all the refinements
-helper.getState(['query', 'attribute:*']);
-```
-
-#### Get an object for the helper configuration in the query string
-
-```js
-var state = algoliasearchHelper.url.getStateFromQueryString(qs);
-```
-
-#### Get the configuration contained in the query string that is not for the helper
-
-```js
-var otherConf = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs);
-```
-
-#### Get the query string of any state
-
-```js
-var state = helper.getState();
-var qs = algoliasearchHelper.url.getQueryStringFromState(state);
 ```
 
 ### Query parameters

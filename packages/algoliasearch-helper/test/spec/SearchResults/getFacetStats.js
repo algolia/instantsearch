@@ -3,8 +3,6 @@
 var SearchResults = require('../../../src/SearchResults');
 var SearchParameters = require('../../../src/SearchParameters');
 
-var bind = require('lodash/bind');
-
 var response = {
   'results': [{
     'page': 0,
@@ -43,8 +41,8 @@ test('getFacetStats(facetName) returns stats for any facet or disjunctiveFacet',
   });
   var result = new SearchResults(searchParams, response.results);
 
-  expect(bind(result.getFacetStats, result, 'city')).toThrowError(Error);
-  expect(result.getFacetStats('country')).toBe(undefined);
+  expect(result.getFacetStats('city')).toBeUndefined();
+  expect(result.getFacetStats('country')).toBeUndefined();
   expect(result.getFacetStats('age')).toEqual(response.results[0].facets_stats.age);
   expect(result.getFacetStats('price')).toEqual(response.results[0].facets_stats.price);
 });

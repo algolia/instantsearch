@@ -29,3 +29,5 @@ node_modules
 
 # Built documentation folder, tracked in gh-pages
 documentation
+
+dist

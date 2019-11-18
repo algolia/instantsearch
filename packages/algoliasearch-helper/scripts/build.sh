@@ -12,6 +12,8 @@ bundle='algoliasearch.helper'
 
 echo "Build"
 
+mkdir -p dist
+
 browserify index.js \
   --standalone algoliasearchHelper \
   --debug | \

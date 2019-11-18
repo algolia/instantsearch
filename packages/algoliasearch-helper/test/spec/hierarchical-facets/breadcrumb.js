@@ -52,7 +52,11 @@ test('hierarchical facets: using getHierarchicalFacetBreadcrumb on an undefined 
   var indexName = 'hierarchical-simple-indexName';
 
   var client = algoliasearch(appId, apiKey);
-  var helper = algoliasearchHelper(client, indexName, {});
+  var helper = algoliasearchHelper(client, indexName, {
+    hierarchicalFacetsRefinements: {categories: ['beers > IPA > Flying dog']}
+  });
 
-  expect(helper.getHierarchicalFacetBreadcrumb.bind('categories')).toThrow();
+  expect(
+    helper.getHierarchicalFacetBreadcrumb('categories')
+  ).toEqual([]);
 });

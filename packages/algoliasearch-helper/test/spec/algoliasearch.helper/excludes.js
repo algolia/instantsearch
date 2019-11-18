@@ -33,7 +33,7 @@ test('removeExclude should remove an exclusion', function(done) {
   helper.addExclude(facetName, facetValueToExclude);
   expect(helper.state.facetsExcludes[facetName].length === 1).toBeTruthy();
   helper.removeExclude(facetName, facetValueToExclude);
-  expect(!helper.state.facetsExcludes[facetName]).toBeTruthy();
+  expect(helper.state.facetsExcludes[facetName]).toEqual([]);
 
   try {
     helper.removeExclude(facetName, facetValueToExclude);

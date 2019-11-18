@@ -83,7 +83,6 @@ documentation](https://www.algolia.com/doc/rest#query-an-index).
 Before using those methods, be sure to check [the shortcuts](query-parameters-shortcuts).
 
 {{> jsdoc jsdoc/helper/setQueryParameter}}
-{{> jsdoc jsdoc/helper/getQueryParameter}}
 
 
 ### Conjunctive Facets
@@ -226,8 +225,8 @@ You will get a hierarchical presentation of your facet values: a navigation menu
 of your facet values.
 
 ```js
-helper.on('result', function(data){
-  console.log(data.hierarchicalFacets[0]);
+helper.on('result', function(event){
+  console.log(event.results.hierarchicalFacets[0]);
   // {
   //   'name': 'products',
   //   'count': null,
@@ -417,7 +416,6 @@ Algolia.
 
 ### State management
 
-{{> jsdoc jsdoc/helper/getState}}
 {{> jsdoc jsdoc/helper/setState}}
 {{> jsdoc jsdoc/helper/overrideStateWithoutTriggeringChangeEvent}}
 
@@ -505,10 +503,10 @@ that you might encounter in the documentation.
 The SearchParameters is the class that structures all the parameters
 that are needed to build a query to Algolia.
 
-The SearchParameters instances are usually refered to as the state of
+The SearchParameters instances are usually referred to as the state of
 the search. This state is available when receiving `change` and `search`
 events, and with `result` as a secondary parameter. Alternatively,
-it can be retrieved using the [getState](#AlgoliaSearchHelper#getState) method on the Helper.
+it can be retrieved using `helper.state`.
 
 SearchParameter is an immutable class. Each setter method returns a new
 instance with the modification, and does not modify the object it is
@@ -551,7 +549,6 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/addTagRefinement}}
 {{> jsdoc jsdoc/state/clearRefinements}}
 {{> jsdoc jsdoc/state/clearTags}}
-{{> jsdoc jsdoc/state/filter}}
 {{> jsdoc jsdoc/state/getConjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getDisjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getExcludeRefinements}}
@@ -560,7 +557,6 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/getHierarchicalRefinement}}
 {{> jsdoc jsdoc/state/getNumericRefinements}}
 {{> jsdoc jsdoc/state/getNumericRefinement}}
-{{> jsdoc jsdoc/state/getQueryParameter}}
 {{> jsdoc jsdoc/state/getRefinedDisjunctiveFacets}}
 {{> jsdoc jsdoc/state/getRefinedHierarchicalFacets}}
 {{> jsdoc jsdoc/state/getUnrefinedDisjunctiveFacets}}
@@ -597,14 +593,3 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/toggleFacetRefinement}}
 {{> jsdoc jsdoc/state/toggleTagRefinement}}
 {{> jsdoc jsdoc/state/validate}}
-
-## URL
-
-The helper exposes some URL utility methods for serializing and deserializing
-state to and from a URL query string.
-
-The following methods are available under the `algoliasearchHelper.url` namespace.
-
-{{> jsdoc jsdoc/url/getStateFromQueryString}}
-{{> jsdoc jsdoc/url/getUnrecognizedParametersInQueryString}}
-{{> jsdoc jsdoc/url/getQueryStringFromState}}

@@ -18,11 +18,13 @@ test('Search should call the algolia client according to the number of refinemen
   helper.addDisjunctiveRefine('city', 'Paris', true);
   helper.addDisjunctiveRefine('city', 'New York', true);
 
-  helper.on('result', function(data) {
-    // shame deepclone, to remove any associated methods coming from the results
-    expect(JSON.parse(JSON.stringify(data))).toEqual(JSON.parse(JSON.stringify(testData.responseHelper)));
+  helper.on('result', function(event) {
+    var results = event.results;
 
-    var cityValues = data.getFacetValues('city');
+    // shame deepclone, to remove any associated methods coming from the results
+    expect(JSON.parse(JSON.stringify(results))).toEqual(JSON.parse(JSON.stringify(testData.responseHelper)));
+
+    var cityValues = results.getFacetValues('city');
     var expectedCityValues = [
       {name: 'Paris', count: 3, isRefined: true},
       {name: 'New York', count: 1, isRefined: true},
@@ -31,7 +33,7 @@ test('Search should call the algolia client according to the number of refinemen
 
     expect(cityValues).toEqual(expectedCityValues);
 
-    var cityValuesCustom = data.getFacetValues('city', {sortBy: ['count:asc', 'name:asc']});
+    var cityValuesCustom = results.getFacetValues('city', {sortBy: ['count:asc', 'name:asc']});
     var expectedCityValuesCustom = [
       {name: 'New York', count: 1, isRefined: true},
       {name: 'San Francisco', count: 1, isRefined: false},
@@ -41,7 +43,7 @@ test('Search should call the algolia client according to the number of refinemen
 
     expect(cityValuesCustom).toEqual(expectedCityValuesCustom);
 
-    var cityValuesFn = data.getFacetValues('city', {sortBy: function(a, b) { return a.count - b.count; }});
+    var cityValuesFn = results.getFacetValues('city', {sortBy: function(a, b) { return a.count - b.count; }});
     var expectedCityValuesFn = [
       {name: 'New York', count: 1, isRefined: true},
       {name: 'San Francisco', count: 1, isRefined: false},
@@ -55,8 +57,8 @@ test('Search should call the algolia client according to the number of refinemen
     var queries = client.search.mock.calls[0][0];
     for (var i = 0; i < queries.length; i++) {
       var query = queries[i];
-      expect(query.query).toBe(undefined);
-      expect(query.params.query).toBe('');
+      expect(query.query).toBeUndefined();
+      expect(query.params.query).toBeUndefined();
     }
 
     done();

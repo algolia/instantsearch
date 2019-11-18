@@ -34,40 +34,42 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
 
     var calls = 0;
 
-    helper.on('error', function(err) {
-      done.fail(err);
+    helper.on('error', function(event) {
+      done.fail(event.error);
     });
 
-    helper.on('result', function(content) {
+    helper.on('result', function(event) {
       calls++;
 
+      var results = event.results;
+
       if (calls === 1) {
-        expect(content.hits.length).toBe(4);
-        expect(map(content.hits, hitsToParsedID).sort()).toEqual([0, 1, 2, 3]);
+        expect(results.hits.length).toBe(4);
+        expect(map(results.hits, hitsToParsedID).sort()).toEqual([0, 1, 2, 3]);
         helper.addTag('t1').search();
       }
 
       if (calls === 2) {
-        expect(content.hits.length).toBe(2);
-        expect(map(content.hits, hitsToParsedID).sort()).toEqual([0, 1]);
+        expect(results.hits.length).toBe(2);
+        expect(map(results.hits, hitsToParsedID).sort()).toEqual([0, 1]);
         helper.addTag('t2').search();
       }
 
       if (calls === 3) {
-        expect(content.hits.length).toBe(1);
-        expect(map(content.hits, hitsToParsedID).sort()).toEqual([0]);
+        expect(results.hits.length).toBe(1);
+        expect(map(results.hits, hitsToParsedID).sort()).toEqual([0]);
         helper.removeTag('t2').toggleTag('t3').toggleTag('t1').search();
       }
 
       if (calls === 4) {
-        expect(content.hits.length).toBe(3);
-        expect(map(content.hits, hitsToParsedID).sort()).toEqual([1, 2, 3]);
+        expect(results.hits.length).toBe(3);
+        expect(map(results.hits, hitsToParsedID).sort()).toEqual([1, 2, 3]);
         helper.clearTags().setQueryParameter('tagFilters', 't3,(t1,t2)').search();
       }
 
       if (calls === 5) {
-        expect(content.hits.length).toBe(2);
-        expect(map(content.hits, hitsToParsedID).sort()).toEqual([1, 2]);
+        expect(results.hits.length).toBe(2);
+        expect(map(results.hits, hitsToParsedID).sort()).toEqual([1, 2]);
         client.deleteIndex(indexName);
         if (!process.browser) {
           client.destroy();

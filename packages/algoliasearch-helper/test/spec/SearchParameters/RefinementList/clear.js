@@ -13,7 +13,7 @@ test('When removing refinements of a specific attribute, and there are no refine
     'attribute': ['test']
   };
 
-  expect(clear(initialRefinementList, 'notThisAttribute')).toBe(initialRefinementList);
+  expect(clear(initialRefinementList, 'notThisAttribute')).toEqual(initialRefinementList);
 });
 
 test('When removing numericRefinements using a function, and there are no changes', function() {
@@ -30,3 +30,10 @@ test('When removing numericRefinements using a function, and there are no change
   expect(clear(initialRefinementList, clearUndefinedValue, 'facet')).toBe(initialRefinementList);
 });
 
+test('calling clear on a empty refinement removes it', function() {
+  var initialRefinementList = {
+    'attribute': []
+  };
+
+  expect(clear(initialRefinementList, 'attribute')).toEqual({});
+});

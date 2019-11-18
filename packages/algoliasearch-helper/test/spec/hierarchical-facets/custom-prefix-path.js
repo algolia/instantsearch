@@ -30,6 +30,7 @@ test('hierarchical facets: custom prefix path', function(done) {
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
+      'exhaustiveFacetsCount': true,
       'facets': {
         'categories.lvl0': {'beers': 3},
         'categories.lvl1': {'beers | IPA': 2, 'beers | Belgian': 1},
@@ -66,22 +67,26 @@ test('hierarchical facets: custom prefix path', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'exhaustive': true,
     'data': [{
       'name': 'Belgian',
       'path': 'beers | Belgian',
       'count': 1,
       'isRefined': true,
+      'exhaustive': true,
       'data': [{
         'name': 'Blond',
         'path': 'beers | Belgian | Blond',
         'count': 2,
         'isRefined': false,
+        'exhaustive': true,
         'data': null
       }, {
         'name': 'Dark',
         'path': 'beers | Belgian | Dark',
         'count': 1,
         'isRefined': false,
+        'exhaustive': true,
         'data': null
       }]
     }, {
@@ -89,6 +94,7 @@ test('hierarchical facets: custom prefix path', function(done) {
       'path': 'beers | IPA',
       'count': 2,
       'isRefined': false,
+      'exhaustive': true,
       'data': null
     }]
   }];
@@ -98,9 +104,9 @@ test('hierarchical facets: custom prefix path', function(done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(content) {
+  helper.once('result', function(event) {
     expect(client.search).toHaveBeenCalledTimes(1);
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

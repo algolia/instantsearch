@@ -43,21 +43,11 @@ test(
       });
 
       var mainResponse = new Promise(function(resolve) {
-        mainHelper.on('result', function(results, state) {
-          resolve({
-            results: results,
-            state: state
-          });
-        });
+        mainHelper.on('result', resolve);
       });
 
       var derivedResponse = new Promise(function(resolve) {
-        derivedHelper.on('result', function(results, state) {
-          resolve({
-            results: results,
-            state: state
-          });
-        });
+        derivedHelper.on('result', resolve);
       });
 
       mainHelper.search();
@@ -66,7 +56,7 @@ test(
     }).then(function(responses) {
       var mainResponse = responses[0];
 
-      expect(mainResponse.state.query).toBe('');
+      expect(mainResponse.state.query).toBeUndefined();
       expect(mainResponse.results.hits.length).toBe(2);
 
       var derivedResponse = responses[1];

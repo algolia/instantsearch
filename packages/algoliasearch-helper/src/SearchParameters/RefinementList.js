@@ -12,15 +12,9 @@
  * @typedef {Object.<string, SearchParameters.refinementList.Refinements>} SearchParameters.refinementList.RefinementList
  */
 
-var isUndefined = require('lodash/isUndefined');
-var isString = require('lodash/isString');
-var isFunction = require('lodash/isFunction');
-var isEmpty = require('lodash/isEmpty');
-var defaults = require('lodash/defaults');
-
-var reduce = require('lodash/reduce');
-var filter = require('lodash/filter');
-var omit = require('lodash/omit');
+var defaultsPure = require('../functions/defaultsPure');
+var omit = require('../functions/omit');
+var objectHasKeys = require('../functions/objectHasKeys');
 
 var lib = {
   /**
@@ -45,7 +39,7 @@ var lib = {
 
     mod[attribute] = facetRefinement;
 
-    return defaults({}, mod, refinementList);
+    return defaultsPure({}, mod, refinementList);
   },
   /**
    * Removes refinement(s) for an attribute:
@@ -57,8 +51,12 @@ var lib = {
    * @return {RefinementList} a new and updated refinement lst
    */
   removeRefinement: function removeRefinement(refinementList, attribute, value) {
-    if (isUndefined(value)) {
-      return lib.clearRefinement(refinementList, attribute);
+    if (value === undefined) {
+      // we use the "filter" form of clearRefinement, since it leaves empty values as-is
+      // the form with a string will remove the attribute completely
+      return lib.clearRefinement(refinementList, function(v, f) {
+        return attribute === f;
+      });
     }
 
     var valueAsString = '' + value;
@@ -75,7 +73,7 @@ var lib = {
    * @return {RefinementList} a new and updated list
    */
   toggleRefinement: function toggleRefinement(refinementList, attribute, value) {
-    if (isUndefined(value)) throw new Error('toggleRefinement should be used with a value');
+    if (value === undefined) throw new Error('toggleRefinement should be used with a value');
 
     if (lib.isRefined(refinementList, attribute, value)) {
       return lib.removeRefinement(refinementList, attribute, value);
@@ -95,25 +93,26 @@ var lib = {
    * @return {RefinementList} a new and updated refinement list
    */
   clearRefinement: function clearRefinement(refinementList, attribute, refinementType) {
-    if (isUndefined(attribute)) {
-      if (isEmpty(refinementList)) return refinementList;
+    if (attribute === undefined) {
+      if (!objectHasKeys(refinementList)) {
+        return refinementList;
+      }
       return {};
-    } else if (isString(attribute)) {
-      if (isEmpty(refinementList[attribute])) return refinementList;
+    } else if (typeof attribute === 'string') {
       return omit(refinementList, attribute);
-    } else if (isFunction(attribute)) {
+    } else if (typeof attribute === 'function') {
       var hasChanged = false;
 
-      var newRefinementList = reduce(refinementList, function(memo, values, key) {
-        var facetList = filter(values, function(value) {
+      var newRefinementList = Object.keys(refinementList).reduce(function(memo, key) {
+        var values = refinementList[key] || [];
+        var facetList = values.filter(function(value) {
           return !attribute(value, key, refinementType);
         });
 
-        if (!isEmpty(facetList)) {
-          if (facetList.length !== values.length) hasChanged = true;
-          memo[key] = facetList;
+        if (facetList.length !== values.length) {
+          hasChanged = true;
         }
-        else hasChanged = true;
+        memo[key] = facetList;
 
         return memo;
       }, {});
@@ -132,18 +131,16 @@ var lib = {
    * @return {boolean}
    */
   isRefined: function isRefined(refinementList, attribute, refinementValue) {
-    var indexOf = require('lodash/indexOf');
-
     var containsRefinements = !!refinementList[attribute] &&
       refinementList[attribute].length > 0;
 
-    if (isUndefined(refinementValue) || !containsRefinements) {
+    if (refinementValue === undefined || !containsRefinements) {
       return containsRefinements;
     }
 
     var refinementValueAsString = '' + refinementValue;
 
-    return indexOf(refinementList[attribute], refinementValueAsString) !== -1;
+    return refinementList[attribute].indexOf(refinementValueAsString) !== -1;
   }
 };
 

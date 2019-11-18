@@ -12,15 +12,15 @@ test('setChange should change the current state', function() {
     changed = true;
   });
 
-  expect(helper.getCurrentPage()).toBe(0);
-  expect(changed).toBeFalsy();
+  expect(helper.getPage()).toBeUndefined();
+  expect(changed).toBe(false);
   helper.setQueryParameter('page', 22);
-  expect(helper.getCurrentPage()).toBe(22);
-  expect(changed).toBeTruthy();
+  expect(helper.getPage()).toBe(22);
+  expect(changed).toBe(true);
 });
 
 test('setChange should not change the current state: no real modification', function() {
-  var helper = algoliasearchHelper(fakeClient, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, {page: 0});
   var changed = false;
   var initialState = helper.state;
 
@@ -28,10 +28,10 @@ test('setChange should not change the current state: no real modification', func
     changed = true;
   });
 
-  expect(helper.getCurrentPage()).toBe(0);
-  expect(changed).toBeFalsy();
+  expect(helper.getPage()).toBe(0);
+  expect(changed).toBe(false);
   helper.setQueryParameter('page', 0);
-  expect(helper.getCurrentPage()).toBe(0);
-  expect(changed).toBeFalsy();
+  expect(helper.getPage()).toBe(0);
+  expect(changed).toBe(false);
   expect(helper.state).toBe(initialState);
 });

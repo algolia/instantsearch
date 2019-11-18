@@ -3,6 +3,7 @@
   "version": "2.28.0",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
+  "types": "index.d.ts",
   "homepage": "https://community.algolia.com/algoliasearch-helper-js/",
   "scripts": {
     "watch": "watchify index.js -v -s algoliasearchHelper -o dist/algoliasearch.helper.js",
@@ -17,7 +18,7 @@
     "test": "scripts/test.sh",
     "test:unit": "jest",
     "test:watch": "jest --watch",
-    "release": "git checkout dist/ && rm -rf node_modules && yarn && ./scripts/release.js",
+    "release": "./scripts/release.js",
     "changelog:view-last": "conventional-changelog -u -n scripts/conventional-changelog/",
     "changelog:update": "conventional-changelog -i CHANGELOG -s -u -n scripts/conventional-changelog/"
   },
@@ -33,9 +34,11 @@
   "files": [
     "dist",
     "src",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "devDependencies": {
+    "@types/algoliasearch": "^3.30.12",
     "algolia-frontend-components": "0.0.35",
     "algoliasearch": "3.32.0",
     "babel-core": "6.26.3",
@@ -61,6 +64,7 @@
     "jest-watch-typeahead": "0.3.0",
     "jsdoc-parse": "1.2.7",
     "jsdoc-to-markdown": "1.3.9",
+    "lodash": "4.17.5",
     "marked": "0.3.19",
     "metalsmith": "2.3.0",
     "metalsmith-changed": "2.0.0",
@@ -87,12 +91,11 @@
     "vinyl": "1.2.0",
     "watchify": "3.7.0",
     "webpack": "1.15.0",
-    "webpack-stream": "3.2.0"
+    "webpack-stream": "3.2.0",
+    "yargs": "13.2.4"
   },
   "dependencies": {
-    "events": "^1.1.1",
-    "lodash": "^4.17.5",
-    "qs": "^6.5.1"
+    "events": "^1.1.1"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"

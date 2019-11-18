@@ -51,6 +51,15 @@ test('Constructor should accept an object with unknown keys', function() {
   });
 });
 
+test('Constructor should ignore keys with undefined values', function() {
+  var state = new SearchParameters({
+    query: '',
+    page: undefined
+  });
+
+  expect(state).not.toHaveProperty('page');
+});
+
 test('Factory should accept an object with known keys', function() {
   var legitConfig = {
     'query': '',
@@ -74,7 +83,7 @@ test('Factory should accept an object with known keys', function() {
   });
 });
 
-test('Constructor should accept an object with unknown keys', function() {
+test('Factory should accept an object with unknown keys', function() {
   var betaConfig = {
     'query': '',
     'disjunctiveFacets': [
@@ -97,4 +106,13 @@ test('Constructor should accept an object with unknown keys', function() {
   forOwn(betaConfig, function(v, k) {
     expect(params[k]).toEqual(v);
   });
+});
+
+test('Factory should ignore keys with undefined values', function() {
+  var state = SearchParameters.make({
+    query: '',
+    page: undefined
+  });
+
+  expect(state).not.toHaveProperty('page');
 });

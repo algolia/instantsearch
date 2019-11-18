@@ -29,6 +29,7 @@ test('hierarchical facets: using sortBy', function(done) {
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
+      'exhaustiveFacetsCount': true,
       'facets': {
         'categories.lvl0': {'beers': 1},
         'categories.lvl1': {'beers > IPA': 1},
@@ -70,33 +71,39 @@ test('hierarchical facets: using sortBy', function(done) {
     'count': null,
     'isRefined': true,
     'path': null,
+    'exhaustive': true,
     'data': [{
       'name': 'beers',
       'path': 'beers',
       'count': 5,
       'isRefined': true,
+      'exhaustive': true,
       'data': [{
         'name': 'IPA',
         'path': 'beers > IPA',
         'count': 5,
         'isRefined': true,
+        'exhaustive': true,
         'data': [{
           'name': 'Brewdog punk IPA',
           'path': 'beers > IPA > Brewdog punk IPA',
           'count': 3,
           'isRefined': false,
+          'exhaustive': true,
           'data': null
         }, {
           'name': 'Anchor steam',
           'path': 'beers > IPA > Anchor steam',
           'count': 1,
           'isRefined': false,
+          'exhaustive': true,
           'data': null
         }, {
           'name': 'Flying dog',
           'path': 'beers > IPA > Flying dog',
           'count': 1,
           'isRefined': true,
+          'exhaustive': true,
           'data': null
         }]
       }]
@@ -108,8 +115,8 @@ test('hierarchical facets: using sortBy', function(done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(content) {
-    expect(content.hierarchicalFacets).toEqual(expectedHelperResponse);
+  helper.once('result', function(event) {
+    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });
 });

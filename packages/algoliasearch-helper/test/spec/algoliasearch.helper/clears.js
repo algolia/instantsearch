@@ -2,8 +2,6 @@
 
 var algoliasearchHelper = require('../../../index');
 var forEach = require('lodash/forEach');
-var keys = require('lodash/keys');
-var isEmpty = require('lodash/isEmpty');
 var isUndefined = require('lodash/isUndefined');
 
 function fixture() {
@@ -11,8 +9,11 @@ function fixture() {
     facets: ['facet1', 'facet2', 'both_facet', 'excluded1', 'excluded2'],
     disjunctiveFacets: ['disjunctiveFacet1', 'disjunctiveFacet2', 'both_facet'],
     hierarchicalFacets: [{
-      facetName: 'hierarchy',
+      name: 'hierarchy1',
       attributes: ['a', 'b', 'c']
+    }, {
+      name: 'hierarchy2',
+      attributes: ['d', 'e', 'f']
     }]
   });
 
@@ -22,6 +23,8 @@ function fixture() {
     .toggleRefine('disjunctiveFacet2', '0')
     .toggleExclude('excluded1', '0')
     .toggleExclude('excluded2', '0')
+    .addHierarchicalFacetRefinement('hierarchy1', '0')
+    .addHierarchicalFacetRefinement('hierarchy2', '0')
     .addNumericRefinement('numeric1', '>=', '0')
     .addNumericRefinement('numeric1', '<', '10')
     .addNumericRefinement('numeric2', '>=', 0)
@@ -31,10 +34,22 @@ function fixture() {
 test('Check that the state objects match how we test them', function() {
   var helper = fixture();
 
-  expect(helper.state.facetsRefinements).toEqual({facet1: ['0'], facet2: ['0']});
-  expect(helper.state.disjunctiveFacetsRefinements).toEqual({disjunctiveFacet1: ['0'], disjunctiveFacet2: ['0']});
-  expect(helper.state.facetsExcludes).toEqual({excluded1: ['0'], excluded2: ['0']});
-  expect(helper.state.numericRefinements).toEqual({numeric1: {'>=': [0], '<': [10]}, numeric2: {'>=': [0], '<': [10]}});
+  expect(helper.state.facetsRefinements).toEqual({
+    facet1: ['0'],
+    facet2: ['0']
+  });
+  expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+    disjunctiveFacet1: ['0'],
+    disjunctiveFacet2: ['0']
+  });
+  expect(helper.state.facetsExcludes).toEqual({
+    excluded1: ['0'],
+    excluded2: ['0']
+  });
+  expect(helper.state.numericRefinements).toEqual({
+    numeric1: {'>=': [0], '<': [10]},
+    numeric2: {'>=': [0], '<': [10]}
+  });
 });
 
 test('Clear with a name should work on every type and not remove others than targetted name', function() {
@@ -89,10 +104,20 @@ test('Clear with a function: remove all predicate', function() {
     return true;
   });
 
-  expect(isEmpty(helper.state.numericRefinements)).toBeTruthy();
-  expect(isEmpty(helper.state.facetsRefinements)).toBeTruthy();
-  expect(isEmpty(helper.state.facetsExcludes)).toBeTruthy();
-  expect(isEmpty(helper.state.disjunctiveFacetsRefinements)).toBeTruthy();
+  Object.keys(helper.state.numericRefinements).forEach(function(facet) {
+    Object.keys(helper.state.numericRefinements[facet]).forEach(function(operator) {
+      expect(helper.state.numericRefinements[facet][operator]).toHaveLength(0);
+    });
+  });
+  Object.keys(helper.state.facetsRefinements).forEach(function(facet) {
+    expect(helper.state.facetsRefinements[facet]).toHaveLength(0);
+  });
+  Object.keys(helper.state.facetsExcludes).forEach(function(facet) {
+    expect(helper.state.facetsExcludes[facet]).toHaveLength(0);
+  });
+  Object.keys(helper.state.disjunctiveFacetsRefinements).forEach(function(facet) {
+    expect(helper.state.disjunctiveFacetsRefinements[facet]).toHaveLength(0);
+  });
 });
 
 test('Clear with a function: filtering', function() {
@@ -102,7 +127,8 @@ test('Clear with a function: filtering', function() {
     numeric: false,
     disjunctiveFacet: false,
     conjunctiveFacet: false,
-    exclude: false
+    exclude: false,
+    hierarchicalFacet: false
   };
 
   helper.clearRefinements(function(value, key, type) {
@@ -111,13 +137,28 @@ test('Clear with a function: filtering', function() {
     return key.indexOf('1') !== -1;
   });
 
-  expect(keys(checkType).length).toBe(4);
-  forEach(checkType, function(typeTest) { expect(typeTest).toBeTruthy(); });
+  expect(Object.keys(checkType).length).toBe(5);
+  forEach(checkType, function(typeTest) {
+    expect(typeTest).toBeTruthy();
+  });
 
-  expect(helper.state.facetsRefinements).toEqual({facet2: ['0']});
-  expect(helper.state.disjunctiveFacetsRefinements).toEqual({disjunctiveFacet2: ['0']});
-  expect(helper.state.facetsExcludes).toEqual({excluded2: ['0']});
-  expect(helper.state.numericRefinements).toEqual({numeric2: {'>=': [0], '<': [10]}});
+  expect(helper.state.facetsRefinements).toEqual({facet1: [], facet2: ['0']});
+  expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+    disjunctiveFacet1: [],
+    disjunctiveFacet2: ['0']
+  });
+  expect(helper.state.facetsExcludes).toEqual({
+    excluded1: [],
+    excluded2: ['0']
+  });
+  expect(helper.state.numericRefinements).toEqual({
+    numeric1: {'>=': [], '<': []},
+    numeric2: {'>=': [0], '<': [10]}
+  });
+  expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+    hierarchy1: [],
+    hierarchy2: ['0']
+  });
 });
 
 test('Clearing twice the same attribute should be not problem', function() {
@@ -185,10 +226,10 @@ test('Clearing with no effect should not update the state, if used with an unkno
   // This operation should not update the reference to the state
   helper.clearRefinements('unknown');
 
-  expect(helper.state.numericRefinements).toBe(initialState.numericRefinements);
-  expect(helper.state.facetsRefinements).toBe(initialState.facetsRefinements);
-  expect(helper.state.disjunctiveFacetsRefinements).toBe(initialState.disjunctiveFacetsRefinements);
-  expect(helper.state.hierarchicalFacetsRefinements).toBe(initialState.hierarchicalFacetsRefinements);
+  expect(helper.state.numericRefinements).toEqual(initialState.numericRefinements);
+  expect(helper.state.facetsRefinements).toEqual(initialState.facetsRefinements);
+  expect(helper.state.disjunctiveFacetsRefinements).toEqual(initialState.disjunctiveFacetsRefinements);
+  expect(helper.state.hierarchicalFacetsRefinements).toEqual(initialState.hierarchicalFacetsRefinements);
 
-  expect(helper.state).toBe(initialState);
+  expect(helper.state).toEqual(initialState);
 });
