@@ -55,7 +55,7 @@ export interface PaginationRendererOptions<TPaginationWidgetParams>
    */
   refine: (page: number) => void;
   /**
-   * createURL Creates URLs for the next state, the number is the page to generate the URL for.
+   * Creates URLs for the next state, the number is the page to generate the URL for.
    */
   createURL: (page: number) => string;
 }
