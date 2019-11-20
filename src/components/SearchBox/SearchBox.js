@@ -102,16 +102,13 @@ class SearchBox extends Component {
   };
 
   onReset = event => {
-    const { searchAsYouType, refine, onReset } = this.props;
+    const { refine, onReset } = this.props;
     const query = '';
 
     this.input.focus();
 
     refine(query);
-
-    if (!searchAsYouType) {
-      this.setState({ query });
-    }
+    this.setState({ query });
 
     onReset(event);
   };
