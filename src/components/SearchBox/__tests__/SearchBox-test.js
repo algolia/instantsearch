@@ -184,6 +184,37 @@ describe('SearchBox', () => {
   });
 
   describe('Events', () => {
+    describe('focus/blur', () => {
+      test('does not derive value from prop when focused', () => {
+        const props = {
+          ...defaultProps,
+          query: 'Initial query',
+        };
+        const { container, rerender } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
+        expect(input.value).toEqual('Initial query');
+
+        fireEvent.focus(input);
+        rerender(<SearchBox {...props} query={'Query updated through prop'} />);
+
+        expect(input.value).toEqual('Initial query');
+      });
+
+      test('derives value from prop when not focused', () => {
+        const props = {
+          ...defaultProps,
+          query: 'Initial query',
+        };
+        const { container, rerender } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
+        expect(input.value).toEqual('Initial query');
+
+        fireEvent.blur(input);
+        rerender(<SearchBox {...props} query={'Query updated through prop'} />);
+
+        expect(input.value).toEqual('Query updated through prop');
+      });
+    });
     describe('searchAsYouType to true', () => {
       test('refines input value on input', () => {
         const refine = jest.fn();

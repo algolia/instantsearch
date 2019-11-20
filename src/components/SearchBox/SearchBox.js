@@ -52,7 +52,8 @@ class SearchBox extends Component {
   };
 
   state = {
-    query: this.props.searchAsYouType ? '' : this.props.query,
+    query: this.props.query,
+    focused: false,
   };
 
   /**
@@ -72,12 +73,17 @@ class SearchBox extends Component {
 
     if (searchAsYouType) {
       refine(query);
-    } else {
-      this.setState({ query });
     }
+    this.setState({ query });
 
     onChange(event);
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.state.focused && nextProps.query !== this.state.query) {
+      this.setState({ query: nextProps.query });
+    }
+  }
 
   onSubmit = event => {
     const { searchAsYouType, refine, onSubmit } = this.props;
@@ -110,6 +116,14 @@ class SearchBox extends Component {
     onReset(event);
   };
 
+  onBlur = () => {
+    this.setState({ focused: false });
+  };
+
+  onFocus = () => {
+    this.setState({ focused: true });
+  };
+
   render() {
     const {
       cssClasses,
@@ -120,10 +134,7 @@ class SearchBox extends Component {
       showLoadingIndicator,
       templates,
       isSearchStalled,
-      searchAsYouType,
     } = this.props;
-
-    const query = searchAsYouType ? this.props.query : this.state.query;
 
     return (
       <div className={cssClasses.root}>
@@ -137,7 +148,7 @@ class SearchBox extends Component {
         >
           <input
             ref={inputRef => (this.input = inputRef)}
-            value={query}
+            value={this.state.query}
             disabled={this.props.disabled}
             className={cssClasses.input}
             type="search"
@@ -149,6 +160,8 @@ class SearchBox extends Component {
             spellCheck={false}
             maxLength={512}
             onInput={this.onInput}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
           />
 
           <Template
@@ -171,7 +184,11 @@ class SearchBox extends Component {
               className: cssClasses.reset,
               type: 'reset',
               title: 'Clear the search query.',
-              hidden: !(showReset && query.trim() && !isSearchStalled),
+              hidden: !(
+                showReset &&
+                this.state.query.trim() &&
+                !isSearchStalled
+              ),
             }}
             templates={templates}
             data={{ cssClasses }}
