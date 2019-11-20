@@ -2432,10 +2432,10 @@ algolia-aerial@^1.5.3:
   resolved "https://registry.yarnpkg.com/algolia-aerial/-/algolia-aerial-1.5.3.tgz#c8b8ca6bc484164ffc7b36717689a424ea6bfe6c"
   integrity sha512-LZTpVlYnhqNFd+ru/Spm73omhsagiRQLmjrosa5bJ6/I9OMRp4Sb9pYZkAxcx3RSr+ZNXZqthL7rpXqMFdrnPA==
 
-algoliasearch-helper@0.0.0-5a0352a:
-  version "0.0.0-5a0352a"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-0.0.0-5a0352a.tgz#91a739e7741bc96004851715cb4b4311c530d6bc"
-  integrity sha512-UElrfeoKxysLld8PY5P6ziNIFkbPVYNfWp9Bv4qCMM5/wozWwfJn0H+s3x9XZkKWI1zEs1Bf9ITg1V53oOkbZg==
+algoliasearch-helper@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.0.0.tgz#830f0017408df16d47618400bed9eed00930b27b"
+  integrity sha512-urO9Yq6gMj93qfuCK5wFK250LfRSVFanJrSyOevJWgN6o6H3Km3wl04er0NaiHGZorqOyEAEU1us1aqFLO3YSA==
   dependencies:
     events "^1.1.1"
 
@@ -7050,7 +7050,6 @@ insert-css@^2.0.0:
 
 instantsearch-e2e-tests@algolia/instantsearch-e2e-tests#v1.2.3:
   version "1.2.3"
-  uid "856d5d788ff25cfeeab43d3aa7dbd10ab98b0182"
   resolved "https://codeload.github.com/algolia/instantsearch-e2e-tests/tar.gz/856d5d788ff25cfeeab43d3aa7dbd10ab98b0182"
   dependencies:
     dotenv "^8.0.0"
