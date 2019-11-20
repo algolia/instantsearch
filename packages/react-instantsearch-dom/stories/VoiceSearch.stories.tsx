@@ -134,4 +134,35 @@ stories
         </div>
       </WrapWithHits>
     );
-  });
+  })
+  .add('with additional paramaters', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="VoiceSearch"
+    >
+      <VoiceSearch additionalQueryParameters={() => {}} />
+      <SearchBox />
+    </WrapWithHits>
+  ))
+  .add('with additional paramaters & language', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="VoiceSearch"
+    >
+      <VoiceSearch language="fr-FR" additionalQueryParameters={() => {}} />
+    </WrapWithHits>
+  ))
+  .add('with additional paramaters & user set & language', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="VoiceSearch"
+    >
+      <VoiceSearch
+        language="fr-FR"
+        additionalQueryParameters={() => ({ analyticsTags: ['voice'] })}
+      />
+    </WrapWithHits>
+  ));
