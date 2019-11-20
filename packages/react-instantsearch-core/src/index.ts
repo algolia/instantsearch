@@ -51,6 +51,7 @@ export {
   default as connectToggleRefinement,
 } from './connectors/connectToggleRefinement';
 export { default as connectHitInsights } from './connectors/connectHitInsights';
+export { default as connectVoiceSearch } from './connectors/connectVoiceSearch';
 
 // Types
 export * from './types';

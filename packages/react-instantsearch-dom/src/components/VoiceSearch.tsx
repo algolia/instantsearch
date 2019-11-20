@@ -23,6 +23,9 @@ export type InnerComponentProps = {
 
 type VoiceSearchProps = {
   searchAsYouSpeak: boolean;
+  language?: string;
+  additionalQueryParameters?: (params: { query: string }) => {} | void;
+
   refine: (query: string) => void;
   translate: Translate;
   buttonTextComponent: React.FC<InnerComponentProps>;
@@ -84,9 +87,10 @@ class VoiceSearch extends Component<VoiceSearchProps, VoiceListeningState> {
   private voiceSearchHelper?: VoiceSearchHelper;
 
   public componentDidMount() {
-    const { searchAsYouSpeak, refine } = this.props;
+    const { searchAsYouSpeak = false, language, refine } = this.props;
     this.voiceSearchHelper = createVoiceSearchHelper({
       searchAsYouSpeak,
+      language,
       onQueryChange: query => refine(query),
       onStateChange: () => {
         this.setState(this.voiceSearchHelper!.getState());
