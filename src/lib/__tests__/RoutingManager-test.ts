@@ -309,7 +309,7 @@ describe('RoutingManager', () => {
       await runAllMicroTasks();
 
       // Trigger change
-      search.removeWidget(fakeHitsPerPage);
+      search.removeWidgets([fakeHitsPerPage]);
 
       await runAllMicroTasks();
 
@@ -359,7 +359,7 @@ describe('RoutingManager', () => {
       });
 
       // Trigger change
-      search.removeWidget(fakeHitsPerPage);
+      search.removeWidgets([fakeHitsPerPage]);
 
       await runAllMicroTasks();
 
@@ -432,7 +432,7 @@ describe('RoutingManager', () => {
       await runAllMicroTasks();
 
       // Trigger change
-      search.removeWidget(fakeHitsPerPage);
+      search.removeWidgets([fakeHitsPerPage]);
 
       await runAllMicroTasks();
 
