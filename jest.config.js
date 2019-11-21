@@ -14,7 +14,6 @@ module.exports = {
     '<rootDir>/dist',
     '<rootDir>/es',
     '<rootDir>/examples',
-    '<rootDir>/scripts',
     '<rootDir>/stories',
     '<rootDir>/website',
   ],
