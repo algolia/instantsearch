@@ -31,8 +31,8 @@ type MatchingPatterns = {
 interface RelatedHitsConnectorParams {
   container: HTMLElement;
   hit: ResultHit;
-  cssClasses: any;
-  templates: any;
+  cssClasses?: any;
+  templates?: any;
   transformItems?(items: any[]): any[];
   transformSearchParameters?(
     searchParameters: SearchParameters
