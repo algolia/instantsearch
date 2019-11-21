@@ -95,8 +95,25 @@ storiesOf('Results|RelatedHits', module)
       let relatedItem;
 
       const customRelatedHits = connectRelatedHits(
-        ({ items, widgetParams }) => {
+        ({ items, widgetParams, showPrevious, showNext }, isFirstRender) => {
           console.log(items, widgetParams);
+
+          widgetParams.container.innerHTML = JSON.stringify(
+            items.map(item => item.name),
+            null,
+            2
+          );
+
+          const previousButton = document.createElement('button');
+          previousButton.textContent = 'Button';
+          previousButton.addEventListener('click', () => showPrevious());
+
+          const nextButton = document.createElement('button');
+          nextButton.textContent = 'Next';
+          nextButton.addEventListener('click', () => showNext());
+
+          widgetParams.container.appendChild(previousButton);
+          widgetParams.container.appendChild(nextButton);
         }
       );
 

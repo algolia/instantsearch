@@ -1,4 +1,8 @@
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchParameters,
+  AlgoliaSearchHelper,
+  SearchResults,
+} from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -44,6 +48,10 @@ interface RelatedHitsConnectorParams {
 export interface RelatedHitsRendererOptions<TRelatedHitsWidgetParams>
   extends RendererOptions<TRelatedHitsWidgetParams> {
   items: Hit[];
+  isFirstPage: boolean;
+  isLastPage: boolean;
+  showPrevious: () => void;
+  showNext: () => void;
 }
 
 export type RelatedHitsRenderer<TRelatedHitsWidgetParams> = Renderer<
@@ -134,11 +142,25 @@ const connectRelatedHits: RelatedHitsConnector = (
       return acc;
     }, []);
 
+    const connectorState = {
+      showPrevious: noop,
+      showNext: noop,
+    };
+
+    const cachedShowPrevious = () => connectorState.showPrevious();
+    const cachedShowNext = () => connectorState.showNext();
+
     return {
-      init({ instantSearchInstance }) {
+      init({ helper, instantSearchInstance }) {
+        const currentPage = helper.state.page || 0;
+
         renderFn(
           {
             items: transformItems([]),
+            isFirstPage: currentPage === 0,
+            isLastPage: true,
+            showPrevious: cachedShowPrevious,
+            showNext: cachedShowNext,
             widgetParams,
             instantSearchInstance,
           },
@@ -146,10 +168,25 @@ const connectRelatedHits: RelatedHitsConnector = (
         );
       },
 
-      render({ results, instantSearchInstance }) {
+      render({ results, helper, instantSearchInstance }) {
+        const currentPage = helper.state.page || 0;
+
+        connectorState.showPrevious = () => {
+          helper.setPage(Math.max(0, currentPage - 1)).search();
+        };
+        connectorState.showNext = () => {
+          helper
+            .setPage(Math.min(currentPage + 1, results.nbPages - 1))
+            .search();
+        };
+
         renderFn(
           {
             items: transformItems(results.hits),
+            isFirstPage: currentPage === 0,
+            isLastPage: results.nbPages <= results.page + 1,
+            showPrevious: cachedShowPrevious,
+            showNext: cachedShowNext,
             widgetParams,
             instantSearchInstance,
           },
