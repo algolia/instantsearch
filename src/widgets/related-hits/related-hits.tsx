@@ -15,6 +15,7 @@ import {
   ResultHit,
   Template as WidgetTemplate,
 } from '../../types';
+import { SearchParameters } from 'algoliasearch-helper';
 
 export type RelatedHitsCSSClasses = {
   root: string;
@@ -31,7 +32,7 @@ type MatchingPattern = {
 };
 
 type MatchingPatterns = {
-  [attribute: string]: Array<MatchingPattern>;
+  [attribute: string]: MatchingPattern;
 };
 
 type RelatedHitsWidgetParams = {
@@ -41,7 +42,10 @@ type RelatedHitsWidgetParams = {
   matchingPatterns?: MatchingPatterns;
   cssClasses?: RelatedHitsCSSClasses;
   templates?: RelatedHitsTemplates;
-  transformItems?: (items: any[]) => any;
+  transformItems?(items: any[]): any[];
+  transformSearchParameters?(
+    searchParameters: SearchParameters
+  ): Partial<SearchParameters>;
 };
 
 interface RelatedHitsRendererWidgetParams extends RelatedHitsWidgetParams {
@@ -105,15 +109,12 @@ const relatedHits: RelatedHits = (
   {
     container,
     hit,
-    matchingPatterns = Object.keys(hit).reduce((acc, key) => {
-      acc[key] = [{}];
-
-      return acc;
-    }, {}),
-    limit = 5,
+    matchingPatterns,
+    limit,
     cssClasses: userCssClasses = {} as RelatedHitsCSSClasses,
     templates: userTemplates = {},
-    transformItems = items => items,
+    transformItems,
+    transformSearchParameters,
   } = {} as RelatedHitsWidgetParams
 ) => {
   if (!container) {
@@ -145,6 +146,7 @@ const relatedHits: RelatedHits = (
     cssClasses,
     templates,
     transformItems,
+    transformSearchParameters,
   });
 };
 

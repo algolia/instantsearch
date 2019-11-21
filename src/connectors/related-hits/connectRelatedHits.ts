@@ -1,3 +1,4 @@
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -24,16 +25,19 @@ type MatchingPattern = {
 };
 
 type MatchingPatterns = {
-  [attribute: string]: Array<MatchingPattern>;
+  [attribute: string]: MatchingPattern;
 };
 
 interface RelatedHitsConnectorParams {
   container: HTMLElement;
+  hit: ResultHit;
   cssClasses: any;
   templates: any;
-  transformItems: any;
-  hit: ResultHit;
-  limit: number;
+  transformItems?(items: any[]): any[];
+  transformSearchParameters?(
+    searchParameters: SearchParameters
+  ): Partial<SearchParameters>;
+  limit?: number;
   matchingPatterns?: MatchingPatterns;
 }
 
@@ -69,6 +73,14 @@ function getDefaultMatchingPatterns(hit = {}) {
   }, {});
 }
 
+function createOptionalFilter({ attribute, attributeName, attributeValue }) {
+  const filter = `${attributeName}:${attributeValue}`;
+  const score =
+    attribute.score !== undefined ? `<score=${attribute.score}>` : '';
+
+  return `${filter}${score}`;
+}
+
 const connectRelatedHits: RelatedHitsConnector = (
   renderFn,
   unmountFn = noop
@@ -85,6 +97,8 @@ const connectRelatedHits: RelatedHitsConnector = (
       hit,
       limit = 5,
       matchingPatterns = getDefaultMatchingPatterns(hit),
+      transformItems = x => x,
+      transformSearchParameters = x => x,
     } = widgetParams || ({} as typeof widgetParams);
 
     if (!hit) {
@@ -94,30 +108,28 @@ const connectRelatedHits: RelatedHitsConnector = (
     const optionalFilters = Object.keys(matchingPatterns).reduce<
       Array<string | string[]>
     >((acc, attributeName) => {
-      const attributes = matchingPatterns[attributeName];
+      const attribute = matchingPatterns[attributeName];
 
-      const filters = attributes.map((attribute: MatchingPattern) => {
-        const value =
-          attribute.value !== undefined ? attribute.value : hit[attributeName];
+      // If the value is not provided (which happens most of the time),
+      // we infer the value from the `hit` option.
+      const attributeValue =
+        attribute.value !== undefined ? attribute.value : hit[attributeName];
 
-        if (Array.isArray(value)) {
-          return value.map(filterValue => {
-            const filter = `${attributeName}:${filterValue}`;
-            const score =
-              attribute.score !== undefined ? `<score=${attribute.score}>` : '';
-
-            return `${filter}${score}`;
-          });
-        } else {
-          const filter = `${attributeName}:${value}`;
-          const score =
-            attribute.score !== undefined ? `<score=${attribute.score}>` : '';
-
-          return `${filter}${score}`;
-        }
-      });
-
-      acc.push(filters);
+      if (Array.isArray(attributeValue)) {
+        acc.push(
+          attributeValue.map(filterValue => {
+            return createOptionalFilter({
+              attribute,
+              attributeName,
+              attributeValue: filterValue,
+            });
+          })
+        );
+      } else {
+        acc.push(
+          createOptionalFilter({ attribute, attributeName, attributeValue })
+        );
+      }
 
       return acc;
     }, []);
@@ -126,7 +138,7 @@ const connectRelatedHits: RelatedHitsConnector = (
       init({ instantSearchInstance }) {
         renderFn(
           {
-            items: [],
+            items: transformItems([]),
             widgetParams,
             instantSearchInstance,
           },
@@ -137,7 +149,7 @@ const connectRelatedHits: RelatedHitsConnector = (
       render({ results, instantSearchInstance }) {
         renderFn(
           {
-            items: results.hits,
+            items: transformItems(results.hits),
             widgetParams,
             instantSearchInstance,
           },
@@ -150,19 +162,17 @@ const connectRelatedHits: RelatedHitsConnector = (
       },
 
       getWidgetSearchParameters(state) {
-        const searchParameters = state.setQueryParameters({
-          hitsPerPage: limit,
-          // @ts-ignore TODO add this type in the helper
-          sumOrFiltersScores: true,
-          filters: `NOT objectID:${hit.objectID}`,
-          optionalFilters,
-        });
+        const searchParameters = transformSearchParameters(
+          state.setQueryParameters({
+            hitsPerPage: limit,
+            // @ts-ignore TODO add `sumOrFiltersScores` type in the helper
+            sumOrFiltersScores: true,
+            filters: `NOT objectID:${hit.objectID}`,
+            optionalFilters,
+          })
+        );
 
-        console.log(JSON.stringify(hit, null, 2));
-        console.log(JSON.stringify(matchingPatterns, null, 2));
-        console.log(JSON.stringify(searchParameters, null, 2));
-
-        return searchParameters;
+        return new algoliasearchHelper.SearchParameters(searchParameters);
       },
     };
   };

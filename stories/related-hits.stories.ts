@@ -33,10 +33,16 @@ storiesOf('Results|RelatedHits', module).add(
                   container: relatedContainer,
                   hit: relatedItem,
                   limit: 5,
+                  transformSearchParameters(searchParameters) {
+                    return {
+                      ...searchParameters,
+                      optionalWords: relatedItem.name.split(' '),
+                    };
+                  },
                   matchingPatterns: {
-                    brand: [{ score: 3 }],
-                    type: [{ score: 10 }],
-                    categories: [{ score: 2 }],
+                    brand: { score: 3 },
+                    type: { score: 10 },
+                    categories: { score: 2 },
                   },
                 }),
               ]);
