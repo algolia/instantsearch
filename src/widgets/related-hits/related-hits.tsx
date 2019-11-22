@@ -3,6 +3,13 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import {
+  WidgetFactory,
+  Renderer,
+  ResultHit,
+  Template as WidgetTemplate,
+} from '../../types';
+import { SearchParameters } from 'algoliasearch-helper';
+import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
@@ -10,14 +17,7 @@ import { component } from '../../lib/suit';
 import connectRelatedHits, {
   MatchingPatterns,
 } from '../../connectors/related-hits/connectRelatedHits';
-import Template from '../../components/Template/Template';
-import {
-  WidgetFactory,
-  Renderer,
-  ResultHit,
-  Template as WidgetTemplate,
-} from '../../types';
-import { SearchParameters } from 'algoliasearch-helper';
+import RelatedHits from '../../components/RelatedHits/RelatedHits';
 
 export type RelatedHitsCSSClasses = {
   root: string;
@@ -47,42 +47,13 @@ interface RelatedHitsRendererWidgetParams extends RelatedHitsWidgetParams {
 
 export type RelatedHitsRenderer<TRelatedHitsWidgetParams> = Renderer<any>;
 
-type RelatedHits = WidgetFactory<RelatedHitsWidgetParams>;
+type RelatedHitsWidget = WidgetFactory<RelatedHitsWidgetParams>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'related-hits',
 });
 
 const suit = component('RelatedHits');
-
-function RelatedHits({ items, templates, cssClasses }) {
-  const defaultTemplate = ({ items }) => {
-    return `
-<ul>${items
-      .map(
-        item => `
-<li>
-  <strong>${item.name}</strong>
-
-  <ul>
-    <li>price: ${item.price}</li>
-    <li>rating: ${item.rating}</li>
-    <li>categories: [${item.categories.join(', ')}]</li>
-  </ul>
-</li>`
-      )
-      .join('')}</ul>`;
-  };
-
-  return (
-    <Template
-      templates={{ ...templates, default: defaultTemplate }}
-      templateKey="default"
-      rootProps={{ className: cssClasses.root }}
-      data={{ items }}
-    />
-  );
-}
 
 const renderer: RelatedHitsRenderer<RelatedHitsRendererWidgetParams> = ({
   items,
@@ -96,7 +67,7 @@ const renderer: RelatedHitsRenderer<RelatedHitsRendererWidgetParams> = ({
   );
 };
 
-const relatedHits: RelatedHits = (
+const relatedHits: RelatedHitsWidget = (
   {
     container,
     hit,
