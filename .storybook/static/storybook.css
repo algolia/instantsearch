@@ -105,6 +105,70 @@ body {
   margin-bottom: 25px;
 }
 
+/* RelatedHits */
+
+.ais-RelatedHits {
+  display: flex;
+  align-items: center;
+}
+
+.ais-RelatedHits-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0 0.5rem;
+}
+
+.ais-RelatedHits-item {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #dfe2ee;
+  background-color: #dfe2ee;
+  border-radius: 3px;
+  color: #3a4570;
+}
+
+.ais-RelatedHits-item:not(:last-of-type) {
+  margin-right: 1rem;
+}
+
+.ais-RelatedHits-item-image {
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.ais-RelatedHits-item-image img {
+  max-height: 120px;
+}
+
+.ais-RelatedHits-item-title {
+  text-align: center;
+  padding: 1rem;
+}
+
+.ais-RelatedHits-item-title h4 {
+  margin: 0;
+}
+
+.ais-RelatedHits-button {
+  height: 40px;
+  width: 60px;
+  border-radius: 3px;
+  background-color: #dfe2ee;
+  border: none;
+  color: 3a4570;
+  cursor: pointer;
+}
+
+.ais-RelatedHits-button[disabled] {
+  cursor: not-allowed;
+}
+
 /* GeoSearch */
 
 .ais-GeoSearch {
