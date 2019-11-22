@@ -7,7 +7,9 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import connectRelatedHits from '../../connectors/related-hits/connectRelatedHits';
+import connectRelatedHits, {
+  MatchingPatterns,
+} from '../../connectors/related-hits/connectRelatedHits';
 import Template from '../../components/Template/Template';
 import {
   WidgetFactory,
@@ -25,20 +27,9 @@ export type RelatedHitsTemplates = {
   default?: WidgetTemplate<{ items: any }>;
 };
 
-type MatchingPattern = {
-  value?: any;
-  score?: number;
-  operator?: string;
-};
-
-type MatchingPatterns = {
-  [attribute: string]: MatchingPattern;
-};
-
 type RelatedHitsWidgetParams = {
   container: string | HTMLElement;
   hit: ResultHit;
-  limit?: number;
   matchingPatterns?: MatchingPatterns;
   cssClasses?: RelatedHitsCSSClasses;
   templates?: RelatedHitsTemplates;
@@ -110,7 +101,6 @@ const relatedHits: RelatedHits = (
     container,
     hit,
     matchingPatterns,
-    limit,
     cssClasses: userCssClasses = {} as RelatedHitsCSSClasses,
     templates: userTemplates = {},
     transformItems,
@@ -142,7 +132,6 @@ const relatedHits: RelatedHits = (
     container: containerNode,
     hit,
     matchingPatterns,
-    limit,
     cssClasses,
     templates,
     transformItems,

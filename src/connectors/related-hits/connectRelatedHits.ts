@@ -24,8 +24,8 @@ type MatchingPattern = {
   score?: number;
 };
 
-type MatchingPatterns = {
-  [attribute: string]: MatchingPattern;
+export type MatchingPatterns = {
+  [attribute: string]: MatchingPattern | MatchingPattern[];
 };
 
 interface RelatedHitsConnectorParams {
@@ -37,7 +37,6 @@ interface RelatedHitsConnectorParams {
   transformSearchParameters?(
     searchParameters: SearchParameters
   ): Partial<SearchParameters>;
-  limit?: number;
   matchingPatterns?: MatchingPatterns;
 }
 
@@ -107,7 +106,6 @@ const connectRelatedHits: RelatedHitsConnector = (
   return widgetParams => {
     const {
       hit,
-      limit = 5,
       matchingPatterns = getDefaultMatchingPatterns(hit),
       transformItems = x => x,
       transformSearchParameters = x => x,
@@ -207,7 +205,6 @@ const connectRelatedHits: RelatedHitsConnector = (
 
         const searchParameters = transformSearchParameters(
           state.setQueryParameters({
-            hitsPerPage: limit,
             // @ts-ignore TODO add `sumOrFiltersScores` type in the helper
             sumOrFiltersScores: true,
             filters: `NOT objectID:${hit.objectID}`,
