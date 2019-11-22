@@ -17,7 +17,9 @@ storiesOf('Results|RelatedHits', module)
       container.appendChild(relatedContainer);
 
       const relatedIndex = index({ indexName: 'instant_search' });
-      let relatedItem;
+      let lastRelatedItem = {
+        objectID: null,
+      };
 
       search.addWidgets([
         index({ indexName: 'instant_search' }).addWidgets([
@@ -27,28 +29,32 @@ storiesOf('Results|RelatedHits', module)
           hits({
             container: productContainer,
             transformItems: items => {
-              if (!relatedItem) {
-                relatedItem = items[0];
+              const [relatedItem] = items;
 
-                relatedIndex.addWidgets([
-                  relatedHits({
-                    container: relatedContainer,
-                    hit: relatedItem,
-                    limit: 5,
-                    transformSearchParameters(searchParameters) {
-                      return {
-                        ...searchParameters,
-                        optionalWords: relatedItem.name.split(' '),
-                      };
-                    },
-                    matchingPatterns: {
-                      brand: { score: 3 },
-                      type: { score: 10 },
-                      categories: { score: 2 },
-                    },
-                  }),
-                ]);
+              if (relatedItem.objectID === lastRelatedItem.objectID) {
+                return items;
               }
+
+              lastRelatedItem = relatedItem;
+
+              relatedIndex.addWidgets([
+                relatedHits({
+                  container: relatedContainer,
+                  hit: relatedItem,
+                  limit: 5,
+                  transformSearchParameters(searchParameters) {
+                    return {
+                      ...searchParameters,
+                      optionalWords: relatedItem.name.split(' '),
+                    };
+                  },
+                  matchingPatterns: {
+                    brand: { score: 3 },
+                    type: { score: 10 },
+                    categories: { score: 2 },
+                  },
+                }),
+              ]);
 
               return items;
             },

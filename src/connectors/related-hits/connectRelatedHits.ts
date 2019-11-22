@@ -1,8 +1,4 @@
-import algoliasearchHelper, {
-  SearchParameters,
-  AlgoliaSearchHelper,
-  SearchResults,
-} from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -69,11 +65,19 @@ export type RelatedHitsConnector = <TRelatedHitsWidgetParams>(
   unmount?: Unmounter
 ) => RelatedHitsWidgetFactory<TRelatedHitsWidgetParams>;
 
-const attributesToIgnore = ['objectID', '_snippetResult', '_highlightResult'];
+function isAttributeIgnored({ key, value }: { key: string; value: any }) {
+  return (
+    key === 'objectID' ||
+    key.indexOf('_') === 0 ||
+    // We also ignore number attributes because they're not supported by
+    // `optionalFilters`.
+    (typeof value !== 'string' && !Array.isArray(value))
+  );
+}
 
 function getDefaultMatchingPatterns(hit = {}) {
   return Object.keys(hit).reduce((acc, key) => {
-    if (attributesToIgnore.indexOf(key) === -1) {
+    if (!isAttributeIgnored({ key, value: hit[key] })) {
       acc[key] = [{}];
     }
 
@@ -112,35 +116,6 @@ const connectRelatedHits: RelatedHitsConnector = (
     if (!hit) {
       throw new Error(withUsage('The `hit` option is required.'));
     }
-
-    const optionalFilters = Object.keys(matchingPatterns).reduce<
-      Array<string | string[]>
-    >((acc, attributeName) => {
-      const attribute = matchingPatterns[attributeName];
-
-      // If the value is not provided (which happens most of the time),
-      // we infer the value from the `hit` option.
-      const attributeValue =
-        attribute.value !== undefined ? attribute.value : hit[attributeName];
-
-      if (Array.isArray(attributeValue)) {
-        acc.push(
-          attributeValue.map(filterValue => {
-            return createOptionalFilter({
-              attribute,
-              attributeName,
-              attributeValue: filterValue,
-            });
-          })
-        );
-      } else {
-        acc.push(
-          createOptionalFilter({ attribute, attributeName, attributeValue })
-        );
-      }
-
-      return acc;
-    }, []);
 
     const connectorState = {
       showPrevious: noop,
@@ -199,6 +174,37 @@ const connectRelatedHits: RelatedHitsConnector = (
       },
 
       getWidgetSearchParameters(state) {
+        const optionalFilters = Object.keys(matchingPatterns).reduce<
+          Array<string | string[]>
+        >((acc, attributeName) => {
+          const attribute = matchingPatterns[attributeName];
+
+          // If the value is not provided (which happens most of the time),
+          // we infer the value from the `hit` option.
+          const attributeValue =
+            attribute.value !== undefined
+              ? attribute.value
+              : hit[attributeName];
+
+          if (Array.isArray(attributeValue)) {
+            acc.push(
+              attributeValue.map(filterValue => {
+                return createOptionalFilter({
+                  attribute,
+                  attributeName,
+                  attributeValue: filterValue,
+                });
+              })
+            );
+          } else {
+            acc.push(
+              createOptionalFilter({ attribute, attributeName, attributeValue })
+            );
+          }
+
+          return acc;
+        }, []);
+
         const searchParameters = transformSearchParameters(
           state.setQueryParameters({
             hitsPerPage: limit,
