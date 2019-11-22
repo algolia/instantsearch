@@ -29,8 +29,8 @@ export type MatchingPatterns = {
 };
 
 interface RelatedHitsConnectorParams {
-  container: HTMLElement;
   hit: ResultHit;
+  container?: HTMLElement;
   cssClasses?: any;
   templates?: any;
   transformItems?(items: any[]): any[];
@@ -124,6 +124,8 @@ const connectRelatedHits: RelatedHitsConnector = (
     const cachedShowNext = () => connectorState.showNext();
 
     return {
+      $$type: 'ais.relatedHits',
+
       init({ helper, instantSearchInstance }) {
         const currentPage = helper.state.page || 0;
 

@@ -5,7 +5,6 @@ import relatedHits from '../src/widgets/related-hits/related-hits';
 import configure from '../src/widgets/configure/configure';
 import hits from '../src/widgets/hits/hits';
 import { connectRelatedHits, connectHits } from '../src/connectors';
-import { snippet } from '../src/helpers';
 
 storiesOf('Results|RelatedHits', module)
   .add(
@@ -34,7 +33,7 @@ storiesOf('Results|RelatedHits', module)
 
           if (state.relatedIndex) {
             // This throws in the widget index because `derivedHelper` becomes `null`.
-            // state.relatedIndex.dispose();
+            state.relatedIndex.dispose();
             // instantSearchInstance.mainIndex.removeWidgets([state.relatedIndex]);
             state.relatedIndex = null;
           }

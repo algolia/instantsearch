@@ -145,6 +145,7 @@ export interface Widget {
     | 'ais.range'
     | 'ais.ratingMenu'
     | 'ais.refinementList'
+    | 'ais.relatedHits'
     | 'ais.searchBox'
     | 'ais.sortBy'
     | 'ais.stats'
