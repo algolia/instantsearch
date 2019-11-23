@@ -124,7 +124,7 @@
     "mversion": "1.13.0",
     "places.js": "1.17.0",
     "prettier": "1.18.2",
-    "rollup": "1.26.3",
+    "rollup": "1.27.4",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-filesize": "6.1.1",
