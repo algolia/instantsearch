@@ -36,9 +36,9 @@ storiesOf('Basics|InstantSearch', module)
       button.innerHTML = 'Refresh InstantSearch';
       const searchBoxContainer = document.createElement('div');
 
-      search.addWidget(
-        instantsearch.widgets.searchBox({ container: searchBoxContainer })
-      );
+      search.addWidgets([
+        instantsearch.widgets.searchBox({ container: searchBoxContainer }),
+      ]);
 
       container.appendChild(button);
       container.appendChild(searchBoxContainer);
