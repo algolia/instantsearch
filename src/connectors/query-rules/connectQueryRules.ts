@@ -21,6 +21,7 @@ import {
   Refinement as InternalRefinement,
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';
+import { createMemoRender } from '../../helpers/memo';
 
 type TrackedFilterRefinement = string | number | boolean;
 
@@ -177,6 +178,10 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       transformItems = (items => items) as ParamTransformItems,
     } = widgetParams || ({} as typeof widgetParams);
 
+    const memoRender = createMemoRender<
+      QueryRulesRendererOptions<typeof widgetParams>
+    >();
+
     Object.keys(trackedFilters).forEach(facetName => {
       if (typeof trackedFilters[facetName] !== 'function') {
         throw new Error(
@@ -223,28 +228,37 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
           helper.on('change', onHelperChange);
         }
 
-        render(
-          {
-            items: [],
-            instantSearchInstance,
-            widgetParams,
-          },
-          true
-        );
+        // memoRender({
+        //   render,
+        //   params: {
+        //     items: [],
+        //     instantSearchInstance,
+        //     widgetParams,
+        //   },
+        // });
       },
 
       render({ results, instantSearchInstance }) {
         const { userData = [] } = results;
         const items = transformItems(userData);
 
-        render(
-          {
+        memoRender({
+          render,
+          params: {
             items,
             instantSearchInstance,
             widgetParams,
           },
-          false
-        );
+        });
+
+        // render(
+        //   {
+        //     items,
+        //     instantSearchInstance,
+        //     widgetParams,
+        //   },
+        //   false
+        // );
       },
 
       dispose({ helper, state }) {
