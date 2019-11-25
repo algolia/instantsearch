@@ -22,6 +22,7 @@ import {
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';
 import { createMemoRender } from '../../helpers/memo';
+import { Effect, createEffectHandler } from '../../helpers/effect';
 
 type TrackedFilterRefinement = string | number | boolean;
 
@@ -168,7 +169,11 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
   }
 }
 
-const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
+const connectQueryRules: QueryRulesConnector = (
+  render,
+  unmount = noop,
+  effects = []
+) => {
   checkRendering(render, withUsage());
 
   return widgetParams => {
@@ -181,6 +186,11 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     const memoRender = createMemoRender<
       QueryRulesRendererOptions<typeof widgetParams>
     >();
+
+    const handleEffects = createEffectHandler<
+      QueryRulesRendererOptions<typeof widgetParams>
+    >(effects);
+    let unsubscribeEffects = noop;
 
     Object.keys(trackedFilters).forEach(facetName => {
       if (typeof trackedFilters[facetName] !== 'function') {
@@ -241,28 +251,23 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       render({ results, instantSearchInstance }) {
         const { userData = [] } = results;
         const items = transformItems(userData);
+        const params = {
+          items,
+          instantSearchInstance,
+          widgetParams,
+        };
 
         memoRender({
           render,
-          params: {
-            items,
-            instantSearchInstance,
-            widgetParams,
-          },
+          params,
         });
 
-        // render(
-        //   {
-        //     items,
-        //     instantSearchInstance,
-        //     widgetParams,
-        //   },
-        //   false
-        // );
+        unsubscribeEffects = handleEffects(params);
       },
 
       dispose({ helper, state }) {
         unmount();
+        unsubscribeEffects();
 
         if (hasTrackedFilters) {
           helper.removeListener('change', onHelperChange);

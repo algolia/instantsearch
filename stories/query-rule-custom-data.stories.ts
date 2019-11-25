@@ -5,6 +5,7 @@ import queryRuleCustomData from '../src/widgets/query-rule-custom-data/query-rul
 import { configure } from '../src/widgets';
 import { isEqual } from '../src/lib/utils';
 import { memo } from '../src/helpers/memo';
+import { effect } from '../src/helpers/effect';
 
 type CustomDataItem = {
   title: string;
@@ -271,54 +272,45 @@ storiesOf('Metadata|QueryRuleCustomData', module)
         const queryRulesLanes = instantsearch.connectors.connectQueryRules(
           memo(
             ({ items, widgetParams, instantSearchInstance }) => {
-              const lanes = items && items[0].lanes;
-
-              if (!lanes) {
-                return;
-              }
-
-              lanes.sort(function(a, b) {
-                return a.position - b.position;
-              });
-
-              const { container } = widgetParams;
-
-              const lanesIndices = lanes.map(lane => {
-                const laneContainer = document.createElement('div');
-                const laneTitle = document.createElement('h2');
-                laneTitle.innerText = lane.label;
-                const laneRow = document.createElement('div');
-
-                laneContainer.append(laneTitle, laneRow);
-
-                const laneIndex = instantsearch.widgets
-                  .index({ indexName: instantSearchInstance.indexName })
-                  .addWidgets([
-                    instantsearch.widgets.configure({
-                      hitsPerPage: 4 || lane.nbProducts,
-                      ruleContexts: [lane.ruleContext],
-                    }),
-                    instantsearch.widgets.hits({
-                      container: laneRow,
-                      templates: {
-                        item: widgetParams.template,
-                      },
-                    }),
-                  ]);
-
-                return [laneIndex, laneContainer];
-              });
-
-              const nextLanesIndices = lanesIndices.map(
-                lanesIndex => lanesIndex[0]
-              );
-              const lanesContainers = lanesIndices.map(
-                lanesIndex => lanesIndex[1]
-              );
-
-              instantSearchInstance.mainIndex.addWidgets(nextLanesIndices);
-              container.innerHTML = '';
-              container.append(...lanesContainers);
+              // const lanes = items && items[0].lanes;
+              // if (!lanes) {
+              //   return;
+              // }
+              // lanes.sort(function(a, b) {
+              //   return a.position - b.position;
+              // });
+              // const { container } = widgetParams;
+              // const lanesIndices = lanes.map(lane => {
+              //   const laneContainer = document.createElement('div');
+              //   const laneTitle = document.createElement('h2');
+              //   laneTitle.innerText = lane.label;
+              //   const laneRow = document.createElement('div');
+              //   laneContainer.append(laneTitle, laneRow);
+              //   const laneIndex = instantsearch.widgets
+              //     .index({ indexName: instantSearchInstance.indexName })
+              //     .addWidgets([
+              //       instantsearch.widgets.configure({
+              //         hitsPerPage: 4 || lane.nbProducts,
+              //         ruleContexts: [lane.ruleContext],
+              //       }),
+              //       instantsearch.widgets.hits({
+              //         container: laneRow,
+              //         templates: {
+              //           item: widgetParams.template,
+              //         },
+              //       }),
+              //     ]);
+              //   return [laneIndex, laneContainer];
+              // });
+              // const nextLanesIndices = lanesIndices.map(
+              //   lanesIndex => lanesIndex[0]
+              // );
+              // const lanesContainers = lanesIndices.map(
+              //   lanesIndex => lanesIndex[1]
+              // );
+              // instantSearchInstance.mainIndex.addWidgets(nextLanesIndices);
+              // container.innerHTML = '';
+              // container.append(...lanesContainers);
             },
             (prevParams, nextParams) => {
               const prevLanes = prevParams.items[0].lanes;
@@ -337,7 +329,135 @@ storiesOf('Metadata|QueryRuleCustomData', module)
 
               return isEqual(prevLanes, nextLanes);
             }
-          )
+          ),
+          () => {
+            console.log('Unmount');
+          },
+          [
+            // effect<any>(
+            //   params => {
+            //     console.log('Effect', params);
+
+            //     function onClick() {
+            //       alert('clicked the button');
+            //     }
+
+            //     const button = document.createElement('button');
+            //     button.textContent = 'Click';
+            //     container.appendChild(button);
+
+            //     button.addEventListener('click', onClick);
+
+            //     return () => {
+            //       console.log('Unsubscribe effect');
+            //       button.removeEventListener('click', onClick);
+            //       container.removeChild(button);
+            //     };
+            //   },
+            //   (prevParams, nextParams) => {
+            //     // return prevParams.items === nextParams.items;
+
+            //     const prevLanes = prevParams.items[0].lanes;
+            //     const nextLanes = nextParams.items[0].lanes;
+
+            //     if (!prevLanes || !nextLanes) {
+            //       return true;
+            //     }
+
+            //     prevLanes.sort(function(a, b) {
+            //       return a.position - b.position;
+            //     });
+            //     nextLanes.sort(function(a, b) {
+            //       return a.position - b.position;
+            //     });
+
+            //     return isEqual(prevLanes, nextLanes);
+            //   }
+            // ),
+            effect<any>(
+              ({ items, widgetParams, instantSearchInstance }) => {
+                console.log('Effect');
+
+                const lanes = items && items[0].lanes;
+
+                if (!lanes) {
+                  return;
+                }
+
+                lanes.sort(function(a, b) {
+                  return a.position - b.position;
+                });
+
+                const { container } = widgetParams;
+
+                const lanesIndices = lanes.map(lane => {
+                  const laneContainer = document.createElement('div');
+                  const laneTitle = document.createElement('h2');
+                  laneTitle.innerText = lane.label;
+                  const laneRow = document.createElement('div');
+
+                  laneContainer.append(laneTitle, laneRow);
+
+                  const laneIndex = instantsearch.widgets
+                    .index({ indexName: instantSearchInstance.indexName })
+                    .addWidgets([
+                      instantsearch.widgets.configure({
+                        hitsPerPage: 4 || lane.nbProducts,
+                        ruleContexts: [lane.ruleContext],
+                      }),
+                      instantsearch.widgets.hits({
+                        container: laneRow,
+                        templates: {
+                          item: widgetParams.template,
+                        },
+                      }),
+                    ]);
+
+                  return [laneIndex, laneContainer];
+                });
+
+                const nextLanesIndices = lanesIndices.map(
+                  lanesIndex => lanesIndex[0]
+                );
+                const lanesContainers = lanesIndices.map(
+                  lanesIndex => lanesIndex[1]
+                );
+
+                instantSearchInstance.mainIndex.addWidgets(nextLanesIndices);
+                container.append(...lanesContainers);
+
+                return () => {
+                  console.log('Unsubscribe effect');
+                  container.innerHTML = '';
+                  instantSearchInstance.mainIndex.removeWidgets(
+                    nextLanesIndices
+                  );
+                };
+              },
+              (prevParams, nextParams) => {
+                // return (
+                //   JSON.stringify(prevParams.items[0].lanes) ===
+                //   JSON.stringify(nextParams.items[0].lanes)
+                // );
+
+                const prevLanes = prevParams.items[0].lanes;
+                const nextLanes = nextParams.items[0].lanes;
+
+                if (!prevLanes || !nextLanes) {
+                  return true;
+                }
+
+                prevLanes.sort(function(a, b) {
+                  return a.position - b.position;
+                });
+                nextLanes.sort(function(a, b) {
+                  return a.position - b.position;
+                });
+
+                return isEqual(prevLanes, nextLanes);
+              }
+            ),
+          ]
         );
 
         search.addWidgets([
