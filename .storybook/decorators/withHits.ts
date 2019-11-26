@@ -40,13 +40,13 @@ export const withHits = (
     ...instantsearchOptions,
   });
 
-  search.addWidget(
+  search.addWidgets([
     instantsearch.widgets.configure({
       hitsPerPage: 4,
       attributesToSnippet: ['description:15'],
       snippetEllipsisText: '[…]',
-    })
-  );
+    }),
+  ]);
 
   const containerElement = document.createElement('div');
 

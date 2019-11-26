@@ -124,8 +124,8 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
 
   return widgetParams => {
     if (
-      (widgetParams || ({} as any)).includedAttributes &&
-      (widgetParams || ({} as any)).excludedAttributes
+      (widgetParams || ({} as typeof widgetParams)).includedAttributes &&
+      (widgetParams || ({} as typeof widgetParams)).excludedAttributes
     ) {
       throw new Error(
         withUsage(
@@ -138,7 +138,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
       includedAttributes,
       excludedAttributes = ['query'],
       transformItems = (items: Item[]) => items,
-    } = widgetParams || ({} as CurrentRefinementsConnectorParams);
+    } = widgetParams || ({} as typeof widgetParams);
 
     return {
       $$type: 'ais.currentRefinements',

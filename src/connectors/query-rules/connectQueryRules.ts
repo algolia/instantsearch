@@ -175,7 +175,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       trackedFilters = {} as ParamTrackedFilters,
       transformRuleContexts = (rules => rules) as ParamTransformRuleContexts,
       transformItems = (items => items) as ParamTransformItems,
-    } = widgetParams || {};
+    } = widgetParams || ({} as typeof widgetParams);
 
     Object.keys(trackedFilters).forEach(facetName => {
       if (typeof trackedFilters[facetName] !== 'function') {
