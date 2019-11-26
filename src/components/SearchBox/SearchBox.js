@@ -81,8 +81,8 @@ class SearchBox extends Component {
 
   componentWillReceiveProps(nextProps) {
     /**
-     * when the user is typing, we don't want to replace the query typed by the user
-     * with the query exposed by the connector:
+     * when the user is typing, we don't want to replace the query typed
+     * by the user (state.query) with the query exposed by the connector (props.query)
      * see: https://github.com/algolia/instantsearch.js/issues/4141
      */
     if (!this.state.focused && nextProps.query !== this.state.query) {
