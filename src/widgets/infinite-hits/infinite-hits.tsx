@@ -88,18 +88,18 @@ export type InfiniteHitsRendererWidgetParams = {
    *
    * @default `true`
    */
-  escapeHTML: boolean;
+  escapeHTML?: boolean;
   /**
    * Enable the button to load previous results.
    *
    * @default `false`
    */
-  showPrevious: boolean;
+  showPrevious?: boolean;
   /**
    * Receives the items, and is called before displaying them.
    * Useful for mapping over the items to transform, and remove or reorder them.
    */
-  transformItems: (items: any[]) => any[];
+  transformItems?: (items: any[]) => any[];
 };
 
 interface InfiniteHitsWidgetParams extends InfiniteHitsRendererWidgetParams {
@@ -125,7 +125,7 @@ const renderer = ({
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}): InfiniteHitsRenderer<InfiniteHitsRendererWidgetParams> => (
+}): InfiniteHitsRenderer<Required<InfiniteHitsRendererWidgetParams>> => (
   {
     hits,
     results,
