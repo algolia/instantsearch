@@ -381,6 +381,8 @@ Array [
               className="input"
               disabled={false}
               maxLength={512}
+              onBlur={[Function]}
+              onFocus={[Function]}
               onInput={[Function]}
               placeholder="Search"
               spellCheck={false}
@@ -568,6 +570,8 @@ Array [
               className="input"
               disabled={false}
               maxLength={512}
+              onBlur={[Function]}
+              onFocus={[Function]}
               onInput={[Function]}
               placeholder="Search"
               spellCheck={false}

@@ -82,4 +82,21 @@ storiesOf('Basics|SearchBox', module)
         }),
       ]);
     })
+  )
+  .add(
+    'with debounced queryHook',
+    withHits(({ search, container, instantsearch }) => {
+      let timerId;
+      search.addWidgets([
+        instantsearch.widgets.searchBox({
+          container,
+          queryHook(query, refine) {
+            clearTimeout(timerId);
+            timerId = setTimeout(() => {
+              refine(query);
+            }, 100);
+          },
+        }),
+      ]);
+    })
   );
