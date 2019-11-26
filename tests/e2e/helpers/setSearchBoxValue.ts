@@ -7,8 +7,17 @@ declare namespace WebdriverIOAsync {
 browser.addCommand('setSearchBoxValue', async (value: string) => {
   const oldUrl = await browser.getUrl();
   const searchBox = await browser.$('.ais-SearchBox [type=search]');
+  const resetButton = await browser.$('.ais-SearchBox [type=reset]');
+
   // Assures us that the element is in the viewport
   await searchBox.scrollIntoView();
+
+  // Click the reset button to clear the input
+  if (await resetButton.isDisplayed()) {
+    // The reset button is invisible when nothing to reset
+    await resetButton.click();
+  }
+
   // In Internet Explorer the input must be focused before updating its value
   await searchBox.click();
   await searchBox.setValue(value);
