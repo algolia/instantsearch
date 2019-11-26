@@ -6,6 +6,7 @@ import { configure } from '../src/widgets';
 import { isEqual } from '../src/lib/utils';
 import { memo } from '../src/helpers/memo';
 import { effect } from '../src/helpers/effect';
+import { Index } from '../src/widgets/index';
 
 type CustomDataItem = {
   title: string;
@@ -161,7 +162,13 @@ storiesOf('Metadata|QueryRuleCustomData', module)
     'without memo',
     withHits(
       ({ search, container, instantsearch }) => {
-        const state = {
+        // This logic shouldn't be userland and should be handled by InstantSearch.
+        // See next story called "with memo".
+        interface State {
+          lastLanesReceived: string | null;
+          lanesIndices: Index[];
+        }
+        const state: State = {
           lastLanesReceived: null,
           lanesIndices: [],
         };
@@ -270,115 +277,42 @@ storiesOf('Metadata|QueryRuleCustomData', module)
     withHits(
       ({ search, container, instantsearch }) => {
         const queryRulesLanes = instantsearch.connectors.connectQueryRules(
-          memo(
-            ({ items, widgetParams, instantSearchInstance }) => {
-              // const lanes = items && items[0].lanes;
-              // if (!lanes) {
-              //   return;
-              // }
-              // lanes.sort(function(a, b) {
-              //   return a.position - b.position;
-              // });
-              // const { container } = widgetParams;
-              // const lanesIndices = lanes.map(lane => {
-              //   const laneContainer = document.createElement('div');
-              //   const laneTitle = document.createElement('h2');
-              //   laneTitle.innerText = lane.label;
-              //   const laneRow = document.createElement('div');
-              //   laneContainer.append(laneTitle, laneRow);
-              //   const laneIndex = instantsearch.widgets
-              //     .index({ indexName: instantSearchInstance.indexName })
-              //     .addWidgets([
-              //       instantsearch.widgets.configure({
-              //         hitsPerPage: 4 || lane.nbProducts,
-              //         ruleContexts: [lane.ruleContext],
-              //       }),
-              //       instantsearch.widgets.hits({
-              //         container: laneRow,
-              //         templates: {
-              //           item: widgetParams.template,
-              //         },
-              //       }),
-              //     ]);
-              //   return [laneIndex, laneContainer];
-              // });
-              // const nextLanesIndices = lanesIndices.map(
-              //   lanesIndex => lanesIndex[0]
-              // );
-              // const lanesContainers = lanesIndices.map(
-              //   lanesIndex => lanesIndex[1]
-              // );
-              // instantSearchInstance.mainIndex.addWidgets(nextLanesIndices);
-              // container.innerHTML = '';
-              // container.append(...lanesContainers);
-            },
-            (prevParams, nextParams) => {
-              const prevLanes = prevParams.items[0].lanes;
-              const nextLanes = nextParams.items[0].lanes;
-
-              if (!prevLanes || !nextLanes) {
-                return true;
-              }
-
-              prevLanes.sort(function(a, b) {
-                return a.position - b.position;
-              });
-              nextLanes.sort(function(a, b) {
-                return a.position - b.position;
-              });
-
-              return isEqual(prevLanes, nextLanes);
-            }
-          ),
+          // memo(
+          //   ({ items, widgetParams, instantSearchInstance }) => {
+          //     const suptitle = document.createElement('p');
+          //     suptitle.textContent = `There are ${items.length} query rules detected`;
+          //     container.appendChild(suptitle);
+          //   },
+          //   (prevParams, nextParams) => {
+          //     return prevParams.items.length !== nextParams.items.length;
+          //   }
+          // ),
+          () => {
+            console.log('Render');
+          },
           () => {
             console.log('Unmount');
           },
           [
-            // effect<any>(
-            //   params => {
-            //     console.log('Effect', params);
+            effect(
+              ({ items }) => {
+                const suptitle = document.createElement('p');
+                suptitle.textContent = `${items.length} query rules detected`;
+                container.appendChild(suptitle);
 
-            //     function onClick() {
-            //       alert('clicked the button');
-            //     }
-
-            //     const button = document.createElement('button');
-            //     button.textContent = 'Click';
-            //     container.appendChild(button);
-
-            //     button.addEventListener('click', onClick);
-
-            //     return () => {
-            //       console.log('Unsubscribe effect');
-            //       button.removeEventListener('click', onClick);
-            //       container.removeChild(button);
-            //     };
-            //   },
-            //   (prevParams, nextParams) => {
-            //     // return prevParams.items === nextParams.items;
-
-            //     const prevLanes = prevParams.items[0].lanes;
-            //     const nextLanes = nextParams.items[0].lanes;
-
-            //     if (!prevLanes || !nextLanes) {
-            //       return true;
-            //     }
-
-            //     prevLanes.sort(function(a, b) {
-            //       return a.position - b.position;
-            //     });
-            //     nextLanes.sort(function(a, b) {
-            //       return a.position - b.position;
-            //     });
-
-            //     return isEqual(prevLanes, nextLanes);
-            //   }
-            // ),
-            effect<any>(
+                return () => {
+                  container.removeChild(suptitle);
+                };
+              },
+              (prevParams, nextParams) => {
+                return prevParams.items.length !== nextParams.items.length;
+              }
+            ),
+            effect(
               ({ items, widgetParams, instantSearchInstance }) => {
-                console.log('Effect');
+                console.log('Run effect');
 
-                const lanes = items && items[0].lanes;
+                const lanes = items[0].lanes;
 
                 if (!lanes) {
                   return;
@@ -428,6 +362,7 @@ storiesOf('Metadata|QueryRuleCustomData', module)
 
                 return () => {
                   console.log('Unsubscribe effect');
+
                   container.innerHTML = '';
                   instantSearchInstance.mainIndex.removeWidgets(
                     nextLanesIndices
@@ -435,11 +370,6 @@ storiesOf('Metadata|QueryRuleCustomData', module)
                 };
               },
               (prevParams, nextParams) => {
-                // return (
-                //   JSON.stringify(prevParams.items[0].lanes) ===
-                //   JSON.stringify(nextParams.items[0].lanes)
-                // );
-
                 const prevLanes = prevParams.items[0].lanes;
                 const nextLanes = nextParams.items[0].lanes;
 

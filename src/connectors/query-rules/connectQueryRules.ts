@@ -22,7 +22,7 @@ import {
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils/getRefinements';
 import { createMemoRender } from '../../helpers/memo';
-import { Effect, createEffectHandler } from '../../helpers/effect';
+import { EffectHandler, createEffectHandler } from '../../helpers/effect';
 
 type TrackedFilterRefinement = string | number | boolean;
 
@@ -170,11 +170,11 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
 }
 
 const connectQueryRules: QueryRulesConnector = (
-  render,
-  unmount = noop,
+  renderer,
+  unmounter = noop,
   effects = []
 ) => {
-  checkRendering(render, withUsage());
+  checkRendering(renderer, withUsage());
 
   return widgetParams => {
     const {
@@ -185,7 +185,7 @@ const connectQueryRules: QueryRulesConnector = (
 
     const memoRender = createMemoRender<
       QueryRulesRendererOptions<typeof widgetParams>
-    >();
+    >(renderer);
 
     const handleEffects = createEffectHandler<
       QueryRulesRendererOptions<typeof widgetParams>
@@ -238,14 +238,18 @@ const connectQueryRules: QueryRulesConnector = (
           helper.on('change', onHelperChange);
         }
 
-        // memoRender({
-        //   render,
-        //   params: {
+        // @TODO: We don't render on `init` by default.
+        // We should call `render` with "mocked" response from the API
+        // to allow the UI to be reactive to the lifecycle.
+
+        // render(
+        //   {
         //     items: [],
         //     instantSearchInstance,
         //     widgetParams,
         //   },
-        // });
+        //   true
+        // );
       },
 
       render({ results, instantSearchInstance }) {
@@ -257,16 +261,13 @@ const connectQueryRules: QueryRulesConnector = (
           widgetParams,
         };
 
-        memoRender({
-          render,
-          params,
-        });
+        memoRender(params);
 
         unsubscribeEffects = handleEffects(params);
       },
 
       dispose({ helper, state }) {
-        unmount();
+        unmounter();
         unsubscribeEffects();
 
         if (hasTrackedFilters) {

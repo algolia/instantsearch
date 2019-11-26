@@ -4,7 +4,7 @@ type Runner<TParams> = (params: TParams) => Unsubcriber;
 type Unsubcriber = () => void;
 type Compare<TParams> = (prevParams: TParams, nextparams: TParams) => boolean;
 
-export interface Effect<TParams> {
+export interface EffectHandler<TParams> {
   $$type: 'ais.effect';
   run: Runner<TParams>;
   compare: Compare<TParams>;
@@ -13,7 +13,7 @@ export interface Effect<TParams> {
 export function effect<TParams>(
   run: Runner<TParams>,
   compare: Compare<TParams>
-): Effect<TParams> {
+): EffectHandler<TParams> {
   return {
     $$type: 'ais.effect',
     run,
@@ -21,8 +21,9 @@ export function effect<TParams>(
   };
 }
 
+// @TODO: TParams must extend RendererOptions
 export function createEffectHandler<TParams extends RendererOptions>(
-  effects: Effect<TParams>[]
+  effects: EffectHandler<TParams>[]
 ) {
   let prevParams: TParams | null = null;
   const unsubscribers: Unsubcriber[] = [];
