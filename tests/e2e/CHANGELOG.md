@@ -1,3 +1,12 @@
+## [1.2.4](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.3...v1.2.4) (2019-11-26)
+
+
+### Bug Fixes
+
+* **setSearchBoxValue:** reset searchbox before editing ([#15](https://github.com/algolia/instantsearch-e2e-tests/issues/15)) ([b52ea34](https://github.com/algolia/instantsearch-e2e-tests/commit/b52ea3468594c86168b155bb0fcab1230ff86672)), closes [/app.saucelabs.com/tests/4518f96fdfd447e998786d0ff463658a#54](https://github.com//app.saucelabs.com/tests/4518f96fdfd447e998786d0ff463658a/issues/54)
+
+
+
 ## [1.2.3](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.2...v1.2.3) (2019-10-14)
 
 
