@@ -186,6 +186,9 @@ describe('SearchBox', () => {
   describe('Events', () => {
     describe('focus/blur', () => {
       test('does not derive value from prop when focused', () => {
+        // This makes sure we don't override the user's input while they're typing.
+        // This issue is more obvious when using queryHook to add debouncing.
+
         const props = {
           ...defaultProps,
           query: 'Initial query',
