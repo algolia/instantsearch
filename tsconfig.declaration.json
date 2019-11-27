@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "allowJs": true
+  },
+  "include": ["src", "./global.d.ts"],
+  "exclude": ["**/__tests__"]
+}
