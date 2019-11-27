@@ -98,6 +98,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     global[AlgoliaAnalyticsObject] = jest.fn();
 
     expect(() => {
+      // eslint-disable-next-line no-new
       new InstantSearch({
         indexName: 'indexName',
         searchClient: createSearchClient(),
@@ -123,6 +124,7 @@ const search = instantsearch({
     global[AlgoliaAnalyticsObject] = jest.fn();
 
     expect(() => {
+      // eslint-disable-next-line no-new
       new InstantSearch({
         indexName: 'indexName',
         searchClient: createSearchClient(),
