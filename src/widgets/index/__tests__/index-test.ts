@@ -97,7 +97,7 @@ describe('index', () => {
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`indexName\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
 `);
   });
 
@@ -107,7 +107,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`indexName\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
 `);
   });
 
@@ -169,7 +169,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`addWidgets\` method expects an array of widgets.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
 `);
     });
 
@@ -181,7 +181,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       }).toThrowErrorMatchingInlineSnapshot(`
 "The widget definition expects a \`render\` and/or an \`init\` method.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
 `);
     });
 
@@ -366,7 +366,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`removeWidgets\` method expects an array of widgets.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
 `);
     });
 
@@ -378,7 +378,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
       }).toThrowErrorMatchingInlineSnapshot(`
 "The widget definition expects a \`dispose\` method.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/index/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
 `);
     });
 

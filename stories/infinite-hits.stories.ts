@@ -2,36 +2,15 @@ import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
+import { infiniteHits, configure } from '../src/widgets';
 
 storiesOf('Results|InfiniteHits', module)
   .add(
     'default',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidgets([
-        instantsearch.widgets.infiniteHits({
+        infiniteHits({
           container,
-          templates: {
-            item: '{{name}}',
-          },
-        }),
-      ]);
-    })
-  )
-  .add(
-    'with custom css classes',
-    withHits(({ search, container, instantsearch }) => {
-      const style = window.document.createElement('style');
-      window.document.head.appendChild(style);
-      style.sheet.insertRule(
-        '.button button{border: 1px solid black; background: #fff;}'
-      );
-
-      search.addWidgets([
-        instantsearch.widgets.infiniteHits({
-          container,
-          cssClasses: {
-            loadMore: 'button',
-          },
           templates: {
             item: '{{name}}',
           },
@@ -41,9 +20,9 @@ storiesOf('Results|InfiniteHits', module)
   )
   .add(
     'with custom "showMoreText" template',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidgets([
-        instantsearch.widgets.infiniteHits({
+        infiniteHits({
           container,
           templates: {
             item: '{{name}}',
@@ -55,9 +34,9 @@ storiesOf('Results|InfiniteHits', module)
   )
   .add(
     'with transformed items',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidgets([
-        instantsearch.widgets.infiniteHits({
+        infiniteHits({
           container,
           templates: {
             item: '{{name}}',
@@ -74,16 +53,16 @@ storiesOf('Results|InfiniteHits', module)
   .add(
     'with insights helper',
     withHits(
-      ({ search, container, instantsearch }) => {
+      ({ search, container }) => {
         search.addWidgets([
-          instantsearch.widgets.configure({
+          configure({
             attributesToSnippet: ['name', 'description'],
             clickAnalytics: true,
           }),
         ]);
 
         search.addWidgets([
-          instantsearch.widgets.infiniteHits({
+          infiniteHits({
             container,
             templates: {
               item: item => `
@@ -107,9 +86,9 @@ storiesOf('Results|InfiniteHits', module)
   .add(
     'with previous button enabled',
     withHits(
-      ({ search, container, instantsearch }) => {
+      ({ search, container }) => {
         search.addWidgets([
-          instantsearch.widgets.infiniteHits({
+          infiniteHits({
             container,
             showPrevious: true,
             templates: {

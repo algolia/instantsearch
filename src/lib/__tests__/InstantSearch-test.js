@@ -351,6 +351,10 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 });
 
 describe('addWidget(s)', () => {
+  beforeEach(() => {
+    warning.cache = {};
+  });
+
   it('forwards the call of `addWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -388,7 +392,15 @@ describe('addWidget(s)', () => {
       searchClient,
     });
 
-    expect(search.addWidget(createWidget())).toBe(search);
+    let result = null;
+
+    expect(() => {
+      result = search.addWidget(createWidget());
+    }).toWarnDev(
+      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+    );
+
+    expect(result).toBe(search);
   });
 
   it('returns the search instance when calling `addWidgets`', () => {
@@ -403,6 +415,10 @@ describe('addWidget(s)', () => {
 });
 
 describe('removeWidget(s)', () => {
+  beforeEach(() => {
+    warning.cache = {};
+  });
+
   it('forwards the call to `removeWidget` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -449,9 +465,20 @@ describe('removeWidget(s)', () => {
     });
 
     const widget = createWidget();
-    search.addWidget(widget);
 
-    expect(search.removeWidget(widget)).toBe(search);
+    expect(() => search.addWidget(widget)).toWarnDev(
+      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+    );
+
+    let result = null;
+
+    expect(() => {
+      result = search.removeWidget(widget);
+    }).toWarnDev(
+      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
+    );
+
+    expect(result).toBe(search);
   });
 
   it('returns the search instance when calling `removeWidgets`', () => {

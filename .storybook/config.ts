@@ -20,6 +20,7 @@ addParameters({
       brandTitle: 'InstantSearch.js',
       brandUrl: 'https://github.com/algolia/instantsearch.js',
     }),
+    panelPosition: 'bottom',
     storySort(a: any[], b: any[]) {
       const categoryA = a[1].kind.split('|')[0];
       const categoryB = b[1].kind.split('|')[0];

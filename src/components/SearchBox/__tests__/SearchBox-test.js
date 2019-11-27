@@ -184,6 +184,40 @@ describe('SearchBox', () => {
   });
 
   describe('Events', () => {
+    describe('focus/blur', () => {
+      test('does not derive value from prop when focused', () => {
+        // This makes sure we don't override the user's input while they're typing.
+        // This issue is more obvious when using queryHook to add debouncing.
+
+        const props = {
+          ...defaultProps,
+          query: 'Initial query',
+        };
+        const { container, rerender } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
+        expect(input.value).toEqual('Initial query');
+
+        fireEvent.focus(input);
+        rerender(<SearchBox {...props} query={'Query updated through prop'} />);
+
+        expect(input.value).toEqual('Initial query');
+      });
+
+      test('derives value from prop when not focused', () => {
+        const props = {
+          ...defaultProps,
+          query: 'Initial query',
+        };
+        const { container, rerender } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
+        expect(input.value).toEqual('Initial query');
+
+        fireEvent.blur(input);
+        rerender(<SearchBox {...props} query={'Query updated through prop'} />);
+
+        expect(input.value).toEqual('Query updated through prop');
+      });
+    });
     describe('searchAsYouType to true', () => {
       test('refines input value on input', () => {
         const refine = jest.fn();
@@ -281,64 +315,123 @@ describe('SearchBox', () => {
       });
     });
 
-    // @TODO This test suite will pass once we upgrade Jest to 25.x.
-    // See https://github.com/algolia/instantsearch.js/issues/4160
-    // eslint-disable-next-line jest/no-disabled-tests
-    describe.skip('onReset', () => {
-      test('resets the input value with searchAsYouType to true', () => {
-        const props = {
-          ...defaultProps,
-          searchAsYouType: true,
-        };
-        const { container } = render(<SearchBox {...props} />);
-        const input = container.querySelector('input');
-        const resetButton = container.querySelector('button[type="reset"]');
+    describe('onReset', () => {
+      // @TODO This test suite will pass once we upgrade Jest to 25.x.
+      // See https://github.com/algolia/instantsearch.js/issues/4160
+      // eslint-disable-next-line jest/no-disabled-tests
+      describe.skip('with button click', () => {
+        test('resets the input value with searchAsYouType to true', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: true,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const input = container.querySelector('input');
+          const resetButton = container.querySelector('button[type="reset"]');
 
-        fireEvent.change(input, {
-          target: { value: 'hello' },
+          fireEvent.change(input, {
+            target: { value: 'hello' },
+          });
+
+          expect(input.value).toEqual('hello');
+
+          fireEvent.click(resetButton);
+
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
         });
 
-        expect(input.value).toEqual('hello');
+        test('resets the input value with searchAsYouType to false', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: false,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const form = container.querySelector('form');
+          const input = container.querySelector('input');
+          const resetButton = container.querySelector('button[type="reset"]');
 
-        fireEvent.click(resetButton);
+          fireEvent.input(input, { target: { value: 'hello' } });
+          fireEvent.submit(form);
 
-        expect(input.value).toEqual('');
-        expect(input).toHaveFocus();
+          expect(input.value).toEqual('hello');
+
+          fireEvent.click(resetButton);
+
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
+        });
+
+        test('calls custom onReset', () => {
+          const onReset = jest.fn();
+          const props = {
+            ...defaultProps,
+            onReset,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const resetButton = container.querySelector('button[type="reset"]');
+
+          fireEvent.click(resetButton);
+
+          expect(onReset).toHaveBeenCalledTimes(1);
+        });
       });
 
-      test('resets the input value with searchAsYouType to false', () => {
-        const props = {
-          ...defaultProps,
-          searchAsYouType: false,
-        };
-        const { container } = render(<SearchBox {...props} />);
-        const form = container.querySelector('form');
-        const input = container.querySelector('input');
-        const resetButton = container.querySelector('button[type="reset"]');
+      describe('when form is reset programmatically', () => {
+        test('resets the input value with searchAsYouType to true', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: true,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const input = container.querySelector('input');
+          const form = container.querySelector('form');
 
-        fireEvent.input(input, { target: { value: 'hello' } });
-        fireEvent.submit(form);
+          fireEvent.change(input, {
+            target: { value: 'hello' },
+          });
 
-        expect(input.value).toEqual('hello');
+          expect(input.value).toEqual('hello');
 
-        fireEvent.click(resetButton);
+          fireEvent.reset(form);
 
-        expect(input.value).toEqual('');
-        expect(input).toHaveFocus();
-      });
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
+        });
 
-      test('calls custom onReset', () => {
-        const onReset = jest.fn();
-        const props = {
-          ...defaultProps,
-          onReset,
-        };
-        const { container } = render(<SearchBox {...props} />);
-        const resetButton = container.querySelector('button[type="reset"]');
+        test('resets the input value with searchAsYouType to false', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: false,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const form = container.querySelector('form');
+          const input = container.querySelector('input');
 
-        fireEvent.click(resetButton);
+          fireEvent.input(input, { target: { value: 'hello' } });
+          fireEvent.submit(form);
 
-        expect(onReset).toHaveBeenCalledTimes(1);
+          expect(input.value).toEqual('hello');
+
+          fireEvent.reset(form);
+
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
+        });
+
+        test('calls custom onReset', () => {
+          const onReset = jest.fn();
+          const props = {
+            ...defaultProps,
+            onReset,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const form = container.querySelector('form');
+
+          fireEvent.reset(form);
+
+          expect(onReset).toHaveBeenCalledTimes(1);
+        });
       });
     });
   });

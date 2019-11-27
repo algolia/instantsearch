@@ -49,7 +49,7 @@ export const withLifecycle = (
   });
 
   remove.addEventListener('click', () => {
-    search.removeWidget(widget);
+    search.removeWidgets([widget]);
     setDisabledState(add, false);
     setDisabledState(remove, true);
   });
