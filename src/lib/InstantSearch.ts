@@ -2,15 +2,11 @@ import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
 import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
-import RoutingManager from './RoutingManager';
-import simpleStateMapping from './stateMappings/simple';
-import historyRouter from './routers/history';
 import version from './version';
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
-  isPlainObject,
   defer,
   noop,
   warning,
@@ -23,6 +19,7 @@ import {
   Router,
   UiState,
 } from '../types';
+import { Middleware, MiddlewareDefinition, createRouter } from '../middleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -135,7 +132,7 @@ class InstantSearch extends EventEmitter {
   public _createURL: (nextState: UiState) => string;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  private _routingManager?: RoutingManager;
+  public middleware: MiddlewareDefinition[] = [];
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -157,14 +154,6 @@ class InstantSearch extends EventEmitter {
 
     if (searchClient === null) {
       throw new Error(withUsage('The `searchClient` option is required.'));
-    }
-
-    if (typeof (options as any).urlSync !== 'undefined') {
-      throw new Error(
-        withUsage(
-          'The `urlSync` option was removed in InstantSearch.js 3. You may want to use the `routing` option.'
-        )
-      );
     }
 
     if (typeof (searchClient as any).search !== 'function') {
@@ -234,33 +223,29 @@ See ${createDocumentationLink({
       this._searchFunction = searchFunction;
     }
 
-    const defaultRoutingOptions = {
-      stateMapping: simpleStateMapping(),
-      router: historyRouter(),
-    };
-
-    let routingOptions: Routing | null = null;
-    if (routing === true) {
-      routingOptions = defaultRoutingOptions;
-    } else if (isPlainObject(routing)) {
-      routingOptions = {
-        ...defaultRoutingOptions,
-        ...routing,
-      };
+    if (routing) {
+      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
+      this.use(createRouter(routerOptions));
     }
+  }
 
-    if (routingOptions) {
-      this._routingManager = new RoutingManager({
-        ...routingOptions,
-        instantSearchInstance: this,
+  public use(...middleware: Middleware[]): this {
+    const newMiddlewareList = middleware.map(fn => {
+      const newMiddleware = fn({ instantSearchInstance: this });
+      this.middleware.push(newMiddleware);
+
+      return newMiddleware;
+    });
+
+    // If the instance has already started, we directly subscribe the
+    // middleware so they're notified of changes.
+    if (this.started) {
+      newMiddlewareList.forEach(m => {
+        m.subscribe();
       });
-
-      this._createURL = this._routingManager.createURL;
-      this._initialUiState = {
-        ...initialUiState,
-        ...this._routingManager.read(),
-      };
     }
+
+    return this;
   }
 
   /**
@@ -418,15 +403,15 @@ See ${createDocumentationLink({
 
     this.mainHelper = mainHelper;
 
+    this.middleware.forEach(m => {
+      m.subscribe();
+    });
+
     this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
       uiState: this._initialUiState,
     });
-
-    if (this._routingManager) {
-      this._routingManager.subscribe();
-    }
 
     mainHelper.search();
 
@@ -465,9 +450,9 @@ See ${createDocumentationLink({
     this.mainHelper = null;
     this.helper = null;
 
-    if (this._routingManager) {
-      this._routingManager.dispose();
-    }
+    this.middleware.forEach(m => {
+      m.unsubscribe();
+    });
   }
 
   public scheduleSearch = defer(() => {
@@ -500,9 +485,11 @@ See ${createDocumentationLink({
   public onStateChange = () => {
     const nextUiState = this.mainIndex.getWidgetState({});
 
-    if (this._routingManager) {
-      this._routingManager.write({ state: nextUiState });
-    }
+    this.middleware.forEach(m => {
+      m.onStateChange({
+        state: nextUiState,
+      });
+    });
   };
 
   public createURL(nextState: UiState = {}): string {

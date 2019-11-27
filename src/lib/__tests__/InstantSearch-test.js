@@ -1287,6 +1287,153 @@ describe('refresh', () => {
   });
 });
 
+describe('use', () => {
+  it('hooks middleware into the lifecycle before the instance starts', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const button = document.createElement('button');
+    const searchBox = connectSearchBox(({ refine }, isFirstRender) => {
+      if (isFirstRender) {
+        button.addEventListener('click', () => {
+          refine('Trigger search');
+        });
+      }
+    });
+    const middlewareSpy = {
+      onStateChange: jest.fn(),
+      subscribe: jest.fn(),
+      unsubscribe: jest.fn(),
+    };
+    const middleware = jest.fn(() => middlewareSpy);
+
+    search.addWidgets([searchBox({})]);
+    search.use(middleware);
+
+    expect(middleware).toHaveBeenCalledTimes(1);
+    expect(middleware).toHaveBeenCalledWith({ instantSearchInstance: search });
+
+    // The subscriptions happen only once the search has started.
+    expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(0);
+
+    search.start();
+
+    expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(1);
+    expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(0);
+
+    button.click();
+
+    expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(1);
+    expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
+      state: {
+        indexName: {
+          query: 'Trigger search',
+        },
+      },
+    });
+
+    search.dispose();
+
+    expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(2);
+    expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
+      state: {
+        indexName: {},
+      },
+    });
+    expect(middlewareSpy.unsubscribe).toHaveBeenCalledTimes(1);
+  });
+
+  it('hooks middleware into the lifecycle after the instance starts', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const button = document.createElement('button');
+    const searchBox = connectSearchBox(({ refine }, isFirstRender) => {
+      if (isFirstRender) {
+        button.addEventListener('click', () => {
+          refine('Trigger search');
+        });
+      }
+    });
+    const middlewareBeforeStartSpy = {
+      onStateChange: jest.fn(),
+      subscribe: jest.fn(),
+      unsubscribe: jest.fn(),
+    };
+    const middlewareBeforeStart = jest.fn(() => middlewareBeforeStartSpy);
+    const middlewareAfterStartSpy = {
+      onStateChange: jest.fn(),
+      subscribe: jest.fn(),
+      unsubscribe: jest.fn(),
+    };
+    const middlewareAfterStart = jest.fn(() => middlewareAfterStartSpy);
+
+    search.addWidgets([searchBox({})]);
+    search.use(middlewareBeforeStart);
+    search.start();
+
+    expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
+    expect(middlewareBeforeStart).toHaveBeenCalledWith({
+      instantSearchInstance: search,
+    });
+
+    search.use(middlewareAfterStart);
+
+    // The first middleware should still have been only called once
+    expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
+    expect(middlewareAfterStart).toHaveBeenCalledTimes(1);
+    expect(middlewareAfterStart).toHaveBeenCalledWith({
+      instantSearchInstance: search,
+    });
+
+    // The first middleware subscribe function should have been only called once
+    expect(middlewareBeforeStartSpy.subscribe).toHaveBeenCalledTimes(1);
+    expect(middlewareAfterStartSpy.subscribe).toHaveBeenCalledTimes(1);
+    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(0);
+    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(0);
+
+    button.click();
+
+    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(1);
+    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(1);
+    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledWith({
+      state: {
+        indexName: {
+          query: 'Trigger search',
+        },
+      },
+    });
+    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledWith({
+      state: {
+        indexName: {
+          query: 'Trigger search',
+        },
+      },
+    });
+
+    search.dispose();
+
+    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(2);
+    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(2);
+    expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledWith({
+      state: {
+        indexName: {},
+      },
+    });
+    expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledWith({
+      state: {
+        indexName: {},
+      },
+    });
+    expect(middlewareBeforeStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
+    expect(middlewareAfterStartSpy.unsubscribe).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('UI state', () => {
   it('warns if UI state contains unmounted widgets in development mode', () => {
     const searchClient = createSearchClient();
