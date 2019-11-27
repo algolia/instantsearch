@@ -23,7 +23,7 @@ import {
   Router,
   UiState,
 } from '../types';
-import getDetectedInsightsClient from './utils/detect-insights-client';
+import hasDetectedInsightsClient from './utils/detect-insights-client';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -149,9 +149,8 @@ class InstantSearch extends EventEmitter {
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
+      insightsClient = null,
     } = options;
-
-    let { insightsClient = null } = options;
 
     if (indexName === null) {
       throw new Error(withUsage('The `indexName` option is required.'));
@@ -186,9 +185,17 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       );
     }
 
-    if (!insightsClient && Boolean(getDetectedInsightsClient())) {
-      insightsClient = getDetectedInsightsClient();
-    }
+    warning(
+      Boolean(insightsClient) || !hasDetectedInsightsClient(),
+      `InstantSearch detected the insights client in the global scope. 
+To connect InstantSearch to insights client, make sure you provide it to your InstantSearch instance:
+
+const search = instantsearch({
+  /* ... */
+  insightsClient: window.aa,
+});
+`
+    );
 
     if (insightsClient && typeof insightsClient !== 'function') {
       throw new Error(

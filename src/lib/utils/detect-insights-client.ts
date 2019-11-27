@@ -1,9 +1,6 @@
-export default function getDetectedInsightsClient() {
-  if (typeof window !== 'undefined' && window) {
-    const aa = (window as any).aa;
-    if (typeof aa === 'function') {
-      return aa;
-    }
-  }
-  return false;
+export default function hasDetectedInsightsClient(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    Boolean(window && (window as any).AlgoliaAnalyticsObject)
+  );
 }

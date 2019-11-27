@@ -90,26 +90,55 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 `);
   });
 
-  it('is able to detect insightsClient on window', () => {
-    global.aa = jest.fn();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient: createSearchClient(),
-    });
+  it('throws a warning when insights is detected but insightsClient was not passed', () => {
+    warning.cache = {};
 
-    expect(search.insightsClient).toBe(global.aa);
-    delete global.aa;
+    const AlgoliaAnalyticsObject = 'aa';
+    global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
+    global[AlgoliaAnalyticsObject] = jest.fn();
+
+    expect(() => {
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+    })
+      .toWarnDev(`[InstantSearch.js]: InstantSearch detected the insights client in the global scope. 
+To connect InstantSearch to insights client, make sure you provide it to your InstantSearch instance:
+
+const search = instantsearch({
+  /* ... */
+  insightsClient: window.aa,
+});`);
+
+    delete global.AlgoliaAnalyticsObject;
+    delete global[AlgoliaAnalyticsObject];
   });
 
-  it('should not accept an invalid insightsClient', () => {
-    global.aa = 'something invalid';
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient: createSearchClient(),
-    });
+  it('does not throw a warning when insights is detected but insightsClient was passed', () => {
+    warning.cache = {};
 
-    expect(search.insightsClient).toBe(null);
-    delete global.aa;
+    const AlgoliaAnalyticsObject = 'aa';
+    global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
+    global[AlgoliaAnalyticsObject] = jest.fn();
+
+    expect(() => {
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+        insightsClient: jest.fn(),
+      });
+    }).not
+      .toWarnDev(`[InstantSearch.js]: InstantSearch detected the insights client in the global scope. 
+To connect InstantSearch to insights client, make sure you provide it to your InstantSearch instance:
+
+const search = instantsearch({
+  /* ... */
+  insightsClient: window.aa,
+});`);
+
+    delete global.AlgoliaAnalyticsObject;
+    delete global[AlgoliaAnalyticsObject];
   });
 
   it('throws if addWidgets is called with a single widget', () => {
