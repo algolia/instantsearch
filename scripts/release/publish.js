@@ -118,7 +118,6 @@ inquirer
     }
 
     shell.echo(colors.blue('Install dependencies'));
-    shell.exec('yarn cache clean');
     shell.exec('yarn');
 
     const { version: currentVersion } = require('../../package.json');
