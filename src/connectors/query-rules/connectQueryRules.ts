@@ -1,9 +1,13 @@
 import {
-  Renderer,
-  RenderOptions,
-  WidgetFactory,
-  Helper,
+  AlgoliaSearchHelper as Helper,
   SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
+import {
+  Renderer,
+  RendererOptions,
+  WidgetFactory,
+  HelperChangeEvent,
 } from '../../types';
 import {
   checkRendering,
@@ -34,13 +38,13 @@ export type QueryRulesConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-export interface QueryRulesRenderOptions<TQueryRulesWidgetParams>
-  extends RenderOptions<TQueryRulesWidgetParams> {
+export interface QueryRulesRendererOptions<TQueryRulesWidgetParams>
+  extends RendererOptions<TQueryRulesWidgetParams> {
   items: any[];
 }
 
 export type QueryRulesRenderer<TQueryRulesWidgetParams> = Renderer<
-  QueryRulesRenderOptions<QueryRulesConnectorParams & TQueryRulesWidgetParams>
+  QueryRulesRendererOptions<QueryRulesConnectorParams & TQueryRulesWidgetParams>
 >;
 
 export type QueryRulesWidgetFactory<TQueryRulesWidgetParams> = WidgetFactory<
@@ -86,12 +90,13 @@ function getRuleContextsFromTrackedFilters({
   const ruleContexts = Object.keys(trackedFilters).reduce<string[]>(
     (facets, facetName) => {
       const facetRefinements: TrackedFilterRefinement[] = getRefinements(
-        helper.lastResults || {},
+        // An empty object is technically not a `SearchResults` but `getRefinements`
+        // only accesses properties, meaning it will not throw with an empty object.
+        helper.lastResults || ({} as SearchResults),
         sharedHelperState
       )
         .filter(
-          (refinement: InternalRefinement) =>
-            refinement.attributeName === facetName
+          (refinement: InternalRefinement) => refinement.attribute === facetName
         )
         .map(
           (refinement: InternalRefinement) =>
@@ -126,7 +131,7 @@ function applyRuleContexts(
     trackedFilters: ParamTrackedFilters;
     transformRuleContexts: ParamTransformRuleContexts;
   },
-  sharedHelperState: SearchParameters
+  event: HelperChangeEvent
 ): void {
   const {
     helper,
@@ -135,6 +140,7 @@ function applyRuleContexts(
     transformRuleContexts,
   } = this;
 
+  const sharedHelperState = event.state;
   const previousRuleContexts: string[] = sharedHelperState.ruleContexts || [];
   const newRuleContexts = getRuleContextsFromTrackedFilters({
     helper,
@@ -169,7 +175,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
       trackedFilters = {} as ParamTrackedFilters,
       transformRuleContexts = (rules => rules) as ParamTransformRuleContexts,
       transformItems = (items => items) as ParamTransformItems,
-    } = widgetParams || {};
+    } = widgetParams || ({} as typeof widgetParams);
 
     Object.keys(trackedFilters).forEach(facetName => {
       if (typeof trackedFilters[facetName] !== 'function') {
@@ -186,9 +192,11 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
     // We store the initial rule contexts applied before creating the widget
     // so that we do not override them with the rules created from `trackedFilters`.
     let initialRuleContexts: string[] = [];
-    let onHelperChange: (state: SearchParameters) => void;
+    let onHelperChange: (event: HelperChangeEvent) => void;
 
     return {
+      $$type: 'ais.queryRules',
+
       init({ helper, state, instantSearchInstance }) {
         initialRuleContexts = state.ruleContexts || [];
         onHelperChange = applyRuleContexts.bind({
@@ -207,7 +215,7 @@ const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
             hasStateRefinements(state) ||
             Boolean(widgetParams.transformRuleContexts)
           ) {
-            onHelperChange(state);
+            onHelperChange({ state });
           }
 
           // We track every change in the helper to override its state and add

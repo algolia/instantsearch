@@ -1,6 +1,5 @@
 import {
   checkRendering,
-  warning,
   aroundLatLngToPosition,
   insideBoundingBoxToBoundingBox,
   createDocumentationMessageGenerator,
@@ -96,11 +95,11 @@ const withUsage = createDocumentationMessageGenerator({
  * const customGeoSearch = instantsearch.connectors.connectGeoSearch(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customGeoSearch({
  *     container: document.getElementById('custom-geo-search'),
  *   })
- * );
+ * ]);
  */
 const connectGeoSearch = (renderFn, unmountFn = noop) => {
   checkRendering(renderFn, withUsage());
@@ -110,81 +109,6 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
       enableRefineOnMapMove = true,
       transformItems = items => items,
     } = widgetParams;
-
-    // Always trigger this message because the default value was `true`. We can't
-    // display the message only when the parameter is defined otherwise a user that was
-    // relying on the default value won't have any information about the changes.
-    warning(
-      false,
-      `
-The option \`enableGeolocationWithIP\` has been removed from the GeoSearch widget.
-Please consider using the \`Configure\` widget instead:
-
-search.addWidget(
-  configure({
-    aroundLatLngViaIP: ${widgetParams.enableGeolocationWithIP || 'true'},
-  })
-);
-
-You can find more information inside the migration guide:
-http://community.algolia.com/instantsearch.js/migration-guide
-        `
-    );
-
-    warning(
-      typeof widgetParams.position === 'undefined',
-      `
-The option \`position\` has been removed from the GeoSearch widget.
-Please consider using the \`Configure\` widget instead:
-
-search.addWidget(
-  configure({
-    aroundLatLng: '${widgetParams.position &&
-      widgetParams.position.lat}, ${widgetParams.position &&
-        widgetParams.position.lng}',
-  })
-);
-
-You can find more information inside the migration guide:
-http://community.algolia.com/instantsearch.js/migration-guide
-      `
-    );
-
-    warning(
-      typeof widgetParams.radius === 'undefined',
-      `
-The option \`radius\` has been removed from the GeoSearch widget.
-Please consider using the \`Configure\` widget instead:
-
-search.addWidget(
-  configure({
-    aroundRadius: ${widgetParams.radius},
-  })
-);
-
-You can find more information inside the migration guide:
-
-http://community.algolia.com/instantsearch.js/migration-guide
-      `
-    );
-
-    warning(
-      typeof widgetParams.precision === 'undefined',
-      `
-The option \`precision\` has been removed from the GeoSearch widget.
-Please consider using the \`Configure\` widget instead:
-
-search.addWidget(
-  configure({
-    aroundPrecision: ${widgetParams.precision},
-  })
-);
-
-You can find more information inside the migration guide:
-
-http://community.algolia.com/instantsearch.js/migration-guide
-      `
-    );
 
     const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
@@ -212,7 +136,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
     };
 
     const clearMapRefinement = helper => () => {
-      helper.setQueryParameter('insideBoundingBox').search();
+      helper.setQueryParameter('insideBoundingBox', undefined).search();
     };
 
     const isRefinedWithMap = state => () => Boolean(state.insideBoundingBox);
@@ -332,13 +256,16 @@ http://community.algolia.com/instantsearch.js/migration-guide
     };
 
     return {
+      $$type: 'ais.geoSearch',
+
       init,
+
       render,
 
       dispose({ state }) {
         unmountFn();
 
-        return state.setQueryParameter('insideBoundingBox');
+        return state.setQueryParameter('insideBoundingBox', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
@@ -363,7 +290,10 @@ http://community.algolia.com/instantsearch.js/migration-guide
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         if (!uiState || !uiState.geoSearch) {
-          return searchParameters.setQueryParameter('insideBoundingBox');
+          return searchParameters.setQueryParameter(
+            'insideBoundingBox',
+            undefined
+          );
         }
 
         return searchParameters.setQueryParameter(

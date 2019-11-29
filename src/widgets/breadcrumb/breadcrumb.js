@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
@@ -111,7 +113,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  * @param {BreadcrumbWidgetOptions} $0 The Breadcrumb widget options.
  * @return {Widget} A new Breadcrumb widget instance.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
@@ -119,7 +121,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
  *     separator: ' / ',
  *     rootPath: 'Cameras & Camcorders > Digital Cameras',
  *   })
- * );
+ * ]);
  */
 
 export default function breadcrumb({
@@ -164,7 +166,7 @@ export default function breadcrumb({
   });
 
   const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeBreadcrumb({ attributes, separator, rootPath, transformItems });

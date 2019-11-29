@@ -77,13 +77,13 @@ const withUsage = createDocumentationMessageGenerator({
  * var customPagination = instantsearch.connectors.connectPagination(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customPagination({
  *     containerNode: $('#custom-pagination-container'),
  *     totalPages: 20,
  *     padding: 4,
  *   })
- * );
+ * ]);
  */
 export default function connectPagination(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -98,6 +98,8 @@ export default function connectPagination(renderFn, unmountFn = noop) {
     });
 
     return {
+      $$type: 'ais.pagination',
+
       init({ helper, createURL, instantSearchInstance }) {
         this.refine = page => {
           helper.setPage(page);
@@ -109,7 +111,7 @@ export default function connectPagination(renderFn, unmountFn = noop) {
         renderFn(
           {
             createURL: this.createURL(helper.state),
-            currentRefinement: helper.getPage() || 0,
+            currentRefinement: helper.state.page || 0,
             nbHits: 0,
             nbPages: 0,
             pages: [],
@@ -130,14 +132,15 @@ export default function connectPagination(renderFn, unmountFn = noop) {
       },
 
       render({ results, state, instantSearchInstance }) {
+        const page = state.page || 0;
         const nbPages = this.getMaxPage(results);
-        pager.currentPage = state.page;
+        pager.currentPage = page;
         pager.total = nbPages;
 
         renderFn(
           {
             createURL: this.createURL(state),
-            currentRefinement: state.page,
+            currentRefinement: page,
             refine: this.refine,
             nbHits: results.nbHits,
             nbPages,
@@ -151,13 +154,19 @@ export default function connectPagination(renderFn, unmountFn = noop) {
         );
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setQueryParameter('page', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page;
-        if (page === 0 || page + 1 === uiState.page) return uiState;
+        const page = searchParameters.page || 0;
+
+        if (!page) {
+          return uiState;
+        }
+
         return {
           ...uiState,
           page: page + 1,
@@ -165,10 +174,9 @@ export default function connectPagination(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const uiPage = uiState.page;
-        if (uiPage)
-          return searchParameters.setQueryParameter('page', uiState.page - 1);
-        return searchParameters.setQueryParameter('page', 0);
+        const page = uiState.page ? uiState.page - 1 : 0;
+
+        return searchParameters.setQueryParameter('page', page);
       },
     };
   };

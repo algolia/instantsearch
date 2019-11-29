@@ -1,5 +1,8 @@
-import React from 'react';
+/** @jsx h */
+
+import { h } from 'preact';
 import { mount } from 'enzyme';
+import { render, fireEvent } from '@testing-library/preact';
 import SearchBox from '../SearchBox';
 
 const defaultProps = {
@@ -158,9 +161,15 @@ describe('SearchBox', () => {
         ...defaultProps,
         autofocus: true,
       };
-      mount(<SearchBox {...props} />);
 
-      expect(document.activeElement.tagName).toBe('INPUT');
+      const { container } = render(<SearchBox {...props} />);
+      const input = container.querySelector('input');
+
+      // @TODO Since the Preact X migration and new testing environment, this
+      // assertion doesn't work. Once it does, we can remove the
+      // `toHaveAttribute` assertion.
+      // expect(input).toHaveFocus();
+      expect(input).toHaveAttribute('autofocus', 'true');
     });
 
     test('disables the input with disabled to true', () => {
@@ -175,41 +184,77 @@ describe('SearchBox', () => {
   });
 
   describe('Events', () => {
+    describe('focus/blur', () => {
+      test('does not derive value from prop when focused', () => {
+        // This makes sure we don't override the user's input while they're typing.
+        // This issue is more obvious when using queryHook to add debouncing.
+
+        const props = {
+          ...defaultProps,
+          query: 'Initial query',
+        };
+        const { container, rerender } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
+        expect(input.value).toEqual('Initial query');
+
+        fireEvent.focus(input);
+        rerender(<SearchBox {...props} query={'Query updated through prop'} />);
+
+        expect(input.value).toEqual('Initial query');
+      });
+
+      test('derives value from prop when not focused', () => {
+        const props = {
+          ...defaultProps,
+          query: 'Initial query',
+        };
+        const { container, rerender } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
+        expect(input.value).toEqual('Initial query');
+
+        fireEvent.blur(input);
+        rerender(<SearchBox {...props} query={'Query updated through prop'} />);
+
+        expect(input.value).toEqual('Query updated through prop');
+      });
+    });
     describe('searchAsYouType to true', () => {
-      test('refines input value on change', () => {
+      test('refines input value on input', () => {
         const refine = jest.fn();
         const props = {
           ...defaultProps,
           searchAsYouType: true,
           refine,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+        fireEvent.input(input, {
+          target: { value: 'hello' },
+        });
 
-        expect(refine.mock.calls).toHaveLength(1);
-        expect(refine.mock.calls[0][0]).toBe('hello');
+        expect(refine).toHaveBeenCalledTimes(1);
+        expect(refine).toHaveBeenLastCalledWith('hello');
       });
     });
 
     describe('searchAsYouType to false', () => {
-      test('updates DOM input value on change', () => {
+      test('updates DOM input value on input', () => {
         const props = {
           ...defaultProps,
           query: 'Query 1',
           searchAsYouType: false,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
 
-        expect(wrapper.find('input').props().value).toBe('Query 1');
+        expect(input.value).toEqual('Query 1');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'Query 2' } });
+        fireEvent.input(input, {
+          target: { value: 'Query 2' },
+        });
 
-        expect(wrapper.find('input').props().value).toBe('Query 2');
+        expect(input.value).toEqual('Query 2');
       });
 
       test('refines query on submit', () => {
@@ -219,18 +264,20 @@ describe('SearchBox', () => {
           searchAsYouType: false,
           refine,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const form = container.querySelector('form');
+        const input = container.querySelector('input');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+        fireEvent.input(input, {
+          target: { value: 'hello' },
+        });
 
-        expect(refine.mock.calls).toHaveLength(0);
+        expect(refine).toHaveBeenCalledTimes(0);
 
-        wrapper.find('form').simulate('submit');
+        fireEvent.submit(form);
 
-        expect(refine.mock.calls).toHaveLength(1);
-        expect(refine.mock.calls[0][0]).toBe('hello');
+        expect(refine).toHaveBeenCalledTimes(1);
+        expect(refine).toHaveBeenLastCalledWith('hello');
       });
     });
 
@@ -241,11 +288,12 @@ describe('SearchBox', () => {
           ...defaultProps,
           onChange,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const input = container.querySelector('input');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+        fireEvent.input(input, {
+          target: { value: 'hello' },
+        });
 
         expect(onChange).toHaveBeenCalledTimes(1);
       });
@@ -258,63 +306,132 @@ describe('SearchBox', () => {
           ...defaultProps,
           onSubmit,
         };
-        const wrapper = mount(<SearchBox {...props} />);
+        const { container } = render(<SearchBox {...props} />);
+        const form = container.querySelector('form');
 
-        wrapper.find('form').simulate('submit');
+        fireEvent.submit(form);
 
         expect(onSubmit).toHaveBeenCalledTimes(1);
       });
     });
 
     describe('onReset', () => {
-      test('resets the input value with searchAsYouType to true', () => {
-        const props = {
-          ...defaultProps,
-          searchAsYouType: true,
-        };
-        const wrapper = mount(<SearchBox {...props} />);
+      // @TODO This test suite will pass once we upgrade Jest to 25.x.
+      // See https://github.com/algolia/instantsearch.js/issues/4160
+      // eslint-disable-next-line jest/no-disabled-tests
+      describe.skip('with button click', () => {
+        test('resets the input value with searchAsYouType to true', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: true,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const input = container.querySelector('input');
+          const resetButton = container.querySelector('button[type="reset"]');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
+          fireEvent.change(input, {
+            target: { value: 'hello' },
+          });
 
-        wrapper.find('form').simulate('reset');
+          expect(input.value).toEqual('hello');
 
-        expect(wrapper.find('input').props().value).toBe('');
-        expect(document.activeElement.tagName).toBe('INPUT');
+          fireEvent.click(resetButton);
+
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
+        });
+
+        test('resets the input value with searchAsYouType to false', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: false,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const form = container.querySelector('form');
+          const input = container.querySelector('input');
+          const resetButton = container.querySelector('button[type="reset"]');
+
+          fireEvent.input(input, { target: { value: 'hello' } });
+          fireEvent.submit(form);
+
+          expect(input.value).toEqual('hello');
+
+          fireEvent.click(resetButton);
+
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
+        });
+
+        test('calls custom onReset', () => {
+          const onReset = jest.fn();
+          const props = {
+            ...defaultProps,
+            onReset,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const resetButton = container.querySelector('button[type="reset"]');
+
+          fireEvent.click(resetButton);
+
+          expect(onReset).toHaveBeenCalledTimes(1);
+        });
       });
 
-      test('resets the input value with searchAsYouType to false', () => {
-        const props = {
-          ...defaultProps,
-          searchAsYouType: false,
-        };
-        const wrapper = mount(<SearchBox {...props} />);
+      describe('when form is reset programmatically', () => {
+        test('resets the input value with searchAsYouType to true', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: true,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const input = container.querySelector('input');
+          const form = container.querySelector('form');
 
-        wrapper
-          .find('input')
-          .simulate('change', { target: { value: 'hello' } });
-        wrapper.find('form').simulate('submit');
+          fireEvent.change(input, {
+            target: { value: 'hello' },
+          });
 
-        expect(wrapper.find('input').props().value).not.toBe('');
+          expect(input.value).toEqual('hello');
 
-        wrapper.find('form').simulate('reset');
+          fireEvent.reset(form);
 
-        expect(wrapper.find('input').props().value).toBe('');
-        expect(document.activeElement.tagName).toBe('INPUT');
-      });
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
+        });
 
-      test('calls custom onReset', () => {
-        const onReset = jest.fn();
-        const props = {
-          ...defaultProps,
-          onReset,
-        };
-        const wrapper = mount(<SearchBox {...props} />);
+        test('resets the input value with searchAsYouType to false', () => {
+          const props = {
+            ...defaultProps,
+            searchAsYouType: false,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const form = container.querySelector('form');
+          const input = container.querySelector('input');
 
-        wrapper.find('form').simulate('reset');
+          fireEvent.input(input, { target: { value: 'hello' } });
+          fireEvent.submit(form);
 
-        expect(onReset).toHaveBeenCalledTimes(1);
+          expect(input.value).toEqual('hello');
+
+          fireEvent.reset(form);
+
+          expect(input.value).toEqual('');
+          expect(input).toHaveFocus();
+        });
+
+        test('calls custom onReset', () => {
+          const onReset = jest.fn();
+          const props = {
+            ...defaultProps,
+            onReset,
+          };
+          const { container } = render(<SearchBox {...props} />);
+          const form = container.querySelector('form');
+
+          fireEvent.reset(form);
+
+          expect(onReset).toHaveBeenCalledTimes(1);
+        });
       });
     });
   });

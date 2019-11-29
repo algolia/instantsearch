@@ -1,3 +1,160 @@
+## [4.0.1](https://github.com/algolia/instantsearch.js/compare/v4.0.0...v4.0.1) (2019-11-28)
+
+
+### Bug Fixes
+
+* widget name in documentation link for index ([#4172](https://github.com/algolia/instantsearch.js/issues/4172)) ([fe7e588](https://github.com/algolia/instantsearch.js/commit/fe7e588d252ad6bd7de2f49d52ca022099f3e959))
+* **helper:** rely on stable version of algoliasearch-helper ([#4200](https://github.com/algolia/instantsearch.js/issues/4200)) ([ff11731](https://github.com/algolia/instantsearch.js/commit/ff117314d786c4509edabcb1ddbac73f55930511))
+* **infiniteHits:** correct widget options types ([#4222](https://github.com/algolia/instantsearch.js/issues/4222)) ([bb1b327](https://github.com/algolia/instantsearch.js/commit/bb1b327e26b5faad3358a00d174dc48fd4b73356))
+* **queryHook:** restore behaviour of queryHook ([#4202](https://github.com/algolia/instantsearch.js/issues/4202)) ([7bf96cb](https://github.com/algolia/instantsearch.js/commit/7bf96cb6eafd5349cdf2f32114d5e6ef5dde1328)), closes [/github.com/algolia/instantsearch.js/commit/c073a9acb51fff3c15278fcd563e47fec55c8365#diff-530222e0c4597f2110dc6ba173a306b0L98](https://github.com//github.com/algolia/instantsearch.js/commit/c073a9acb51fff3c15278fcd563e47fec55c8365/issues/diff-530222e0c4597f2110dc6ba173a306b0L98)
+
+
+### Features
+
+* **transformers:** add tests ([#4153](https://github.com/algolia/instantsearch.js/issues/4153)) ([5a28415](https://github.com/algolia/instantsearch.js/commit/5a28415c39bf5a3a65c61d8f0d444ea6f4e0e17a))
+
+
+
+# [4.0.0](https://github.com/algolia/instantsearch.js/compare/v3.7.0...v4.0.0) (2019-10-23)
+
+This release is focused on two main features: Federated search, and bundle size reduction.
+
+Federated search, is the feature where you search through multiple types of content with the same experience, but with separate result lists. In the past we have also called this feature "multi-index search". This feature helps you make more efficient UIs with multiple result lists, autocomplete, nested interfaces and query suggestions. You can read more about the new index widget [in the documentation](https://www.algolia.com/doc/api-reference/widgets/index-widget/js/).
+
+The second main feature is bundle size reduction. This is a bottom-up process where we started by removing Lodash from our bundle. While the library has many useful features, it was a major part of our compiled code. We have also updated to Preact X, the latest version of Preact internally. This allows us to use more modern (p)react features in the future, which have a more efficient bundling pattern.
+
+You can read more details on our choices by following [the original posts](https://discourse.algolia.com/t/instantsearch-js-v4-beta-0-is-released/8461) about the beta releases.
+
+Even though all this internally were major refactors, this should not have a big impact on how you are using InstantSearch. For the few things which did change, a migration guide can be found in [the documentation](https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-from-v3-to-v4). Don't hesitate to reach out if anything is unclear from that guide, so we can fix it for everyone.
+
+Note, if you are using the [places.js](https://github.com/algolia/places) InstantSearch widget, it is not compatible with InstantSearch v4. However, we took this opportunity to make it a real part of InstantSearch.js, and is now accessible as a widget of InstantSearch. You can use it with a `placesReference`.
+
+### Bug Fixes
+
+* **configure:** merge with the previous parameters ([#4085](https://github.com/algolia/instantsearch.js/issues/4085)) ([a215d0c](https://github.com/algolia/instantsearch.js/commit/a215d0c))
+* **configure:** update lifecycle state ([#3994](https://github.com/algolia/instantsearch.js/issues/3994)) ([3d8d967](https://github.com/algolia/instantsearch.js/commit/3d8d967))
+* **connectInfiniteHits:** fix page state when adding or removing widgets ([#4104](https://github.com/algolia/instantsearch.js/issues/4104)) ([1077340](https://github.com/algolia/instantsearch.js/commit/1077340))
+* **connectInfiniteHits:** fix state when navigating or adding/removing widgets ([#4123](https://github.com/algolia/instantsearch.js/issues/4123)) ([9cbd24a](https://github.com/algolia/instantsearch.js/commit/9cbd24a))
+* **createURL:** support multi-index ([#4082](https://github.com/algolia/instantsearch.js/issues/4082)) ([179a6e5](https://github.com/algolia/instantsearch.js/commit/179a6e5))
+* **defer:** recover from error ([#3933](https://github.com/algolia/instantsearch.js/issues/3933)) ([f22b9e2](https://github.com/algolia/instantsearch.js/commit/f22b9e2))
+* **helper:** expose .lastResults to .helper ([#4170](https://github.com/algolia/instantsearch.js/issues/4170)) ([236eb7b](https://github.com/algolia/instantsearch.js/commit/236eb7b))
+* **history:** avoid empty query string ([#4130](https://github.com/algolia/instantsearch.js/issues/4130)) ([18fee7c](https://github.com/algolia/instantsearch.js/commit/18fee7c))
+* **hits:** update lifecycle state ([#3977](https://github.com/algolia/instantsearch.js/issues/3977)) ([6e55ba6](https://github.com/algolia/instantsearch.js/commit/6e55ba6))
+* **hitsPerPage:** avoid sync default value ([#4086](https://github.com/algolia/instantsearch.js/issues/4086)) ([3f8b958](https://github.com/algolia/instantsearch.js/commit/3f8b958))
+* **hitsPerPage:** update lifecycle state ([#3978](https://github.com/algolia/instantsearch.js/issues/3978)) ([d21d620](https://github.com/algolia/instantsearch.js/commit/d21d620))
+* **index:** ensure that we always use the index set by widgets ([#4125](https://github.com/algolia/instantsearch.js/issues/4125)) ([952dc70](https://github.com/algolia/instantsearch.js/commit/952dc70)), closes [/github.com/algolia/algoliasearch-helper-js/blob/5a0352aa233c5ea932df6b054a16989c8d302404/src/algoliasearch.helper.js#L124](https://github.com//github.com/algolia/algoliasearch-helper-js/blob/5a0352aa233c5ea932df6b054a16989c8d302404/src/algoliasearch.helper.js/issues/L124)
+* **index:** prevent render without results ([#3932](https://github.com/algolia/instantsearch.js/issues/3932)) ([1b9b5f4](https://github.com/algolia/instantsearch.js/commit/1b9b5f4))
+* **index:** subscribe to state change only after init for uiState ([#4003](https://github.com/algolia/instantsearch.js/issues/4003)) ([9490ca9](https://github.com/algolia/instantsearch.js/commit/9490ca9))
+* **index:** support custom UI params in UI state warning ([#4165](https://github.com/algolia/instantsearch.js/issues/4165)) ([80d32fc](https://github.com/algolia/instantsearch.js/commit/80d32fc))
+* **index:** warn for inconsistent UI state in development mode ([#4140](https://github.com/algolia/instantsearch.js/issues/4140)) ([7e277dc](https://github.com/algolia/instantsearch.js/commit/7e277dc))
+* **infiniteHits:** update lifecycle state ([#3983](https://github.com/algolia/instantsearch.js/issues/3983)) ([4b8bee5](https://github.com/algolia/instantsearch.js/commit/4b8bee5))
+* **instantsearch:** return instance in widgets methods ([#4143](https://github.com/algolia/instantsearch.js/issues/4143)) ([77ffb93](https://github.com/algolia/instantsearch.js/commit/77ffb93))
+* **InstantSearch:** cancel scheduled operations ([#3930](https://github.com/algolia/instantsearch.js/issues/3930)) ([3aafbad](https://github.com/algolia/instantsearch.js/commit/3aafbad))
+* **InstantSearch:** fix initialUIState when refinements are already present in the route ([#4103](https://github.com/algolia/instantsearch.js/issues/4103)) ([079db57](https://github.com/algolia/instantsearch.js/commit/079db57))
+* **InstantSearch:** remove useless walk/duplicate request ([#4127](https://github.com/algolia/instantsearch.js/issues/4127)) ([70163a8](https://github.com/algolia/instantsearch.js/commit/70163a8))
+* **menu:** apply & remove refinement ([#4027](https://github.com/algolia/instantsearch.js/issues/4027)) ([85de2cf](https://github.com/algolia/instantsearch.js/commit/85de2cf))
+* **menu:** prevent error on stale search ([#3934](https://github.com/algolia/instantsearch.js/issues/3934)) ([5f9e138](https://github.com/algolia/instantsearch.js/commit/5f9e138))
+* **numericMenu:** take array into account for empty state ([#4084](https://github.com/algolia/instantsearch.js/issues/4084)) ([2c05a01](https://github.com/algolia/instantsearch.js/commit/2c05a01))
+* **pagination:** update lifecycle state ([#3979](https://github.com/algolia/instantsearch.js/issues/3979)) ([2b08344](https://github.com/algolia/instantsearch.js/commit/2b08344))
+* **pagination:** update no refinement behavior ([#4124](https://github.com/algolia/instantsearch.js/issues/4124)) ([8d222ad](https://github.com/algolia/instantsearch.js/commit/8d222ad))
+* **range:** clear widget state on empty refinements ([#4157](https://github.com/algolia/instantsearch.js/issues/4157)) ([23cd112](https://github.com/algolia/instantsearch.js/commit/23cd112))
+* **ratingMenu:** update lifecycle state ([#3987](https://github.com/algolia/instantsearch.js/issues/3987)) ([ffadf64](https://github.com/algolia/instantsearch.js/commit/ffadf64))
+* **RefinementList:** remove root css class on sublists ([#4117](https://github.com/algolia/instantsearch.js/issues/4117)) ([ceddd42](https://github.com/algolia/instantsearch.js/commit/ceddd42)), closes [/github.com/algolia/instantsearch.js/blob/v2/src/decorators/headerFooter.js#L22](https://github.com//github.com/algolia/instantsearch.js/blob/v2/src/decorators/headerFooter.js/issues/L22)
+* **searchBox:** update lifecycle state ([#3981](https://github.com/algolia/instantsearch.js/issues/3981)) ([0ea4950](https://github.com/algolia/instantsearch.js/commit/0ea4950))
+* **sortBy:** ensure a return value for getWidgetSearchParameters ([#4126](https://github.com/algolia/instantsearch.js/issues/4126)) ([569d573](https://github.com/algolia/instantsearch.js/commit/569d573))
+* **sortBy:** read initial index name from parent index ([#4079](https://github.com/algolia/instantsearch.js/issues/4079)) ([fe23c55](https://github.com/algolia/instantsearch.js/commit/fe23c55))
+* display warnings only in development ([#4150](https://github.com/algolia/instantsearch.js/issues/4150)) ([44f69a0](https://github.com/algolia/instantsearch.js/commit/44f69a0))
+* remove useless types  ([#3958](https://github.com/algolia/instantsearch.js/issues/3958)) ([ddebf53](https://github.com/algolia/instantsearch.js/commit/ddebf53))
+* **stories:** hide Places ([#4152](https://github.com/algolia/instantsearch.js/issues/4152)) ([7ff843f](https://github.com/algolia/instantsearch.js/commit/7ff843f))
+* **toggleRefinement:** update lifecycle state ([#3993](https://github.com/algolia/instantsearch.js/issues/3993)) ([f1beff6](https://github.com/algolia/instantsearch.js/commit/f1beff6))
+* **voiceSearch:** update lifecycle state ([#3982](https://github.com/algolia/instantsearch.js/issues/3982)) ([798e3c1](https://github.com/algolia/instantsearch.js/commit/798e3c1))
+* **warnings:** remove v3 warnings ([#4134](https://github.com/algolia/instantsearch.js/issues/4134)) ([7eb6810](https://github.com/algolia/instantsearch.js/commit/7eb6810))
+
+
+### Features
+
+* **autocomplete:** leverage scoped results ([#3975](https://github.com/algolia/instantsearch.js/issues/3975)) ([8f05968](https://github.com/algolia/instantsearch.js/commit/8f05968))
+* **autocomplete:** participate in routing ([#4029](https://github.com/algolia/instantsearch.js/issues/4029)) ([a9ca0c5](https://github.com/algolia/instantsearch.js/commit/a9ca0c5))
+* **autocomplete:** provide indexId ([#4142](https://github.com/algolia/instantsearch.js/issues/4142)) ([b641e23](https://github.com/algolia/instantsearch.js/commit/b641e23))
+* **clearRefinements:** support multiple indices ([#4036](https://github.com/algolia/instantsearch.js/issues/4036)) ([3611b11](https://github.com/algolia/instantsearch.js/commit/3611b11))
+* **connectAutocomplete:** add default value on getConfiguration ([#3836](https://github.com/algolia/instantsearch.js/issues/3836)) ([724b83f](https://github.com/algolia/instantsearch.js/commit/724b83f))
+* **connectAutocomplete:** clear the state on dispose ([#3815](https://github.com/algolia/instantsearch.js/issues/3815)) ([8ae87d8](https://github.com/algolia/instantsearch.js/commit/8ae87d8))
+* **connectHierarchicalMenu:** update getWidgetSearchParameters ([#4053](https://github.com/algolia/instantsearch.js/issues/4053)) ([c99f822](https://github.com/algolia/instantsearch.js/commit/c99f822))
+* **connectHits:** clear the state on dispose ([#3816](https://github.com/algolia/instantsearch.js/issues/3816)) ([c4de730](https://github.com/algolia/instantsearch.js/commit/c4de730))
+* **connectHits:** implement getWidgetSearchParameters ([#4001](https://github.com/algolia/instantsearch.js/issues/4001)) ([c77cf66](https://github.com/algolia/instantsearch.js/commit/c77cf66))
+* **connectHitsPerPage:** clear the state on dispose ([#3818](https://github.com/algolia/instantsearch.js/issues/3818)) ([d7a5c89](https://github.com/algolia/instantsearch.js/commit/d7a5c89))
+* **connectInfiniteHits:** add default value on getConfiguration ([#3837](https://github.com/algolia/instantsearch.js/issues/3837)) ([8c65249](https://github.com/algolia/instantsearch.js/commit/8c65249))
+* **connectInfiniteHits:** clear the state on dispose ([#3819](https://github.com/algolia/instantsearch.js/issues/3819)) ([60ce151](https://github.com/algolia/instantsearch.js/commit/60ce151))
+* **connectMenu:** update getWidgetSearchParameters ([#4054](https://github.com/algolia/instantsearch.js/issues/4054)) ([7d001e7](https://github.com/algolia/instantsearch.js/commit/7d001e7))
+* **connectNumericMenu:** update state lifecycle  ([#4013](https://github.com/algolia/instantsearch.js/issues/4013)) ([2620c90](https://github.com/algolia/instantsearch.js/commit/2620c90))
+* **connectPagination:** add default value on getConfiguration ([#3838](https://github.com/algolia/instantsearch.js/issues/3838)) ([aa4602c](https://github.com/algolia/instantsearch.js/commit/aa4602c))
+* **connectPagination:** clear the state on dispose ([#3821](https://github.com/algolia/instantsearch.js/issues/3821)) ([5b8ef49](https://github.com/algolia/instantsearch.js/commit/5b8ef49))
+* **connectPagination:** update getWidgetSearchParameters ([#4004](https://github.com/algolia/instantsearch.js/issues/4004)) ([eed7e77](https://github.com/algolia/instantsearch.js/commit/eed7e77))
+* **connectRange:** default `precision` to 0 ([#3953](https://github.com/algolia/instantsearch.js/issues/3953)) ([632e06b](https://github.com/algolia/instantsearch.js/commit/632e06b))
+* **connectRatingMenu:** update getWidgetSearchParameters  ([#4008](https://github.com/algolia/instantsearch.js/issues/4008)) ([d3c96bf](https://github.com/algolia/instantsearch.js/commit/d3c96bf))
+* **connectRefinementList:** update getWidgetSearchParameters  ([#4010](https://github.com/algolia/instantsearch.js/issues/4010)) ([ddc8fc4](https://github.com/algolia/instantsearch.js/commit/ddc8fc4))
+* **connectSearchBox:** clear the state on dispose ([#3822](https://github.com/algolia/instantsearch.js/issues/3822)) ([940522c](https://github.com/algolia/instantsearch.js/commit/940522c))
+* **connectSearchBox:** mount with a default query ([#3840](https://github.com/algolia/instantsearch.js/issues/3840)) ([c3a7d69](https://github.com/algolia/instantsearch.js/commit/c3a7d69))
+* **connectSearchBox:** update getWidgetSearchParameters ([#4002](https://github.com/algolia/instantsearch.js/issues/4002)) ([5c6fcd8](https://github.com/algolia/instantsearch.js/commit/5c6fcd8))
+* **connectVoiceSearch:** add default value on getConfiguration ([#3841](https://github.com/algolia/instantsearch.js/issues/3841)) ([fb70363](https://github.com/algolia/instantsearch.js/commit/fb70363))
+* **connectVoiceSearch:** clear the state on dispose ([#3823](https://github.com/algolia/instantsearch.js/issues/3823)) ([705b3e6](https://github.com/algolia/instantsearch.js/commit/705b3e6))
+* **connectVoiceSearch:** update getWidgetSearchParameters ([#4055](https://github.com/algolia/instantsearch.js/issues/4055)) ([b8c669f](https://github.com/algolia/instantsearch.js/commit/b8c669f))
+* **core:** deprecate addWidget & removeWidget ([#4131](https://github.com/algolia/instantsearch.js/issues/4131)) ([e5dafef](https://github.com/algolia/instantsearch.js/commit/e5dafef))
+* **currentRefinements:** support multiple indices ([#4012](https://github.com/algolia/instantsearch.js/issues/4012)) ([e997728](https://github.com/algolia/instantsearch.js/commit/e997728))
+* **defer:** implement cancellable callback ([#3916](https://github.com/algolia/instantsearch.js/issues/3916)) ([43a0bf8](https://github.com/algolia/instantsearch.js/commit/43a0bf8))
+* **federated:** keep a consistent state in the RefinementList life cycle ([#3976](https://github.com/algolia/instantsearch.js/issues/3976)) ([31d0fd6](https://github.com/algolia/instantsearch.js/commit/31d0fd6))
+* **hitsPerPage:** support new routing system ([#4038](https://github.com/algolia/instantsearch.js/issues/4038)) ([02502cb](https://github.com/algolia/instantsearch.js/commit/02502cb)), closes [#4069](https://github.com/algolia/instantsearch.js/issues/4069)
+* **index:** accept indexId ([#4070](https://github.com/algolia/instantsearch.js/issues/4070)) ([b74f8e3](https://github.com/algolia/instantsearch.js/commit/b74f8e3))
+* **index:** add mergeSearchParameters function ([#3917](https://github.com/algolia/instantsearch.js/issues/3917)) ([c0fe7bb](https://github.com/algolia/instantsearch.js/commit/c0fe7bb))
+* **index:** add widget ([dbbda0f](https://github.com/algolia/instantsearch.js/commit/dbbda0f)), closes [#3892](https://github.com/algolia/instantsearch.js/issues/3892) [#3893](https://github.com/algolia/instantsearch.js/issues/3893) [#3914](https://github.com/algolia/instantsearch.js/issues/3914)
+* **index:** compute local uiState ([#3997](https://github.com/algolia/instantsearch.js/issues/3997)) ([997c0f4](https://github.com/algolia/instantsearch.js/commit/997c0f4))
+* **index:** merge `ruleContexts` search parameter ([#3944](https://github.com/algolia/instantsearch.js/issues/3944)) ([e94752d](https://github.com/algolia/instantsearch.js/commit/e94752d))
+* **index:** provide scoped results to render hook ([#3964](https://github.com/algolia/instantsearch.js/issues/3964)) ([37c6aad](https://github.com/algolia/instantsearch.js/commit/37c6aad))
+* **index:** replicate searchFunction hack ([#4078](https://github.com/algolia/instantsearch.js/issues/4078)) ([1d2a816](https://github.com/algolia/instantsearch.js/commit/1d2a816)), closes [/github.com/algolia/instantsearch.js/blob/509513c0feafaad522f6f18d87a441559f4aa050/src/lib/RoutingManager.ts#L113-L130](https://github.com//github.com/algolia/instantsearch.js/blob/509513c0feafaad522f6f18d87a441559f4aa050/src/lib/RoutingManager.ts/issues/L113-L130)
+* **index:** reset page of child indexes ([#3962](https://github.com/algolia/instantsearch.js/issues/3962)) ([131b1ce](https://github.com/algolia/instantsearch.js/commit/131b1ce))
+* **index:** resolve parent SearchParameters ([#3937](https://github.com/algolia/instantsearch.js/issues/3937)) ([2611da5](https://github.com/algolia/instantsearch.js/commit/2611da5))
+* **index:** use uiState driven SearchParameters ([#4059](https://github.com/algolia/instantsearch.js/issues/4059)) ([b12bb9f](https://github.com/algolia/instantsearch.js/commit/b12bb9f))
+* **infiniteHits:** support new routing system ([#4040](https://github.com/algolia/instantsearch.js/issues/4040)) ([49315cf](https://github.com/algolia/instantsearch.js/commit/49315cf))
+* **instantsearch:** add onStateChange method ([#4080](https://github.com/algolia/instantsearch.js/issues/4080)) ([9f68da5](https://github.com/algolia/instantsearch.js/commit/9f68da5))
+* **InstantSearch:** switch to DerivedHelper only ([#3885](https://github.com/algolia/instantsearch.js/issues/3885)) ([d6fc317](https://github.com/algolia/instantsearch.js/commit/d6fc317))
+* **places:** add Places widget ([#4167](https://github.com/algolia/instantsearch.js/issues/4167)) ([1d754d1](https://github.com/algolia/instantsearch.js/commit/1d754d1))
+* drop support of searchParameters for initialUiState ([#4081](https://github.com/algolia/instantsearch.js/issues/4081)) ([571efeb](https://github.com/algolia/instantsearch.js/commit/571efeb))
+* **range:** support new routing system ([#4039](https://github.com/algolia/instantsearch.js/issues/4039)) ([8cba05a](https://github.com/algolia/instantsearch.js/commit/8cba05a))
+* **routing:** add a "single index" compatibility mode ([#4087](https://github.com/algolia/instantsearch.js/issues/4087)) ([842eb0f](https://github.com/algolia/instantsearch.js/commit/842eb0f))
+* **RoutingManager:** update state on route update ([#4100](https://github.com/algolia/instantsearch.js/issues/4100)) ([88f2615](https://github.com/algolia/instantsearch.js/commit/88f2615))
+* **toggleRefinement:** support new routing system ([#4037](https://github.com/algolia/instantsearch.js/issues/4037)) ([6a9d99f](https://github.com/algolia/instantsearch.js/commit/6a9d99f))
+* **types:** DerivedHelper ([#3887](https://github.com/algolia/instantsearch.js/issues/3887)) ([0f38b4a](https://github.com/algolia/instantsearch.js/commit/0f38b4a))
+* **types:** rename RenderOptions -> RendererOptions ([#3867](https://github.com/algolia/instantsearch.js/issues/3867)) ([05c6f72](https://github.com/algolia/instantsearch.js/commit/05c6f72))
+* **utils:** implement defer ([#3882](https://github.com/algolia/instantsearch.js/issues/3882)) ([8af470e](https://github.com/algolia/instantsearch.js/commit/8af470e))
+* **voice:** add additional query parameters ([#3738](https://github.com/algolia/instantsearch.js/issues/3738)) ([c555255](https://github.com/algolia/instantsearch.js/commit/c555255))
+* drop suppot for onHistoryChange ([#3941](https://github.com/algolia/instantsearch.js/issues/3941)) ([697f609](https://github.com/algolia/instantsearch.js/commit/697f609))
+* introduce initialUiState option ([#4074](https://github.com/algolia/instantsearch.js/issues/4074)) ([de00707](https://github.com/algolia/instantsearch.js/commit/de00707))
+* update UiState definition ([#4075](https://github.com/algolia/instantsearch.js/issues/4075)) ([9e7d3d8](https://github.com/algolia/instantsearch.js/commit/9e7d3d8))
+* **widgets:** add `$$type` to widgets definition ([#3960](https://github.com/algolia/instantsearch.js/issues/3960)) ([344d1b7](https://github.com/algolia/instantsearch.js/commit/344d1b7))
+
+
+
+# [3.7.0](https://github.com/algolia/instantsearch.js/compare/v3.5.4...v3.7.0) (2019-10-08)
+
+
+### Bug Fixes
+
+* **clearRefinements:** reset page to 0 ([#3936](https://github.com/algolia/instantsearch.js/issues/3936)) ([7378a0a](https://github.com/algolia/instantsearch.js/commit/7378a0a))
+* **connectSortBy:** never update the initial index ([#4015](https://github.com/algolia/instantsearch.js/issues/4015)) ([bc0f9e2](https://github.com/algolia/instantsearch.js/commit/bc0f9e2))
+* **deps:** update dependency instantsearch.js to v3.5.4 ([#3929](https://github.com/algolia/instantsearch.js/issues/3929)) ([eff84c5](https://github.com/algolia/instantsearch.js/commit/eff84c5))
+* **deps:** update dependency instantsearch.js to v3.6.0 ([#4021](https://github.com/algolia/instantsearch.js/issues/4021)) ([7719bba](https://github.com/algolia/instantsearch.js/commit/7719bba))
+* **enhanceConfiguration:** deduplicate the hierarchicalFacets ([#3966](https://github.com/algolia/instantsearch.js/issues/3966)) ([baf8a35](https://github.com/algolia/instantsearch.js/commit/baf8a35))
+* **examples:** fix IE11 compatibility for e-commerce demo ([#4049](https://github.com/algolia/instantsearch.js/issues/4049)) ([dc6f350](https://github.com/algolia/instantsearch.js/commit/dc6f350))
+* **examples:** fix missing polyfill in e-commerce demo ([#4076](https://github.com/algolia/instantsearch.js/issues/4076)) ([4bf3ab3](https://github.com/algolia/instantsearch.js/commit/4bf3ab3))
+* **hierarchicalFacets:** prevent different rootPath on same attribute ([#3965](https://github.com/algolia/instantsearch.js/issues/3965)) ([5ee79fa](https://github.com/algolia/instantsearch.js/commit/5ee79fa))
+* **instantsearch:** warn deprecated usage of `searchParameters` ([#4151](https://github.com/algolia/instantsearch.js/issues/4151)) ([18e1c36](https://github.com/algolia/instantsearch.js/commit/18e1c36))
+* **menuSelect:** unmount component ([#3911](https://github.com/algolia/instantsearch.js/issues/3911)) ([f6debce](https://github.com/algolia/instantsearch.js/commit/f6debce))
+* **rangeInput:** unmount component ([#3910](https://github.com/algolia/instantsearch.js/issues/3910)) ([f6c29e8](https://github.com/algolia/instantsearch.js/commit/f6c29e8))
+* **refinementList:** fix showMore button to work after search ([#3082](https://github.com/algolia/instantsearch.js/issues/3082)) ([23e46b6](https://github.com/algolia/instantsearch.js/commit/23e46b6))
+* pass noop as default value to unmountFn at connectors ([#3955](https://github.com/algolia/instantsearch.js/issues/3955)) ([7c38744](https://github.com/algolia/instantsearch.js/commit/7c38744))
+
+
+
 # [3.6.0](https://github.com/algolia/instantsearch.js/compare/v3.5.4...v3.6.0) (2019-07-30)
 
 

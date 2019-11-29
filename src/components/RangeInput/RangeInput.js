@@ -1,4 +1,6 @@
-import React, { Component } from 'preact-compat';
+/** @jsx h */
+
+import { h, Component } from 'preact';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template/Template';
@@ -20,9 +22,9 @@ class RangeInput extends Component {
     });
   }
 
-  onChange = name => event => {
+  onInput = name => event => {
     this.setState({
-      [name]: event.currentTarget.value,
+      [name]: Number(event.currentTarget.value),
     });
   };
 
@@ -54,7 +56,7 @@ class RangeInput extends Component {
               max={max}
               step={step}
               value={minValue}
-              onChange={this.onChange('min')}
+              onInput={this.onInput('min')}
               placeholder={min}
               disabled={isDisabled}
             />
@@ -77,7 +79,7 @@ class RangeInput extends Component {
               max={max}
               step={step}
               value={maxValue}
-              onChange={this.onChange('max')}
+              onInput={this.onInput('max')}
               placeholder={max}
               disabled={isDisabled}
             />

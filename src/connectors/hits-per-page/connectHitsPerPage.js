@@ -2,7 +2,6 @@ import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
-  find,
   noop,
 } from '../../lib/utils';
 
@@ -84,7 +83,7 @@ const withUsage = createDocumentationMessageGenerator({
  * var customHitsPerPage = instantsearch.connectors.connectHitsPerPage(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customHitsPerPage({
  *     containerNode: $('#custom-hits-per-page-container'),
  *     items: [
@@ -93,7 +92,7 @@ const withUsage = createDocumentationMessageGenerator({
  *       {value: 24, label: '24 per page'},
  *     ],
  *   })
- * );
+ * ]);
  */
 export default function connectHitsPerPage(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -108,21 +107,24 @@ export default function connectHitsPerPage(renderFn, unmountFn = noop) {
       );
     }
 
-    const defaultValues = items.filter(item => item.default);
-    if (defaultValues.length > 1) {
+    const defaultItems = items.filter(item => item.default === true);
+
+    if (defaultItems.length === 0) {
+      throw new Error(
+        withUsage(`A default value must be specified in \`items\`.`)
+      );
+    }
+
+    if (defaultItems.length > 1) {
       throw new Error(
         withUsage('More than one default value is specified in `items`.')
       );
     }
 
-    const defaultValue = find(userItems, item => item.default === true);
+    const defaultItem = defaultItems[0];
 
     return {
-      getConfiguration() {
-        return defaultValues.length > 0
-          ? { hitsPerPage: defaultValues[0].value }
-          : {};
-      },
+      $$type: 'ais.hitsPerPage',
 
       init({ helper, createURL, state, instantSearchInstance }) {
         const isCurrentInOptions = items.some(
@@ -200,17 +202,16 @@ You may want to add another entry to the \`items\` option with this value.`
         }));
       },
 
-      dispose() {
+      dispose({ state }) {
         unmountFn();
+
+        return state.setQueryParameter('hitsPerPage', undefined);
       },
 
       getWidgetState(uiState, { searchParameters }) {
         const hitsPerPage = searchParameters.hitsPerPage;
-        if (
-          (defaultValue && hitsPerPage === defaultValue.value) ||
-          hitsPerPage === undefined ||
-          uiState.hitsPerPage === hitsPerPage
-        ) {
+
+        if (hitsPerPage === undefined || hitsPerPage === defaultItem.value) {
           return uiState;
         }
 
@@ -221,19 +222,9 @@ You may want to add another entry to the \`items\` option with this value.`
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const hitsPerPage = uiState.hitsPerPage;
-        if (hitsPerPage)
-          return searchParameters.setQueryParameter(
-            'hitsPerPage',
-            uiState.hitsPerPage
-          );
-        if (defaultValue) {
-          return searchParameters.setQueryParameter(
-            'hitsPerPage',
-            defaultValue.value
-          );
-        }
-        return searchParameters.setQueryParameter('hitsPerPage', undefined);
+        return searchParameters.setQueryParameters({
+          hitsPerPage: uiState.hitsPerPage || defaultItem.value,
+        });
       },
     };
   };

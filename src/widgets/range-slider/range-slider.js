@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Slider from '../../components/Slider/Slider';
 import connectRange from '../../connectors/range/connectRange';
@@ -95,7 +97,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.rangeSlider({
  *     container: '#price',
  *     attribute: 'price',
@@ -105,7 +107,7 @@ const renderer = ({ containerNode, cssClasses, pips, step, tooltips }) => (
  *       }
  *     }
  *   })
- * );
+ * ]);
  */
 export default function rangeSlider({
   container,
@@ -141,7 +143,7 @@ export default function rangeSlider({
   });
 
   const makeWidget = connectRange(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ attribute, min, max, precision });

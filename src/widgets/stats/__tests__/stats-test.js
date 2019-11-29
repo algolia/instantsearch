@@ -1,8 +1,8 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import stats from '../stats';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -49,18 +49,16 @@ describe('stats()', () => {
     render.mockClear();
   });
 
-  it('configures nothing', () => {
-    expect(widget.getConfiguration).toEqual(undefined);
-  });
-
   it('calls twice render(<Stats props />, container)', () => {
     widget.render({ results, instantSearchInstance });
     widget.render({ results, instantSearchInstance });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(firstRender[0].props).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[0].props).toMatchSnapshot();
+    expect(secondRender[1]).toEqual(container);
   });
 });

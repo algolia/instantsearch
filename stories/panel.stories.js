@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Panel', module)
+storiesOf('Basics|Panel', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
@@ -14,12 +14,12 @@ storiesOf('Panel', module)
         },
       })(instantsearch.widgets.refinementList);
 
-      search.addWidget(
+      search.addWidgets([
         brandList({
           container,
           attribute: 'brand',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -32,12 +32,12 @@ storiesOf('Panel', module)
         },
       })(instantsearch.widgets.rangeInput);
 
-      search.addWidget(
+      search.addWidgets([
         priceList({
           container,
           attribute: 'price',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -50,7 +50,7 @@ storiesOf('Panel', module)
         },
       })(instantsearch.widgets.rangeSlider);
 
-      search.addWidget(
+      search.addWidgets([
         priceSlider({
           container,
           attribute: 'price',
@@ -59,8 +59,8 @@ storiesOf('Panel', module)
               return `$${Math.round(rawValue).toLocaleString()}`;
             },
           },
-        })
-      );
+        }),
+      ]);
     })
   )
 
@@ -75,12 +75,12 @@ storiesOf('Panel', module)
         hidden: ({ results }) => results.nbHits === 0,
       })(instantsearch.widgets.rangeInput);
 
-      search.addWidget(
+      search.addWidgets([
         priceList({
           container,
           attribute: 'price',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -88,7 +88,7 @@ storiesOf('Panel', module)
     withHits(({ search, container, instantsearch }) => {
       const brandList = instantsearch.widgets.panel({
         collapsed: options => {
-          return options && options.state && options.state.query.length === 0;
+          return options && options.state && !options.state.query;
         },
         templates: {
           header: 'Brand (collapsible)',
@@ -96,12 +96,12 @@ storiesOf('Panel', module)
         },
       })(instantsearch.widgets.refinementList);
 
-      search.addWidget(
+      search.addWidgets([
         brandList({
           container,
           attribute: 'brand',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
@@ -109,7 +109,7 @@ storiesOf('Panel', module)
     withHits(({ search, container, instantsearch }) => {
       const brandList = instantsearch.widgets.panel({
         collapsed: options => {
-          return options && options.state && options.state.query.length === 0;
+          return options && options.state && !options.state.query;
         },
         templates: {
           header: 'Collapsible panel',
@@ -118,11 +118,11 @@ storiesOf('Panel', module)
         },
       })(instantsearch.widgets.refinementList);
 
-      search.addWidget(
+      search.addWidgets([
         brandList({
           container,
           attribute: 'brand',
-        })
-      );
+        }),
+      ]);
     })
   );

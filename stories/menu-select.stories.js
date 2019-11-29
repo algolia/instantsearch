@@ -1,22 +1,22 @@
 import { storiesOf } from '@storybook/html';
-import { withHits } from '../.storybook/decorators';
+import { withHits, withLifecycle } from '../.storybook/decorators';
 
-storiesOf('MenuSelect', module)
+storiesOf('Refinements|MenuSelect', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.menuSelect({
           container,
           attribute: 'categories',
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with custom item template',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.menuSelect({
           container,
           attribute: 'categories',
@@ -24,14 +24,14 @@ storiesOf('MenuSelect', module)
           templates: {
             item: '{{label}}',
           },
-        })
-      );
+        }),
+      ]);
     })
   )
   .add(
     'with custom default option template',
     withHits(({ search, container, instantsearch }) => {
-      search.addWidget(
+      search.addWidgets([
         instantsearch.widgets.menuSelect({
           container,
           attribute: 'categories',
@@ -39,6 +39,17 @@ storiesOf('MenuSelect', module)
           templates: {
             defaultOption: 'Default choice',
           },
+        }),
+      ]);
+    })
+  )
+  .add(
+    'with add/remove',
+    withHits(({ search, container, instantsearch }) => {
+      withLifecycle(search, container, node =>
+        instantsearch.widgets.menuSelect({
+          container: node,
+          attribute: 'categories',
         })
       );
     })

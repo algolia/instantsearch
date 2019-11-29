@@ -14,6 +14,23 @@ describe('connectStats', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#connector"
 `);
     });
+
+    it('is a widget', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customStats = connectStats(render, unmount);
+      const widget = customStats({});
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.stats',
+          init: expect.any(Function),
+          render: expect.any(Function),
+          dispose: expect.any(Function),
+        })
+      );
+    });
   });
 
   it('Renders during init and render', () => {
@@ -26,8 +43,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       foo: 'bar', // dummy param to test `widgetParams`
     });
 
-    expect(widget.getConfiguration).toEqual(undefined);
-
     const helper = jsHelper({});
     helper.search = jest.fn();
 
@@ -35,7 +50,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     {
@@ -58,9 +72,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(0);
       expect(nbPages).toBe(0);
-      expect(page).toBe(helper.state.page);
+      expect(page).toBe(0);
       expect(processingTimeMS).toBe(-1);
-      expect(query).toBe(helper.state.query);
+      expect(query).toBe('');
       expect(widgetParams).toEqual({ foo: 'bar' });
     }
 
@@ -72,7 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
           nbHits: 1,
           hitsPerPage: helper.state.hitsPerPage,
           page: helper.state.page,
-          query: helper.state.query,
+          query: '',
           processingTimeMS: 12,
         },
       ]),
@@ -102,7 +116,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
       expect(nbPages).toBe(1);
       expect(page).toBe(helper.state.page);
       expect(processingTimeMS).toBe(12);
-      expect(query).toBe(helper.state.query);
+      expect(query).toBe('');
     }
   });
 

@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import Pagination from '../../components/Pagination/Pagination';
 import connectPagination from '../../connectors/pagination/connectPagination';
@@ -128,7 +130,7 @@ const renderer = ({
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.pagination({
  *     container: '#pagination-container',
  *     totalPages: 20,
@@ -137,7 +139,7 @@ const renderer = ({
  *     showFirst: false,
  *     showLast: false,
  *   })
- * );
+ * ]);
  */
 export default function pagination({
   container,
@@ -214,7 +216,7 @@ export default function pagination({
   });
 
   const makeWidget = connectPagination(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({ totalPages, padding });

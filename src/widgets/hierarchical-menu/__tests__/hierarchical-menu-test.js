@@ -1,9 +1,9 @@
-import { render } from 'preact-compat';
+import { render } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import hierarchicalMenu from '../hierarchical-menu';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -33,103 +33,6 @@ describe('hierarchicalMenu()', () => {
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/"
 `);
-    });
-  });
-
-  describe('getConfiguration', () => {
-    beforeEach(() => {
-      options = { container, attributes };
-    });
-
-    it('has defaults', () => {
-      expect(hierarchicalMenu(options).getConfiguration({})).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: null,
-            attributes: ['hello', 'world'],
-            separator: ' > ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
-    });
-
-    it('understand the separator option', () => {
-      expect(
-        hierarchicalMenu({ separator: ' ? ', ...options }).getConfiguration({})
-      ).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: null,
-            attributes: ['hello', 'world'],
-            separator: ' ? ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
-    });
-
-    it('understand the showParentLevel option', () => {
-      expect(
-        hierarchicalMenu({
-          showParentLevel: false,
-          ...options,
-        }).getConfiguration({})
-      ).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: null,
-            attributes: ['hello', 'world'],
-            separator: ' > ',
-            showParentLevel: false,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
-    });
-
-    it('understand the rootPath option', () => {
-      expect(
-        hierarchicalMenu({ rootPath: 'Beer', ...options }).getConfiguration({})
-      ).toEqual({
-        hierarchicalFacets: [
-          {
-            name: 'hello',
-            rootPath: 'Beer',
-            attributes: ['hello', 'world'],
-            separator: ' > ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
-    });
-
-    describe('limit option', () => {
-      it('configures maxValuesPerFacet', () =>
-        expect(
-          hierarchicalMenu({ limit: 20, ...options }).getConfiguration({})
-            .maxValuesPerFacet
-        ).toBe(20));
-
-      it('uses provided maxValuesPerFacet when higher', () =>
-        expect(
-          hierarchicalMenu({ limit: 20, ...options }).getConfiguration({
-            maxValuesPerFacet: 30,
-          }).maxValuesPerFacet
-        ).toBe(30));
-
-      it('ignores provided maxValuesPerFacet when lower', () =>
-        expect(
-          hierarchicalMenu({ limit: 10, ...options }).getConfiguration({
-            maxValuesPerFacet: 3,
-          }).maxValuesPerFacet
-        ).toBe(10));
     });
   });
 
@@ -170,25 +73,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         showMore: 'showMore',
         disabledShowMore: 'disabledShowMore',
       };
-
       widget = hierarchicalMenu({ ...options, cssClasses: userCssClasses });
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     it('calls render', () => {
       widget = hierarchicalMenu(options);
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
+
+      const [firstRender] = render.mock.calls;
+
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     it('asks for results.getFacetValues', () => {
       widget = hierarchicalMenu(options);
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
+
       expect(results.getFacetValues).toHaveBeenCalledTimes(1);
       expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
         sortBy: ['name:asc'],
@@ -197,8 +109,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
     it('has a sortBy option', () => {
       widget = hierarchicalMenu({ ...options, sortBy: ['count:asc'] });
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
+
       expect(results.getFacetValues).toHaveBeenCalledTimes(1);
       expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
         sortBy: ['count:asc'],
@@ -212,9 +126,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           item: 'item2',
         },
       });
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     it('has a transformItems options', () => {
@@ -227,24 +145,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
 
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     it('sets facetValues to empty array when no results', () => {
       data = {};
       widget = hierarchicalMenu(options);
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     it('has a toggleRefinement method', () => {
       widget = hierarchicalMenu(options);
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      const elementToggleRefinement =
-        render.mock.calls[0][0].props.toggleRefinement;
+
+      const [firstRender] = render.mock.calls;
+
+      const elementToggleRefinement = firstRender[0].props.toggleRefinement;
       elementToggleRefinement('mom');
+
       expect(helper.toggleRefinement).toHaveBeenCalledTimes(1);
       expect(helper.toggleRefinement).toHaveBeenCalledWith('hello', 'mom');
       expect(helper.search).toHaveBeenCalledTimes(1);
@@ -257,7 +185,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         { name: 'eight', path: 'eight' },
         { name: 'nine', path: 'nine' },
       ];
-
       const firstLevel = [
         { name: 'one', path: 'one' },
         { name: 'two', path: 'two', data: secondLevel },
@@ -265,7 +192,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         { name: 'four', path: 'four' },
         { name: 'five', path: 'five' },
       ];
-
       data = { data: firstLevel };
       const expectedFacetValues = [
         { label: 'one', value: 'one' },
@@ -281,9 +207,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         { label: 'three', value: 'three' },
       ];
       widget = hierarchicalMenu({ ...options, limit: 3 });
+
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      const actualFacetValues = render.mock.calls[0][0].props.facetValues;
+
+      const [firstRender] = render.mock.calls;
+
+      const actualFacetValues = firstRender[0].props.facetValues;
       expect(actualFacetValues).toEqual(expectedFacetValues);
     });
   });

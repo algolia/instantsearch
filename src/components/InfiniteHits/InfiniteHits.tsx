@@ -1,7 +1,10 @@
-import React from 'preact-compat';
+/** @jsx h */
+
+import { h } from 'preact';
 import cx from 'classnames';
 import Template from '../Template/Template';
-import { Hits, SearchResults } from '../../types';
+import { SearchResults } from 'algoliasearch-helper';
+import { Hits } from '../../types';
 import { InfiniteHitsTemplates } from '../../widgets/infinite-hits/infinite-hits';
 
 type InfiniteHitsCSSClasses = {
@@ -40,7 +43,7 @@ const InfiniteHits = ({
   isLastPage,
   cssClasses,
   templateProps,
-}: InfiniteHitsProps): React.ReactNode => {
+}: InfiniteHitsProps) => {
   if (results.hits.length === 0) {
     return (
       <Template

@@ -1,6 +1,6 @@
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import { createDocumentationMessageGenerator } from '../../lib/utils';
-import { SearchParameters, SearchResults, Widget } from '../../types';
-import { QueryParameters } from 'algoliasearch-helper';
+import { Widget } from '../../types';
 
 type AnalyticsWidgetParams = {
   pushFunction(
@@ -73,7 +73,7 @@ function analytics(
   };
 
   const serializeNumericRefinements = function(
-    numericRefinements: QueryParameters['numericRefinements']
+    numericRefinements: SearchParameters['numericRefinements']
   ): string {
     const refinements: string[] = [];
 
@@ -144,9 +144,10 @@ function analytics(
 
     const stringifiedParams = serializedParams.join('&');
 
-    let dataToSend = `Query: ${analyticsState.state.query}, ${stringifiedParams}`;
+    let dataToSend = `Query: ${analyticsState.state.query ||
+      ''}, ${stringifiedParams}`;
     if (pushPagination === true) {
-      dataToSend += `, Page: ${analyticsState.state.page}`;
+      dataToSend += `, Page: ${analyticsState.state.page || 0}`;
     }
 
     if (lastSentData !== dataToSend) {

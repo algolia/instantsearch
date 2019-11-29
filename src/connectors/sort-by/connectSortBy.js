@@ -77,7 +77,7 @@ const withUsage = createDocumentationMessageGenerator({
  * var customSortBy = instantsearch.connectors.connectSortBy(renderFn);
  *
  * // mount widget on the page
- * search.addWidget(
+ * search.addWidgets([
  *   customSortBy({
  *     containerNode: $('#custom-sort-by-container'),
  *     items: [
@@ -86,7 +86,7 @@ const withUsage = createDocumentationMessageGenerator({
  *       { value: 'instant_search_price_desc', label: 'Highest price' },
  *     ],
  *   })
- * );
+ * ]);
  */
 export default function connectSortBy(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
@@ -101,24 +101,16 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
     }
 
     return {
-      init({ helper, instantSearchInstance }) {
+      $$type: 'ais.sortBy',
+
+      init({ helper, instantSearchInstance, parent }) {
         const currentIndex = helper.state.index;
         const isCurrentIndexInItems = find(
           items,
           item => item.value === currentIndex
         );
 
-        // The `initialIndex` is the one set at the top level not the one used
-        // at `init`. The value of `index` at `init` could come from the URL. We
-        // want the "real" initial value, this one should never change. If it changes
-        // between the lifecycles of the widget the current refinement won't be
-        // pushed into the `uiState`. Because we never push the "initial" value to
-        // avoid to pollute the URL.
-        // Note that it might be interesting to manage this at the state mapping
-        // level and always push the index value into  the `uiState`. It is a
-        // breaking change.
-        // @MAJOR
-        this.initialIndex = instantSearchInstance.indexName;
+        this.initialIndex = parent.getIndexName();
         this.setIndex = indexName => {
           helper.setIndex(indexName).search();
         };
@@ -162,23 +154,23 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const currentIndex = searchParameters.getQueryParameter('index');
+        const currentIndex = searchParameters.index;
         const isInitialIndex = currentIndex === this.initialIndex;
 
-        if (isInitialIndex || (uiState && uiState.sortBy === currentIndex)) {
+        if (isInitialIndex) {
           return uiState;
         }
 
         return {
           ...uiState,
-          sortBy: searchParameters.getQueryParameter('index'),
+          sortBy: currentIndex,
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameter(
           'index',
-          uiState.sortBy || this.initialIndex
+          uiState.sortBy || this.initialIndex || searchParameters.index
         );
       },
     };

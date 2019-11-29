@@ -1,9 +1,12 @@
-import { render } from 'preact-compat';
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import { render } from 'preact';
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import ratingMenu from '../rating-menu';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
 
   module.render = jest.fn();
 
@@ -40,10 +43,17 @@ describe('ratingMenu()', () => {
       attribute,
       cssClasses: { body: ['body', 'cx'] },
     });
-    helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper = jsHelper(
+      {},
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    );
     jest.spyOn(helper, 'clearRefinements');
     jest.spyOn(helper, 'addDisjunctiveFacetRefinement');
     jest.spyOn(helper, 'getRefinements');
+    jest.spyOn(helper, 'removeDisjunctiveFacetRefinement');
     helper.search = jest.fn();
 
     state = {
@@ -61,20 +71,30 @@ describe('ratingMenu()', () => {
   });
 
   it('configures the underlying disjunctive facet', () => {
-    expect(widget.getConfiguration()).toEqual({
-      disjunctiveFacets: ['anAttrName'],
-    });
+    expect(
+      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+    ).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: ['anAttrName'],
+        disjunctiveFacetsRefinements: {
+          anAttrName: [],
+        },
+      })
+    );
   });
 
   it('calls twice render(<RefinementList props />, container)', () => {
     widget.render({ state, helper, results, createURL });
     widget.render({ state, helper, results, createURL });
 
+    const [firstRender, secondRender] = render.mock.calls;
+
+    const { children, ...rootProps } = firstRender[0].props;
+
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[0][0]).toMatchSnapshot();
-    expect(render.mock.calls[0][1]).toEqual(container);
-    expect(render.mock.calls[1][0]).toMatchSnapshot();
-    expect(render.mock.calls[1][1]).toEqual(container);
+    expect(rootProps).toMatchSnapshot();
+    expect(firstRender[1]).toEqual(container);
+    expect(secondRender[1]).toEqual(container);
   });
 
   it('hide the count==0 when there is a refinement', () => {
@@ -89,8 +109,11 @@ describe('ratingMenu()', () => {
     ]);
 
     widget.render({ state, helper, results: _results, createURL });
+
+    const [firstRender] = render.mock.calls;
+
     expect(render).toHaveBeenCalledTimes(1);
-    expect(render.mock.calls[0][0].props.facetValues).toEqual([
+    expect(firstRender[0].props.facetValues).toEqual([
       {
         count: 42,
         isRefined: true,
@@ -104,6 +127,7 @@ describe('ratingMenu()', () => {
   it("doesn't call the refinement functions if not refined", () => {
     helper.getRefinements = jest.fn().mockReturnValue([]);
     widget.render({ state, helper, results, createURL });
+
     expect(helper.clearRefinements).toHaveBeenCalledTimes(0);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(0);
     expect(helper.search).toHaveBeenCalledTimes(0);
@@ -112,7 +136,8 @@ describe('ratingMenu()', () => {
   it('refines the search', () => {
     helper.getRefinements = jest.fn().mockReturnValue([]);
     widget._toggleRefinement('3');
-    expect(helper.clearRefinements).toHaveBeenCalledTimes(1);
+
+    expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(3);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
@@ -121,7 +146,8 @@ describe('ratingMenu()', () => {
     helper.addDisjunctiveFacetRefinement(attribute, 2);
     helper.addDisjunctiveFacetRefinement.mockReset();
     widget._toggleRefinement('2');
-    expect(helper.clearRefinements).toHaveBeenCalledTimes(1);
+
+    expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(0);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
@@ -129,7 +155,8 @@ describe('ratingMenu()', () => {
   it('toggles the refinements with another facet', () => {
     helper.getRefinements = jest.fn().mockReturnValue([{ value: '2' }]);
     widget._toggleRefinement('4');
-    expect(helper.clearRefinements).toHaveBeenCalledTimes(1);
+
+    expect(helper.removeDisjunctiveFacetRefinement).toHaveBeenCalledTimes(1);
     expect(helper.addDisjunctiveFacetRefinement).toHaveBeenCalledTimes(2);
     expect(helper.search).toHaveBeenCalledTimes(1);
   });
@@ -140,14 +167,19 @@ describe('ratingMenu()', () => {
       attribute,
       cssClasses: { body: ['body', 'cx'] },
     });
-    const _helper = jsHelper({}, '', _widget.getConfiguration({}));
+    const _helper = jsHelper(
+      {},
+      '',
+      _widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    );
     _helper.search = jest.fn();
 
     _widget.init({
       helper: _helper,
       state: _helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
       instantSearchInstance: {
         templatesConfig: {},
       },

@@ -25,7 +25,6 @@ describe('connectGeoSearch', () => {
       helper,
       state: helper.state,
       createURL: () => '#',
-      onHistoryChange: () => {},
     });
 
     const { refine } = render.mock.calls[0][0];
@@ -53,9 +52,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const unmount = jest.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
-    const widget = customGeoSearch();
+    const widget = customGeoSearch({});
 
     expect(widget).toEqual({
+      $$type: 'ais.geoSearch',
       init: expect.any(Function),
       render: expect.any(Function),
       dispose: expect.any(Function),
@@ -1134,14 +1134,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
 
-      const expectation = {
-        insideBoundingBox: undefined,
-      };
+      const expectation = new SearchParameters();
 
       const actual = widget.dispose({ state: helper.state });
 
       expect(unmount).toHaveBeenCalled();
-      expect(actual).toMatchObject(expectation);
+      expect(actual).toEqual(expectation);
     });
 
     it('does not throw without the unmount function', () => {

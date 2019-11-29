@@ -1,4 +1,4 @@
-import { SearchParameters, SearchResults } from '../../types';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import find from './find';
 import unescapeRefinement from './unescapeRefinement';
 
@@ -11,14 +11,14 @@ export interface FacetRefinement {
     | 'numeric'
     | 'tag'
     | 'query';
-  attributeName: string;
+  attribute: string;
   name: string;
   count?: number;
   exhaustive?: boolean;
 }
 
 export interface QueryRefinement
-  extends Pick<FacetRefinement, 'type' | 'attributeName' | 'name'> {
+  extends Pick<FacetRefinement, 'type' | 'attribute' | 'name'> {
   type: 'query';
   query: string;
 }
@@ -43,19 +43,19 @@ export type Refinement =
 function getRefinement(
   state: SearchParameters,
   type: Refinement['type'],
-  attributeName: Refinement['attributeName'],
+  attribute: Refinement['attribute'],
   name: Refinement['name'],
   resultsFacets: SearchResults['facets' | 'hierarchicalFacets'] = []
 ): Refinement {
-  const res: Refinement = { type, attributeName, name };
+  const res: Refinement = { type, attribute, name };
   let facet: any = find(
     resultsFacets as Array<{ name: string }>,
-    resultsFacet => resultsFacet.name === attributeName
+    resultsFacet => resultsFacet.name === attribute
   );
   let count: number;
 
   if (type === 'hierarchical') {
-    const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
+    const facetDeclaration = state.getHierarchicalFacetByName(attribute);
     const nameParts = name.split(facetDeclaration.separator);
 
     const getFacetRefinement = (
@@ -96,7 +96,7 @@ function getRefinements(
   state: SearchParameters,
   clearsQuery: boolean = false
 ): Refinement[] {
-  const res: Refinement[] = [];
+  const refinements: Refinement[] = [];
   const {
     facetsRefinements = {},
     facetsExcludes = {},
@@ -106,56 +106,56 @@ function getRefinements(
     tagRefinements = [],
   } = state;
 
-  Object.keys(facetsRefinements).forEach(attributeName => {
-    const refinements = facetsRefinements[attributeName];
+  Object.keys(facetsRefinements).forEach(attribute => {
+    const refinementNames = facetsRefinements[attribute];
 
-    refinements.forEach(refinement => {
-      res.push(
-        getRefinement(state, 'facet', attributeName, refinement, results.facets)
+    refinementNames.forEach(refinementName => {
+      refinements.push(
+        getRefinement(state, 'facet', attribute, refinementName, results.facets)
       );
     });
   });
 
-  Object.keys(facetsExcludes).forEach(attributeName => {
-    const refinements = facetsExcludes[attributeName];
+  Object.keys(facetsExcludes).forEach(attribute => {
+    const refinementNames = facetsExcludes[attribute];
 
-    refinements.forEach(refinement => {
-      res.push({
+    refinementNames.forEach(refinementName => {
+      refinements.push({
         type: 'exclude',
-        attributeName,
-        name: refinement,
+        attribute,
+        name: refinementName,
         exclude: true,
       });
     });
   });
 
-  Object.keys(disjunctiveFacetsRefinements).forEach(attributeName => {
-    const refinements = disjunctiveFacetsRefinements[attributeName];
+  Object.keys(disjunctiveFacetsRefinements).forEach(attribute => {
+    const refinementNames = disjunctiveFacetsRefinements[attribute];
 
-    refinements.forEach(refinement => {
-      res.push(
+    refinementNames.forEach(refinementName => {
+      refinements.push(
         getRefinement(
           state,
           'disjunctive',
-          attributeName,
+          attribute,
           // We unescape any disjunctive refined values with `unescapeRefinement` because
           // they can be escaped on negative numeric values with `escapeRefinement`.
-          unescapeRefinement(refinement),
+          unescapeRefinement(refinementName),
           results.disjunctiveFacets
         )
       );
     });
   });
 
-  Object.keys(hierarchicalFacetsRefinements).forEach(attributeName => {
-    const refinements = hierarchicalFacetsRefinements[attributeName];
+  Object.keys(hierarchicalFacetsRefinements).forEach(attribute => {
+    const refinementNames = hierarchicalFacetsRefinements[attribute];
 
-    refinements.forEach(refinement => {
-      res.push(
+    refinementNames.forEach(refinement => {
+      refinements.push(
         getRefinement(
           state,
           'hierarchical',
-          attributeName,
+          attribute,
           refinement,
           results.hierarchicalFacets
         )
@@ -163,41 +163,42 @@ function getRefinements(
     });
   });
 
-  Object.keys(numericRefinements).forEach(attributeName => {
-    const operators = numericRefinements[attributeName];
+  Object.keys(numericRefinements).forEach(attribute => {
+    const operators = numericRefinements[attribute];
 
-    Object.keys(operators).forEach(operator => {
+    Object.keys(operators).forEach(operatorOriginal => {
+      const operator = operatorOriginal as SearchParameters.Operator;
       const valueOrValues = operators[operator];
-      const refinements = Array.isArray(valueOrValues)
+      const refinementNames = Array.isArray(valueOrValues)
         ? valueOrValues
         : [valueOrValues];
 
-      refinements.forEach(refinement => {
-        res.push({
+      refinementNames.forEach(refinementName => {
+        refinements.push({
           type: 'numeric',
-          attributeName,
-          name: `${refinement}`,
-          numericValue: refinement,
+          attribute,
+          name: `${refinementName}`,
+          numericValue: refinementName,
           operator: operator as NumericRefinement['operator'],
         });
       });
     });
   });
 
-  tagRefinements.forEach(refinement => {
-    res.push({ type: 'tag', attributeName: '_tags', name: refinement });
+  tagRefinements.forEach(refinementName => {
+    refinements.push({ type: 'tag', attribute: '_tags', name: refinementName });
   });
 
   if (clearsQuery && state.query && state.query.trim()) {
-    res.push({
-      attributeName: 'query',
+    refinements.push({
+      attribute: 'query',
       type: 'query',
       name: state.query,
       query: state.query,
     });
   }
 
-  return res;
+  return refinements;
 }
 
 export default getRefinements;

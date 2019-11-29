@@ -1,5 +1,6 @@
 export type VoiceSearchHelperParams = {
   searchAsYouSpeak: boolean;
+  language?: string;
   onQueryChange: (query: string) => void;
   onStateChange: () => void;
 };
@@ -31,6 +32,7 @@ export type ToggleListening = () => void;
 
 export default function createVoiceSearchHelper({
   searchAsYouSpeak,
+  language,
   onQueryChange,
   onStateChange,
 }: VoiceSearchHelperParams): VoiceSearchHelper {
@@ -105,6 +107,11 @@ export default function createVoiceSearchHelper({
     }
     resetState('askingPermission');
     recognition.interimResults = true;
+
+    if (language) {
+      recognition.lang = language;
+    }
+
     recognition.addEventListener('start', onStart);
     recognition.addEventListener('error', onError);
     recognition.addEventListener('result', onResult);

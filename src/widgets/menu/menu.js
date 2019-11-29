@@ -1,4 +1,6 @@
-import React, { render, unmountComponentAtNode } from 'preact-compat';
+/** @jsx h */
+
+import { h, render } from 'preact';
 import cx from 'classnames';
 import RefinementList from '../../components/RefinementList/RefinementList';
 import connectMenu from '../../connectors/menu/connectMenu';
@@ -110,13 +112,13 @@ const renderer = ({
  * @param {MenuWidgetOptions} $0 The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
  * @example
- * search.addWidget(
+ * search.addWidgets([
  *   instantsearch.widgets.menu({
  *     container: '#categories',
  *     attribute: 'hierarchicalCategories.lvl0',
  *     limit: 10,
  *   })
- * );
+ * ]);
  */
 export default function menu({
   container,
@@ -166,7 +168,7 @@ export default function menu({
   });
 
   const makeWidget = connectMenu(specializedRenderer, () =>
-    unmountComponentAtNode(containerNode)
+    render(null, containerNode)
   );
 
   return makeWidget({

@@ -18,39 +18,39 @@ function demoQueryRulesPlayground({
     },
   })(instantsearch.widgets.refinementList);
 
-  search.addWidget(
+  search.addWidgets([
     brandList({
       container: refinementList,
       attribute: 'genre',
-    })
-  );
+    }),
+  ]);
 
   const searchBox = document.createElement('div');
   searchBox.classList.add('searchbox');
   rightPanel.appendChild(searchBox);
 
-  search.addWidget(
+  search.addWidgets([
     instantsearch.widgets.searchBox({
       container: searchBox,
       placeholder: 'Search here…',
-    })
-  );
+    }),
+  ]);
 
   const stats = document.createElement('div');
   stats.classList.add('stats');
   rightPanel.appendChild(stats);
 
-  search.addWidget(
+  search.addWidgets([
     instantsearch.widgets.stats({
       container: stats,
-    })
-  );
+    }),
+  ]);
 
   const hits = document.createElement('div');
   hits.classList.add('hits');
   rightPanel.appendChild(hits);
 
-  search.addWidget(
+  search.addWidgets([
     instantsearch.widgets.hits({
       container: hits,
       templates: {
@@ -64,22 +64,22 @@ function demoQueryRulesPlayground({
     <strong>{{#helpers.highlight}}{ "attribute": "title" }{{/helpers.highlight}}</strong>
   </header>
 </article>
-          `,
+        `,
       },
       cssClasses: {
         item: 'hits-item',
       },
-    })
-  );
+    }),
+  ]);
 
   const pagination = document.createElement('div');
   rightPanel.appendChild(pagination);
 
-  search.addWidget(
+  search.addWidgets([
     instantsearch.widgets.pagination({
       container: pagination,
-    })
-  );
+    }),
+  ]);
 }
 
 export default demoQueryRulesPlayground;

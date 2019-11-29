@@ -1,4 +1,6 @@
-import React, { Component } from 'preact-compat';
+/** @jsx h */
+
+import { h, Component } from 'preact';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { isSpecialClick, isEqual } from '../../lib/utils';
@@ -13,13 +15,13 @@ class RefinementList extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const isStateDifferent = nextState !== this.state;
-    const isFacetValuesDifferent = !isEqual(
+    const isStateDifferent = this.state !== nextState;
+    const areFacetValuesDifferent = !isEqual(
       this.props.facetValues,
       nextProps.facetValues
     );
-    const shouldUpdate = isStateDifferent || isFacetValuesDifferent;
-    return shouldUpdate;
+
+    return isStateDifferent || areFacetValuesDifferent;
   }
 
   refine(facetValueToRefine, isRefined) {
@@ -30,9 +32,11 @@ class RefinementList extends Component {
     let subItems;
     const hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
+      const { root, ...cssClasses } = this.props.cssClasses;
       subItems = (
         <RefinementList
           {...this.props}
+          cssClasses={cssClasses}
           depth={this.props.depth + 1}
           facetValues={facetValue.data}
           showMore={false}

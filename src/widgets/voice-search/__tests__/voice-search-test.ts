@@ -1,15 +1,26 @@
-import { render } from 'preact-compat';
+import { render as preactRender } from 'preact';
+import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {
+  AlgoliaSearchHelper as Helper,
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { Widget } from '../../../types';
 import voiceSearch from '../voice-search';
-import algoliasearch from 'algoliasearch';
-import { Helper, Widget } from '../../../types';
 
-jest.mock('preact-compat', () => {
-  const module = require.requireActual('preact-compat');
+const render = castToJestMock(preactRender);
+
+jest.mock('preact', () => {
+  const module = require.requireActual('preact');
+
   module.render = jest.fn();
+
   return module;
 });
 
@@ -23,39 +34,34 @@ interface DefaultSetupWrapper {
 function defaultSetup(opts = {}): DefaultSetupWrapper {
   const container = document.createElement('div');
   const widget = voiceSearch({ container, ...opts });
+
   const widgetInit = (helper: Helper): void => {
     if (!widget.init) {
       throw new Error('VoiceSearch widget has no init method.');
     }
-    widget.init({
-      helper,
-      instantSearchInstance: {
-        helper: null,
-        widgets: [],
-      },
-      state: helper.state,
-      templatesConfig: {},
-      createURL: () => '',
-    });
+
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
   };
+
   const widgetRender = (helper: Helper): void => {
     if (!widget.render) {
       throw new Error('VoiceSearch widget has no render method.');
     }
-    widget.render({
-      helper,
-      instantSearchInstance: {
-        helper: null,
-        widgets: [],
-      },
-      templatesConfig: {},
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      searchMetadata: {
-        isSearchStalled: false,
-      },
-      createURL: () => '',
-    });
+
+    widget.render(
+      createRenderOptions({
+        helper,
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+      })
+    );
   };
 
   return { container, widget, widgetInit, widgetRender };
@@ -93,8 +99,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       const { widgetInit } = defaultSetup();
       widgetInit(helper);
 
+      const [firstRender] = render.mock.calls;
+
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
+      expect(firstRender[0].props).toMatchSnapshot();
     });
 
     test('renders during render()', () => {
@@ -102,11 +110,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
       widgetInit(helper);
       widgetRender(helper);
 
+      const [firstRender, secondRender] = render.mock.calls;
+
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[0][0]).toMatchSnapshot();
-      expect(render.mock.calls[0][1]).toEqual(container);
-      expect(render.mock.calls[1][0]).toMatchSnapshot();
-      expect(render.mock.calls[1][1]).toEqual(container);
+      expect(firstRender[0].props).toMatchSnapshot();
+      expect(firstRender[1]).toEqual(container);
+      expect(secondRender[0].props).toMatchSnapshot();
+      expect(secondRender[1]).toEqual(container);
     });
 
     test('sets the correct CSS classes', () => {
@@ -114,7 +124,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
 
       widgetInit(helper);
 
-      expect(render.mock.calls[0][0].props.cssClasses).toMatchSnapshot();
+      const [firstRender] = render.mock.calls;
+
+      expect(firstRender[0].props.cssClasses).toMatchSnapshot();
     });
   });
 });

@@ -1,9 +1,10 @@
+import { PlainSearchParameters } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Renderer, RenderOptions, WidgetFactory } from '../../types';
+import { Renderer, RendererOptions, WidgetFactory } from '../../types';
 import createVoiceSearchHelper, {
   VoiceListeningState,
   ToggleListening,
@@ -15,11 +16,15 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type VoiceSearchConnectorParams = {
-  searchAsYouSpeak?: boolean;
+  searchAsYouSpeak: boolean;
+  language?: string;
+  additionalQueryParameters?: (params: {
+    query: string;
+  }) => PlainSearchParameters | void;
 };
 
-export interface VoiceSearchRenderOptions<TVoiceSearchWidgetParams>
-  extends RenderOptions<TVoiceSearchWidgetParams> {
+export interface VoiceSearchRendererOptions<TVoiceSearchWidgetParams>
+  extends RendererOptions<TVoiceSearchWidgetParams> {
   isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: ToggleListening;
@@ -27,7 +32,7 @@ export interface VoiceSearchRenderOptions<TVoiceSearchWidgetParams>
 }
 
 export type VoiceSearchRenderer<TVoiceSearchWidgetParams> = Renderer<
-  VoiceSearchRenderOptions<
+  VoiceSearchRendererOptions<
     VoiceSearchConnectorParams & TVoiceSearchWidgetParams
   >
 >;
@@ -71,28 +76,42 @@ const connectVoiceSearch: VoiceSearchConnector = (
       );
     };
 
-    const { searchAsYouSpeak = false } = widgetParams;
+    const {
+      searchAsYouSpeak = false,
+      language,
+      additionalQueryParameters,
+    } = widgetParams;
 
     return {
+      $$type: 'ais.voiceSearch',
+
       init({ helper, instantSearchInstance }) {
-        (this as any)._refine = (() => {
-          let previousQuery: string | undefined;
-          const setQueryAndSearch = (query: string): void => {
-            if (query !== helper.state.query) {
-              previousQuery = helper.state.query;
-              helper.setQuery(query);
+        (this as any)._refine = (query: string): void => {
+          if (query !== helper.state.query) {
+            const queryLanguages = language
+              ? [language.split('-')[0]]
+              : undefined;
+            helper.setQueryParameter('queryLanguages', queryLanguages);
+
+            if (typeof additionalQueryParameters === 'function') {
+              helper.setState(
+                helper.state.setQueryParameters({
+                  ignorePlurals: true,
+                  removeStopWords: true,
+                  // @ts-ignore (optionalWords only allows array, while string is also valid)
+                  optionalWords: query,
+                  ...additionalQueryParameters({ query }),
+                })
+              );
             }
-            if (
-              typeof previousQuery !== 'undefined' &&
-              previousQuery !== query
-            ) {
-              helper.search();
-            }
-          };
-          return setQueryAndSearch;
-        })();
+
+            helper.setQuery(query).search();
+          }
+        };
+
         (this as any)._voiceSearchHelper = createVoiceSearchHelper({
           searchAsYouSpeak,
+          language,
           onQueryChange: query => (this as any)._refine(query),
           onStateChange: () => {
             render({
@@ -102,12 +121,14 @@ const connectVoiceSearch: VoiceSearchConnector = (
             });
           },
         });
+
         render({
           isFirstRendering: true,
           instantSearchInstance,
           voiceSearchHelper: (this as any)._voiceSearchHelper,
         });
       },
+
       render({ instantSearchInstance }) {
         render({
           isFirstRendering: false,
@@ -115,15 +136,38 @@ const connectVoiceSearch: VoiceSearchConnector = (
           voiceSearchHelper: (this as any)._voiceSearchHelper,
         });
       },
+
       dispose({ state }) {
         (this as any)._voiceSearchHelper.dispose();
-        unmountFn();
-        return state.setQuery('');
-      },
-      getWidgetState(uiState, { searchParameters }) {
-        const query = searchParameters.query;
 
-        if (query === '' || (uiState && uiState.query === query)) {
+        unmountFn();
+
+        let newState = state;
+        if (typeof additionalQueryParameters === 'function') {
+          const additional = additionalQueryParameters({ query: '' });
+          const toReset = additional
+            ? Object.keys(additional).reduce((acc, current) => {
+                acc[current] = undefined;
+                return acc;
+              }, {})
+            : {};
+          newState = state.setQueryParameters({
+            // @ts-ignore (queryLanguages is not yet added to algoliasearch)
+            queryLanguages: undefined,
+            ignorePlurals: undefined,
+            removeStopWords: undefined,
+            optionalWords: undefined,
+            ...toReset,
+          });
+        }
+
+        return newState.setQueryParameter('query', undefined);
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const query = searchParameters.query || '';
+
+        if (!query) {
           return uiState;
         }
 
@@ -132,8 +176,9 @@ const connectVoiceSearch: VoiceSearchConnector = (
           query,
         };
       },
+
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
+        return searchParameters.setQueryParameter('query', uiState.query || '');
       },
     };
   };

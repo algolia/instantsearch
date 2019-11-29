@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/instantsearchjs
   docker:
-    - image: circleci/node:8.16.1@sha256:b8afd692a39511825ad59010cb5f472a5eeac9d4cbea7a9bcac4a2cd77dbf2a2
+    - image: circleci/node:8.16.2@sha256:24f612728159e792fe418b7b6f0fb100be4a5b992ca6ac94d10639d9aa571b33
 
 version: 2
 jobs:
@@ -68,6 +68,20 @@ jobs:
           name: Unit tests
           command: yarn run test --maxWorkers=4
 
+  test_e2e:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: End-2-End tests
+          command: |
+            yarn run website:build
+            yarn run test:e2e:saucelabs
+
 workflows:
   version: 2
   ci:
@@ -75,3 +89,4 @@ workflows:
       - test_build
       - test_unit
       - test_lint
+      - test_e2e
