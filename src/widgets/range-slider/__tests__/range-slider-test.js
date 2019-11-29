@@ -22,6 +22,17 @@ describe('rangeSlider', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slider/js/"
 `);
     });
+
+    it('is a widget', () => {
+      const container = document.createElement('div');
+      const widget = rangeSlider({ container, attribute: 'price' });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.rangeSlider',
+        })
+      );
+    });
   });
 
   describe('Lifecycle', () => {
