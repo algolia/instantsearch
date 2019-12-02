@@ -10,4 +10,4 @@ export type Middleware = ({
   instantSearchInstance: InstantSearch,
 }) => MiddlewareDefinition;
 
-export { createRouter } from './createRouter';
+export { createRouter, RouterProps } from './createRouter';

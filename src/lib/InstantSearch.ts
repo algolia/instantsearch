@@ -15,11 +15,14 @@ import {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
-  StateMapping,
-  Router,
   UiState,
 } from '../types';
-import { Middleware, MiddlewareDefinition, createRouter } from '../middleware';
+import {
+  Middleware,
+  MiddlewareDefinition,
+  createRouter,
+  RouterProps,
+} from '../middleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -28,11 +31,6 @@ const withUsage = createDocumentationMessageGenerator({
 function defaultCreateURL() {
   return '#';
 }
-
-export type Routing<TRouteState = UiState> = {
-  router: Router<TRouteState>;
-  stateMapping: StateMapping<TRouteState>;
-};
 
 /**
  * Global options for an InstantSearch instance.
@@ -102,7 +100,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
    * Router configuration used to save the UI State into the URL or any other
    * client side persistence. Passing `true` will use the default URL options.
    */
-  routing?: Partial<Routing<TRouteState>> | boolean;
+  routing?: RouterProps<TRouteState> | boolean;
 
   /**
    * the instance of search-insights to use for sending insights events inside

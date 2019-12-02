@@ -16,9 +16,9 @@ const walk = (current: Index, callback: (index: Index) => void) => {
     });
 };
 
-interface RouterProps {
-  router?: Router;
-  stateMapping?: StateMapping;
+export interface RouterProps<TRouteState = UiState> {
+  router?: Router<TRouteState>;
+  stateMapping?: StateMapping<TRouteState>;
 }
 
 export type RoutingManager = (props?: RouterProps) => Middleware;
