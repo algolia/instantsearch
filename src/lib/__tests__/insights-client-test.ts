@@ -261,8 +261,9 @@ describe('withInsights', () => {
           eventName: 'Add to basket',
         });
       }).toThrowErrorMatchingInlineSnapshot(`
-"Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with Configure widget.
-https://alg.li/lNiZZ7"
+"Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with the Configure widget.
+
+See: https://alg.li/lNiZZ7"
 `);
     });
 
