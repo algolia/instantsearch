@@ -260,9 +260,10 @@ describe('withInsights', () => {
           objectIDs: ['1', '2'],
           eventName: 'Add to basket',
         });
-      }).toThrowErrorMatchingInlineSnapshot(
-        `"Could not infer \`queryID\`. Ensure InstantSearch is configured with \`clickAnalytics: true\`"`
-      );
+      }).toThrowErrorMatchingInlineSnapshot(`
+"Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with Configure widget.
+https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/#connect-instantsearch-with-the-insights-client-for-javascript"
+`);
     });
 
     it('should reject unknown method name', () => {
