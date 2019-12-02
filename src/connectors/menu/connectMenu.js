@@ -118,7 +118,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
     const {
       toggleShowMore,
       setToggleShowMore,
-      isShowingMore,
+      getIsShowingMore,
       getCurrentLimit,
     } = createShowMore({
       limit,
@@ -153,7 +153,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             instantSearchInstance,
             canRefine: false,
             widgetParams,
-            isShowingMore: isShowingMore(),
+            isShowingMore: getIsShowingMore(),
             toggleShowMore,
             canToggleShowMore: false,
           },
@@ -167,6 +167,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
         );
 
         const currentLimit = getCurrentLimit();
+        const isShowingMore = getIsShowingMore();
         const facetValues = results.getFacetValues(attribute, { sortBy });
         const facetItems =
           facetValues && facetValues.data ? facetValues.data : [];
@@ -189,10 +190,10 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             instantSearchInstance,
             canRefine: items.length > 0,
             widgetParams,
-            isShowingMore: isShowingMore(),
+            isShowingMore,
             toggleShowMore,
             canToggleShowMore:
-              showMore && (isShowingMore() || facetItems.length > currentLimit),
+              showMore && (isShowingMore || facetItems.length > currentLimit),
           },
           false
         );

@@ -162,7 +162,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     const {
       toggleShowMore,
       setToggleShowMore,
-      isShowingMore,
+      getIsShowingMore,
       getCurrentLimit,
     } = createShowMore({
       limit,
@@ -183,6 +183,8 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       const _createURL = facetValue =>
         createURL(state.toggleRefinement(attribute, facetValue));
 
+      const isShowingMore = getIsShowingMore();
+
       // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
       // function
       const searchFacetValues =
@@ -193,11 +195,11 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           helperSpecializedSearchFacetValues,
           refine,
           instantSearchInstance,
-          isShowingMore()
+          isShowingMore
         );
 
       const canShowLess =
-        isShowingMore() && lastResultsFromMainSearch.length > limit;
+        isShowingMore && lastResultsFromMainSearch.length > limit;
       const canShowMore = showMore && !isFromSearch && !hasExhaustiveItems;
 
       const canToggleShowMore = canShowLess || canShowMore;
@@ -212,7 +214,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           isFromSearch,
           canRefine: isFromSearch || items.length > 0,
           widgetParams,
-          isShowingMore: isShowingMore(),
+          isShowingMore,
           canToggleShowMore,
           toggleShowMore,
           hasExhaustiveItems,

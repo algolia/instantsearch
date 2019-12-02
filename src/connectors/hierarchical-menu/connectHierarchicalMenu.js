@@ -96,7 +96,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     const {
       toggleShowMore,
       setToggleShowMore,
-      isShowingMore,
+      getIsShowingMore,
       getCurrentLimit,
     } = createShowMore({
       limit,
@@ -125,7 +125,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             refine: this._refine,
             instantSearchInstance,
             widgetParams,
-            isShowingMore: isShowingMore(),
+            isShowingMore: getIsShowingMore(),
             toggleShowMore,
             canToggleShowMore: false,
           },
@@ -144,6 +144,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         } = renderOptions;
 
         const currentLimit = getCurrentLimit();
+        const isShowingMore = getIsShowingMore();
         const facetValues =
           results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [];
         const items = transformItems(
@@ -176,10 +177,10 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             createURL: _createURL,
             instantSearchInstance,
             widgetParams,
-            isShowingMore: isShowingMore(),
+            isShowingMore,
             toggleShowMore,
             canToggleShowMore:
-              showMore && (isShowingMore() || !hasExhaustiveItems),
+              showMore && (isShowingMore || !hasExhaustiveItems),
           },
           false
         );

@@ -5,14 +5,14 @@ describe('createShowMore', () => {
     const {
       toggleShowMore,
       setToggleShowMore,
-      isShowingMore,
+      getIsShowingMore,
     } = createShowMore();
 
-    expect(isShowingMore).toBeInstanceOf(Function);
+    expect(getIsShowingMore).toBeInstanceOf(Function);
     expect(toggleShowMore).toBeInstanceOf(Function);
     expect(setToggleShowMore).toBeInstanceOf(Function);
 
-    expect(isShowingMore()).toEqual(false);
+    expect(getIsShowingMore()).toEqual(false);
 
     const onToggleSpy = jest.fn();
     const unsubscribeOnShowMore = setToggleShowMore(onToggleSpy);
@@ -22,7 +22,7 @@ describe('createShowMore', () => {
 
     toggleShowMore();
 
-    expect(isShowingMore()).toEqual(true);
+    expect(getIsShowingMore()).toEqual(true);
     // The `onToggle` spy is called without arguments
     expect(onToggleSpy).toHaveBeenCalledTimes(1);
     expect(onToggleSpy).toHaveBeenLastCalledWith();
@@ -30,7 +30,7 @@ describe('createShowMore', () => {
     unsubscribeOnShowMore();
     toggleShowMore();
 
-    expect(isShowingMore()).toEqual(false);
+    expect(getIsShowingMore()).toEqual(false);
     // The listener is unset, so it shouldn't be called anymore
     expect(onToggleSpy).toHaveBeenCalledTimes(1);
   });

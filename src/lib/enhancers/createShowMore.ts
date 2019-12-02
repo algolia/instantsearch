@@ -17,7 +17,7 @@ interface ShowMore {
   /**
    * Returns whether the widget is currently showing more values.
    */
-  isShowingMore(): boolean;
+  getIsShowingMore(): boolean;
   /**
    * Returns the current facets limit (`limit` or `showMoreLimit`)
    */
@@ -63,7 +63,7 @@ export const createShowMore: CreateShowMore = initialState => {
   return {
     toggleShowMore: enhancerState.toggleShowMore,
     setToggleShowMore,
-    isShowingMore: enhancerState.isShowingMore,
+    getIsShowingMore: enhancerState.isShowingMore,
     getCurrentLimit: enhancerState.getLimit,
   };
 };
