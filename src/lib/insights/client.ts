@@ -33,9 +33,9 @@ const getQueryID = (selectedHits: Hits): string => {
   }
   const queryID = queryIDs[0];
   if (typeof queryID !== 'string') {
-    const docsUrl = `https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/#connect-instantsearch-with-the-insights-client-for-javascript`;
     throw new Error(
-      `Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with Configure widget.\n${docsUrl}`
+      `Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with Configure widget.
+https://alg.li/lNiZZ7`
     );
   }
   return queryID;
