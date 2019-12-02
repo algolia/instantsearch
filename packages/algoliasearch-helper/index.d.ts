@@ -948,6 +948,12 @@ declare namespace algoliasearchHelper {
      */
     facetFilters?: string[] | string[][];
     /**
+     * Create filters for ranking purposes, where records that match the filter are ranked highest
+     * default: []
+     * https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
+     */
+    optionalFilters?: Array<string | string[]>;
+    /**
      * If set to false, this query will not be taken into account in the analytics feature.
      * default true
      * https://www.algolia.com/doc/api-reference/api-parameters/analytics/
