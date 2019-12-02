@@ -223,11 +223,17 @@ See ${createDocumentationLink({
 
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.use(createRouter(routerOptions));
+      this.EXPERIMENTAL_use(createRouter(routerOptions));
     }
   }
 
-  public use(...middleware: Middleware[]): this {
+  /**
+   * Hooks a middleware into the InstantSearch lifecycle.
+   *
+   * This method is considered as experimental and is subject to change in
+   * minor versions.
+   */
+  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = fn({ instantSearchInstance: this });
       this.middleware.push(newMiddleware);

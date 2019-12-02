@@ -1310,7 +1310,7 @@ describe('use', () => {
     const middleware = jest.fn(() => middlewareSpy);
 
     search.addWidgets([searchBox({})]);
-    search.use(middleware);
+    search.EXPERIMENTAL_use(middleware);
 
     expect(middleware).toHaveBeenCalledTimes(1);
     expect(middleware).toHaveBeenCalledWith({ instantSearchInstance: search });
@@ -1373,7 +1373,7 @@ describe('use', () => {
     const middlewareAfterStart = jest.fn(() => middlewareAfterStartSpy);
 
     search.addWidgets([searchBox({})]);
-    search.use(middlewareBeforeStart);
+    search.EXPERIMENTAL_use(middlewareBeforeStart);
     search.start();
 
     expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
@@ -1381,7 +1381,7 @@ describe('use', () => {
       instantSearchInstance: search,
     });
 
-    search.use(middlewareAfterStart);
+    search.EXPERIMENTAL_use(middlewareAfterStart);
 
     // The first middleware should still have been only called once
     expect(middlewareBeforeStart).toHaveBeenCalledTimes(1);
