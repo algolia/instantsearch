@@ -164,9 +164,11 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       setToggleShowMore,
       getIsShowingMore,
       getCurrentLimit,
+      getMaxValuesPerFacet,
     } = createShowMore({
       limit,
       showMoreLimit,
+      showMore,
     });
 
     const render = ({
@@ -394,7 +396,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
 
         const nextMaxValuesPerFacet = Math.max(
           currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
+          getMaxValuesPerFacet()
         );
 
         const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(

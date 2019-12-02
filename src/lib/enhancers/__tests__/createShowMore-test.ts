@@ -51,4 +51,24 @@ describe('createShowMore', () => {
 
     expect(getCurrentLimit()).toEqual(10);
   });
+
+  test('returns the `limit` as `getMaxValuesPerFacet()` when show more is not activated', () => {
+    const { getMaxValuesPerFacet } = createShowMore({
+      limit: 10,
+      showMoreLimit: 20,
+      showMore: false,
+    });
+
+    expect(getMaxValuesPerFacet()).toEqual(10);
+  });
+
+  test('returns the `showMoreLimit` as `getMaxValuesPerFacet()` when show more is not activated', () => {
+    const { getMaxValuesPerFacet } = createShowMore({
+      limit: 10,
+      showMoreLimit: 20,
+      showMore: true,
+    });
+
+    expect(getMaxValuesPerFacet()).toEqual(20);
+  });
 });

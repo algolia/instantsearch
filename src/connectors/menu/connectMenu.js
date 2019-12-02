@@ -120,9 +120,11 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       setToggleShowMore,
       getIsShowingMore,
       getCurrentLimit,
+      getMaxValuesPerFacet,
     } = createShowMore({
       limit,
       showMoreLimit,
+      showMore,
     });
 
     return {
@@ -240,7 +242,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
 
         const nextMaxValuesPerFacet = Math.max(
           currentMaxValuesPerFacet,
-          showMore ? showMoreLimit : limit
+          getMaxValuesPerFacet()
         );
 
         const withMaxValuesPerFacet = withFacetConfiguration.setQueryParameter(

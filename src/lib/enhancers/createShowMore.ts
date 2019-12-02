@@ -2,6 +2,7 @@ interface ShowMoreState {
   isShowingMore: boolean;
   limit: number | null;
   showMoreLimit: number | null;
+  showMore: boolean;
 }
 
 interface ShowMore {
@@ -22,6 +23,10 @@ interface ShowMore {
    * Returns the current facets limit (`limit` or `showMoreLimit`)
    */
   getCurrentLimit(): number | null;
+  /**
+   * Returns the number of facets to retrieve from the API.
+   */
+  getMaxValuesPerFacet(): number | null;
 }
 
 type CreateShowMore = (initialState?: Partial<ShowMoreState>) => ShowMore;
@@ -34,6 +39,7 @@ export const createShowMore: CreateShowMore = initialState => {
     isShowingMore: false,
     limit: null,
     showMoreLimit: null,
+    showMore: false,
     ...initialState,
   };
 
@@ -57,13 +63,17 @@ export const createShowMore: CreateShowMore = initialState => {
   const enhancerState = {
     toggleShowMore: () => toggleShowMore(),
     isShowingMore: () => state.isShowingMore,
-    getLimit: () => (state.isShowingMore ? state.showMoreLimit : state.limit),
+    getCurrentLimit: () =>
+      state.isShowingMore ? state.showMoreLimit : state.limit,
+    getMaxValuesPerFacet: () =>
+      state.showMore ? state.showMoreLimit : state.limit,
   };
 
   return {
     toggleShowMore: enhancerState.toggleShowMore,
     setToggleShowMore,
     getIsShowingMore: enhancerState.isShowingMore,
-    getCurrentLimit: enhancerState.getLimit,
+    getCurrentLimit: enhancerState.getCurrentLimit,
+    getMaxValuesPerFacet: enhancerState.getMaxValuesPerFacet,
   };
 };
