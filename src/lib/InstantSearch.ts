@@ -17,12 +17,8 @@ import {
   Widget,
   UiState,
 } from '../types';
-import {
-  Middleware,
-  MiddlewareDefinition,
-  createRouter,
-  RouterProps,
-} from '../middleware';
+import { Middleware, MiddlewareDefinition } from '../middleware';
+import { createRouter, RouterProps } from '../middleware/createRouter';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
