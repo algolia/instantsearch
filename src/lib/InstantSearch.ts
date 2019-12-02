@@ -188,7 +188,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     warning(
       Boolean(insightsClient) || !hasDetectedInsightsClient(),
       `InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to insights client, make sure you provide it to your InstantSearch instance:
+To connect InstantSearch to the Insights client, make sure to specify the `insightsClient` option:
 
 const search = instantsearch({
   /* ... */
