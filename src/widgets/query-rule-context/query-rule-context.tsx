@@ -23,10 +23,14 @@ const queryRuleContext: QueryRuleContext = (
     throw new Error(withUsage('The `trackedFilters` option is required.'));
   }
 
-  return connectQueryRules(noop)({
-    trackedFilters,
-    transformRuleContexts,
-  });
+  return {
+    ...connectQueryRules(noop)({
+      trackedFilters,
+      transformRuleContexts,
+    }),
+
+    $$type: 'ais.queryRuleContext',
+  };
 };
 
 export default queryRuleContext;

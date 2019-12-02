@@ -84,12 +84,16 @@ const queryRuleCustomData: QueryRuleCustomData = (
     render(null, containerNode);
   });
 
-  return makeQueryRuleCustomData({
-    container: containerNode,
-    cssClasses,
-    templates,
-    transformItems,
-  });
+  return {
+    ...makeQueryRuleCustomData({
+      container: containerNode,
+      cssClasses,
+      templates,
+      transformItems,
+    }),
+
+    $$type: 'ais.queryRuleCustomData',
+  };
 };
 
 export default queryRuleCustomData;
