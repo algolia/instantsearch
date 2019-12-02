@@ -21,7 +21,9 @@ export interface RouterProps<TRouteState = UiState> {
   stateMapping?: StateMapping<TRouteState>;
 }
 
-export type RoutingManager = (props?: RouterProps) => Middleware;
+export type RoutingManager<TRouteState = UiState> = (
+  props?: RouterProps<TRouteState>
+) => Middleware;
 
 export const createRouter: RoutingManager = (props = {}) => {
   const {
@@ -31,7 +33,7 @@ export const createRouter: RoutingManager = (props = {}) => {
 
   return ({ instantSearchInstance }) => {
     function topLevelCreateURL(nextState: UiState) {
-      const uiState = Object.keys(nextState).reduce(
+      const uiState: UiState = Object.keys(nextState).reduce(
         (acc, indexId) => ({
           ...acc,
           [indexId]: nextState[indexId],
