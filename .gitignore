@@ -1,5 +1,6 @@
 node_modules/
 !scripts/docs/
+.eslintcache
 npm-debug.log
 yarn-error.log
 .DS_Store
