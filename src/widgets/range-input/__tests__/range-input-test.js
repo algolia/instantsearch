@@ -40,6 +40,17 @@ describe('rangeInput', () => {
 See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/"
 `);
     });
+
+    it('is a widget', () => {
+      const container = document.createElement('div');
+      const widget = rangeInput({ container, attribute: 'price' });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.rangeInput',
+        })
+      );
+    });
   });
 
   describe('Lifecycle', () => {

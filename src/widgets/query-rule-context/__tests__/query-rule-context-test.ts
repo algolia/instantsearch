@@ -23,5 +23,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-context/js/"
 `);
     });
+
+    it('is a widget', () => {
+      const widget = queryRuleContext({ trackedFilters: {} });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.queryRuleContext',
+        })
+      );
+    });
   });
 });
