@@ -104,8 +104,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         searchClient: createSearchClient(),
       });
     })
-      .toWarnDev(`[InstantSearch.js]: InstantSearch detected the insights client in the global scope. 
-To connect InstantSearch to insights client, make sure you provide it to your InstantSearch instance:
+      .toWarnDev(`[InstantSearch.js]: InstantSearch detected the Insights client in the global scope.
+To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
 
 const search = instantsearch({
   /* ... */
