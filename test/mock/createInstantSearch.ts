@@ -30,6 +30,7 @@ export const createInstantSearch = (
     helper: mainHelper, // @TODO: use the Helper from the index once the RoutingManger uses the index
     templatesConfig: {},
     insightsClient: null,
+    middleware: [],
     scheduleStalledRender: defer(jest.fn()),
     scheduleSearch: defer(jest.fn()),
     scheduleRender: defer(jest.fn()),
@@ -44,6 +45,7 @@ export const createInstantSearch = (
     addWidgets: jest.fn(),
     removeWidget: jest.fn(),
     removeWidgets: jest.fn(),
+    EXPERIMENTAL_use: jest.fn(),
     // methods from EventEmitter
     addListener: jest.fn(),
     removeListener: jest.fn(),
