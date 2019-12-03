@@ -110,7 +110,9 @@ To connect InstantSearch to insights client, make sure you provide it to your In
 const search = instantsearch({
   /* ... */
   insightsClient: window.aa,
-});`);
+});
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/`);
 
     delete global.AlgoliaAnalyticsObject;
     delete global[AlgoliaAnalyticsObject];
