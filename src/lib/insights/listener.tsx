@@ -9,7 +9,7 @@ type WithInsightsListenerProps = {
   insights: InsightsClientWrapper;
 };
 
-const findRealTarget = (
+const findInsightsTarget = (
   startElement: HTMLElement | null,
   endElement: HTMLElement | null
 ): HTMLElement | null => {
@@ -31,14 +31,14 @@ const insightsListener = (BaseComponent: any) => {
           'The `insightsClient` option has not been provided to `instantsearch`.'
         );
       }
-      const realTarget = findRealTarget(
+      const insightsTarget = findInsightsTarget(
         event.target as HTMLElement | null,
         event.currentTarget as HTMLElement | null
       );
 
-      if (!realTarget) return;
+      if (!insightsTarget) return;
 
-      const { method, payload } = readDataAttributes(realTarget);
+      const { method, payload } = readDataAttributes(insightsTarget);
 
       props.insights(method, payload);
     };
