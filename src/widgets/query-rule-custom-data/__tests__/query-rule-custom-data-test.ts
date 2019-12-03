@@ -54,6 +54,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-custom-data/js/"
 `);
     });
+
+    it('is a widget', () => {
+      const container = document.createElement('div');
+      const widget = queryRuleCustomData({ container });
+
+      expect(widget).toEqual(
+        expect.objectContaining({
+          $$type: 'ais.queryRuleCustomData',
+        })
+      );
+    });
   });
 
   describe('Options', () => {
