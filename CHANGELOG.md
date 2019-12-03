@@ -1,3 +1,20 @@
+## [4.0.1](https://github.com/algolia/instantsearch.js/compare/v4.0.0...v4.0.1) (2019-11-28)
+
+
+### Bug Fixes
+
+* widget name in documentation link for index ([#4172](https://github.com/algolia/instantsearch.js/issues/4172)) ([fe7e588](https://github.com/algolia/instantsearch.js/commit/fe7e588d252ad6bd7de2f49d52ca022099f3e959))
+* **helper:** rely on stable version of algoliasearch-helper ([#4200](https://github.com/algolia/instantsearch.js/issues/4200)) ([ff11731](https://github.com/algolia/instantsearch.js/commit/ff117314d786c4509edabcb1ddbac73f55930511))
+* **infiniteHits:** correct widget options types ([#4222](https://github.com/algolia/instantsearch.js/issues/4222)) ([bb1b327](https://github.com/algolia/instantsearch.js/commit/bb1b327e26b5faad3358a00d174dc48fd4b73356))
+* **queryHook:** restore behaviour of queryHook ([#4202](https://github.com/algolia/instantsearch.js/issues/4202)) ([7bf96cb](https://github.com/algolia/instantsearch.js/commit/7bf96cb6eafd5349cdf2f32114d5e6ef5dde1328)), closes [/github.com/algolia/instantsearch.js/commit/c073a9acb51fff3c15278fcd563e47fec55c8365#diff-530222e0c4597f2110dc6ba173a306b0L98](https://github.com//github.com/algolia/instantsearch.js/commit/c073a9acb51fff3c15278fcd563e47fec55c8365/issues/diff-530222e0c4597f2110dc6ba173a306b0L98)
+
+
+### Features
+
+* **transformers:** add tests ([#4153](https://github.com/algolia/instantsearch.js/issues/4153)) ([5a28415](https://github.com/algolia/instantsearch.js/commit/5a28415c39bf5a3a65c61d8f0d444ea6f4e0e17a))
+
+
+
 # [4.0.0](https://github.com/algolia/instantsearch.js/compare/v3.7.0...v4.0.0) (2019-10-23)
 
 This release is focused on two main features: Federated search, and bundle size reduction.

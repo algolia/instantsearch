@@ -4,6 +4,7 @@ module.exports = {
   rules: {
     'no-param-reassign': 0,
     'import/no-extraneous-dependencies': 0,
+    'new-cap': ['error', { capIsNewExceptions: ['EXPERIMENTAL_use'] }],
     'react/no-string-refs': 1,
     // Avoid errors about `UNSAFE` lifecycles (e.g. `UNSAFE_componentWillMount`)
     'react/no-deprecated': 0,
@@ -15,7 +16,7 @@ module.exports = {
     ],
     '@typescript-eslint/camelcase': [
       'error',
-      { allow: ['instant_search', 'instant_search_movies'] },
+      { allow: ['instant_search', 'instant_search_movies', '^EXPERIMENTAL_'] },
     ],
   },
   overrides: [

@@ -146,5 +146,9 @@ export default function rangeSlider({
     render(null, containerNode)
   );
 
-  return makeWidget({ attribute, min, max, precision });
+  return {
+    ...makeWidget({ attribute, min, max, precision }),
+
+    $$type: 'ais.rangeSlider',
+  };
 }
