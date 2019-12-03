@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Panel collapsible should render component with \`collapsible\` and \`collapsed\` props 1`] = `
+<div>
+  <div
+    class="root collapsibleRoot collapsedRoot"
+  >
+    <div
+      class="header"
+    >
+      <span>
+        Header
+      </span>
+      <button
+        class="collapseButton"
+      >
+        <span>
+          More
+        </span>
+      </button>
+    </div>
+    <div
+      class="body"
+    >
+      <div />
+    </div>
+    <div
+      class="footer"
+    >
+      Footer
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Panel collapsible should render component with \`collapsible\` prop 1`] = `
+<div>
+  <div
+    class="root collapsibleRoot"
+  >
+    <div
+      class="header"
+    >
+      <span>
+        Header
+      </span>
+      <button
+        aria-expanded="true"
+        class="collapseButton"
+      >
+        <span>
+          Less
+        </span>
+      </button>
+    </div>
+    <div
+      class="body"
+    >
+      <div />
+    </div>
+    <div
+      class="footer"
+    >
+      Footer
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Panel default should render component with default props 1`] = `
+<div>
+  <div
+    class="root"
+  >
+    
+    <div
+      class="body"
+    >
+      <div />
+    </div>
+    
+  </div>
+</div>
+`;
+
+exports[`Panel hidden should hide component with \`hidden\` prop 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+    hidden=""
+  >
+    <div
+      class="header"
+    >
+      <span>
+        Header
+      </span>
+    </div>
+    <div
+      class="body"
+    >
+      <div />
+    </div>
+    <div
+      class="footer"
+    >
+      Footer
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Panel templates should render component with custom templates 1`] = `
+<div>
+  <div
+    class="root"
+  >
+    <div
+      class="header"
+    >
+      <span>
+        Header
+      </span>
+    </div>
+    <div
+      class="body"
+    >
+      <div />
+    </div>
+    <div
+      class="footer"
+    >
+      Footer
+    </div>
+  </div>
+</div>
+`;

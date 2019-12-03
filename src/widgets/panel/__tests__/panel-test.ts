@@ -1,5 +1,12 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import panel from '../panel';
+import {
+  createInitOptions,
+  createRenderOptions,
+  createDisposeOptions,
+} from '../../../../test/mock/createWidget';
+import algoliasearchHelper from 'algoliasearch-helper';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -8,6 +15,8 @@ jest.mock('preact', () => {
 
   return module;
 });
+
+const render = castToJestMock(preactRender);
 
 beforeEach(() => {
   render.mockClear();
@@ -46,6 +55,7 @@ describe('Usage', () => {
 
   test('with `hidden` as boolean warns', () => {
     expect(() => {
+      // @ts-ignore wrong option type
       panel({
         hidden: true,
       });
@@ -56,6 +66,7 @@ describe('Usage', () => {
 
   test('with `collapsed` as boolean warns', () => {
     expect(() => {
+      // @ts-ignore wrong option type
       panel({
         collapsed: true,
       });
@@ -65,10 +76,11 @@ describe('Usage', () => {
   });
 
   test('with a widget without `container` throws', () => {
-    const fakeWidget = () => {};
+    const fakeWidget = () => ({});
     const fakeWithPanel = panel()(fakeWidget);
 
     expect(() => {
+      // @ts-ignore missing option
       fakeWithPanel({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required in the widget within the panel.
@@ -97,7 +109,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props.templateProps;
+    const { templates } = render.mock.calls[0][0].props;
 
     expect(templates).toEqual({
       header: '',
@@ -117,7 +129,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props.templateProps;
+    const { templates } = render.mock.calls[0][0].props;
 
     expect(templates.header).toBe('Custom header');
   });
@@ -133,7 +145,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props.templateProps;
+    const { templates } = render.mock.calls[0][0].props;
 
     expect(templates.footer).toBe('Custom footer');
   });
@@ -149,7 +161,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    const { templates } = render.mock.calls[0][0].props.templateProps;
+    const { templates } = render.mock.calls[0][0].props;
 
     expect(templates.collapseButtonText).toBe('Custom collapseButtonText');
   });
@@ -172,9 +184,9 @@ describe('Lifecycle', () => {
       container: document.createElement('div'),
     });
 
-    widgetWithPanel.init({});
-    widgetWithPanel.render({});
-    widgetWithPanel.dispose({});
+    widgetWithPanel.init!(createInitOptions());
+    widgetWithPanel.render!(createRenderOptions());
+    widgetWithPanel.dispose!(createRenderOptions());
 
     expect(widget.init).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenCalledTimes(1);
@@ -182,8 +194,12 @@ describe('Lifecycle', () => {
   });
 
   test('returns the `state` from the widget dispose function', () => {
+    const nextSearchParameters = new algoliasearchHelper.SearchParameters({
+      facets: ['brands'],
+    });
     const widget = {
-      dispose: jest.fn(() => 'nextState'),
+      init: jest.fn(),
+      dispose: jest.fn(() => nextSearchParameters),
     };
     const widgetFactory = () => widget;
 
@@ -191,8 +207,8 @@ describe('Lifecycle', () => {
       container: document.createElement('div'),
     });
 
-    const nextState = widgetWithPanel.dispose({});
+    const nextState = widgetWithPanel.dispose!(createDisposeOptions());
 
-    expect(nextState).toBe('nextState');
+    expect(nextState).toEqual(nextSearchParameters);
   });
 });

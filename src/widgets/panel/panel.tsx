@@ -3,14 +3,75 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import {
-  getContainerNode,
-  prepareTemplateProps,
-  warning,
   createDocumentationMessageGenerator,
+  getContainerNode,
   getObjectType,
+  warning,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
+import { WidgetFactory, Template, RenderOptions, Widget } from '../../types';
+
+export interface PanelCSSClasses {
+  /**
+   * CSS classes to add to the root element of the widget.
+   */
+  root: string | string[];
+  /**
+   * CSS classes to add to the root element of the widget when there's no refinements.
+   */
+  noRefinementRoot: string | string[];
+  /**
+   * CSS classes to add to the root element when collapsible (`collapse` is defined).
+   */
+  collapsibleRoot: string | string[];
+  /**
+   * CSS classes to add to the root element when collapsed.
+   */
+  collapsedRoot: string | string[];
+  /**
+   * CSS classes to add to the collapse button element.
+   */
+  collapseButton: string | string[];
+  /**
+   * CSS classes to add to the collapse icon of the button.
+   */
+  collapseIcon: string | string[];
+  /**
+   * CSS classes to add to the header.
+   */
+  header: string | string[];
+  /**
+   * CSS classes to add to the body.
+   */
+  body: string | string[];
+  /**
+   * CSS classes to add to the footer.
+   */
+  footer: string | string[];
+}
+
+export interface PanelTemplates {
+  /**
+   * Template to use for the header.
+   */
+  header: Template<RenderOptions>;
+  /**
+   * Template to use for the footer.
+   */
+  footer: Template<RenderOptions>;
+  /**
+   * Template to use for collapse button.
+   */
+  collapseButtonText: Template<{ collapsed: boolean }>;
+}
+
+interface PanelWidgetParams {
+  hidden?(options: RenderOptions): boolean;
+  collapsed?(options: RenderOptions): boolean;
+  templates?: Partial<PanelTemplates>;
+  cssClasses?: Partial<PanelCSSClasses>;
+}
 
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');
@@ -19,15 +80,15 @@ const renderer = ({
   containerNode,
   bodyContainerNode,
   cssClasses,
-  templateProps,
+  templates,
 }) => ({ options, hidden, collapsible, collapsed }) => {
   render(
     <Panel
       cssClasses={cssClasses}
       hidden={hidden}
       collapsible={collapsible}
-      collapsed={collapsed}
-      templateProps={templateProps}
+      isCollapsed={collapsed}
+      templates={templates}
       data={options}
       bodyElement={bodyContainerNode}
     />,
@@ -35,60 +96,28 @@ const renderer = ({
   );
 };
 
-/**
- * @typedef {Object} PanelWidgetCSSClasses
- * @property  {string|string[]} [root] CSS classes added to the root element of the widget.
- * @property  {string|string[]} [noRefinementRoot] CSS classes added to the root element of the widget when there's no refinements.
- * @property  {string|string[]} [collapsibleRoot] CSS classes added to the root element when collapsible.
- * @property  {string|string[]} [collapsedRoot] CSS classes added to the root element when collapsed.
- * @property  {string|string[]} [collapseButton] CSS classes added to the collapse button element.
- * @property  {string|string[]} [collapseIcon] CSS classes added to the collapse icon of the button.
- * @property  {string|string[]} [header] CSS class to add to the header.
- * @property  {string|string[]} [footer] CSS class to add to the SVG footer.
- */
+type NestedWidgetOptions = {
+  container: HTMLElement | string;
+  [key: string]: any;
+};
+type PanelWidget = (
+  params?: PanelWidgetParams
+) => (
+  widgetFactory: WidgetFactory<NestedWidgetOptions>
+) => (widgetOptions: NestedWidgetOptions) => Widget;
 
 /**
- * @typedef {Object} PanelTemplates
- * @property {string|function} [header = ''] Template to use for the header.
- * @property {string|function} [footer = ''] Template to use for the footer.
- * @property {string|function} [collapseButtonText] Template to use for collapse button. It is given the collapsed state.
+ * The panel widget wraps other widgets in a consistent panel design.
+ * It also reacts, indicates and sets CSS classes when widgets are no more relevant for refining.
  */
+const panel: PanelWidget = (widgetParams = {} as PanelWidgetParams) => {
+  const {
+    templates = {},
+    hidden = () => false,
+    collapsed,
+    cssClasses: userCssClasses = {},
+  } = widgetParams;
 
-/**
- * @typedef {Object} PanelWidgetOptions
- * @property {function} [hidden] This function is called on each render to determine from the render options if the panel have to be hidden or not. If the value is `true` the CSS class `noRefinementRoot` is applied and the wrapper is hidden.
- * @property {PanelTemplates} [templates] Templates to use for the widgets.
- * @property {PanelWidgetCSSClasses} [cssClasses] CSS classes to add.
- */
-
-/**
- * The panel widget wraps other widgets in a consistent panel design. It also reacts, indicates and sets CSS classes when widgets are no more relevant for refining.
- *
- * @type {WidgetFactory}
- * @devNovel Panel
- * @category metadata
- * @param {PanelWidgetOptions} $0 Panel widget options.
- * @return {function} A new panel widget instance
- * @example
- * const refinementListWithPanel = instantsearch.widgets.panel({
- *   templates: {
- *     header: 'Brand',
- *   },
- * })(instantsearch.widgets.refinementList);
- *
- * search.addWidgets([
- *   refinementListWithPanel({
- *     container: '#refinement-list',
- *     attribute: 'brand',
- *   })
- * ]);
- */
-export default function panel({
-  templates = {},
-  hidden = () => false,
-  collapsed,
-  cssClasses: userCssClasses = {},
-} = {}) {
   warning(
     typeof hidden === 'function',
     `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received type ${getObjectType(
@@ -133,7 +162,9 @@ export default function panel({
     footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
   };
 
-  return widgetFactory => (widgetOptions = {}) => {
+  return (widgetFactory: WidgetFactory<NestedWidgetOptions>) => (
+    widgetOptions = {} as NestedWidgetOptions
+  ): Widget => {
     const { container } = widgetOptions;
 
     if (!container) {
@@ -159,13 +190,15 @@ export default function panel({
         }" fill="currentColor" />
         </svg>`,
     };
-    const templateProps = prepareTemplateProps({ defaultTemplates, templates });
 
     const renderPanel = renderer({
       containerNode: getContainerNode(container),
       bodyContainerNode,
       cssClasses,
-      templateProps,
+      templates: {
+        ...defaultTemplates,
+        ...templates,
+      },
     });
 
     renderPanel({
@@ -207,4 +240,6 @@ export default function panel({
       },
     };
   };
-}
+};
+
+export default panel;
