@@ -89,22 +89,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
   });
-
-  it('throws a warning when insights is detected but insightsClient was not passed', () => {
-    warning.cache = {};
-
-    const AlgoliaAnalyticsObject = 'aa';
-    global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
-    global[AlgoliaAnalyticsObject] = jest.fn();
-
-    expect(() => {
-      // eslint-disable-next-line no-new
-      new InstantSearch({
-        indexName: 'indexName',
-        searchClient: createSearchClient(),
-      });
-    })
-      .toWarnDev(`[InstantSearch.js]: InstantSearch detected the Insights client in the global scope.
+  describe('when insights client is detected', () => {
+    const warningMessage = `[InstantSearch.js]: InstantSearch detected the Insights client in the global scope.
 To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
 
 const search = instantsearch({
@@ -112,39 +98,46 @@ const search = instantsearch({
   insightsClient: window.aa,
 });
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/`);
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/`;
 
-    delete global.AlgoliaAnalyticsObject;
-    delete global[AlgoliaAnalyticsObject];
-  });
+    it('throws a warning if insightsClient was not passed', () => {
+      warning.cache = {};
 
-  it('does not throw a warning when insights is detected but insightsClient was passed', () => {
-    warning.cache = {};
+      const AlgoliaAnalyticsObject = 'aa';
+      global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
+      global[AlgoliaAnalyticsObject] = jest.fn();
 
-    const AlgoliaAnalyticsObject = 'aa';
-    global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
-    global[AlgoliaAnalyticsObject] = jest.fn();
+      expect(() => {
+        // eslint-disable-next-line no-new
+        new InstantSearch({
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+        });
+      }).toWarnDev(warningMessage);
 
-    expect(() => {
-      // eslint-disable-next-line no-new
-      new InstantSearch({
-        indexName: 'indexName',
-        searchClient: createSearchClient(),
-        insightsClient: jest.fn(),
-      });
-    }).not
-      .toWarnDev(`[InstantSearch.js]: InstantSearch detected the Insights client in the global scope.
-To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
+      delete global.AlgoliaAnalyticsObject;
+      delete global[AlgoliaAnalyticsObject];
+    });
 
-const search = instantsearch({
-  /* ... */
-  insightsClient: window.aa,
-});
+    it('does not throw a warning if insightsClient was passed', () => {
+      warning.cache = {};
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/`);
+      const AlgoliaAnalyticsObject = 'aa';
+      global.AlgoliaAnalyticsObject = AlgoliaAnalyticsObject;
+      global[AlgoliaAnalyticsObject] = jest.fn();
 
-    delete global.AlgoliaAnalyticsObject;
-    delete global[AlgoliaAnalyticsObject];
+      expect(() => {
+        // eslint-disable-next-line no-new
+        new InstantSearch({
+          indexName: 'indexName',
+          searchClient: createSearchClient(),
+          insightsClient: jest.fn(),
+        });
+      }).not.toWarnDev(warningMessage);
+
+      delete global.AlgoliaAnalyticsObject;
+      delete global[AlgoliaAnalyticsObject];
+    });
   });
 
   it('throws if addWidgets is called with a single widget', () => {
