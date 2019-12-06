@@ -102,4 +102,39 @@ describe('connectHitInsights', () => {
       );
     });
   });
+
+  describe('when queryID is undefined', () => {
+    it('should throw an error message inviting to add clickAnalytics: true', () => {
+      const insightsClient = jest.fn();
+
+      const contextValue = {
+        mainTargetedIndex: 'firstIndex',
+      };
+      const indexContextValue = {
+        targetedIndex: 'theIndex',
+      };
+
+      const hit = {
+        objectID: 'objectID_42',
+        __position: 42,
+        // no queryID
+      };
+
+      const searchResults = { results: { theIndex: { index: 'theIndex' } } };
+      const props = connect(insightsClient).getProvidedProps(
+        { hit, contextValue, indexContextValue },
+        null,
+        searchResults
+      );
+
+      expect(() => {
+        props.insights('clickedObjectIDsAfterSearch', {
+          eventName: 'Add to wishlist',
+        });
+      }).toThrowErrorMatchingInlineSnapshot(`
+"Could not infer \`queryID\`. Ensure \`clickAnalytics: true\` was added with the Configure widget.
+See: https://alg.li/VpPpLt"
+`);
+    });
+  });
 });
