@@ -33,6 +33,12 @@ function inferPayload({
   const { index } = results;
   const queryID = currentHit.__queryID;
   const objectIDs = [currentHit.objectID];
+
+  if (!queryID) {
+    throw new Error(`Could not infer \`queryID\`. Ensure \`clickAnalytics: true\` was added with the Configure widget.
+See: https://alg.li/VpPpLt`);
+  }
+
   switch (method) {
     case 'clickedObjectIDsAfterSearch': {
       const positions = [currentHit.__position];
