@@ -2238,10 +2238,10 @@
     traverse "^0.6.6"
     unified "^6.1.6"
 
-"@types/algoliasearch@3.34.6":
-  version "3.34.6"
-  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.34.6.tgz#520522d9e405429e17d404fda165e1197055ab39"
-  integrity sha512-MX9hdBbDCp0b85GhMrubIR2Zsk4KTwUVb9C3at0MejbcvzSGqBoWSdktUOmsI7LGP/4kiaQ0Hbg302xq2U4sMg==
+"@types/algoliasearch@3.34.7":
+  version "3.34.7"
+  resolved "https://registry.yarnpkg.com/@types/algoliasearch/-/algoliasearch-3.34.7.tgz#7d0d565f658dbdbb2c6201dbc750dd66e0701ff5"
+  integrity sha512-5loTXY3jFdKwSDFtKWSBdhKLNs2TI+YKnyNCnUh/WnOEjMbDi8fZHb6sflW8zs9VL7lYtwGkd62ralE7kjZjNQ==
 
 "@types/babel__core@^7.1.0":
   version "7.1.3"
