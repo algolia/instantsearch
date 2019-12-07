@@ -122,7 +122,7 @@
     "jscodeshift": "0.6.4",
     "jsdom-global": "3.0.2",
     "mversion": "1.13.0",
-    "places.js": "1.17.0",
+    "places.js": "1.17.1",
     "prettier": "1.18.2",
     "rollup": "1.27.4",
     "rollup-plugin-babel": "4.3.3",
