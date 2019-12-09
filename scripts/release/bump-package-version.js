@@ -19,7 +19,10 @@ if (!semver.valid(newVersion)) {
   );
 }
 
-if (semver.gte(currentVersion, newVersion)) {
+if (
+  semver.gte(currentVersion, newVersion) &&
+  semver.diff(newVersion, currentVersion) !== 'prerelease'
+) {
   throw new Error(`release:
     Provided new version is not higher than current version (${newVersion} <= ${currentVersion})`);
 }
