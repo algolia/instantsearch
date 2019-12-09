@@ -1,6 +1,6 @@
 import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { Client as AlgoliaSearchClient } from 'algoliasearch';
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import index, { Index } from '../widgets/index/index';
 import version from './version';
 import createHelpers from './createHelpers';
