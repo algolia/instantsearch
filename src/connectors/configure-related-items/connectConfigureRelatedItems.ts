@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchParameters,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { Unmounter, WidgetFactory, ResultHit } from '../../types';
+import { Unmounter, WidgetFactory, AlgoliaHit } from '../../types';
 import { createDocumentationMessageGenerator, warning } from '../../lib/utils';
 import connectConfigure, {
   ConfigureRenderer,
@@ -24,7 +24,7 @@ export interface ConfigureRelatedItemsConnectorParams {
   /**
    * The reference hit to extract the filters from.
    */
-  hit: ResultHit;
+  hit: AlgoliaHit;
   /**
    * The schema to create the optional filters.
    * Each key represents an attribute from the hit.

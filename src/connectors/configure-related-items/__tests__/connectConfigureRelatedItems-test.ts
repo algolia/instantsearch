@@ -2,8 +2,9 @@ import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 import instantsearch from '../../../lib/main';
 import { warning } from '../../../lib/utils';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { AlgoliaHit } from '../../../types';
 
-const hit = {
+const hit: AlgoliaHit = {
   objectID: '1',
   name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',
   description:
@@ -29,6 +30,7 @@ const hit = {
       value:
         'Enjoy smart access to videos, games and apps with this Amazon Fire TV stick. Its […]',
       matchLevel: 'none',
+      matchedWords: [],
     },
   },
 };

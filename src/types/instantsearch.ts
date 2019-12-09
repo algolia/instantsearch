@@ -37,7 +37,7 @@ type HitSnippetResult = {
     | HitSnippetResult;
 };
 
-export type Hit = {
+export interface AlgoliaHit {
   [attribute: string]: any;
   objectID: string;
   _highlightResult?: HitHighlightResult;
@@ -60,11 +60,12 @@ export type Hit = {
     };
   };
   _distinctSeqID?: number;
+}
+
+export interface Hit extends AlgoliaHit {
   __position: number;
   __queryID?: string;
-};
-
-export type ResultHit = Omit<Hit, '__position' | '__queryID'>;
+}
 
 export type Hits = Hit[];
 
