@@ -38,7 +38,7 @@ export interface ConfigureRelatedItemsConnectorParams {
   ): PlainSearchParameters;
 }
 
-type ConfigureConfigureRelatedItemsWidgetFactory<
+type ConfigureRelatedItemsWidgetFactory<
   TConfigureRelatedItemsWidgetParams
 > = WidgetFactory<
   ConfigureRelatedItemsConnectorParams & TConfigureRelatedItemsWidgetParams
@@ -47,9 +47,7 @@ type ConfigureConfigureRelatedItemsWidgetFactory<
 type ConfigureRelatedItemsConnector = <TConfigureRelatedItemsWidgetParams>(
   render?: ConfigureRenderer<ConfigureConnectorParams>,
   unmount?: Unmounter
-) => ConfigureConfigureRelatedItemsWidgetFactory<
-  TConfigureRelatedItemsWidgetParams
->;
+) => ConfigureRelatedItemsWidgetFactory<TConfigureRelatedItemsWidgetParams>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'configure-related-items',
