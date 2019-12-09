@@ -226,7 +226,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
           }),
         ]);
       })
-        .toWarnDev(`[InstantSearch.js]: The \`matchingPatterns\` option returned a value of type \`number\` for the "rating" key. This value was not sent to Algolia because \`optionalFilters\` only supports strings and array of strings.
+        .toWarnDev(`[InstantSearch.js]: The \`matchingPatterns\` option returned a value of type Number for the "rating" key. This value was not sent to Algolia because \`optionalFilters\` only supports strings and array of strings.
 
 You can remove the "rating" key from the \`matchingPatterns\` option.
 

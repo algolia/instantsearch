@@ -3,7 +3,11 @@ import algoliasearchHelper, {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { Unmounter, WidgetFactory, AlgoliaHit } from '../../types';
-import { createDocumentationMessageGenerator, warning } from '../../lib/utils';
+import {
+  createDocumentationMessageGenerator,
+  getObjectType,
+  warning,
+} from '../../lib/utils';
 import connectConfigure, {
   ConfigureRenderer,
   ConfigureConnectorParams,
@@ -117,7 +121,9 @@ const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = (
       warning(
         false,
         `
-The \`matchingPatterns\` option returned a value of type \`${typeof attributeValue}\` for the "${attributeName}" key. This value was not sent to Algolia because \`optionalFilters\` only supports strings and array of strings.
+The \`matchingPatterns\` option returned a value of type ${getObjectType(
+          attributeValue
+        )} for the "${attributeName}" key. This value was not sent to Algolia because \`optionalFilters\` only supports strings and array of strings.
 
 You can remove the "${attributeName}" key from the \`matchingPatterns\` option.
 
