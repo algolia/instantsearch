@@ -21,6 +21,8 @@ if (!semver.valid(newVersion)) {
 
 if (
   semver.gte(currentVersion, newVersion) &&
+  // In SemVer `X.Y.Z-prerelease` < `X.Y.Z`, but we sometimes need to publish
+  // an experimental release based on a stable release (like v4.X.X-experimental-xxx)
   semver.diff(newVersion, currentVersion) !== 'prerelease'
 ) {
   throw new Error(`release:
