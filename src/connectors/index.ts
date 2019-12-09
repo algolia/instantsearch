@@ -41,6 +41,9 @@ export { default as connectGeoSearch } from './geo-search/connectGeoSearch';
 export { default as connectPoweredBy } from './powered-by/connectPoweredBy';
 export { default as connectConfigure } from './configure/connectConfigure';
 export {
+  default as EXPERIMENTAL_connectConfigureRelatedItems,
+} from './configure-related-items/connectConfigureRelatedItems';
+export {
   default as connectAutocomplete,
 } from './autocomplete/connectAutocomplete';
 export { default as connectQueryRules } from './query-rules/connectQueryRules';

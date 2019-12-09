@@ -1,6 +1,11 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
-import { configureRelatedItems, configure, hits, index } from '../src/widgets';
+import {
+  EXPERIMENTAL_configureRelatedItems,
+  configure,
+  hits,
+  index,
+} from '../src/widgets';
 import { connectHits, connectPagination } from '../src/connectors';
 
 storiesOf('Basics|ConfigureRelatedItems', module).add(
@@ -83,7 +88,7 @@ storiesOf('Basics|ConfigureRelatedItems', module).add(
             configure({
               hitsPerPage: 4,
             }),
-            configureRelatedItems({
+            EXPERIMENTAL_configureRelatedItems({
               hit,
               matchingPatterns: {
                 brand: { score: 3 },

@@ -3,7 +3,7 @@ export {
 } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
 export {
-  default as configureRelatedItems,
+  default as EXPERIMENTAL_configureRelatedItems,
 } from './configure-related-items/configure-related-items';
 export {
   default as currentRefinements,

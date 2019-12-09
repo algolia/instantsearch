@@ -1,6 +1,5 @@
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 import instantsearch from '../../../lib/main';
-import { warning } from '../../../lib/utils';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { AlgoliaHit } from '../../../types';
 
@@ -92,16 +91,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
           getWidgetSearchParameters: expect.any(Function),
           getWidgetState: expect.any(Function),
         })
-      );
-    });
-
-    test('warns about being an experimental widget', () => {
-      warning.cache = {};
-
-      expect(() => {
-        connectConfigureRelatedItems();
-      }).toWarnDev(
-        '[InstantSearch.js]: ConfigureRelatedItems is an experimental widget that is subject to change in next minor versions.'
       );
     });
   });

@@ -70,11 +70,6 @@ const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = (
   renderFn,
   unmountFn
 ) => {
-  warning(
-    false,
-    'ConfigureRelatedItems is an experimental widget that is subject to change in next minor versions.'
-  );
-
   return widgetParams => {
     const { hit, matchingPatterns, transformSearchParameters = x => x } =
       widgetParams || ({} as typeof widgetParams);
