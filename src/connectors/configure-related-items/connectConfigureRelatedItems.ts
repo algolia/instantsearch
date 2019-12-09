@@ -31,7 +31,7 @@ export interface ConfigureRelatedItemsConnectorParams {
    */
   matchingPatterns: MatchingPatterns;
   /**
-   * Function called to transform the search parameters generated.
+   * Function to transform the generated search parameters.
    */
   transformSearchParameters?(
     searchParameters: SearchParameters

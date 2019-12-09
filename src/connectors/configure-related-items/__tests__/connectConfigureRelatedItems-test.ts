@@ -105,7 +105,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
   });
 
   describe('options', () => {
-    test('sets search parameters optionalFilters based on matchingPatterns', () => {
+    test('sets the optionalFilters search parameter based on matchingPatterns', () => {
       const searchClient = createSearchClient();
       const search = instantsearch({
         indexName: 'indexName',
