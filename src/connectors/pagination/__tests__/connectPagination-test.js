@@ -30,7 +30,7 @@ describe('connectPagination', () => {
       expect(() => {
         connectPagination()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (got type \\"undefined\\").
+"The render function is not valid (received type Undefined).
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/js/#connector"
 `);

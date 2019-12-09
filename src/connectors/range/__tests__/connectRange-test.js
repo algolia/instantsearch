@@ -10,7 +10,7 @@ describe('connectRange', () => {
       expect(() => {
         connectRange()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (got type \\"undefined\\").
+"The render function is not valid (received type Undefined).
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input/js/#connector, https://www.algolia.com/doc/api-reference/widgets/range-slider/js/#connector"
 `);
