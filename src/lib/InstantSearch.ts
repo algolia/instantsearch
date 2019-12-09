@@ -17,6 +17,7 @@ import {
   Widget,
   UiState,
 } from '../types';
+import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
 
@@ -166,6 +167,17 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         `instantsearch.js (${version})`
       );
     }
+
+    warning(
+      Boolean(insightsClient) || !hasDetectedInsightsClient(),
+      withUsage(`InstantSearch detected the Insights client in the global scope.
+To connect InstantSearch to the Insights client, make sure to specify the \`insightsClient\` option:
+
+const search = instantsearch({
+  /* ... */
+  insightsClient: window.aa,
+});`)
+    );
 
     if (insightsClient && typeof insightsClient !== 'function') {
       throw new Error(

@@ -9,22 +9,36 @@ type WithInsightsListenerProps = {
   insights: InsightsClientWrapper;
 };
 
+const findInsightsTarget = (
+  startElement: HTMLElement | null,
+  endElement: HTMLElement | null
+): HTMLElement | null => {
+  let element: HTMLElement | null = startElement;
+  while (element && !hasDataAttributes(element)) {
+    if (element === endElement) {
+      return null;
+    }
+    element = element.parentElement;
+  }
+  return element;
+};
+
 const insightsListener = (BaseComponent: any) => {
   function WithInsightsListener(props: WithInsightsListenerProps) {
     const handleClick = (event: MouseEvent): void => {
-      if (!hasDataAttributes(event.target as HTMLElement)) {
-        return;
-      }
-
       if (!props.insights) {
         throw new Error(
           'The `insightsClient` option has not been provided to `instantsearch`.'
         );
       }
-
-      const { method, payload } = readDataAttributes(
-        event.target as HTMLElement
+      const insightsTarget = findInsightsTarget(
+        event.target as HTMLElement | null,
+        event.currentTarget as HTMLElement | null
       );
+
+      if (!insightsTarget) return;
+
+      const { method, payload } = readDataAttributes(insightsTarget);
 
       props.insights(method, payload);
     };

@@ -38,7 +38,7 @@ describe('connectRatingMenu', () => {
       expect(() => {
         connectRatingMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (got type \\"undefined\\").
+"The render function is not valid (received type Undefined).
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu/js/#connector"
 `);

@@ -260,9 +260,11 @@ describe('withInsights', () => {
           objectIDs: ['1', '2'],
           eventName: 'Add to basket',
         });
-      }).toThrowErrorMatchingInlineSnapshot(
-        `"Could not infer \`queryID\`. Ensure InstantSearch is configured with \`clickAnalytics: true\`"`
-      );
+      }).toThrowErrorMatchingInlineSnapshot(`
+"Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with the Configure widget.
+
+See: https://alg.li/lNiZZ7"
+`);
     });
 
     it('should reject unknown method name', () => {

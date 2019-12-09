@@ -11,6 +11,7 @@ export { default as escapeRefinement } from './escapeRefinement';
 export { default as unescapeRefinement } from './unescapeRefinement';
 export { default as checkRendering } from './checkRendering';
 export { default as getPropertyByPath } from './getPropertyByPath';
+export { default as getObjectType } from './getObjectType';
 export { default as noop } from './noop';
 export { default as isFiniteNumber } from './isFiniteNumber';
 export { default as isPlainObject } from './isPlainObject';
