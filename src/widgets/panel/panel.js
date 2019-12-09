@@ -7,6 +7,7 @@ import {
   prepareTemplateProps,
   warning,
   createDocumentationMessageGenerator,
+  getObjectType,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
@@ -90,12 +91,16 @@ export default function panel({
 } = {}) {
   warning(
     typeof hidden === 'function',
-    `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received "${typeof hidden}" type).`
+    `The \`hidden\` option in the "panel" widget expects a function returning a boolean (received type ${getObjectType(
+      hidden
+    )}).`
   );
 
   warning(
     typeof collapsed === 'undefined' || typeof collapsed === 'function',
-    `The \`collapsed\` option in the "panel" widget expects a function returning a boolean (received "${typeof collapsed}" type).`
+    `The \`collapsed\` option in the "panel" widget expects a function returning a boolean (received type ${getObjectType(
+      collapsed
+    )}).`
   );
 
   const bodyContainerNode = document.createElement('div');

@@ -14,7 +14,7 @@ describe('connectRefinementList', () => {
 
   it('throws on bad usage', () => {
     expect(connectRefinementList).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (got type \\"undefined\\").
+"The render function is not valid (received type Undefined).
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
 `);
@@ -24,7 +24,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         operator: 'and',
       })
     ).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (got type \\"object\\").
+"The render function is not valid (received type Object).
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector"
 `);

@@ -50,7 +50,7 @@ describe('Usage', () => {
         hidden: true,
       });
     }).toWarnDev(
-      '[InstantSearch.js]: The `hidden` option in the "panel" widget expects a function returning a boolean (received "boolean" type).'
+      '[InstantSearch.js]: The `hidden` option in the "panel" widget expects a function returning a boolean (received type Boolean).'
     );
   });
 
@@ -60,7 +60,7 @@ describe('Usage', () => {
         collapsed: true,
       });
     }).toWarnDev(
-      '[InstantSearch.js]: The `collapsed` option in the "panel" widget expects a function returning a boolean (received "boolean" type).'
+      '[InstantSearch.js]: The `collapsed` option in the "panel" widget expects a function returning a boolean (received type Boolean).'
     );
   });
 
