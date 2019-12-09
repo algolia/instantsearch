@@ -34,7 +34,9 @@ const getQueryID = (selectedHits: Hits): string => {
   const queryID = queryIDs[0];
   if (typeof queryID !== 'string') {
     throw new Error(
-      'Could not infer `queryID`. Ensure InstantSearch is configured with `clickAnalytics: true`'
+      `Could not infer \`queryID\`. Ensure InstantSearch \`clickAnalytics: true\` was added with the Configure widget.
+
+See: https://alg.li/lNiZZ7`
     );
   }
   return queryID;
