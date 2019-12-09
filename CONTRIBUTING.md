@@ -219,11 +219,11 @@ _Make sure to use `npm run` instead of `yarn run` to avoid issues._
 
 #### Experimental TypeScript version
 
-An experimental version containing the TypeScript declaration files is available.
+An experimental version containing the TypeScript declaration files is available on the npm tag `experimental-typescript`.
 
-Since some of these declaration files are generated from the JSDoc comments they can still contains some typing errors. This version will stay experimental until we are confident enough in the generated declarations to put them in the stable release.
+Since some of these declaration files are generated from the JSDoc comments, they can contain some typing errors. This version will stay experimental until we are confident enough in the generated declarations to put them in a stable release.
 
-To generate the experimental TypeScript version for a particular release run:
+To generate the experimental TypeScript version for a particular release, run:
 
 ```sh
 git checkout v4.X.X
