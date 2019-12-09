@@ -117,7 +117,7 @@ const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = (
       warning(
         false,
         `
-The \`matchingPatterns\` option returned a value of type \`${typeof attributeValue}\` for the "${attributeName}" key. This value was not sent to Algolia because it's not supported by \`optionalFilters\`.
+The \`matchingPatterns\` option returned a value of type \`${typeof attributeValue}\` for the "${attributeName}" key. This value was not sent to Algolia because \`optionalFilters\` only supports strings and array of strings.
 
 You can remove the "${attributeName}" key from the \`matchingPatterns\` option.
 
