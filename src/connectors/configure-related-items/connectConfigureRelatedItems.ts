@@ -91,35 +91,39 @@ const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = (
       const attributeScore = attribute.score;
 
       if (Array.isArray(attributeValue)) {
-        acc.push(
+        return [
+          ...acc,
           attributeValue.map(attributeSubValue => {
             return createOptionalFilter({
               attributeName,
               attributeValue: attributeSubValue,
               attributeScore,
             });
-          })
-        );
-      } else if (typeof attributeValue === 'string') {
-        acc.push(
+          }),
+        ];
+      }
+
+      if (typeof attributeValue === 'string') {
+        return [
+          ...acc,
           createOptionalFilter({
             attributeName,
             attributeValue,
             attributeScore,
-          })
-        );
-      } else {
-        warning(
-          false,
-          `
+          }),
+        ];
+      }
+
+      warning(
+        false,
+        `
 The \`matchingPatterns\` option returned a value of type \`${typeof attributeValue}\` for the "${attributeName}" key. This value was not sent to Algolia because it's not supported by \`optionalFilters\`.
 
 You can remove the "${attributeName}" key from the \`matchingPatterns\` option.
 
 See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
             `
-        );
-      }
+      );
 
       return acc;
     }, []);
