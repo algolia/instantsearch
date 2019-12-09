@@ -11,7 +11,6 @@ If this guide does not contain what you are looking for and thus prevents you fr
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
 - [Commit conventions](#commit-conventions)
@@ -217,3 +216,21 @@ npm run release -- --beta
 ```
 
 _Make sure to use `npm run` instead of `yarn run` to avoid issues._
+
+#### Experimental TypeScript version
+
+An experimental version containing the TypeScript declaration files is available.
+
+Since some of these declaration files are generated from the JSDoc comments they can still contains some typing errors. This version will stay experimental until we are confident enough in the generated declarations to put them in the stable release.
+
+To generate the experimental TypeScript version for a particular release run:
+
+```sh
+git checkout v4.X.X
+VERSION=4.X.X-experimental-typescript.X node ./scripts/release/bump-package-version.js
+yarn build
+yarn build:types
+sed -i '/"main":/ a \ "types": "es/index.d.ts",' package.json # Add `types` entry in `package.json`
+npm publish --tag experimental-typescript
+git checkout .
+```
