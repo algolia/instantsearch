@@ -38,7 +38,7 @@ export interface ConfigureRelatedItemsConnectorParams {
   ): PlainSearchParameters;
 }
 
-type ConfigureRelatedItemsWidgetFactory<
+export type ConfigureRelatedItemsWidgetFactory<
   TConfigureRelatedItemsWidgetParams
 > = WidgetFactory<
   ConfigureRelatedItemsConnectorParams & TConfigureRelatedItemsWidgetParams
