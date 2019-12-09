@@ -2,7 +2,7 @@ import connectConfigureRelatedItems, {
   ConfigureRelatedItemsWidgetFactory,
 } from '../../connectors/configure-related-items/connectConfigureRelatedItems';
 
-type ConfigureRelatedItems = ConfigureRelatedItemsWidgetFactory<void>;
+type ConfigureRelatedItems = ConfigureRelatedItemsWidgetFactory<{}>;
 
 const configureRelatedItems: ConfigureRelatedItems = widgetParams => {
   const makeWidget = connectConfigureRelatedItems();
