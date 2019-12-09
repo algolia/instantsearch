@@ -64,7 +64,7 @@
     "@babel/core": "7.7.5",
     "@babel/plugin-proposal-class-properties": "7.7.4",
     "@babel/plugin-transform-react-constant-elements": "7.7.4",
-    "@babel/preset-env": "7.7.5",
+    "@babel/preset-env": "7.7.6",
     "@babel/preset-react": "7.7.4",
     "@babel/preset-typescript": "7.7.4",
     "@storybook/addon-actions": "5.2.6",
