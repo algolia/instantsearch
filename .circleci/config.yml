@@ -55,6 +55,9 @@ jobs:
       - run:
           name: Type Checking
           command: yarn run type-check
+      - run:
+          name: Type Checking including JS files
+          command: yarn run type-check:js || echo ''
 
   test_unit:
     <<: *defaults
