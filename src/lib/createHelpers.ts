@@ -63,7 +63,7 @@ The snippet helper expects a JSON object of the format:
       try {
         type InsightsHelperOptions = {
           method: InsightsClientMethod;
-          payload: InsightsClientPayload;
+          payload: Partial<InsightsClientPayload>;
         };
         const { method, payload }: InsightsHelperOptions = JSON.parse(options);
 
