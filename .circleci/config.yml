@@ -27,7 +27,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  test_build:
+  'build size':
     <<: *defaults
     steps:
       - checkout
@@ -41,7 +41,7 @@ jobs:
             yarn run build
             yarn run test:size
 
-  test_lint:
+  lint:
     <<: *defaults
     steps:
       - checkout
@@ -56,7 +56,7 @@ jobs:
           name: Type Checking
           command: yarn run type-check
 
-  test_unit:
+  'unit tests':
     <<: *defaults
     steps:
       - checkout
@@ -68,7 +68,7 @@ jobs:
           name: Unit tests
           command: yarn run test --maxWorkers=4
 
-  test_e2e:
+  'e2e tests':
     <<: *defaults
     steps:
       - checkout
@@ -98,8 +98,8 @@ workflows:
   version: 2
   ci:
     jobs:
-      - test_build
-      - test_unit
-      - test_lint
+      - build size
+      - unit tests
+      - lint
       - type check js (optional)
-      - test_e2e
+      - e2e tests
