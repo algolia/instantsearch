@@ -1,3 +1,26 @@
+# [4.1.0](https://github.com/algolia/instantsearch.js/compare/v4.0.1...v4.1.0) (2019-12-10)
+
+The [4.0.1](#4.0.1) release contained experimental TypeScript definitions in the ESM build by accident. We rolled this back in 4.1.0 because types will first be released on an experimental tag: `experimental-typescript`.
+
+
+### Bug Fixes
+
+* **core:** display correct object types in messages ([#4249](https://github.com/algolia/instantsearch.js/issues/4249)) ([fb2c3c9](https://github.com/algolia/instantsearch.js/commit/fb2c3c9c37fd8d28cd4712486c5c637e237fe83b))
+* **insights:** detect clicks on children of `[data-insights]` HTML elements ([#4197](https://github.com/algolia/instantsearch.js/issues/4197)) ([9cac5a3](https://github.com/algolia/instantsearch.js/commit/9cac5a3aa4af616ec7913c17ed7388134c5e7f0a))
+* **insights:** display docs URL when missing ([#4231](https://github.com/algolia/instantsearch.js/issues/4231)) ([9df1e7f](https://github.com/algolia/instantsearch.js/commit/9df1e7f762333bd31b5840b35378d56605fe4844))
+* **widgets:** override connectors' `$$type` ([#4227](https://github.com/algolia/instantsearch.js/issues/4227)) ([50f4af3](https://github.com/algolia/instantsearch.js/commit/50f4af3006a44cd08dd99b3a72bd410340c2e48a))
+
+
+### Features
+
+* **middleware:** introduce `EXPERIMENTAL_use` to plug middleware into InstantSearch ([#4224](https://github.com/algolia/instantsearch.js/issues/4224)) ([9d1f7be](https://github.com/algolia/instantsearch.js/commit/9d1f7be9df304a4bc2d07dbd253a73580a0593c3))
+* **router:** plug router as a middleware ([#4224](https://github.com/algolia/instantsearch.js/issues/4224)) ([9d1f7be](https://github.com/algolia/instantsearch.js/commit/9d1f7be9df304a4bc2d07dbd253a73580a0593c3))
+* **insights:** detect window.aa when available on global scope and a function ([#4191](https://github.com/algolia/instantsearch.js/issues/4191)) ([d6df5af](https://github.com/algolia/instantsearch.js/commit/d6df5affc4111aaf2c82f847ffe877793faac86c))
+* **typescript:** add declaration files (experimental) ([#4220](https://github.com/algolia/instantsearch.js/issues/4220)) ([ebacfe5](https://github.com/algolia/instantsearch.js/commit/ebacfe55bc0fddf9ca217eca8c8a207b220ab93d))
+* **widgets:** introduce Related Items widgets as experimental (`EXPERIMENTAL_configureRelatedItems` and `EXPERIMENTAL_connectConfigureRelatedItems`) ([#4233](https://github.com/algolia/instantsearch.js/issues/4233)) ([f811f4e](https://github.com/algolia/instantsearch.js/commit/f811f4efa3e58a2b868d11ec338248715a7596c9))
+
+
+
 ## [4.0.1](https://github.com/algolia/instantsearch.js/compare/v4.0.0...v4.0.1) (2019-11-28)
 
 
