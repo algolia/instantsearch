@@ -82,7 +82,7 @@ jobs:
             yarn run website:build
             yarn run test:e2e:saucelabs
 
-  test_type_check_js:
+  'type check js (optional)':
     <<: *defaults
     steps:
       - checkout
@@ -101,5 +101,5 @@ workflows:
       - test_build
       - test_unit
       - test_lint
-      - test_type_check_js
+      - type check js (optional)
       - test_e2e
