@@ -27,7 +27,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  'build size':
+  'build and size':
     <<: *defaults
     steps:
       - checkout
@@ -98,7 +98,7 @@ workflows:
   version: 2
   ci:
     jobs:
-      - build size
+      - build and size
       - unit tests
       - lint
       - type check js (optional)
