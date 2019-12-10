@@ -129,6 +129,7 @@ export interface Widget {
     | 'ais.breadcrumb'
     | 'ais.clearRefinements'
     | 'ais.configure'
+    | 'ais.configureRelatedItems'
     | 'ais.currentRefinements'
     | 'ais.geoSearch'
     | 'ais.hierarchicalMenu'

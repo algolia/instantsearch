@@ -18,7 +18,7 @@ import {
 
 type Refine = (searchParameters: PlainSearchParameters) => void;
 
-interface ConfigureConnectorParams {
+export interface ConfigureConnectorParams {
   /**
    * A list of [search parameters](https://www.algolia.com/doc/api-reference/search-api-parameters/)
    * to enable when the widget mounts.
@@ -112,7 +112,7 @@ const connectConfigure: ConfigureConnector = (
 
         renderFn(
           {
-            refine: connectorState.refine!,
+            refine: connectorState.refine,
             instantSearchInstance,
             widgetParams,
           },

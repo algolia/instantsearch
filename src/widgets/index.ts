@@ -3,6 +3,9 @@ export {
 } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
 export {
+  default as EXPERIMENTAL_configureRelatedItems,
+} from './configure-related-items/configure-related-items';
+export {
   default as currentRefinements,
 } from './current-refinements/current-refinements';
 export { default as geoSearch } from './geo-search/geo-search';
