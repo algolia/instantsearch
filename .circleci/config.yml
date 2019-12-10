@@ -55,9 +55,6 @@ jobs:
       - run:
           name: Type Checking
           command: yarn run type-check
-      - run:
-          name: Type Checking including JS files
-          command: yarn run type-check:js || echo ''
 
   test_unit:
     <<: *defaults
@@ -85,6 +82,18 @@ jobs:
             yarn run website:build
             yarn run test:e2e:saucelabs
 
+  test_type_check_js:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Type Checking including JS files
+          command: yarn run type-check:js
+
 workflows:
   version: 2
   ci:
@@ -92,4 +101,5 @@ workflows:
       - test_build
       - test_unit
       - test_lint
+      - test_type_check_js
       - test_e2e
