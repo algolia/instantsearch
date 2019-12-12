@@ -7,4 +7,6 @@ coverage
 .env
 
 # Generated files
-/website
+/website/stories
+/website/examples/*
+!/website/examples/index.html
