@@ -20,6 +20,7 @@ import {
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
+import { initDevTools } from './devtools';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -128,6 +129,7 @@ class InstantSearch extends EventEmitter {
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];
+  public _isDevToolsAttached = false;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -233,6 +235,8 @@ See ${createDocumentationLink({
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.EXPERIMENTAL_use(createRouter(routerOptions));
     }
+
+    initDevTools(this);
   }
 
   /**
@@ -495,6 +499,12 @@ See ${createDocumentationLink({
   }
 
   public onStateChange = () => {
+    // If the browser extension is opened after InstantSearch has started,
+    // perhaps we need to add the middleware to start listening for changes (?)
+    if (!this._isDevToolsAttached) {
+      initDevTools(this);
+    }
+
     const nextUiState = this.mainIndex.getWidgetState({});
 
     this.middleware.forEach(m => {
