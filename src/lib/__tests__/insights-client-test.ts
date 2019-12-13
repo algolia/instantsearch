@@ -128,9 +128,11 @@ describe('withInsights', () => {
           eventName: 'add to favorites',
           objectIDs: ['1'],
         });
-      }).toThrowErrorMatchingInlineSnapshot(
-        `"The \`insightsClient\` option has not been provided to \`instantsearch\`."`
-      );
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`insightsClient\` option has not been provided to \`instantsearch\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
     });
   });
 

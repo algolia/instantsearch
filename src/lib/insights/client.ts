@@ -1,5 +1,5 @@
 import { SearchResults } from 'algoliasearch-helper';
-import { uniq, find } from '../utils';
+import { uniq, find, createDocumentationMessageGenerator } from '../utils';
 import {
   Hits,
   InsightsClient,
@@ -83,8 +83,13 @@ const wrapInsightsClient = (
   payload: Partial<InsightsClientPayload>
 ) => {
   if (!aa) {
+    const withInstantSearchUsage = createDocumentationMessageGenerator({
+      name: 'instantsearch',
+    });
     throw new Error(
-      'The `insightsClient` option has not been provided to `instantsearch`.'
+      withInstantSearchUsage(
+        'The `insightsClient` option has not been provided to `instantsearch`.'
+      )
     );
   }
   if (!Array.isArray(payload.objectIDs)) {
