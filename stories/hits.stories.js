@@ -140,4 +140,36 @@ storiesOf('Results|Hits', module)
           action(`[InsightsClient] sent ${method} with payload`)(payload),
       }
     )
+  )
+  .add(
+    'with insights helper when insightsClient has not been provided',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        search.addWidgets([
+          instantsearch.widgets.configure({
+            attributesToSnippet: ['name', 'description'],
+            clickAnalytics: true,
+          }),
+        ]);
+
+        search.addWidgets([
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item: item => `
+          <h4>${item.name}</h4>
+          <button
+            ${insights('clickedObjectIDsAfterSearch', {
+              objectIDs: [item.objectID],
+              eventName: 'Add to cart',
+            })} >Add to cart</button>
+          `,
+            },
+          }),
+        ]);
+      },
+      {
+        /* insightsClient not provided */
+      }
+    )
   );
