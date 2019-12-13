@@ -239,7 +239,7 @@ Object {
       "transformed": true,
     },
   ],
-  "insights": undefined,
+  "insights": [Function],
   "isFirstPage": true,
   "isLastPage": false,
   "results": Object {
