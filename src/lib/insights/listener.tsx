@@ -26,11 +26,6 @@ const findInsightsTarget = (
 const insightsListener = (BaseComponent: any) => {
   function WithInsightsListener(props: WithInsightsListenerProps) {
     const handleClick = (event: MouseEvent): void => {
-      if (!props.insights) {
-        throw new Error(
-          'The `insightsClient` option has not been provided to `instantsearch`.'
-        );
-      }
       const insightsTarget = findInsightsTarget(
         event.target as HTMLElement | null,
         event.currentTarget as HTMLElement | null

@@ -86,10 +86,11 @@ describe('withInsights', () => {
       expect(renderProps).toHaveProperty('insights');
       expect(renderProps.insights).toBeInstanceOf(Function);
     });
-
-    it('should not expose the insights client wrapper to renderOptions if not passed to instantSearchInstance', () => {
+    it('should expose the insights client wrapper even when insightsClient was not provided', () => {
       const renderFn = jest.fn();
-      const instantSearchInstance = { insightsClient: undefined };
+      const instantSearchInstance = {
+        /* insightsClient was not passed */
+      };
       const results = {
         index: 'theIndex',
         hits: [
@@ -102,7 +103,34 @@ describe('withInsights', () => {
       createWidgetWithInsights({ renderFn, instantSearchInstance, results });
 
       const [renderProps] = renderFn.mock.calls[0];
-      expect(renderProps).not.toHaveProperty('insights');
+      expect(renderProps).toHaveProperty('insights');
+      expect(renderProps.insights).toBeInstanceOf(Function);
+    });
+    it('should expose the insights client wrapper that throws when insightsClient was not provided', () => {
+      const renderFn = jest.fn();
+      const instantSearchInstance = {
+        /* insightsClient was not passed */
+      };
+      const results = {
+        index: 'theIndex',
+        hits: [
+          { objectID: '1', __queryID: 'theQueryID', __position: 9 },
+          { objectID: '2', __queryID: 'theQueryID', __position: 10 },
+          { objectID: '3', __queryID: 'theQueryID', __position: 11 },
+          { objectID: '4', __queryID: 'theQueryID', __position: 12 },
+        ],
+      };
+      createWidgetWithInsights({ renderFn, instantSearchInstance, results });
+
+      const [renderProps] = renderFn.mock.calls[0];
+      expect(() => {
+        renderProps.insights('clickedObjectIDsAfterSearch', {
+          eventName: 'add to favorites',
+          objectIDs: ['1'],
+        });
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"The \`insightsClient\` option has not been provided to \`instantsearch\`."`
+      );
     });
   });
 

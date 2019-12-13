@@ -75,13 +75,18 @@ export const inferPayload = ({
 };
 
 const wrapInsightsClient = (
-  aa: InsightsClient,
+  aa: InsightsClient | null,
   results: SearchResults,
   hits: Hits
 ): InsightsClientWrapper => (
   method: InsightsClientMethod,
   payload: Partial<InsightsClientPayload>
 ) => {
+  if (!aa) {
+    throw new Error(
+      'The `insightsClient` option has not been provided to `instantsearch`.'
+    );
+  }
   if (!Array.isArray(payload.objectIDs)) {
     throw new TypeError('Expected `objectIDs` to be an array.');
   }
@@ -109,12 +114,7 @@ export default function withInsights(
     isFirstRender: boolean
   ) => {
     const { results, hits, instantSearchInstance } = renderOptions;
-    if (
-      results &&
-      hits &&
-      instantSearchInstance &&
-      instantSearchInstance.insightsClient /* providing the insightsClient is optional */
-    ) {
+    if (results && hits && instantSearchInstance) {
       const insights = wrapInsightsClient(
         instantSearchInstance.insightsClient,
         results,
