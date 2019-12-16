@@ -6,6 +6,9 @@ export {
   default as EXPERIMENTAL_configureRelatedItems,
 } from './configure-related-items/configure-related-items';
 export {
+  default as configureUserToken,
+} from './configure-user-token/configure-user-token';
+export {
   default as currentRefinements,
 } from './current-refinements/current-refinements';
 export { default as geoSearch } from './geo-search/geo-search';
