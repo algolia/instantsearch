@@ -121,7 +121,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
           indexName: 'indexName',
           params: {
             facets: [],
-            filters: 'NOT objectID:1',
+            facetFilters: ['objectID:-1'],
             tagFilters: '',
             sumOrFiltersScores: true,
             optionalFilters: [
@@ -167,7 +167,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
           indexName: 'indexName',
           params: {
             facets: [],
-            filters: 'NOT objectID:1',
+            facetFilters: ['objectID:-1'],
             tagFilters: '',
             sumOrFiltersScores: true,
             optionalFilters: [
@@ -228,7 +228,7 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/`);
           indexName: 'indexName',
           params: {
             facets: [],
-            filters: 'NOT objectID:1',
+            facetFilters: ['objectID:-1'],
             tagFilters: '',
             sumOrFiltersScores: true,
             optionalFilters: [

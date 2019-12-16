@@ -29,7 +29,7 @@ describe('connectConfigureRelatedItems - bridge', () => {
     expect(makeWidget).toHaveBeenCalledTimes(1);
     expect(makeWidget).toHaveBeenCalledWith({
       searchParameters: expect.objectContaining({
-        filters: 'NOT objectID:1',
+        facetFilters: ['objectID:-1'],
         optionalFilters: [],
         sumOrFiltersScores: true,
       }),
