@@ -6,7 +6,7 @@ jest.mock(
   '../../../connectors/configure-related-items/connectConfigureRelatedItems'
 );
 
-describe('connectConfigureRelatedItems', () => {
+describe('configureRelatedItems', () => {
   test('forwards the options to the connector', () => {
     const makeWidget = jest.fn();
     castToJestMock(connectConfigureRelatedItems).mockImplementationOnce(
