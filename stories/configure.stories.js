@@ -7,7 +7,7 @@ storiesOf('Basics|Configure', module)
     withHits(({ search, container, instantsearch }) => {
       const description = document.createElement('div');
       description.innerHTML = `
-        <p>Search parameters provied to the Configure widget:</p>
+        <p>Search parameters provided to the Configure widget:</p>
         <pre>{ hitsPerPage: 1 }</pre>
       `;
 
@@ -31,7 +31,7 @@ storiesOf('Basics|Configure', module)
 
       const description = document.createElement('div');
       description.innerHTML = `
-        <p>Search parameters provied to the Configure widget:</p>
+        <p>Search parameters provided to the Configure widget:</p>
         <pre>{ hitsPerPage: 1 }</pre>
       `;
 
