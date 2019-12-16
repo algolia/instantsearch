@@ -109,7 +109,7 @@ storiesOf('Results|Hits', module)
     })
   )
   .add(
-    'with insights helper',
+    'with insights function',
     withHits(
       ({ search, container, instantsearch }) => {
         search.addWidgets([
@@ -131,6 +131,39 @@ storiesOf('Results|Hits', module)
               eventName: 'Add to cart',
             })} >Add to cart</button>
           `,
+            },
+          }),
+        ]);
+      },
+      {
+        insightsClient: (method, payload) =>
+          action(`[InsightsClient] sent ${method} with payload`)(payload),
+      }
+    )
+  )
+  .add(
+    'with insights helper',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        search.addWidgets([
+          instantsearch.widgets.configure({
+            attributesToSnippet: ['name', 'description'],
+            clickAnalytics: true,
+          }),
+        ]);
+
+        search.addWidgets([
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item: `
+              <h4>{{name}}</h4>
+              <button {{#helpers.insights}} {
+               "method": "clickedObjectIDsAfterSearch", 
+               "payload": { "eventName": "Add to cart" }
+              } {{/helpers.insights}}>
+                Add to cart
+              </button>`,
             },
           }),
         ]);
