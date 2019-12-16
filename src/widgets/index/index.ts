@@ -362,38 +362,86 @@ const index = (props: IndexProps): Index => {
             }
           }
 
+          type StateDescription = {
+            connectors: string[];
+            widgets: Array<Widget['$$type']>;
+          };
+
           type StateToWidgets = {
-            [TParameter in keyof IndexUiState]: Array<Widget['$$type']>;
+            [TParameter in keyof IndexUiState]: StateDescription;
           };
 
           const stateToWidgetsMap: StateToWidgets = {
-            query: ['ais.searchBox', 'ais.autocomplete', 'ais.voiceSearch'],
-            refinementList: ['ais.refinementList'],
-            menu: ['ais.menu'],
-            hierarchicalMenu: ['ais.hierarchicalMenu'],
-            numericMenu: ['ais.numericMenu'],
-            ratingMenu: ['ais.ratingMenu'],
-            range: ['ais.range'],
-            toggle: ['ais.toggleRefinement'],
-            geoSearch: ['ais.geoSearch'],
-            sortBy: ['ais.sortBy'],
-            page: ['ais.pagination', 'ais.infiniteHits'],
-            hitsPerPage: ['ais.hitsPerPage'],
-            configure: ['ais.configure'],
-            places: ['ais.places'],
+            query: {
+              connectors: ['connectSearchBox'],
+              widgets: ['ais.searchBox', 'ais.autocomplete', 'ais.voiceSearch'],
+            },
+            refinementList: {
+              connectors: ['connectRefinementList'],
+              widgets: ['ais.refinementList'],
+            },
+            menu: {
+              connectors: ['connectMenu'],
+              widgets: ['ais.menu'],
+            },
+            hierarchicalMenu: {
+              connectors: ['connectHierarchicalMenu'],
+              widgets: ['ais.hierarchicalMenu'],
+            },
+            numericMenu: {
+              connectors: ['connectNumericMenu'],
+              widgets: ['ais.numericMenu'],
+            },
+            ratingMenu: {
+              connectors: ['connectRatingMenu'],
+              widgets: ['ais.ratingMenu'],
+            },
+            range: {
+              connectors: ['connectRange'],
+              widgets: ['ais.rangeInput', 'ais.rangeSlider'],
+            },
+            toggle: {
+              connectors: ['connectToggleRefinement'],
+              widgets: ['ais.toggleRefinement'],
+            },
+            geoSearch: {
+              connectors: ['connectGeoSearch'],
+              widgets: ['ais.geoSearch'],
+            },
+            sortBy: {
+              connectors: ['connectSortBy'],
+              widgets: ['ais.sortBy'],
+            },
+            page: {
+              connectors: ['connectPagination'],
+              widgets: ['ais.pagination', 'ais.infiniteHits'],
+            },
+            hitsPerPage: {
+              connectors: ['connectHitsPerPage'],
+              widgets: ['ais.hitsPerPage'],
+            },
+            configure: {
+              connectors: ['connectConfigure'],
+              widgets: ['ais.configure'],
+            },
+            places: {
+              connectors: [],
+              widgets: ['ais.places'],
+            },
           };
 
           const mountedWidgets = this.getWidgets()
             .map(widget => widget.$$type)
             .filter(Boolean);
 
-          type MissingWidgets = Array<[string, Array<Widget['$$type']>]>;
+          type MissingWidgets = Array<[string, StateDescription]>;
 
           const missingWidgets = Object.keys(localUiState).reduce<
             MissingWidgets
           >((acc, parameter) => {
             const requiredWidgets: Array<Widget['$$type']> | undefined =
-              stateToWidgetsMap[parameter];
+              stateToWidgetsMap[parameter] &&
+              stateToWidgetsMap[parameter].widgets;
 
             if (
               requiredWidgets &&
@@ -403,10 +451,13 @@ const index = (props: IndexProps): Index => {
             ) {
               acc.push([
                 parameter,
-                stateToWidgetsMap[parameter].map(
-                  (widgetIdentifier: string) =>
-                    widgetIdentifier.split('ais.')[1]
-                ),
+                {
+                  connectors: stateToWidgetsMap[parameter].connectors,
+                  widgets: stateToWidgetsMap[parameter].widgets.map(
+                    (widgetIdentifier: string) =>
+                      widgetIdentifier.split('ais.')[1]
+                  ),
+                },
               ]);
             }
 
@@ -422,7 +473,7 @@ This can happen when the UI state is specified via \`initialUiState\` or \`routi
 To fully reflect the state, some widgets need to be added to the index "${this.getIndexId()}":
 
 ${missingWidgets
-  .map(([stateParameter, widgets]) => {
+  .map(([stateParameter, { widgets }]) => {
     return `- \`${stateParameter}\` needs one of these widgets: ${([] as string[])
       .concat(...widgets.map(name => getWidgetNames(name!)))
       .map((name: string) => `"${name}"`)
@@ -434,16 +485,23 @@ If you do not wish to display widgets but still want to support their search par
 
 \`\`\`
 ${missingWidgets
-  .map(([_stateParameter, widgets]) => {
+  .filter(([_stateParameter, { connectors }]) => {
+    return connectors.length > 0;
+  })
+  .map(([_stateParameter, { connectors, widgets }]) => {
     const capitalizedWidget = capitalize(widgets[0]!);
+    const connectorName = connectors[0];
 
-    return `const virtual${capitalizedWidget} = connect${capitalizedWidget}(() => null);`;
+    return `const virtual${capitalizedWidget} = ${connectorName}(() => null);`;
   })
   .join('\n')}
 
 search.addWidgets([
   ${missingWidgets
-    .map(([_stateParameter, widgets]) => {
+    .filter(([_stateParameter, { connectors }]) => {
+      return connectors.length > 0;
+    })
+    .map(([_stateParameter, { widgets }]) => {
       const capitalizedWidget = capitalize(widgets[0]!);
 
       return `virtual${capitalizedWidget}({ /* ... */ })`;
