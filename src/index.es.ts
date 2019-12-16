@@ -1,7 +1,7 @@
 import { InstantSearchOptions } from './types';
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
-import { snippet, highlight } from './helpers';
+import { snippet, highlight, insights } from './helpers';
 
 const instantsearch = (options: InstantSearchOptions): InstantSearch =>
   new InstantSearch(options);
@@ -9,6 +9,7 @@ const instantsearch = (options: InstantSearchOptions): InstantSearch =>
 instantsearch.version = version;
 instantsearch.snippet = snippet;
 instantsearch.highlight = highlight;
+instantsearch.insights = insights;
 
 Object.defineProperty(instantsearch, 'widgets', {
   get() {
