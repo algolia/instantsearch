@@ -1,3 +1,20 @@
+# [6.1.0](https://github.com/algolia/react-instantsearch/compare/v6.0.0...v6.1.0) (2019-12-17)
+
+
+### Bug Fixes
+
+* **connectNumericMenu:** support numeric refinement 0 ([#2882](https://github.com/algolia/react-instantsearch/issues/2882)) ([30bd9fd](https://github.com/algolia/react-instantsearch/commit/30bd9fd))
+* **deps:** update dependency next to v9.1.1 ([9d49d33](https://github.com/algolia/react-instantsearch/commit/9d49d33))
+* **helper:** rely on stable version of algoliasearch-helper ([#2871](https://github.com/algolia/react-instantsearch/issues/2871)) ([e3531a1](https://github.com/algolia/react-instantsearch/commit/e3531a1))
+
+
+### Features
+
+* **insights:** show an error when 'clickAnalytics: true' is missing. ([#2877](https://github.com/algolia/react-instantsearch/issues/2877)) ([621656a](https://github.com/algolia/react-instantsearch/commit/621656a))
+* **voice:** add additionalQueryParameters ([#2366](https://github.com/algolia/react-instantsearch/issues/2366)) ([3a45b2c](https://github.com/algolia/react-instantsearch/commit/3a45b2c))
+
+
+
 # [6.0.0](https://github.com/algolia/react-instantsearch/compare/v6.0.0-beta.2...v6.0.0) (2019-10-28)
 
 
