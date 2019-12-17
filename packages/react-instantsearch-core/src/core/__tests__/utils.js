@@ -119,6 +119,28 @@ describe('utils', () => {
     });
   });
 
+  describe('removeEmptyArraysFromObject', () => {
+    it('removes empty arrays from objects', () => {
+      expect(
+        utils.removeEmptyArraysFromObject({
+          disjunctiveFacets: [],
+          facetFilters: ['categories'],
+          facets: [],
+          filters: 'NOT objectID:1',
+          hierarchicalFacets: [],
+          optionalFilters: ['brand:Amazon<score=3>'],
+          sumOrFiltersScores: true,
+          tagRefinements: [],
+        })
+      ).toEqual({
+        facetFilters: ['categories'],
+        filters: 'NOT objectID:1',
+        optionalFilters: ['brand:Amazon<score=3>'],
+        sumOrFiltersScores: true,
+      });
+    });
+  });
+
   describe('addAbsolutePositions', () => {
     const allHits = [
       { objectID: '1' },
@@ -297,6 +319,45 @@ describe('utils', () => {
       expect(function() {
         utils.find([1, 2, 3], undefined);
       }).toThrow();
+    });
+  });
+
+  describe('getObjectType', () => {
+    test('returns the type of a string', () => {
+      expect(utils.getObjectType('string')).toEqual('String');
+    });
+
+    test('returns the type of a number', () => {
+      expect(utils.getObjectType(2)).toEqual('Number');
+    });
+
+    test('returns the type of a boolean', () => {
+      expect(utils.getObjectType(true)).toEqual('Boolean');
+      expect(utils.getObjectType(false)).toEqual('Boolean');
+    });
+
+    test('returns the type of an object', () => {
+      expect(utils.getObjectType({})).toEqual('Object');
+    });
+
+    test('returns the type of an array', () => {
+      expect(utils.getObjectType([])).toEqual('Array');
+    });
+
+    test('returns the type of a date', () => {
+      expect(utils.getObjectType(new Date())).toEqual('Date');
+    });
+
+    test('returns the type of a function', () => {
+      expect(utils.getObjectType(function() {})).toEqual('Function');
+    });
+
+    test('returns the type of undefined', () => {
+      expect(utils.getObjectType(undefined)).toEqual('Undefined');
+    });
+
+    test('returns the type of null', () => {
+      expect(utils.getObjectType(null)).toEqual('Null');
     });
   });
 });
