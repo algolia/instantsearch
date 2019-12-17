@@ -120,6 +120,37 @@ describe('connectNumericMenu', () => {
         currentRefinement: '',
         canRefine: true,
       });
+
+      props = connect.getProvidedProps(
+        {
+          items: [
+            { label: 'is 0', start: 0, end: 0 },
+            { label: 'in 0..10', start: 0, end: 10 },
+          ],
+          contextValue,
+        },
+        {},
+        { results }
+      );
+      expect(props).toEqual({
+        items: [
+          {
+            label: 'is 0',
+            value: '0:0',
+            isRefined: false,
+            noRefinement: false,
+          },
+          {
+            label: 'in 0..10',
+            value: '0:10',
+            isRefined: false,
+            noRefinement: false,
+          },
+          { label: 'All', value: '', isRefined: true, noRefinement: false },
+        ],
+        currentRefinement: '',
+        canRefine: true,
+      });
     });
 
     it('no items define', () => {
@@ -278,6 +309,34 @@ describe('connectNumericMenu', () => {
       expect(params.getNumericRefinements('facet')).toEqual({
         '>=': [100],
         '<=': [200],
+      });
+
+      params = connect.getSearchParameters(
+        initSP,
+        { attribute: 'facet', contextValue },
+        { multiRange: { facet: '0:' } }
+      );
+      expect(params.getNumericRefinements('facet')).toEqual({
+        '>=': [0],
+      });
+
+      params = connect.getSearchParameters(
+        initSP,
+        { attribute: 'facet', contextValue },
+        { multiRange: { facet: ':0' } }
+      );
+      expect(params.getNumericRefinements('facet')).toEqual({
+        '<=': [0],
+      });
+
+      params = connect.getSearchParameters(
+        initSP,
+        { attribute: 'facet', contextValue },
+        { multiRange: { facet: '0:0' } }
+      );
+      expect(params.getNumericRefinements('facet')).toEqual({
+        '>=': [0],
+        '<=': [0],
       });
     });
 
