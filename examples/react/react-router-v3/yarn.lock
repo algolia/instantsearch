@@ -1956,10 +1956,10 @@ algoliasearch-helper@^3.0.0:
   dependencies:
     events "^1.1.1"
 
-algoliasearch@3.32.1:
-  version "3.32.1"
-  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.32.1.tgz#605f8a2c17ab8da2af4456110f4d0a02b384e3d0"
-  integrity sha512-NaaHMboU9tKwrU3aim7LlzSDqKb+1TGaC+Lx3NOttSnuMHbPpaf+7LtJL4KlosbRWEwqb9t5wSYMVDrPTH2dNA==
+algoliasearch@3.35.1:
+  version "3.35.1"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.35.1.tgz#297d15f534a3507cab2f5dfb996019cac7568f0c"
+  integrity sha512-K4yKVhaHkXfJ/xcUnil04xiSrB8B8yHZoFEhWNpXg23eiCnqvTZw1tn/SqvdsANlYHLJlKl0qi3I/Q2Sqo7LwQ==
   dependencies:
     agentkeepalive "^2.2.0"
     debug "^2.6.9"
