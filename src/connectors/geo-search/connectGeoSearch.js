@@ -112,6 +112,7 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
 
     const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
+      // @MAJOR hasMapMoveSinceLastRefine -> hasMapMovedSinceLastRefine
       hasMapMoveSinceLastRefine: false,
       lastRefinePosition: '',
       lastRefineBoundingBox: '',
