@@ -54,7 +54,6 @@ const withUsage = createDocumentationMessageGenerator({
  *
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  *
- * @type {Connector}
  * @param {function(GeoSearchRenderingOptions, boolean)} renderFn Rendering function for the custom **GeoSearch** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomGeoSearchWidgetOptions)} Re-usable widget factory for a custom **GeoSearch** widget.
