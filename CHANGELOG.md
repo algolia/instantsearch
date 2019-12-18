@@ -1,3 +1,12 @@
+# [4.6.0](https://github.com/algolia/create-instantsearch-app/compare/4.5.0...4.6.0) (2019-12-18)
+
+
+### Features
+
+* **templates:** add JavaScript Helper 3 template ([#444](https://github.com/algolia/create-instantsearch-app/issues/444)) ([dea6714](https://github.com/algolia/create-instantsearch-app/commit/dea6714a16e4f47e52a7824348064a962b9a93ff))
+
+
+
 ## [4.4.2](https://github.com/algolia/create-instantsearch-app/compare/4.4.1...4.4.2) (2019-04-10)
 
 
