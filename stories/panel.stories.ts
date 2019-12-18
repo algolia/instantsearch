@@ -1,18 +1,22 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
+import panel from '../src/widgets/panel/panel';
+import refinementList from '../src/widgets/refinement-list/refinement-list';
+import rangeInput from '../src/widgets/range-input/range-input';
+import rangeSlider from '../src/widgets/range-slider/range-slider';
 
 storiesOf('Basics|Panel', module)
   .add(
     'default',
-    withHits(({ search, container, instantsearch }) => {
-      const brandList = instantsearch.widgets.panel({
+    withHits(({ search, container }) => {
+      const brandList = panel({
         templates: {
           header: 'Brand',
           footer: ({ results }) => {
             return results ? `${results.nbHits} results` : '';
           },
         },
-      })(instantsearch.widgets.refinementList);
+      })(refinementList);
 
       search.addWidgets([
         brandList({
@@ -24,13 +28,13 @@ storiesOf('Basics|Panel', module)
   )
   .add(
     'with range input',
-    withHits(({ search, container, instantsearch }) => {
-      const priceList = instantsearch.widgets.panel({
+    withHits(({ search, container }) => {
+      const priceList = panel({
         templates: {
           header: 'Price',
           footer: 'Footer',
         },
-      })(instantsearch.widgets.rangeInput);
+      })(rangeInput);
 
       search.addWidgets([
         priceList({
@@ -42,13 +46,13 @@ storiesOf('Basics|Panel', module)
   )
   .add(
     'with range slider',
-    withHits(({ search, container, instantsearch }) => {
-      const priceSlider = instantsearch.widgets.panel({
+    withHits(({ search, container }) => {
+      const priceSlider = panel({
         templates: {
           header: 'Price',
           footer: 'Footer',
         },
-      })(instantsearch.widgets.rangeSlider);
+      })(rangeSlider);
 
       search.addWidgets([
         priceSlider({
@@ -66,14 +70,14 @@ storiesOf('Basics|Panel', module)
 
   .add(
     'with hidden',
-    withHits(({ search, container, instantsearch }) => {
-      const priceList = instantsearch.widgets.panel({
+    withHits(({ search, container }) => {
+      const priceList = panel({
         templates: {
           header: 'Price',
           footer: 'The panel is hidden when there are no results.',
         },
         hidden: ({ results }) => results.nbHits === 0,
-      })(instantsearch.widgets.rangeInput);
+      })(rangeInput);
 
       search.addWidgets([
         priceList({
@@ -85,8 +89,8 @@ storiesOf('Basics|Panel', module)
   )
   .add(
     'with collapsed',
-    withHits(({ search, container, instantsearch }) => {
-      const brandList = instantsearch.widgets.panel({
+    withHits(({ search, container }) => {
+      const brandList = panel({
         collapsed: options => {
           return options && options.state && !options.state.query;
         },
@@ -94,7 +98,7 @@ storiesOf('Basics|Panel', module)
           header: 'Brand (collapsible)',
           footer: 'The panel collapses on empty query until controlled',
         },
-      })(instantsearch.widgets.refinementList);
+      })(refinementList);
 
       search.addWidgets([
         brandList({
@@ -106,8 +110,8 @@ storiesOf('Basics|Panel', module)
   )
   .add(
     'with collapsed and custom templates',
-    withHits(({ search, container, instantsearch }) => {
-      const brandList = instantsearch.widgets.panel({
+    withHits(({ search, container }) => {
+      const brandList = panel({
         collapsed: options => {
           return options && options.state && !options.state.query;
         },
@@ -116,7 +120,7 @@ storiesOf('Basics|Panel', module)
           footer: 'The panel collapses on empty query until controlled',
           collapseButtonText: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
         },
-      })(instantsearch.widgets.refinementList);
+      })(refinementList);
 
       search.addWidgets([
         brandList({
