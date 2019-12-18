@@ -3,8 +3,8 @@ const teardown = require('../../tasks/node/teardown');
 
 module.exports = {
   libraryName: 'algoliasearch-helper',
-  templateName: 'javascript-helper',
-  supportedVersion: '>= 3.0.0 < 4.0.0',
+  templateName: 'javascript-helper-2.x',
+  supportedVersion: '>= 2.0.0 < 3.0.0',
   appName: 'javascript-helper-app',
   keywords: ['algolia', 'JavaScript', 'Helper', 'algoliasearch-helper'],
   tasks: {

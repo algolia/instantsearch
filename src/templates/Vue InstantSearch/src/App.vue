@@ -15,10 +15,7 @@
     </header>
 
     <div class="container">
-      <ais-instant-search
-        :search-client="searchClient"
-        index-name="{{indexName}}"
-      >
+      <ais-instant-search :search-client="searchClient" index-name="{{indexName}}">
         <div class="search-panel">
           {{#if attributesForFaceting.length}}
           <div class="search-panel__filters">
@@ -37,18 +34,12 @@
               <template slot="item" slot-scope="{ item }">
                 <article>
                   <h1>
-                    <ais-highlight
-                      :hit="item"
-                      attribute="{{attributesToDisplay.[0]}}"
-                    />
+                    <ais-highlight :hit="item" attribute="{{attributesToDisplay.[0]}}" />
                   </h1>
                   {{#each attributesToDisplay}}
                   {{#unless @first}}
                   <p>
-                    <ais-highlight
-                      :hit="item"
-                      attribute="{{this}}"
-                    />
+                    <ais-highlight :hit="item" attribute="{{this}}" />
                   </p>
                   {{/unless}}
                   {{/each}}
@@ -75,10 +66,7 @@ import algoliasearch from 'algoliasearch/lite';
 export default {
   data() {
     return {
-      searchClient: algoliasearch(
-        '{{appId}}',
-        '{{apiKey}}'
-      ),
+      searchClient: algoliasearch('{{appId}}', '{{apiKey}}'),
     };
   },
 };

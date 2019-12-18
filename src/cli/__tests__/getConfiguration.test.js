@@ -13,11 +13,9 @@ jest.mock('../../utils', () => ({
 test('without template throws', async () => {
   expect.assertions(1);
 
-  try {
-    await getConfiguration({});
-  } catch (err) {
-    expect(err.message).toBe('The template is required in the config.');
-  }
+  await expect(getConfiguration({})).rejects.toThrow(
+    new Error('The template is required in the config.')
+  );
 });
 
 test('with template transforms to its relative path', async () => {

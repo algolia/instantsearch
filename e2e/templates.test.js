@@ -50,9 +50,7 @@ describe('Templates', () => {
           attributesForFaceting: ['facet1', 'facet2'],
         };
 
-        configFilePath = `${temporaryDirectory}/${
-          templateConfig.appName
-        }.config.json`;
+        configFilePath = `${temporaryDirectory}/${templateConfig.appName}.config.json`;
 
         fs.writeFileSync(configFilePath, JSON.stringify(config));
 

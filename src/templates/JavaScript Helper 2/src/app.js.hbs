@@ -13,11 +13,11 @@ $searchBox.addEventListener('input', event => {
   helper.setQuery(query).search();
 });
 
-helper.on('result', ({ results }) => {
+helper.on('result', result => {
   // Please sanitize user-provided data when using `innerHTML` to avoid XSS
   $hits.innerHTML = `
     <ol class="ais-hits">
-      ${results.hits
+      ${result.hits
         .map(
           hit =>
             `<li class="ais-hits--item">

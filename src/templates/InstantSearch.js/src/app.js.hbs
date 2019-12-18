@@ -1,9 +1,6 @@
 /* global algoliasearch instantsearch */
 
-const searchClient = algoliasearch(
-  '{{appId}}',
-  '{{apiKey}}'
-);
+const searchClient = algoliasearch('{{appId}}', '{{apiKey}}');
 
 const search = instantsearch({
   indexName: '{{indexName}}',
@@ -42,7 +39,7 @@ search.addWidgets([
   {{/each}}
   instantsearch.widgets.pagination({
     container: '#pagination',
-  })
+  }),
 ]);
 
 search.start();

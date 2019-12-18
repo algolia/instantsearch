@@ -30,6 +30,7 @@ module.exports = function teardown(config) {
     // Besides, prettifying the files in not necessary in the app generation lifecycle.
     // Prettier might throw for these known reasons:
     //  - there's no `.prettierrc` file in the template
+    //  - the destination folder doesn't have the rights
   }
 
   if (!config.silent) {
