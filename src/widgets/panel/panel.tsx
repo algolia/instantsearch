@@ -108,7 +108,7 @@ type PanelWidget = (
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
- * It also reacts, indicates and sets CSS classes when widgets are no more relevant for refining.
+ * It also reacts, indicates and sets CSS classes when widgets are no longer relevant for refining.
  */
 const panel: PanelWidget = (widgetParams = {} as PanelWidgetParams) => {
   const {
