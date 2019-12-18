@@ -32,10 +32,14 @@ function Panel(props: PanelProps) {
 
   useEffect(() => {
     if (!bodyRef.current) {
-      return;
+      return undefined;
     }
 
     bodyRef.current.appendChild(props.bodyElement);
+
+    return () => {
+      bodyRef!.current!.removeChild(props.bodyElement);
+    };
   }, [bodyRef, props.bodyElement]);
 
   if (!isControlled && props.isCollapsed !== isCollapsed) {
