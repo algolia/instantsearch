@@ -31,6 +31,7 @@ class SearchBox extends Component {
     searchAsYouType: PropTypes.bool,
     isSearchStalled: PropTypes.bool,
     disabled: PropTypes.bool,
+    inputLabel: PropTypes.string,
     onChange: PropTypes.func,
     onSubmit: PropTypes.func,
     onReset: PropTypes.func,
@@ -136,6 +137,7 @@ class SearchBox extends Component {
       showLoadingIndicator,
       templates,
       isSearchStalled,
+      inputLabel,
     } = this.props;
 
     return (
@@ -161,6 +163,7 @@ class SearchBox extends Component {
             autoCapitalize="off"
             spellCheck={false}
             maxLength={512}
+            aria-label={inputLabel}
             onInput={this.onInput}
             onBlur={this.onBlur}
             onFocus={this.onFocus}

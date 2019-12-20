@@ -24,6 +24,7 @@ const renderer = ({
   showReset,
   showSubmit,
   showLoadingIndicator,
+  inputLabel,
 }) => ({ refine, query, isSearchStalled }) => {
   render(
     <SearchBox
@@ -37,6 +38,7 @@ const renderer = ({
       showReset={showReset}
       showLoadingIndicator={showLoadingIndicator}
       isSearchStalled={isSearchStalled}
+      inputLabel={inputLabel}
       cssClasses={cssClasses}
     />,
     containerNode
@@ -74,6 +76,7 @@ const renderer = ({
  * @property {boolean} [showSubmit=true] Whether to show the submit button
  * @property {boolean} [showLoadingIndicator=true] Whether to show the loading indicator (replaces the submit if
  * the search is stalled)
+ * @property {string} [inputLabel=Search] ARIA-label to add to the actual search input.
  * @property {SearchBoxCSSClasses} [cssClasses] CSS classes to add
  * @property {SearchBoxTemplates} [templates] Templates used for customizing the rendering of the searchbox
  * @property {function} [queryHook] A function that is called every time a new search is done. You
@@ -110,6 +113,7 @@ export default function searchBox({
   showReset = true,
   showSubmit = true,
   showLoadingIndicator = true,
+  inputLabel = 'Search',
   queryHook,
   templates,
 } = {}) {
@@ -153,6 +157,7 @@ export default function searchBox({
     showReset,
     showSubmit,
     showLoadingIndicator,
+    inputLabel,
   });
 
   const makeWidget = connectSearchBox(specializedRenderer, () =>

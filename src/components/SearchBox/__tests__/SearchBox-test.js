@@ -70,6 +70,18 @@ describe('SearchBox', () => {
       });
     });
 
+    describe('inputLabel', () => {
+      test('sets inputLabel', () => {
+        const props = {
+          ...defaultProps,
+          inputLabel: 'Rech.',
+        };
+        const wrapper = mount(<SearchBox {...props} />);
+
+        expect(wrapper.find('input').props()['aria-label']).toBe('Rech.');
+      });
+    });
+
     describe('showSubmit', () => {
       test('show the submit button by default', () => {
         const props = {
