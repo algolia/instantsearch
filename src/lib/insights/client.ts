@@ -1,5 +1,5 @@
 import { SearchResults } from 'algoliasearch-helper';
-import { uniq, find } from '../utils';
+import { uniq, find, createDocumentationMessageGenerator } from '../utils';
 import {
   Hits,
   InsightsClient,
@@ -75,13 +75,23 @@ export const inferPayload = ({
 };
 
 const wrapInsightsClient = (
-  aa: InsightsClient,
+  aa: InsightsClient | null,
   results: SearchResults,
   hits: Hits
 ): InsightsClientWrapper => (
   method: InsightsClientMethod,
   payload: Partial<InsightsClientPayload>
 ) => {
+  if (!aa) {
+    const withInstantSearchUsage = createDocumentationMessageGenerator({
+      name: 'instantsearch',
+    });
+    throw new Error(
+      withInstantSearchUsage(
+        'The `insightsClient` option has not been provided to `instantsearch`.'
+      )
+    );
+  }
   if (!Array.isArray(payload.objectIDs)) {
     throw new TypeError('Expected `objectIDs` to be an array.');
   }
@@ -109,12 +119,7 @@ export default function withInsights(
     isFirstRender: boolean
   ) => {
     const { results, hits, instantSearchInstance } = renderOptions;
-    if (
-      results &&
-      hits &&
-      instantSearchInstance &&
-      instantSearchInstance.insightsClient /* providing the insightsClient is optional */
-    ) {
+    if (results && hits && instantSearchInstance) {
       const insights = wrapInsightsClient(
         instantSearchInstance.insightsClient,
         results,
