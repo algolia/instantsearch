@@ -1,3 +1,20 @@
+## [4.1.1](https://github.com/algolia/instantsearch.js/compare/v4.1.0...v4.1.1) (2019-12-20)
+
+
+### Bug Fixes
+
+* **configureRelatedItems:** use `facetFilters` to exclude `obje… ([#4264](https://github.com/algolia/instantsearch.js/issues/4264)) ([9bc66cf](https://github.com/algolia/instantsearch.js/commit/9bc66cfb8b13a44840c687a1631696c85e45845f))
+* **index:** fix warning for widgets sharing connectors ([#4260](https://github.com/algolia/instantsearch.js/issues/4260)) ([ec97b4a](https://github.com/algolia/instantsearch.js/commit/ec97b4a07e5d1f9a967f5ee5925ebd3b447e1b02))
+* **insights:** export Insights helper in the ESM build ([#4261](https://github.com/algolia/instantsearch.js/issues/4261)) ([20649af](https://github.com/algolia/instantsearch.js/commit/20649aff54a3150050866038cd3718d6010c353b))
+* **insights:** move 'insightsClient not provided error' to wrapper level ([#4254](https://github.com/algolia/instantsearch.js/issues/4254)) ([15d38dd](https://github.com/algolia/instantsearch.js/commit/15d38ddb87fbd6323f350d42f791c4d7a1505eeb))
+
+
+### Features
+
+* **insights:** add hogan helper ([#4253](https://github.com/algolia/instantsearch.js/issues/4253)) ([85739d7](https://github.com/algolia/instantsearch.js/commit/85739d782ae1fad3b87612e4a410eada0ca4fe54))
+
+
+
 # [4.1.0](https://github.com/algolia/instantsearch.js/compare/v4.0.1...v4.1.0) (2019-12-10)
 
 The [4.0.1](#4.0.1) release contained experimental TypeScript definitions in the ESM build by accident. We rolled this back in 4.1.0 because types will first be released on an experimental tag: `experimental-typescript`.
