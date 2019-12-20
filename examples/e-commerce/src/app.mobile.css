@@ -130,8 +130,8 @@
 
   .header {
     background: linear-gradient(to bottom, #ae8600, #885b01);
-    background-image: url('./images/cover-mobile.png');
-    background-image: url('./images/cover-mobile.png'),
+    background-image: url('./images/cover-mobile.jpg');
+    background-image: url('./images/cover-mobile.jpg'),
       linear-gradient(to bottom, #ae8600, #885b01);
     background-position: bottom;
     background-size: cover;
