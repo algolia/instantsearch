@@ -101,7 +101,7 @@
     "colors": "1.4.0",
     "conventional-changelog-cli": "2.0.28",
     "doctoc": "1.4.0",
-    "enzyme": "3.10.0",
+    "enzyme": "3.11.0",
     "enzyme-adapter-preact-pure": "2.2.0",
     "enzyme-to-json": "3.4.3",
     "eslint": "6.7.2",
