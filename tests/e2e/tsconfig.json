@@ -11,5 +11,6 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "types": ["node", "webdriverio", "jasmine"]
-  }
+  },
+  "exclude": ["node_modules", "tests"]
 }
