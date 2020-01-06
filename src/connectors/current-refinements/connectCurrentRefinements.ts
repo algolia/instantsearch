@@ -314,8 +314,9 @@ function normalizeRefinement(refinement: Refinement): ConnectorRefinement {
   const value =
     refinement.type === 'numeric' ? Number(refinement.name) : refinement.name;
   const label = (refinement as NumericRefinement).operator
-    ? `${getOperatorSymbol((refinement as NumericRefinement)
-        .operator as SearchParameters.Operator)} ${refinement.name}`
+    ? `${getOperatorSymbol(
+        (refinement as NumericRefinement).operator as SearchParameters.Operator
+      )} ${refinement.name}`
     : refinement.name;
 
   const normalizedRefinement: ConnectorRefinement = {

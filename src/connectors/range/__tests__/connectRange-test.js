@@ -156,10 +156,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     const attribute = 'price';
 
     expect(
-      makeWidget({ attribute, min: 0 }).getWidgetSearchParameters(
-        new SearchParameters(),
-        { uiState: {} }
-      )
+      makeWidget({
+        attribute,
+        min: 0,
+      }).getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: [attribute],
@@ -170,10 +170,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     );
 
     expect(
-      makeWidget({ attribute, max: 100 }).getWidgetSearchParameters(
-        new SearchParameters(),
-        { uiState: {} }
-      )
+      makeWidget({
+        attribute,
+        max: 100,
+      }).getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: [attribute],
@@ -184,10 +184,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
     );
 
     expect(
-      makeWidget({ attribute, min: 0, max: 100 }).getWidgetSearchParameters(
-        new SearchParameters(),
-        { uiState: {} }
-      )
+      makeWidget({
+        attribute,
+        min: 0,
+        max: 100,
+      }).getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
     ).toEqual(
       new SearchParameters({
         disjunctiveFacets: [attribute],

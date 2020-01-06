@@ -207,10 +207,9 @@ const infiniteHits: InfiniteHits = (
     renderState: {},
   });
 
-  const makeInfiniteHits = withInsights(connectInfiniteHits)(
-    specializedRenderer,
-    () => render(null, containerNode)
-  );
+  const makeInfiniteHits = withInsights(
+    connectInfiniteHits
+  )(specializedRenderer, () => render(null, containerNode));
 
   return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });
 };

@@ -70,12 +70,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: jest
-            .fn()
-            .mockReturnValue([
-              { name: 'true', count: 2 },
-              { name: 'false', count: 1 },
-            ]),
+          getFacetValues: jest.fn().mockReturnValue([
+            { name: 'true', count: 2 },
+            { name: 'false', count: 1 },
+          ]),
         };
         widget = toggleRefinement({
           container: containerNode,
@@ -100,12 +98,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: jest
-            .fn()
-            .mockReturnValue([
-              { name: 'true', count: 2, isRefined: false },
-              { name: 'false', count: 1, isRefined: false },
-            ]),
+          getFacetValues: jest.fn().mockReturnValue([
+            { name: 'true', count: 2, isRefined: false },
+            { name: 'false', count: 1, isRefined: false },
+          ]),
         };
         widget = toggleRefinement({
           container: containerNode,
@@ -134,12 +130,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: jest
-            .fn()
-            .mockReturnValue([
-              { name: 'true', count: 2, isRefined: false },
-              { name: 'false', count: 1, isRefined: false },
-            ]),
+          getFacetValues: jest.fn().mockReturnValue([
+            { name: 'true', count: 2, isRefined: false },
+            { name: 'false', count: 1, isRefined: false },
+          ]),
         };
         widget = toggleRefinement({
           container: containerNode,
@@ -164,12 +158,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: jest
-            .fn()
-            .mockReturnValue([
-              { name: '-2', count: 2, isRefined: true },
-              { name: '5', count: 1, isRefined: false },
-            ]),
+          getFacetValues: jest.fn().mockReturnValue([
+            { name: '-2', count: 2, isRefined: true },
+            { name: '5', count: 1, isRefined: false },
+          ]),
         };
 
         widget = toggleRefinement({
@@ -245,12 +237,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: jest
-            .fn()
-            .mockReturnValue([
-              { name: 'true', count: 2, isRefined: true },
-              { name: 'false', count: 1, isRefined: false },
-            ]),
+          getFacetValues: jest.fn().mockReturnValue([
+            { name: 'true', count: 2, isRefined: true },
+            { name: 'false', count: 1, isRefined: false },
+          ]),
         };
         widget = toggleRefinement({
           container: containerNode,
@@ -275,12 +265,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         results = {
           hits: [{ Hello: ', world!' }],
           nbHits: 1,
-          getFacetValues: jest
-            .fn()
-            .mockReturnValue([
-              { name: 'true', count: 2 },
-              { name: 'false', count: 1 },
-            ]),
+          getFacetValues: jest.fn().mockReturnValue([
+            { name: 'true', count: 2 },
+            { name: 'false', count: 1 },
+          ]),
         };
         widget = toggleRefinement({
           container: containerNode,
