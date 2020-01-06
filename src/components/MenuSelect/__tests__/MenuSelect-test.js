@@ -15,7 +15,10 @@ describe('MenuSelect', () => {
 
   it('should render <MenuSelect /> with items', () => {
     const props = {
-      items: [{ value: 'foo', label: 'foo' }, { value: 'bar', label: 'bar' }],
+      items: [
+        { value: 'foo', label: 'foo' },
+        { value: 'bar', label: 'bar' },
+      ],
       refine: () => {},
       templateProps: { templates: defaultTemplates },
       cssClasses,
@@ -41,7 +44,10 @@ describe('MenuSelect', () => {
 
   it('should render <MenuSelect /> with custom templates', () => {
     const props = {
-      items: [{ value: 'foo', label: 'foo' }, { value: 'bar', label: 'bar' }],
+      items: [
+        { value: 'foo', label: 'foo' },
+        { value: 'bar', label: 'bar' },
+      ],
       refine: () => {},
       templateProps: {
         templates: {

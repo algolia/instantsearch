@@ -4,7 +4,10 @@ import { connectHierarchicalMenu } from '../src/connectors';
 import { noop } from '../src/lib/utils';
 
 const virtualHierarchicalMenu = (args = {}) =>
-  connectHierarchicalMenu(noop, noop)({
+  connectHierarchicalMenu(
+    noop,
+    noop
+  )({
     attributes: [
       'hierarchicalCategories.lvl0',
       'hierarchicalCategories.lvl1',
