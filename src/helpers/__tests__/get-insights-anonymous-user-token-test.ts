@@ -28,4 +28,10 @@ describe('getInsightsAnonymousUserToken', () => {
     document.cookie = `${ANONYMOUS_TOKEN_COOKIE_KEY}=anonymous-uuid;expires=${DATE_TOMORROW};`;
     expect(getInsightsAnonymousUserToken()).toBe('anonymous-uuid');
   });
+
+  it("should not care about other cookies and fail if they're malformed", () => {
+    document.cookie = `${ANONYMOUS_TOKEN_COOKIE_KEY}=anonymous-uuid;expires=${DATE_TOMORROW};`;
+    document.cookie = `BAD_COOKIE=val%ue;expires=${DATE_TOMORROW};path=/`;
+    expect(getInsightsAnonymousUserToken()).toBe('anonymous-uuid');
+  });
 });
