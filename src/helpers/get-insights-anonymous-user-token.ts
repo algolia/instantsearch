@@ -1,6 +1,6 @@
 export const ANONYMOUS_TOKEN_COOKIE_KEY = '_ALGOLIA';
 
-function getCookie(name: string): string {
+function getCookie(name: string): string | undefined {
   const prefix = `${name}=`;
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
@@ -12,10 +12,9 @@ function getCookie(name: string): string {
       return cookie.substring(prefix.length, cookie.length);
     }
   }
-  return '';
+  return undefined;
 }
 
-export default function getInsightsAnonymousUserToken(): string | null {
-  const anonymousUserToken = getCookie(ANONYMOUS_TOKEN_COOKIE_KEY);
-  return anonymousUserToken || null;
+export default function getInsightsAnonymousUserToken(): string | undefined {
+  return getCookie(ANONYMOUS_TOKEN_COOKIE_KEY);
 }

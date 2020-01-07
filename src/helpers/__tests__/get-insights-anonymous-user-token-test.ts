@@ -15,13 +15,13 @@ describe('getInsightsAnonymousUserToken', () => {
     resetCookie(ANONYMOUS_TOKEN_COOKIE_KEY);
   });
 
-  it('should return null when no cookies', () => {
-    expect(getInsightsAnonymousUserToken()).toBe(null);
+  it('should return undefined when no cookies', () => {
+    expect(getInsightsAnonymousUserToken()).toBe(undefined);
   });
 
-  it('should return null when cookie present but expired', () => {
+  it('should return undefined when cookie present but expired', () => {
     document.cookie = `${ANONYMOUS_TOKEN_COOKIE_KEY}=anonymous-uuid;expires=${DATE_YESTERDAY};`;
-    expect(getInsightsAnonymousUserToken()).toBe(null);
+    expect(getInsightsAnonymousUserToken()).toBe(undefined);
   });
 
   it('should return the anonymous uuid when cookie present and valid', () => {
