@@ -72,9 +72,10 @@ const withUsage = createDocumentationMessageGenerator({
 });
 const suit = component('CurrentRefinements');
 
-const renderer: CurrentRefinementsRenderer<
-  CurrentRefinementsRendererWidgetParams
-> = ({ items, widgetParams }, isFirstRender) => {
+const renderer: CurrentRefinementsRenderer<CurrentRefinementsRendererWidgetParams> = (
+  { items, widgetParams },
+  isFirstRender
+) => {
   if (isFirstRender) {
     return;
   }
