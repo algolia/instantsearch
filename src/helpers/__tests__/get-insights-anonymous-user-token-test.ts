@@ -29,7 +29,7 @@ describe('getInsightsAnonymousUserToken', () => {
     expect(getInsightsAnonymousUserToken()).toBe('anonymous-uuid');
   });
 
-  it("should not care about other cookies and fail if they're malformed", () => {
+  it('should return the anonymous uuid when other cookies are invalid', () => {
     document.cookie = `${ANONYMOUS_TOKEN_COOKIE_KEY}=anonymous-uuid;expires=${DATE_TOMORROW};`;
     document.cookie = `BAD_COOKIE=val%ue;expires=${DATE_TOMORROW};path=/`;
     expect(getInsightsAnonymousUserToken()).toBe('anonymous-uuid');
