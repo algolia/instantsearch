@@ -30,8 +30,10 @@ Object {
     "selectedItem": "ais-RefinementList-item--selected",
     "showMore": "ais-RefinementList-showMore",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "hasExhaustiveItems": true,
+  "isFromSearch": false,
+  "isShowingMore": false,
+  "items": Array [
     Object {
       "highlighted": "foo",
       "label": "foo",
@@ -45,9 +47,6 @@ Object {
       "value": "bar",
     },
   ],
-  "hasExhaustiveItems": true,
-  "isFromSearch": false,
-  "isShowingMore": false,
   "searchFacetValues": undefined,
   "searchIsAlwaysActive": true,
   "searchPlaceholder": "Search...",

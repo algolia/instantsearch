@@ -113,7 +113,7 @@ describe('ratingMenu()', () => {
     const [firstRender] = render.mock.calls;
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect(firstRender[0].props.facetValues).toEqual([
+    expect(firstRender[0].props.items).toEqual([
       {
         count: 42,
         isRefined: true,
@@ -203,7 +203,7 @@ describe('ratingMenu()', () => {
     });
 
     expect(
-      render.mock.calls[render.mock.calls.length - 1][0].props.facetValues
+      render.mock.calls[render.mock.calls.length - 1][0].props.items
     ).toEqual([
       {
         count: 1000,

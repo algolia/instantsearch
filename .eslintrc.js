@@ -40,6 +40,7 @@ module.exports = {
       files: ['*.ts', '*.tsx'],
       rules: {
         'valid-jsdoc': 0,
+        'react/prop-types': 0,
       },
     },
   ],

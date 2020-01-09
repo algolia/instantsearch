@@ -2,7 +2,7 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import RefinementList from '../../components/RefinementList/RefinementList';
+import Menu from '../../components/Menu/Menu';
 import connectMenu from '../../connectors/menu/connectMenu';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -48,10 +48,10 @@ const renderer = ({
   }));
 
   render(
-    <RefinementList
+    <Menu
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={facetValues}
+      items={facetValues}
       showMore={showMore}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}

@@ -96,7 +96,7 @@ describe('numericMenu()', () => {
 
     const [firstRender] = render.mock.calls;
 
-    expect(firstRender[0].props.facetValues).toEqual([
+    expect(firstRender[0].props.items).toEqual([
       {
         isRefined: true,
         label: 'All',

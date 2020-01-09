@@ -17,8 +17,7 @@ Object {
     "selectedItem": "ais-RatingMenu-item--selected",
     "starIcon": "ais-RatingMenu-starIcon",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "items": Array [
     Object {
       "count": 0,
       "isRefined": false,
@@ -72,6 +71,7 @@ Object {
       "value": "1",
     },
   ],
+  "suit": [Function],
   "templateProps": Object {
     "templates": Object {
       "item": "{{#count}}<a class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" href=\\"{{href}}\\">{{/count}}{{^count}}<div class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" disabled>{{/count}}

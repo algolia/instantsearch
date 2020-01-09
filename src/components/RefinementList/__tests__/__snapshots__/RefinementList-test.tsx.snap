@@ -3,7 +3,7 @@
 exports[`RefinementList rendering with facets 1`] = `
 <div>
   <div
-    class="root customClassName"
+    class="root"
   >
     <ul
       class="list"
@@ -11,12 +11,16 @@ exports[`RefinementList rendering with facets 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          Amazon
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          Google
+        </div>
       </li>
     </ul>
   </div>
@@ -26,7 +30,7 @@ exports[`RefinementList rendering with facets 1`] = `
 exports[`RefinementList rendering with facets and disabled show more 1`] = `
 <div>
   <div
-    class="root customClassName"
+    class="root"
   >
     <ul
       class="list"
@@ -34,19 +38,27 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          Amazon
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          Google
+        </div>
       </li>
     </ul>
     <button
       class="showMore disabledShowMore"
       disabled=""
     >
-      {"isShowingMore":false}
+      <button
+        data-testid="show-more"
+      >
+        Show more
+      </button>
     </button>
   </div>
 </div>
@@ -55,7 +67,7 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
 exports[`RefinementList rendering with facets and show more 1`] = `
 <div>
   <div
-    class="root customClassName"
+    class="root"
   >
     <ul
       class="list"
@@ -63,12 +75,16 @@ exports[`RefinementList rendering with facets and show more 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          Amazon
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          Google
+        </div>
       </li>
     </ul>
     <button
@@ -83,17 +99,14 @@ exports[`RefinementList rendering with facets and show more 1`] = `
 exports[`RefinementList rendering with facets from search 1`] = `
 <div>
   <div
-    class="root customClassName"
+    class="root"
   >
     <div
       class="searchBox"
     >
-      <div
-        class="root"
-      >
+      <div>
         <form
           action=""
-          class="form"
           novalidate=""
           role="search"
         >
@@ -101,20 +114,17 @@ exports[`RefinementList rendering with facets from search 1`] = `
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
-            class="input"
             maxlength="512"
             placeholder="Search"
             type="search"
           />
           <button
-            class="submit"
             title="Submit the search query."
             type="submit"
           >
             submit
           </button>
           <button
-            class="reset"
             hidden=""
             title="Clear the search query."
             type="reset"
@@ -122,7 +132,6 @@ exports[`RefinementList rendering with facets from search 1`] = `
             reset
           </button>
           <span
-            class="loadingIndicator"
             hidden=""
           >
             loadingIndicator
@@ -136,12 +145,16 @@ exports[`RefinementList rendering with facets from search 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          Amazon
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          Google
+        </div>
       </li>
     </ul>
   </div>
@@ -151,7 +164,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
 exports[`RefinementList rendering without facets 1`] = `
 <div>
   <div
-    class="root noRefinementRoot customClassName"
+    class="root noRefinementRoot"
   />
 </div>
 `;
@@ -159,17 +172,14 @@ exports[`RefinementList rendering without facets 1`] = `
 exports[`RefinementList rendering without facets from search 1`] = `
 <div>
   <div
-    class="root noRefinementRoot customClassName"
+    class="root noRefinementRoot"
   >
     <div
       class="searchBox"
     >
-      <div
-        class="root"
-      >
+      <div>
         <form
           action=""
-          class="form"
           novalidate=""
           role="search"
         >
@@ -177,20 +187,17 @@ exports[`RefinementList rendering without facets from search 1`] = `
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
-            class="input"
             maxlength="512"
             placeholder="Search"
             type="search"
           />
           <button
-            class="submit"
             title="Submit the search query."
             type="submit"
           >
             submit
           </button>
           <button
-            class="reset"
             hidden=""
             title="Clear the search query."
             type="reset"
@@ -198,7 +205,6 @@ exports[`RefinementList rendering without facets from search 1`] = `
             reset
           </button>
           <span
-            class="loadingIndicator"
             hidden=""
           >
             loadingIndicator

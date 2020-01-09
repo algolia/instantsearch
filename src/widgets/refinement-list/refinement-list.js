@@ -80,7 +80,7 @@ const renderer = ({
     <RefinementList
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={items}
+      items={items}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       searchFacetValues={searchable ? searchForItems : undefined}

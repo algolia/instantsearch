@@ -16,8 +16,8 @@ Object {
     "selectedItem": "ais-Menu-item--selected",
     "showMore": "ais-Menu-showMore",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "isShowingMore": false,
+  "items": Array [
     Object {
       "label": "foo",
       "transformed": true,
@@ -31,7 +31,6 @@ Object {
       "value": undefined,
     },
   ],
-  "isShowingMore": false,
   "showMore": undefined,
   "templateProps": Object {
     "templates": Object {
@@ -72,8 +71,8 @@ Object {
     "selectedItem": "ais-Menu-item--selected",
     "showMore": "ais-Menu-showMore",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "isShowingMore": false,
+  "items": Array [
     Object {
       "label": "foo",
       "url": "#",
@@ -85,7 +84,6 @@ Object {
       "value": undefined,
     },
   ],
-  "isShowingMore": false,
   "showMore": undefined,
   "templateProps": Object {
     "templates": Object {

@@ -18,8 +18,8 @@ Object {
     "selectedItem": "ais-HierarchicalMenu-item--selected",
     "showMore": "ais-HierarchicalMenu-showMore",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "isShowingMore": false,
+  "items": Array [
     Object {
       "label": "foo",
       "value": undefined,
@@ -29,7 +29,6 @@ Object {
       "value": undefined,
     },
   ],
-  "isShowingMore": false,
   "showMore": false,
   "templateProps": Object {
     "templates": Object {
@@ -72,8 +71,8 @@ Object {
     "selectedItem": "ais-HierarchicalMenu-item--selected",
     "showMore": "ais-HierarchicalMenu-showMore",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "isShowingMore": false,
+  "items": Array [
     Object {
       "label": "foo",
       "value": undefined,
@@ -83,7 +82,6 @@ Object {
       "value": undefined,
     },
   ],
-  "isShowingMore": false,
   "showMore": false,
   "templateProps": Object {
     "templates": Object {
@@ -126,8 +124,8 @@ Object {
     "selectedItem": "ais-HierarchicalMenu-item--selected",
     "showMore": "ais-HierarchicalMenu-showMore",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "isShowingMore": false,
+  "items": Array [
     Object {
       "label": "foo",
       "transformed": true,
@@ -139,7 +137,6 @@ Object {
       "value": undefined,
     },
   ],
-  "isShowingMore": false,
   "showMore": false,
   "templateProps": Object {
     "templates": Object {
@@ -182,9 +179,8 @@ Object {
     "selectedItem": "ais-HierarchicalMenu-item--selected",
     "showMore": "ais-HierarchicalMenu-showMore",
   },
-  "depth": 0,
-  "facetValues": Array [],
   "isShowingMore": false,
+  "items": Array [],
   "showMore": false,
   "templateProps": Object {
     "templates": Object {
@@ -227,8 +223,8 @@ Object {
     "selectedItem": "ais-HierarchicalMenu-item--selected selectedItem",
     "showMore": "ais-HierarchicalMenu-showMore showMore",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "isShowingMore": false,
+  "items": Array [
     Object {
       "label": "foo",
       "value": undefined,
@@ -238,7 +234,6 @@ Object {
       "value": undefined,
     },
   ],
-  "isShowingMore": false,
   "showMore": false,
   "templateProps": Object {
     "templates": Object {

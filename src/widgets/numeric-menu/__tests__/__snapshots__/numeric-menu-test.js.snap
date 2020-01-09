@@ -14,8 +14,7 @@ Object {
     "root": "ais-NumericMenu root cx",
     "selectedItem": "ais-NumericMenu-item--selected",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "items": Array [
     Object {
       "isRefined": true,
       "label": "All",
@@ -72,8 +71,7 @@ Object {
     "root": "ais-NumericMenu root cx",
     "selectedItem": "ais-NumericMenu-item--selected",
   },
-  "depth": 0,
-  "facetValues": Array [
+  "items": Array [
     Object {
       "isRefined": true,
       "label": "All",

@@ -213,7 +213,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
 
       const [firstRender] = render.mock.calls;
 
-      const actualFacetValues = firstRender[0].props.facetValues;
+      const actualFacetValues = firstRender[0].props.items;
       expect(actualFacetValues).toEqual(expectedFacetValues);
     });
   });

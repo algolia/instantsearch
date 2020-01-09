@@ -9,6 +9,7 @@ const templates = {
     return `
   <label>
     <input
+      data-testid="checkbox"
       type="checkbox"
       value="${value}"
       ${isRefined ? 'checked' : ''}
@@ -19,18 +20,60 @@ const templates = {
   `;
   },
   showMoreText() {
-    return `
-  <button data-testid="show-more">Show more</button>
-    `;
+    return `<button data-testid="show-more">Show more</button>`;
   },
+  searchableNoResults: 'searchableNoResults',
+  searchableReset: 'searchableReset',
+  searchableSubmit: 'searchableSubmit',
+  searchableLoadingIndicator: 'searchableLoadingIndicator',
+  reset: 'reset',
+  submit: 'submit',
+  loadingIndicator: 'loadingIndicator',
 };
 
 const defaultProps = {
+  attribute: 'attribute',
+  canToggleShowMore: false,
   createURL: () => '#',
+  hasExhaustiveItems: true,
+  isFromSearch: false,
+  isShowingMore: false,
+  items: [],
+  searchFacetValues: undefined,
+  searchIsAlwaysActive: false,
+  searchPlaceholder: '',
+  showMore: false,
   templateProps: {
     templates,
   },
   toggleRefinement: () => {},
+  toggleShowMore: () => {},
+  cssClasses: {
+    root: 'root',
+    noRefinementRoot: 'noRefinementRoot',
+    noResults: 'noResults',
+    list: 'list',
+    item: 'item',
+    selectedItem: 'selectedItem',
+    label: 'label',
+    checkbox: 'checkbox',
+    labelText: 'labelText',
+    showMore: 'showMore',
+    disabledShowMore: 'disabledShowMore',
+    count: 'count',
+    searchBox: 'searchBox',
+    searchable: {
+      searchableRoot: 'searchableRoot',
+      searchableForm: 'searchableForm',
+      searchableInput: 'searchableInput',
+      searchableSubmit: 'searchableSubmit',
+      searchableSubmitIcon: 'searchableSubmitIcon',
+      searchableReset: 'searchableReset',
+      searchableResetIcon: 'searchableResetIcon',
+      searchableLoadingIndicator: 'searchableLoadingIndicator',
+      searchableLoadingIcon: 'searchableLoadingIcon',
+    },
+  },
 };
 
 describe('RefinementList', () => {
@@ -39,51 +82,51 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         cssClasses: {
-          root: 'root',
-          searchable: {},
+          ...defaultProps.cssClasses,
+          root: 'customRoot',
         },
       };
 
       const { container } = render(<RefinementList {...props} />);
       const root = container.firstChild;
 
-      expect(root).toHaveClass('root');
+      expect(root).toHaveClass('customRoot');
     });
 
     it('should set item classes to the refinements', () => {
       const props = {
         ...defaultProps,
         cssClasses: {
-          item: 'item',
-          searchable: {},
+          ...defaultProps.cssClasses,
+          item: 'customItem',
         },
-        facetValues: [{ value: 'foo', isRefined: true }],
+        items: [{ label: 'foo', value: 'foo', isRefined: true, count: 10 }],
       };
 
       const { container } = render(<RefinementList {...props} />);
       const item = container.querySelector('li');
 
-      expect(item).toHaveClass('item');
+      expect(item).toHaveClass('customItem');
     });
 
     it('should set active classes to the active refinements', () => {
       const props = {
         ...defaultProps,
         cssClasses: {
-          selectedItem: 'active',
-          searchable: {},
+          ...defaultProps.cssClasses,
+          selectedItem: 'customSelectedItem',
         },
-        facetValues: [
-          { value: 'foo', isRefined: true },
-          { value: 'bar', isRefined: false },
+        items: [
+          { label: 'foo', value: 'foo', isRefined: true, count: 10 },
+          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
         ],
       };
 
       const { container } = render(<RefinementList {...props} />);
-      const [activeItem, unactiveItem] = container.querySelectorAll('li');
+      const [selectedItem, nonSelectedItems] = container.querySelectorAll('li');
 
-      expect(activeItem).toHaveClass('active');
-      expect(unactiveItem).not.toHaveClass('active');
+      expect(selectedItem).toHaveClass('customSelectedItem');
+      expect(nonSelectedItems).not.toHaveClass('customSelectedItem');
     });
   });
 
@@ -91,9 +134,9 @@ describe('RefinementList', () => {
     it('should have the correct names', () => {
       const props = {
         ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
+        items: [
+          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
+          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
         ],
       };
 
@@ -107,14 +150,14 @@ describe('RefinementList', () => {
     it('should correctly set if refined or not', () => {
       const props = {
         ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: true },
+        items: [
+          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
+          { label: 'bar', value: 'bar', isRefined: true, count: 10 },
         ],
       };
 
-      const { container } = render(<RefinementList {...props} />);
-      const [firstItem, secondItem] = container.querySelectorAll('input');
+      const { queryAllByTestId } = render(<RefinementList {...props} />);
+      const [firstItem, secondItem] = queryAllByTestId('checkbox');
 
       expect(firstItem).not.toHaveAttribute('checked');
       expect(secondItem).toHaveAttribute('checked');
@@ -125,9 +168,9 @@ describe('RefinementList', () => {
     it('should pass the count to the templateData', () => {
       const props = {
         ...defaultProps,
-        facetValues: [
-          { value: 'foo', count: 42, isRefined: false },
-          { value: 'bar', count: 16, isRefined: false },
+        items: [
+          { label: 'foo', value: 'foo', count: 42, isRefined: false },
+          { label: 'bar', value: 'bar', count: 16, isRefined: false },
         ],
       };
 
@@ -143,10 +186,10 @@ describe('RefinementList', () => {
     it('adds a showMore link when the feature is enabled', () => {
       const props = {
         ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
+        items: [
+          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
+          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
+          { label: 'baz', value: 'baz', isRefined: false, count: 10 },
         ],
         showMore: true,
         isShowingMore: false,
@@ -162,10 +205,10 @@ describe('RefinementList', () => {
     it('does not add a showMore link when the feature is disabled', () => {
       const props = {
         ...defaultProps,
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: false },
-          { value: 'baz', isRefined: false },
+        items: [
+          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
+          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
+          { label: 'baz', value: 'baz', isRefined: false, count: 10 },
         ],
         showMore: false,
         isShowingMore: false,
@@ -178,143 +221,10 @@ describe('RefinementList', () => {
     });
   });
 
-  describe('sublist', () => {
-    it('should create a subList with the sub values', () => {
-      const toggleRefinement = jest.fn();
-      const props = {
-        ...defaultProps,
-        toggleRefinement,
-        createURL: () => {},
-        cssClasses: {
-          item: 'item',
-        },
-        facetValues: [
-          {
-            value: 'foo',
-            data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
-            ],
-            isRefined: false,
-          },
-        ],
-      };
-
-      const { container } = render(<RefinementList {...props} />);
-      const [
-        mainItem,
-        firstSubItem,
-        secondISubtem,
-      ] = container.querySelectorAll('.item');
-
-      fireEvent.click(mainItem);
-      expect(toggleRefinement).toHaveBeenCalledWith('foo', false);
-
-      fireEvent.click(firstSubItem);
-      expect(toggleRefinement).toHaveBeenCalledWith('bar', false);
-
-      fireEvent.click(secondISubtem);
-      expect(toggleRefinement).toHaveBeenCalledWith('baz', false);
-    });
-
-    it('should add depth class for each depth', () => {
-      const props = {
-        ...defaultProps,
-        createURL: () => {},
-        cssClasses: {
-          depth: 'depth-',
-        },
-        facetValues: [
-          {
-            value: 'foo',
-            data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
-            ],
-            isRefined: false,
-          },
-        ],
-        templateProps: {
-          templates: {
-            item: item => item.value,
-          },
-        },
-      };
-
-      const { container } = render(<RefinementList {...props} />);
-      const mainItem = container.querySelector('ul');
-      const subItem = container.querySelector('ul ul');
-
-      expect(mainItem).toHaveClass('depth-0');
-      expect(subItem).toHaveClass('depth-1');
-    });
-
-    it('should not add root class on sub lists', () => {
-      const props = {
-        ...defaultProps,
-        createURL: () => {},
-        cssClasses: {
-          root: 'my-root',
-        },
-        facetValues: [
-          {
-            value: 'foo',
-            data: [
-              { value: 'bar', isRefined: false },
-              { value: 'baz', isRefined: false },
-            ],
-            isRefined: false,
-          },
-        ],
-      };
-
-      const { container } = render(<RefinementList {...props} />);
-      const root = container.querySelector('div');
-
-      expect(root).toHaveClass(props.cssClasses.root);
-      expect(
-        container.querySelectorAll(`.${props.cssClasses.root}`)
-      ).toHaveLength(1);
-    });
-  });
-
   describe('rendering', () => {
-    const cssClasses = {
-      root: 'root',
-      noRefinementRoot: 'noRefinementRoot',
-      list: 'list',
-      item: 'item',
-      selectedItem: 'selectedItem',
-      searchBox: 'searchBox',
-      label: 'label',
-      checkbox: 'checkbox',
-      labelText: 'labelText',
-      count: 'count',
-      noResults: 'noResults',
-      showMore: 'showMore',
-      disabledShowMore: 'disabledShowMore',
-      searchable: {
-        root: 'root',
-        form: 'form',
-        input: 'input',
-        submit: 'submit',
-        submitIcon: 'submitIcon',
-        reset: 'reset',
-        resetIcon: 'resetIcon',
-        loadingIndicator: 'loadingIndicator',
-        loadingIcon: 'loadingIcon',
-      },
-    };
-
     it('without facets', () => {
       const props = {
-        container: document.createElement('div'),
-        attribute: 'attribute',
-        facetValues: [],
-        cssClasses,
-        className: 'customClassName',
-        templateProps: {},
-        toggleRefinement: () => {},
+        ...defaultProps,
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -323,24 +233,17 @@ describe('RefinementList', () => {
 
     it('without facets from search', () => {
       const props = {
-        container: document.createElement('div'),
-        attribute: 'attribute',
-        facetValues: [],
-        cssClasses,
-        className: 'customClassName',
+        ...defaultProps,
+        searchFacetValues: () => {},
         isFromSearch: true,
         searchPlaceholder: 'Search',
-        searchFacetValues: x => x,
         templateProps: {
           templates: {
+            ...defaultProps.templateProps.templates,
             item: item => item.value,
             searchableNoResults: x => JSON.stringify(x),
-            reset: 'reset',
-            submit: 'submit',
-            loadingIndicator: 'loadingIndicator',
           },
         },
-        toggleRefinement: () => {},
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -349,29 +252,27 @@ describe('RefinementList', () => {
 
     it('with facets', () => {
       const props = {
-        container: document.createElement('div'),
-        attribute: 'attribute',
-        facetValues: [
+        ...defaultProps,
+        items: [
           {
             label: 'Amazon',
+            value: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
+            value: 'Google',
             count: 1000,
             isRefined: true,
           },
         ],
-        cssClasses,
-        className: 'customClassName',
         templateProps: {
           templates: {
+            ...defaultProps.templateProps.templates,
             item: item => item.value,
           },
         },
-        toggleRefinement: () => {},
-        createURL: () => {},
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -380,33 +281,31 @@ describe('RefinementList', () => {
 
     it('with facets and show more', () => {
       const props = {
-        container: document.createElement('div'),
-        attribute: 'attribute',
-        facetValues: [
+        ...defaultProps,
+        items: [
           {
             label: 'Amazon',
+            value: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
+            value: 'Google',
             count: 1000,
             isRefined: true,
           },
         ],
-        cssClasses,
-        className: 'customClassName',
         showMore: true,
         isShowingMore: false,
         canToggleShowMore: true,
         templateProps: {
           templates: {
+            ...defaultProps.templateProps.templates,
             item: item => item.value,
             showMoreText: x => JSON.stringify(x),
           },
         },
-        toggleRefinement: () => {},
-        createURL: () => {},
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -415,33 +314,30 @@ describe('RefinementList', () => {
 
     it('with facets and disabled show more', () => {
       const props = {
-        container: document.createElement('div'),
-        attribute: 'attribute',
-        facetValues: [
+        ...defaultProps,
+        items: [
           {
             label: 'Amazon',
+            value: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
+            value: 'Google',
             count: 1000,
             isRefined: true,
           },
         ],
-        cssClasses,
-        className: 'customClassName',
         showMore: true,
         isShowingMore: false,
         canToggleShowMore: false,
         templateProps: {
           templates: {
+            ...defaultProps.templateProps.templates,
             item: item => item.value,
-            showMoreText: x => JSON.stringify(x),
           },
         },
-        toggleRefinement: () => {},
-        createURL: () => {},
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -450,35 +346,31 @@ describe('RefinementList', () => {
 
     it('with facets from search', () => {
       const props = {
-        container: document.createElement('div'),
-        attribute: 'attribute',
-        facetValues: [
+        ...defaultProps,
+        items: [
           {
             label: 'Amazon',
+            value: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
+            value: 'Google',
             count: 1000,
             isRefined: true,
           },
         ],
-        cssClasses,
-        className: 'customClassName',
+        searchFacetValues: () => {},
         isFromSearch: true,
         searchPlaceholder: 'Search',
-        searchFacetValues: x => x,
         templateProps: {
           templates: {
+            ...defaultProps.templateProps.templates,
             item: item => item.value,
-            reset: 'reset',
-            submit: 'submit',
-            loadingIndicator: 'loadingIndicator',
+            searchableNoResults: x => JSON.stringify(x),
           },
         },
-        toggleRefinement: () => {},
-        createURL: () => {},
       };
       const { container } = render(<RefinementList {...props} />);
 
@@ -488,17 +380,15 @@ describe('RefinementList', () => {
     it('should not refine on click on already refined items', () => {
       const toggleRefinement = jest.fn();
       const props = {
-        container: document.createElement('div'),
-        facetValues: [
-          { value: 'foo', isRefined: false },
-          { value: 'bar', isRefined: true },
-          { value: 'baz', isRefined: false },
+        ...defaultProps,
+        items: [
+          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
+          { label: 'bar', value: 'bar', isRefined: true, count: 10 },
+          { label: 'baz', value: 'baz', isRefined: false, count: 10 },
         ],
-        cssClasses: {
-          item: 'item',
-        },
         templateProps: {
           templates: {
+            ...defaultProps.templateProps.templates,
             item: item => `
               <label>
                 <input type="radio" checked="${item.isRefined}" />
@@ -507,12 +397,10 @@ describe('RefinementList', () => {
             `,
           },
         },
-        toggleRefinement,
-        createURL: () => {},
       };
 
       const { container } = render(<RefinementList {...props} />);
-      const checkedItem = container.querySelector('.item [checked="true"]');
+      const checkedItem = container.querySelector('.item [checked="true"]')!;
 
       fireEvent.click(checkedItem);
 
