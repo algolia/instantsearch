@@ -44,7 +44,9 @@
     "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
     "release": "./scripts/release/publish.js",
     "release:maintenance": "./scripts/release/publish-maintenance.sh",
-    "release:view-changelog": "conventional-changelog -p angular"
+    "release:view-changelog": "conventional-changelog -p angular",
+    "release:prepare": "shipjs prepare",
+    "release:trigger": "shipjs trigger"
   },
   "files": [
     "dist",
@@ -136,6 +138,7 @@
     "scriptjs": "2.5.9",
     "semver": "6.3.0",
     "shelljs": "0.8.3",
+    "shipjs": "0.13.1",
     "typescript": "3.7.3",
     "webpack": "4.41.2"
   },

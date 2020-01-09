@@ -94,6 +94,19 @@ jobs:
           name: Type Checking including JS files
           command: yarn run type-check:js
 
+  'release if needed':
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Trigger a release if the latest commit is a release commit.
+          command: |
+            yarn release:trigger
+
 workflows:
   version: 2
   ci:
@@ -103,3 +116,4 @@ workflows:
       - lint
       - type check js (optional)
       - e2e tests
+      - release if needed
