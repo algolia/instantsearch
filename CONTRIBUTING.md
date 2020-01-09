@@ -61,7 +61,6 @@ After you create a pull request, a bot will comment with a link to a development
 You will find a playground for the widgets: https://**netlify-deploy-url**/stories.
 
 - Example: https://deploy-preview-3376--instantsearchjs.netlify.com/stories/
-- Source: https://github.com/algolia/instantsearch.js/tree/develop/stories
 
 ## Commit conventions
 
@@ -94,11 +93,10 @@ Some examples of valid commit messages (used as first lines):
 
 The project is based on the classic GitHub flow:
 
-- `develop` for the current version being worked on – Pull requests for bugs and feature related to the current major version should be created against this branch
-- `master` for the latest stable version – we usually don't make pull requests on this branch
+- `master` for the current version being worked on – Pull requests for bugs and feature related to the current major version should be created against this branch
 - `vX` for each major version (`X` being a number) – Pull requests for critical bug fixes should be created against this branch
 
-Most of the time, your pull requests should target the `develop` branch, except if you're fixing a critical bug on an older version.
+Most of the time, your pull requests should target the `master` branch.
 
 _Note that no new features will be developed or backported for the `vX` branches._
 
@@ -182,7 +180,7 @@ JavaScript and TypeScript files are validated using a combination of [Prettier](
 
 ### Main version
 
-For the main version, go on develop (`git checkout develop`) and use:
+For the main version, go on master (`git checkout master`) and use:
 
 ```sh
 npm run release
@@ -210,7 +208,7 @@ If you're on a feature branch (either for a fix or a new minor/major version), y
 npm run release
 ```
 
-You can also release a beta version from `develop`, using the beta flag in the command line:
+You can also release a beta version from `next`, using the beta flag in the command line:
 
 ```sh
 npm run release -- --beta
