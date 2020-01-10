@@ -58,9 +58,7 @@ Then:
 
 After you create a pull request, a bot will comment with a link to a development version of the website.
 
-You will find a playground for the widgets: https://**netlify-deploy-url**/stories.
-
-- Example: https://deploy-preview-3376--instantsearchjs.netlify.com/stories/
+You will find a playground for the widgets, for example: https://deploy-preview-3376--instantsearchjs.netlify.com/stories/
 
 ## Commit conventions
 
