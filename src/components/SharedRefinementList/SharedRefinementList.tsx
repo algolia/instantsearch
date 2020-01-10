@@ -86,7 +86,7 @@ function SharedRefinementList<
 
   const searchBoxIsEnabled =
     props.searchIsAlwaysActive === true ||
-    (props.isFromSearch && !props.hasExhaustiveItems);
+    !props.isFromSearch || !props.hasExhaustiveItems;
 
   return (
     <List

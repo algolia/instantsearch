@@ -76,8 +76,10 @@ function List(props: ListProps) {
             }
             onReset={() => props.searchFacetValues!('')}
             onSubmit={() => {
-              // Hitting `enter` should refine the first item in the list
-              props.refine(props.items[0]);
+              if (props.items.length > 0) {
+                // Hitting `enter` should refine the first item in the list
+                props.refine(props.items[0]);
+              }
             }}
             // This sets the search box to a controlled state because
             // we don't rely on the `refine` prop but on `onChange`.
