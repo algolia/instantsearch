@@ -26,3 +26,4 @@ export { Snippet } from 'react-instantsearch-dom';
 export { SortBy } from 'react-instantsearch-dom';
 export { Stats } from 'react-instantsearch-dom';
 export { ToggleRefinement } from 'react-instantsearch-dom';
+export { getInsightsAnonymousUserToken } from 'react-instantsearch-dom';

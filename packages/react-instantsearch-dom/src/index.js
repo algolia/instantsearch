@@ -72,3 +72,8 @@ export { createClassNames } from './core/utils';
 
 // voiceSearchHelper
 export { default as createVoiceSearchHelper } from './lib/voiceSearchHelper';
+
+// insights
+export {
+  default as getInsightsAnonymousUserToken,
+} from './core/getInsightsAnonymousUserToken';
