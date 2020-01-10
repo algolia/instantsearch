@@ -126,3 +126,52 @@ button:not([class^='ais-']) {
 button:not([class^='ais-']):disabled {
   border-color: #c4c8d8;
 }
+
+/* Related items */
+
+.related-items {
+  display: flex;
+  align-items: center;
+}
+
+.related-items .ais-Hits-list {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+.ais-RelatedHits-item-image {
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.ais-RelatedHits-item-image img {
+  max-width: 100%;
+  max-height: 120px;
+}
+
+.ais-RelatedHits-item-title {
+  text-align: center;
+  padding: 1rem;
+}
+
+.ais-RelatedHits-item-title h4 {
+  margin: 0;
+}
+
+.ais-RelatedHits-button {
+  height: 40px;
+  width: 40px;
+  border-radius: 3px;
+  background-color: #dfe2ee;
+  border: none;
+  color: #3a4570;
+  cursor: pointer;
+}
+
+.ais-RelatedHits-button[disabled] {
+  cursor: not-allowed;
+}

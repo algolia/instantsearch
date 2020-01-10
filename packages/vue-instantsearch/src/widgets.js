@@ -5,6 +5,9 @@ export {
 } from './components/ClearRefinements.vue';
 export { default as AisConfigure } from './components/Configure';
 export {
+  default as AisExperimentalConfigureRelatedItems,
+} from './components/ConfigureRelatedItems';
+export {
   default as AisCurrentRefinements,
 } from './components/CurrentRefinements.vue';
 export {

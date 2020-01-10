@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import InstantSearch from '../instantsearch';
 
+const renderlessComponents = ['AisExperimentalConfigureRelatedItems'];
+
 it('should have `name` the same as the suit class name everywhere', () => {
   Vue.component = jest.fn();
   Vue.use(InstantSearch);
 
-  const allInstalledComponents = Vue.component.mock.calls;
+  const allInstalledComponents = Vue.component.mock.calls.filter(
+    ([installedName]) => !renderlessComponents.includes(installedName)
+  );
   const components = allInstalledComponents.map(
     ([installedName, { name, mixins }]) => {
       let suitClass = `Error! ${name} is missing the suit classes`;

@@ -13,7 +13,7 @@ module.exports = {
     camelcase: [
       'error',
       {
-        allow: ['^\\$_ais'],
+        allow: ['^\\$_ais', '^EXPERIMENTAL_'],
       },
     ],
   },
