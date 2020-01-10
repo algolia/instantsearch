@@ -468,7 +468,7 @@ import cx from 'classnames';
 import ClearRefinements from './widgets/ClearRefinements.vue';
 import NoResults from './widgets/NoResults.vue';
 import { formatNumber } from './utils';
-import routing from './routing';
+import getRouting from './routing';
 
 import './Theme.css';
 import './App.css';
@@ -508,7 +508,7 @@ export default {
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
-      routing
+      routing: getRouting({ indexName: 'instant_search' })
     };
   },
   methods: {

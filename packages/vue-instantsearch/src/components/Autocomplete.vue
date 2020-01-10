@@ -32,11 +32,6 @@ export default {
     createSuitMixin({ name: 'Autocomplete' }),
   ],
   props: {
-    indices: {
-      type: Array,
-      required: false,
-      default: undefined,
-    },
     escapeHTML: {
       type: Boolean,
       required: false,
@@ -46,7 +41,6 @@ export default {
   computed: {
     widgetParams() {
       return {
-        indices: this.indices,
         escapeHTML: this.escapeHTML,
       };
     },

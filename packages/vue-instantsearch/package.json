@@ -47,8 +47,8 @@
     "release:publish": "scripts/release-publish.sh"
   },
   "dependencies": {
-    "algoliasearch-helper": "^2.26.1",
-    "instantsearch.js": "^3.6.0"
+    "algoliasearch-helper": "^3.0.0",
+    "instantsearch.js": "^4.0.1"
   },
   "peerDependencies": {
     "algoliasearch": "^3.30.0",
@@ -111,7 +111,7 @@
   "bundlesize": [
     {
       "path": "./dist/vue-instantsearch.js",
-      "maxSize": "60.50 kB"
+      "maxSize": "46.25 kB"
     },
     {
       "path": "./dist/vue-instantsearch.esm.js",

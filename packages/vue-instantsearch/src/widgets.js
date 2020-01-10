@@ -13,6 +13,7 @@ export {
 export { default as AisHighlight } from './components/Highlight.vue';
 export { default as AisHits } from './components/Hits.vue';
 export { default as AisHitsPerPage } from './components/HitsPerPage.vue';
+export { default as AisIndex } from './components/Index';
 export { default as AisInstantSearch } from './components/InstantSearch';
 export { default as AisInstantSearchSsr } from './components/InstantSearchSsr';
 export { default as AisInfiniteHits } from './components/InfiniteHits.vue';

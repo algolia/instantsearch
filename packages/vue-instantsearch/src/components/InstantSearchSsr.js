@@ -3,9 +3,6 @@ import { createInstantSearchComponent } from '../util/createInstantSearchCompone
 export default createInstantSearchComponent({
   name: 'AisInstantSearchSsr',
   inject: {
-    // should be possible to configure this with {camelcase: ['error', {allow: ['^\\$_']}]}
-    // but that didn't work
-    // eslint-disable-next-line camelcase
     $_ais: {
       default() {
         throw new Error('`rootMixin` is required when using SSR.');

@@ -18,7 +18,6 @@ it('requires an injected instantsearch instance ($_ais)', () => {
 it('renders correctly (empty)', () => {
   const wrapper = mount(InstantSearchSsr, {
     provide: () => ({
-      // eslint-disable-next-line camelcase
       $_ais: instantsearch({
         indexName: 'bla',
         searchClient: createFakeClient(),
@@ -32,7 +31,6 @@ it('renders correctly (empty)', () => {
 it('renders correctly (with slot used)', () => {
   const wrapper = mount(InstantSearchSsr, {
     provide: () => ({
-      // eslint-disable-next-line camelcase
       $_ais: instantsearch({
         indexName: 'bla',
         searchClient: createFakeClient(),

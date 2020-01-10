@@ -91,9 +91,6 @@ export const createInstantSearch = instantSearchOptions => {
   const rootMixin = {
     provide() {
       return {
-        // should be possible to configure this with {camelcase: ['error', {allow: ['^\\$_']}]}
-        // but that didn't work
-        // eslint-disable-next-line camelcase
         $_ais: search,
       };
     },

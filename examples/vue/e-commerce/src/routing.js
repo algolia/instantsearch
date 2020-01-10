@@ -3,18 +3,35 @@ import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
 const hitsPerPageItemsValue = [16, 32, 64];
 
 function getFallbackHitsPerPageRoutingValue(hitsPerPageValue) {
-  return hitsPerPageItemsValue.indexOf(Number(hitsPerPageValue)) !== -1 ? hitsPerPageValue : undefined;
+  if (hitsPerPageItemsValue.indexOf(Number(hitsPerPageValue)) !== -1) {
+    return hitsPerPageValue;
+  }
+
+  return undefined;
 }
 
-const sortByItemsValue = ['instant_search', 'instant_search_price_asc', 'instant_search_price_desc'];
+const sortByItemsValue = [
+  'instant_search',
+  'instant_search_price_asc',
+  'instant_search_price_desc',
+];
 
 function getFallbackSortByRoutingValue(sortByValue) {
-  return sortByItemsValue.indexOf(sortByValue) !== -1 ? sortByValue : undefined;
+  if (sortByItemsValue.indexOf(sortByValue) !== -1) {
+    return sortByValue;
+  }
+
+  return undefined;
 }
 
 function getFallbackRatingsRoutingValue(value) {
   const ratingValue = Number(value);
-  return ratingValue >= 1 && ratingValue <= 4 ? value : undefined;
+
+  if (ratingValue >= 1 && ratingValue <= 4) {
+    return value;
+  }
+
+  return undefined;
 }
 
 const routeStateDefaultValues = {
@@ -93,7 +110,7 @@ const router = historyRouter({
     const categoryPath = routeState.category
       ? `${getCategorySlug(routeState.category)}/`
       : '';
-    const queryParameters= {};
+    const queryParameters = {};
 
     if (
       routeState.query &&
@@ -184,55 +201,61 @@ const router = historyRouter({
   },
 });
 
-const stateMapping = {
+const getStateMapping = ({ indexName }) => ({
   stateToRoute(uiState) {
+    const indexUiState = uiState[indexName];
     return {
-      query: uiState.query,
-      page: uiState.page,
-      brands: uiState.refinementList && uiState.refinementList.brand,
+      query: indexUiState.query,
+      page: indexUiState.page,
+      brands: indexUiState.refinementList && indexUiState.refinementList.brand,
       category:
-        uiState.hierarchicalMenu &&
-        uiState.hierarchicalMenu['hierarchicalCategories.lvl0'] &&
-        uiState.hierarchicalMenu['hierarchicalCategories.lvl0'].join('/'),
-      rating: uiState.ratingMenu && String(uiState.ratingMenu.rating),
-      price: uiState.range && uiState.range.price,
+        indexUiState.hierarchicalMenu &&
+        indexUiState.hierarchicalMenu['hierarchicalCategories.lvl0'] &&
+        indexUiState.hierarchicalMenu['hierarchicalCategories.lvl0'].join('/'),
+      rating: indexUiState.ratingMenu && String(indexUiState.ratingMenu.rating),
+      price: indexUiState.range && indexUiState.range.price,
       free_shipping:
-        (uiState.toggle && String(uiState.toggle.free_shipping)) || undefined,
-      sortBy: uiState.sortBy,
+        (indexUiState.toggle && String(indexUiState.toggle.free_shipping)) ||
+        undefined,
+      sortBy: indexUiState.sortBy,
       hitsPerPage:
-        (uiState.hitsPerPage && String(uiState.hitsPerPage)) || undefined,
+        (indexUiState.hitsPerPage && String(indexUiState.hitsPerPage)) ||
+        undefined,
     };
   },
 
   routeToState(routeState) {
     return {
-      query: routeState.query,
-      page: routeState.page,
-      hierarchicalMenu: {
-        'hierarchicalCategories.lvl0':
-          (routeState.category && routeState.category.split('/')) || undefined,
+      [indexName]: {
+        query: routeState.query,
+        page: routeState.page,
+        hierarchicalMenu: {
+          'hierarchicalCategories.lvl0':
+            (routeState.category && routeState.category.split('/')) ||
+            undefined,
+        },
+        refinementList: {
+          brand: routeState.brands,
+        },
+        ratingMenu: {
+          rating: Number(routeState.rating),
+        },
+        range: {
+          price: routeState.price,
+        },
+        toggle: {
+          free_shipping: Boolean(routeState.free_shipping),
+        },
+        sortBy: routeState.sortBy,
+        hitsPerPage: Number(routeState.hitsPerPage),
       },
-      refinementList: {
-        brand: routeState.brands,
-      },
-      ratingMenu: {
-        rating: Number(routeState.rating),
-      },
-      range: {
-        price: routeState.price,
-      },
-      toggle: {
-        free_shipping: Boolean(routeState.free_shipping),
-      },
-      sortBy: routeState.sortBy,
-      hitsPerPage: Number(routeState.hitsPerPage),
     };
   },
-};
+});
 
-const searchRouting = {
+const getRouting = ({ indexName }) => ({
   router,
-  stateMapping,
-};
+  stateMapping: getStateMapping({ indexName }),
+});
 
-export default searchRouting;
+export default getRouting;

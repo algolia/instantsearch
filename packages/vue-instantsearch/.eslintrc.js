@@ -10,6 +10,12 @@ module.exports = {
         ignore: ['createURL'],
       },
     ],
+    camelcase: [
+      'error',
+      {
+        allow: ['^\\$_ais'],
+      },
+    ],
   },
   overrides: {
     files: ['src/components/__tests__/*.js'],

@@ -1,4 +1,5 @@
 let state = {};
+let widget = {};
 
 // we need to have state given by `component` before it is mounted, otherwise
 // we can't render it in most cases (items, hits, etc. are used in the template)
@@ -12,10 +13,15 @@ export function __setState(newState) {
   state = newState;
 }
 
-export const createWidgetMixin = () => ({
+export function __setWidget(newWidget) {
+  widget = newWidget;
+}
+
+export const createWidgetMixin = jest.fn(() => ({
   data() {
     return {
       state,
+      widget,
     };
   },
-});
+}));

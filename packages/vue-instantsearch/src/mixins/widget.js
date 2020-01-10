@@ -3,12 +3,18 @@ import { warn } from '../util/warn';
 export const createWidgetMixin = ({ connector } = {}) => ({
   inject: {
     instantSearchInstance: {
-      name: 'instantSearchInstance',
+      from: '$_ais_instantSearchInstance',
       default() {
         const tag = this.$options._componentTag;
         throw new TypeError(
           `It looks like you forgot to wrap your Algolia search component "<${tag}>" inside of an "<ais-instant-search>" component.`
         );
+      },
+    },
+    getParentIndex: {
+      from: '$_ais_getParentIndex',
+      default() {
+        return () => this.instantSearchInstance;
       },
     },
   },
@@ -21,7 +27,7 @@ export const createWidgetMixin = ({ connector } = {}) => ({
     if (typeof connector === 'function') {
       this.factory = connector(this.updateState, () => {});
       this.widget = this.factory(this.widgetParams);
-      this.instantSearchInstance.addWidget(this.widget);
+      this.getParentIndex().addWidgets([this.widget]);
 
       const { hydrated, started } = this.instantSearchInstance;
       if ((!started && hydrated) || this.$isServer) {
@@ -50,7 +56,7 @@ Read more on using connectors: https://alg.li/vue-custom`
       this.widget.dispose &&
       this.instantSearchInstance.started // a widget can't be removed if IS is not started
     ) {
-      this.instantSearchInstance.removeWidget(this.widget);
+      this.getParentIndex().removeWidgets([this.widget]);
     }
   },
   watch: {
@@ -59,10 +65,10 @@ Read more on using connectors: https://alg.li/vue-custom`
         this.state = null;
         // a widget can't be removed if IS is not started
         if (this.widget.dispose && this.instantSearchInstance.started) {
-          this.instantSearchInstance.removeWidget(this.widget);
+          this.getParentIndex().removeWidgets([this.widget]);
         }
         this.widget = this.factory(nextWidgetParams);
-        this.instantSearchInstance.addWidget(this.widget);
+        this.getParentIndex().addWidgets([this.widget]);
       },
       deep: true,
     },

@@ -39,7 +39,28 @@ const fakeInstantSearch = jest.fn(
       start: jest.fn(() => {
         instantsearchInstance.started = true;
       }),
-      dispose: jest.fn(),
+      dispose: jest.fn(() => {
+        instantsearchInstance.started = false;
+      }),
+      mainIndex: {
+        $$type: 'ais.index',
+        _widgets: [],
+        getWidgets() {
+          return this._widgets;
+        },
+      },
+      addWidgets(widgets) {
+        instantsearchInstance.mainIndex._widgets.push(...widgets);
+      },
+      removeWidgets(widgets) {
+        widgets.forEach(widget => {
+          const i = instantsearchInstance.mainIndex._widgets.findIndex(widget);
+          if (i === -1) {
+            return;
+          }
+          instantsearchInstance.mainIndex._widgets.splice(i, 1);
+        });
+      },
     };
 
     return instantsearchInstance;

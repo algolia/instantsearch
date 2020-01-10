@@ -59,18 +59,9 @@ storiesOf('ais-autocomplete', module)
   .add('using vue-autosuggest (multi-index)', () => ({
     template: `
       <div>
-        <ais-autocomplete
-          :indices="[
-            {
-              value: 'airbnb',
-              label: 'ATIS',
-            },
-            {
-              value: 'instantsearch_query_suggestions',
-              label: 'query-suggestions',
-            }
-          ]"
-        >
+        <ais-index index-name="airbnb" />
+        <ais-index index-name="instantsearch_query_suggestions" />
+        <ais-autocomplete>
           <template slot-scope="{currentRefinement, indices, refine}">
             <vue-autosuggest
               :suggestions="indicesToSuggestions(indices)"
@@ -80,7 +71,7 @@ storiesOf('ais-autocomplete', module)
                 onInputChange: refine,
               }"
             >
-            <template slot-scope="{ suggestion }">
+            <template slot="default" slot-scope="{ suggestion }">
               <img
                 :src="suggestion.item.image"
                 style="height: 50px;"

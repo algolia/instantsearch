@@ -284,3 +284,33 @@ it('disposes the instantsearch instance on unmount', async () => {
   expect(wrapper.vm.instantSearchInstance.started).toBe(false);
   expect(wrapper.vm.instantSearchInstance.dispose).toHaveBeenCalledTimes(1);
 });
+
+it('provides the instantsearch instance', done => {
+  Vue.config.errorHandler = done;
+
+  const ChildComponent = {
+    inject: ['$_ais_instantSearchInstance'],
+    mounted() {
+      this.$nextTick(() => {
+        expect(typeof this.$_ais_instantSearchInstance).toBe('object');
+        expect(wrapper.vm.instantSearchInstance).toBe(
+          this.$_ais_instantSearchInstance
+        );
+        done();
+      });
+    },
+    render() {
+      return null;
+    },
+  };
+
+  const wrapper = mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      indexName: 'something',
+    },
+    slots: {
+      default: ChildComponent,
+    },
+  });
+});
