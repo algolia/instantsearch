@@ -103,7 +103,7 @@ jobs:
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
       - run:
-          name: Trigger a release if the latest commit is a release commit.
+          name: Trigger a release if the latest commit is a release commit
           command: |
             yarn release:trigger
 
