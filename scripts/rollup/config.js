@@ -2,7 +2,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
-import { uglify } from 'rollup-plugin-uglify';
+import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import filesize from 'rollup-plugin-filesize';
 
 const version =
@@ -43,12 +43,7 @@ const createConfiguration = ({ mode, filename }) => ({
       __DEV__: mode === 'development',
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    mode === 'production' &&
-      uglify({
-        output: {
-          preamble: license,
-        },
-      }),
+    mode === 'production' && compiler(),
   ].filter(Boolean),
 });
 

@@ -62,6 +62,7 @@
     "qs": "^6.5.1"
   },
   "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "0.19.1",
     "@babel/cli": "7.7.7",
     "@babel/core": "7.7.7",
     "@babel/plugin-proposal-class-properties": "7.7.4",
