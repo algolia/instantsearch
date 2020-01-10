@@ -5,7 +5,6 @@ it('is a connector', () => {
   const widgetInstance = widgetFactory();
   expect(widgetInstance).toEqual(
     expect.objectContaining({
-      $$type: 'vue.stateResults',
       init: expect.any(Function),
       render: expect.any(Function),
       dispose: expect.any(Function),

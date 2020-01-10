@@ -3,8 +3,6 @@ import { _objectSpread } from '../util/polyfills';
 const connectStateResults = (renderFn, unmountFn = () => {}) => (
   widgetParams = {}
 ) => ({
-  $$type: 'vue.stateResults',
-
   init({ instantSearchInstance }) {
     renderFn(
       {
