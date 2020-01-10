@@ -15,6 +15,7 @@ module.exports = {
   },
   pullRequestReviewer: ['@algolia/instantsearch-for-websites'],
   slack: {
+    prepared: null,
     releaseStart: null,
   },
 };
