@@ -52,8 +52,6 @@ const withUsage = createDocumentationMessageGenerator({
  * websites. From a UX point of view, we suggest not displaying more than two
  * levels deep.
  *
- * There's a complete example available on how to write a custom **HierarchicalMenu**:
- *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/storybook/app/jquery/widgets/hierarchicalMenu.js)
  * @type {Connector}
  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
