@@ -180,7 +180,7 @@ JavaScript and TypeScript files are validated using a combination of [Prettier](
 
 ### Main version
 
-For the main version, go on master (`git checkout master`) and use:
+For the main version, go on `master` (`git checkout master`) and use:
 
 ```sh
 npm run release
@@ -208,7 +208,7 @@ If you're on a feature branch (either for a fix or a new minor/major version), y
 npm run release
 ```
 
-You can also release a beta version from `next`, using the beta flag in the command line:
+You can also release a beta version from another branch, using the beta flag in the command line:
 
 ```sh
 npm run release -- --beta
