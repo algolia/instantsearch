@@ -1,37 +1,39 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow, mount } from 'enzyme';
 import { render, fireEvent } from '@testing-library/preact';
 import RefinementList from '../RefinementList';
-import RefinementListItem from '../RefinementListItem';
+
+const templates = {
+  item({ value, count, isRefined }) {
+    return `
+  <label>
+    <input
+      type="checkbox"
+      value="${value}"
+      ${isRefined ? 'checked' : ''}
+    />
+    <span data-testid="value">${value}</span>
+    <span data-testid="count">${count}</span>
+  </label>
+  `;
+  },
+  showMoreText() {
+    return `
+  <button data-testid="show-more">Show more</button>
+    `;
+  },
+};
 
 const defaultProps = {
+  createURL: () => '#',
   templateProps: {
-    templates: {
-      item: 'item',
-      templateKey: 'templateKey',
-      searchableNoResults: 'searchableNoResults',
-    },
+    templates,
   },
   toggleRefinement: () => {},
 };
 
 describe('RefinementList', () => {
-  let createURL;
-
-  function shallowRender(extraProps = {}) {
-    createURL = () => {};
-    const props = {
-      ...defaultProps,
-      createURL,
-      facetValues: [],
-      ...extraProps,
-    };
-
-    return shallow(<RefinementList {...props} />);
-  }
-
   describe('cssClasses', () => {
     it('should add the `root` class to the root element', () => {
       const props = {
@@ -42,9 +44,10 @@ describe('RefinementList', () => {
         },
       };
 
-      const wrapper = shallowRender(props);
+      const { container } = render(<RefinementList {...props} />);
+      const root = container.firstChild;
 
-      expect(wrapper.hasClass('root')).toEqual(true);
+      expect(root).toHaveClass('root');
     });
 
     it('should set item classes to the refinements', () => {
@@ -57,9 +60,10 @@ describe('RefinementList', () => {
         facetValues: [{ value: 'foo', isRefined: true }],
       };
 
-      const wrapper = shallowRender(props).find(RefinementListItem);
+      const { container } = render(<RefinementList {...props} />);
+      const item = container.querySelector('li');
 
-      expect(wrapper.props().className).toContain('item');
+      expect(item).toHaveClass('item');
     });
 
     it('should set active classes to the active refinements', () => {
@@ -75,11 +79,11 @@ describe('RefinementList', () => {
         ],
       };
 
-      const activeItem = shallowRender(props).find({ isRefined: true });
-      const inactiveItem = shallowRender(props).find({ isRefined: false });
+      const { container } = render(<RefinementList {...props} />);
+      const [activeItem, unactiveItem] = container.querySelectorAll('li');
 
-      expect(activeItem.props().className).toContain('active');
-      expect(inactiveItem.props().className).not.toContain('active');
+      expect(activeItem).toHaveClass('active');
+      expect(unactiveItem).not.toHaveClass('active');
     });
   });
 
@@ -93,12 +97,11 @@ describe('RefinementList', () => {
         ],
       };
 
-      const items = shallowRender(props).find(RefinementListItem);
-      const firstItem = items.at(0);
-      const secondItem = items.at(1);
+      const { container } = render(<RefinementList {...props} />);
+      const [firstItem, secondItem] = container.querySelectorAll('li');
 
-      expect(firstItem.props().facetValueToRefine).toEqual('foo');
-      expect(secondItem.props().facetValueToRefine).toEqual('bar');
+      expect(firstItem).toHaveTextContent('foo');
+      expect(secondItem).toHaveTextContent('bar');
     });
 
     it('should correctly set if refined or not', () => {
@@ -110,12 +113,11 @@ describe('RefinementList', () => {
         ],
       };
 
-      const items = shallowRender(props).find(RefinementListItem);
-      const firstItem = items.at(0);
-      const secondItem = items.at(1);
+      const { container } = render(<RefinementList {...props} />);
+      const [firstItem, secondItem] = container.querySelectorAll('input');
 
-      expect(firstItem.props().isRefined).toEqual(false);
-      expect(secondItem.props().isRefined).toEqual(true);
+      expect(firstItem).not.toHaveAttribute('checked');
+      expect(secondItem).toHaveAttribute('checked');
     });
   });
 
@@ -129,12 +131,11 @@ describe('RefinementList', () => {
         ],
       };
 
-      const items = shallowRender(props).find(RefinementListItem);
-      const firstItem = items.at(0);
-      const secondItem = items.at(1);
+      const { queryAllByTestId } = render(<RefinementList {...props} />);
+      const [firstItem, secondItem] = queryAllByTestId('count');
 
-      expect(firstItem.props().templateData.count).toEqual(42);
-      expect(secondItem.props().templateData.count).toEqual(16);
+      expect(firstItem).toHaveTextContent('42');
+      expect(secondItem).toHaveTextContent('16');
     });
   });
 
@@ -152,10 +153,10 @@ describe('RefinementList', () => {
         canToggleShowMore: true,
       };
 
-      const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="showMoreText"]');
+      const { queryByTestId } = render(<RefinementList {...props} />);
+      const showMoreTemplate = queryByTestId('show-more');
 
-      expect(wrapper).toHaveLength(1);
+      expect(showMoreTemplate).toBeInTheDocument();
     });
 
     it('does not add a showMore link when the feature is disabled', () => {
@@ -170,10 +171,10 @@ describe('RefinementList', () => {
         isShowingMore: false,
       };
 
-      const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="showMoreText"]');
+      const { queryByTestId } = render(<RefinementList {...props} />);
+      const showMoreTemplate = queryByTestId('show-more');
 
-      expect(wrapper).toHaveLength(0);
+      expect(showMoreTemplate).not.toBeInTheDocument();
     });
   });
 
@@ -315,9 +316,9 @@ describe('RefinementList', () => {
         templateProps: {},
         toggleRefinement: () => {},
       };
-      const wrapper = mount(<RefinementList {...props} />);
+      const { container } = render(<RefinementList {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('without facets from search', () => {
@@ -332,8 +333,8 @@ describe('RefinementList', () => {
         searchFacetValues: x => x,
         templateProps: {
           templates: {
-            item: item => item,
-            searchableNoResults: x => x,
+            item: item => item.value,
+            searchableNoResults: x => JSON.stringify(x),
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',
@@ -341,9 +342,9 @@ describe('RefinementList', () => {
         },
         toggleRefinement: () => {},
       };
-      const wrapper = mount(<RefinementList {...props} />);
+      const { container } = render(<RefinementList {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('with facets', () => {
@@ -366,15 +367,15 @@ describe('RefinementList', () => {
         className: 'customClassName',
         templateProps: {
           templates: {
-            item: item => item,
+            item: item => item.value,
           },
         },
         toggleRefinement: () => {},
         createURL: () => {},
       };
-      const wrapper = mount(<RefinementList {...props} />);
+      const { container } = render(<RefinementList {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('with facets and show more', () => {
@@ -400,16 +401,16 @@ describe('RefinementList', () => {
         canToggleShowMore: true,
         templateProps: {
           templates: {
-            item: item => item,
-            showMoreText: x => x,
+            item: item => item.value,
+            showMoreText: x => JSON.stringify(x),
           },
         },
         toggleRefinement: () => {},
         createURL: () => {},
       };
-      const wrapper = mount(<RefinementList {...props} />);
+      const { container } = render(<RefinementList {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('with facets and disabled show more', () => {
@@ -435,16 +436,16 @@ describe('RefinementList', () => {
         canToggleShowMore: false,
         templateProps: {
           templates: {
-            item: item => item,
-            showMoreText: x => x,
+            item: item => item.value,
+            showMoreText: x => JSON.stringify(x),
           },
         },
         toggleRefinement: () => {},
         createURL: () => {},
       };
-      const wrapper = mount(<RefinementList {...props} />);
+      const { container } = render(<RefinementList {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('with facets from search', () => {
@@ -470,7 +471,7 @@ describe('RefinementList', () => {
         searchFacetValues: x => x,
         templateProps: {
           templates: {
-            item: item => item,
+            item: item => item.value,
             reset: 'reset',
             submit: 'submit',
             loadingIndicator: 'loadingIndicator',
@@ -479,9 +480,9 @@ describe('RefinementList', () => {
         toggleRefinement: () => {},
         createURL: () => {},
       };
-      const wrapper = mount(<RefinementList {...props} />);
+      const { container } = render(<RefinementList {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it('should not refine on click on already refined items', () => {
