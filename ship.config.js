@@ -19,5 +19,40 @@ module.exports = {
     // Ship.js will send slack message only for `releaseSuccess`.
     prepared: null,
     releaseStart: null,
+    releaseSuccess: ({
+      appName,
+      version,
+      releaseTag,
+      latestCommitHash,
+      latestCommitUrl,
+      repoURL,
+    }) => ({
+      pretext: [
+        `:tada: Successfully released *${appName}@${version}*`,
+        '',
+        `:warning: Make sure you run \`yarn run release-templates\` in \`create-instantsearch-app\`.`,
+      ].join('\n'),
+      fields: [
+        {
+          title: 'Branch',
+          value: 'master',
+          short: true,
+        },
+        {
+          title: 'Commit',
+          value: `*<${latestCommitUrl}|${latestCommitHash}>*`,
+          short: true,
+        },
+        {
+          title: 'Version',
+          value: version,
+          short: true,
+        },
+        {
+          title: 'Release',
+          value: `${repoURL}/releases/tag/${releaseTag}`,
+        },
+      ],
+    }),
   },
 };
