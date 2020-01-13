@@ -30,7 +30,7 @@ module.exports = {
       pretext: [
         `:tada: Successfully released *${appName}@${version}*`,
         '',
-        `:warning: Make sure you run \`yarn run release-templates\` in \`create-instantsearch-app\`.`,
+        `Make sure to run \`yarn run release-templates\` in \`create-instantsearch-app\`.`,
       ].join('\n'),
       fields: [
         {
