@@ -31,28 +31,27 @@ interface RefinementListCSSClasses {
   };
 }
 
+interface RefinementListItem {
+  value: string;
+  label: string;
+  highlighted: string;
+  count: number;
+  isRefined: boolean;
+}
+
 interface RefinementListTemplates {
-  item: WidgetTemplate<{
-    value: string;
-    label: string;
-    isRefined: boolean;
-    count: number;
-    attribute: string;
-    url: string;
-    cssClasses: RefinementListCSSClasses;
-  }>;
+  item: WidgetTemplate<
+    RefinementListItem & {
+      attribute: string;
+      url: string;
+      cssClasses: RefinementListCSSClasses;
+    }
+  >;
   showMoreText: WidgetTemplate<{ isShowingMore: boolean }>;
   searchableNoResults: WidgetTemplate;
   reset: WidgetTemplate<{ cssClasses: object }>;
   submit: WidgetTemplate<{ cssClasses: object }>;
   loadingIndicator: WidgetTemplate<{ cssClasses: object }>;
-}
-
-interface RefinementListItem {
-  value: string;
-  label: string;
-  count: number;
-  isRefined: boolean;
 }
 
 interface RefinementListProps {

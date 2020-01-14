@@ -100,7 +100,15 @@ describe('RefinementList', () => {
           ...defaultProps.cssClasses,
           item: 'customItem',
         },
-        items: [{ label: 'foo', value: 'foo', isRefined: true, count: 10 }],
+        items: [
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            isRefined: true,
+            count: 10,
+          },
+        ],
       };
 
       const { container } = render(<RefinementList {...props} />);
@@ -117,8 +125,20 @@ describe('RefinementList', () => {
           selectedItem: 'customSelectedItem',
         },
         items: [
-          { label: 'foo', value: 'foo', isRefined: true, count: 10 },
-          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            isRefined: true,
+            count: 10,
+          },
+          {
+            label: 'bar',
+            value: 'bar',
+            highlighted: 'bar',
+            isRefined: false,
+            count: 10,
+          },
         ],
       };
 
@@ -135,8 +155,20 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         items: [
-          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
-          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            isRefined: false,
+            count: 10,
+          },
+          {
+            label: 'bar',
+            value: 'bar',
+            highlighted: 'bar',
+            isRefined: false,
+            count: 10,
+          },
         ],
       };
 
@@ -151,8 +183,20 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         items: [
-          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
-          { label: 'bar', value: 'bar', isRefined: true, count: 10 },
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            isRefined: false,
+            count: 10,
+          },
+          {
+            label: 'bar',
+            value: 'bar',
+            highlighted: 'bar',
+            isRefined: true,
+            count: 10,
+          },
         ],
       };
 
@@ -169,8 +213,20 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         items: [
-          { label: 'foo', value: 'foo', count: 42, isRefined: false },
-          { label: 'bar', value: 'bar', count: 16, isRefined: false },
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            count: 42,
+            isRefined: false,
+          },
+          {
+            label: 'bar',
+            value: 'bar',
+            highlighted: 'bar',
+            count: 16,
+            isRefined: false,
+          },
         ],
       };
 
@@ -187,9 +243,27 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         items: [
-          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
-          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
-          { label: 'baz', value: 'baz', isRefined: false, count: 10 },
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            isRefined: false,
+            count: 10,
+          },
+          {
+            label: 'bar',
+            value: 'bar',
+            highlighted: 'bar',
+            isRefined: false,
+            count: 10,
+          },
+          {
+            label: 'baz',
+            value: 'baz',
+            highlighted: 'baz',
+            isRefined: false,
+            count: 10,
+          },
         ],
         showMore: true,
         isShowingMore: false,
@@ -206,9 +280,27 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         items: [
-          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
-          { label: 'bar', value: 'bar', isRefined: false, count: 10 },
-          { label: 'baz', value: 'baz', isRefined: false, count: 10 },
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            isRefined: false,
+            count: 10,
+          },
+          {
+            label: 'bar',
+            value: 'bar',
+            highlighted: 'bar',
+            isRefined: false,
+            count: 10,
+          },
+          {
+            label: 'baz',
+            value: 'baz',
+            highlighted: 'baz',
+            isRefined: false,
+            count: 10,
+          },
         ],
         showMore: false,
         isShowingMore: false,
@@ -257,12 +349,14 @@ describe('RefinementList', () => {
           {
             label: 'Amazon',
             value: 'Amazon',
+            highlighted: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
             value: 'Google',
+            highlighted: 'Google',
             count: 1000,
             isRefined: true,
           },
@@ -286,12 +380,14 @@ describe('RefinementList', () => {
           {
             label: 'Amazon',
             value: 'Amazon',
+            highlighted: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
             value: 'Google',
+            highlighted: 'Google',
             count: 1000,
             isRefined: true,
           },
@@ -319,12 +415,14 @@ describe('RefinementList', () => {
           {
             label: 'Amazon',
             value: 'Amazon',
+            highlighted: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
             value: 'Google',
+            highlighted: 'Google',
             count: 1000,
             isRefined: true,
           },
@@ -351,12 +449,14 @@ describe('RefinementList', () => {
           {
             label: 'Amazon',
             value: 'Amazon',
+            highlighted: 'Amazon',
             count: 1200,
             isRefined: false,
           },
           {
             label: 'Google',
             value: 'Google',
+            highlighted: 'Google',
             count: 1000,
             isRefined: true,
           },
@@ -382,9 +482,27 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         items: [
-          { label: 'foo', value: 'foo', isRefined: false, count: 10 },
-          { label: 'bar', value: 'bar', isRefined: true, count: 10 },
-          { label: 'baz', value: 'baz', isRefined: false, count: 10 },
+          {
+            label: 'foo',
+            value: 'foo',
+            highlighted: 'foo',
+            isRefined: false,
+            count: 10,
+          },
+          {
+            label: 'bar',
+            value: 'bar',
+            highlighted: 'bar',
+            isRefined: true,
+            count: 10,
+          },
+          {
+            label: 'baz',
+            value: 'baz',
+            highlighted: 'baz',
+            isRefined: false,
+            count: 10,
+          },
         ],
         templateProps: {
           templates: {
