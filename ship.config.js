@@ -13,7 +13,7 @@ module.exports = {
   beforeCommitChanges: ({ exec }) => {
     exec('yarn doctoc');
   },
-  pullRequestReviewer: ['@algolia/instantsearch-for-websites'],
+  pullRequestTeamReviewer: ['instantsearch-for-websites'],
   slack: {
     // disable slack notification for `prepared` and `releaseStart` lifecycle.
     // Ship.js will send slack message only for `releaseSuccess`.
