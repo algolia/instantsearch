@@ -22,7 +22,7 @@ module.exports = {
     releaseSuccess: ({
       appName,
       version,
-      releaseTag,
+      tagName,
       latestCommitHash,
       latestCommitUrl,
       repoURL,
@@ -50,7 +50,7 @@ module.exports = {
         },
         {
           title: 'Release',
-          value: `${repoURL}/releases/tag/${releaseTag}`,
+          value: `${repoURL}/releases/tag/${tagName}`,
         },
       ],
     }),
