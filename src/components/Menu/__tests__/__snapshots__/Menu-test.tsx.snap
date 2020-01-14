@@ -1,0 +1,275 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu renders correct DOM with items 1`] = `
+<div>
+  <div
+    class="root"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item selectedItem"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Appliances"
+          >
+            <span
+              class="label"
+            >
+              Appliances
+            </span>
+            <span
+              class="count"
+            >
+              4306
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Computers & Tablets"
+          >
+            <span
+              class="label"
+            >
+              Computers & Tablets
+            </span>
+            <span
+              class="count"
+            >
+              3563
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Cell Phones"
+          >
+            <span
+              class="label"
+            >
+              Cell Phones
+            </span>
+            <span
+              class="count"
+            >
+              3291
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Cell Phone Accessories"
+          >
+            <span
+              class="label"
+            >
+              Cell Phone Accessories
+            </span>
+            <span
+              class="count"
+            >
+              2836
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Audio"
+          >
+            <span
+              class="label"
+            >
+              Audio
+            </span>
+            <span
+              class="count"
+            >
+              1570
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Small Kitchen Appliances"
+          >
+            <span
+              class="label"
+            >
+              Small Kitchen Appliances
+            </span>
+            <span
+              class="count"
+            >
+              1510
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Cameras & Camcorders"
+          >
+            <span
+              class="label"
+            >
+              Cameras & Camcorders
+            </span>
+            <span
+              class="count"
+            >
+              1369
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Car Electronics & GPS"
+          >
+            <span
+              class="label"
+            >
+              Car Electronics & GPS
+            </span>
+            <span
+              class="count"
+            >
+              1208
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#TV & Home Theater"
+          >
+            <span
+              class="label"
+            >
+              TV & Home Theater
+            </span>
+            <span
+              class="count"
+            >
+              1201
+            </span>
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Cell Phone Cases & Clips"
+          >
+            <span
+              class="label"
+            >
+              Cell Phone Cases & Clips
+            </span>
+            <span
+              class="count"
+            >
+              1195
+            </span>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`Menu renders correct DOM without items 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  />
+</div>
+`;
+
+exports[`Menu renders with showMore and canToggleShowMore to false 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <button
+      class="showMore disabledShowMore"
+      disabled=""
+    >
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Menu renders with showMore and isShowingMore to false 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <button
+      class="showMore"
+    >
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Menu renders with showMore and isShowingMore to true 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <button
+      class="showMore"
+    >
+      Show less
+    </button>
+  </div>
+</div>
+`;

@@ -10,9 +10,11 @@ interface MenuCSSClasses {
   list: string;
   item: string;
   selectedItem: string;
+  link: string;
   label: string;
-  labelText: string;
-  radio: string;
+  count: string;
+  showMore: string;
+  disabledShowMore: string;
 }
 
 interface MenuItem {
@@ -32,7 +34,6 @@ interface MenuTemplates {
 }
 
 interface MenuProps {
-  attribute: string;
   canToggleShowMore: boolean;
   createURL(value: string): string;
   cssClasses: MenuCSSClasses;

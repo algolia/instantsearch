@@ -49,15 +49,15 @@ const renderer = ({
 
   render(
     <Menu
+      canToggleShowMore={canToggleShowMore}
       createURL={createURL}
       cssClasses={cssClasses}
+      isShowingMore={isShowingMore}
       items={facetValues}
       showMore={showMore}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       toggleShowMore={toggleShowMore}
-      isShowingMore={isShowingMore}
-      canToggleShowMore={canToggleShowMore}
     />,
     containerNode
   );
