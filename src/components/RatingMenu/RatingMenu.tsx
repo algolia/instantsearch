@@ -37,7 +37,6 @@ interface RatingMenuTemplates {
 }
 
 interface RatingMenuProps {
-  children?: React.ReactNode;
   createURL(value: string): string;
   cssClasses: RatingMenuCSSClasses;
   items: RatingMenuItem[];
