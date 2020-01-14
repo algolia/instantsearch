@@ -40,11 +40,11 @@ interface HierarchicalMenuItem {
   label: string;
   count: number;
   isRefined: boolean;
-  data: HierarchicalMenuItem[];
+  exhaustive: boolean;
+  data: HierarchicalMenuItem[] | null;
 }
 
 interface HierarchicalMenuProps {
-  attribute: string;
   canToggleShowMore: boolean;
   createURL(value: string): string;
   cssClasses: HierarchicalMenuCSSClasses;
@@ -83,15 +83,13 @@ function HierarchicalMenu(props: HierarchicalMenuProps) {
             ...item,
             url: props.createURL(item.value),
             cssClasses: props.cssClasses,
-            // @MAJOR: remove undocumented `attribute` template prop
-            attribute: props.attribute,
           }}
         />
 
         {hasChildren && (
           <div className={props.cssClasses.childList}>
             <ul className={props.cssClasses.list}>
-              {item.data.map(childItem => renderItem(childItem))}
+              {item.data!.map(childItem => renderItem(childItem))}
             </ul>
           </div>
         )}
@@ -102,11 +100,15 @@ function HierarchicalMenu(props: HierarchicalMenuProps) {
   return (
     <List
       canRefine={props.items.length > 0}
+      canToggleShowMore={props.canToggleShowMore}
       cssClasses={props.cssClasses}
       items={props.items}
       refine={refine}
       renderItem={renderItem}
       templateProps={props.templateProps}
+      isShowingMore={props.isShowingMore}
+      showMore={props.showMore}
+      toggleShowMore={props.toggleShowMore}
     />
   );
 }

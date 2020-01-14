@@ -1,0 +1,453 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HierarchicalMenu renders correct DOM with items 1`] = `
+<div>
+  <div
+    class="root"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item selectedItem parentItem"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Appliances"
+          >
+            <span
+              class="label"
+            >
+              Appliances
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+        <div
+          class="childList"
+        >
+          <ul
+            class="list"
+          >
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Dishwashers"
+                >
+                  <span
+                    class="label"
+                  >
+                    Dishwashers
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Fans"
+                >
+                  <span
+                    class="label"
+                  >
+                    Fans
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Freezers & Ice Makers"
+                >
+                  <span
+                    class="label"
+                  >
+                    Freezers & Ice Makers
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Heaters"
+                >
+                  <span
+                    class="label"
+                  >
+                    Heaters
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Humidifiers"
+                >
+                  <span
+                    class="label"
+                  >
+                    Humidifiers
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Microwaves"
+                >
+                  <span
+                    class="label"
+                  >
+                    Microwaves
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Ranges, Cooktops & Ovens"
+                >
+                  <span
+                    class="label"
+                  >
+                    Ranges, Cooktops & Ovens
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Refrigerators"
+                >
+                  <span
+                    class="label"
+                  >
+                    Refrigerators
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Small Kitchen Appliances"
+                >
+                  <span
+                    class="label"
+                  >
+                    Small Kitchen Appliances
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+            <li
+              class="item"
+            >
+              <div>
+                <a
+                  class="link"
+                  href="#Appliances > Washers & Dryers"
+                >
+                  <span
+                    class="label"
+                  >
+                    Washers & Dryers
+                  </span>
+                  <span
+                    class="count"
+                  />
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Audio"
+          >
+            <span
+              class="label"
+            >
+              Audio
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Cameras & Camcorders"
+          >
+            <span
+              class="label"
+            >
+              Cameras & Camcorders
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Car Electronics & GPS"
+          >
+            <span
+              class="label"
+            >
+              Car Electronics & GPS
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Cell Phones"
+          >
+            <span
+              class="label"
+            >
+              Cell Phones
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Computers & Tablets"
+          >
+            <span
+              class="label"
+            >
+              Computers & Tablets
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Health, Fitness & Beauty"
+          >
+            <span
+              class="label"
+            >
+              Health, Fitness & Beauty
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Office & School Supplies"
+          >
+            <span
+              class="label"
+            >
+              Office & School Supplies
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#TV & Home Theater"
+          >
+            <span
+              class="label"
+            >
+              TV & Home Theater
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <a
+            class="link"
+            href="#Video Games"
+          >
+            <span
+              class="label"
+            >
+              Video Games
+            </span>
+            <span
+              class="count"
+            />
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`HierarchicalMenu renders correct DOM without items 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  />
+</div>
+`;
+
+exports[`HierarchicalMenu renders with showMore and canToggleShowMore to false 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <button
+      class="showMore disabledShowMore"
+      disabled=""
+    >
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`HierarchicalMenu renders with showMore and isShowingMore to false 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <button
+      class="showMore"
+    >
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`HierarchicalMenu renders with showMore and isShowingMore to true 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  >
+    <button
+      class="showMore"
+    >
+      Show less
+    </button>
+  </div>
+</div>
+`;

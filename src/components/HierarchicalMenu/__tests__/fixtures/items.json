@@ -1,0 +1,163 @@
+[
+  {
+    "label": "Appliances",
+    "value": "Appliances",
+    "count": 4306,
+    "isRefined": true,
+    "exhaustive": true,
+    "data": [
+      {
+        "label": "Dishwashers",
+        "value": "Appliances > Dishwashers",
+        "count": 181,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Fans",
+        "value": "Appliances > Fans",
+        "count": 91,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Freezers & Ice Makers",
+        "value": "Appliances > Freezers & Ice Makers",
+        "count": 75,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Heaters",
+        "value": "Appliances > Heaters",
+        "count": 76,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Humidifiers",
+        "value": "Appliances > Humidifiers",
+        "count": 62,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Microwaves",
+        "value": "Appliances > Microwaves",
+        "count": 223,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Ranges, Cooktops & Ovens",
+        "value": "Appliances > Ranges, Cooktops & Ovens",
+        "count": 664,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Refrigerators",
+        "value": "Appliances > Refrigerators",
+        "count": 453,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Small Kitchen Appliances",
+        "value": "Appliances > Small Kitchen Appliances",
+        "count": 1510,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      },
+      {
+        "label": "Washers & Dryers",
+        "value": "Appliances > Washers & Dryers",
+        "count": 277,
+        "isRefined": false,
+        "exhaustive": true,
+        "data": null
+      }
+    ]
+  },
+  {
+    "label": "Audio",
+    "value": "Audio",
+    "count": 1570,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "Cameras & Camcorders",
+    "value": "Cameras & Camcorders",
+    "count": 1369,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "Car Electronics & GPS",
+    "value": "Car Electronics & GPS",
+    "count": 1208,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "Cell Phones",
+    "value": "Cell Phones",
+    "count": 3291,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "Computers & Tablets",
+    "value": "Computers & Tablets",
+    "count": 3563,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "Health, Fitness & Beauty",
+    "value": "Health, Fitness & Beauty",
+    "count": 923,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "Office & School Supplies",
+    "value": "Office & School Supplies",
+    "count": 617,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "TV & Home Theater",
+    "value": "TV & Home Theater",
+    "count": 1201,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  },
+  {
+    "label": "Video Games",
+    "value": "Video Games",
+    "count": 505,
+    "isRefined": false,
+    "exhaustive": true,
+    "data": null
+  }
+]

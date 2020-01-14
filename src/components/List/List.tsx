@@ -8,7 +8,6 @@ import SearchBox from '../SearchBox/SearchBox';
 interface ListItem {
   value: string;
   isRefined: boolean;
-  data?: ListItem[];
 }
 
 interface ListCSSClasses {
