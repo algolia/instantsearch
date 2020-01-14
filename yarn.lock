@@ -8035,25 +8035,6 @@ inquirer@6.5.0:
     strip-ansi "^5.1.0"
     through "^2.3.6"
 
-inquirer@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/inquirer/-/inquirer-7.0.1.tgz#13f7980eedc73c689feff3994b109c4e799c6ebb"
-  integrity sha512-V1FFQ3TIO15det8PijPLFR9M9baSlnRs9nL7zWu1MNVA2T9YVl9ZbrHJhYs7e9X8jeMZ3lr2JH/rdHFgNCBdYw==
-  dependencies:
-    ansi-escapes "^4.2.1"
-    chalk "^2.4.2"
-    cli-cursor "^3.1.0"
-    cli-width "^2.0.0"
-    external-editor "^3.0.3"
-    figures "^3.0.0"
-    lodash "^4.17.15"
-    mute-stream "0.0.8"
-    run-async "^2.2.0"
-    rxjs "^6.5.3"
-    string-width "^4.1.0"
-    strip-ansi "^5.1.0"
-    through "^2.3.6"
-
 inquirer@7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.0.3.tgz#f9b4cd2dff58b9f73e8d43759436ace15bed4567"
@@ -12690,10 +12671,10 @@ shellwords@^0.1.1:
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
 
-shipjs-lib@0.13.1:
-  version "0.13.1"
-  resolved "https://registry.npmjs.org/shipjs-lib/-/shipjs-lib-0.13.1.tgz#a3654e4f5c1c6481a145b9a0bcab01ef475f7b32"
-  integrity sha512-SWFdIPgQTEcXSfRFqA/0+2IEui+qerN9R3bxOil6dcNUD+BRHu72zcPKsZI24+BoVDl6LjZukppKKlt2VH2e+Q==
+shipjs-lib@0.14.0:
+  version "0.14.0"
+  resolved "https://registry.npmjs.org/shipjs-lib/-/shipjs-lib-0.14.0.tgz#3c06bb520bc1c8074d617ff97d8488ae71257c00"
+  integrity sha512-3knIgkIMQLRLRdfryL2mPwnnOENAOG+3ooHajclA4fPYzVfZsBriNrf9/n1ejWv7ZYayUXMlvon/NawjxmJOPA==
   dependencies:
     deepmerge "^4.2.2"
     dotenv "^8.1.0"
@@ -12701,10 +12682,10 @@ shipjs-lib@0.13.1:
     semver "6.3.0"
     shelljs "0.8.3"
 
-shipjs@0.13.1:
-  version "0.13.1"
-  resolved "https://registry.npmjs.org/shipjs/-/shipjs-0.13.1.tgz#d31f8ab56e7f70251dd77bee46a1f0e7a59a74a3"
-  integrity sha512-PAG6eVKDMdIzQ57x/fAGWxkYbIG/yqeRO19dazFa4VW0t7CeHZOsMl3pK2v4BvwdpOMRMuY+y/Yig4zVP0XZfg==
+shipjs@0.14.0:
+  version "0.14.0"
+  resolved "https://registry.npmjs.org/shipjs/-/shipjs-0.14.0.tgz#acd094feed177d02b94786b132cf8bbabb971966"
+  integrity sha512-nyyEfW+DXDYowhKM0hxh99Y4Uew1CWDqOuIweQtDGnNYb+dXSjyeqD7uwjaqXZ22T5miMMUOeVZQiYiB03O0VA==
   dependencies:
     "@babel/runtime" "^7.6.3"
     "@octokit/rest" "^16.35.0"
@@ -12718,14 +12699,14 @@ shipjs@0.13.1:
     ejs "^3.0.0"
     esm "3.2.25"
     globby "^10.0.1"
-    inquirer "7.0.1"
+    inquirer "7.0.3"
     mime-types "^2.1.25"
     mkdirp "^0.5.1"
     open "^7.0.0"
     prettier "^1.18.2"
     serialize-javascript "^2.1.0"
     shell-quote "^1.7.2"
-    shipjs-lib "0.13.1"
+    shipjs-lib "0.14.0"
     temp-write "4.0.0"
     tempfile "^3.0.0"
 
