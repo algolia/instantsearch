@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NumericMenu renders correct DOM with items 1`] = `
+<div>
+  <div
+    class="root"
+  >
+    <ul
+      class="list"
+    >
+      <li
+        class="item selectedItem"
+      >
+        <div>
+          <label
+            class="label"
+          >
+             
+            <input
+              checked=""
+              class="radio"
+              name="attribute"
+              type="radio"
+            />
+             
+            <span
+              class="labelText"
+            >
+              All
+            </span>
+             
+          </label>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <label
+            class="label"
+          >
+             
+            <input
+              class="radio"
+              name="attribute"
+              type="radio"
+            />
+             
+            <span
+              class="labelText"
+            >
+              Less than 10
+            </span>
+             
+          </label>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <label
+            class="label"
+          >
+             
+            <input
+              class="radio"
+              name="attribute"
+              type="radio"
+            />
+             
+            <span
+              class="labelText"
+            >
+              Between 10 and 100
+            </span>
+             
+          </label>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <label
+            class="label"
+          >
+             
+            <input
+              class="radio"
+              name="attribute"
+              type="radio"
+            />
+             
+            <span
+              class="labelText"
+            >
+              1000
+            </span>
+             
+          </label>
+        </div>
+      </li>
+      <li
+        class="item"
+      >
+        <div>
+          <label
+            class="label"
+          >
+             
+            <input
+              class="radio"
+              name="attribute"
+              type="radio"
+            />
+             
+            <span
+              class="labelText"
+            >
+              More than 1000
+            </span>
+             
+          </label>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`NumericMenu renders correct DOM without items 1`] = `
+<div>
+  <div
+    class="root noRefinementRoot"
+  />
+</div>
+`;

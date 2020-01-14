@@ -36,12 +36,12 @@ const renderer = ({
 
   render(
     <NumericMenu
+      attribute={attribute}
       createURL={createURL}
       cssClasses={cssClasses}
       items={items}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
-      attribute={attribute}
     />,
     containerNode
   );
