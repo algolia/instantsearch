@@ -33,7 +33,7 @@
     "src"
   ],
   "engines": {
-    "node": ">= 8"
+    "node": ">= 10"
   },
   "dependencies": {
     "algoliasearch": "3.35.1",

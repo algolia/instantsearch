@@ -25,15 +25,15 @@ aliases:
 defaults: &defaults
   working_directory: ~/create-instantsearch-app
   docker:
-    - image: circleci/node:8
+    - image: circleci/node:12
 
 executors:
-  node8:
-    docker:
-      - image: circleci/node:8
   node10:
     docker:
       - image: circleci/node:10
+  node12:
+    docker:
+      - image: circleci/node:12
 
 commands:
   build_app:
@@ -88,8 +88,8 @@ jobs:
           name: End-to-end tests
           command: yarn run test:e2e --maxWorkers=4
 
-  test_apps_node_8:
-    executor: node8
+  test_apps_node_10:
+    executor: node10
     steps:
       - checkout
       - run: *install_yarn_version
@@ -118,8 +118,8 @@ jobs:
           template: 'Vue InstantSearch'
           app: 'vue-instantsearch'
 
-  test_apps_node_10:
-    executor: node10
+  test_apps_node_12:
+    executor: node12
     steps:
       - checkout
       - run: *install_yarn_version
@@ -155,5 +155,5 @@ workflows:
       - test_lint
       - test_unit
       - test_e2e
-      - test_apps_node_8
       - test_apps_node_10
+      - test_apps_node_12
