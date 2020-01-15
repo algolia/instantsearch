@@ -4427,7 +4427,7 @@ exports[`Templates React InstantSearch File content: src/App.css 1`] = `
 `;
 
 exports[`Templates React InstantSearch File content: src/App.js 1`] = `
-"import React, { Component } from 'react';
+"import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
@@ -4442,49 +4442,47 @@ import './App.css';
 
 const searchClient = algoliasearch('appId', 'apiKey');
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <header className=\\"header\\">
-          <h1 className=\\"header-title\\">
-            <a href=\\"/\\">react-instantsearch-app</a>
-          </h1>
-          <p className=\\"header-subtitle\\">
-            using{' '}
-            <a href=\\"https://github.com/algolia/react-instantsearch\\">
-              React InstantSearch
-            </a>
-          </p>
-        </header>
+function App() {
+  return (
+    <div>
+      <header className=\\"header\\">
+        <h1 className=\\"header-title\\">
+          <a href=\\"/\\">react-instantsearch-app</a>
+        </h1>
+        <p className=\\"header-subtitle\\">
+          using{' '}
+          <a href=\\"https://github.com/algolia/react-instantsearch\\">
+            React InstantSearch
+          </a>
+        </p>
+      </header>
 
-        <div className=\\"container\\">
-          <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
-            <div className=\\"search-panel\\">
-              <div className=\\"search-panel__filters\\">
-                <RefinementList attribute=\\"facet1\\" />
-                <RefinementList attribute=\\"facet2\\" />
-              </div>
+      <div className=\\"container\\">
+        <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+          <div className=\\"search-panel\\">
+            <div className=\\"search-panel__filters\\">
+              <RefinementList attribute=\\"facet1\\" />
+              <RefinementList attribute=\\"facet2\\" />
+            </div>
 
-              <div className=\\"search-panel__results\\">
-                <SearchBox
-                  className=\\"searchbox\\"
-                  translations={{
-                    placeholder: 'Search placeholder',
-                  }}
-                />
-                <Hits hitComponent={Hit} />
+            <div className=\\"search-panel__results\\">
+              <SearchBox
+                className=\\"searchbox\\"
+                translations={{
+                  placeholder: 'Search placeholder',
+                }}
+              />
+              <Hits hitComponent={Hit} />
 
-                <div className=\\"pagination\\">
-                  <Pagination />
-                </div>
+              <div className=\\"pagination\\">
+                <Pagination />
               </div>
             </div>
-          </InstantSearch>
-        </div>
+          </div>
+        </InstantSearch>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 function Hit(props) {
