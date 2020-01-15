@@ -112,7 +112,7 @@
     "eslint-import-resolver-webpack": "0.12.1",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-jasmine": "4.1.0",
-    "eslint-plugin-jest": "22.21.0",
+    "eslint-plugin-jest": "23.6.0",
     "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-react": "7.17.0",
     "eslint-plugin-react-hooks": "2.3.0",
