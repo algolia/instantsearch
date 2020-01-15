@@ -136,24 +136,28 @@ describe('InstantSearch - State and route', () => {
     });
 
     it('must have the expected url', async () => {
-      await browser.waitUntil(async () => {
-        const url = await browser.getUrl();
-        const { pathname, searchParams } = new URL(url);
+      await browser.waitUntil(
+        async () => {
+          const url = await browser.getUrl();
+          const { pathname, searchParams } = new URL(url);
 
-        return (
-          pathname ===
-            '/examples/e-commerce/search/Appliances%2FRanges%2C+Cooktops+%26+Ovens/' &&
-          searchParams.get('query') === 'cooktop' &&
-          searchParams.get('page') === '2' &&
-          searchParams.get('brands') === 'Whirlpool' &&
-          searchParams.get('rating') === '3' &&
-          /^(23[0-9]|24[0-9]|250):(124[0-9]|1250)$/.test(
-            searchParams.get('price') || ''
-          ) &&
-          searchParams.get('sortBy') === 'instant_search_price_asc' &&
-          searchParams.get('hitsPerPage') === '64'
-        );
-      });
+          return (
+            pathname ===
+              '/examples/e-commerce/search/Appliances%2FRanges%2C+Cooktops+%26+Ovens/' &&
+            searchParams.get('query') === 'cooktop' &&
+            searchParams.get('page') === '2' &&
+            searchParams.get('brands') === 'Whirlpool' &&
+            searchParams.get('rating') === '3' &&
+            /^(23[0-9]|24[0-9]|250):(124[0-9]|1250)$/.test(
+              searchParams.get('price') || ''
+            ) &&
+            searchParams.get('sortBy') === 'instant_search_price_asc' &&
+            searchParams.get('hitsPerPage') === '64'
+          );
+        },
+        undefined,
+        'URL does not have expected parameters'
+      );
     });
   });
 });
