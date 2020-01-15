@@ -11,14 +11,18 @@ describe('InstantSearch - Search on specific price range', () => {
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be > lowerBound)`, async () => {
-    await browser.waitUntil(async () => {
-      const hits = await browser.$$('.hit-info-container strong');
-      const hitsText = await browser.getTextFromElements(hits);
-      return (
-        hitsText.filter(text => Number(text.replace(',', '')) < lowerBound)
-          .length === 0
-      );
-    });
+    await browser.waitUntil(
+      async () => {
+        const hits = await browser.$$('.hit-info-container strong');
+        const hitsText = await browser.getTextFromElements(hits);
+        return (
+          hitsText.filter(text => Number(text.replace(',', '')) < lowerBound)
+            .length === 0
+        );
+      },
+      undefined,
+      `Results list was not updated to display only hits with prices > ${lowerBound}`
+    );
   });
 
   it('drag and drop upper handle to the left', async () => {
@@ -26,14 +30,18 @@ describe('InstantSearch - Search on specific price range', () => {
   });
 
   it(`waits for the results list to be updated (wait for all the prices to be < upperBound)`, async () => {
-    await browser.waitUntil(async () => {
-      const hits = await browser.$$('.hit-info-container strong');
-      const hitsText = await browser.getTextFromElements(hits);
-      return (
-        hitsText.filter(text => Number(text.replace(',', '')) > upperBound)
-          .length === 0
-      );
-    });
+    await browser.waitUntil(
+      async () => {
+        const hits = await browser.$$('.hit-info-container strong');
+        const hitsText = await browser.getTextFromElements(hits);
+        return (
+          hitsText.filter(text => Number(text.replace(',', '')) > upperBound)
+            .length === 0
+        );
+      },
+      undefined,
+      `Results list was not updated to display only hits with prices < ${upperBound}`
+    );
   });
 
   it('must have the expected results', async () => {

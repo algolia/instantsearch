@@ -5,5 +5,9 @@ declare namespace WebdriverIOAsync {
 }
 
 browser.addCommand('waitForElement', (selector: string) =>
-  browser.waitUntil(async () => (await browser.$$(selector)).length > 0)
+  browser.waitUntil(
+    async () => (await browser.$$(selector)).length > 0,
+    undefined,
+    `Element matching selector "${selector}" wasn't found`
+  )
 );
