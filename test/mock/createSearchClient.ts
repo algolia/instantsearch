@@ -1,4 +1,6 @@
-import { MultiResponse } from 'algoliasearch';
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { SearchResponse } from '@algolia/client-search';
 import { SearchClient } from '../../src/types';
 
 import {
@@ -6,6 +8,10 @@ import {
   createMultiSearchResponse,
   createSFFVResponse,
 } from './createAPIResponse';
+
+interface MultiResponse<THit = any> {
+  results: Array<SearchResponse<THit>>;
+}
 
 export const createSearchClient = (
   args: Partial<SearchClient> = {}

@@ -1,10 +1,35 @@
 import { SearchParameters } from 'algoliasearch-helper';
-import { Client as AlgoliaSearchClient } from 'algoliasearch';
+import algoliasearch, {
+  // @ts-ignore
+  SearchClient as SearchClientV4,
+  // @ts-ignore
+  Client as SearchClientV3,
+  // @ts-ignore
+  Response as SearchResponseV3,
+  // @ts-ignore
+  SearchForFacetValues as SearchForFacetValuesV3,
+} from 'algoliasearch';
+import {
+  SearchResponse as SearchResponseV4,
+  SearchForFacetValuesResponse as SearchForFacetValuesResponseV4,
+  // @ts-ignore
+  // eslint-disable-next-line import/no-unresolved
+} from '@algolia/client-search';
 import { UiState } from './widget';
 export {
   default as InstantSearch,
   InstantSearchOptions,
 } from '../lib/InstantSearch';
+
+type DummySearchClientV4 = {
+  readonly addAlgoliaAgent: (segment: string, version?: string) => void;
+};
+
+export type Client = ReturnType<
+  typeof algoliasearch
+> extends DummySearchClientV4
+  ? SearchClientV4
+  : SearchClientV3;
 
 // @TODO: can this be written some other way?
 export type HelperChangeEvent = {
@@ -153,7 +178,20 @@ export type RouteState = {
   [stateKey: string]: any;
 };
 
-export type SearchClient = Pick<
-  AlgoliaSearchClient,
-  'search' | 'searchForFacetValues'
->;
+export type SearchClient = Pick<Client, 'search' | 'searchForFacetValues'>;
+
+export interface MultiResponse<THit = any> {
+  results: Array<SearchResponse<THit>>;
+}
+
+export type SearchResponse<THit> = ReturnType<
+  typeof algoliasearch
+> extends DummySearchClientV4
+  ? SearchResponseV4<THit>
+  : SearchResponseV3<THit>;
+
+export type SearchForFacetValuesResponse = ReturnType<
+  typeof algoliasearch
+> extends DummySearchClientV4
+  ? SearchForFacetValuesResponseV4
+  : SearchForFacetValuesV3.Response;
