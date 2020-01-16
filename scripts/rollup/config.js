@@ -3,6 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
+import {terser} from 'rollup-plugin-terser';
 import filesize from 'rollup-plugin-filesize';
 
 const version =
@@ -44,6 +45,7 @@ const createConfiguration = ({ mode, filename }) => ({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     mode === 'production' && compiler(),
+    mode === 'production' && terser(),
   ].filter(Boolean),
 });
 
