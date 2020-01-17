@@ -19,6 +19,7 @@ module.exports = {
     'react/no-deprecated': 0,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'jest/no-test-callback': 0,
     '@typescript-eslint/no-unused-vars': [
       'error',
       { argsIgnorePattern: '^_', ignoreRestSiblings: true },
