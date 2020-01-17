@@ -714,6 +714,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 });
 
 describe('dispose', () => {
+  // eslint-disable-next-line jest/expect-expect
   it('cancels the scheduled search', async () => {
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -737,6 +738,7 @@ describe('dispose', () => {
     await runAllMicroTasks();
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('cancels the scheduled render', async () => {
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -759,6 +761,7 @@ describe('dispose', () => {
     await runAllMicroTasks();
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('cancels the scheduled stalled render', async () => {
     const { searches, searchClient } = createControlledSearchClient();
     const search = new InstantSearch({
