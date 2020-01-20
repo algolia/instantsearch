@@ -11,7 +11,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
-import { Client } from '../../../types';
+import { AlgoliaSearchClient as Client } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {

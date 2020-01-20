@@ -15,7 +15,7 @@ import {
   WidgetStateOptions,
   WidgetSearchParametersOptions,
   ScopedResult,
-  Client,
+  AlgoliaSearchClient as Client,
 } from '../../types';
 import {
   createDocumentationMessageGenerator,

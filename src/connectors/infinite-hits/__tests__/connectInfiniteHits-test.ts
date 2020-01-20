@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Client } from '../../../types';
+import { AlgoliaSearchClient as Client } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createInitOptions,
