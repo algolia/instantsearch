@@ -5,7 +5,7 @@ export { translatable } from 'react-instantsearch-core';
 
 // Widget
 export { Configure } from 'react-instantsearch-core';
-export { EXPERIMENTAL_ConfigureRelatedItems } from 'react-instantsearch-core';
+export { ExperimentalConfigureRelatedItems } from 'react-instantsearch-core';
 export { QueryRuleContext } from 'react-instantsearch-core';
 export { Index } from 'react-instantsearch-core';
 export { InstantSearch } from 'react-instantsearch-core';
