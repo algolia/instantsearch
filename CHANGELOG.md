@@ -1,3 +1,19 @@
+# [6.2.0](https://github.com/algolia/react-instantsearch/compare/v6.1.0...v6.2.0) (2020-01-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency algoliasearch to v3.35.1 ([#2802](https://github.com/algolia/react-instantsearch/issues/2802)) ([cfb91f0](https://github.com/algolia/react-instantsearch/commit/cfb91f0))
+* **widgets:** rename `ExperimentalConfigureRelatedItems` compon… ([#2891](https://github.com/algolia/react-instantsearch/issues/2891)) ([b910df2](https://github.com/algolia/react-instantsearch/commit/b910df2))
+
+
+### Features
+
+* **insights:** add getInsightsAnonymousUserToken helper ([#2887](https://github.com/algolia/react-instantsearch/issues/2887)) ([b5fe4f7](https://github.com/algolia/react-instantsearch/commit/b5fe4f7))
+* **widgets:** introduce `ConfigureRelatedItems` as experimental ([#2880](https://github.com/algolia/react-instantsearch/issues/2880)) ([923cd43](https://github.com/algolia/react-instantsearch/commit/923cd43))
+
+
+
 # [6.1.0](https://github.com/algolia/react-instantsearch/compare/v6.0.0...v6.1.0) (2019-12-17)
 
 
