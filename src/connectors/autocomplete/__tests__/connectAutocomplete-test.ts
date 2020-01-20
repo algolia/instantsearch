@@ -245,6 +245,7 @@ search.addWidgets([
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
+        objectID: '1',
       },
     ];
 

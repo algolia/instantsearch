@@ -363,6 +363,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
+        objectID: '1',
       },
     ];
 
@@ -499,6 +500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
                 value: 'HE<MARK>LLO</MARK>',
               },
             },
+            objectID: '1',
           },
           {
             name: 'halloween',
@@ -507,6 +509,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
                 value: 'HA<MARK>LLO</MARK>WEEN',
               },
             },
+            objectID: '2',
           },
         ],
         results,
@@ -559,10 +562,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         hits: [
           {
             name: 'name 1',
+            objectID: '1',
             __queryID: 'theQueryID',
           },
           {
             name: 'name 2',
+            objectID: '2',
             __queryID: 'theQueryID',
           },
         ],
