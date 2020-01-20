@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-dom",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "⚡ Lightning-fast search for React DOM, by Algolia",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -44,7 +44,7 @@
     "algoliasearch-helper": "^3.0.0",
     "classnames": "^2.2.5",
     "prop-types": "^15.5.10",
-    "react-instantsearch-core": "^6.1.0"
+    "react-instantsearch-core": "^6.2.0"
   },
   "peerDependencies": {
     "react": ">= 16.3.0 < 17",
