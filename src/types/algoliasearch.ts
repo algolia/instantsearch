@@ -22,7 +22,7 @@ type DummySearchClientV4 = {
   readonly addAlgoliaAgent: (segment: string, version?: string) => void;
 };
 
-export type AlgoliaSearchClient = ReturnType<
+export type Client = ReturnType<
   typeof algoliasearch
 > extends DummySearchClientV4
   ? SearchClientV4

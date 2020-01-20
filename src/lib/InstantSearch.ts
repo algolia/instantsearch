@@ -15,7 +15,7 @@ import {
   SearchClient,
   Widget,
   UiState,
-  AlgoliaSearchClient as Client,
+  Client,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
