@@ -9,7 +9,7 @@ export { default as translatable } from './core/translatable';
 // Widgets
 export { default as Configure } from './widgets/Configure';
 export {
-  default as EXPERIMENTAL_ConfigureRelatedItems,
+  default as ExperimentalConfigureRelatedItems,
 } from './widgets/ConfigureRelatedItems';
 export { default as QueryRuleContext } from './widgets/QueryRuleContext';
 export { default as Index } from './widgets/Index';
