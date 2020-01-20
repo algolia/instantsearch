@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import {
   Configure,
-  EXPERIMENTAL_ConfigureRelatedItems,
+  ExperimentalConfigureRelatedItems,
   Hits,
   Index,
   connectPagination,
@@ -89,7 +89,7 @@ function ConfigureRelatedItemsExample() {
       {referenceHit && (
         <Index indexName="instant_search" indexId="relatedIndex">
           <Configure hitsPerPage={4} />
-          <EXPERIMENTAL_ConfigureRelatedItems
+          <ExperimentalConfigureRelatedItems
             hit={referenceHit}
             matchingPatterns={{
               brand: { score: 3 },
