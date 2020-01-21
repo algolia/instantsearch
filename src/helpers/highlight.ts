@@ -24,6 +24,7 @@ export default function highlight({
     (getPropertyByPath(hit, `_highlightResult.${attribute}.value`) as string) ||
     '';
 
+  // cx is not used, since it would be bundled as a dependency for Vue & Angular
   const className =
     suit({
       descendantName: 'highlighted',
