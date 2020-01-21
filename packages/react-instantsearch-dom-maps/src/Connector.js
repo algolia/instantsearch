@@ -107,6 +107,7 @@ export class Connector extends Component {
       hits,
       isRefinedWithMap,
       isRefineOnMapMove,
+      // @MAJOR hasMapMoveSinceLastRefine -> hasMapMovedSinceLastRefine
       hasMapMoveSinceLastRefine,
       position,
       currentRefinement,
