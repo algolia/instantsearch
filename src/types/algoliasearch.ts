@@ -32,14 +32,10 @@ export interface MultiResponse<THit = any> {
   results: Array<SearchResponse<THit>>;
 }
 
-export type SearchResponse<THit> = ReturnType<
-  typeof algoliasearch
-> extends DummySearchClientV4
+export type SearchResponse<THit> = Client extends DummySearchClientV4
   ? SearchResponseV4<THit>
   : SearchResponseV3<THit>;
 
-export type SearchForFacetValuesResponse = ReturnType<
-  typeof algoliasearch
-> extends DummySearchClientV4
+export type SearchForFacetValuesResponse = Client extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
   : SearchForFacetValuesV3.Response;
