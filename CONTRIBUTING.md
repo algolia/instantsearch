@@ -224,10 +224,13 @@ To generate the experimental TypeScript version for a particular release, run:
 
 ```sh
 git checkout v4.X.X
-VERSION=4.X.X-experimental-typescript.X node ./scripts/release/bump-package-version.js
-yarn build
-yarn build:types
-sed -i '/"main":/ a \ "types": "es/index.d.ts",' package.json # Add `types` entry in `package.json`
+./scripts/release/build-experimental-typescript.js
+```
+
+To publish it, run:
+
+```
 npm publish --tag experimental-typescript
-git checkout .
+# or
+yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript
 ```
