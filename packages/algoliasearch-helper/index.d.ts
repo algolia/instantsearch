@@ -1,10 +1,40 @@
-import algoliasearch from 'algoliasearch';
+// Note: Bellow, we will be importing both algoliasearch
+// `v3` and algoliasearch `v4` types. The goal is being
+// able to export the algoliasearch-helper types using
+// the developer installed version of the client.
+
+import algoliasearch, {
+  // @ts-ignore
+  SearchClient as SearchClientV4,
+  // @ts-ignore
+  Client as SearchClientV3,
+  // @ts-ignore
+  QueryParameters as SearchOptionsV3,
+  // @ts-ignore
+  Response as SearchResponseV3,
+} from 'algoliasearch';
+import {
+  SearchOptions as SearchOptionsV4,
+  SearchResponse as SearchResponseV4
+// @ts-ignore
+} from '@algolia/client-search';
 import { EventEmitter } from 'events';
 
-type SearchClient = Pick<
-  algoliasearch.Client,
-  'search' | 'searchForFacetValues'
->;
+type DummySearchClientV4 = {
+  readonly addAlgoliaAgent: (segment: string, version?: string) => void;
+};
+
+type Client = ReturnType<typeof algoliasearch> extends DummySearchClientV4
+  ? SearchClientV4
+  : SearchClientV3;
+type SearchOptions = Client extends DummySearchClientV4
+  ? SearchOptionsV4
+  : SearchOptionsV3;
+type SearchResponse<T> = Client extends DummySearchClientV4
+  ? SearchResponseV4<T>
+  : SearchResponseV3<T>;
+
+type SearchClient = Pick<Client, 'search' | 'searchForFacetValues'>;
 
 /**
  * The algoliasearchHelper module is the function that will let its
@@ -82,7 +112,7 @@ declare namespace algoliasearchHelper {
      * Gets the search query parameters that would be sent to the Algolia Client
      * for the hits
      */
-    getQuery(): algoliasearch.QueryParameters;
+    getQuery(): SearchOptions;
 
     /**
      * Start a search using a modified version of the current state. This method does
@@ -285,7 +315,7 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
-    on( event: 'error', cb: (res: { error: Error }) => void): this;
+    on(event: 'error', cb: (res: { error: Error }) => void): this;
 
     lastResults: SearchResults | null;
     detach(): void;
@@ -315,7 +345,7 @@ declare namespace algoliasearchHelper {
     }
   }
 
-  export interface PlainSearchParameters extends algoliasearch.QueryParameters {
+  export interface PlainSearchParameters extends SearchOptions {
     /**
      * Targeted index. This parameter is mandatory.
      */
@@ -469,7 +499,7 @@ declare namespace algoliasearchHelper {
       attribute: string,
       operator: SearchParameters.Operator
     ): Array<number | number[]>;
-    getQueryParams(): algoliasearch.QueryParameters;
+    getQueryParams(): SearchOptions;
     getRefinedDisjunctiveFacets(facet: string, value: any): string[];
     getRefinedHierarchicalFacets(facet: string, value: any): string[];
     getUnrefinedDisjunctiveFacets(): string[];
@@ -1020,7 +1050,7 @@ declare namespace algoliasearchHelper {
   }
 
   export class SearchResults<T = any>
-    implements Omit<algoliasearch.Response<T>, 'facets' | 'params'> {
+    implements Omit<SearchResponse<T>, 'facets' | 'params'> {
     /**
      * query used to generate the results
      */
@@ -1036,7 +1066,9 @@ declare namespace algoliasearchHelper {
      *  - `value` : the value of the facet highlighted (html)
      *  - `matchLevel`: full, partial or none depending on how the query terms match
      */
-    hits: T[];
+    hits: (T & {
+      readonly objectID: string;
+    })[];
     /**
      * index where the results come from
      */
@@ -1107,7 +1139,6 @@ declare namespace algoliasearchHelper {
      * This value is only available if the `clickAnalytics` search parameter is set to `true`.
      */
     queryID: string;
-
     /**
      * disjunctive facets results
      */
@@ -1122,10 +1153,10 @@ declare namespace algoliasearchHelper {
      */
     facets: SearchResults.Facet[];
 
-    _rawResults: algoliasearch.Response<T>[];
+    _rawResults: SearchResponse<T>[];
     _state: SearchParameters;
 
-    constructor(state: SearchParameters, results: algoliasearch.Response<T>[]);
+    constructor(state: SearchParameters, results: SearchResponse<T>[]);
 
     /**
      * Get a facet object with its name

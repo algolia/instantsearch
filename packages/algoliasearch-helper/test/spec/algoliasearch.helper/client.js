@@ -11,6 +11,12 @@ function makeFakeClient() {
     return new Promise(function() {});
   });
 
+  client._ua || Object.defineProperty(client, '_ua', {
+    get() {
+      return client.transporter.userAgent.value;
+    }
+  });
+
   return client;
 }
 
@@ -58,11 +64,17 @@ test('clearCache gets called if exists', function() {
 
 test('setting the agent once', function() {
   var client = algoliasearch('what', 'wait', {});
+  client._ua || Object.defineProperty(client, '_ua', {
+    get() {
+      return client.transporter.userAgent.value;
+    }
+  });
+
   var originalUA = client._ua;
   algoliaSearchHelper(client, 'IndexName', {});
   algoliaSearchHelper(client, 'IndexName2', {});
 
-  expect(client._ua).toBe(originalUA + ';JS Helper (' + version + ')');
+  expect(client._ua).toBe(originalUA + '; JS Helper (' + version + ')');
 });
 
 test('getClient / setClient', function() {
@@ -76,7 +88,7 @@ test('getClient / setClient', function() {
 
   expect(helper.getClient()).toBe(client0);
 
-  expect(client0._ua).toBe(originalUA + ';JS Helper (' + version + ')');
+  expect(client0._ua).toBe(originalUA + '; JS Helper (' + version + ')');
 
   var client1 = makeFakeClient();
   helper.setClient(client1);
@@ -88,10 +100,10 @@ test('getClient / setClient', function() {
   expect(client1.search).toHaveBeenCalledTimes(1);
   expect(client0.search).toHaveBeenCalledTimes(1);
 
-  expect(client1._ua).toBe(originalUA + ';JS Helper (' + version + ')');
+  expect(client1._ua).toBe(originalUA + '; JS Helper (' + version + ')');
 
   helper.setClient(client1);
-  expect(client1._ua).toBe(originalUA + ';JS Helper (' + version + ')');
+  expect(client1._ua).toBe(originalUA + '; JS Helper (' + version + ')');
 });
 
 test('initial client === getClient', function() {

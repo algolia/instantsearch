@@ -10,7 +10,20 @@ function setup(indexName, fn) {
     // all indexing requests must be done in https
     protocol: 'https:'
   });
+  client.deleteIndex = client.deleteIndex || function(deleteIndexName) {
+    return client.initIndex(deleteIndexName).delete();
+  };
+  client.listIndexes = client.listIndexes || client.listIndices;
+
   var index = client.initIndex(indexName);
+  index.addObjects = index.addObjects || function(objects) {
+    return index.saveObjects(objects, {autoGenerateObjectIDIfNotExist: true}).then(function(content) {
+      return {
+        taskID: content.taskIDs[0]
+      };
+    });
+  };
+  index.clearIndex = index.clearIndex || index.clearObjects;
 
   return index
     .clearIndex()
