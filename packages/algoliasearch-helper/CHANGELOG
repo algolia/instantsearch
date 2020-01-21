@@ -1,3 +1,8 @@
+3.1.0 - 2020-01-21
+ * chore(types): add `sumOrFiltersScores` search parameter (#753) https://github.com/algolia/algoliasearch-helper-js/commit/68ce2dba40fa1284f9a5b93aa6ce42c16d1b1ea1
+ * feat(algoliasearch): add support for algoliasearch v4 the helper v3 (#756) https://github.com/algolia/algoliasearch-helper-js/commit/67407a0dfd99402bc1a77bd005385633c3881624
+ * fix(types): add `optionalFilters` search parameter (#754) https://github.com/algolia/algoliasearch-helper-js/commit/faba4d7f52abae1c18f1023a03c41cfb5cffefb0
+
 3.0.0 - 2019-11-18
  *  fix(merge): change implementation  (#716) https://github.com/algolia/algoliasearch-helper-js/commit/29c213853de49e4f2a36d9c95886ddb13237047e
  * chore: mention remaining changes https://github.com/algolia/algoliasearch-helper-js/commit/f756947a6b879869b3672360d0bff6ebada88540
