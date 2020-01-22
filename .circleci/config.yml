@@ -5,7 +5,7 @@ aliases:
     at: *root
 
   - &persist_to_workspace:
-      root: *root
+    root: *root
 
 defaults: &defaults
   working_directory: *root
