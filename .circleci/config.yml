@@ -20,6 +20,15 @@ aliases:
     name: Install dependencies
     command: yarn install
 
+  - &attach_workspace
+    at: ~/instantsearchjs
+
+  - &persist_to_workspace
+    root: ~/instantsearchjs
+    paths:
+      - ./**/*
+      - ./*
+
 defaults: &defaults
   working_directory: ~/instantsearchjs
   docker:
@@ -27,93 +36,147 @@ defaults: &defaults
 
 version: 2
 jobs:
-  'build and size':
+  'install':
     <<: *defaults
     steps:
       - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
-      - run:
-          name: Build & Test packages size
-          command: |
-            yarn run build
-            yarn run test:size
-
-  lint:
+      - persist_to_workspace:
+          root: ~/instantsearchjs
+          paths:
+            - ./*
+  'build':
     <<: *defaults
     steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - attach_workspace: *attach_workspace
       - run:
-          name: Lint & Code styles
-          command: yarn run lint
+          name: Build packages
+          command: yarn run build
+      - persist_to_workspace:
+          root: ~/instantsearchjs
+          paths:
+            - cjs
+            - dist
+            - es
+  'size check':
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_workspace
       - run:
-          name: Type Checking
-          command: yarn run type-check
-
+          name: Test packages size
+          command: yarn run test:size
   'unit tests':
     <<: *defaults
     steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - attach_workspace: *attach_workspace
       - run:
-          name: Unit tests
+          name: Run unit tests
           command: yarn run test --maxWorkers=4
-
-  'e2e tests':
+  'lint':
     <<: *defaults
     steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - attach_workspace: *attach_workspace
       - run:
-          name: End-2-End tests
-          command: |
-            yarn run website:build
-            yarn run test:e2e:saucelabs
-
+          name: Lint & Code styles
+          command: yarn run lint
+  'type check':
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_workspace
+      - run:
+          name: Type Checking
+          command: yarn run type-check
   'type check js (optional)':
     <<: *defaults
     steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - attach_workspace: *attach_workspace
       - run:
-          name: Type Checking including JS files
+          name: Type Checking
           command: yarn run type-check:js
-
-  'release if needed':
+  'build storybook':
     <<: *defaults
     steps:
-      - checkout
-      - run: *install_yarn_version
-      - restore_cache: *restore_yarn_cache
-      - run: *run_yarn_install
-      - save_cache: *save_yarn_cache
+      - attach_workspace: *attach_workspace
+      - run:
+          name: Build Storybook
+          command: yarn run storybook:build
+      - persist_to_workspace:
+          root: ~/instantsearchjs
+          paths:
+            - website/stories
+  'build examples':
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_workspace
+      - run:
+          name: Build Examples
+          command: yarn run website:build
+      - persist_to_workspace:
+          root: ~/instantsearchjs
+          paths:
+            - website/examples
+  'e2e tests':
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_workspace
+      - run:
+          name: End-2-End tests
+          command: yarn run test:e2e:saucelabs
+  'release':
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_workspace
       - run:
           name: Trigger a release if the latest commit is a release commit
-          command: |
-            yarn release:trigger
+          command: yarn release:trigger
+  'deploy':
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_workspace
+      - run:
+          name: Deploy artifacts to netlify
+          command: ls -la website
 
 workflows:
   version: 2
   ci:
     jobs:
-      - build and size
-      - unit tests
-      - lint
-      - type check js (optional)
-      - e2e tests
-      - release if needed
+      - install
+      - build:
+          requires:
+            - install
+      - size check:
+          requires:
+            - build
+      - unit tests:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - type check:
+          requires:
+            - install
+      - type check js (optional):
+          requires:
+            - install
+      - build storybook:
+          requires:
+            - install
+      - build examples:
+          requires:
+            - build
+      - e2e tests:
+          requires:
+            - build examples
+      - release:
+          requires:
+            - lint
+            - type check
+            - size check
+            - unit tests
+            - e2e tests
+      - deploy:
+          requires:
+            - build examples
+            - build storybook
