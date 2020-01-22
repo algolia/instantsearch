@@ -14,11 +14,13 @@ module.exports = {
     exec('yarn doctoc');
   },
   pullRequestTeamReviewer: ['instantsearch-for-websites'],
-  afterPublish: ({ exec }) => {
-    exec('./scripts/release/build-experimental-typescript.js');
-    exec(
-      `yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript`
-    );
+  afterPublish: ({ exec, version, releaseTag }) => {
+    if (releaseTag === 'latest' && version.startsWith('4.')) {
+      exec('./scripts/release/build-experimental-typescript.js');
+      exec(
+        `yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript`
+      );
+    }
   },
   slack: {
     // disable slack notification for `prepared` and `releaseStart` lifecycle.
