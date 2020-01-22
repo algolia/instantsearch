@@ -1,6 +1,12 @@
 aliases:
   - &root ~/instantsearchjs
 
+  - &attach_workspace
+    at: *root
+
+  - &persist_to_workspace:
+      root: *root
+
 defaults: &defaults
   working_directory: *root
   docker:
@@ -16,7 +22,7 @@ jobs:
           name: Install dependencies
           command: yarn install
       - persist_to_workspace:
-          root: *root
+          <<: *persist_to_workspace
           paths:
             - ./*
   'build':
@@ -27,7 +33,7 @@ jobs:
           name: Build packages
           command: yarn run build
       - persist_to_workspace:
-          root: *root
+          <<: *persist_to_workspace
           paths:
             - cjs
             - dist
@@ -75,7 +81,7 @@ jobs:
           name: Build Storybook
           command: yarn run storybook:build
       - persist_to_workspace:
-          root: *root
+          <<: *persist_to_workspace
           paths:
             - website/stories
   'build examples':
@@ -86,7 +92,7 @@ jobs:
           name: Build Examples
           command: yarn run website:build
       - persist_to_workspace:
-          root: *root
+          <<: *persist_to_workspace
           paths:
             - website/examples
   'e2e tests':
