@@ -3,7 +3,7 @@
 set -e
 
 rm -rf instantsearch.js
-git clone git@github.com:algolia/instantsearch.js.git --branch develop --depth=1
+git clone git@github.com:algolia/instantsearch.js.git --branch master --depth=1
 cd instantsearch.js
 yarn --ignore-engines
 yarn link instantsearch-e2e-tests
