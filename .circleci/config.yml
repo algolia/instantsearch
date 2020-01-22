@@ -1,16 +1,16 @@
 aliases:
   - &root ~/instantsearchjs
 
-  - &restore_yarn_cache
+  - &restore_node_modules
     name: Restore Yarn cache
     keys:
-      - yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+      - node_modules-{{ checksum "yarn.lock" }}
 
-  - &save_yarn_cache
+  - &save_node_modules
     name: Save Yarn cache
-    key: yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+    key: node_modules-{{ checksum "yarn.lock" }}
     paths:
-      - ~/.cache/yarn
+      - node_modules
 
   - &attach_workspace
     at: *root
@@ -29,9 +29,11 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - restore_cache: &restore_node_modules
       - run:
           name: Install dependencies
           command: yarn install
+      - save_cache: &save_node_modules
       - persist_to_workspace:
           <<: *persist_to_workspace
           paths:
