@@ -2,12 +2,12 @@ aliases:
   - &root ~/instantsearchjs
 
   - &restore_node_modules
-    name: Restore Yarn cache
+    name: Restore node_modules cache
     keys:
       - node_modules-{{ checksum "yarn.lock" }}
 
   - &save_node_modules
-    name: Save Yarn cache
+    name: Save node_modules cache
     key: node_modules-{{ checksum "yarn.lock" }}
     paths:
       - node_modules
@@ -128,7 +128,7 @@ jobs:
       - attach_workspace: *attach_workspace
       - run:
           name: Deploy artifacts to netlify
-          command: ls -la website
+          command: netlify deploy --message="Deploy Preview \#$CIRCLE_BUILD_NUM" --dir=website
 
 workflows:
   version: 2

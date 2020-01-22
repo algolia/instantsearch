@@ -126,6 +126,8 @@
     "jscodeshift": "0.7.0",
     "jsdom-global": "3.0.2",
     "mversion": "1.13.0",
+    "netlify-cli": "2.30.0",
+    "npm-normalize-package-bin": "1.0.1",
     "places.js": "1.17.1",
     "prettier": "1.19.1",
     "rollup": "1.29.0",
