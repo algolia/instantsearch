@@ -1,10 +1,21 @@
 aliases:
   - &root ~/instantsearchjs
 
+  - &restore_yarn_cache
+    name: Restore Yarn cache
+    keys:
+      - yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+
+  - &save_yarn_cache
+    name: Save Yarn cache
+    key: yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+    paths:
+      - ~/.cache/yarn
+
   - &attach_workspace
     at: *root
 
-  - &persist_to_workspace:
+  - persist_to_workspace: &persist_to_workspace
     root: *root
 
 defaults: &defaults
@@ -22,18 +33,19 @@ jobs:
           name: Install dependencies
           command: yarn install
       - persist_to_workspace:
-          <<: *persist_to_workspace
+          root: *root
           paths:
             - ./*
   'build':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Build packages
           command: yarn run build
       - persist_to_workspace:
-          <<: *persist_to_workspace
+          root: *root
           paths:
             - cjs
             - dist
@@ -41,42 +53,48 @@ jobs:
   'size check':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Test packages size
           command: yarn run test:size
   'unit tests':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Run unit tests
           command: yarn run test --maxWorkers=4
   'lint':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Lint & Code styles
           command: yarn run lint
   'type check':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Type Checking
           command: yarn run type-check
   'type check js (optional)':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Type Checking
           command: yarn run type-check:js
   'build storybook':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Build Storybook
           command: yarn run storybook:build
@@ -87,32 +105,36 @@ jobs:
   'build examples':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Build Examples
           command: yarn run website:build
       - persist_to_workspace:
-          <<: *persist_to_workspace
+          root: *root
           paths:
             - website/examples
   'e2e tests':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: End-2-End tests
           command: yarn run test:e2e:saucelabs
   'release':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Trigger a release if the latest commit is a release commit
           command: yarn release:trigger
   'deploy':
     <<: *defaults
     steps:
-      - attach_workspace: *attach_workspace
+      - attach_workspace:
+          at: *root
       - run:
           name: Deploy artifacts to netlify
           command: ls -la website
