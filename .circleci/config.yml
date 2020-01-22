@@ -29,11 +29,11 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: &restore_node_modules
+      - restore_cache: *restore_node_modules
       - run:
           name: Install dependencies
           command: yarn install
-      - save_cache: &save_node_modules
+      - save_cache: *save_node_modules
       - persist_to_workspace:
           <<: *persist_to_workspace
           paths:
@@ -41,7 +41,7 @@ jobs:
   'build':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Build packages
           command: yarn run build
@@ -54,42 +54,42 @@ jobs:
   'size check':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Test packages size
           command: yarn run test:size
   'unit tests':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Run unit tests
           command: yarn run test --maxWorkers=4
   'lint':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Lint & Code styles
           command: yarn run lint
   'type check':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Type Checking
           command: yarn run type-check
   'type check js (optional)':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Type Checking
           command: yarn run type-check:js
   'build storybook':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Build Storybook
           command: yarn run storybook:build
@@ -100,7 +100,7 @@ jobs:
   'build examples':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Build Examples
           command: yarn run website:build
@@ -111,21 +111,21 @@ jobs:
   'e2e tests':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: End-2-End tests
           command: yarn run test:e2e:saucelabs
   'release':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Trigger a release if the latest commit is a release commit
           command: yarn release:trigger
   'deploy':
     <<: *defaults
     steps:
-      - attach_workspace: &attach_workspace
+      - attach_workspace: *attach_workspace
       - run:
           name: Deploy artifacts to netlify
           command: ls -la website
