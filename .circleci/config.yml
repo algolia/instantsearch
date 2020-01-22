@@ -1,36 +1,8 @@
 aliases:
-  - &install_yarn_version
-    name: Install specific Yarn version
-    command: |
-      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-      echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> $BASH_ENV
-
-  - &restore_yarn_cache
-    name: Restore Yarn cache
-    keys:
-      - yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
-
-  - &save_yarn_cache
-    name: Save Yarn cache
-    key: yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
-    paths:
-      - ~/.cache/yarn
-
-  - &run_yarn_install
-    name: Install dependencies
-    command: yarn install
-
-  - &attach_workspace
-    at: ~/instantsearchjs
-
-  - &persist_to_workspace
-    root: ~/instantsearchjs
-    paths:
-      - ./**/*
-      - ./*
+  - &root ~/instantsearchjs
 
 defaults: &defaults
-  working_directory: ~/instantsearchjs
+  working_directory: *root
   docker:
     - image: circleci/node:12.14.1@sha256:84b5e98d5ad8dcce1ec7a024ffa06d087b9293b5872333650b3f1029b2038de7
 
@@ -40,9 +12,11 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run: *run_yarn_install
+      - run:
+          name: Install dependencies
+          command: yarn install
       - persist_to_workspace:
-          root: ~/instantsearchjs
+          root: *root
           paths:
             - ./*
   'build':
@@ -53,7 +27,7 @@ jobs:
           name: Build packages
           command: yarn run build
       - persist_to_workspace:
-          root: ~/instantsearchjs
+          root: *root
           paths:
             - cjs
             - dist
@@ -101,7 +75,7 @@ jobs:
           name: Build Storybook
           command: yarn run storybook:build
       - persist_to_workspace:
-          root: ~/instantsearchjs
+          root: *root
           paths:
             - website/stories
   'build examples':
@@ -112,7 +86,7 @@ jobs:
           name: Build Examples
           command: yarn run website:build
       - persist_to_workspace:
-          root: ~/instantsearchjs
+          root: *root
           paths:
             - website/examples
   'e2e tests':
