@@ -12,10 +12,10 @@ aliases:
     paths:
       - ~/.cache/yarn
 
-  - &attach_workspace
-    at: *root
+  # - &attach_workspace
+  #   at: *root
 
-  - persist_to_workspace: &persist_to_workspace
+  - &persist_to_workspace
     root: *root
 
 defaults: &defaults
