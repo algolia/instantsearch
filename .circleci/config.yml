@@ -128,7 +128,7 @@ jobs:
       - attach_workspace: *attach_workspace
       - run:
           name: Deploy artifacts to netlify
-          command: ./node_modules/./bin/netlify deploy --message="Deploy Preview \#$CIRCLE_BUILD_NUM" --dir=website
+          command: ./node_modules/.bin/netlify deploy --message="Deploy Preview \#$CIRCLE_BUILD_NUM" --dir=website
 
 workflows:
   version: 2
