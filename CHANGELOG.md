@@ -1,3 +1,13 @@
+# [4.2.0](https://github.com/algolia/instantsearch.js/compare/v4.1.1...v4.2.0) (2020-01-23)
+
+
+### Features
+
+* **algoliasearch:** add support for algoliasearch v4 ([#4294](https://github.com/algolia/instantsearch.js/issues/4294)) ([73f1584](https://github.com/algolia/instantsearch.js/commit/73f158428c7d4de1e3d1bc40bf4342362f275829))
+* **insights:** add getInsightsAnonymousUserToken helper ([#4279](https://github.com/algolia/instantsearch.js/issues/4279)) ([4653f95](https://github.com/algolia/instantsearch.js/commit/4653f95b436a0715ce1489e0b83c00a87e4a02f0))
+
+
+
 ## [4.1.1](https://github.com/algolia/instantsearch.js/compare/v4.1.0...v4.1.1) (2019-12-20)
 
 
