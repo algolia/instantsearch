@@ -220,14 +220,16 @@ An experimental version containing the TypeScript declaration files is available
 
 Since some of these declaration files are generated from the JSDoc comments, they can contain some typing errors. This version will stay experimental until we are confident enough in the generated declarations to put them in a stable release.
 
-To generate the experimental TypeScript version for a particular release, run:
+To generate the experimental TypeScript version for a particular (stable) release, run:
 
 ```sh
-git checkout v4.X.X
-VERSION=4.X.X-experimental-typescript.X node ./scripts/release/bump-package-version.js
-yarn build
-yarn build:types
-sed -i '/"main":/ a \ "types": "es/index.d.ts",' package.json # Add `types` entry in `package.json`
+./scripts/release/build-experimental-typescript.js
+```
+
+To publish it, run:
+
+```
 npm publish --tag experimental-typescript
-git checkout .
+# or
+yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript
 ```
