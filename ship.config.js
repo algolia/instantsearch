@@ -14,6 +14,7 @@ module.exports = {
     exec('yarn doctoc');
   },
   pullRequestTeamReviewer: ['instantsearch-for-websites'],
+  testCommandBeforeRelease: () => 'echo "No need to test again."',
   afterPublish: ({ exec, version, releaseTag }) => {
     if (releaseTag === 'latest' && version.startsWith('4.')) {
       exec('./scripts/release/build-experimental-typescript.js');
