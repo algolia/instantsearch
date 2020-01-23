@@ -122,13 +122,20 @@ jobs:
       - run:
           name: Trigger a release if the latest commit is a release commit
           command: yarn release:trigger
-  'deploy':
+  'deploy preview':
     <<: *defaults
     steps:
       - attach_workspace: *attach_workspace
       - run:
           name: Deploy to Netlify
           command: ./node_modules/.bin/netlify deploy --message="Deploy Preview $CIRCLE_BUILD_NUM" --dir=website
+  'deploy production':
+    <<: *defaults
+    steps:
+      - attach_workspace: *attach_workspace
+      - run:
+          name: Deploy to Netlify
+          command: ./node_modules/.bin/netlify deploy --prod --message="Production" --dir=website
 
 workflows:
   version: 2
@@ -169,7 +176,17 @@ workflows:
             - size check
             - unit tests
             - e2e tests
-      - deploy:
+      - deploy preview:
           requires:
             - build examples
             - build storybook
+          branches:
+            ignore:
+              - master
+      - deploy production:
+          requires:
+            - build examples
+            - build storybook
+          branches:
+            only:
+              - master
