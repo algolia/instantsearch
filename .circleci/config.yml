@@ -128,9 +128,7 @@ jobs:
       - attach_workspace: *attach_workspace
       - run:
           name: Deploy to Netlify
-          command: |
-            deploy_url=$(./node_modules/.bin/netlify deploy --message="Deploy Preview $CIRCLE_BUILD_NUM" --dir=website --json | grep -oP '(?<="deploy_url": ").*(?=")')
-            ./scripts/ci/github-status.js --description="Successfully deployed on Netlify" --target_url="${deploy_url}"
+          command: ./node_modules/.bin/netlify deploy --message="Deploy Preview $CIRCLE_BUILD_NUM" --dir=website
 
 workflows:
   version: 2
