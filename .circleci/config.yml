@@ -180,13 +180,13 @@ workflows:
           requires:
             - build examples
             - build storybook
-          branches:
-            ignore:
-              - master
+          filters:
+            branches:
+              ignore: master
       - deploy production:
           requires:
             - build examples
             - build storybook
-          branches:
-            only:
-              - master
+          filters:
+            branches:
+              only: master
