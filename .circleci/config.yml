@@ -176,6 +176,9 @@ workflows:
             - size check
             - unit tests
             - e2e tests
+          filters:
+            branches:
+              only: master
       - deploy preview:
           requires:
             - build examples
