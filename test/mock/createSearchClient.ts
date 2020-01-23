@@ -1,5 +1,4 @@
-import { MultiResponse } from 'algoliasearch';
-import { SearchClient } from '../../src/types';
+import { SearchClient, MultiResponse } from '../../src/types';
 
 import {
   createSingleSearchResponse,

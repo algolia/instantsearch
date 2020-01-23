@@ -1,8 +1,12 @@
-import { SearchForFacetValues, Response, MultiResponse } from 'algoliasearch';
+import {
+  MultiResponse,
+  SearchResponse,
+  SearchForFacetValuesResponse,
+} from '../../src/types';
 
 export const createSingleSearchResponse = <THit = any>(
-  subset: Partial<Response<THit>> = {}
-): Response<THit> => {
+  subset: Partial<SearchResponse<THit>> = {}
+): SearchResponse<THit> => {
   const {
     query = '',
     page = 0,
@@ -32,8 +36,8 @@ export const createSingleSearchResponse = <THit = any>(
   };
 };
 
-export const createMultiSearchResponse = (
-  ...args: Array<Partial<Response>>
+export const createMultiSearchResponse = <THit = any>(
+  ...args: Array<Partial<SearchResponse<THit>>>
 ): MultiResponse => {
   if (!args.length) {
     return {
@@ -47,8 +51,8 @@ export const createMultiSearchResponse = (
 };
 
 export const createSFFVResponse = (
-  args: Partial<SearchForFacetValues.Response> = {}
-): SearchForFacetValues.Response => ({
+  args: Partial<SearchForFacetValuesResponse> = {}
+): SearchForFacetValuesResponse => ({
   facetHits: [],
   exhaustiveFacetsCount: true,
   processingTimeMS: 1,

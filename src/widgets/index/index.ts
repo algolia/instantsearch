@@ -5,7 +5,6 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { Client } from 'algoliasearch';
 import {
   InstantSearch,
   UiState,
@@ -16,6 +15,7 @@ import {
   WidgetStateOptions,
   WidgetSearchParametersOptions,
   ScopedResult,
+  Client,
 } from '../../types';
 import {
   createDocumentationMessageGenerator,
