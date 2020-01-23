@@ -11,7 +11,7 @@ const octokit = Octokit({
 });
 
 (async () => {
-  await delay(10000);
+  await delay(60000);
   await octokit.repos.createStatus({
     owner: process.env.CIRCLE_PROJECT_USERNAME,
     repo: process.env.CIRCLE_PROJECT_REPONAME,
