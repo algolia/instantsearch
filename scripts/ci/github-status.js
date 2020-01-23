@@ -16,6 +16,6 @@ const octokit = Octokit({
     state: argv.state || 'success',
     target_url: argv.target_url || process.env.CIRCLE_BUILD_URL,
     description: argv.description || 'Your tests passed on CircleCI!',
-    context: argv.context || `ci/circleci2: ${process.env.CIRCLE_JOB}`,
+    context: argv.context || `ci/circleci: ${process.env.CIRCLE_JOB}`,
   });
 })();
