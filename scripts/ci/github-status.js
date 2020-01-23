@@ -4,11 +4,14 @@
 const argv = require('yargs').argv;
 const Octokit = require('@octokit/rest');
 
+const delay = time => new Promise(res => setTimeout(res, time));
+
 const octokit = Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
 (async () => {
+  await delay(10000);
   await octokit.repos.createStatus({
     owner: process.env.CIRCLE_PROJECT_USERNAME,
     repo: process.env.CIRCLE_PROJECT_REPONAME,
