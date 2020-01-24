@@ -184,11 +184,11 @@ To release a stable version, go on `master` (`git checkout master`) and use:
 npm run release:prepare
 ```
 
-It will create a pull-request for next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to NPM.
+It will create a pull request for the next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to npm.
 
-### Maintenance version (v3 or below)
+### Maintenance versions
 
-For the maintenance version, go on a maintenance branch(e.g., `git checkout maintenance-v3`) and use:
+For the maintenance versions, go to a previous version branch (e.g., `git checkout v3`) and use:
 
 ```sh
 npm run release:maintenance
@@ -198,14 +198,14 @@ _Make sure to use `npm run` instead of `yarn run` to avoid issues._
 
 #### `next` version
 
-`next` version release is available on `next` branch. It is to release the next major version in beta.
+`next` version release is available on the `next` branch. It is used to release the next major version in beta.
 
 ```sh
 git checkout next
 npm run release:prepare
 ```
 
-The script will ask you a question about the next version. If it's wrong, you can say "No" and put something like "7.0.0-beta.0". Then it will create a pull-request for that release. When the pull-request is merged, CircleCI will publish it to NPM with `--tag beta` option.
+The script will ask you a question about the next version. If it's wrong, you can say "No" and specify the version (e.g. "7.0.0-beta.0"). Then, it will open a pull request for that release. When the pull request is merged, CircleCI will publish it to npm with a `--tag beta` argument.
 
 #### Experimental TypeScript version
 
@@ -227,4 +227,4 @@ npm publish --tag experimental-typescript
 yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript
 ```
 
-_Note that this build will be automatically published along with stable version v4.x.x by Ship.js._
+_Note that this build will be automatically published along with the current stable version by Ship.js._
