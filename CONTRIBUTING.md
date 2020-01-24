@@ -181,14 +181,14 @@ JavaScript and TypeScript files are validated using a combination of [Prettier](
 To release a stable version, go on `master` (`git checkout master`) and use:
 
 ```sh
-npm run release
+npm run release:prepare
 ```
 
-_Make sure to use `npm run` instead of `yarn run` to avoid issues._
+It will create a pull-request for next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to NPM.
 
-### Maintenance version
+### Maintenance version (v3 or below)
 
-For the maintenance version, go on maintenance (`git checkout maintenance`) and use:
+For the maintenance version, go on a maintenance branch(e.g., `git checkout maintenance-v3`) and use:
 
 ```sh
 npm run release:maintenance
@@ -196,23 +196,16 @@ npm run release:maintenance
 
 _Make sure to use `npm run` instead of `yarn run` to avoid issues._
 
-#### Beta version
+#### `next` version
 
-Beta version release is available on any branch except `master`, `maintenance`. The main use cases are for releasing a patch before the official release, or create custom builds with new features (or friday releases).
-
-If you're on a feature branch (either for a fix or a new minor/major version), you can run:
+`next` version release is available on `next` branch. It is to release the next major version in beta.
 
 ```sh
-npm run release
+git checkout next
+npm run release:prepare
 ```
 
-You can release beta versions from any branch, using the beta flag in the command line:
-
-```sh
-npm run release -- --beta
-```
-
-_Make sure to use `npm run` instead of `yarn run` to avoid issues._
+The script will ask you a question about the next version. If it's wrong, you can say "No" and put something like "7.0.0-beta.0". Then it will create a pull-request for that release. When the pull-request is merged, CircleCI will publish it to NPM with `--tag beta` option.
 
 #### Experimental TypeScript version
 
@@ -226,10 +219,12 @@ To generate the experimental TypeScript version for a particular (stable) releas
 ./scripts/release/build-experimental-typescript.js
 ```
 
-To publish it, run:
+To publish it manually, run:
 
 ```
 npm publish --tag experimental-typescript
 # or
 yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript
 ```
+
+_Note that this build will be automatically published along with stable version v4.x.x by Ship.js._
