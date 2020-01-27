@@ -14,6 +14,8 @@ module.exports = {
     exec('yarn doctoc');
   },
   pullRequestTeamReviewer: ['instantsearch-for-websites'],
+  buildCommand: ({ version }) =>
+    `NODE_ENV=production VERSION=${version} yarn build`,
   testCommandBeforeRelease: () => 'echo "No need to test again."',
   afterPublish: ({ exec, version, releaseTag }) => {
     if (releaseTag === 'latest' && version.startsWith('4.')) {
