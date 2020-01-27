@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = {
-  mergeStrategy: { toSameBranch: ['master'] },
+  mergeStrategy: { toSameBranch: ['master', 'next'] },
   versionUpdated: ({ version, dir }) => {
     fs.writeFileSync(
       path.resolve(dir, 'src', 'lib', 'version.ts'),
