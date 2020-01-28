@@ -1348,13 +1348,16 @@ describe('use', () => {
       searchClient,
     });
     const button = document.createElement('button');
-    const searchBox = connectSearchBox(({ refine }, isFirstRender) => {
+    const createSearchBox = connectSearchBox(({ refine }, isFirstRender) => {
       if (isFirstRender) {
         button.addEventListener('click', () => {
           refine('Trigger search');
         });
       }
     });
+    const searchBox = createSearchBox({});
+    const searchBoxInit = searchBox.init;
+    searchBox.init = jest.fn(args => searchBoxInit.bind(searchBox, args)());
     const middlewareSpy = {
       onStateChange: jest.fn(),
       subscribe: jest.fn(),
@@ -1362,7 +1365,7 @@ describe('use', () => {
     };
     const middleware = jest.fn(() => middlewareSpy);
 
-    search.addWidgets([searchBox({})]);
+    search.addWidgets([searchBox]);
     search.EXPERIMENTAL_use(middleware);
 
     expect(middleware).toHaveBeenCalledTimes(1);
@@ -1372,6 +1375,12 @@ describe('use', () => {
     expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(0);
 
     search.start();
+
+    const widgetsInitCallOrder = searchBox.init.mock.invocationCallOrder[0];
+    const middlewareSubscribeCallOrder =
+      middlewareSpy.subscribe.mock.invocationCallOrder[0];
+    // Checks that `mainIndex.init` was called before subscribing the middleware.
+    expect(widgetsInitCallOrder).toBeLessThan(middlewareSubscribeCallOrder);
 
     expect(middlewareSpy.subscribe).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(0);
