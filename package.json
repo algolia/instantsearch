@@ -64,8 +64,8 @@
     "eslint-plugin-import": "2.19.1",
     "eslint-plugin-jest": "23.1.1",
     "eslint-plugin-prettier": "3.1.2",
-    "jest": "24.9.0",
-    "jest-image-snapshot": "2.11.1",
+    "jest": "25.1.0",
+    "jest-image-snapshot": "2.12.0",
     "release-it": "10.4.5",
     "walk-sync": "2.0.2"
   }
