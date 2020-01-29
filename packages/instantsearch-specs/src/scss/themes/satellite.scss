@@ -1,0 +1,1053 @@
+@import 'reset.scss';
+
+////////////////
+// Shared
+////////////////
+
+// See https://github.com/algolia/satellite/blob/8f9bdfedc5562f459e8ac2ca9e4f94e4e6cf915f/packages/satellite/src/styles/colors.js
+
+$black: #000;
+$white: #fff;
+$grey950: #111432;
+$grey900: #23263b;
+$grey800: #36395a;
+$grey700: #484c7a;
+$grey600: #5a5e9a;
+$grey500: #777aaf;
+$grey400: #9698c3;
+$grey300: #b6b7d5;
+$grey200: #d6d6e7;
+$grey100: #f5f5fa;
+$grey50: #fcfcfd;
+$pink900: #59063d;
+$pink800: #88085c;
+$pink700: #b80979;
+$pink600: #e90a96;
+$pink500: #f82caa;
+$pink400: #fb5abc;
+$pink300: #fd89ce;
+$pink200: #feb9e2;
+$pink100: #ffeaf6;
+$nebula900: #141d61;
+$nebula800: #1e2b8f;
+$nebula700: #2b3cbb;
+$nebula600: #3c4fe0;
+$nebula500: #5468ff;
+$nebula400: #7c8aff;
+$nebula300: #a3acff;
+$nebula200: #cacfff;
+$nebula100: #f2f3ff;
+$blue900: #00526c;
+$blue800: #00769b;
+$blue700: #009bcb;
+$blue600: #0db7eb;
+$blue500: #2cc8f7;
+$blue400: #5adaff;
+$blue300: #89e5ff;
+$blue200: #b9efff;
+$blue100: #e8faff;
+$green900: #005e36;
+$green800: #028950;
+$green700: #06b66c;
+$green600: #0de589;
+$green500: #5feb9e;
+$green400: #88f0b3;
+$green300: #aaf4c8;
+$green200: #c9f8de;
+$green100: #e6fcf3;
+$orange900: #963209;
+$orange800: #bf470a;
+$orange700: #e8600a;
+$orange600: #f78125;
+$orange500: #faa04b;
+$orange400: #fcbc73;
+$orange300: #fed59a;
+$orange200: #ffe9c3;
+$orange100: #fff9ec;
+$red900: #83111e;
+$red800: #ab1325;
+$red700: #d4142a;
+$red600: #ee243c;
+$red500: #f4495d;
+$red400: #f86e7e;
+$red300: #fc95a1;
+$red200: #febdc5;
+$red100: #ffe6e9;
+
+////////////////
+// Shared
+////////////////
+
+/**
+ * Reset
+ */
+
+[class^='ais-'] {
+  box-sizing: border-box;
+}
+
+/**
+ * Disabled
+ */
+
+[class^='ais-'][class$='--disabled'],
+// We need to target all elements for widgets containing
+// multiple sub elements (e.g. RangeSlider, RatingMenu).
+[class^='ais-'][class$='--disabled'] *,
+// Disabled VoiceSearch root CSS class doesn't contain `--disabled`.
+.ais-VoiceSearch-button:disabled {
+  cursor: not-allowed;
+}
+
+/**
+ * Buttons
+ */
+
+.ais-HierarchicalMenu-showMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore,
+.ais-ClearRefinements-button,
+.ais-InfiniteHits-loadMore,
+.ais-RangeInput-submit,
+.ais-InfiniteHits-loadPrevious,
+.ais-Pagination-link,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset,
+.ais-VoiceSearch-button {
+  appearance: none;
+  background-color: $white;
+  background-image: linear-gradient(-180deg, $white, $grey50);
+  border: 1px solid $grey200;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 0 rgba($grey900, 0.05);
+  color: $grey900;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 400;
+  height: 2rem;
+  justify-content: center;
+  line-height: 1.25rem;
+  padding: 0 1rem;
+  place-items: center;
+  text-decoration: none;
+  user-select: none;
+}
+
+.ais-HierarchicalMenu-showMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset {
+  height: 1.5rem;
+}
+
+.ais-HierarchicalMenu-showMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore {
+  margin-top: 1rem;
+}
+
+.ais-HierarchicalMenu-showMore:hover,
+.ais-Menu-showMore:hover,
+.ais-RefinementList-showMore:hover,
+.ais-ClearRefinements-button:hover,
+.ais-InfiniteHits-loadMore:hover,
+.ais-RangeInput-submit:hover,
+.ais-InfiniteHits-loadPrevious:hover,
+.ais-Pagination-item:not(.ais-Pagination-item--selected):not(.ais-Pagination-item--disabled)
+  .ais-Pagination-link:hover,
+.ais-GeoSearch-redo:hover,
+.ais-GeoSearch-reset:hover,
+.ais-VoiceSearch-button:hover {
+  background-image: linear-gradient(-180deg, $white, $grey100);
+  border-color: $grey200;
+}
+
+.ais-HierarchicalMenu-showMore:focus,
+.ais-Menu-showMore:focus,
+.ais-RefinementList-showMore:focus,
+.ais-ClearRefinements-button:focus,
+.ais-InfiniteHits-loadMore:focus,
+.ais-RangeInput-submit:focus,
+.ais-InfiniteHits-loadPrevious:focus,
+.ais-GeoSearch-redo:focus,
+.ais-GeoSearch-reset:focus,
+.ais-VoiceSearch-button:focus {
+  background-image: linear-gradient(-180deg, $white, $grey100);
+  border-color: $nebula600;
+  box-shadow: $nebula600 0 0 0 1px, rgba($grey900, 0.05) 0 2px 0 1px;
+  outline: currentcolor none medium;
+}
+
+.ais-HierarchicalMenu-showMore:active,
+.ais-Menu-showMore:active,
+.ais-RefinementList-showMore:active,
+.ais-ClearRefinements-button:active,
+.ais-InfiniteHits-loadMore:active,
+.ais-InfiniteHits-loadPrevious:active,
+.ais-Pagination-item--selected .ais-Pagination-link,
+.ais-Pagination-link:active,
+.ais-GeoSearch-redo:active,
+.ais-GeoSearch-reset:active,
+.ais-VoiceSearch-button:active {
+  border-color: $grey200;
+  box-shadow: rgba($grey500, 0.4) 0 1px 4px 0 inset,
+    rgba($grey500, 0.4) 0 1px 1px 0 inset, rgba($grey900, 0.05) 0 1px 0 0;
+}
+
+.ais-ClearRefinements-button:disabled[disabled],
+.ais-InfiniteHits-loadMore:disabled[disabled],
+.ais-InfiniteHits-loadPrevious:disabled[disabled],
+.ais-Pagination-item--disabled .ais-Pagination-link,
+.ais-GeoSearch-redo--disabled,
+.ais-GeoSearch-reset--disabled,
+.ais-VoiceSearch-button:disabled {
+  background-image: linear-gradient(-180deg, $white, $grey100);
+  border-color: #efeff5;
+  box-shadow: none;
+  color: $grey300;
+}
+
+.ais-HierarchicalMenu-showMore--disabled[disabled],
+.ais-Menu-showMore--disabled[disabled],
+.ais-RefinementList-showMore--disabled[disabled] {
+  display: none;
+}
+
+/**
+ * Labels
+ */
+
+.ais-NumericMenu-label,
+.ais-ToggleRefinement-label,
+.ais-HierarchicalMenu-item,
+.ais-Menu-item,
+.ais-RatingMenu-item,
+.ais-RefinementList-item {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.75rem;
+}
+
+.ais-HierarchicalMenu-link,
+.ais-Menu-link,
+.ais-RatingMenu-link,
+.ais-RefinementList-label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.ais-Breadcrumb-link,
+.ais-HierarchicalMenu-link,
+.ais-Menu-link,
+.ais-RatingMenu-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ais-Breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.ais-HierarchicalMenu-label,
+.ais-Menu-label,
+.ais-RefinementList-labelText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ais-HierarchicalMenu-item--selected
+  > .ais-HierarchicalMenu-link
+  > .ais-HierarchicalMenu-label,
+.ais-Menu-item--selected .ais-Menu-label,
+.ais-RefinementList-item--selected,
+.ais-RatingMenu-item--selected {
+  font-weight: 600;
+}
+
+/**
+ * Count
+ */
+
+.ais-ToggleRefinement-count,
+.ais-HierarchicalMenu-count,
+.ais-Menu-count,
+.ais-RatingMenu-count,
+.ais-RefinementList-count {
+  background: $grey100 none repeat scroll 0% 0%;
+  border: 1px solid $grey300;
+  border-radius: 99999px;
+  color: $grey900;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  margin-left: 0.5rem;
+  overflow: hidden;
+  padding: 0 0.25rem;
+}
+
+/**
+ * No Results
+ */
+
+.ais-Menu-noResults,
+.ais-HierarchicalMenu-noResults,
+.ais-RefinementList-noResults {
+  color: $grey600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 1rem;
+}
+
+/**
+ * Selectors
+ */
+
+.ais-MenuSelect-select,
+.ais-HitsPerPage-select,
+.ais-SortBy-select {
+  appearance: none;
+  background-color: $white;
+  background-image: url('data:image/svg+xml;utf8,<svg width="14" height="24" xmlns="http://www.w3.org/2000/svg"><g stroke="%23777aaf" stroke-width="2" fill="none" fill-rule="evenodd"><path d="M13 7L7 1 1 7M1 17l6 6 6-6"/></g></svg>'),
+    linear-gradient(-180deg, $white, $grey50);
+  background-position: right 1rem center, 0 0;
+  background-repeat: no-repeat;
+  background-size: 10px, auto;
+  border: 1px solid $grey200;
+  border-radius: 3px;
+  box-shadow: rgba($grey900, 0.05) 0 1px 0 0;
+  color: $grey900;
+  cursor: pointer;
+  font: inherit;
+  height: 2.5rem;
+  outline: currentcolor none medium;
+  padding: 0 2.5rem 0 1rem;
+  position: relative;
+  width: 100%;
+}
+
+.ais-HitsPerPage-select:-moz-focusring,
+.ais-HitsPerPage-select::-moz-focus-inner,
+.ais-SortBy-select:-moz-focusring,
+.ais-SortBy-select::-moz-focus-inner {
+  color: transparent;
+  outline: currentcolor none medium;
+}
+
+.ais-HitsPerPage-select > option:not(:checked),
+.ais-SortBy-select > option:not(:checked) {
+  color: $grey900;
+}
+
+.ais-HitsPerPage-select > option:disabled,
+.ais-SortBy-select > option:disabled {
+  color: $grey300;
+}
+
+.ais-HitsPerPage-select:hover,
+.ais-SortBy-select:hover {
+  background-image: url('data:image/svg+xml;utf8,<svg width="14" height="24" xmlns="http://www.w3.org/2000/svg"><g stroke="%23777aaf" stroke-width="2" fill="none" fill-rule="evenodd"><path d="M13 7L7 1 1 7M1 17l6 6 6-6"/></g></svg>'),
+    linear-gradient(-180deg, $grey50, $grey100);
+  border-color: $grey200;
+}
+
+.ais-HitsPerPage-select:focus,
+.ais-SortBy-select:focus {
+  background-image: url('data:image/svg+xml;utf8,<svg width="14" height="24" xmlns="http://www.w3.org/2000/svg"><g stroke="%23777aaf" stroke-width="2" fill="none" fill-rule="evenodd"><path d="M13 7L7 1 1 7M1 17l6 6 6-6"/></g></svg>'),
+    linear-gradient(-180deg, $white, $grey100);
+  border-color: $nebula600;
+  box-shadow: $nebula600 0 0 0 1px, rgba($grey900, 0.05) 0 2px 0 0;
+}
+
+.ais-HitsPerPage-select:disabled,
+.ais-SortBy-select:disabled {
+  background-image: url('data:image/svg+xml;utf8,<svg width="14" height="24" xmlns="http://www.w3.org/2000/svg"><g stroke="%23b6b7d5" stroke-width="2" fill="none" fill-rule="evenodd"><path d="M13 7L7 1 1 7M1 17l6 6 6-6"/></g></svg>'),
+    linear-gradient(-180deg, $white, $grey100);
+  border-color: #efeff5;
+  box-shadow: none;
+  color: $grey300;
+  cursor: not-allowed;
+}
+
+////////////////
+// Basics
+////////////////
+
+/**
+ * Panel
+ */
+
+.ais-Panel {
+  margin-bottom: 2rem;
+}
+
+.ais-Panel-header {
+  color: $grey600;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.ais-Panel-footer {
+  color: $grey600;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+  margin-top: 1rem;
+}
+
+.ais-Panel--collapsible {
+  position: relative;
+}
+
+.ais-Panel--collapsible .ais-Panel-collapseButton {
+  background: none;
+  border: none;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.ais-Panel--collapsed .ais-Panel-body,
+.ais-Panel--collapsed .ais-Panel-footer {
+  display: none;
+}
+
+/**
+ * SearchBox
+ */
+
+.ais-SearchBox-form {
+  background-color: $white;
+  display: flex;
+  font-size: 0.875rem;
+  height: 2.5rem;
+  line-height: 1.25rem;
+  position: relative;
+  width: 100%;
+}
+
+.ais-SearchBox-form::before {
+  background: rgba(0, 0, 0, 0)
+    url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%235a5e9a%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2211%22%20cy%3D%2211%22%20r%3D%228%22%3E%3C%2Fcircle%3E%3Cline%20x1%3D%2221%22%20y1%3D%2221%22%20x2%3D%2216.65%22%20y2%3D%2216.65%22%3E%3C%2Fline%3E%3C%2Fsvg%3E')
+    repeat scroll 0% 0%;
+  content: '';
+  height: 1rem;
+  left: 1rem;
+  margin-top: -0.5rem;
+  position: absolute;
+  top: 50%;
+  width: 1rem;
+}
+
+.ais-SearchBox-input {
+  appearance: none;
+  background-color: $white;
+  border: 1px solid $grey200;
+  border-radius: 3px;
+  box-shadow: rgba($grey500, 0.3) 0 1px 4px 0 inset;
+  caret-color: $grey600;
+  color: $grey900;
+  flex: 1 1 0%;
+  font: inherit;
+  padding-left: 2.5rem;
+}
+
+.ais-SearchBox-input::-webkit-input-placeholder {
+  color: $grey600;
+}
+
+.ais-SearchBox-input::placeholder {
+  color: $grey600;
+}
+
+.ais-SearchBox-input:focus {
+  border-color: $nebula600;
+  box-shadow: rgba($grey900, 0.05) 0 1px 0 0;
+  outline: currentcolor none medium;
+}
+
+.ais-SearchBox-input:disabled {
+  background: rgba(0, 0, 0, 0) linear-gradient(-180deg, $white, $grey100) repeat
+    scroll 0% 0%;
+  border-color: #efeff5;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.ais-SearchBox-input:disabled::-webkit-input-placeholder {
+  color: $grey300;
+  pointer-events: none;
+}
+
+.ais-SearchBox-input:disabled::placeholder {
+  color: $grey300;
+  pointer-events: none;
+}
+
+.ais-SearchBox-input::-webkit-search-cancel-button,
+.ais-SearchBox-input::-webkit-search-decoration,
+.ais-SearchBox-input::-webkit-search-results-button,
+.ais-SearchBox-input::-webkit-search-results-decoration {
+  appearance: none;
+}
+
+.ais-SearchBox-loadingIndicator,
+.ais-SearchBox-reset {
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  fill: $grey700;
+  height: 100%;
+  justify-content: center;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+}
+
+.ais-SearchBox-reset:focus {
+  background: $grey300;
+  fill: $white;
+  outline: 0;
+}
+
+.ais-RefinementList-searchBox .ais-SearchBox-loadingIndicator,
+.ais-RefinementList-searchBox .ais-SearchBox-reset {
+  right: 0.5rem;
+}
+
+.ais-SearchBox-loadingIndicator[hidden],
+.ais-SearchBox-reset[hidden] {
+  display: none;
+}
+
+// We ignore the `submit` button in this theme because it's replaced by the
+// Algolia magnifier glass.
+.ais-SearchBox-submit {
+  display: none;
+}
+
+.ais-Menu-searchBox,
+.ais-RefinementList-searchBox {
+  margin-bottom: 0.5rem;
+}
+
+.ais-Menu-searchBox .ais-SearchBox-form,
+.ais-RefinementList-searchBox .ais-SearchBox-form {
+  height: 2rem;
+}
+
+.ais-Menu-searchBox .ais-SearchBox-form::before,
+.ais-RefinementList-searchBox .ais-SearchBox-form::before {
+  left: 0.5rem;
+}
+
+.ais-Menu-searchBox .ais-SearchBox-input,
+.ais-RefinementList-searchBox .ais-SearchBox-input {
+  padding-left: 2rem;
+}
+
+/**
+ * VoiceSearch
+ */
+
+.ais-VoiceSearch-button {
+  color: $grey600;
+  height: 48px;
+  width: 48px;
+}
+
+.ais-VoiceSearch-button svg {
+  color: currentcolor;
+}
+
+////////////////
+// Results
+////////////////
+
+/**
+ * Highlighting and Snippeting
+ */
+
+.ais-Highlight-highlighted,
+.ais-Snippet-highlighted {
+  background-color: $blue200;
+  color: inherit;
+  font-style: normal;
+  font-weight: bold;
+}
+
+/**
+ * Hits
+ */
+
+.ais-Hits-item,
+.ais-InfiniteHits-item {
+  align-items: center;
+  background: $white;
+  box-shadow: 0 0 0 1px rgba($grey900, 0.05), 0 1px 3px 0 rgba($grey900, 0.15);
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  padding: 1.5rem;
+}
+
+.ais-Hits-item:first-of-type,
+.ais-InfiniteHits-item:first-of-type {
+  border-radius: 3px 3px 0 0;
+}
+
+.ais-Hits-item:last-of-type,
+.ais-InfiniteHits-item:last-of-type {
+  border-radius: 0 0 3px 3px;
+}
+
+.ais-Hits-item:only-of-type,
+.ais-InfiniteHits-item:only-of-type {
+  border-radius: 3px;
+}
+
+.ais-InfiniteHits-loadMore,
+.ais-InfiniteHits-loadPrevious {
+  display: flex;
+  margin: 1rem auto;
+}
+
+/**
+ * GeoSearch
+ */
+
+.ais-GeoSearch {
+  position: relative;
+}
+
+.ais-GeoSearch-control {
+  left: 3.75rem;
+  position: absolute;
+  top: 1rem;
+}
+
+.ais-GeoSearch-label {
+  align-items: center;
+  background-color: $grey100;
+  border: 1px solid $grey300;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  min-height: 1.5rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.ais-GeoSearch-label,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset {
+  white-space: nowrap;
+}
+
+.ais-GeoSearch-reset {
+  bottom: 1.25rem;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+////////////////
+// Refinements
+////////////////
+
+/**
+ * RefinementList
+ */
+
+.ais-RefinementList-checkbox,
+.ais-GeoSearch-input {
+  appearance: none;
+  background-color: $white;
+  background-position: 50%;
+  background-size: 180%;
+  border: 1px solid currentcolor;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 4px 0 rgba($grey500, 0.4);
+  color: $grey200;
+  cursor: inherit;
+  height: 1rem;
+  margin: 0 0.5rem 0 0;
+  width: 1rem;
+}
+
+.ais-RefinementList-item--selected .ais-RefinementList-checkbox,
+.ais-GeoSearch-input:checked {
+  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%235468ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2220%206%209%2017%204%2012%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
+  background-size: 14px;
+  border-color: currentcolor;
+  box-shadow: rgba($grey900, 0.05) 0 1px 0 0 inset;
+  color: $nebula600;
+}
+
+.ais-RefinementList-checkbox:focus,
+.ais-GeoSearch-input:focus {
+  outline: currentcolor none medium;
+}
+
+.ais-RefinementList-item--selected .ais-RefinementList-checkbox:focus,
+.ais-GeoSearch-input:checked:focus {
+  box-shadow: rgba($grey900, 0.05) 0 1px 0 0 inset, currentcolor 0 0 0 1px;
+}
+
+/**
+ * NumericMenu
+ */
+
+.ais-NumericMenu-label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+}
+
+.ais-NumericMenu-radio {
+  appearance: none;
+  background: $white;
+  border: 1px solid $grey200;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 4px 0 rgba($grey500, 0.3);
+  height: 16px;
+  margin: 0 0.5rem 0 0;
+  outline: 0;
+  position: relative;
+  width: 16px;
+}
+
+.ais-NumericMenu-radio:checked,
+.ais-NumericMenu-radio:focus {
+  border-color: $nebula600;
+  box-shadow: 0 1px 0 0 rgba($grey900, 0.05);
+}
+
+.ais-NumericMenu-radio:focus {
+  box-shadow: 0 0 0 1px $nebula600, 0 1px 0 0 rgba($grey900, 0.05);
+}
+
+.ais-NumericMenu-radio:checked:after {
+  background: $nebula600;
+  border-radius: 50%;
+  bottom: 4px;
+  content: '';
+  left: 4px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
+/**
+ * HierarchicalMenu
+ */
+
+.ais-HierarchicalMenu-list .ais-HierarchicalMenu-list {
+  margin-left: 1.5rem;
+}
+
+.ais-HierarchicalMenu-link::before {
+  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23b6b7d5%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%2218%2015%2012%209%206%2015%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  content: '';
+  display: inline-block;
+  height: 1rem;
+  margin-right: 0.5rem;
+  user-select: none;
+  width: 1rem;
+}
+
+.ais-HierarchicalMenu-item--selected > .ais-HierarchicalMenu-link::before {
+  background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%235468ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E');
+}
+
+/**
+ * RatingMenu
+ */
+
+.ais-RatingMenu-starIcon {
+  margin-right: 0.25rem;
+}
+
+.ais-RatingMenu-starIcon {
+  fill: $grey600;
+  position: relative;
+  width: 16px;
+}
+
+.ais-RatingMenu-item--disabled .ais-RatingMenu-starIcon {
+  fill: $grey300;
+}
+
+.ais-RatingMenu-item--disabled .ais-RatingMenu-count,
+.ais-RatingMenu-item--disabled .ais-RatingMenu-label {
+  color: $grey300;
+}
+
+/**
+ * ClearRefinements
+ */
+
+.ais-ClearRefinements-button {
+  width: 100%;
+}
+
+/**
+ * CurrentRefinements
+ */
+
+.ais-CurrentRefinements-list {
+  display: inline-grid;
+  gap: 1rem;
+  grid-auto-flow: column;
+}
+
+.ais-CurrentRefinements-item {
+  align-items: center;
+  background-color: $grey100;
+  border: 1px solid $grey300;
+  border-radius: 3px;
+  display: flex;
+  display: inline-flex;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  min-height: 1.5rem;
+  padding: 0.05rem 0.5rem;
+}
+
+.ais-CurrentRefinements-category {
+  display: flex;
+  margin-left: 0.5rem;
+}
+
+.ais-CurrentRefinements-delete {
+  color: $grey400;
+  height: 100%;
+  margin-left: 0.25rem;
+  outline-width: 0;
+}
+
+/**
+ * ToggleRefinement
+ */
+
+.ais-ToggleRefinement-label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.ais-ToggleRefinement-checkbox {
+  appearance: none;
+  background: rgba(#414247, 0.08);
+  background: $grey100;
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 4px 0 rgba($grey500, 0.4);
+  height: 18px;
+  pointer-events: none;
+  position: relative;
+  width: 32px;
+}
+
+.ais-ToggleRefinement-checkbox:checked {
+  background: $nebula600;
+  box-shadow: inset 0 1px 4px 0 rgba($grey900, 0.1);
+}
+
+.ais-ToggleRefinement-checkbox:focus {
+  outline: 0;
+}
+
+.ais-ToggleRefinement-checkbox::after {
+  background: linear-gradient(-180deg, $white, $grey100);
+  border-radius: 9999px;
+  box-shadow: 1px 1px 1px 0 rgba($grey900, 0.05);
+  content: '';
+  height: 16px;
+  left: 1px;
+  position: absolute;
+  top: 1px;
+  transition: all 100ms ease-in-out;
+  width: 16px;
+}
+
+.ais-ToggleRefinement-checkbox:checked::after {
+  transform: translateX(14px);
+}
+
+/**
+ * RangeInput
+ */
+
+.ais-RangeInput-input {
+  align-items: center;
+  background-color: $white;
+  border: 1px solid $grey200;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 4px 0 rgba($grey500, 0.3);
+  caret-color: $grey600;
+  color: $grey900;
+  cursor: text;
+  display: flex;
+  flex: 1;
+  font-size: 0.875rem;
+  height: 2rem;
+  line-height: 1.25rem;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.ais-RangeInput-input:focus {
+  border-color: $nebula600;
+  box-shadow: 0 1px 0 0 rgba($grey900, 0.05);
+  outline: 0;
+}
+
+.ais-RangeInput-separator {
+  margin: 0 0.5rem;
+}
+
+.ais-RangeInput-submit {
+  margin-left: 0.5rem;
+}
+
+/**
+ * RangeSlider
+ */
+
+.ais-RangeSlider .rheostat {
+  margin: 40px 6px;
+}
+
+.ais-RangeSlider .rheostat-horizontal {
+  cursor: pointer;
+  width: calc(100% - 15px);
+}
+
+.ais-RangeSlider .rheostat-background {
+  background-color: transparent;
+  border: none;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 0.5px 0 0 rgba(255, 255, 255, 0.05);
+  height: 4px;
+}
+
+.ais-RangeSlider .rheostat-progress {
+  background-color: $nebula600;
+  border-radius: 3px;
+  height: 4px;
+  max-width: 100%;
+  top: 0;
+}
+
+.ais-RangeSlider .rheostat-tooltip {
+  font-weight: bold;
+  user-select: none;
+}
+
+.ais-RangeSlider .rheostat-handle {
+  background-color: $white;
+  background-image: linear-gradient(-180deg, $white, $grey50);
+  border: 1px solid $grey200;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 0 rgba($grey900, 0.05);
+  height: 24px;
+  margin-left: -6px;
+  top: -11px;
+  width: 12px;
+}
+
+.ais-RangeSlider .rheostat-handle::before,
+.ais-RangeSlider .rheostat-handle::after {
+  background-color: $grey200;
+  content: '';
+  height: 12px;
+  position: absolute;
+  top: 6px;
+  width: 1px;
+}
+
+.ais-RangeSlider .rheostat-handle::before {
+  left: 4px;
+}
+.ais-RangeSlider .rheostat-handle::after {
+  right: 4px;
+}
+
+.ais-RangeSlider .rheostat-marker {
+  background-color: $grey200;
+}
+
+////////////////
+// Pagination
+////////////////
+
+/**
+ * Pagination
+ */
+
+.ais-Pagination-item:first-child > .ais-Pagination-link {
+  border-radius: 3px 0 0 3px;
+}
+
+.ais-Pagination-item + .ais-Pagination-item > .ais-Pagination-link {
+  border-radius: 0;
+  margin-left: -1px;
+}
+
+.ais-Pagination-item:last-child > .ais-Pagination-link {
+  border-radius: 0 3px 3px 0;
+}
+
+.ais-Pagination-item {
+  display: inline-block;
+}
+
+.ais-Pagination-item--selected .ais-Pagination-link {
+  font-weight: bold;
+}
+
+////////////////
+// Metadata
+////////////////
+
+/**
+ * Breadrumb
+ */
+
+.ais-Breadcrumb-link,
+.ais-Breadcrumb-separator {
+  color: $grey600;
+}
+
+.ais-Breadcrumb-separator {
+  display: flex;
+  margin: 0 0.5rem;
+}
+
+.ais-Breadcrumb-item--selected {
+  font-weight: 600;
+}
+
+.ais-Breadcrumb-item--selected .ais-Breadcrumb-separator {
+  font-weight: normal;
+}
