@@ -63,14 +63,14 @@ export default class extends React.Component {
           <h1>React InstantSearch + Next.Js</h1>
           <SearchBox />
         </header>
-        <content>
-          <menu>
+        <main>
+          <div className="menu">
             <RefinementList attribute="categories" />
-          </menu>
-          <results>
+          </div>
+          <div className="results">
             <Hits hitComponent={HitComponent} />
-          </results>
-        </content>
+          </div>
+        </main>
         <footer>
           <Pagination />
           <div>

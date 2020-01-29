@@ -69,13 +69,17 @@ exports[`Next app recipes App renders without crashing 1`] = `
       </form>
     </div>
   </header>
-  <content>
-    <menu>
+  <main>
+    <div
+      className="menu"
+    >
       <div
         className="ais-RefinementList ais-RefinementList--noRefinement"
       />
-    </menu>
-    <results>
+    </div>
+    <div
+      className="results"
+    >
       <div
         className="ais-Hits"
       >
@@ -83,8 +87,8 @@ exports[`Next app recipes App renders without crashing 1`] = `
           className="ais-Hits-list"
         />
       </div>
-    </results>
-  </content>
+    </div>
+  </main>
   <footer>
     <div>
       See
