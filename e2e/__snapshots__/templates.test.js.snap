@@ -1094,6 +1094,7 @@ exports[`Templates Autocomplete.js File content: package.json 1`] = `
   \\"name\\": \\"autocomplete.js-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/app.js\\",
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
     \\"build\\": \\"parcel build index.html\\",
@@ -2813,6 +2814,7 @@ exports[`Templates InstantSearch.js 2 File content: package.json 1`] = `
   \\"name\\": \\"instantsearch.js-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/app.js\\",
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
     \\"build\\": \\"parcel build index.html\\",
@@ -3146,6 +3148,7 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
   \\"name\\": \\"instantsearch.js-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/app.js\\",
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
     \\"build\\": \\"parcel build index.html\\",
@@ -3445,6 +3448,7 @@ exports[`Templates JavaScript Client File content: package.json 1`] = `
   \\"name\\": \\"javascript-client-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/app.js\\",
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
     \\"build\\": \\"parcel build index.html\\",
@@ -3753,6 +3757,7 @@ exports[`Templates JavaScript Helper 2 File content: package.json 1`] = `
   \\"name\\": \\"javascript-helper-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/app.js\\",
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
     \\"build\\": \\"parcel build index.html\\",
@@ -4059,6 +4064,7 @@ exports[`Templates JavaScript Helper File content: package.json 1`] = `
   \\"name\\": \\"javascript-helper-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/app.js\\",
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
     \\"build\\": \\"parcel build index.html\\",
@@ -4295,6 +4301,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
   \\"name\\": \\"react-instantsearch-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/App.js\\",
   \\"scripts\\": {
     \\"start\\": \\"react-scripts start\\",
     \\"build\\": \\"react-scripts build\\",
@@ -4949,6 +4956,7 @@ exports[`Templates Vue InstantSearch 1 File content: package.json 1`] = `
   \\"name\\": \\"vue-instantsearch-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/App.vue\\",
   \\"scripts\\": {
     \\"start\\": \\"vue-cli-service serve --port 3000\\",
     \\"build\\": \\"vue-cli-service build\\",
@@ -5271,6 +5279,7 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
   \\"name\\": \\"vue-instantsearch-app\\",
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
+  \\"main\\": \\"src/App.vue\\",
   \\"scripts\\": {
     \\"start\\": \\"vue-cli-service serve --port 3000\\",
     \\"build\\": \\"vue-cli-service build\\",

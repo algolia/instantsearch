@@ -2,6 +2,7 @@
   "name": "{{name}}",
   "version": "1.0.0",
   "private": true,
+  "main": "src/App.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

@@ -2,6 +2,7 @@
   "name": "{{name}}",
   "version": "1.0.0",
   "private": true,
+  "main": "src/app.js",
   "scripts": {
     "start": "parcel index.html --port 3000",
     "build": "parcel build index.html",
