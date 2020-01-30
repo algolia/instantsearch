@@ -1,3 +1,12 @@
+# [6.3.0](https://github.com/algolia/react-instantsearch/compare/v6.2.0...v6.3.0) (2020-01-30)
+
+
+### Features
+
+* **algoliasearch:** add support for algoliasearch v4 ([#2890](https://github.com/algolia/react-instantsearch/issues/2890)) ([c6c7382](https://github.com/algolia/react-instantsearch/commit/c6c7382))
+
+
+
 # [6.2.0](https://github.com/algolia/react-instantsearch/compare/v6.1.0...v6.2.0) (2020-01-20)
 
 
