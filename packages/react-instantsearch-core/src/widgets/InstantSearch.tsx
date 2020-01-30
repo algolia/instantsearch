@@ -5,7 +5,7 @@ import createInstantSearchManager from '../core/createInstantSearchManager';
 import { InstantSearchProvider, InstantSearchContext } from '../core/context';
 import { Store } from '../core/createStore';
 import { PlainSearchParameters, SearchParameters } from 'algoliasearch-helper';
-import { MultiResponse } from 'algoliasearch';
+import { MultiResponse } from '../types/algoliasearch';
 
 type ResultsState = {
   state: PlainSearchParameters;
