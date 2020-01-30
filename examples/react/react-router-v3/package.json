@@ -13,7 +13,7 @@
     "react-test-renderer": "16.8.6"
   },
   "dependencies": {
-    "algoliasearch": "3.35.1",
+    "algoliasearch": "4.0.0-beta.15",
     "instantsearch.css": "7.3.1",
     "lodash": "4.17.15",
     "prop-types": "15.6.0",

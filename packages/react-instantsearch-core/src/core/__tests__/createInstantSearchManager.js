@@ -68,6 +68,12 @@ describe('createInstantSearchManager', () => {
         _cache: true, // cache is not enabled by default inside Node
       });
 
+      // Skip this test with Algoliasearch API Client >= v4
+      // (cache is handled by the client ifself)
+      if (searchClient.transporter) {
+        return;
+      }
+
       const resultsState = {
         rawResults: [
           {
@@ -107,6 +113,12 @@ describe('createInstantSearchManager', () => {
       const searchClient = algoliasearch('appId', 'apiKey', {
         _cache: true, // cache is not enabled by default inside Node
       });
+
+      // Skip this test with Algoliasearch API Client >= v4
+      // (cache is handled by the client ifself)
+      if (searchClient.transporter) {
+        return;
+      }
 
       const resultsState = [
         {
@@ -166,6 +178,12 @@ describe('createInstantSearchManager', () => {
     it('does not hydrate the `searchClient` without results', () => {
       const searchClient = algoliasearch('appId', 'apiKey');
 
+      // Skip this test with Algoliasearch API Client >= v4
+      // (cache is handled by the client ifself)
+      if (searchClient.transporter) {
+        return;
+      }
+
       expect(Object.keys(searchClient.cache)).toHaveLength(0);
 
       createInstantSearchManager({
@@ -181,6 +199,12 @@ describe('createInstantSearchManager', () => {
         _useCache: true,
         cache: {},
       };
+
+      // Skip this test with Algoliasearch API Client >= v4
+      // (cache is handled by the client ifself)
+      if (searchClient.transporter) {
+        return;
+      }
 
       const resultsState = {
         rawResults: [
@@ -210,6 +234,12 @@ describe('createInstantSearchManager', () => {
       const searchClient = algoliasearch('appId', 'apiKey', {
         _cache: false,
       });
+
+      // Skip this test with Algoliasearch API Client >= v4
+      // (cache is handled by the client ifself)
+      if (searchClient.transporter) {
+        return;
+      }
 
       const resultsState = {
         rawResults: [

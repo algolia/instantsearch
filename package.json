@@ -32,6 +32,7 @@
     "website:build": "yarn build && yarn webpack --config website/webpack.config.js"
   },
   "devDependencies": {
+    "@algolia/client-search": "4.0.0-beta.15",
     "@babel/cli": "7.4.4",
     "@babel/core": "7.4.5",
     "@babel/plugin-proposal-class-properties": "7.4.4",
@@ -47,6 +48,7 @@
     "@storybook/addons": "5.0.11",
     "@storybook/react": "5.0.11",
     "@storybook/theming": "5.0.11",
+    "@testing-library/react": "9.1.0",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
@@ -70,7 +72,7 @@
     "@wdio/selenium-standalone-service": "5.16.10",
     "@wdio/spec-reporter": "5.16.11",
     "@wdio/static-server-service": "5.16.10",
-    "algoliasearch": "3.35.1",
+    "algoliasearch": "4.0.0-beta.15",
     "argos-cli": "0.1.3",
     "babel-eslint": "10.0.2",
     "babel-jest": "24.9.0",
@@ -102,6 +104,7 @@
     "lerna": "3.16.4",
     "lodash.orderby": "4.6.0",
     "mversion": "1.13.0",
+    "nock": "11.7.2",
     "null-loader": "3.0.0",
     "places.js": "1.16.4",
     "prettier": "1.18.2",
@@ -139,7 +142,7 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "33.75 kB"
+      "maxSize": "34 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
@@ -147,7 +150,7 @@
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
-      "maxSize": "36.25 kB"
+      "maxSize": "36.50 kB"
     },
     {
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",
