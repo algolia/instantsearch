@@ -338,7 +338,7 @@ const index = (props: IndexProps): Index => {
         }
       });
 
-      derivedHelper.on('search', () => {
+      derivedHelper.on('search', event => {
         // The index does not manage the "staleness" of the search. This is the
         // responsibility of the main instance. It does not make sense to manage
         // it at the index level because it's either: all of them or none of them
@@ -515,9 +515,11 @@ If you're using custom widgets that do set these query parameters, we recommend 
 See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`
           );
         }
+
+        helper!.emit('search', event);
       });
 
-      derivedHelper.on('result', ({ results }) => {
+      derivedHelper.on('result', event => {
         // The index does not render the results it schedules a new render
         // to let all the other indices emit their own results. It allows us to
         // run the render process in one pass.
@@ -527,7 +529,11 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
         // which is exposed e.g. via instance.helper, doesn't search, and thus
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
-        helper!.lastResults = results;
+        helper!.lastResults = event.results;
+
+        // similarly, there is no longer a "result" event on the main helper,
+        // so we will proxy this event
+        helper!.emit('result', event);
       });
 
       localWidgets.forEach(widget => {
