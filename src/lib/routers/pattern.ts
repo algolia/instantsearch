@@ -22,9 +22,10 @@ export default function patternRouter<TRouteState extends object = UiState>({
     decode: decodeURIComponent,
   });
   const pathParameters = parse(pattern)
-    .filter(token => typeof token === 'object')
-    // TODO: why do I need to guard twice here? TS complained
-    .map(token => (typeof token === 'object' ? token.name : ''));
+    .filter(
+      <TKey>(token: TKey | string): token is TKey => typeof token !== 'string'
+    )
+    .map(token => token.name);
 
   let onPopState: (event: PopStateEvent) => void | undefined;
   let writeTimer: number | undefined;
