@@ -686,7 +686,7 @@ $red100: #ffe6e9;
   cursor: inherit;
   height: 1rem;
   margin: 0 0.5rem 0 0;
-  width: 1rem;
+  min-width: 1rem;
 }
 
 .ais-RefinementList-item--selected .ais-RefinementList-checkbox,
