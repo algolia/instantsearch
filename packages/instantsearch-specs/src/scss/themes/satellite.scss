@@ -74,6 +74,8 @@ $red300: #fc95a1;
 $red200: #febdc5;
 $red100: #ffe6e9;
 
+$break-medium: 767px;
+
 ////////////////
 // Shared
 ////////////////
@@ -1050,4 +1052,18 @@ $red100: #ffe6e9;
 
 .ais-Breadcrumb-item--selected .ais-Breadcrumb-separator {
   font-weight: normal;
+}
+
+////////////////
+// Mobile specifics
+////////////////
+
+@media (max-width: $break-medium) {
+  .ais-SearchBox-input,
+  .ais-RangeInput-input {
+    // iOS Safari auto-zooms on the input when the input font size is lower
+    // than 16px. This allows to prevent that behavior and to make the text
+    // more readable.
+    font-size: 1rem;
+  }
 }
