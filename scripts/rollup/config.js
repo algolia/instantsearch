@@ -11,7 +11,7 @@ if (
   !semver.valid(process.env.VERSION)
 ) {
   throw new Error(
-    `You need to specify a valid semver environment variable 'VERSION' to run the build process (received: '${process.env.VERSION}').`
+    `You need to specify a valid semver environment variable 'VERSION' to run the build process (received: JSON.stringify(${process.env.VERSION})).`
   );
 }
 
