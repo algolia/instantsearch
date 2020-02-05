@@ -6,16 +6,13 @@ import { uglify } from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
 import semver from 'semver';
 
-if (process.env.NODE_ENV === 'production') {
-  if (!process.env.VERSION) {
-    throw new Error(
-      'You need to specify an environment variable `VERSION` to run the build process.'
-    );
-  }
-
-  if (!semver.valid(process.env.VERSION)) {
-    throw new Error(`${process.env.VERSION} is not a valid semver.`);
-  }
+if (
+  process.env.NODE_ENV === 'production' &&
+  !semver.valid(process.env.VERSION)
+) {
+  throw new Error(
+    `You need to specify a valid semver environment variable 'VERSION' to run the build process (received: '${process.env.VERSION}').`
+  );
 }
 
 const version =
