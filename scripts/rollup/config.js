@@ -5,7 +5,7 @@ import replace from 'rollup-plugin-replace';
 import { uglify } from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
 
-if (process.env.SHIPJS === 'true' && !process.env.VERSION) {
+if (process.env.NODE_ENV === 'production' && !process.env.VERSION) {
   throw new Error(
     'You need to specify an environment variable `VERSION` to run the build process.'
   );
