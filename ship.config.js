@@ -4,6 +4,13 @@ const path = require('path');
 
 module.exports = {
   mergeStrategy: { toSameBranch: ['master', 'next'] },
+  shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
+    const { fix = 0 } = commitNumbersPerType;
+    if (releaseType === 'patch' && fix === 0) {
+      return false;
+    }
+    return true;
+  },
   versionUpdated: ({ version, dir }) => {
     fs.writeFileSync(
       path.resolve(dir, 'src', 'lib', 'version.ts'),
