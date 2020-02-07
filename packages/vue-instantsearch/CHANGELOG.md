@@ -1,3 +1,13 @@
+# [2.7.0](https://github.com/algolia/vue-instantsearch/compare/v2.6.0...v2.7.0) (2020-01-23)
+
+
+### Features
+
+* **algoliasearch:** add support for algoliasearch v4 ([#756](https://github.com/algolia/vue-instantsearch/issues/756)) ([571b1fc](https://github.com/algolia/vue-instantsearch/commit/571b1fc))
+* **StateResults:** give access to search parameters ([#627](https://github.com/algolia/vue-instantsearch/issues/627)) ([9870e85](https://github.com/algolia/vue-instantsearch/commit/9870e85))
+
+
+
 # [2.6.0](https://github.com/algolia/vue-instantsearch/compare/v2.5.0...v2.6.0) (2019-10-14)
 
 
