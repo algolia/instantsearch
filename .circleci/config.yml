@@ -23,7 +23,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/instantsearchjs
   docker:
-    - image: circleci/node:12.14.1@sha256:bc28f8653824cc4e28902e73d140011c94dfeda8b1f83393d049daa468f51693
+    - image: circleci/node:12.14.1@sha256:c5797c81ac84bab191d03df1abd71bb3c7df16badf26f867809624ecbc47ceeb
 
 version: 2
 jobs:
@@ -52,6 +52,23 @@ jobs:
       - run:
           name: Lint & Code styles
           command: yarn run lint
+      - run:
+          name: Type Checking
+          command: yarn run type-check
+
+  'type check algoliasearch v3':
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Update dependencies
+          command: |
+            yarn remove @algolia/client-search
+            yarn add @types/algoliasearch@3.34.8 algoliasearch@3.35.1
       - run:
           name: Type Checking
           command: yarn run type-check
@@ -114,6 +131,7 @@ workflows:
       - build and size
       - unit tests
       - lint
+      - type check algoliasearch v3
       - type check js (optional)
       - e2e tests
       - release if needed

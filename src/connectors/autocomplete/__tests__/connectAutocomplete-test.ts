@@ -11,7 +11,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
-import { Client } from 'algoliasearch/lite';
+import { Client } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
@@ -152,8 +152,11 @@ search.addWidgets([
 
     expect(firstRenderOptions.indices).toHaveLength(0);
 
-    const firstIndexHits = [{ name: 'Hit 1' }];
-    const secondIndexHits = [{ name: 'Hit 1' }, { name: 'Hit 2' }];
+    const firstIndexHits = [{ name: 'Hit 1', objectID: '1' }];
+    const secondIndexHits = [
+      { name: 'Hit 1', objectID: '1' },
+      { name: 'Hit 2', objectID: '2' },
+    ];
     const scopedResults = [
       {
         indexId: 'indexId0',
@@ -231,6 +234,7 @@ search.addWidgets([
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
+        objectID: '1',
       },
     ];
 
@@ -241,6 +245,7 @@ search.addWidgets([
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
+        objectID: '1',
       },
     ];
 
@@ -286,6 +291,7 @@ search.addWidgets([
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
+        objectID: '1',
       },
     ];
 

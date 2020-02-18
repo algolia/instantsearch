@@ -316,10 +316,7 @@ describe('SearchBox', () => {
     });
 
     describe('onReset', () => {
-      // @TODO This test suite will pass once we upgrade Jest to 25.x.
-      // See https://github.com/algolia/instantsearch.js/issues/4160
-      // eslint-disable-next-line jest/no-disabled-tests
-      describe.skip('with button click', () => {
+      describe('with button click', () => {
         test('resets the input value with searchAsYouType to true', () => {
           const props = {
             ...defaultProps,

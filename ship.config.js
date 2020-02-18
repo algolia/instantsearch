@@ -3,7 +3,14 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = {
-  mergeStrategy: { toSameBranch: ['master'] },
+  mergeStrategy: { toSameBranch: ['master', 'next'] },
+  shouldPrepare: ({ releaseType, commitNumbersPerType }) => {
+    const { fix = 0 } = commitNumbersPerType;
+    if (releaseType === 'patch' && fix === 0) {
+      return false;
+    }
+    return true;
+  },
   versionUpdated: ({ version, dir }) => {
     fs.writeFileSync(
       path.resolve(dir, 'src', 'lib', 'version.ts'),
@@ -14,6 +21,17 @@ module.exports = {
     exec('yarn doctoc');
   },
   pullRequestTeamReviewer: ['instantsearch-for-websites'],
+  buildCommand: ({ version }) =>
+    `NODE_ENV=production VERSION=${version} yarn build`,
+  testCommandBeforeRelease: () => 'echo "No need to test again."',
+  afterPublish: ({ exec, version, releaseTag }) => {
+    if (releaseTag === 'latest' && version.startsWith('4.')) {
+      exec('./scripts/release/build-experimental-typescript.js');
+      exec(
+        `yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript`
+      );
+    }
+  },
   slack: {
     // disable slack notification for `prepared` and `releaseStart` lifecycle.
     // Ship.js will send slack message only for `releaseSuccess`.

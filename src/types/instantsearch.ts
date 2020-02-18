@@ -1,5 +1,5 @@
 import { SearchParameters } from 'algoliasearch-helper';
-import { Client as AlgoliaSearchClient } from 'algoliasearch';
+import { Client as AlgoliaSearchClient } from './algoliasearch';
 import { UiState } from './widget';
 export {
   default as InstantSearch,

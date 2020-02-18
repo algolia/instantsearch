@@ -1,6 +1,6 @@
 import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { Client } from 'algoliasearch';
+import { Client } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 

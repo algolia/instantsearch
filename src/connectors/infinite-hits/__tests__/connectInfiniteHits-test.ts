@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Client } from 'algoliasearch';
+import { Client } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createInitOptions,
@@ -138,7 +138,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(firstRenderOptions.hits).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
-    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const hits = [
+      { fake: 'data', objectID: '1' },
+      { sample: 'infos', objectID: '2' },
+    ];
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits }),
     ]);
@@ -159,7 +162,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(helper.search).toHaveBeenCalledTimes(1);
 
     // the results should accumulate if there is an increment in page
-    const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const otherHits = [
+      { fake: 'data 2', objectID: '1' },
+      { sample: 'infos 2', objectID: '2' },
+    ];
     const otherResults = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits: otherHits }),
     ]);
@@ -198,7 +204,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(firstRenderOptions.hits).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
-    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const hits = [
+      { fake: 'data', objectID: '1' },
+      { sample: 'infos', objectID: '2' },
+    ];
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits }),
     ]);
@@ -221,7 +230,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(helper.search).toHaveBeenCalledTimes(1);
 
     // the results should be prepended if there is an decrement in page
-    const previousHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const previousHits = [
+      { fake: 'data 2', objectID: '1' },
+      { sample: 'infos 2', objectID: '2' },
+    ];
     const previousResults = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits: previousHits }),
     ]);
@@ -258,7 +270,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(firstRenderOptions.hits).toEqual([]);
     expect(firstRenderOptions.results).toBe(undefined);
 
-    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const hits = [
+      { fake: 'data', objectID: '1' },
+      { sample: 'infos', objectID: '2' },
+    ];
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits }),
     ]);
@@ -278,7 +293,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     helper.setQuery('data');
 
     // If the query changes, the hits cache should be flushed
-    const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const otherHits = [
+      { fake: 'data 2', objectID: '1' },
+      { sample: 'infos 2', objectID: '2' },
+    ];
     const otherResults = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits: otherHits }),
     ]);
@@ -322,6 +340,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
           },
         },
+        objectID: '1',
       },
     ];
 
@@ -344,6 +363,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
+        objectID: '1',
       },
     ];
 
@@ -376,9 +396,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const hits = [
       {
         name: 'name 1',
+        objectID: '1',
       },
       {
         name: 'name 2',
+        objectID: '2',
       },
     ];
 
@@ -442,6 +464,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
           },
         },
+        objectID: '1',
       },
       {
         name: 'halloween',
@@ -450,6 +473,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
           },
         },
+        objectID: '2',
       },
     ];
 
@@ -476,6 +500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
                 value: 'HE<MARK>LLO</MARK>',
               },
             },
+            objectID: '1',
           },
           {
             name: 'halloween',
@@ -484,6 +509,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
                 value: 'HA<MARK>LLO</MARK>WEEN',
               },
             },
+            objectID: '2',
           },
         ],
         results,
@@ -510,9 +536,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const hits = [
       {
         name: 'name 1',
+        objectID: '1',
       },
       {
         name: 'name 2',
+        objectID: '2',
       },
     ];
 
@@ -534,10 +562,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         hits: [
           {
             name: 'name 1',
+            objectID: '1',
             __queryID: 'theQueryID',
           },
           {
             name: 'name 2',
+            objectID: '2',
             __queryID: 'theQueryID',
           },
         ],
@@ -640,7 +670,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     );
 
     const results = new SearchResults(helper.state, [
-      createSingleSearchResponse({ hits: [{ whatever: 'i like kittens' }] }),
+      createSingleSearchResponse({
+        hits: [{ whatever: 'i like kittens', objectID: '1' }],
+      }),
     ]);
 
     widget.render!(

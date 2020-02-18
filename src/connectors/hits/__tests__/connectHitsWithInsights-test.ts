@@ -36,7 +36,10 @@ describe('connectHitsWithInsights', () => {
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.insights).toBeUndefined();
 
-    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const hits = [
+      { fake: 'data', objectID: '1' },
+      { sample: 'infos', objectID: '2' },
+    ];
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits }),
     ]);
@@ -69,7 +72,10 @@ describe('connectHitsWithInsights', () => {
       })
     );
 
-    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const hits = [
+      { fake: 'data', objectID: '1' },
+      { sample: 'infos', objectID: '2' },
+    ];
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse({ hits }),
     ]);
