@@ -7,6 +7,9 @@ export type SnippetOptions = {
   attribute: string;
   highlightedTagName?: string;
   hit: Partial<Hit>;
+  cssClasses?: {
+    highlighted?: string;
+  };
 };
 
 const suit = component('Snippet');
@@ -15,14 +18,17 @@ export default function snippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
+  cssClasses = {},
 }: SnippetOptions): string {
   const attributeValue =
     (getPropertyByPath(hit, `_snippetResult.${attribute}.value`) as string) ||
     '';
 
-  const className = suit({
-    descendantName: 'highlighted',
-  });
+  // cx is not used, since it would be bundled as a dependency for Vue & Angular
+  const className =
+    suit({
+      descendantName: 'highlighted',
+    }) + (cssClasses.highlighted ? ` ${cssClasses.highlighted}` : '');
 
   return attributeValue
     .replace(

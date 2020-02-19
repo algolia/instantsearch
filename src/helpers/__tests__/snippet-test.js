@@ -91,6 +91,18 @@ describe('snippet', () => {
     );
   });
 
+  test('with custom highlighted class name', () => {
+    expect(
+      snippet({
+        attribute: 'description',
+        cssClasses: { highlighted: '__highlighted' },
+        hit,
+      })
+    ).toMatchInlineSnapshot(
+      `"Enjoy smart access to videos, games and apps with this <mark class=\\"ais-Snippet-highlighted __highlighted\\">Amazon</mark> Fire TV stick. Its Alexa voice remote lets you deliver hands-free commands when you want to watch television or engage with other applications. With a quad-core processor, 1GB internal memory and 8GB of storage, this portable <mark class=\\"ais-Snippet-highlighted __highlighted\\">Amazon</mark> Fire TV stick works fast for buffer-free streaming."`
+    );
+  });
+
   test('with unknown attribute returns an empty string', () => {
     expect(
       snippet({
