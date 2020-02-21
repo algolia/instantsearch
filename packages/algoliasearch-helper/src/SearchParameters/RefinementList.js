@@ -99,7 +99,7 @@ var lib = {
       }
       return {};
     } else if (typeof attribute === 'string') {
-      return omit(refinementList, attribute);
+      return omit(refinementList, [attribute]);
     } else if (typeof attribute === 'function') {
       var hasChanged = false;
 

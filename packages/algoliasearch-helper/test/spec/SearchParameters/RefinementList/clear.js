@@ -16,6 +16,20 @@ test('When removing refinements of a specific attribute, and there are no refine
   expect(clear(initialRefinementList, 'notThisAttribute')).toEqual(initialRefinementList);
 });
 
+test('When removing refinements of a specific attribute, and another refinement is a substring of this attribute', function() {
+  var initialRefinementList = {
+    'Brand': ['HP'],
+    'CPU type': ['Core i5'],
+    'Motherboard CPU type': ['Intel Core X']
+  };
+  var expectedRefinementList = {
+    'Brand': ['HP'],
+    'CPU type': ['Core i5']
+  };
+
+  expect(clear(initialRefinementList, 'Motherboard CPU type')).toEqual(expectedRefinementList);
+});
+
 test('When removing numericRefinements using a function, and there are no changes', function() {
   var initialRefinementList = {
     'attribute': ['test']

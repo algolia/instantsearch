@@ -17,6 +17,21 @@ test('When removing numericRefinements of a specific attribute, and there are no
   expect(state._clearNumericRefinements('size')).toBe(state.numericRefinements);
 });
 
+test('When removing refinements of a specific attribute, and another refinement is a substring of this attribute', function() {
+  var state = SearchParameters.make({
+    numericRefinements: {
+      'price': {'>': [300]},
+      'price with taxes': {'>': [300]}
+    }
+  });
+
+  const expectedNumericRefinements = {
+    price: {'>': [300]}
+  };
+
+  expect(state._clearNumericRefinements('price with taxes')).toEqual(expectedNumericRefinements);
+});
+
 test('When removing numericRefinements using a function, and there are no changes', function() {
   var state = SearchParameters.make({
     numericRefinements: {

@@ -665,7 +665,7 @@ SearchParameters.prototype = {
       if (!objectHasKeys(this.numericRefinements[attribute])) {
         return this.numericRefinements;
       }
-      return omit(this.numericRefinements, attribute);
+      return omit(this.numericRefinements, [attribute]);
     } else if (typeof attribute === 'function') {
       var hasChanged = false;
       var numericRefinements = this.numericRefinements;
