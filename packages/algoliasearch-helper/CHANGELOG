@@ -1,3 +1,6 @@
+3.1.1 - 2020-02-21
+ * fix: fix omit calls to pass excluded value as an array (#760) https://github.com/algolia/algoliasearch-helper-js/commit/dd375ab18513336817bd8d5d78341ac33ae94954, closes https://github.com/algolia/algoliasearch-helper-js/issues/760
+
 3.1.0 - 2020-01-21
  * chore(types): add `sumOrFiltersScores` search parameter (#753) https://github.com/algolia/algoliasearch-helper-js/commit/68ce2dba40fa1284f9a5b93aa6ce42c16d1b1ea1
  * feat(algoliasearch): add support for algoliasearch v4 the helper v3 (#756) https://github.com/algolia/algoliasearch-helper-js/commit/67407a0dfd99402bc1a77bd005385633c3881624
