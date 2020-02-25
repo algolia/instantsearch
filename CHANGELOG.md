@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 
-* **deps:** update dependency algoliasearch-helper to v3.1.1 to fixes a case where refinements for a facet with a name that matches a substring of another facet could be cleared by mistake ([algolia/algoliasearch-helper-js/pull/760](https://github.com/algolia/algoliasearch-helper-js/pull/760)) ([#4335](https://github.com/algolia/instantsearch.js/issues/4335)) ([9bc66cf](https://github.com/algolia/instantsearch.js/commit/381cda05c9c51dc9d3245a6d926e3c919245b723))
+* **deps:** update dependency algoliasearch-helper to v3.1.1 that fixes a case where refinements for a facet with a name that matches a substring of another facet could be cleared by mistake ([algolia/algoliasearch-helper-js/pull/760](https://github.com/algolia/algoliasearch-helper-js/pull/760)) ([#4335](https://github.com/algolia/instantsearch.js/issues/4335)) ([9bc66cf](https://github.com/algolia/instantsearch.js/commit/381cda05c9c51dc9d3245a6d926e3c919245b723))
 
 
 ### Features
