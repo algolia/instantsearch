@@ -25,7 +25,7 @@ If this guide does not contain what you are looking for and thus prevents you fr
 - [Linting](#linting)
 - [Release](#release)
   - [Main version](#main-version)
-  - [Maintenance version](#maintenance-version)
+  - [Maintenance versions](#maintenance-versions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
