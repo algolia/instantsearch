@@ -1,18 +1,17 @@
 # [4.3.0](https://github.com/algolia/instantsearch.js/compare/v4.2.0...v4.3.0) (2020-02-25)
 
+### Bug Fixes
+
+* **deps:** update dependency algoliasearch-helper to v3.1.1 to fixes a case where refinements for a facet with a name that matches a substring of another facet could be cleared by mistake ([algolia/algoliasearch-helper-js/pull/760](https://github.com/algolia/algoliasearch-helper-js/pull/760)) ([#4335](https://github.com/algolia/instantsearch.js/issues/4335)) ([9bc66cf](https://github.com/algolia/instantsearch.js/commit/381cda05c9c51dc9d3245a6d926e3c919245b723))
+
 
 ### Features
 
 * **highlight:** add cssClasses to snippet & highlight helper ([#4306](https://github.com/algolia/instantsearch.js/issues/4306)) ([ece0aa6](https://github.com/algolia/instantsearch.js/commit/ece0aa60f05c2c687a23f9219d62ace0d5b866f9))
 
 
-### Reverts
-
-* Revert "chore: release v4.3.0 (#4336)" (#4337) ([8d65ed9](https://github.com/algolia/instantsearch.js/commit/8d65ed93842768da711622568129e898d74f241d)), closes [#4336](https://github.com/algolia/instantsearch.js/issues/4336) [#4337](https://github.com/algolia/instantsearch.js/issues/4337)
-
-
-
 # [4.2.0](https://github.com/algolia/instantsearch.js/compare/v4.1.1...v4.2.0) (2020-01-23)
+
 
 
 ### Features
