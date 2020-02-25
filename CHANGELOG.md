@@ -1,3 +1,12 @@
+# [4.3.0](https://github.com/algolia/instantsearch.js/compare/v4.2.0...v4.3.0) (2020-02-25)
+
+
+### Features
+
+* **highlight:** add cssClasses to snippet & highlight helper ([#4306](https://github.com/algolia/instantsearch.js/issues/4306)) ([ece0aa6](https://github.com/algolia/instantsearch.js/commit/ece0aa60f05c2c687a23f9219d62ace0d5b866f9))
+
+
+
 # [4.2.0](https://github.com/algolia/instantsearch.js/compare/v4.1.1...v4.2.0) (2020-01-23)
 
 
