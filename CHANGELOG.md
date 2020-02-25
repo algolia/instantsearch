@@ -1,5 +1,6 @@
 # [4.3.0](https://github.com/algolia/instantsearch.js/compare/v4.2.0...v4.3.0) (2020-02-25)
 
+This version fixes a case where refinements for a facet with a name that matches a substring of another facet could be cleared by mistake. The fix was addressed in the [helper of the library](https://github.com/algolia/algoliasearch-helper-js/pull/760).
 
 ### Bug Fixes
 
