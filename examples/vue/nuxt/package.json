@@ -4,6 +4,7 @@
   "description": "Vue InstantSearch & Nuxt",
   "private": true,
   "scripts": {
+    "serve": "yarn dev",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
