@@ -47,11 +47,24 @@ type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
 
 export type Index = Widget & {
   getIndexName(): string;
+
+  /**
+   * get the index identifier, falls back too indexName if not given
+   */
   getIndexId(): string;
+
+  /**
+   * get the "main" helper for this index. Not used for searching, so doesn't follow the full contract
+   */
   getHelper(): Helper | null;
   getResults(): SearchResults | null;
   getParent(): Index | null;
   getWidgets(): Widget[];
+
+  /**
+   * assign last results to the derived helper, supposed to be ran after init
+   */
+  hydrate(results: SearchResults): void;
   addWidgets(widgets: Widget[]): Index;
   removeWidgets(widgets: Widget[]): Index;
   init(options: IndexInitOptions): void;
@@ -183,6 +196,10 @@ const index = (props: IndexProps): Index => {
 
     getWidgets() {
       return localWidgets;
+    },
+
+    hydrate(results) {
+      derivedHelper!.lastResults = results;
     },
 
     addWidgets(widgets) {
