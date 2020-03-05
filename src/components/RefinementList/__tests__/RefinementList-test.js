@@ -3,6 +3,7 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import RefinementList from '../RefinementList';
+import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
 
 const templates = {
   item({ value, count, isRefined }) {
@@ -118,6 +119,77 @@ describe('RefinementList', () => {
 
       expect(firstItem).not.toHaveAttribute('checked');
       expect(secondItem).toHaveAttribute('checked');
+    });
+
+    it('should escape the items in the default template to prevent XSS', () => {
+      const props = {
+        ...defaultProps,
+        facetValues: [
+          {
+            highlighted: 'Samsung"><iframe/onload=alert("xss")>',
+            value: 'Samsung"><iframe/onload=alert("xss")>',
+            label: 'Samsung"><iframe/onload=alert("xss")>',
+            count: 0,
+            isRefined: true,
+          },
+          {
+            highlighted: 'Apple',
+            value: 'Apple',
+            label: 'Apple',
+            count: 10,
+            isRefined: false,
+          },
+        ],
+        templateProps: {
+          templates: defaultTemplates,
+        },
+        cssClasses: {
+          labelText: 'labelText',
+        },
+      };
+
+      const { container } = render(<RefinementList {...props} />);
+      const [firstItem, secondItem] = container.querySelectorAll('.labelText');
+
+      expect(firstItem.innerHTML).toEqual(
+        'Samsung"&gt;&lt;iframe/onload=alert("xss")&gt;'
+      );
+      expect(secondItem.innerHTML).toEqual('Apple');
+    });
+
+    it('should allow HTML in the items when SFFV', () => {
+      const props = {
+        ...defaultProps,
+        isFromSearch: true,
+        facetValues: [
+          {
+            highlighted: '<mark>Sam</mark>sung',
+            value: 'Samsung',
+            label: 'Samsung',
+            count: 0,
+            isRefined: true,
+          },
+          {
+            highlighted: 'Apple',
+            value: 'Apple',
+            label: 'Apple',
+            count: 10,
+            isRefined: false,
+          },
+        ],
+        templateProps: {
+          templates: defaultTemplates,
+        },
+        cssClasses: {
+          labelText: 'labelText',
+        },
+      };
+
+      const { container } = render(<RefinementList {...props} />);
+      const [firstItem, secondItem] = container.querySelectorAll('.labelText');
+
+      expect(firstItem.innerHTML).toEqual('<mark>Sam</mark>sung');
+      expect(secondItem.innerHTML).toEqual('Apple');
     });
   });
 
