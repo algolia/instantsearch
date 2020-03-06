@@ -1,3 +1,12 @@
+## [4.3.1](https://github.com/algolia/instantsearch.js/compare/v4.3.0...v4.3.1) (2020-03-06)
+
+
+### Bug Fixes
+
+* **refinementList:** prevent XSS via routing ([#4344](https://github.com/algolia/instantsearch.js/issues/4344)) ([8552221](https://github.com/algolia/instantsearch.js/commit/8552221eff17a4ae5ba9c454054b0eb6e002934d))
+
+
+
 # [4.3.0](https://github.com/algolia/instantsearch.js/compare/v4.2.0...v4.3.0) (2020-02-25)
 
 
