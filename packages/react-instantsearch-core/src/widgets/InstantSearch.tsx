@@ -1,5 +1,5 @@
 import React, { Component, Children } from 'react';
-import isEqual from 'fast-deep-equal';
+import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
 import createInstantSearchManager from '../core/createInstantSearchManager';
 import { InstantSearchProvider, InstantSearchContext } from '../core/context';
