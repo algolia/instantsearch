@@ -134,23 +134,23 @@
   "bundlesize": [
     {
       "path": "packages/react-instantsearch/dist/umd/Core.min.js",
-      "maxSize": "2.75 kB"
+      "maxSize": "2.95 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Connectors.min.js",
-      "maxSize": "21.5 kB"
+      "maxSize": "21.75 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "34 kB"
+      "maxSize": "34.25 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "25 kB"
+      "maxSize": "25.25 kB"
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
-      "maxSize": "36.50 kB"
+      "maxSize": "36.75 kB"
     },
     {
       "path": "packages/react-instantsearch-dom-maps/dist/umd/ReactInstantSearchDOMMaps.min.js",
