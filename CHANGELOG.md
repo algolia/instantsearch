@@ -6,7 +6,7 @@ You were not vulnerable to this XSS if:
 
 - You didn't use [routing](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-routing)
 - You didn't use use the [`refinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/) widget ([`connectRefinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector) is not subject to this issue)
-- You used a custom `item` template for your [`refinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/) widget
+- You used a custom `item` template for your [`refinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/) widget that does not rely on the triple-brace Hogan.js syntax (e.g., `{{{highlighted}}}`)
 
 
 ### Bug Fixes
