@@ -483,7 +483,9 @@ See ${createDocumentationLink({
   }
 
   public scheduleSearch = defer(() => {
-    this.mainHelper!.search();
+    if (this.started) {
+      this.mainHelper!.search();
+    }
   });
 
   public scheduleRender = defer(() => {
