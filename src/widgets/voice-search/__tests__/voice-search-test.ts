@@ -24,12 +24,12 @@ jest.mock('preact', () => {
   return module;
 });
 
-interface DefaultSetupWrapper {
+type DefaultSetupWrapper = {
   container: HTMLDivElement;
   widget: Widget;
   widgetInit: (helper: Helper) => void;
   widgetRender: (helper: Helper) => void;
-}
+};
 
 function defaultSetup(opts = {}): DefaultSetupWrapper {
   const container = document.createElement('div');

@@ -38,10 +38,9 @@ export type QueryRulesConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-export interface QueryRulesRendererOptions<TQueryRulesWidgetParams>
-  extends RendererOptions<TQueryRulesWidgetParams> {
+export type QueryRulesRendererOptions<TQueryRulesWidgetParams> = {
   items: any[];
-}
+} & RendererOptions<TQueryRulesWidgetParams>;
 
 export type QueryRulesRenderer<TQueryRulesWidgetParams> = Renderer<
   QueryRulesRendererOptions<QueryRulesConnectorParams & TQueryRulesWidgetParams>

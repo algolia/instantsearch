@@ -64,8 +64,7 @@ export type NumericMenuConnectorParams = {
 
 type Refine = (facetValue: string) => void;
 
-export interface NumericMenuRendererOptions<TNumericMenuWidgetParams>
-  extends RendererOptions<TNumericMenuWidgetParams> {
+export type NumericMenuRendererOptions<TNumericMenuWidgetParams> = {
   /**
    * The list of available choices
    */
@@ -82,7 +81,7 @@ export interface NumericMenuRendererOptions<TNumericMenuWidgetParams>
    * Sets the selected value and trigger a new search
    */
   refine: Refine;
-}
+} & RendererOptions<TNumericMenuWidgetParams>;
 
 export type NumericMenuRenderer<TNumericMenuWidgetParams> = Renderer<
   NumericMenuRendererOptions<

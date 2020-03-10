@@ -7,7 +7,7 @@ import {
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 
-export interface InitOptions {
+export type InitOptions = {
   instantSearchInstance: InstantSearch;
   parent: Index | null;
   uiState: UiState;
@@ -15,15 +15,15 @@ export interface InitOptions {
   helper: Helper;
   templatesConfig: object;
   createURL(state: SearchParameters): string;
-}
+};
 
-export interface ScopedResult {
+export type ScopedResult = {
   indexId: string;
   results: SearchResults;
   helper: Helper;
-}
+};
 
-export interface RenderOptions {
+export type RenderOptions = {
   instantSearchInstance: InstantSearch;
   templatesConfig: object;
   results: SearchResults;
@@ -34,21 +34,21 @@ export interface RenderOptions {
     isSearchStalled: boolean;
   };
   createURL(state: SearchParameters): string;
-}
+};
 
-export interface DisposeOptions {
+export type DisposeOptions = {
   helper: Helper;
   state: SearchParameters;
-}
+};
 
-export interface WidgetStateOptions {
+export type WidgetStateOptions = {
   searchParameters: SearchParameters;
   helper: Helper;
-}
+};
 
-export interface WidgetSearchParametersOptions {
+export type WidgetSearchParametersOptions = {
   uiState: IndexUiState;
-}
+};
 
 export type IndexUiState = {
   query?: string;
@@ -123,7 +123,7 @@ export type UiState = {
  * Widgets are the building blocks of InstantSearch.js. Any valid widget must
  * have at least a `render` or a `init` function.
  */
-export interface Widget {
+export type Widget = {
   $$type?:
     | 'ais.autocomplete'
     | 'ais.breadcrumb'
@@ -190,7 +190,7 @@ export interface Widget {
     state: SearchParameters,
     widgetSearchParametersOptions: WidgetSearchParametersOptions
   ): SearchParameters;
-}
+};
 
 export type WidgetFactory<TWidgetParams> = (
   widgetParams: TWidgetParams

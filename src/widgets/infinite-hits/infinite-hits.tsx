@@ -102,7 +102,7 @@ export type InfiniteHitsRendererWidgetParams = {
   transformItems?: (items: any[]) => any[];
 };
 
-interface InfiniteHitsWidgetParams extends InfiniteHitsRendererWidgetParams {
+type InfiniteHitsWidgetParams = {
   /**
    * The CSS Selector or `HTMLElement` to insert the widget into.
    */
@@ -115,7 +115,7 @@ interface InfiniteHitsWidgetParams extends InfiniteHitsRendererWidgetParams {
    * The templates to use for the widget.
    */
   templates?: Partial<InfiniteHitsTemplates>;
-}
+} & InfiniteHitsRendererWidgetParams;
 
 type InfiniteHits = WidgetFactory<InfiniteHitsWidgetParams>;
 

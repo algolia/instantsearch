@@ -28,12 +28,11 @@ type QueryRuleCustomDataWidgetParams = {
   transformItems?: (items: any[]) => any;
 };
 
-interface QueryRuleCustomDataRendererWidgetParams
-  extends QueryRuleCustomDataWidgetParams {
+type QueryRuleCustomDataRendererWidgetParams = {
   container: HTMLElement;
   cssClasses: QueryRuleCustomDataCSSClasses;
   templates: QueryRuleCustomDataTemplates;
-}
+} & QueryRuleCustomDataWidgetParams;
 
 type QueryRuleCustomData = WidgetFactory<QueryRuleCustomDataWidgetParams>;
 

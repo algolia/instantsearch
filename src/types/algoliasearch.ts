@@ -28,9 +28,9 @@ export type Client = ReturnType<
   ? SearchClientV4
   : SearchClientV3;
 
-export interface MultiResponse<THit = any> {
+export type MultiResponse<THit = any> = {
   results: Array<SearchResponse<THit>>;
-}
+};
 
 export type SearchResponse<THit> = Client extends DummySearchClientV4
   ? SearchResponseV4<THit>

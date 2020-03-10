@@ -23,13 +23,12 @@ export type VoiceSearchConnectorParams = {
   }) => PlainSearchParameters | void;
 };
 
-export interface VoiceSearchRendererOptions<TVoiceSearchWidgetParams>
-  extends RendererOptions<TVoiceSearchWidgetParams> {
+export type VoiceSearchRendererOptions<TVoiceSearchWidgetParams> = {
   isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: ToggleListening;
   voiceListeningState: VoiceListeningState;
-}
+} & RendererOptions<TVoiceSearchWidgetParams>;
 
 export type VoiceSearchRenderer<TVoiceSearchWidgetParams> = Renderer<
   VoiceSearchRendererOptions<

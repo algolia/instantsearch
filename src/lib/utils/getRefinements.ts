@@ -2,7 +2,7 @@ import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import find from './find';
 import unescapeRefinement from './unescapeRefinement';
 
-export interface FacetRefinement {
+export type FacetRefinement = {
   type:
     | 'facet'
     | 'exclude'
@@ -15,24 +15,23 @@ export interface FacetRefinement {
   name: string;
   count?: number;
   exhaustive?: boolean;
-}
+};
 
-export interface QueryRefinement
-  extends Pick<FacetRefinement, 'type' | 'attribute' | 'name'> {
+export type QueryRefinement = {
   type: 'query';
   query: string;
-}
+} & Pick<FacetRefinement, 'type' | 'attribute' | 'name'>;
 
-export interface NumericRefinement extends FacetRefinement {
+export type NumericRefinement = {
   type: 'numeric';
   numericValue: number;
   operator: '<' | '<=' | '=' | '!=' | '>=' | '>';
-}
+} & FacetRefinement;
 
-export interface FacetExcludeRefinement extends FacetRefinement {
+export type FacetExcludeRefinement = {
   type: 'exclude';
   exclude: boolean;
-}
+} & FacetRefinement;
 
 export type Refinement =
   | FacetRefinement

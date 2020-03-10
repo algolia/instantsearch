@@ -51,11 +51,11 @@ type VoiceSearchWidgetParams = {
   }) => PlainSearchParameters | void;
 };
 
-interface VoiceSearchRendererWidgetParams extends VoiceSearchWidgetParams {
+type VoiceSearchRendererWidgetParams = {
   container: HTMLElement;
   cssClasses: VoiceSearchComponentCSSClasses;
   templates: VoiceSearchTemplates;
-}
+} & VoiceSearchWidgetParams;
 
 type VoiceSearch = WidgetFactory<VoiceSearchWidgetParams>;
 
