@@ -24,7 +24,7 @@ export type MatchingPatterns = {
   };
 };
 
-export interface ConfigureRelatedItemsConnectorParams {
+export type ConfigureRelatedItemsConnectorParams = {
   /**
    * The reference hit to extract the filters from.
    */
@@ -40,7 +40,7 @@ export interface ConfigureRelatedItemsConnectorParams {
   transformSearchParameters?(
     searchParameters: SearchParameters
   ): PlainSearchParameters;
-}
+};
 
 export type ConfigureRelatedItemsWidgetFactory<
   TConfigureRelatedItemsWidgetParams

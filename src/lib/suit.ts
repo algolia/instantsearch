@@ -1,9 +1,9 @@
 const NAMESPACE = 'ais';
 
-interface SuitOptions {
+type SuitOptions = {
   descendantName?: string;
   modifierName?: string;
-}
+};
 
 type SuitSelector = (names?: SuitOptions) => string;
 

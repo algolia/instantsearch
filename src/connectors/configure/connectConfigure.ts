@@ -18,18 +18,17 @@ import {
 
 type Refine = (searchParameters: PlainSearchParameters) => void;
 
-export interface ConfigureConnectorParams {
+export type ConfigureConnectorParams = {
   /**
    * A list of [search parameters](https://www.algolia.com/doc/api-reference/search-api-parameters/)
    * to enable when the widget mounts.
    */
   searchParameters: PlainSearchParameters;
-}
+};
 
-export interface ConfigureRendererOptions<TConfigureWidgetParams>
-  extends RendererOptions<TConfigureWidgetParams> {
+export type ConfigureRendererOptions<TConfigureWidgetParams> = {
   refine: Refine;
-}
+} & RendererOptions<TConfigureWidgetParams>;
 
 export type ConfigureRenderer<TConfigureWidgetParams> = Renderer<
   ConfigureRendererOptions<ConfigureConnectorParams & TConfigureWidgetParams>

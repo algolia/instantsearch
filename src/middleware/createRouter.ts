@@ -16,10 +16,10 @@ const walk = (current: Index, callback: (index: Index) => void) => {
     });
 };
 
-export interface RouterProps<TRouteState = UiState> {
+export type RouterProps<TRouteState = UiState> = {
   router?: Router<TRouteState>;
   stateMapping?: StateMapping<TRouteState>;
-}
+};
 
 export type RoutingManager<TRouteState = UiState> = (
   props?: RouterProps<TRouteState>

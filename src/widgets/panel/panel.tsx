@@ -12,7 +12,7 @@ import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
 import { WidgetFactory, Template, RenderOptions, Widget } from '../../types';
 
-export interface PanelCSSClasses {
+export type PanelCSSClasses = {
   /**
    * CSS classes to add to the root element of the widget.
    */
@@ -49,9 +49,9 @@ export interface PanelCSSClasses {
    * CSS classes to add to the footer.
    */
   footer: string | string[];
-}
+};
 
-export interface PanelTemplates {
+export type PanelTemplates = {
   /**
    * Template to use for the header.
    */
@@ -64,14 +64,14 @@ export interface PanelTemplates {
    * Template to use for collapse button.
    */
   collapseButtonText: Template<{ collapsed: boolean }>;
-}
+};
 
-interface PanelWidgetParams {
+type PanelWidgetParams = {
   hidden?(options: RenderOptions): boolean;
   collapsed?(options: RenderOptions): boolean;
   templates?: Partial<PanelTemplates>;
   cssClasses?: Partial<PanelCSSClasses>;
-}
+};
 
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
 const suit = component('Panel');

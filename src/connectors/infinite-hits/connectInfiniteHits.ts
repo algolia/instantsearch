@@ -24,13 +24,12 @@ export type InfiniteHitsConnectorParams = Partial<
   InfiniteHitsRendererWidgetParams
 >;
 
-export interface InfiniteHitsRendererOptions<TInfiniteHitsWidgetParams>
-  extends RendererOptions<TInfiniteHitsWidgetParams> {
+export type InfiniteHitsRendererOptions<TInfiniteHitsWidgetParams> = {
   showPrevious: () => void;
   showMore: () => void;
   isFirstPage: boolean;
   isLastPage: boolean;
-}
+} & RendererOptions<TInfiniteHitsWidgetParams>;
 
 export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
   InfiniteHitsRendererOptions<

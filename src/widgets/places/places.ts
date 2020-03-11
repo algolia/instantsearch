@@ -6,7 +6,7 @@ import {
 } from 'places.js';
 import { WidgetFactory } from '../../types';
 
-interface PlacesWidgetOptions extends StaticOptions {
+type PlacesWidgetOptions = {
   /**
    * The Algolia Places reference to use.
    *
@@ -19,13 +19,13 @@ interface PlacesWidgetOptions extends StaticOptions {
    * The default position when the input is empty.
    */
   defaultPosition?: string[];
-}
+} & StaticOptions;
 
-interface PlacesWidgetState {
+type PlacesWidgetState = {
   query: string;
   initialLatLngViaIP: boolean | undefined;
   isInitialLatLngViaIPSet: boolean;
-}
+};
 
 /**
  * This widget sets the geolocation value for the search based on the selected

@@ -59,11 +59,10 @@ export type CurrentRefinementsWidgetParams = {
   transformItems?: (items: Item[]) => any;
 };
 
-interface CurrentRefinementsRendererWidgetParams
-  extends CurrentRefinementsWidgetParams {
+type CurrentRefinementsRendererWidgetParams = {
   container: HTMLElement;
   cssClasses: CurrentRefinementsComponentCSSClasses;
-}
+} & CurrentRefinementsWidgetParams;
 
 type CurrentRefinements = WidgetFactory<CurrentRefinementsWidgetParams>;
 
