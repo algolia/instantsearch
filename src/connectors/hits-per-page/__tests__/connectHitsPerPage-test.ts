@@ -7,6 +7,12 @@ import {
   HitsPerPageConnectorParamsItem,
   HitsPerPageConnectorParams,
 } from '../connectHitsPerPage';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
 describe('connectHitsPerPage', () => {
   describe('Usage', () => {
@@ -124,16 +130,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
     expect(renderFn).toHaveBeenCalledTimes(0);
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 3,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      })
+    );
 
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -148,12 +157,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       true
     );
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -181,15 +194,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         items.map(item => ({ ...item, label: 'transformed' })),
     });
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 3,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -201,11 +217,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       true
     );
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      helper,
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -272,16 +292,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 11,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      })
+    );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
     const { refine } = firstRenderOptions;
@@ -289,12 +312,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     refine(3);
     expect(helper.state.hitsPerPage).toBe(3);
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     const { refine: renderSetValue } = secondRenderOptions;
@@ -316,27 +343,34 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 20,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: state => state,
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: state => state as any,
+      })
+    );
 
     const createURLAtInit = renderFn.mock.calls[0][0].createURL;
     expect(helper.state.hitsPerPage).toEqual(20);
     const URLStateAtInit = createURLAtInit(3);
     expect(URLStateAtInit.hitsPerPage).toEqual(3);
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      createURL: state => state,
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        createURL: state => state as any,
+      })
+    );
 
     const createURLAtRender = renderFn.mock.calls[1][0].createURL;
     const URLStateAtRender = createURLAtRender(5);
@@ -354,16 +388,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      })
+    );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
     expect(firstRenderOptions.items).toMatchInlineSnapshot(`
@@ -388,12 +425,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     `);
     firstRenderOptions.refine(3);
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     expect(secondRenderOptions.items).toMatchInlineSnapshot(`
@@ -428,16 +469,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      })
+    );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
     expect(firstRenderOptions.items).toHaveLength(3);
@@ -447,12 +491,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     expect(secondRenderOptions.items).toHaveLength(3);
@@ -470,16 +518,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      })
+    );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
     expect(firstRenderOptions.items).toHaveLength(3);
@@ -489,12 +540,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     expect(secondRenderOptions.items).toHaveLength(3);
@@ -512,16 +567,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       ],
     });
 
-    const helper = algoliasearchHelper({} as any, '', {
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {
       hitsPerPage: 7,
     });
     helper.search = jest.fn();
 
-    widget.init!({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    } as any);
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+      })
+    );
 
     const firstRenderOptions = renderFn.mock.calls[0][0];
     expect(firstRenderOptions.items).toHaveLength(3);
@@ -531,12 +589,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
 
-    widget.render!({
-      results: new SearchResults(helper.state, [{} as any]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    } as any);
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      })
+    );
 
     const secondRenderOptions = renderFn.mock.calls[1][0];
     expect(secondRenderOptions.items).toHaveLength(3);
@@ -546,7 +608,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = algoliasearchHelper({} as any, '');
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '');
 
       const renderFn = () => {};
       const unmountFn = jest.fn();
@@ -566,7 +629,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({} as any, '');
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '');
 
       const renderFn = () => {};
       const makeWidget = connectHitsPerPage(renderFn);
@@ -583,7 +647,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     it('removes `hitsPerPage` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({} as any, '', {
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '', {
         hitsPerPage: 5,
       });
 
@@ -612,7 +677,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     test('returns the `uiState` empty', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
-      const helper = algoliasearchHelper({} as any, 'indexName');
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, 'indexName');
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page', default: true },
@@ -634,7 +700,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     test('returns the `uiState` empty with default value selected', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
-      const helper = algoliasearchHelper({} as any, 'indexName', {
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, 'indexName', {
         hitsPerPage: 3,
       });
 
@@ -659,7 +726,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     test('returns the `uiState` with a refinement', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
-      const helper = algoliasearchHelper({} as any, 'indexName', {
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, 'indexName', {
         hitsPerPage: 22,
       });
       const widget = makeWidget({
@@ -687,7 +755,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     test('returns the `SearchParameters` with the default value', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
-      const helper = algoliasearchHelper({} as any, 'indexName');
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, 'indexName');
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page', default: true },
@@ -705,7 +774,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     test('returns the `SearchParameters` with the value from `uiState`', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
-      const helper = algoliasearchHelper({} as any, 'indexName');
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, 'indexName');
       const widget = makeWidget({
         items: [
           { value: 3, label: '3 items per page', default: true },
@@ -725,7 +795,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
       const render = jest.fn();
       const makeWidget = connectHitsPerPage(render);
-      const helper = algoliasearchHelper({} as any, 'indexName', {
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, 'indexName', {
         hitsPerPage: 22,
       });
       const widget = makeWidget({
