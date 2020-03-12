@@ -1,6 +1,9 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import hitsPerPage from '../hits-per-page';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -13,7 +16,7 @@ jest.mock('preact', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
-      hitsPerPage({ container: undefined });
+      hitsPerPage({ container: '', items: [] });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
 
@@ -71,7 +74,7 @@ describe('hitsPerPage()', () => {
     });
 
     expect(
-      widgetWithDefaults.getWidgetSearchParameters(new SearchParameters({}), {
+      widgetWithDefaults.getWidgetSearchParameters!(new SearchParameters({}), {
         uiState: {},
       })
     ).toEqual(
