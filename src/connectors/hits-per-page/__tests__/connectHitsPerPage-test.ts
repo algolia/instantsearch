@@ -140,7 +140,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: () => '#',
       })
     );
 
@@ -164,7 +163,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
@@ -302,7 +300,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: () => '#',
       })
     );
 
@@ -319,7 +316,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
@@ -353,13 +349,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: state => state as any,
+        createURL: state => JSON.stringify(state),
       })
     );
 
     const createURLAtInit = renderFn.mock.calls[0][0].createURL;
     expect(helper.state.hitsPerPage).toEqual(20);
-    const URLStateAtInit = createURLAtInit(3);
+    const URLStateAtInit = JSON.parse(createURLAtInit(3));
     expect(URLStateAtInit.hitsPerPage).toEqual(3);
 
     widget.render!(
@@ -368,12 +364,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           createSingleSearchResponse(),
         ]),
         state: helper.state,
-        createURL: state => state as any,
+        createURL: state => JSON.stringify(state),
       })
     );
 
     const createURLAtRender = renderFn.mock.calls[1][0].createURL;
-    const URLStateAtRender = createURLAtRender(5);
+    const URLStateAtRender = JSON.parse(createURLAtRender(5));
     expect(URLStateAtRender.hitsPerPage).toEqual(5);
   });
 
@@ -398,7 +394,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: () => '#',
       })
     );
 
@@ -432,7 +427,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
@@ -479,7 +473,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: () => '#',
       })
     );
 
@@ -498,7 +491,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
@@ -528,7 +520,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: () => '#',
       })
     );
 
@@ -547,7 +538,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
@@ -577,7 +567,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: () => '#',
       })
     );
 
@@ -596,7 +585,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
