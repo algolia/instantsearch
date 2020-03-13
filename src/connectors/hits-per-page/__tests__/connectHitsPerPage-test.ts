@@ -3,10 +3,7 @@ import algoliasearchHelper, {
   SearchResults,
 } from 'algoliasearch-helper';
 import { connectHitsPerPage } from '../..';
-import {
-  HitsPerPageConnectorParamsItem,
-  HitsPerPageConnectorParams,
-} from '../connectHitsPerPage';
+import { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 import {
   createInitOptions,
   createRenderOptions,
