@@ -4,7 +4,12 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { WidgetFactory, Renderer, RendererOptions } from '../../types';
+import {
+  WidgetFactory,
+  Renderer,
+  RendererOptions,
+  Unmounter,
+} from '../../types';
 
 import { SearchParameters } from 'algoliasearch-helper';
 
@@ -73,16 +78,18 @@ export type HitsPerPageRendererOptions<
 
   /**
    * Creates the URL for a single item name in the list.
+   *
+   * @internal
    */
   createURL: (value: HitsPerPageRendererOptionsItem['value']) => string;
 
   /**
-   * Sets the number of hits per page and trigger a search.
+   * Sets the number of hits per page and triggers a search.
    */
-  refine: (number: number) => any;
+  refine: (value: number) => void;
 
   /**
-   * `true` if the last search contains no result.
+   * Indicates whether or not the search has results.
    */
   hasNoResults: boolean;
 } & RendererOptions<THitsPerPageWidgetParams>;
@@ -99,17 +106,17 @@ type HitsPerPageConnector<
   THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
 > = (
   /**
-   * Rendering function for the custom **HitsPerPage** widget.
+   * Render function for the custom **HitsPerPage** widget.
    */
   render: HitsPerPageRenderer<THitsPerPageWidgetParams>,
 
   /**
    * Unmount function called when the widget is disposed.
    */
-  unmount?: () => void
+  unmount?: Unmounter
 ) => HitsPerPageWidgetFactory<THitsPerPageWidgetParams>;
 
-const connector: HitsPerPageConnector = function connectHitsPerPage(
+const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
   renderFn,
   unmountFn = noop
 ) {
@@ -266,4 +273,4 @@ You may want to add another entry to the \`items\` option with this value.`
   };
 };
 
-export default connector;
+export default connectHitsPerPage;

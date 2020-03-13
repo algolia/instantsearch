@@ -69,20 +69,10 @@ export type HitsPerPageWidgetOptions = {
   container: string | HTMLElement;
 
   /**
-   * Array of objects defining the different values and labels.
-   */
-  items: HitsPerPageItems;
-
-  /**
    * CSS classes to be added.
    */
   cssClasses?: HitsPerPageCSSClasses;
-
-  /**
-   * Function to transform the items passed to the templates.
-   */
-  transformItems?: HitsPerPageConnectorParams['transformItems'];
-};
+} & HitsPerPageConnectorParams;
 
 export type HitsPerPageWidget = WidgetFactory<HitsPerPageWidgetOptions>;
 
