@@ -30,9 +30,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
     });
 
     it('throws with empty items', () => {
-      const items: HitsPerPageConnectorParamsItem[] = [];
       const options: HitsPerPageConnectorParams = {
-        items,
+        items: [],
       };
 
       expect(() => {
