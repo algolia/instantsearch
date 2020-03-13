@@ -1,10 +1,10 @@
 import { UiState } from '../types';
 
-export type MiddlewareDefinition = {
-  onStateChange(options: { state: UiState }): void;
+export interface MiddlewareDefinition {
+  onStateChange(options: { uiState: UiState }): void;
   subscribe(): void;
   unsubscribe(): void;
-};
+}
 
 export type Middleware = ({
   instantSearchInstance: InstantSearch,

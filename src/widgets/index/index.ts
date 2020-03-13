@@ -18,11 +18,10 @@ import {
   Client,
 } from '../../types';
 import {
+  checkIndexUiState,
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
-  warning,
-  capitalize,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -58,9 +57,14 @@ export type Index = Widget & {
   render(options: IndexRenderOptions): void;
   dispose(): void;
   getWidgetState(uiState: UiState): UiState;
+  getWidgetSearchParameters(
+    searchParameters: SearchParameters,
+    searchParametersOptions: { uiState: IndexUiState }
+  ): SearchParameters;
+  refreshUiState(): void;
 };
 
-function isIndexWidget(widget: Widget): widget is Index {
+export function isIndexWidget(widget: Widget): widget is Index {
   return widget.$$type === 'ais.index';
 }
 
@@ -305,7 +309,22 @@ const index = (props: IndexProps): Index => {
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is
       // aware of the `searchClient`).
-      helper.search = () => mainHelper.search();
+      helper.search = () => {
+        if (instantSearchInstance.onStateChange) {
+          instantSearchInstance.onStateChange!({
+            uiState: instantSearchInstance.mainIndex.getWidgetState({}),
+            setUiState: instantSearchInstance.setUiState.bind(
+              instantSearchInstance
+            ),
+          });
+
+          // We don't trigger a search when controlled because it becomes the
+          // responsibility of `setUiState`.
+          return mainHelper;
+        }
+
+        return mainHelper.search();
+      };
 
       // We use the same pattern for the `searchForFacetValues`.
       helper.searchForFacetValues = (
@@ -346,174 +365,7 @@ const index = (props: IndexProps): Index => {
         instantSearchInstance.scheduleStalledRender();
 
         if (__DEV__) {
-          // Some connectors are responsible for multiple widgets so we need
-          // to map them.
-          // eslint-disable-next-line no-inner-declarations
-          function getWidgetNames(connectorName: string): string[] {
-            switch (connectorName) {
-              case 'range':
-                return ['rangeInput', 'rangeSlider'];
-
-              case 'menu':
-                return ['menu', 'menuSelect'];
-
-              default:
-                return [connectorName];
-            }
-          }
-
-          type StateDescription = {
-            connectors: string[];
-            widgets: Array<Widget['$$type']>;
-          };
-
-          type StateToWidgets = {
-            [TParameter in keyof IndexUiState]: StateDescription;
-          };
-
-          const stateToWidgetsMap: StateToWidgets = {
-            query: {
-              connectors: ['connectSearchBox'],
-              widgets: ['ais.searchBox', 'ais.autocomplete', 'ais.voiceSearch'],
-            },
-            refinementList: {
-              connectors: ['connectRefinementList'],
-              widgets: ['ais.refinementList'],
-            },
-            menu: {
-              connectors: ['connectMenu'],
-              widgets: ['ais.menu'],
-            },
-            hierarchicalMenu: {
-              connectors: ['connectHierarchicalMenu'],
-              widgets: ['ais.hierarchicalMenu'],
-            },
-            numericMenu: {
-              connectors: ['connectNumericMenu'],
-              widgets: ['ais.numericMenu'],
-            },
-            ratingMenu: {
-              connectors: ['connectRatingMenu'],
-              widgets: ['ais.ratingMenu'],
-            },
-            range: {
-              connectors: ['connectRange'],
-              widgets: ['ais.rangeInput', 'ais.rangeSlider'],
-            },
-            toggle: {
-              connectors: ['connectToggleRefinement'],
-              widgets: ['ais.toggleRefinement'],
-            },
-            geoSearch: {
-              connectors: ['connectGeoSearch'],
-              widgets: ['ais.geoSearch'],
-            },
-            sortBy: {
-              connectors: ['connectSortBy'],
-              widgets: ['ais.sortBy'],
-            },
-            page: {
-              connectors: ['connectPagination'],
-              widgets: ['ais.pagination', 'ais.infiniteHits'],
-            },
-            hitsPerPage: {
-              connectors: ['connectHitsPerPage'],
-              widgets: ['ais.hitsPerPage'],
-            },
-            configure: {
-              connectors: ['connectConfigure'],
-              widgets: ['ais.configure'],
-            },
-            places: {
-              connectors: [],
-              widgets: ['ais.places'],
-            },
-          };
-
-          const mountedWidgets = this.getWidgets()
-            .map(widget => widget.$$type)
-            .filter(Boolean);
-
-          type MissingWidgets = Array<[string, StateDescription]>;
-
-          const missingWidgets = Object.keys(localUiState).reduce<
-            MissingWidgets
-          >((acc, parameter) => {
-            const requiredWidgets: Array<Widget['$$type']> | undefined =
-              stateToWidgetsMap[parameter] &&
-              stateToWidgetsMap[parameter].widgets;
-
-            if (
-              requiredWidgets &&
-              !requiredWidgets.some(requiredWidget =>
-                mountedWidgets.includes(requiredWidget)
-              )
-            ) {
-              acc.push([
-                parameter,
-                {
-                  connectors: stateToWidgetsMap[parameter].connectors,
-                  widgets: stateToWidgetsMap[parameter].widgets.map(
-                    (widgetIdentifier: string) =>
-                      widgetIdentifier.split('ais.')[1]
-                  ),
-                },
-              ]);
-            }
-
-            return acc;
-          }, []);
-
-          warning(
-            missingWidgets.length === 0,
-            `The UI state for the index "${this.getIndexId()}" is not consistent with the widgets mounted.
-
-This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
-
-To fully reflect the state, some widgets need to be added to the index "${this.getIndexId()}":
-
-${missingWidgets
-  .map(([stateParameter, { widgets }]) => {
-    return `- \`${stateParameter}\` needs one of these widgets: ${([] as string[])
-      .concat(...widgets.map(name => getWidgetNames(name!)))
-      .map((name: string) => `"${name}"`)
-      .join(', ')}`;
-  })
-  .join('\n')}
-
-If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
-
-\`\`\`
-${missingWidgets
-  .filter(([_stateParameter, { connectors }]) => {
-    return connectors.length > 0;
-  })
-  .map(([_stateParameter, { connectors, widgets }]) => {
-    const capitalizedWidget = capitalize(widgets[0]!);
-    const connectorName = connectors[0];
-
-    return `const virtual${capitalizedWidget} = ${connectorName}(() => null);`;
-  })
-  .join('\n')}
-
-search.addWidgets([
-  ${missingWidgets
-    .filter(([_stateParameter, { connectors }]) => {
-      return connectors.length > 0;
-    })
-    .map(([_stateParameter, { widgets }]) => {
-      const capitalizedWidget = capitalize(widgets[0]!);
-
-      return `virtual${capitalizedWidget}({ /* ... */ })`;
-    })
-    .join(',\n  ')}
-]);
-\`\`\`
-
-If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
-
-See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`
-          );
+          checkIndexUiState({ index: this, indexUiState: localUiState });
         }
       });
 
@@ -556,7 +408,11 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
           helper: helper!,
         });
 
-        instantSearchInstance.onStateChange();
+        // We don't trigger an internal change when controlled because it
+        // becomes the responsibility of `setUiState`.
+        if (!instantSearchInstance.onStateChange) {
+          instantSearchInstance.onInternalStateChange();
+        }
       });
     },
 
@@ -619,6 +475,20 @@ See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-e
             [this.getIndexId()]: localUiState,
           }
         );
+    },
+
+    getWidgetSearchParameters(searchParameters, { uiState }) {
+      return getLocalWidgetsSearchParameters(localWidgets, {
+        uiState,
+        initialSearchParameters: searchParameters,
+      });
+    },
+
+    refreshUiState() {
+      localUiState = getLocalWidgetsState(localWidgets, {
+        searchParameters: this.getHelper()!.state,
+        helper: this.getHelper()!,
+      });
     },
   };
 };

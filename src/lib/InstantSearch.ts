@@ -1,6 +1,6 @@
 import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import EventEmitter from 'events';
-import index, { Index } from '../widgets/index/index';
+import index, { Index, isIndexWidget } from '../widgets/index/index';
 import version from './version';
 import createHelpers from './createHelpers';
 import {
@@ -9,6 +9,7 @@ import {
   defer,
   noop,
   warning,
+  checkIndexUiState,
 } from './utils';
 import {
   InsightsClient as AlgoliaInsightsClient,
@@ -81,6 +82,17 @@ export type InstantSearchOptions<TRouteState = UiState> = {
   searchFunction?: (helper: AlgoliaSearchHelper) => void;
 
   /**
+   * Function called when the state changes.
+   *
+   * Using this function turns the experience controlled. This means that you
+   * become in charge of updating the UI state with the `setUiState` function.
+   */
+  onStateChange?: (params: {
+    uiState: UiState;
+    setUiState(uiState: UiState | ((uiState: UiState) => UiState)): void;
+  }) => void;
+
+  /**
    * Injects a `uiState` to the `instantsearch` instance. You can use this option
    * to provide an initial state to a widget. Note that the state is only used
    * for the first search. To unconditionally pass additional parameters to the
@@ -115,6 +127,7 @@ class InstantSearch extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
   public insightsClient: AlgoliaInsightsClient | null;
+  public onStateChange: InstantSearchOptions['onStateChange'] | null = null;
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: Index;
@@ -141,6 +154,7 @@ class InstantSearch extends EventEmitter {
       stalledSearchDelay = 200,
       searchClient = null,
       insightsClient = null,
+      onStateChange = null,
     } = options;
 
     if (indexName === null) {
@@ -211,6 +225,7 @@ See ${createDocumentationLink({
     this.mainIndex = index({
       indexName,
     });
+    this.onStateChange = onStateChange;
 
     this.started = false;
     this.templatesConfig = {
@@ -494,12 +509,55 @@ See ${createDocumentationLink({
     }
   }
 
-  public onStateChange = () => {
+  public setUiState: (
+    uiState: UiState | ((uiState: UiState) => UiState)
+  ) => void = uiState => {
+    if (!this.mainHelper) {
+      throw new Error(
+        withUsage('The `start` method needs to be called before `setUiState`.')
+      );
+    }
+
+    // We refresh the index UI state to update the local UI state that the
+    // main index passes to the function form of `setUiState`.
+    this.mainIndex.refreshUiState();
+    const nextUiState =
+      typeof uiState === 'function'
+        ? uiState(this.mainIndex.getWidgetState({}))
+        : uiState;
+
+    const setIndexHelperState = (indexWidget: Index) => {
+      if (__DEV__) {
+        checkIndexUiState({
+          index: indexWidget,
+          indexUiState: nextUiState[indexWidget.getIndexId()],
+        });
+      }
+
+      indexWidget.getHelper()!.overrideStateWithoutTriggeringChangeEvent(
+        indexWidget.getWidgetSearchParameters(indexWidget.getHelper()!.state, {
+          uiState: nextUiState[indexWidget.getIndexName()],
+        })
+      );
+
+      indexWidget
+        .getWidgets()
+        .filter(isIndexWidget)
+        .forEach(setIndexHelperState);
+    };
+
+    setIndexHelperState(this.mainIndex);
+
+    this.scheduleSearch();
+    this.onInternalStateChange();
+  };
+
+  public onInternalStateChange = () => {
     const nextUiState = this.mainIndex.getWidgetState({});
 
     this.middleware.forEach(m => {
       m.onStateChange({
-        state: nextUiState,
+        uiState: nextUiState,
       });
     });
   };
