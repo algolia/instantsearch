@@ -10,6 +10,7 @@ export { default as clearRefinements } from './clearRefinements';
 export { default as escapeRefinement } from './escapeRefinement';
 export { default as unescapeRefinement } from './unescapeRefinement';
 export { default as checkRendering } from './checkRendering';
+export { checkIndexUiState } from './checkIndexUiState';
 export { default as getPropertyByPath } from './getPropertyByPath';
 export { default as getObjectType } from './getObjectType';
 export { default as noop } from './noop';

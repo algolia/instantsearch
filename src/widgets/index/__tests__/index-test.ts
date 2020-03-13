@@ -470,7 +470,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
         // 1. By the helper `change` event callback, for the change to the query parameters
         // 2. By the helper `change` event callback, for the child widgets being disposed
-        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).toHaveBeenCalledTimes(2);
       });
 
       it('calls `dispose` on the removed widgets', () => {
@@ -1520,7 +1522,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         // `instantSearchInstance` must have been notified 2 times of the `uiState` changes:
         // 1. By the helper `change` event callback, for the 1st change to the query parameters
         // 2. By the helper `change` event callback, for the 2nd change to the query parameters
-        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).toHaveBeenCalledTimes(2);
       });
 
       it('does not update the local `uiState` on state changes in `init`', () => {
@@ -1560,7 +1564,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           indexName: {},
         });
 
-        expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).not.toHaveBeenCalled();
       });
 
       it('updates the local `uiState` only with widgets', () => {
@@ -1590,7 +1596,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       it('updates the local `uiState` when they differ on first render', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
-          onStateChange: jest.fn(),
+          onInternalStateChange: jest.fn(),
         });
 
         instance.addWidgets([createSearchBox()]);
@@ -1618,7 +1624,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(1);
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).toHaveBeenCalledTimes(1);
         expect(instance.getWidgetState({})).toEqual({
           indexName: {
             query: 'Apple iPhone',
@@ -1637,7 +1645,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        expect(instantSearchInstance.onStateChange).toHaveBeenCalledTimes(2);
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).toHaveBeenCalledTimes(2);
         expect(instance.getWidgetState({})).toEqual({
           indexName: {
             query: 'Apple iPhone XS',
@@ -1649,7 +1659,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const topLevelInstance = index({ indexName: 'topLevelIndexName' });
         const subLevelInstance = index({ indexName: 'subLevelIndexName' });
         const instantSearchInstance = createInstantSearch({
-          onStateChange: jest.fn(),
+          onInternalStateChange: jest.fn(),
         });
 
         topLevelInstance.addWidgets([
@@ -1688,7 +1698,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        expect(instantSearchInstance.onStateChange).not.toHaveBeenCalled();
+        expect(
+          instantSearchInstance.onInternalStateChange
+        ).not.toHaveBeenCalled();
         expect(subLevelInstance.getWidgetState({})).toEqual({
           subLevelIndexName: {},
         });
