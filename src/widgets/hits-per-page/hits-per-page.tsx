@@ -3,13 +3,18 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
+import connectHitsPerPage, {
+  HitsPerPageConnectorParams,
+  HitsPerPageRenderer,
+  HitsPerPageRendererOptions,
+} from '../../connectors/hits-per-page/connectHitsPerPage';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
   find,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
@@ -17,9 +22,9 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('HitsPerPage');
 
 const renderer = ({ containerNode, cssClasses }) => (
-  { items, refine },
+  { items, refine }: HitsPerPageRendererOptions,
   isFirstRendering
-) => {
+): HitsPerPageRenderer<HitsPerPageWidgetOptions> | void => {
   if (isFirstRendering) return;
 
   const { value: currentValue } =
@@ -38,56 +43,47 @@ const renderer = ({ containerNode, cssClasses }) => (
   );
 };
 
-/**
- * @typedef {Object} HitsPerPageCSSClasses
- * @property {string|string[]} [root] CSS classes added to the outer `<div>`.
- * @property {string|string[]} [select] CSS classes added to the parent `<select>`.
- * @property {string|string[]} [option] CSS classes added to each `<option>`.
- */
+export type HitsPerPageCSSClasses = {
+  /**
+   * CSS classes added to the outer `<div>`.
+   */
+  root?: string | string[];
 
-/**
- * @typedef {Object} HitsPerPageItems
- * @property {number} value number of hits to display per page.
- * @property {string} label Label to display in the option.
- * @property {boolean} default The default hits per page on first search.
- */
+  /**
+   * CSS classes added to the parent `<select>`.
+   */
+  select?: string | string[];
 
-/**
- * @typedef {Object} HitsPerPageWidgetOptions
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {HitsPerPageItems[]} items Array of objects defining the different values and labels.
- * @property {HitsPerPageCSSClasses} [cssClasses] CSS classes to be added.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
+  /**
+   * CSS classes added to each `<option>`.
+   */
+  option?: string | string[];
+};
 
-/**
- * The hitsPerPage widget gives the user the ability to change the number of results
- * displayed in the hits widget.
- *
- * You can specify the default hits per page using a boolean in the items[] array. If none is specified, this first hits per page option will be picked.
- * @type {WidgetFactory}
- * @devNovel HitsPerPage
- * @category basic
- * @param {HitsPerPageWidgetOptions} $0 The options of the HitPerPageSelector widget.
- * @return {Widget} A new instance of the HitPerPageSelector widget.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.hitsPerPage({
- *     container: '#hits-per-page',
- *     items: [
- *       {value: 3, label: '3 per page', default: true},
- *       {value: 6, label: '6 per page'},
- *       {value: 12, label: '12 per page'},
- *     ]
- *   })
- * ]);
- */
-export default function hitsPerPage({
-  container,
-  items,
-  cssClasses: userCssClasses = {},
-  transformItems,
-} = {}) {
+export type HitsPerPageItems = HitsPerPageConnectorParams['items'];
+
+export type HitsPerPageWidgetOptions = {
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+
+  /**
+   * CSS classes to be added.
+   */
+  cssClasses?: HitsPerPageCSSClasses;
+} & HitsPerPageConnectorParams;
+
+export type HitsPerPageWidget = WidgetFactory<HitsPerPageWidgetOptions>;
+
+const hitsPerPage: HitsPerPageWidget = function hitsPerPage(
+  {
+    container,
+    items,
+    cssClasses: userCssClasses = {},
+    transformItems,
+  } = {} as HitsPerPageWidgetOptions
+) {
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -110,4 +106,6 @@ export default function hitsPerPage({
   );
 
   return makeHitsPerPage({ items, transformItems });
-}
+};
+
+export default hitsPerPage;
