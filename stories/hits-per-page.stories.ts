@@ -1,12 +1,13 @@
 import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
+import { hitsPerPage } from '../src/widgets';
 
 storiesOf('Pagination|HitsPerPage', module)
   .add(
     'default',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidgets([
-        instantsearch.widgets.hitsPerPage({
+        hitsPerPage({
           container,
           items: [
             { value: 3, label: '3 per page', default: true },
@@ -19,9 +20,9 @@ storiesOf('Pagination|HitsPerPage', module)
   )
   .add(
     'with transformed items',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidgets([
-        instantsearch.widgets.hitsPerPage({
+        hitsPerPage({
           container,
           items: [
             { value: 3, label: '3 per page', default: true },
@@ -39,9 +40,9 @@ storiesOf('Pagination|HitsPerPage', module)
   )
   .add(
     'with add/remove',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       withLifecycle(search, container, node =>
-        instantsearch.widgets.hitsPerPage({
+        hitsPerPage({
           container: node,
           items: [
             { value: 3, label: '3 per page', default: true },
