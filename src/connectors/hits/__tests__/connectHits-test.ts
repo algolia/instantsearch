@@ -2,8 +2,18 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
+import escapeHits, {
+  TAG_PLACEHOLDER,
+  EscapedHits,
+} from '../../../lib/escape-highlight';
 import connectHits from '../connectHits';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { AlgoliaHit } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
@@ -15,7 +25,7 @@ jest.mock('../../../lib/utils/hits-absolute-position', () => ({
 describe('connectHits', () => {
   it('throws without render function', () => {
     expect(() => {
-      connectHits()({});
+      connectHits((undefined as unknown) as () => {})({});
     }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
 
@@ -48,14 +58,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     // test if widget is not rendered yet at this point
     expect(renderFn).toHaveBeenCalledTimes(0);
 
-    const helper = algoliasearchHelper({}, '', {});
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -63,12 +75,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       true
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{ hits: [] }]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -82,14 +97,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({}, '', {});
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -99,18 +116,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect.anything()
     );
 
-    const hits = [{ fake: 'data' }, { sample: 'infos' }];
-    hits.__escaped = true;
+    const hits = escapeHits([
+      { objectID: '1', fake: 'data' },
+      { objectID: '2', sample: 'infos' },
+    ]);
 
     const results = new SearchResults(helper.state, [
-      { hits: [].concat(hits) },
+      createSingleSearchResponse({ hits }),
     ]);
-    widget.render({
-      results,
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results,
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -126,14 +146,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
-    const helper = algoliasearchHelper({}, '', {});
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -145,37 +167,47 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     const hits = [
       {
+        objectID: '1',
         _highlightResult: {
           foobar: {
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
+            matchLevel: 'none',
+            matchedWords: ['foobar'],
           },
         },
       },
     ];
 
-    const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render({
-      results,
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ hits }),
+    ]);
+    widget.render!(
+      createRenderOptions({
+        results,
+        state: helper.state,
+        helper,
+      })
+    );
 
-    const escapedHits = [
+    // @ts-ignore
+    const expectedHits: EscapedHits = [
       {
+        objectID: '1',
         _highlightResult: {
           foobar: {
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+            matchLevel: 'none',
+            matchedWords: ['foobar'],
           },
         },
       },
     ];
 
-    escapedHits.__escaped = true;
+    expectedHits.__escaped = true;
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits: escapedHits,
+        hits: expectedHits,
         results,
       }),
       expect.anything()
@@ -189,14 +221,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       transformItems: items => items.map(() => ({ name: 'transformed' })),
     });
 
-    const helper = algoliasearchHelper({}, '', {});
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(renderFn).toHaveBeenNthCalledWith(
       1,
@@ -204,18 +238,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect.anything()
     );
 
-    const hits = [{ name: 'name 1' }, { name: 'name 2' }];
+    const hits = [
+      { objectID: '1', name: 'name 1' },
+      { objectID: '2', name: 'name 2' },
+    ];
 
-    const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render({
-      results,
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    const results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ hits }),
+    ]);
+    widget.render!(
+      createRenderOptions({
+        results,
+        state: helper.state,
+        helper,
+      })
+    );
 
-    const expectedHits = [{ name: 'transformed' }, { name: 'transformed' }];
-    expectedHits.__escaped = true;
+    const expectedHits = escapeHits([
+      // @ts-ignore
+      { name: 'transformed' },
+      // @ts-ignore
+      { name: 'transformed' },
+    ]);
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -232,32 +276,38 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(renderFn);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({}, '', {});
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
-    const hits = [{ name: 'name 1' }, { name: 'name 2' }];
+    const hits = [
+      { objectID: '1', name: 'name 1' },
+      { objectID: '2', name: 'name 2' },
+    ];
 
     const results = new SearchResults(helper.state, [
-      { hits, queryID: 'theQueryID' },
+      createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
     ]);
-    widget.render({
-      results,
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
 
-    const expectedHits = [
-      { name: 'name 1', __queryID: 'theQueryID' },
-      { name: 'name 2', __queryID: 'theQueryID' },
-    ];
-    expectedHits.__escaped = true;
+    widget.render!(
+      createRenderOptions({
+        results,
+        state: helper.state,
+        helper,
+      })
+    );
+
+    const expectedHits = escapeHits([
+      { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+      { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+    ]);
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -278,68 +328,65 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           _highlightResult: {
             name: {
               value: item._highlightResult.name.value.toUpperCase(),
+              matchLevel: 'none',
+              matchedWords: [''],
             },
           },
         })),
       escapeHTML: true,
     });
 
-    const helper = algoliasearchHelper({}, '', {});
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
-    const hits = [
+    const hits: AlgoliaHit[] = [
       {
+        objectID: '1',
         name: 'hello',
         _highlightResult: {
           name: {
-            value: `he${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`,
+            value: `HE${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}`.toUpperCase(),
+            matchLevel: 'none',
+            matchedWords: [''],
           },
         },
       },
       {
+        objectID: '2',
         name: 'halloween',
         _highlightResult: {
           name: {
-            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`,
+            value: `ha${TAG_PLACEHOLDER.highlightPreTag}llo${TAG_PLACEHOLDER.highlightPostTag}ween`.toUpperCase(),
+            matchLevel: 'none',
+            matchedWords: [''],
           },
         },
       },
     ];
 
-    const results = new SearchResults(helper.state, [{ hits }]);
-    widget.render({
-      results,
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
-
-    const expectedHits = [
+    const results = new SearchResults(helper.state, [
       {
-        name: 'hello',
-        _highlightResult: {
-          name: {
-            value: 'HE<MARK>LLO</MARK>',
-          },
-        },
+        ...createSingleSearchResponse(),
+        hits,
       },
-      {
-        name: 'halloween',
-        _highlightResult: {
-          name: {
-            value: 'HA<MARK>LLO</MARK>WEEN',
-          },
-        },
-      },
-    ];
+    ]);
+    widget.render!(
+      createRenderOptions({
+        results,
+        state: helper.state,
+        helper,
+      })
+    );
 
-    expectedHits.__escaped = true;
+    const expectedHits = escapeHits(hits);
 
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
@@ -356,36 +403,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({}, '', {});
+    const searchClient = createSearchClient();
+    const helper = algoliasearchHelper(searchClient, '', {});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const results = new SearchResults(helper.state, [
-      { hits: [{ whatever: 'i like kittens' }] },
+      {
+        ...createSingleSearchResponse(),
+        hits: [{ whatever: 'i like kittens', objectID: '1' }],
+      },
     ]);
-    widget.render({
-      results,
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results,
+        state: helper.state,
+        helper,
+      })
+    );
 
-    expect(results.hits.__escaped).toBe(true);
+    expect((results.hits as any).__escaped).toBe(true);
   });
 
   describe('getWidgetSearchParameters', () => {
     it('adds the TAG_PLACEHOLDER to the `SearchParameters`', () => {
       const render = () => {};
       const makeWidget = connectHits(render);
-      const widget = makeWidget();
+      const widget = makeWidget({});
 
-      const actual = widget.getWidgetSearchParameters(new SearchParameters());
+      const actual = widget.getWidgetSearchParameters!(new SearchParameters(), {
+        uiState: {},
+      });
 
       expect(actual).toEqual(new SearchParameters(TAG_PLACEHOLDER));
     });
@@ -397,7 +451,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         escapeHTML: false,
       });
 
-      const actual = widget.getWidgetSearchParameters(new SearchParameters());
+      const actual = widget.getWidgetSearchParameters!(new SearchParameters(), {
+        uiState: {},
+      });
 
       expect(actual).toEqual(new SearchParameters());
     });
@@ -405,40 +461,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = algoliasearchHelper({}, '');
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '');
 
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectHits(renderFn, unmountFn);
-      const widget = makeWidget();
+      const widget = makeWidget({});
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose({ helper, state: helper.state });
+      widget.dispose!({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({}, '');
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '');
 
       const renderFn = () => {};
       const makeWidget = connectHits(renderFn);
-      const widget = makeWidget();
+      const widget = makeWidget({});
 
       expect(() =>
-        widget.dispose({ helper, state: helper.state })
+        widget.dispose!({ helper, state: helper.state })
       ).not.toThrow();
     });
 
     it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({}, '', {
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '', {
         ...TAG_PLACEHOLDER,
       });
 
       const renderFn = () => {};
       const makeWidget = connectHits(renderFn);
-      const widget = makeWidget();
+      const widget = makeWidget({});
 
       expect(helper.state.highlightPreTag).toBe(
         TAG_PLACEHOLDER.highlightPreTag
@@ -448,14 +507,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         TAG_PLACEHOLDER.highlightPostTag
       );
 
-      const nextState = widget.dispose({ helper, state: helper.state });
+      const nextState = widget.dispose!({
+        helper,
+        state: helper.state,
+      }) as SearchParameters;
 
       expect(nextState.highlightPreTag).toBeUndefined();
       expect(nextState.highlightPostTag).toBeUndefined();
     });
 
     it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const helper = algoliasearchHelper({}, '', {
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '', {
         highlightPreTag: '<mark>',
         highlightPostTag: '</mark>',
       });
@@ -469,7 +532,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect(helper.state.highlightPreTag).toBe('<mark>');
       expect(helper.state.highlightPostTag).toBe('</mark>');
 
-      const nextState = widget.dispose({ helper, state: helper.state });
+      const nextState = widget.dispose!({
+        helper,
+        state: helper.state,
+      }) as SearchParameters;
 
       expect(nextState.highlightPreTag).toBe('<mark>');
       expect(nextState.highlightPostTag).toBe('</mark>');

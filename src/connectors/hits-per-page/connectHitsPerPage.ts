@@ -68,9 +68,7 @@ export type HitsPerPageConnectorParams = {
   ) => HitsPerPageConnectorParamsItem[];
 };
 
-export type HitsPerPageRendererOptions<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = {
+export type HitsPerPageRendererOptions<THitsPerPageWidgetParams> = {
   /**
    * Array of objects defining the different values and labels.
    */
@@ -92,39 +90,28 @@ export type HitsPerPageRendererOptions<
    * Indicates whether or not the search has results.
    */
   hasNoResults: boolean;
-} & RendererOptions<THitsPerPageWidgetParams>;
+} & RendererOptions<THitsPerPageWidgetParams & HitsPerPageConnectorParams>;
 
-export type HitsPerPageRenderer<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = Renderer<HitsPerPageRendererOptions<THitsPerPageWidgetParams>>;
+export type HitsPerPageRenderer<THitsPerPageWidgetParams> = Renderer<
+  HitsPerPageRendererOptions<
+    THitsPerPageWidgetParams & HitsPerPageConnectorParams
+  >
+>;
 
-export type HitsPerPageWidgetFactory<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = WidgetFactory<HitsPerPageConnectorParams & THitsPerPageWidgetParams>;
+export type HitsPerPageWidgetFactory<THitsPerPageWidgetParams> = WidgetFactory<
+  HitsPerPageConnectorParams & THitsPerPageWidgetParams
+>;
 
-type HitsPerPageConnector<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = (
-  /**
-   * Render function for the custom **HitsPerPage** widget.
-   */
-  render: HitsPerPageRenderer<THitsPerPageWidgetParams>,
-
-  /**
-   * Unmount function called when the widget is disposed.
-   */
-  unmount?: Unmounter
-) => HitsPerPageWidgetFactory<THitsPerPageWidgetParams>;
-
-const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
-  renderFn,
-  unmountFn = noop
-) {
+export default function connectHitsPerPage<THitsPerPageWidgetParams = {}>(
+  renderFn: HitsPerPageRenderer<
+    HitsPerPageConnectorParams & THitsPerPageWidgetParams
+  >,
+  unmountFn: Unmounter = noop
+): HitsPerPageWidgetFactory<THitsPerPageWidgetParams> {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const { items: userItems, transformItems = items => items } =
-      widgetParams || {};
+    const { items: userItems, transformItems = items => items } = widgetParams;
     let items = userItems;
 
     if (!Array.isArray(items)) {
@@ -271,6 +258,4 @@ You may want to add another entry to the \`items\` option with this value.`
       },
     };
   };
-};
-
-export default connectHitsPerPage;
+}

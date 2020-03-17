@@ -44,8 +44,12 @@ function recursiveEscape(input: any): any {
   };
 }
 
-export default function escapeHits(hits: Hit[]): Hit[] {
-  if ((hits as any).__escaped === undefined) {
+export type EscapedHits<THit = Hit> = THit[] & { __escaped: boolean };
+
+export default function escapeHits<THit extends Hit>(
+  hits: THit[]
+): EscapedHits<THit> {
+  if ((hits as EscapedHits<THit>).__escaped === undefined) {
     hits = hits.map(hit => {
       if (hit._highlightResult) {
         hit._highlightResult = recursiveEscape(hit._highlightResult);
@@ -58,10 +62,10 @@ export default function escapeHits(hits: Hit[]): Hit[] {
       return hit;
     });
 
-    (hits as any).__escaped = true;
+    (hits as EscapedHits<THit>).__escaped = true;
   }
 
-  return hits;
+  return (hits as unknown) as EscapedHits<THit>;
 }
 
 export function escapeFacets(facetHits: FacetHit[]): FacetHit[] {

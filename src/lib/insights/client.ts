@@ -10,9 +10,14 @@ import {
   RendererOptions,
   Unmounter,
   WidgetFactory,
+  HitWithPosition,
+  Hit,
 } from '../../types';
 
-const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
+const getSelectedHits = <THits extends Hit>(
+  hits: THits[],
+  selectedObjectIDs: string[]
+): THits[] => {
   return selectedObjectIDs.map(objectID => {
     const hit = find(hits, h => h.objectID === objectID);
     if (typeof hit === 'undefined') {
@@ -42,7 +47,7 @@ See: https://alg.li/lNiZZ7`
   return queryID;
 };
 
-const getPositions = (selectedHits: Hits): number[] =>
+const getPositions = (selectedHits: HitWithPosition[]): number[] =>
   selectedHits.map(hit => hit.__position);
 
 export const inferPayload = ({
@@ -53,7 +58,7 @@ export const inferPayload = ({
 }: {
   method: InsightsClientMethod;
   results: SearchResults;
-  hits: Hits;
+  hits: HitWithPosition[];
   objectIDs: string[];
 }): Omit<InsightsClientPayload, 'eventName'> => {
   const { index } = results;
@@ -74,10 +79,10 @@ export const inferPayload = ({
   }
 };
 
-const wrapInsightsClient = (
+const wrapInsightsClient = <THit extends HitWithPosition>(
   aa: InsightsClient | null,
   results: SearchResults,
-  hits: Hits
+  hits: THit[]
 ): InsightsClientWrapper => (
   method: InsightsClientMethod,
   payload: Partial<InsightsClientPayload>
@@ -123,7 +128,7 @@ export default function withInsights(
       const insights = wrapInsightsClient(
         instantSearchInstance.insightsClient,
         results,
-        hits
+        hits as HitWithPosition[]
       );
       return renderFn({ ...renderOptions, insights }, isFirstRender);
     }

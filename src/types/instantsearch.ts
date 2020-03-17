@@ -13,7 +13,7 @@ export type HelperChangeEvent = {
 
 type HitAttributeHighlightResult = {
   value: string;
-  matchLevel: 'none' | 'partial' | 'full';
+  matchLevel: string;
   matchedWords: string[];
   fullyHighlighted?: boolean;
 };
@@ -21,8 +21,7 @@ type HitAttributeHighlightResult = {
 type HitHighlightResult = {
   [attribute: string]:
     | HitAttributeHighlightResult
-    | HitAttributeHighlightResult[]
-    | HitHighlightResult;
+    | HitAttributeHighlightResult[];
 };
 
 type HitAttributeSnippetResult = Pick<
@@ -63,9 +62,12 @@ export type AlgoliaHit = {
 };
 
 export type Hit = {
-  __position: number;
+  __position?: number;
   __queryID?: string;
 } & AlgoliaHit;
+
+export type HitWithPosition<THit extends Hit = Hit> = THit &
+  Required<Pick<Hit, '__position'>>;
 
 export type Hits = Hit[];
 
