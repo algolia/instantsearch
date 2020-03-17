@@ -2,7 +2,9 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import connectHits from '../../connectors/hits/connectHits';
+import connectHits, {
+  HitsConnectorParams,
+} from '../../connectors/hits/connectHits';
 import Hits from '../../components/Hits/Hits';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -12,6 +14,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
+import { WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
@@ -42,53 +45,66 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
   );
 };
 
-/**
- * @typedef {Object} HitsCSSClasses
- * @property {string|string[]} [root] CSS class to add to the wrapping element.
- * @property {string|string[]} [emptyRoot] CSS class to add to the wrapping element when no results.
- * @property {string|string[]} [list] CSS class to add to the list of results.
- * @property {string|string[]} [item] CSS class to add to each result.
- */
+export type HitsCSSClasses = {
+  /**
+   * CSS class to add to the wrapping element.
+   */
+  root?: string | string[];
 
-/**
- * @typedef {Object} HitsTemplates
- * @property {string|function(object):string} [empty=''] Template to use when there are no results.
- * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record. The record will have a new property `__hitIndex` for the position of the record in the list of displayed hits.
- */
+  /**
+   * CSS class to add to the list of results.
+   */
+  list?: string | string[];
 
-/**
- * @typedef {Object} HitsWidgetOptions
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {HitsTemplates} [templates] Templates to use for the widget.
- * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
- * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
+  /**
+   * CSS class to add to the list of results.
+   */
+  emptyRoot?: string | string[];
 
-/**
- * Display the list of results (hits) from the current search.
- *
- * This is a traditional display of the hits. It has to be implemented
- * together with a pagination widget, to let the user browse the results
- * beyond the first page.
- * @type {WidgetFactory}
- * @devNovel Hits
- * @category basic
- * @param {HitsWidgetOptions} $0 Options of the Hits widget.
- * @return {Widget} A new instance of Hits widget.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.hits({
- *     container: '#hits-container',
- *     templates: {
- *       empty: 'No results',
- *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
- *     },
- *     transformItems: items => items.map(item => item),
- *   })
- * ]);
- */
-export default function hits({
+  /**
+   * CSS class to add to each result.
+   */
+  item?: string | string[];
+};
+
+export type HitsTemplates = {
+  /**
+   * Template to use when there are no results.
+   *
+   * @default ''
+   */
+  empty?: string | ((object: Record<string, any>) => string);
+
+  /**
+   * Template to use for each result. This template will receive an object containing
+   * a single record. The record will have a new property `__hitIndex` for the
+   * position of the record in the list of displayed hits.
+   *
+   * @default ''
+   */
+  item?: string | ((object: Record<string, any>) => string);
+};
+
+export type HitsWidgetOptions = {
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+
+  /**
+   * CSS classes to add.
+   */
+  cssClasses?: HitsCSSClasses;
+
+  /**
+   * Templates to use for the widget.
+   */
+  templates?: HitsTemplates;
+} & HitsConnectorParams;
+
+export type HitsWidget = WidgetFactory<HitsWidgetOptions>;
+
+const hitsWidget: HitsWidget = function hits({
   container,
   escapeHTML,
   transformItems,
@@ -119,4 +135,6 @@ export default function hits({
   );
 
   return makeHits({ escapeHTML, transformItems });
-}
+};
+
+export default hitsWidget;

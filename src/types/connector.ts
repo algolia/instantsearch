@@ -14,8 +14,8 @@ export type RendererOptions<TWidgetParams = unknown> = {
   insights?: InsightsClient;
 };
 
-export type Renderer<TRenderOptions extends RendererOptions = any> = (
-  renderOptions: TRenderOptions,
+export type Renderer<TRenderOptions> = (
+  renderOptions: TRenderOptions & RendererOptions,
   isFirstRender: boolean
 ) => void;
 

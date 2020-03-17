@@ -1,6 +1,9 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import defaultTemplates from '../defaultTemplates';
 import hits from '../hits';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -13,7 +16,7 @@ jest.mock('preact', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
-      hits({ container: undefined });
+      hits({ container: undefined } as any);
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
 

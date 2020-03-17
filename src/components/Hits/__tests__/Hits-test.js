@@ -1,10 +1,9 @@
 /** @jsx h */
 
 import { h } from 'preact';
-import { shallow, mount } from 'enzyme';
+import { render } from '@testing-library/preact';
 import { highlight } from '../../../helpers';
 import { TAG_REPLACEMENT } from '../../../lib/escape-highlight';
-import Template from '../../Template/Template';
 import Hits from '../Hits';
 
 describe('Hits', () => {
@@ -15,47 +14,51 @@ describe('Hits', () => {
     list: 'list',
   };
 
-  function shallowRender(extraProps = {}) {
-    const props = {
-      cssClasses,
-      templateProps: {},
-      ...extraProps,
-    };
-
-    return shallow(<Hits {...props} />);
-  }
-
   describe('no results', () => {
     it('should use the empty template if no results', () => {
       const props = {
         results: {
           hits: [],
         },
+        templateProps: {
+          templates: {
+            empty: 'noresults',
+          },
+        },
         hits: [],
         cssClasses,
       };
 
-      const wrapper = shallowRender(props);
+      const { container } = render(<Hits {...props} />);
 
-      expect(wrapper.props().templateKey).toEqual('empty');
+      expect(
+        container.querySelector(`.${cssClasses.emptyRoot}`)
+      ).toHaveTextContent('noresults');
     });
 
-    it('should set the empty CSS class when no results', () => {
+    it('should have empty CSS class when no results', () => {
       const props = {
         results: {
           hits: [],
         },
+        templateProps: {
+          templates: {
+            empty: 'empty body',
+          },
+        },
         cssClasses,
       };
 
-      const wrapper = shallowRender(props);
+      const { container } = render(<Hits {...props} />);
 
-      expect(wrapper.props().rootProps.className).toContain('root');
+      expect(container.querySelector(`.${cssClasses.root}`)).toHaveClass(
+        'root'
+      );
     });
   });
 
   describe('individual item templates', () => {
-    it('should add an item template for each hit', () => {
+    it('should use the item template for each hit', () => {
       const hits = [
         {
           objectID: 'one',
@@ -70,44 +73,40 @@ describe('Hits', () => {
         results: { hits },
         hits,
         templateProps: {
-          templates: {
-            item: 'one item',
-          },
+          templates: { item: templateProps => JSON.stringify(templateProps) },
         },
         cssClasses,
       };
 
-      const wrapper = shallowRender(props).find(Template);
+      const { container } = render(<Hits {...props} />);
 
-      expect(wrapper).toHaveLength(2);
-      expect(wrapper.at(0).props().templateKey).toEqual('item');
-    });
-
-    it('should set the item class to each item', () => {
-      const hits = [
-        {
-          objectID: 'one',
-          foo: 'bar',
-        },
-      ];
-      const props = {
-        results: { hits },
-        hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
-      };
-
-      const wrapper = shallowRender(props).find(Template);
-
-      expect(wrapper.props().rootProps.className).toContain('item');
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="root"
+          >
+            <ol
+              class="list"
+            >
+              <li
+                class="item"
+              >
+                {"objectID":"one","foo":"bar","__hitIndex":0}
+              </li>
+              <li
+                class="item"
+              >
+                {"objectID":"two","foo":"baz","__hitIndex":1}
+              </li>
+            </ol>
+          </div>
+        </div>
+      `);
     });
 
     it('should wrap the items in a root div element', () => {
       const props = {
+        hits: [],
         results: {
           hits: [
             {
@@ -128,94 +127,19 @@ describe('Hits', () => {
         cssClasses,
       };
 
-      const wrapper = shallowRender(props);
+      const { container } = render(<Hits {...props} />);
 
-      expect(wrapper.name()).toEqual('div');
-      expect(wrapper.props().className).toContain('root');
-    });
-
-    it('should pass each result data to each item template', () => {
-      const hits = [
-        {
-          objectID: 'one',
-          foo: 'bar',
-        },
-        {
-          objectID: 'two',
-          foo: 'baz',
-        },
-      ];
-      const props = {
-        results: { hits },
-        hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
-      };
-
-      const wrapper = shallowRender(props).find({ templateKey: 'item' });
-
-      expect(wrapper.at(0).props().data.foo).toEqual('bar');
-      expect(wrapper.at(1).props().data.foo).toEqual('baz');
-    });
-
-    it('should add the __hitIndex in the list to each item', () => {
-      const hits = [
-        {
-          objectID: 'one',
-          foo: 'bar',
-        },
-        {
-          objectID: 'two',
-          foo: 'baz',
-        },
-      ];
-      const props = {
-        results: { hits },
-        hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
-      };
-
-      const wrapper = shallowRender(props).find({ templateKey: 'item' });
-
-      expect(wrapper.at(0).props().data.__hitIndex).toEqual(0);
-      expect(wrapper.at(1).props().data.__hitIndex).toEqual(1);
-    });
-
-    it('should use the objectID as the DOM key', () => {
-      const hits = [
-        {
-          objectID: 'BAR',
-          foo: 'bar',
-        },
-        {
-          objectID: 'BAZ',
-          foo: 'baz',
-        },
-      ];
-      const props = {
-        results: { hits },
-        hits,
-        templateProps: {
-          templates: {
-            item: 'one item',
-          },
-        },
-        cssClasses,
-      };
-
-      const wrapper = shallowRender(props).find({ templateKey: 'item' });
-
-      expect(wrapper.at(0).key()).toEqual('BAR');
-      expect(wrapper.at(1).key()).toEqual('BAZ');
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <ol
+      class="list"
+    />
+  </div>
+</div>
+`);
     });
   });
 
@@ -223,7 +147,7 @@ describe('Hits', () => {
     it('should render <Hits />', () => {
       const hits = [
         {
-          objectID: 'one',
+          objectID: '1',
           foo: 'bar',
         },
         {
@@ -243,9 +167,30 @@ describe('Hits', () => {
         cssClasses,
       };
 
-      const wrapper = mount(<Hits {...props} />);
+      const { container } = render(<Hits {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <ol
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        item
+      </li>
+      <li
+        class="item"
+      >
+        item
+      </li>
+    </ol>
+  </div>
+</div>
+`);
     });
 
     it('should render <Hits /> without highlight function', () => {
@@ -286,9 +231,38 @@ describe('Hits', () => {
         cssClasses,
       };
 
-      const wrapper = mount(<Hits {...props} />);
+      const { container } = render(<Hits {...props} />);
 
-      expect(wrapper).toMatchSnapshot();
+      expect(container).toMatchInlineSnapshot(`
+<div>
+  <div
+    class="root"
+  >
+    <ol
+      class="list"
+    >
+      <li
+        class="item"
+      >
+        <mark
+          class="ais-Highlight-highlighted"
+        >
+          name 1
+        </mark>
+      </li>
+      <li
+        class="item"
+      >
+        <mark
+          class="ais-Highlight-highlighted"
+        >
+          name 2
+        </mark>
+      </li>
+    </ol>
+  </div>
+</div>
+`);
     });
   });
 });
