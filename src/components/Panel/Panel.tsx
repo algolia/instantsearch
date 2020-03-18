@@ -28,7 +28,7 @@ type PanelProps = {
 function Panel(props: PanelProps) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(props.isCollapsed);
   const [isControlled, setIsControlled] = useState<boolean>(false);
-  const bodyRef = useRef<HTMLElement | null>(null);
+  const bodyRef = useRef<HTMLDivElement | null | undefined>(null);
 
   useEffect(() => {
     if (!bodyRef.current) {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-commonjs
 const defineTest = require('jscodeshift/dist/testUtils').defineTest;
 
 defineTest(

@@ -236,7 +236,7 @@ describe('Panel', () => {
       ).toHaveTextContent('More');
       expect(
         container.querySelector(`.${cssClasses.collapseButton}`)
-      ).not.toHaveAttribute('aria-expanded');
+      ).toHaveAttribute('aria-expanded', 'false');
       expect(
         container.querySelector(`.${cssClasses.body}`)
       ).toBeInTheDocument();
@@ -290,7 +290,7 @@ describe('Panel', () => {
       ).toHaveTextContent('More');
       expect(
         container.querySelector(`.${cssClasses.collapseButton}`)
-      ).not.toHaveAttribute('aria-expanded');
+      ).toHaveAttribute('aria-expanded', 'false');
 
       // Un-collapse the panel
       fireEvent.click(collapseButton);
