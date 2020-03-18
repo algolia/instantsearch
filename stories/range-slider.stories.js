@@ -135,4 +135,58 @@ storiesOf('Refinements|RangeSlider', module)
         }),
       ]);
     })
+  )
+  .add(
+    'with histogram',
+    withHits(
+      ({ search, container, instantsearch }) => {
+        window.search = search;
+        const histogramContainer = document.createElement('div');
+        const sliderContainer = document.createElement('div');
+        container.appendChild(histogramContainer);
+        container.appendChild(sliderContainer);
+
+        const style = window.document.createElement('style');
+        // WebKit hack :(
+        style.appendChild(document.createTextNode(''));
+        window.document.head.appendChild(style);
+
+        [
+          // TODO: put in IS.css
+          `.ais-Histogram {
+          color: #3a4570;
+        }`,
+          // counteract slider style
+          `.ais-Histogram {
+          margin-bottom: -43px;
+        }`,
+          `.rheostat-tooltip {
+          background: white;
+          border-radius: .5em;
+          padding: .2em
+        }`,
+        ].forEach((rule, i) => style.sheet.insertRule(rule, i));
+
+        search.addWidgets([
+          instantsearch.widgets.configure({
+            facets: ['price'],
+            // TODO: remove this when the empty query works
+            filters: 'free_shipping:true OR free_shipping:false',
+          }),
+          instantsearch.widgets.histogram({
+            container: histogramContainer,
+            attribute: 'price',
+          }),
+          instantsearch.widgets.rangeSlider({
+            attribute: 'price',
+            container: sliderContainer,
+          }),
+        ]);
+      },
+      {
+        appId: 'Q5A73H2SWE',
+        apiKey: 'a1dc90c5a5ca2096cc44de8e00629127',
+        indexName: 'instant_search',
+      }
+    )
   );

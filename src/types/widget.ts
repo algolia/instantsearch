@@ -113,6 +113,15 @@ export type IndexUiState = {
      */
     position: string;
   };
+  // if we accept start, end, bucket, this becomes:
+  // histogram?: {
+  //   [attribute: string]: {
+  //     start?: number;
+  //     end?: number;
+  //     buckets: number;
+  //   };
+  // };
+  histogram?: string[];
 };
 
 export type UiState = {
@@ -133,6 +142,7 @@ export interface Widget {
     | 'ais.currentRefinements'
     | 'ais.geoSearch'
     | 'ais.hierarchicalMenu'
+    | 'ais.histogram'
     | 'ais.hits'
     | 'ais.hitsPerPage'
     | 'ais.index'
@@ -196,6 +206,7 @@ export type WidgetFactory<TWidgetParams> = (
   widgetParams: TWidgetParams
 ) => Widget;
 
-export type Template<TTemplateData = void> =
-  | string
-  | ((data: TTemplateData) => string);
+// TODO: this might be wrong
+export type Template<TTemplateData = void> = TTemplateData extends void
+  ? string
+  : string | ((data: TTemplateData) => string);

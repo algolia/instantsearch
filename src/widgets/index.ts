@@ -4,6 +4,7 @@ export { default as EXPERIMENTAL_configureRelatedItems } from './configure-relat
 export { default as currentRefinements } from './current-refinements/current-refinements';
 export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
+export { default as histogram } from './histogram/histogram';
 export { default as hits } from './hits/hits';
 export { default as hitsPerPage } from './hits-per-page/hits-per-page';
 export { default as infiniteHits } from './infinite-hits/infinite-hits';
@@ -28,3 +29,4 @@ export { default as queryRuleCustomData } from './query-rule-custom-data/query-r
 export { default as queryRuleContext } from './query-rule-context/query-rule-context';
 export { default as index } from './index/index';
 export { default as places } from './places/places';
+
