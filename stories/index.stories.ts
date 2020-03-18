@@ -1,6 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { hitsItemTemplate } from '../.storybook/playgrounds/default';
+import { hits } from '../src/widgets';
 
 storiesOf('Basics|Index', module)
   .add(
@@ -33,7 +34,7 @@ storiesOf('Basics|Index', module)
             instantsearch.widgets.configure({
               hitsPerPage: 2,
             }),
-            instantsearch.widgets.hits({
+            hits({
               container: instantSearchPriceAscHits,
               templates: {
                 item: hitsItemTemplate,
@@ -50,7 +51,7 @@ storiesOf('Basics|Index', module)
             instantsearch.widgets.configure({
               hitsPerPage: 1,
             }),
-            instantsearch.widgets.hits({
+            hits({
               container: instantSearchRatingAscHits,
               templates: {
                 item: hitsItemTemplate,
@@ -97,7 +98,7 @@ storiesOf('Basics|Index', module)
             instantsearch.widgets.configure({
               hitsPerPage: 2,
             }),
-            instantsearch.widgets.hits({
+            hits({
               container: instantSearchPriceAscHits,
               templates: {
                 item: hitsItemTemplate,
@@ -116,7 +117,7 @@ storiesOf('Basics|Index', module)
                 instantsearch.widgets.configure({
                   hitsPerPage: 1,
                 }),
-                instantsearch.widgets.hits({
+                hits({
                   container: instantSearchRatingAscHits,
                   templates: {
                     item: hitsItemTemplate,
@@ -155,7 +156,7 @@ storiesOf('Basics|Index', module)
             instantsearch.widgets.configure({
               hitsPerPage: 2,
             }),
-            instantsearch.widgets.hits({
+            hits({
               container: instantSearchPriceAscHits,
               templates: {
                 item: hitsItemTemplate,

@@ -22,7 +22,7 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('HitsPerPage');
 
 const renderer = ({ containerNode, cssClasses }) => (
-  { items, refine }: HitsPerPageRendererOptions,
+  { items, refine }: HitsPerPageRendererOptions<HitsPerPageWidgetOptions>,
   isFirstRendering
 ): HitsPerPageRenderer<HitsPerPageWidgetOptions> | void => {
   if (isFirstRendering) return;
@@ -101,11 +101,12 @@ const hitsPerPage: HitsPerPageWidget = function hitsPerPage(
     cssClasses,
   });
 
-  const makeHitsPerPage = connectHitsPerPage(specializedRenderer, () =>
-    render(null, containerNode)
+  const makeHitsPerPage = connectHitsPerPage<HitsPerPageWidgetOptions>(
+    specializedRenderer,
+    () => render(null, containerNode)
   );
 
-  return makeHitsPerPage({ items, transformItems });
+  return makeHitsPerPage({ items, transformItems } as HitsPerPageWidgetOptions);
 };
 
 export default hitsPerPage;

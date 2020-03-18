@@ -149,7 +149,7 @@ export default function connectHitsPerPage<THitsPerPageWidgetParams = {}>(
       setHitsPerPage: (value: HitsPerPageConnectorParamsItem['value']) => any;
       createURLFactory: (
         state: SearchParameters
-      ) => HitsPerPageRendererOptions['createURL'];
+      ) => HitsPerPageRendererOptions<{}>['createURL'];
     };
 
     const connectorState = {} as ConnectorState;
