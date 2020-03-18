@@ -13,7 +13,7 @@ export type HelperChangeEvent = {
 
 type HitAttributeHighlightResult = {
   value: string;
-  matchLevel: string;
+  matchLevel: 'none' | 'partial' | 'full';
   matchedWords: string[];
   fullyHighlighted?: boolean;
 };
@@ -21,7 +21,8 @@ type HitAttributeHighlightResult = {
 type HitHighlightResult = {
   [attribute: string]:
     | HitAttributeHighlightResult
-    | HitAttributeHighlightResult[];
+    | HitAttributeHighlightResult[]
+    | HitHighlightResult;
 };
 
 type HitAttributeSnippetResult = Pick<
