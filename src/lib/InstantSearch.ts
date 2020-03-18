@@ -1,5 +1,5 @@
 import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import { EventEmitter } from 'events';
+import EventEmitter from 'events';
 import index, { Index } from '../widgets/index/index';
 import version from './version';
 import createHelpers from './createHelpers';
@@ -111,7 +111,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
  * created using the `instantsearch` factory function.
  * It emits the 'render' event every time a search is done
  */
-class InstantSearch extends EventEmitter {
+class InstantSearch extends EventEmitter.EventEmitter {
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
   public insightsClient: AlgoliaInsightsClient | null;
