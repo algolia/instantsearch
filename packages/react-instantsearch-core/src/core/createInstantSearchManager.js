@@ -224,7 +224,7 @@ export default function createInstantSearchManager({
         // - ap -> main helper receives results
         // - app -> main helper + derived helpers receive results
         //
-        // The quick fix is to avoid to detatch them on search but only once they
+        // The quick fix is to avoid to detach them on search but only once they
         // received the results. But it means that in case of a stalled search
         // all the derived helpers not detached yet register a new search inside
         // the helper. The number grows fast in case of a bad network and it's
@@ -341,7 +341,7 @@ export default function createInstantSearchManager({
     if (client.transporter) {
       const baseMethod = client.search;
       client.search = (requests, ...methodArgs) => {
-        const requestsWithSeriazizedParams = requests.map(request => ({
+        const requestsWithSerializedParams = requests.map(request => ({
           ...request,
           params: serializeQueryParameters(request.params),
         }));
@@ -349,7 +349,7 @@ export default function createInstantSearchManager({
         return client.transporter.responsesCache.get(
           {
             method: 'search',
-            args: [requestsWithSeriazizedParams, ...methodArgs],
+            args: [requestsWithSerializedParams, ...methodArgs],
           },
           () => {
             return baseMethod(requests, ...methodArgs);
