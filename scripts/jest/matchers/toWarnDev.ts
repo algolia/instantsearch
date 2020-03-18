@@ -28,7 +28,7 @@ const matcher: jest.ExpectExtendMap = {
     if (!__DEV__) {
       callback();
 
-      return { pass: true, message: '' };
+      return { pass: true, message: () => '' };
     }
 
     const originalWarnMethod = console.warn;
@@ -65,7 +65,7 @@ ${jestDiff(expectedMessage, actualWarning)}`,
       };
     }
 
-    return { pass: true, message: '' };
+    return { pass: true, message: () => '' };
   },
 };
 
