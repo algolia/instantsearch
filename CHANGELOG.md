@@ -1,3 +1,12 @@
+# [6.4.0](https://github.com/algolia/react-instantsearch/compare/v6.3.0...v6.4.0) (2020-03-18)
+
+
+### Bug Fixes
+
+* **deps:** fix "too much recursion" error with circular deps ([#2899](https://github.com/algolia/react-instantsearch/issues/2899)) ([c5f27a1](https://github.com/algolia/react-instantsearch/commit/c5f27a1))
+
+
+
 # [6.3.0](https://github.com/algolia/react-instantsearch/compare/v6.2.0...v6.3.0) (2020-01-30)
 
 
