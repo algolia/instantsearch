@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { h, Component } from 'preact';
+import { h, Component, Fragment } from 'preact';
 import PropTypes from 'prop-types';
 import { renderTemplate, isEqual } from '../../lib/utils';
 
@@ -14,7 +14,7 @@ class Template extends Component {
   }
 
   render() {
-    const RootTagName = this.props.rootTagName;
+    const RootTagName = this.props.rootTagName || Fragment;
     const useCustomCompileOptions = this.props.useCustomCompileOptions[
       this.props.templateKey
     ];
