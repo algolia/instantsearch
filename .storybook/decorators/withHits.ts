@@ -2,6 +2,13 @@ import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../src/index';
 import defaultPlayground from '../playgrounds/default';
+import { InstantSearchOptions, InstantSearch } from '../../src/types';
+
+export type Playground = (opts: {
+  search: InstantSearch;
+  leftPanel: HTMLDivElement;
+  rightPanel: HTMLDivElement;
+}) => void;
 
 export const withHits = (
   storyFn: ({
@@ -13,7 +20,11 @@ export const withHits = (
     instantsearch: any;
     search: any;
   }) => void,
-  searchOptions?: any
+  searchOptions?: InstantSearchOptions & {
+    appId: string;
+    apiKey: string;
+    playground: any;
+  }
 ) => () => {
   const {
     appId = 'latency',
@@ -26,7 +37,14 @@ export const withHits = (
   const urlLogger = action('Routing state');
   const search = instantsearch({
     indexName,
-    searchClient: algoliasearch(appId, apiKey),
+    searchClient: algoliasearch(appId, apiKey, {
+      hosts: [
+        {
+          url: appId.toLowerCase() + '-3.algolia.net',
+          accept: 1,
+        },
+      ],
+    }),
     routing: {
       router: {
         write: (routeState: object) => {
@@ -35,6 +53,7 @@ export const withHits = (
         read: () => ({}),
         createURL: () => '',
         onUpdate: () => {},
+        dispose: () => {},
       },
     },
     ...instantsearchOptions,

@@ -59,12 +59,16 @@ storiesOf('Basics|VoiceSearch', module)
     'with a custom button text',
     withHits(({ search, container }) => {
       const style = window.document.createElement('style');
+      // WebKit hack :(
+      style.appendChild(document.createTextNode(''));
       window.document.head.appendChild(style);
       [
         `.ais-VoiceSearch-button.custom-button:hover {
         background: inherit;
       }`,
-      ].forEach(rule => (style.sheet as CSSStyleSheet).insertRule(rule));
+      ].forEach((rule, i) =>
+        (style.sheet as CSSStyleSheet).insertRule(rule, i)
+      );
 
       search.addWidgets([
         voiceSearch({
