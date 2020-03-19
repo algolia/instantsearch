@@ -9,14 +9,6 @@ storiesOf('Refinements|RangeSlider', module)
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
-          templates: {
-            header: 'Price',
-          },
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
         }),
       ]);
     })
@@ -28,12 +20,8 @@ storiesOf('Refinements|RangeSlider', module)
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
-          step: 500,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
+          step: 100,
+          pips: false,
         }),
       ]);
     })
@@ -46,31 +34,6 @@ storiesOf('Refinements|RangeSlider', module)
           container,
           attribute: 'price',
           pips: false,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
-        }),
-      ]);
-    })
-  )
-  .add(
-    'with 0 as first pit',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidgets([
-        instantsearch.widgets.rangeSlider({
-          container,
-          attribute: 'price',
-          templates: {
-            header: 'Price',
-          },
-          min: 0,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
         }),
       ]);
     })
@@ -82,15 +45,7 @@ storiesOf('Refinements|RangeSlider', module)
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
-          templates: {
-            header: 'Price',
-          },
           min: 36,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
         }),
       ]);
     })
@@ -102,34 +57,34 @@ storiesOf('Refinements|RangeSlider', module)
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
-          templates: {
-            header: 'Price',
-          },
           max: 36,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
-            },
-          },
         }),
       ]);
     })
   )
   .add(
-    'with min / max boundaries',
+    'with min and max boundaries',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
         instantsearch.widgets.rangeSlider({
           container,
           attribute: 'price',
-          templates: {
-            header: 'Price',
-          },
           min: 10,
           max: 500,
+        }),
+      ]);
+    })
+  )
+  .add(
+    'with formatted tooltips',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.rangeSlider({
+          container,
+          attribute: 'price',
           tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
+            format(value) {
+              return `$${Math.round(value).toLocaleString()}`;
             },
           },
         }),
