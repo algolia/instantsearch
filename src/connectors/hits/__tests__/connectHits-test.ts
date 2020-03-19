@@ -203,8 +203,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       },
     ];
 
-    expectedHits.__escaped = true;
-
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: expectedHits,
@@ -428,7 +426,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       })
     );
 
-    expect((results.hits as any).__escaped).toBe(true);
+    expect(((results.hits as unknown) as EscapedHits).__escaped).toBe(true);
   });
 
   describe('getWidgetSearchParameters', () => {

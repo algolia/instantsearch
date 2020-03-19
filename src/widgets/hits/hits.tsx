@@ -14,7 +14,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
-import { WidgetFactory } from '../../types';
+import { WidgetFactory, HitWithPosition } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
@@ -71,7 +71,7 @@ export type HitsTemplates = {
   /**
    * Template to use when there are no results.
    *
-   * @default ''
+   * @default 'No Results'
    */
   empty?: string | ((object: Record<string, any>) => string);
 
@@ -82,7 +82,7 @@ export type HitsTemplates = {
    *
    * @default ''
    */
-  item?: string | ((object: Record<string, any>) => string);
+  item?: string | ((object: HitWithPosition) => string);
 };
 
 export type HitsWidgetOptions = {

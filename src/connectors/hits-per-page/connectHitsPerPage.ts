@@ -4,12 +4,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import {
-  WidgetFactory,
-  Renderer,
-  RendererOptions,
-  Unmounter,
-} from '../../types';
+import { WidgetFactory, Renderer, Unmounter } from '../../types';
 
 import { SearchParameters } from 'algoliasearch-helper';
 
@@ -68,7 +63,7 @@ export type HitsPerPageConnectorParams = {
   ) => HitsPerPageConnectorParamsItem[];
 };
 
-export type HitsPerPageRendererOptions<THitsPerPageWidgetParams> = {
+export type HitsPerPageRendererOptions = {
   /**
    * Array of objects defining the different values and labels.
    */
@@ -90,24 +85,12 @@ export type HitsPerPageRendererOptions<THitsPerPageWidgetParams> = {
    * Indicates whether or not the search has results.
    */
   hasNoResults: boolean;
-} & RendererOptions<THitsPerPageWidgetParams & HitsPerPageConnectorParams>;
-
-export type HitsPerPageRenderer<THitsPerPageWidgetParams> = Renderer<
-  HitsPerPageRendererOptions<
-    THitsPerPageWidgetParams & HitsPerPageConnectorParams
-  >
->;
-
-export type HitsPerPageWidgetFactory<THitsPerPageWidgetParams> = WidgetFactory<
-  HitsPerPageConnectorParams & THitsPerPageWidgetParams
->;
+};
 
 export default function connectHitsPerPage<THitsPerPageWidgetParams = {}>(
-  renderFn: HitsPerPageRenderer<
-    HitsPerPageConnectorParams & THitsPerPageWidgetParams
-  >,
+  renderFn: Renderer<HitsPerPageRendererOptions, THitsPerPageWidgetParams>,
   unmountFn: Unmounter = noop
-): HitsPerPageWidgetFactory<THitsPerPageWidgetParams> {
+): WidgetFactory<HitsPerPageConnectorParams & THitsPerPageWidgetParams> {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -149,7 +132,7 @@ export default function connectHitsPerPage<THitsPerPageWidgetParams = {}>(
       setHitsPerPage: (value: HitsPerPageConnectorParamsItem['value']) => any;
       createURLFactory: (
         state: SearchParameters
-      ) => HitsPerPageRendererOptions<{}>['createURL'];
+      ) => HitsPerPageRendererOptions['createURL'];
     };
 
     const connectorState = {} as ConnectorState;

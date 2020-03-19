@@ -7,7 +7,6 @@ import {
   InsightsClientPayload,
   InsightsClientWrapper,
   Renderer,
-  RendererOptions,
   Unmounter,
   WidgetFactory,
   HitWithPosition,
@@ -109,19 +108,19 @@ const wrapInsightsClient = <THit extends HitWithPosition>(
   aa(method, { ...inferredPayload, ...payload } as any);
 };
 
-type Connector<TWidgetParams> = (
-  renderFn: Renderer<any>,
+type Connector<TRenderOptions, TWidgetParams> = (
+  renderFn: Renderer<TRenderOptions, TWidgetParams>,
   unmountFn: Unmounter
 ) => WidgetFactory<TWidgetParams>;
 
-export default function withInsights(
-  connector: Connector<any>
-): Connector<unknown> {
+export default function withInsights<TRenderOptions, TWidgetParams>(
+  connector: Connector<TRenderOptions, TWidgetParams>
+): Connector<TRenderOptions, TWidgetParams> {
   const wrapRenderFn = (
-    renderFn: Renderer<RendererOptions<unknown>>
-  ): Renderer<RendererOptions<unknown>> => (
-    renderOptions: RendererOptions,
-    isFirstRender: boolean
+    renderFn: Renderer<TRenderOptions, TWidgetParams>
+  ): Renderer<TRenderOptions, TWidgetParams> => (
+    renderOptions,
+    isFirstRender
   ) => {
     const { results, hits, instantSearchInstance } = renderOptions;
     if (results && hits && instantSearchInstance) {
@@ -135,6 +134,8 @@ export default function withInsights(
     return renderFn(renderOptions, isFirstRender);
   };
 
-  return (renderFn: Renderer<RendererOptions<unknown>>, unmountFn: Unmounter) =>
-    connector(wrapRenderFn(renderFn), unmountFn);
+  return (
+    renderFn: Renderer<TRenderOptions, TWidgetParams>,
+    unmountFn: Unmounter
+  ) => connector(wrapRenderFn(renderFn), unmountFn);
 }

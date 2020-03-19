@@ -5,7 +5,6 @@ import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectHitsPerPage, {
   HitsPerPageConnectorParams,
-  HitsPerPageRenderer,
   HitsPerPageRendererOptions,
 } from '../../connectors/hits-per-page/connectHitsPerPage';
 import {
@@ -15,6 +14,7 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { WidgetFactory } from '../../types';
+import { HitsPerPageRenderer } from '../../../es/connectors/hits-per-page/connectHitsPerPage';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
@@ -22,7 +22,7 @@ const withUsage = createDocumentationMessageGenerator({
 const suit = component('HitsPerPage');
 
 const renderer = ({ containerNode, cssClasses }) => (
-  { items, refine }: HitsPerPageRendererOptions<HitsPerPageWidgetOptions>,
+  { items, refine }: HitsPerPageRendererOptions,
   isFirstRendering
 ): HitsPerPageRenderer<HitsPerPageWidgetOptions> | void => {
   if (isFirstRendering) return;
@@ -61,6 +61,8 @@ export type HitsPerPageCSSClasses = {
 };
 
 export type HitsPerPageItems = HitsPerPageConnectorParams['items'];
+
+export type HitsPerPageRendererWidgetOptions = HitsPerPageConnectorParams;
 
 export type HitsPerPageWidgetOptions = {
   /**
@@ -101,12 +103,12 @@ const hitsPerPage: HitsPerPageWidget = function hitsPerPage(
     cssClasses,
   });
 
-  const makeHitsPerPage = connectHitsPerPage<HitsPerPageWidgetOptions>(
+  const makeHitsPerPage = connectHitsPerPage<HitsPerPageRendererWidgetOptions>(
     specializedRenderer,
     () => render(null, containerNode)
   );
 
-  return makeHitsPerPage({ items, transformItems } as HitsPerPageWidgetOptions);
+  return makeHitsPerPage({ items, transformItems });
 };
 
 export default hitsPerPage;

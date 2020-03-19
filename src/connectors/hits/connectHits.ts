@@ -6,12 +6,7 @@ import {
   addQueryID,
   noop,
 } from '../../lib/utils';
-import {
-  RendererOptions,
-  WidgetFactory,
-  Unmounter,
-  Renderer,
-} from '../../types';
+import { WidgetFactory, Unmounter, Renderer } from '../../types';
 import { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -19,21 +14,21 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type HitsRendererOptions<THitsWidgetParams> = {
+export type HitsRendererOptions = {
   /**
    * The matched hits from Algolia API.
    */
   hits: Array<Record<string, any>>;
 
   /**
-   * The response from Algolia API.
+   * The response from the Algolia API.
    */
   results?: SearchResults<any>;
-} & RendererOptions<THitsWidgetParams & HitsConnectorParams>;
+};
 
 export type HitsConnectorParams = {
   /**
-   * Whether to escape HTML tags from `hits[i]._highlightResult`.
+   * Whether to escape HTML tags from hits string values.
    *
    * @default true
    */
@@ -47,18 +42,10 @@ export type HitsConnectorParams = {
   ) => Array<Record<string, any>>;
 };
 
-export type HitsRenderer<THitsWidgetParams> = Renderer<
-  HitsRendererOptions<THitsWidgetParams & HitsConnectorParams>
->;
-
-export type HitsWidgetFactory<THitsWidgetParams> = WidgetFactory<
-  THitsWidgetParams & HitsConnectorParams
->;
-
 export default function connectHits<THitsWidgetParams = {}>(
-  renderFn: HitsRenderer<HitsConnectorParams & THitsWidgetParams>,
+  renderFn: Renderer<HitsRendererOptions, THitsWidgetParams>,
   unmountFn: Unmounter = noop
-): HitsWidgetFactory<THitsWidgetParams> {
+): WidgetFactory<THitsWidgetParams & HitsConnectorParams> {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
