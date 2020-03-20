@@ -84,7 +84,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
   /**
    * Function called when the state changes.
    *
-   * Using this function turns the experience controlled. This means that you
+   * Using this function makes the instance controlled. This means that you
    * become in charge of updating the UI state with the `setUiState` function.
    */
   onStateChange?: (params: {
