@@ -13,6 +13,23 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type HitsPerPageRendererOptionsItem = {
+  /**
+   * Label to display in the option.
+   */
+  label: string;
+
+  /**
+   * Number of hits to display per page.
+   */
+  value: number;
+
+  /**
+   * Indicates if it's the current refined value.
+   */
+  isRefined: boolean;
+};
+
 export type HitsPerPageConnectorParamsItem = {
   /**
    * Label to display in the option.
@@ -50,7 +67,7 @@ export type HitsPerPageRendererOptions = {
   /**
    * Array of objects defining the different values and labels.
    */
-  items: Array<HitsPerPageConnectorParamsItem & { isRefined: boolean }>;
+  items: HitsPerPageRendererOptionsItem[];
 
   /**
    * Creates the URL for a single item name in the list.
