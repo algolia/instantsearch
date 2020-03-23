@@ -53,8 +53,8 @@ export const createRouter: RoutingManager = (props = {}) => {
     };
 
     return {
-      onStateChange({ state }) {
-        const route = stateMapping.stateToRoute(state);
+      onStateChange({ uiState }) {
+        const route = stateMapping.stateToRoute(uiState);
 
         router.write(route);
       },
