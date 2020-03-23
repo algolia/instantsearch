@@ -49,13 +49,6 @@ export type AutocompleteRendererOptions = {
   }>;
 
   /**
-   * The current instant search instance.
-   *
-   * @internal
-   */
-  instantSearchInstance: InstantSearch;
-
-  /**
    * Searches into the indices with the provided query.
    */
   refine: (query: string) => void;
