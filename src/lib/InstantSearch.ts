@@ -536,7 +536,7 @@ See ${createDocumentationLink({
 
       indexWidget.getHelper()!.overrideStateWithoutTriggeringChangeEvent(
         indexWidget.getWidgetSearchParameters(indexWidget.getHelper()!.state, {
-          uiState: nextUiState[indexWidget.getIndexName()],
+          uiState: nextUiState[indexWidget.getIndexId()],
         })
       );
 

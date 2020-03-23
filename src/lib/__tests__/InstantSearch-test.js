@@ -1555,7 +1555,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
   });
 
-  test('with object form set indices state', async () => {
+  test('with object form sets indices state', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1578,6 +1578,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       ]),
       index({
         indexName: 'siblingIndexName1',
+        indexId: 'siblingIndexId1',
       }).addWidgets([connectSearchBox(() => {})({})]),
     ]);
     search.start();
@@ -1594,7 +1595,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         query: 'Query 3',
         page: 4,
       },
-      siblingIndexName1: {
+      siblingIndexId1: {
         query: 'Query 4',
       },
     });
@@ -1632,7 +1633,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     ]);
   });
 
-  test('with function form set multiple indices state', async () => {
+  test('with function form sets indices state', async () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -1663,6 +1664,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       ]),
       index({
         indexName: 'siblingIndexName1',
+        indexId: 'siblingIndexId1',
       }).addWidgets([connectSearchBox(() => {})({})]),
     ]);
     search.start();
@@ -1676,7 +1678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         nestedIndexName2: {
           query: 'Nested query 2',
         },
-        siblingIndexName1: {},
+        siblingIndexId1: {},
       });
 
       return {
@@ -1698,7 +1700,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         nestedIndexName2: {
           query: 'Nested query 2',
         },
-        siblingIndexName1: {},
+        siblingIndexId1: {},
       });
 
       return {
@@ -1713,7 +1715,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           query: 'Query 3',
           page: 4,
         },
-        siblingIndexName1: {
+        siblingIndexId1: {
           query: 'Query 4',
         },
       };
