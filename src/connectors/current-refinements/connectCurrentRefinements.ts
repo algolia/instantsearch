@@ -15,12 +15,7 @@ import {
   FacetRefinement,
   NumericRefinement,
 } from '../../lib/utils/getRefinements';
-import {
-  Unmounter,
-  WidgetFactory,
-  Renderer,
-  RendererOptions,
-} from '../../types';
+import { Connector } from '../../types';
 
 export type ConnectorRefinement = {
   attribute: string;
@@ -61,7 +56,7 @@ export type ItemRefinement = {
   exhaustive?: boolean;
 };
 
-type CurrentRefinementsConnectorParams = {
+export type CurrentRefinementsConnectorParams = {
   /**
    * The attributes to include in the widget (all by default).
    * Cannot be used with `excludedAttributes`.
@@ -84,42 +79,18 @@ type CurrentRefinementsConnectorParams = {
   transformItems?: (items: Item[]) => any;
 };
 
-export type CurrentRefinementsRendererOptions<
-  TCurrentRefinementsWidgetParams
-> = {
+export type CurrentRefinementsRendererOptions = {
   items: Item[];
   refine(refinement: ItemRefinement): void;
   createURL(state: ItemRefinement): string;
-} & RendererOptions<TCurrentRefinementsWidgetParams>;
-
-export type CurrentRefinementsRenderer<
-  TCurrentRefinementsWidgetParams
-> = Renderer<
-  CurrentRefinementsRendererOptions<
-    CurrentRefinementsConnectorParams & TCurrentRefinementsWidgetParams
-  >
->;
-
-export type CurrentRefinementsWidgetFactory<
-  TCurrentRefinementsWidgetParams
-> = WidgetFactory<
-  CurrentRefinementsConnectorParams & TCurrentRefinementsWidgetParams
->;
-
-export type CurrentRefinementsConnector = <TCurrentRefinementsWidgetParams>(
-  render: CurrentRefinementsRenderer<TCurrentRefinementsWidgetParams>,
-  unmount?: Unmounter
-) => CurrentRefinementsWidgetFactory<TCurrentRefinementsWidgetParams>;
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'current-refinements',
   connector: true,
 });
 
-const connectCurrentRefinements: CurrentRefinementsConnector = (
-  renderFn,
-  unmountFn = noop
-) => {
+export default (function connectCurrentRefinements(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -198,7 +169,10 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
       },
     };
   };
-};
+} as Connector<
+  CurrentRefinementsRendererOptions,
+  CurrentRefinementsConnectorParams
+>);
 
 function getItems({
   results,
@@ -338,5 +312,3 @@ function normalizeRefinement(refinement: Refinement): ConnectorRefinement {
 
   return normalizedRefinement;
 }
-
-export default connectCurrentRefinements;

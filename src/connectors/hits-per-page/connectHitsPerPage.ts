@@ -4,9 +4,9 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Connector } from '../../types';
 
 import { SearchParameters } from 'algoliasearch-helper';
+import { Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
@@ -70,17 +70,12 @@ export type HitsPerPageRendererOptions = {
   hasNoResults: boolean;
 };
 
-export type HitsPerPageConnector = Connector<
-  HitsPerPageRendererOptions,
-  HitsPerPageConnectorParams
->;
-
 export default (function connectHitsPerPage(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
     const { items: userItems, transformItems = items => items } =
-      widgetParams || ({} as Parameters<ReturnType<HitsPerPageConnector>>[0]);
+      widgetParams || ({} as typeof widgetParams);
     let items = userItems;
 
     if (!Array.isArray(items)) {
@@ -225,4 +220,4 @@ You may want to add another entry to the \`items\` option with this value.`
       },
     };
   };
-} as HitsPerPageConnector);
+} as Connector<HitsPerPageRendererOptions, HitsPerPageConnectorParams>);

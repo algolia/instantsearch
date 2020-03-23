@@ -2,15 +2,14 @@ import algoliasearchHelper, {
   SearchParameters,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { Unmounter, WidgetFactory, AlgoliaHit } from '../../types';
+import { AlgoliaHit, Connector } from '../../types';
 import {
   createDocumentationMessageGenerator,
   getObjectType,
   warning,
 } from '../../lib/utils';
 import connectConfigure, {
-  ConfigureRenderer,
-  ConfigureConnectorParams,
+  ConfigureRendererOptions,
 } from '../configure/connectConfigure';
 
 export type MatchingPatterns = {
@@ -42,17 +41,6 @@ export type ConfigureRelatedItemsConnectorParams = {
   ): PlainSearchParameters;
 };
 
-export type ConfigureRelatedItemsWidgetFactory<
-  TConfigureRelatedItemsWidgetParams
-> = WidgetFactory<
-  ConfigureRelatedItemsConnectorParams & TConfigureRelatedItemsWidgetParams
->;
-
-type ConfigureRelatedItemsConnector = <TConfigureRelatedItemsWidgetParams>(
-  render?: ConfigureRenderer<ConfigureConnectorParams>,
-  unmount?: Unmounter
-) => ConfigureRelatedItemsWidgetFactory<TConfigureRelatedItemsWidgetParams>;
-
 const withUsage = createDocumentationMessageGenerator({
   name: 'configure-related-items',
   connector: true,
@@ -66,10 +54,7 @@ function createOptionalFilter({
   return `${attributeName}:${attributeValue}<score=${attributeScore || 1}>`;
 }
 
-const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = (
-  renderFn,
-  unmountFn
-) => {
+export default (function connectConfigureRelatedItems(renderFn, unmountFn) {
   return widgetParams => {
     const { hit, matchingPatterns, transformSearchParameters = x => x } =
       widgetParams || ({} as typeof widgetParams);
@@ -148,11 +133,8 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
     const makeConfigure = connectConfigure(renderFn, unmountFn);
 
     return {
-      ...makeConfigure({ searchParameters }),
-
+      ...makeConfigure({ searchParameters } as any),
       $$type: 'ais.configureRelatedItems',
     };
   };
-};
-
-export default connectConfigureRelatedItems;
+} as Connector<ConfigureRendererOptions, ConfigureRelatedItemsConnectorParams>);

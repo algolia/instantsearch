@@ -3,13 +3,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import {
-  Renderer,
-  RendererOptions,
-  WidgetFactory,
-  Hits,
-  Unmounter,
-} from '../../types';
+import { Hits, Connector } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -24,37 +18,19 @@ export type InfiniteHitsConnectorParams = Partial<
   InfiniteHitsRendererWidgetParams
 >;
 
-export type InfiniteHitsRendererOptions<TInfiniteHitsWidgetParams> = {
+export type InfiniteHitsRendererOptions = {
   showPrevious: () => void;
   showMore: () => void;
   isFirstPage: boolean;
   isLastPage: boolean;
-} & RendererOptions<TInfiniteHitsWidgetParams>;
-
-export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
-  InfiniteHitsRendererOptions<
-    InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams
-  >
->;
-
-export type InfiniteHitsWidgetFactory<
-  TInfiniteHitsWidgetParams
-> = WidgetFactory<InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams>;
-
-export type InfiniteHitsConnector = <TInfiniteHitsWidgetParams>(
-  render: InfiniteHitsRenderer<TInfiniteHitsWidgetParams>,
-  unmount?: Unmounter
-) => InfiniteHitsWidgetFactory<TInfiniteHitsWidgetParams>;
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
   connector: true,
 });
 
-const connectInfiniteHits: InfiniteHitsConnector = (
-  renderFn,
-  unmountFn = noop
-) => {
+export default (function connectInfiniteHits(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -254,6 +230,4 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       },
     };
   };
-};
-
-export default connectInfiniteHits;
+} as Connector<InfiniteHitsRendererOptions, InfiniteHitsConnectorParams>);

@@ -4,7 +4,7 @@ import {
   isFiniteNumber,
   noop,
 } from '../../lib/utils';
-import { RendererOptions, Renderer, WidgetFactory } from '../../types';
+import { Connector } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -64,7 +64,7 @@ export type NumericMenuConnectorParams = {
 
 type Refine = (facetValue: string) => void;
 
-export type NumericMenuRendererOptions<TNumericMenuWidgetParams> = {
+export type NumericMenuRendererOptions = {
   /**
    * The list of available choices
    */
@@ -81,27 +81,9 @@ export type NumericMenuRendererOptions<TNumericMenuWidgetParams> = {
    * Sets the selected value and trigger a new search
    */
   refine: Refine;
-} & RendererOptions<TNumericMenuWidgetParams>;
+};
 
-export type NumericMenuRenderer<TNumericMenuWidgetParams> = Renderer<
-  NumericMenuRendererOptions<
-    NumericMenuConnectorParams & TNumericMenuWidgetParams
-  >
->;
-
-export type NumericMenuWidgetFactory<TNumericMenuWidgetParams> = WidgetFactory<
-  NumericMenuConnectorParams & TNumericMenuWidgetParams
->;
-
-type NumericMenuConnector = <TNumericMenuWidgetParams>(
-  render: NumericMenuRenderer<TNumericMenuWidgetParams>,
-  unmount?: () => void
-) => NumericMenuWidgetFactory<TNumericMenuWidgetParams>;
-
-const connectNumericMenu: NumericMenuConnector = (
-  renderFn,
-  unmountFn = noop
-) => {
+export default (function connectNumericMenu(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -248,7 +230,7 @@ const connectNumericMenu: NumericMenuConnector = (
       },
     };
   };
-};
+} as Connector<NumericMenuRendererOptions, NumericMenuConnectorParams>);
 
 function isRefined(state: SearchParameters, attribute: string, option: Option) {
   // @TODO: same as another spot, why is this mixing arrays & elements?
@@ -373,5 +355,3 @@ function hasNumericRefinement(
     currentRefinements[operator]!.includes(value)
   );
 }
-
-export default connectNumericMenu;

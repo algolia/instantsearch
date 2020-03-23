@@ -7,9 +7,10 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory } from '../../types';
+import { WidgetFactory, Renderer } from '../../types';
 import connectQueryRules, {
-  QueryRulesRenderer,
+  QueryRulesConnectorParams,
+  QueryRulesRendererOptions,
 } from '../../connectors/query-rules/connectQueryRules';
 import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 
@@ -34,7 +35,10 @@ type QueryRuleCustomDataRendererWidgetParams = {
   templates: QueryRuleCustomDataTemplates;
 } & QueryRuleCustomDataWidgetParams;
 
-type QueryRuleCustomData = WidgetFactory<QueryRuleCustomDataWidgetParams>;
+type QueryRuleCustomDataWidget = WidgetFactory<
+  QueryRulesConnectorParams,
+  QueryRuleCustomDataWidgetParams
+>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-custom-data',
@@ -42,10 +46,10 @@ const withUsage = createDocumentationMessageGenerator({
 
 const suit = component('QueryRuleCustomData');
 
-const renderer: QueryRulesRenderer<QueryRuleCustomDataRendererWidgetParams> = ({
-  items,
-  widgetParams,
-}) => {
+const renderer: Renderer<
+  QueryRulesRendererOptions,
+  QueryRuleCustomDataRendererWidgetParams
+> = ({ items, widgetParams }) => {
   const { container, cssClasses, templates } = widgetParams;
 
   render(
@@ -54,7 +58,7 @@ const renderer: QueryRulesRenderer<QueryRuleCustomDataRendererWidgetParams> = ({
   );
 };
 
-const queryRuleCustomData: QueryRuleCustomData = (
+const queryRuleCustomData: QueryRuleCustomDataWidget = (
   {
     container,
     cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,

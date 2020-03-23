@@ -4,7 +4,7 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Renderer, RendererOptions, WidgetFactory } from '../../types';
+import { Connector } from '../../types';
 import createVoiceSearchHelper, {
   VoiceListeningState,
   ToggleListening,
@@ -16,39 +16,21 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type VoiceSearchConnectorParams = {
-  searchAsYouSpeak: boolean;
+  searchAsYouSpeak?: boolean;
   language?: string;
   additionalQueryParameters?: (params: {
     query: string;
   }) => PlainSearchParameters | void;
 };
 
-export type VoiceSearchRendererOptions<TVoiceSearchWidgetParams> = {
+export type VoiceSearchRendererOptions = {
   isBrowserSupported: boolean;
   isListening: boolean;
   toggleListening: ToggleListening;
   voiceListeningState: VoiceListeningState;
-} & RendererOptions<TVoiceSearchWidgetParams>;
+};
 
-export type VoiceSearchRenderer<TVoiceSearchWidgetParams> = Renderer<
-  VoiceSearchRendererOptions<
-    VoiceSearchConnectorParams & TVoiceSearchWidgetParams
-  >
->;
-
-export type VoiceSearchWidgetFactory<TVoiceSearchWidgetParams> = WidgetFactory<
-  VoiceSearchConnectorParams & TVoiceSearchWidgetParams
->;
-
-export type VoiceSearchConnector = <TVoiceSearchWidgetParams>(
-  renderFn: VoiceSearchRenderer<TVoiceSearchWidgetParams>,
-  unmountFn?: () => void
-) => VoiceSearchWidgetFactory<TVoiceSearchWidgetParams>;
-
-const connectVoiceSearch: VoiceSearchConnector = (
-  renderFn,
-  unmountFn = noop
-) => {
+export default (function connectVoiceSearch(renderFn, unmountFn = noop) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -181,6 +163,4 @@ const connectVoiceSearch: VoiceSearchConnector = (
       },
     };
   };
-};
-
-export default connectVoiceSearch;
+} as Connector<VoiceSearchRendererOptions, VoiceSearchConnectorParams>);

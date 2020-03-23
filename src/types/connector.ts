@@ -69,5 +69,5 @@ export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
   /**
    * The called function when unmounting a widget.
    */
-  unmountFn: Unmounter
-) => WidgetFactory<TConnectorParams & TWidgetParams>;
+  unmountFn?: Unmounter
+) => WidgetFactory<TConnectorParams, TWidgetParams>;
