@@ -5,7 +5,7 @@ import {
   noop,
 } from '../../lib/utils';
 import { Renderer, RendererOptions, WidgetFactory } from '../../types';
-import createVoiceSearchHelper, {
+import builtInCreateVoiceSearchHelper, {
   VoiceListeningState,
   ToggleListening,
 } from '../../lib/voiceSearchHelper';
@@ -21,6 +21,7 @@ export type VoiceSearchConnectorParams = {
   additionalQueryParameters?: (params: {
     query: string;
   }) => PlainSearchParameters | void;
+  createVoiceSearchHelper?: typeof builtInCreateVoiceSearchHelper;
 };
 
 export type VoiceSearchRendererOptions<TVoiceSearchWidgetParams> = {
@@ -79,6 +80,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       searchAsYouSpeak = false,
       language,
       additionalQueryParameters,
+      createVoiceSearchHelper = builtInCreateVoiceSearchHelper,
     } = widgetParams;
 
     return {
