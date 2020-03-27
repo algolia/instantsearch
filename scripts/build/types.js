@@ -16,7 +16,7 @@ const pkgDir = path.resolve('');
 const pkg = require(`${pkgDir}/package.json`);
 
 console.log();
-console.log(`Rolling up type definitions for instantsearch...`);
+console.log(`Rolling up type definitions for InstantSearch...`);
 
 const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 
