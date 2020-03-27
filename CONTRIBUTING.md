@@ -207,24 +207,3 @@ yarn run release:prepare
 
 The script will ask you a question about the next version. If it's wrong, you can say "No" and specify the version (e.g. "7.0.0-beta.0"). Then, it will open a pull request for that release. When the pull request is merged, CircleCI will publish it to npm with a `--tag beta` argument.
 
-#### Experimental TypeScript version
-
-An experimental version containing the TypeScript declaration files is available on the npm tag `experimental-typescript`.
-
-Since some of these declaration files are generated from the JSDoc comments, they can contain some typing errors. This version will stay experimental until we are confident enough in the generated declarations to put them in a stable release.
-
-To generate the experimental TypeScript version for a particular (stable) release, run:
-
-```sh
-./scripts/release/build-experimental-typescript.js
-```
-
-To publish it manually, run:
-
-```
-npm publish --tag experimental-typescript
-# or
-yarn publish --no-git-tag-version --non-interactive --tag experimental-typescript
-```
-
-_Note that this build will be automatically published along with the current stable version by Ship.js._
