@@ -157,17 +157,18 @@ export default createConnector({
       return searchParameters;
     }
 
-    const indexSearchState = hasMultipleIndices({
-      ais: props.contextValue,
-      multiIndexContext: props.indexContextValue,
-    })
-      ? searchState.indices[
-          getIndexId({
-            ais: props.contextValue,
-            multiIndexContext: props.indexContextValue,
-          })
-        ]
-      : searchState;
+    const indexSearchState =
+      hasMultipleIndices({
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }) && searchState.indices
+        ? searchState.indices[
+            getIndexId({
+              ais: props.contextValue,
+              multiIndexContext: props.indexContextValue,
+            })
+          ]
+        : searchState;
 
     const newRuleContexts = getRuleContextsFromTrackedFilters({
       searchState: indexSearchState,
