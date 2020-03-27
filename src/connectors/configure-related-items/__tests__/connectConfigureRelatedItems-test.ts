@@ -2,6 +2,7 @@ import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 import instantsearch from '../../../lib/main';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { AlgoliaHit } from '../../../types';
+import { noop } from '../../../lib/utils';
 
 const hit: AlgoliaHit = {
   objectID: '1',
@@ -37,7 +38,7 @@ const hit: AlgoliaHit = {
 describe('connectConfigureRelatedItems', () => {
   describe('usage', () => {
     test('throws without hit option', () => {
-      const configureRelatedItems = connectConfigureRelatedItems();
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       expect(() => {
         // @ts-ignore missing options
@@ -50,7 +51,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
     });
 
     test('throws without matchingPatterns option', () => {
-      const configureRelatedItems = connectConfigureRelatedItems();
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       expect(() => {
         // @ts-ignore missing options
@@ -65,7 +66,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
     });
 
     test('does not throw on correct usage', () => {
-      const configureRelatedItems = connectConfigureRelatedItems();
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       expect(() => {
         configureRelatedItems({
@@ -76,7 +77,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
     });
 
     test('is a widget', () => {
-      const configureRelatedItems = connectConfigureRelatedItems();
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
       const widget = configureRelatedItems({
         hit,
         matchingPatterns: {},
@@ -102,7 +103,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         indexName: 'indexName',
         searchClient,
       });
-      const configureRelatedItems = connectConfigureRelatedItems();
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       search.addWidgets([
         configureRelatedItems({
@@ -142,7 +143,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         indexName: 'indexName',
         searchClient,
       });
-      const configureRelatedItems = connectConfigureRelatedItems();
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       search.addWidgets([
         configureRelatedItems({
@@ -201,7 +202,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
         indexName: 'indexName',
         searchClient,
       });
-      const configureRelatedItems = connectConfigureRelatedItems();
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
 
       expect(() => {
         search.addWidgets([

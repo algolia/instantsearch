@@ -6,27 +6,14 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import {
-  RendererOptions,
-  Renderer,
-  WidgetFactory,
-  Hits,
-  InstantSearch,
-  Unmounter,
-} from '../../types';
+import { Hits, Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
   connector: true,
 });
 
-type AutocompleteIndex = {
-  indexName: string;
-  hits: Hits;
-  results: SearchResults;
-};
-
-type AutocompleteConnectorParams = {
+export type AutocompleteConnectorParams = {
   /**
    * Escapes HTML entities from hits string values.
    *
@@ -35,32 +22,47 @@ type AutocompleteConnectorParams = {
   escapeHTML?: boolean;
 };
 
-export type AutocompleteRendererOptions<TAutocompleteWidgetParams> = {
+export type AutocompleteRendererOptions = {
+  /**
+   * The current value of the query.
+   */
   currentRefinement: string;
-  indices: AutocompleteIndex[];
-  instantSearchInstance: InstantSearch;
-  refine: (query: string) => void;
-} & RendererOptions<TAutocompleteWidgetParams>;
 
-export type AutocompleteRenderer<TAutocompleteWidgetParams> = Renderer<
-  AutocompleteRendererOptions<
-    AutocompleteConnectorParams & TAutocompleteWidgetParams
-  >
+  /**
+   * The indices this widget has access to.
+   */
+  indices: Array<{
+    /**
+     * The name of the index
+     */
+    indexName: string;
+
+    /**
+     * The resolved hits from the index matching the query.
+     */
+    hits: Hits;
+
+    /**
+     * The full results object from the Algolia API.
+     */
+    results: SearchResults;
+  }>;
+
+  /**
+   * Searches into the indices with the provided query.
+   */
+  refine: (query: string) => void;
+};
+
+export type AutocompleteConnector = Connector<
+  AutocompleteRendererOptions,
+  AutocompleteConnectorParams
 >;
 
-export type AutocompleteWidgetFactory<
-  TAutocompleteWidgetParams
-> = WidgetFactory<AutocompleteConnectorParams & TAutocompleteWidgetParams>;
-
-export type AutocompleteConnector = <TAutocompleteWidgetParams>(
-  render: AutocompleteRenderer<TAutocompleteWidgetParams>,
-  unmount?: Unmounter
-) => AutocompleteWidgetFactory<TAutocompleteWidgetParams>;
-
-const connectAutocomplete: AutocompleteConnector = (
+const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
   renderFn,
   unmountFn = noop
-) => {
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
