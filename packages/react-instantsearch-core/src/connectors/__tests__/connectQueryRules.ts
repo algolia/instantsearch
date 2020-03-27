@@ -622,6 +622,24 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           'ais-price-3000',
         ]);
       });
+
+      it('sets empty ruleContexts without search state', () => {
+        const props: ConnectedProps<QueryRulesProps> = {
+          ...defaultPropsMultiIndex,
+          trackedFilters: {
+            price: values => values,
+          },
+        };
+        const searchState = {};
+
+        const searchParameters = connect.getSearchParameters(
+          new SearchParameters(),
+          props,
+          searchState
+        );
+
+        expect(searchParameters.ruleContexts).toEqual([]);
+      });
     });
 
     describe('transformRuleContexts', () => {
