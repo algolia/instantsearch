@@ -1,7 +1,6 @@
 /dist
 /cjs
 /es
-/temp
 /website
 node_modules/
 

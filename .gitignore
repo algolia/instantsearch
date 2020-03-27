@@ -16,7 +16,6 @@ yarn-error.log
 /website/examples
 /website/stories
 /storybook/dist/*
-/temp
 
 # Argos CI screenshots
 /functional-tests/screenshots/
