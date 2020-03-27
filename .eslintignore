@@ -5,7 +5,7 @@
 node_modules/
 
 # TODO: don't ignore these examples once they're updated
-/examples/e-commerce
 /examples/calendar-widget
+/examples/e-commerce
 /examples/media
 /examples/tourism
