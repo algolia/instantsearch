@@ -1,11 +1,8 @@
-import connectConfigureRelatedItems, {
-  ConfigureRelatedItemsWidgetFactory,
-} from '../../connectors/configure-related-items/connectConfigureRelatedItems';
+import { noop } from '../../lib/utils';
+import connectConfigureRelatedItems from '../../connectors/configure-related-items/connectConfigureRelatedItems';
 
-type ConfigureRelatedItems = ConfigureRelatedItemsWidgetFactory<{}>;
-
-const configureRelatedItems: ConfigureRelatedItems = widgetParams => {
-  const makeWidget = connectConfigureRelatedItems();
+const configureRelatedItems = widgetParams => {
+  const makeWidget = connectConfigureRelatedItems(noop);
 
   return makeWidget(widgetParams);
 };

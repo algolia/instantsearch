@@ -4,15 +4,16 @@ import { h, render } from 'preact';
 import cx from 'classnames';
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
 import connectCurrentRefinements, {
-  CurrentRefinementsRenderer,
   Item,
+  CurrentRefinementsConnectorParams,
+  CurrentRefinementsRendererOptions,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory } from '../../types';
+import { WidgetFactory, Renderer } from '../../types';
 
 type CurrentRefinementsCSSClasses = {
   root: string | string[];
@@ -62,16 +63,24 @@ export type CurrentRefinementsWidgetParams = {
 type CurrentRefinementsRendererWidgetParams = {
   container: HTMLElement;
   cssClasses: CurrentRefinementsComponentCSSClasses;
-} & CurrentRefinementsWidgetParams;
+};
 
-type CurrentRefinements = WidgetFactory<CurrentRefinementsWidgetParams>;
+type CurrentRefinements = WidgetFactory<
+  CurrentRefinementsConnectorParams,
+  CurrentRefinementsWidgetParams
+>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'current-refinements',
 });
 const suit = component('CurrentRefinements');
 
-const renderer: CurrentRefinementsRenderer<CurrentRefinementsRendererWidgetParams> = (
+type CurrentRefinementsRenderer = Renderer<
+  CurrentRefinementsRendererOptions,
+  CurrentRefinementsRendererWidgetParams
+>;
+
+const renderer: CurrentRefinementsRenderer = (
   { items, widgetParams },
   isFirstRender
 ) => {
@@ -112,9 +121,9 @@ const currentRefinements: CurrentRefinements = ({
     delete: cx(suit({ descendantName: 'delete' }), userCssClasses.delete),
   };
 
-  const makeWidget = connectCurrentRefinements(renderer, () =>
-    render(null, containerNode)
-  );
+  const makeWidget = connectCurrentRefinements<
+    CurrentRefinementsRendererWidgetParams
+  >(renderer, () => render(null, containerNode));
 
   return makeWidget({
     container: containerNode,

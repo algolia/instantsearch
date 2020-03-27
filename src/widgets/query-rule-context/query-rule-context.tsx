@@ -3,6 +3,7 @@ import { createDocumentationMessageGenerator, noop } from '../../lib/utils';
 import connectQueryRules, {
   ParamTrackedFilters,
   ParamTransformRuleContexts,
+  QueryRulesConnectorParams,
 } from '../../connectors/query-rules/connectQueryRules';
 
 type QueryRuleContextWidgetParams = {
@@ -10,7 +11,10 @@ type QueryRuleContextWidgetParams = {
   transformRuleContexts?: ParamTransformRuleContexts;
 };
 
-type QueryRuleContext = WidgetFactory<QueryRuleContextWidgetParams>;
+type QueryRuleContext = WidgetFactory<
+  QueryRulesConnectorParams,
+  QueryRuleContextWidgetParams
+>;
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-context',

@@ -4,14 +4,9 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import {
-  WidgetFactory,
-  Renderer,
-  RendererOptions,
-  Unmounter,
-} from '../../types';
 
 import { SearchParameters } from 'algoliasearch-helper';
+import { Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
@@ -63,14 +58,12 @@ export type HitsPerPageConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: (
-    objects: HitsPerPageConnectorParamsItem[]
-  ) => HitsPerPageConnectorParamsItem[];
+  transformItems?: <TItem extends HitsPerPageConnectorParamsItem>(
+    objects: TItem[]
+  ) => TItem[];
 };
 
-export type HitsPerPageRendererOptions<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = {
+export type HitsPerPageRendererOptions = {
   /**
    * Array of objects defining the different values and labels.
    */
@@ -81,7 +74,7 @@ export type HitsPerPageRendererOptions<
    *
    * @internal
    */
-  createURL: (value: HitsPerPageRendererOptionsItem['value']) => string;
+  createURL: (value: HitsPerPageConnectorParamsItem['value']) => string;
 
   /**
    * Sets the number of hits per page and triggers a search.
@@ -92,29 +85,12 @@ export type HitsPerPageRendererOptions<
    * Indicates whether or not the search has results.
    */
   hasNoResults: boolean;
-} & RendererOptions<THitsPerPageWidgetParams>;
+};
 
-export type HitsPerPageRenderer<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = Renderer<HitsPerPageRendererOptions<THitsPerPageWidgetParams>>;
-
-export type HitsPerPageWidgetFactory<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = WidgetFactory<HitsPerPageConnectorParams & THitsPerPageWidgetParams>;
-
-type HitsPerPageConnector<
-  THitsPerPageWidgetParams extends HitsPerPageConnectorParams = HitsPerPageConnectorParams
-> = (
-  /**
-   * Render function for the custom **HitsPerPage** widget.
-   */
-  render: HitsPerPageRenderer<THitsPerPageWidgetParams>,
-
-  /**
-   * Unmount function called when the widget is disposed.
-   */
-  unmount?: Unmounter
-) => HitsPerPageWidgetFactory<THitsPerPageWidgetParams>;
+export type HitsPerPageConnector = Connector<
+  HitsPerPageRendererOptions,
+  HitsPerPageConnectorParams
+>;
 
 const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
   renderFn,
@@ -124,7 +100,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
 
   return widgetParams => {
     const { items: userItems, transformItems = items => items } =
-      widgetParams || {};
+      widgetParams || ({} as typeof widgetParams);
     let items = userItems;
 
     if (!Array.isArray(items)) {
@@ -149,9 +125,7 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
 
     const defaultItem = defaultItems[0];
 
-    const normalizeItems = ({
-      hitsPerPage,
-    }: SearchParameters): HitsPerPageConnectorParamsItem[] => {
+    const normalizeItems = ({ hitsPerPage }: SearchParameters) => {
       return items.map(item => ({
         ...item,
         isRefined: Number(item.value) === Number(hitsPerPage),
