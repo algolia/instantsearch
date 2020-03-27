@@ -103,7 +103,7 @@ type NestedWidgetOptions = {
 type PanelWidget = (
   params?: PanelWidgetParams
 ) => (
-  widgetFactory: WidgetFactory<NestedWidgetOptions>
+  widgetFactory: WidgetFactory<{}, NestedWidgetOptions>
 ) => (widgetOptions: NestedWidgetOptions) => Widget;
 
 /**
@@ -162,7 +162,7 @@ const panel: PanelWidget = (widgetParams = {} as PanelWidgetParams) => {
     footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
   };
 
-  return (widgetFactory: WidgetFactory<NestedWidgetOptions>) => (
+  return (widgetFactory: WidgetFactory<{}, NestedWidgetOptions>) => (
     widgetOptions = {} as NestedWidgetOptions
   ): Widget => {
     const { container } = widgetOptions;

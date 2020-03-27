@@ -10,14 +10,16 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { WidgetFactory } from '../../../types';
 import connectQueryRules, {
-  QueryRulesWidgetFactory,
+  QueryRulesConnectorParams,
+  QueryRulesRendererOptions,
 } from '../connectQueryRules';
 
 describe('connectQueryRules', () => {
   let renderFn = jest.fn();
   let unmountFn = jest.fn();
-  let makeWidget: QueryRulesWidgetFactory<{}>;
+  let makeWidget: WidgetFactory<QueryRulesConnectorParams, {}>;
 
   const createFakeHelper = (state = {}): Helper => {
     const client = createSearchClient();
@@ -57,9 +59,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
       expect(() => {
         makeWidget({
           // @ts-ignore
-          trackedFilters: {
-            brand: ['Samsung'],
-          },
+          trackedFilters: { brand: ['Samsung'] },
         });
       }).toThrowErrorMatchingInlineSnapshot(`
 "'The \\"brand\\" filter value in the \`trackedFilters\` option expects a function.
@@ -200,8 +200,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
     test('does not throw without the unmount function', () => {
       const helper = createFakeHelper();
       const rendering = () => {};
-      const createWidget = connectQueryRules(rendering);
-      const widget = createWidget({});
+      const createWidget = connectQueryRules<QueryRulesRendererOptions>(
+        rendering
+      );
+      const widget = createWidget({
+        items: [] as any[],
+      });
 
       widget.init!(
         createInitOptions({

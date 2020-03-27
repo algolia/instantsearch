@@ -9,6 +9,7 @@ import {
   createInitOptions,
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
+import { noop } from '../../../lib/utils';
 
 describe('connectConfigure', () => {
   let helper: AlgoliaSearchHelper;
@@ -80,7 +81,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
   });
 
   it('should apply searchParameters', () => {
-    const makeWidget = connectConfigure();
+    const makeWidget = connectConfigure(noop);
     const widget = makeWidget({
       searchParameters: {
         analytics: true,
@@ -99,7 +100,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
   });
 
   it('should apply searchParameters with a higher priority', () => {
-    const makeWidget = connectConfigure();
+    const makeWidget = connectConfigure(noop);
     const widget = makeWidget({
       searchParameters: {
         analytics: true,
@@ -195,7 +196,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
   });
 
   it('should dispose only the state set by configure', () => {
-    const makeWidget = connectConfigure();
+    const makeWidget = connectConfigure(noop);
     const widget = makeWidget({
       searchParameters: {
         analytics: true,
@@ -241,7 +242,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
   describe('getWidgetState', () => {
     it('adds default parameters', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
         searchParameters: {
           analytics: true,
@@ -298,7 +299,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('merges with existing configuration', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
         searchParameters: {
           analytics: true,
@@ -316,7 +317,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('overwrites existing configuration', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
         searchParameters: {
           analytics: true,
@@ -336,7 +337,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
   describe('getWidgetSearchParameters', () => {
     it('returns parameters set by default', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
         searchParameters: {
           analytics: true,
@@ -351,7 +352,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('returns parameters set by uiState', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({ searchParameters: {} });
 
       const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
@@ -366,7 +367,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('overrides parameters set by uiState', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
         searchParameters: {
           analytics: true,
@@ -385,7 +386,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('merges parameters set by uiState', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
         searchParameters: {
           analyticsTags: ['best-website-in-the-world'],
@@ -409,7 +410,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     it('merges with the previous parameters', () => {
-      const makeWidget = connectConfigure();
+      const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
         searchParameters: {
           disjunctiveFacets: ['brand'],

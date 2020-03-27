@@ -3,12 +3,7 @@ import {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import {
-  Renderer,
-  RendererOptions,
-  WidgetFactory,
-  HelperChangeEvent,
-} from '../../types';
+import { HelperChangeEvent, Connector } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -38,22 +33,9 @@ export type QueryRulesConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-export type QueryRulesRendererOptions<TQueryRulesWidgetParams> = {
+export type QueryRulesRendererOptions = {
   items: any[];
-} & RendererOptions<TQueryRulesWidgetParams>;
-
-export type QueryRulesRenderer<TQueryRulesWidgetParams> = Renderer<
-  QueryRulesRendererOptions<QueryRulesConnectorParams & TQueryRulesWidgetParams>
->;
-
-export type QueryRulesWidgetFactory<TQueryRulesWidgetParams> = WidgetFactory<
-  QueryRulesConnectorParams & TQueryRulesWidgetParams
->;
-
-export type QueryRulesConnector = <TQueryRulesWidgetParams>(
-  render: QueryRulesRenderer<TQueryRulesWidgetParams>,
-  unmount?: () => void
-) => QueryRulesWidgetFactory<TQueryRulesWidgetParams>;
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'query-rules',
@@ -166,7 +148,15 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
   }
 }
 
-const connectQueryRules: QueryRulesConnector = (render, unmount = noop) => {
+export type QueryRulesConnector = Connector<
+  QueryRulesRendererOptions,
+  QueryRulesConnectorParams
+>;
+
+const connectQueryRules: QueryRulesConnector = function connectQueryRules(
+  render,
+  unmount = noop
+) {
   checkRendering(render, withUsage());
 
   return widgetParams => {
