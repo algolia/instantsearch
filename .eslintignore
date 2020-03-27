@@ -2,11 +2,11 @@
 /cjs
 /es
 /website
+dist
+.cache
 node_modules/
 
 # TODO: don't ignore these examples once they're updated
 /examples/calendar-widget
-/examples/e-commerce/.cache
-/examples/e-commerce/dist
 /examples/media
 /examples/tourism
