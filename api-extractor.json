@@ -37,7 +37,7 @@
       }
     }
   },
-  "mainEntryPointFilePath": "./temp/types/index.d.ts",
+  "mainEntryPointFilePath": "./global.d.ts",
   "dtsRollup": {
     "untrimmedFilePath": "./dist/index.d.ts",
     "enabled": true

@@ -5,9 +5,11 @@
 const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
+const tmpdir = `${require('os').tmpdir()}/instantsearch.js/types`;
+shell.exec(`rm -rf ${tmpdir}`);
 
 shell.exec(
-  'tsc -p tsconfig.declaration.json --outDir temp/types; mv temp/types/index.es.d.ts temp/types/index.d.ts'
+  `tsc -p tsconfig.declaration.json --outDir ${tmpdir}; mv ${tmpdir}/index.es.d.ts ${tmpdir}/index.d.ts`
 );
 
 const pkgDir = path.resolve('');
@@ -20,6 +22,9 @@ const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 
 const extractorConfigPath = path.resolve(pkgDir, `api-extractor.json`);
 const extractorConfig = ExtractorConfig.loadFileAndPrepare(extractorConfigPath);
+
+extractorConfig.mainEntryPointFilePath = `${tmpdir}/index.d.ts`;
+
 const result = Extractor.invoke(extractorConfig, {
   localBuild: true,
   showVerboseMessages: true,
