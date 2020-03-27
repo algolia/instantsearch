@@ -5,7 +5,8 @@ import cx from 'classnames';
 import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits, {
-  InfiniteHitsRenderer,
+  InfiniteHitsConnectorParams,
+  InfiniteHitsRendererOptions,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
@@ -19,6 +20,7 @@ import {
   Template,
   Hit,
   InsightsClientWrapper,
+  Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
 
@@ -117,7 +119,10 @@ type InfiniteHitsWidgetParams = {
   templates?: Partial<InfiniteHitsTemplates>;
 } & InfiniteHitsRendererWidgetParams;
 
-type InfiniteHits = WidgetFactory<InfiniteHitsWidgetParams>;
+type InfiniteHits = WidgetFactory<
+  InfiniteHitsConnectorParams,
+  InfiniteHitsWidgetParams
+>;
 
 const renderer = ({
   cssClasses,
@@ -125,7 +130,7 @@ const renderer = ({
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}): InfiniteHitsRenderer<Required<InfiniteHitsRendererWidgetParams>> => (
+}): Renderer<InfiniteHitsRendererOptions, InfiniteHitsRendererWidgetParams> => (
   {
     hits,
     results,

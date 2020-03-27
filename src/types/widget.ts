@@ -192,8 +192,14 @@ export type Widget = {
   ): SearchParameters;
 };
 
-export type WidgetFactory<TWidgetParams> = (
-  widgetParams: TWidgetParams
+/**
+ * The function that creates a new widget.
+ */
+export type WidgetFactory<TConnectorParams, TWidgetParams> = (
+  /**
+   * The params of the widget.
+   */
+  widgetParams: TConnectorParams & TWidgetParams
 ) => Widget;
 
 export type Template<TTemplateData = void> =
