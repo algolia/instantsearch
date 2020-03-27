@@ -87,7 +87,15 @@ export type HitsPerPageRendererOptions = {
   hasNoResults: boolean;
 };
 
-export default (function connectHitsPerPage(renderFn, unmountFn = noop) {
+export type HitsPerPageConnector = Connector<
+  HitsPerPageRendererOptions,
+  HitsPerPageConnectorParams
+>;
+
+const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -237,4 +245,6 @@ You may want to add another entry to the \`items\` option with this value.`
       },
     };
   };
-} as Connector<HitsPerPageRendererOptions, HitsPerPageConnectorParams>);
+};
+
+export default connectHitsPerPage;

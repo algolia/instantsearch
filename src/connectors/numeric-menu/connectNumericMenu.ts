@@ -83,7 +83,15 @@ export type NumericMenuRendererOptions = {
   refine: Refine;
 };
 
-export default (function connectNumericMenu(renderFn, unmountFn = noop) {
+export type NumericMenuConnector = Connector<
+  NumericMenuRendererOptions,
+  NumericMenuConnectorParams
+>;
+
+const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -230,7 +238,7 @@ export default (function connectNumericMenu(renderFn, unmountFn = noop) {
       },
     };
   };
-} as Connector<NumericMenuRendererOptions, NumericMenuConnectorParams>);
+};
 
 function isRefined(state: SearchParameters, attribute: string, option: Option) {
   // @TODO: same as another spot, why is this mixing arrays & elements?
@@ -355,3 +363,5 @@ function hasNumericRefinement(
     currentRefinements[operator]!.includes(value)
   );
 }
+
+export default connectNumericMenu;

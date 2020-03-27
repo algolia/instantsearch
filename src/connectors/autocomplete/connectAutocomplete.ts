@@ -54,7 +54,15 @@ export type AutocompleteRendererOptions = {
   refine: (query: string) => void;
 };
 
-export default (function connectAutocomplete(renderFn, unmountFn = noop) {
+export type AutocompleteConnector = Connector<
+  AutocompleteRendererOptions,
+  AutocompleteConnectorParams
+>;
+
+const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -188,4 +196,6 @@ search.addWidgets([
       },
     };
   };
-} as Connector<AutocompleteRendererOptions, AutocompleteConnectorParams>);
+};
+
+export default connectAutocomplete;

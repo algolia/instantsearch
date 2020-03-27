@@ -30,7 +30,15 @@ export type VoiceSearchRendererOptions = {
   voiceListeningState: VoiceListeningState;
 };
 
-export default (function connectVoiceSearch(renderFn, unmountFn = noop) {
+export type VoiceSearchConnector = Connector<
+  VoiceSearchRendererOptions,
+  VoiceSearchConnectorParams
+>;
+
+const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -163,4 +171,6 @@ export default (function connectVoiceSearch(renderFn, unmountFn = noop) {
       },
     };
   };
-} as Connector<VoiceSearchRendererOptions, VoiceSearchConnectorParams>);
+};
+
+export default connectVoiceSearch;

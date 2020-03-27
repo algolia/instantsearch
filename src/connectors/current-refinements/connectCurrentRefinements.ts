@@ -90,7 +90,15 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export default (function connectCurrentRefinements(renderFn, unmountFn = noop) {
+export type CurrentRefinementsConnector = Connector<
+  CurrentRefinementsRendererOptions,
+  CurrentRefinementsConnectorParams
+>;
+
+const connectCurrentRefinements: CurrentRefinementsConnector = function connectCurrentRefinements(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -169,10 +177,7 @@ export default (function connectCurrentRefinements(renderFn, unmountFn = noop) {
       },
     };
   };
-} as Connector<
-  CurrentRefinementsRendererOptions,
-  CurrentRefinementsConnectorParams
->);
+};
 
 function getItems({
   results,
@@ -312,3 +317,5 @@ function normalizeRefinement(refinement: Refinement): ConnectorRefinement {
 
   return normalizedRefinement;
 }
+
+export default connectCurrentRefinements;

@@ -30,7 +30,15 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export default (function connectInfiniteHits(renderFn, unmountFn = noop) {
+export type InfiniteHitsConnector = Connector<
+  InfiniteHitsRendererOptions,
+  InfiniteHitsConnectorParams
+>;
+
+const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -230,4 +238,6 @@ export default (function connectInfiniteHits(renderFn, unmountFn = noop) {
       },
     };
   };
-} as Connector<InfiniteHitsRendererOptions, InfiniteHitsConnectorParams>);
+};
+
+export default connectInfiniteHits;

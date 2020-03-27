@@ -148,7 +148,15 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
   }
 }
 
-export default (function connectQueryRules(render, unmount = noop) {
+export type QueryRulesConnector = Connector<
+  QueryRulesRendererOptions,
+  QueryRulesConnectorParams
+>;
+
+const connectQueryRules: QueryRulesConnector = function connectQueryRules(
+  render,
+  unmount = noop
+) {
   checkRendering(render, withUsage());
 
   return widgetParams => {
@@ -241,4 +249,6 @@ export default (function connectQueryRules(render, unmount = noop) {
       },
     };
   };
-} as Connector<QueryRulesRendererOptions, QueryRulesConnectorParams>);
+};
+
+export default connectQueryRules;

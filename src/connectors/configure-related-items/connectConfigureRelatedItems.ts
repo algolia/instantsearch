@@ -54,16 +54,15 @@ function createOptionalFilter({
   return `${attributeName}:${attributeValue}<score=${attributeScore || 1}>`;
 }
 
-type ConfigureRelatedItemsConnector = Connector<
+export type ConfigureRelatedItemsConnector = Connector<
   ConfigureRendererOptions,
   ConfigureRelatedItemsConnectorParams
 >;
 
-export default (function connectConfigureRelatedItems<
-  TWidgetParams extends {
-    searchParameters: algoliasearchHelper.PlainSearchParameters;
-  }
->(renderFn, unmountFn) {
+const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = function connectConfigureRelatedItems(
+  renderFn,
+  unmountFn
+) {
   return widgetParams => {
     const { hit, matchingPatterns, transformSearchParameters = x => x } =
       widgetParams || ({} as typeof widgetParams);
@@ -139,11 +138,13 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
       ),
     };
 
-    const makeConfigure = connectConfigure<TWidgetParams>(renderFn, unmountFn);
+    const makeConfigure = connectConfigure(renderFn, unmountFn);
 
     return {
-      ...makeConfigure({ searchParameters } as TWidgetParams),
+      ...makeConfigure({ searchParameters } as any),
       $$type: 'ais.configureRelatedItems',
     };
   };
-} as ConfigureRelatedItemsConnector);
+};
+
+export default connectConfigureRelatedItems;

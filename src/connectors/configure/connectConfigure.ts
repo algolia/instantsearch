@@ -54,7 +54,15 @@ function getInitialSearchParameters(
   );
 }
 
-export default (function connectConfigure(renderFn = noop, unmountFn = noop) {
+export type ConfigureConnector = Connector<
+  ConfigureRendererOptions,
+  ConfigureConnectorParams
+>;
+
+const connectConfigure: ConfigureConnector = function connectConfigure(
+  renderFn = noop,
+  unmountFn = noop
+) {
   return widgetParams => {
     if (!widgetParams || !isPlainObject(widgetParams.searchParameters)) {
       throw new Error(
@@ -142,4 +150,6 @@ export default (function connectConfigure(renderFn = noop, unmountFn = noop) {
       },
     };
   };
-} as Connector<ConfigureRendererOptions, ConfigureConnectorParams>);
+};
+
+export default connectConfigure;
