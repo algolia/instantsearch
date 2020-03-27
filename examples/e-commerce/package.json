@@ -8,7 +8,7 @@
     "lint": "eslint --ext .js,.ts,.tsx ."
   },
   "dependencies": {
-    "algoliasearch": "4.0.0-beta.15"
+    "algoliasearch": "4.1.0"
   },
   "devDependencies": {
     "babel-eslint": "10.0.3",
