@@ -43,29 +43,32 @@ function Handle({
 }
 
 const PriceSlider = ({ min, max, refine, currentRefinement, canRefine }) => {
-  if (!canRefine) {
-    return null;
-  }
-
-  const domain = [min, max];
   const [ticksValues, setTicksValues] = useState([
     currentRefinement.min,
     currentRefinement.max,
   ]);
 
+  useEffect(() => {
+    setTicksValues([currentRefinement.min, currentRefinement.max]);
+  }, [currentRefinement]);
+
   const onChange = values => {
     refine({ min: values[0], max: values[1] });
   };
 
-  useEffect(() => {
-    setTicksValues([currentRefinement.min, currentRefinement.max]);
-  }, [currentRefinement]);
+  if (
+    !canRefine ||
+    ticksValues[0] === undefined ||
+    ticksValues[1] === undefined
+  ) {
+    return null;
+  }
 
   return (
     <Slider
       mode={2}
       step={1}
-      domain={domain}
+      domain={[min, max]}
       values={[currentRefinement.min, currentRefinement.max]}
       disabled={!canRefine}
       onChange={onChange}
@@ -104,7 +107,7 @@ const PriceSlider = ({ min, max, refine, currentRefinement, canRefine }) => {
               <Handle
                 key={handle.id}
                 handle={handle}
-                domain={domain}
+                domain={[min, max]}
                 getHandleProps={getHandleProps}
               />
             ))}
