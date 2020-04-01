@@ -1,5 +1,4 @@
 import { SearchParameters } from 'algoliasearch-helper';
-import { Client as AlgoliaSearchClient } from './algoliasearch';
 import { UiState } from './widget';
 export {
   default as InstantSearch,
@@ -152,8 +151,3 @@ export type StateMapping<TRouteState = UiState> = {
 export type RouteState = {
   [stateKey: string]: any;
 };
-
-export type SearchClient = Pick<
-  AlgoliaSearchClient,
-  'search' | 'searchForFacetValues'
->;

@@ -22,20 +22,28 @@ type DummySearchClientV4 = {
   readonly addAlgoliaAgent: (segment: string, version?: string) => void;
 };
 
-export type Client = ReturnType<
+type DefaultSearchClient = ReturnType<
   typeof algoliasearch
 > extends DummySearchClientV4
   ? SearchClientV4
   : SearchClientV3;
 
+export type SearchClient = {
+  search: DefaultSearchClient['search'];
+  searchForFacetValues: DefaultSearchClient['searchForFacetValues'];
+  addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
+};
+
 export type MultiResponse<THit = any> = {
   results: Array<SearchResponse<THit>>;
 };
 
-export type SearchResponse<THit> = Client extends DummySearchClientV4
+export type SearchResponse<
+  THit
+> = DefaultSearchClient extends DummySearchClientV4
   ? SearchResponseV4<THit>
   : SearchResponseV3<THit>;
 
-export type SearchForFacetValuesResponse = Client extends DummySearchClientV4
+export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
   : SearchForFacetValuesV3.Response;
