@@ -41,4 +41,7 @@ import { connectSearchBox } from 'instantsearch.js/es/connectors'`
   },
 });
 
+export * from './types';
+export * from './middleware';
+
 export default instantsearch;

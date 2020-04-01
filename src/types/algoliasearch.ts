@@ -34,16 +34,25 @@ export type SearchClient = {
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
 };
 
+/**
+ * @internal
+ */
 export type MultiResponse<THit = any> = {
   results: Array<SearchResponse<THit>>;
 };
 
+/**
+ * @internal
+ */
 export type SearchResponse<
   THit
 > = DefaultSearchClient extends DummySearchClientV4
   ? SearchResponseV4<THit>
   : SearchResponseV3<THit>;
 
+/**
+ * @internal
+ */
 export type SearchForFacetValuesResponse = DefaultSearchClient extends DummySearchClientV4
   ? SearchForFacetValuesResponseV4
   : SearchForFacetValuesV3.Response;

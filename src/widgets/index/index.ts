@@ -33,12 +33,12 @@ type IndexProps = {
   indexId?: string;
 };
 
-type IndexInitOptions = Pick<
+export type IndexInitOptions = Pick<
   InitOptions,
   'instantSearchInstance' | 'parent' | 'uiState'
 >;
 
-type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
+export type IndexRenderOptions = Pick<RenderOptions, 'instantSearchInstance'>;
 
 type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
   initialSearchParameters: SearchParameters;

@@ -7,6 +7,12 @@ import {
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 
+export {
+  Index,
+  IndexInitOptions,
+  IndexRenderOptions,
+} from '../widgets/index/index';
+
 export type InitOptions = {
   instantSearchInstance: InstantSearch;
   parent: Index | null;
