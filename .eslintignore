@@ -1,7 +1,8 @@
-/dist
 /cjs
 /es
 /website
+dist
+.cache
 node_modules/
 
 # TODO: don't ignore these examples once they're updated
