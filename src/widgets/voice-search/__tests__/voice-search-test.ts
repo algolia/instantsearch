@@ -12,7 +12,8 @@ import {
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { Widget } from '../../../types';
-import voiceSearch from '../voice-search';
+import voiceSearch, { VoiceSearchWidgetParams } from '../voice-search';
+import { VoiceSearchHelper } from '../../../lib/voiceSearchHelper';
 
 const render = castToJestMock(preactRender);
 
@@ -31,7 +32,9 @@ type DefaultSetupWrapper = {
   widgetRender: (helper: Helper) => void;
 };
 
-function defaultSetup(opts = {}): DefaultSetupWrapper {
+function defaultSetup(
+  opts: Omit<VoiceSearchWidgetParams, 'container'> = {}
+): DefaultSetupWrapper {
   const container = document.createElement('div');
   const widget = voiceSearch({ container, ...opts });
 
@@ -91,6 +94,28 @@ describe('voiceSearch()', () => {
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-search/js/"
 `);
+    });
+
+    it('creates custom voice helper', () => {
+      const voiceHelper: VoiceSearchHelper = {
+        isBrowserSupported: () => true,
+        dispose: () => {},
+        getState: () => ({
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        }),
+        isListening: () => true,
+        toggleListening: () => {},
+      };
+
+      const { widgetInit, widget } = defaultSetup({
+        createVoiceSearchHelper: () => voiceHelper,
+      });
+
+      widgetInit(helper);
+
+      expect((widget as any)._voiceSearchHelper).toBe(voiceHelper);
     });
   });
 

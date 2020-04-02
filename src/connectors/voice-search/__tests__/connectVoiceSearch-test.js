@@ -65,6 +65,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         })
       );
     });
+
+    it('creates custom voice helper', () => {
+      const voiceHelper = {
+        isBrowserSupported: () => true,
+        dispose: () => {},
+        getState: () => ({
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        }),
+        isListening: () => true,
+        toggleListening: () => {},
+      };
+
+      const { widget } = getInitializedWidget({
+        widgetParams: {
+          createVoiceSearchHelper: () => voiceHelper,
+        },
+      });
+
+      expect(widget._voiceSearchHelper).toBe(voiceHelper);
+    });
   });
 
   it('calls renderFn during init and render', () => {

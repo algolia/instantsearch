@@ -41,7 +41,7 @@ export type VoiceSearchTemplates = {
   status: Template<VoiceSearchTemplateProps>;
 };
 
-type VoiceSearchWidgetParams = {
+export type VoiceSearchWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: Partial<VoiceSearchCSSClasses>;
   templates?: Partial<VoiceSearchTemplates>;
