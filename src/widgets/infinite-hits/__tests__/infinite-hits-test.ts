@@ -1,6 +1,6 @@
 import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { Client } from '../../../types';
+import { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
@@ -36,7 +36,7 @@ describe('infiniteHits()', () => {
   beforeEach(() => {
     render.mockClear();
 
-    helper = algoliasearchHelper({} as Client, '', {});
+    helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     container = document.createElement('div');

@@ -1,9 +1,9 @@
 import clearRefinements from '../clearRefinements';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-import { Client } from '../../../types';
+import { SearchClient } from '../../../types';
 
 const initHelperWithRefinements = () => {
-  const helper = algoliasearchHelper({} as Client, 'index', {
+  const helper = algoliasearchHelper({} as SearchClient, 'index', {
     facets: ['conjFacet'],
     disjunctiveFacets: ['disjFacet'],
   });
@@ -21,7 +21,7 @@ describe('clearRefinements', () => {
   test('with hierarchical refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           hierarchicalFacets: [
             { name: 'attr', attributes: ['attr'], separator: '>' },
           ],
@@ -46,7 +46,7 @@ describe('clearRefinements', () => {
   test('with empty hierarchical refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           hierarchicalFacets: [
             { name: 'attr', attributes: ['attr'], separator: '>' },
           ],
@@ -71,7 +71,7 @@ describe('clearRefinements', () => {
   test('with disjunctive refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           disjunctiveFacets: ['attr'],
           disjunctiveFacetsRefinements: {
             attr: ['text'],
@@ -92,7 +92,7 @@ describe('clearRefinements', () => {
   test('with empty disjunctive refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           disjunctiveFacets: ['attr'],
           disjunctiveFacetsRefinements: {
             attr: [],
@@ -115,7 +115,7 @@ describe('clearRefinements', () => {
   test('with conjunctive refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           facets: ['attr'],
           facetsRefinements: {
             attr: ['text'],
@@ -138,7 +138,7 @@ describe('clearRefinements', () => {
   test('with empty conjunctive refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           facets: ['attr'],
           facetsRefinements: {
             attr: [],
@@ -161,7 +161,7 @@ describe('clearRefinements', () => {
   test('with numeric refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           disjunctiveFacets: ['attr'],
           numericRefinements: {
             attr: {
@@ -188,7 +188,7 @@ describe('clearRefinements', () => {
   test('with empty numeric refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           disjunctiveFacets: ['attr'],
           numericRefinements: {
             attr: {
@@ -215,7 +215,7 @@ describe('clearRefinements', () => {
   test('with multiple numeric refinements', () => {
     expect(
       clearRefinements({
-        helper: algoliasearchHelper({} as Client, '', {
+        helper: algoliasearchHelper({} as SearchClient, '', {
           disjunctiveFacets: ['attr'],
           numericRefinements: {
             attr: {

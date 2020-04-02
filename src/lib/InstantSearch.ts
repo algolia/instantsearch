@@ -16,7 +16,6 @@ import {
   SearchClient,
   Widget,
   UiState,
-  Client as AlgoliaSearchClient,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
@@ -66,7 +65,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
    * });
    * ```
    */
-  searchClient: SearchClient | AlgoliaSearchClient;
+  searchClient: SearchClient;
 
   /**
    * The locale used to display numbers. This will be passed
@@ -173,13 +172,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       );
     }
 
-    if (
-      typeof (searchClient as AlgoliaSearchClient).addAlgoliaAgent ===
-      'function'
-    ) {
-      (searchClient as AlgoliaSearchClient).addAlgoliaAgent(
-        `instantsearch.js (${version})`
-      );
+    if (typeof searchClient.addAlgoliaAgent === 'function') {
+      searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
     }
 
     warning(
@@ -397,7 +391,7 @@ See ${createDocumentationLink({
       // to not throw errors
       const fakeClient = ({
         search: () => new Promise(noop),
-      } as any) as AlgoliaSearchClient;
+      } as any) as SearchClient;
 
       this._mainHelperSearch = mainHelper.search.bind(mainHelper);
       mainHelper.search = () => {

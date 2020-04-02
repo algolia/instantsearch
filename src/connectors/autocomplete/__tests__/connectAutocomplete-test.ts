@@ -11,7 +11,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
-import { Client } from '../../../types';
+import { SearchClient } from '../../../types';
 
 describe('connectAutocomplete', () => {
   const getInitializedWidget = (config = {}) => {
@@ -22,7 +22,7 @@ describe('connectAutocomplete', () => {
     });
 
     const initialConfig = {};
-    const helper = algoliasearchHelper({} as Client, '', initialConfig);
+    const helper = algoliasearchHelper({} as SearchClient, '', initialConfig);
     helper.search = jest.fn();
 
     widget.init!(
