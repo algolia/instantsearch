@@ -1,41 +1,11 @@
-export type VoiceSearchHelperParams = {
-  searchAsYouSpeak: boolean;
-  language?: string;
-  onQueryChange: (query: string) => void;
-  onStateChange: () => void;
-};
+import { CreateVoiceSearchHelper, Status, VoiceListeningState } from './types';
 
-export type Status =
-  | 'initial'
-  | 'askingPermission'
-  | 'waiting'
-  | 'recognizing'
-  | 'finished'
-  | 'error';
-
-export type VoiceListeningState = {
-  status: Status;
-  transcript: string;
-  isSpeechFinal: boolean;
-  errorCode?: SpeechRecognitionErrorCode;
-};
-
-export type VoiceSearchHelper = {
-  getState: () => VoiceListeningState;
-  isBrowserSupported: () => boolean;
-  isListening: () => boolean;
-  toggleListening: () => void;
-  dispose: () => void;
-};
-
-export type ToggleListening = () => void;
-
-export default function createVoiceSearchHelper({
+const createVoiceSearchHelper: CreateVoiceSearchHelper = function createVoiceSearchHelper({
   searchAsYouSpeak,
   language,
   onQueryChange,
   onStateChange,
-}: VoiceSearchHelperParams): VoiceSearchHelper {
+}) {
   const SpeechRecognitionAPI: new () => SpeechRecognition =
     (window as any).webkitSpeechRecognition ||
     (window as any).SpeechRecognition;
@@ -139,22 +109,14 @@ export default function createVoiceSearchHelper({
     resetState('finished');
   };
 
-  const toggleListening = (): void => {
-    if (!isBrowserSupported()) {
-      return;
-    }
-    if (isListening()) {
-      stop();
-    } else {
-      start();
-    }
-  };
-
   return {
     getState,
     isBrowserSupported,
     isListening,
-    toggleListening,
+    startListening: start,
+    stopListening: stop,
     dispose,
   };
-}
+};
+
+export default createVoiceSearchHelper;

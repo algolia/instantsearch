@@ -16,7 +16,7 @@ import VoiceSearch, {
 } from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
 import { WidgetFactory, Template } from '../../types';
-import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper';
+import { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
@@ -50,7 +50,7 @@ export type VoiceSearchWidgetParams = {
   additionalQueryParameters?: (params: {
     query: string;
   }) => PlainSearchParameters | void;
-  createVoiceSearchHelper?: typeof builtInCreateVoiceSearchHelper;
+  createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
 type VoiceSearchRendererWidgetParams = {
