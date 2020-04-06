@@ -10,6 +10,7 @@ declare module 'webdriverio' {
 }
 
 browser.addCommand('dragRangeSliderLowerBoundTo', async (value: number) => {
+  const oldUrl = await browser.getUrl();
   const slider = await browser.$(RANGE_SLIDER_RAIL_SELECTOR);
 
   await browser.waitForElement(RANGE_SLIDER_HANDLE_SELECTOR);
@@ -36,10 +37,19 @@ browser.addCommand('dragRangeSliderLowerBoundTo', async (value: number) => {
 
   await browser.dragAndDropByOffset(lowerHandle, offset);
 
+  await browser.waitForElement(RANGE_SLIDER_HANDLE_SELECTOR);
+
+  // Changing the URL will also change the page element IDs in Internet Explorer
+  // Not waiting for the URL to be properly updated before continuing can make the next tests fail
+  await browser.waitUntil(
+    async () => (await browser.getUrl()) !== oldUrl,
+    undefined,
+    `URL was not updated after dragging the range slider lower bound`
+  );
+
   // Depending of the steps calculation there can be a difference between
   // the wanted value and the actual value of the slider, so we return
   // the actual value in case we need it in the rest of the tests
-  await browser.waitForElement(RANGE_SLIDER_HANDLE_SELECTOR);
   [lowerHandle, upperHandle] = await browser.$$(RANGE_SLIDER_HANDLE_SELECTOR);
   return Number(await lowerHandle.getAttribute('aria-valuenow'));
 });

@@ -63,8 +63,6 @@ module.exports = {
        */
       'sauce:options': {
         screenResolution: '1680x1050',
-        extendedDebugging: true,
-        capturePerformance: true,
       },
     },
     {

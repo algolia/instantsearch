@@ -34,10 +34,10 @@ browser.addCommand(
         document.body.appendChild(target);
         return target.id;
       },
-      sourceLocation.x,
-      sourceLocation.y,
-      offsetX,
-      offsetY
+      Math.round(sourceLocation.x),
+      Math.round(sourceLocation.y),
+      Math.round(offsetX),
+      Math.round(offsetY)
     );
     /* eslint-enable prefer-template */
     const target = await browser.$(`#${targetId}`);

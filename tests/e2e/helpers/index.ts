@@ -1,6 +1,6 @@
 // Generic
 import './dragAndDropByOffset';
-import './getTextFromElements';
+import './getTextFromSelector';
 import './waitForElement';
 
 // SearchBox
