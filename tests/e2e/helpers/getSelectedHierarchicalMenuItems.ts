@@ -9,9 +9,7 @@ browser.addCommand('getSelectedHierarchicalMenuItems', async () => {
     '.ais-HierarchicalMenu-item--selected .ais-HierarchicalMenu-label'
   );
 
-  const items = await browser.$$(
+  return await browser.getTextFromSelector(
     '.ais-HierarchicalMenu-item--selected .ais-HierarchicalMenu-label'
   );
-
-  return await browser.getTextFromElements(items);
 });

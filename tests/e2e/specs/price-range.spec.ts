@@ -13,8 +13,9 @@ describe('InstantSearch - Search on specific price range', () => {
   it(`waits for the results list to be updated (wait for all the prices to be > lowerBound)`, async () => {
     await browser.waitUntil(
       async () => {
-        const hits = await browser.$$('.hit-info-container strong');
-        const hitsText = await browser.getTextFromElements(hits);
+        const hitsText = await browser.getTextFromSelector(
+          '.hit-info-container strong'
+        );
         return (
           hitsText.filter(text => Number(text.replace(',', '')) < lowerBound)
             .length === 0
@@ -32,8 +33,9 @@ describe('InstantSearch - Search on specific price range', () => {
   it(`waits for the results list to be updated (wait for all the prices to be < upperBound)`, async () => {
     await browser.waitUntil(
       async () => {
-        const hits = await browser.$$('.hit-info-container strong');
-        const hitsText = await browser.getTextFromElements(hits);
+        const hitsText = await browser.getTextFromSelector(
+          '.hit-info-container strong'
+        );
         return (
           hitsText.filter(text => Number(text.replace(',', '')) > upperBound)
             .length === 0

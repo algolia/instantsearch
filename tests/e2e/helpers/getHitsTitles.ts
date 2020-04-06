@@ -4,6 +4,6 @@ declare namespace WebdriverIOAsync {
   }
 }
 
-browser.addCommand('getHitsTitles', async () =>
-  browser.getTextFromElements(await browser.$$('.hit h1'))
+browser.addCommand('getHitsTitles', () =>
+  browser.getTextFromSelector('.hit h1')
 );
