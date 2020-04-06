@@ -13,7 +13,7 @@ import { createSingleSearchResponse } from '../../../../test/mock/createAPIRespo
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { Widget } from '../../../types';
 import voiceSearch, { VoiceSearchWidgetParams } from '../voice-search';
-import { VoiceSearchHelper } from '../../../lib/voiceSearchHelper';
+import { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types';
 
 const render = castToJestMock(preactRender);
 
@@ -106,7 +106,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
           transcript: '',
         }),
         isListening: () => true,
-        toggleListening: () => {},
+        startListening: () => {},
+        stopListening: () => {},
       };
 
       const { widgetInit, widget } = defaultSetup({
