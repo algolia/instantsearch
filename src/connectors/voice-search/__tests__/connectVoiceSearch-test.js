@@ -3,11 +3,14 @@ import connectVoiceSearch from '../connectVoiceSearch';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
   return ({ onStateChange, onQueryChange }) => {
+    let isListening = false;
     return {
       getState: () => {},
       isBrowserSupported: () => true,
-      isListening: () => false,
-      toggleListening: () => {},
+      isListening: () => isListening,
+      startListening: () => {
+        isListening = !isListening;
+      },
       dispose: jest.fn(),
       // ⬇️ for test
       changeState: () => onStateChange(),
