@@ -70,7 +70,7 @@ const createVoiceSearchHelper: CreateVoiceSearchHelper = function createVoiceSea
     }
   };
 
-  const start = (): void => {
+  const startListening = (): void => {
     recognition = new SpeechRecognitionAPI();
     if (!recognition) {
       return;
@@ -101,7 +101,7 @@ const createVoiceSearchHelper: CreateVoiceSearchHelper = function createVoiceSea
     recognition = undefined;
   };
 
-  const stop = (): void => {
+  const stopListening = (): void => {
     dispose();
     // Because `dispose` removes event listeners, `end` listener is not called.
     // So we're setting the `status` as `finished` here.
@@ -113,8 +113,8 @@ const createVoiceSearchHelper: CreateVoiceSearchHelper = function createVoiceSea
     getState,
     isBrowserSupported,
     isListening,
-    startListening: start,
-    stopListening: stop,
+    startListening,
+    stopListening,
     dispose,
   };
 };
