@@ -11,6 +11,7 @@ export type VoiceListeningState = {
   transcript: string;
   isSpeechFinal: boolean;
   errorCode?: string;
+  [key: string]: any;
 };
 
 export type VoiceSearchHelperParams = {
