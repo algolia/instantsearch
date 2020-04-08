@@ -3,9 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import { warning } from '../../../lib/utils';
-import connectBreadcrumb, {
-  BreadcrumbConnectorParams,
-} from '../connectBreadcrumb';
+import connectBreadcrumb from '../connectBreadcrumb';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 import {
