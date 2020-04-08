@@ -78,6 +78,8 @@ export type HitsPerPageWidget = WidgetFactory<
 
 const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetOptions) {
   const { container, items, cssClasses: userCssClasses = {}, transformItems } =
+    widgetOptions || ({} as typeof widgetOptions);
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
