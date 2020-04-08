@@ -1,37 +1,37 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
 
-   "apiReport": {
+  "apiReport": {
     "enabled": false
   },
 
-   "docModel": {
+  "docModel": {
     "enabled": false
   },
 
-   "tsdocMetadata": {
+  "tsdocMetadata": {
     "enabled": false
   },
 
-   "messages": {
+  "messages": {
     "compilerMessageReporting": {
       "default": {
         "logLevel": "warning"
       }
     },
 
-     "extractorMessageReporting": {
+    "extractorMessageReporting": {
       "default": {
         "logLevel": "warning",
         "addToApiReportFile": true
       },
 
-       "ae-missing-release-tag": {
+      "ae-missing-release-tag": {
         "logLevel": "none"
       }
     },
 
-     "tsdocMessageReporting": {
+    "tsdocMessageReporting": {
       "default": {
         "logLevel": "warning"
       }
