@@ -15,7 +15,7 @@ import {
   FacetRefinement,
   NumericRefinement,
 } from '../../lib/utils/getRefinements';
-import { Connector } from '../../types';
+import { Connector, TransformItems } from '../../types';
 
 export type ConnectorRefinement = {
   attribute: string;
@@ -71,12 +71,11 @@ export type CurrentRefinementsConnectorParams = {
    * @default `['query']`
    */
   excludedAttributes?: string[];
+
   /**
-   * Receives the items, and is called before displaying them.
-   * Should return a new array with the same shape as the original array.
-   * Useful for mapping over the items to transform, and remove or reorder them.
+   * Function to transform the items passed to the templates.
    */
-  transformItems?: (items: Item[]) => any;
+  transformItems?: TransformItems<Item>;
 };
 
 export type CurrentRefinementsRendererOptions = {

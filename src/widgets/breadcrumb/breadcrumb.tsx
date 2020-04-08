@@ -3,7 +3,9 @@
 import { h, render } from 'preact';
 import cx from 'classnames';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
-import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
+import connectBreadcrumb, {
+  BreadcrumbConnectorParams,
+} from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
@@ -11,6 +13,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
@@ -42,97 +45,88 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   );
 };
 
-/**
- * @typedef {Object} BreadcrumbCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element of the widget.
- * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element of the widget if there are no refinements.
- * @property {string|string[]} [list] CSS class to add to the list element.
- * @property {string|string[]} [item] CSS class to add to the items of the list. The items contains the link and the separator.
- * @property {string|string[]} [selectedItem] CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
- * @property {string|string[]} [separator] CSS class to add to the separator.
- * @property {string|string[]} [link] CSS class to add to the links in the items.
- */
+export type BreadcrumbCSSClasses = {
+  /**
+   * CSS class to add to the root element of the widget.
+   */
+  root?: string | string[];
 
-/**
- * @typedef {Object} BreadcrumbTemplates
- * @property {string|function(object):string} [home = 'Home'] Label of the breadcrumb's first element.
- * @property {string|function(object):string} [separator = '>'] Symbol used to separate the elements of the breadcrumb.
- */
+  /**
+   * CSS class to add to the root element of the widget if there are no refinements.
+   */
+  noRefinementRoot?: string | string[];
 
-/**
- * @typedef {Object} BreadcrumbWidgetOptions
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string[]} attributes Array of attributes to use to generate the breadcrumb.
- * @property {string} [separator = ' > '] The level separator used in the records.
- * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
- * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- */
+  /**
+   * CSS class to add to the list element.
+   */
+  list?: string | string[];
 
-/**
- * The breadcrumb widget is a secondary navigation scheme that allows the user to see where the current page is in relation to the facet's hierarchy.
- *
- * It reduces the number of actions a user needs to take in order to get to a higher-level page and improve the discoverability of the app or website's sections and pages.
- * It is commonly used for websites with a large amount of data organized into categories with subcategories.
- *
- * All attributes (lvl0, lvl1 in this case) must be declared as [attributes for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
- * Algolia settings.
- *
- * @requirements
- * Your objects must be formatted in a specific way to be
- * able to display a breadcrumb. Here's an example:
- *
- * ```javascript
- * {
- *   "objectID": "123",
- *   "name": "orange",
- *   "categories": {
- *     "lvl0": "fruits",
- *     "lvl1": "fruits > citrus"
- *   }
- * }
- * ```
- *
- * Each level must be specified entirely.
- * It's also possible to have multiple values per level, for instance:
- *
- * ```javascript
- * {
- *   "objectID": "123",
- *   "name": "orange",
- *   "categories": {
- *     "lvl0": ["fruits", "vitamins"],
- *     "lvl1": ["fruits > citrus", "vitamins > C"]
- *   }
- * }
- * ```
- * @type {WidgetFactory}
- * @devNovel Breadcrumb
- * @category navigation
- * @param {BreadcrumbWidgetOptions} $0 The Breadcrumb widget options.
- * @return {Widget} A new Breadcrumb widget instance.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.breadcrumb({
- *     container: '#breadcrumb',
- *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
- *     templates: { home: 'Home Page' },
- *     separator: ' / ',
- *     rootPath: 'Cameras & Camcorders > Digital Cameras',
- *   })
- * ]);
- */
+  /**
+   * CSS class to add to the items of the list. The items contains the link and the separator.
+   */
+  item?: string | string[];
 
-export default function breadcrumb({
-  container,
-  attributes,
-  separator,
-  rootPath = null,
-  transformItems,
-  templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
-} = {}) {
+  /**
+   * CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
+   */
+  selectedItem?: string | string[];
+
+  /**
+   * CSS class to add to the separator.
+   */
+  separator?: string | string[];
+
+  /**
+   * CSS class to add to the links in the items.
+   */
+  link?: string | string[];
+};
+
+export type BreadcrumbTemplates = {
+  /**
+   * Label of the breadcrumb's first element.
+   */
+  home?: string | ((value: any) => string);
+
+  /**
+   * Symbol used to separate the elements of the breadcrumb.
+   */
+  separator?: string | ((value: any) => string);
+};
+
+export type BreadcrumbWidgetOptions = {
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+
+  /**
+   * Templates to use for the widget.
+   */
+  templates?: BreadcrumbTemplates;
+
+  /**
+   * CSS classes to add to the wrapping elements.
+   */
+  cssClasses?: BreadcrumbCSSClasses;
+};
+
+export type BreadcrumbWidget = WidgetFactory<
+  BreadcrumbConnectorParams,
+  BreadcrumbWidgetOptions
+>;
+
+const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetOptions) {
+  const {
+    container,
+    attributes,
+    separator,
+    rootPath,
+    transformItems,
+    templates = defaultTemplates,
+    cssClasses: userCssClasses = {},
+  } = widgetOptions || ({} as typeof widgetOptions);
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -170,4 +164,6 @@ export default function breadcrumb({
   );
 
   return makeBreadcrumb({ attributes, separator, rootPath, transformItems });
-}
+};
+
+export default breadcrumb;

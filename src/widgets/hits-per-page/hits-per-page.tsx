@@ -76,14 +76,8 @@ export type HitsPerPageWidget = WidgetFactory<
   HitsPerPageWidgetOptions
 >;
 
-export default (function hitsPerPage(
-  {
-    container,
-    items,
-    cssClasses: userCssClasses = {},
-    transformItems,
-  } = {} as HitsPerPageConnectorParams & HitsPerPageWidgetOptions
-) {
+const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetOptions) {
+  const { container, items, cssClasses: userCssClasses = {}, transformItems } =
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -106,4 +100,6 @@ export default (function hitsPerPage(
   );
 
   return makeHitsPerPage({ items, transformItems });
-} as HitsPerPageWidget);
+};
+
+export default hitsPerPage;
