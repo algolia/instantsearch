@@ -1,3 +1,17 @@
+# [4.4.0](https://github.com/algolia/instantsearch.js/compare/v4.3.1...v4.4.0) (2020-04-08)
+
+
+### Bug Fixes
+
+* **setUiState:** display experimental warning ([#4373](https://github.com/algolia/instantsearch.js/issues/4373)) ([7ec38f3](https://github.com/algolia/instantsearch.js/commit/7ec38f394fc25ec17e6472a14a702455a46bc9f0))
+
+
+### Features
+
+* introduce controlled mode ([#4362](https://github.com/algolia/instantsearch.js/issues/4362)) ([4953324](https://github.com/algolia/instantsearch.js/commit/4953324ac8a3af4c6a8be411ca9e7cc673ee6561))
+
+
+
 ## [4.3.1](https://github.com/algolia/instantsearch.js/compare/v4.3.0...v4.3.1) (2020-03-06)
 
 This versions fixes a [Cross-Site Scripting](https://en.wikipedia.org/wiki/Cross-site_scripting) (XSS) vulnerability ([#4344](https://github.com/algolia/instantsearch.js/issues/4344)) when using the [`refinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/) widget when relying on its default [`item`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#widget-param-item) template and [routing](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-routing). **We recommend all users to upgrade to this version**. We now escape the `refinementList` `item` template by default, which avoids HTML to be injected. If ever you were relying on this behavior, **which we do not recommend**, you can copy the [previous `item` template](https://github.com/algolia/instantsearch.js/blob/933d9ffb3c0a396a047eeb4b44733b17aa31d081/src/widgets/refinement-list/defaultTemplates.js#L2-L9) into your widget.
