@@ -93,7 +93,6 @@ const suit = component('GeoSearch');
  *
  * Don't forget to explicitly set the `height` of the map container (default class `.ais-geo-search--map`), otherwise it won't be shown (it's a requirement of Google Maps).
  *
- * @type {WidgetFactory}
  * @devNovel GeoSearch
  * @param {GeoSearchWidgetOptions} $0 Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
