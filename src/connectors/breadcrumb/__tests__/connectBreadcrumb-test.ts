@@ -552,7 +552,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: state => (state as unknown) as string,
+        createURL: state => JSON.stringify(state),
       })
     );
 
@@ -585,12 +585,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         ]),
         state: helper.state,
         helper,
-        createURL: state => (state as unknown) as string,
+        createURL: state => JSON.stringify(state),
       })
     );
     const createURL = rendering.mock.calls[1][0].createURL;
     expect(helper.state.hierarchicalFacetsRefinements).toEqual({});
-    const stateForURL = createURL('Decoration > Candle holders & candles');
+    const stateForURL = JSON.parse(
+      createURL('Decoration > Candle holders & candles')
+    );
     expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
       category: ['Decoration > Candle holders & candles'],
     });
@@ -617,7 +619,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: state => (state as unknown) as string,
+        createURL: state => JSON.stringify(state),
       })
     );
 
@@ -751,18 +753,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         ]),
         state: helper.state,
         helper,
-        createURL: state => (state as unknown) as string,
+        createURL: state => JSON.stringify(state),
       })
     );
     const { createURL, items } = rendering.mock.calls[1][0];
     const secondItemValue = items[1].value;
 
-    const stateForURL = createURL(secondItemValue);
+    const stateForURL = JSON.parse(createURL(secondItemValue));
 
     expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
       'hierarchicalCategories.lvl0': ['Cameras & Camcorders > Digital Cameras'],
     });
-    const stateForHome = createURL(null);
+    const stateForHome = JSON.parse(createURL(null));
     expect(stateForHome.hierarchicalFacetsRefinements).toEqual({
       'hierarchicalCategories.lvl0': [],
     });
