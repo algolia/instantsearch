@@ -149,8 +149,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             name: 'country',
             attributes: ['country', 'sub_country'],
             separator: ' > ',
-            // @ts-ignore
-            rootPath: null,
           },
         ],
       });
@@ -168,7 +166,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
           name: 'country',
           attributes: ['country', 'sub_country'],
           separator: ' > ',
-          rootPath: null,
         },
         {
           name: 'category',
