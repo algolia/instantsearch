@@ -75,7 +75,7 @@ export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
 /**
  * Transforms the given items.
  */
-export type TransformItems<TItem> = (objects: TItem[]) => TItem[];
+export type TransformItems<TItem> = (items: TItem[]) => TItem[];
 
 /**
  * Creates the URL for the given value.
