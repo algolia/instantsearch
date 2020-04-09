@@ -66,7 +66,7 @@ export type BreadcrumbRendererOptions = {
   refine: (value: BreadcrumbConnectorParamsItem['value']) => void;
 
   /**
-   * @internal
+   * True if refinement can be applied.
    */
   canRefine: boolean;
 };
