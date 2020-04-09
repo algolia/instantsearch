@@ -13,7 +13,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
-import { WidgetFactory } from '../../types';
+import { WidgetFactory, Template } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');
@@ -86,12 +86,12 @@ export type BreadcrumbTemplates = {
   /**
    * Label of the breadcrumb's first element.
    */
-  home?: string | ((value: any) => string);
+  home?: Template;
 
   /**
    * Symbol used to separate the elements of the breadcrumb.
    */
-  separator?: string | ((value: any) => string);
+  separator?: Template;
 };
 
 export type BreadcrumbWidgetOptions = {
