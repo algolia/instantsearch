@@ -2,6 +2,7 @@
 
 /* eslint-disable import/no-commonjs, no-console */
 
+const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
 
@@ -20,33 +21,42 @@ const extractorConfigPath = path.resolve(pkgDir, `api-extractor.json`);
 const extractorConfig = ExtractorConfig.loadFileAndPrepare(extractorConfigPath);
 
 const publicExports = [
-  'index.d.ts',
-  // 'components/index.d.ts' -> does not contains index.d.ts yet
-  'connectors/index.d.ts',
-  // 'lib/main.d.ts', -> Api extrator "import * as ___ from ___;" is not supported yet for local files
-  'middleware/index.d.ts',
-  'types/index.d.ts',
-  'widgets/index.d.ts', //  -> It does not compile as WidgetFactory is not imported in all files
+  '',
+  // 'components' -> does not conns index.d.ts yet
+  'connectors',
+  // 'lib', -> Api extrator "import * as ___ from ___;" is not supported yet for local files
+  'middleware',
+  'types',
+  'widgets', //  -> It does not compile as WidgetFactory is not imported in all files
 ];
 
-const validateExport = publicExport => {
-  extractorConfig.mainEntryPointFilePath = `${pkgDir}/es/${publicExport}`;
-  console.log(
-    `Validating type definitions of: ${extractorConfig.mainEntryPointFilePath}`
+const tempSingleFileApiContentRelativePath = '.temp/index.d.ts';
+const tempSingleFileApiContent = publicExports
+  .map(publicExport => `../es/${publicExport}`)
+  .map(exportedFile => {
+    return `export * from '${exportedFile}';`;
+  })
+  .join('\r\n');
+
+fs.writeFileSync(
+  tempSingleFileApiContentRelativePath,
+  tempSingleFileApiContent
+);
+extractorConfig.mainEntryPointFilePath = `${pkgDir}/${tempSingleFileApiContentRelativePath}`;
+
+console.log(
+  `Validating type definitions of: ${extractorConfig.mainEntryPointFilePath}`
+);
+const result = Extractor.invoke(extractorConfig, {
+  localBuild: true,
+  showVerboseMessages: true,
+});
+
+if (!result.succeeded) {
+  console.error(
+    `API Extractor completed with ${result.errorCount} errors` +
+      ` and ${result.warningCount} warnings`
   );
-  const result = Extractor.invoke(extractorConfig, {
-    localBuild: true,
-    showVerboseMessages: true,
-  });
 
-  if (!result.succeeded) {
-    console.error(
-      `API Extractor completed with ${result.errorCount} errors` +
-        ` and ${result.warningCount} warnings`
-    );
-
-    process.exitCode = 1;
-  }
-};
-
-publicExports.forEach(validateExport);
+  process.exitCode = 1;
+}

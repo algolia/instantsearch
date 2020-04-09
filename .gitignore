@@ -10,6 +10,7 @@ yarn-error.log
 /dist
 /cjs
 /es
+/.temp
 
 # Generated files
 /docs
