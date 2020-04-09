@@ -2208,33 +2208,33 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@microsoft/api-extractor-model@7.7.9":
-  version "7.7.9"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor-model/-/api-extractor-model-7.7.9.tgz#9a6ded46f63b6729b1c6630f6ef4e20c1396e177"
-  integrity sha512-WPN99HNlOYz9+pPC+tk7yoa2h1ueEVuYNhcw/5t9rQSHgHbxW6QVM8QPn/caGJ9pHVDzB8+0ySNX+1IZCpidBw==
+"@microsoft/api-extractor-model@7.7.11":
+  version "7.7.11"
+  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor-model/-/api-extractor-model-7.7.11.tgz#9dfc5425f4a6a2b6b1ebc39332ae8101ab8da36a"
+  integrity sha512-Kf3RytYDq7sP4ASaaA9IcvaOPbVj1Xj34E2Wxd9DznI7sG4HzcpoOGmxaZHCzyYVh7wfAaAlvcXf3SV+djhNZw==
   dependencies:
-    "@microsoft/tsdoc" "0.12.14"
-    "@rushstack/node-core-library" "3.19.5"
+    "@microsoft/tsdoc" "0.12.19"
+    "@rushstack/node-core-library" "3.19.7"
 
-"@microsoft/api-extractor@7.7.10":
-  version "7.7.10"
-  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.7.10.tgz#cfc8db27ecfe54d07c504fc735e6169ec77aff8e"
-  integrity sha512-NT31W07KoPwIUrrLnASqHp+/cX6DSUMxYCy/v/qM6GEWRbsyWBUT39kOIM6Fl6DS5VFpOroTgL9oGz8blraYsA==
+"@microsoft/api-extractor@7.7.13":
+  version "7.7.13"
+  resolved "https://registry.yarnpkg.com/@microsoft/api-extractor/-/api-extractor-7.7.13.tgz#7ee70978825a36d294d26e50b5d888ca3789d1b0"
+  integrity sha512-7+EGunGd7OSfDxZl4aDI4qMWG98+I84vTryNadti+IfgpB9IyhJtgA4r3dCG7hewTwKACBhi5aPqpH2C7l/30A==
   dependencies:
-    "@microsoft/api-extractor-model" "7.7.9"
-    "@microsoft/tsdoc" "0.12.14"
-    "@rushstack/node-core-library" "3.19.5"
-    "@rushstack/ts-command-line" "4.3.12"
+    "@microsoft/api-extractor-model" "7.7.11"
+    "@microsoft/tsdoc" "0.12.19"
+    "@rushstack/node-core-library" "3.19.7"
+    "@rushstack/ts-command-line" "4.3.14"
     colors "~1.2.1"
     lodash "~4.17.15"
     resolve "1.8.1"
     source-map "~0.6.1"
     typescript "~3.7.2"
 
-"@microsoft/tsdoc@0.12.14":
-  version "0.12.14"
-  resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.12.14.tgz#0e0810a0a174e50e22dfe8edb30599840712f22d"
-  integrity sha512-518yewjSga1jLdiLrcmpMFlaba5P+50b0TWNFUpC+SL9Yzf0kMi57qw+bMl+rQ08cGqH1vLx4eg9YFUbZXgZ0Q==
+"@microsoft/tsdoc@0.12.19":
+  version "0.12.19"
+  resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.12.19.tgz#2173ccb92469aaf62031fa9499d21b16d07f9b57"
+  integrity sha512-IpgPxHrNxZiMNUSXqR1l/gePKPkfAmIKoDRP9hp7OwjU29ZR8WCJsOJ8iBKgw0Qk+pFwR+8Y1cy8ImLY6e9m4A==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -2385,10 +2385,10 @@
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
 
-"@rushstack/node-core-library@3.19.5":
-  version "3.19.5"
-  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.19.5.tgz#d6a303bc6feaa9eaf1272dbcb3b12d05894783e2"
-  integrity sha512-dWnA5n7RZNFhW0XeovTSA+K86dy6Nt+kqwxnW1hBZnreIm6vILAI4noOLF1N3bu5De6GC7QIwmBIu2L4MaxZrw==
+"@rushstack/node-core-library@3.19.7":
+  version "3.19.7"
+  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.19.7.tgz#8d8a193fd6f99536c92dd797ab50fd5fcb7630ea"
+  integrity sha512-gKE/OXH5GAj8yJ1kEyRW68UekJernilZ3QTRgmQ0MUHBCQmtZ9Q6T5PQ1sVbcL4teH8BMdpZeFy1DKnHs8h3PA==
   dependencies:
     "@types/node" "10.17.13"
     colors "~1.2.1"
@@ -2398,10 +2398,10 @@
     timsort "~0.3.0"
     z-schema "~3.18.3"
 
-"@rushstack/ts-command-line@4.3.12":
-  version "4.3.12"
-  resolved "https://registry.yarnpkg.com/@rushstack/ts-command-line/-/ts-command-line-4.3.12.tgz#35f4e96f5f6870d51dac0186da3992e658d97cf0"
-  integrity sha512-x+AHiWVy0Wx6OSFlzHmXkm2Z23kn4OVMd8/57hZpzeAn1iAIILGFW1L7uWQaAhnt+mZCFqgwRpggQbPQuZOT7w==
+"@rushstack/ts-command-line@4.3.14":
+  version "4.3.14"
+  resolved "https://registry.yarnpkg.com/@rushstack/ts-command-line/-/ts-command-line-4.3.14.tgz#5d7a437d4e9c564ff1b8e876215fca96c74858a1"
+  integrity sha512-YJZIyKvkm3f6ZdKSfMntHS9542Y2mmMWzaiPPoXxLFZntKxEIDE3WfUNlvOSo3yK4fNd09Tz3hfvTivQNHSiKQ==
   dependencies:
     "@types/argparse" "1.0.33"
     argparse "~1.0.9"
