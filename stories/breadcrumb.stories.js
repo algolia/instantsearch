@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { connectHierarchicalMenu } from '../src/connectors';
 import { noop } from '../src/lib/utils';
+import { breadcrumb } from '../src/widgets';
 
 const virtualHierarchicalMenu = (args = {}) =>
   connectHierarchicalMenu(
@@ -20,14 +21,14 @@ storiesOf('Metadata|Breadcrumb', module)
   .add(
     'default',
     withHits(
-      ({ search, container, instantsearch }) => {
-        const breadcrumb = document.createElement('div');
-        container.appendChild(breadcrumb);
+      ({ search, container }) => {
+        const breadcrumbDiv = document.createElement('div');
+        container.appendChild(breadcrumbDiv);
 
         search.addWidgets([
           virtualHierarchicalMenu(),
 
-          instantsearch.widgets.breadcrumb({
+          breadcrumb({
             container: breadcrumb,
             attributes: [
               'hierarchicalCategories.lvl0',
@@ -53,14 +54,14 @@ storiesOf('Metadata|Breadcrumb', module)
   .add(
     'with custom separators',
     withHits(
-      ({ search, container, instantsearch }) => {
-        const breadcrumb = document.createElement('div');
-        container.appendChild(breadcrumb);
+      ({ search, container }) => {
+        const breadcrumbDiv = document.createElement('div');
+        container.appendChild(breadcrumbDiv);
 
         search.addWidgets([
           virtualHierarchicalMenu(),
 
-          instantsearch.widgets.breadcrumb({
+          breadcrumb({
             container: breadcrumb,
             attributes: [
               'hierarchicalCategories.lvl0',
@@ -89,14 +90,14 @@ storiesOf('Metadata|Breadcrumb', module)
   .add(
     'with custom home label',
     withHits(
-      ({ search, container, instantsearch }) => {
-        const breadcrumb = document.createElement('div');
-        container.appendChild(breadcrumb);
+      ({ search, container }) => {
+        const breadcrumbDiv = document.createElement('div');
+        container.appendChild(breadcrumbDiv);
 
         search.addWidgets([
           virtualHierarchicalMenu(),
 
-          instantsearch.widgets.breadcrumb({
+          breadcrumb({
             container: breadcrumb,
             attributes: [
               'hierarchicalCategories.lvl0',
@@ -126,14 +127,14 @@ storiesOf('Metadata|Breadcrumb', module)
     'with root path',
     withHits(
       ({ search, container, instantsearch }) => {
-        const breadcrumb = document.createElement('div');
+        const breadcrumbDiv = document.createElement('div');
         const hierarchicalMenu = document.createElement('div');
 
-        container.appendChild(breadcrumb);
+        container.appendChild(breadcrumbDiv);
         container.appendChild(hierarchicalMenu);
 
         search.addWidgets([
-          instantsearch.widgets.breadcrumb({
+          breadcrumb({
             container: breadcrumb,
             attributes: [
               'hierarchicalCategories.lvl0',
@@ -171,13 +172,13 @@ storiesOf('Metadata|Breadcrumb', module)
     'with hierarchical menu',
     withHits(
       ({ search, container, instantsearch }) => {
-        const breadcrumb = document.createElement('div');
-        container.appendChild(breadcrumb);
+        const breadcrumbDiv = document.createElement('div');
+        container.appendChild(breadcrumbDiv);
         const hierarchicalMenu = document.createElement('div');
         container.appendChild(hierarchicalMenu);
 
         search.addWidgets([
-          instantsearch.widgets.breadcrumb({
+          breadcrumb({
             container: breadcrumb,
             attributes: [
               'hierarchicalCategories.lvl0',
@@ -212,14 +213,14 @@ storiesOf('Metadata|Breadcrumb', module)
   .add(
     'with transformed items',
     withHits(
-      ({ search, container, instantsearch }) => {
-        const breadcrumb = document.createElement('div');
-        container.appendChild(breadcrumb);
+      ({ search, container }) => {
+        const breadcrumbDiv = document.createElement('div');
+        container.appendChild(breadcrumbDiv);
 
         search.addWidgets([
           virtualHierarchicalMenu(),
 
-          instantsearch.widgets.breadcrumb({
+          breadcrumb({
             container: breadcrumb,
             attributes: [
               'hierarchicalCategories.lvl0',
@@ -250,11 +251,11 @@ storiesOf('Metadata|Breadcrumb', module)
   .add(
     'with add/remove',
     withHits(
-      ({ search, container, instantsearch }) => {
+      ({ search, container }) => {
         search.addWidgets([virtualHierarchicalMenu()]);
 
         withLifecycle(search, container, node =>
-          instantsearch.widgets.breadcrumb({
+          breadcrumb({
             container: node,
             attributes: [
               'hierarchicalCategories.lvl0',
