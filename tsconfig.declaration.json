@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
+    "stripInternal": true,
     "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true,
