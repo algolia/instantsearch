@@ -30,23 +30,16 @@ const publicExports = [
   'widgets', //  -> It does not compile as WidgetFactory is not imported in all files
 ];
 
-const tempSingleFileApiContentRelativePath = '.temp/index.d.ts';
-const tempSingleFileApiContent = publicExports
-  .map(publicExport => `../es/${publicExport}`)
-  .map(exportedFile => {
-    return `export * from '${exportedFile}';`;
-  })
-  .join('\r\n');
-
 fs.writeFileSync(
-  tempSingleFileApiContentRelativePath,
-  tempSingleFileApiContent
+  '.temp/index.d.ts',
+  publicExports
+    .map(publicExport => `../es/${publicExport}`)
+    .map(exportedFile => {
+      return `export * from '${exportedFile}';`;
+    })
+    .join('\r\n')
 );
-extractorConfig.mainEntryPointFilePath = `${pkgDir}/${tempSingleFileApiContentRelativePath}`;
 
-console.log(
-  `Validating type definitions of: ${extractorConfig.mainEntryPointFilePath}`
-);
 const result = Extractor.invoke(extractorConfig, {
   localBuild: true,
   showVerboseMessages: true,
