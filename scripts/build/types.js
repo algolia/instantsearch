@@ -10,15 +10,10 @@ shell.exec(
   `tsc -p tsconfig.declaration.json --outDir es/; mv es/index.es.d.ts es/index.d.ts`
 );
 
-const pkgDir = path.resolve('');
-
 console.log();
 console.log(`Validating definitions...`);
 
 const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
-
-const extractorConfigPath = path.resolve(pkgDir, `api-extractor.json`);
-const extractorConfig = ExtractorConfig.loadFileAndPrepare(extractorConfigPath);
 
 const publicExports = [
   '',
@@ -30,14 +25,21 @@ const publicExports = [
   'widgets', //  -> It does not compile as WidgetFactory is not imported in all files
 ];
 
+shell.cd(__dirname);
+shell.mkdir('-p', '.temp');
+
 fs.writeFileSync(
   '.temp/index.d.ts',
   publicExports
-    .map(publicExport => `../es/${publicExport}`)
+    .map(publicExport => `../../../es/${publicExport}`)
     .map(exportedFile => {
       return `export * from '${exportedFile}';`;
     })
     .join('\r\n')
+);
+
+const extractorConfig = ExtractorConfig.loadFileAndPrepare(
+  path.resolve(path.join(__dirname, 'api-extractor.json'))
 );
 
 const result = Extractor.invoke(extractorConfig, {
