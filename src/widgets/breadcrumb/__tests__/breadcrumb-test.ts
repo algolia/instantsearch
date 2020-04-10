@@ -1,5 +1,12 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import breadcrumb from '../breadcrumb';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import {
+  createRenderOptions,
+  createInitOptions,
+} from '../../../../test/mock/createWidget';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -24,6 +31,7 @@ describe('breadcrumb()', () => {
     it('throws without `container`', () => {
       expect(() => {
         breadcrumb({
+          // @ts-ignore
           container: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -99,15 +107,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         transformItems: items =>
           items.map(item => ({ ...item, transformed: true })),
       });
-      widget.init({
-        helper,
-        instantSearchInstance: {},
-      });
-      widget.render({
-        results,
-        state,
-        instantSearchInstance: {},
-      });
+      widget.init!(
+        createInitOptions({
+          helper,
+        })
+      );
+      widget.render!(
+        createRenderOptions({
+          results,
+          state,
+        })
+      );
 
       const [firstRender] = render.mock.calls;
 

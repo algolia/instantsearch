@@ -16,6 +16,7 @@ import {
   SearchClient,
   Widget,
   UiState,
+  CreateURL,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
@@ -136,7 +137,7 @@ class InstantSearch extends EventEmitter {
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
-  public _createURL: (nextState: UiState) => string;
+  public _createURL: CreateURL<UiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];

@@ -71,3 +71,13 @@ export type Connector<TRendererOptions, TConnectorParams> = <TWidgetParams>(
    */
   unmountFn?: Unmounter
 ) => WidgetFactory<TConnectorParams, TWidgetParams>;
+
+/**
+ * Transforms the given items.
+ */
+export type TransformItems<TItem> = (items: TItem[]) => TItem[];
+
+/**
+ * Creates the URL for the given value.
+ */
+export type CreateURL<TValue> = (value: TValue) => string;
