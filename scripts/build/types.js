@@ -20,7 +20,8 @@ const publicExports = [
   // 'components' -> does not contains index.d.ts yet
   'connectors',
   // 'lib', -> Api extrator "import * as ___ from ___;" is not supported yet for local files
-  'middleware',
+  // 'middleware',
+  'helpers',
   'types',
   'widgets', //  -> It does not compile as WidgetFactory is not imported in all files
 ];
