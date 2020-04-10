@@ -6,7 +6,7 @@ import {
   noop,
 } from '../../lib/utils';
 import { SearchResults } from 'algoliasearch-helper';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import { Connector, TransformItems, CreateURL, Refine } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'breadcrumb',
@@ -63,7 +63,7 @@ export type BreadcrumbRendererOptions = {
   /**
    * Sets the path of the hierarchical filter and triggers a new search.
    */
-  refine: (value: BreadcrumbConnectorParamsItem['value']) => void;
+  refine: Refine<BreadcrumbConnectorParamsItem['value']>;
 
   /**
    * True if refinement can be applied.

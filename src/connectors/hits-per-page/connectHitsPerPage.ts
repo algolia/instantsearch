@@ -6,7 +6,7 @@ import {
 } from '../../lib/utils';
 
 import { SearchParameters } from 'algoliasearch-helper';
-import { Connector, TransformItems, CreateURL } from '../../types';
+import { Connector, TransformItems, CreateURL, Refine } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',

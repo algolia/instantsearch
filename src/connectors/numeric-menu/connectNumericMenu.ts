@@ -4,7 +4,7 @@ import {
   isFiniteNumber,
   noop,
 } from '../../lib/utils';
-import { Connector, CreateURL } from '../../types';
+import { Connector, CreateURL, Refine } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
