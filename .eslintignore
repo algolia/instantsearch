@@ -1,10 +1,10 @@
 /cjs
 /es
+/scripts/build/.temp
 /website
 dist
 .cache
 node_modules/
-.temp/
 
 # TODO: don't ignore these examples once they're updated
 /examples/calendar-widget

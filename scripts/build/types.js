@@ -17,7 +17,7 @@ const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 
 const publicExports = [
   '',
-  // 'components' -> does not conns index.d.ts yet
+  // 'components' -> does not contains index.d.ts yet
   'connectors',
   // 'lib', -> Api extrator "import * as ___ from ___;" is not supported yet for local files
   'middleware',
