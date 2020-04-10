@@ -4,7 +4,7 @@ import {
   isFiniteNumber,
   noop,
 } from '../../lib/utils';
-import { Connector } from '../../types';
+import { Connector, CreateURL } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -72,7 +72,7 @@ export type NumericMenuRendererOptions = {
   /**
    * Creates URLs for the next state, the string is the name of the selected option
    */
-  createURL: (value: Item['value']) => string;
+  createURL: CreateURL<Item['value']>;
   /**
    * `true` if the last search contains no result
    */
