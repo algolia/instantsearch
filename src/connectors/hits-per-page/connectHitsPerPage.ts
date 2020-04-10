@@ -6,7 +6,7 @@ import {
 } from '../../lib/utils';
 
 import { SearchParameters } from 'algoliasearch-helper';
-import { Connector } from '../../types';
+import { Connector, TransformItems, CreateURL } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits-per-page',
@@ -58,9 +58,7 @@ export type HitsPerPageConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: <TItem extends HitsPerPageConnectorParamsItem>(
-    objects: TItem[]
-  ) => TItem[];
+  transformItems?: TransformItems<HitsPerPageConnectorParamsItem>;
 };
 
 export type HitsPerPageRendererOptions = {
@@ -74,7 +72,7 @@ export type HitsPerPageRendererOptions = {
    *
    * @internal
    */
-  createURL: (value: HitsPerPageConnectorParamsItem['value']) => string;
+  createURL: CreateURL<HitsPerPageConnectorParamsItem['value']>;
 
   /**
    * Sets the number of hits per page and triggers a search.

@@ -32,6 +32,7 @@ export type BreadcrumbProps = {
   };
   createURL(value: string | undefined): string;
   refine(value: string | undefined): void;
+  canRefine?: boolean;
 };
 
 const Breadcrumb = ({
