@@ -81,3 +81,8 @@ export type TransformItems<TItem> = (items: TItem[]) => TItem[];
  * Creates the URL for the given value.
  */
 export type CreateURL<TValue> = (value: TValue) => string;
+
+/**
+ * Trigers a search with the given value.
+ */
+export type Refine<TValue> = (value: TValue) => void;

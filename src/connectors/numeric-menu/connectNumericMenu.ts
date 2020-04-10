@@ -62,8 +62,6 @@ export type NumericMenuConnectorParams = {
   transformItems?: ParamTransformItems;
 };
 
-type Refine = (facetValue: string) => void;
-
 export type NumericMenuRendererOptions = {
   /**
    * The list of available choices
@@ -80,7 +78,7 @@ export type NumericMenuRendererOptions = {
   /**
    * Sets the selected value and trigger a new search
    */
-  refine: Refine;
+  refine: Refine<string>;
 };
 
 export type NumericMenuConnector = Connector<
@@ -112,7 +110,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     }
 
     type ConnectorState = {
-      refine?: Refine;
+      refine?: Refine<string>;
       createURL?: (state: SearchParameters) => (facetValue: string) => string;
     };
 

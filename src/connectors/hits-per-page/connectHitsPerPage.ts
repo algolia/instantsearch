@@ -77,7 +77,7 @@ export type HitsPerPageRendererOptions = {
   /**
    * Sets the number of hits per page and triggers a search.
    */
-  refine: (value: number) => void;
+  refine: Refine<number>;
 
   /**
    * Indicates whether or not the search has results.

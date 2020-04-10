@@ -6,7 +6,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
-import { Hits, Connector } from '../../types';
+import { Hits, Connector, Refine } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
@@ -51,7 +51,7 @@ export type AutocompleteRendererOptions = {
   /**
    * Searches into the indices with the provided query.
    */
-  refine: (query: string) => void;
+  refine: Refine<string>;
 };
 
 export type AutocompleteConnector = Connector<
@@ -94,7 +94,7 @@ search.addWidgets([
     );
 
     type ConnectorState = {
-      refine?: (query: string) => void;
+      refine?: Refine<string>;
     };
 
     const connectorState: ConnectorState = {};

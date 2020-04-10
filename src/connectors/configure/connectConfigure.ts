@@ -3,18 +3,13 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import { Connector } from '../../types';
+import { Connector, Refine } from '../../types';
 import {
   createDocumentationMessageGenerator,
   isPlainObject,
   mergeSearchParameters,
   noop,
 } from '../../lib/utils';
-
-/**
- * Refine the given search parameters.
- */
-type Refine = (searchParameters: PlainSearchParameters) => void;
 
 export type ConfigureConnectorParams = {
   /**
@@ -28,7 +23,7 @@ export type ConfigureRendererOptions = {
   /**
    * Refine the given search parameters.
    */
-  refine: Refine;
+  refine: Refine<PlainSearchParameters>;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -71,12 +66,14 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
     }
 
     type ConnectorState = {
-      refine?: Refine;
+      refine?: Refine<PlainSearchParameters>;
     };
 
     const connectorState: ConnectorState = {};
 
-    function refine(helper: AlgoliaSearchHelper): Refine {
+    function refine(
+      helper: AlgoliaSearchHelper
+    ): Refine<PlainSearchParameters> {
       return (searchParameters: PlainSearchParameters) => {
         // Merge new `searchParameters` with the ones set from other widgets
         const actualState = getInitialSearchParameters(

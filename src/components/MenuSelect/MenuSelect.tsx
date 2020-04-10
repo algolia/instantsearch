@@ -4,6 +4,7 @@ import { h } from 'preact';
 import cx from 'classnames';
 import { find } from '../../lib/utils';
 import Template from '../Template/Template';
+import { Refine } from '../../types';
 
 type MenuSelectTemplates = {
   defaultOption: string;
@@ -37,7 +38,7 @@ type Props = {
     option: string;
   };
   items: MenuItem[];
-  refine: (value: MenuItem['value']) => void;
+  refine: Refine<MenuItem['value']>;
   templateProps: {
     templates: MenuSelectTemplates;
   };
