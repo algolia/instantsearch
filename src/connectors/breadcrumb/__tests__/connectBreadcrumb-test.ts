@@ -185,6 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             name: 'category',
             attributes: ['category', 'sub_category'],
             separator: ' > ',
+            // @TODO Add missing type to js helper
             // @ts-ignore
             rootPath: null,
           },
