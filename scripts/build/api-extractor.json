@@ -26,6 +26,10 @@
         "addToApiReportFile": true
       },
 
+      "ae-internal-missing-underscore": {
+        "logLevel": "none"
+      },
+
       "ae-missing-release-tag": {
         "logLevel": "none"
       }
@@ -33,11 +37,11 @@
 
     "tsdocMessageReporting": {
       "default": {
-        "logLevel": "warning"
+        "logLevel": "none"
       }
     }
   },
-  "mainEntryPointFilePath": "./global.d.ts",
+  "mainEntryPointFilePath": ".temp/index.d.ts",
   "dtsRollup": {
     "enabled": false
   }
