@@ -2,6 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
+import { configure } from '../src/widgets';
 
 storiesOf('Results|Hits', module)
   .add(
@@ -61,7 +62,7 @@ storiesOf('Results|Hits', module)
     'with snippet function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        instantsearch.widgets.configure({
+        configure({
           attributesToSnippet: ['name', 'description'],
         }),
       ]);
@@ -91,7 +92,7 @@ storiesOf('Results|Hits', module)
     'with snippet helper',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
-        instantsearch.widgets.configure({
+        configure({
           attributesToSnippet: ['name', 'description'],
         }),
       ]);
@@ -113,7 +114,7 @@ storiesOf('Results|Hits', module)
     withHits(
       ({ search, container, instantsearch }) => {
         search.addWidgets([
-          instantsearch.widgets.configure({
+          configure({
             attributesToSnippet: ['name', 'description'],
             clickAnalytics: true,
           }),
@@ -146,7 +147,7 @@ storiesOf('Results|Hits', module)
     withHits(
       ({ search, container, instantsearch }) => {
         search.addWidgets([
-          instantsearch.widgets.configure({
+          configure({
             attributesToSnippet: ['name', 'description'],
             clickAnalytics: true,
           }),
@@ -159,7 +160,7 @@ storiesOf('Results|Hits', module)
               item: `
               <h4>{{name}}</h4>
               <button {{#helpers.insights}} {
-               "method": "clickedObjectIDsAfterSearch", 
+               "method": "clickedObjectIDsAfterSearch",
                "payload": { "eventName": "Add to cart" }
               } {{/helpers.insights}}>
                 Add to cart

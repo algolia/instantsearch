@@ -1,5 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
+import { connectAutocomplete } from '../src/connectors';
+import { configure } from '../src/widgets';
 
 storiesOf('Basics|Autocomplete', module).add(
   'default',
@@ -8,7 +10,7 @@ storiesOf('Basics|Autocomplete', module).add(
 
     container.appendChild(instantSearchAutocomplete);
 
-    const customAutocomplete = instantsearch.connectors.connectAutocomplete(
+    const customAutocomplete = connectAutocomplete<{ container: HTMLElement }>(
       (renderOptions, isFirstRender) => {
         const {
           indices,
@@ -30,8 +32,10 @@ storiesOf('Basics|Autocomplete', module).add(
           widgetParams.container.appendChild(list);
         }
 
-        widgetParams.container.querySelector('input').value = currentRefinement;
-        widgetParams.container.querySelector('ul').innerHTML = indices
+        widgetParams.container.querySelector(
+          'input'
+        )!.value = currentRefinement;
+        widgetParams.container.querySelector('ul')!.innerHTML = indices
           .map(
             ({ indexName, hits }) => `
 <li>
@@ -54,7 +58,7 @@ storiesOf('Basics|Autocomplete', module).add(
       instantsearch.widgets
         .index({ indexName: 'instant_search_price_asc' })
         .addWidgets([
-          instantsearch.widgets.configure({
+          configure({
             hitsPerPage: 3,
           }),
 
@@ -65,7 +69,7 @@ storiesOf('Basics|Autocomplete', module).add(
           instantsearch.widgets
             .index({ indexName: 'instant_search_rating_asc' })
             .addWidgets([
-              instantsearch.widgets.configure({
+              configure({
                 hitsPerPage: 2,
               }),
             ]),
