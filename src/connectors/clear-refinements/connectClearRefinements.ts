@@ -71,6 +71,7 @@ export type ClearRefinementsConnector = Connector<
   ClearRefinementsRendererOptions,
   ClearRefinementsConnectorParams
 >;
+
 const connectClearRefinements: ClearRefinementsConnector = function connectClearRefinements(
   renderFn,
   unmountFn = noop
