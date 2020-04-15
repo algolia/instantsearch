@@ -7,73 +7,83 @@ import {
   uniq,
   mergeSearchParameters,
 } from '../../lib/utils';
+import { TransformItems, CreateURL, Connector } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
   connector: true,
 });
 
-/**
- * @typedef {Object} CustomClearRefinementsWidgetOptions
- * @property {string[]} [includedAttributes = []] The attributes to include in the refinements to clear (all by default). Cannot be used with `excludedAttributes`.
- * @property {string[]} [excludedAttributes = ['query']] The attributes to exclude from the refinements to clear. Cannot be used with `includedAttributes`.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
+export type ClearRefinementsConnectorParamsItem = {
+  /**
+   * Label to display in the option.
+   */
+  label: string;
 
-/**
- * @typedef {Object} ClearRefinementsRenderingOptions
- * @property {function} refine Triggers the clear of all the currently refined values.
- * @property {boolean} hasRefinements Indicates if search state is refined.
- * @property {function} createURL Creates a url for the next state when refinements are cleared.
- * @property {Object} widgetParams All original `CustomClearRefinementsWidgetOptions` forwarded to the `renderFn`.
- */
+  /**
+   * Number of hits to display per page.
+   */
+  value: number;
 
-/**
- * **ClearRefinements** connector provides the logic to build a custom widget that will give the user
- * the ability to reset the search state.
- *
- * This connector provides a `refine` function to remove the current refined facets.
- *
- * The behaviour of this function can be changed with widget options. If `clearsQuery`
- * is set to `true`, `refine` will also clear the query and `excludedAttributes` can
- * prevent certain attributes from being cleared.
- *
- * @type {Connector}
- * @param {function(ClearRefinementsRenderingOptions, boolean)} renderFn Rendering function for the custom **ClearRefinements** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomClearRefinementsWidgetOptions)} Re-usable widget factory for a custom **ClearRefinements** widget.
- * @example
- * // custom `renderFn` to render the custom ClearRefinements widget
- * function renderFn(ClearRefinementsRenderingOptions, isFirstRendering) {
- *   var containerNode = ClearRefinementsRenderingOptions.widgetParams.containerNode;
- *   if (isFirstRendering) {
- *     var markup = $('<button id="custom-clear-all">Clear All</button>');
- *     containerNode.append(markup);
- *
- *     markup.on('click', function(event) {
- *       event.preventDefault();
- *       ClearRefinementsRenderingOptions.refine();
- *     })
- *   }
- *
- *   var clearRefinementsCTA = containerNode.find('#custom-clear-all');
- *   clearRefinementsCTA.attr('disabled', !ClearRefinementsRenderingOptions.hasRefinements)
- * };
- *
- * // connect `renderFn` to ClearRefinements logic
- * var customClearRefinementsWidget = instantsearch.connectors.connectClearRefinements(renderFn);
- *
- * // mount widget on the page
- * search.addWidgets([
- *   customClearRefinementsWidget({
- *     containerNode: $('#custom-clear-all-container'),
- *   })
- * ]);
- */
-export default function connectClearRefinements(renderFn, unmountFn = noop) {
+  /**
+   * The default hits per page on first search.
+   *
+   * @default false
+   */
+  default?: boolean;
+};
+
+export type ClearRefinementsConnectorParams = {
+  /**
+   * The attributes to include in the refinements to clear (all by default). Cannot be used with `excludedAttributes`.
+   */
+  includedAttributes?: string[];
+
+  /**
+   * The attributes to exclude from the refinements to clear. Cannot be used with `includedAttributes`.
+   */
+  excludedAttributes?: string[];
+
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<ClearRefinementsConnectorParamsItem>;
+};
+
+export type ClearRefinementsRendererOptions = {
+  /**
+   * Triggers the clear of all the currently refined values.
+   */
+  refine: () => void;
+
+  /**
+   * Indicates if search state is refined.
+   */
+  hasRefinements: boolean;
+
+  /**
+   * Creates a url for the next state when refinements are cleared.
+   */
+  createURL: CreateURL<void>;
+};
+
+export type ClearRefinementsConnector = Connector<
+  ClearRefinementsRendererOptions,
+  ClearRefinementsConnectorParams
+>;
+const connectClearRefinements: ClearRefinementsConnector = function connectClearRefinements(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
+    const {
+      includedAttributes = [],
+      excludedAttributes = ['query'],
+      transformItems = items => items,
+    } = widgetParams || ({} as typeof widgetParams);
+
     if (widgetParams.includedAttributes && widgetParams.excludedAttributes) {
       throw new Error(
         withUsage(
@@ -81,12 +91,6 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
         )
       );
     }
-
-    const {
-      includedAttributes = [],
-      excludedAttributes = ['query'],
-      transformItems = items => items,
-    } = widgetParams;
 
     const connectorState = {
       refine: noop,
@@ -113,19 +117,18 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
       },
 
       render({ scopedResults, createURL, instantSearchInstance }) {
-        const attributesToClear = scopedResults.reduce(
-          (results, scopedResult) => {
-            return results.concat(
-              getAttributesToClear({
-                scopedResult,
-                includedAttributes,
-                excludedAttributes,
-                transformItems,
-              })
-            );
-          },
-          []
-        );
+        const attributesToClear = scopedResults.reduce<
+          Array<ReturnType<typeof getAttributesToClear>>
+        >((results, scopedResult) => {
+          return results.concat(
+            getAttributesToClear({
+              scopedResult,
+              includedAttributes,
+              excludedAttributes,
+              transformItems,
+            })
+          );
+        }, []);
 
         connectorState.refine = () => {
           attributesToClear.forEach(({ helper: indexHelper, items }) => {
@@ -171,7 +174,7 @@ export default function connectClearRefinements(renderFn, unmountFn = noop) {
       },
     };
   };
-}
+};
 
 function getAttributesToClear({
   scopedResult,
@@ -211,3 +214,5 @@ function getAttributesToClear({
     ),
   };
 }
+
+export default connectClearRefinements;
