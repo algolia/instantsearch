@@ -14,25 +14,6 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type ClearRefinementsConnectorParamsItem = {
-  /**
-   * Label to display in the option.
-   */
-  label: string;
-
-  /**
-   * Number of hits to display per page.
-   */
-  value: number;
-
-  /**
-   * The default hits per page on first search.
-   *
-   * @default false
-   */
-  default?: boolean;
-};
-
 export type ClearRefinementsConnectorParams = {
   /**
    * The attributes to include in the refinements to clear (all by default). Cannot be used with `excludedAttributes`.
@@ -47,7 +28,7 @@ export type ClearRefinementsConnectorParams = {
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<ClearRefinementsConnectorParamsItem>;
+  transformItems?: TransformItems<string>;
 };
 
 export type ClearRefinementsRendererOptions = {
