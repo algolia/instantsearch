@@ -3,7 +3,9 @@
 import { h, render } from 'preact';
 import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
 import cx from 'classnames';
-import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
+import connectClearRefinements, {
+  ClearRefinementsConnectorParams,
+} from '../../connectors/clear-refinements/connectClearRefinements';
 import defaultTemplates from './defaultTemplates';
 import {
   getContainerNode,
@@ -11,6 +13,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
+import { WidgetFactory, Template } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
@@ -41,56 +44,62 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   );
 };
 
-/**
- * @typedef {Object} ClearRefinementsCSSClasses
- * @property {string|string[]} [root] CSS class to add to the wrapper element.
- * @property {string|string[]} [button] CSS class to add to the button of the widget.
- * @property {string|string[]} [disabledButton] CSS class to add to the button when there are no refinements.
- */
+export type ClearRefinementsCSSClasses = {
+  /**
+   * CSS class to add to the wrapper element.
+   */
+  root?: string | string[];
 
-/**
- * @typedef {Object} ClearRefinementsTemplates
- * @property {string|string[]} [resetLabel] Template for the content of the button
- */
+  /**
+   * CSS class to add to the button of the widget.
+   */
+  button?: string | string[];
 
-/**
- * @typedef {Object} ClearRefinementsWidgetOptions
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string[]} [includedAttributes = []] The attributes to include in the refinements to clear (all by default). Cannot be used with `excludedAttributes`.
- * @property {string[]} [excludedAttributes = ['query']] The attributes to exclude from the refinements to clear. Cannot be used with `includedAttributes`.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- * @property {ClearRefinementsTemplates} [templates] Templates to use for the widget.
- * @property {ClearRefinementsCSSClasses} [cssClasses] CSS classes to be added.
- */
+  /**
+   * CSS class to add to the button when there are no refinements.
+   */
+  disabledButton?: string | string[];
+};
 
-/**
- * The clear all widget gives the user the ability to clear all the refinements currently
- * applied on the results. It is equivalent to the reset button of a form.
- *
- * The current refined values widget can display a button that has the same behavior.
- * @type {WidgetFactory}
- * @devNovel ClearRefinements
- * @category clear-filter
- * @param {ClearRefinementsWidgetOptions} $0 The ClearRefinements widget options.
- * @returns {Widget} A new instance of the ClearRefinements widget.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.clearRefinements({
- *     container: '#clear-all',
- *     templates: {
- *       resetLabel: 'Reset everything'
- *     },
- *   })
- * ]);
- */
-export default function clearRefinements({
-  container,
-  templates = defaultTemplates,
-  includedAttributes,
-  excludedAttributes,
-  transformItems,
-  cssClasses: userCssClasses = {},
-}) {
+export type ClearRefinementsTemplates = {
+  /**
+   * Template for the content of the button
+   */
+  resetLabel?: Template;
+};
+
+export type ClearRefinementsWidgetOptions = {
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+
+  /**
+   * Templates to use for the widget.
+   */
+  templates?: ClearRefinementsTemplates;
+
+  /**
+   * CSS classes to be added.
+   */
+  cssClasses?: ClearRefinementsCSSClasses;
+};
+
+export type ClearRefinementsWidget = WidgetFactory<
+  ClearRefinementsConnectorParams,
+  ClearRefinementsWidgetOptions
+>;
+
+const clearRefinements: ClearRefinementsWidget = widgetOptions => {
+  const {
+    container,
+    templates = defaultTemplates,
+    includedAttributes,
+    excludedAttributes,
+    transformItems,
+    cssClasses: userCssClasses = {},
+  } = widgetOptions || ({} as typeof widgetOptions);
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -122,4 +131,6 @@ export default function clearRefinements({
     excludedAttributes,
     transformItems,
   });
-}
+};
+
+export default clearRefinements;
