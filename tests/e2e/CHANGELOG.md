@@ -1,3 +1,19 @@
+# [1.3.0](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.4...v1.3.0) (2020-04-17)
+
+
+### Bug Fixes
+
+* **spec:** improve specs reliability to minimize flackyness ([#21](https://github.com/algolia/instantsearch-e2e-tests/issues/21)) ([44bae68](https://github.com/algolia/instantsearch-e2e-tests/commit/44bae68))
+* **test:** change InstantSearch.js test branch to `master` ([#19](https://github.com/algolia/instantsearch-e2e-tests/issues/19)) ([1c34d8d](https://github.com/algolia/instantsearch-e2e-tests/commit/1c34d8d))
+
+
+### Features
+
+* **spec:** add custom error messages for timeouts ([#18](https://github.com/algolia/instantsearch-e2e-tests/issues/18)) ([617a22d](https://github.com/algolia/instantsearch-e2e-tests/commit/617a22d))
+* **webdriverio:** add retry for Sauce Connect tunnel ([#17](https://github.com/algolia/instantsearch-e2e-tests/issues/17)) ([9e398c2](https://github.com/algolia/instantsearch-e2e-tests/commit/9e398c2))
+
+
+
 ## [1.2.4](https://github.com/algolia/instantsearch-e2e-tests/compare/v1.2.3...v1.2.4) (2019-11-26)
 
 
