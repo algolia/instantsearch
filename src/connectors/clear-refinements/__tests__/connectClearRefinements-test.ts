@@ -4,11 +4,14 @@ import {
   createRenderOptions,
 } from '../../../../test/mock/createWidget';
 import connectClearRefinements from '../connectClearRefinements';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 describe('connectClearRefinements', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
+        // @ts-ignore
         connectClearRefinements()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -52,10 +55,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
   describe('Lifecycle', () => {
     it('renders during init and render', () => {
-      const helper = jsHelper({}, 'indexName');
-      helper.search = () => {};
+      const helper = jsHelper(createSearchClient(), 'indexName');
+      helper.search = () => helper;
       const rendering = jest.fn();
-      const makeWidget = connectClearRefinements(rendering);
+      const makeWidget = connectClearRefinements<{ foo: string }>(rendering);
       const widget = makeWidget({
         foo: 'bar', // dummy param to test `widgetParams`
       });
@@ -63,7 +66,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       // test if widget is not rendered yet at this point
       expect(rendering).toHaveBeenCalledTimes(0);
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -86,9 +89,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         foo: 'bar', // dummy param to test `widgetParams`
       });
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -109,23 +114,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = jsHelper({}, 'indexName');
+      const helper = jsHelper(createSearchClient(), 'indexName');
       const rendering = () => {};
       const makeWidget = connectClearRefinements(rendering);
-      const widget = makeWidget();
+      const widget = makeWidget({});
 
       expect(() =>
-        widget.dispose({ helper, state: helper.state })
+        widget.dispose!({ helper, state: helper.state })
       ).not.toThrow();
     });
   });
 
   describe('Instance options', () => {
     it('provides a function to clear the refinements', () => {
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         facets: ['myFacet'],
       });
-      helper.search = () => {};
+      helper.search = () => helper;
       helper.setQuery('not empty');
       helper.toggleRefinement('myFacet', 'myValue');
 
@@ -133,7 +138,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -144,9 +149,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       helper.toggleRefinement('myFacet', 'someOtherValue');
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -163,10 +170,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('provides a function to clear the refinements and the query', () => {
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         facets: ['myFacet'],
       });
-      helper.search = () => {};
+      helper.search = () => helper;
       helper.setQuery('a query');
       helper.toggleRefinement('myFacet', 'myValue');
 
@@ -174,7 +181,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({ excludedAttributes: [] });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -186,9 +193,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       helper.toggleRefinement('myFacet', 'someOtherValue');
       helper.setQuery('another query');
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -205,31 +214,35 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('provides the same `refine` and `createURL` function references during the lifecycle', () => {
-      const helper = jsHelper({}, 'indexName');
-      helper.search = () => {};
+      const helper = jsHelper(createSearchClient(), 'indexName');
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -245,17 +258,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('gets refinements from results', () => {
-      const helper = jsHelper({}, undefined, {
+      const helper = jsHelper(createSearchClient(), '', {
         facets: ['aFacet'],
       });
       helper.toggleRefinement('aFacet', 'some value');
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
-      const widget = makeWidget();
+      const widget = makeWidget({});
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -264,9 +277,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -278,11 +293,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     it('with query not excluded and not empty has refinements', () => {
       // test if the values sent to the rendering function
       // are consistent with the search state
-      const helper = jsHelper({}, undefined, {
+      const helper = jsHelper(createSearchClient(), '', {
         facets: ['aFacet'],
       });
       helper.setQuery('no empty');
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -290,7 +305,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         excludedAttributes: [],
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -299,9 +314,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -311,10 +328,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('with query not excluded and empty has no refinements', () => {
-      const helper = jsHelper({}, undefined, {
+      const helper = jsHelper(createSearchClient(), '', {
         facets: ['aFacet'],
       });
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -322,7 +339,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         excludedAttributes: [],
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -331,9 +348,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -343,15 +362,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('without includedAttributes or excludedAttributes and with a query has no refinements', () => {
-      const helper = jsHelper({}, 'indexName');
+      const helper = jsHelper(createSearchClient(), 'indexName');
       helper.setQuery('not empty');
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -360,9 +379,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -372,10 +393,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('includes only includedAttributes', () => {
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2'],
       });
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -386,7 +407,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         .toggleRefinement('facet2', 'value')
         .setQuery('not empty');
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -396,9 +417,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(helper.hasRefinements('facet1')).toBe(true);
       expect(helper.hasRefinements('facet2')).toBe(true);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -407,9 +430,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const refine = rendering.mock.calls[1][0].refine;
       refine();
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -421,10 +446,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('includes only includedAttributes (with query)', () => {
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         facets: ['facet1'],
       });
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -432,7 +457,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
       helper.toggleRefinement('facet1', 'value').setQuery('not empty');
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -442,9 +467,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(helper.hasRefinements('facet1')).toBe(true);
       expect(helper.state.query).toBe('not empty');
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -453,9 +480,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const refine = rendering.mock.calls[1][0].refine;
       refine();
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -467,10 +496,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('excludes excludedAttributes', () => {
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2'],
       });
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -485,7 +514,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       {
         helper.setQuery('not empty');
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             state: helper.state,
@@ -495,9 +524,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         expect(helper.hasRefinements('facet1')).toBe(true);
         expect(helper.hasRefinements('facet2')).toBe(true);
 
-        widget.render(
+        widget.render!(
           createRenderOptions({
-            results: new SearchResults(helper.state, [{}]),
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+            ]),
             helper,
             state: helper.state,
           })
@@ -516,9 +547,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         // facet has not been cleared and it is still refined with value
         helper.setQuery('not empty');
 
-        widget.render(
+        widget.render!(
           createRenderOptions({
-            results: new SearchResults(helper.state, [{}]),
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+            ]),
             helper,
             state: helper.state,
           })
@@ -530,9 +563,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         const refine = rendering.mock.calls[2][0].refine;
         refine();
 
-        widget.render(
+        widget.render!(
           createRenderOptions({
-            results: new SearchResults(helper.state, [{}]),
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+            ]),
             helper,
             state: helper.state,
           })
@@ -544,10 +579,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('transformItems is called', () => {
-      const helper = jsHelper({}, 'indexName', {
+      const helper = jsHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2', 'facet3'],
       });
-      helper.search = () => {};
+      helper.search = () => helper;
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
@@ -565,7 +600,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         .toggleRefinement('facet3', 'value')
         .setQuery('not empty');
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
@@ -577,9 +612,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(helper.hasRefinements('facet3')).toBe(true);
       expect(helper.state.query).toBe('not empty');
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -588,9 +625,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       const refine = rendering.mock.calls[1][0].refine;
       refine();
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
@@ -605,10 +644,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
     describe('createURL', () => {
       it('consistent with the list of excludedAttributes', () => {
-        const helper = jsHelper({}, 'indexName', {
+        const helper = jsHelper(createSearchClient(), 'indexName', {
           facets: ['facet', 'otherFacet'],
         });
-        helper.search = () => {};
+        helper.search = () => helper;
 
         const rendering = jest.fn();
         const makeWidget = connectClearRefinements(rendering);
@@ -622,19 +661,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         {
           helper.setQuery('not empty');
 
-          widget.init(
+          widget.init!(
             createInitOptions({
               helper,
               state: helper.state,
             })
           );
 
-          widget.render(
+          widget.render!(
             createRenderOptions({
-              results: new SearchResults(helper.state, [{}]),
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse(),
+              ]),
               helper,
               state: helper.state,
-              createURL: state => state,
+              createURL: state => JSON.stringify(state),
             })
           );
 
@@ -642,7 +683,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
           // The state represented by the URL should be equal to a state
           // after refining.
-          const createURLState = createURL();
+          const createURLState = JSON.parse(createURL());
           refine();
           const stateAfterRefine = helper.state;
 
@@ -650,18 +691,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         }
 
         {
-          widget.render(
+          widget.render!(
             createRenderOptions({
-              results: new SearchResults(helper.state, [{}]),
+              results: new SearchResults(helper.state, [
+                createSingleSearchResponse(),
+              ]),
               helper,
               state: helper.state,
-              createURL: state => state,
+              createURL: state => JSON.stringify(state),
             })
           );
 
           const { createURL, refine } = rendering.mock.calls[2][0];
 
-          const createURLState = createURL();
+          const createURLState = JSON.parse(createURL());
           refine();
           const stateAfterRefine = helper.state;
 
@@ -671,24 +714,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('reset the page to 0', () => {
-      const helper = jsHelper({}, 'indexName', {});
-      helper.search = () => {};
+      const helper = jsHelper(createSearchClient(), 'indexName', {});
+      helper.search = () => helper;
       helper.setQuery('not empty');
 
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           state: helper.state,
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
-          results: new SearchResults(helper.state, [{}]),
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
           helper,
           state: helper.state,
         })
