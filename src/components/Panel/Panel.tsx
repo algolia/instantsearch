@@ -49,9 +49,9 @@ function Panel(props: PanelProps) {
   return (
     <div
       className={cx(props.cssClasses.root, {
-        [props.cssClasses.noRefinementRoot]: props.hidden,
-        [props.cssClasses.collapsibleRoot]: props.collapsible,
-        [props.cssClasses.collapsedRoot]: isCollapsed,
+        [props.cssClasses.noRefinementRoot as string]: props.hidden,
+        [props.cssClasses.collapsibleRoot as string]: props.collapsible,
+        [props.cssClasses.collapsedRoot as string]: isCollapsed,
       })}
       hidden={props.hidden}
     >
