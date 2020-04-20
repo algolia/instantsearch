@@ -10,11 +10,11 @@ export type ConfigureRelatedItemsWidget = WidgetFactory<
 >;
 
 const configureRelatedItems: ConfigureRelatedItemsWidget = function configureRelatedItems(
-  widgetOptions
+  widgetParams
 ) {
   const makeWidget = connectConfigureRelatedItems(noop);
 
-  return makeWidget(widgetOptions);
+  return makeWidget(widgetParams);
 };
 
 export default configureRelatedItems;
