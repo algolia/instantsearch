@@ -494,7 +494,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
@@ -516,7 +515,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         ]),
         state: helper.state,
         helper,
-        createURL: () => '#',
       })
     );
 
