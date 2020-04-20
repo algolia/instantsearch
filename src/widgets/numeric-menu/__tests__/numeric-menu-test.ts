@@ -3,6 +3,7 @@ import numericMenu from '../numeric-menu';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
+  AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
@@ -38,12 +39,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
 describe('numericMenu()', () => {
   let container: string | HTMLElement;
-  let widget;
-  let helper;
+  let widget: ReturnType<typeof numericMenu>;
+  let helper: AlgoliaSearchHelper;
 
   let items;
   let results;
-  let createURL;
   let state;
 
   beforeEach(() => {
@@ -68,7 +68,7 @@ describe('numericMenu()', () => {
     helper = algoliasearchHelper(
       createSearchClient(),
       '',
-      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
     );
 
     jest.spyOn(helper, 'search');
@@ -78,13 +78,12 @@ describe('numericMenu()', () => {
       createSingleSearchResponse({ nbHits: 0 }),
     ]);
 
-    createURL = () => '#';
-    widget.init!({ helper, instantSearchInstance: {} });
+    widget.init!(createInitOptions({ helper }));
   });
 
   it('calls twice render(<RefinementList props />, container)', () => {
-    widget.render!({ state, results, createURL });
-    widget.render!({ state, results, createURL });
+    widget.render!(createRenderOptions({ state, results }));
+    widget.render!(createRenderOptions({ state, results }));
 
     const [firstRender, secondRender] = render.mock.calls;
 
@@ -104,8 +103,8 @@ describe('numericMenu()', () => {
         allItems.map(item => ({ ...item, transformed: true })),
     });
 
-    widget.init!({ helper, instantSearchInstance: {} });
-    widget.render!({ state, results, createURL });
+    widget.init!(createInitOptions({ helper }));
+    widget.render!(createRenderOptions({ state, results }));
 
     const [firstRender] = render.mock.calls;
 

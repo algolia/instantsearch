@@ -46,14 +46,14 @@ function instantSearchPlayground({
     }),
   ]);
 
-  const numericMenuElement = document.createElement('div');
-  leftPanel.appendChild(numericMenuElement);
+  const numericMenuContainer = document.createElement('div');
+  leftPanel.appendChild(numericMenuContainer);
 
   const priceMenu = panel({ templates: { header: 'Price' } })(numericMenu);
 
   search.addWidgets([
     priceMenu({
-      container: numericMenuElement,
+      container: numericMenuContainer,
       attribute: 'price',
       items: [
         { label: 'All' },
