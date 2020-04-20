@@ -1,4 +1,5 @@
 import instantsearch from '../../src/index';
+import { panel, numericMenu } from '../../src/widgets';
 
 export const hitsItemTemplate = `
 <div
@@ -32,7 +33,7 @@ function instantSearchPlayground({
   const refinementList = document.createElement('div');
   leftPanel.appendChild(refinementList);
 
-  const brandList = instantsearch.widgets.panel({
+  const brandList = panel({
     templates: {
       header: 'Brands',
     },
@@ -45,18 +46,14 @@ function instantSearchPlayground({
     }),
   ]);
 
-  const numericMenu = document.createElement('div');
-  leftPanel.appendChild(numericMenu);
+  const numericMenuElement = document.createElement('div');
+  leftPanel.appendChild(numericMenuElement);
 
-  const priceMenu = instantsearch.widgets.panel({
-    templates: {
-      header: 'Price',
-    },
-  })(instantsearch.widgets.numericMenu);
+  const priceMenu = panel({ templates: { header: 'Price' } })(numericMenu);
 
   search.addWidgets([
     priceMenu({
-      container: numericMenu,
+      container: numericMenuElement,
       attribute: 'price',
       items: [
         { label: 'All' },
@@ -71,7 +68,7 @@ function instantSearchPlayground({
   const ratingMenu = document.createElement('div');
   leftPanel.appendChild(ratingMenu);
 
-  const ratingList = instantsearch.widgets.panel({
+  const ratingList = panel({
     templates: {
       header: 'Rating',
     },
