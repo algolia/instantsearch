@@ -11,12 +11,12 @@ export type ConfigureWidgetOptions = PlainSearchParameters;
 
 export type ConfigureWidget = WidgetFactory<{}, ConfigureWidgetOptions>;
 
-const configure: ConfigureWidget = widgetParams => {
+const configure: ConfigureWidget = function configure(widgetOptions) {
   // This is a renderless widget that falls back to the connector's
   // noop render and unmount functions.
   const makeWidget = connectConfigure(noop);
 
-  return makeWidget({ searchParameters: widgetParams });
+  return makeWidget({ searchParameters: widgetOptions });
 };
 
 export default configure;
