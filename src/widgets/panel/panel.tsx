@@ -10,67 +10,94 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import Panel from '../../components/Panel/Panel';
-import { WidgetFactory, Template, RenderOptions, Widget } from '../../types';
+import { Template, RenderOptions, Widget } from '../../types';
 
 export type PanelCSSClasses = {
   /**
    * CSS classes to add to the root element of the widget.
    */
-  root: string | string[];
+  root?: string | string[];
+
   /**
    * CSS classes to add to the root element of the widget when there's no refinements.
    */
-  noRefinementRoot: string | string[];
+  noRefinementRoot?: string | string[];
+
   /**
    * CSS classes to add to the root element when collapsible (`collapse` is defined).
    */
-  collapsibleRoot: string | string[];
+  collapsibleRoot?: string | string[];
+
   /**
    * CSS classes to add to the root element when collapsed.
    */
-  collapsedRoot: string | string[];
+  collapsedRoot?: string | string[];
+
   /**
    * CSS classes to add to the collapse button element.
    */
-  collapseButton: string | string[];
+  collapseButton?: string | string[];
+
   /**
    * CSS classes to add to the collapse icon of the button.
    */
-  collapseIcon: string | string[];
+  collapseIcon?: string | string[];
+
   /**
    * CSS classes to add to the header.
    */
-  header: string | string[];
+  header?: string | string[];
+
   /**
    * CSS classes to add to the body.
    */
-  body: string | string[];
+  body?: string | string[];
+
   /**
    * CSS classes to add to the footer.
    */
-  footer: string | string[];
+  footer?: string | string[];
 };
 
 export type PanelTemplates = {
   /**
    * Template to use for the header.
    */
-  header: Template<RenderOptions>;
+  header?: Template<RenderOptions>;
+
   /**
    * Template to use for the footer.
    */
-  footer: Template<RenderOptions>;
+  footer?: Template<RenderOptions>;
+
   /**
    * Template to use for collapse button.
    */
-  collapseButtonText: Template<{ collapsed: boolean }>;
+  collapseButtonText?: Template<{ collapsed: boolean }>;
 };
 
-type PanelWidgetParams = {
+export type PanelWidgetOptions = {
+  /**
+   * A function that is called on each render to determine if the
+   * panel should be hidden based on the render options.
+   */
   hidden?(options: RenderOptions): boolean;
+
+  /**
+   * A function that is called on each render to determine if the
+   * panel should be collapsed based on the render options.
+   */
   collapsed?(options: RenderOptions): boolean;
-  templates?: Partial<PanelTemplates>;
-  cssClasses?: Partial<PanelCSSClasses>;
+
+  /**
+   * The templates to use for the widget.
+   */
+  templates?: PanelTemplates;
+
+  /**
+   * The CSS classes to override.
+   */
+  cssClasses?: PanelCSSClasses;
 };
 
 const withUsage = createDocumentationMessageGenerator({ name: 'panel' });
@@ -96,27 +123,25 @@ const renderer = ({
   );
 };
 
-type NestedWidgetOptions = {
-  container: HTMLElement | string;
-  [key: string]: any;
-};
-type PanelWidget = (
-  params?: PanelWidgetParams
-) => (
-  widgetFactory: WidgetFactory<{}, NestedWidgetOptions>
-) => (widgetOptions: NestedWidgetOptions) => Widget;
+export type PanelWidget = (
+  params?: PanelWidgetOptions
+) => <
+  TWidgetOptions extends { container: HTMLElement | string; [key: string]: any }
+>(
+  widgetFactory: (widgetOptions: TWidgetOptions) => Widget
+) => (widgetOptions: TWidgetOptions) => Widget;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
  * It also reacts, indicates and sets CSS classes when widgets are no longer relevant for refining.
  */
-const panel: PanelWidget = (widgetParams = {} as PanelWidgetParams) => {
+const panel: PanelWidget = widgetParams => {
   const {
     templates = {},
     hidden = () => false,
     collapsed,
     cssClasses: userCssClasses = {},
-  } = widgetParams;
+  } = widgetParams || {};
 
   warning(
     typeof hidden === 'function',
@@ -162,10 +187,8 @@ const panel: PanelWidget = (widgetParams = {} as PanelWidgetParams) => {
     footer: cx(suit({ descendantName: 'footer' }), userCssClasses.footer),
   };
 
-  return (widgetFactory: WidgetFactory<{}, NestedWidgetOptions>) => (
-    widgetOptions = {} as NestedWidgetOptions
-  ): Widget => {
-    const { container } = widgetOptions;
+  return widgetFactory => widgetOptions => {
+    const { container } = widgetOptions || ({} as typeof widgetOptions);
 
     if (!container) {
       throw new Error(

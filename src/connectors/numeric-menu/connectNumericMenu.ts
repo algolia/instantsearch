@@ -4,7 +4,7 @@ import {
   isFiniteNumber,
   noop,
 } from '../../lib/utils';
-import { Connector, CreateURL } from '../../types';
+import { Connector, CreateURL, TransformItems } from '../../types';
 import { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -12,26 +12,29 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-type Option = {
+export type NumericMenuConnectorParamsItem = {
   /**
    * Name of the option
    */
   label: string;
+
   /**
    * Higher bound of the option (<=)
    */
-  start: number;
+  start?: number;
+
   /**
    * Lower bound of the option (>=)
    */
-  end: number;
+  end?: number;
 };
 
-type Item = {
+export type NumericMenuRendererOptionsItem = {
   /**
    *  Name of the option.
    */
   label: string;
+
   /**
    * URL encoded of the bounds object with the form `{start, end}`.
    * This value can be used verbatim in the webpage and can be read by `refine`
@@ -39,48 +42,50 @@ type Item = {
    * `JSON.parse(window.decodeURI(value))` to get the object.
    */
   value: string;
+
   /**
    * True if the value is selected
    */
   isRefined: boolean;
 };
 
-type ParamTransformItems = (items: Item[]) => Item[];
-
 export type NumericMenuConnectorParams = {
   /**
    * Name of the attribute for filtering
    */
   attribute: string;
+
   /**
    * List of all the items
    */
-  items: Option[];
+  items: NumericMenuConnectorParamsItem[];
+
   /**
    * Function to transform the items passed to the templates
    */
-  transformItems?: ParamTransformItems;
+  transformItems?: TransformItems<NumericMenuRendererOptionsItem>;
 };
-
-type Refine = (facetValue: string) => void;
 
 export type NumericMenuRendererOptions = {
   /**
    * The list of available choices
    */
-  items: Item[];
+  items: NumericMenuRendererOptionsItem[];
+
   /**
    * Creates URLs for the next state, the string is the name of the selected option
    */
-  createURL: CreateURL<Item['value']>;
+  createURL: CreateURL<NumericMenuRendererOptionsItem['value']>;
+
   /**
    * `true` if the last search contains no result
    */
   hasNoResults: boolean;
+
   /**
    * Sets the selected value and trigger a new search
    */
-  refine: Refine;
+  refine: (facetValue: string) => void;
 };
 
 export type NumericMenuConnector = Connector<
@@ -95,11 +100,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
-    const {
-      attribute = '',
-      items = [],
-      transformItems = (x => x) as ParamTransformItems,
-    } = widgetParams || ({} as typeof widgetParams);
+    const { attribute = '', items = [], transformItems = x => x } =
+      widgetParams || ({} as typeof widgetParams);
 
     if (attribute === '') {
       throw new Error(withUsage('The `attribute` option is required.'));
@@ -112,7 +114,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     }
 
     type ConnectorState = {
-      refine?: Refine;
+      refine?: (facetValue: string) => void;
       createURL?: (state: SearchParameters) => (facetValue: string) => string;
     };
 
@@ -240,7 +242,11 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
   };
 };
 
-function isRefined(state: SearchParameters, attribute: string, option: Option) {
+function isRefined(
+  state: SearchParameters,
+  attribute: string,
+  option: NumericMenuConnectorParamsItem
+) {
   // @TODO: same as another spot, why is this mixing arrays & elements?
   const currentRefinements = state.getNumericRefinements(
     attribute
