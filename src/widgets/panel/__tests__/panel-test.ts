@@ -81,7 +81,7 @@ describe('Usage', () => {
 
     expect(() => {
       // @ts-ignore missing option
-      fakeWithPanel({});
+      fakeWithPanel();
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required in the widget within the panel.
 
@@ -103,7 +103,7 @@ describe('Templates', () => {
   });
 
   test('with default templates', () => {
-    const widgetWithPanel = panel({})(widgetFactory);
+    const widgetWithPanel = panel()(widgetFactory);
 
     widgetWithPanel({
       container: document.createElement('div'),
@@ -207,7 +207,7 @@ describe('Lifecycle', () => {
       container: document.createElement('div'),
     });
 
-    const nextState = widgetWithPanel.dispose!(createDisposeOptions());
+    const nextState = widgetWithPanel.dispose!(createDisposeOptions({}));
 
     expect(nextState).toEqual(nextSearchParameters);
   });

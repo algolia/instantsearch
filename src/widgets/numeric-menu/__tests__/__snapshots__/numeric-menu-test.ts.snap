@@ -49,7 +49,7 @@ Object {
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "item": false,
     },
@@ -107,7 +107,7 @@ Object {
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "item": false,
     },
