@@ -96,7 +96,40 @@ export type NumericMenuTemplates = {
   /**
    * Item template, provided with `label` (the name in the configuration), `isRefined`, `url`, `value` (the setting for the filter) data properties.
    */
-  item?: Template;
+  item?: Template<{
+    /**
+     * The name of the attribute.
+     */
+    attribute: string;
+
+    /**
+     * The label for the option.
+     */
+    label: string;
+
+    /**
+     * The encoded URL of the bounds object with a {start, end} form. This
+     * value can be used verbatim in the webpage and can be read by refine
+     * directly. If you want to inspect the value, you can do JSON.parse(window.decodeURI(value))
+     * to get the object.
+     */
+    value: string;
+
+    /**
+     *  Whether or not the refinement is selected.
+     */
+    isRefined: boolean;
+
+    /**
+     * The URL with the applied refinement.
+     */
+    url: string;
+
+    /**
+     * The CSS classes provided to the widget.
+     */
+    cssClasses: NumericMenuCSSClasses;
+  }>;
 };
 
 export type NumericMenuWidgetOptions = {
