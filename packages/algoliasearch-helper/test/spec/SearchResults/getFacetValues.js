@@ -89,6 +89,26 @@ test('getFacetValues(facetName) testing the sort function', function() {
   expect(facetValues).toEqual(expected);
 });
 
+test('getFacetValues(facetName) with disabled sorting', function() {
+  var data = require('./getFacetValues/disjunctive.json');
+  var searchParams = new SearchParameters(data.state);
+  var result = new SearchResults(searchParams, data.content.results);
+
+  var facetValues = result.getFacetValues('brand', {
+    sortBy: function() {
+      return 0;
+    }
+  });
+
+  var expected = [
+    {count: 551, isRefined: false, name: 'Insignia™'},
+    {count: 511, isRefined: false, name: 'Samsung'},
+    {count: 386, isRefined: true, name: 'Apple'}
+  ];
+
+  expect(facetValues).toEqual(expected);
+});
+
 test('getFacetValues(conjunctive) returns correct facet values with the name `length`', function() {
   var searchParams = new SearchParameters({
     index: 'instant_search',

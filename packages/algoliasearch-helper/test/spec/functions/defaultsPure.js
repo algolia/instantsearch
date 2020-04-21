@@ -64,3 +64,13 @@ it('should assign properties that shadow those on `Object.prototype`', function(
   expected = clone(object);
   expect(defaults({}, object, source)).toEqual(expected);
 });
+
+it('should not touch keys order', function() {
+  var expected = {'a': 1, 'b': 3, 'c': 3, 'd': 4};
+  var actual = defaults({'a': 1, 'b': 2}, {'b': 3, 'c': 3}, {'d': 4});
+
+  var expectedKeys = Object.keys(expected);
+  var actualKeys = Object.keys(actual);
+
+  expect(expectedKeys).toEqual(actualKeys);
+});
