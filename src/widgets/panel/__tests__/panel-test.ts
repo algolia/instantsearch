@@ -25,7 +25,7 @@ beforeEach(() => {
 describe('Usage', () => {
   test('without arguments does not throw', () => {
     expect(() => {
-      panel({});
+      panel();
     }).not.toThrow();
   });
 
@@ -55,8 +55,8 @@ describe('Usage', () => {
 
   test('with `hidden` as boolean warns', () => {
     expect(() => {
+      // @ts-ignore wrong option type
       panel({
-        // @ts-ignore wrong option type
         hidden: true,
       });
     }).toWarnDev(
@@ -66,8 +66,8 @@ describe('Usage', () => {
 
   test('with `collapsed` as boolean warns', () => {
     expect(() => {
+      // @ts-ignore wrong option type
       panel({
-        // @ts-ignore wrong option type
         collapsed: true,
       });
     }).toWarnDev(
@@ -77,11 +77,11 @@ describe('Usage', () => {
 
   test('with a widget without `container` throws', () => {
     const fakeWidget = () => ({});
-    const fakeWithPanel = panel({})(fakeWidget);
+    const fakeWithPanel = panel()(fakeWidget);
 
     expect(() => {
       // @ts-ignore missing option
-      fakeWithPanel({});
+      fakeWithPanel();
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required in the widget within the panel.
 
@@ -103,7 +103,7 @@ describe('Templates', () => {
   });
 
   test('with default templates', () => {
-    const widgetWithPanel = panel({})(widgetFactory);
+    const widgetWithPanel = panel()(widgetFactory);
 
     widgetWithPanel({
       container: document.createElement('div'),
@@ -180,7 +180,7 @@ describe('Lifecycle', () => {
     };
     const widgetFactory = () => widget;
 
-    const widgetWithPanel = panel({})(widgetFactory)({
+    const widgetWithPanel = panel()(widgetFactory)({
       container: document.createElement('div'),
     });
 
@@ -203,7 +203,7 @@ describe('Lifecycle', () => {
     };
     const widgetFactory = () => widget;
 
-    const widgetWithPanel = panel({})(widgetFactory)({
+    const widgetWithPanel = panel()(widgetFactory)({
       container: document.createElement('div'),
     });
 
