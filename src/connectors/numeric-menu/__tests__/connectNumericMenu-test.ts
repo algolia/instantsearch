@@ -2,11 +2,24 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectNumericMenu from '../connectNumericMenu';
+import connectNumericMenu, {
+  NumericMenuConnectorParamsItem,
+  NumericMenuRendererOptionsItem,
+} from '../connectNumericMenu';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
-const encodeValue = (start, end) =>
-  window.encodeURI(JSON.stringify({ start, end }));
-const mapOptionsToItems = ({ start, end, label }) => ({
+const encodeValue = (
+  start: NumericMenuConnectorParamsItem['start'],
+  end?: NumericMenuConnectorParamsItem['end']
+) => window.encodeURI(JSON.stringify({ start, end }));
+const mapOptionsToItems: (
+  item: NumericMenuConnectorParamsItem
+) => NumericMenuRendererOptionsItem = ({ start, end, label }) => ({
   label,
   value: encodeValue(start, end),
   isRefined: false,
@@ -25,14 +38,15 @@ describe('connectNumericMenu', () => {
       ],
     });
 
-    const helper = jsHelper({}, '');
-    helper.search = () => {};
+    const helper = jsHelper(createSearchClient(), '');
+    helper.search = () => helper;
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const { refine } = rendering.mock.calls[0][0];
 
@@ -42,6 +56,7 @@ describe('connectNumericMenu', () => {
   describe('Usage', () => {
     it('throws without render function', () => {
       expect(() => {
+        // @ts-ignore
         connectNumericMenu()({});
       }).toThrowErrorMatchingInlineSnapshot(`
 "The render function is not valid (received type Undefined).
@@ -52,6 +67,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
     it('throws without attribute', () => {
       expect(() => {
+        // @ts-ignore
         connectNumericMenu(() => {})({ attribute: undefined, items: [] });
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`attribute\` option is required.
@@ -64,6 +80,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(() => {
         connectNumericMenu(() => {})({
           attribute: 'attribute',
+          // @ts-ignore
           items: undefined,
         });
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -113,14 +130,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     // test if widget is not rendered yet at this point
     expect(rendering).toHaveBeenCalledTimes(0);
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     // test that rendering has been called during init with isFirstRendering = true
     expect(rendering).toHaveBeenCalledTimes(1);
@@ -139,12 +157,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       true
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{ nbHits: 0 }]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({ nbHits: 0 }),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering).toHaveBeenCalledTimes(2);
@@ -176,14 +197,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         })),
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -192,12 +214,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect.anything()
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{ nbHits: 0 }]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({ nbHits: 0 }),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -221,14 +246,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       ],
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine, items } = firstRenderingOptions;
@@ -260,12 +286,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       '>=': [],
     });
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const {
@@ -321,14 +350,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       ],
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -345,12 +375,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect.anything()
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
@@ -383,14 +416,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       items: listOptions,
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     let refine =
       rendering.mock.calls[rendering.mock.calls.length - 1][0].refine;
@@ -398,12 +432,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     listOptions.forEach((option, i) => {
       refine(encodeValue(option.start, option.end));
 
-      widget.render({
-        results: new SearchResults(helper.state, [{}]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+      widget.render!(
+        createRenderOptions({
+          results: new SearchResults(helper.state, [
+            createSingleSearchResponse(),
+          ]),
+          state: helper.state,
+          helper,
+        })
+      );
 
       // The current option should be the one selected
       // First we copy and set the default added values
@@ -435,26 +472,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       items: listOptions,
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const refine =
       rendering.mock.calls[rendering.mock.calls.length - 1][0].refine;
     // a user selects a value in the refinement list
     refine(encodeValue(listOptions[0].start, listOptions[0].end));
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     // No option should be selected
     const expectedResults0 = [...listOptions].map(mapOptionsToItems);
@@ -467,12 +508,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     // Only the current refinement is cleared by a third party
     helper.removeNumericRefinement('numerics', '<=', 10);
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     // No option should be selected
     const expectedResults1 = [...listOptions].map(mapOptionsToItems);
@@ -498,26 +542,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       items: listOptions,
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const refine =
       rendering.mock.calls[rendering.mock.calls.length - 1][0].refine;
     // a user selects a value in the refinement list
     refine(encodeValue(listOptions[0].start, listOptions[0].end));
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     // No option should be selected
     const expectedResults0 = [...listOptions].map(mapOptionsToItems);
@@ -530,12 +578,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     // All the refinements are cleared by a third party
     helper.clearRefinements('numerics');
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     // No option should be selected
     const expectedResults1 = [...listOptions].map(mapOptionsToItems);
@@ -561,14 +612,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       items: listOptions,
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items[0].isRefined).toBe(false);
@@ -578,12 +630,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       encodeValue(listOptions[0].start, listOptions[0].end)
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
+    widget.render!(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse(),
+        ]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items[0].isRefined).toBe(true);
@@ -604,15 +659,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       ],
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
     helper.setPage(2);
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(helper.state.page).toBe(2);
 
@@ -639,14 +695,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       ],
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init!(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(helper.state.page).toBeUndefined();
 
@@ -673,9 +730,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       ],
     });
 
-    const helper = jsHelper({});
+    const helper = jsHelper(createSearchClient(), '');
 
-    expect(() => widget.dispose({ helper, state: helper.state })).not.toThrow();
+    expect(() =>
+      widget.dispose!({ helper, state: helper.state })
+    ).not.toThrow();
   });
 
   describe('getWidgetState', () => {

@@ -1,9 +1,20 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import numericMenu from '../numeric-menu';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
+  AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
+
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import {
+  createRenderOptions,
+  createInitOptions,
+} from '../../../../test/mock/createWidget';
+import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -16,6 +27,7 @@ jest.mock('preact', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
+      // @ts-ignore
       numericMenu({ container: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -26,13 +38,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 });
 
 describe('numericMenu()', () => {
-  let container;
-  let widget;
-  let helper;
+  let container: string | HTMLElement;
+  let widget: ReturnType<typeof numericMenu>;
+  let helper: AlgoliaSearchHelper;
 
   let items;
   let results;
-  let createURL;
   let state;
 
   beforeEach(() => {
@@ -55,23 +66,24 @@ describe('numericMenu()', () => {
     });
 
     helper = algoliasearchHelper(
-      {},
+      createSearchClient(),
       '',
-      widget.getWidgetSearchParameters(new SearchParameters(), { uiState: {} })
+      widget.getWidgetSearchParameters!(new SearchParameters(), { uiState: {} })
     );
 
     jest.spyOn(helper, 'search');
 
     state = helper.state;
-    results = new SearchResults(helper.state, [{ nbHits: 0 }]);
+    results = new SearchResults(helper.state, [
+      createSingleSearchResponse({ nbHits: 0 }),
+    ]);
 
-    createURL = () => '#';
-    widget.init({ helper, instantSearchInstance: {} });
+    widget.init!(createInitOptions({ helper }));
   });
 
   it('calls twice render(<RefinementList props />, container)', () => {
-    widget.render({ state, results, createURL });
-    widget.render({ state, results, createURL });
+    widget.render!(createRenderOptions({ state, results }));
+    widget.render!(createRenderOptions({ state, results }));
 
     const [firstRender, secondRender] = render.mock.calls;
 
@@ -91,8 +103,8 @@ describe('numericMenu()', () => {
         allItems.map(item => ({ ...item, transformed: true })),
     });
 
-    widget.init({ helper, instantSearchInstance: {} });
-    widget.render({ state, results, createURL });
+    widget.init!(createInitOptions({ helper }));
+    widget.render!(createRenderOptions({ state, results }));
 
     const [firstRender] = render.mock.calls;
 
@@ -145,10 +157,10 @@ describe('numericMenu()', () => {
     });
 
     // The life cycle impose all the steps
-    testWidget.init({ helper, createURL: () => '', instantSearchInstance: {} });
+    testWidget.init!(createInitOptions());
 
     // When
-    testWidget.render({ state, results, createURL });
+    testWidget.render!(createRenderOptions());
 
     // Then
     expect(initialOptions).toEqual(initialOptionsClone);

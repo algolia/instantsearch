@@ -7,12 +7,14 @@ import Template from '../Template/Template';
 import { PanelCSSClasses, PanelTemplates } from '../../widgets/panel/panel';
 import { RenderOptions } from '../../types';
 
-type PanelComponentCSSClasses = Omit<
-  {
-    [TKey in keyof PanelCSSClasses]: string;
-  },
-  // `collapseIcon` is only used in the default templates of the widget
-  'collapseIcon'
+type PanelComponentCSSClasses = Required<
+  Omit<
+    {
+      [TKey in keyof PanelCSSClasses]: string;
+    },
+    // `collapseIcon` is only used in the default templates of the widget
+    'collapseIcon'
+  >
 >;
 
 type PanelProps = {
@@ -21,7 +23,7 @@ type PanelProps = {
   isCollapsed: boolean;
   data: RenderOptions;
   cssClasses: PanelComponentCSSClasses;
-  templates: PanelTemplates;
+  templates: Required<PanelTemplates>;
   bodyElement: HTMLElement;
 };
 
