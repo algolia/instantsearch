@@ -124,7 +124,7 @@ const renderer = ({
 };
 
 export type PanelWidget = (
-  params: PanelWidgetOptions
+  params?: PanelWidgetOptions
 ) => <
   TWidgetOptions extends { container: HTMLElement | string; [key: string]: any }
 >(
@@ -141,7 +141,7 @@ const panel: PanelWidget = widgetParams => {
     hidden = () => false,
     collapsed,
     cssClasses: userCssClasses = {},
-  } = widgetParams || ({} as typeof widgetParams);
+  } = widgetParams || {};
 
   warning(
     typeof hidden === 'function',
