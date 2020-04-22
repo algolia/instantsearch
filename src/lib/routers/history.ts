@@ -26,6 +26,13 @@ type BrowserHistoryProps = {
   parseURL: ParseURL;
 };
 
+type BrowserHistoryArgs = {
+  windowTitle?: (routeState: RouteState) => string;
+  writeDelay?: number;
+  createURL?: CreateURL;
+  parseURL?: ParseURL;
+};
+
 const defaultCreateURL: CreateURL = ({ qsModule, routeState, location }) => {
   const { protocol, hostname, port = '', pathname, hash } = location;
   const queryString = qsModule.stringify(routeState);
@@ -96,7 +103,7 @@ class BrowserHistory implements Router {
       writeDelay = 400,
       createURL = defaultCreateURL,
       parseURL = defaultParseURL,
-    }: BrowserHistoryProps = {} as BrowserHistoryProps
+    }: BrowserHistoryArgs = {} as BrowserHistoryArgs
   ) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
@@ -128,9 +135,11 @@ class BrowserHistory implements Router {
     }
 
     this.writeTimer = window.setTimeout(() => {
-      setWindowTitle(title);
+      if (window.location.href !== url) {
+        setWindowTitle(title);
 
-      window.history.pushState(routeState, title || '', url);
+        window.history.pushState(routeState, title || '', url);
+      }
       this.writeTimer = undefined;
     }, this.writeDelay);
   }
@@ -192,6 +201,6 @@ class BrowserHistory implements Router {
   }
 }
 
-export default function(...args: BrowserHistoryProps[]): BrowserHistory {
-  return new BrowserHistory(...args);
+export default function(props?: BrowserHistoryArgs): BrowserHistory {
+  return new BrowserHistory(props);
 }
