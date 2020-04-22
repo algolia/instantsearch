@@ -27,7 +27,7 @@ type InfiniteHitsProps = {
   showMore: () => void;
   templateProps: {
     [key: string]: any;
-    templates: InfiniteHitsTemplates;
+    templates: Partial<InfiniteHitsTemplates>;
   };
   isFirstPage: boolean;
   isLastPage: boolean;

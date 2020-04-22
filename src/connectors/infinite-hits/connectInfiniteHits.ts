@@ -3,7 +3,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Hits, Connector } from '../../types';
+import { Hits, Connector, TransformItems } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -12,16 +12,54 @@ import {
   addQueryID,
   noop,
 } from '../../lib/utils';
-import { InfiniteHitsRendererWidgetParams } from '../../widgets/infinite-hits/infinite-hits';
 
-export type InfiniteHitsConnectorParams = Partial<
-  InfiniteHitsRendererWidgetParams
->;
+export type InfiniteHitsConnectorParamsItem = {
+  __hitIndex: number;
+};
+
+export type InfiniteHitsConnectorParams<
+  TInfiniteHitsConnectorParamsItem extends InfiniteHitsConnectorParamsItem = InfiniteHitsConnectorParamsItem
+> = {
+  /**
+   * Escapes HTML entities from hits string values.
+   *
+   * @default `true`
+   */
+  escapeHTML?: boolean;
+
+  /**
+   * Enable the button to load previous results.
+   *
+   * @default `false`
+   */
+  showPrevious?: boolean;
+
+  /**
+   * Receives the items, and is called before displaying them.
+   * Useful for mapping over the items to transform, and remove or reorder them.
+   */
+  transformItems?: TransformItems<TInfiniteHitsConnectorParamsItem>;
+};
 
 export type InfiniteHitsRendererOptions = {
+  /**
+   * Loads the previous results.
+   */
   showPrevious: () => void;
+
+  /**
+   * Loads the next page of hits.
+   */
   showMore: () => void;
+
+  /**
+   * Indicates whether the first page of hits has been reached.
+   */
   isFirstPage: boolean;
+
+  /**
+   * Indicates whether the last page of hits has been reached.
+   */
   isLastPage: boolean;
 };
 
