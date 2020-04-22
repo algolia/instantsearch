@@ -13,13 +13,7 @@ import {
   noop,
 } from '../../lib/utils';
 
-export type InfiniteHitsConnectorParamsItem = {
-  __hitIndex: number;
-};
-
-export type InfiniteHitsConnectorParams<
-  TInfiniteHitsConnectorParamsItem extends InfiniteHitsConnectorParamsItem = InfiniteHitsConnectorParamsItem
-> = {
+export type InfiniteHitsConnectorParams = {
   /**
    * Escapes HTML entities from hits string values.
    *
@@ -38,7 +32,9 @@ export type InfiniteHitsConnectorParams<
    * Receives the items, and is called before displaying them.
    * Useful for mapping over the items to transform, and remove or reorder them.
    */
-  transformItems?: TransformItems<TInfiniteHitsConnectorParamsItem>;
+  transformItems?: TransformItems<{
+    __hitIndex: number;
+  }>;
 };
 
 export type InfiniteHitsRendererOptions = {
