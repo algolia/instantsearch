@@ -376,7 +376,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
-      transformItems: items => items.map(() => ({ name: 'transformed' })),
+      transformItems: items => {
+        return items.map(item => ({ ...item, name: 'transformed' }));
+      },
     });
 
     const helper = algoliasearchHelper({} as SearchClient, '', {});
@@ -418,9 +420,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const transformedHits = [
       {
+        objectID: '1',
         name: 'transformed',
       },
       {
+        objectID: '2',
         name: 'transformed',
       },
     ];
@@ -435,14 +439,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
       transformItems: items =>
-        items.map(item => ({
-          ...item,
-          _highlightResult: {
-            name: {
-              value: item._highlightResult.name.value.toUpperCase(),
-            },
-          },
-        })),
+        items.map(item => {
+          // @ts-ignore
+          item._highlightResult.name.value = item._highlightResult.name.value.toUpperCase();
+
+          return item;
+        }),
       escapeHTML: true,
     });
 

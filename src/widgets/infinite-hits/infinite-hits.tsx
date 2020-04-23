@@ -111,7 +111,7 @@ type InfiniteHitsWidgetParams = {
   templates?: InfiniteHitsTemplates;
 };
 
-type InfiniteHits = WidgetFactory<
+export type InfiniteHitsWidget = WidgetFactory<
   InfiniteHitsConnectorParams,
   InfiniteHitsWidgetParams
 >;
@@ -122,7 +122,7 @@ const renderer = ({
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}): Renderer<InfiniteHitsRendererOptions, InfiniteHitsRendererWidgetParams> => (
+}): Renderer<InfiniteHitsRendererOptions, InfiniteHitsWidgetParams> => (
   {
     hits,
     results,
@@ -161,7 +161,7 @@ const renderer = ({
   );
 };
 
-const infiniteHits: InfiniteHits = (
+const infiniteHits: InfiniteHitsWidget = (
   {
     container,
     escapeHTML,
@@ -208,7 +208,12 @@ const infiniteHits: InfiniteHits = (
     connectInfiniteHits
   )(specializedRenderer, () => render(null, containerNode));
 
-  return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });
+  return makeInfiniteHits({
+    container: containerNode,
+    escapeHTML,
+    transformItems,
+    showPrevious,
+  });
 };
 
 export default infiniteHits;
