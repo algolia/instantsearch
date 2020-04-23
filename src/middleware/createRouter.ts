@@ -31,7 +31,7 @@ export const createRouter: RoutingManager = (props = {}) => {
     stateMapping = simpleStateMapping(),
   } = props;
 
-  return ({ instantSearchInstance }) => {
+  const routingMiddleware: Middleware = ({ instantSearchInstance }) => {
     function topLevelCreateURL(nextState: UiState) {
       const uiState: UiState = Object.keys(nextState).reduce(
         (acc, indexId) => ({
@@ -47,10 +47,15 @@ export const createRouter: RoutingManager = (props = {}) => {
     }
 
     instantSearchInstance._createURL = topLevelCreateURL;
-    instantSearchInstance._initialUiState = {
-      ...instantSearchInstance._initialUiState,
-      ...stateMapping.routeToState(router.read()),
-    };
+
+    const uiState = stateMapping.routeToState(router.read());
+
+    Object.keys(uiState).forEach(key => {
+      instantSearchInstance._initialUiState[key] = {
+        ...instantSearchInstance._initialUiState[key],
+        ...uiState[key],
+      };
+    });
 
     return {
       onStateChange({ uiState }) {
@@ -91,4 +96,6 @@ export const createRouter: RoutingManager = (props = {}) => {
       },
     };
   };
+
+  return routingMiddleware;
 };
