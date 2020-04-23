@@ -3,7 +3,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Hits, Connector, TransformItems, AlgoliaHit } from '../../types';
+import { Hits, Connector, TransformItems, Hit } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -32,11 +32,7 @@ export type InfiniteHitsConnectorParams = {
    * Receives the items, and is called before displaying them.
    * Useful for mapping over the items to transform, and remove or reorder them.
    */
-  transformItems?: TransformItems<
-    AlgoliaHit & {
-      __hitIndex: number;
-    }
-  >;
+  transformItems?: TransformItems<Hit>;
 };
 
 export type InfiniteHitsRendererOptions = {
