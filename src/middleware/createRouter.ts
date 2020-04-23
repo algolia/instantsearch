@@ -48,12 +48,12 @@ export const createRouter: RoutingManager = (props = {}) => {
 
     instantSearchInstance._createURL = topLevelCreateURL;
 
-    const uiState = stateMapping.routeToState(router.read());
+    const routeState = stateMapping.routeToState(router.read());
 
-    Object.keys(uiState).forEach(key => {
+    Object.keys(routeState).forEach(key => {
       instantSearchInstance._initialUiState[key] = {
         ...instantSearchInstance._initialUiState[key],
-        ...uiState[key],
+        ...routeState[key],
       };
     });
 
