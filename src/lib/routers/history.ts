@@ -19,13 +19,6 @@ type ParseURL = ({
   location: Location;
 }) => RouteState;
 
-type BrowserHistoryProps = {
-  windowTitle?: (routeState: RouteState) => string;
-  writeDelay: number;
-  createURL: CreateURL;
-  parseURL: ParseURL;
-};
-
 type BrowserHistoryArgs = {
   windowTitle?: (routeState: RouteState) => string;
   writeDelay?: number;
@@ -70,7 +63,7 @@ class BrowserHistory implements Router {
   /**
    * Transforms a UI state into a title for the page.
    */
-  private readonly windowTitle?: BrowserHistoryProps['windowTitle'];
+  private readonly windowTitle?: BrowserHistoryArgs['windowTitle'];
   /**
    * Time in milliseconds before performing a write in the history.
    * It prevents from adding too many entries in the history and
@@ -78,17 +71,17 @@ class BrowserHistory implements Router {
    *
    * @default 400
    */
-  private readonly writeDelay: BrowserHistoryProps['writeDelay'];
+  private readonly writeDelay: Required<BrowserHistoryArgs>['writeDelay'];
   /**
    * Creates a full URL based on the route state.
    * The storage adaptor maps all syncable keys to the query string of the URL.
    */
-  private readonly _createURL: BrowserHistoryProps['createURL'];
+  private readonly _createURL: Required<BrowserHistoryArgs>['createURL'];
   /**
    * Parses the URL into a route state.
    * It should be symetrical to `createURL`.
    */
-  private readonly parseURL: BrowserHistoryProps['parseURL'];
+  private readonly parseURL: Required<BrowserHistoryArgs>['parseURL'];
 
   private writeTimer?: number;
   private _onPopState?(event: PopStateEvent): void;
