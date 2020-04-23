@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { SearchClient } from '../../../types';
+import { SearchClient, HitAttributeHighlightResult } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createInitOptions,
@@ -440,8 +440,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const widget = makeWidget({
       transformItems: items =>
         items.map(item => {
-          // @ts-ignore
-          item._highlightResult.name.value = item._highlightResult.name.value.toUpperCase();
+          const name = item._highlightResult!
+            .name as HitAttributeHighlightResult;
+
+          name.value = name.value.toUpperCase();
 
           return item;
         }),

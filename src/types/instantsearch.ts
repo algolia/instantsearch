@@ -10,26 +10,26 @@ export type HelperChangeEvent = {
   state: SearchParameters;
 };
 
-type HitAttributeHighlightResult = {
+export type HitAttributeHighlightResult = {
   value: string;
   matchLevel: 'none' | 'partial' | 'full';
   matchedWords: string[];
   fullyHighlighted?: boolean;
 };
 
-type HitHighlightResult = {
+export type HitHighlightResult = {
   [attribute: string]:
     | HitAttributeHighlightResult
     | HitAttributeHighlightResult[]
     | HitHighlightResult;
 };
 
-type HitAttributeSnippetResult = Pick<
+export type HitAttributeSnippetResult = Pick<
   HitAttributeHighlightResult,
   'value' | 'matchLevel'
 >;
 
-type HitSnippetResult = {
+export type HitSnippetResult = {
   [attribute: string]:
     | HitAttributeSnippetResult
     | HitAttributeSnippetResult[]
