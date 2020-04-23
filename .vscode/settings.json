@@ -1,0 +1,7 @@
+{
+  "search.exclude": {
+    "cjs/**": true,
+    "dist/**": true,
+    "es/**": true
+  }
+}
