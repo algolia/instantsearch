@@ -26,6 +26,32 @@ describe('life cycle', () => {
     expect(pushState).toHaveBeenCalledTimes(1);
   });
 
+  it('does not write if already externally updated to desired URL', async () => {
+    const pushState = jest.spyOn(window.history, 'pushState');
+    const router = historyRouter({
+      writeDelay: 0,
+    });
+
+    const fakeState = { identifier: 'fake state' };
+
+    router.write({ some: 'state one' });
+
+    // external update before timeout passes
+    window.history.pushState(
+      fakeState,
+      '',
+      'http://localhost/?some=state%20two'
+    );
+
+    // this write isn't needed anymore
+    router.write({ some: 'state two' });
+    await wait(0);
+
+    expect(pushState).toHaveBeenCalledTimes(1);
+    // proves that InstantSearch' write did not happen
+    expect(history.state).toBe(fakeState);
+  });
+
   it('does not write the same url title twice', async () => {
     const title = jest.spyOn(window.document, 'title', 'set');
     const pushState = jest.spyOn(window.history, 'pushState');
