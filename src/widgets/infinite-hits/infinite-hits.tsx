@@ -94,7 +94,7 @@ export type InfiniteHitsTemplates = {
   item?: Template<Hit>;
 };
 
-type InfiniteHitsWidgetParams = {
+export type InfiniteHitsWidgetParams = {
   /**
    * The CSS Selector or `HTMLElement` to insert the widget into.
    */
