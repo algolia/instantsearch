@@ -24,6 +24,17 @@ describe('life cycle', () => {
     await wait(0);
 
     expect(pushState).toHaveBeenCalledTimes(1);
+    expect(pushState.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "some": "state",
+          },
+          "",
+          "http://localhost/?some=state",
+        ],
+      ]
+    `);
   });
 
   it('does not write if already externally updated to desired URL', async () => {
@@ -48,6 +59,18 @@ describe('life cycle', () => {
     await wait(0);
 
     expect(pushState).toHaveBeenCalledTimes(1);
+    expect(pushState.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "identifier": "fake state",
+          },
+          "",
+          "http://localhost/?some=state%20two",
+        ],
+      ]
+    `);
+
     // proves that InstantSearch' write did not happen
     expect(history.state).toBe(fakeState);
   });
@@ -74,6 +97,17 @@ describe('life cycle', () => {
     await wait(0);
 
     expect(pushState).toHaveBeenCalledTimes(1);
+    expect(pushState.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "some": "state",
+          },
+          "My Site - state",
+          "http://localhost/?some=state",
+        ],
+      ]
+    `);
 
     expect(title).toHaveBeenCalledTimes(2);
     expect(window.document.title).toBe('My Site - state');
@@ -92,5 +126,16 @@ describe('life cycle', () => {
     await wait(0);
 
     expect(pushState).toHaveBeenCalledTimes(1);
+    expect(pushState.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "some": "third",
+          },
+          "",
+          "http://localhost/?some=third",
+        ],
+      ]
+    `);
   });
 });
