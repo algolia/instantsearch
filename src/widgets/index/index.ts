@@ -225,7 +225,10 @@ const index = (props: IndexProps): Index => {
             widget.init({
               helper: helper!,
               parent: this,
-              uiState: {},
+              // Only index widget uses this key. This means that the initial value
+              // is sufficient, since that index didn't yet exist. If we see wrong
+              // behavior with this, use mainIndex.getWidgetState()
+              uiState: localInstantSearchInstance._initialUiState,
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
