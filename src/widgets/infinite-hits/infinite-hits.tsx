@@ -122,7 +122,10 @@ const renderer = ({
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}): Renderer<InfiniteHitsRendererOptions, InfiniteHitsWidgetParams> => (
+}): Renderer<
+  InfiniteHitsRendererOptions,
+  Partial<InfiniteHitsWidgetParams>
+> => (
   {
     hits,
     results,
@@ -204,12 +207,11 @@ const infiniteHits: InfiniteHitsWidget = (
     renderState: {},
   });
 
-  const makeInfiniteHits = withInsights(
+  const makeInfiniteHitsWidget = withInsights(
     connectInfiniteHits
   )(specializedRenderer, () => render(null, containerNode));
 
-  return makeInfiniteHits({
-    container: containerNode,
+  return makeInfiniteHitsWidget({
     escapeHTML,
     transformItems,
     showPrevious,
