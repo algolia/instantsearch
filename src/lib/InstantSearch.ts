@@ -142,6 +142,10 @@ class InstantSearch extends EventEmitter {
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];
 
+  // this is set on the instance by SSR implementations. The goal is to prevent
+  // e.g. change events taking effect while doing a prerender.
+  public __isServerRendering?: boolean;
+
   public constructor(options: InstantSearchOptions) {
     super();
 
