@@ -101,9 +101,9 @@ const wrapInsightsClient = (
   aa(method, { ...inferredPayload, ...payload } as any);
 };
 
-export default function withInsights<TRenderOptions, TWidgetParams>(
-  connector: Connector<TRenderOptions, TWidgetParams>
-): Connector<TRenderOptions, TWidgetParams> {
+export default function withInsights<TRendererOptions, TConnectorParams>(
+  connector: Connector<TRendererOptions, TConnectorParams>
+): Connector<TRendererOptions, TConnectorParams> {
   const wrapRenderFn = renderFn => (renderOptions, isFirstRender) => {
     const { results, hits, instantSearchInstance } = renderOptions;
     if (results && hits && instantSearchInstance) {
