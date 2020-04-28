@@ -168,7 +168,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         _highlightResult: {
           foobar: {
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
-            matchLevel: 'none',
+            matchLevel: 'partial',
             matchedWords: ['foobar'],
           },
         },
@@ -192,7 +192,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         _highlightResult: {
           foobar: {
             value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
-            matchLevel: 'none',
+            matchLevel: 'partial',
             matchedWords: ['foobar'],
           },
         },
