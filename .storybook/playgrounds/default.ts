@@ -102,9 +102,6 @@ function instantSearchPlayground({
     }),
   ]);
 
-  const hits = document.createElement('div');
-  hits.classList.add('hits');
-  rightPanel.appendChild(hits);
   const hitsElement = document.createElement('div');
   hitsElement.classList.add('hits');
   rightPanel.appendChild(hitsElement);
