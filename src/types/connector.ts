@@ -1,6 +1,6 @@
 import { SearchResults } from 'algoliasearch-helper';
 import { Hits, InstantSearch } from './instantsearch';
-import { InsightsClient } from './insights';
+import { InsightsClientWrapper } from './insights';
 import { WidgetFactory } from './widget';
 
 /**
@@ -33,7 +33,7 @@ export type RendererOptions<TWidgetParams> = {
   /**
    * The current insights client, if any.
    */
-  insights?: InsightsClient;
+  insights?: InsightsClientWrapper;
 };
 
 /**
