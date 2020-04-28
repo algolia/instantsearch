@@ -16,7 +16,7 @@ function range({ start = 0, end, step = 1 }: RangeOptions): number[] {
   const arrayLength = Math.round((end - start) / limitStep);
 
   return [...Array(arrayLength)].map(
-    (_, current) => (start + current) * limitStep
+    (_, current) => start + current * limitStep
   );
 }
 
