@@ -3,8 +3,8 @@ import analytics from '../analytics';
 describe('Usage', () => {
   it('throws without `pushFunction`', () => {
     expect(() => {
-      // @ts-ignore
       analytics({
+        // @ts-ignore
         pushFunction: undefined,
       });
     }).toThrowErrorMatchingInlineSnapshot(`
