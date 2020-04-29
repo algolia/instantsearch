@@ -2,7 +2,10 @@
 
 import { h, render } from 'preact';
 import cx from 'classnames';
-import connectHits from '../../connectors/hits/connectHits';
+import connectHits, {
+  HitsConnectorParams,
+  HitsRendererOptions,
+} from '../../connectors/hits/connectHits';
 import Hits from '../../components/Hits/Hits';
 import defaultTemplates from './defaultTemplates';
 import {
@@ -12,12 +15,24 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
+import {
+  Template,
+  Hit,
+  WidgetFactory,
+  Renderer,
+  InsightsClientWrapper,
+} from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
 const HitsWithInsightsListener = withInsightsListener(Hits);
 
-const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
+const renderer = ({
+  renderState,
+  cssClasses,
+  containerNode,
+  templates,
+}): Renderer<HitsRendererOptions, Partial<HitsWidgetOptions>> => (
   { hits: receivedHits, results, instantSearchInstance, insights },
   isFirstRendering
 ) => {
@@ -36,65 +51,83 @@ const renderer = ({ renderState, cssClasses, containerNode, templates }) => (
       hits={receivedHits}
       results={results}
       templateProps={renderState.templateProps}
-      insights={insights}
+      insights={insights as InsightsClientWrapper}
     />,
     containerNode
   );
 };
 
-/**
- * @typedef {Object} HitsCSSClasses
- * @property {string|string[]} [root] CSS class to add to the wrapping element.
- * @property {string|string[]} [emptyRoot] CSS class to add to the wrapping element when no results.
- * @property {string|string[]} [list] CSS class to add to the list of results.
- * @property {string|string[]} [item] CSS class to add to each result.
- */
+export type HitsCSSClasses = {
+  /**
+   * CSS class to add to the wrapping element.
+   */
+  root?: string | string[];
 
-/**
- * @typedef {Object} HitsTemplates
- * @property {string|function(object):string} [empty=''] Template to use when there are no results.
- * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record. The record will have a new property `__hitIndex` for the position of the record in the list of displayed hits.
- */
+  /**
+   * CSS class to add to the wrapping element when no results.
+   */
+  emptyRoot?: string | string[];
 
-/**
- * @typedef {Object} HitsWidgetOptions
- * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {HitsTemplates} [templates] Templates to use for the widget.
- * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
- * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
- */
+  /**
+   * CSS class to add to the list of results.
+   */
+  list?: string | string[];
 
-/**
- * Display the list of results (hits) from the current search.
- *
- * This is a traditional display of the hits. It has to be implemented
- * together with a pagination widget, to let the user browse the results
- * beyond the first page.
- * @type {WidgetFactory}
- * @devNovel Hits
- * @category basic
- * @param {HitsWidgetOptions} $0 Options of the Hits widget.
- * @return {Widget} A new instance of Hits widget.
- * @example
- * search.addWidgets([
- *   instantsearch.widgets.hits({
- *     container: '#hits-container',
- *     templates: {
- *       empty: 'No results',
- *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
- *     },
- *     transformItems: items => items.map(item => item),
- *   })
- * ]);
- */
-export default function hits({
-  container,
-  escapeHTML,
-  transformItems,
-  templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
-}) {
+  /**
+   * CSS class to add to each result.
+   */
+  item?: string | string[];
+};
+
+export type HitsTemplates = {
+  /**
+   * Template to use when there are no results.
+   *
+   * @default 'No Results'
+   */
+  empty?: Template;
+
+  /**
+   * Template to use for each result. This template will receive an object containing a single record. The record will
+   * have a new property `__hitIndex` for the position of the record in the list of displayed hits.
+   *
+   * @default ''
+   */
+  item?: Template<
+    Hit & {
+      __hitIndex: number;
+    }
+  >;
+};
+
+export type HitsWidgetOptions = {
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+
+  /**
+   * Templates to use for the widget.
+   */
+  templates?: HitsTemplates;
+
+  /**
+   * CSS classes to add.
+   */
+  cssClasses?: HitsCSSClasses;
+};
+
+export type HitsWidget = WidgetFactory<HitsConnectorParams, HitsWidgetOptions>;
+
+const hits: HitsWidget = function hits(widgetOptions) {
+  const {
+    container,
+    escapeHTML,
+    transformItems,
+    templates = defaultTemplates,
+    cssClasses: userCssClasses = {},
+  } = widgetOptions || ({} as typeof widgetOptions);
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -119,4 +152,6 @@ export default function hits({
   );
 
   return makeHits({ escapeHTML, transformItems });
-}
+};
+
+export default hits;

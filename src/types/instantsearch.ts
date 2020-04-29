@@ -68,6 +68,8 @@ export type Hit = {
 
 export type Hits = Hit[];
 
+export type EscapedHits<THit = Hit> = THit[] & { __escaped: boolean };
+
 export type FacetHit = {
   value: string;
   highlighted: string;
