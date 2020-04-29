@@ -3,7 +3,9 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectCurrentRefinements, { Item } from '../connectCurrentRefinements';
+import connectCurrentRefinements, {
+  CurrentRefinementsConnectorParamsItem,
+} from '../connectCurrentRefinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import {
   createInitOptions,
@@ -508,7 +510,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       );
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
-      const items: Item[] = secondRenderingOptions.items;
+      const items: CurrentRefinementsConnectorParamsItem[] =
+        secondRenderingOptions.items;
 
       expect(items).toHaveLength(2);
       expect(items).toEqual([
@@ -612,7 +615,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       );
 
       const secondRenderingOptions = rendering.mock.calls[1][0];
-      const items: Item[] = secondRenderingOptions.items;
+      const items: CurrentRefinementsConnectorParamsItem[] =
+        secondRenderingOptions.items;
       expect(items).toHaveLength(4);
       expect(items).toEqual([
         {

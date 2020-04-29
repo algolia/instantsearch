@@ -2,11 +2,14 @@
 
 import { h } from 'preact';
 import { isSpecialClick, capitalize } from '../../lib/utils';
-import { Item } from '../../connectors/current-refinements/connectCurrentRefinements';
+import {
+  CurrentRefinementsConnectorParamsItem,
+  CurrentRefinementsConnectorParamsRefinement,
+} from '../../connectors/current-refinements/connectCurrentRefinements';
 import { CurrentRefinementsComponentCSSClasses } from '../../widgets/current-refinements/current-refinements';
 
 type CurrentRefinementsProps = {
-  items: Item[];
+  items: CurrentRefinementsConnectorParamsItem[];
   cssClasses: CurrentRefinementsComponentCSSClasses;
 };
 
@@ -15,12 +18,7 @@ const createItemKey = ({
   value,
   type,
   operator,
-}: {
-  attribute: string;
-  value: string;
-  type: string;
-  operator?: string;
-}): string =>
+}: CurrentRefinementsConnectorParamsRefinement): string =>
   [attribute, type, value, operator]
     .map(key => key)
     .filter(Boolean)
