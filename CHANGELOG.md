@@ -1,3 +1,13 @@
+## [4.4.1](https://github.com/algolia/instantsearch.js/compare/v4.4.0...v4.4.1) (2020-04-29)
+
+
+### Bug Fixes
+
+* **range:** fix range calculation when step is set ([#4398](https://github.com/algolia/instantsearch.js/issues/4398)) ([a36b4e0](https://github.com/algolia/instantsearch.js/commit/a36b4e0a64afaa9dfa3048c802d010d569c821a9))
+* **router:** don't write an existing URL ([#4392](https://github.com/algolia/instantsearch.js/issues/4392)) ([ee6a9c6](https://github.com/algolia/instantsearch.js/commit/ee6a9c657c97adebba9fb9404eae454c3996b86d))
+
+
+
 # [4.4.0](https://github.com/algolia/instantsearch.js/compare/v4.3.1...v4.4.0) (2020-04-08)
 
 
