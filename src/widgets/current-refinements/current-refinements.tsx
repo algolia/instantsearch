@@ -50,10 +50,6 @@ export type CurrentRefinementsCSSClasses = {
   delete?: string | string[];
 };
 
-export type CurrentRefinementsComponentCSSClasses = {
-  [TClassName in keyof CurrentRefinementsCSSClasses]: string;
-};
-
 export type CurrentRefinementsWidgetParams = {
   /**
    * The CSS Selector or `HTMLElement` to insert the widget into.

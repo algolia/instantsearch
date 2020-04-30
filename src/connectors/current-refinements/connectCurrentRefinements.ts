@@ -17,15 +17,6 @@ import {
 } from '../../lib/utils/getRefinements';
 import { Connector, TransformItems, CreateURL } from '../../types';
 
-export type CurrentRefinementsConnectorParamsRefinementType =
-  | 'facet'
-  | 'exclude'
-  | 'disjunctive'
-  | 'hierarchical'
-  | 'numeric'
-  | 'query'
-  | 'tag';
-
 export type CurrentRefinementsConnectorParamsRefinement = {
   /**
    * The attribute on which the refinement is applied.
@@ -34,8 +25,10 @@ export type CurrentRefinementsConnectorParamsRefinement = {
 
   /**
    * The type of the refinement.
+   *
+   * It can be one of those: 'facet'|'exclude'|'disjunctive'|'hierarchical'|'numeric'|'query'|'tag'.
    */
-  type: CurrentRefinementsConnectorParamsRefinementType;
+  type: string;
 
   /**
    * The raw value of the refinement.
@@ -66,8 +59,6 @@ export type CurrentRefinementsConnectorParamsRefinement = {
 export type CurrentRefinementsConnectorParamsItem = {
   /**
    * The index name.
-   *
-   * @internal
    */
   indexName: string;
 
@@ -254,12 +245,9 @@ function getItems({
     .map(normalizeRefinement)
     .filter(filterFunction);
 
-  return items.reduce<any[]>(
+  return items.reduce<CurrentRefinementsConnectorParamsItem[]>(
     (allItems, currentItem) => [
-      ...allItems.filter(
-        (item: CurrentRefinementsConnectorParamsItem) =>
-          item.attribute !== currentItem.attribute
-      ),
+      ...allItems.filter(item => item.attribute !== currentItem.attribute),
       {
         indexName: helper.state.index,
         attribute: currentItem.attribute,
@@ -270,8 +258,7 @@ function getItems({
           .sort((a, b) =>
             a.type === 'numeric' ? (a.value as number) - (b.value as number) : 0
           ),
-        refine: (refinement: CurrentRefinementsConnectorParamsRefinement) =>
-          clearRefinement(helper, refinement),
+        refine: refinement => clearRefinement(helper, refinement),
       },
     ],
     []

@@ -2,7 +2,6 @@
 
 import { h } from 'preact';
 import { render } from '@testing-library/preact';
-import { CurrentRefinementsConnectorParamsRefinementType } from '../../../connectors/current-refinements/connectCurrentRefinements';
 import CurrentRefinements from '../CurrentRefinements';
 
 describe('CurrentRefinements', () => {
@@ -27,13 +26,13 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'facet' as CurrentRefinementsConnectorParamsRefinementType,
+              type: 'facet',
               attribute: 'facet',
               value: 'facet-val1',
               label: 'facet-val1',
             },
             {
-              type: 'facet' as CurrentRefinementsConnectorParamsRefinementType,
+              type: 'facet',
               attribute: 'facet',
               value: 'facet-val2',
               label: 'facet-val2',
@@ -47,7 +46,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'exclude' as CurrentRefinementsConnectorParamsRefinementType,
+              type: 'exclude',
               attribute: 'facetExclude',
               value: 'disjunctiveFacet-val1',
               label: 'disjunctiveFacet-val1',
@@ -62,7 +61,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'disjunctive' as CurrentRefinementsConnectorParamsRefinementType,
+              type: 'disjunctive',
               attribute: 'disjunctiveFacet',
               value: 'disjunctiveFacet-val1',
               label: 'disjunctiveFacet-val1',
@@ -76,7 +75,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'hierarchical' as CurrentRefinementsConnectorParamsRefinementType,
+              type: 'hierarchical',
               attribute: 'hierarchicalFacet',
               value: 'hierarchicalFacet-val1',
               label: 'hierarchicalFacet-val1',
@@ -90,7 +89,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'numeric' as CurrentRefinementsConnectorParamsRefinementType,
+              type: 'numeric',
               attribute: 'numericFacet',
               value: 'numericFacet-val1',
               label: 'numericFacet-val1',
@@ -105,7 +104,7 @@ describe('CurrentRefinements', () => {
           refine: () => {},
           refinements: [
             {
-              type: 'tag' as CurrentRefinementsConnectorParamsRefinementType,
+              type: 'tag',
               attribute: '_tags',
               value: 'tag1',
               label: 'tag1',
@@ -133,7 +132,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customFacet',
-                type: 'facet' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'facet',
                 value: 'val1',
                 label: 'val1',
               },
@@ -159,7 +158,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customExcludeFacet',
-                type: 'exclude' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'exclude',
                 value: 'val1',
                 label: 'val1',
                 exclude: true,
@@ -186,7 +185,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customDisjunctiveFacet',
-                type: 'disjunctive' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'disjunctive',
                 value: 'val1',
                 label: 'val1',
               },
@@ -212,7 +211,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customHierarchicalFacet',
-                type: 'hierarchical' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'hierarchical',
                 value: 'val1',
                 label: 'val1',
               },
@@ -238,7 +237,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'numeric',
                 operator: '=',
                 value: 'val1',
                 label: 'val1',
@@ -253,7 +252,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'numeric',
                 operator: '<=',
                 value: 'val2',
                 label: 'val2',
@@ -268,7 +267,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'customNumericFilter',
-                type: 'numeric' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'numeric',
                 operator: '>=',
                 value: 'val3',
                 label: 'val3',
@@ -295,7 +294,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: '_tags',
-                type: 'tag' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'tag',
                 value: 'tag1',
                 label: 'tag1',
               },
@@ -321,7 +320,7 @@ describe('CurrentRefinements', () => {
             refinements: [
               {
                 attribute: 'query',
-                type: 'query' as CurrentRefinementsConnectorParamsRefinementType,
+                type: 'query',
                 value: 'search1',
                 label: 'search1',
               },

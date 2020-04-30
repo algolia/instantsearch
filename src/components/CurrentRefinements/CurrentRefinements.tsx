@@ -6,7 +6,11 @@ import {
   CurrentRefinementsConnectorParamsItem,
   CurrentRefinementsConnectorParamsRefinement,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
-import { CurrentRefinementsComponentCSSClasses } from '../../widgets/current-refinements/current-refinements';
+import { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
+
+export type CurrentRefinementsComponentCSSClasses = {
+  [TClassName in keyof CurrentRefinementsCSSClasses]: string;
+};
 
 type CurrentRefinementsProps = {
   items: CurrentRefinementsConnectorParamsItem[];
