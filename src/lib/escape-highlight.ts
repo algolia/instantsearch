@@ -46,13 +46,15 @@ function recursiveEscape(input: any): any {
 
 export default function escapeHits(hits: Hit[]): Hit[] {
   if ((hits as any).__escaped === undefined) {
-    hits = hits.map(hit => {
-      if (hit._highlightResult) {
-        hit._highlightResult = recursiveEscape(hit._highlightResult);
+    // We don't overidde the value on hit because it will mutate the raw results
+    // instead we make a shallow copy and we assigin the escaped values on it.
+    hits = hits.map(({ _highlightResult, _snippetResult, ...hit }) => {
+      if (_highlightResult) {
+        hit._highlightResult = recursiveEscape(_highlightResult);
       }
 
-      if (hit._snippetResult) {
-        hit._snippetResult = recursiveEscape(hit._snippetResult);
+      if (_snippetResult) {
+        hit._snippetResult = recursiveEscape(_snippetResult);
       }
 
       return hit;
