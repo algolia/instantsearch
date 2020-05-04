@@ -111,8 +111,12 @@ function resetPageFromWidgets(widgets: Widget[]): void {
   indexWidgets.forEach(widget => {
     const widgetHelper = widget.getHelper()!;
 
-    // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
-    widgetHelper.setState(widgetHelper.state.resetPage());
+    // @ts-ignore remove once resetPage is a helper method
+    widgetHelper._change({
+      // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
+      state: widgetHelper.state.resetPage(),
+      isPageReset: true,
+    });
 
     resetPageFromWidgets(widget.getWidgets());
   });
@@ -357,6 +361,7 @@ const index = (props: IndexProps): Index => {
       // listener on `change` below, once `init` is done.
       helper.on('change', ({ isPageReset }) => {
         if (isPageReset) {
+          localUiState.page = undefined;
           resetPageFromWidgets(localWidgets);
         }
       });

@@ -1783,6 +1783,58 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         });
       });
     });
+
+    it('uiState on inner index does not get erased on "change"', () => {
+      const level0 = index({ indexName: 'level0IndexName' });
+
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+        _initialUiState: {
+          level0IndexName: { query: 'something' },
+        },
+      });
+
+      instantSearchInstance.mainIndex.init(
+        createInitOptions({ instantSearchInstance, parent: null })
+      );
+
+      instantSearchInstance.mainIndex.addWidgets([
+        level0.addWidgets([
+          createConfigure({
+            distinct: false,
+          }),
+          createSearchBox(),
+        ]),
+      ]);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+          parent: instantSearchInstance.mainIndex,
+        })
+      );
+
+      // Setting a page is considered as a change
+      level0
+        .getHelper()!
+        .setQueryParameter('page', 4)
+        .search();
+
+      expect(level0.getHelper()!.state.page).toBe(4);
+      expect(level0.getHelper()!.state.query).toBe('something');
+
+      expect(instantSearchInstance.mainIndex.getWidgetState({})).toEqual({
+        indexName: {},
+        level0IndexName: {
+          configure: {
+            distinct: false,
+          },
+          query: 'something',
+        },
+      });
+    });
   });
 
   describe('render', () => {
