@@ -407,13 +407,6 @@ const index = (props: IndexProps): Index => {
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
       // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
       helper.on('change', ({ state }) => {
-        // if (
-        //   instantSearchInstance.__isServerRendering &&
-        //   !instantSearchInstance.started
-        // ) {
-        //   return;
-        // }
-
         localUiState = getLocalWidgetsState(
           localWidgets,
           {
