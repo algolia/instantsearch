@@ -361,7 +361,6 @@ const index = (props: IndexProps): Index => {
       // listener on `change` below, once `init` is done.
       helper.on('change', ({ isPageReset }) => {
         if (isPageReset) {
-          localUiState.page = undefined;
           resetPageFromWidgets(localWidgets);
         }
       });
@@ -411,7 +410,11 @@ const index = (props: IndexProps): Index => {
       // widgets. When the subscription happens before the `init` step, the (static)
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
       // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
-      helper.on('change', ({ state }) => {
+      helper.on('change', ({ state, isPageReset }) => {
+        if (isPageReset) {
+          localUiState.page = undefined;
+        }
+
         localUiState = getLocalWidgetsState(
           localWidgets,
           {
