@@ -273,28 +273,28 @@ function clearRefinementFromState(
     case 'facet':
       return state.removeFacetRefinement(
         refinement.attribute,
-        refinement.value as string
+        String(refinement.value)
       );
     case 'disjunctive':
       return state.removeDisjunctiveFacetRefinement(
         refinement.attribute,
-        refinement.value as string
+        String(refinement.value)
       );
     case 'hierarchical':
       return state.removeHierarchicalFacetRefinement(refinement.attribute);
     case 'exclude':
       return state.removeExcludeRefinement(
         refinement.attribute,
-        refinement.value as string
+        String(refinement.value)
       );
     case 'numeric':
       return state.removeNumericRefinement(
         refinement.attribute,
         refinement.operator,
-        refinement.value as string
+        String(refinement.value)
       );
     case 'tag':
-      return state.removeTagRefinement(refinement.value as string);
+      return state.removeTagRefinement(String(refinement.value));
     case 'query':
       return state.setQueryParameter('query', '');
     default:
