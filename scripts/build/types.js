@@ -40,7 +40,7 @@ fs.writeFileSync(
 );
 
 const extractorConfig = ExtractorConfig.loadFileAndPrepare(
-  path.resolve(path.join(__dirname, 'api-extractor.json'))
+  path.resolve(path.join(__dirname, '../../', 'api-extractor.json'))
 );
 
 const result = Extractor.invoke(extractorConfig, {
