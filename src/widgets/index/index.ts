@@ -4,6 +4,7 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   SearchParameters,
   SearchResults,
+  AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 import {
   InstantSearch,
@@ -68,6 +69,34 @@ export function isIndexWidget(widget: Widget): widget is Index {
   return widget.$$type === 'ais.index';
 }
 
+/**
+ * This is the same content as helper._change / setState, but allowing for extra
+ * _isFromAddWidget, which we use to decide whether local ui state invalidates.
+ */
+function privateHelperSetState(
+  helper: AlgoliaSearchHelper,
+  {
+    state,
+    isPageReset,
+    _isFromAddWidget,
+  }: {
+    state: SearchParameters;
+    isPageReset?: boolean;
+    _isFromAddWidget?: boolean;
+  }
+) {
+  if (state !== helper.state) {
+    helper.state = state;
+
+    helper.emit('change', {
+      state: helper.state,
+      results: helper.lastResults,
+      isPageReset,
+      _isFromAddWidget,
+    });
+  }
+}
+
 function getLocalWidgetsState(
   widgets: Widget[],
   widgetStateOptions: WidgetStateOptions,
@@ -111,8 +140,7 @@ function resetPageFromWidgets(widgets: Widget[]): void {
   indexWidgets.forEach(widget => {
     const widgetHelper = widget.getHelper()!;
 
-    // @ts-ignore remove once resetPage is a helper method
-    widgetHelper._change({
+    privateHelperSetState(widgetHelper, {
       // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
       state: widgetHelper.state.resetPage(),
       isPageReset: true,
@@ -218,12 +246,13 @@ const index = (props: IndexProps): Index => {
       localWidgets = localWidgets.concat(widgets);
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        helper!.setState(
-          getLocalWidgetsSearchParameters(localWidgets, {
+        privateHelperSetState(helper!, {
+          state: getLocalWidgetsSearchParameters(localWidgets, {
             uiState: localUiState,
             initialSearchParameters: helper!.state,
-          })
-        );
+          }),
+          _isFromAddWidget: true,
+        });
 
         widgets.forEach(widget => {
           if (localInstantSearchInstance && widget.init) {
@@ -410,7 +439,13 @@ const index = (props: IndexProps): Index => {
       // widgets. When the subscription happens before the `init` step, the (static)
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
       // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
-      helper.on('change', ({ state, isPageReset }) => {
+      helper.on('change', event => {
+        const { state, isPageReset } = event;
+
+        // @ts-ignore _isFromAddWidget comes from privateHelperSetState and
+        // thus isn't typed on the helper event
+        const _isFromAddWidget = event._isFromAddWidget;
+
         if (isPageReset) {
           localUiState.page = undefined;
         }
@@ -421,7 +456,7 @@ const index = (props: IndexProps): Index => {
             searchParameters: state,
             helper: helper!,
           },
-          localUiState
+          _isFromAddWidget ? localUiState : {}
         );
 
         // We don't trigger an internal change when controlled because it

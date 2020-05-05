@@ -75,6 +75,7 @@ describe('index', () => {
       }),
       getWidgetState(uiState) {
         return {
+          ...uiState,
           configure: {
             ...uiState.configure,
             ...params,
@@ -1784,7 +1785,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
     });
 
-    it('uiState on inner index does not get erased on "change"', () => {
+    it('uiState on inner index does not get erased on addWidget', () => {
       const level0 = index({ indexName: 'level0IndexName' });
 
       const searchClient = createSearchClient();
@@ -1792,7 +1793,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instantSearchInstance = createInstantSearch({
         mainHelper,
         _initialUiState: {
-          level0IndexName: { query: 'something' },
+          level0IndexName: {
+            query: 'something',
+          },
         },
       });
 
@@ -1800,14 +1803,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         createInitOptions({ instantSearchInstance, parent: null })
       );
 
-      instantSearchInstance.mainIndex.addWidgets([
-        level0.addWidgets([
-          createConfigure({
-            distinct: false,
-          }),
-          createSearchBox(),
-        ]),
-      ]);
+      instantSearchInstance.mainIndex.addWidgets([level0]);
 
       level0.init(
         createInitOptions({
@@ -1816,13 +1812,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
 
-      // Setting a page is considered as a change
-      level0
-        .getHelper()!
-        .setQueryParameter('page', 4)
-        .search();
+      level0.addWidgets([
+        createConfigure({
+          distinct: false,
+        }),
+      ]);
 
-      expect(level0.getHelper()!.state.page).toBe(4);
+      level0.addWidgets([createSearchBox()]);
+
       expect(level0.getHelper()!.state.query).toBe('something');
 
       expect(instantSearchInstance.mainIndex.getWidgetState({})).toEqual({
