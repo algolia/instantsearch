@@ -456,6 +456,7 @@ const index = (props: IndexProps): Index => {
             searchParameters: state,
             helper: helper!,
           },
+          // @MAJOR in a next version we can always use localUiState, instead of usually empty object), but it requires every single widget to set an empty value (or remove the state key's value) if they are not refined.
           _isFromAddWidget ? localUiState : {}
         );
 
