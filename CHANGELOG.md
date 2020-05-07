@@ -1,3 +1,52 @@
+## [4.4.1](https://github.com/algolia/instantsearch.js/compare/v4.4.0...v4.4.1) (2020-04-29)
+
+
+### Bug Fixes
+
+* **range:** fix range calculation when step is set ([#4398](https://github.com/algolia/instantsearch.js/issues/4398)) ([a36b4e0](https://github.com/algolia/instantsearch.js/commit/a36b4e0a64afaa9dfa3048c802d010d569c821a9))
+* **router:** don't write an existing URL ([#4392](https://github.com/algolia/instantsearch.js/issues/4392)) ([ee6a9c6](https://github.com/algolia/instantsearch.js/commit/ee6a9c657c97adebba9fb9404eae454c3996b86d))
+
+
+
+# [4.4.0](https://github.com/algolia/instantsearch.js/compare/v4.3.1...v4.4.0) (2020-04-08)
+
+
+### Features
+
+* introduce controlled mode APIs with `onStateChange` and `setUiState` ([#4362](https://github.com/algolia/instantsearch.js/issues/4362)) ([4953324](https://github.com/algolia/instantsearch.js/commit/4953324ac8a3af4c6a8be411ca9e7cc673ee6561))
+
+
+
+## [4.3.1](https://github.com/algolia/instantsearch.js/compare/v4.3.0...v4.3.1) (2020-03-06)
+
+This versions fixes a [Cross-Site Scripting](https://en.wikipedia.org/wiki/Cross-site_scripting) (XSS) vulnerability ([#4344](https://github.com/algolia/instantsearch.js/issues/4344)) when using the [`refinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/) widget when relying on its default [`item`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#widget-param-item) template and [routing](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-routing). **We recommend all users to upgrade to this version**. We now escape the `refinementList` `item` template by default, which avoids HTML to be injected. If ever you were relying on this behavior, **which we do not recommend**, you can copy the [previous `item` template](https://github.com/algolia/instantsearch.js/blob/933d9ffb3c0a396a047eeb4b44733b17aa31d081/src/widgets/refinement-list/defaultTemplates.js#L2-L9) into your widget.
+
+You were not vulnerable to this XSS if:
+
+- You didn't use [routing](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-routing)
+- You didn't use use the [`refinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/) widget ([`connectRefinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/#connector) is not subject to this issue)
+- You used a custom `item` template for your [`refinementList`](https://www.algolia.com/doc/api-reference/widgets/refinement-list/js/) widget that does not rely on the triple-brace Hogan.js syntax (e.g., `{{{highlighted}}}`)
+
+
+### Bug Fixes
+
+* **refinementList:** prevent XSS via routing ([#4344](https://github.com/algolia/instantsearch.js/issues/4344)) ([8552221](https://github.com/algolia/instantsearch.js/commit/8552221eff17a4ae5ba9c454054b0eb6e002934d))
+
+
+
+# [4.3.0](https://github.com/algolia/instantsearch.js/compare/v4.2.0...v4.3.0) (2020-02-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency algoliasearch-helper to v3.1.1 that fixes a case where refinements for a facet with a name that matches a substring of another facet could be cleared by mistake ([algolia/algoliasearch-helper-js/pull/760](https://github.com/algolia/algoliasearch-helper-js/pull/760)) ([#4335](https://github.com/algolia/instantsearch.js/issues/4335)) ([9bc66cf](https://github.com/algolia/instantsearch.js/commit/381cda05c9c51dc9d3245a6d926e3c919245b723))
+
+
+### Features
+
+* **highlight:** add cssClasses to snippet & highlight helper ([#4306](https://github.com/algolia/instantsearch.js/issues/4306)) ([ece0aa6](https://github.com/algolia/instantsearch.js/commit/ece0aa60f05c2c687a23f9219d62ace0d5b866f9))
+
+
 # [4.2.0](https://github.com/algolia/instantsearch.js/compare/v4.1.1...v4.2.0) (2020-01-23)
 
 

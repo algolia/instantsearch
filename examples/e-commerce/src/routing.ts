@@ -7,7 +7,7 @@ import {
   getFallbackRatingsRoutingValue,
 } from './widgets';
 
-interface RouteState {
+type RouteState = {
   query?: string;
   page?: string;
   brands?: string[];
@@ -17,9 +17,9 @@ interface RouteState {
   free_shipping?: string;
   sortBy?: string;
   hitsPerPage?: string;
-}
+};
 
-interface UiState {
+type UiState = {
   query?: string;
   page?: string;
   hierarchicalMenu?: {
@@ -39,7 +39,7 @@ interface UiState {
   };
   sortBy?: string;
   hitsPerPage?: number;
-}
+};
 
 const routeStateDefaultValues = {
   query: '',

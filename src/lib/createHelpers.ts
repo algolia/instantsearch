@@ -9,12 +9,12 @@ import { Hit, InsightsClientMethod, InsightsClientPayload } from '../types';
 
 type HoganRenderer = (value: any) => string;
 
-interface HoganHelpers {
+type HoganHelpers = {
   formatNumber: (value: number, render: HoganRenderer) => string;
   highlight: (options: string, render: HoganRenderer) => string;
   snippet: (options: string, render: HoganRenderer) => string;
   insights: (options: string, render: HoganRenderer) => string;
-}
+};
 
 export default function hoganHelpers({
   numberLocale,

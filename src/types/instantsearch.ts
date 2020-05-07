@@ -37,7 +37,7 @@ type HitSnippetResult = {
     | HitSnippetResult;
 };
 
-export interface AlgoliaHit {
+export type AlgoliaHit = {
   [attribute: string]: any;
   objectID: string;
   _highlightResult?: HitHighlightResult;
@@ -60,12 +60,12 @@ export interface AlgoliaHit {
     };
   };
   _distinctSeqID?: number;
-}
+};
 
-export interface Hit extends AlgoliaHit {
+export type Hit = {
   __position: number;
   __queryID?: string;
-}
+} & AlgoliaHit;
 
 export type Hits = Hit[];
 
@@ -93,7 +93,7 @@ export type Refinement = FacetRefinement | NumericRefinement;
  * The router is the part that saves and reads the object from the storage.
  * Usually this is the URL.
  */
-export interface Router<TRouteState = UiState> {
+export type Router<TRouteState = UiState> = {
   /**
    * onUpdate Sets an event listener that is triggered when the storage is updated.
    * The function should accept a callback to trigger when the update happens.
@@ -124,7 +124,7 @@ export interface Router<TRouteState = UiState> {
    * Called when InstantSearch is disposed. Used to remove subscriptions.
    */
   dispose(): void;
-}
+};
 
 /**
  * The state mapping is a way to customize the structure before sending it to the router.

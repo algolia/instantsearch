@@ -32,9 +32,9 @@ export type ConnectorRefinement = {
   exhaustive?: boolean;
 };
 
-interface ConnectorNumericRefinement extends ConnectorRefinement {
+type ConnectorNumericRefinement = {
   value: number;
-}
+} & ConnectorRefinement;
 
 export type Item = {
   indexName: string;
@@ -61,7 +61,7 @@ export type ItemRefinement = {
   exhaustive?: boolean;
 };
 
-interface CurrentRefinementsConnectorParams {
+type CurrentRefinementsConnectorParams = {
   /**
    * The attributes to include in the widget (all by default).
    * Cannot be used with `excludedAttributes`.
@@ -82,15 +82,15 @@ interface CurrentRefinementsConnectorParams {
    * Useful for mapping over the items to transform, and remove or reorder them.
    */
   transformItems?: (items: Item[]) => any;
-}
+};
 
-export interface CurrentRefinementsRendererOptions<
+export type CurrentRefinementsRendererOptions<
   TCurrentRefinementsWidgetParams
-> extends RendererOptions<TCurrentRefinementsWidgetParams> {
+> = {
   items: Item[];
   refine(refinement: ItemRefinement): void;
   createURL(state: ItemRefinement): string;
-}
+} & RendererOptions<TCurrentRefinementsWidgetParams>;
 
 export type CurrentRefinementsRenderer<
   TCurrentRefinementsWidgetParams

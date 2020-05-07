@@ -15,7 +15,7 @@ type PanelComponentCSSClasses = Omit<
   'collapseIcon'
 >;
 
-interface PanelProps {
+type PanelProps = {
   hidden: boolean;
   collapsible: boolean;
   isCollapsed: boolean;
@@ -23,7 +23,7 @@ interface PanelProps {
   cssClasses: PanelComponentCSSClasses;
   templates: PanelTemplates;
   bodyElement: HTMLElement;
-}
+};
 
 function Panel(props: PanelProps) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(props.isCollapsed);

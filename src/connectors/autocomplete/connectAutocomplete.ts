@@ -20,28 +20,27 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-interface AutocompleteIndex {
+type AutocompleteIndex = {
   indexName: string;
   hits: Hits;
   results: SearchResults;
-}
+};
 
-interface AutocompleteConnectorParams {
+type AutocompleteConnectorParams = {
   /**
    * Escapes HTML entities from hits string values.
    *
    * @default `true`
    */
   escapeHTML?: boolean;
-}
+};
 
-export interface AutocompleteRendererOptions<TAutocompleteWidgetParams>
-  extends RendererOptions<TAutocompleteWidgetParams> {
+export type AutocompleteRendererOptions<TAutocompleteWidgetParams> = {
   currentRefinement: string;
   indices: AutocompleteIndex[];
   instantSearchInstance: InstantSearch;
   refine: (query: string) => void;
-}
+} & RendererOptions<TAutocompleteWidgetParams>;
 
 export type AutocompleteRenderer<TAutocompleteWidgetParams> = Renderer<
   AutocompleteRendererOptions<

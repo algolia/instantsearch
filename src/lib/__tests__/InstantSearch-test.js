@@ -1,3 +1,6 @@
+/** @jsx h */
+
+import { h, render, createRef } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
 import version from '../version';
@@ -1389,7 +1392,7 @@ describe('use', () => {
 
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
-      state: {
+      uiState: {
         indexName: {
           query: 'Trigger search',
         },
@@ -1400,7 +1403,7 @@ describe('use', () => {
 
     expect(middlewareSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareSpy.onStateChange).toHaveBeenCalledWith({
-      state: {
+      uiState: {
         indexName: {},
       },
     });
@@ -1463,14 +1466,14 @@ describe('use', () => {
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(1);
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledWith({
-      state: {
+      uiState: {
         indexName: {
           query: 'Trigger search',
         },
       },
     });
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledWith({
-      state: {
+      uiState: {
         indexName: {
           query: 'Trigger search',
         },
@@ -1482,12 +1485,12 @@ describe('use', () => {
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledTimes(2);
     expect(middlewareBeforeStartSpy.onStateChange).toHaveBeenCalledWith({
-      state: {
+      uiState: {
         indexName: {},
       },
     });
     expect(middlewareAfterStartSpy.onStateChange).toHaveBeenCalledWith({
-      state: {
+      uiState: {
         indexName: {},
       },
     });
@@ -1496,7 +1499,548 @@ describe('use', () => {
   });
 });
 
-describe('UI state', () => {
+describe('setUiState', () => {
+  beforeEach(() => {
+    warning.cache = {};
+  });
+
+  test('throws if the instance has not started', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    expect(() => {
+      search.setUiState({});
+    }).toThrowErrorMatchingInlineSnapshot(`
+"The \`start\` method needs to be called before \`setUiState\`.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+`);
+  });
+
+  test('triggers a search', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.start();
+    await runAllMicroTasks();
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+    search.setUiState({
+      indexName: {},
+    });
+    await runAllMicroTasks();
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
+  });
+
+  test('notifies all middleware', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+    const onMiddlewareStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: onMiddlewareStateChange,
+      };
+    };
+
+    search.EXPERIMENTAL_use(middleware);
+    search.start();
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(0);
+
+    search.setUiState({
+      indexName: {},
+    });
+    expect(onMiddlewareStateChange).toHaveBeenCalledTimes(1);
+    expect(onMiddlewareStateChange).toHaveBeenCalledWith({
+      uiState: {
+        indexName: {},
+      },
+    });
+  });
+
+  test('with object form sets indices state', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
+      index({
+        indexName: 'nestedIndexName1',
+      }).addWidgets([
+        connectSearchBox(() => {})({}),
+        index({
+          indexName: 'nestedIndexName2',
+        }).addWidgets([
+          connectSearchBox(() => {})({}),
+          connectPagination(() => {})({}),
+        ]),
+      ]),
+      index({
+        indexName: 'siblingIndexName1',
+        indexId: 'siblingIndexId1',
+      }).addWidgets([connectSearchBox(() => {})({})]),
+    ]);
+    search.start();
+
+    search.setUiState({
+      indexName: {
+        query: 'Query',
+        page: 3,
+      },
+      nestedIndexName1: {
+        query: 'Query 2',
+      },
+      nestedIndexName2: {
+        query: 'Query 3',
+        page: 4,
+      },
+      siblingIndexId1: {
+        query: 'Query 4',
+      },
+    });
+
+    await runAllMicroTasks();
+
+    expect(searchClient.search).toHaveBeenCalledWith([
+      {
+        indexName: 'indexName',
+        params: expect.objectContaining({
+          query: 'Query',
+          page: 2,
+        }),
+      },
+      {
+        indexName: 'nestedIndexName1',
+        params: expect.objectContaining({
+          query: 'Query 2',
+          page: 2,
+        }),
+      },
+      {
+        indexName: 'nestedIndexName2',
+        params: expect.objectContaining({
+          query: 'Query 3',
+          page: 3,
+        }),
+      },
+      {
+        indexName: 'siblingIndexName1',
+        params: expect.objectContaining({
+          query: 'Query 4',
+        }),
+      },
+    ]);
+  });
+
+  test('with function form sets indices state', async () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      initialUiState: {
+        indexName: {
+          query: 'Initial query',
+        },
+        nestedIndexName2: {
+          query: 'Nested query 2',
+        },
+      },
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})({}),
+      connectPagination(() => {})({}),
+      index({
+        indexName: 'nestedIndexName1',
+      }).addWidgets([
+        connectSearchBox(() => {})({}),
+        index({
+          indexName: 'nestedIndexName2',
+        }).addWidgets([
+          connectSearchBox(() => {})({}),
+          connectPagination(() => {})({}),
+        ]),
+      ]),
+      index({
+        indexName: 'siblingIndexName1',
+        indexId: 'siblingIndexId1',
+      }).addWidgets([connectSearchBox(() => {})({})]),
+    ]);
+    search.start();
+
+    search.setUiState(prevUiState => {
+      expect(prevUiState).toEqual({
+        indexName: {
+          query: 'Initial query',
+        },
+        nestedIndexName1: {},
+        nestedIndexName2: {
+          query: 'Nested query 2',
+        },
+        siblingIndexId1: {},
+      });
+
+      return {
+        ...prevUiState,
+        indexName: {
+          page: 2,
+        },
+      };
+    });
+
+    await runAllMicroTasks();
+
+    search.setUiState(prevUiState => {
+      expect(prevUiState).toEqual({
+        indexName: {
+          page: 2,
+        },
+        nestedIndexName1: {},
+        nestedIndexName2: {
+          query: 'Nested query 2',
+        },
+        siblingIndexId1: {},
+      });
+
+      return {
+        indexName: {
+          query: 'Query',
+          page: 3,
+        },
+        nestedIndexName1: {
+          query: 'Query 2',
+        },
+        nestedIndexName2: {
+          query: 'Query 3',
+          page: 4,
+        },
+        siblingIndexId1: {
+          query: 'Query 4',
+        },
+      };
+    });
+
+    await runAllMicroTasks();
+
+    expect(searchClient.search).toHaveBeenCalledWith([
+      {
+        indexName: 'indexName',
+        params: expect.objectContaining({
+          query: 'Query',
+          page: 2,
+        }),
+      },
+      {
+        indexName: 'nestedIndexName1',
+        params: expect.objectContaining({
+          query: 'Query 2',
+          page: 2,
+        }),
+      },
+      {
+        indexName: 'nestedIndexName2',
+        params: expect.objectContaining({
+          query: 'Query 3',
+          page: 3,
+        }),
+      },
+      {
+        indexName: 'siblingIndexName1',
+        params: expect.objectContaining({
+          query: 'Query 4',
+        }),
+      },
+    ]);
+  });
+
+  it('warns if UI state contains unmounted widgets in development mode', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: {
+          query: 'Query',
+          page: 2,
+        },
+      });
+    })
+      .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
+
+This can happen when the UI state is specified via \`initialUiState\`, \`routing\` or \`setUiState\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
+
+To fully reflect the state, some widgets need to be added to the index "indexName":
+
+- \`query\` needs one of these widgets: "searchBox", "autocomplete", "voiceSearch"
+- \`page\` needs one of these widgets: "pagination", "infiniteHits"
+
+If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
+
+\`\`\`
+const virtualSearchBox = connectSearchBox(() => null);
+const virtualPagination = connectPagination(() => null);
+
+search.addWidgets([
+  virtualSearchBox({ /* ... */ }),
+  virtualPagination({ /* ... */ })
+]);
+\`\`\`
+
+If you're using custom widgets that do set these query parameters, we recommend using connectors instead.
+
+See https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#customize-the-complete-ui-of-the-widgets`);
+  });
+
+  it('warns about experimental API', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+    });
+
+    search.addWidgets([connectSearchBox(() => {})({})]);
+
+    search.start();
+
+    expect(() => {
+      search.setUiState({
+        indexName: {
+          query: 'Query',
+        },
+      });
+    })
+      .toWarnDev(`[InstantSearch.js]: \`setUiState\` provides a powerful way to manage the UI state. This is considered experimental as the API might change in a next minor version.
+
+Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearch.js/issues/new`);
+  });
+});
+
+describe('onStateChange', () => {
+  test('does not trigger an internal state change', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      onStateChange() {},
+    });
+    const button = document.createElement('button');
+    const searchBox = connectSearchBox(({ refine }, isFirstRender) => {
+      if (isFirstRender) {
+        button.addEventListener('click', () => {
+          refine('Trigger search');
+        });
+      }
+    });
+    const middlewareOnStateChange = jest.fn();
+    const middleware = () => {
+      return {
+        subscribe() {},
+        unsubscribe() {},
+        onStateChange: middlewareOnStateChange,
+      };
+    };
+
+    search.addWidgets([searchBox({})]);
+    search.EXPERIMENTAL_use(middleware);
+    search.start();
+
+    expect(middlewareOnStateChange).toHaveBeenCalledTimes(0);
+
+    button.click();
+
+    expect(middlewareOnStateChange).toHaveBeenCalledTimes(0);
+  });
+
+  test('does not trigger a search', () => {
+    const searchClient = createSearchClient();
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      onStateChange() {},
+    });
+    const button = document.createElement('button');
+    const searchBox = connectSearchBox(({ refine }, isFirstRender) => {
+      if (isFirstRender) {
+        button.addEventListener('click', () => {
+          refine('Trigger search');
+        });
+      }
+    });
+
+    search.addWidgets([searchBox({})]);
+    search.start();
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+    button.click();
+
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+  });
+
+  test('is triggered when the main index helper changes', () => {
+    const searchClient = createSearchClient();
+    const onStateChange = jest.fn(({ uiState, setUiState }) => {
+      setUiState(uiState);
+    });
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      onStateChange,
+    });
+
+    const inputRef = createRef();
+    const buttonRef = createRef();
+
+    const searchBox = connectSearchBox(({ refine, query, widgetParams }) => {
+      render(
+        <div>
+          <input ref={inputRef} value={query} />
+          <button
+            ref={buttonRef}
+            onClick={() => refine(widgetParams.queryTriggered)}
+          >
+            Trigger
+          </button>
+        </div>,
+        widgetParams.container
+      );
+    });
+
+    search.addWidgets([
+      searchBox({
+        container: document.createElement('div'),
+        queryTriggered: 'Query',
+      }),
+    ]);
+    search.start();
+
+    expect(onStateChange).toHaveBeenCalledTimes(0);
+
+    buttonRef.current.click();
+    expect(onStateChange).toHaveBeenCalledTimes(1);
+    expect(onStateChange).toHaveBeenCalledWith({
+      uiState: {
+        indexName: {
+          query: 'Query',
+        },
+      },
+      setUiState: expect.any(Function),
+    });
+  });
+
+  test("is triggered when nested indices' helper changes", () => {
+    const searchClient = createSearchClient();
+    const onStateChange = jest.fn(({ uiState, setUiState }) => {
+      setUiState(uiState);
+    });
+    const search = new InstantSearch({
+      indexName: 'indexName',
+      searchClient,
+      onStateChange,
+    });
+
+    const container1 = document.createElement('div');
+    const container2 = document.createElement('div');
+    const container3 = document.createElement('div');
+    const container4 = document.createElement('div');
+    const buttonRef1 = createRef();
+    const buttonRef2 = createRef();
+    const buttonRef3 = createRef();
+    const buttonRef4 = createRef();
+
+    const searchBox = connectSearchBox(({ refine, query, widgetParams }) => {
+      render(
+        <div>
+          <input value={query} />
+          <button
+            ref={widgetParams.buttonRef}
+            onClick={() => refine(widgetParams.queryTriggered)}
+          >
+            Trigger
+          </button>
+        </div>,
+        widgetParams.container
+      );
+    });
+
+    search.addWidgets([
+      searchBox({
+        container: container1,
+        buttonRef: buttonRef1,
+        queryTriggered: 'Query',
+      }),
+      index({ indexName: 'nestedIndex1' }).addWidgets([
+        searchBox({
+          container: container2,
+          buttonRef: buttonRef2,
+          queryTriggered: 'Nested query 1',
+        }),
+        index({ indexName: 'nestedIndex2' }).addWidgets([
+          searchBox({
+            container: container3,
+            buttonRef: buttonRef3,
+            queryTriggered: 'Nested query 2',
+          }),
+        ]),
+      ]),
+      index({ indexName: 'siblingIndex1' }).addWidgets([
+        searchBox({
+          container: container4,
+          buttonRef: buttonRef4,
+          queryTriggered: 'Sibling query 1',
+        }),
+      ]),
+    ]);
+    search.start();
+
+    expect(onStateChange).toHaveBeenCalledTimes(0);
+
+    buttonRef1.current.click();
+    buttonRef2.current.click();
+    buttonRef3.current.click();
+    buttonRef4.current.click();
+
+    expect(onStateChange).toHaveBeenCalledTimes(4);
+    expect(onStateChange).toHaveBeenCalledWith({
+      uiState: {
+        indexName: {
+          query: 'Query',
+        },
+        nestedIndex1: {
+          query: 'Nested query 1',
+        },
+        nestedIndex2: {
+          query: 'Nested query 2',
+        },
+        siblingIndex1: {
+          query: 'Sibling query 1',
+        },
+      },
+      setUiState: expect.any(Function),
+    });
+  });
+});
+
+describe('initialUiState', () => {
   it('warns if UI state contains unmounted widgets in development mode', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -1542,7 +2086,7 @@ describe('UI state', () => {
     })
       .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
 
-This can happen when the UI state is specified via \`initialUiState\` or \`routing\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
+This can happen when the UI state is specified via \`initialUiState\`, \`routing\` or \`setUiState\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
 
 To fully reflect the state, some widgets need to be added to the index "indexName":
 

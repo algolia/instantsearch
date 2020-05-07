@@ -51,6 +51,7 @@ class RefinementList extends Component {
       url,
       attribute: this.props.attribute,
       cssClasses: this.props.cssClasses,
+      isFromSearch: this.props.isFromSearch,
     };
 
     let { value: key } = facetValue;
