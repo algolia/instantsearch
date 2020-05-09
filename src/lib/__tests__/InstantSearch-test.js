@@ -509,7 +509,19 @@ describe('start', () => {
     search.start();
 
     expect(algoliasearchHelper).toHaveBeenCalledTimes(2);
-    expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
+    expect(algoliasearchHelper).toHaveBeenNthCalledWith(
+      1,
+      searchClient,
+      'indexName'
+    );
+    expect(algoliasearchHelper).toHaveBeenNthCalledWith(
+      2,
+      {},
+      indexName,
+      new algoliasearchHelper.SearchParameters({
+        index: 'indexName',
+      })
+    );
   });
 
   it('replaces the regular `search` with `searchOnlyWithDerivedHelpers`', () => {

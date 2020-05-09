@@ -18,6 +18,7 @@ import {
   UiState,
   Client as AlgoliaSearchClient,
 } from '../types';
+import { createSearchSequencer } from './searchSequencer';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
@@ -141,6 +142,9 @@ class InstantSearch extends EventEmitter {
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];
+  public searchSequencer: ReturnType<
+    typeof createSearchSequencer
+  > | null = null;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -382,15 +386,18 @@ See ${createDocumentationLink({
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
-    const mainHelper = algoliasearchHelper(this.client, this.indexName);
-
-    mainHelper.search = () => {
-      // This solution allows us to keep the exact same API for the users but
-      // under the hood, we have a different implementation. It should be
-      // completely transparent for the rest of the codebase. Only this module
-      // is impacted.
-      return mainHelper.searchOnlyWithDerivedHelpers();
-    };
+    this.searchSequencer = createSearchSequencer({
+      searchClient: this.client,
+      indexName: this.indexName,
+      onError: ({ error }) => {
+        this.emit('error', {
+          error,
+        });
+      },
+    });
+    const mainHelper = this.searchSequencer.getLegacyHelper();
+    // Attach `mainHelper` to instance for legacy reasons.
+    this.mainHelper = mainHelper;
 
     if (this._searchFunction) {
       // this client isn't used to actually search, but required for the helper
@@ -420,16 +427,6 @@ See ${createDocumentationLink({
       };
     }
 
-    // Only the "main" Helper emits the `error` event vs the one for `search`
-    // and `results` that are also emitted on the derived one.
-    mainHelper.on('error', ({ error }) => {
-      this.emit('error', {
-        error,
-      });
-    });
-
-    this.mainHelper = mainHelper;
-
     this.middleware.forEach(m => {
       m.subscribe();
     });
@@ -440,7 +437,7 @@ See ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    mainHelper.search();
+    this.searchSequencer.dispatchSearch();
 
     // Keep the previous reference for legacy purpose, some pattern use
     // the direct Helper access `search.helper` (e.g multi-index).
@@ -473,7 +470,7 @@ See ${createDocumentationLink({
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
     this.removeAllListeners();
-    this.mainHelper!.removeAllListeners();
+    this.searchSequencer!.teardown();
     this.mainHelper = null;
     this.helper = null;
 
@@ -483,11 +480,11 @@ See ${createDocumentationLink({
   }
 
   public scheduleSearch = defer(() => {
-    this.mainHelper!.search();
+    this.searchSequencer!.dispatchSearch();
   });
 
   public scheduleRender = defer(() => {
-    if (!this.mainHelper!.hasPendingRequests()) {
+    if (!this.searchSequencer!.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
       this._searchStalledTimer = null;
       this._isSearchStalled = false;
@@ -512,7 +509,7 @@ See ${createDocumentationLink({
   public setUiState: (
     uiState: UiState | ((uiState: UiState) => UiState)
   ) => void = uiState => {
-    if (!this.mainHelper) {
+    if (!this.searchSequencer) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')
       );
@@ -582,13 +579,14 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
   }
 
   public refresh() {
-    if (!this.mainHelper) {
+    if (!this.searchSequencer) {
       throw new Error(
         withUsage('The `start` method needs to be called before `refresh`.')
       );
     }
 
-    this.mainHelper.clearCache().search();
+    this.searchSequencer.clearCache();
+    this.searchSequencer.dispatchSearch();
   }
 }
 
