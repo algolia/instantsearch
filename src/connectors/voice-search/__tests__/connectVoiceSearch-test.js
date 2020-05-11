@@ -3,11 +3,14 @@ import connectVoiceSearch from '../connectVoiceSearch';
 
 jest.mock('../../../lib/voiceSearchHelper', () => {
   return ({ onStateChange, onQueryChange }) => {
+    let isListening = false;
     return {
       getState: () => {},
       isBrowserSupported: () => true,
-      isListening: () => false,
-      toggleListening: () => {},
+      isListening: () => isListening,
+      startListening: () => {
+        isListening = !isListening;
+      },
       dispose: jest.fn(),
       // ⬇️ for test
       changeState: () => onStateChange(),
@@ -64,6 +67,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
           getWidgetSearchParameters: expect.any(Function),
         })
       );
+    });
+
+    it('creates custom voice helper', () => {
+      const voiceHelper = {
+        isBrowserSupported: () => true,
+        dispose: () => {},
+        getState: () => ({
+          isSpeechFinal: true,
+          status: 'askingPermission',
+          transcript: '',
+        }),
+        isListening: () => true,
+        toggleListening: () => {},
+      };
+
+      const { widget } = getInitializedWidget({
+        widgetParams: {
+          createVoiceSearchHelper: () => voiceHelper,
+        },
+      });
+
+      expect(widget._voiceSearchHelper).toBe(voiceHelper);
     });
   });
 
