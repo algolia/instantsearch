@@ -5,10 +5,11 @@ import {
   noop,
 } from '../../lib/utils';
 import { Renderer, RendererOptions, WidgetFactory } from '../../types';
-import createVoiceSearchHelper, {
+import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper';
+import {
+  CreateVoiceSearchHelper,
   VoiceListeningState,
-  ToggleListening,
-} from '../../lib/voiceSearchHelper';
+} from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',
@@ -21,12 +22,13 @@ export type VoiceSearchConnectorParams = {
   additionalQueryParameters?: (params: {
     query: string;
   }) => PlainSearchParameters | void;
+  createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
 export type VoiceSearchRendererOptions<TVoiceSearchWidgetParams> = {
   isBrowserSupported: boolean;
   isListening: boolean;
-  toggleListening: ToggleListening;
+  toggleListening: () => void;
   voiceListeningState: VoiceListeningState;
 } & RendererOptions<TVoiceSearchWidgetParams>;
 
@@ -58,7 +60,8 @@ const connectVoiceSearch: VoiceSearchConnector = (
       voiceSearchHelper: {
         isBrowserSupported,
         isListening,
-        toggleListening,
+        startListening,
+        stopListening,
         getState,
       },
     }): void => {
@@ -66,7 +69,16 @@ const connectVoiceSearch: VoiceSearchConnector = (
         {
           isBrowserSupported: isBrowserSupported(),
           isListening: isListening(),
-          toggleListening,
+          toggleListening() {
+            if (!isBrowserSupported()) {
+              return;
+            }
+            if (isListening()) {
+              stopListening();
+            } else {
+              startListening();
+            }
+          },
           voiceListeningState: getState(),
           widgetParams,
           instantSearchInstance,
@@ -79,6 +91,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       searchAsYouSpeak = false,
       language,
       additionalQueryParameters,
+      createVoiceSearchHelper = builtInCreateVoiceSearchHelper,
     } = widgetParams;
 
     return {
