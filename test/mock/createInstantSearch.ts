@@ -12,19 +12,17 @@ export const createInstantSearch = (
   const mainHelper = algoliasearchHelper(searchClient, indexName, {});
   const mainIndex = index({ indexName });
 
-  let started = false;
-
   return {
     indexName,
     mainIndex,
     mainHelper,
     client: searchClient,
-    started,
-    start: () => {
-      started = true;
+    started: false,
+    start() {
+      this.started = true;
     },
-    dispose: () => {
-      started = false;
+    dispose() {
+      this.started = false;
     },
     refresh: jest.fn(),
     helper: mainHelper, // @TODO: use the Helper from the index once the RoutingManger uses the index
