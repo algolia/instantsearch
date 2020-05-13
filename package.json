@@ -42,8 +42,6 @@
     "test:e2e:saucelabs": "wdio wdio.saucelabs.conf.js",
     "test:size": "bundlesize",
     "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
-    "release:maintenance": "./scripts/release/publish-maintenance.sh",
-    "release:view-changelog": "conventional-changelog -p angular",
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger"
   },
