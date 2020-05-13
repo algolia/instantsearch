@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
+  FlatList,
   TouchableHighlight,
   Keyboard,
 } from 'react-native';
@@ -121,7 +121,7 @@ class Refinements extends React.Component {
     };
   }
 
-  _renderRow = refinement => {
+  _renderRow = ({ item: refinement }) => {
     const item = this.props.items.find(
       i => i.attribute === this.mapping[refinement].attribute
     );
@@ -166,23 +166,11 @@ class Refinements extends React.Component {
     />
   );
   render() {
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-    });
     return (
       <View>
-        <ListView
-          dataSource={ds.cloneWithRows([
-            'Type',
-            'Categories',
-            'Price',
-            'Rating',
-            'ClearRefinements',
-          ])}
-          renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
-          keyboardShouldPersistTaps={'always'}
-          style={styles.mainContainer}
+        <FlatList
+          data={['Type', 'Categories', 'Price', 'Rating', 'ClearRefinements']}
+          renderItem={this._renderRow}
         />
       </View>
     );

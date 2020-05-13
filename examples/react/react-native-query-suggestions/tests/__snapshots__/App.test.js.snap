@@ -41,6 +41,7 @@ exports[`renders correctly 1`] = `
       onFocus={[Function]}
       placeholder="Search a product..."
       placeholderTextColor="black"
+      rejectResponderTermination={true}
       spellCheck={false}
       style={
         Object {
@@ -55,9 +56,6 @@ exports[`renders correctly 1`] = `
     />
   </View>
   <Text
-    accessible={true}
-    allowFontScaling={true}
-    ellipsizeMode="tail"
     style={
       Object {
         "backgroundColor": "lightgrey",
@@ -95,6 +93,7 @@ exports[`renders correctly 1`] = `
       onScroll={[Function]}
       onScrollBeginDrag={[Function]}
       onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
       renderItem={[Function]}
       scrollEventThrottle={50}
       stickyHeaderIndices={Array []}

@@ -4,6 +4,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import App from '../App';
 
+jest.useFakeTimers();
 Date.now = jest.fn(() => 0);
 
 test('renders correctly', () => {

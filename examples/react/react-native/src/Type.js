@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
+  FlatList,
   TextInput,
   Platform,
   TouchableHighlight,
@@ -118,19 +118,10 @@ class RefinementList extends Component {
     this.setState({ query: text });
   }
   render() {
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-    });
     const { items, searchForItems } = this.props;
     const facets =
       items.length > 0 ? (
-        <ListView
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(items)}
-          renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
-          keyboardShouldPersistTaps={'always'}
-        />
+        <FlatList data={items} renderItem={this._renderRow} />
       ) : null;
     return (
       <View style={styles.searchBoxContainer}>
@@ -153,7 +144,7 @@ class RefinementList extends Component {
     );
   }
 
-  _renderRow = (refinement, sectionId, rowId) => {
+  _renderRow = ({ item: refinement }) => {
     const icon = refinement.isRefined ? (
       <Icon name="check-square-o" color="#e29b0b" />
     ) : (
@@ -175,7 +166,6 @@ class RefinementList extends Component {
           this.props.refine(refinement.value);
           Keyboard.dismiss();
         }}
-        key={rowId}
       >
         <View style={styles.item}>
           <Text style={refinement.isRefined ? styles.itemRefined : {}}>

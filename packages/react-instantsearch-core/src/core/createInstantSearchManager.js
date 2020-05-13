@@ -29,10 +29,13 @@ const isIndexWidgetEqualIndex = (widget, indexId) =>
   widget.props.indexId === indexId;
 
 const sortIndexWidgetsFirst = (firstWidget, secondWidget) => {
-  if (isIndexWidget(firstWidget)) {
+  const isFirstWidgetIndex = isIndexWidget(firstWidget);
+  const isSecondWidgetIndex = isIndexWidget(secondWidget);
+
+  if (isFirstWidgetIndex && !isSecondWidgetIndex) {
     return -1;
   }
-  if (isIndexWidget(secondWidget)) {
+  if (!isFirstWidgetIndex && isSecondWidgetIndex) {
     return 1;
   }
   return 0;
