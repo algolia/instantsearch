@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
+  FlatList,
   TextInput,
   Image,
   StatusBar,
@@ -211,25 +211,17 @@ class Hits extends Component {
   };
 
   render() {
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-    });
     const hits =
       this.props.hits.length > 0 ? (
         <View style={styles.items}>
-          <ListView
-            dataSource={ds.cloneWithRows(this.props.hits)}
-            renderRow={this._renderRow}
-            renderSeparator={this._renderSeparator}
-            onEndReached={this.onEndReached}
-          />
+          <FlatList data={this.props.hits} renderItem={this._renderRow} />
         </View>
       ) : null;
     return hits;
   }
 
-  _renderRow = (hit, sectionId, rowId) => (
-    <View style={styles.item} key={rowId}>
+  _renderRow = ({ item: hit }) => (
+    <View style={styles.item}>
       <Image style={{ height: 70, width: 70 }} source={{ uri: hit.image }} />
       <View style={styles.itemContent}>
         <Text style={styles.itemName}>

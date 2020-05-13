@@ -1,44 +1,39 @@
 {
   "name": "example-react-native-query-suggestions",
   "version": "1.0.0",
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
-  "private": true,
-  "license": "MIT",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "react-native-scripts start",
     "build": "echo \"Error: no build specified\" && exit 0",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject",
     "test": "jest"
   },
-  "devDependencies": {
-    "babel-preset-react-native": "4.0.1",
-    "jest": "21.2.1",
-    "jest-expo": "24.0.0",
-    "react-native-scripts": "1.14.1",
-    "react-test-renderer": "16.8.6"
-  },
   "dependencies": {
-    "algoliasearch": "4.0.0-beta.15",
-    "expo": "25.1.2",
+    "algoliasearch": "4.2.0",
+    "expo": "37.0.3",
     "lodash": "4.17.15",
-    "prop-types": "15.6.0",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
+    "prop-types": "15.7.2",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
     "react-instantsearch": "6.4.0",
-    "react-native": "0.52.0",
-    "react-native-animatable": "1.3.2",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
     "react-native-vector-icons": "6.6.0",
-    "react-test-renderer": "16.8.6"
+    "react-native-web": "0.11.7"
   },
+  "devDependencies": {
+    "@babel/core": "7.8.6",
+    "babel-preset-expo": "8.1.0",
+    "jest-expo": "37.0.0",
+    "react-test-renderer": "16.13.1"
+  },
+  "private": true,
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!react|@expo|expo|@ptomasroos|react-native-router-flux|mobx-react)"
-    ],
-    "setupFiles": [
-      "./shim-react-native.js"
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
     ]
   }
 }

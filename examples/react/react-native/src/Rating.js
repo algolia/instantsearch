@@ -4,7 +4,7 @@ import RatingMenu from 'react-native-star-rating';
 import {
   StyleSheet,
   Text,
-  ListView,
+  FlatList,
   View,
   TouchableHighlight,
 } from 'react-native';
@@ -109,7 +109,7 @@ class Rating extends Component {
     return { max, min: lowerBound, count, selected };
   }
 
-  _renderRow = ({ max, min, count, selected }) => (
+  _renderRow = ({ item: { max, min, count, selected } }) => (
     <TouchableHighlight
       style={{ backgroundColor: selected ? '#162331' : 'white' }}
       onPress={() =>
@@ -172,18 +172,9 @@ class Rating extends Component {
         })
       );
     }
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-    });
     return (
       <View>
-        <ListView
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(items)}
-          renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
-          keyboardShouldPersistTaps={'always'}
-        />
+        <FlatList data={items} renderItem={this._renderRow} />
       </View>
     );
   }
