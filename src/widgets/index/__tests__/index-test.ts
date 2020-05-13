@@ -256,6 +256,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         });
       });
 
+      it('forwards initial UiState to inner indices', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          _initialUiState: {
+            indexName: {
+              query: 'xxx',
+            },
+            two: {
+              query: 'inner',
+            },
+          },
+        });
+        const inner = index({ indexName: 'two' });
+        jest.spyOn(inner, 'init');
+
+        const widgets = [createSearchBox(), createPagination(), inner];
+        const innerWidgets = [createSearchBox()];
+
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        widgets.forEach(widget => {
+          expect(widget.init).toHaveBeenCalledTimes(0);
+        });
+
+        instance.addWidgets(widgets);
+
+        widgets.forEach(widget => {
+          expect(widget.init).toHaveBeenCalledTimes(1);
+          expect(widget.init).toHaveBeenCalledWith({
+            instantSearchInstance,
+            parent: instance,
+            uiState: {
+              indexName: {
+                query: 'xxx',
+              },
+              two: {
+                query: 'inner',
+              },
+            },
+            helper: instance.getHelper(),
+            state: instance.getHelper()!.state,
+            templatesConfig: instantSearchInstance.templatesConfig,
+            createURL: expect.any(Function),
+          });
+        });
+
+        inner.addWidgets(innerWidgets);
+
+        expect(inner.getWidgetState({})).toEqual({
+          two: {
+            query: 'inner',
+          },
+        });
+      });
+
       it('schedules a search to take the added widgets into account', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({

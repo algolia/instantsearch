@@ -71,18 +71,18 @@ export function isIndexWidget(widget: Widget): widget is Index {
 
 /**
  * This is the same content as helper._change / setState, but allowing for extra
- * _isFromAddWidget, which we use to decide whether local ui state invalidates.
+ * UiState to be synchronized.
  */
 function privateHelperSetState(
   helper: AlgoliaSearchHelper,
   {
     state,
     isPageReset,
-    _isFromAddWidget,
+    _uiState,
   }: {
     state: SearchParameters;
     isPageReset?: boolean;
-    _isFromAddWidget?: boolean;
+    _uiState?: IndexUiState;
   }
 ) {
   if (state !== helper.state) {
@@ -92,7 +92,7 @@ function privateHelperSetState(
       state: helper.state,
       results: helper.lastResults,
       isPageReset,
-      _isFromAddWidget,
+      _uiState,
     });
   }
 }
@@ -251,7 +251,7 @@ const index = (props: IndexProps): Index => {
             uiState: localUiState,
             initialSearchParameters: helper!.state,
           }),
-          _isFromAddWidget: true,
+          _uiState: localUiState,
         });
 
         widgets.forEach(widget => {
@@ -442,9 +442,8 @@ const index = (props: IndexProps): Index => {
       helper.on('change', event => {
         const { state, isPageReset } = event;
 
-        // @ts-ignore _isFromAddWidget comes from privateHelperSetState and
-        // thus isn't typed on the helper event
-        const _isFromAddWidget = event._isFromAddWidget;
+        // @ts-ignore _uiState comes from privateHelperSetState and thus isn't typed on the helper event
+        const _uiState = event._uiState;
 
         if (isPageReset) {
           localUiState.page = undefined;
@@ -457,7 +456,7 @@ const index = (props: IndexProps): Index => {
             helper: helper!,
           },
           // @MAJOR in a next version we can always use localUiState, instead of usually empty object), but it requires every single widget to set an empty value (or remove the state key's value) if they are not refined.
-          _isFromAddWidget ? localUiState : {}
+          _uiState || {}
         );
 
         // We don't trigger an internal change when controlled because it
