@@ -533,6 +533,7 @@ declare namespace algoliasearchHelper {
       value?: string
     ): SearchParameters;
     removeTagRefinement(tag: string): SearchParameters;
+    resetPage(): SearchParameters;
     setDisjunctiveFacets(facets: string[]): SearchParameters;
     setFacets(facets: string[]): SearchParameters;
     setHitsPerPage(n: number): SearchParameters;
