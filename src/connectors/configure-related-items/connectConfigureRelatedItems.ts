@@ -132,14 +132,8 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
     const searchParameters: PlainSearchParameters = {
       ...transformSearchParameters(
         new algoliasearchHelper.SearchParameters({
-          // @ts-ignore @TODO algoliasearch-helper@3.0.1 will contain the type
-          // `sumOrFiltersScores`.
-          // See https://github.com/algolia/algoliasearch-helper-js/pull/753
           sumOrFiltersScores: true,
           facetFilters: [`objectID:-${hit.objectID}`],
-          // @ts-ignore @TODO algoliasearch-helper@3.0.1 will contain the type
-          // `optionalFilters`.
-          // See https://github.com/algolia/algoliasearch-helper-js/pull/754
           optionalFilters,
         })
       ),
