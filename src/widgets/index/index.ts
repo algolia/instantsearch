@@ -72,6 +72,7 @@ export function isIndexWidget(widget: Widget): widget is Index {
 /**
  * This is the same content as helper._change / setState, but allowing for extra
  * UiState to be synchronized.
+ * see: https://github.com/algolia/algoliasearch-helper-js/blob/6b835ffd07742f2d6b314022cce6848f5cfecd4a/src/algoliasearch.helper.js#L1311-L1324
  */
 function privateHelperSetState(
   helper: AlgoliaSearchHelper,
@@ -259,9 +260,6 @@ const index = (props: IndexProps): Index => {
             widget.init({
               helper: helper!,
               parent: this,
-              // Only index widget uses this key. This means that the initial value
-              // is sufficient, since that index didn't yet exist. If we see wrong
-              // behavior with this, use mainIndex.getWidgetState()
               uiState: localInstantSearchInstance._initialUiState,
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
@@ -455,7 +453,6 @@ const index = (props: IndexProps): Index => {
             searchParameters: state,
             helper: helper!,
           },
-          // @MAJOR in a next version we can always use localUiState, instead of usually empty object), but it requires every single widget to set an empty value (or remove the state key's value) if they are not refined.
           _uiState || {}
         );
 
