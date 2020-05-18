@@ -1,0 +1,6 @@
+{
+  "packages": ["packages/*"],
+  "sandboxes": [
+    "github/algolia/create-instantsearch-app/tree/templates/react-instantsearch"
+  ]
+}
