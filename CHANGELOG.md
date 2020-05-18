@@ -1,3 +1,18 @@
+# [6.5.0](https://github.com/algolia/react-instantsearch/compare/v6.4.0...v6.5.0) (2020-05-18)
+
+
+### Bug Fixes
+
+* **connectQueryRules:** fix crash when using connectQueryRules with multiple indexes ([#2903](https://github.com/algolia/react-instantsearch/issues/2903)) ([c66d612](https://github.com/algolia/react-instantsearch/commit/c66d612))
+* **core:** fix maximum call stack size exceeded ([#2926](https://github.com/algolia/react-instantsearch/issues/2926)) ([7e883df](https://github.com/algolia/react-instantsearch/commit/7e883df))
+
+
+### Features
+
+* **SearchBox:** provide input element ref ([#2913](https://github.com/algolia/react-instantsearch/issues/2913)) ([b41bff2](https://github.com/algolia/react-instantsearch/commit/b41bff2))
+
+
+
 # [6.4.0](https://github.com/algolia/react-instantsearch/compare/v6.3.0...v6.4.0) (2020-03-18)
 
 
