@@ -46,7 +46,7 @@ export type InfiniteHitsConnectorParams = {
    * When user comes back to the search page after leaving for product page,
    * this helps restore InfiniteHits and its scroll position.
    */
-  // cache?: InfiniteHitsCache;
+  cache?: InfiniteHitsCache;
 };
 
 export type InfiniteHitsRendererOptions = {
