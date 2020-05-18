@@ -1,0 +1,5 @@
+{
+  "sandboxes": [
+    "github/algolia/create-instantsearch-app/tree/templates/instantsearch.js"
+  ]
+}
