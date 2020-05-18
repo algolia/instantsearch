@@ -3,6 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
 import { infiniteHits, configure } from '../src/widgets';
+import { createInfiniteHitsSessionStorageCache } from '../src/lib/infiniteHitsCache';
 
 storiesOf('Results|InfiniteHits', module)
   .add(
@@ -105,4 +106,24 @@ storiesOf('Results|InfiniteHits', module)
         },
       }
     )
+  )
+  .add(
+    'with sessionStorage cache enabled',
+    withHits(({ search, container }) => {
+      search.addWidgets([
+        configure({
+          hitsPerPage: 24,
+        }),
+        infiniteHits({
+          container,
+          templates: {
+            item: hit => `
+              <p>#${hit.__position} ${hit.name}</p>
+              <a href="https://google.com">Details</a>
+            `,
+          },
+          cache: createInfiniteHitsSessionStorageCache(),
+        }),
+      ]);
+    })
   );
