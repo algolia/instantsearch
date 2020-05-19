@@ -365,8 +365,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
           this._isSearchStalled = true;
           this._render(
             this.helper,
-            this.helper.lastResults,
-            this.helper.lastResults._state
+            this.helper && this.helper.lastResults,
+            this.helper.lastResults && this.helper.lastResults._state
           );
         }, this._stalledSearchDelay);
       }
