@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "4.4.1",
+  "version": "4.5.0",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "types": "es/index.d.ts",
@@ -43,9 +43,6 @@
     "test:e2e:saucelabs": "wdio wdio.saucelabs.conf.js",
     "test:size": "bundlesize",
     "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
-    "release": "./scripts/release/publish.js",
-    "release:maintenance": "./scripts/release/publish-maintenance.sh",
-    "release:view-changelog": "conventional-changelog -p angular",
     "release:prepare": "shipjs prepare",
     "release:trigger": "shipjs trigger"
   },

@@ -425,14 +425,14 @@ See ${createDocumentationLink({
 
     this.mainHelper = mainHelper;
 
-    this.middleware.forEach(m => {
-      m.subscribe();
-    });
-
     this.mainIndex.init({
       instantSearchInstance: this,
       parent: null,
       uiState: this._initialUiState,
+    });
+
+    this.middleware.forEach(m => {
+      m.subscribe();
     });
 
     mainHelper.search();
@@ -478,7 +478,9 @@ See ${createDocumentationLink({
   }
 
   public scheduleSearch = defer(() => {
-    this.mainHelper!.search();
+    if (this.started) {
+      this.mainHelper!.search();
+    }
   });
 
   public scheduleRender = defer(() => {
