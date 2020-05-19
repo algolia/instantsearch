@@ -1,4 +1,4 @@
-import isEqual from 'react-fast-compare';
+import { isEqual } from '../utils';
 import { InfiniteHitsCache } from '../../types';
 
 function getStateWithoutPage(state) {
