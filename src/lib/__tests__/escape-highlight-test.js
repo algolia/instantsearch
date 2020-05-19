@@ -246,4 +246,26 @@ describe('escapeHits()', () => {
 
     expect(hits).toEqual(output);
   });
+
+  it('should not mutate the hit', () => {
+    const hit = {
+      _highlightResult: {
+        foobar: {
+          value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+        },
+      },
+    };
+
+    const hits = [hit];
+
+    escapeHits(hits);
+
+    expect(hit).toEqual({
+      _highlightResult: {
+        foobar: {
+          value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+        },
+      },
+    });
+  });
 });

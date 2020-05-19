@@ -1,3 +1,18 @@
+# [4.5.0](https://github.com/algolia/instantsearch.js/compare/v4.4.1...v4.5.0) (2020-05-13)
+
+
+### Bug Fixes
+
+* **middleware:** subscribe middleware after `init` ([#4322](https://github.com/algolia/instantsearch.js/issues/4322)) ([f61fc4d](https://github.com/algolia/instantsearch.js/commit/f61fc4d133c118cfe8f2a2ba2e02d037a21cf8e0))
+
+
+### Features
+
+* **index:** support adding index widget with initial UI state ([#4359](https://github.com/algolia/instantsearch.js/issues/4359)) ([5ff4c83](https://github.com/algolia/instantsearch.js/commit/5ff4c8307c2be7bde7fb53aa9935a243e6532fe2))
+* **voice:** allow custom voice helper ([#4363](https://github.com/algolia/instantsearch.js/issues/4363)) ([4a00fa6](https://github.com/algolia/instantsearch.js/commit/4a00fa607354aefaae468735b590e237a2d46f9b))
+
+
+
 ## [4.4.1](https://github.com/algolia/instantsearch.js/compare/v4.4.0...v4.4.1) (2020-04-29)
 
 

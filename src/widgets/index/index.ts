@@ -4,6 +4,7 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   SearchParameters,
   SearchResults,
+  AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
 import {
   InstantSearch,
@@ -68,9 +69,39 @@ export function isIndexWidget(widget: Widget): widget is Index {
   return widget.$$type === 'ais.index';
 }
 
+/**
+ * This is the same content as helper._change / setState, but allowing for extra
+ * UiState to be synchronized.
+ * see: https://github.com/algolia/algoliasearch-helper-js/blob/6b835ffd07742f2d6b314022cce6848f5cfecd4a/src/algoliasearch.helper.js#L1311-L1324
+ */
+function privateHelperSetState(
+  helper: AlgoliaSearchHelper,
+  {
+    state,
+    isPageReset,
+    _uiState,
+  }: {
+    state: SearchParameters;
+    isPageReset?: boolean;
+    _uiState?: IndexUiState;
+  }
+) {
+  if (state !== helper.state) {
+    helper.state = state;
+
+    helper.emit('change', {
+      state: helper.state,
+      results: helper.lastResults,
+      isPageReset,
+      _uiState,
+    });
+  }
+}
+
 function getLocalWidgetsState(
   widgets: Widget[],
-  widgetStateOptions: WidgetStateOptions
+  widgetStateOptions: WidgetStateOptions,
+  initialUiState: IndexUiState = {}
 ): IndexUiState {
   return widgets
     .filter(widget => !isIndexWidget(widget))
@@ -80,7 +111,7 @@ function getLocalWidgetsState(
       }
 
       return widget.getWidgetState(uiState, widgetStateOptions);
-    }, {});
+    }, initialUiState);
 }
 
 function getLocalWidgetsSearchParameters(
@@ -110,8 +141,11 @@ function resetPageFromWidgets(widgets: Widget[]): void {
   indexWidgets.forEach(widget => {
     const widgetHelper = widget.getHelper()!;
 
-    // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
-    widgetHelper.setState(widgetHelper.state.resetPage());
+    privateHelperSetState(widgetHelper, {
+      // @ts-ignore @TODO: remove "ts-ignore" once `resetPage()` is typed in the helper
+      state: widgetHelper.state.resetPage(),
+      isPageReset: true,
+    });
 
     resetPageFromWidgets(widget.getWidgets());
   });
@@ -213,19 +247,20 @@ const index = (props: IndexProps): Index => {
       localWidgets = localWidgets.concat(widgets);
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        helper!.setState(
-          getLocalWidgetsSearchParameters(localWidgets, {
+        privateHelperSetState(helper!, {
+          state: getLocalWidgetsSearchParameters(localWidgets, {
             uiState: localUiState,
             initialSearchParameters: helper!.state,
-          })
-        );
+          }),
+          _uiState: localUiState,
+        });
 
         widgets.forEach(widget => {
           if (localInstantSearchInstance && widget.init) {
             widget.init({
               helper: helper!,
               parent: this,
-              uiState: {},
+              uiState: localInstantSearchInstance._initialUiState,
               instantSearchInstance: localInstantSearchInstance,
               state: helper!.state,
               templatesConfig: localInstantSearchInstance.templatesConfig,
@@ -406,11 +441,24 @@ const index = (props: IndexProps): Index => {
       // widgets. When the subscription happens before the `init` step, the (static)
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
       // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
-      helper.on('change', ({ state }) => {
-        localUiState = getLocalWidgetsState(localWidgets, {
-          searchParameters: state,
-          helper: helper!,
-        });
+      helper.on('change', event => {
+        const { state, isPageReset } = event;
+
+        // @ts-ignore _uiState comes from privateHelperSetState and thus isn't typed on the helper event
+        const _uiState = event._uiState;
+
+        if (isPageReset) {
+          localUiState.page = undefined;
+        }
+
+        localUiState = getLocalWidgetsState(
+          localWidgets,
+          {
+            searchParameters: state,
+            helper: helper!,
+          },
+          _uiState || {}
+        );
 
         // We don't trigger an internal change when controlled because it
         // becomes the responsibility of `setUiState`.

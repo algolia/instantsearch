@@ -5,10 +5,11 @@ import {
   noop,
 } from '../../lib/utils';
 import { Connector } from '../../types';
-import createVoiceSearchHelper, {
+import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper';
+import {
+  CreateVoiceSearchHelper,
   VoiceListeningState,
-  ToggleListening,
-} from '../../lib/voiceSearchHelper';
+} from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',
@@ -21,12 +22,13 @@ export type VoiceSearchConnectorParams = {
   additionalQueryParameters?: (params: {
     query: string;
   }) => PlainSearchParameters | void;
+  createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
 export type VoiceSearchRendererOptions = {
   isBrowserSupported: boolean;
   isListening: boolean;
-  toggleListening: ToggleListening;
+  toggleListening: () => void;
   voiceListeningState: VoiceListeningState;
 };
 
@@ -48,7 +50,8 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
       voiceSearchHelper: {
         isBrowserSupported,
         isListening,
-        toggleListening,
+        startListening,
+        stopListening,
         getState,
       },
     }): void => {
@@ -56,7 +59,16 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
         {
           isBrowserSupported: isBrowserSupported(),
           isListening: isListening(),
-          toggleListening,
+          toggleListening() {
+            if (!isBrowserSupported()) {
+              return;
+            }
+            if (isListening()) {
+              stopListening();
+            } else {
+              startListening();
+            }
+          },
           voiceListeningState: getState(),
           widgetParams,
           instantSearchInstance,
@@ -69,6 +81,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
       searchAsYouSpeak = false,
       language,
       additionalQueryParameters,
+      createVoiceSearchHelper = builtInCreateVoiceSearchHelper,
     } = widgetParams;
 
     return {

@@ -75,6 +75,7 @@ describe('index', () => {
       }),
       getWidgetState(uiState) {
         return {
+          ...uiState,
           configure: {
             ...uiState.configure,
             ...params,
@@ -252,6 +253,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
           });
+        });
+      });
+
+      it('forwards initial UiState to inner indices', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          _initialUiState: {
+            indexName: {
+              query: 'xxx',
+            },
+            two: {
+              query: 'inner',
+            },
+          },
+        });
+        const inner = index({ indexName: 'two' });
+        jest.spyOn(inner, 'init');
+
+        const widgets = [createSearchBox(), createPagination(), inner];
+        const innerWidgets = [createSearchBox()];
+
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        widgets.forEach(widget => {
+          expect(widget.init).toHaveBeenCalledTimes(0);
+        });
+
+        instance.addWidgets(widgets);
+
+        widgets.forEach(widget => {
+          expect(widget.init).toHaveBeenCalledTimes(1);
+          expect(widget.init).toHaveBeenCalledWith({
+            instantSearchInstance,
+            parent: instance,
+            uiState: {
+              indexName: {
+                query: 'xxx',
+              },
+              two: {
+                query: 'inner',
+              },
+            },
+            helper: instance.getHelper(),
+            state: instance.getHelper()!.state,
+            templatesConfig: instantSearchInstance.templatesConfig,
+            createURL: expect.any(Function),
+          });
+        });
+
+        inner.addWidgets(innerWidgets);
+
+        expect(inner.getWidgetState({})).toEqual({
+          two: {
+            query: 'inner',
+          },
         });
       });
 
@@ -1781,6 +1842,54 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(level3.getWidgetState({})).toEqual({
           level3IndexName: {},
         });
+      });
+    });
+
+    it('uiState on inner index does not get erased on addWidget', () => {
+      const level0 = index({ indexName: 'level0IndexName' });
+
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+        _initialUiState: {
+          level0IndexName: {
+            query: 'something',
+          },
+        },
+      });
+
+      instantSearchInstance.mainIndex.init(
+        createInitOptions({ instantSearchInstance, parent: null })
+      );
+
+      instantSearchInstance.mainIndex.addWidgets([level0]);
+
+      level0.init(
+        createInitOptions({
+          instantSearchInstance,
+          parent: instantSearchInstance.mainIndex,
+        })
+      );
+
+      level0.addWidgets([
+        createConfigure({
+          distinct: false,
+        }),
+      ]);
+
+      level0.addWidgets([createSearchBox()]);
+
+      expect(level0.getHelper()!.state.query).toBe('something');
+
+      expect(instantSearchInstance.mainIndex.getWidgetState({})).toEqual({
+        indexName: {},
+        level0IndexName: {
+          configure: {
+            distinct: false,
+          },
+          query: 'something',
+        },
       });
     });
   });

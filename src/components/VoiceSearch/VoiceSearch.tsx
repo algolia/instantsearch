@@ -4,11 +4,7 @@ import { h } from 'preact';
 import Template from '../Template/Template';
 
 import { VoiceSearchTemplates } from '../../widgets/voice-search/voice-search';
-
-import {
-  VoiceListeningState,
-  ToggleListening,
-} from '../../lib/voiceSearchHelper';
+import { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
 
 export type VoiceSearchComponentCSSClasses = {
   root: string;
@@ -20,7 +16,7 @@ export type VoiceSearchProps = {
   cssClasses: VoiceSearchComponentCSSClasses;
   isBrowserSupported: boolean;
   isListening: boolean;
-  toggleListening: ToggleListening;
+  toggleListening: () => void;
   voiceListeningState: VoiceListeningState;
   templates: VoiceSearchTemplates;
 };

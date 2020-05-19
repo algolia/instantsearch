@@ -94,7 +94,7 @@ describe('VoiceSearchHelper', () => {
       onStateChange,
     });
 
-    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.startListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
     simulateListener.start();
@@ -132,7 +132,7 @@ describe('VoiceSearchHelper', () => {
       onStateChange,
     });
 
-    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.startListening();
     expect(onStateChange).toHaveBeenCalledTimes(1);
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
     simulateListener.start();
@@ -169,7 +169,7 @@ describe('VoiceSearchHelper', () => {
       onQueryChange,
       onStateChange,
     });
-    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.startListening();
     expect(voiceSearchHelper.getState().status).toEqual('askingPermission');
     simulateListener.error({
       error: 'not-allowed',
@@ -187,7 +187,7 @@ describe('VoiceSearchHelper', () => {
       onQueryChange: () => {},
       onStateChange: () => {},
     });
-    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.startListening();
     voiceSearchHelper.dispose();
     expect(stop).toHaveBeenCalledTimes(1);
   });
@@ -202,8 +202,8 @@ describe('VoiceSearchHelper', () => {
       onStateChange,
     });
 
-    voiceSearchHelper.toggleListening();
-    voiceSearchHelper.toggleListening();
+    voiceSearchHelper.startListening();
+    voiceSearchHelper.stopListening();
     expect(voiceSearchHelper.getState().status).toBe('finished');
   });
 });
