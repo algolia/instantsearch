@@ -24,14 +24,17 @@ class RangeInput extends Component {
 
   onInput = name => event => {
     this.setState({
-      [name]: Number(event.currentTarget.value),
+      [name]: event.currentTarget.value,
     });
   };
 
   onSubmit = event => {
     event.preventDefault();
 
-    this.props.refine([this.state.min, this.state.max]);
+    this.props.refine([
+      this.state.min && Number(this.state.min),
+      this.state.max && Number(this.state.max),
+    ]);
   };
 
   render() {
