@@ -33,7 +33,7 @@ function defaultCreateURL() {
 /**
  * Global options for an InstantSearch instance.
  */
-export type InstantSearchOptions<TRouteState = UiState> = {
+export type InstantSearchOptions = {
   /**
    * The name of the main index
    */
@@ -109,7 +109,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
    * Router configuration used to save the UI State into the URL or any other
    * client side persistence. Passing `true` will use the default URL options.
    */
-  routing?: RouterProps<TRouteState> | boolean;
+  routing?: RouterProps | boolean;
 
   /**
    * the instance of search-insights to use for sending insights events inside
