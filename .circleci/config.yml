@@ -122,7 +122,7 @@ jobs:
       - run:
           name: Trigger a release if the latest commit is a release commit
           command: |
-            yarn release:trigger
+            yarn shipjs trigger
 
 workflows:
   version: 2
