@@ -24,6 +24,7 @@ export { default as find } from './find';
 export { default as findIndex } from './findIndex';
 export { default as mergeSearchParameters } from './mergeSearchParameters';
 export { default as resolveSearchParameters } from './resolveSearchParameters';
+export { default as toArray } from './toArray';
 export { warning, deprecate } from './logger';
 export {
   createDocumentationLink,
