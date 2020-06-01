@@ -3,14 +3,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import {
-  Hits,
-  Connector,
-  TransformItems,
-  Hit,
-  InfiniteHitsCache,
-  InfiniteHitsCachedHits,
-} from '../../types';
+import { Hits, Connector, TransformItems, Hit } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -19,6 +12,29 @@ import {
   addQueryID,
   noop,
 } from '../../lib/utils';
+
+export type InfiniteHitsCachedHits = {
+  [page: number]: Hits;
+};
+
+type Read = ({
+  state,
+}: {
+  state: Partial<SearchParameters>;
+}) => InfiniteHitsCachedHits | null;
+
+type Write = ({
+  state,
+  hits,
+}: {
+  state: Partial<SearchParameters>;
+  hits: InfiniteHitsCachedHits;
+}) => void;
+
+export type InfiniteHitsCache = {
+  read: Read;
+  write: Write;
+};
 
 export type InfiniteHitsConnectorParams = {
   /**
