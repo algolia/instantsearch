@@ -7,6 +7,7 @@ import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits, {
   InfiniteHitsConnectorParams,
   InfiniteHitsRendererOptions,
+  InfiniteHitsCache,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
@@ -21,7 +22,6 @@ import {
   Hit,
   InsightsClientWrapper,
   Renderer,
-  InfiniteHitsCache,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
 
