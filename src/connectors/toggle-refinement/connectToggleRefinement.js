@@ -269,10 +269,8 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const isRefined = searchParameters.isDisjunctiveFacetRefined(
-          attribute,
-          on
-        );
+        const isRefined =
+          on && on.every(v => state.isDisjunctiveFacetRefined(attribute, v));
 
         if (!isRefined) {
           return uiState;
