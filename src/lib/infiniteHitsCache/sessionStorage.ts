@@ -1,5 +1,5 @@
 import { isEqual } from '../utils';
-import { InfiniteHitsCache } from '../../types';
+import { InfiniteHitsCache } from '../../connectors/infinite-hits/connectInfiniteHits';
 
 function getStateWithoutPage(state) {
   const { page, ...rest } = state || {};
