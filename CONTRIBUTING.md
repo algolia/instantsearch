@@ -11,7 +11,6 @@ If this guide does not contain what you are looking for and thus prevents you fr
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
 - [Commit conventions](#commit-conventions)
@@ -181,7 +180,7 @@ JavaScript and TypeScript files are validated using a combination of [Prettier](
 To release a stable version, go on `master` (`git checkout master`) and use:
 
 ```sh
-yarn run release:prepare
+yarn run release
 ```
 
 It will create a pull request for the next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to npm.
@@ -202,7 +201,7 @@ _Make sure to use `npm run` instead of `yarn run` to avoid issues._
 
 ```sh
 git checkout next
-yarn run release:prepare
+yarn run release
 ```
 
 The script will ask you a question about the next version. If it's wrong, you can say "No" and specify the version (e.g. "7.0.0-beta.0"). Then, it will open a pull request for that release. When the pull request is merged, CircleCI will publish it to npm with a `--tag beta` argument.

@@ -43,8 +43,7 @@
     "test:e2e:saucelabs": "wdio wdio.saucelabs.conf.js",
     "test:size": "bundlesize",
     "test:argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
-    "release:prepare": "shipjs prepare",
-    "release:trigger": "shipjs trigger"
+    "release": "shipjs prepare"
   },
   "files": [
     "dist",

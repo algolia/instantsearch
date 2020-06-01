@@ -6,9 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
 
-shell.exec(
-  `tsc -p tsconfig.declaration.json --outDir es/; mv es/index.es.d.ts es/index.d.ts`
-);
+shell.exec(`tsc -p tsconfig.declaration.json --outDir es/`);
 
 console.log();
 console.log(`Validating definitions...`);
@@ -16,7 +14,6 @@ console.log(`Validating definitions...`);
 const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 
 const publicExports = [
-  '',
   // 'components' -> does not contains index.d.ts yet
   'connectors',
   // 'lib', -> Api extrator "import * as ___ from ___;" is not supported yet for local files
@@ -24,19 +21,19 @@ const publicExports = [
   'helpers',
   'types',
   'widgets', //  -> It does not compile as WidgetFactory is not imported in all files
+  'lib/routers',
 ];
 
-shell.cd(__dirname);
-shell.mkdir('-p', '.temp');
-
 fs.writeFileSync(
-  '.temp/index.d.ts',
-  publicExports
-    .map(publicExport => `../../../es/${publicExport}`)
-    .map(exportedFile => {
-      return `export * from '${exportedFile}';`;
-    })
-    .join('\r\n')
+  path.join(__dirname, '../../', 'es/index.d.ts'),
+  [
+    `export { default } from './index.es';`,
+    ...publicExports
+      .map(publicExport => `./${publicExport}`)
+      .map(exportedFile => {
+        return `export * from '${exportedFile}';`;
+      }),
+  ].join('\r\n')
 );
 
 const extractorConfig = ExtractorConfig.loadFileAndPrepare(
