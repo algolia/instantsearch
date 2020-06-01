@@ -27,10 +27,10 @@ type DummySearchClientV4 = {
 type Client = ReturnType<typeof algoliasearch> extends DummySearchClientV4
   ? SearchClientV4
   : SearchClientV3;
-type SearchOptions = Client extends DummySearchClientV4
+type SearchOptions = ReturnType<typeof algoliasearch> extends DummySearchClientV4
   ? SearchOptionsV4
   : SearchOptionsV3;
-type SearchResponse<T> = Client extends DummySearchClientV4
+type SearchResponse<T> = ReturnType<typeof algoliasearch> extends DummySearchClientV4
   ? SearchResponseV4<T>
   : SearchResponseV3<T>;
 
