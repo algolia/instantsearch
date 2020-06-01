@@ -360,13 +360,17 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     this.helper.search();
 
     this.helper.on('search', () => {
-      if (!this._isSearchStalled && !this._searchStalledTimer) {
+      if (
+        !this._isSearchStalled &&
+        !this._searchStalledTimer &&
+        this.helper.lastResults
+      ) {
         this._searchStalledTimer = setTimeout(() => {
           this._isSearchStalled = true;
           this._render(
             this.helper,
-            this.helper && this.helper.lastResults,
-            this.helper.lastResults && this.helper.lastResults._state
+            this.helper.lastResults,
+            this.helper.lastResults._state
           );
         }, this._stalledSearchDelay);
       }
