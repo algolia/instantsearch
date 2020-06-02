@@ -1,3 +1,8 @@
+3.1.2 - 2020-06-02
+ * fix(defaultsPure): don't change keys order, fix #761 (#762) https://github.com/algolia/algoliasearch-helper-js/commit/6b835ffd07742f2d6b314022cce6848f5cfecd4a, closes https://github.com/algolia/algoliasearch-helper-js/issues/761 https://github.com/algolia/algoliasearch-helper-js/issues/762
+ * fix(types): add `resetPage` state method (#773) https://github.com/algolia/algoliasearch-helper-js/commit/e2a88a169d3b82f4fd756cb4b0e9317d5bcc6b9e
+ * fix(typescript): fix TypeScript 3.9 compatibility (#775) https://github.com/algolia/algoliasearch-helper-js/commit/c83c501938e803ca9fa74601dcd1ed896583ac0e, closes https://github.com/algolia/algoliasearch-helper-js/issues/775 https://github.com/algolia/algoliasearch-helper-js/issues/774
+
 3.1.1 - 2020-02-21
  * fix: fix omit calls to pass excluded value as an array (#760) https://github.com/algolia/algoliasearch-helper-js/commit/dd375ab18513336817bd8d5d78341ac33ae94954, closes https://github.com/algolia/algoliasearch-helper-js/issues/760
 
