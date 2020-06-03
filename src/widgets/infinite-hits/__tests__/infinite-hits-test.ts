@@ -179,4 +179,50 @@ describe('infiniteHits()', () => {
     expect(firstRender[0].props.isFirstPage).toEqual(false);
     expect(firstRender[1]).toEqual(container);
   });
+
+  it('works with cache', () => {
+    const getStateWithoutPage = ({ page, ...rest } = {}) => rest;
+    const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    let cachedState: any = undefined;
+    let cachedHits: any = undefined;
+    const customCache = {
+      read({ state }) {
+        return isEqual(cachedState, getStateWithoutPage(state))
+          ? cachedHits
+          : null;
+      },
+      write({ state, hits }) {
+        cachedState = getStateWithoutPage(state);
+        cachedHits = hits;
+      },
+    };
+
+    const state = { page: 0, query: 'hello' };
+    widget = infiniteHits({
+      container,
+      escapeHTML: true,
+      transformItems: items => items,
+      cssClasses: { root: ['root', 'cx'] },
+      showPrevious: false,
+      cache: customCache,
+    });
+    widget.init({ helper, instantSearchInstance: {} });
+    widget.render({ results: { ...results, page: 0 }, state });
+    expect(cachedState).toMatchInlineSnapshot(`
+      Object {
+        "query": "hello",
+      }
+    `);
+    expect(cachedHits).toMatchInlineSnapshot(`
+Object {
+  "0": Array [
+    Object {
+      "__position": 1,
+      "first": "hit",
+      "second": "hit",
+    },
+  ],
+}
+`);
+  });
 });
