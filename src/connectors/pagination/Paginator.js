@@ -48,7 +48,7 @@ class Paginator {
   }
 
   isLastPage() {
-    return this.currentPage === 0 || this.currentPage === this.total - 1;
+    return this.currentPage === this.total - 1 || this.total === 0;
   }
 
   isFirstPage() {
