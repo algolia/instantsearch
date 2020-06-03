@@ -180,8 +180,11 @@ describe('infiniteHits()', () => {
     expect(firstRender[1]).toEqual(container);
   });
 
-  it('works with cache', () => {
-    const getStateWithoutPage = ({ page, ...rest } = {}) => rest;
+  describe('cache', () => {
+    const getStateWithoutPage = state => {
+      const { page, ...rest } = state || {};
+      return rest;
+    };
     const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
     let cachedState: any = undefined;
     let cachedHits: any = undefined;
@@ -197,32 +200,111 @@ describe('infiniteHits()', () => {
       },
     };
 
-    const state = { page: 0, query: 'hello' };
-    widget = infiniteHits({
-      container,
-      escapeHTML: true,
-      transformItems: items => items,
-      cssClasses: { root: ['root', 'cx'] },
-      showPrevious: false,
-      cache: customCache,
+    beforeEach(() => {
+      cachedState = undefined;
+      cachedHits = undefined;
     });
-    widget.init({ helper, instantSearchInstance: {} });
-    widget.render({ results: { ...results, page: 0 }, state });
-    expect(cachedState).toMatchInlineSnapshot(`
+
+    it('write hits to cache', () => {
+      const state = { page: 0, query: 'hello' };
+      widget = infiniteHits({
+        container,
+        escapeHTML: true,
+        transformItems: items => items,
+        cssClasses: { root: ['root', 'cx'] },
+        showPrevious: false,
+        cache: customCache,
+      });
+      widget.init({ helper, instantSearchInstance: {} });
+      expect(cachedState).toMatchInlineSnapshot(`undefined`);
+      expect(cachedHits).toMatchInlineSnapshot(`undefined`);
+      widget.render({
+        results: {
+          page: 0,
+          hits: [{ title: 'first' }, { title: 'second' }],
+          hitsPerPage: 2,
+        },
+        state,
+      });
+      expect(cachedState).toMatchInlineSnapshot(`
+        Object {
+          "query": "hello",
+        }
+      `);
+      expect(cachedHits).toMatchInlineSnapshot(`
+  Object {
+    "0": Array [
       Object {
-        "query": "hello",
-      }
-    `);
-    expect(cachedHits).toMatchInlineSnapshot(`
-Object {
-  "0": Array [
+        "__position": 1,
+        "title": "first",
+      },
+      Object {
+        "__position": 2,
+        "title": "second",
+      },
+    ],
+  }
+  `);
+      const firstCall = render.mock.calls[0];
+      expect(firstCall[0].props.hits).toMatchInlineSnapshot(`
+  Array [
     Object {
       "__position": 1,
-      "first": "hit",
-      "second": "hit",
+      "title": "first",
     },
-  ],
-}
+    Object {
+      "__position": 2,
+      "title": "second",
+    },
+  ]
+  `);
+    });
+
+    it('render hits from cache', () => {
+      cachedHits = [
+        {
+          __position: 1,
+          title: 'first',
+        },
+        {
+          __position: 2,
+          title: 'second',
+        },
+      ];
+      cachedState = {
+        query: 'hello',
+      };
+      const state = { page: 0, query: 'hello' };
+      widget = infiniteHits({
+        container,
+        escapeHTML: true,
+        transformItems: items => items,
+        cssClasses: { root: ['root', 'cx'] },
+        showPrevious: false,
+        cache: customCache,
+      });
+      widget.init({ helper, instantSearchInstance: {} });
+      widget.render({
+        results: {
+          page: 0,
+          hits: [],
+          hitsPerPage: 2,
+        },
+        state,
+      });
+      const firstCall = render.mock.calls[0];
+      expect(firstCall[0].props.hits).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "__position": 1,
+    "title": "first",
+  },
+  Object {
+    "__position": 2,
+    "title": "second",
+  },
+]
 `);
+    });
   });
 });
