@@ -48,7 +48,7 @@ class Pagination extends Component {
     return this.pageLink({
       ariaLabel: 'Previous',
       additionalClassName: this.props.cssClasses.previousPageItem,
-      isDisabled: this.props.nbHits === 0 || isFirstPage,
+      isDisabled: isFirstPage,
       label: this.props.templates.previous,
       pageNumber: currentPage - 1,
       createURL,
@@ -59,7 +59,7 @@ class Pagination extends Component {
     return this.pageLink({
       ariaLabel: 'Next',
       additionalClassName: this.props.cssClasses.nextPageItem,
-      isDisabled: this.props.nbHits === 0 || isLastPage,
+      isDisabled: isLastPage,
       label: this.props.templates.next,
       pageNumber: currentPage + 1,
       createURL,
@@ -70,7 +70,7 @@ class Pagination extends Component {
     return this.pageLink({
       ariaLabel: 'First',
       additionalClassName: this.props.cssClasses.firstPageItem,
-      isDisabled: this.props.nbHits === 0 || isFirstPage,
+      isDisabled: isFirstPage,
       label: this.props.templates.first,
       pageNumber: 0,
       createURL,
@@ -81,7 +81,7 @@ class Pagination extends Component {
     return this.pageLink({
       ariaLabel: 'Last',
       additionalClassName: this.props.cssClasses.lastPageItem,
-      isDisabled: this.props.nbHits === 0 || isLastPage,
+      isDisabled: isLastPage,
       label: this.props.templates.last,
       pageNumber: nbPages - 1,
       createURL,
