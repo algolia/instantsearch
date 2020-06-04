@@ -70,8 +70,14 @@ async function build() {
           (await getLatestLibraryVersion({ libraryName, supportedVersion })),
         appId: 'latency',
         apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-        indexName: 'instant_search',
-        attributesToDisplay: ['name', 'description'],
+        indexName:
+          libraryName === 'autocomplete.js'
+            ? 'instant_search_demo_query_suggestions'
+            : 'instant_search',
+        attributesToDisplay:
+          libraryName === 'autocomplete.js'
+            ? ['query']
+            : ['name', 'description'],
         attributesForFaceting: ['brand'],
         installation: false,
         silent: true,

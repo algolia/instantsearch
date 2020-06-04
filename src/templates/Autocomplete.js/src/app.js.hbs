@@ -4,20 +4,28 @@ import autocomplete from 'autocomplete.js';
 const client = algoliasearch('{{appId}}', '{{apiKey}}');
 const index = client.initIndex('{{indexName}}');
 
-autocomplete('#searchBox input[type=search]', { hint: false }, [
+autocomplete(
+  '#searchBox input[type=search]',
   {
-    source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-    displayKey: '{{attributesToDisplay.[0]}}',
-    templates: {
-      suggestion(suggestion) {
-        {{#if attributesToDisplay.[0]}}
-        return suggestion._highlightResult.{{attributesToDisplay.[0]}}.value;
-        {{else}}
-        return JSON.stringify(suggestion);
-        {{/if}}
+    hint: false,
+    debug: process.env.NODE_ENV === 'development',
+  },
+  [
+    {
+      source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+      displayKey: '{{attributesToDisplay.[0]}}',
+      templates: {
+        suggestion(suggestion) {
+          {{#if attributesToDisplay.[0]}}
+          return suggestion._highlightResult.{{attributesToDisplay.[0]}}.value;
+          {{else}}
+          return JSON.stringify(suggestion);
+          {{/if}}
+        },
       },
     },
-  },
-]).on('autocomplete:selected', (event, suggestion, dataset) => {
+  ]
+).on('autocomplete:selected', (event, suggestion, dataset) => {
+  // eslint-disable-next-line no-console
   console.log({ suggestion, dataset });
 });
