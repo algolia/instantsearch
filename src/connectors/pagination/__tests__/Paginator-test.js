@@ -155,3 +155,23 @@ describe('paginator: bug #668', () => {
     expect(pager.isLastPage()).toBe(false);
   });
 });
+
+describe('paginator: no results', () => {
+  const pager = new Paginator({
+    currentPage: 0,
+    total: 0,
+    padding: 3,
+  });
+
+  it('isFirstPage: true', () => {
+    expect(pager.isFirstPage()).toBe(true);
+  });
+
+  it('isLastPage: true', () => {
+    expect(pager.isLastPage()).toBe(true);
+  });
+
+  it('pages: just current page', () => {
+    expect(pager.pages()).toEqual([0]);
+  });
+});
