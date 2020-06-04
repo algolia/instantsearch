@@ -5,6 +5,7 @@ import {
   createDocumentationMessageGenerator,
   find,
   noop,
+  toArray,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -99,8 +100,10 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
 
     const hasAnOffValue = userOff !== undefined;
     const hasAnOnValue = userOn !== undefined;
-    const on = hasAnOnValue ? escapeRefinement(userOn) : undefined;
-    const off = hasAnOffValue ? escapeRefinement(userOff) : undefined;
+    const on = hasAnOnValue ? toArray(userOn).map(escapeRefinement) : undefined;
+    const off = hasAnOffValue
+      ? toArray(userOff).map(escapeRefinement)
+      : undefined;
 
     return {
       $$type: 'ais.toggleRefinement',
@@ -109,14 +112,22 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
-            helper.removeDisjunctiveFacetRefinement(attribute, off);
+            off.forEach(v =>
+              helper.removeDisjunctiveFacetRefinement(attribute, v)
+            );
           }
-          helper.addDisjunctiveFacetRefinement(attribute, on);
+
+          on.forEach(v => helper.addDisjunctiveFacetRefinement(attribute, v));
         } else {
           // Unchecking
-          helper.removeDisjunctiveFacetRefinement(attribute, on);
+          on.forEach(v =>
+            helper.removeDisjunctiveFacetRefinement(attribute, v)
+          );
+
           if (hasAnOffValue) {
-            helper.addDisjunctiveFacetRefinement(attribute, off);
+            off.forEach(v =>
+              helper.addDisjunctiveFacetRefinement(attribute, v)
+            );
           }
         }
 
@@ -124,33 +135,43 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       init({ state, helper, createURL, instantSearchInstance }) {
-        this._createURL = isCurrentlyRefined => () =>
-          createURL(
-            state
-              .removeDisjunctiveFacetRefinement(
-                attribute,
-                isCurrentlyRefined ? on : off
-              )
-              .addDisjunctiveFacetRefinement(
-                attribute,
-                isCurrentlyRefined ? off : on
-              )
-          );
+        this._createURL = isCurrentlyRefined => () => {
+          const valuesToRemove = isCurrentlyRefined ? on : off;
+          if (valuesToRemove) {
+            valuesToRemove.forEach(v => {
+              state.removeDisjunctiveFacetRefinement(attribute, v);
+            });
+          }
+
+          const valuesToAdd = isCurrentlyRefined ? off : on;
+          if (valuesToAdd) {
+            valuesToAdd.forEach(v => {
+              state.addDisjunctiveFacetRefinement(attribute, v);
+            });
+          }
+
+          return createURL(state);
+        };
 
         this.toggleRefinement = opts => {
           this._toggleRefinement(helper, opts);
         };
 
-        const isRefined = state.isDisjunctiveFacetRefined(attribute, on);
+        const isRefined =
+          on && on.every(v => state.isDisjunctiveFacetRefined(attribute, v));
 
         // no need to refine anything at init if no custom off values
         if (hasAnOffValue) {
           // Add filtering on the 'off' value if set
           if (!isRefined) {
             const currentPage = helper.state.page;
-            helper
-              .addDisjunctiveFacetRefinement(attribute, off)
-              .setPage(currentPage);
+            if (off) {
+              off.forEach(v =>
+                helper.addDisjunctiveFacetRefinement(attribute, v)
+              );
+            }
+
+            helper.setPage(currentPage);
           }
         }
 
@@ -185,7 +206,9 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       render({ helper, results, state, instantSearchInstance }) {
-        const isRefined = helper.state.isDisjunctiveFacetRefined(attribute, on);
+        const isRefined =
+          on &&
+          on.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v));
         const offValue = off === undefined ? false : off;
         const allFacetValues = results.getFacetValues(attribute) || [];
 
@@ -246,10 +269,11 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const isRefined = searchParameters.isDisjunctiveFacetRefined(
-          attribute,
-          on
-        );
+        const isRefined =
+          on &&
+          on.every(v =>
+            searchParameters.isDisjunctiveFacetRefined(attribute, v)
+          );
 
         if (!isRefined) {
           return uiState;
@@ -265,25 +289,36 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const withFacetConfiguration = searchParameters
+        let withFacetConfiguration = searchParameters
           .clearRefinements(attribute)
           .addDisjunctiveFacet(attribute);
 
         const isRefined = Boolean(uiState.toggle && uiState.toggle[attribute]);
 
         if (isRefined) {
-          return withFacetConfiguration.addDisjunctiveFacetRefinement(
-            attribute,
-            on
-          );
+          if (on) {
+            on.forEach(v => {
+              withFacetConfiguration = withFacetConfiguration.addDisjunctiveFacetRefinement(
+                attribute,
+                v
+              );
+            });
+          }
+
+          return withFacetConfiguration;
         }
 
         // It's not refined with an `off` value
         if (hasAnOffValue) {
-          return withFacetConfiguration.addDisjunctiveFacetRefinement(
-            attribute,
-            off
-          );
+          if (off) {
+            off.forEach(v => {
+              withFacetConfiguration = withFacetConfiguration.addDisjunctiveFacetRefinement(
+                attribute,
+                v
+              );
+            });
+          }
+          return withFacetConfiguration;
         }
 
         // It's not refined without an `off` value
