@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Metadata|Analytics', module).add(
+storiesOf('Metadata/Analytics', module).add(
   'default',
   withHits(({ search, container, instantsearch }) => {
     const description = document.createElement('p');

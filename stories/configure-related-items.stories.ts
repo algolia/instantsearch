@@ -8,7 +8,7 @@ import {
 } from '../src/widgets';
 import { connectHits, connectPagination } from '../src/connectors';
 
-storiesOf('Basics|ConfigureRelatedItems', module).add(
+storiesOf('Basics/ConfigureRelatedItems', module).add(
   'default',
   withHits(({ search, container }) => {
     const productContainer = document.createElement('div');

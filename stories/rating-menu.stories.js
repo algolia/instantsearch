@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Refinements|RatingMenu', module)
+storiesOf('Refinements/RatingMenu', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {

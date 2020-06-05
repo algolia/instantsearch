@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 
-storiesOf('Refinements|HierarchicalMenu', module)
+storiesOf('Refinements/HierarchicalMenu', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {

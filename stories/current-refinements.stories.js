@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Refinements|CurrentRefinements', module)
+storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'default',
     withHits(

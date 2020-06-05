@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 
-storiesOf('Refinements|MenuSelect', module)
+storiesOf('Refinements/MenuSelect', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {

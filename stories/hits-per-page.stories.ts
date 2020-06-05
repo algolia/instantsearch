@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { hitsPerPage } from '../src/widgets';
 
-storiesOf('Pagination|HitsPerPage', module)
+storiesOf('Pagination/HitsPerPage', module)
   .add(
     'default',
     withHits(({ search, container }) => {

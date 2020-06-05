@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Refinements|RangeSlider', module)
+storiesOf('Refinements/RangeSlider', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
