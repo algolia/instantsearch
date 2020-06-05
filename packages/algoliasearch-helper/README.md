@@ -49,7 +49,6 @@ track of the search parameters and provides a higher level API.
     - [Pagination](#pagination)
     - [Index](#index)
     - [One time query](#one-time-query)
-    - [URL Helpers](#url-helpers)
     - [Query parameters](#query-parameters)
     - [Results format](#results-format)
 - [Browser support](#browser-support)
