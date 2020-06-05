@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
 
-storiesOf('Results|Hits', module)
+storiesOf('Results/Hits', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {
@@ -159,7 +159,7 @@ storiesOf('Results|Hits', module)
               item: `
               <h4>{{name}}</h4>
               <button {{#helpers.insights}} {
-               "method": "clickedObjectIDsAfterSearch", 
+               "method": "clickedObjectIDsAfterSearch",
                "payload": { "eventName": "Add to cart" }
               } {{/helpers.insights}}>
                 Add to cart

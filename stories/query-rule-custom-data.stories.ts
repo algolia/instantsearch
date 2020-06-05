@@ -16,7 +16,7 @@ const searchOptions = {
   playground: moviesPlayground,
 };
 
-storiesOf('Metadata|QueryRuleCustomData', module)
+storiesOf('Metadata/QueryRuleCustomData', module)
   .add(
     'default',
     withHits(({ search, container }) => {

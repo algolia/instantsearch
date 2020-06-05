@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { hitsItemTemplate } from '../.storybook/playgrounds/default';
 
-storiesOf('Basics|Index', module)
+storiesOf('Basics/Index', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {

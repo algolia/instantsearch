@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Basics|InstantSearch', module)
+storiesOf('Basics/InstantSearch', module)
   .add(
     'with searchFunction to prevent search',
     withHits(() => {}, {

@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Basics|Autocomplete', module).add(
+storiesOf('Basics/Autocomplete', module).add(
   'default',
   withHits(({ search, container, instantsearch }) => {
     const instantSearchAutocomplete = document.createElement('div');
