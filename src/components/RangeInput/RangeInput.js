@@ -58,7 +58,7 @@ class RangeInput extends Component {
               min={min}
               max={max}
               step={step}
-              value={minValue}
+              value={minValue ?? ''}
               onInput={this.onInput('min')}
               placeholder={min}
               disabled={isDisabled}
@@ -81,7 +81,7 @@ class RangeInput extends Component {
               min={min}
               max={max}
               step={step}
-              value={maxValue}
+              value={maxValue ?? ''}
               onInput={this.onInput('max')}
               placeholder={max}
               disabled={isDisabled}
