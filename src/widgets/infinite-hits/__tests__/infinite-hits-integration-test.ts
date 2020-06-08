@@ -1,8 +1,19 @@
-import algoliasearch from 'algoliasearch/lite';
 import { getByText, waitFor, fireEvent } from '@testing-library/dom';
 
 import instantsearch from '../../../index.es';
 import { infiniteHits, configure } from '../../';
+
+function createSingleSearchResponse({ params: { hitsPerPage, page } }) {
+  return {
+    hits: Array(hitsPerPage)
+      .fill(undefined)
+      .map((_, index) => ({
+        title: `title ${page * hitsPerPage + index + 1}`,
+      })),
+    page,
+    hitsPerPage,
+  };
+}
 
 describe('infiniteHits', () => {
   let search;
@@ -14,7 +25,13 @@ describe('infiniteHits', () => {
   let customCache;
 
   beforeEach(() => {
-    searchClient = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+    searchClient = {
+      search: jest.fn(requests =>
+        Promise.resolve({
+          results: requests.map(request => createSingleSearchResponse(request)),
+        })
+      ),
+    };
     search = instantsearch({
       indexName: 'instant_search',
       searchClient,
