@@ -77,3 +77,6 @@ export { default as createVoiceSearchHelper } from './lib/voiceSearchHelper';
 export {
   default as getInsightsAnonymousUserToken,
 } from './core/getInsightsAnonymousUserToken';
+
+// InfiniteHits Cache
+export { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';

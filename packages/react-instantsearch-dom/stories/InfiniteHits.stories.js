@@ -8,6 +8,7 @@ import {
   Snippet,
   Configure,
   connectInfiniteHits,
+  createInfiniteHitsSessionStorageCache,
 } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
 import { action } from '@storybook/addon-actions';
@@ -145,6 +146,32 @@ stories
       <WrapWithHits linkedStoryGroup="Hits">
         <Configure clickAnalytics />
         <InfiniteHits hitComponent={ProductWithInsights} />
+      </WrapWithHits>
+    );
+  })
+  .add('with sessionStorage cache', () => {
+    function Product({ hit }) {
+      return (
+        <div>
+          <span>#{hit.__position}. </span>
+          <Highlight attribute="name" hit={hit} />
+          <p>
+            <a href="https://google.com">Details</a>
+          </p>
+        </div>
+      );
+    }
+    Product.propTypes = {
+      hit: PropTypes.object.isRequired,
+    };
+
+    return (
+      <WrapWithHits linkedStoryGroup="InfiniteHits">
+        <Configure hitsPerPage={16} />
+        <InfiniteHits
+          hitComponent={Product}
+          cache={createInfiniteHitsSessionStorageCache()}
+        />
       </WrapWithHits>
     );
   });
