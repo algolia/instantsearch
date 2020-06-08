@@ -1,3 +1,18 @@
+# [4.6.0](https://github.com/algolia/instantsearch.js/compare/v4.5.0...v4.6.0) (2020-06-08)
+
+
+### Bug Fixes
+
+* **connectPagination:** set `isLastPage` to `true` when no results ([#4422](https://github.com/algolia/instantsearch.js/issues/4422)) ([92bcc02](https://github.com/algolia/instantsearch.js/commit/92bcc0271927f0239083366fff920530977e32cd))
+* **rangeInput:** support typing float numbers ([#4418](https://github.com/algolia/instantsearch.js/issues/4418)) ([61b19b8](https://github.com/algolia/instantsearch.js/commit/61b19b87ae3afdabde8ef355e3b727059ae59911))
+
+
+### Features
+
+* **connectToggleRefinement:** add support for array values ([#4420](https://github.com/algolia/instantsearch.js/issues/4420)) ([fe1fbee](https://github.com/algolia/instantsearch.js/commit/fe1fbee4ad59c5f24831ed38a419906bbd7d2c15))
+
+
+
 # [4.5.0](https://github.com/algolia/instantsearch.js/compare/v4.4.1...v4.5.0) (2020-05-13)
 
 
