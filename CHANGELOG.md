@@ -3,8 +3,8 @@
 
 ### Bug Fixes
 
-* **pagination:** isLastPage when there's no pages ([#4422](https://github.com/algolia/instantsearch.js/issues/4422)) ([92bcc02](https://github.com/algolia/instantsearch.js/commit/92bcc0271927f0239083366fff920530977e32cd))
-* **rangeInput:** fix a bug that floating number cannot be typed ([#4418](https://github.com/algolia/instantsearch.js/issues/4418)) ([61b19b8](https://github.com/algolia/instantsearch.js/commit/61b19b87ae3afdabde8ef355e3b727059ae59911))
+* **connectPagination:** set `isLastPage` to `true` when no results ([#4422](https://github.com/algolia/instantsearch.js/issues/4422)) ([92bcc02](https://github.com/algolia/instantsearch.js/commit/92bcc0271927f0239083366fff920530977e32cd))
+* **rangeInput:** support typing float numbers ([#4418](https://github.com/algolia/instantsearch.js/issues/4418)) ([61b19b8](https://github.com/algolia/instantsearch.js/commit/61b19b87ae3afdabde8ef355e3b727059ae59911))
 
 
 ### Features
