@@ -3,7 +3,7 @@ import { withHits } from '../.storybook/decorators';
 import { connectAutocomplete } from '../src/connectors';
 import { configure } from '../src/widgets';
 
-storiesOf('Basics|Autocomplete', module).add(
+storiesOf('Basics/Autocomplete', module).add(
   'default',
   withHits(({ search, container, instantsearch }) => {
     const instantSearchAutocomplete = document.createElement('div');

@@ -36,7 +36,7 @@ const injectGoogleMaps = fn => {
   );
 };
 
-const stories = storiesOf('Results|GeoSearch', module);
+const stories = storiesOf('Results/GeoSearch', module);
 const initialZoom = 12;
 const initialPosition = {
   lat: 40.71,

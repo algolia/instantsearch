@@ -4,7 +4,7 @@ import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
 import { configure, hits } from '../src/widgets';
 
-storiesOf('Results|Hits', module)
+storiesOf('Results/Hits', module)
   .add(
     'default',
     withHits(({ search, container }) => {

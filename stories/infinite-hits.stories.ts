@@ -4,7 +4,7 @@ import { withHits } from '../.storybook/decorators';
 import insights from '../src/helpers/insights';
 import { infiniteHits, configure } from '../src/widgets';
 
-storiesOf('Results|InfiniteHits', module)
+storiesOf('Results/InfiniteHits', module)
   .add(
     'default',
     withHits(({ search, container }) => {

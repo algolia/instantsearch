@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import { clearRefinements } from '../src/widgets';
 
-storiesOf('Refinements|ClearRefinements', module)
+storiesOf('Refinements/ClearRefinements', module)
   .add(
     'default',
     withHits(

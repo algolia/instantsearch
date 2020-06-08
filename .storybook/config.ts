@@ -15,6 +15,7 @@ const categories = [
 
 addParameters({
   options: {
+    showRoots: true,
     theme: create({
       base: 'light',
       brandTitle: 'InstantSearch.js',

@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { configure } from '../src/widgets';
 
-storiesOf('Basics|Configure', module)
+storiesOf('Basics/Configure', module)
   .add(
     'Force 1 hit per page',
     withHits(({ search, container }) => {

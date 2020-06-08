@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Pagination|Pagination', module)
+storiesOf('Pagination/Pagination', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {

@@ -10,7 +10,7 @@ import { connectHits, connectPagination } from '../src/connectors';
 import { HitsWidgetOptions } from '../src/widgets/hits/hits';
 import { AlgoliaHit } from '../src/types';
 
-storiesOf('Basics|ConfigureRelatedItems', module).add(
+storiesOf('Basics/ConfigureRelatedItems', module).add(
   'default',
   withHits(({ search, container }) => {
     const productContainer = document.createElement('div');

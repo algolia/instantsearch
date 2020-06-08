@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import { currentRefinements } from '../src/widgets';
 
-storiesOf('Refinements|CurrentRefinements', module)
+storiesOf('Refinements/CurrentRefinements', module)
   .add(
     'default',
     withHits(

@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 
-storiesOf('Metadata|PoweredBy', module)
+storiesOf('Metadata/PoweredBy', module)
   .add(
     'default',
     withHits(({ search, container, instantsearch }) => {

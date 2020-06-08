@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { withHits } from '../.storybook/decorators';
 import { analytics } from '../src/widgets';
 
-storiesOf('Metadata|Analytics', module).add(
+storiesOf('Metadata/Analytics', module).add(
   'default',
   withHits(({ search, container }) => {
     const description = document.createElement('p');
