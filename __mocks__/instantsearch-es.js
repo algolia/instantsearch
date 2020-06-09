@@ -45,12 +45,15 @@ const fakeInstantSearch = jest.fn(
       mainIndex: {
         $$type: 'ais.index',
         _widgets: [],
+        addWidgets(widgets) {
+          this._widgets.push(...widgets);
+        },
         getWidgets() {
           return this._widgets;
         },
       },
       addWidgets(widgets) {
-        instantsearchInstance.mainIndex._widgets.push(...widgets);
+        instantsearchInstance.mainIndex.addWidgets(widgets);
       },
       removeWidgets(widgets) {
         widgets.forEach(widget => {

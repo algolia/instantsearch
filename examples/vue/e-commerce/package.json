@@ -10,7 +10,7 @@
   "dependencies": {
     "algoliasearch": "^4.0.1",
     "classnames": "2.2.6",
-    "instantsearch.js": "^4.0.1",
+    "instantsearch.js": "^4.5.0",
     "vue": "2.6.10",
     "vue-instantsearch": "file:../../",
     "vue-slider-component": "3.0.32"

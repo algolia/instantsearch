@@ -5,4 +5,6 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(plugin);
 }
 
-export * from './instantsearch';
+export { createSuitMixin } from './mixins/suit';
+export { createWidgetMixin } from './mixins/widget';
+export * from './widgets';

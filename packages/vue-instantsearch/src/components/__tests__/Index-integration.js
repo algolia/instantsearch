@@ -2,7 +2,6 @@ jest.unmock('instantsearch.js/es');
 import { mount } from '@vue/test-utils';
 import Index from '../Index';
 import instantsearch from 'instantsearch.js/es';
-import { SearchParameters } from 'algoliasearch-helper';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';
 
@@ -28,7 +27,7 @@ it('child widgets get added to their parent index', () => {
     provide() {
       return {
         $_ais_instantSearchInstance: {
-          addWidgets: rootAddWidgets,
+          mainIndex: { addWidgets: rootAddWidgets },
         },
       };
     },
@@ -95,7 +94,7 @@ it('child widgets render with right data', () => {
       helper: expect.any(Object),
       instantSearchInstance: search,
       parent: indexWidget,
-      state: expect.any(SearchParameters),
+      state: expect.any(Object),
       templatesConfig: expect.any(Object),
       uiState: {},
     })

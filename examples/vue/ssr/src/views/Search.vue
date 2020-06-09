@@ -38,14 +38,6 @@ import {
 } from 'vue-instantsearch';
 
 export default {
-  asyncData({ instantsearch }) {
-    return instantsearch.findResultsState({
-      query: 'iphone',
-      hitsPerPage: 5,
-      disjunctiveFacets: ['brand'],
-      disjunctiveFacetsRefinements: { brand: ['Apple'] },
-    });
-  },
   components: {
     AisInstantSearchSsr,
     AisRefinementList,

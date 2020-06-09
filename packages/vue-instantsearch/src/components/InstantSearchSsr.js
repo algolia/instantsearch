@@ -3,15 +3,15 @@ import { createInstantSearchComponent } from '../util/createInstantSearchCompone
 export default createInstantSearchComponent({
   name: 'AisInstantSearchSsr',
   inject: {
-    $_ais: {
+    $_ais_ssrInstantSearchInstance: {
       default() {
-        throw new Error('`rootMixin` is required when using SSR.');
+        throw new Error('`createServerRootMixin` is required when using SSR.');
       },
     },
   },
   data() {
     return {
-      instantSearchInstance: this.$_ais,
+      instantSearchInstance: this.$_ais_ssrInstantSearchInstance,
     };
   },
   render(createElement) {

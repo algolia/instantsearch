@@ -9,6 +9,7 @@ const createFakeComponent = localVue =>
 const createFakeInstance = () => ({
   addWidgets: jest.fn(),
   removeWidgets: jest.fn(),
+  mainIndex: createFakeIndexWidget(),
   started: true,
 });
 
@@ -42,7 +43,7 @@ describe('on root index', () => {
 
     expect(connector).toHaveBeenCalled();
     expect(factory).toHaveBeenCalledWith(widgetParams);
-    expect(instance.addWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledWith([widget]);
   });
 
   it('removes a widget on destroy', () => {
@@ -70,11 +71,11 @@ describe('on root index', () => {
       }),
     });
 
-    expect(instance.addWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledWith([widget]);
 
     wrapper.destroy();
 
-    expect(instance.removeWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledWith([widget]);
   });
 
   it('updates widget on widget params change', () => {
@@ -112,22 +113,22 @@ describe('on root index', () => {
       items: [],
     };
 
-    expect(instance.addWidgets).toHaveBeenCalledTimes(1);
-    expect(instance.addWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledTimes(1);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledWith([widget]);
 
     // Simulate widget params update
     wrapper.vm.widgetParams = nextWidgetParams;
 
     expect(wrapper.vm.state).toBe(null);
 
-    expect(instance.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(instance.removeWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledTimes(1);
+    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledWith([widget]);
 
     expect(factory).toHaveBeenCalledTimes(2);
     expect(factory).toHaveBeenCalledWith(nextWidgetParams);
 
-    expect(instance.addWidgets).toHaveBeenCalledTimes(2);
-    expect(instance.addWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledTimes(2);
+    expect(instance.mainIndex.addWidgets).toHaveBeenCalledWith([widget]);
   });
 
   it('updates local state on connector render', () => {

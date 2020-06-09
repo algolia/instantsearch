@@ -223,7 +223,7 @@ export default {
     refine(page) {
       const p = Math.min(Math.max(page, 0), this.state.nbPages - 1);
       this.state.refine(p);
-      // @TODO: do this in a general way
+      // TODO: do this in a general way
       this.$emit('page-change', p);
     },
   },

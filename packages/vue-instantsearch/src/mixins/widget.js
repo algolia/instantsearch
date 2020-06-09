@@ -14,7 +14,7 @@ export const createWidgetMixin = ({ connector } = {}) => ({
     getParentIndex: {
       from: '$_ais_getParentIndex',
       default() {
-        return () => this.instantSearchInstance;
+        return () => this.instantSearchInstance.mainIndex;
       },
     },
   },
@@ -29,14 +29,19 @@ export const createWidgetMixin = ({ connector } = {}) => ({
       this.widget = this.factory(this.widgetParams);
       this.getParentIndex().addWidgets([this.widget]);
 
-      const { hydrated, started } = this.instantSearchInstance;
-      if ((!started && hydrated) || this.$isServer) {
+      if (
+        this.instantSearchInstance.__initialSearchResults &&
+        !this.instantSearchInstance.started
+      ) {
         if (typeof this.instantSearchInstance.__forceRender !== 'function') {
           throw new Error(
             'You are using server side rendering with <ais-instant-search> instead of <ais-instant-search-ssr>.'
           );
         }
-        this.instantSearchInstance.__forceRender(this.widget);
+        this.instantSearchInstance.__forceRender(
+          this.widget,
+          this.getParentIndex()
+        );
       }
     } else if (connector !== true) {
       warn(

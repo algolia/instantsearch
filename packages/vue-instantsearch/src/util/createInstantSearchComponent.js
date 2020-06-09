@@ -58,7 +58,7 @@ export const createInstantSearchComponent = component =>
         }
 
         // a hydrated instance will no longer be hydrated once disposed, and starts from scratch
-        this.instantSearchInstance.hydrated = false;
+        this.instantSearchInstance.__initialSearchResults = undefined;
       },
     },
     component

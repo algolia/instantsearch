@@ -46,7 +46,10 @@ export default createInstantSearchComponent({
       type: Function,
       default: null,
     },
-
+    initialUiState: {
+      type: Object,
+      required: false,
+    },
     apiKey: {
       type: String,
       default: null,
@@ -77,6 +80,7 @@ export default createInstantSearchComponent({
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,
         searchFunction: this.searchFunction,
+        initialUiState: this.initialUiState,
       }),
     };
   },
