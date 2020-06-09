@@ -52,6 +52,7 @@
     "scripts/transforms"
   ],
   "dependencies": {
+    "@types/googlemaps": "^3.39.6",
     "algoliasearch-helper": "^3.1.1",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
