@@ -7,7 +7,6 @@ import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits, {
   InfiniteHitsConnectorParams,
   InfiniteHitsRendererOptions,
-  InfiniteHitsCache,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
@@ -110,13 +109,6 @@ export type InfiniteHitsWidgetParams = {
    * The templates to use for the widget.
    */
   templates?: InfiniteHitsTemplates;
-
-  /**
-   * Reads and writes hits from/to cache.
-   * When user comes back to the search page after leaving for product page,
-   * this helps restore InfiniteHits and its scroll position.
-   */
-  cache?: InfiniteHitsCache;
 };
 
 export type InfiniteHitsWidget = WidgetFactory<
@@ -180,7 +172,6 @@ const infiniteHits: InfiniteHitsWidget = (
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
     showPrevious,
-    cache,
   } = {} as InfiniteHitsWidgetParams
 ) => {
   if (!container) {
@@ -224,7 +215,6 @@ const infiniteHits: InfiniteHitsWidget = (
     escapeHTML,
     transformItems,
     showPrevious,
-    cache,
   });
 };
 
