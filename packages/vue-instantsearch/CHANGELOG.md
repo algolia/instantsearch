@@ -1,3 +1,13 @@
+## [2.7.1](https://github.com/algolia/vue-instantsearch/compare/v2.7.0...v2.7.1) (2020-06-10)
+
+
+### Bug Fixes
+
+* **Highlight, Snippet:** prevent XSS via routing ([#783](https://github.com/algolia/vue-instantsearch/issues/783)) ([f35446b](https://github.com/algolia/vue-instantsearch/commit/f35446b))
+* **RangeInput:** refine correctly when start is given ([#777](https://github.com/algolia/vue-instantsearch/issues/777)) ([6eb46c8](https://github.com/algolia/vue-instantsearch/commit/6eb46c8))
+
+
+
 # [2.7.0](https://github.com/algolia/vue-instantsearch/compare/v2.6.0...v2.7.0) (2020-01-23)
 
 
