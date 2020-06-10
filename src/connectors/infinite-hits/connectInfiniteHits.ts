@@ -13,29 +13,6 @@ import {
   noop,
 } from '../../lib/utils';
 
-export type InfiniteHitsCachedHits = {
-  [page: number]: Hits;
-};
-
-type Read = ({
-  state,
-}: {
-  state: Partial<SearchParameters>;
-}) => InfiniteHitsCachedHits | null;
-
-type Write = ({
-  state,
-  hits,
-}: {
-  state: Partial<SearchParameters>;
-  hits: InfiniteHitsCachedHits;
-}) => void;
-
-export type InfiniteHitsCache = {
-  read: Read;
-  write: Write;
-};
-
 export type InfiniteHitsConnectorParams = {
   /**
    * Escapes HTML entities from hits string values.
@@ -56,13 +33,6 @@ export type InfiniteHitsConnectorParams = {
    * Useful for mapping over the items to transform, and remove or reorder them.
    */
   transformItems?: TransformItems<Hit>;
-
-  /**
-   * Reads and writes hits from/to cache.
-   * When user comes back to the search page after leaving for product page,
-   * this helps restore InfiniteHits and its scroll position.
-   */
-  cache?: InfiniteHitsCache;
 };
 
 export type InfiniteHitsRendererOptions = {
@@ -97,36 +67,6 @@ export type InfiniteHitsConnector = Connector<
   InfiniteHitsConnectorParams
 >;
 
-function getStateWithoutPage(state) {
-  const { page, ...rest } = state || {};
-  return rest;
-}
-
-function getInMemoryCache(): InfiniteHitsCache {
-  let cachedHits: InfiniteHitsCachedHits | null = null;
-  let cachedState = undefined;
-  return {
-    read({ state }) {
-      return isEqual(cachedState, getStateWithoutPage(state))
-        ? cachedHits
-        : null;
-    },
-    write({ state, hits }) {
-      cachedState = getStateWithoutPage(state);
-      cachedHits = hits;
-    },
-  };
-}
-
-function extractHitsFromCachedHits(cachedHits: InfiniteHitsCachedHits) {
-  return Object.keys(cachedHits)
-    .map(Number)
-    .sort((a, b) => a - b)
-    .reduce((acc: Hits, page) => {
-      return acc.concat(cachedHits[page]);
-    }, []);
-}
-
 const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
   renderFn,
   unmountFn = noop
@@ -138,17 +78,13 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       escapeHTML = true,
       transformItems = (items: any[]) => items,
       showPrevious: hasShowPrevious = false,
-      cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
-    let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
+    let hitsCache: Hits = [];
+    let firstReceivedPage = Infinity;
+    let lastReceivedPage = -1;
     let prevState: Partial<SearchParameters>;
     let showPrevious: () => void;
     let showMore: () => void;
-
-    const getFirstReceivedPage = () =>
-      Math.min(...Object.keys(cachedHits || {}).map(Number));
-    const getLastReceivedPage = () =>
-      Math.max(...Object.keys(cachedHits || {}).map(Number));
 
     const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
@@ -156,12 +92,12 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       helper
         .overrideStateWithoutTriggeringChangeEvent({
           ...helper.state,
-          page: getFirstReceivedPage() - 1,
+          page: firstReceivedPage - 1,
         })
         .search();
     };
     const getShowMore = (helper: Helper): (() => void) => () => {
-      helper.setPage(getLastReceivedPage() + 1).search();
+      helper.setPage(lastReceivedPage + 1).search();
     };
     const filterEmptyRefinements = (refinements = {}) => {
       return Object.keys(refinements)
@@ -182,17 +118,16 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
+        firstReceivedPage = helper.state.page || 0;
+        lastReceivedPage = helper.state.page || 0;
 
         renderFn(
           {
-            hits: extractHitsFromCachedHits(
-              cache.read({ state: helper.state }) || {}
-            ),
+            hits: hitsCache,
             results: undefined,
             showPrevious,
             showMore,
-            isFirstPage:
-              getFirstReceivedPage() === 0 || helper.state.page === undefined,
+            isFirstPage: firstReceivedPage === 0,
             isLastPage: true,
             instantSearchInstance,
             widgetParams,
@@ -231,7 +166,9 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         );
 
         if (!isEqual(currentState, prevState)) {
-          cachedHits = cache.read({ state }) || {};
+          hitsCache = [];
+          firstReceivedPage = page;
+          lastReceivedPage = page;
           prevState = currentState;
         }
 
@@ -255,21 +192,20 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         // hits widgets mounted on the page.
         (results.hits as any).__escaped = initialEscaped;
 
-        if (cachedHits === undefined) {
-          cachedHits = cache.read({ state }) || {};
+        if (lastReceivedPage < page || !hitsCache.length) {
+          hitsCache = [...hitsCache, ...results.hits];
+          lastReceivedPage = page;
+        } else if (firstReceivedPage > page) {
+          hitsCache = [...results.hits, ...hitsCache];
+          firstReceivedPage = page;
         }
 
-        if (cachedHits![page] === undefined) {
-          cachedHits![page] = results.hits;
-          cache.write({ state, hits: cachedHits });
-        }
-
-        const isFirstPage = getFirstReceivedPage() === 0;
+        const isFirstPage = firstReceivedPage === 0;
         const isLastPage = results.nbPages <= results.page + 1;
 
         renderFn(
           {
-            hits: extractHitsFromCachedHits(cachedHits!),
+            hits: hitsCache,
             results,
             showPrevious,
             showMore,

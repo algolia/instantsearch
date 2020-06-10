@@ -7,7 +7,6 @@ import * as helpers from '../helpers/index';
 
 import * as routers from './routers/index';
 import * as stateMappings from './stateMappings/index';
-import { createInfiniteHitsSessionStorageCache } from './infiniteHitsCache/index';
 import { InstantSearchOptions } from '../types';
 
 /**
@@ -35,7 +34,6 @@ instantsearch.stateMappings = stateMappings;
 instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
 instantsearch.version = version;
-instantsearch.createInfiniteHitsSessionStorageCache = createInfiniteHitsSessionStorageCache;
 instantsearch.highlight = helpers.highlight;
 instantsearch.snippet = helpers.snippet;
 instantsearch.insights = helpers.insights;
