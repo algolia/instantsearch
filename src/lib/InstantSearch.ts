@@ -16,7 +16,7 @@ import {
   SearchClient,
   Widget,
   UiState,
-  Client as AlgoliaSearchClient,
+  CreateURL,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
@@ -33,7 +33,7 @@ function defaultCreateURL() {
 /**
  * Global options for an InstantSearch instance.
  */
-export type InstantSearchOptions<TRouteState = UiState> = {
+export type InstantSearchOptions = {
   /**
    * The name of the main index
    */
@@ -66,7 +66,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
    * });
    * ```
    */
-  searchClient: SearchClient | AlgoliaSearchClient;
+  searchClient: SearchClient;
 
   /**
    * The locale used to display numbers. This will be passed
@@ -109,7 +109,7 @@ export type InstantSearchOptions<TRouteState = UiState> = {
    * Router configuration used to save the UI State into the URL or any other
    * client side persistence. Passing `true` will use the default URL options.
    */
-  routing?: RouterProps<TRouteState> | boolean;
+  routing?: RouterProps | boolean;
 
   /**
    * the instance of search-insights to use for sending insights events inside
@@ -137,7 +137,7 @@ class InstantSearch extends EventEmitter {
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
   public _initialUiState: UiState;
-  public _createURL: (nextState: UiState) => string;
+  public _createURL: CreateURL<UiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];
@@ -173,13 +173,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       );
     }
 
-    if (
-      typeof (searchClient as AlgoliaSearchClient).addAlgoliaAgent ===
-      'function'
-    ) {
-      (searchClient as AlgoliaSearchClient).addAlgoliaAgent(
-        `instantsearch.js (${version})`
-      );
+    if (typeof searchClient.addAlgoliaAgent === 'function') {
+      searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
     }
 
     warning(
@@ -397,7 +392,7 @@ See ${createDocumentationLink({
       // to not throw errors
       const fakeClient = ({
         search: () => new Promise(noop),
-      } as any) as AlgoliaSearchClient;
+      } as any) as SearchClient;
 
       this._mainHelperSearch = mainHelper.search.bind(mainHelper);
       mainHelper.search = () => {

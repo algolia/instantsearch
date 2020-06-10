@@ -1,4 +1,5 @@
 import instantsearch from '../../src/index';
+import { panel } from '../../src/widgets';
 
 function demoQueryRulesPlayground({
   search,
@@ -12,7 +13,7 @@ function demoQueryRulesPlayground({
   const refinementList = document.createElement('div');
   leftPanel.appendChild(refinementList);
 
-  const brandList = instantsearch.widgets.panel({
+  const brandList = panel({
     templates: {
       header: 'Genres',
     },

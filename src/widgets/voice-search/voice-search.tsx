@@ -9,13 +9,14 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import connectVoiceSearch, {
-  VoiceSearchRenderer,
+  VoiceSearchConnectorParams,
+  VoiceSearchRendererOptions,
 } from '../../connectors/voice-search/connectVoiceSearch';
 import VoiceSearch, {
   VoiceSearchComponentCSSClasses,
 } from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
-import { WidgetFactory, Template } from '../../types';
+import { WidgetFactory, Template, Renderer } from '../../types';
 import { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
@@ -59,9 +60,15 @@ type VoiceSearchRendererWidgetParams = {
   templates: VoiceSearchTemplates;
 } & VoiceSearchWidgetParams;
 
-type VoiceSearch = WidgetFactory<VoiceSearchWidgetParams>;
+type VoiceSearch = WidgetFactory<
+  VoiceSearchConnectorParams,
+  VoiceSearchWidgetParams
+>;
 
-const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
+const renderer: Renderer<
+  VoiceSearchRendererOptions,
+  VoiceSearchRendererWidgetParams
+> = ({
   isBrowserSupported,
   isListening,
   toggleListening,

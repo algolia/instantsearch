@@ -2,7 +2,7 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { Client } from '../../../types';
+import { SearchClient, HitAttributeHighlightResult } from '../../../types';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import {
   createInitOptions,
@@ -62,7 +62,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     expect(renderFn).toHaveBeenCalledTimes(0);
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -124,7 +124,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -188,7 +188,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.setPage(1);
     helper.search = jest.fn();
     helper.emit = jest.fn();
@@ -256,7 +256,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -319,7 +319,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({ escapeHTML: true });
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -376,10 +376,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
-      transformItems: items => items.map(() => ({ name: 'transformed' })),
+      transformItems: items => {
+        return items.map(item => ({ ...item, name: 'transformed' }));
+      },
     });
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -418,9 +420,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
     const transformedHits = [
       {
+        objectID: '1',
         name: 'transformed',
       },
       {
+        objectID: '2',
         name: 'transformed',
       },
     ];
@@ -435,18 +439,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({
       transformItems: items =>
-        items.map(item => ({
-          ...item,
-          _highlightResult: {
-            name: {
-              value: item._highlightResult.name.value.toUpperCase(),
-            },
-          },
-        })),
+        items.map(item => {
+          const name = item._highlightResult!
+            .name as HitAttributeHighlightResult;
+
+          name.value = name.value.toUpperCase();
+
+          return item;
+        }),
       escapeHTML: true,
     });
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -523,7 +527,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -581,7 +585,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(renderFn);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     widget.init!(
@@ -657,7 +661,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({});
 
-    const helper = algoliasearchHelper({} as Client, '', {});
+    const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     createInitOptions();
@@ -688,7 +692,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = algoliasearchHelper({} as Client, '', {});
+      const helper = algoliasearchHelper({} as SearchClient, '', {});
 
       const renderFn = (): void => {};
       const unmountFn = jest.fn();
@@ -703,7 +707,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({} as Client, '', {});
+      const helper = algoliasearchHelper({} as SearchClient, '', {});
 
       const renderFn = (): void => {};
       const makeWidget = connectInfiniteHits(renderFn);
@@ -715,7 +719,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({} as Client, '', {
+      const helper = algoliasearchHelper({} as SearchClient, '', {
         ...TAG_PLACEHOLDER,
       });
 
@@ -741,7 +745,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const helper = algoliasearchHelper({} as Client, '', {
+      const helper = algoliasearchHelper({} as SearchClient, '', {
         highlightPreTag: '<mark>',
         highlightPostTag: '</mark>',
       });
@@ -765,7 +769,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
 
     it('removes the `page` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({} as Client, '', {
+      const helper = algoliasearchHelper({} as SearchClient, '', {
         page: 5,
       });
 

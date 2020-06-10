@@ -16,7 +16,7 @@ import {
   WidgetStateOptions,
   WidgetSearchParametersOptions,
   ScopedResult,
-  Client,
+  SearchClient,
 } from '../../types';
 import {
   checkIndexUiState,
@@ -339,7 +339,11 @@ const index = (props: IndexProps): Index => {
       // This Helper is only used for state management we do not care about the
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
-      helper = algoliasearchHelper({} as Client, parameters.index, parameters);
+      helper = algoliasearchHelper(
+        {} as SearchClient,
+        parameters.index,
+        parameters
+      );
 
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is

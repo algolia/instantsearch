@@ -3,13 +3,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import {
-  Renderer,
-  RendererOptions,
-  WidgetFactory,
-  Hits,
-  Unmounter,
-} from '../../types';
+import { Hits, Connector, TransformItems, Hit } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -18,43 +12,65 @@ import {
   addQueryID,
   noop,
 } from '../../lib/utils';
-import { InfiniteHitsRendererWidgetParams } from '../../widgets/infinite-hits/infinite-hits';
 
-export type InfiniteHitsConnectorParams = Partial<
-  InfiniteHitsRendererWidgetParams
->;
+export type InfiniteHitsConnectorParams = {
+  /**
+   * Escapes HTML entities from hits string values.
+   *
+   * @default `true`
+   */
+  escapeHTML?: boolean;
 
-export type InfiniteHitsRendererOptions<TInfiniteHitsWidgetParams> = {
+  /**
+   * Enable the button to load previous results.
+   *
+   * @default `false`
+   */
+  showPrevious?: boolean;
+
+  /**
+   * Receives the items, and is called before displaying them.
+   * Useful for mapping over the items to transform, and remove or reorder them.
+   */
+  transformItems?: TransformItems<Hit>;
+};
+
+export type InfiniteHitsRendererOptions = {
+  /**
+   * Loads the previous results.
+   */
   showPrevious: () => void;
+
+  /**
+   * Loads the next page of hits.
+   */
   showMore: () => void;
+
+  /**
+   * Indicates whether the first page of hits has been reached.
+   */
   isFirstPage: boolean;
+
+  /**
+   * Indicates whether the last page of hits has been reached.
+   */
   isLastPage: boolean;
-} & RendererOptions<TInfiniteHitsWidgetParams>;
-
-export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
-  InfiniteHitsRendererOptions<
-    InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams
-  >
->;
-
-export type InfiniteHitsWidgetFactory<
-  TInfiniteHitsWidgetParams
-> = WidgetFactory<InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams>;
-
-export type InfiniteHitsConnector = <TInfiniteHitsWidgetParams>(
-  render: InfiniteHitsRenderer<TInfiniteHitsWidgetParams>,
-  unmount?: Unmounter
-) => InfiniteHitsWidgetFactory<TInfiniteHitsWidgetParams>;
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
   connector: true,
 });
 
-const connectInfiniteHits: InfiniteHitsConnector = (
+export type InfiniteHitsConnector = Connector<
+  InfiniteHitsRendererOptions,
+  InfiniteHitsConnectorParams
+>;
+
+const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
   renderFn,
   unmountFn = noop
-) => {
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {

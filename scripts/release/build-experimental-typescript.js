@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 /* eslint-disable import/no-commonjs */
+
 const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');

@@ -6,56 +6,51 @@ import {
   addQueryID,
   noop,
 } from '../../lib/utils';
+import { TransformItems, Connector, Hits, Hit, AlgoliaHit } from '../../types';
+import { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits',
   connector: true,
 });
 
-/**
- * @typedef {Object} HitsRenderingOptions
- * @property {Object[]} hits The matched hits from Algolia API.
- * @property {Object} results The complete results response from Algolia API.
- * @property {Object} widgetParams All original widget options forwarded to the `renderFn`.
- */
+export type HitsRendererOptions = {
+  /**
+   * The matched hits from Algolia API.
+   */
+  hits: Hits;
 
-/**
- * @typedef {Object} CustomHitsWidgetOptions
- * @property {boolean} [escapeHTML = true] Whether to escape HTML tags from `hits[i]._highlightResult`.
- * @property {function(Object[]):Object[]} [transformItems] Function to transform the items passed to the templates.
- */
+  /**
+   * The response from the Algolia API.
+   */
+  results?: SearchResults<AlgoliaHit>;
+};
 
-/**
- * **Hits** connector provides the logic to create custom widgets that will render the results retrieved from Algolia.
- * @type {Connector}
- * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
- * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomHitsWidgetOptions)} Re-usable widget factory for a custom **Hits** widget.
- * @example
- * // custom `renderFn` to render the custom Hits widget
- * function renderFn(HitsRenderingOptions) {
- *   HitsRenderingOptions.widgetParams.containerNode.html(
- *     HitsRenderingOptions.hits.map(function(hit) {
- *       return '<div>' + hit._highlightResult.name.value + '</div>';
- *     })
- *   );
- * }
- *
- * // connect `renderFn` to Hits logic
- * var customHits = instantsearch.connectors.connectHits(renderFn);
- *
- * // mount widget on the page
- * search.addWidgets([
- *   customHits({
- *     containerNode: $('#custom-hits-container'),
- *   })
- * ]);
- */
-export default function connectHits(renderFn, unmountFn = noop) {
+export type HitsConnectorParams = {
+  /**
+   * Whether to escape HTML tags from hits string values.
+   *
+   * @default true
+   */
+  escapeHTML?: boolean;
+
+  /**
+   * Function to transform the items passed to the templates.
+   */
+  transformItems?: TransformItems<Hit>;
+};
+
+export type HitsConnector = Connector<HitsRendererOptions, HitsConnectorParams>;
+
+const connectHits: HitsConnector = function connectHits(
+  renderFn,
+  unmountFn = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams = {}) => {
-    const { escapeHTML = true, transformItems = items => items } = widgetParams;
+  return widgetParams => {
+    const { escapeHTML = true, transformItems = items => items } =
+      widgetParams || ({} as typeof widgetParams);
 
     return {
       $$type: 'ais.hits',
@@ -77,7 +72,8 @@ export default function connectHits(renderFn, unmountFn = noop) {
           results.hits = escapeHits(results.hits);
         }
 
-        const initialEscaped = results.hits.__escaped;
+        const initialEscaped = (results.hits as ReturnType<typeof escapeHits>)
+          .__escaped;
 
         results.hits = addAbsolutePosition(
           results.hits,
@@ -92,7 +88,9 @@ export default function connectHits(renderFn, unmountFn = noop) {
         // Make sure the escaped tag stays, even after mapping over the hits.
         // This prevents the hits from being double-escaped if there are multiple
         // hits widgets mounted on the page.
-        results.hits.__escaped = initialEscaped;
+        (results.hits as ReturnType<
+          typeof escapeHits
+        >).__escaped = initialEscaped;
 
         renderFn(
           {
@@ -132,4 +130,6 @@ export default function connectHits(renderFn, unmountFn = noop) {
       },
     };
   };
-}
+};
+
+export default connectHits;

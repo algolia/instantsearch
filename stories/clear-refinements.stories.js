@@ -1,13 +1,14 @@
 import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
+import { clearRefinements } from '../src/widgets';
 
 storiesOf('Refinements/ClearRefinements', module)
   .add(
     'default',
     withHits(
-      ({ search, container, instantsearch }) => {
+      ({ search, container }) => {
         search.addWidgets([
-          instantsearch.widgets.clearRefinements({
+          clearRefinements({
             container,
           }),
         ]);
@@ -25,9 +26,9 @@ storiesOf('Refinements/ClearRefinements', module)
   )
   .add(
     'with query only (via includedAttributes)',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       search.addWidgets([
-        instantsearch.widgets.clearRefinements({
+        clearRefinements({
           container,
           includedAttributes: ['query'],
           templates: {
@@ -40,9 +41,9 @@ storiesOf('Refinements/ClearRefinements', module)
   .add(
     'with refinements and query (via excludedAttributes)',
     withHits(
-      ({ search, container, instantsearch }) => {
+      ({ search, container }) => {
         search.addWidgets([
-          instantsearch.widgets.clearRefinements({
+          clearRefinements({
             container,
             excludedAttributes: [],
             templates: {
@@ -65,12 +66,12 @@ storiesOf('Refinements/ClearRefinements', module)
   .add(
     'with brands excluded (via transformItems)',
     withHits(
-      ({ search, container, instantsearch }) => {
+      ({ search, container }) => {
         const clearRefinementsContainer = document.createElement('div');
         container.appendChild(clearRefinementsContainer);
 
         search.addWidgets([
-          instantsearch.widgets.clearRefinements({
+          clearRefinements({
             container: clearRefinementsContainer,
             excludedAttributes: [],
             transformItems: items =>
@@ -109,7 +110,7 @@ storiesOf('Refinements/ClearRefinements', module)
       container.appendChild(refinementListContainer2);
 
       search.addWidgets([
-        instantsearch.widgets.clearRefinements({
+        clearRefinements({
           container: clearRefinementsContainer,
         }),
 

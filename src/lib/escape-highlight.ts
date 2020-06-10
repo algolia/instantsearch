@@ -1,4 +1,4 @@
-import { Hit, FacetHit } from '../types';
+import { Hit, FacetHit, EscapedHits } from '../types';
 import { isPlainObject, escape } from '../lib/utils';
 
 export const TAG_PLACEHOLDER = {
@@ -44,17 +44,19 @@ function recursiveEscape(input: any): any {
   };
 }
 
-export default function escapeHits(hits: Hit[]): Hit[] {
+export default function escapeHits<THit extends Hit>(
+  hits: THit[]
+): EscapedHits<THit> {
   if ((hits as any).__escaped === undefined) {
     // We don't override the value on hit because it will mutate the raw results
     // instead we make a shallow copy and we assign the escaped values on it.
-    hits = hits.map(({ _highlightResult, _snippetResult, ...hit }) => {
-      if (_highlightResult) {
-        hit._highlightResult = recursiveEscape(_highlightResult);
+    hits = hits.map(({ ...hit }) => {
+      if (hit._highlightResult) {
+        hit._highlightResult = recursiveEscape(hit._highlightResult);
       }
 
-      if (_snippetResult) {
-        hit._snippetResult = recursiveEscape(_snippetResult);
+      if (hit._snippetResult) {
+        hit._snippetResult = recursiveEscape(hit._snippetResult);
       }
 
       return hit;
@@ -63,7 +65,7 @@ export default function escapeHits(hits: Hit[]): Hit[] {
     (hits as any).__escaped = true;
   }
 
-  return hits;
+  return (hits as unknown) as EscapedHits<THit>;
 }
 
 export function escapeFacets(facetHits: FacetHit[]): FacetHit[] {

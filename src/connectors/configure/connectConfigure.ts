@@ -3,12 +3,7 @@ import algoliasearchHelper, {
   PlainSearchParameters,
   AlgoliaSearchHelper,
 } from 'algoliasearch-helper';
-import {
-  Renderer,
-  RendererOptions,
-  Unmounter,
-  WidgetFactory,
-} from '../../types';
+import { Connector } from '../../types';
 import {
   createDocumentationMessageGenerator,
   isPlainObject,
@@ -16,6 +11,9 @@ import {
   noop,
 } from '../../lib/utils';
 
+/**
+ * Refine the given search parameters.
+ */
 type Refine = (searchParameters: PlainSearchParameters) => void;
 
 export type ConfigureConnectorParams = {
@@ -26,22 +24,12 @@ export type ConfigureConnectorParams = {
   searchParameters: PlainSearchParameters;
 };
 
-export type ConfigureRendererOptions<TConfigureWidgetParams> = {
+export type ConfigureRendererOptions = {
+  /**
+   * Refine the given search parameters.
+   */
   refine: Refine;
-} & RendererOptions<TConfigureWidgetParams>;
-
-export type ConfigureRenderer<TConfigureWidgetParams> = Renderer<
-  ConfigureRendererOptions<ConfigureConnectorParams & TConfigureWidgetParams>
->;
-
-export type ConfigureWidgetFactory<TConfigureWidgetParams> = WidgetFactory<
-  ConfigureConnectorParams & TConfigureWidgetParams
->;
-
-export type ConfigureConnector = <TConfigureWidgetParams>(
-  render?: ConfigureRenderer<TConfigureWidgetParams>,
-  unmount?: Unmounter
-) => ConfigureWidgetFactory<TConfigureWidgetParams>;
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'configure',
@@ -66,10 +54,15 @@ function getInitialSearchParameters(
   );
 }
 
-const connectConfigure: ConfigureConnector = (
+export type ConfigureConnector = Connector<
+  ConfigureRendererOptions,
+  ConfigureConnectorParams
+>;
+
+const connectConfigure: ConfigureConnector = function connectConfigure(
   renderFn = noop,
   unmountFn = noop
-) => {
+) {
   return widgetParams => {
     if (!widgetParams || !isPlainObject(widgetParams.searchParameters)) {
       throw new Error(

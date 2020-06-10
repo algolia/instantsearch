@@ -2,6 +2,7 @@ import { action } from '@storybook/addon-actions';
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../src/index';
 import defaultPlayground from '../playgrounds/default';
+import { configure } from '../../src/widgets';
 
 export const withHits = (
   storyFn: ({
@@ -41,7 +42,7 @@ export const withHits = (
   });
 
   search.addWidgets([
-    instantsearch.widgets.configure({
+    configure({
       hitsPerPage: 4,
       attributesToSnippet: ['description:15'],
       snippetEllipsisText: '[…]',
@@ -69,7 +70,7 @@ export const withHits = (
   playgroundElement.appendChild(rightPanelPlaygroundElement);
 
   search.addWidgets([
-    instantsearch.widgets.configure({
+    configure({
       hitsPerPage: 4,
       attributesToSnippet: ['description:15'],
       snippetEllipsisText: '[…]',
