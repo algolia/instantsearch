@@ -1,3 +1,19 @@
+# [3.0.0](https://github.com/algolia/vue-instantsearch/compare/v2.7.1...v3.0.0) (2020-06-11)
+
+
+### Features
+
+* **index:** add multi-index widget ([#745](https://github.com/algolia/vue-instantsearch/issues/745)) ([3c32cfe](https://github.com/algolia/vue-instantsearch/commit/3c32cfe))
+* **server side rendering:** support ais-index ([#764](https://github.com/algolia/vue-instantsearch/issues/764)) ([3e74a8c](https://github.com/algolia/vue-instantsearch/commit/3e74a8c)), closes [#784](https://github.com/algolia/vue-instantsearch/issues/784)
+* **widgets:** introduce `ConfigureRelatedItems` as experimental ([#751](https://github.com/algolia/vue-instantsearch/issues/751)) ([f00513e](https://github.com/algolia/vue-instantsearch/commit/f00513e))
+
+
+### BREAKING CHANGES
+
+* **index:** this introduces the dependency on InstantSearch v4, which has its own breaking changes you might see if you're using methods on helper. See more here: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-from-v3-to-v4
+* **server-side rendering:** the API has changed to avoid having to repeat information between template & fetching. See more here: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/vue/
+
+
 ## [2.7.1](https://github.com/algolia/vue-instantsearch/compare/v2.7.0...v2.7.1) (2020-06-10)
 
 
