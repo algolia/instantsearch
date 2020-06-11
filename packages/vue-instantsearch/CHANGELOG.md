@@ -1,3 +1,10 @@
+# [3.0.1](https://github.com/algolia/vue-instantsearch/compare/v3.0.0...v3.0.1) (2020-06-11)
+
+
+### Bug Fixes
+
+* make vue-server-renderer temporarily a dependency ([84fc47c](https://github.com/algolia/vue-instantsearch/commit/84fc47c))
+
 # [3.0.0](https://github.com/algolia/vue-instantsearch/compare/v2.7.1...v3.0.0) (2020-06-11)
 
 
