@@ -1,14 +1,19 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import App from './App';
+import { Router, Route } from 'react-router-dom/cjs/react-router-dom.min';
 import { createMemoryHistory } from 'history';
 
+import App from './App';
+
 const history = createMemoryHistory('/');
-const { location } = history;
 
 describe('react-router recipe', () => {
   it('App renders without crashing', () => {
-    const component = renderer.create(<App location={location} />);
+    const component = renderer.create(
+      <Router history={history}>
+        <Route path="/" component={App} />
+      </Router>
+    );
 
     expect(component.toJSON()).toMatchSnapshot();
   });
