@@ -442,14 +442,10 @@ const index = (props: IndexProps): Index => {
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
       // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
       helper.on('change', event => {
-        const { state, isPageReset } = event;
+        const { state } = event;
 
         // @ts-ignore _uiState comes from privateHelperSetState and thus isn't typed on the helper event
         const _uiState = event._uiState;
-
-        if (isPageReset) {
-          localUiState.page = undefined;
-        }
 
         localUiState = getLocalWidgetsState(
           localWidgets,
