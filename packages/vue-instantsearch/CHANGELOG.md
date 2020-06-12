@@ -1,3 +1,12 @@
+## [3.0.2](https://github.com/algolia/vue-instantsearch/compare/v3.0.1...v3.0.2) (2020-06-12)
+
+
+### Bug Fixes
+
+* **server:** make vue-server-renderer not a dependency unless you're using it ([#801](https://github.com/algolia/vue-instantsearch/issues/801)) ([1acc3df](https://github.com/algolia/vue-instantsearch/commit/1acc3df))
+
+
+
 # [3.0.1](https://github.com/algolia/vue-instantsearch/compare/v3.0.0...v3.0.1) (2020-06-11)
 
 
