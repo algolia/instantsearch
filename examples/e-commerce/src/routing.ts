@@ -194,7 +194,7 @@ const getStateMapping = ({ indexName }) => ({
     const indexUiState = uiState[indexName];
     return {
       query: indexUiState.query,
-      page: String(indexUiState.page),
+      page: indexUiState.page,
       brands: indexUiState.refinementList && indexUiState.refinementList.brand,
       category:
         indexUiState.hierarchicalMenu &&
