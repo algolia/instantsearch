@@ -53,7 +53,7 @@ describe('createServerRootMixin', () => {
             ],
           })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"createServerRootMixin requires the \`searchClient\` and \`indexName\` arguments to be passed"`
+        `"createServerRootMixin requires \`searchClient\` and \`indexName\` in the first argument"`
       );
     });
 
@@ -69,7 +69,7 @@ describe('createServerRootMixin', () => {
             ],
           })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"createServerRootMixin requires the \`searchClient\` and \`indexName\` arguments to be passed"`
+        `"createServerRootMixin requires \`searchClient\` and \`indexName\` in the first argument"`
       );
     });
 

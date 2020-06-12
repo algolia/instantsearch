@@ -14,7 +14,8 @@
     "algoliasearch": "^4.0.1",
     "cross-env": "^5.2.0",
     "nuxt": "^2.4.5",
-    "vue-instantsearch": "file:../../"
+    "vue-instantsearch": "file:../../",
+    "vue-server-renderer": "2.6.11"
   },
   "devDependencies": {}
 }

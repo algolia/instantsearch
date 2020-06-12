@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import _renderToString from 'vue-server-renderer/basic';
 import instantsearch from 'instantsearch.js/es';
 import algoliaHelper from 'algoliasearch-helper';
 const { SearchResults, SearchParameters } = algoliaHelper;
@@ -15,7 +14,7 @@ function walkIndex(indexWidget, visit) {
   });
 }
 
-function renderToString(app) {
+function renderToString(app, _renderToString) {
   return new Promise((resolve, reject) =>
     _renderToString(app, (err, res) => {
       if (err) reject(err);
@@ -55,7 +54,18 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
    * @returns {Promise} result of the search, to save for .hydrate
    */
   search.findResultsState = function(componentInstance) {
+    let _renderToString;
+    try {
+      _renderToString = require('vue-server-renderer/basic');
+    } catch (e) {
+      // error is handled by regular if, in case it's `undefined`
+    }
+    if (!_renderToString) {
+      throw new Error('you need to install vue-server-renderer');
+    }
+
     let app;
+
     return Promise.resolve()
       .then(() => {
         const options = {
@@ -82,7 +92,7 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
           uiState: app.instantsearch._initialUiState,
         });
       })
-      .then(() => renderToString(app))
+      .then(() => renderToString(app, _renderToString))
       .then(() => searchOnlyWithDerivedHelpers(helper))
       .then(() => {
         const results = {};
@@ -229,7 +239,7 @@ export function createServerRootMixin(instantSearchOptions = {}) {
 
   if (!searchClient || !indexName) {
     throw new Error(
-      'createServerRootMixin requires the `searchClient` and `indexName` arguments to be passed'
+      'createServerRootMixin requires `searchClient` and `indexName` in the first argument'
     );
   }
 

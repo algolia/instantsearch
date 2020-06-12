@@ -34,8 +34,8 @@ export async function createApp({
               const url = context
                 ? context.url
                 : typeof window.location === 'object'
-                ? window.location.href
-                : '';
+                  ? window.location.href
+                  : '';
               const search = url.slice(url.indexOf('?'));
 
               return qs.parse(search, {
