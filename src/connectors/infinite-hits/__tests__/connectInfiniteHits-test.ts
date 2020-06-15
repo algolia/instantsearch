@@ -793,7 +793,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   describe('getWidgetState', () => {
-    test('returns the `uiState` empty without `showPrevious` option', () => {
+    test('returns the `uiState` with `page` when `showPrevious` not given', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -809,10 +809,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         }
       );
 
-      expect(actual).toEqual({});
+      expect(actual).toEqual({
+        page: 2,
+      });
     });
 
-    test('returns the `uiState` empty with `showPrevious` option on first page', () => {
+    test('returns the `uiState` with `page` when `showPrevious` given on first page', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -830,7 +832,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         }
       );
 
-      expect(actual).toEqual({});
+      expect(actual).toEqual({
+        page: 1,
+      });
     });
 
     test('returns the `uiState` containing `page` with `showPrevious` option', () => {
