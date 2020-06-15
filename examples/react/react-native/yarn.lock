@@ -5835,18 +5835,28 @@ react-instantsearch-core@^6.5.0:
     prop-types "^15.5.10"
     react-fast-compare "^3.0.0"
 
-react-instantsearch-dom@^6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-6.5.0.tgz#e0fbc365cab47840f681dfd16d2870d4c3f5265b"
-  integrity sha512-cyMQair/6nAGlmT3aUNFJv+n2O4iUOL4BHcab1ASmMkvLeMy5odW5gVFjLqt7Dz1MPHmddNiyk0H1/3LEoL7tQ==
+react-instantsearch-core@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.npmjs.org/react-instantsearch-core/-/react-instantsearch-core-6.6.0.tgz#d076a67dadfcc8fb18f4e5eaa3d6ed81d4172590"
+  integrity sha512-Rf3Qh7lMGtc5ZIo9A4QoDAW4Pso8JP67r07KdHEmzhEDRGhW7Ga0Ri4rXN6ahcjmwLoo5Fz14LpX4gn3Yrz9kg==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    algoliasearch-helper "^3.1.0"
+    prop-types "^15.5.10"
+    react-fast-compare "^3.0.0"
+
+react-instantsearch-dom@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.npmjs.org/react-instantsearch-dom/-/react-instantsearch-dom-6.6.0.tgz#ed153aaedcc466e0ceed50860d9008a4ab7e714c"
+  integrity sha512-pC6SB7Ruvgc1Iv9ELbzgaEJUDeoX3zBuNqSu9S4qAAIZaYUB+C05Y/LW1/TPTeRSQyPFJ0FmrrpnyHn6qpMKIQ==
   dependencies:
     "@babel/runtime" "^7.1.2"
     algoliasearch-helper "^3.1.0"
     classnames "^2.2.5"
     prop-types "^15.5.10"
-    react-instantsearch-core "^6.5.0"
+    react-instantsearch-core "^6.6.0"
 
-react-instantsearch-native@6.5.0, react-instantsearch-native@^6.5.0:
+react-instantsearch-native@6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/react-instantsearch-native/-/react-instantsearch-native-6.5.0.tgz#deb3cac6766a0c76ef6d62c290fd2422686b2fae"
   integrity sha512-I/33YO8d0FYE4O8fv7sL0WQl4jKp2ZwIgmrN73sGc6+4RGa4Q02LE85SKsi3Oo170xlnRfPCO8NYketsGQD5aQ==
@@ -5855,15 +5865,24 @@ react-instantsearch-native@6.5.0, react-instantsearch-native@^6.5.0:
     algoliasearch ">= 3.27.1 < 5"
     react-instantsearch-core "^6.5.0"
 
-react-instantsearch@6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-6.5.0.tgz#780d1dde72b1760bff67036f7c96a320a4ab3f86"
-  integrity sha512-hO0P8r+I2nSjTvs2IetUfNt/NAiB52xVKKZOhk8qbVdU5jc7MEPRPo23udMVg5lHqExduPVfQegj6uJ8+55bMQ==
+react-instantsearch-native@^6.6.0:
+  version "6.6.0"
+  resolved "https://registry.npmjs.org/react-instantsearch-native/-/react-instantsearch-native-6.6.0.tgz#0c8f294fb7d1c51e300fd78a1ff66d5189c575cf"
+  integrity sha512-16BzNWIMEUZePVugnvFSqxYtx+PhS7U0lQ3wRhGpXFNyHxe7afkeI5Pyb/hknOLHLPYqf3SHR13osbJi5YaKhA==
   dependencies:
     "@babel/runtime" "^7.1.2"
-    react-instantsearch-core "^6.5.0"
-    react-instantsearch-dom "^6.5.0"
-    react-instantsearch-native "^6.5.0"
+    algoliasearch ">= 3.27.1 < 5"
+    react-instantsearch-core "^6.6.0"
+
+react-instantsearch@6.6.0:
+  version "6.6.0"
+  resolved "https://registry.npmjs.org/react-instantsearch/-/react-instantsearch-6.6.0.tgz#af6fda92c85267b5eac96f7ca17fcb6984154142"
+  integrity sha512-ps/eAzaJCCXVgkXRfgCpRsvC+72G4I5jwKC+IsJADX4sXrs7bieajAdHqBVbE2USyX0DgfxkPhw+IT5bBCUzOg==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    react-instantsearch-core "^6.6.0"
+    react-instantsearch-dom "^6.6.0"
+    react-instantsearch-native "^6.6.0"
 
 react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.13.1"
