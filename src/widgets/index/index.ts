@@ -365,6 +365,10 @@ const index = (props: IndexProps): Index => {
         return mainHelper.search();
       };
 
+      (helper as any).searchWithoutTriggeringOnStateChange = () => {
+        return mainHelper.search();
+      };
+
       // We use the same pattern for the `searchForFacetValues`.
       helper.searchForFacetValues = (
         facetName,

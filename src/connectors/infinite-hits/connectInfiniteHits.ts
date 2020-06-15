@@ -158,7 +158,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           ...helper.state,
           page: getFirstReceivedPage() - 1,
         })
-        .search();
+        .searchWithoutTriggeringOnStateChange();
     };
     const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(getLastReceivedPage() + 1).search();
