@@ -137,7 +137,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     const {
       escapeHTML = true,
       transformItems = (items: any[]) => items,
-      showPrevious: hasShowPrevious = false,
       cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
     let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
