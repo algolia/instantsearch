@@ -1,3 +1,17 @@
+# [4.7.0](https://github.com/algolia/instantsearch.js/compare/v4.6.0...v4.7.0) (2020-06-15)
+
+
+### Bug Fixes
+
+* **rangeInput:** clear input when refinement is cleared ([#4429](https://github.com/algolia/instantsearch.js/issues/4429)) ([a2c7663](https://github.com/algolia/instantsearch.js/commit/a2c7663424c5cd59e17ed841e12abaa19e524b14))
+
+
+### Features
+
+* **infiniteHits:** support cache ([#4431](https://github.com/algolia/instantsearch.js/issues/4431)) ([008c01c](https://github.com/algolia/instantsearch.js/commit/008c01c7cd09e4fcecdf53a4b299960de2b7a026))
+
+
+
 # [4.6.0](https://github.com/algolia/instantsearch.js/compare/v4.5.0...v4.6.0) (2020-06-08)
 
 
