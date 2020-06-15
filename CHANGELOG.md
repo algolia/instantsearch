@@ -1,3 +1,12 @@
+# [6.6.0](https://github.com/algolia/react-instantsearch/compare/v6.5.0...v6.6.0) (2020-06-15)
+
+
+### Features
+
+* **infiniteHits:** support cache ([#2921](https://github.com/algolia/react-instantsearch/issues/2921)) ([7b26adc](https://github.com/algolia/react-instantsearch/commit/7b26adc))
+
+
+
 # [6.5.0](https://github.com/algolia/react-instantsearch/compare/v6.4.0...v6.5.0) (2020-05-18)
 
 
