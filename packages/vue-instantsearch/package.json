@@ -113,7 +113,7 @@
   "bundlesize": [
     {
       "path": "./dist/vue-instantsearch.js",
-      "maxSize": "47.75 kB"
+      "maxSize": "48.00 kB"
     },
     {
       "path": "./dist/vue-instantsearch.esm.js",
