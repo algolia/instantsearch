@@ -302,10 +302,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       },
 
       getWidgetState(uiState, { searchParameters }) {
-        const page = Math.max(
-          getLastReceivedPage(),
-          searchParameters.page || 0
-        );
+        const page = searchParameters.page || 0;
 
         return {
           ...uiState,
