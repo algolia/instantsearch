@@ -304,6 +304,12 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
+        if (!page) {
+          // return without adding `page` to uiState
+          // because we don't want `page=1` in the URL
+          return uiState;
+        }
+
         return {
           ...uiState,
           // The page in the UI state is incremented by one
