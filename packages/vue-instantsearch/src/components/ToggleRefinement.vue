@@ -55,12 +55,12 @@ export default {
       required: true,
     },
     on: {
-      type: [String, Number, Boolean],
+      type: [String, Number, Boolean, Array],
       required: false,
       default: true,
     },
     off: {
-      type: [String, Number, Boolean],
+      type: [String, Number, Boolean, Array],
       required: false,
       // explicit otherwise Vue coerces the default value
       // to false because of the `Boolean` prop type
