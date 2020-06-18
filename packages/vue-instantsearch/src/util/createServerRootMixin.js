@@ -167,7 +167,7 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
           .getWidgets()
           .filter(w => w.$$type !== 'ais.index')
           .reduce((uiState, w) => {
-            if (!widget.getWidgetState) {
+            if (!w.getWidgetState) {
               return uiState;
             }
 

@@ -433,35 +433,78 @@ Object {
       );
     });
 
-    it('has a fake createURL', () => {
-      const app = new Vue({
-        mixins: [
-          createServerRootMixin({
-            searchClient: createFakeClient(),
-            indexName: 'lol',
-          }),
-        ],
+    describe('createURL', () => {
+      it('returns # if instantsearch has no routing', () => {
+        const app = new Vue({
+          mixins: [
+            createServerRootMixin({
+              searchClient: createFakeClient(),
+              indexName: 'lol',
+            }),
+          ],
+        });
+
+        const widget = {
+          init: jest.fn(),
+          render: jest.fn(),
+        };
+
+        const instantSearchInstance = app.$data.instantsearch;
+
+        instantSearchInstance.hydrate({
+          lol: createSerializedState(),
+        });
+
+        instantSearchInstance.__forceRender(
+          widget,
+          instantSearchInstance.mainIndex
+        );
+
+        const renderArgs = widget.render.mock.calls[0][0];
+
+        expect(renderArgs.createURL()).toBe('#');
       });
 
-      const widget = {
-        init: jest.fn(),
-        render: jest.fn(),
-      };
+      it('allows for widgets without getWidgetState', () => {
+        const app = new Vue({
+          mixins: [
+            createServerRootMixin({
+              searchClient: createFakeClient(),
+              indexName: 'lol',
+            }),
+          ],
+        });
 
-      const instantSearchInstance = app.$data.instantsearch;
+        const widget = {
+          init: jest.fn(),
+          render: jest.fn(),
+          getWidgetState(uiState) {
+            return uiState;
+          },
+        };
 
-      instantSearchInstance.hydrate({
-        lol: createSerializedState(),
+        const widgetWithoutGetWidgetState = {
+          init: jest.fn(),
+          render: jest.fn(),
+        };
+
+        const instantSearchInstance = app.$data.instantsearch;
+
+        instantSearchInstance.hydrate({
+          lol: createSerializedState(),
+        });
+
+        instantSearchInstance.addWidgets([widget, widgetWithoutGetWidgetState]);
+
+        instantSearchInstance.__forceRender(
+          widget,
+          instantSearchInstance.mainIndex
+        );
+
+        const renderArgs = widget.render.mock.calls[0][0];
+
+        expect(renderArgs.createURL()).toBe('#');
       });
-
-      instantSearchInstance.__forceRender(
-        widget,
-        instantSearchInstance.mainIndex
-      );
-
-      const renderArgs = widget.render.mock.calls[0][0];
-
-      expect(renderArgs.createURL()).toBe('#');
     });
   });
 });
