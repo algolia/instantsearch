@@ -43,8 +43,7 @@
     "format": "prettier --write '**/*.{js,md,vue,css}'",
     "changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file",
     "changelog:unreleased": "conventional-changelog --preset angular --output-unreleased",
-    "release:branch": "scripts/release-branch.sh",
-    "release:publish": "scripts/release-publish.sh"
+    "release": "shipjs prepare"
   },
   "dependencies": {
     "algoliasearch-helper": "^3.1.0",
@@ -100,6 +99,7 @@
     "rollup-plugin-terser": "4.0.4",
     "rollup-plugin-vue": "3.0.0",
     "rollup-watch": "4.3.1",
+    "shipjs": "0.20.0-beta.3",
     "vue": "2.5.18",
     "vue-autosuggest": "1.8.1",
     "vue-jest": "2.6.0",
