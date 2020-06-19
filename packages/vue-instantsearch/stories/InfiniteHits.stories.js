@@ -1,5 +1,6 @@
 import { storiesOf } from '@storybook/vue';
 import { action } from '@storybook/addon-actions';
+import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { previewWrapper } from './utils';
 import { MemoryRouter } from './MemoryRouter';
@@ -169,4 +170,17 @@ storiesOf('ais-infinite-hits', module)
         </ais-infinite-hits>
       </div>
     `,
+  }))
+  .add('with sessionStorage cache enabled', () => ({
+    template: `
+      <ais-infinite-hits :cache="cache">
+        <div slot="item" slot-scope="{ item, insights }">
+          custom objectID: {{item.objectID}}
+          <a href="https://google.com">Go to the detail</a>
+        </div>
+      </ais-infinite-hits>
+    `,
+    data: () => ({
+      cache: createInfiniteHitsSessionStorageCache(),
+    }),
   }));

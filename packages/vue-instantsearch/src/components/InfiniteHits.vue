@@ -85,6 +85,10 @@ export default {
         return items;
       },
     },
+    cache: {
+      type: Object,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {
@@ -92,6 +96,7 @@ export default {
         showPrevious: this.showPrevious,
         escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
+        cache: this.cache,
       };
     },
     items() {

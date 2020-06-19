@@ -80,6 +80,25 @@ it('accepts a showPrevious prop', () => {
   expect(wrapper.vm.widgetParams.showPrevious).toBe(true);
 });
 
+it('accepts a cache prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const cache = {
+    read: () => {},
+    write: () => {},
+  };
+
+  const wrapper = mount(InfiniteHits, {
+    propsData: {
+      cache,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.cache).toEqual(cache);
+});
+
 it('renders correctly', () => {
   __setState({
     ...defaultState,
