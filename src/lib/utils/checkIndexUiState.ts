@@ -56,7 +56,7 @@ const stateToWidgetsMap: StateToWidgets = {
   },
   range: {
     connectors: ['connectRange'],
-    widgets: ['ais.rangeInput', 'ais.rangeSlider'],
+    widgets: ['ais.rangeInput', 'ais.rangeSlider', 'ais.range'],
   },
   toggle: {
     connectors: ['connectToggleRefinement'],
