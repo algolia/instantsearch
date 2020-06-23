@@ -355,6 +355,7 @@ function getData() {
     'nbHits': 4,
     'nbPages': 1,
     'page': 0,
+    'params': 'query=&hitsPerPage=20&page=0&facets=%5B%5D&facetFilters=%5B%5B%22city%3AParis%22%2C%22city%3ANew%20York%22%5D%5D',
     'processingTimeMS': 5,
     'disjunctiveFacets': [
       {
