@@ -8,7 +8,7 @@ import { Widget, IndexUiState } from '../../types';
 function getWidgetNames(connectorName: string): string[] {
   switch (connectorName) {
     case 'range':
-      return ['rangeInput', 'rangeSlider'];
+      return [];
 
     case 'menu':
       return ['menu', 'menuSelect'];
