@@ -1,3 +1,18 @@
+# [3.1.0](https://github.com/algolia/vue-instantsearch/compare/v3.0.3...v3.1.0) (2020-07-02)
+
+
+### Bug Fixes
+
+* **ssr:** allow getWidgetState to be empty for createURL ([#805](https://github.com/algolia/vue-instantsearch/issues/805)) ([0528b55](https://github.com/algolia/vue-instantsearch/commit/0528b55999099aee4981f745027f175a0df49094))
+
+
+### Features
+
+* **ais-toggle-refinement:** allow multiple values for "on" and "off" ([#780](https://github.com/algolia/vue-instantsearch/issues/780)) ([6ee1404](https://github.com/algolia/vue-instantsearch/commit/6ee140485825619f80709587fd6ce2f2f9ebb98d))
+* **InfiniteHits:** support cache ([#804](https://github.com/algolia/vue-instantsearch/issues/804)) ([918c92d](https://github.com/algolia/vue-instantsearch/commit/918c92d0d73edb9790e98cfeed3b9ed58b948df7))
+
+
+
 ## [3.0.3](https://github.com/algolia/vue-instantsearch/compare/v3.0.1...v3.0.3) (2020-06-12)
 
 
