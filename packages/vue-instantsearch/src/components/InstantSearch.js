@@ -27,11 +27,10 @@ export default createInstantSearchComponent({
       validator(value) {
         if (
           typeof value === 'boolean' ||
-          !value.router ||
-          !value.stateMapping
+          (!value.router && !value.stateMapping)
         ) {
           warn(
-            'routing should be an object, with `router` and `stateMapping`. See https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-routing'
+            'The `routing` option expects an object with `router` and/or `stateMapping`.\n\nSee https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-routing'
           );
           return false;
         }

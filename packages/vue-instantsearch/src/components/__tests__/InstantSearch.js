@@ -3,8 +3,13 @@ import { mount } from '@vue/test-utils';
 import instantsearch from 'instantsearch.js/es';
 import InstantSearch from '../InstantSearch';
 import { version } from '../../../package.json';
+import { warn } from '../../util/warn';
 
-beforeEach(() => jest.clearAllMocks());
+jest.mock('../../util/warn');
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 it('passes props to InstantSearch.js', () => {
   const searchClient = {};
@@ -38,7 +43,6 @@ it('passes props to InstantSearch.js', () => {
 });
 
 it('throws on usage of appId or apiKey', () => {
-  global.console.warn = jest.fn();
   global.console.error = jest.fn();
 
   mount(InstantSearch, {
@@ -50,12 +54,11 @@ it('throws on usage of appId or apiKey', () => {
     },
   });
 
-  expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(`
-"Vue InstantSearch: You used the prop api-key or app-id.
+  expect(warn)
+    .toHaveBeenCalledWith(`Vue InstantSearch: You used the prop api-key or app-id.
 These have been replaced by search-client.
 
-See more info here: https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-search-client"
-`);
+See more info here: https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-search-client`);
 
   expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
 "[Vue warn]: Invalid prop: custom validator check failed for prop \\"apiKey\\".
@@ -195,7 +198,6 @@ it('Allows a change in `stalled-search-delay`', () => {
 
 it('does not allow `routing` to be a boolean', () => {
   global.console.error = jest.fn();
-  global.console.warn = jest.fn();
   mount(InstantSearch, {
     propsData: {
       searchClient: {},
@@ -213,9 +215,44 @@ found in
        <Root>"
 `);
 
-  expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(
-    `"routing should be an object, with \`router\` and \`stateMapping\`. See https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-routing"`
-  );
+  expect(warn)
+    .toHaveBeenCalledWith(`The \`routing\` option expects an object with \`router\` and/or \`stateMapping\`.
+
+See https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-routing`);
+});
+
+it('warns when `routing` does not have `router` or `stateMapping`', () => {
+  mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      indexName: 'indexName',
+      routing: {},
+    },
+  });
+
+  expect(warn)
+    .toHaveBeenCalledWith(`The \`routing\` option expects an object with \`router\` and/or \`stateMapping\`.
+
+See https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-routing`);
+});
+
+it('does not warn when `routing` have either `router` or `stateMapping`', () => {
+  mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      indexName: 'indexName',
+      routing: { router: {} },
+    },
+  });
+  mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      indexName: 'indexName',
+      routing: { stateMapping: {} },
+    },
+  });
+
+  expect(warn).toHaveBeenCalledTimes(0);
 });
 
 it('Does not allow a change in `routing`', () => {
