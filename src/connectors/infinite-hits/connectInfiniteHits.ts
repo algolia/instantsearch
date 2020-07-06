@@ -137,6 +137,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     const {
       escapeHTML = true,
       transformItems = (items: any[]) => items,
+      showPrevious: hasShowPrevious = false,
       cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
     let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
@@ -304,7 +305,10 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (!page) {
+        if (
+          (hasShowPrevious && uiState.page && page <= uiState.page) ||
+          !page
+        ) {
           // return without adding `page` to uiState
           // because we don't want `page=1` in the URL
           return uiState;
