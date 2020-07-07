@@ -137,7 +137,6 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     const {
       escapeHTML = true,
       transformItems = (items: any[]) => items,
-      showPrevious: hasShowPrevious = false,
       cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
     let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
@@ -158,7 +157,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           ...helper.state,
           page: getFirstReceivedPage() - 1,
         })
-        .search();
+        .searchWithoutTriggeringOnStateChange();
     };
     const getShowMore = (helper: Helper): (() => void) => () => {
       helper.setPage(getLastReceivedPage() + 1).search();
@@ -305,7 +304,9 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (!hasShowPrevious || !page) {
+        if (!page) {
+          // return without adding `page` to uiState
+          // because we don't want `page=1` in the URL
           return uiState;
         }
 
