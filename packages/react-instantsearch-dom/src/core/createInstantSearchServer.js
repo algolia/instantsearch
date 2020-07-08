@@ -59,9 +59,35 @@ const getSearchParameters = (indexName, searchParameters) => {
   };
 };
 
+/**
+ * The engine can return params: "query=xxx&query=yyy" if e.g. a query rule modifies it.
+ * This however will cause us to miss the cache hydration, so we make sure to keep
+ * only the first query (always the one from the parameters).
+ */
+function removeDuplicateQuery(params) {
+  let hasFoundQuery = false;
+  const queryParamRegex = /&?query=[^&]*/g;
+  return params.replace(queryParamRegex, function replacer(match) {
+    if (hasFoundQuery) {
+      return '';
+    }
+    hasFoundQuery = true;
+    return match;
+  });
+}
+
+function cleanRawResults(rawResults) {
+  return rawResults.map(res => {
+    return {
+      ...res,
+      params: removeDuplicateQuery(res.params),
+    };
+  });
+}
+
 const singleIndexSearch = (helper, parameters) =>
   helper.searchOnce(parameters).then(res => ({
-    rawResults: res.content._rawResults,
+    rawResults: cleanRawResults(res.content._rawResults),
     state: res.content._state,
   }));
 
@@ -93,7 +119,7 @@ const multiIndexSearch = (
   // may have multiple times the same index.
   return Promise.all(searches).then(results =>
     [indexName, ...indexIds].map((indexId, i) => ({
-      rawResults: results[i].content._rawResults,
+      rawResults: cleanRawResults(results[i].content._rawResults),
       state: results[i].content._state,
       _internalIndexId: indexId,
     }))
