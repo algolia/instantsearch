@@ -13,11 +13,14 @@ import { findResultsState } from '../createInstantSearchServer';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('findResultsState', () => {
-  const createSearchClient = () => ({
+  const createSearchClient = ({ transformResponseParams } = {}) => ({
     search: requests =>
       Promise.resolve({
         results: requests.map(({ indexName, params: { query } }) => ({
           query,
+          params: transformResponseParams
+            ? transformResponseParams(query)
+            : `query=${encodeURIComponent(query)}`,
           index: indexName,
         })),
       }),
@@ -231,6 +234,185 @@ describe('findResultsState', () => {
           expect.objectContaining({ index: 'indexName', query: 'iPhone' }),
         ],
         state: expect.objectContaining({ index: 'indexName', query: 'iPhone' }),
+      });
+    });
+
+    describe('cleaning "params"', () => {
+      it('with one query', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient(),
+          searchState: {
+            query: 'iPhone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPhone"`
+        );
+      });
+
+      it('with shadowing query', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient(),
+          searchState: {
+            query: 'iPhone&query=iphone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPhone%26query%3Diphone"`
+        );
+      });
+
+      it('with modified query', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams: query =>
+              `query=${encodeURIComponent(query)}&query=modified`,
+          }),
+          searchState: {
+            query: 'iPhone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPhone"`
+        );
+      });
+
+      it('with shadowing query and modified query', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams: query =>
+              `query=${encodeURIComponent(query)}&query=modified`,
+          }),
+          searchState: {
+            query: 'iPhone&query=iphone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPhone%26query%3Diphone"`
+        );
+      });
+
+      it('with padded, modified query', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams: query =>
+              `test=1&query=${encodeURIComponent(query)}&boo=ba&query=modified`,
+          }),
+          searchState: {
+            query: 'iPhone&query=iphone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toMatchInlineSnapshot(
+          `"test=1&query=iPhone%26query%3Diphone&boo=ba"`
+        );
+      });
+
+      it('with nothing returned', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams: () => '',
+          }),
+          searchState: {
+            query: 'iPhone&query=iphone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toMatchInlineSnapshot(`""`);
+      });
+
+      it('with no query returned', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams: () => 'lol=lol',
+          }),
+          searchState: {
+            query: 'iPhone&query=iphone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toMatchInlineSnapshot(`"lol=lol"`);
       });
     });
   });
@@ -554,6 +736,89 @@ describe('findResultsState', () => {
         rawResults: [
           expect.objectContaining({ index: 'index1', query: 'iPad' }),
         ],
+      });
+    });
+
+    describe('cleaning "params"', () => {
+      it('multiple queries', async () => {
+        const Connected = createWidget();
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+            <Index indexId="index1WithRefinement" indexName="index1">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient(),
+          indexName: 'index1',
+          searchState: {
+            query: 'iPhone',
+            indices: {
+              index1WithRefinement: {
+                query: 'iPad&query=test',
+              },
+            },
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data).toHaveLength(2);
+
+        const [first, second] = data;
+
+        expect(first.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPhone"`
+        );
+        expect(second.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPad%26query%3Dtest"`
+        );
+      });
+
+      it('server-side params', async () => {
+        const Connected = createWidget();
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+            <Index indexId="index1WithRefinement" indexName="index1">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams: query =>
+              `query=${encodeURIComponent(query)}&query=modified`,
+          }),
+          indexName: 'index1',
+          searchState: {
+            query: 'iPhone',
+            indices: {
+              index1WithRefinement: {
+                query: 'iPad&query=test',
+              },
+            },
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data).toHaveLength(2);
+
+        const [first, second] = data;
+
+        expect(first.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPhone"`
+        );
+        expect(second.rawResults[0].params).toMatchInlineSnapshot(
+          `"query=iPad%26query%3Dtest"`
+        );
       });
     });
   });
