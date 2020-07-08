@@ -38,7 +38,7 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@types/algoliasearch": "^3.30.12",
+    "@types/algoliasearch": "3.30.12",
     "algolia-frontend-components": "0.0.35",
     "algoliasearch": "4.0.0-beta.14",
     "babel-core": "6.26.3",
@@ -83,7 +83,7 @@
     "onchange": "3.2.1",
     "pretty-bytes-cli": "2.0.0",
     "prompt": "1.0.0",
-    "pug": "^2.0.3",
+    "pug": "2.0.3",
     "semver": "5.3.0",
     "shelljs": "0.7.8",
     "st": "1.2.2",
