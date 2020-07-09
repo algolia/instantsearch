@@ -29,6 +29,7 @@ export type ConfigureRendererOptions = {
    * Refine the given search parameters.
    */
   refine: Refine;
+  setSearchParametersWithoutSearch: Refine;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -72,11 +73,18 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
     type ConnectorState = {
       refine?: Refine;
+      setSearchParametersWithoutSearch?: Refine;
     };
 
     const connectorState: ConnectorState = {};
 
-    function refine(helper: AlgoliaSearchHelper): Refine {
+    function refine({
+      helper,
+      triggerSearch,
+    }: {
+      helper: AlgoliaSearchHelper;
+      triggerSearch: boolean;
+    }): Refine {
       return (searchParameters: PlainSearchParameters) => {
         // Merge new `searchParameters` with the ones set from other widgets
         const actualState = getInitialSearchParameters(
@@ -88,8 +96,11 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
           new algoliasearchHelper.SearchParameters(searchParameters)
         );
 
-        // Trigger a search with the resolved search parameters
-        helper.setState(nextSearchParameters).search();
+        // Set the resolved search parameters
+        helper.setState(nextSearchParameters);
+        if (triggerSearch) {
+          helper.search();
+        }
 
         // Update original `widgetParams.searchParameters` to the new refined one
         widgetParams.searchParameters = searchParameters;
@@ -100,11 +111,17 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
       $$type: 'ais.configure',
 
       init({ instantSearchInstance, helper }) {
-        connectorState.refine = refine(helper);
+        connectorState.refine = refine({ helper, triggerSearch: true });
+        connectorState.setSearchParametersWithoutSearch = refine({
+          helper,
+          triggerSearch: false,
+        });
 
         renderFn(
           {
             refine: connectorState.refine,
+            setSearchParametersWithoutSearch:
+              connectorState.setSearchParametersWithoutSearch,
             instantSearchInstance,
             widgetParams,
           },
@@ -116,6 +133,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         renderFn(
           {
             refine: connectorState.refine!,
+            setSearchParametersWithoutSearch: connectorState.setSearchParametersWithoutSearch!,
             instantSearchInstance,
             widgetParams,
           },

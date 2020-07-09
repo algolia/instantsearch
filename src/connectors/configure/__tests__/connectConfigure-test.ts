@@ -195,6 +195,46 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
   });
 
+  it('should apply new searchParameters but not trigger search on setSearchParametersWithoutSearch()', () => {
+    const renderFn = jest.fn();
+    helper.search = jest.fn();
+    const makeWidget = connectConfigure(renderFn, jest.fn());
+    const widget = makeWidget({
+      searchParameters: {
+        userToken: 'a',
+      },
+    });
+
+    helper.setState(
+      widget.getWidgetSearchParameters!(
+        new SearchParameters({
+          userToken: 'a',
+        }),
+        { uiState: { configure: { userToken: 'a' } } }
+      )
+    );
+
+    widget.init!(createInitOptions({ helper }));
+
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        userToken: 'a',
+      })
+    );
+
+    const { setSearchParametersWithoutSearch } = renderFn.mock.calls[0][0];
+
+    setSearchParametersWithoutSearch({ userToken: 'b' });
+
+    expect(helper.state).toEqual(
+      new SearchParameters({
+        userToken: 'b',
+      })
+    );
+
+    expect(helper.search).toHaveBeenCalledTimes(0);
+  });
+
   it('should dispose only the state set by configure', () => {
     const makeWidget = connectConfigure(noop);
     const widget = makeWidget({
