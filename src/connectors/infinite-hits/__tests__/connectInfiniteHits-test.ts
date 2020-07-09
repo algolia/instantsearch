@@ -191,6 +191,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.setPage(1);
     helper.search = jest.fn();
+    (helper as any).searchWithoutTriggeringOnStateChange = jest.fn();
     helper.emit = jest.fn();
 
     widget.init!(
@@ -227,7 +228,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     showPrevious();
     expect(helper.state.page).toBe(0);
     expect(helper.emit).not.toHaveBeenCalled();
-    expect(helper.search).toHaveBeenCalledTimes(1);
+    expect(helper.search).toHaveBeenCalledTimes(0);
+    expect(
+      (helper as any).searchWithoutTriggeringOnStateChange
+    ).toHaveBeenCalledTimes(1);
 
     // the results should be prepended if there is an decrement in page
     const previousHits = [
@@ -789,7 +793,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   describe('getWidgetState', () => {
-    test('returns the `uiState` empty without `showPrevious` option', () => {
+    test('returns the `uiState` with `page` when `showPrevious` not given', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
@@ -805,10 +809,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         }
       );
 
-      expect(actual).toEqual({});
+      expect(actual).toEqual({
+        page: 2,
+      });
     });
 
-    test('returns the `uiState` empty with `showPrevious` option on first page', () => {
+    test('returns the `uiState` without `page` on first page', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
