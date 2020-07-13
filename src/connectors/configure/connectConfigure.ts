@@ -29,7 +29,7 @@ export type ConfigureRendererOptions = {
    * Refine the given search parameters.
    */
   refine: Refine;
-  setSearchParametersWithoutSearch: Refine;
+  refineLater: Refine;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -73,7 +73,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
     type ConnectorState = {
       refine?: Refine;
-      setSearchParametersWithoutSearch?: Refine;
+      refineLater?: Refine;
     };
 
     const connectorState: ConnectorState = {};
@@ -112,7 +112,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
 
       init({ instantSearchInstance, helper }) {
         connectorState.refine = refine({ helper, triggerSearch: true });
-        connectorState.setSearchParametersWithoutSearch = refine({
+        connectorState.refineLater = refine({
           helper,
           triggerSearch: false,
         });
@@ -120,8 +120,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         renderFn(
           {
             refine: connectorState.refine,
-            setSearchParametersWithoutSearch:
-              connectorState.setSearchParametersWithoutSearch,
+            refineLater: connectorState.refineLater,
             instantSearchInstance,
             widgetParams,
           },
@@ -133,7 +132,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         renderFn(
           {
             refine: connectorState.refine!,
-            setSearchParametersWithoutSearch: connectorState.setSearchParametersWithoutSearch!,
+            refineLater: connectorState.refineLater!,
             instantSearchInstance,
             widgetParams,
           },
