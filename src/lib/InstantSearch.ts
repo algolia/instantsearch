@@ -1,6 +1,7 @@
 import algoliasearchHelper, { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import EventEmitter from 'events';
 import index, { Index, isIndexWidget } from '../widgets/index/index';
+import connectConfigure from '../connectors/configure/connectConfigure';
 import version from './version';
 import createHelpers from './createHelpers';
 import {
@@ -243,6 +244,43 @@ See ${createDocumentationLink({
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.EXPERIMENTAL_use(createRouter(routerOptions));
     }
+
+    if (this.insightsClient) {
+      this.setupUserTokenUpdater();
+    }
+  }
+
+  /**
+   * Updates userToken automatically.
+   *
+   * When insightsClient is given, this method sets up an event listener
+   * so that every time userToken is set to insightsClient, it can set it to
+   * searchParameter, too.
+   */
+  setupUserTokenUpdater() {
+    let setUserTokenToSearch;
+    const configUserToken = connectConfigure(
+      ({ refineLater }, isFirstRendering) => {
+        if (isFirstRendering) {
+          setUserTokenToSearch = (userToken: string) =>
+            refineLater({ userToken });
+        }
+      }
+    );
+    this.addWidgets([configUserToken({ searchParameters: {} })]);
+
+    (this.insightsClient as Function)(
+      'onSetUserToken',
+      userToken => {
+        if (setUserTokenToSearch) {
+          console.log('setting userToken!', userToken);
+          setUserTokenToSearch(userToken);
+        }
+      },
+      {
+        immediate: true,
+      }
+    );
   }
 
   /**
