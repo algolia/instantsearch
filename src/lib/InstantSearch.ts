@@ -258,29 +258,25 @@ See ${createDocumentationLink({
    * searchParameter, too.
    */
   setupUserTokenUpdater() {
-    let setUserTokenToSearch;
     const configUserToken = connectConfigure(
       ({ refineLater }, isFirstRendering) => {
-        if (isFirstRendering) {
-          setUserTokenToSearch = (userToken: string) =>
-            refineLater({ userToken });
+        if (!isFirstRendering) {
+          return;
         }
+
+        (this.insightsClient as Function)(
+          'onSetUserToken',
+          userToken => {
+            console.log('setting userToken!', userToken);
+            refineLater({ userToken });
+          },
+          {
+            immediate: true,
+          }
+        );
       }
     );
     this.addWidgets([configUserToken({ searchParameters: {} })]);
-
-    (this.insightsClient as Function)(
-      'onSetUserToken',
-      userToken => {
-        if (setUserTokenToSearch) {
-          console.log('setting userToken!', userToken);
-          setUserTokenToSearch(userToken);
-        }
-      },
-      {
-        immediate: true,
-      }
-    );
   }
 
   /**
