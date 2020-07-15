@@ -257,7 +257,7 @@ See ${createDocumentationLink({
    * so that every time userToken is set to insightsClient, it can set it to
    * searchParameter, too.
    */
-  setupUserTokenUpdater() {
+  private setupUserTokenUpdater() {
     const configUserToken = connectConfigure(
       ({ refineLater }, isFirstRendering) => {
         if (!isFirstRendering) {
