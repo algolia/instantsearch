@@ -11,6 +11,7 @@ import {
   noop,
   warning,
   checkIndexUiState,
+  mergeSearchParameters,
 } from './utils';
 import {
   InsightsClient as AlgoliaInsightsClient,
@@ -258,25 +259,26 @@ See ${createDocumentationLink({
    * searchParameter, too.
    */
   private setupUserTokenUpdater() {
-    const configUserToken = connectConfigure(
-      ({ refineLater }, isFirstRendering) => {
-        if (!isFirstRendering) {
-          return;
-        }
+    const setUpdater = (callback: (userToken: string) => void) => {
+      (this.insightsClient as Function)('onSetUserToken', callback, {
+        immediate: true,
+      });
+    };
 
-        (this.insightsClient as Function)(
-          'onSetUserToken',
-          userToken => {
-            console.log('setting userToken!', userToken);
-            refineLater({ userToken });
-          },
-          {
-            immediate: true,
-          }
-        );
-      }
-    );
-    this.addWidgets([configUserToken({ searchParameters: {} })]);
+    const customWidgetForUserToken = {
+      init({ helper }) {
+        setUpdater(userToken => {
+          const nextSearchParameters = mergeSearchParameters(
+            helper.state,
+            new algoliasearchHelper.SearchParameters({ userToken })
+          );
+          helper.setState(nextSearchParameters);
+        });
+      },
+      render() {},
+    };
+
+    this.addWidgets([customWidgetForUserToken]);
   }
 
   /**
