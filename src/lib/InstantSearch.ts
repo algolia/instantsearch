@@ -243,10 +243,6 @@ See ${createDocumentationLink({
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.EXPERIMENTAL_use(createRouter(routerOptions));
     }
-
-    if (this.insightsClient) {
-      this.setupUserTokenUpdater();
-    }
   }
 
   /**
@@ -256,11 +252,11 @@ See ${createDocumentationLink({
    * so that every time userToken is set to insightsClient, it can set it to
    * searchParameter, too.
    */
-  private setupUserTokenUpdater() {
+  private setupUserTokenUpdater(helper: AlgoliaSearchHelper) {
     (this.insightsClient as Function)(
       'onSetUserToken',
       (userToken: string) => {
-        this.helper!.setQueryParameter('userToken', userToken);
+        helper.setQueryParameter('userToken', userToken);
       },
       {
         immediate: true,
@@ -453,6 +449,10 @@ See ${createDocumentationLink({
       parent: null,
       uiState: this._initialUiState,
     });
+
+    if (this.insightsClient) {
+      this.setupUserTokenUpdater(this.mainIndex.getHelper()!);
+    }
 
     this.middleware.forEach(m => {
       m.subscribe();
