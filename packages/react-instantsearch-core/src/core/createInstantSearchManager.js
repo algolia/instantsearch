@@ -262,7 +262,7 @@ export default function createInstantSearchManager({
       results = !isDerivedHelpersEmpty && results.getFacetByName ? {} : results;
 
       if (!isDerivedHelpersEmpty) {
-        results[indexId] = event.results;
+        results = { ...results, [indexId]: event.results };
       } else {
         results = event.results;
       }
