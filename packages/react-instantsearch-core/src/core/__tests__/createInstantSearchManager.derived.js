@@ -145,6 +145,97 @@ describe('createInstantSearchManager with multi index', () => {
     );
   });
 
+  // https://github.com/algolia/react-instantsearch/issues/2875
+  it('update resultsState without mutate object', async () => {
+    const ism = createInstantSearchManager({
+      indexName: 'first',
+      initialState: {},
+      searchParameters: {},
+      searchClient: createSearchClient(),
+    });
+
+    // <SearchBox defaultRefinement="first query 1" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: params => params.setQuery('first query 1'),
+      props: {},
+    });
+
+    // <Index indexName="first" indexId="first" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: params => params.setIndex('first'),
+      props: {
+        indexName: 'first',
+        indexId: 'first',
+      },
+    });
+
+    // <Index indexName="first" indexId="first">
+    //   <Pagination defaultRefinement={3} />
+    // </Index>
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: params => params.setPage(3),
+      props: {
+        indexContextValue: {
+          targetedIndex: 'first',
+        },
+      },
+    });
+
+    // <Index indexName="second" indexId="second" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: params => params.setIndex('second'),
+      props: {
+        indexName: 'second',
+        indexId: 'second',
+      },
+    });
+
+    // <Index indexName="second" indexId="second">
+    //   <SearchBox defaultRefinement="second query 1" />
+    // </Index>
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: params => params.setQuery('second query 1'),
+      props: {
+        indexContextValue: {
+          targetedIndex: 'second',
+        },
+      },
+    });
+
+    expect(ism.store.getState().results).toBe(null);
+
+    await runAllMicroTasks();
+
+    const resultsWithFirstAndSecond = ism.store.getState().results;
+
+    // <Index indexName="thrid" indexId="thrid" />
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: params => params.setIndex('thrid'),
+      props: {
+        indexName: 'thrid',
+        indexId: 'thrid',
+      },
+    });
+
+    // <Index indexName="thrid" indexId="thrid">
+    //   <SearchBox defaultRefinement="thrid query 1" />
+    // </Index>
+    ism.widgetsManager.registerWidget({
+      getSearchParameters: params => params.setQuery('thrid query 1'),
+      props: {
+        indexContextValue: {
+          targetedIndex: 'thrid',
+        },
+      },
+    });
+
+    await runAllMicroTasks();
+
+    expect(
+      Object.is(resultsWithFirstAndSecond, ism.store.getState().results)
+    ).toBe(false);
+  });
+
   it('searches with duplicate Index & SortBy', async () => {
     // <InstantSearch indexName="first">
     //   <SearchBox defaultRefinement="query" />
