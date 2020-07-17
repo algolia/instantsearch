@@ -5,7 +5,9 @@ import cx from 'classnames';
 import { SearchResults } from 'algoliasearch-helper';
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits, {
-  InfiniteHitsRenderer,
+  InfiniteHitsConnectorParams,
+  InfiniteHitsRendererOptions,
+  InfiniteHitsCache,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
 import {
   prepareTemplateProps,
@@ -19,6 +21,7 @@ import {
   Template,
   Hit,
   InsightsClientWrapper,
+  Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
 
@@ -32,92 +35,94 @@ export type InfiniteHitsCSSClasses = {
   /**
    * The root element of the widget.
    */
-  root: string | string[];
+  root?: string | string[];
+
   /**
    * The root container without results.
    */
-  emptyRoot: string | string[];
+  emptyRoot?: string | string[];
+
   /**
    * The list of results.
    */
-  list: string | string[];
+  list?: string | string[];
+
   /**
    * The list item.
    */
-  item: string | string[];
+  item?: string | string[];
+
   /**
    * The “Show previous” button.
    */
-  loadPrevious: string | string[];
+  loadPrevious?: string | string[];
+
   /**
    * The disabled “Show previous” button.
    */
-  disabledLoadPrevious: string | string[];
+  disabledLoadPrevious?: string | string[];
+
   /**
    * The “Show more” button.
    */
-  loadMore: string | string[];
+  loadMore?: string | string[];
+
   /**
    * The disabled “Show more” button.
    */
-  disabledLoadMore: string | string[];
+  disabledLoadMore?: string | string[];
 };
 
 export type InfiniteHitsTemplates = {
   /**
    * The template to use when there are no results.
    */
-  empty: Template<{ results: SearchResults }>;
+  empty?: Template<{ results: SearchResults }>;
+
   /**
    * The template to use for the “Show previous” label.
    */
-  showPreviousText: Template;
+  showPreviousText?: Template;
+
   /**
    * The template to use for the “Show more” label.
    */
-  showMoreText: Template;
+  showMoreText?: Template;
+
   /**
    * The template to use for each result.
    */
-  item: Template<Hit>;
+  item?: Template<Hit>;
 };
 
-export type InfiniteHitsRendererWidgetParams = {
-  /**
-   * Escapes HTML entities from hits string values.
-   *
-   * @default `true`
-   */
-  escapeHTML?: boolean;
-  /**
-   * Enable the button to load previous results.
-   *
-   * @default `false`
-   */
-  showPrevious?: boolean;
-  /**
-   * Receives the items, and is called before displaying them.
-   * Useful for mapping over the items to transform, and remove or reorder them.
-   */
-  transformItems?: (items: any[]) => any[];
-};
-
-type InfiniteHitsWidgetParams = {
+export type InfiniteHitsWidgetParams = {
   /**
    * The CSS Selector or `HTMLElement` to insert the widget into.
    */
   container: string | HTMLElement;
+
   /**
    * The CSS classes to override.
    */
-  cssClasses?: Partial<InfiniteHitsCSSClasses>;
+  cssClasses?: InfiniteHitsCSSClasses;
+
   /**
    * The templates to use for the widget.
    */
-  templates?: Partial<InfiniteHitsTemplates>;
-} & InfiniteHitsRendererWidgetParams;
+  templates?: InfiniteHitsTemplates;
 
-type InfiniteHits = WidgetFactory<InfiniteHitsWidgetParams>;
+  /**
+   * Reads and writes hits from/to cache.
+   * When user comes back to the search page after leaving for product page,
+   * this helps restore InfiniteHits and its scroll position.
+   */
+  cache?: InfiniteHitsCache;
+};
+
+export type InfiniteHitsWidget = WidgetFactory<
+  InfiniteHitsConnectorParams,
+  InfiniteHitsWidgetParams
+>;
 
 const renderer = ({
   cssClasses,
@@ -125,7 +130,10 @@ const renderer = ({
   renderState,
   templates,
   showPrevious: hasShowPrevious,
-}): InfiniteHitsRenderer<Required<InfiniteHitsRendererWidgetParams>> => (
+}): Renderer<
+  InfiniteHitsRendererOptions,
+  Partial<InfiniteHitsWidgetParams>
+> => (
   {
     hits,
     results,
@@ -164,7 +172,7 @@ const renderer = ({
   );
 };
 
-const infiniteHits: InfiniteHits = (
+const infiniteHits: InfiniteHitsWidget = (
   {
     container,
     escapeHTML,
@@ -172,6 +180,7 @@ const infiniteHits: InfiniteHits = (
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
     showPrevious,
+    cache,
   } = {} as InfiniteHitsWidgetParams
 ) => {
   if (!container) {
@@ -211,7 +220,12 @@ const infiniteHits: InfiniteHits = (
     connectInfiniteHits
   )(specializedRenderer, () => render(null, containerNode));
 
-  return makeInfiniteHits({ escapeHTML, transformItems, showPrevious });
+  return makeInfiniteHits({
+    escapeHTML,
+    transformItems,
+    showPrevious,
+    cache,
+  });
 };
 
 export default infiniteHits;

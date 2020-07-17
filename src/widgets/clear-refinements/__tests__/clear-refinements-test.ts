@@ -1,4 +1,4 @@
-import { render } from 'preact';
+import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import {
   createInitOptions,
@@ -6,6 +6,9 @@ import {
 } from '../../../../test/mock/createWidget';
 import clearRefinements from '../clear-refinements';
 import { createSearchClient } from '../../../../test/mock/createSearchClient';
+import { castToJestMock } from '../../../../test/utils/castToJestMock';
+
+const render = castToJestMock(preactRender);
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -18,6 +21,7 @@ jest.mock('preact', () => {
 describe('Usage', () => {
   it('throws without container', () => {
     expect(() => {
+      // @ts-ignore
       clearRefinements({ container: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
@@ -42,9 +46,9 @@ describe('clearRefinements()', () => {
         container,
       });
 
-      widget.init(createInitOptions({ helper }));
-      widget.render(createRenderOptions({ helper, state: helper.state }));
-      widget.render(createRenderOptions({ helper, state: helper.state }));
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, state: helper.state }));
+      widget.render!(createRenderOptions({ helper, state: helper.state }));
 
       expect(render).toHaveBeenCalledTimes(2);
 
@@ -70,9 +74,9 @@ describe('clearRefinements()', () => {
         container,
       });
 
-      widget.init(createInitOptions({ helper }));
-      widget.render(createRenderOptions({ helper, state: helper.state }));
-      widget.render(createRenderOptions({ helper, state: helper.state }));
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, state: helper.state }));
+      widget.render!(createRenderOptions({ helper, state: helper.state }));
 
       expect(render).toHaveBeenCalledTimes(2);
 
@@ -94,8 +98,8 @@ describe('clearRefinements()', () => {
         container,
       });
 
-      widget.init(createInitOptions({ helper }));
-      widget.render(createRenderOptions({ helper, state: helper.state }));
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, state: helper.state }));
 
       expect(render.mock.calls[0][0].props.cssClasses).toMatchInlineSnapshot(`
         Object {
@@ -118,8 +122,8 @@ describe('clearRefinements()', () => {
         },
       });
 
-      widget.init(createInitOptions({ helper }));
-      widget.render(createRenderOptions({ helper, state: helper.state }));
+      widget.init!(createInitOptions({ helper }));
+      widget.render!(createRenderOptions({ helper, state: helper.state }));
 
       expect(render.mock.calls[0][0].props.cssClasses).toMatchInlineSnapshot(`
         Object {

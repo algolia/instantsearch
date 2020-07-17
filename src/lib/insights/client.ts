@@ -6,10 +6,7 @@ import {
   InsightsClientMethod,
   InsightsClientPayload,
   InsightsClientWrapper,
-  Renderer,
-  RendererOptions,
-  Unmounter,
-  WidgetFactory,
+  Connector,
 } from '../../types';
 
 const getSelectedHits = (hits: Hits, selectedObjectIDs: string[]): Hits => {
@@ -104,20 +101,10 @@ const wrapInsightsClient = (
   aa(method, { ...inferredPayload, ...payload } as any);
 };
 
-type Connector<TWidgetParams> = (
-  renderFn: Renderer<any>,
-  unmountFn: Unmounter
-) => WidgetFactory<TWidgetParams>;
-
-export default function withInsights(
-  connector: Connector<any>
-): Connector<unknown> {
-  const wrapRenderFn = (
-    renderFn: Renderer<RendererOptions<unknown>>
-  ): Renderer<RendererOptions<unknown>> => (
-    renderOptions: RendererOptions,
-    isFirstRender: boolean
-  ) => {
+export default function withInsights<TRendererOptions, TConnectorParams>(
+  connector: Connector<TRendererOptions, TConnectorParams>
+): Connector<TRendererOptions, TConnectorParams> {
+  const wrapRenderFn = renderFn => (renderOptions, isFirstRender) => {
     const { results, hits, instantSearchInstance } = renderOptions;
     if (results && hits && instantSearchInstance) {
       const insights = wrapInsightsClient(
@@ -130,6 +117,5 @@ export default function withInsights(
     return renderFn(renderOptions, isFirstRender);
   };
 
-  return (renderFn: Renderer<RendererOptions<unknown>>, unmountFn: Unmounter) =>
-    connector(wrapRenderFn(renderFn), unmountFn);
+  return (renderFn, unmountFn) => connector(wrapRenderFn(renderFn), unmountFn);
 }

@@ -1,6 +1,6 @@
 import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { Client } from '../../../types';
+import { SearchClient } from '../../../types';
 import infiniteHits from '../infinite-hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 
@@ -36,7 +36,7 @@ describe('infiniteHits()', () => {
   beforeEach(() => {
     render.mockClear();
 
-    helper = algoliasearchHelper({} as Client, '', {});
+    helper = algoliasearchHelper({} as SearchClient, '', {});
     helper.search = jest.fn();
 
     container = document.createElement('div');
@@ -178,5 +178,133 @@ describe('infiniteHits()', () => {
     expect(render).toHaveBeenCalledTimes(1);
     expect(firstRender[0].props.isFirstPage).toEqual(false);
     expect(firstRender[1]).toEqual(container);
+  });
+
+  describe('cache', () => {
+    const getStateWithoutPage = state => {
+      const { page, ...rest } = state || {};
+      return rest;
+    };
+    const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    let cachedState: any = undefined;
+    let cachedHits: any = undefined;
+    const customCache = {
+      read({ state }) {
+        return isEqual(cachedState, getStateWithoutPage(state))
+          ? cachedHits
+          : null;
+      },
+      write({ state, hits }) {
+        cachedState = getStateWithoutPage(state);
+        cachedHits = hits;
+      },
+    };
+
+    beforeEach(() => {
+      cachedState = undefined;
+      cachedHits = undefined;
+    });
+
+    it('write hits to cache', () => {
+      const state = { page: 0, query: 'hello' };
+      widget = infiniteHits({
+        container,
+        escapeHTML: true,
+        transformItems: items => items,
+        cssClasses: { root: ['root', 'cx'] },
+        showPrevious: false,
+        cache: customCache,
+      });
+      widget.init({ helper, instantSearchInstance: {} });
+      expect(cachedState).toMatchInlineSnapshot(`undefined`);
+      expect(cachedHits).toMatchInlineSnapshot(`undefined`);
+      widget.render({
+        results: {
+          page: 0,
+          hits: [{ title: 'first' }, { title: 'second' }],
+          hitsPerPage: 2,
+        },
+        state,
+      });
+      expect(cachedState).toMatchInlineSnapshot(`
+        Object {
+          "query": "hello",
+        }
+      `);
+      expect(cachedHits).toMatchInlineSnapshot(`
+  Object {
+    "0": Array [
+      Object {
+        "__position": 1,
+        "title": "first",
+      },
+      Object {
+        "__position": 2,
+        "title": "second",
+      },
+    ],
+  }
+  `);
+      const firstCall = render.mock.calls[0];
+      expect(firstCall[0].props.hits).toMatchInlineSnapshot(`
+  Array [
+    Object {
+      "__position": 1,
+      "title": "first",
+    },
+    Object {
+      "__position": 2,
+      "title": "second",
+    },
+  ]
+  `);
+    });
+
+    it('render hits from cache', () => {
+      cachedHits = [
+        {
+          __position: 1,
+          title: 'first',
+        },
+        {
+          __position: 2,
+          title: 'second',
+        },
+      ];
+      cachedState = {
+        query: 'hello',
+      };
+      const state = { page: 0, query: 'hello' };
+      widget = infiniteHits({
+        container,
+        escapeHTML: true,
+        transformItems: items => items,
+        cssClasses: { root: ['root', 'cx'] },
+        showPrevious: false,
+        cache: customCache,
+      });
+      widget.init({ helper, instantSearchInstance: {} });
+      widget.render({
+        results: {
+          page: 0,
+          hits: [],
+          hitsPerPage: 2,
+        },
+        state,
+      });
+      const firstCall = render.mock.calls[0];
+      expect(firstCall[0].props.hits).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "__position": 1,
+    "title": "first",
+  },
+  Object {
+    "__position": 2,
+    "title": "second",
+  },
+]
+`);
+    });
   });
 });

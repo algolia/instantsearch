@@ -1,10 +1,11 @@
 import { storiesOf } from '@storybook/html';
 import { withHits, withLifecycle } from '../.storybook/decorators';
+import { configure } from '../src/widgets';
 
-storiesOf('Basics|Configure', module)
+storiesOf('Basics/Configure', module)
   .add(
     'Force 1 hit per page',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       const description = document.createElement('div');
       description.innerHTML = `
         <p>Search parameters provided to the Configure widget:</p>
@@ -14,7 +15,7 @@ storiesOf('Basics|Configure', module)
       container.appendChild(description);
 
       search.addWidgets([
-        instantsearch.widgets.configure({
+        configure({
           hitsPerPage: 1,
         }),
       ]);
@@ -22,9 +23,9 @@ storiesOf('Basics|Configure', module)
   )
   .add(
     'with add/remove',
-    withHits(({ search, container, instantsearch }) => {
+    withHits(({ search, container }) => {
       withLifecycle(search, container, () =>
-        instantsearch.widgets.configure({
+        configure({
           hitsPerPage: 1,
         })
       );

@@ -5,7 +5,6 @@ import cx from 'classnames';
 import Selector from '../../components/Selector/Selector';
 import connectHitsPerPage, {
   HitsPerPageConnectorParams,
-  HitsPerPageRenderer,
   HitsPerPageRendererOptions,
 } from '../../connectors/hits-per-page/connectHitsPerPage';
 import {
@@ -24,7 +23,7 @@ const suit = component('HitsPerPage');
 const renderer = ({ containerNode, cssClasses }) => (
   { items, refine }: HitsPerPageRendererOptions,
   isFirstRendering
-): HitsPerPageRenderer<HitsPerPageWidgetOptions> | void => {
+) => {
   if (isFirstRendering) return;
 
   const { value: currentValue } =
@@ -60,8 +59,6 @@ export type HitsPerPageCSSClasses = {
   option?: string | string[];
 };
 
-export type HitsPerPageItems = HitsPerPageConnectorParams['items'];
-
 export type HitsPerPageWidgetOptions = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
@@ -72,18 +69,17 @@ export type HitsPerPageWidgetOptions = {
    * CSS classes to be added.
    */
   cssClasses?: HitsPerPageCSSClasses;
-} & HitsPerPageConnectorParams;
+};
 
-export type HitsPerPageWidget = WidgetFactory<HitsPerPageWidgetOptions>;
+export type HitsPerPageWidget = WidgetFactory<
+  HitsPerPageConnectorParams,
+  HitsPerPageWidgetOptions
+>;
 
-const hitsPerPage: HitsPerPageWidget = function hitsPerPage(
-  {
-    container,
-    items,
-    cssClasses: userCssClasses = {},
-    transformItems,
-  } = {} as HitsPerPageWidgetOptions
-) {
+const hitsPerPage: HitsPerPageWidget = function hitsPerPage(widgetOptions) {
+  const { container, items, cssClasses: userCssClasses = {}, transformItems } =
+    widgetOptions || ({} as typeof widgetOptions);
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }

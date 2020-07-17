@@ -24,14 +24,17 @@ class RangeInput extends Component {
 
   onInput = name => event => {
     this.setState({
-      [name]: Number(event.currentTarget.value),
+      [name]: event.currentTarget.value,
     });
   };
 
   onSubmit = event => {
     event.preventDefault();
 
-    this.props.refine([this.state.min, this.state.max]);
+    this.props.refine([
+      this.state.min && Number(this.state.min),
+      this.state.max && Number(this.state.max),
+    ]);
   };
 
   render() {
@@ -55,7 +58,7 @@ class RangeInput extends Component {
               min={min}
               max={max}
               step={step}
-              value={minValue}
+              value={minValue ?? ''}
               onInput={this.onInput('min')}
               placeholder={min}
               disabled={isDisabled}
@@ -78,7 +81,7 @@ class RangeInput extends Component {
               min={min}
               max={max}
               step={step}
-              value={maxValue}
+              value={maxValue ?? ''}
               onInput={this.onInput('max')}
               placeholder={max}
               disabled={isDisabled}

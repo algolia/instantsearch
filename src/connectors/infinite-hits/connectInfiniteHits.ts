@@ -3,13 +3,7 @@ import {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
 } from 'algoliasearch-helper';
-import {
-  Renderer,
-  RendererOptions,
-  WidgetFactory,
-  Hits,
-  Unmounter,
-} from '../../types';
+import { Hits, Connector, TransformItems, Hit } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -18,57 +12,142 @@ import {
   addQueryID,
   noop,
 } from '../../lib/utils';
-import { InfiniteHitsRendererWidgetParams } from '../../widgets/infinite-hits/infinite-hits';
 
-export type InfiniteHitsConnectorParams = Partial<
-  InfiniteHitsRendererWidgetParams
->;
+export type InfiniteHitsCachedHits = {
+  [page: number]: Hits;
+};
 
-export type InfiniteHitsRendererOptions<TInfiniteHitsWidgetParams> = {
+type Read = ({
+  state,
+}: {
+  state: Partial<SearchParameters>;
+}) => InfiniteHitsCachedHits | null;
+
+type Write = ({
+  state,
+  hits,
+}: {
+  state: Partial<SearchParameters>;
+  hits: InfiniteHitsCachedHits;
+}) => void;
+
+export type InfiniteHitsCache = {
+  read: Read;
+  write: Write;
+};
+
+export type InfiniteHitsConnectorParams = {
+  /**
+   * Escapes HTML entities from hits string values.
+   *
+   * @default `true`
+   */
+  escapeHTML?: boolean;
+
+  /**
+   * Enable the button to load previous results.
+   *
+   * @default `false`
+   */
+  showPrevious?: boolean;
+
+  /**
+   * Receives the items, and is called before displaying them.
+   * Useful for mapping over the items to transform, and remove or reorder them.
+   */
+  transformItems?: TransformItems<Hit>;
+
+  /**
+   * Reads and writes hits from/to cache.
+   * When user comes back to the search page after leaving for product page,
+   * this helps restore InfiniteHits and its scroll position.
+   */
+  cache?: InfiniteHitsCache;
+};
+
+export type InfiniteHitsRendererOptions = {
+  /**
+   * Loads the previous results.
+   */
   showPrevious: () => void;
+
+  /**
+   * Loads the next page of hits.
+   */
   showMore: () => void;
+
+  /**
+   * Indicates whether the first page of hits has been reached.
+   */
   isFirstPage: boolean;
+
+  /**
+   * Indicates whether the last page of hits has been reached.
+   */
   isLastPage: boolean;
-} & RendererOptions<TInfiniteHitsWidgetParams>;
-
-export type InfiniteHitsRenderer<TInfiniteHitsWidgetParams> = Renderer<
-  InfiniteHitsRendererOptions<
-    InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams
-  >
->;
-
-export type InfiniteHitsWidgetFactory<
-  TInfiniteHitsWidgetParams
-> = WidgetFactory<InfiniteHitsConnectorParams & TInfiniteHitsWidgetParams>;
-
-export type InfiniteHitsConnector = <TInfiniteHitsWidgetParams>(
-  render: InfiniteHitsRenderer<TInfiniteHitsWidgetParams>,
-  unmount?: Unmounter
-) => InfiniteHitsWidgetFactory<TInfiniteHitsWidgetParams>;
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
   connector: true,
 });
 
-const connectInfiniteHits: InfiniteHitsConnector = (
+export type InfiniteHitsConnector = Connector<
+  InfiniteHitsRendererOptions,
+  InfiniteHitsConnectorParams
+>;
+
+function getStateWithoutPage(state) {
+  const { page, ...rest } = state || {};
+  return rest;
+}
+
+function getInMemoryCache(): InfiniteHitsCache {
+  let cachedHits: InfiniteHitsCachedHits | null = null;
+  let cachedState = undefined;
+  return {
+    read({ state }) {
+      return isEqual(cachedState, getStateWithoutPage(state))
+        ? cachedHits
+        : null;
+    },
+    write({ state, hits }) {
+      cachedState = getStateWithoutPage(state);
+      cachedHits = hits;
+    },
+  };
+}
+
+function extractHitsFromCachedHits(cachedHits: InfiniteHitsCachedHits) {
+  return Object.keys(cachedHits)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .reduce((acc: Hits, page) => {
+      return acc.concat(cachedHits[page]);
+    }, []);
+}
+
+const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
   renderFn,
   unmountFn = noop
-) => {
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
     const {
       escapeHTML = true,
       transformItems = (items: any[]) => items,
-      showPrevious: hasShowPrevious = false,
+      cache = getInMemoryCache(),
     } = widgetParams || ({} as typeof widgetParams);
-    let hitsCache: Hits = [];
-    let firstReceivedPage = Infinity;
-    let lastReceivedPage = -1;
+    let cachedHits: InfiniteHitsCachedHits | undefined = undefined;
     let prevState: Partial<SearchParameters>;
     let showPrevious: () => void;
     let showMore: () => void;
+
+    const getFirstReceivedPage = () =>
+      Math.min(...Object.keys(cachedHits || {}).map(Number));
+    const getLastReceivedPage = () =>
+      Math.max(...Object.keys(cachedHits || {}).map(Number));
 
     const getShowPrevious = (helper: Helper): (() => void) => () => {
       // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
@@ -76,12 +155,12 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       helper
         .overrideStateWithoutTriggeringChangeEvent({
           ...helper.state,
-          page: firstReceivedPage - 1,
+          page: getFirstReceivedPage() - 1,
         })
-        .search();
+        .searchWithoutTriggeringOnStateChange();
     };
     const getShowMore = (helper: Helper): (() => void) => () => {
-      helper.setPage(lastReceivedPage + 1).search();
+      helper.setPage(getLastReceivedPage() + 1).search();
     };
     const filterEmptyRefinements = (refinements = {}) => {
       return Object.keys(refinements)
@@ -102,16 +181,17 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
-        firstReceivedPage = helper.state.page || 0;
-        lastReceivedPage = helper.state.page || 0;
 
         renderFn(
           {
-            hits: hitsCache,
+            hits: extractHitsFromCachedHits(
+              cache.read({ state: helper.state }) || {}
+            ),
             results: undefined,
             showPrevious,
             showMore,
-            isFirstPage: firstReceivedPage === 0,
+            isFirstPage:
+              getFirstReceivedPage() === 0 || helper.state.page === undefined,
             isLastPage: true,
             instantSearchInstance,
             widgetParams,
@@ -150,9 +230,7 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         );
 
         if (!isEqual(currentState, prevState)) {
-          hitsCache = [];
-          firstReceivedPage = page;
-          lastReceivedPage = page;
+          cachedHits = cache.read({ state }) || {};
           prevState = currentState;
         }
 
@@ -176,20 +254,21 @@ const connectInfiniteHits: InfiniteHitsConnector = (
         // hits widgets mounted on the page.
         (results.hits as any).__escaped = initialEscaped;
 
-        if (lastReceivedPage < page || !hitsCache.length) {
-          hitsCache = [...hitsCache, ...results.hits];
-          lastReceivedPage = page;
-        } else if (firstReceivedPage > page) {
-          hitsCache = [...results.hits, ...hitsCache];
-          firstReceivedPage = page;
+        if (cachedHits === undefined) {
+          cachedHits = cache.read({ state }) || {};
         }
 
-        const isFirstPage = firstReceivedPage === 0;
+        if (cachedHits![page] === undefined) {
+          cachedHits![page] = results.hits;
+          cache.write({ state, hits: cachedHits });
+        }
+
+        const isFirstPage = getFirstReceivedPage() === 0;
         const isLastPage = results.nbPages <= results.page + 1;
 
         renderFn(
           {
-            hits: hitsCache,
+            hits: extractHitsFromCachedHits(cachedHits!),
             results,
             showPrevious,
             showMore,
@@ -225,7 +304,9 @@ const connectInfiniteHits: InfiniteHitsConnector = (
       getWidgetState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
-        if (!hasShowPrevious || !page) {
+        if (!page) {
+          // return without adding `page` to uiState
+          // because we don't want `page=1` in the URL
           return uiState;
         }
 

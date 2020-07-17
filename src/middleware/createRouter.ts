@@ -16,14 +16,12 @@ const walk = (current: Index, callback: (index: Index) => void) => {
     });
 };
 
-export type RouterProps<TRouteState = UiState> = {
-  router?: Router<TRouteState>;
-  stateMapping?: StateMapping<TRouteState>;
+export type RouterProps = {
+  router?: Router;
+  stateMapping?: StateMapping;
 };
 
-export type RoutingManager<TRouteState = UiState> = (
-  props?: RouterProps<TRouteState>
-) => Middleware;
+export type RoutingManager = (props?: RouterProps) => Middleware;
 
 export const createRouter: RoutingManager = (props = {}) => {
   const {

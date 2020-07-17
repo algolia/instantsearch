@@ -7,6 +7,7 @@ import {
   insights,
   getInsightsAnonymousUserToken,
 } from './helpers';
+import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache';
 
 const instantsearch = (options: InstantSearchOptions): InstantSearch =>
   new InstantSearch(options);
@@ -16,6 +17,7 @@ instantsearch.snippet = snippet;
 instantsearch.highlight = highlight;
 instantsearch.insights = insights;
 instantsearch.getInsightsAnonymousUserToken = getInsightsAnonymousUserToken;
+instantsearch.createInfiniteHitsSessionStorageCache = createInfiniteHitsSessionStorageCache;
 
 Object.defineProperty(instantsearch, 'widgets', {
   get() {

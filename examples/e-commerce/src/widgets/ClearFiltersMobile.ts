@@ -2,7 +2,11 @@ import { connectClearRefinements } from 'instantsearch.js/es/connectors';
 
 const resultsContainer = document.querySelector('.container-results');
 
-const clearRefinements = connectClearRefinements(
+type ClearRefinementsWidgetParams = {
+  container: string;
+};
+
+const clearRefinements = connectClearRefinements<ClearRefinementsWidgetParams>(
   ({ refine, widgetParams }, isFirstRender) => {
     const { container } = widgetParams;
     const containerNode = document.querySelector(container);
@@ -22,7 +26,7 @@ const clearRefinements = connectClearRefinements(
       });
 
       wrapper.appendChild(button);
-      containerNode.appendChild(wrapper);
+      containerNode!.appendChild(wrapper);
     }
   }
 );

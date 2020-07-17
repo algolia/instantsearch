@@ -520,6 +520,29 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
   });
 
+  it('sets user-provided "off" value by default (array)', () => {
+    const makeWidget = connectToggleRefinement(() => {});
+    const widget = makeWidget({
+      attribute: 'whatever',
+      off: ['a', 'b'],
+    });
+
+    const helper = jsHelper(
+      {},
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    );
+    widget.init({ helper, state: helper.state });
+
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual(
+      expect.objectContaining({
+        whatever: ['a', 'b'],
+      })
+    );
+  });
+
   it('sets user-provided "on" value on refine (falsy)', () => {
     let caughtRefine;
     const makeWidget = connectToggleRefinement(({ refine }) => {
@@ -567,6 +590,58 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     expect(helper.state.disjunctiveFacetsRefinements).toEqual(
       expect.objectContaining({
         whatever: ['false'],
+      })
+    );
+  });
+
+  it('sets user-provided "on" value on refine (array)', () => {
+    let caughtRefine;
+    const makeWidget = connectToggleRefinement(({ refine }) => {
+      caughtRefine = refine;
+    });
+    const widget = makeWidget({
+      attribute: 'whatever',
+      on: ['a', 'b'],
+    });
+
+    const helper = jsHelper(
+      { search() {} },
+      '',
+      widget.getWidgetSearchParameters(new SearchParameters({}), {
+        uiState: {},
+      })
+    );
+    helper.search = jest.fn();
+
+    widget.init({ helper, state: helper.state });
+
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual({
+      whatever: [],
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            whatever: {
+              a: 45,
+              b: 20,
+              c: 20,
+            },
+          },
+          nbHits: 85,
+        },
+      ]),
+      state: helper.state,
+      helper,
+    });
+
+    // toggle the value
+    caughtRefine();
+
+    expect(helper.state.disjunctiveFacetsRefinements).toEqual(
+      expect.objectContaining({
+        whatever: ['a', 'b'],
       })
     );
   });

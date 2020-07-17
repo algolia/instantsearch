@@ -1,4 +1,5 @@
-import { warning, capitalize } from '.';
+import capitalize from './capitalize';
+import { warning } from './logger';
 import { Index } from '../../widgets/index/index';
 import { Widget, IndexUiState } from '../../types';
 
@@ -7,7 +8,7 @@ import { Widget, IndexUiState } from '../../types';
 function getWidgetNames(connectorName: string): string[] {
   switch (connectorName) {
     case 'range':
-      return ['rangeInput', 'rangeSlider'];
+      return [];
 
     case 'menu':
       return ['menu', 'menuSelect'];
@@ -55,7 +56,7 @@ const stateToWidgetsMap: StateToWidgets = {
   },
   range: {
     connectors: ['connectRange'],
-    widgets: ['ais.rangeInput', 'ais.rangeSlider'],
+    widgets: ['ais.rangeInput', 'ais.rangeSlider', 'ais.range'],
   },
   toggle: {
     connectors: ['connectToggleRefinement'],

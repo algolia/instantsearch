@@ -99,6 +99,11 @@ describe('Pagination', () => {
   });
 
   it('should have all buttons disabled if there are no results', () => {
+    const localPager = new Paginator({
+      currentPage: 0,
+      total: 0,
+      padding: 3,
+    });
     const wrapper = mount(
       <Pagination
         {...defaultProps}
@@ -109,7 +114,9 @@ describe('Pagination', () => {
         currentPage={0}
         nbHits={0}
         nbPages={0}
-        pages={[0]}
+        pages={localPager.pages()}
+        isFirstPage={localPager.isFirstPage()}
+        isLastPage={localPager.isLastPage()}
       />
     );
 

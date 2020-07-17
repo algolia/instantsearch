@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/html';
 import { withHits } from '../.storybook/decorators';
 import voiceSearch from '../src/widgets/voice-search/voice-search';
 
-storiesOf('Basics|VoiceSearch', module)
+storiesOf('Basics/VoiceSearch', module)
   .add(
     'default',
     withHits(({ search, container }) => {

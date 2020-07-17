@@ -4,11 +4,12 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import { Renderer, RendererOptions, WidgetFactory } from '../../types';
-import createVoiceSearchHelper, {
+import { Connector } from '../../types';
+import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper';
+import {
+  CreateVoiceSearchHelper,
   VoiceListeningState,
-  ToggleListening,
-} from '../../lib/voiceSearchHelper';
+} from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',
@@ -16,39 +17,30 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type VoiceSearchConnectorParams = {
-  searchAsYouSpeak: boolean;
+  searchAsYouSpeak?: boolean;
   language?: string;
   additionalQueryParameters?: (params: {
     query: string;
   }) => PlainSearchParameters | void;
+  createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
-export type VoiceSearchRendererOptions<TVoiceSearchWidgetParams> = {
+export type VoiceSearchRendererOptions = {
   isBrowserSupported: boolean;
   isListening: boolean;
-  toggleListening: ToggleListening;
+  toggleListening: () => void;
   voiceListeningState: VoiceListeningState;
-} & RendererOptions<TVoiceSearchWidgetParams>;
+};
 
-export type VoiceSearchRenderer<TVoiceSearchWidgetParams> = Renderer<
-  VoiceSearchRendererOptions<
-    VoiceSearchConnectorParams & TVoiceSearchWidgetParams
-  >
+export type VoiceSearchConnector = Connector<
+  VoiceSearchRendererOptions,
+  VoiceSearchConnectorParams
 >;
 
-export type VoiceSearchWidgetFactory<TVoiceSearchWidgetParams> = WidgetFactory<
-  VoiceSearchConnectorParams & TVoiceSearchWidgetParams
->;
-
-export type VoiceSearchConnector = <TVoiceSearchWidgetParams>(
-  renderFn: VoiceSearchRenderer<TVoiceSearchWidgetParams>,
-  unmountFn?: () => void
-) => VoiceSearchWidgetFactory<TVoiceSearchWidgetParams>;
-
-const connectVoiceSearch: VoiceSearchConnector = (
+const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
   renderFn,
   unmountFn = noop
-) => {
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -58,7 +50,8 @@ const connectVoiceSearch: VoiceSearchConnector = (
       voiceSearchHelper: {
         isBrowserSupported,
         isListening,
-        toggleListening,
+        startListening,
+        stopListening,
         getState,
       },
     }): void => {
@@ -66,7 +59,16 @@ const connectVoiceSearch: VoiceSearchConnector = (
         {
           isBrowserSupported: isBrowserSupported(),
           isListening: isListening(),
-          toggleListening,
+          toggleListening() {
+            if (!isBrowserSupported()) {
+              return;
+            }
+            if (isListening()) {
+              stopListening();
+            } else {
+              startListening();
+            }
+          },
           voiceListeningState: getState(),
           widgetParams,
           instantSearchInstance,
@@ -79,6 +81,7 @@ const connectVoiceSearch: VoiceSearchConnector = (
       searchAsYouSpeak = false,
       language,
       additionalQueryParameters,
+      createVoiceSearchHelper = builtInCreateVoiceSearchHelper,
     } = widgetParams;
 
     return {

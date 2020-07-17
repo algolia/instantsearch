@@ -1,0 +1,4 @@
+{
+  "sandboxes": ["instantsearchjs-es-template-pcw1k"],
+  "buildCommand": "build:es"
+}

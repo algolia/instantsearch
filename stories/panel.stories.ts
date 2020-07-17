@@ -5,7 +5,7 @@ import refinementList from '../src/widgets/refinement-list/refinement-list';
 import rangeInput from '../src/widgets/range-input/range-input';
 import rangeSlider from '../src/widgets/range-slider/range-slider';
 
-storiesOf('Basics|Panel', module)
+storiesOf('Basics/Panel', module)
   .add(
     'default',
     withHits(({ search, container }) => {

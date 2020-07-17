@@ -9,13 +9,15 @@ import {
 } from '../../lib/utils';
 import { component } from '../../lib/suit';
 import connectVoiceSearch, {
-  VoiceSearchRenderer,
+  VoiceSearchConnectorParams,
+  VoiceSearchRendererOptions,
 } from '../../connectors/voice-search/connectVoiceSearch';
 import VoiceSearch, {
   VoiceSearchComponentCSSClasses,
 } from '../../components/VoiceSearch/VoiceSearch';
 import defaultTemplates from './defaultTemplates';
-import { WidgetFactory, Template } from '../../types';
+import { WidgetFactory, Template, Renderer } from '../../types';
+import { CreateVoiceSearchHelper } from '../../lib/voiceSearchHelper/types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'voice-search' });
 const suit = component('VoiceSearch');
@@ -40,7 +42,7 @@ export type VoiceSearchTemplates = {
   status: Template<VoiceSearchTemplateProps>;
 };
 
-type VoiceSearchWidgetParams = {
+export type VoiceSearchWidgetParams = {
   container: string | HTMLElement;
   cssClasses?: Partial<VoiceSearchCSSClasses>;
   templates?: Partial<VoiceSearchTemplates>;
@@ -49,6 +51,7 @@ type VoiceSearchWidgetParams = {
   additionalQueryParameters?: (params: {
     query: string;
   }) => PlainSearchParameters | void;
+  createVoiceSearchHelper?: CreateVoiceSearchHelper;
 };
 
 type VoiceSearchRendererWidgetParams = {
@@ -57,9 +60,15 @@ type VoiceSearchRendererWidgetParams = {
   templates: VoiceSearchTemplates;
 } & VoiceSearchWidgetParams;
 
-type VoiceSearch = WidgetFactory<VoiceSearchWidgetParams>;
+type VoiceSearch = WidgetFactory<
+  VoiceSearchConnectorParams,
+  VoiceSearchWidgetParams
+>;
 
-const renderer: VoiceSearchRenderer<VoiceSearchRendererWidgetParams> = ({
+const renderer: Renderer<
+  VoiceSearchRendererOptions,
+  VoiceSearchRendererWidgetParams
+> = ({
   isBrowserSupported,
   isListening,
   toggleListening,
@@ -89,6 +98,7 @@ const voiceSearch: VoiceSearch = (
     searchAsYouSpeak = false,
     language,
     additionalQueryParameters,
+    createVoiceSearchHelper,
   } = {} as VoiceSearchWidgetParams
 ) => {
   if (!container) {
@@ -114,6 +124,7 @@ const voiceSearch: VoiceSearch = (
     searchAsYouSpeak,
     language,
     additionalQueryParameters,
+    createVoiceSearchHelper,
   });
 };
 

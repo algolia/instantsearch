@@ -15,53 +15,75 @@ import {
   FacetRefinement,
   NumericRefinement,
 } from '../../lib/utils/getRefinements';
-import {
-  Unmounter,
-  WidgetFactory,
-  Renderer,
-  RendererOptions,
-} from '../../types';
+import { Connector, TransformItems, CreateURL } from '../../types';
 
-export type ConnectorRefinement = {
+export type CurrentRefinementsConnectorParamsRefinement = {
+  /**
+   * The attribute on which the refinement is applied.
+   */
   attribute: string;
+
+  /**
+   * The type of the refinement.
+   *
+   * It can be one of those: 'facet'|'exclude'|'disjunctive'|'hierarchical'|'numeric'|'query'|'tag'.
+   */
   type: string;
+
+  /**
+   * The raw value of the refinement.
+   */
   value: string | number;
+
+  /**
+   * The label of the refinement to display.
+   */
   label: string;
+
+  /**
+   * The value of the operator (only if applicable).
+   */
   operator?: string;
+
+  /**
+   * The number of found items (only if applicable).
+   */
   count?: number;
+
+  /**
+   * Whether the count is exhaustive (only if applicable).
+   */
   exhaustive?: boolean;
 };
 
-type ConnectorNumericRefinement = {
-  value: number;
-} & ConnectorRefinement;
-
-export type Item = {
+export type CurrentRefinementsConnectorParamsItem = {
+  /**
+   * The index name.
+   */
   indexName: string;
+
+  /**
+   * The attribute on which the refinement is applied.
+   */
   attribute: string;
+
+  /**
+   * The textual representation of this attribute.
+   */
   label: string;
-  refinements: ItemRefinement[];
-  refine(refinement: ItemRefinement): void;
+
+  /**
+   * Currently applied refinements.
+   */
+  refinements: CurrentRefinementsConnectorParamsRefinement[];
+
+  /**
+   * Removes the given refinement and triggers a new search.
+   */
+  refine(refinement: CurrentRefinementsConnectorParamsRefinement): void;
 };
 
-export type ItemRefinement = {
-  type:
-    | 'facet'
-    | 'exclude'
-    | 'disjunctive'
-    | 'hierarchical'
-    | 'numeric'
-    | 'query'
-    | 'tag';
-  attribute: string;
-  value: string;
-  label: string;
-  operator?: string;
-  count?: number;
-  exhaustive?: boolean;
-};
-
-type CurrentRefinementsConnectorParams = {
+export type CurrentRefinementsConnectorParams = {
   /**
    * The attributes to include in the widget (all by default).
    * Cannot be used with `excludedAttributes`.
@@ -69,6 +91,7 @@ type CurrentRefinementsConnectorParams = {
    * @default `[]`
    */
   includedAttributes?: string[];
+
   /**
    * The attributes to exclude from the widget.
    * Cannot be used with `includedAttributes`.
@@ -76,50 +99,44 @@ type CurrentRefinementsConnectorParams = {
    * @default `['query']`
    */
   excludedAttributes?: string[];
+
   /**
-   * Receives the items, and is called before displaying them.
-   * Should return a new array with the same shape as the original array.
-   * Useful for mapping over the items to transform, and remove or reorder them.
+   * Function to transform the items passed to the templates.
    */
-  transformItems?: (items: Item[]) => any;
+  transformItems?: TransformItems<CurrentRefinementsConnectorParamsItem>;
 };
 
-export type CurrentRefinementsRendererOptions<
-  TCurrentRefinementsWidgetParams
-> = {
-  items: Item[];
-  refine(refinement: ItemRefinement): void;
-  createURL(state: ItemRefinement): string;
-} & RendererOptions<TCurrentRefinementsWidgetParams>;
+export type CurrentRefinementsRendererOptions = {
+  /**
+   * All the currently refined items, grouped by attribute.
+   */
+  items: CurrentRefinementsConnectorParamsItem[];
 
-export type CurrentRefinementsRenderer<
-  TCurrentRefinementsWidgetParams
-> = Renderer<
-  CurrentRefinementsRendererOptions<
-    CurrentRefinementsConnectorParams & TCurrentRefinementsWidgetParams
-  >
->;
+  /**
+   * Removes the given refinement and triggers a new search.
+   */
+  refine(refinement: CurrentRefinementsConnectorParamsRefinement): void;
 
-export type CurrentRefinementsWidgetFactory<
-  TCurrentRefinementsWidgetParams
-> = WidgetFactory<
-  CurrentRefinementsConnectorParams & TCurrentRefinementsWidgetParams
->;
-
-export type CurrentRefinementsConnector = <TCurrentRefinementsWidgetParams>(
-  render: CurrentRefinementsRenderer<TCurrentRefinementsWidgetParams>,
-  unmount?: Unmounter
-) => CurrentRefinementsWidgetFactory<TCurrentRefinementsWidgetParams>;
+  /**
+   * Generates a URL for the next state.
+   */
+  createURL: CreateURL<CurrentRefinementsConnectorParamsRefinement>;
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'current-refinements',
   connector: true,
 });
 
-const connectCurrentRefinements: CurrentRefinementsConnector = (
+export type CurrentRefinementsConnector = Connector<
+  CurrentRefinementsRendererOptions,
+  CurrentRefinementsConnectorParams
+>;
+
+const connectCurrentRefinements: CurrentRefinementsConnector = function connectCurrentRefinements(
   renderFn,
   unmountFn = noop
-) => {
+) {
   checkRendering(renderFn, withUsage());
 
   return widgetParams => {
@@ -137,7 +154,8 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
     const {
       includedAttributes,
       excludedAttributes = ['query'],
-      transformItems = (items: Item[]) => items,
+      transformItems = (items: CurrentRefinementsConnectorParamsItem[]) =>
+        items,
     } = widgetParams || ({} as typeof widgetParams);
 
     return {
@@ -167,7 +185,9 @@ const connectCurrentRefinements: CurrentRefinementsConnector = (
       },
 
       render({ scopedResults, helper, createURL, instantSearchInstance }) {
-        const items = scopedResults.reduce<Item[]>((results, scopedResult) => {
+        const items = scopedResults.reduce<
+          CurrentRefinementsConnectorParamsItem[]
+        >((results, scopedResult) => {
           return results.concat(
             transformItems(
               getItems({
@@ -210,26 +230,24 @@ function getItems({
   helper: AlgoliaSearchHelper;
   includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];
   excludedAttributes: CurrentRefinementsConnectorParams['excludedAttributes'];
-}): Item[] {
+}): CurrentRefinementsConnectorParamsItem[] {
   const clearsQuery =
     (includedAttributes || []).indexOf('query') !== -1 ||
     (excludedAttributes || []).indexOf('query') === -1;
 
   const filterFunction = includedAttributes
-    ? (item: ConnectorRefinement) =>
+    ? (item: CurrentRefinementsConnectorParamsRefinement) =>
         includedAttributes.indexOf(item.attribute) !== -1
-    : (item: ConnectorRefinement) =>
+    : (item: CurrentRefinementsConnectorParamsRefinement) =>
         excludedAttributes!.indexOf(item.attribute) === -1;
 
   const items = getRefinements(results, helper.state, clearsQuery)
     .map(normalizeRefinement)
     .filter(filterFunction);
 
-  return items.reduce<any[]>(
+  return items.reduce<CurrentRefinementsConnectorParamsItem[]>(
     (allItems, currentItem) => [
-      ...allItems.filter(
-        (item: Item) => item.attribute !== currentItem.attribute
-      ),
+      ...allItems.filter(item => item.attribute !== currentItem.attribute),
       {
         indexName: helper.state.index,
         attribute: currentItem.attribute,
@@ -238,13 +256,9 @@ function getItems({
           .filter(result => result.attribute === currentItem.attribute)
           // We want to keep the order of refinements except the numeric ones.
           .sort((a, b) =>
-            a.type === 'numeric'
-              ? (a as ConnectorNumericRefinement).value -
-                (b as ConnectorNumericRefinement).value
-              : 0
+            a.type === 'numeric' ? (a.value as number) - (b.value as number) : 0
           ),
-        refine: (refinement: ItemRefinement) =>
-          clearRefinement(helper, refinement),
+        refine: refinement => clearRefinement(helper, refinement),
       },
     ],
     []
@@ -253,34 +267,34 @@ function getItems({
 
 function clearRefinementFromState(
   state: SearchParameters,
-  refinement: ItemRefinement
+  refinement: CurrentRefinementsConnectorParamsRefinement
 ): SearchParameters {
   switch (refinement.type) {
     case 'facet':
       return state.removeFacetRefinement(
         refinement.attribute,
-        refinement.value
+        String(refinement.value)
       );
     case 'disjunctive':
       return state.removeDisjunctiveFacetRefinement(
         refinement.attribute,
-        refinement.value
+        String(refinement.value)
       );
     case 'hierarchical':
       return state.removeHierarchicalFacetRefinement(refinement.attribute);
     case 'exclude':
       return state.removeExcludeRefinement(
         refinement.attribute,
-        refinement.value
+        String(refinement.value)
       );
     case 'numeric':
       return state.removeNumericRefinement(
         refinement.attribute,
         refinement.operator,
-        refinement.value
+        String(refinement.value)
       );
     case 'tag':
-      return state.removeTagRefinement(refinement.value);
+      return state.removeTagRefinement(String(refinement.value));
     case 'query':
       return state.setQueryParameter('query', '');
     default:
@@ -294,7 +308,7 @@ function clearRefinementFromState(
 
 function clearRefinement(
   helper: AlgoliaSearchHelper,
-  refinement: ItemRefinement
+  refinement: CurrentRefinementsConnectorParamsRefinement
 ): void {
   helper.setState(clearRefinementFromState(helper.state, refinement)).search();
 }
@@ -310,7 +324,9 @@ function getOperatorSymbol(operator: SearchParameters.Operator): string {
   }
 }
 
-function normalizeRefinement(refinement: Refinement): ConnectorRefinement {
+function normalizeRefinement(
+  refinement: Refinement
+): CurrentRefinementsConnectorParamsRefinement {
   const value =
     refinement.type === 'numeric' ? Number(refinement.name) : refinement.name;
   const label = (refinement as NumericRefinement).operator
@@ -319,7 +335,7 @@ function normalizeRefinement(refinement: Refinement): ConnectorRefinement {
       )} ${refinement.name}`
     : refinement.name;
 
-  const normalizedRefinement: ConnectorRefinement = {
+  const normalizedRefinement: CurrentRefinementsConnectorParamsRefinement = {
     attribute: refinement.attribute,
     type: refinement.type,
     value,

@@ -1,3 +1,57 @@
+# [4.7.0](https://github.com/algolia/instantsearch.js/compare/v4.6.0...v4.7.0) (2020-06-15)
+
+
+### Bug Fixes
+
+* **rangeInput:** clear input when refinement is cleared ([#4429](https://github.com/algolia/instantsearch.js/issues/4429)) ([a2c7663](https://github.com/algolia/instantsearch.js/commit/a2c7663424c5cd59e17ed841e12abaa19e524b14))
+
+
+### Features
+
+* **infiniteHits:** support cache ([#4431](https://github.com/algolia/instantsearch.js/issues/4431)) ([008c01c](https://github.com/algolia/instantsearch.js/commit/008c01c7cd09e4fcecdf53a4b299960de2b7a026))
+
+
+
+# [4.6.0](https://github.com/algolia/instantsearch.js/compare/v4.5.0...v4.6.0) (2020-06-08)
+
+
+### Bug Fixes
+
+* **connectPagination:** set `isLastPage` to `true` when no results ([#4422](https://github.com/algolia/instantsearch.js/issues/4422)) ([92bcc02](https://github.com/algolia/instantsearch.js/commit/92bcc0271927f0239083366fff920530977e32cd))
+* **rangeInput:** support typing float numbers ([#4418](https://github.com/algolia/instantsearch.js/issues/4418)) ([61b19b8](https://github.com/algolia/instantsearch.js/commit/61b19b87ae3afdabde8ef355e3b727059ae59911))
+
+
+### Features
+
+* **connectToggleRefinement:** add support for array values ([#4420](https://github.com/algolia/instantsearch.js/issues/4420)) ([fe1fbee](https://github.com/algolia/instantsearch.js/commit/fe1fbee4ad59c5f24831ed38a419906bbd7d2c15))
+
+
+
+# [4.5.0](https://github.com/algolia/instantsearch.js/compare/v4.4.1...v4.5.0) (2020-05-13)
+
+
+### Bug Fixes
+
+* **middleware:** subscribe middleware after `init` ([#4322](https://github.com/algolia/instantsearch.js/issues/4322)) ([f61fc4d](https://github.com/algolia/instantsearch.js/commit/f61fc4d133c118cfe8f2a2ba2e02d037a21cf8e0))
+
+
+### Features
+
+* **index:** support adding index widget with initial UI state ([#4359](https://github.com/algolia/instantsearch.js/issues/4359)) ([5ff4c83](https://github.com/algolia/instantsearch.js/commit/5ff4c8307c2be7bde7fb53aa9935a243e6532fe2))
+* **voice:** allow custom voice helper ([#4363](https://github.com/algolia/instantsearch.js/issues/4363)) ([4a00fa6](https://github.com/algolia/instantsearch.js/commit/4a00fa607354aefaae468735b590e237a2d46f9b))
+
+
+
+## [4.4.1](https://github.com/algolia/instantsearch.js/compare/v4.4.0...v4.4.1) (2020-04-29)
+
+
+### Bug Fixes
+
+* **range:** fix range calculation when step is set ([#4398](https://github.com/algolia/instantsearch.js/issues/4398)) ([a36b4e0](https://github.com/algolia/instantsearch.js/commit/a36b4e0a64afaa9dfa3048c802d010d569c821a9))
+* **router:** don't write an existing URL ([#4392](https://github.com/algolia/instantsearch.js/issues/4392)) ([ee6a9c6](https://github.com/algolia/instantsearch.js/commit/ee6a9c657c97adebba9fb9404eae454c3996b86d))
+
+
+
 # [4.4.0](https://github.com/algolia/instantsearch.js/compare/v4.3.1...v4.4.0) (2020-04-08)
 
 

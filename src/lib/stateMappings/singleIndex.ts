@@ -7,7 +7,7 @@ function getIndexStateWithoutConfigure(uiState: IndexUiState): IndexUiState {
 
 export default function singleIndexStateMapping(
   indexName: string
-): StateMapping<IndexUiState> {
+): StateMapping {
   return {
     stateToRoute(uiState) {
       return getIndexStateWithoutConfigure(uiState[indexName] || {});

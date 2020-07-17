@@ -4,6 +4,7 @@ import { withHits, withLifecycle } from '../.storybook/decorators';
 import createInfoBox from '../.storybook/utils/create-info-box';
 import algoliaPlaces from 'places.js';
 import places from '../src/widgets/places/places';
+import { configure } from '../src/widgets';
 import injectScript from 'scriptjs';
 
 const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
@@ -11,10 +12,10 @@ const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
 const withHitsAndConfigure = (fn, options) =>
   withHits(
     args => {
-      const { search, instantsearch } = args;
+      const { search } = args;
 
       search.addWidgets([
-        instantsearch.widgets.configure({
+        configure({
           aroundLatLngViaIP: true,
           hitsPerPage: 20,
         }),
@@ -35,7 +36,7 @@ const injectGoogleMaps = fn => {
   );
 };
 
-const stories = storiesOf('Results|GeoSearch', module);
+const stories = storiesOf('Results/GeoSearch', module);
 const initialZoom = 12;
 const initialPosition = {
   lat: 40.71,
@@ -78,7 +79,7 @@ stories
     withHitsAndConfigure(({ search, container, instantsearch }) =>
       injectGoogleMaps(() => {
         search.addWidgets([
-          instantsearch.widgets.configure({
+          configure({
             aroundLatLngViaIP: false,
             aroundLatLng: '37.7793, -122.419',
           }),
@@ -106,7 +107,7 @@ stories.add(
       container.appendChild(mapElement);
 
       search.addWidgets([
-        instantsearch.widgets.configure({
+        configure({
           aroundRadius: 20000,
         }),
 

@@ -7,8 +7,10 @@ import {
   index,
 } from '../src/widgets';
 import { connectHits, connectPagination } from '../src/connectors';
+import { HitsWidgetOptions } from '../src/widgets/hits/hits';
+import { AlgoliaHit } from '../src/types';
 
-storiesOf('Basics|ConfigureRelatedItems', module).add(
+storiesOf('Basics/ConfigureRelatedItems', module).add(
   'default',
   withHits(({ search, container }) => {
     const productContainer = document.createElement('div');
@@ -63,11 +65,11 @@ storiesOf('Basics|ConfigureRelatedItems', module).add(
       }
     );
 
-    const state = {
+    const state: { referenceHit: AlgoliaHit | null } = {
       referenceHit: null,
     };
 
-    const relatedHits = connectHits(
+    const relatedHits = connectHits<HitsWidgetOptions>(
       ({ hits: items, widgetParams, instantSearchInstance }) => {
         const [hit] = items;
 
@@ -78,7 +80,7 @@ storiesOf('Basics|ConfigureRelatedItems', module).add(
         state.referenceHit = hit;
 
         if (items.length === 0) {
-          widgetParams.container.innerHTML = '';
+          (widgetParams.container as HTMLElement).innerHTML = '';
         }
 
         instantSearchInstance.addWidgets([

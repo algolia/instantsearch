@@ -1,6 +1,9 @@
 /* eslint @typescript-eslint/camelcase: ["error", { allow: ["free_shipping"] }], complexity: off */
 
-import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+import {
+  history as historyRouter,
+  UiState,
+} from 'instantsearch.js/es/lib/routers';
 import {
   getFallbackHitsPerPageRoutingValue,
   getFallbackSortByRoutingValue,
@@ -19,29 +22,7 @@ type RouteState = {
   hitsPerPage?: string;
 };
 
-type UiState = {
-  query?: string;
-  page?: string;
-  hierarchicalMenu?: {
-    'hierarchicalCategories.lvl0'?: string[];
-  };
-  ratingMenu?: {
-    rating?: number;
-  };
-  range?: {
-    price?: string;
-  };
-  toggle?: {
-    free_shipping?: boolean;
-  };
-  refinementList?: {
-    brand?: string[];
-  };
-  sortBy?: string;
-  hitsPerPage?: number;
-};
-
-const routeStateDefaultValues = {
+const routeStateDefaultValues: RouteState = {
   query: '',
   page: '1',
   brands: undefined,
@@ -232,24 +213,33 @@ const getStateMapping = ({ indexName }) => ({
   },
 
   routeToState(routeState: RouteState): UiState {
+    const hierarchicalMenu: { [key: string]: string[] } = {};
+    if (routeState.category) {
+      hierarchicalMenu[
+        'hierarchicalCategories.lvl0'
+      ] = routeState.category.split('/');
+    }
+
+    const refinementList: { [key: string]: string[] } = {};
+    if (routeState.brands) {
+      refinementList.brand = routeState.brands;
+    }
+
+    const range: { [key: string]: string } = {};
+    if (routeState.price) {
+      range.price = routeState.price;
+    }
+
     return {
       [indexName]: {
         query: routeState.query,
-        page: routeState.page,
-        hierarchicalMenu: {
-          'hierarchicalCategories.lvl0':
-            (routeState.category && routeState.category.split('/')) ||
-            undefined,
-        },
-        refinementList: {
-          brand: routeState.brands,
-        },
+        page: Number(routeState.page),
+        hierarchicalMenu,
+        refinementList,
         ratingMenu: {
           rating: Number(routeState.rating),
         },
-        range: {
-          price: routeState.price,
-        },
+        range,
         toggle: {
           free_shipping: Boolean(routeState.free_shipping),
         },

@@ -2,15 +2,14 @@ import algoliasearchHelper, {
   SearchParameters,
   PlainSearchParameters,
 } from 'algoliasearch-helper';
-import { Unmounter, WidgetFactory, AlgoliaHit } from '../../types';
+import { AlgoliaHit, Connector } from '../../types';
 import {
   createDocumentationMessageGenerator,
   getObjectType,
   warning,
 } from '../../lib/utils';
 import connectConfigure, {
-  ConfigureRenderer,
-  ConfigureConnectorParams,
+  ConfigureRendererOptions,
 } from '../configure/connectConfigure';
 
 export type MatchingPatterns = {
@@ -42,17 +41,6 @@ export type ConfigureRelatedItemsConnectorParams = {
   ): PlainSearchParameters;
 };
 
-export type ConfigureRelatedItemsWidgetFactory<
-  TConfigureRelatedItemsWidgetParams
-> = WidgetFactory<
-  ConfigureRelatedItemsConnectorParams & TConfigureRelatedItemsWidgetParams
->;
-
-type ConfigureRelatedItemsConnector = <TConfigureRelatedItemsWidgetParams>(
-  render?: ConfigureRenderer<ConfigureConnectorParams>,
-  unmount?: Unmounter
-) => ConfigureRelatedItemsWidgetFactory<TConfigureRelatedItemsWidgetParams>;
-
 const withUsage = createDocumentationMessageGenerator({
   name: 'configure-related-items',
   connector: true,
@@ -66,10 +54,15 @@ function createOptionalFilter({
   return `${attributeName}:${attributeValue}<score=${attributeScore || 1}>`;
 }
 
-const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = (
+export type ConfigureRelatedItemsConnector = Connector<
+  ConfigureRendererOptions,
+  ConfigureRelatedItemsConnectorParams
+>;
+
+const connectConfigureRelatedItems: ConfigureRelatedItemsConnector = function connectConfigureRelatedItems(
   renderFn,
   unmountFn
-) => {
+) {
   return widgetParams => {
     const { hit, matchingPatterns, transformSearchParameters = x => x } =
       widgetParams || ({} as typeof widgetParams);
@@ -132,14 +125,8 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
     const searchParameters: PlainSearchParameters = {
       ...transformSearchParameters(
         new algoliasearchHelper.SearchParameters({
-          // @ts-ignore @TODO algoliasearch-helper@3.0.1 will contain the type
-          // `sumOrFiltersScores`.
-          // See https://github.com/algolia/algoliasearch-helper-js/pull/753
           sumOrFiltersScores: true,
           facetFilters: [`objectID:-${hit.objectID}`],
-          // @ts-ignore @TODO algoliasearch-helper@3.0.1 will contain the type
-          // `optionalFilters`.
-          // See https://github.com/algolia/algoliasearch-helper-js/pull/754
           optionalFilters,
         })
       ),
@@ -148,8 +135,9 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
     const makeConfigure = connectConfigure(renderFn, unmountFn);
 
     return {
-      ...makeConfigure({ searchParameters }),
-
+      // required, since widget parameters differ between these connectors
+      // and we don't want to have the parameters of configure here
+      ...makeConfigure({ searchParameters } as any),
       $$type: 'ais.configureRelatedItems',
     };
   };

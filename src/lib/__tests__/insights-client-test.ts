@@ -1,9 +1,10 @@
 import { withInsights, inferInsightsPayload } from '../insights';
 import { Widget, WidgetFactory } from '../../types';
 
-const connectHits = (renderFn: any, unmountFn: any): WidgetFactory<unknown> => (
-  widgetParams = {}
-): Widget => ({
+const connectHits = (
+  renderFn: any,
+  unmountFn: any
+): WidgetFactory<unknown, unknown> => (widgetParams = {}): Widget => ({
   init() {},
   render({ results, instantSearchInstance }) {
     const hits = results.hits;
