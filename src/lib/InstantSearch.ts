@@ -241,7 +241,7 @@ See ${createDocumentationLink({
 
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.EXPERIMENTAL_use(createRouter(routerOptions));
+      this.use(createRouter(routerOptions));
     }
   }
 
@@ -251,7 +251,7 @@ See ${createDocumentationLink({
    * This method is considered as experimental and is subject to change in
    * minor versions.
    */
-  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+  public use(...middleware: Middleware[]): this {
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = fn({ instantSearchInstance: this });
       this.middleware.push(newMiddleware);
@@ -268,6 +268,11 @@ See ${createDocumentationLink({
     }
 
     return this;
+  }
+
+  // This is an alias to keep for a while
+  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
+    return this.use(...middleware);
   }
 
   /**
