@@ -1,3 +1,18 @@
+# [6.7.0](https://github.com/algolia/react-instantsearch/compare/v6.5.0...v6.7.0) (2020-07-20)
+
+
+### Bug Fixes
+
+* **core:** appending successful index search results by returning new object reference ([#2953](https://github.com/algolia/react-instantsearch/issues/2953)) ([0a711a7](https://github.com/algolia/react-instantsearch/commit/0a711a7))
+* **ssr:** remove second instance of "query" in the response "params" for SSR ([#2945](https://github.com/algolia/react-instantsearch/issues/2945)) ([bf837c5](https://github.com/algolia/react-instantsearch/commit/bf837c5)), closes [#2941](https://github.com/algolia/react-instantsearch/issues/2941)
+
+
+### Features
+
+* **infinite-hits:** support cache ([#2921](https://github.com/algolia/react-instantsearch/issues/2921)) ([7b26adc](https://github.com/algolia/react-instantsearch/commit/7b26adc))
+
+
+
 # [6.6.0](https://github.com/algolia/react-instantsearch/compare/v6.5.0...v6.6.0) (2020-06-15)
 
 
