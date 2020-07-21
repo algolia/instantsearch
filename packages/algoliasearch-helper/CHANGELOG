@@ -1,3 +1,8 @@
+3.2.0 - 2020-07-21
+ * chore(deps): pin dependencies (#763) https://github.com/algolia/algoliasearch-helper-js/commit/3e755eb780d0258e6c5060f7112df785db63f6b5
+ * docs(readme): remove URL helpers from TOC https://github.com/algolia/algoliasearch-helper-js/commit/c49bf5398f77c7a185241777a213daf4bd27fcf7
+ * fix: accept all fields implicitly instead of the allow list (#779) https://github.com/algolia/algoliasearch-helper-js/commit/89a7aab6d0189fcc963832e418399aad98c159ec
+
 3.1.2 - 2020-06-02
  * fix(defaultsPure): don't change keys order, fix #761 (#762) https://github.com/algolia/algoliasearch-helper-js/commit/6b835ffd07742f2d6b314022cce6848f5cfecd4a, closes https://github.com/algolia/algoliasearch-helper-js/issues/761 https://github.com/algolia/algoliasearch-helper-js/issues/762
  * fix(types): add `resetPage` state method (#773) https://github.com/algolia/algoliasearch-helper-js/commit/e2a88a169d3b82f4fd756cb4b0e9317d5bcc6b9e
