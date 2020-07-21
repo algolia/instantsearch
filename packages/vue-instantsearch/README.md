@@ -33,6 +33,10 @@ yarn add vue-instantsearch
 
 To learn more about the usage, follow our [getting started guide][getting-started-guide].
 
+## Troubleshooting
+
+Encountering an issue? Before reaching out to support, we recommend heading to our [FAQ](https://www.algolia.com/doc/guides/building-search-ui/troubleshooting/faq/vue/) where you will find answers for the most common issues and gotchas with the library.
+
 ## Contributing, dev, release
 
 We welcome all contributors, from casual to regular. You are only
