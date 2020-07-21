@@ -212,6 +212,9 @@ const analytics: AnalyticsWidget = function analytics(widgetParams) {
   };
 
   return {
+    $$type: 'ais.analytics',
+    $$params: widgetParams,
+
     init() {
       if (triggerOnUIInteraction === true) {
         document.addEventListener('click', onClick);

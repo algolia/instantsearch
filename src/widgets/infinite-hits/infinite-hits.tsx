@@ -172,8 +172,8 @@ const renderer = ({
   );
 };
 
-const infiniteHits: InfiniteHitsWidget = (
-  {
+const infiniteHits: InfiniteHitsWidget = widgetOptions => {
+  const {
     container,
     escapeHTML,
     transformItems,
@@ -181,8 +181,8 @@ const infiniteHits: InfiniteHitsWidget = (
     cssClasses: userCssClasses = {},
     showPrevious,
     cache,
-  } = {} as InfiniteHitsWidgetParams
-) => {
+  } = widgetOptions || ({} as InfiniteHitsWidgetParams);
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -220,12 +220,15 @@ const infiniteHits: InfiniteHitsWidget = (
     connectInfiniteHits
   )(specializedRenderer, () => render(null, containerNode));
 
-  return makeInfiniteHits({
-    escapeHTML,
-    transformItems,
-    showPrevious,
-    cache,
-  });
+  return {
+    ...makeInfiniteHits({
+      escapeHTML,
+      transformItems,
+      showPrevious,
+      cache,
+    }),
+    $params: widgetOptions,
+  };
 };
 
 export default infiniteHits;

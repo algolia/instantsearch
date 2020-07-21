@@ -126,11 +126,14 @@ const clearRefinements: ClearRefinementsWidget = widgetOptions => {
     render(null, containerNode)
   );
 
-  return makeWidget({
-    includedAttributes,
-    excludedAttributes,
-    transformItems,
-  });
+  return {
+    ...makeWidget({
+      includedAttributes,
+      excludedAttributes,
+      transformItems,
+    }),
+    $$params: widgetOptions,
+  };
 };
 
 export default clearRefinements;

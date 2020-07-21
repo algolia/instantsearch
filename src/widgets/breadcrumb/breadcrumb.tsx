@@ -165,7 +165,10 @@ const breadcrumb: BreadcrumbWidget = function breadcrumb(widgetOptions) {
     render(null, containerNode)
   );
 
-  return makeBreadcrumb({ attributes, separator, rootPath, transformItems });
+  return {
+    ...makeBreadcrumb({ attributes, separator, rootPath, transformItems }),
+    $$params: widgetOptions,
+  };
 };
 
 export default breadcrumb;

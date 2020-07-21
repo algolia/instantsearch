@@ -23,6 +23,73 @@ import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
 
+type TelemetryWidget = {
+  type: number;
+  params: number[];
+  useConnector: boolean;
+};
+
+function telemetryClient() {
+  const payload: { widgets: TelemetryWidget[] } = {
+    widgets: [],
+  };
+
+  return {
+    updatePayload({ type, params, useConnector }: TelemetryWidget) {
+      const existingWidget = payload.widgets.find(
+        payloadWidget => payloadWidget.type === type
+      );
+      if (existingWidget) {
+        existingWidget.params = [
+          ...new Set([...existingWidget.params, ...params]),
+        ];
+        existingWidget.useConnector =
+          existingWidget.useConnector || useConnector;
+      } else {
+        payload.widgets.push({ type, params, useConnector });
+      }
+    },
+    // updatePayload(widget: TelemetryWidget) {
+    //   if (!widget.params) {
+    //     console.log(`No params for ${widget.type}`, widget);
+    //   }
+    //   const type = WidgetType[widget.type]
+    //     ? WidgetType[widget.type].value
+    //     : WidgetType['ais.custom'].value;
+    //   const widgetParamsKeys = widget.params ? Object.keys(widget.params) : [];
+    //   const params = widgetParamsKeys
+    //     .filter(key => {
+    //       if (widget.params![key] === undefined) {
+    //         return false;
+    //       }
+    //       if (WidgetParams[key] === undefined) {
+    //         console.error(`${key} is missing in props list`);
+    //         return false;
+    //       }
+    //       return true;
+    //     })
+    //     .map(key => WidgetParams[key].value);
+    //   const useConnector = !widget.params;
+
+    //   const existingWidget = payload.widgets.find(
+    //     payloadWidget => payloadWidget.type === type
+    //   );
+    //   if (existingWidget) {
+    //     existingWidget.params = [
+    //       ...new Set([...(existingWidget.params || []), ...params]),
+    //     ];
+    //     existingWidget.useConnector =
+    //       existingWidget.useConnector || useConnector;
+    //   } else {
+    //     payload.widgets.push({ type, params, useConnector });
+    //   }
+    // },
+    getPayload() {
+      return payload;
+    },
+  };
+}
+
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
 });
@@ -215,7 +282,7 @@ See ${createDocumentationLink({
 
     this.client = searchClient;
     this.insightsClient = insightsClient;
-
+    this.telemetry = telemetryClient();
     this.indexName = indexName;
     this.helper = null;
     this.mainHelper = null;

@@ -20,9 +20,10 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'query-rule-context',
 });
 
-const queryRuleContext: QueryRuleContext = (
-  { trackedFilters, transformRuleContexts } = {} as QueryRuleContextWidgetParams
-) => {
+const queryRuleContext: QueryRuleContext = widgetOptions => {
+  const { trackedFilters, transformRuleContexts } =
+    widgetOptions || ({} as QueryRuleContextWidgetParams);
+
   if (!trackedFilters) {
     throw new Error(withUsage('The `trackedFilters` option is required.'));
   }
@@ -34,6 +35,7 @@ const queryRuleContext: QueryRuleContext = (
     }),
 
     $$type: 'ais.queryRuleContext',
+    $$params: widgetOptions,
   };
 };
 
