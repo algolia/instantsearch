@@ -270,7 +270,7 @@ See ${createDocumentationLink({
     return this;
   }
 
-  // This is an alias to keep for a while
+  // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
   public EXPERIMENTAL_use(...middleware: Middleware[]): this {
     return this.use(...middleware);
   }
