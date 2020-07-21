@@ -56,6 +56,7 @@ const placesWidget: WidgetFactory<{}, PlacesWidgetOptions> = (
 
   return {
     $$type: 'ais.places',
+    $$params: widgetOptions,
 
     init({ helper }) {
       placesAutocomplete.on('change', (eventOptions: ChangeEvent) => {

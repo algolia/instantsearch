@@ -151,7 +151,10 @@ const hits: HitsWidget = function hits(widgetOptions) {
     render(null, containerNode)
   );
 
-  return makeHits({ escapeHTML, transformItems });
+  return {
+    ...makeHits({ escapeHTML, transformItems }),
+    $$params: widgetOptions,
+  };
 };
 
 export default hits;

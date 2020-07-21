@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+enum WidgetType {
+  ais.custom = 0;
+  ais.instantSearch = 1;
+  ais.autocomplete = 2;
+  ais.breadcrumb = 3;
+  ais.clearRefinements = 4;
+  ais.configure = 5;
+  ais.configureRelatedItems = 6;
+  ais.currentRefinements = 7;
+  ais.geoSearch = 8;
+  ais.hierarchicalMenu = 9;
+  ais.hits = 10;
+  ais.hitsPerPage = 11;
+  ais.index = 12;
+  ais.infiniteHits = 13;
+  ais.menu = 14;
+  ais.numericMenu = 15;
+  ais.pagination = 16;
+  ais.places = 17;
+  ais.poweredBy = 18;
+  ais.queryRules = 19;
+  ais.queryRuleCustomData = 20;
+  ais.queryRuleContext = 21;
+  ais.range = 22;
+  ais.rangeInput = 23;
+  ais.rangeSlider = 24;
+  ais.ratingMenu = 25;
+  ais.refinementList = 26;
+  ais.searchBox = 27;
+  ais.sortBy = 28;
+  ais.stats = 29;
+  ais.toggleRefinement = 30;
+  ais.voiceSearch = 31;
+}
+
+enum WidgetParams {
+  indexName = 1000;
+  searchClient = 1001;
+  numberLocale = 1002;
+  searchFunction = 1003;
+  initialUiState = 1004;
+  onStateChange = 1005;
+  stalledSearchDelay = 1006;
+  routing = 1007;
+  insightsClient = 1008;
+  container = 1009;
+  placeholder = 1010;
+  autofocus = 1011;
+  searchAsYouType = 1012;
+  showReset = 1013;
+  showSubmit = 1014;
+  showLoadingIndicator = 1015;
+  queryHook = 1016;
+  templates = 1017;
+  cssClasses = 1018;
+  escapeHTML = 1019;
+  transformItems = 1020;
+  attributes = 1021;
+  showMore = 1022;
+  attribute = 1023;
+  escapeFacetValues = 1024;
+  searchParameters = 1025;
+  on = 1026;
+  items = 1027;
+  padding = 1028;
+  precision = 1029;
+  max = 1030;
+  searchable = 1031;
+  searchablePlaceholder = 1032;
+  searchableShowReset = 1033;
+  attributesToSnippet = 1034;
+  snippetEllipsisText = 1035;
+  removeWordsIfNoResults = 1036;
+  scrollTo = 1037;
+  showFirst = 1038;
+  showLast = 1039;
+  pips = 1040;
+  tooltips = 1041;
+}
+
+message Widget {
+  WidgetType type = 600 [default = UNKNOWN];
+  repeated WidgetParams params = 601;
+  bool useConnector = 602 [default = false];
+}
+
+message Schema {
+  repeated Widget widgets = 501;
+  int32 oversize = 502;
+}

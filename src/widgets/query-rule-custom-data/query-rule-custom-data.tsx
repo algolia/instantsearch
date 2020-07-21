@@ -58,14 +58,14 @@ const renderer: Renderer<
   );
 };
 
-const queryRuleCustomData: QueryRuleCustomDataWidget = (
-  {
+const queryRuleCustomData: QueryRuleCustomDataWidget = widgetOptions => {
+  const {
     container,
     cssClasses: userCssClasses = {} as QueryRuleCustomDataCSSClasses,
     templates: userTemplates = {},
     transformItems = items => items,
-  } = {} as QueryRuleCustomDataWidgetParams
-) => {
+  } = widgetOptions || ({} as QueryRuleCustomDataWidgetParams);
+
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
   }
@@ -96,6 +96,7 @@ const queryRuleCustomData: QueryRuleCustomDataWidget = (
     }),
 
     $$type: 'ais.queryRuleCustomData',
+    $$params: widgetOptions,
   };
 };
 
