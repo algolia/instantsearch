@@ -16,7 +16,7 @@ const configureRelatedItems: ConfigureRelatedItemsWidget = function configureRel
 
   return {
     ...makeWidget(widgetParams),
-    $$parms: widgetParams,
+    $$params: widgetParams,
   };
 };
 
