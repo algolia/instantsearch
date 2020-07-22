@@ -334,10 +334,12 @@ const index = (props: IndexProps): Index => {
         widgets.forEach(widget => {
           if (localInstantSearchInstance && widget.init) {
             localInstantSearchInstance.telemetry.updatePayload({
-              type: WidgetType[widget.$$type] || WidgetType['ais.custom'],
+              type:
+                WidgetType[widget.$$type]?.value ||
+                WidgetType['ais.custom'].value,
               params: widget.$$params
                 ? Object.keys(widget.$$params)
-                    .map(param => WidgetParams[param])
+                    .map(param => WidgetParams[param]?.value)
                     .filter(Boolean)
                 : [],
               useConnector: !widget.$$params,
@@ -408,9 +410,9 @@ const index = (props: IndexProps): Index => {
 
     init({ instantSearchInstance, parent, uiState }: IndexInitOptions) {
       instantSearchInstance.telemetry.updatePayload({
-        type: WidgetType['ais.index'],
+        type: WidgetType['ais.index'].value,
         params: Object.keys(props)
-          .map(param => WidgetParams[param])
+          .map(param => WidgetParams[param]?.value)
           .filter(Boolean),
         useConnector: false,
       });
@@ -503,21 +505,22 @@ const index = (props: IndexProps): Index => {
         const newTelemetryHeader = window.btoa(
           String.fromCharCode.apply(null, arrayBuffer)
         );
-        // console.log(payload);
 
-        // const mappedPayload = payload.widgets.map(widget => ({
-        //   type: Object.keys(WidgetType).find(
-        //     type => WidgetType[type] === widget.type
-        //   ),
-        //   params: widget.params.map(paramId =>
-        //     Object.keys(WidgetParams).find(
-        //       type => WidgetParams[type] === paramId
-        //     )
-        //   ),
-        //   useConnector: widget.useConnector,
-        // }));
+        const mappedPayload = payload.widgets.map(widget => ({
+          type: Object.keys(WidgetType).find(
+            type => WidgetType[type].value === widget.type
+          ),
+          params: widget.params.map(paramId =>
+            Object.keys(WidgetParams).find(
+              type => WidgetParams[type].value === paramId
+            )
+          ),
+          useConnector: widget.useConnector,
+        }));
 
-        // console.log(mappedPayload);
+        console.log('Telemetry payload', payload);
+        console.log('Telemetry mapped payload', mappedPayload);
+        console.log('Telemetry header', newTelemetryHeader);
 
         if (telemetryHeader !== newTelemetryHeader) {
           telemetryHeader = newTelemetryHeader;
@@ -557,10 +560,12 @@ const index = (props: IndexProps): Index => {
       localWidgets.forEach(widget => {
         if (widget.init) {
           instantSearchInstance.telemetry.updatePayload({
-            type: WidgetType[widget.$$type] || WidgetType['ais.custom'],
+            type:
+              WidgetType[widget.$$type]?.value ||
+              WidgetType['ais.custom'].value,
             params: widget.$$params
               ? Object.keys(widget.$$params)
-                  .map(param => WidgetParams[param])
+                  .map(param => WidgetParams[param]?.value)
                   .filter(Boolean)
               : [],
             useConnector: !widget.$$params,
