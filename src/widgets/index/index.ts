@@ -333,7 +333,7 @@ const index = (props: IndexProps): Index => {
 
         widgets.forEach(widget => {
           if (localInstantSearchInstance && widget.init) {
-            instantSearchInstance.telemetry.updatePayload({
+            localInstantSearchInstance.telemetry.updatePayload({
               type: WidgetType[widget.$$type] || WidgetType['ais.custom'],
               params: widget.$$params
                 ? Object.keys(widget.$$params)
