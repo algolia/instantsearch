@@ -209,30 +209,41 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
         const isRefined =
           on &&
           on.every(v => helper.state.isDisjunctiveFacetRefined(attribute, v));
-        const offValue = off === undefined ? false : off;
+        const offValue = toArray(off === undefined ? false : off);
         const allFacetValues = results.getFacetValues(attribute) || [];
 
-        const onData = find(
-          allFacetValues,
-          ({ name }) => name === unescapeRefinement(on)
-        );
+        const onData =
+          on &&
+          on
+            .map(v =>
+              find(allFacetValues, ({ name }) => name === unescapeRefinement(v))
+            )
+            .filter(v => v !== undefined);
         const onFacetValue = {
-          isRefined: onData !== undefined ? onData.isRefined : false,
-          count: onData === undefined ? null : onData.count,
+          isRefined: onData.length > 0 ? onData.every(v => v.isRefined) : false,
+          count:
+            onData.length === 0
+              ? null
+              : onData.reduce((acc, v) => acc + v.count, 0),
         };
 
         const offData = hasAnOffValue
-          ? find(
-              allFacetValues,
-              ({ name }) => name === unescapeRefinement(offValue)
-            )
-          : undefined;
+          ? offValue
+              .map(v =>
+                find(
+                  allFacetValues,
+                  ({ name }) => name === unescapeRefinement(v)
+                )
+              )
+              .filter(v => v !== undefined)
+          : [];
         const offFacetValue = {
-          isRefined: offData !== undefined ? offData.isRefined : false,
+          isRefined:
+            offData.length > 0 ? offData.every(v => v.isRefined) : false,
           count:
-            offData === undefined
+            offData.length === 0
               ? allFacetValues.reduce((total, { count }) => total + count, 0)
-              : offData.count,
+              : offData.reduce((acc, v) => acc + v.count, 0),
         };
 
         // what will we show by default,
