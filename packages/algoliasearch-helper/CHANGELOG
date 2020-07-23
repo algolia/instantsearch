@@ -1,3 +1,6 @@
+3.2.1 - 2020-07-23
+ * fix(defaultsPure): fix the regression where the order was wrong with addFacetRefinement (#786) https://github.com/algolia/algoliasearch-helper-js/commit/b54fddb9196b2dc19b6c259306262f2e1da2cf78, closes https://github.com/algolia/algoliasearch-helper-js/issues/786
+
 3.2.0 - 2020-07-21
  * chore(deps): pin dependencies (#763) https://github.com/algolia/algoliasearch-helper-js/commit/3e755eb780d0258e6c5060f7112df785db63f6b5
  * docs(readme): remove URL helpers from TOC https://github.com/algolia/algoliasearch-helper-js/commit/c49bf5398f77c7a185241777a213daf4bd27fcf7
