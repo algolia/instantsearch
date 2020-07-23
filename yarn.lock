@@ -3604,10 +3604,10 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.5.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-algoliasearch-helper@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-3.2.0.tgz#79e6a5dcf36dae226001fd0ffeca8ff42e072bd0"
-  integrity sha512-L2VoqjI0mGHNqWXt57389aINNAlBMyg4jABD7+FVAbGVpkh27sCqsJXmh6k0NWxhXNu6VW//uzCA3j3JJ3eB5A==
+algoliasearch-helper@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-3.2.1.tgz#8082b4bd9d0966318926b9bafd63d46e6460e02e"
+  integrity sha512-qf/1HVsx24JQUxMz5djeBPDc4Zmnf23VrC2FT8PrZEclcBmZqD9ZGv7mhOVUr8pTo1hWU6knl7KM+WnorzIxag==
   dependencies:
     events "^1.1.1"
 
