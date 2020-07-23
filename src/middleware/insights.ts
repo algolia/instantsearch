@@ -9,7 +9,11 @@ export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient } = props;
-
+  if (!insightsClient) {
+    throw new Error(
+      'passing insightsClient to instantsearch is required for insightsMiddleware',
+    );
+  }
   return ({ instantSearchInstance }) => {
     return {
       onStateChange() {},
