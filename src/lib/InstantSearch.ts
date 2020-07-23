@@ -246,25 +246,6 @@ See ${createDocumentationLink({
   }
 
   /**
-   * Updates userToken automatically.
-   *
-   * When insightsClient is given, this method sets up an event listener
-   * so that every time userToken is set to insightsClient, it can set it to
-   * searchParameter, too.
-   */
-  private setupUserTokenUpdater(helper: AlgoliaSearchHelper) {
-    (this.insightsClient as Function)(
-      'onSetUserToken',
-      (userToken: string) => {
-        helper.setQueryParameter('userToken', userToken);
-      },
-      {
-        immediate: true,
-      }
-    );
-  }
-
-  /**
    * Hooks a middleware into the InstantSearch lifecycle.
    *
    * This method is considered as experimental and is subject to change in
@@ -449,10 +430,6 @@ See ${createDocumentationLink({
       parent: null,
       uiState: this._initialUiState,
     });
-
-    if (this.insightsClient) {
-      this.setupUserTokenUpdater(this.mainIndex.getHelper()!);
-    }
 
     this.middleware.forEach(m => {
       m.subscribe();

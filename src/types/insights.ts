@@ -10,10 +10,20 @@ export type InsightsClientPayload = {
   positions?: number[];
 };
 
-export type InsightsClient = (
+export type InsightsSendEvent = (
   method: InsightsClientMethod,
   payload: InsightsClientPayload
 ) => void;
+
+export type InsightsOnUserTokenChangeMethod = 'onUserTokenChange';
+
+export type InsightsOnUserTokenChange = (
+  method: InsightsOnUserTokenChangeMethod,
+  callback: (userToken: string) => void,
+  options?: { immediate?: boolean }
+) => void;
+
+export type InsightsClient = InsightsSendEvent & InsightsOnUserTokenChange;
 
 export type InsightsClientWrapper = (
   method: InsightsClientMethod,
