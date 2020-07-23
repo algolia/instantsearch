@@ -33,7 +33,7 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
         );
       },
       unsubscribe() {
-        insightsClient('onUserTokenChange', () => {});
+        insightsClient('onUserTokenChange', undefined);
       },
     };
   };
