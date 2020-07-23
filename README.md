@@ -125,6 +125,10 @@ We support the **last two versions of major browsers** (Chrome, Edge, Firefox, S
 
 Please refer to the [browser support](https://www.algolia.com/doc/guides/building-search-ui/installation/js/#browser-support) section in the documentation to use InstantSearch.js on other browsers.
 
+## Troubleshooting
+
+Encountering an issue? Before reaching out to support, we recommend heading to our [FAQ](https://www.algolia.com/doc/guides/building-search-ui/troubleshooting/faq/js/) where you will find answers for the most common issues and gotchas with the library.
+
 ## Contributing
 
 We welcome all contributors, from casual to regular 💙

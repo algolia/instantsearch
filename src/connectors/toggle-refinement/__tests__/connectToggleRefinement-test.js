@@ -152,6 +152,117 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     }
   });
 
+  it('Renders during init and render with array value', () => {
+    // test that the dummyRendering is called with the isFirstRendering
+    // flag set accordingly
+    const rendering = jest.fn();
+    const makeWidget = connectToggleRefinement(rendering);
+
+    const attribute = 'whatever';
+    const widget = makeWidget({
+      attribute,
+      on: ['a', 'b'],
+      off: ['c'],
+    });
+
+    const config = widget.getWidgetSearchParameters(new SearchParameters({}), {
+      uiState: {},
+    });
+    expect(config).toEqual(
+      new SearchParameters({
+        disjunctiveFacets: [attribute],
+        disjunctiveFacetsRefinements: {
+          [attribute]: ['c'],
+        },
+      })
+    );
+
+    const helper = jsHelper({}, '', config);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    {
+      // should call the rendering once with isFirstRendering to true
+      expect(rendering).toHaveBeenCalledTimes(1);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
+      expect(isFirstRendering).toBe(true);
+
+      // should provide good values for the first rendering
+      const { value, widgetParams } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
+      expect(value).toEqual({
+        name: 'whatever',
+        count: null,
+        isRefined: false,
+        onFacetValue: {
+          isRefined: false,
+          count: 0,
+        },
+        offFacetValue: {
+          isRefined: true,
+          count: 0,
+        },
+      });
+
+      expect(widgetParams).toEqual({
+        attribute,
+        on: ['a', 'b'],
+        off: ['c'],
+      });
+    }
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            whatever: {
+              a: 45,
+              b: 20,
+              c: 20,
+            },
+          },
+          nbHits: 85,
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
+      expect(rendering).toHaveBeenCalledTimes(2);
+      const isFirstRendering =
+        rendering.mock.calls[rendering.mock.calls.length - 1][1];
+      expect(isFirstRendering).toBe(false);
+
+      // should provide good values after the first search
+      const { value } = rendering.mock.calls[
+        rendering.mock.calls.length - 1
+      ][0];
+      expect(value).toEqual({
+        name: 'whatever',
+        count: 65,
+        isRefined: false,
+        onFacetValue: {
+          isRefined: false,
+          count: 65,
+        },
+        offFacetValue: {
+          isRefined: true,
+          count: 20,
+        },
+      });
+    }
+  });
+
   it('does not throw without the unmount function', () => {
     const rendering = () => {};
     const makeWidget = connectToggleRefinement(rendering);
