@@ -1,7 +1,6 @@
 export type InsightsClientMethod =
   | 'clickedObjectIDsAfterSearch'
   | 'convertedObjectIDsAfterSearch';
-
 export type InsightsClientPayload = {
   eventName: string;
   queryID: string;
@@ -9,21 +8,35 @@ export type InsightsClientPayload = {
   objectIDs: string[];
   positions?: number[];
 };
-
 export type InsightsSendEvent = (
   method: InsightsClientMethod,
   payload: InsightsClientPayload
 ) => void;
 
-export type InsightsOnUserTokenChangeMethod = 'onUserTokenChange';
-
 export type InsightsOnUserTokenChange = (
-  method: InsightsOnUserTokenChangeMethod,
-  callback: (userToken: string) => void,
+  method: 'onUserTokenChange',
+  callback?: (userToken: string) => void,
   options?: { immediate?: boolean }
 ) => void;
 
-export type InsightsClient = InsightsSendEvent & InsightsOnUserTokenChange;
+export type InsightsGet = (
+  method: '_get',
+  key: string,
+  callback: (value: any) => void
+) => void;
+
+export type InsightsInit = (
+  method: 'init',
+  options: {
+    appId: string;
+    apiKey: string;
+  }
+) => void;
+
+export type InsightsClient = InsightsSendEvent &
+  InsightsOnUserTokenChange &
+  InsightsGet &
+  InsightsInit;
 
 export type InsightsClientWrapper = (
   method: InsightsClientMethod,
