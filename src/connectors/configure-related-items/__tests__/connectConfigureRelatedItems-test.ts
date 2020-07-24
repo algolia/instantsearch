@@ -90,7 +90,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
           render: expect.any(Function),
           dispose: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
-          getWidgetState: expect.any(Function),
+          getWidgetUiState: expect.any(Function),
         })
       );
     });

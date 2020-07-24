@@ -258,7 +258,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
         return stateWithoutDisjunctive;
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const {
           '>=': min = [],
           '<=': max = [],

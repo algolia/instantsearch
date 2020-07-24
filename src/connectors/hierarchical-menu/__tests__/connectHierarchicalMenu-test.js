@@ -61,7 +61,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           render: expect.any(Function),
           dispose: expect.any(Function),
 
-          getWidgetState: expect.any(Function),
+          getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
       );
@@ -425,7 +425,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
       const render = () => {};
       const makeWidget = connectHierarchicalMenu(render);
@@ -434,7 +434,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -466,7 +466,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -502,7 +502,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         attributes: ['categoriesLvl0', 'categoriesLvl1'],
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {
           hierarchicalMenu: {
             countryLvl0: ['TopLevelCountry', 'SubLevelCountry'],

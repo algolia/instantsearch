@@ -147,7 +147,7 @@ search.addWidgets([
         );
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const query = searchParameters.query || '';
 
         if (query === '' || (uiState && uiState.query === query)) {

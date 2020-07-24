@@ -268,7 +268,7 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
         return state.setQueryParameter('insideBoundingBox', undefined);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const boundingBox = searchParameters.insideBoundingBox;
 
         if (

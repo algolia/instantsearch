@@ -153,7 +153,7 @@ export default function connectSortBy(renderFn, unmountFn = noop) {
         return state.setIndex(this.initialIndex);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const currentIndex = searchParameters.index;
         const isInitialIndex = currentIndex === this.initialIndex;
 

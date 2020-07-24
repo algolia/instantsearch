@@ -529,7 +529,7 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
     this.mainIndex.refreshUiState();
     const nextUiState =
       typeof uiState === 'function'
-        ? uiState(this.mainIndex.getWidgetState({}))
+        ? uiState(this.mainIndex.getWidgetUiState({}))
         : uiState;
 
     const setIndexHelperState = (indexWidget: Index) => {
@@ -559,7 +559,7 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
   };
 
   public onInternalStateChange = () => {
-    const nextUiState = this.mainIndex.getWidgetState({});
+    const nextUiState = this.mainIndex.getWidgetUiState({});
 
     this.middleware.forEach(m => {
       m.onStateChange({

@@ -171,7 +171,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         return state.clearRefinements(attribute);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const values = searchParameters.getNumericRefinements(attribute);
 
         const equal = values['='] && values['='][0];

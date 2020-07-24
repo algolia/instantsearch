@@ -180,7 +180,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         return state.removeDisjunctiveFacet(attribute);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const value = this._getRefinedStar(searchParameters);
 
         if (typeof value !== 'number') {

@@ -218,7 +218,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           .setQueryParameter('maxValuesPerFacet', undefined);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const path = searchParameters.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );

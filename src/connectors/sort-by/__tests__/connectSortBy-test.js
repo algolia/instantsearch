@@ -57,7 +57,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getWidgetState: expect.any(Function),
+          getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
       );
@@ -358,12 +358,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       return [widget, helper, refine];
     };
 
-    describe('getWidgetState', () => {
+    describe('getWidgetUiState', () => {
       test('should return the same `uiState` when the default value is selected', () => {
         const [widget, helper] = getInitializedWidget();
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -377,7 +377,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         refine('priceASC');
 
         const uiStateBefore = {};
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -392,14 +392,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         refine('priceASC');
 
-        const uiStateBefore = widget.getWidgetState(
+        const uiStateBefore = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
             helper,
           }
         );
-        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
           searchParameters: helper.state,
           helper,
         });
@@ -438,7 +438,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetState(
+        const actual = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
@@ -484,7 +484,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           })
         );
 
-        const actual = widget.getWidgetState(
+        const actual = widget.getWidgetUiState(
           {},
           {
             searchParameters: helper.state,
