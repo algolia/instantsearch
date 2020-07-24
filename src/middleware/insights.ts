@@ -11,9 +11,7 @@ export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient } = props;
   if (!insightsClient) {
-    throw new Error(
-      'passing insightsClient to instantsearch is required for insightsMiddleware'
-    );
+    throw new Error('The `insightsClient` option is required.');
   }
   return ({ instantSearchInstance }) => {
     const setUserToken = (userToken?: string) => {
