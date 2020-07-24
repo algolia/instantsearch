@@ -7,28 +7,19 @@ import {
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
 
-export type InitOptions = {
-  instantSearchInstance: InstantSearch;
-  parent: Index | null;
-  uiState: UiState;
-  state: SearchParameters;
-  helper: Helper;
-  templatesConfig: object;
-  createURL(state: SearchParameters): string;
-};
-
 export type ScopedResult = {
   indexId: string;
   results: SearchResults;
   helper: Helper;
 };
 
-export type RenderOptions = {
+type SharedRenderOptions = {
   instantSearchInstance: InstantSearch;
+  parent: Index | null;
   templatesConfig: object;
-  results: SearchResults;
   scopedResults: ScopedResult[];
   state: SearchParameters;
+  renderState: IndexRenderState;
   helper: Helper;
   searchMetadata: {
     isSearchStalled: boolean;
@@ -36,12 +27,21 @@ export type RenderOptions = {
   createURL(state: SearchParameters): string;
 };
 
+export type InitOptions = SharedRenderOptions & {
+  uiState: UiState;
+  results: undefined;
+};
+
+export type RenderOptions = SharedRenderOptions & {
+  results: SearchResults;
+};
+
 export type DisposeOptions = {
   helper: Helper;
   state: SearchParameters;
 };
 
-export type WidgetStateOptions = {
+export type WidgetUiStateOptions = {
   searchParameters: SearchParameters;
   helper: Helper;
 };
@@ -119,6 +119,31 @@ export type UiState = {
   [indexId: string]: IndexUiState;
 };
 
+export type RenderState = {
+  [indexId: string]: IndexRenderState;
+};
+
+export type IndexRenderState = Partial<{
+  searchBox: WidgetRenderState<
+    {
+      query: string;
+      refine(query: string): void;
+      clear(): void;
+      isSearchStalled: boolean;
+    },
+    {
+      queryHook?(query: string, refine: (query: string) => void);
+    }
+  >;
+}>;
+
+type WidgetRenderState<
+  TWidgetRenderState,
+  TWidgetParams
+> = TWidgetRenderState & {
+  widgetParams: TWidgetParams;
+};
+
 /**
  * Widgets are the building blocks of InstantSearch.js. Any valid widget must
  * have at least a `render` or a `init` function.
@@ -169,6 +194,13 @@ export type Widget = {
    */
   dispose?(options: DisposeOptions): SearchParameters | void;
   /**
+   * Returns the render params to pass to the render function.
+   */
+  getWidgetRenderState?(
+    renderState: IndexRenderState,
+    widgetRenderStateOptions: InitOptions | RenderOptions
+  ): IndexRenderState;
+  /**
    * This function is required for a widget to be taken in account for routing.
    * It will derive a uiState for this widget based on the existing uiState and
    * the search parameters applied.
@@ -177,7 +209,7 @@ export type Widget = {
    */
   getWidgetUiState?(
     uiState: IndexUiState,
-    widgetStateOptions: WidgetStateOptions
+    widgetUiStateOptions: WidgetUiStateOptions
   ): IndexUiState;
   /**
    * This function is required for a widget to be taken in account for routing.
@@ -189,7 +221,7 @@ export type Widget = {
    */
   getWidgetState?(
     uiState: IndexUiState,
-    widgetStateOptions: WidgetStateOptions
+    widgetStateOptions: WidgetUiStateOptions
   ): IndexUiState;
   /**
    * This function is required for a widget to behave correctly when a URL is

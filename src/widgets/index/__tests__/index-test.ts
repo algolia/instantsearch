@@ -11,7 +11,7 @@ import {
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
-import { Widget } from '../../../types';
+import { Widget, InstantSearch } from '../../../types';
 import index from '../index';
 import { warning } from '../../../lib/utils';
 
@@ -251,8 +251,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             uiState: {},
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
+            renderState: {},
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
+            results: undefined,
+            scopedResults: [],
+            searchMetadata: {
+              isSearchStalled: true,
+            },
           });
         });
       });
@@ -303,8 +309,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             },
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
+            renderState: {},
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
+            results: undefined,
+            scopedResults: [],
+            searchMetadata: {
+              isSearchStalled: true,
+            },
           });
         });
 
@@ -1002,8 +1014,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           uiState: {},
           helper: instance.getHelper(),
           state: instance.getHelper()!.state,
+          renderState: {},
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
+          results: undefined,
+          scopedResults: [],
+          searchMetadata: {
+            isSearchStalled: instantSearchInstance._isSearchStalled,
+          },
         });
       });
     });
@@ -1893,6 +1911,187 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         },
       });
     });
+
+    test('stores the render state on the instance', () => {
+      expect.assertions(2);
+
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      const searchIndex1 = index({ indexName: 'indexName1' });
+      const searchBoxRefine = jest.fn();
+      const searchBoxClear = jest.fn();
+      const paginationRefine = jest.fn();
+      const searchBox = createSearchBox({
+        getWidgetRenderState: jest.fn(
+          (renderState, { helper, searchMetadata }) => {
+            return {
+              ...renderState,
+              searchBox: {
+                query: helper.state.query || '',
+                refine: searchBoxRefine,
+                clear: searchBoxClear,
+                isSearchStalled: searchMetadata.isSearchStalled,
+                widgetParams: {},
+              },
+            };
+          }
+        ),
+      });
+      const pagination = createPagination({
+        getWidgetRenderState: jest.fn((renderState, { state }) => {
+          return {
+            ...renderState,
+            pagination: {
+              refine: paginationRefine,
+              page: state.page,
+              widgetParams: {},
+            },
+          };
+        }),
+      });
+      const renderStateWidget = {
+        init({ renderState }) {
+          expect(renderState).toEqual({
+            indexName: {
+              searchBox: {
+                query: '',
+                refine: searchBoxRefine,
+                clear: searchBoxClear,
+                isSearchStalled: false,
+                widgetParams: {},
+              },
+            },
+            indexName1: {
+              searchBox: {
+                query: '',
+                refine: searchBoxRefine,
+                clear: searchBoxClear,
+                isSearchStalled: false,
+                widgetParams: {},
+              },
+              pagination: {
+                refine: paginationRefine,
+                page: 0,
+                widgetParams: {},
+              },
+            },
+          });
+        },
+        render({ renderState }) {
+          expect(renderState).toEqual({
+            indexName: {
+              searchBox: {
+                query: '',
+                refine: searchBoxRefine,
+                clear: searchBoxClear,
+                isSearchStalled: false,
+                widgetParams: {},
+              },
+            },
+            indexName1: {
+              searchBox: {
+                query: '',
+                refine: searchBoxRefine,
+                clear: searchBoxClear,
+                isSearchStalled: false,
+                widgetParams: {},
+              },
+              pagination: {
+                refine: paginationRefine,
+                page: 0,
+                widgetParams: {},
+              },
+            },
+          });
+        },
+      };
+
+      search.addWidgets([
+        searchBox,
+        searchIndex1.addWidgets([searchBox, pagination, renderStateWidget]),
+      ]);
+      search.start();
+    });
+
+    test('calls `getWidgetRenderState` with the index render state', () => {
+      const searchIndex = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, 'indexName', {});
+      const instantSearchInstance = createInstantSearch({ mainHelper });
+      const searchBox = createSearchBox({
+        getWidgetRenderState: jest.fn(
+          (renderState, { helper, searchMetadata }) => {
+            return {
+              ...renderState,
+              searchBox: {
+                query: helper.state.query || '',
+                refine: () => {},
+                clear: () => {},
+                isSearchStalled: searchMetadata.isSearchStalled,
+                widgetParams: {},
+              },
+            };
+          }
+        ),
+      });
+      const pagination = createPagination({
+        getWidgetRenderState: jest.fn((renderState, { state }) => {
+          return {
+            ...renderState,
+            pagination: {
+              refine: () => {},
+              page: state.page,
+              widgetParams: {},
+            },
+          };
+        }),
+      });
+
+      searchIndex.addWidgets([searchBox, pagination]);
+
+      searchIndex.init(
+        createInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      expect(searchBox.getWidgetRenderState).toHaveBeenCalledTimes(1);
+      expect(searchBox.getWidgetRenderState).toHaveBeenCalledWith(
+        {},
+        expect.objectContaining({
+          uiState: {},
+          helper: expect.anything(),
+          state: expect.anything(),
+          parent: expect.anything(),
+          instantSearchInstance,
+          renderState: {},
+          templatesConfig: instantSearchInstance.templatesConfig,
+          createURL: expect.any(Function),
+          results: undefined,
+          scopedResults: [],
+          searchMetadata: {
+            isSearchStalled: instantSearchInstance._isSearchStalled,
+          },
+        })
+      );
+
+      expect(pagination.getWidgetRenderState).toHaveBeenCalledTimes(1);
+      expect(pagination.getWidgetRenderState).toHaveBeenCalledWith(
+        {
+          searchBox: {
+            clear: expect.any(Function),
+            isSearchStalled: true,
+            query: '',
+            refine: expect.any(Function),
+            widgetParams: {},
+          },
+        },
+        expect.anything()
+      );
+    });
   });
 
   describe('render', () => {
@@ -1936,6 +2135,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.render).toHaveBeenCalledTimes(1);
         expect(widget.render).toHaveBeenCalledWith({
           instantSearchInstance,
+          parent: instance,
           results: expect.any(algoliasearchHelper.SearchResults),
           scopedResults: [
             {
@@ -1945,6 +2145,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             },
           ],
           state: expect.any(algoliasearchHelper.SearchParameters),
+          renderState: {},
           helper: instance.getHelper(),
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),

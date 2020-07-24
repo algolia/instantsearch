@@ -3,6 +3,12 @@ import algoliasearchHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import connectSearchBox from '../connectSearchBox';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
+import { InstantSearch } from '../../../types';
+import { createSearchClient } from '../../../../test/mock/createSearchClient';
 
 describe('connectSearchBox', () => {
   const getInitializedWidget = (config = {}) => {
@@ -16,11 +22,12 @@ describe('connectSearchBox', () => {
     const helper = algoliasearchHelper({}, '', initialConfig);
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const { refine } = renderFn.mock.calls[0][0];
 
@@ -51,7 +58,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-
+          getWidgetRenderState: expect.any(Function),
           getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
@@ -69,11 +76,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     const helper = algoliasearchHelper({});
     helper.search = () => {};
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -84,13 +92,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       true
     );
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-      searchMetadata: { isSearchStalled: false },
-    });
+    widget.render(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [{}]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -110,11 +118,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     {
       const { refine, query } = renderFn.mock.calls[0][0];
@@ -125,13 +134,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-      searchMetadata: { isSearchStalled: false },
-    });
+    widget.render(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [{}]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     {
       const { refine, query } = renderFn.mock.calls[1][0];
@@ -153,11 +162,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     {
       expect(helper.state.query).toBe('bup');
@@ -168,13 +178,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       refine('bip'); // triggers a search
     }
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-      searchMetadata: { isSearchStalled: false },
-    });
+    widget.render(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [{}]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     {
       expect(helper.state.query).toBe('bip');
@@ -200,11 +210,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     const helper = algoliasearchHelper({});
     helper.search = jest.fn();
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     {
       const { refine } = renderFn.mock.calls[0][0];
@@ -224,13 +235,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     letSearchThrough = false;
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-      searchMetadata: { isSearchStalled: false },
-    });
+    widget.render(
+      createRenderOptions({
+        results: new SearchResults(helper.state, [{}]),
+        state: helper.state,
+        helper,
+      })
+    );
 
     {
       const { refine } = renderFn.mock.calls[1][0];
@@ -248,42 +259,27 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     }
   });
 
-  it('should always provide the same refine() and clear() function reference', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectSearchBox(renderFn);
-    const widget = makeWidget();
-
-    const helper = algoliasearchHelper({});
-    helper.search = () => {};
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
+  it('provides the same `refine` and `clear` function references', done => {
+    const initRenderState = {};
+    const createSearchBox = connectSearchBox(
+      ({ refine, clear }, isFirstRender) => {
+        if (isFirstRender) {
+          initRenderState.refine = refine;
+          initRenderState.clear = clear;
+        } else {
+          expect(refine).toBe(initRenderState.refine);
+          expect(clear).toBe(initRenderState.clear);
+          done();
+        }
+      }
+    );
+    const search = new InstantSearch({
+      searchClient: createSearchClient(),
+      indexName: 'indexName',
     });
 
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-      searchMetadata: { isSearchStalled: false },
-    });
-
-    const firstRenderOptions = renderFn.mock.calls[0][0];
-
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-      searchMetadata: { isSearchStalled: false },
-    });
-
-    const secondRenderOptions = renderFn.mock.calls[1][0];
-
-    expect(firstRenderOptions.clear).toBe(secondRenderOptions.clear);
-    expect(firstRenderOptions.refine).toBe(secondRenderOptions.refine);
+    search.addWidgets([createSearchBox()]);
+    search.start();
   });
 
   it('should clear on init as well', () => {
@@ -297,17 +293,107 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
     expect(helper.state.query).toBe('foobar');
 
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-    });
+    widget.init(
+      createInitOptions({
+        helper,
+        state: helper.state,
+      })
+    );
 
     const { clear } = renderFn.mock.calls[0][0];
     clear();
 
     expect(helper.state.query).toBe('');
     expect(helper.search).toHaveBeenCalledTimes(1);
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the render state with default render options', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const queryHook = jest.fn();
+      const createSearchBox = connectSearchBox(renderFn, unmountFn);
+      const searchBox = createSearchBox({
+        queryHook,
+      });
+
+      const renderState1 = searchBox.getWidgetRenderState(
+        {},
+        createInitOptions()
+      );
+
+      expect(renderState1.searchBox).toEqual({
+        clear: expect.any(Function),
+        isSearchStalled: false,
+        query: '',
+        refine: undefined,
+        widgetParams: { queryHook },
+      });
+
+      searchBox.init(createInitOptions());
+
+      const renderState2 = searchBox.getWidgetRenderState(
+        {},
+        createRenderOptions()
+      );
+
+      expect(renderState2.searchBox).toEqual({
+        clear: renderState2.searchBox.clear,
+        isSearchStalled: false,
+        query: '',
+        refine: expect.any(Function),
+        widgetParams: {
+          queryHook,
+        },
+      });
+    });
+
+    test('returns the render state with a query', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createSearchBox = connectSearchBox(renderFn, unmountFn);
+      const searchBox = createSearchBox();
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        query: 'query',
+      });
+
+      searchBox.init(createInitOptions());
+
+      const renderState = searchBox.getWidgetRenderState(
+        {},
+        createRenderOptions({ helper })
+      );
+
+      expect(renderState.searchBox).toEqual({
+        clear: expect.any(Function),
+        isSearchStalled: false,
+        query: 'query',
+        refine: expect.any(Function),
+        widgetParams: {},
+      });
+    });
+
+    test('returns the render state with stalled search', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createSearchBox = connectSearchBox(renderFn, unmountFn);
+      const searchBox = createSearchBox();
+
+      searchBox.init(createInitOptions());
+
+      const renderState = searchBox.getWidgetRenderState(
+        {},
+        createRenderOptions({ searchMetadata: { isSearchStalled: true } })
+      );
+
+      expect(renderState.searchBox).toEqual({
+        clear: expect.any(Function),
+        isSearchStalled: true,
+        query: '',
+        refine: expect.any(Function),
+        widgetParams: {},
+      });
+    });
   });
 
   describe('dispose', () => {

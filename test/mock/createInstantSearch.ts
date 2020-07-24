@@ -29,6 +29,7 @@ export const createInstantSearch = (
     templatesConfig: {},
     insightsClient: null,
     middleware: [],
+    renderState: {},
     scheduleStalledRender: defer(jest.fn()),
     scheduleSearch: defer(jest.fn()),
     scheduleRender: defer(jest.fn()),
