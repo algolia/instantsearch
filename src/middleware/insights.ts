@@ -14,6 +14,13 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
     throw new Error('The `insightsClient` option is required.');
   }
   return ({ instantSearchInstance }) => {
+    insightsClient('_get', '_hasCredentials', (hasCredentials: boolean) => {
+      if (!hasCredentials) {
+        const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
+        insightsClient('init', { appId, apiKey });
+      }
+    });
+
     return {
       onStateChange() {},
       subscribe() {
@@ -31,37 +38,28 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
           .getHelper()!
           .setQueryParameter('clickAnalytics', true);
 
-        insightsClient('_get', '_hasCredentials', (hasCredentials: boolean) => {
-          if (!hasCredentials) {
-            const [appId, apiKey] = getAppIdAndApiKey(
-              instantSearchInstance.client
-            );
-            insightsClient('init', { appId, apiKey });
-          }
+        // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
+        // We can set it as userToken.
+        setUserTokenToSearch(getInsightsAnonymousUserToken());
 
-          // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
-          // We can set it as userToken.
-          setUserTokenToSearch(getInsightsAnonymousUserToken());
-
-          if (Array.isArray((insightsClient as any).queue)) {
-            // Context: The umd build of search-insights is asynchronously loaded by the snippet.
-            //
-            // When user called `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
-            // it is stored in `aa.queue` and we are reading it to set userToken to search call.
-            // This queue is meant to be consumed whenever `search-insights` is loaded and when it runs `processQueue()`.
-            // But the reason why we handle it here is to prevent the first search API from being triggered
-            // without userToken because search-insights is not loaded yet.
-            (insightsClient as any).queue.forEach(([method, firstArgument]) => {
-              if (method === 'setUserToken') {
-                setUserTokenToSearch(firstArgument);
-              }
-            });
-          }
-
-          // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
-          insightsClient('onUserTokenChange', setUserTokenToSearch, {
-            immediate: true,
+        if (Array.isArray((insightsClient as any).queue)) {
+          // Context: The umd build of search-insights is asynchronously loaded by the snippet.
+          //
+          // When user called `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
+          // it is stored in `aa.queue` and we are reading it to set userToken to search call.
+          // This queue is meant to be consumed whenever `search-insights` is loaded and when it runs `processQueue()`.
+          // But the reason why we handle it here is to prevent the first search API from being triggered
+          // without userToken because search-insights is not loaded yet.
+          (insightsClient as any).queue.forEach(([method, firstArgument]) => {
+            if (method === 'setUserToken') {
+              setUserTokenToSearch(firstArgument);
+            }
           });
+        }
+
+        // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
+        insightsClient('onUserTokenChange', setUserTokenToSearch, {
+          immediate: true,
         });
       },
       unsubscribe() {
