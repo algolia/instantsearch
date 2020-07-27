@@ -579,7 +579,7 @@ describe('start', () => {
 
     search.start();
 
-    expect(search.mainIndex.getWidgetState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState()).toEqual({
       indexName: {
         refinementList: {
           brand: ['Apple'],
@@ -612,7 +612,7 @@ describe('start', () => {
 
     search.start();
 
-    expect(search.mainIndex.getWidgetState()).toEqual({
+    expect(search.mainIndex.getWidgetUiState()).toEqual({
       indexName: {
         hierarchicalMenu: {
           'hierarchicalCategories.lvl0': ['Cell Phones'],

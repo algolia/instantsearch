@@ -175,6 +175,18 @@ export type Widget = {
    * @param uiState current state
    * @param widgetStateOptions extra information to calculate uiState
    */
+  getWidgetUiState?(
+    uiState: IndexUiState,
+    widgetStateOptions: WidgetStateOptions
+  ): IndexUiState;
+  /**
+   * This function is required for a widget to be taken in account for routing.
+   * It will derive a uiState for this widget based on the existing uiState and
+   * the search parameters applied.
+   * @deprecated Use `getWidgetUiState` instead.
+   * @param uiState current state
+   * @param widgetStateOptions extra information to calculate uiState
+   */
   getWidgetState?(
     uiState: IndexUiState,
     widgetStateOptions: WidgetStateOptions

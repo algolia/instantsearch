@@ -67,7 +67,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           init: expect.any(Function),
           render: expect.any(Function),
           dispose: expect.any(Function),
-          getWidgetState: expect.any(Function),
+          getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
       );
@@ -335,7 +335,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
       const render = () => {};
       const makeWidget = connectRatingMenu(render);
@@ -344,7 +344,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -369,7 +369,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -398,7 +398,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
         attribute: 'grade',
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {
           ratingMenu: {
             rating: 4,

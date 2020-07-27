@@ -382,7 +382,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
         return withoutMaxValuesPerFacet.removeDisjunctiveFacet(attribute);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const values =
           operator === 'or'
             ? searchParameters.getDisjunctiveRefinements(attribute)

@@ -52,7 +52,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
           render: expect.any(Function),
           dispose: expect.any(Function),
 
-          getWidgetState: expect.any(Function),
+          getWidgetUiState: expect.any(Function),
           getWidgetSearchParameters: expect.any(Function),
         })
       );
@@ -355,11 +355,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('should give back the object unmodified if the default value is selected', () => {
       const [widget, helper] = getInitializedWidget();
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -370,7 +370,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       const [widget, helper, refine] = getInitializedWidget();
       refine('some query');
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -382,14 +382,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     test('should give back the same instance if the value is alreay in the uiState', () => {
       const [widget, helper, refine] = getInitializedWidget();
       refine('query');
-      const uiStateBefore = widget.getWidgetState(
+      const uiStateBefore = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
           helper,
         }
       );
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });

@@ -23,6 +23,7 @@ import {
   createDocumentationMessageGenerator,
   resolveSearchParameters,
   mergeSearchParameters,
+  warning,
 } from '../../lib/utils';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -57,7 +58,11 @@ export type Index = Widget & {
   init(options: IndexInitOptions): void;
   render(options: IndexRenderOptions): void;
   dispose(): void;
+  /**
+   * @deprecated
+   */
   getWidgetState(uiState: UiState): UiState;
+  getWidgetUiState(uiState: UiState): UiState;
   getWidgetSearchParameters(
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
@@ -106,11 +111,15 @@ function getLocalWidgetsState(
   return widgets
     .filter(widget => !isIndexWidget(widget))
     .reduce<IndexUiState>((uiState, widget) => {
-      if (!widget.getWidgetState) {
+      if (!widget.getWidgetUiState && !widget.getWidgetState) {
         return uiState;
       }
 
-      return widget.getWidgetState(uiState, widgetStateOptions);
+      if (widget.getWidgetUiState) {
+        return widget.getWidgetUiState(uiState, widgetStateOptions);
+      }
+
+      return widget.getWidgetState!(uiState, widgetStateOptions);
     }, initialUiState);
 }
 
@@ -351,7 +360,7 @@ const index = (props: IndexProps): Index => {
       helper.search = () => {
         if (instantSearchInstance.onStateChange) {
           instantSearchInstance.onStateChange!({
-            uiState: instantSearchInstance.mainIndex.getWidgetState({}),
+            uiState: instantSearchInstance.mainIndex.getWidgetUiState({}),
             setUiState: instantSearchInstance.setUiState.bind(
               instantSearchInstance
             ),
@@ -426,6 +435,11 @@ const index = (props: IndexProps): Index => {
       });
 
       localWidgets.forEach(widget => {
+        warning(
+          !widget.getWidgetState,
+          'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+        );
+
         if (widget.init) {
           widget.init({
             uiState,
@@ -516,17 +530,26 @@ const index = (props: IndexProps): Index => {
       derivedHelper = null;
     },
 
-    getWidgetState(uiState: UiState) {
+    getWidgetUiState(uiState: UiState) {
       return localWidgets
         .filter(isIndexWidget)
         .reduce<UiState>(
           (previousUiState, innerIndex) =>
-            innerIndex.getWidgetState(previousUiState),
+            innerIndex.getWidgetUiState(previousUiState),
           {
             ...uiState,
             [this.getIndexId()]: localUiState,
           }
         );
+    },
+
+    getWidgetState(uiState: UiState) {
+      warning(
+        false,
+        'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+      );
+
+      return this.getWidgetUiState(uiState);
     },
 
     getWidgetSearchParameters(searchParameters, { uiState }) {

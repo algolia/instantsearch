@@ -223,7 +223,7 @@ You may want to add another entry to the \`items\` option with this value.`
         return state.setQueryParameter('hitsPerPage', undefined);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const hitsPerPage = searchParameters.hitsPerPage;
 
         if (hitsPerPage === undefined || hitsPerPage === defaultItem.value) {

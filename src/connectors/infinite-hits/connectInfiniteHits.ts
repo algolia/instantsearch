@@ -301,7 +301,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         );
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const page = searchParameters.page || 0;
 
         if (!page) {
