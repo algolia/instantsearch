@@ -1,6 +1,7 @@
 import { Middleware } from '.';
 import { InsightsClient } from '../types';
 import { getInsightsAnonymousUserToken } from '../helpers';
+import { warning } from '../lib/utils';
 
 export type InsightsProps = {
   insightsClient: InsightsClient;
@@ -17,6 +18,20 @@ export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
     insightsClient('_get', '_hasCredentials', (hasCredentials: boolean) => {
       if (!hasCredentials) {
         const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
+        insightsClient('_get', '_userToken', (userToken: string) => {
+          warning(
+            !userToken,
+            `You set userToken before \`createInsightsMiddleware()\` and it is ignored.
+Please set the token after the \`createInsightsMiddleware()\` call.
+
+createInsightsMiddleware({ /* ... */ });
+
+insightsClient('setUserToken', 'your-user-token');
+// or
+aa('setUserToken', 'your-user-token');
+            `
+          );
+        });
         insightsClient('init', { appId, apiKey });
       }
     });
