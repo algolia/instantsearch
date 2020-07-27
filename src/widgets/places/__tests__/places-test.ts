@@ -373,7 +373,7 @@ describe('places', () => {
       });
     });
 
-    describe('getWidgetState', () => {
+    describe('getWidgetUiState', () => {
       test('returns the default state empty', () => {
         const searchClient = createSearchClient();
         const helper = createFakeHelper(searchClient);
@@ -382,7 +382,7 @@ describe('places', () => {
         });
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState!(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -399,7 +399,7 @@ describe('places', () => {
         });
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState!(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -434,7 +434,7 @@ describe('places', () => {
         });
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState!(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -466,7 +466,7 @@ describe('places', () => {
         clearEventListener();
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState!(previousUiState, {
           helper,
           searchParameters: helper.state,
         });
@@ -494,7 +494,7 @@ describe('places', () => {
         clearEventListener();
 
         const previousUiState = {};
-        const nextUiState = widget.getWidgetState!(previousUiState, {
+        const nextUiState = widget.getWidgetUiState!(previousUiState, {
           helper,
           searchParameters: helper.state,
         });

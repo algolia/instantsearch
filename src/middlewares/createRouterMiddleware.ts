@@ -42,7 +42,7 @@ export const createRouterMiddleware: RoutingManager = (props = {}) => {
           ...acc,
           [indexId]: nextState[indexId],
         }),
-        instantSearchInstance.mainIndex.getWidgetState({})
+        instantSearchInstance.mainIndex.getWidgetUiState({})
       );
 
       const route = stateMapping.stateToRoute(uiState);

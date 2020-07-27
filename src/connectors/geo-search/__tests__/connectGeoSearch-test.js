@@ -60,7 +60,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       init: expect.any(Function),
       render: expect.any(Function),
       dispose: expect.any(Function),
-      getWidgetState: expect.any(Function),
+      getWidgetUiState: expect.any(Function),
       getWidgetSearchParameters: expect.any(Function),
     });
   });
@@ -1222,12 +1222,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     it('expect to return the uiState unmodified if no boundingBox is selected', () => {
       const [widget, helper] = getInitializedWidget();
 
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -1244,7 +1244,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       });
 
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -1264,7 +1264,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         southWest: { lat: 12, lng: 14 },
       });
 
-      const uiStateBefore = widget.getWidgetState(
+      const uiStateBefore = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -1272,7 +1272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         }
       );
 
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });

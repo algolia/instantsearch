@@ -166,7 +166,7 @@ const connectVoiceSearch: VoiceSearchConnector = function connectVoiceSearch(
         return newState.setQueryParameter('query', undefined);
       },
 
-      getWidgetState(uiState, { searchParameters }) {
+      getWidgetUiState(uiState, { searchParameters }) {
         const query = searchParameters.query || '';
 
         if (!query) {

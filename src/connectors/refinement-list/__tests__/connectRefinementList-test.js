@@ -99,7 +99,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         render: expect.any(Function),
         dispose: expect.any(Function),
 
-        getWidgetState: expect.any(Function),
+        getWidgetUiState: expect.any(Function),
         getWidgetSearchParameters: expect.any(Function),
       })
     );
@@ -2087,7 +2087,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('returns the `uiState` empty', () => {
       const render = () => {};
       const makeWidget = connectRefinementList(render);
@@ -2096,7 +2096,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -2120,7 +2120,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
@@ -2148,7 +2148,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'brand',
       });
 
-      const actual = widget.getWidgetState(
+      const actual = widget.getWidgetUiState(
         {
           refinementList: {
             categories: ['Phone', 'Tablet'],

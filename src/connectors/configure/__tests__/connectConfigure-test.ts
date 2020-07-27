@@ -240,7 +240,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     it('adds default parameters', () => {
       const makeWidget = connectConfigure(noop);
       const widget = makeWidget({
@@ -250,7 +250,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { analytics: true },
       });
@@ -271,7 +271,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       refine({ analytics: false });
 
       expect(
-        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { analytics: false },
       });
@@ -292,7 +292,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       refine({ query: 'unsafe toys' });
 
       expect(
-        widget.getWidgetState!({}, { helper, searchParameters: helper.state })
+        widget.getWidgetUiState!({}, { helper, searchParameters: helper.state })
       ).toEqual({
         configure: { query: 'unsafe toys' },
       });
@@ -307,7 +307,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetState!(
+        widget.getWidgetUiState!(
           { configure: { queryType: 'prefixAll' } },
           { helper, searchParameters: helper.state }
         )
@@ -325,7 +325,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       });
 
       expect(
-        widget.getWidgetState!(
+        widget.getWidgetUiState!(
           { configure: { analytics: false } },
           { helper, searchParameters: helper.state }
         )
