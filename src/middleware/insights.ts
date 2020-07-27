@@ -1,19 +1,32 @@
 import { Middleware } from '.';
 import { InsightsClient } from '../types';
 import { getInsightsAnonymousUserToken } from '../helpers';
-import { warning } from '../lib/utils';
+import { warning, noop } from '../lib/utils';
 
 export type InsightsProps = {
-  insightsClient: InsightsClient;
+  insightsClient: false | InsightsClient;
 };
 
 export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
-  const { insightsClient } = props;
-  if (!insightsClient) {
-    throw new Error('The `insightsClient` option is required.');
+  const { insightsClient: _insightsClient } = props;
+  if (_insightsClient !== false && !_insightsClient) {
+    if (__DEV__) {
+      throw new Error(
+        "The `insightsClient` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to `false`."
+      );
+    } else {
+      throw new Error(
+        'The `insightsClient` option is required. To disable, set it to `false`.'
+      );
+    }
   }
+
+  const hasInsightsClient = Boolean(_insightsClient);
+  const insightsClient =
+    _insightsClient === false ? (noop as InsightsClient) : _insightsClient;
+
   return ({ instantSearchInstance }) => {
     insightsClient('_get', '_hasCredentials', (hasCredentials: boolean) => {
       if (!hasCredentials) {
@@ -53,9 +66,11 @@ aa('setUserToken', 'your-user-token');
           .getHelper()!
           .setQueryParameter('clickAnalytics', true);
 
-        // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
-        // We can set it as userToken.
-        setUserTokenToSearch(getInsightsAnonymousUserToken());
+        if (hasInsightsClient) {
+          // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
+          // We can set it as userToken.
+          setUserTokenToSearch(getInsightsAnonymousUserToken());
+        }
 
         if (Array.isArray((insightsClient as any).queue)) {
           // Context: The umd build of search-insights is asynchronously loaded by the snippet.
