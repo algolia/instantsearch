@@ -139,7 +139,7 @@ const connectConfigure: ConfigureConnector = function connectConfigure(
         );
       },
 
-      getWidgetState(uiState) {
+      getWidgetUiState(uiState) {
         return {
           ...uiState,
           configure: {

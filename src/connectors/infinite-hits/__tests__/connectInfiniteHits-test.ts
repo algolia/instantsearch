@@ -46,7 +46,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         render: expect.any(Function),
         dispose: expect.any(Function),
 
-        getWidgetState: expect.any(Function),
+        getWidgetUiState: expect.any(Function),
         getWidgetSearchParameters: expect.any(Function),
       })
     );
@@ -878,7 +878,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('returns the `uiState` with `page` when `showPrevious` not given', () => {
       const render = jest.fn();
       const makeWidget = connectInfiniteHits(render);
@@ -887,7 +887,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       });
       const widget = makeWidget({});
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -910,7 +910,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -931,7 +931,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,
@@ -954,7 +954,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         showPrevious: true,
       });
 
-      const actual = widget.getWidgetState!(
+      const actual = widget.getWidgetUiState!(
         {},
         {
           searchParameters: helper.state,

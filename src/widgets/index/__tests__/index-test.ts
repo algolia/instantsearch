@@ -13,6 +13,7 @@ import {
 import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 import { Widget } from '../../../types';
 import index from '../index';
+import { warning } from '../../../lib/utils';
 
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
@@ -20,7 +21,7 @@ describe('index', () => {
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('query', undefined);
       }),
-      getWidgetState: jest.fn((uiState, { searchParameters }) => {
+      getWidgetUiState: jest.fn((uiState, { searchParameters }) => {
         if (!searchParameters.query) {
           return uiState;
         }
@@ -41,7 +42,7 @@ describe('index', () => {
       dispose: jest.fn(({ state }) => {
         return state.setQueryParameter('page', undefined);
       }),
-      getWidgetState: jest.fn((uiState, { searchParameters }) => {
+      getWidgetUiState: jest.fn((uiState, { searchParameters }) => {
         if (!searchParameters.page) {
           return uiState;
         }
@@ -73,7 +74,7 @@ describe('index', () => {
           )
         );
       }),
-      getWidgetState(uiState) {
+      getWidgetUiState(uiState) {
         return {
           ...uiState,
           configure: {
@@ -309,7 +310,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
         inner.addWidgets(innerWidgets);
 
-        expect(inner.getWidgetState({})).toEqual({
+        expect(inner.getWidgetUiState({})).toEqual({
           two: {
             query: 'inner',
           },
@@ -1184,7 +1185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQueryParameter('query', 'Apple iPhone XS Red')
           .setQueryParameter('page', 4);
 
-        expect(level0.getWidgetState({})).toEqual({
+        expect(level0.getWidgetUiState({})).toEqual({
           level0IndexName: {
             query: 'Apple',
             page: 1,
@@ -1209,7 +1210,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQuery('Hey')
           .search();
 
-        expect(level0.getWidgetState({})).toEqual({
+        expect(level0.getWidgetUiState({})).toEqual({
           level0IndexName: {
             query: 'Hey',
           },
@@ -1489,7 +1490,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQueryParameter('query', 'Apple')
           .setQueryParameter('page', 5);
 
-        expect(instance.getWidgetState({})).toEqual({
+        expect(instance.getWidgetUiState({})).toEqual({
           indexId: {
             query: 'Apple',
             page: 5,
@@ -1530,7 +1531,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        expect(topLevelInstance.getWidgetState({})).toEqual({
+        expect(topLevelInstance.getWidgetUiState({})).toEqual({
           topLevelIndexName: {
             configure: {
               hitsPerPage: 5,
@@ -1573,7 +1574,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQueryParameter('query', 'Apple')
           .setQueryParameter('page', 5);
 
-        expect(instance.getWidgetState({})).toEqual({
+        expect(instance.getWidgetUiState({})).toEqual({
           indexName: {
             query: 'Apple',
             page: 5,
@@ -1621,7 +1622,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        expect(instance.getWidgetState({})).toEqual({
+        expect(instance.getWidgetUiState({})).toEqual({
           indexName: {},
         });
 
@@ -1635,7 +1636,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         const level1 = index({ indexName: 'level1IndexName' });
         const widgets = [createSearchBox(), createPagination()];
 
-        jest.spyOn(level1, 'getWidgetState');
+        jest.spyOn(level1, 'getWidgetUiState');
 
         level0.addWidgets([...widgets, level1]);
 
@@ -1648,10 +1649,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQueryParameter('page', 5);
 
         widgets.forEach(widget => {
-          expect(widget.getWidgetState).toHaveBeenCalledTimes(2); // 2 changes
+          expect(widget.getWidgetUiState).toHaveBeenCalledTimes(2); // 2 changes
         });
 
-        expect(level1.getWidgetState).toHaveBeenCalledTimes(0);
+        expect(level1.getWidgetUiState).toHaveBeenCalledTimes(0);
       });
 
       it('updates the local `uiState` when they differ on first render', () => {
@@ -1669,7 +1670,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        expect(instance.getWidgetState({})).toEqual({
+        expect(instance.getWidgetUiState({})).toEqual({
           indexName: {},
         });
 
@@ -1688,7 +1689,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(
           instantSearchInstance.onInternalStateChange
         ).toHaveBeenCalledTimes(1);
-        expect(instance.getWidgetState({})).toEqual({
+        expect(instance.getWidgetUiState({})).toEqual({
           indexName: {
             query: 'Apple iPhone',
           },
@@ -1709,7 +1710,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(
           instantSearchInstance.onInternalStateChange
         ).toHaveBeenCalledTimes(2);
-        expect(instance.getWidgetState({})).toEqual({
+        expect(instance.getWidgetUiState({})).toEqual({
           indexName: {
             query: 'Apple iPhone XS',
           },
@@ -1735,7 +1736,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        expect(subLevelInstance.getWidgetState({})).toEqual({
+        expect(subLevelInstance.getWidgetUiState({})).toEqual({
           subLevelIndexName: {},
         });
 
@@ -1762,7 +1763,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(
           instantSearchInstance.onInternalStateChange
         ).not.toHaveBeenCalled();
-        expect(subLevelInstance.getWidgetState({})).toEqual({
+        expect(subLevelInstance.getWidgetUiState({})).toEqual({
           subLevelIndexName: {},
         });
       });
@@ -1803,7 +1804,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           .setQueryParameter('query', 'Apple iPhone 5S')
           .setQueryParameter('page', 9);
 
-        expect(level0.getWidgetState({})).toEqual({
+        expect(level0.getWidgetUiState({})).toEqual({
           level0IndexName: {
             query: 'Apple',
             page: 5,
@@ -1819,7 +1820,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           level3IndexName: {},
         });
 
-        expect(level1.getWidgetState({})).toEqual({
+        expect(level1.getWidgetUiState({})).toEqual({
           level1IndexName: {
             query: 'Apple iPhone',
             page: 7,
@@ -1831,7 +1832,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           level3IndexName: {},
         });
 
-        expect(level2.getWidgetState({})).toEqual({
+        expect(level2.getWidgetUiState({})).toEqual({
           level2IndexName: {
             query: 'Apple iPhone 5S',
             page: 9,
@@ -1839,7 +1840,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           level3IndexName: {},
         });
 
-        expect(level3.getWidgetState({})).toEqual({
+        expect(level3.getWidgetUiState({})).toEqual({
           level3IndexName: {},
         });
       });
@@ -1882,7 +1883,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(level0.getHelper()!.state.query).toBe('something');
 
-      expect(instantSearchInstance.mainIndex.getWidgetState({})).toEqual({
+      expect(instantSearchInstance.mainIndex.getWidgetUiState({})).toEqual({
         indexName: {},
         level0IndexName: {
           configure: {
@@ -2224,14 +2225,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone');
 
-      expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
+      expect(searchBox.getWidgetUiState).toHaveBeenCalledTimes(1);
 
       instance.dispose(createDisposeOptions());
 
       // Simulate a state change
       helper.setQueryParameter('query', 'Apple iPhone 5S');
 
-      expect(searchBox.getWidgetState).toHaveBeenCalledTimes(1);
+      expect(searchBox.getWidgetUiState).toHaveBeenCalledTimes(1);
     });
 
     it('removes the internal Helper', () => {
@@ -2294,6 +2295,70 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.dispose(createDisposeOptions());
 
       expect(mainHelper.derivedHelpers).toHaveLength(0);
+    });
+  });
+
+  describe('getWidgetState', () => {
+    test('warns when index has this method', () => {
+      warning.cache = {};
+
+      const instance = index({ indexName: 'indexName' });
+
+      expect(() => {
+        instance.getWidgetState({});
+      }).toWarnDev(
+        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+      );
+    });
+
+    test('warns when widget has this method', () => {
+      warning.cache = {};
+
+      const createDeprecatedSearchBox = (args: Partial<Widget> = {}): Widget =>
+        createWidget({
+          dispose: jest.fn(({ state }) => {
+            return state.setQueryParameter('query', undefined);
+          }),
+          getWidgetState: jest.fn((uiState, { searchParameters }) => {
+            if (!searchParameters.query) {
+              return uiState;
+            }
+
+            return {
+              ...uiState,
+              query: searchParameters.query,
+            };
+          }),
+          getWidgetSearchParameters: jest.fn(
+            (searchParameters, { uiState }) => {
+              return searchParameters.setQueryParameter(
+                'query',
+                uiState.query || ''
+              );
+            }
+          ),
+          ...args,
+        });
+
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient();
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      instance.addWidgets([createDeprecatedSearchBox()]);
+
+      expect(() => {
+        instance.init(
+          createInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+      }).toWarnDev(
+        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+      );
     });
   });
 });

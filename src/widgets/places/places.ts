@@ -97,7 +97,7 @@ const placesWidget: WidgetFactory<{}, PlacesWidgetOptions> = (
       });
     },
 
-    getWidgetState(uiState, { searchParameters }) {
+    getWidgetUiState(uiState, { searchParameters }) {
       const position =
         searchParameters.aroundLatLng || defaultPosition.join(',');
       const hasPositionSet = position !== defaultPosition.join(',');

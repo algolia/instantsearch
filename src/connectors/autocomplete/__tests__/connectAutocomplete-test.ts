@@ -429,11 +429,11 @@ search.addWidgets([
     });
   });
 
-  describe('getWidgetState', () => {
+  describe('getWidgetUiState', () => {
     test('should give back the object unmodified if the default value is selected', () => {
       const [widget, helper] = getInitializedWidget();
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -444,7 +444,7 @@ search.addWidgets([
       const [widget, helper, refine] = getInitializedWidget();
       refine('some query');
       const uiStateBefore = {};
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });
@@ -456,14 +456,14 @@ search.addWidgets([
     test('should give back the same instance if the value is already in the uiState', () => {
       const [widget, helper, refine] = getInitializedWidget();
       refine('query');
-      const uiStateBefore = widget.getWidgetState(
+      const uiStateBefore = widget.getWidgetUiState(
         {},
         {
           searchParameters: helper.state,
           helper,
         }
       );
-      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
       });

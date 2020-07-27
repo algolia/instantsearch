@@ -84,7 +84,7 @@ const createFakeSearchBox = (): Widget =>
     getWidgetSearchParameters(searchParameters, { uiState }) {
       return searchParameters.setQuery(uiState.query || '');
     },
-    getWidgetState(uiState, { searchParameters }) {
+    getWidgetUiState(uiState, { searchParameters }) {
       return {
         ...uiState,
         query: searchParameters.query,
@@ -100,7 +100,7 @@ const createFakeHitsPerPage = (): Widget =>
     getWidgetSearchParameters(parameters) {
       return parameters;
     },
-    getWidgetState(uiState) {
+    getWidgetUiState(uiState) {
       return uiState;
     },
   });
@@ -123,7 +123,7 @@ describe('RoutingManager', () => {
 
       const widget = {
         render: jest.fn(),
-        getWidgetState: jest.fn((uiState, { searchParameters }) => ({
+        getWidgetUiState: jest.fn((uiState, { searchParameters }) => ({
           ...uiState,
           q: searchParameters.query,
         })),
@@ -242,7 +242,7 @@ describe('RoutingManager', () => {
 
       search.addWidgets([
         createWidget({
-          getWidgetState(uiState, { searchParameters }) {
+          getWidgetUiState(uiState, { searchParameters }) {
             return {
               ...uiState,
               query: searchParameters.query,
