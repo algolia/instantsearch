@@ -12,6 +12,7 @@ export type InsightsEvent = {
 
 export type InsightsProps = {
   insightsClient: false | InsightsClient;
+  onEvent?: (event: InsightsEvent) => void;
 };
 
 export type CreateInsightsMiddleware = (
@@ -21,7 +22,7 @@ export type CreateInsightsMiddleware = (
 }>;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
-  const { insightsClient: _insightsClient } = props;
+  const { insightsClient: _insightsClient, onEvent } = props;
   if (_insightsClient !== false && !_insightsClient) {
     if (__DEV__) {
       throw new Error(
@@ -108,7 +109,16 @@ aa('setUserToken', 'your-user-token');
         insightsClient('onUserTokenChange', undefined);
       },
       sendEvent(event: InsightsEvent) {
-        console.log({ event });
+        if (onEvent) {
+          onEvent(event);
+        } else if (event.insightsMethod) {
+          insightsClient(event.insightsMethod!, event.payload);
+        } else {
+          warning(
+            false,
+            'Cannot send event to Algolia Insights because `insightsMethod` option is missing.'
+          );
+        }
       },
     };
   };
