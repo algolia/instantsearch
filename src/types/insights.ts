@@ -1,4 +1,5 @@
 export type InsightsClientMethod =
+  | 'clickedFilters'
   | 'clickedObjectIDsAfterSearch'
   | 'convertedObjectIDsAfterSearch';
 export type InsightsClientPayload = {
