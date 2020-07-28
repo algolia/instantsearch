@@ -40,5 +40,7 @@ export { default as isFacetRefined } from './isFacetRefined';
 export { default as createSendEventForFacet } from './createSendEventForFacet';
 export {
   createSendEventForHits,
+  createBindEventForHits,
   SendEventForHits,
+  BindEventForHits,
 } from './createSendEventForHits';

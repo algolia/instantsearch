@@ -4,8 +4,11 @@ import { InsightsEvent } from '../../middleware/insights';
 
 type BuiltInSendEventForHits = (eventType: string, hits: Hit[]) => void;
 type CustomSendEventForHits = (customPayload: any) => void;
-
 export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
+
+type BuiltInBindEventForHits = (eventType: string, hits: Hit[]) => string;
+type CustomBindEventForHits = (customPayload: any) => string;
+export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
 type BuildPayload = (options: {
   eventType: string;
@@ -104,4 +107,35 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
   return sendEventForHits;
 }
 
-// export function createBindEventForHits();
+export function createBindEventForHits({
+  helper,
+  widgetType,
+}: {
+  helper: AlgoliaSearchHelper;
+  widgetType: string;
+}): BindEventForHits {
+  // TODO: fix types -> something's wrong and args is any now.
+  const bindEventForHits: BindEventForHits = (...args) => {
+    let payload;
+    if (args.length === 2) {
+      const [eventType, hits] = args;
+      if (!Array.isArray(hits)) {
+        throw new Error(
+          `You need to pass an array of Hits as the second parameter to \`sendEvent()\`.`
+        );
+      }
+
+      payload = buildPayload({ eventType, widgetType, helper, hits });
+    } else if (args.length === 1) {
+      payload = args[0];
+    } else {
+      throw new Error(`You need to pass two arguments: eventType, hits.
+(eventType = 'view' | 'click' | 'conversion')
+
+If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
+`);
+    }
+    return `data-insights-event=${btoa(JSON.stringify(payload))}`;
+  };
+  return bindEventForHits;
+}

@@ -6,6 +6,8 @@ import {
   addQueryID,
   createSendEventForHits,
   SendEventForHits,
+  createBindEventForHits,
+  BindEventForHits,
   noop,
 } from '../../lib/utils';
 import { TransformItems, Connector, Hits, Hit, AlgoliaHit } from '../../types';
@@ -28,9 +30,14 @@ export type HitsRendererOptions = {
   results?: SearchResults<AlgoliaHit>;
 
   /**
-   *
+   * Send event to insights middleware
    */
   sendEvent: SendEventForHits;
+
+  /**
+   * Returns a string of data-insights-event attribute for insights middleware
+   */
+  bindEvent: BindEventForHits;
 };
 
 export type HitsConnectorParams = {
@@ -59,6 +66,7 @@ const connectHits: HitsConnector = function connectHits(
     const { escapeHTML = true, transformItems = items => items } =
       widgetParams || ({} as typeof widgetParams);
     let sendEvent;
+    let bindEvent;
 
     return {
       $$type: 'ais.hits',
@@ -69,12 +77,14 @@ const connectHits: HitsConnector = function connectHits(
           helper,
           widgetType: 'ais.hits',
         });
+        bindEvent = createBindEventForHits({ helper, widgetType: 'ais.hits' });
 
         renderFn(
           {
             hits: [],
             results: undefined,
             sendEvent,
+            bindEvent,
             instantSearchInstance,
             widgetParams,
           },
@@ -114,6 +124,7 @@ const connectHits: HitsConnector = function connectHits(
             hits: results.hits,
             results,
             sendEvent,
+            bindEvent,
             instantSearchInstance,
             widgetParams,
           },
