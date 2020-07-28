@@ -305,11 +305,12 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
-        sendEvent = createSendEventForFacet(
+        sendEvent = createSendEventForFacet({
           instantSearchInstance,
           helper,
-          attribute
-        );
+          attribute,
+          widgetType: 'ais.refinementList',
+        });
 
         triggerRefine = facetValue => {
           sendEvent('click', facetValue);

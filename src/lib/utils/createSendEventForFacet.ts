@@ -7,18 +7,24 @@ type CustomSendEventForFacet = (customPayload: any) => void;
 
 type SendEventForFacet = BuiltInSendEventForFacet & CustomSendEventForFacet;
 
-export default function createSendEventForFacet(
-  instantSearchInstance: InstantSearch,
-  helper: AlgoliaSearchHelper,
-  attribute: string
-): SendEventForFacet {
+export default function createSendEventForFacet({
+  instantSearchInstance,
+  helper,
+  attribute,
+  widgetType,
+}: {
+  instantSearchInstance: InstantSearch;
+  helper: AlgoliaSearchHelper;
+  attribute: string;
+  widgetType: string;
+}): SendEventForFacet {
   const sendEventForFacet: SendEventForFacet = (...args) => {
     if (args.length === 2) {
       const [eventType, facetValue] = args;
       if (!isFacetRefined(helper, attribute, facetValue)) {
         instantSearchInstance.sendEventToInsights({
           insightsMethod: 'clickedFilters',
-          widgetType: 'ais.refinementList',
+          widgetType,
           eventType,
           payload: {
             eventName: 'Item List Filtered',
@@ -31,8 +37,7 @@ export default function createSendEventForFacet(
       instantSearchInstance.sendEventToInsights(args[0]);
     } else {
       throw new Error(`You need to pass two arguments: eventType, facetValue.
-
-For example: sendEvent('click', facetValue);
+(eventType = 'click')
 
 If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
 `);
