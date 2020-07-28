@@ -113,3 +113,5 @@ function getAppIdAndApiKey(searchClient) {
     return [searchClient.applicationID, searchClient.apiKey];
   }
 }
+
+// TODO: remove this line (dummy line for a commit)
