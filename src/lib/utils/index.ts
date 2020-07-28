@@ -36,3 +36,5 @@ export {
 } from './geo-search';
 export { addAbsolutePosition } from './hits-absolute-position';
 export { addQueryID } from './hits-query-id';
+export { default as isFacetRefined } from './isFacetRefined';
+export { default as createSendEventForFacet } from './createSendEventForFacet';

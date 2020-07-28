@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
   noop,
 } from '../../lib/utils';
 import {
@@ -158,6 +159,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
     let hasExhaustiveItems = true;
     let searchForFacetValues;
     let triggerRefine;
+    let sendEvent;
 
     const render = ({
       items,
@@ -303,8 +305,16 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
-        triggerRefine = facetValue =>
+        sendEvent = createSendEventForFacet(
+          instantSearchInstance,
+          helper,
+          attribute
+        );
+
+        triggerRefine = facetValue => {
+          sendEvent('click', facetValue);
           helper.toggleRefinement(attribute, facetValue).search();
+        };
 
         searchForFacetValues = createSearchForFacetValues(
           helper,
@@ -322,6 +332,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          sendEvent,
         });
       },
 
@@ -366,6 +377,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          sendEvent,
         });
       },
 
