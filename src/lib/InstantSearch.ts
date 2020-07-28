@@ -21,6 +21,7 @@ import {
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
+import { InsightsEvent } from '../middleware/insights';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -586,6 +587,20 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
     }
 
     this.mainHelper.clearCache().search();
+  }
+
+  public sendEventToInsights(event: InsightsEvent) {
+    const insights = this.getInsightsMiddleware();
+    if (!insights) {
+      return;
+    }
+    insights.sendEvent(event);
+  }
+
+  private getInsightsMiddleware() {
+    return this.middleware.find(
+      middleware => middleware.$$type === 'aism.insights'
+    );
   }
 }
 

@@ -3,11 +3,22 @@ import { InsightsClient } from '../types';
 import { getInsightsAnonymousUserToken } from '../helpers';
 import { warning, noop } from '../lib/utils';
 
+export type InsightsEvent = {
+  insightsMethod?: string;
+  payload: any;
+  widgetType: string;
+  eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
+};
+
 export type InsightsProps = {
   insightsClient: false | InsightsClient;
 };
 
-export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
+export type CreateInsightsMiddleware = (
+  props: InsightsProps
+) => Middleware<{
+  sendEvent: (event: InsightsEvent) => void;
+}>;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient: _insightsClient } = props;
@@ -50,6 +61,7 @@ aa('setUserToken', 'your-user-token');
     });
 
     return {
+      $$type: 'aism.insights',
       onStateChange() {},
       subscribe() {
         const setUserTokenToSearch = (userToken?: string) => {
@@ -95,6 +107,9 @@ aa('setUserToken', 'your-user-token');
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
       },
+      sendEvent(event: InsightsEvent) {
+        console.log({ event });
+      },
     };
   };
 };
@@ -113,5 +128,3 @@ function getAppIdAndApiKey(searchClient) {
     return [searchClient.applicationID, searchClient.apiKey];
   }
 }
-
-// TODO: remove this line (dummy line for a commit)
