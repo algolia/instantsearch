@@ -4,6 +4,8 @@ import {
   createDocumentationMessageGenerator,
   addAbsolutePosition,
   addQueryID,
+  createSendEventForHits,
+  SendEventForHits,
   noop,
 } from '../../lib/utils';
 import { TransformItems, Connector, Hits, Hit, AlgoliaHit } from '../../types';
@@ -24,6 +26,11 @@ export type HitsRendererOptions = {
    * The response from the Algolia API.
    */
   results?: SearchResults<AlgoliaHit>;
+
+  /**
+   *
+   */
+  sendEvent: SendEventForHits;
 };
 
 export type HitsConnectorParams = {
@@ -51,15 +58,23 @@ const connectHits: HitsConnector = function connectHits(
   return widgetParams => {
     const { escapeHTML = true, transformItems = items => items } =
       widgetParams || ({} as typeof widgetParams);
+    let sendEvent;
 
     return {
       $$type: 'ais.hits',
 
-      init({ instantSearchInstance }) {
+      init({ instantSearchInstance, helper }) {
+        sendEvent = createSendEventForHits({
+          instantSearchInstance,
+          helper,
+          widgetType: 'ais.hits',
+        });
+
         renderFn(
           {
             hits: [],
             results: undefined,
+            sendEvent,
             instantSearchInstance,
             widgetParams,
           },
@@ -96,6 +111,7 @@ const connectHits: HitsConnector = function connectHits(
           {
             hits: results.hits,
             results,
+            sendEvent,
             instantSearchInstance,
             widgetParams,
           },

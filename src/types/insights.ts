@@ -1,4 +1,5 @@
 export type InsightsClientMethod =
+  | 'viewedObjectIDs'
   | 'clickedFilters'
   | 'clickedObjectIDsAfterSearch'
   | 'convertedObjectIDsAfterSearch';
