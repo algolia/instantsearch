@@ -126,7 +126,7 @@ aa('setUserToken', 'your-user-token');
         if (onEvent) {
           onEvent(event);
         } else if (event.insightsMethod) {
-          insightsClient(event.insightsMethod!, event.payload);
+          insightsClient(event.insightsMethod, event.payload);
         } else {
           warning(
             false,
