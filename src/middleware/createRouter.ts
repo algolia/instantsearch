@@ -51,7 +51,7 @@ export const createRouter: RoutingManager = (props = {}) => {
     };
 
     return {
-      $$type: 'aism.router',
+      $$type: 'ais.router',
 
       onStateChange({ uiState }) {
         const route = stateMapping.stateToRoute(uiState);
