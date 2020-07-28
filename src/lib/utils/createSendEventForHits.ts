@@ -2,11 +2,11 @@ import { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { InstantSearch, Hit } from '../../types';
 import { InsightsEvent } from '../../middleware/insights';
 
-type BuiltInSendEventForHits = (eventType: string, hits: Hit[]) => void;
+type BuiltInSendEventForHits = (eventType: string, hits: Hit | Hit[]) => void;
 type CustomSendEventForHits = (customPayload: any) => void;
 export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
 
-type BuiltInBindEventForHits = (eventType: string, hits: Hit[]) => string;
+type BuiltInBindEventForHits = (eventType: string, hits: Hit | Hit[]) => string;
 type CustomBindEventForHits = (customPayload: any) => string;
 export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
@@ -14,7 +14,7 @@ type BuildPayload = (options: {
   eventType: string;
   widgetType: string;
   helper: AlgoliaSearchHelper;
-  hits: Hit[];
+  hits: Hit | Hit[];
 }) => InsightsEvent;
 
 const buildPayload: BuildPayload = ({
@@ -23,9 +23,10 @@ const buildPayload: BuildPayload = ({
   helper,
   hits,
 }) => {
-  const queryID = hits[0].__queryID;
-  const objectIDs = hits.map(hit => hit.objectID);
-  const positions = hits.map(hit => hit.__position);
+  const hitsArray = Array.isArray(hits) ? hits : [hits];
+  const queryID = hitsArray[0].__queryID;
+  const objectIDs = hitsArray.map(hit => hit.objectID);
+  const positions = hitsArray.map(hit => hit.__position);
   const index = helper.getIndex();
 
   if (eventType === 'view') {
@@ -85,19 +86,13 @@ export function createSendEventForHits({
   const sendEventForHits: SendEventForHits = (...args) => {
     if (args.length === 2) {
       const [eventType, hits] = args;
-      if (!Array.isArray(hits)) {
-        throw new Error(
-          `You need to pass an array of Hits as the second parameter to \`sendEvent()\`.`
-        );
-      }
-
       instantSearchInstance.sendEventToInsights(
         buildPayload({ eventType, widgetType, helper, hits })
       );
     } else if (args.length === 1) {
       instantSearchInstance.sendEventToInsights(args[0]);
     } else {
-      throw new Error(`You need to pass two arguments: eventType, hits.
+      throw new Error(`You need to pass two arguments: eventType, hit(s).
 (eventType = 'view' | 'click' | 'conversion')
 
 If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
@@ -119,17 +114,11 @@ export function createBindEventForHits({
     let payload;
     if (args.length === 2) {
       const [eventType, hits] = args;
-      if (!Array.isArray(hits)) {
-        throw new Error(
-          `You need to pass an array of Hits as the second parameter to \`sendEvent()\`.`
-        );
-      }
-
       payload = buildPayload({ eventType, widgetType, helper, hits });
     } else if (args.length === 1) {
       payload = args[0];
     } else {
-      throw new Error(`You need to pass two arguments: eventType, hits.
+      throw new Error(`You need to pass two arguments: eventType, hit(s).
 (eventType = 'view' | 'click' | 'conversion')
 
 If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
