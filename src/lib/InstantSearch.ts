@@ -590,17 +590,12 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
   }
 
   public sendEventToInsights(event: InsightsEvent) {
-    const insights = this.getInsightsMiddleware();
-    if (!insights) {
-      return;
-    }
-    insights.sendEvent(event);
-  }
-
-  private getInsightsMiddleware() {
-    return this.middleware.find(
+    const insights = this.middleware.find(
       middleware => middleware.$$type === 'aism.insights'
     );
+    if (insights) {
+      insights.sendEvent(event);
+    }
   }
 }
 
