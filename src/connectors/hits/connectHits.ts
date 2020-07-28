@@ -107,6 +107,8 @@ const connectHits: HitsConnector = function connectHits(
           typeof escapeHits
         >).__escaped = initialEscaped;
 
+        sendEvent('view', results.hits);
+
         renderFn(
           {
             hits: results.hits,
