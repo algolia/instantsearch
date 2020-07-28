@@ -1,10 +1,10 @@
-import { Middleware } from '.';
-import { InsightsClient } from '../types';
+import { Middleware, MiddlewareDefinition } from '.';
+import { InsightsClient, InsightsClientMethod } from '../types';
 import { getInsightsAnonymousUserToken } from '../helpers';
 import { warning, noop } from '../lib/utils';
 
 export type InsightsEvent = {
-  insightsMethod?: string;
+  insightsMethod?: InsightsClientMethod;
   payload: any;
   widgetType: string;
   eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
@@ -15,11 +15,25 @@ export type InsightsProps = {
   onEvent?: (event: InsightsEvent) => void;
 };
 
+type InsightsMiddlewareExtraDefinition = {
+  sendEvent: (event: InsightsEvent) => void;
+};
+
+export type InsightsMiddleware = Middleware<InsightsMiddlewareExtraDefinition>;
+
+export type InsightsMiddlewareDefinition = MiddlewareDefinition<
+  InsightsMiddlewareExtraDefinition
+>;
+
 export type CreateInsightsMiddleware = (
   props: InsightsProps
-) => Middleware<{
-  sendEvent: (event: InsightsEvent) => void;
-}>;
+) => InsightsMiddleware;
+
+export function isInsightsMiddlewareDefinition(
+  middlewareDefinition: MiddlewareDefinition
+): middlewareDefinition is InsightsMiddlewareDefinition {
+  return middlewareDefinition.$$type === 'ais.insights';
+}
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient: _insightsClient, onEvent } = props;

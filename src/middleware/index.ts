@@ -1,6 +1,6 @@
 import { UiState, InstantSearch } from '../types';
 
-export type MiddlewareDefinition<TExtraDefinition> = {
+export type MiddlewareDefinition<TExtraDefinition = {}> = {
   $$type: string;
   onStateChange(options: { uiState: UiState }): void;
   subscribe(): void;
