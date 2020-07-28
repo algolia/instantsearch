@@ -24,6 +24,7 @@ import {
   Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
+import { InsightsEvent } from '../../middleware/insights';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -143,6 +144,7 @@ const renderer = ({
     isLastPage,
     instantSearchInstance,
     insights,
+    bindEvent,
   },
   isFirstRendering
 ) => {
@@ -167,6 +169,10 @@ const renderer = ({
       isFirstPage={isFirstPage}
       isLastPage={isLastPage}
       insights={insights as InsightsClientWrapper}
+      sendEvent={(event: InsightsEvent) => {
+        instantSearchInstance.sendEventToInsights(event);
+      }}
+      bindEvent={bindEvent}
     />,
     containerNode
   );

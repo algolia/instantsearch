@@ -22,6 +22,7 @@ import {
   Renderer,
   InsightsClientWrapper,
 } from '../../types';
+import { InsightsEvent } from '../../middleware/insights';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
@@ -33,7 +34,7 @@ const renderer = ({
   containerNode,
   templates,
 }): Renderer<HitsRendererOptions, Partial<HitsWidgetOptions>> => (
-  { hits: receivedHits, results, instantSearchInstance, insights },
+  { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -52,6 +53,10 @@ const renderer = ({
       results={results}
       templateProps={renderState.templateProps}
       insights={insights as InsightsClientWrapper}
+      sendEvent={(event: InsightsEvent) => {
+        instantSearchInstance.sendEventToInsights(event);
+      }}
+      bindEvent={bindEvent}
     />,
     containerNode
   );
