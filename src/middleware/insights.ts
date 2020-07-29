@@ -1,5 +1,4 @@
-import { Middleware } from '.';
-import { InsightsClient, InsightsClientMethod } from '../types';
+import { InsightsClient, InsightsClientMethod, Middleware } from '../types';
 import { getInsightsAnonymousUserToken } from '../helpers';
 import { warning, noop } from '../lib/utils';
 
