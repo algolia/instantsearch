@@ -36,8 +36,7 @@ const parseInsightsEvent = element => {
   }
 
   try {
-    const payload = JSON.parse(atob(serializedPayload));
-    return payload;
+    return JSON.parse(atob(serializedPayload));
   } catch (error) {
     throw new Error(
       'The insights middleware was unable to parse `data-insights-event`.'
