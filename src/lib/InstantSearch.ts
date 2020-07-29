@@ -21,11 +21,7 @@ import {
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
-import {
-  InsightsEvent,
-  InsightsMiddlewareDefinition,
-  isInsightsMiddlewareDefinition,
-} from '../middleware/insights';
+import { InsightsEvent } from '../middleware/insights';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -145,8 +141,8 @@ class InstantSearch extends EventEmitter {
   public _createURL: CreateURL<UiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
-  public _insightsMiddleware?: InsightsMiddlewareDefinition;
   public middleware: MiddlewareDefinition[] = [];
+  public sendEventToInsights: (event: InsightsEvent) => void;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -245,6 +241,8 @@ See ${createDocumentationLink({
       this._searchFunction = searchFunction;
     }
 
+    this.sendEventToInsights = noop;
+
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.EXPERIMENTAL_use(createRouter(routerOptions));
@@ -261,14 +259,6 @@ See ${createDocumentationLink({
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = fn({ instantSearchInstance: this });
       this.middleware.push(newMiddleware);
-
-      if (
-        !this._insightsMiddleware &&
-        isInsightsMiddlewareDefinition(newMiddleware)
-      ) {
-        this._insightsMiddleware = newMiddleware;
-      }
-
       return newMiddleware;
     });
 
@@ -599,12 +589,6 @@ Feel free to give us feedback on GitHub: https://github.com/algolia/instantsearc
     }
 
     this.mainHelper.clearCache().search();
-  }
-
-  public sendEventToInsights(event: InsightsEvent) {
-    if (this._insightsMiddleware) {
-      this._insightsMiddleware.sendEvent(event);
-    }
   }
 }
 

@@ -1,4 +1,4 @@
-import { Middleware, MiddlewareDefinition } from '.';
+import { Middleware } from '.';
 import { InsightsClient, InsightsClientMethod } from '../types';
 import { getInsightsAnonymousUserToken } from '../helpers';
 import { warning, noop } from '../lib/utils';
@@ -15,25 +15,7 @@ export type InsightsProps = {
   onEvent?: (event: InsightsEvent) => void;
 };
 
-type InsightsMiddlewareExtraDefinition = {
-  sendEvent: (event: InsightsEvent) => void;
-};
-
-export type InsightsMiddleware = Middleware<InsightsMiddlewareExtraDefinition>;
-
-export type InsightsMiddlewareDefinition = MiddlewareDefinition<
-  InsightsMiddlewareExtraDefinition
->;
-
-export type CreateInsightsMiddleware = (
-  props: InsightsProps
-) => InsightsMiddleware;
-
-export function isInsightsMiddlewareDefinition(
-  middlewareDefinition: MiddlewareDefinition
-): middlewareDefinition is InsightsMiddlewareDefinition {
-  return middlewareDefinition.$$type === 'ais.insights';
-}
+export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient: _insightsClient, onEvent } = props;
@@ -118,21 +100,23 @@ aa('setUserToken', 'your-user-token');
         insightsClient('onUserTokenChange', setUserTokenToSearch, {
           immediate: true,
         });
+
+        instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
+          if (onEvent) {
+            onEvent(event);
+          } else if (event.insightsMethod) {
+            insightsClient(event.insightsMethod, event.payload);
+          } else {
+            warning(
+              false,
+              'Cannot send event to Algolia Insights because `insightsMethod` option is missing.'
+            );
+          }
+        };
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
-      },
-      sendEvent(event: InsightsEvent) {
-        if (onEvent) {
-          onEvent(event);
-        } else if (event.insightsMethod) {
-          insightsClient(event.insightsMethod, event.payload);
-        } else {
-          warning(
-            false,
-            'Cannot send event to Algolia Insights because `insightsMethod` option is missing.'
-          );
-        }
+        instantSearchInstance.sendEventToInsights = noop;
       },
     };
   };
