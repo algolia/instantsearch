@@ -1,8 +1,7 @@
 import simpleStateMapping from '../lib/stateMappings/simple';
 import historyRouter from '../lib/routers/history';
 import { Index } from '../widgets/index/index';
-import { Middleware } from '.';
-import { Router, StateMapping, UiState } from '../types';
+import { Router, StateMapping, UiState, Middleware } from '../types';
 
 const walk = (current: Index, callback: (index: Index) => void) => {
   callback(current);

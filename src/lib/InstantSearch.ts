@@ -17,9 +17,10 @@ import {
   Widget,
   UiState,
   CreateURL,
+  Middleware,
+  MiddlewareDefinition,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
-import { Middleware, MiddlewareDefinition } from '../middleware';
 import { createRouter, RouterProps } from '../middleware/createRouter';
 import { InsightsEvent } from '../middleware/insights';
 
