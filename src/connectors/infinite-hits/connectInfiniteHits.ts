@@ -11,6 +11,8 @@ import {
   addAbsolutePosition,
   addQueryID,
   noop,
+  SendEventForHits,
+  BindEventForHits,
 } from '../../lib/utils';
 
 export type InfiniteHitsCachedHits = {
@@ -85,6 +87,16 @@ export type InfiniteHitsRendererOptions = {
    * Indicates whether the last page of hits has been reached.
    */
   isLastPage: boolean;
+
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForHits;
+
+  /**
+   * Returns a string of data-insights-event attribute for insights middleware
+   */
+  bindEvent: BindEventForHits;
 };
 
 const withUsage = createDocumentationMessageGenerator({
