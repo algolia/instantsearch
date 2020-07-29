@@ -19,15 +19,16 @@ export default function createSendEventForFacet({
   widgetType: string;
 }): SendEventForFacet {
   const sendEventForFacet: SendEventForFacet = (...args) => {
-    if (args.length === 2) {
-      const [eventType, facetValue] = args;
+    const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+    if (eventType === 'click' && (args.length === 2 || args.length === 3)) {
       if (!isFacetRefined(helper, attribute, facetValue)) {
+        // send event only when the facet is being checked "ON"
         instantSearchInstance.sendEventToInsights({
           insightsMethod: 'clickedFilters',
           widgetType,
           eventType,
           payload: {
-            eventName: 'Item List Filtered',
+            eventName,
             index: helper.getIndex(),
             filters: [`${attribute}:${JSON.stringify(facetValue)}`],
           },
@@ -35,12 +36,14 @@ export default function createSendEventForFacet({
       }
     } else if (args.length === 1) {
       instantSearchInstance.sendEventToInsights(args[0]);
-    } else {
-      throw new Error(`You need to pass two arguments: eventType, facetValue.
-(eventType = 'click')
+    } else if (__DEV__) {
+      throw new Error(
+        `You need to pass two arguments like:
+sendEvent('click', facetValue);
 
 If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-`);
+`
+      );
     }
   };
   return sendEventForFacet;
