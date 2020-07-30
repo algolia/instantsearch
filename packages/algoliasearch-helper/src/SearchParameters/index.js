@@ -249,9 +249,12 @@ SearchParameters._parseNumbers = function(partialState) {
   // the one which is an array of float geo rectangles
   if (Array.isArray(partialState.insideBoundingBox)) {
     numbers.insideBoundingBox = partialState.insideBoundingBox.map(function(geoRect) {
-      return geoRect.map(function(value) {
-        return parseFloat(value);
-      });
+      if (Array.isArray(geoRect)) {
+        return geoRect.map(function(value) {
+          return parseFloat(value);
+        });
+      }
+      return geoRect;
     });
   }
 

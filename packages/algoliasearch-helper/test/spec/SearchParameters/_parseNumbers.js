@@ -51,6 +51,15 @@ test('_parseNumbers should not convert insideBoundingBox if it\'s a string', fun
   expect(actual.insideBoundingBox).toBe('5,4,5,4');
 });
 
+test('_parseNumbers should leave insideBoundingBox as-is if not nested array', function() {
+  var partialState = {
+    insideBoundingBox: ['5', '4', '5', '4']
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  expect(actual.insideBoundingBox).toEqual(['5', '4', '5', '4']);
+});
+
 test('_parseNumbers should not convert unparseable strings', function() {
   var partialState = {
     aroundRadius: 'all'
