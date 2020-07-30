@@ -264,6 +264,9 @@ const index = (props: IndexProps): Index => {
           _uiState: localUiState,
         });
 
+        // We compute the render state before calling `init` in a separate loop
+        // to construct the whole render state object that is then passed to
+        // `init`.
         widgets.forEach(widget => {
           if (widget.getWidgetRenderState) {
             const widgetRenderState = widget.getWidgetRenderState(
@@ -467,6 +470,9 @@ const index = (props: IndexProps): Index => {
         helper!.lastResults = results;
       });
 
+      // We compute the render state before calling `render` in a separate loop
+      // to construct the whole render state object that is then passed to
+      // `render`.
       localWidgets.forEach(widget => {
         if (widget.getWidgetRenderState) {
           const widgetRenderState = widget.getWidgetRenderState(
