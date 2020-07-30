@@ -4,6 +4,7 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import { warning } from '../../../lib/utils';
 import connectHierarchicalMenu from '../connectHierarchicalMenu';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectHierarchicalMenu', () => {
   describe('Usage', () => {
@@ -157,6 +158,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -409,6 +411,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         helper,
         state: helper.state,
         createURL: () => '#',
+        instantSearchInstance: createInstantSearch(),
       });
 
       const firstRenderingOptions = rendering.mock.calls[0][0];
