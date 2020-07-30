@@ -4,6 +4,7 @@ import jsHelper, {
 } from 'algoliasearch-helper';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 import connectRefinementList from '../connectRefinementList';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {
@@ -487,6 +488,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
   it('Provide a function to clear the refinements at each step (or)', () => {
     const { makeWidget, rendering } = createWidgetFactory();
+    const instantSearchInstance = createInstantSearch();
     const widget = makeWidget({
       attribute: 'category',
     });
@@ -506,6 +508,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance,
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -531,6 +534,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   it('Provide a function to clear the refinements at each step (and)', () => {
+    const instantSearchInstance = createInstantSearch();
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attribute: 'category',
@@ -552,6 +556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance,
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -1844,6 +1849,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     it('removes refinements completely on dispose (and)', () => {
       const rendering = jest.fn();
       const makeWidget = connectRefinementList(rendering);
+      const instantSearchInstance = createInstantSearch();
 
       const widget = makeWidget({
         attribute: 'category',
@@ -1864,6 +1870,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         helper,
         state: helper.state,
         createURL: () => '#',
+        instantSearchInstance,
       });
 
       widget.render({
@@ -1930,6 +1937,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     it('removes refinements completely on dispose (or)', () => {
       const rendering = jest.fn();
       const makeWidget = connectRefinementList(rendering);
+      const instantSearchInstance = createInstantSearch();
 
       const widget = makeWidget({
         attribute: 'category',
@@ -1950,6 +1958,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         helper,
         state: helper.state,
         createURL: () => '#',
+        instantSearchInstance,
       });
 
       widget.render({
