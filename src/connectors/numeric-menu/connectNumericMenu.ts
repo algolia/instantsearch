@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   isFiniteNumber,
   SendEventForFacet,
+  convertNumericRefinementsToFilters,
   noop,
 } from '../../lib/utils';
 import { Connector, CreateURL, TransformItems } from '../../types';
@@ -149,32 +150,11 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
             return;
           }
           // facetValue === "%7B%22start%22:5,%22end%22:10%7D"
-          const { numericRefinements } = getRefinedState(
-            helper.state,
-            attribute,
-            facetValue
+          const filters = convertNumericRefinementsToFilters(
+            getRefinedState(helper.state, attribute, facetValue),
+            attribute
           );
-          const filtersObj = numericRefinements[attribute];
-          /*
-            filtersObj === {
-              "<=": [10],
-              "=": [],
-              ">=": [5]
-            }
-          */
-          const filters: string[] = [];
-          Object.keys(filtersObj)
-            .filter(
-              operator =>
-                Array.isArray(filtersObj[operator]) &&
-                filtersObj[operator].length > 0
-            )
-            .forEach(operator => {
-              filtersObj[operator].forEach(value => {
-                filters.push(`${attribute}${operator}${value}`);
-              });
-            });
-          if (filters.length > 0) {
+          if (filters && filters.length > 0) {
             /*
               filters === ["price<=10", "price>=5"]
             */

@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  convertNumericRefinementsToFilters,
   isFiniteNumber,
   find,
   noop,
@@ -150,6 +151,57 @@ export default function connectRange(renderFn, unmountFn = noop) {
       return null;
     };
 
+    const sendEventWithRefinedState = (
+      refinedState,
+      instantSearchInstance,
+      helper,
+      eventName = 'Filter Applied'
+    ) => {
+      const filters = convertNumericRefinementsToFilters(
+        refinedState,
+        attribute
+      );
+      if (filters && filters.length > 0) {
+        instantSearchInstance.sendEventToInsights({
+          insightsMethod: 'clickedFilters',
+          widgetType: 'ais.range',
+          eventType: 'click',
+          payload: {
+            eventName,
+            index: helper.getIndex(),
+            filters,
+          },
+        });
+      }
+    };
+
+    const createSendEvent = (instantSearchInstance, helper, currentRange) => (
+      ...args
+    ) => {
+      if (args.length === 1) {
+        instantSearchInstance.sendEventToInsights(args[0]);
+        return;
+      }
+
+      const [eventType, facetValue, eventName] = args;
+      if (eventType !== 'click') {
+        return;
+      }
+      const [nextMin, nextMax] = facetValue;
+      const refinedState = getRefinedState(
+        helper,
+        currentRange,
+        nextMin,
+        nextMax
+      );
+      sendEventWithRefinedState(
+        refinedState,
+        instantSearchInstance,
+        helper,
+        eventName
+      );
+    };
+
     return {
       $$type: 'ais.range',
 
@@ -191,7 +243,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
         return [min, max];
       },
 
-      _refine(helper, currentRange) {
+      _refine(instantSearchInstance, helper, currentRange) {
         // eslint-disable-next-line complexity
         return ([nextMin, nextMax] = []) => {
           const refinedState = getRefinedState(
@@ -201,6 +253,11 @@ export default function connectRange(renderFn, unmountFn = noop) {
             nextMax
           );
           if (refinedState) {
+            sendEventWithRefinedState(
+              refinedState,
+              instantSearchInstance,
+              helper
+            );
             helper.setState(refinedState).search();
           }
         };
@@ -216,7 +273,8 @@ export default function connectRange(renderFn, unmountFn = noop) {
             // On first render pass an empty range
             // to be able to bypass the validation
             // related to it
-            refine: this._refine(helper, {}),
+            refine: this._refine(instantSearchInstance, helper, {}),
+            sendEvent: createSendEvent(instantSearchInstance, helper, {}),
             format: rangeFormatter,
             range: currentRange,
             widgetParams: {
@@ -243,7 +301,12 @@ export default function connectRange(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            refine: this._refine(helper, currentRange),
+            refine: this._refine(instantSearchInstance, helper, currentRange),
+            sendEvent: createSendEvent(
+              instantSearchInstance,
+              helper,
+              currentRange
+            ),
             format: rangeFormatter,
             range: currentRange,
             widgetParams: {

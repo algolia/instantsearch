@@ -3,6 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import connectRange from '../connectRange';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectRange', () => {
   describe('Usage', () => {
@@ -211,6 +212,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       attribute,
     });
 
+    const instantSearchInstance = createInstantSearch();
     const helper = jsHelper(
       {},
       '',
@@ -222,6 +224,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance,
     });
 
     {
@@ -260,6 +263,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       state: helper.state,
       helper,
       createURL: () => '#',
+      instantSearchInstance,
     });
 
     {
@@ -294,6 +298,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -336,6 +341,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -376,6 +382,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -558,7 +565,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         attribute,
       });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -574,7 +581,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -590,7 +597,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -604,7 +611,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([11]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([491]);
@@ -621,7 +628,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         min: 10,
       });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -638,7 +645,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         max: 490,
       });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -655,7 +662,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -674,7 +681,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
@@ -693,7 +700,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -712,7 +719,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
@@ -730,7 +737,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '>=', 10);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -748,7 +755,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([]);
@@ -769,7 +776,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '>=', 20);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -788,7 +795,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       helper.addNumericRefinement(attribute, '>=', 240);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([250]);
@@ -802,7 +809,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -816,7 +823,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -830,7 +837,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -847,7 +854,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       helper.addNumericRefinement(attribute, '>=', 10);
       helper.addNumericRefinement(attribute, '<=', 490);
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual([490]);
@@ -861,7 +868,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
       const helper = createHelper();
       const widget = connectRange(rendering)({ attribute });
 
-      widget._refine(helper, range)(values);
+      widget._refine(createInstantSearch(), helper, range)(values);
 
       expect(helper.getNumericRefinement(attribute, '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement(attribute, '<=')).toEqual(undefined);
@@ -926,6 +933,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         helper,
         state: helper.state,
         createURL: () => '#',
+        instantSearchInstance: createInstantSearch(),
       });
 
       const renderOptions = rendering.mock.calls[0][0];

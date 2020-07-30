@@ -47,3 +47,4 @@ export {
   SendEventForHits,
   BindEventForHits,
 } from './createSendEventForHits';
+export { convertNumericRefinementsToFilters } from './convertNumericRefinementsToFilters';
