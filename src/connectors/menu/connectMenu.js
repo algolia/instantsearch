@@ -1,6 +1,7 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
   noop,
 } from '../../lib/utils';
 
@@ -114,6 +115,8 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       );
     }
 
+    let sendEvent;
+
     return {
       $$type: 'ais.menu',
 
@@ -142,6 +145,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
             attribute
           );
+          sendEvent('click', facetValue ? facetValue : refinedItem);
           helper
             .toggleRefinement(attribute, facetValue ? facetValue : refinedItem)
             .search();
@@ -149,6 +153,13 @@ export default function connectMenu(renderFn, unmountFn = noop) {
       },
 
       init({ helper, createURL, instantSearchInstance }) {
+        sendEvent = createSendEventForFacet({
+          instantSearchInstance,
+          helper,
+          attribute,
+          widgetType: 'ais.menu',
+        });
+
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         this._createURL = facetValue =>
@@ -161,6 +172,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             items: [],
             createURL: this._createURL,
             refine: this._refine,
+            sendEvent,
             instantSearchInstance,
             canRefine: false,
             widgetParams,
@@ -197,6 +209,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
             items,
             createURL: this._createURL,
             refine: this._refine,
+            sendEvent,
             instantSearchInstance,
             canRefine: items.length > 0,
             widgetParams,

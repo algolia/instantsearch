@@ -3,6 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 import connectMenu from '../connectMenu';
 
 describe('connectMenu', () => {
@@ -220,6 +221,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
@@ -975,6 +977,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         helper,
         state: helper.state,
         createURL: () => '#',
+        instantSearchInstance: createInstantSearch(),
       });
 
       widget.render({
