@@ -19,7 +19,7 @@ import {
 } from '@algolia/client-search';
 
 type DummySearchClientV4 = {
-  readonly addAlgoliaAgent: (segment: string, version?: string) => void;
+  readonly transporter: any;
 };
 
 type DefaultSearchClient = ReturnType<
