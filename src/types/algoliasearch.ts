@@ -20,6 +20,7 @@ import {
 
 type DummySearchClientV4 = {
   readonly addAlgoliaAgent: (segment: string, version?: string) => void;
+  readonly transporter: any;
 };
 
 type DefaultSearchClient = ReturnType<
@@ -37,6 +38,8 @@ export type SearchClient = {
 export type MultiResponse<THit = any> = {
   results: Array<SearchResponse<THit>>;
 };
+
+// ok?
 
 export type SearchResponse<
   THit
