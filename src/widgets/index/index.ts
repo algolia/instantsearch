@@ -479,7 +479,7 @@ const index = (props: IndexProps): Index => {
             instantSearchInstance.renderState[this.getIndexId()] || {},
             {
               uiState,
-              helper: this.getHelper()!,
+              helper: helper!,
               parent: this,
               instantSearchInstance,
               state: helper!.state,
@@ -514,8 +514,8 @@ const index = (props: IndexProps): Index => {
             parent: this,
             instantSearchInstance,
             state: helper!.state,
-            templatesConfig: instantSearchInstance.templatesConfig,
             renderState: instantSearchInstance.renderState,
+            templatesConfig: instantSearchInstance.templatesConfig,
             createURL,
             scopedResults: [],
             searchMetadata: {
