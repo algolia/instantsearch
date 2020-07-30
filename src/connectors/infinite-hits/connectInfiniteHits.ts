@@ -199,11 +199,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         showMore = getShowMore(helper);
         sendEvent = createSendEventForHits({
           instantSearchInstance,
-          helper,
+          index: helper.getIndex(),
           widgetType: 'ais.infiniteHits',
         });
         bindEvent = createBindEventForHits({
-          helper,
+          index: helper.getIndex(),
           widgetType: 'ais.infiniteHits',
         });
 
