@@ -29,7 +29,6 @@ type SharedRenderOptions = {
 
 export type InitOptions = SharedRenderOptions & {
   uiState: UiState;
-  results: undefined;
 };
 
 export type RenderOptions = SharedRenderOptions & {

@@ -21,7 +21,6 @@ export const createInitOptions = (
     helper: instantSearchInstance.helper!,
     state: instantSearchInstance.helper!.state,
     renderState: instantSearchInstance.renderState,
-    results: undefined,
     scopedResults: [],
     createURL: jest.fn(() => '#'),
     searchMetadata: {

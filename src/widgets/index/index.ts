@@ -277,7 +277,6 @@ const index = (props: IndexProps): Index => {
                 renderState: localInstantSearchInstance!.renderState,
                 templatesConfig: localInstantSearchInstance!.templatesConfig,
                 createURL,
-                results: undefined,
                 scopedResults: [],
                 searchMetadata: {
                   isSearchStalled: localInstantSearchInstance!._isSearchStalled,
@@ -304,7 +303,6 @@ const index = (props: IndexProps): Index => {
               renderState: localInstantSearchInstance!.renderState,
               templatesConfig: localInstantSearchInstance!.templatesConfig,
               createURL,
-              results: undefined,
               scopedResults: [],
               searchMetadata: {
                 isSearchStalled: localInstantSearchInstance!._isSearchStalled,
@@ -482,7 +480,6 @@ const index = (props: IndexProps): Index => {
               renderState: instantSearchInstance.renderState,
               templatesConfig: instantSearchInstance.templatesConfig,
               createURL,
-              results: undefined,
               scopedResults: [],
               searchMetadata: {
                 isSearchStalled: instantSearchInstance._isSearchStalled,
@@ -514,7 +511,6 @@ const index = (props: IndexProps): Index => {
             templatesConfig: instantSearchInstance.templatesConfig,
             renderState: instantSearchInstance.renderState,
             createURL,
-            results: undefined,
             scopedResults: [],
             searchMetadata: {
               isSearchStalled: instantSearchInstance._isSearchStalled,

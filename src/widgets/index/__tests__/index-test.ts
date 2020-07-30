@@ -254,7 +254,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             renderState: {},
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
-            results: undefined,
             scopedResults: [],
             searchMetadata: {
               isSearchStalled: true,
@@ -312,7 +311,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             renderState: {},
             templatesConfig: instantSearchInstance.templatesConfig,
             createURL: expect.any(Function),
-            results: undefined,
             scopedResults: [],
             searchMetadata: {
               isSearchStalled: true,
@@ -1017,7 +1015,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           renderState: {},
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
-          results: undefined,
           scopedResults: [],
           searchMetadata: {
             isSearchStalled: instantSearchInstance._isSearchStalled,
@@ -2070,7 +2067,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           renderState: {},
           templatesConfig: instantSearchInstance.templatesConfig,
           createURL: expect.any(Function),
-          results: undefined,
           scopedResults: [],
           searchMetadata: {
             isSearchStalled: instantSearchInstance._isSearchStalled,
