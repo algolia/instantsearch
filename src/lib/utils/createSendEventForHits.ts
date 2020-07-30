@@ -61,6 +61,9 @@ const buildPayload: BuildPayload = ({
     }
   }
   const hitsArray = Array.isArray(hits) ? hits : [hits];
+  if (hitsArray.length === 0) {
+    return null;
+  }
   const queryID = hitsArray[0].__queryID;
   const objectIDs = hitsArray.map(hit => hit.objectID);
   const positions = hitsArray.map(hit => hit.__position);

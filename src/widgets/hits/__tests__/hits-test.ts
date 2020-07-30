@@ -1,7 +1,10 @@
 import { render as preactRender } from 'preact';
+import algoliasearchHelper from 'algoliasearch-helper';
+import { SearchClient } from '../../../types';
 import defaultTemplates from '../defaultTemplates';
 import hits from '../hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 const render = castToJestMock(preactRender);
 
@@ -31,10 +34,12 @@ describe('hits()', () => {
   let templateProps;
   let widget;
   let results;
+  let helper;
 
   beforeEach(() => {
     render.mockClear();
 
+    helper = algoliasearchHelper({} as SearchClient, '', {});
     container = document.createElement('div');
     templateProps = {
       templatesConfig: undefined,
@@ -42,7 +47,12 @@ describe('hits()', () => {
       useCustomCompileOptions: { item: false, empty: false },
     };
     widget = hits({ container, cssClasses: { root: ['root', 'cx'] } });
-    widget.init({ instantSearchInstance: { templateProps } });
+    widget.init({
+      helper,
+      instantSearchInstance: createInstantSearch({
+        templatesConfig: undefined,
+      }),
+    });
     results = {
       hits: [{ first: 'hit', second: 'hit' }],
       hitsPerPage: 4,
@@ -70,7 +80,12 @@ describe('hits()', () => {
         items.map(item => ({ ...item, transformed: true })),
     });
 
-    widget.init({ instantSearchInstance: {} });
+    widget.init({
+      helper,
+      instantSearchInstance: createInstantSearch({
+        templatesConfig: undefined,
+      }),
+    });
     widget.render({ results });
 
     const [firstRender] = render.mock.calls;
