@@ -2,7 +2,11 @@ import { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { InstantSearch } from '../../types';
 import isFacetRefined from './isFacetRefined';
 
-type BuiltInSendEventForFacet = (eventType: string, facetValue: string) => void;
+type BuiltInSendEventForFacet = (
+  eventType: string,
+  facetValue: string,
+  eventName?: string
+) => void;
 type CustomSendEventForFacet = (customPayload: any) => void;
 
 export type SendEventForFacet = BuiltInSendEventForFacet &
