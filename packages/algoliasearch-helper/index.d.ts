@@ -1,4 +1,4 @@
-// Note: Bellow, we will be importing both algoliasearch
+// Note: Below, we will be importing both algoliasearch
 // `v3` and algoliasearch `v4` types. The goal is being
 // able to export the algoliasearch-helper types using
 // the developer installed version of the client.
