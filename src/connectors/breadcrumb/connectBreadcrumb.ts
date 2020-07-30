@@ -2,6 +2,8 @@ import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
+  SendEventForFacet,
   isEqual,
   noop,
 } from '../../lib/utils';
@@ -69,6 +71,11 @@ export type BreadcrumbRendererOptions = {
    * True if refinement can be applied.
    */
   canRefine: boolean;
+
+  /**
+   * Send event to insights middleware
+   */
+  sendEvent: SendEventForFacet;
 };
 
 export type BreadcrumbConnector = Connector<
@@ -104,11 +111,19 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
     }
 
     const [hierarchicalFacetName] = attributes;
+    let sendEvent;
 
     return {
       $$type: 'ais.breadcrumb',
 
       init({ createURL, helper, instantSearchInstance }) {
+        sendEvent = createSendEventForFacet({
+          instantSearchInstance,
+          helper,
+          attribute: hierarchicalFacetName,
+          widgetType: 'ais.breadcrumb',
+        });
+
         connectorState.createURL = facetValue => {
           if (!facetValue) {
             const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
@@ -137,11 +152,13 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
               hierarchicalFacetName
             );
             if (breadcrumb.length > 0) {
+              sendEvent('click', breadcrumb[0]);
               helper
                 .toggleRefinement(hierarchicalFacetName, breadcrumb[0])
                 .search();
             }
           } else {
+            sendEvent('click', facetValue);
             helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
           }
         };
@@ -153,6 +170,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
             instantSearchInstance,
             items: [],
             refine: connectorState.refine,
+            sendEvent,
             widgetParams,
           },
           true
@@ -176,6 +194,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
             instantSearchInstance,
             items,
             refine: connectorState.refine,
+            sendEvent,
             widgetParams,
           },
           false

@@ -5,9 +5,10 @@ import isFacetRefined from './isFacetRefined';
 type BuiltInSendEventForFacet = (eventType: string, facetValue: string) => void;
 type CustomSendEventForFacet = (customPayload: any) => void;
 
-type SendEventForFacet = BuiltInSendEventForFacet & CustomSendEventForFacet;
+export type SendEventForFacet = BuiltInSendEventForFacet &
+  CustomSendEventForFacet;
 
-export default function createSendEventForFacet({
+export function createSendEventForFacet({
   instantSearchInstance,
   helper,
   attribute,
