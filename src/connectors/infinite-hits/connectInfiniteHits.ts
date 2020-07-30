@@ -11,7 +11,9 @@ import {
   addAbsolutePosition,
   addQueryID,
   noop,
+  createSendEventForHits,
   SendEventForHits,
+  createBindEventForHits,
   BindEventForHits,
 } from '../../lib/utils';
 
@@ -155,6 +157,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
     let prevState: Partial<SearchParameters>;
     let showPrevious: () => void;
     let showMore: () => void;
+    let sendEvent;
+    let bindEvent;
 
     const getFirstReceivedPage = () =>
       Math.min(...Object.keys(cachedHits || {}).map(Number));
@@ -193,6 +197,15 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       init({ instantSearchInstance, helper }) {
         showPrevious = getShowPrevious(helper);
         showMore = getShowMore(helper);
+        sendEvent = createSendEventForHits({
+          instantSearchInstance,
+          helper,
+          widgetType: 'ais.infiniteHits',
+        });
+        bindEvent = createBindEventForHits({
+          helper,
+          widgetType: 'ais.infiniteHits',
+        });
 
         renderFn(
           {
@@ -200,6 +213,8 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
               cache.read({ state: helper.state }) || {}
             ),
             results: undefined,
+            sendEvent,
+            bindEvent,
             showPrevious,
             showMore,
             isFirstPage:
@@ -278,10 +293,14 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         const isFirstPage = getFirstReceivedPage() === 0;
         const isLastPage = results.nbPages <= results.page + 1;
 
+        sendEvent('view', cachedHits[page]);
+
         renderFn(
           {
             hits: extractHitsFromCachedHits(cachedHits!),
             results,
+            sendEvent,
+            bindEvent,
             showPrevious,
             showMore,
             isFirstPage,

@@ -2,6 +2,7 @@
 
 exports[`infiniteHits() calls twice render(<Hits props />, container) 1`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
@@ -34,6 +35,7 @@ Object {
     "hitsPerPage": 2,
     "page": 1,
   },
+  "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": Object {
@@ -43,7 +45,7 @@ Object {
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "empty": false,
       "item": false,
@@ -56,6 +58,7 @@ Object {
 
 exports[`infiniteHits() calls twice render(<Hits props />, container) 2`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
@@ -88,6 +91,7 @@ Object {
     "hitsPerPage": 2,
     "page": 1,
   },
+  "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": Object {
@@ -97,7 +101,7 @@ Object {
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "empty": false,
       "item": false,
@@ -110,6 +114,7 @@ Object {
 
 exports[`infiniteHits() if it is the last page, then the props should contain isLastPage true 1`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
@@ -143,6 +148,7 @@ Object {
     "nbPages": 2,
     "page": 0,
   },
+  "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": Object {
@@ -152,7 +158,7 @@ Object {
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "empty": false,
       "item": false,
@@ -165,6 +171,7 @@ Object {
 
 exports[`infiniteHits() if it is the last page, then the props should contain isLastPage true 2`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
@@ -198,6 +205,7 @@ Object {
     "nbPages": 2,
     "page": 1,
   },
+  "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": Object {
@@ -207,7 +215,7 @@ Object {
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "empty": false,
       "item": false,
@@ -220,6 +228,7 @@ Object {
 
 exports[`infiniteHits() renders transformed items 1`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "disabledLoadMore": "ais-InfiniteHits-loadMore--disabled",
     "disabledLoadPrevious": "ais-InfiniteHits-loadPrevious--disabled",
@@ -254,6 +263,7 @@ Object {
     "hitsPerPage": 2,
     "page": 1,
   },
+  "sendEvent": [Function],
   "showMore": [Function],
   "showPrevious": [Function],
   "templateProps": Object {
@@ -263,7 +273,7 @@ Object {
       "showMoreText": "Show more results",
       "showPreviousText": "Show previous results",
     },
-    "templatesConfig": undefined,
+    "templatesConfig": Object {},
     "useCustomCompileOptions": Object {
       "empty": false,
       "item": false,
