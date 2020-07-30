@@ -71,6 +71,85 @@ export default function connectRange(renderFn, unmountFn = noop) {
       to: v => formatToNumber(v).toLocaleString(),
     };
 
+    // eslint-disable-next-line complexity
+    const getRefinedState = (helper, currentRange, nextMin, nextMax) => {
+      let resolvedState = helper.state;
+      const { min: currentRangeMin, max: currentRangeMax } = currentRange;
+
+      const [min] = resolvedState.getNumericRefinement(attribute, '>=') || [];
+      const [max] = resolvedState.getNumericRefinement(attribute, '<=') || [];
+
+      const isResetMin = nextMin === undefined || nextMin === '';
+      const isResetMax = nextMax === undefined || nextMax === '';
+
+      const nextMinAsNumber = !isResetMin ? parseFloat(nextMin) : undefined;
+      const nextMaxAsNumber = !isResetMax ? parseFloat(nextMax) : undefined;
+
+      let newNextMin;
+      if (!hasMinBound && currentRangeMin === nextMinAsNumber) {
+        newNextMin = undefined;
+      } else if (hasMinBound && isResetMin) {
+        newNextMin = minBound;
+      } else {
+        newNextMin = nextMinAsNumber;
+      }
+
+      let newNextMax;
+      if (!hasMaxBound && currentRangeMax === nextMaxAsNumber) {
+        newNextMax = undefined;
+      } else if (hasMaxBound && isResetMax) {
+        newNextMax = maxBound;
+      } else {
+        newNextMax = nextMaxAsNumber;
+      }
+
+      const isResetNewNextMin = newNextMin === undefined;
+      const isValidNewNextMin = isFiniteNumber(newNextMin);
+      const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
+      const isGreaterThanCurrentRange =
+        isValidMinCurrentRange && currentRangeMin <= newNextMin;
+      const isMinValid =
+        isResetNewNextMin ||
+        (isValidNewNextMin &&
+          (!isValidMinCurrentRange || isGreaterThanCurrentRange));
+
+      const isResetNewNextMax = newNextMax === undefined;
+      const isValidNewNextMax = isFiniteNumber(newNextMax);
+      const isValidMaxCurrentRange = isFiniteNumber(currentRangeMax);
+      const isLowerThanRange =
+        isValidMaxCurrentRange && currentRangeMax >= newNextMax;
+      const isMaxValid =
+        isResetNewNextMax ||
+        (isValidNewNextMax && (!isValidMaxCurrentRange || isLowerThanRange));
+
+      const hasMinChange = min !== newNextMin;
+      const hasMaxChange = max !== newNextMax;
+
+      if ((hasMinChange || hasMaxChange) && isMinValid && isMaxValid) {
+        resolvedState = resolvedState.removeNumericRefinement(attribute);
+
+        if (isValidNewNextMin) {
+          resolvedState = resolvedState.addNumericRefinement(
+            attribute,
+            '>=',
+            formatToNumber(newNextMin)
+          );
+        }
+
+        if (isValidNewNextMax) {
+          resolvedState = resolvedState.addNumericRefinement(
+            attribute,
+            '<=',
+            formatToNumber(newNextMax)
+          );
+        }
+
+        return resolvedState;
+      }
+
+      return null;
+    };
+
     return {
       $$type: 'ais.range',
 
@@ -115,78 +194,14 @@ export default function connectRange(renderFn, unmountFn = noop) {
       _refine(helper, currentRange) {
         // eslint-disable-next-line complexity
         return ([nextMin, nextMax] = []) => {
-          const { min: currentRangeMin, max: currentRangeMax } = currentRange;
-
-          const [min] = helper.getNumericRefinement(attribute, '>=') || [];
-          const [max] = helper.getNumericRefinement(attribute, '<=') || [];
-
-          const isResetMin = nextMin === undefined || nextMin === '';
-          const isResetMax = nextMax === undefined || nextMax === '';
-
-          const nextMinAsNumber = !isResetMin ? parseFloat(nextMin) : undefined;
-          const nextMaxAsNumber = !isResetMax ? parseFloat(nextMax) : undefined;
-
-          let newNextMin;
-          if (!hasMinBound && currentRangeMin === nextMinAsNumber) {
-            newNextMin = undefined;
-          } else if (hasMinBound && isResetMin) {
-            newNextMin = minBound;
-          } else {
-            newNextMin = nextMinAsNumber;
-          }
-
-          let newNextMax;
-          if (!hasMaxBound && currentRangeMax === nextMaxAsNumber) {
-            newNextMax = undefined;
-          } else if (hasMaxBound && isResetMax) {
-            newNextMax = maxBound;
-          } else {
-            newNextMax = nextMaxAsNumber;
-          }
-
-          const isResetNewNextMin = newNextMin === undefined;
-          const isValidNewNextMin = isFiniteNumber(newNextMin);
-          const isValidMinCurrentRange = isFiniteNumber(currentRangeMin);
-          const isGreaterThanCurrentRange =
-            isValidMinCurrentRange && currentRangeMin <= newNextMin;
-          const isMinValid =
-            isResetNewNextMin ||
-            (isValidNewNextMin &&
-              (!isValidMinCurrentRange || isGreaterThanCurrentRange));
-
-          const isResetNewNextMax = newNextMax === undefined;
-          const isValidNewNextMax = isFiniteNumber(newNextMax);
-          const isValidMaxCurrentRange = isFiniteNumber(currentRangeMax);
-          const isLowerThanRange =
-            isValidMaxCurrentRange && currentRangeMax >= newNextMax;
-          const isMaxValid =
-            isResetNewNextMax ||
-            (isValidNewNextMax &&
-              (!isValidMaxCurrentRange || isLowerThanRange));
-
-          const hasMinChange = min !== newNextMin;
-          const hasMaxChange = max !== newNextMax;
-
-          if ((hasMinChange || hasMaxChange) && isMinValid && isMaxValid) {
-            helper.removeNumericRefinement(attribute);
-
-            if (isValidNewNextMin) {
-              helper.addNumericRefinement(
-                attribute,
-                '>=',
-                formatToNumber(newNextMin)
-              );
-            }
-
-            if (isValidNewNextMax) {
-              helper.addNumericRefinement(
-                attribute,
-                '<=',
-                formatToNumber(newNextMax)
-              );
-            }
-
-            helper.search();
+          const refinedState = getRefinedState(
+            helper,
+            currentRange,
+            nextMin,
+            nextMax
+          );
+          if (refinedState) {
+            helper.setState(refinedState).search();
           }
         };
       },
