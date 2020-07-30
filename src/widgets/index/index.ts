@@ -264,7 +264,7 @@ const index = (props: IndexProps): Index => {
           _uiState: localUiState,
         });
 
-        localWidgets.forEach(widget => {
+        widgets.forEach(widget => {
           if (widget.getWidgetRenderState) {
             const widgetRenderState = widget.getWidgetRenderState(
               localInstantSearchInstance!.renderState[this.getIndexId()] || {},
