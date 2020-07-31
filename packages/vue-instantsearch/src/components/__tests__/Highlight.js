@@ -78,3 +78,25 @@ test('allows usage of dot delimited path to access nested attribute', () => {
 
   expect(wrapper.html()).toMatchSnapshot();
 });
+
+test('retains whitespace nodes', () => {
+  const hit = {
+    _highlightResult: {
+      attr: {
+        value: `con<mark>tent</mark> <mark>search</mark>ing`,
+      },
+    },
+  };
+
+  const wrapper = mount(Highlight, {
+    propsData: {
+      attribute: 'attr',
+      highlightedTagName: 'marquee',
+      hit,
+    },
+  });
+
+  expect(wrapper.html()).toBe(
+    `<span class="ais-Highlight">con<marquee class="ais-Highlight-highlighted">tent</marquee>  <marquee class="ais-Highlight-highlighted">search</marquee>ing</span>`
+  );
+});

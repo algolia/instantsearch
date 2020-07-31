@@ -1,7 +1,5 @@
 <template>
-  <span
-    :class="suit()"
-  >
+  <span :class="suit()">
     <component
       v-for="({ value, isHighlighted }, index) in parsedHighlights"
       :class="[isHighlighted && suit('highlighted')]"

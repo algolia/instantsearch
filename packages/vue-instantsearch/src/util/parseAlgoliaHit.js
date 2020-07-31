@@ -39,7 +39,10 @@ function parseHighlightedAttribute({ preTag, postTag, highlightedValue = '' }) {
 
       if (splitByPostTag[1] !== '') {
         elements.push({
-          value: splitByPostTag[1],
+          // Vue removes nodes which are just a single space (vuejs/vue#9208),
+          // we replace this by two spaces, which does not have an impact,
+          // unless someone would have `white-space: pre` on the highlights
+          value: splitByPostTag[1] === ' ' ? '  ' : splitByPostTag[1],
           isHighlighted: false,
         });
       }
