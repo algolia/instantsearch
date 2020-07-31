@@ -1,7 +1,6 @@
 import { render as preactRender } from 'preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { SearchClient } from '../../../types';
-import defaultTemplates from '../defaultTemplates';
 import hits from '../hits';
 import { castToJestMock } from '../../../../test/utils/castToJestMock';
 import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
@@ -31,7 +30,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
 
 describe('hits()', () => {
   let container;
-  let templateProps;
   let widget;
   let results;
   let helper;
@@ -41,11 +39,6 @@ describe('hits()', () => {
 
     helper = algoliasearchHelper({} as SearchClient, '', {});
     container = document.createElement('div');
-    templateProps = {
-      templatesConfig: undefined,
-      templates: defaultTemplates,
-      useCustomCompileOptions: { item: false, empty: false },
-    };
     widget = hits({ container, cssClasses: { root: ['root', 'cx'] } });
     widget.init({
       helper,
