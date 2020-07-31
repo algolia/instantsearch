@@ -105,12 +105,15 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       ? toArray(userOff).map(escapeRefinement)
       : undefined;
 
+    let sendEvent;
+
     return {
       $$type: 'ais.toggleRefinement',
 
       _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
+          sendEvent('click', isRefined);
           if (hasAnOffValue) {
             off.forEach(v =>
               helper.removeDisjunctiveFacetRefinement(attribute, v)
@@ -135,6 +138,32 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       init({ state, helper, createURL, instantSearchInstance }) {
+        sendEvent = (...args) => {
+          if (args.length === 1) {
+            instantSearchInstance.sendEventToInsights(args[0]);
+            return;
+          }
+          const [eventType, isRefined, eventName = 'Filter Applied'] = args;
+          if (eventType !== 'click' || on === undefined) {
+            return;
+          }
+          // Checking
+          if (!isRefined) {
+            instantSearchInstance.sendEventToInsights({
+              insightsMethod: 'clickedFilters',
+              widgetType: 'ais.toggleRefinement',
+              eventType,
+              payload: {
+                eventName,
+                index: helper.getIndex(),
+                filters: on.map(
+                  value => `${attribute}:${JSON.stringify(value)}`
+                ),
+              },
+            });
+          }
+        };
+
         this._createURL = isCurrentlyRefined => () => {
           const valuesToRemove = isCurrentlyRefined ? on : off;
           if (valuesToRemove) {
@@ -198,6 +227,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             value,
             createURL: this._createURL(value.isRefined),
             refine: this.toggleRefinement,
+            sendEvent,
             instantSearchInstance,
             widgetParams,
           },
@@ -265,6 +295,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
             state,
             createURL: this._createURL(value.isRefined),
             refine: this.toggleRefinement,
+            sendEvent,
             helper,
             instantSearchInstance,
             widgetParams,

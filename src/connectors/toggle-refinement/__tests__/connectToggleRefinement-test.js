@@ -3,6 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import connectToggleRefinement from '../connectToggleRefinement';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectToggleRefinement', () => {
   describe('Usage', () => {
@@ -299,6 +300,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -445,6 +447,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     {
@@ -673,7 +676,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
     helper.search = jest.fn();
 
-    widget.init({ helper, state: helper.state });
+    widget.init({
+      helper,
+      state: helper.state,
+      instantSearchInstance: createInstantSearch(),
+    });
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual({
       whatever: [],
@@ -724,7 +731,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     );
     helper.search = jest.fn();
 
-    widget.init({ helper, state: helper.state });
+    widget.init({
+      helper,
+      state: helper.state,
+      instantSearchInstance: createInstantSearch(),
+    });
 
     expect(helper.state.disjunctiveFacetsRefinements).toEqual({
       whatever: [],
