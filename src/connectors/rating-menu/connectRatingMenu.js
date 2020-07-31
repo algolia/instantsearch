@@ -104,6 +104,8 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       throw new Error(withUsage('The `attribute` option is required.'));
     }
 
+    let sendEvent;
+
     return {
       $$type: 'ais.ratingMenu',
 
@@ -112,12 +114,38 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         this._createURL = state => facetValue =>
           createURL(state.toggleRefinement(attribute, facetValue));
 
+        sendEvent = (...args) => {
+          if (args.length === 1) {
+            instantSearchInstance.sendEventToInsights(args[0]);
+            return;
+          }
+          const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+          if (eventType !== 'click') {
+            return;
+          }
+          const isRefined =
+            this._getRefinedStar(helper.state) === Number(facetValue);
+          if (!isRefined) {
+            instantSearchInstance.sendEventToInsights({
+              insightsMethod: 'clickedFilters',
+              widgetType: 'ais.ratingMenu',
+              eventType,
+              payload: {
+                eventName,
+                index: helper.getIndex(),
+                filters: [`${attribute}>=${facetValue}`],
+              },
+            });
+          }
+        };
+
         renderFn(
           {
             instantSearchInstance,
             items: [],
             hasNoResults: true,
             refine: this._toggleRefinement,
+            sendEvent,
             createURL: this._createURL(helper.state),
             widgetParams,
           },
@@ -167,6 +195,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
             items: facetValues,
             hasNoResults: results.nbHits === 0,
             refine: this._toggleRefinement,
+            sendEvent,
             createURL: this._createURL(state),
             widgetParams,
           },
@@ -221,6 +250,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
       },
 
       _toggleRefinement(helper, facetValue) {
+        sendEvent('click', facetValue);
         const isRefined =
           this._getRefinedStar(helper.state) === Number(facetValue);
         helper.removeDisjunctiveFacetRefinement(attribute);

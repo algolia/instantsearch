@@ -3,6 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 import connectRatingMenu from '../connectRatingMenu';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount) => {
@@ -26,6 +27,7 @@ describe('connectRatingMenu', () => {
       helper,
       state: helper.state,
       createURL: () => '#',
+      instantSearchInstance: createInstantSearch(),
     });
 
     const { refine } = rendering.mock.calls[0][0];
