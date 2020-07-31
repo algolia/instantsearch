@@ -37,14 +37,6 @@ export {
 export { addAbsolutePosition } from './hits-absolute-position';
 export { addQueryID } from './hits-query-id';
 export { default as isFacetRefined } from './isFacetRefined';
-export {
-  createSendEventForFacet,
-  SendEventForFacet,
-} from './createSendEventForFacet';
-export {
-  createSendEventForHits,
-  createBindEventForHits,
-  SendEventForHits,
-  BindEventForHits,
-} from './createSendEventForHits';
+export * from './createSendEventForFacet';
+export * from './createSendEventForHits';
 export { convertNumericRefinementsToFilters } from './convertNumericRefinementsToFilters';
