@@ -17,7 +17,7 @@ export type InsightsProps = {
 export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
-  const { insightsClient: _insightsClient, onEvent } = props;
+  const { insightsClient: _insightsClient, onEvent } = props || {};
   if (_insightsClient !== false && !_insightsClient) {
     if (__DEV__) {
       throw new Error(
@@ -83,11 +83,17 @@ aa('setUserToken', 'your-user-token');
         if (Array.isArray((insightsClient as any).queue)) {
           // Context: The umd build of search-insights is asynchronously loaded by the snippet.
           //
-          // When user called `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
-          // it is stored in `aa.queue` and we are reading it to set userToken to search call.
-          // This queue is meant to be consumed whenever `search-insights` is loaded and when it runs `processQueue()`.
-          // But the reason why we handle it here is to prevent the first search API from being triggered
-          // without userToken because search-insights is not loaded yet.
+          // When user calls `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
+          // ['setUserToken', 'my-user-token'] gets stored in `aa.queue`.
+          // Whenever `search-insights` is finally loaded, it will process the queue.
+          //
+          // But the reason why we handle it here is
+          // (1) At this point, even though `search-insights` is not loaded yet,
+          // we still want to read the token from the queue.
+          // Otherwise, the first search call will be fired without the token.
+          // (2) Or, user could use a customized client of `search-insights`,
+          // for example, by using `createInsightsClient` function.
+          // Then `processQueue` might not be called. But we still want to read the token from the queue.
           (insightsClient as any).queue.forEach(([method, firstArgument]) => {
             if (method === 'setUserToken') {
               setUserTokenToSearch(firstArgument);
