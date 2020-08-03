@@ -262,6 +262,32 @@ describe('findResultsState', () => {
         );
       });
 
+      it('with custom client, without "params"', async () => {
+        const Connected = createWidget();
+
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams() {
+              return undefined;
+            },
+          }),
+          searchState: {
+            query: 'iPhone',
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data.rawResults[0].params).toBeUndefined();
+      });
+
       it('with shadowing query', async () => {
         const Connected = createWidget();
 
@@ -777,6 +803,45 @@ describe('findResultsState', () => {
         expect(second.rawResults[0].params).toMatchInlineSnapshot(
           `"query=iPad%26query%3Dtest"`
         );
+      });
+
+      it('custom client without "params"', async () => {
+        const Connected = createWidget();
+        const App = props => (
+          <InstantSearch {...props}>
+            <Connected />
+            <Index indexId="index1WithRefinement" indexName="index1">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
+
+        const props = {
+          ...requiredProps,
+          searchClient: createSearchClient({
+            transformResponseParams() {
+              return undefined;
+            },
+          }),
+          indexName: 'index1',
+          searchState: {
+            query: 'iPhone',
+            indices: {
+              index1WithRefinement: {
+                query: 'iPad&query=test',
+              },
+            },
+          },
+        };
+
+        const data = await findResultsState(App, props);
+
+        expect(data).toHaveLength(2);
+
+        const [first, second] = data;
+
+        expect(first.rawResults[0].params).toBeUndefined();
+        expect(second.rawResults[0].params).toBeUndefined();
       });
 
       it('server-side params', async () => {
