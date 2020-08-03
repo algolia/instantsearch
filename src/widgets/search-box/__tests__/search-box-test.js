@@ -1,5 +1,9 @@
 import { render } from 'preact';
 import searchBox from '../search-box';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -42,7 +46,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     test('renders during init()', () => {
       const widget = searchBox({ container: document.createElement('div') });
 
-      widget.init({ helper });
+      widget.init(createInitOptions({ helper }));
 
       const [firstRender] = render.mock.calls;
 
@@ -54,8 +58,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       const container = document.createElement('div');
       const widget = searchBox({ container });
 
-      widget.init({ helper });
-      widget.render({ helper, searchMetadata: { isSearchStalled: false } });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ helper }));
 
       const [firstRender, secondRender] = render.mock.calls;
 
@@ -71,7 +75,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         container: document.createElement('div'),
       });
 
-      widget.init({ helper });
+      widget.init(createInitOptions({ helper }));
 
       const [firstRender] = render.mock.calls;
 
@@ -81,8 +85,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
     test('sets isSearchStalled', () => {
       const widget = searchBox({ container: document.createElement('div') });
 
-      widget.init({ helper });
-      widget.render({ helper, searchMetadata: { isSearchStalled: true } });
+      widget.init(createInitOptions({ helper }));
+      widget.render(
+        createRenderOptions({
+          helper,
+          searchMetadata: { isSearchStalled: true },
+        })
+      );
 
       const [, secondRender] = render.mock.calls;
 
