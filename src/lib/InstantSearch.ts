@@ -17,6 +17,7 @@ import {
   Widget,
   UiState,
   CreateURL,
+  RenderState,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
 import { Middleware, MiddlewareDefinition } from '../middleware';
@@ -133,6 +134,7 @@ class InstantSearch extends EventEmitter {
   public mainIndex: Index;
   public started: boolean;
   public templatesConfig: object;
+  public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
   public _isSearchStalled: boolean;
