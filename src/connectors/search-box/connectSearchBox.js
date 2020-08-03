@@ -72,8 +72,7 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
     function clear(helper) {
       return function() {
-        helper.setQuery('');
-        helper.search();
+        helper.setQuery('').search();
       };
     }
 
@@ -86,7 +85,8 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         this._clear();
       },
 
-      init({ helper, instantSearchInstance }) {
+      init(initOptions) {
+        const { helper, renderState, instantSearchInstance } = initOptions;
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
 
@@ -107,27 +107,21 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
 
         renderFn(
           {
-            query: helper.state.query || '',
-            refine: this._refine,
-            clear: this._cachedClear,
-            widgetParams,
+            ...this.getWidgetRenderState(renderState, initOptions).searchBox,
             instantSearchInstance,
           },
           true
         );
       },
 
-      render({ helper, instantSearchInstance, searchMetadata }) {
+      render(renderOptions) {
+        const { helper, renderState, instantSearchInstance } = renderOptions;
         this._clear = clear(helper);
 
         renderFn(
           {
-            query: helper.state.query || '',
-            refine: this._refine,
-            clear: this._cachedClear,
-            widgetParams,
+            ...this.getWidgetRenderState(renderState, renderOptions).searchBox,
             instantSearchInstance,
-            isSearchStalled: searchMetadata.isSearchStalled,
           },
           false
         );
@@ -137,6 +131,19 @@ export default function connectSearchBox(renderFn, unmountFn = noop) {
         unmountFn();
 
         return state.setQueryParameter('query', undefined);
+      },
+
+      getWidgetRenderState(renderState, { helper, searchMetadata }) {
+        return {
+          ...renderState,
+          searchBox: {
+            query: helper.state.query || '',
+            refine: this._refine,
+            clear: this._cachedClear,
+            widgetParams,
+            isSearchStalled: searchMetadata.isSearchStalled,
+          },
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
