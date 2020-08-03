@@ -6,6 +6,10 @@ import {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
+import {
+  AutocompleteRendererOptions,
+  AutocompleteConnectorParams,
+} from '../connectors/autocomplete/connectAutocomplete';
 
 export type ScopedResult = {
   indexId: string;
@@ -133,6 +137,10 @@ export type IndexRenderState = Partial<{
     {
       queryHook?(query: string, refine: (query: string) => void);
     }
+  >;
+  autocomplete: WidgetRenderState<
+    AutocompleteRendererOptions,
+    AutocompleteConnectorParams
   >;
 }>;
 
