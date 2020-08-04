@@ -102,24 +102,36 @@ search.addWidgets([
     return {
       $$type: 'ais.autocomplete',
 
-      init({ instantSearchInstance, helper }) {
+      init(initOptions) {
+        const { helper, renderState, instantSearchInstance } = initOptions;
         connectorState.refine = (query: string) => {
           helper.setQuery(query).search();
         };
 
         renderFn(
           {
-            widgetParams,
-            currentRefinement: helper.state.query || '',
-            indices: [],
-            refine: connectorState.refine,
+            ...this.getWidgetRenderState!(renderState, initOptions)
+              .autocomplete!,
             instantSearchInstance,
           },
           true
         );
       },
 
-      render({ helper, scopedResults, instantSearchInstance }) {
+      render(renderOptions) {
+        const { renderState, instantSearchInstance } = renderOptions;
+
+        renderFn(
+          {
+            ...this.getWidgetRenderState!(renderState, renderOptions)
+              .autocomplete!,
+            instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      getWidgetRenderState(renderState, { helper, scopedResults }) {
         const indices = scopedResults.map(scopedResult => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -135,16 +147,15 @@ search.addWidgets([
           };
         });
 
-        renderFn(
-          {
-            widgetParams,
+        return {
+          ...renderState,
+          autocomplete: {
             currentRefinement: helper.state.query || '',
             indices,
             refine: connectorState.refine!,
-            instantSearchInstance,
+            widgetParams,
           },
-          false
-        );
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
