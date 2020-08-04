@@ -7,6 +7,7 @@ import { createSearchClient } from '../../../../test/mock/createSearchClient';
 import connectConfigure from '../connectConfigure';
 import {
   createInitOptions,
+  createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/mock/createWidget';
 import { noop } from '../../../lib/utils';
@@ -238,6 +239,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         clickAnalytics: true,
       })
     );
+  });
+
+  describe('getWidgetRenderState', () => {
+    test('returns the render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createConfigure = connectConfigure(renderFn, unmountFn);
+      const configure = createConfigure({
+        searchParameters: { facetFilters: ['brand:Samsung'] },
+      });
+
+      const renderState1 = configure.getWidgetRenderState!(
+        {},
+        createInitOptions()
+      );
+
+      expect(renderState1.configure).toEqual({
+        refine: undefined,
+        widgetParams: {
+          searchParameters: { facetFilters: ['brand:Samsung'] },
+        },
+      });
+
+      configure.init!(createInitOptions());
+
+      const renderState2 = configure.getWidgetRenderState!(
+        {},
+        createRenderOptions()
+      );
+
+      expect(renderState2.configure).toEqual({
+        refine: expect.any(Function),
+        widgetParams: {
+          searchParameters: { facetFilters: ['brand:Samsung'] },
+        },
+      });
+    });
   });
 
   describe('getWidgetUiState', () => {
