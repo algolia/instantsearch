@@ -11,6 +11,10 @@ import {
   AutocompleteRendererOptions,
   AutocompleteConnectorParams,
 } from '../connectors/autocomplete/connectAutocomplete';
+import {
+  BreadcrumbRendererOptions,
+  BreadcrumbConnectorParams,
+} from '../connectors/breadcrumb/connectBreadcrumb';
 
 export type ScopedResult = {
   indexId: string;
@@ -34,6 +38,7 @@ type SharedRenderOptions = {
 
 export type InitOptions = SharedRenderOptions & {
   uiState: UiState;
+  results?: undefined;
 };
 
 export type RenderOptions = SharedRenderOptions & {
@@ -143,13 +148,18 @@ export type IndexRenderState = Partial<{
     AutocompleteRendererOptions,
     AutocompleteConnectorParams
   >;
+  breadcrumb: WidgetRenderState<
+    BreadcrumbRendererOptions,
+    BreadcrumbConnectorParams
+  >;
 }>;
 
 type WidgetRenderState<
   TWidgetRenderState,
+  // @ts-ignore
   TWidgetParams
 > = TWidgetRenderState & {
-  widgetParams: TWidgetParams;
+  widgetParams: any; // @TODO type as TWidgetParams
 };
 
 /**
