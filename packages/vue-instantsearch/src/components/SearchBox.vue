@@ -84,15 +84,6 @@ export default {
       localValue: '',
     };
   },
-  methods: {
-    onFormSubmit() {
-      const input = this.$el.querySelector('input[type=search]');
-      input.blur();
-    },
-    onFormReset() {
-      this.state.refine('');
-    },
-  },
   computed: {
     isControlled() {
       return typeof this.value !== 'undefined';
