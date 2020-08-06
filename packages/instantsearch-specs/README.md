@@ -34,9 +34,9 @@ git push origin <tag_name>
 
 InstantSearch.css is a living standard. This table tracks down the version implemented in each InstantSearch:
 
-| Project | Version     |
-| ------- | ----------- |
-| Angular | 7.1.0       |
-| React   | 7.1.0       |
-| Vanilla | In progress |
-| Vue     | In progress |
+| Project | Version |
+| ------- | ------- |
+| Angular | 7       |
+| React   | 7       |
+| Vanilla | 7       |
+| Vue     | 7       |
