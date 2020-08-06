@@ -160,10 +160,12 @@ export type IndexRenderState = Partial<{
     AutocompleteRendererOptions,
     AutocompleteConnectorParams
   >;
-  breadcrumb: WidgetRenderState<
-    BreadcrumbRendererOptions,
-    BreadcrumbConnectorParams
-  >;
+  breadcrumb: {
+    [attribute: string]: WidgetRenderState<
+      BreadcrumbRendererOptions,
+      BreadcrumbConnectorParams
+    >;
+  };
   clearRefinements: WidgetRenderState<
     ClearRefinementsRendererOptions,
     ClearRefinementsConnectorParams
