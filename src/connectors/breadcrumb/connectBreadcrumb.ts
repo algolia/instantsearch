@@ -151,7 +151,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         renderFn(
           {
             ...this.getWidgetRenderState!(initOptions.renderState, initOptions)
-              .breadcrumb!,
+              .breadcrumb![hierarchicalFacetName],
             instantSearchInstance: initOptions.instantSearchInstance,
           },
           true
@@ -164,7 +164,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
             ...this.getWidgetRenderState!(
               renderOptions.renderState,
               renderOptions
-            ).breadcrumb!,
+            ).breadcrumb![hierarchicalFacetName],
             instantSearchInstance: renderOptions.instantSearchInstance,
           },
           false
@@ -198,11 +198,14 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         return {
           ...renderState,
           breadcrumb: {
-            canRefine: items.length > 0,
-            createURL: connectorState.createURL,
-            items,
-            refine: connectorState.refine,
-            widgetParams,
+            ...renderState.breadcrumb,
+            [hierarchicalFacetName]: {
+              canRefine: items.length > 0,
+              createURL: connectorState.createURL,
+              items,
+              refine: connectorState.refine,
+              widgetParams,
+            },
           },
         };
       },

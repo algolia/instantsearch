@@ -75,36 +75,62 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       const breadcrumb = createBreadcrumb({
         attributes: ['category', 'subCategory'],
       });
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
-        index: 'indexName',
-        hierarchicalFacets: [
-          {
-            name: 'category',
-            attributes: ['category', 'subCategory'],
-            separator: ' > ',
-          },
-        ],
-      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        breadcrumb.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
 
       helper.toggleRefinement('category', 'Decoration');
 
       const renderState1 = breadcrumb.getWidgetRenderState!(
-        {},
+        {
+          breadcrumb: {
+            anotherCategory: {
+              canRefine: false,
+              createURL: () => '',
+              items: [],
+              refine: () => {},
+              widgetParams: { attributes: ['anotherCategory'] },
+            },
+          },
+        },
         createInitOptions({ helper })
       );
 
       expect(renderState1.breadcrumb).toEqual({
-        canRefine: false,
-        createURL: undefined,
-        items: [],
-        refine: undefined,
-        widgetParams: { attributes: ['category', 'subCategory'] },
+        anotherCategory: {
+          canRefine: false,
+          createURL: expect.any(Function),
+          items: [],
+          refine: expect.any(Function),
+          widgetParams: { attributes: ['anotherCategory'] },
+        },
+        category: {
+          canRefine: false,
+          createURL: undefined,
+          items: [],
+          refine: undefined,
+          widgetParams: { attributes: ['category', 'subCategory'] },
+        },
       });
 
       breadcrumb.init!(createInitOptions({ helper }));
 
       const renderState2 = breadcrumb.getWidgetRenderState!(
-        {},
+        {
+          breadcrumb: {
+            anotherCategory: {
+              canRefine: false,
+              createURL: () => '',
+              items: [],
+              refine: () => {},
+              widgetParams: { attributes: ['anotherCategory'] },
+            },
+          },
+        },
         createRenderOptions({
           helper,
           state: helper.state,
@@ -134,11 +160,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       );
 
       expect(renderState2.breadcrumb).toEqual({
-        canRefine: true,
-        createURL: expect.any(Function),
-        items: [{ label: 'Decoration', value: null }],
-        refine: expect.any(Function),
-        widgetParams: { attributes: ['category', 'subCategory'] },
+        anotherCategory: {
+          canRefine: false,
+          createURL: expect.any(Function),
+          items: [],
+          refine: expect.any(Function),
+          widgetParams: { attributes: ['anotherCategory'] },
+        },
+        category: {
+          canRefine: true,
+          createURL: expect.any(Function),
+          items: [{ label: 'Decoration', value: null }],
+          refine: expect.any(Function),
+          widgetParams: { attributes: ['category', 'subCategory'] },
+        },
       });
     });
   });
