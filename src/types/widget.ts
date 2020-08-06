@@ -22,6 +22,10 @@ import {
   ConfigureRendererOptions,
   ConfigureConnectorParams,
 } from '../connectors/configure/connectConfigure';
+import {
+  CurrentRefinementsRendererOptions,
+  CurrentRefinementsConnectorParams,
+} from '../connectors/current-refinements/connectCurrentRefinements';
 
 export type ScopedResult = {
   indexId: string;
@@ -166,6 +170,10 @@ export type IndexRenderState = Partial<{
   configure: WidgetRenderState<
     ConfigureRendererOptions,
     ConfigureConnectorParams
+  >;
+  currentRefinements: WidgetRenderState<
+    CurrentRefinementsRendererOptions,
+    CurrentRefinementsConnectorParams
   >;
 }>;
 
