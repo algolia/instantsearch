@@ -15,6 +15,10 @@ import {
   BreadcrumbRendererOptions,
   BreadcrumbConnectorParams,
 } from '../connectors/breadcrumb/connectBreadcrumb';
+import {
+  ClearRefinementsRendererOptions,
+  ClearRefinementsConnectorParams,
+} from '../connectors/clear-refinements/connectClearRefinements';
 
 export type ScopedResult = {
   indexId: string;
@@ -151,6 +155,10 @@ export type IndexRenderState = Partial<{
   breadcrumb: WidgetRenderState<
     BreadcrumbRendererOptions,
     BreadcrumbConnectorParams
+  >;
+  clearRefinements: WidgetRenderState<
+    ClearRefinementsRendererOptions,
+    ClearRefinementsConnectorParams
   >;
 }>;
 

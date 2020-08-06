@@ -1,3 +1,4 @@
+import { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import {
   checkRendering,
   clearRefinements,
@@ -53,6 +54,11 @@ export type ClearRefinementsConnector = Connector<
   ClearRefinementsConnectorParams
 >;
 
+type AttributesToClear = {
+  helper: AlgoliaSearchHelper;
+  items: string[];
+};
+
 const connectClearRefinements: ClearRefinementsConnector = function connectClearRefinements(
   renderFn,
   unmountFn = noop
@@ -74,9 +80,16 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
       );
     }
 
-    const connectorState = {
+    type ConnectorState = {
+      refine(): void;
+      createURL(): string;
+      attributesToClear: AttributesToClear[];
+    };
+
+    const connectorState: ConnectorState = {
       refine: noop,
       createURL: () => '',
+      attributesToClear: [],
     };
 
     const cachedRefine = () => connectorState.refine();
@@ -85,21 +98,67 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
     return {
       $$type: 'ais.clearRefinements',
 
-      init({ instantSearchInstance }) {
+      init(initOptions) {
+        const { renderState, instantSearchInstance } = initOptions;
+
         renderFn(
           {
-            hasRefinements: false,
-            refine: cachedRefine,
-            createURL: cachedCreateURL,
+            ...this.getWidgetRenderState!(renderState, initOptions)
+              .clearRefinements!,
             instantSearchInstance,
-            widgetParams,
           },
           true
         );
       },
 
-      render({ scopedResults, createURL, instantSearchInstance }) {
-        const attributesToClear = scopedResults.reduce<
+      render(renderOptions) {
+        const { createURL, renderState, instantSearchInstance } = renderOptions;
+
+        connectorState.refine = () => {
+          connectorState.attributesToClear.forEach(
+            ({ helper: indexHelper, items }) => {
+              indexHelper
+                .setState(
+                  clearRefinements({
+                    helper: indexHelper,
+                    attributesToClear: items,
+                  })
+                )
+                .search();
+            }
+          );
+        };
+
+        connectorState.createURL = () =>
+          createURL(
+            mergeSearchParameters(
+              ...connectorState.attributesToClear.map(
+                ({ helper: indexHelper, items }) => {
+                  return clearRefinements({
+                    helper: indexHelper,
+                    attributesToClear: items,
+                  });
+                }
+              )
+            )
+          );
+
+        renderFn(
+          {
+            ...this.getWidgetRenderState!(renderState, renderOptions)
+              .clearRefinements!,
+            instantSearchInstance,
+          },
+          false
+        );
+      },
+
+      dispose() {
+        unmountFn();
+      },
+
+      getWidgetRenderState(renderState, { scopedResults }) {
+        connectorState.attributesToClear = scopedResults.reduce<
           Array<ReturnType<typeof getAttributesToClear>>
         >((results, scopedResult) => {
           return results.concat(
@@ -112,47 +171,17 @@ const connectClearRefinements: ClearRefinementsConnector = function connectClear
           );
         }, []);
 
-        connectorState.refine = () => {
-          attributesToClear.forEach(({ helper: indexHelper, items }) => {
-            indexHelper
-              .setState(
-                clearRefinements({
-                  helper: indexHelper,
-                  attributesToClear: items,
-                })
-              )
-              .search();
-          });
-        };
-
-        connectorState.createURL = () =>
-          createURL(
-            mergeSearchParameters(
-              ...attributesToClear.map(({ helper: indexHelper, items }) => {
-                return clearRefinements({
-                  helper: indexHelper,
-                  attributesToClear: items,
-                });
-              })
-            )
-          );
-
-        renderFn(
-          {
-            hasRefinements: attributesToClear.some(
+        return {
+          ...renderState,
+          clearRefinements: {
+            hasRefinements: connectorState.attributesToClear.some(
               attributeToClear => attributeToClear.items.length > 0
             ),
             refine: cachedRefine,
             createURL: cachedCreateURL,
-            instantSearchInstance,
             widgetParams,
           },
-          false
-        );
-      },
-
-      dispose() {
-        unmountFn();
+        };
       },
     };
   };
@@ -163,7 +192,7 @@ function getAttributesToClear({
   includedAttributes,
   excludedAttributes,
   transformItems,
-}) {
+}): AttributesToClear {
   const clearsQuery =
     includedAttributes.indexOf('query') !== -1 ||
     excludedAttributes.indexOf('query') === -1;
