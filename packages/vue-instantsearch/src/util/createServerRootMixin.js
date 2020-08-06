@@ -178,9 +178,27 @@ function augmentInstantSearch(instantSearchOptions, searchClient, indexName) {
           }, {}),
       });
 
+    function resolveScopedResultsFromWidgets(widgets) {
+      const indexWidgets = widgets.filter(w => w.$$type === 'ais.index');
+
+      return indexWidgets.reduce(
+        (scopedResults, current) =>
+          scopedResults.concat(
+            {
+              indexId: current.getIndexId(),
+              results: search.__initialSearchResults[current.getIndexId()],
+              helper: current.getHelper(),
+            },
+            ...resolveScopedResultsFromWidgets(current.getWidgets())
+          ),
+        []
+      );
+    }
+
     widget.render({
       helper: localHelper,
       results,
+      scopedResults: resolveScopedResultsFromWidgets([parent]),
       state,
       templatesConfig: {},
       createURL,

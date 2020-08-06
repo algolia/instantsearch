@@ -414,6 +414,13 @@ Array [
         {
           helper: expect.any(Object),
           results: expect.any(Object),
+          scopedResults: expect.arrayContaining([
+            expect.objectContaining({
+              helper: expect.any(Object),
+              indexId: expect.any(String),
+              results: expect.any(Object),
+            }),
+          ]),
           state: expect.any(Object),
           instantSearchInstance: expect.any(Object),
         },
@@ -423,6 +430,13 @@ Object {
   "helper": Any<Object>,
   "instantSearchInstance": Any<Object>,
   "results": Any<Object>,
+  "scopedResults": ArrayContaining [
+    ObjectContaining {
+      "helper": Any<Object>,
+      "indexId": Any<String>,
+      "results": Any<Object>,
+    },
+  ],
   "searchMetadata": Object {
     "isSearchStalled": false,
   },
