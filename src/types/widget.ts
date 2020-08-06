@@ -175,6 +175,29 @@ export type IndexRenderState = Partial<{
     CurrentRefinementsRendererOptions,
     CurrentRefinementsConnectorParams
   >;
+  hierarchicalMenu: {
+    [attribute: string]: WidgetRenderState<
+      {
+        items: any[];
+        refine(facetValue: any): void;
+        createURL(facetValue: any): string;
+        isShowingMore: boolean;
+        toggleShowMore(): void;
+        canToggleShowMore: boolean;
+      },
+      {
+        attributes: string[];
+        separator: string;
+        rootPath: string | null;
+        showParentLevel: boolean;
+        limit: number;
+        showMore: boolean;
+        showMoreLimit: number;
+        sortBy: any;
+        transformItems(items: any): any;
+      }
+    >;
+  };
 }>;
 
 type WidgetRenderState<
