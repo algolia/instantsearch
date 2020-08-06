@@ -113,93 +113,45 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      init({ helper, createURL, instantSearchInstance }) {
+      init(initOptions) {
+        const { helper, renderState, instantSearchInstance } = initOptions;
+
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
 
-        // Bind createURL to this specific attribute
-        function _createURL(facetValue) {
-          return createURL(
-            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
-          );
-        }
-
         renderFn(
           {
-            items: [],
-            createURL: _createURL,
-            refine: this._refine,
+            ...this.getWidgetRenderState(renderState, initOptions)
+              .hierarchicalMenu[hierarchicalFacetName],
             instantSearchInstance,
-            widgetParams,
-            isShowingMore: false,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore: false,
           },
           true
         );
       },
 
-      _prepareFacetValues(facetValues, state) {
+      _prepareFacetValues(facetValues) {
         return facetValues
           .slice(0, this.getLimit())
           .map(({ name: label, path: value, ...subValue }) => {
             if (Array.isArray(subValue.data)) {
-              subValue.data = this._prepareFacetValues(subValue.data, state);
+              subValue.data = this._prepareFacetValues(subValue.data);
             }
             return { ...subValue, label, value };
           });
       },
 
       render(renderOptions) {
-        const {
-          results,
-          state,
-          createURL,
-          instantSearchInstance,
-        } = renderOptions;
-
-        const facetValues =
-          results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [];
-        const items = transformItems(
-          this._prepareFacetValues(facetValues),
-          state
-        );
-
-        // Bind createURL to this specific attribute
-        function _createURL(facetValue) {
-          return createURL(
-            state.toggleRefinement(hierarchicalFacetName, facetValue)
-          );
-        }
-
-        const maxValuesPerFacetConfig = state.maxValuesPerFacet;
-        const currentLimit = this.getLimit();
-        // If the limit is the max number of facet retrieved it is impossible to know
-        // if the facets are exhaustive. The only moment we are sure it is exhaustive
-        // is when it is strictly under the number requested unless we know that another
-        // widget has requested more values (maxValuesPerFacet > getLimit()).
-        // Because this is used for making the search of facets unable or not, it is important
-        // to be conservative here.
-        const hasExhaustiveItems =
-          maxValuesPerFacetConfig > currentLimit
-            ? facetValues.length <= currentLimit
-            : facetValues.length < currentLimit;
+        const { renderState, instantSearchInstance } = renderOptions;
 
         this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
         renderFn(
           {
-            items,
-            refine: this._refine,
-            createURL: _createURL,
+            ...this.getWidgetRenderState(renderState, renderOptions)
+              .hierarchicalMenu[hierarchicalFacetName],
             instantSearchInstance,
-            widgetParams,
-            isShowingMore: this.isShowingMore,
-            toggleShowMore: this.cachedToggleShowMore,
-            canToggleShowMore:
-              showMore && (this.isShowingMore || !hasExhaustiveItems),
           },
           false
         );
@@ -216,6 +168,56 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         return state
           .removeHierarchicalFacet(hierarchicalFacetName)
           .setQueryParameter('maxValuesPerFacet', undefined);
+      },
+
+      getWidgetRenderState(renderState, { results, state, createURL }) {
+        // Bind createURL to this specific attribute
+        function _createURL(facetValue) {
+          return createURL(
+            state.toggleRefinement(hierarchicalFacetName, facetValue)
+          );
+        }
+
+        const facetValues = results
+          ? results.getFacetValues(hierarchicalFacetName, { sortBy }).data || []
+          : [];
+        const items = transformItems(
+          results ? this._prepareFacetValues(facetValues) : []
+        );
+
+        const getHasExhaustiveItems = () => {
+          if (!results) {
+            return false;
+          }
+
+          const currentLimit = this.getLimit();
+          // If the limit is the max number of facet retrieved it is impossible to know
+          // if the facets are exhaustive. The only moment we are sure it is exhaustive
+          // is when it is strictly under the number requested unless we know that another
+          // widget has requested more values (maxValuesPerFacet > getLimit()).
+          // Because this is used for making the search of facets unable or not, it is important
+          // to be conservative here.
+          return state.maxValuesPerFacet > currentLimit
+            ? facetValues.length <= currentLimit
+            : facetValues.length < currentLimit;
+        };
+
+        return {
+          ...renderState,
+          hierarchicalMenu: {
+            ...renderState.hierarchicalMenu,
+            [hierarchicalFacetName]: {
+              items,
+              refine: this._refine,
+              createURL: _createURL,
+              widgetParams,
+              isShowingMore: this.isShowingMore,
+              toggleShowMore: this.cachedToggleShowMore,
+              canToggleShowMore:
+                showMore && (this.isShowingMore || !getHasExhaustiveItems()),
+            },
+          },
+        };
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

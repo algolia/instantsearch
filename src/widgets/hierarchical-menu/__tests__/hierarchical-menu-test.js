@@ -1,6 +1,10 @@
 import { render } from 'preact';
 import { SearchParameters } from 'algoliasearch-helper';
 import hierarchicalMenu from '../hierarchical-menu';
+import {
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/mock/createWidget';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -41,7 +45,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     let data;
     let helper;
     let state;
-    let createURL;
 
     beforeEach(() => {
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
@@ -53,7 +56,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       state = new SearchParameters();
       state.toggleRefinement = jest.fn();
       options = { container, attributes };
-      createURL = () => '#';
     });
 
     it('understand provided cssClasses', () => {
@@ -75,8 +77,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       };
       widget = hierarchicalMenu({ ...options, cssClasses: userCssClasses });
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;
 
@@ -86,8 +88,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     it('calls render', () => {
       widget = hierarchicalMenu(options);
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;
 
@@ -98,8 +100,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     it('asks for results.getFacetValues', () => {
       widget = hierarchicalMenu(options);
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       expect(results.getFacetValues).toHaveBeenCalledTimes(1);
       expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
@@ -110,8 +112,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     it('has a sortBy option', () => {
       widget = hierarchicalMenu({ ...options, sortBy: ['count:asc'] });
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       expect(results.getFacetValues).toHaveBeenCalledTimes(1);
       expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
@@ -127,8 +129,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
         },
       });
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;
 
@@ -142,8 +144,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
           items.map(item => ({ ...item, transformed: true })),
       });
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;
 
@@ -154,8 +156,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       data = {};
       widget = hierarchicalMenu(options);
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;
 
@@ -165,8 +167,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     it('has a toggleRefinement method', () => {
       widget = hierarchicalMenu(options);
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;
 
@@ -208,8 +210,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       ];
       widget = hierarchicalMenu({ ...options, limit: 3 });
 
-      widget.init({ helper, createURL, instantSearchInstance: {} });
-      widget.render({ results, state });
+      widget.init(createInitOptions({ helper }));
+      widget.render(createRenderOptions({ results, state }));
 
       const [firstRender] = render.mock.calls;
 
