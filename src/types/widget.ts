@@ -19,6 +19,10 @@ import {
   ClearRefinementsRendererOptions,
   ClearRefinementsConnectorParams,
 } from '../connectors/clear-refinements/connectClearRefinements';
+import {
+  ConfigureRendererOptions,
+  ConfigureConnectorParams,
+} from '../connectors/configure/connectConfigure';
 
 export type ScopedResult = {
   indexId: string;
@@ -159,6 +163,10 @@ export type IndexRenderState = Partial<{
   clearRefinements: WidgetRenderState<
     ClearRefinementsRendererOptions,
     ClearRefinementsConnectorParams
+  >;
+  configure: WidgetRenderState<
+    ConfigureRendererOptions,
+    ConfigureConnectorParams
   >;
 }>;
 
