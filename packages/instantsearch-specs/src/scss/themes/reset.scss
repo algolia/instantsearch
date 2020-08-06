@@ -55,6 +55,13 @@
   }
 }
 
+// Prevent InfiniteHits buttons from moving scroll position
+// https://bugs.chromium.org/p/chromium/issues/detail?id=1110323
+.ais-InfiniteHits-loadPrevious,
+.ais-InfiniteHits-loadMore {
+  overflow-anchor: none;
+}
+
 // Reset widgets
 
 .ais-Breadcrumb-list,
