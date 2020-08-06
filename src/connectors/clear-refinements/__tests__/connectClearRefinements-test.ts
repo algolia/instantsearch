@@ -1,4 +1,4 @@
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import {
   createInitOptions,
   createRenderOptions,
@@ -55,7 +55,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
   describe('Lifecycle', () => {
     it('renders during init and render', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName');
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       helper.search = () => helper;
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements<{ foo: string }>(rendering);
@@ -114,7 +114,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName');
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       const rendering = () => {};
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({});
@@ -123,11 +123,91 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         widget.dispose!({ helper, state: helper.state })
       ).not.toThrow();
     });
+
+    describe('getWidgetRenderState', () => {
+      test('returns the render state', () => {
+        const renderFn = jest.fn();
+        const unmountFn = jest.fn();
+        const createClearRefinements = connectClearRefinements(
+          renderFn,
+          unmountFn
+        );
+        const clearRefinements = createClearRefinements({});
+        const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+          index: 'indexName',
+          hierarchicalFacets: [
+            {
+              name: 'category',
+              attributes: ['category', 'subCategory'],
+              separator: ' > ',
+            },
+          ],
+        });
+
+        const renderState1 = clearRefinements.getWidgetRenderState!(
+          {},
+          createInitOptions()
+        );
+
+        expect(renderState1.clearRefinements).toEqual({
+          hasRefinements: false,
+          createURL: expect.any(Function),
+          refine: expect.any(Function),
+          widgetParams: {},
+        });
+
+        clearRefinements.init!(createInitOptions());
+
+        helper.toggleRefinement('category', 'Decoration');
+
+        const renderState2 = clearRefinements.getWidgetRenderState!(
+          {},
+          createRenderOptions({
+            helper,
+            scopedResults: [
+              {
+                indexId: 'indexName',
+                helper,
+                results: new SearchResults(helper.state, [
+                  createSingleSearchResponse({
+                    hits: [],
+                    facets: {
+                      category: {
+                        Decoration: 880,
+                      },
+                      subCategory: {
+                        'Decoration > Candle holders & candles': 193,
+                        'Decoration > Frames & pictures': 173,
+                      },
+                    },
+                  }),
+                  createSingleSearchResponse({
+                    facets: {
+                      category: {
+                        Decoration: 880,
+                        Outdoor: 47,
+                      },
+                    },
+                  }),
+                ]),
+              },
+            ],
+          })
+        );
+
+        expect(renderState2.clearRefinements).toEqual({
+          hasRefinements: true,
+          createURL: expect.any(Function),
+          refine: expect.any(Function),
+          widgetParams: {},
+        });
+      });
+    });
   });
 
   describe('Instance options', () => {
     it('provides a function to clear the refinements', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['myFacet'],
       });
       helper.search = () => helper;
@@ -170,7 +250,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('provides a function to clear the refinements and the query', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['myFacet'],
       });
       helper.search = () => helper;
@@ -214,7 +294,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('provides the same `refine` and `createURL` function references during the lifecycle', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName');
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       helper.search = () => helper;
 
       const rendering = jest.fn();
@@ -258,7 +338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('gets refinements from results', () => {
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         facets: ['aFacet'],
       });
       helper.toggleRefinement('aFacet', 'some value');
@@ -293,7 +373,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     it('with query not excluded and not empty has refinements', () => {
       // test if the values sent to the rendering function
       // are consistent with the search state
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         facets: ['aFacet'],
       });
       helper.setQuery('no empty');
@@ -328,7 +408,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('with query not excluded and empty has no refinements', () => {
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         facets: ['aFacet'],
       });
       helper.search = () => helper;
@@ -362,7 +442,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('without includedAttributes or excludedAttributes and with a query has no refinements', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName');
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
       helper.setQuery('not empty');
       helper.search = () => helper;
 
@@ -393,7 +473,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('includes only includedAttributes', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2'],
       });
       helper.search = () => helper;
@@ -446,7 +526,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('includes only includedAttributes (with query)', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1'],
       });
       helper.search = () => helper;
@@ -496,7 +576,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('excludes excludedAttributes', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2'],
       });
       helper.search = () => helper;
@@ -579,7 +659,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('transformItems is called', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         facets: ['facet1', 'facet2', 'facet3'],
       });
       helper.search = () => helper;
@@ -644,7 +724,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
 
     describe('createURL', () => {
       it('consistent with the list of excludedAttributes', () => {
-        const helper = jsHelper(createSearchClient(), 'indexName', {
+        const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
           facets: ['facet', 'otherFacet'],
         });
         helper.search = () => helper;
@@ -714,7 +794,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
     });
 
     it('reset the page to 0', () => {
-      const helper = jsHelper(createSearchClient(), 'indexName', {});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {});
       helper.search = () => helper;
       helper.setQuery('not empty');
 
