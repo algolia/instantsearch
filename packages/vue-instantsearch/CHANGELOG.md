@@ -1,3 +1,16 @@
+# [3.2.0](https://github.com/algolia/vue-instantsearch/compare/v3.1.0...v3.2.0) (2020-08-12)
+
+
+### Bug Fixes
+
+* **highlight:** don't remove whitespace-only nodes ([#827](https://github.com/algolia/vue-instantsearch/issues/827)) ([1358b6a](https://github.com/algolia/vue-instantsearch/commit/1358b6a0a0faa8a530afd02c0342d59f9e3078d2)), closes [#826](https://github.com/algolia/vue-instantsearch/issues/826)
+* **range-input:** fix range input min and max values fallbacks ([#835](https://github.com/algolia/vue-instantsearch/issues/835)) ([0e900ef](https://github.com/algolia/vue-instantsearch/commit/0e900ef2175108ee18f0562fe0b8d1e07f8b23af)), closes [#833](https://github.com/algolia/vue-instantsearch/issues/833)
+* **routing:** do not warn when `router` or `stateMapping` is missing ([#809](https://github.com/algolia/vue-instantsearch/issues/809)) ([a9335c1](https://github.com/algolia/vue-instantsearch/commit/a9335c112807046ff21ed73d24d449850691bb3b))
+* **ssr:** fix missing scopedResults during render ([#830](https://github.com/algolia/vue-instantsearch/issues/830)) ([74cf685](https://github.com/algolia/vue-instantsearch/commit/74cf685d9856904d8edbc1b7de3a86ea96cc3557)), closes [#829](https://github.com/algolia/vue-instantsearch/issues/829)
+* **widgetMixin:** remove when InstantSearch is not yet started ([e94af00](https://github.com/algolia/vue-instantsearch/commit/e94af00af0eb5a57feac907566333510b996313e)), closes [#502](https://github.com/algolia/vue-instantsearch/issues/502)
+
+
+
 # [3.1.0](https://github.com/algolia/vue-instantsearch/compare/v3.0.3...v3.1.0) (2020-07-02)
 
 
