@@ -85,7 +85,7 @@
     "jest-serializer-html": "6.0.0",
     "jest-vue-preprocessor": "1.4.0",
     "jest-watch-typeahead": "0.2.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.19",
     "prettier": "1.14.3",
     "rollup": "1.16.7",
     "rollup-plugin-buble": "0.19.6",
