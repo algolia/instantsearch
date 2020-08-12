@@ -56,11 +56,7 @@ Read more on using connectors: https://alg.li/vue-custom`
     }
   },
   beforeDestroy() {
-    if (
-      this.widget &&
-      this.widget.dispose &&
-      this.instantSearchInstance.started // a widget can't be removed if IS is not started
-    ) {
+    if (this.widget) {
       this.getParentIndex().removeWidgets([this.widget]);
     }
   },
@@ -68,10 +64,7 @@ Read more on using connectors: https://alg.li/vue-custom`
     widgetParams: {
       handler(nextWidgetParams) {
         this.state = null;
-        // a widget can't be removed if IS is not started
-        if (this.widget.dispose && this.instantSearchInstance.started) {
-          this.getParentIndex().removeWidgets([this.widget]);
-        }
+        this.getParentIndex().removeWidgets([this.widget]);
         this.widget = this.factory(nextWidgetParams);
         this.getParentIndex().addWidgets([this.widget]);
       },
