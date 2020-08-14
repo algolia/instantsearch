@@ -208,7 +208,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       /**
        * @param {Object} param0 cleanup arguments
        * @param {any} param0.state current search parameters
-       * @returns {any}
+       * @returns {any} next search parameters
        */
       dispose({ state }) {
         unmountFn();
