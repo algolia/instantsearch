@@ -70,7 +70,7 @@
     "@babel/preset-env": "7.8.3",
     "@babel/preset-react": "7.8.3",
     "@babel/preset-typescript": "7.8.3",
-    "@microsoft/api-extractor": "7.7.13",
+    "@microsoft/api-extractor": "7.9.2",
     "@storybook/addon-actions": "5.3.9",
     "@storybook/html": "5.3.9",
     "@storybook/theming": "5.3.9",
@@ -135,7 +135,7 @@
     "semver": "6.3.0",
     "shelljs": "0.8.3",
     "shipjs": "0.16.0",
-    "typescript": "3.7.5",
+    "typescript": "3.8.3",
     "webpack": "4.41.5"
   },
   "bundlesize": [
