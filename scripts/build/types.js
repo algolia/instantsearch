@@ -18,49 +18,6 @@ shell.sed(
   path.join(__dirname, '../../es/**/*.d.ts')
 );
 
-// TypeScript uses `import()` types in very small files, but API extractor does not support that
-// We will hardcode the type definitions here, to avoid the build not passing.
-// "Error: The expression contains an import() type, which is not yet supported by API Extractor:"
-
-fs.writeFileSync(
-  path.join(
-    __dirname,
-    '../../es/connectors/infinite-hits/connectInfiniteHitsWithInsights.d.ts'
-  ),
-  `
-// edited by yarn build:types
-import { Connector } from '../../types';
-import {
-  InfiniteHitsRendererOptions,
-  InfiniteHitsConnectorParams,
-} from './connectInfiniteHits';
-
-declare const connectInfiniteHitsWithInsights: Connector<
-  InfiniteHitsRendererOptions,
-  InfiniteHitsConnectorParams
->;
-export default connectInfiniteHitsWithInsights;
-`
-);
-
-fs.writeFileSync(
-  path.join(__dirname, '../../es/connectors/hits/connectHitsWithInsights.d.ts'),
-  `
-// edited by yarn build:types
-import { Connector } from '../../types';
-import {
-  HitsRendererOptions,
-  HitsConnectorParams,
-} from './connectHits';
-
-declare const connectHitsWithInsights: Connector<
-  HitsRendererOptions,
-  HitsConnectorParams
->;
-export default connectHitsWithInsights;
-`
-);
-
 console.log();
 console.log(`Validating definitions...`);
 
@@ -69,7 +26,7 @@ const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 const publicExports = [
   // 'components' -> does not contains index.d.ts yet
   'connectors',
-  // 'lib', -> Api extrator "import * as ___ from ___;" is not supported yet for local files
+  // 'lib', -> Api extractor "import * as ___ from ___;" is not supported yet for local files
   // 'middleware',
   'helpers',
   'types',
