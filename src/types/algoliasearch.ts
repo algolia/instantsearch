@@ -21,6 +21,7 @@ import {
   // eslint-disable-next-line prettier/prettier
   SearchForFacetValuesResponse as SearchForFacetValuesResponseV4
   /** @ts-ignore */
+  // @ts-ignore
   // eslint-disable-next-line import/no-unresolved
 } from '@algolia/client-search';
 
