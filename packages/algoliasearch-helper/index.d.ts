@@ -15,8 +15,8 @@ import algoliasearch, {
 } from 'algoliasearch';
 import {
   SearchOptions as SearchOptionsV4,
-  SearchResponse as SearchResponseV4
-// @ts-ignore
+  SearchResponse as SearchResponseV4,
+  // @ts-ignore
 } from '@algolia/client-search';
 import { EventEmitter } from 'events';
 
@@ -27,10 +27,14 @@ type DummySearchClientV4 = {
 type Client = ReturnType<typeof algoliasearch> extends DummySearchClientV4
   ? SearchClientV4
   : SearchClientV3;
-type SearchOptions = ReturnType<typeof algoliasearch> extends DummySearchClientV4
+type SearchOptions = ReturnType<
+  typeof algoliasearch
+> extends DummySearchClientV4
   ? SearchOptionsV4
   : SearchOptionsV3;
-type SearchResponse<T> = ReturnType<typeof algoliasearch> extends DummySearchClientV4
+type SearchResponse<T> = ReturnType<
+  typeof algoliasearch
+> extends DummySearchClientV4
   ? SearchResponseV4<T>
   : SearchResponseV3<T>;
 
@@ -242,35 +246,68 @@ declare namespace algoliasearchHelper {
      */
     setIndex(name: string): this;
 
-    addDisjunctiveFacetRefinement(...args: any[]): any;
-    addDisjunctiveRefine(...args: any[]): any;
-    addHierarchicalFacetRefinement(...args: any[]): any;
-    addNumericRefinement(...args: any[]): any;
-    addFacetRefinement(...args: any[]): any;
-    addRefine(...args: any[]): any;
-    addFacetExclusion(...args: any[]): any;
-    addExclude(...args: any[]): any;
-    addTag(...args: any[]): any;
-    removeNumericRefinement(...args: any[]): any;
-    removeDisjunctiveFacetRefinement(...args: any[]): any;
-    removeDisjunctiveRefine(...args: any[]): any;
-    removeHierarchicalFacetRefinement(...args: any[]): any;
-    removeFacetRefinement(...args: any[]): any;
-    removeRefine(...args: any[]): any;
-    removeFacetExclusion(...args: any[]): any;
-    removeExclude(...args: any[]): any;
-    removeTag(...args: any[]): any;
-    toggleFacetExclusion(...args: any[]): any;
-    toggleExclude(...args: any[]): any;
-    toggleRefinement(...args: any[]): any;
-    toggleFacetRefinement(...args: any[]): any;
-    toggleRefine(...args: any[]): any;
-    toggleTag(...args: any[]): any;
-    nextPage(...args: any[]): any;
-    previousPage(...args: any[]): any;
-    setCurrentPage(...args: any[]): any;
-    setPage(...args: any[]): any;
-    setQueryParameter(...args: any[]): any;
+    addDisjunctiveFacetRefinement(facet: string, value: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
+     */
+    addDisjunctiveRefine(facet: string, value: string): this;
+    addHierarchicalFacetRefinement(facet: string, path: string): this;
+    addNumericRefinement(facet: string, operator?: SearchParameters.Operator, value?: number | number[]): this;
+    addFacetRefinement(facet: string, value: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
+     */
+    addRefine: AlgoliaSearchHelper['addFacetRefinement'];
+    addFacetExclusion(facet: string, value: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
+     */
+    addExclude: AlgoliaSearchHelper['addFacetExclusion'];
+    addTag(facet: string, value: string): this;
+    removeNumericRefinement(facet: string, operator?: SearchParameters.Operator, value?: number | number[]): this;
+    removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
+     */
+    removeDisjunctiveRefine(facet: string, value?: string): this;
+    removeHierarchicalFacetRefinement(facet: string): this;
+    removeFacetRefinement(facet: string, value?: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
+     */
+    removeRefine(facet: string, value: string): this;
+    removeFacetExclusion(facet: string, value: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
+     */
+    removeExclude(facet: string, value: string): this;
+    removeTag(value: string): this;
+    toggleFacetExclusion(facet: string, value: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
+     */
+    toggleExclude(facet: string, value: string): this;
+    toggleFacetRefinement(facet: string, value: string): this;
+    /**
+     * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
+     */
+    toggleRefinement(facet: string, value: string): this;
+    /**
+     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
+     */
+    toggleRefine(facet: string, value: string): this;
+    toggleTag(tag: string): this;
+    nextPage(): this;
+    previousPage(): this;
+    setPage(page: number): this;
+    /**
+     * @deprecated
+     */
+    setCurrentPage(page: number): this;
+    setQueryParameter<SearchParameter extends keyof PlainSearchParameters>(
+      parameter: SearchParameter,
+      value: PlainSearchParameters[SearchParameter]
+    ): this;
 
     /**
      * Set the whole state (warning: will erase previous state)
@@ -281,29 +318,40 @@ declare namespace algoliasearchHelper {
      */
     setState(newState: PlainSearchParameters): this;
 
-    overrideStateWithoutTriggeringChangeEvent(...args: any[]): any;
-    isRefined(...args: any[]): any;
-    hasRefinements(...args: any[]): any;
-    isExcluded(...args: any[]): any;
-    isDisjunctiveRefined(...args: any[]): any;
-    hasTag(...args: any[]): any;
-    isTagRefined(...args: any[]): any;
-    getIndex(...args: any[]): any;
-    getCurrentPage(...args: any[]): any;
-    getPage(...args: any[]): any;
-    getTags(...args: any[]): any;
-    getRefinements(...args: any[]): any;
-    getNumericRefinement(...args: any[]): any;
-    getHierarchicalFacetBreadcrumb(facetName: string): string[];
-    containsRefinement(...args: any[]): any;
-    clearCache(...args: any[]): any;
+    overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
+    hasRefinements(facet: string): boolean;
+    isExcluded: SearchParameters['isExcludeRefined'];
+    /**
+     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
+     */
+    isDisjunctiveRefined: SearchParameters['isDisjunctiveFacetRefined'];
+    hasTag: SearchParameters['isTagRefined'];
+    /**
+     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
+     */
+    isTagRefined: SearchParameters['isTagRefined'];
+    getIndex(): string;
+    /**
+     * @deprecated
+     */
+    getCurrentPage(): number;
+    getPage(): number;
+    getTags(): string[];
+    getRefinements(facetName: string): any[];
+    getNumericRefinement: SearchParameters['getNumericRefinement'];
+    getHierarchicalFacetBreadcrumb: SearchParameters['getHierarchicalFacetBreadcrumb'];
+    /**
+     * @deprecated
+     */
+    containsRefinement(...any: any[]): any;
+    clearCache(): void;
     setClient(client: SearchClient): this;
     getClient(): SearchClient;
     derive(
       deriveFn: (oldParams: SearchParameters) => SearchParameters
     ): DerivedHelper;
     detachDerivedHelper(derivedHelper: DerivedHelper): void;
-    hasPendingRequests(...args: any[]): any;
+    hasPendingRequests(): boolean;
   }
 
   interface DerivedHelper extends EventEmitter {
@@ -542,7 +590,10 @@ declare namespace algoliasearchHelper {
     setIndex(index: string): SearchParameters;
     setPage(newPage: number): SearchParameters;
     setQueryParameters(params: PlainSearchParameters): SearchParameters;
-    setQueryParameter(parameter: string, value: any): SearchParameters;
+    setQueryParameter<SearchParameter extends keyof PlainSearchParameters>(
+      parameter: SearchParameter,
+      value: PlainSearchParameters[SearchParameter]
+    ): SearchParameters;
     setQuery(newQuery: string): SearchParameters;
     setTypoTolerance(typoTolerance: string): SearchParameters;
     toggleDisjunctiveFacetRefinement(
@@ -854,7 +905,7 @@ declare namespace algoliasearchHelper {
      * default: null
      * https://www.algolia.com/doc/api-reference/api-parameters/insideBoundingBox/
      */
-    insideBoundingBox?: number[][];
+    insideBoundingBox?: [number, number, number, number][];
     /**
      * Selects how the query words are interpreted
      * default: 'prefixLast'
