@@ -6,6 +6,7 @@ import createConnector, { ConnectedProps } from '../core/createConnector';
 import {
   omit,
   getObjectType,
+  getPropertyByPath,
   removeEmptyKey,
   removeEmptyArraysFromObject,
 } from '../core/utils';
@@ -73,7 +74,7 @@ function getSearchParametersFromProps(
     Array<string | string[]>
   >((acc, attributeName) => {
     const attributePattern = props.matchingPatterns[attributeName];
-    const attributeValue = props.hit[attributeName];
+    const attributeValue = getPropertyByPath(props.hit, attributeName);
     const attributeScore = attributePattern.score;
 
     if (Array.isArray(attributeValue)) {

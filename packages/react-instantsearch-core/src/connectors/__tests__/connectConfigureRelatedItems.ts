@@ -81,6 +81,32 @@ describe('connectConfigure', () => {
       );
     });
 
+    it('sets the optionalFilters search parameter based on matchingPatterns with nested attributes', () => {
+      const searchParameters = connect.getSearchParameters.call(
+        { contextValue },
+        new SearchParameters(),
+        {
+          ...defaultProps,
+          hit,
+          matchingPatterns: {
+            brand: { score: 3 },
+            'hierarchicalCategories.lvl0': { score: 2 },
+          },
+        }
+      );
+
+      expect(searchParameters).toEqual(
+        expect.objectContaining({
+          facetFilters: ['objectID:-1'],
+          sumOrFiltersScores: true,
+          optionalFilters: [
+            'brand:Amazon<score=3>',
+            'hierarchicalCategories.lvl0:TV & Home Theater<score=2>',
+          ],
+        })
+      );
+    });
+
     it('sets transformed search parameters based on transformSearchParameters', () => {
       const searchParameters = connect.getSearchParameters.call(
         { contextValue },
