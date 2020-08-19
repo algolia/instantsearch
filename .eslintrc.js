@@ -15,6 +15,7 @@ module.exports = {
       },
     ],
     'react/no-string-refs': 1,
+    'react/no-unknown-property': [2, { ignore: ['spellcheck'] }],
     // Avoid errors about `UNSAFE` lifecycles (e.g. `UNSAFE_componentWillMount`)
     'react/no-deprecated': 0,
     'react-hooks/rules-of-hooks': 'error',
