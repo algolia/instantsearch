@@ -1,4 +1,4 @@
-# [4.8.0](https://github.com/algolia/instantsearch.js/compare/v4.7.0...v4.8.0) (2020-08-19)
+# [4.7.1](https://github.com/algolia/instantsearch.js/compare/v4.7.0...v4.7.1) (2020-08-19)
 
 
 ### Bug Fixes
