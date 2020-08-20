@@ -438,18 +438,18 @@ describe('SearchBox', () => {
       expect(mount(<SearchBox {...defaultProps} />)).toMatchSnapshot();
     });
 
-    test('sets autocorrect... properties', () => {
+    test('sets search input attributes', () => {
       const res = render(
         <SearchBox {...defaultProps} autofocus={true} query="sample query" />
       );
       const input = res.getByDisplayValue('sample query');
 
-      expect(input.getAttribute('autofocus')).toBe('true');
-      expect(input.getAttribute('autocomplete')).toBe('off');
-      expect(input.getAttribute('autocorrect')).toBe('off');
-      expect(input.getAttribute('autocapitalize')).toBe('off');
-      expect(input.getAttribute('spellcheck')).toBe('false');
-      expect(input.getAttribute('maxlength')).toBe('512');
+      expect(input).toHaveAttribute('autofocus', 'true');
+      expect(input).toHaveAttribute('autocomplete', 'off');
+      expect(input).toHaveAttribute('autocorrect', 'off');
+      expect(input).toHaveAttribute('autocapitalize', 'off');
+      expect(input).toHaveAttribute('spellcheck', 'false');
+      expect(input).toHaveAttribute('maxlength', '512');
     });
 
     test('with custom templates', () => {
