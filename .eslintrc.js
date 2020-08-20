@@ -7,7 +7,7 @@ module.exports = {
     'new-cap': [
       'error',
       {
-        capIsNewException: [
+        capIsNewExceptions: [
           'EXPERIMENTAL_use',
           'EXPERIMENTAL_connectConfigureRelatedItems',
           'EXPERIMENTAL_configureRelatedItems',
