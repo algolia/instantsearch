@@ -2,25 +2,20 @@ module.exports = {
   extends: ['algolia', 'algolia/jest', 'algolia/react', 'algolia/typescript'],
   plugins: ['react-hooks'],
   rules: {
-    'no-param-reassign': 0,
-    'import/no-extraneous-dependencies': 0,
+    'no-param-reassign': 'off',
+    'import/no-extraneous-dependencies': 'off',
     'new-cap': [
       'error',
       {
-        capIsNewExceptions: [
-          'EXPERIMENTAL_use',
-          'EXPERIMENTAL_configureRelatedItems',
-          'EXPERIMENTAL_connectConfigureRelatedItems',
-        ],
+        capIsNewExceptionPattern: '^EXPERIMENTAL_*',
       },
     ],
-    'react/no-string-refs': 1,
-    'react/no-unknown-property': [2, { ignore: ['spellcheck'] }],
+    'react/no-string-refs': 'error',
     // Avoid errors about `UNSAFE` lifecycles (e.g. `UNSAFE_componentWillMount`)
-    'react/no-deprecated': 0,
+    'react/no-deprecated': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    'jest/no-test-callback': 0,
+    'jest/no-test-callback': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
       { argsIgnorePattern: '^_', ignoreRestSiblings: true },
@@ -41,7 +36,7 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       rules: {
-        'valid-jsdoc': 0,
+        'valid-jsdoc': 'off',
       },
     },
   ],
