@@ -438,6 +438,20 @@ describe('SearchBox', () => {
       expect(mount(<SearchBox {...defaultProps} />)).toMatchSnapshot();
     });
 
+    test('sets autocorrect... properties', () => {
+      const res = render(
+        <SearchBox {...defaultProps} autofocus={true} query="sample query" />
+      );
+      const input = res.getByDisplayValue('sample query');
+
+      expect(input.getAttribute('autofocus')).toBe('true');
+      expect(input.getAttribute('autocomplete')).toBe('off');
+      expect(input.getAttribute('autocorrect')).toBe('off');
+      expect(input.getAttribute('autocapitalize')).toBe('off');
+      expect(input.getAttribute('spellcheck')).toBe('false');
+      expect(input.getAttribute('maxlength')).toBe('512');
+    });
+
     test('with custom templates', () => {
       const props = {
         ...defaultProps,

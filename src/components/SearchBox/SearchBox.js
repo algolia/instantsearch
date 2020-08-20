@@ -159,7 +159,7 @@ class SearchBox extends Component {
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            spellcheck={false}
+            spellCheck="false"
             maxLength={512}
             onInput={this.onInput}
             onBlur={this.onBlur}
