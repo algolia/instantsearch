@@ -75,9 +75,12 @@ const connectHits: HitsConnector = function connectHits(
         sendEvent = createSendEventForHits({
           instantSearchInstance,
           helper,
-          widgetType: 'ais.hits',
+          widgetType: this.$$type!,
         });
-        bindEvent = createBindEventForHits({ helper, widgetType: 'ais.hits' });
+        bindEvent = createBindEventForHits({
+          helper,
+          widgetType: this.$$type!,
+        });
 
         renderFn(
           {
