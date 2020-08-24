@@ -3,6 +3,7 @@ export type InsightsClientMethod =
   | 'clickedFilters'
   | 'clickedObjectIDsAfterSearch'
   | 'convertedObjectIDsAfterSearch';
+
 export type InsightsClientPayload = {
   eventName: string;
   queryID: string;
@@ -10,6 +11,7 @@ export type InsightsClientPayload = {
   objectIDs: string[];
   positions?: number[];
 };
+
 export type InsightsSendEvent = (
   method: InsightsClientMethod,
   payload: InsightsClientPayload

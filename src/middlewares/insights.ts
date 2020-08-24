@@ -1,6 +1,6 @@
 import { InsightsClient, InsightsClientMethod, Middleware } from '../types';
 import { getInsightsAnonymousUserToken } from '../helpers';
-import { warning, noop } from '../lib/utils';
+import { warning, noop, getAppIdAndApiKey } from '../lib/utils';
 
 export type InsightsEvent = {
   insightsMethod?: InsightsClientMethod;
@@ -10,7 +10,7 @@ export type InsightsEvent = {
 };
 
 export type InsightsProps = {
-  insightsClient: false | InsightsClient;
+  insightsClient: null | InsightsClient;
   onEvent?: (event: InsightsEvent) => void;
 };
 
@@ -18,21 +18,21 @@ export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient: _insightsClient, onEvent } = props || {};
-  if (_insightsClient !== false && !_insightsClient) {
+  if (_insightsClient !== null && !_insightsClient) {
     if (__DEV__) {
       throw new Error(
-        "The `insightsClient` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to `false`."
+        "The `insightsClient` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to `null`."
       );
     } else {
       throw new Error(
-        'The `insightsClient` option is required. To disable, set it to `false`.'
+        'The `insightsClient` option is required. To disable, set it to `null`.'
       );
     }
   }
 
   const hasInsightsClient = Boolean(_insightsClient);
   const insightsClient =
-    _insightsClient === false ? (noop as InsightsClient) : _insightsClient;
+    _insightsClient === null ? (noop as InsightsClient) : _insightsClient;
 
   return ({ instantSearchInstance }) => {
     insightsClient('_get', '_hasCredentials', (hasCredentials: boolean) => {
@@ -57,7 +57,6 @@ aa('setUserToken', 'your-user-token');
     });
 
     return {
-      $$type: 'ais.insights',
       onStateChange() {},
       subscribe() {
         const setUserTokenToSearch = (userToken?: string) => {
@@ -126,18 +125,3 @@ aa('setUserToken', 'your-user-token');
     };
   };
 };
-
-function getAppIdAndApiKey(searchClient) {
-  if (searchClient.transporter) {
-    // searchClient v4
-    const { headers, queryParameters } = searchClient.transporter;
-    const APP_ID = 'x-algolia-application-id';
-    const API_KEY = 'x-algolia-api-key';
-    const appId = headers[APP_ID] || queryParameters[APP_ID];
-    const apiKey = headers[API_KEY] || queryParameters[API_KEY];
-    return [appId, apiKey];
-  } else {
-    // searchClient v3
-    return [searchClient.applicationID, searchClient.apiKey];
-  }
-}
