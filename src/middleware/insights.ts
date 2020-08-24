@@ -74,7 +74,7 @@ aa('setUserToken', 'your-user-token');
         if (Array.isArray((insightsClient as any).queue)) {
           // Context: The umd build of search-insights is asynchronously loaded by the snippet.
           //
-          // When user called `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
+          // When user calls `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
           // it is stored in `aa.queue` and we are reading it to set userToken to search call.
           // This queue is meant to be consumed whenever `search-insights` is loaded and when it runs `processQueue()`.
           // But the reason why we handle it here is to prevent the first search API from being triggered
