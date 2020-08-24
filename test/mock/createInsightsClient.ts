@@ -32,6 +32,7 @@ export function createAlgoliaAnalytics() {
     init,
     _get,
     onUserTokenChange,
+    viewedObjectIDs: jest.fn(),
   };
 }
 

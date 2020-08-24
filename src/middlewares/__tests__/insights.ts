@@ -3,6 +3,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import { createInsightsMiddleware } from '../insights';
 import { createInstantSearch } from '../../../test/mock/createInstantSearch';
 import {
+  createAlgoliaAnalytics,
   createInsightsClient,
   createInsightsUmdVersion,
   ANONYMOUS_TOKEN,
@@ -11,12 +12,14 @@ import { warning } from '../../../src/lib/utils';
 import { SearchClient } from '../../types';
 
 describe('insights', () => {
+  let analytics;
   let insightsClient;
   let instantSearchInstance;
   let helper;
 
   beforeEach(() => {
-    insightsClient = createInsightsClient();
+    analytics = createAlgoliaAnalytics();
+    insightsClient = jest.fn(createInsightsClient(analytics));
     instantSearchInstance = createInstantSearch({
       client: algoliasearch('myAppId', 'myApiKey'),
     });
@@ -188,5 +191,64 @@ aa('setUserToken', 'your-user-token');`);
     });
   });
 
-  // describe('sendEvent', () => {});
+  describe('sendEventToInsights', () => {
+    it('sends events', () => {
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      middleware.subscribe();
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          hello: 'world',
+        },
+      });
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
+        hello: 'world',
+      });
+    });
+
+    it('calls onEvent when given', () => {
+      const onEvent = jest.fn();
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+        onEvent,
+      })({ instantSearchInstance });
+      middleware.subscribe();
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          hello: 'world',
+        },
+      });
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent).toHaveBeenCalledWith({
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          hello: 'world',
+        },
+      });
+    });
+
+    it('warns dev when neither insightsMethod nor onEvent is given', () => {
+      const middleware = createInsightsMiddleware({
+        insightsClient,
+      })({ instantSearchInstance });
+      middleware.subscribe();
+
+      const numberOfCalls = insightsClient.mock.calls.length;
+      expect(() => {
+        instantSearchInstance.sendEventToInsights({
+          payload: {
+            hello: 'world',
+          },
+        });
+      }).toWarnDev();
+      expect(insightsClient).toHaveBeenCalledTimes(numberOfCalls); // still the same
+    });
+  });
 });
