@@ -32,14 +32,14 @@ describe('insights', () => {
         // @ts-ignore:next-line
         createInsightsMiddleware()
       ).toThrowErrorMatchingInlineSnapshot(
-        `"The \`insightsClient\` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to \`false\`."`
+        `"The \`insightsClient\` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to \`null\`."`
       );
     });
 
-    it('passes with insightsClient: false', () => {
+    it('passes with insightsClient: null', () => {
       expect(() =>
         createInsightsMiddleware({
-          insightsClient: false,
+          insightsClient: null,
         })
       ).not.toThrow();
     });
