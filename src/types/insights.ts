@@ -1,6 +1,7 @@
 export type InsightsClientMethod =
   | 'clickedObjectIDsAfterSearch'
   | 'convertedObjectIDsAfterSearch';
+
 export type InsightsClientPayload = {
   eventName: string;
   queryID: string;
