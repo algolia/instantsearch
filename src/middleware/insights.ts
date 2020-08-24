@@ -57,7 +57,6 @@ aa('setUserToken', 'your-user-token');
     });
 
     return {
-      $$type: 'ais.insights',
       onStateChange() {},
       subscribe() {
         const setUserTokenToSearch = (userToken?: string) => {
