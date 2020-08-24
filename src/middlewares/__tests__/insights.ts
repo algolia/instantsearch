@@ -8,6 +8,7 @@ import {
   ANONYMOUS_TOKEN,
 } from '../../../test/mock/createInsightsClient';
 import { warning } from '../../../src/lib/utils';
+import { SearchClient } from '../../types';
 
 describe('insights', () => {
   let insightsClient;
@@ -19,7 +20,7 @@ describe('insights', () => {
     instantSearchInstance = createInstantSearch({
       client: algoliasearch('myAppId', 'myApiKey'),
     });
-    helper = algoliasearchHelper({}, '');
+    helper = algoliasearchHelper({} as SearchClient, '');
     instantSearchInstance.mainIndex = {
       getHelper: () => helper,
     };

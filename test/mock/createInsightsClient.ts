@@ -1,7 +1,7 @@
 export const ANONYMOUS_TOKEN = 'anonymous-user-id-1';
 
 export function createAlgoliaAnalytics() {
-  let values = {};
+  let values: any = {};
   const setValues = obj => {
     values = {
       ...values,
