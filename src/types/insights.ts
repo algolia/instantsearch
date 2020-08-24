@@ -8,6 +8,7 @@ export type InsightsClientPayload = {
   objectIDs: string[];
   positions?: number[];
 };
+
 export type InsightsSendEvent = (
   method: InsightsClientMethod,
   payload: InsightsClientPayload
