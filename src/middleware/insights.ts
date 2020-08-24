@@ -3,28 +3,28 @@ import { getInsightsAnonymousUserToken } from '../helpers';
 import { warning, noop } from '../lib/utils';
 
 export type InsightsProps = {
-  insightsClient: false | InsightsClient;
+  insightsClient: null | InsightsClient;
 };
 
 export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
   const { insightsClient: _insightsClient } = props;
-  if (_insightsClient !== false && !_insightsClient) {
+  if (_insightsClient !== null && !_insightsClient) {
     if (__DEV__) {
       throw new Error(
-        "The `insightsClient` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to `false`."
+        "The `insightsClient` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to `null`."
       );
     } else {
       throw new Error(
-        'The `insightsClient` option is required. To disable, set it to `false`.'
+        'The `insightsClient` option is required. To disable, set it to `null`.'
       );
     }
   }
 
   const hasInsightsClient = Boolean(_insightsClient);
   const insightsClient =
-    _insightsClient === false ? (noop as InsightsClient) : _insightsClient;
+    _insightsClient === null ? (noop as InsightsClient) : _insightsClient;
 
   return ({ instantSearchInstance }) => {
     insightsClient('_get', '_hasCredentials', (hasCredentials: boolean) => {
