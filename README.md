@@ -33,6 +33,7 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 - [Demos](#demos)
 - [Playground](#playground)
 - [Browser support](#browser-support)
+- [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
 
