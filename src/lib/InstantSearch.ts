@@ -21,7 +21,7 @@ import {
   MiddlewareDefinition,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
-import { createRouter, RouterProps } from '../middleware/createRouter';
+import { createRouter, RouterProps } from '../middlewares/createRouter';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
