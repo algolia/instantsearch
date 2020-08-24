@@ -36,3 +36,4 @@ export {
 } from './geo-search';
 export { addAbsolutePosition } from './hits-absolute-position';
 export { addQueryID } from './hits-query-id';
+export { getAppIdAndApiKey } from './getAppIdAndApiKey';
