@@ -478,9 +478,10 @@ describe('RoutingManager', () => {
       });
 
       const fakeSearchBox: any = createFakeSearchBox();
-      const fakeHitsPerPage = createFakeHitsPerPage();
+      const fakeHitsPerPage1 = createFakeHitsPerPage();
+      const fakeHitsPerPage2 = createFakeHitsPerPage();
 
-      search.addWidgets([fakeSearchBox, fakeHitsPerPage]);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage1]);
 
       search.start();
 
@@ -497,7 +498,7 @@ describe('RoutingManager', () => {
       });
 
       // Trigger change without UI state change
-      search.removeWidgets([fakeHitsPerPage]);
+      search.removeWidgets([fakeHitsPerPage1]);
 
       expect(router.write).toHaveBeenCalledTimes(1);
 
@@ -505,7 +506,7 @@ describe('RoutingManager', () => {
 
       triggerChange = true;
       // Trigger change without UI state change but with a route change
-      search.removeWidgets([fakeHitsPerPage]);
+      search.removeWidgets([fakeHitsPerPage2]);
 
       expect(router.write).toHaveBeenCalledTimes(2);
       expect(router.write).toHaveBeenLastCalledWith({
