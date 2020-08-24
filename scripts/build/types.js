@@ -6,7 +6,17 @@ const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
 
+console.log(`Compiling definitions...`);
+
 shell.exec(`tsc -p tsconfig.declaration.json --outDir es/`);
+
+// replace block ts-ignore comments with line ones to support TS < 3.9
+shell.sed(
+  '-i',
+  /\*\* @ts-ignore/g,
+  '/ @ts-ignore',
+  path.join(__dirname, '../../es/**/*.d.ts')
+);
 
 console.log();
 console.log(`Validating definitions...`);
@@ -16,7 +26,7 @@ const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
 const publicExports = [
   // 'components' -> does not contains index.d.ts yet
   'connectors',
-  // 'lib', -> Api extrator "import * as ___ from ___;" is not supported yet for local files
+  // 'lib', -> Api extractor "import * as ___ from ___;" is not supported yet for local files
   // 'middleware',
   'helpers',
   'types',

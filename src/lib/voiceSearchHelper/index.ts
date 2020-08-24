@@ -42,8 +42,8 @@ const createVoiceSearchHelper: CreateVoiceSearchHelper = function createVoiceSea
     });
   };
 
-  const onError = (event: SpeechRecognitionError): void => {
-    setState({ status: 'error', errorCode: event.error });
+  const onError = (event: Event): void => {
+    setState({ status: 'error', errorCode: (event as any).error });
   };
 
   const onResult = (event: SpeechRecognitionEvent): void => {

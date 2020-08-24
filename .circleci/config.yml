@@ -68,7 +68,7 @@ jobs:
           name: Update dependencies
           command: |
             yarn remove @algolia/client-search
-            yarn add @types/algoliasearch@3.34.8 algoliasearch@3.35.1
+            yarn add @types/algoliasearch@3.34.10 algoliasearch@3.35.1
       - run:
           name: Type Checking
           command: yarn run type-check

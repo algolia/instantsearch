@@ -44,3 +44,4 @@ export {
   SendEventForHits,
   BindEventForHits,
 } from './createSendEventForHits';
+export { getAppIdAndApiKey } from './getAppIdAndApiKey';
