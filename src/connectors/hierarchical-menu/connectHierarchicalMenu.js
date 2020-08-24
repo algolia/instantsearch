@@ -54,7 +54,7 @@ const withUsage = createDocumentationMessageGenerator({
  * levels deep.
  *
  * @type {Connector}
- * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
+ * @param {function(HierarchicalMenuRenderingOptions, boolean)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
  */
@@ -217,10 +217,10 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
         );
       },
 
-      // eslint-disable-next-line valid-jsdoc
       /**
-       * @param {Object} param0
-       * @param {import('algoliasearch-helper').SearchParameters} param0.state
+       * @param {Object} param0 cleanup arguments
+       * @param {any} param0.state current search parameters
+       * @returns {any} next search parameters
        */
       dispose({ state }) {
         unmountFn();

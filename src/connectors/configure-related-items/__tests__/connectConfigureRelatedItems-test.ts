@@ -137,6 +137,43 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure-r
       ]);
     });
 
+    test('sets the optionalFilters search parameter based on matchingPatterns with nested attributes', () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+      const configureRelatedItems = connectConfigureRelatedItems(noop);
+
+      search.addWidgets([
+        configureRelatedItems({
+          hit,
+          matchingPatterns: {
+            brand: { score: 3 },
+            'hierarchicalCategories.lvl0': { score: 2 },
+          },
+        }),
+      ]);
+      search.start();
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: {
+            facets: [],
+            facetFilters: ['objectID:-1'],
+            tagFilters: '',
+            sumOrFiltersScores: true,
+            optionalFilters: [
+              'brand:Amazon<score=3>',
+              'hierarchicalCategories.lvl0:TV & Home Theater<score=2>',
+            ],
+          },
+        },
+      ]);
+    });
+
     test('sets transformed search parameters based on transformSearchParameters', () => {
       const searchClient = createSearchClient();
       const search = instantsearch({

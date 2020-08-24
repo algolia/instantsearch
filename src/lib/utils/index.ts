@@ -39,4 +39,5 @@ export { addQueryID } from './hits-query-id';
 export { default as isFacetRefined } from './isFacetRefined';
 export * from './createSendEventForFacet';
 export * from './createSendEventForHits';
+export { getAppIdAndApiKey } from './getAppIdAndApiKey';
 export { convertNumericRefinementsToFilters } from './convertNumericRefinementsToFilters';

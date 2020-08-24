@@ -309,7 +309,7 @@ export default function connectRefinementList(renderFn, unmountFn = noop) {
           instantSearchInstance,
           helper,
           attribute,
-          widgetType: 'ais.refinementList',
+          widgetType: this.$$type,
         });
 
         triggerRefine = facetValue => {
