@@ -1,5 +1,5 @@
 import { InstantSearch, Hit } from '../../types';
-import { InsightsEvent } from '../../middleware/insights';
+import { InsightsEvent } from '../../middlewares/insights';
 
 type BuiltInSendEventForHits = (
   eventType: string,
