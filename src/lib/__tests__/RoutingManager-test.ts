@@ -481,7 +481,7 @@ describe('RoutingManager', () => {
       const fakeHitsPerPage1 = createFakeHitsPerPage();
       const fakeHitsPerPage2 = createFakeHitsPerPage();
 
-      search.addWidgets([fakeSearchBox, fakeHitsPerPage1]);
+      search.addWidgets([fakeSearchBox, fakeHitsPerPage1, fakeHitsPerPage2]);
 
       search.start();
 
