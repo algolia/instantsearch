@@ -12,6 +12,8 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const $$type = 'ais.geoSearch';
+
 /**
  * @typedef {Object} LatLng
  * @property {number} lat The latitude in degrees.
@@ -177,7 +179,7 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
       sendEvent = createSendEventForHits({
         instantSearchInstance,
         index: helper.getIndex(),
-        widgetType: 'ais.geoSearch',
+        widgetType: $$type,
       });
 
       widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementOnMapMove(
@@ -269,7 +271,7 @@ const connectGeoSearch = (renderFn, unmountFn = noop) => {
     };
 
     return {
-      $$type: 'ais.geoSearch',
+      $$type,
 
       init,
 

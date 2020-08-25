@@ -12,6 +12,8 @@ const withUsage = createDocumentationMessageGenerator(
   { name: 'range-slider', connector: true }
 );
 
+const $$type = 'ais.range';
+
 /**
  * @typedef {Object} CustomRangeWidgetOptions
  * @property {string} attribute Name of the attribute for faceting.
@@ -164,7 +166,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
       if (filters && filters.length > 0) {
         instantSearchInstance.sendEventToInsights({
           insightsMethod: 'clickedFilters',
-          widgetType: 'ais.range',
+          widgetType: $$type,
           eventType: 'click',
           payload: {
             eventName,
@@ -203,7 +205,7 @@ export default function connectRange(renderFn, unmountFn = noop) {
     };
 
     return {
-      $$type: 'ais.range',
+      $$type,
 
       _getCurrentRange(stats) {
         const pow = Math.pow(10, precision);

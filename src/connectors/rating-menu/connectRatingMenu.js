@@ -128,7 +128,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
           if (!isRefined) {
             instantSearchInstance.sendEventToInsights({
               insightsMethod: 'clickedFilters',
-              widgetType: 'ais.ratingMenu',
+              widgetType: this.$$type,
               eventType,
               payload: {
                 eventName,

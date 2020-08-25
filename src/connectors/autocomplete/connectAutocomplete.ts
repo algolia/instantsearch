@@ -137,7 +137,7 @@ search.addWidgets([
           const sendEvent = createSendEventForHits({
             instantSearchInstance,
             index: scopedResult.results.index,
-            widgetType: 'ais.autocomplete',
+            widgetType: this.$$type!,
           });
 
           sendEvent('view', scopedResult.results.hits);
