@@ -200,11 +200,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         sendEvent = createSendEventForHits({
           instantSearchInstance,
           index: helper.getIndex(),
-          widgetType: 'ais.infiniteHits',
+          widgetType: this.$$type!,
         });
         bindEvent = createBindEventForHits({
           index: helper.getIndex(),
-          widgetType: 'ais.infiniteHits',
+          widgetType: this.$$type!,
         });
 
         renderFn(

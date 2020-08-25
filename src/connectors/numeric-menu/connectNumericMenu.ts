@@ -160,7 +160,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
             */
             instantSearchInstance.sendEventToInsights({
               insightsMethod: 'clickedFilters',
-              widgetType: 'ais.numericMenu',
+              widgetType: this.$$type!,
               eventType,
               payload: {
                 eventName,

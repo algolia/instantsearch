@@ -120,7 +120,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           instantSearchInstance,
           helper,
           attribute: hierarchicalFacetName,
-          widgetType: 'ais.refinementList',
+          widgetType: this.$$type,
         });
 
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);

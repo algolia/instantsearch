@@ -121,7 +121,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
           instantSearchInstance,
           helper,
           attribute: hierarchicalFacetName,
-          widgetType: 'ais.breadcrumb',
+          widgetType: this.$$type!,
         });
 
         connectorState.createURL = facetValue => {

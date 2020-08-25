@@ -157,7 +157,7 @@ export default function connectMenu(renderFn, unmountFn = noop) {
           instantSearchInstance,
           helper,
           attribute,
-          widgetType: 'ais.menu',
+          widgetType: this.$$type,
         });
 
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);

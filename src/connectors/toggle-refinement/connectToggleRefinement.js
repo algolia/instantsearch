@@ -151,7 +151,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
           if (!isRefined) {
             instantSearchInstance.sendEventToInsights({
               insightsMethod: 'clickedFilters',
-              widgetType: 'ais.toggleRefinement',
+              widgetType: this.$$type,
               eventType,
               payload: {
                 eventName,
