@@ -10,6 +10,37 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const $$type = 'ais.ratingMenu';
+
+const createSendEvent = ({
+  instantSearchInstance,
+  helper,
+  refinedStar,
+  attribute,
+}) => (...args) => {
+  if (args.length === 1) {
+    instantSearchInstance.sendEventToInsights(args[0]);
+    return;
+  }
+  const [eventType, facetValue, eventName = 'Filter Applied'] = args;
+  if (eventType !== 'click') {
+    return;
+  }
+  const isRefined = refinedStar === Number(facetValue);
+  if (!isRefined) {
+    instantSearchInstance.sendEventToInsights({
+      insightsMethod: 'clickedFilters',
+      widgetType: $$type,
+      eventType,
+      payload: {
+        eventName,
+        index: helper.getIndex(),
+        filters: [`${attribute}>=${facetValue}`],
+      },
+    });
+  }
+};
+
 /**
  * @typedef {Object} StarRatingItems
  * @property {string} name Name corresponding to the number of stars.
@@ -107,37 +138,19 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
     let sendEvent;
 
     return {
-      $$type: 'ais.ratingMenu',
+      $$type,
 
       init({ helper, createURL, instantSearchInstance }) {
         this._toggleRefinement = this._toggleRefinement.bind(this, helper);
         this._createURL = state => facetValue =>
           createURL(state.toggleRefinement(attribute, facetValue));
 
-        sendEvent = (...args) => {
-          if (args.length === 1) {
-            instantSearchInstance.sendEventToInsights(args[0]);
-            return;
-          }
-          const [eventType, facetValue, eventName = 'Filter Applied'] = args;
-          if (eventType !== 'click') {
-            return;
-          }
-          const isRefined =
-            this._getRefinedStar(helper.state) === Number(facetValue);
-          if (!isRefined) {
-            instantSearchInstance.sendEventToInsights({
-              insightsMethod: 'clickedFilters',
-              widgetType: this.$$type,
-              eventType,
-              payload: {
-                eventName,
-                index: helper.getIndex(),
-                filters: [`${attribute}>=${facetValue}`],
-              },
-            });
-          }
-        };
+        sendEvent = createSendEvent({
+          instantSearchInstance,
+          helper,
+          refinedStar: this._getRefinedStar(helper.state),
+          attribute,
+        });
 
         renderFn(
           {
