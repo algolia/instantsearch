@@ -13,6 +13,34 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+const $$type = 'ais.toggleRefinement';
+
+const createSendEvent = ({ instantSearchInstance, attribute, on, helper }) => (
+  ...args
+) => {
+  if (args.length === 1) {
+    instantSearchInstance.sendEventToInsights(args[0]);
+    return;
+  }
+  const [eventType, isRefined, eventName = 'Filter Applied'] = args;
+  if (eventType !== 'click' || on === undefined) {
+    return;
+  }
+  // Checking
+  if (!isRefined) {
+    instantSearchInstance.sendEventToInsights({
+      insightsMethod: 'clickedFilters',
+      widgetType: $$type,
+      eventType,
+      payload: {
+        eventName,
+        index: helper.getIndex(),
+        filters: on.map(value => `${attribute}:${JSON.stringify(value)}`),
+      },
+    });
+  }
+};
+
 /**
  * @typedef {Object} ToggleValue
  * @property {boolean} isRefined `true` if the toggle is on.
@@ -108,7 +136,7 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
     let sendEvent;
 
     return {
-      $$type: 'ais.toggleRefinement',
+      $$type,
 
       _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
@@ -138,31 +166,12 @@ export default function connectToggleRefinement(renderFn, unmountFn = noop) {
       },
 
       init({ state, helper, createURL, instantSearchInstance }) {
-        sendEvent = (...args) => {
-          if (args.length === 1) {
-            instantSearchInstance.sendEventToInsights(args[0]);
-            return;
-          }
-          const [eventType, isRefined, eventName = 'Filter Applied'] = args;
-          if (eventType !== 'click' || on === undefined) {
-            return;
-          }
-          // Checking
-          if (!isRefined) {
-            instantSearchInstance.sendEventToInsights({
-              insightsMethod: 'clickedFilters',
-              widgetType: this.$$type,
-              eventType,
-              payload: {
-                eventName,
-                index: helper.getIndex(),
-                filters: on.map(
-                  value => `${attribute}:${JSON.stringify(value)}`
-                ),
-              },
-            });
-          }
-        };
+        sendEvent = createSendEvent({
+          instantSearchInstance,
+          attribute,
+          on,
+          helper,
+        });
 
         this._createURL = isCurrentlyRefined => () => {
           const valuesToRemove = isCurrentlyRefined ? on : off;
