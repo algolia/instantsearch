@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Configure } from 'react-instantsearch-dom';
-import { CustomHits } from './util';
+import { CustomHits, Content } from './util';
 
 const stories = storiesOf('RefreshCache', module);
 
@@ -111,7 +111,11 @@ class AppWithRefresh extends Component {
   }
 }
 
-stories.add('with a refresh button', () => <AppWithRefresh />);
+stories.add('with a refresh button', () => (
+  <Content linkedStoryGroup="RefreshCache.stories.js">
+    <AppWithRefresh />
+  </Content>
+));
 
 class App extends Component {
   state = {
@@ -164,4 +168,8 @@ class App extends Component {
   }
 }
 
-stories.add('with setInterval', () => <App />);
+stories.add('with setInterval', () => (
+  <Content linkedStoryGroup="RefreshCache.stories.js">
+    <App />
+  </Content>
+));

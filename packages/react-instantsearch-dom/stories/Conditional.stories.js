@@ -15,7 +15,7 @@ stories
       )
     );
     return (
-      <WrapWithHits linkedStoryGroup="Conditional">
+      <WrapWithHits linkedStoryGroup="Conditional.stories.js">
         <Content />
       </WrapWithHits>
     );
@@ -29,7 +29,7 @@ stories
       )
     );
     return (
-      <WrapWithHits linkedStoryGroup="Conditional">
+      <WrapWithHits linkedStoryGroup="Conditional.stories.js">
         <Content />
       </WrapWithHits>
     );
@@ -39,7 +39,7 @@ stories
       searching ? <div>searching</div> : <div>No searching</div>
     );
     return (
-      <WrapWithHits linkedStoryGroup="Conditional">
+      <WrapWithHits linkedStoryGroup="Conditional.stories.js">
         <Content />
       </WrapWithHits>
     );

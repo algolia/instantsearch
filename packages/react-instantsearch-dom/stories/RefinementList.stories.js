@@ -9,17 +9,26 @@ const stories = storiesOf('RefinementList', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
+    <WrapWithHits
+      linkedStoryGroup="RefinementList.stories.js"
+      hasPlayground={true}
+    >
       <RefinementList attribute="brand" />
     </WrapWithHits>
   ))
   .add('with selected item', () => (
-    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
+    <WrapWithHits
+      linkedStoryGroup="RefinementList.stories.js"
+      hasPlayground={true}
+    >
       <RefinementList attribute="brand" defaultRefinement={['Apple']} />
     </WrapWithHits>
   ))
   .add('with show more', () => (
-    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
+    <WrapWithHits
+      linkedStoryGroup="RefinementList.stories.js"
+      hasPlayground={true}
+    >
       <RefinementList
         attribute="brand"
         limit={2}
@@ -29,12 +38,18 @@ stories
     </WrapWithHits>
   ))
   .add('with search inside items', () => (
-    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
+    <WrapWithHits
+      linkedStoryGroup="RefinementList.stories.js"
+      hasPlayground={true}
+    >
       <RefinementList attribute="brand" searchable />
     </WrapWithHits>
   ))
   .add('with the sort strategy changed', () => (
-    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
+    <WrapWithHits
+      linkedStoryGroup="RefinementList.stories.js"
+      hasPlayground={true}
+    >
       <RefinementList
         attribute="brand"
         transformItems={items =>
@@ -44,7 +59,10 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
+    <WrapWithHits
+      linkedStoryGroup="RefinementList.stories.js"
+      hasPlayground={true}
+    >
       <Panel header="Refinement List" footer="Footer">
         <RefinementList attribute="brand" />
       </Panel>
@@ -53,7 +71,7 @@ stories
   .add('with Panel but no refinement', () => (
     <WrapWithHits
       searchBox={false}
-      linkedStoryGroup="RefinementList"
+      linkedStoryGroup="RefinementList.stories.js"
       hasPlayground={true}
     >
       <Panel header="Refinement List" footer="Footer">
@@ -66,7 +84,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="RefinementList">
+    <WrapWithHits linkedStoryGroup="RefinementList.stories.js">
       <RefinementList
         attribute="brand"
         defaultRefinement={array('defaultSelectedItem', ['Apple', 'Samsung'])}

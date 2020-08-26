@@ -8,12 +8,12 @@ const stories = storiesOf('RangeInput', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" />
     </WrapWithHits>
   ))
   .add('visible without refinement', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput">
+    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" header="Range Input" />
 
       <div style={{ display: 'none' }}>
@@ -22,7 +22,7 @@ stories
     </WrapWithHits>
   ))
   .add('with no refinement', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput">
+    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" />
       <div style={{ display: 'none' }}>
         <SearchBox defaultRefinement="ds" />
@@ -30,37 +30,37 @@ stories
     </WrapWithHits>
   ))
   .add('with precision of 2', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" precision={2} />
     </WrapWithHits>
   ))
   .add('with default value', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" defaultRefinement={{ min: 50 }} />
     </WrapWithHits>
   ))
   .add('with default values', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" defaultRefinement={{ min: 50, max: 200 }} />
     </WrapWithHits>
   ))
   .add('with min boundaries', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" min={30} />
     </WrapWithHits>
   ))
   .add('with max boundaries', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" max={500} />
     </WrapWithHits>
   ))
   .add('with min / max boundaries', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput attribute="price" min={30} max={500} />
     </WrapWithHits>
   ))
   .add('with boundaries and default value', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput
         attribute="price"
         min={30}
@@ -70,7 +70,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <RangeInput
         attribute="price"
         min={number('min', 0)}
@@ -85,14 +85,14 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput.stories.js">
       <Panel header="Range Input" footer="Footer">
         <RangeInput attribute="price" />
       </Panel>
     </WrapWithHits>
   ))
   .add('with Panel but no refinement', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput">
+    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput.stories.js">
       <Panel header="Range Input" footer="Footer">
         <RangeInput attribute="price" />
       </Panel>

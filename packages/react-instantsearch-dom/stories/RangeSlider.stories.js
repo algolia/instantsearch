@@ -15,25 +15,37 @@ const Warning = () => (
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="RangeSlider.stories.js"
+    >
       <Warning />
       <Range attribute="price" />
     </WrapWithHits>
   ))
   .add('providing default value', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="RangeSlider.stories.js"
+    >
       <Warning />
       <Range attribute="price" defaultRefinement={{ min: 50, max: 200 }} />
     </WrapWithHits>
   ))
   .add('custom min/max bounds', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="RangeSlider.stories.js"
+    >
       <Warning />
       <Range attribute="price" min={30} max={100} />
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="RangeSlider.stories.js"
+    >
       <Warning />
       <Panel header="Range Slider" footer="Footer">
         <Range attribute="price" />
@@ -41,7 +53,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="RangeSlider">
+    <WrapWithHits linkedStoryGroup="RangeSlider.stories.js">
       <Warning />
       <Range
         attribute="price"

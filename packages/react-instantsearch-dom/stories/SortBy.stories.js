@@ -7,7 +7,7 @@ const stories = storiesOf('SortBy', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits linkedStoryGroup="SortBy">
+    <WrapWithHits linkedStoryGroup="SortBy.stories.js">
       <SortBy
         items={[
           { value: 'instant_search', label: 'Featured' },
@@ -19,7 +19,7 @@ stories
     </WrapWithHits>
   ))
   .add('without label', () => (
-    <WrapWithHits linkedStoryGroup="SortBy">
+    <WrapWithHits linkedStoryGroup="SortBy.stories.js">
       <SortBy
         items={[
           { value: 'instant_search' },
@@ -31,7 +31,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="SortBy">
+    <WrapWithHits linkedStoryGroup="SortBy.stories.js">
       <Panel header="Sort By" footer="Footer">
         <SortBy
           items={[

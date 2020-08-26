@@ -79,7 +79,7 @@ function ConfigureRelatedItemsExample() {
   );
 
   return (
-    <WrapWithHits linkedStoryGroup="ConfigureRelatedItems">
+    <WrapWithHits linkedStoryGroup="ConfigureRelatedItems.stories.tsx">
       <Index indexName="instant_search" indexId="mainIndex">
         <Configure hitsPerPage={1} />
 

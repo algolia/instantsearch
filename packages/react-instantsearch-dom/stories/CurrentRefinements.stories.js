@@ -16,7 +16,7 @@ const stories = storiesOf('CurrentRefinements', module);
 
 stories
   .add('with RefinementList', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <CurrentRefinements />
       <hr />
       <RefinementList
@@ -26,14 +26,14 @@ stories
     </WrapWithHits>
   ))
   .add('with Menu', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <CurrentRefinements />
       <hr />
       <Menu attribute="brand" defaultRefinement="Apple" />
     </WrapWithHits>
   ))
   .add('with HierarchicalMenu', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <CurrentRefinements />
       <hr />
       <HierarchicalMenu
@@ -47,7 +47,7 @@ stories
     </WrapWithHits>
   ))
   .add('with ToggleRefinement', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <CurrentRefinements />
       <hr />
       <ToggleRefinement
@@ -58,7 +58,7 @@ stories
     </WrapWithHits>
   ))
   .add('with NumericMenu', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <CurrentRefinements />
       <hr />
       <NumericMenu
@@ -74,14 +74,14 @@ stories
     </WrapWithHits>
   ))
   .add('with RangeInput', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <CurrentRefinements />
       <hr />
       <RangeInput attribute="price" defaultRefinement={{ min: 30, max: 500 }} />
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <Panel header="Current refinements" footer="Footer">
         <CurrentRefinements />
       </Panel>
@@ -92,7 +92,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel but no refinements', () => (
-    <WrapWithHits linkedStoryGroup="CurrentRefinements">
+    <WrapWithHits linkedStoryGroup="CurrentRefinements.stories.js">
       <Panel header="Current refinements" footer="Footer">
         <CurrentRefinements />
       </Panel>

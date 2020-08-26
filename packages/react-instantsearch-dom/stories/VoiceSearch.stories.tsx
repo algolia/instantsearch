@@ -11,7 +11,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="VoiceSearch"
+      linkedStoryGroup="VoiceSearch.stories.tsx"
     >
       <p style={{ color: '#999', fontStyle: 'italic' }}>
         To see this button disabled, test it on unsupported browsers like
@@ -24,7 +24,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="VoiceSearch"
+      linkedStoryGroup="VoiceSearch.stories.tsx"
     >
       <VoiceSearch statusComponent={() => null} />
     </WrapWithHits>
@@ -33,7 +33,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="VoiceSearch"
+      linkedStoryGroup="VoiceSearch.stories.tsx"
     >
       <VoiceSearch />
       <SearchBox />
@@ -43,7 +43,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="VoiceSearch"
+      linkedStoryGroup="VoiceSearch.stories.tsx"
     >
       <div className="custom-button-story">
         <VoiceSearch
@@ -77,7 +77,7 @@ stories
       <WrapWithHits
         searchBox={false}
         hasPlayground={true}
-        linkedStoryGroup="VoiceSearch"
+        linkedStoryGroup="VoiceSearch.stories.tsx"
       >
         <VoiceSearch statusComponent={Status} />
       </WrapWithHits>
@@ -107,7 +107,7 @@ stories
       <WrapWithHits
         searchBox={false}
         hasPlayground={true}
-        linkedStoryGroup="VoiceSearch"
+        linkedStoryGroup="VoiceSearch.stories.tsx"
       >
         <VoiceSearch searchAsYouSpeak={true} statusComponent={Status} />
       </WrapWithHits>
@@ -126,7 +126,7 @@ stories
       <WrapWithHits
         searchBox={false}
         hasPlayground={true}
-        linkedStoryGroup="VoiceSearch"
+        linkedStoryGroup="VoiceSearch.stories.tsx"
       >
         <div className="custom-ui">
           <VoiceSearch statusComponent={Status} />
@@ -139,7 +139,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="VoiceSearch"
+      linkedStoryGroup="VoiceSearch.stories.tsx"
     >
       <VoiceSearch additionalQueryParameters={() => {}} />
       <SearchBox />
@@ -149,7 +149,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="VoiceSearch"
+      linkedStoryGroup="VoiceSearch.stories.tsx"
     >
       <VoiceSearch language="fr-FR" additionalQueryParameters={() => {}} />
     </WrapWithHits>
@@ -158,7 +158,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="VoiceSearch"
+      linkedStoryGroup="VoiceSearch.stories.tsx"
     >
       <VoiceSearch
         language="fr-FR"

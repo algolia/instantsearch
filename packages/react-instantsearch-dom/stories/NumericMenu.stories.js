@@ -7,7 +7,7 @@ const stories = storiesOf('NumericMenu', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits linkedStoryGroup="NumericMenu">
+    <WrapWithHits linkedStoryGroup="NumericMenu.stories.js">
       <NumericMenu
         attribute="price"
         items={[
@@ -20,7 +20,7 @@ stories
     </WrapWithHits>
   ))
   .add('with a default range selected', () => (
-    <WrapWithHits linkedStoryGroup="NumericMenu">
+    <WrapWithHits linkedStoryGroup="NumericMenu.stories.js">
       <NumericMenu
         attribute="price"
         items={[
@@ -34,7 +34,7 @@ stories
     </WrapWithHits>
   ))
   .add('with some non selectable ranges', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="NumericMenu">
+    <WrapWithHits searchBox={false} linkedStoryGroup="NumericMenu.stories.js">
       <NumericMenu
         attribute="price"
         items={[
@@ -47,7 +47,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="NumericMenu">
+    <WrapWithHits linkedStoryGroup="NumericMenu.stories.js">
       <Panel header="Numeric Menu" footer="Footer">
         <NumericMenu
           attribute="price"
@@ -62,7 +62,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel but no refinement', () => (
-    <WrapWithHits linkedStoryGroup="NumericMenu">
+    <WrapWithHits linkedStoryGroup="NumericMenu.stories.js">
       <Configure filters="price>200000" />
 
       <Panel header="Numeric Menu" footer="Footer">
