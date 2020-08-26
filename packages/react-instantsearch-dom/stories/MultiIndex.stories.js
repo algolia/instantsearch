@@ -15,6 +15,7 @@ import {
   connectAutoComplete,
   connectStateResults,
 } from 'react-instantsearch-dom';
+import { Content as StoryWrapper } from './util';
 
 const searchClient = algoliasearch(
   'latency',
@@ -25,150 +26,160 @@ const stories = storiesOf('<Index>', module);
 
 stories
   .add('MultiHits', () => (
-    <InstantSearch searchClient={searchClient} indexName="instant_search">
-      <SearchBox />
+    <StoryWrapper linkedStoryGroup="MultiIndex.stories.js">
+      <InstantSearch searchClient={searchClient} indexName="instant_search">
+        <SearchBox />
 
-      <Index indexName="bestbuy">
-        <h3>
-          index: <code>bestbuy</code>
-        </h3>
-        <Configure hitsPerPage={3} />
-        <CustomCategoriesOrBrands />
-      </Index>
+        <Index indexName="bestbuy">
+          <h3>
+            index: <code>bestbuy</code>
+          </h3>
+          <Configure hitsPerPage={3} />
+          <CustomCategoriesOrBrands />
+        </Index>
 
-      <Index indexName="instant_search">
-        <h3>
-          index: <code>instant_search</code>
-        </h3>
-        <Configure hitsPerPage={3} />
-        <CustomCategoriesOrBrands />
-      </Index>
+        <Index indexName="instant_search">
+          <h3>
+            index: <code>instant_search</code>
+          </h3>
+          <Configure hitsPerPage={3} />
+          <CustomCategoriesOrBrands />
+        </Index>
 
-      <Index indexId="instant_search_apple" indexName="instant_search">
-        <h3>
-          index: <code>instant_search</code> with <code>brand:Apple</code>
-        </h3>
-        <Configure hitsPerPage={3} filters="brand:Apple" />
-        <CustomCategoriesOrBrands />
-      </Index>
+        <Index indexId="instant_search_apple" indexName="instant_search">
+          <h3>
+            index: <code>instant_search</code> with <code>brand:Apple</code>
+          </h3>
+          <Configure hitsPerPage={3} filters="brand:Apple" />
+          <CustomCategoriesOrBrands />
+        </Index>
 
-      <Index indexId="instant_search_samsung" indexName="instant_search">
-        <h3>
-          index: <code>instant_search</code> with <code>brand:Samsung</code>
-        </h3>
-        <Configure hitsPerPage={3} filters="brand:Samsung" />
-        <CustomCategoriesOrBrands />
-      </Index>
+        <Index indexId="instant_search_samsung" indexName="instant_search">
+          <h3>
+            index: <code>instant_search</code> with <code>brand:Samsung</code>
+          </h3>
+          <Configure hitsPerPage={3} filters="brand:Samsung" />
+          <CustomCategoriesOrBrands />
+        </Index>
 
-      <Index indexId="instant_search_microsoft" indexName="instant_search">
-        <h3>
-          index: <code>instant_search</code> with <code>brand:Microsoft</code>
-        </h3>
-        <Configure hitsPerPage={3} filters="brand:Microsoft" />
-        <CustomCategoriesOrBrands />
-      </Index>
-    </InstantSearch>
+        <Index indexId="instant_search_microsoft" indexName="instant_search">
+          <h3>
+            index: <code>instant_search</code> with <code>brand:Microsoft</code>
+          </h3>
+          <Configure hitsPerPage={3} filters="brand:Microsoft" />
+          <CustomCategoriesOrBrands />
+        </Index>
+      </InstantSearch>
+    </StoryWrapper>
   ))
   .add('AutoComplete', () => (
-    <InstantSearch searchClient={searchClient} indexName="categories">
-      <Configure hitsPerPage={3} />
-      <Index indexName="brands" />
-      <Index indexName="products">
-        <Configure hitsPerPage={5} />
-      </Index>
-      <AutoComplete />
-    </InstantSearch>
+    <StoryWrapper linkedStoryGroup="MultiIndex.stories.js">
+      <InstantSearch searchClient={searchClient} indexName="categories">
+        <Configure hitsPerPage={3} />
+        <Index indexName="brands" />
+        <Index indexName="products">
+          <Configure hitsPerPage={5} />
+        </Index>
+        <AutoComplete />
+      </InstantSearch>
+    </StoryWrapper>
   ))
   .add('with SortBy nested in same Index as Root', () => (
-    <InstantSearch searchClient={searchClient} indexName="categories">
-      <SearchBox />
+    <StoryWrapper linkedStoryGroup="MultiIndex.stories.js">
+      <InstantSearch searchClient={searchClient} indexName="categories">
+        <SearchBox />
 
-      <div className="multi-index_content">
-        <div className="multi-index_categories-or-brands">
-          <Index indexName="categories">
-            <Configure hitsPerPage={3} />
-
-            <SortBy
-              defaultRefinement="categories"
-              items={[
-                { value: 'categories', label: 'Categories' },
-                { value: 'bestbuy', label: 'Best buy' },
-              ]}
-            />
-
-            <CustomCategoriesOrBrands />
-          </Index>
-
-          <Index indexName="products">
-            <Configure hitsPerPage={3} />
-
-            <SortBy
-              defaultRefinement="products"
-              items={[
-                { value: 'products', label: 'Products' },
-                { value: 'brands', label: 'Brands' },
-              ]}
-            />
-
-            <CustomCategoriesOrBrands />
-          </Index>
-        </div>
-      </div>
-    </InstantSearch>
-  ))
-  .add('with conditional rendering', () => (
-    <InstantSearch searchClient={searchClient} indexName="categories">
-      <SearchBox />
-      <Results>
         <div className="multi-index_content">
           <div className="multi-index_categories-or-brands">
             <Index indexName="categories">
-              <Content>
-                <div>
-                  <div>Categories: </div>
-                  <Configure hitsPerPage={3} />
-                  <CustomCategoriesOrBrands />
-                </div>
-              </Content>
+              <Configure hitsPerPage={3} />
+
+              <SortBy
+                defaultRefinement="categories"
+                items={[
+                  { value: 'categories', label: 'Categories' },
+                  { value: 'bestbuy', label: 'Best buy' },
+                ]}
+              />
+
+              <CustomCategoriesOrBrands />
             </Index>
-            <Index indexName="brands">
-              <Content>
-                <div>
-                  <div>Brand: </div>
-                  <Configure hitsPerPage={3} />
-                  <CustomCategoriesOrBrands />
-                </div>
-              </Content>
-            </Index>
-          </div>
-          <div className="multi-index_products">
+
             <Index indexName="products">
-              <Content>
-                <div>
-                  <div>Products: </div>
-                  <Configure hitsPerPage={5} />
-                  <CustomProducts />
-                </div>
-              </Content>
+              <Configure hitsPerPage={3} />
+
+              <SortBy
+                defaultRefinement="products"
+                items={[
+                  { value: 'products', label: 'Products' },
+                  { value: 'brands', label: 'Brands' },
+                ]}
+              />
+
+              <CustomCategoriesOrBrands />
             </Index>
           </div>
         </div>
-      </Results>
-    </InstantSearch>
+      </InstantSearch>
+    </StoryWrapper>
+  ))
+  .add('with conditional rendering', () => (
+    <StoryWrapper linkedStoryGroup="MultiIndex.stories.js">
+      <InstantSearch searchClient={searchClient} indexName="categories">
+        <SearchBox />
+        <Results>
+          <div className="multi-index_content">
+            <div className="multi-index_categories-or-brands">
+              <Index indexName="categories">
+                <Content>
+                  <div>
+                    <div>Categories: </div>
+                    <Configure hitsPerPage={3} />
+                    <CustomCategoriesOrBrands />
+                  </div>
+                </Content>
+              </Index>
+              <Index indexName="brands">
+                <Content>
+                  <div>
+                    <div>Brand: </div>
+                    <Configure hitsPerPage={3} />
+                    <CustomCategoriesOrBrands />
+                  </div>
+                </Content>
+              </Index>
+            </div>
+            <div className="multi-index_products">
+              <Index indexName="products">
+                <Content>
+                  <div>
+                    <div>Products: </div>
+                    <Configure hitsPerPage={5} />
+                    <CustomProducts />
+                  </div>
+                </Content>
+              </Index>
+            </div>
+          </div>
+        </Results>
+      </InstantSearch>
+    </StoryWrapper>
   ))
   .add('with Hits & Configure', () => (
-    <InstantSearch searchClient={searchClient} indexName="brands">
-      <Configure hitsPerPage={5} />
-      <SearchBox />
+    <StoryWrapper linkedStoryGroup="MultiIndex.stories.js">
+      <InstantSearch searchClient={searchClient} indexName="brands">
+        <Configure hitsPerPage={5} />
+        <SearchBox />
 
-      <CustomCategoriesOrBrands />
-      <Pagination />
-
-      <Index indexName="products">
-        <CustomProducts />
+        <CustomCategoriesOrBrands />
         <Pagination />
-      </Index>
-    </InstantSearch>
+
+        <Index indexName="products">
+          <CustomProducts />
+          <Pagination />
+        </Index>
+      </InstantSearch>
+    </StoryWrapper>
   ));
 
 const AutoComplete = connectAutoComplete(

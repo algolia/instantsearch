@@ -8,7 +8,10 @@ const stories = storiesOf('HitsPerPage', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="HitsPerPage">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="HitsPerPage.stories.js"
+    >
       <HitsPerPage
         defaultRefinement={4}
         items={[
@@ -21,7 +24,10 @@ stories
     </WrapWithHits>
   ))
   .add('without label', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="HitsPerPage">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="HitsPerPage.stories.js"
+    >
       <HitsPerPage
         defaultRefinement={4}
         items={[{ value: 2 }, { value: 4 }, { value: 6 }, { value: 8 }]}
@@ -29,7 +35,10 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="HitsPerPage">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="HitsPerPage.stories.js"
+    >
       <Panel header="Hits per page" footer="Footer">
         <HitsPerPage
           defaultRefinement={4}
@@ -44,7 +53,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="HitsPerPage">
+    <WrapWithHits linkedStoryGroup="HitsPerPage.stories.js">
       <HitsPerPage
         defaultRefinement={number('default hits per page', 4)}
         items={[

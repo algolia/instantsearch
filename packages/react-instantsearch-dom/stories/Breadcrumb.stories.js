@@ -15,7 +15,10 @@ const VirtualHierarchicalMenu = connectHierarchicalMenu(() => null);
 stories
   .add('default', () => (
     <div>
-      <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
+      <WrapWithHits
+        hasPlayground={true}
+        linkedStoryGroup="Breadcrumb.stories.js"
+      >
         <Breadcrumb
           attributes={[
             'hierarchicalCategories.lvl0',
@@ -38,7 +41,7 @@ stories
     </div>
   ))
   .add('with custom component', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb.stories.js">
       <Breadcrumb
         attributes={[
           'hierarchicalCategories.lvl0',
@@ -59,7 +62,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb.stories.js">
       <Breadcrumb
         attributes={[
           'hierarchicalCategories.lvl0',
@@ -82,7 +85,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb.stories.js">
       <Panel header="Breadcrumb" footer="footer">
         <Breadcrumb
           attributes={[
@@ -104,7 +107,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel but no refinement', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb.stories.js">
       <Panel header="Breadcrumb" footer="footer">
         <Breadcrumb
           attributes={[

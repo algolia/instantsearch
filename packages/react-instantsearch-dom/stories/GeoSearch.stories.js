@@ -34,7 +34,7 @@ const initialPosition = {
 
 stories
   .add('default', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -55,7 +55,7 @@ stories
     </WrapWithHits>
   ))
   .add('with default refinement', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -88,7 +88,7 @@ stories
     </WrapWithHits>
   ))
   .add('with refine disabled', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -117,7 +117,7 @@ stories
 // Only UI
 stories
   .add('with zoom & center', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -142,7 +142,7 @@ stories
     </WrapWithHits>
   ))
   .add('with map options', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -163,7 +163,7 @@ stories
     </WrapWithHits>
   ))
   .add('with <Marker> options', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -189,7 +189,7 @@ stories
     </WrapWithHits>
   ))
   .add('with <Marker> events', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -214,7 +214,7 @@ stories
     </WrapWithHits>
   ))
   .add('with <Redo> component', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -237,7 +237,7 @@ stories
     </WrapWithHits>
   ))
   .add('with <Control> component', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -260,7 +260,7 @@ stories
     </WrapWithHits>
   ))
   .add('with <Control> component disabled', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -283,7 +283,7 @@ stories
     </WrapWithHits>
   ))
   .add('with <CustomMarker>', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -314,7 +314,7 @@ stories
     </WrapWithHits>
   ))
   .add('with <CustomMarker> events', () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
       <Configure aroundLatLngViaIP hitsPerPage={20} />
 
       <Container>
@@ -348,7 +348,7 @@ stories
 
 // With Places
 stories.add('with Places', () => (
-  <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+  <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch.stories.js">
     <Configure hitsPerPage={20} aroundRadius={5000} />
 
     <Places
@@ -414,7 +414,10 @@ stories.add('with InfoWindow', () => {
       const { google } = this.props;
 
       return (
-        <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+        <WrapWithHits
+          indexName="airbnb"
+          linkedStoryGroup="GeoSearch.stories.js"
+        >
           <Configure aroundLatLngViaIP hitsPerPage={20} />
 
           <Container>
@@ -506,7 +509,7 @@ stories.add('with hits communication (custom)', () => {
       return (
         <WrapWithHits
           indexName="airbnb"
-          linkedStoryGroup="GeoSearch"
+          linkedStoryGroup="GeoSearch.stories.js"
           hitsElement={
             <CustomHits selectedHit={selectedHit} onHitOver={this.onHitOver} />
           }
@@ -547,7 +550,10 @@ stories.add('with unmount', () => {
       const { visible } = this.state;
 
       return (
-        <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+        <WrapWithHits
+          indexName="airbnb"
+          linkedStoryGroup="GeoSearch.stories.js"
+        >
           <Configure aroundLatLngViaIP hitsPerPage={20} />
 
           <button onClick={this.onToggle} style={{ marginBottom: 15 }}>

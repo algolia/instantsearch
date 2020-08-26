@@ -6,7 +6,7 @@ import { WrapWithHits } from './util';
 const stories = storiesOf('PoweredBy', module);
 
 stories.add('default', () => (
-  <WrapWithHits linkedStoryGroup="PoweredBy">
+  <WrapWithHits linkedStoryGroup="PoweredBy.stories.js">
     <PoweredBy />
   </WrapWithHits>
 ));

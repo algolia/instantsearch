@@ -8,7 +8,10 @@ const stories = storiesOf('HierarchicalMenu', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="HierarchicalMenu.stories.js"
+    >
       <HierarchicalMenu
         attributes={[
           'hierarchicalCategories.lvl0',
@@ -19,7 +22,10 @@ stories
     </WrapWithHits>
   ))
   .add('with default selected item', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="HierarchicalMenu.stories.js"
+    >
       <HierarchicalMenu
         attributes={[
           'hierarchicalCategories.lvl0',
@@ -31,7 +37,10 @@ stories
     </WrapWithHits>
   ))
   .add('with show more', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="HierarchicalMenu.stories.js"
+    >
       <HierarchicalMenu
         attributes={[
           'hierarchicalCategories.lvl0',
@@ -45,7 +54,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="HierarchicalMenu">
+    <WrapWithHits linkedStoryGroup="HierarchicalMenu.stories.js">
       <HierarchicalMenu
         attributes={[
           'hierarchicalCategories.lvl0',
@@ -60,7 +69,10 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
+    <WrapWithHits
+      hasPlayground={true}
+      linkedStoryGroup="HierarchicalMenu.stories.js"
+    >
       <Panel header="Hierarchical Menu" footer="Footer">
         <HierarchicalMenu
           attributes={[
@@ -76,7 +88,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="HierarchicalMenu"
+      linkedStoryGroup="HierarchicalMenu.stories.js"
     >
       <Panel header="Hierarchical Menu" footer="Footer">
         <HierarchicalMenu

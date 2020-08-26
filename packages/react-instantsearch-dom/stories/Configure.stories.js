@@ -20,7 +20,7 @@ class ConfigureExample extends React.Component {
 
   render() {
     return (
-      <WrapWithHits linkedStoryGroup="Configure">
+      <WrapWithHits linkedStoryGroup="Configure.stories.js">
         <Configure hitsPerPage={this.state.hitsPerPage} />
         <button onClick={this.onClick}>Toggle HitsPerPage</button>
       </WrapWithHits>

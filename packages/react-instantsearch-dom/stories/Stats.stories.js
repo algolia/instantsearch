@@ -7,14 +7,14 @@ const stories = storiesOf('Stats', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits linkedStoryGroup="Stats">
+    <WrapWithHits linkedStoryGroup="Stats.stories.js">
       <div>
         <Stats />
       </div>
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="Stats">
+    <WrapWithHits linkedStoryGroup="Stats.stories.js">
       <Panel header="Stats" footer="Footer">
         <Stats />
       </Panel>

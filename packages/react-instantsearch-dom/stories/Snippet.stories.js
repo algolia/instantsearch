@@ -47,13 +47,13 @@ StrongHits.propTypes = {
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Snippet">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Snippet.stories.js">
       <Configure attributesToSnippet={['name', 'description']} />
       <Hits hitComponent={Default} />
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="Snippet">
+    <WrapWithHits linkedStoryGroup="Snippet.stories.js">
       <Configure attributesToSnippet={['name', 'description']} />
       <Hits hitComponent={StrongHits} />
     </WrapWithHits>

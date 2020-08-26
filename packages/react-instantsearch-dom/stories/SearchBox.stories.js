@@ -12,7 +12,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="SearchBox"
+      linkedStoryGroup="SearchBox.stories.js"
     >
       <SearchBox showLoadingIndicator={boolean('showLoadingIndicator', true)} />
     </WrapWithHits>
@@ -21,7 +21,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="SearchBox"
+      linkedStoryGroup="SearchBox.stories.js"
     >
       <SearchBox defaultRefinement="battery" />
     </WrapWithHits>
@@ -30,7 +30,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="SearchBox"
+      linkedStoryGroup="SearchBox.stories.js"
     >
       <SearchBox
         submit={<span>🔍</span>}
@@ -43,7 +43,7 @@ stories
     </WrapWithHits>
   ))
   .add('Display feedback when search is stalled (custom component)', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
+    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox.stories.js">
       <SearchBox
         showLoadingIndicator={true}
         loadingIndicator={<span>✨</span>}
@@ -51,7 +51,7 @@ stories
     </WrapWithHits>
   ))
   .add('without search as you type', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
+    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox.stories.js">
       <SearchBox searchAsYouType={false} />
     </WrapWithHits>
   ))
@@ -59,7 +59,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="SearchBox"
+      linkedStoryGroup="SearchBox.stories.js"
     >
       <Panel header="SearchBox" footer="Footer">
         <SearchBox />
@@ -67,7 +67,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
+    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox.stories.js">
       <SearchBox
         focusShortcuts={['s']}
         searchAsYouType={true}
@@ -126,7 +126,7 @@ class SearchBoxContainer extends Component {
       <WrapWithHits
         searchBox={false}
         hasPlayground={true}
-        linkedStoryGroup="SearchBox"
+        linkedStoryGroup="SearchBox.stories.js"
       >
         <div
           style={{

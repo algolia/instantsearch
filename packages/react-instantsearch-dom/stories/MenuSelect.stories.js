@@ -9,17 +9,17 @@ const stories = storiesOf('MenuSelect', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect.stories.js">
       <MenuSelect attribute="brand" />
     </WrapWithHits>
   ))
   .add('with default selected item', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect.stories.js">
       <MenuSelect attribute="brand" defaultRefinement="Apple" />
     </WrapWithHits>
   ))
   .add('with the sort strategy changed', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect.stories.js">
       <MenuSelect
         attribute="brand"
         transformItems={items =>
@@ -29,7 +29,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="MenuSelect">
+    <WrapWithHits linkedStoryGroup="MenuSelect.stories.js">
       <MenuSelect
         attribute="brand"
         defaultRefinement={text('defaultSelectedItem', 'Apple')}
@@ -37,7 +37,7 @@ stories
     </WrapWithHits>
   ))
   .add('with localized count', () => (
-    <WrapWithHits linkedStoryGroup="MenuSelect">
+    <WrapWithHits linkedStoryGroup="MenuSelect.stories.js">
       <MenuSelect
         attribute="brand"
         defaultRefinement={text('defaultSelectedItem', 'Apple')}
@@ -51,7 +51,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect.stories.js">
       <Panel header="Menu select" footer="Footer">
         <MenuSelect attribute="brand" />
       </Panel>
@@ -61,7 +61,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="MenuSelect"
+      linkedStoryGroup="MenuSelect.stories.js"
     >
       <Panel header="Menu select" footer="Footer">
         <MenuSelect attribute="brand" />

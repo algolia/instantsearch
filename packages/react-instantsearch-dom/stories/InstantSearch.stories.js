@@ -2,6 +2,7 @@ import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import { storiesOf } from '@storybook/react';
 import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
+import { Content } from './util';
 
 const stories = storiesOf('<InstantSearch>', module);
 
@@ -12,23 +13,27 @@ const searchClient = algoliasearch(
 
 stories
   .add('default', () => (
-    <InstantSearch searchClient={searchClient} indexName="instant_search">
-      <SearchBox />
-      <Hits />
-    </InstantSearch>
+    <Content linkedStoryGroup="InstantSearch.stories.js">
+      <InstantSearch searchClient={searchClient} indexName="instant_search">
+        <SearchBox />
+        <Hits />
+      </InstantSearch>
+    </Content>
   ))
   .add('with custom search client', () => (
-    <InstantSearch
-      indexName="instant_search"
-      searchClient={{
-        search() {
-          return Promise.resolve({
-            results: [{ hits: [{ name: 'Fake result' }] }],
-          });
-        },
-      }}
-    >
-      <SearchBox />
-      <Hits />
-    </InstantSearch>
+    <Content linkedStoryGroup="InstantSearch.stories.js">
+      <InstantSearch
+        indexName="instant_search"
+        searchClient={{
+          search() {
+            return Promise.resolve({
+              results: [{ hits: [{ name: 'Fake result' }] }],
+            });
+          },
+        }}
+      >
+        <SearchBox />
+        <Hits />
+      </InstantSearch>
+    </Content>
   ));

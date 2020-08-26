@@ -16,7 +16,7 @@ const stories = storiesOf('Hits', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits linkedStoryGroup="Hits">
+    <WrapWithHits linkedStoryGroup="Hits.stories.js">
       <Hits />
     </WrapWithHits>
   ))
@@ -38,13 +38,13 @@ stories
       hit: PropTypes.object.isRequired,
     };
     return (
-      <WrapWithHits linkedStoryGroup="Hits">
+      <WrapWithHits linkedStoryGroup="Hits.stories.js">
         <Hits hitComponent={Product} />
       </WrapWithHits>
     );
   })
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="Hits">
+    <WrapWithHits linkedStoryGroup="Hits.stories.js">
       <Panel header="Hits" footer="Footer">
         <Hits />
       </Panel>
@@ -75,7 +75,7 @@ stories
       insights: PropTypes.func.isRequired,
     };
     return (
-      <WrapWithHits linkedStoryGroup="Hits">
+      <WrapWithHits linkedStoryGroup="Hits.stories.js">
         <Configure clickAnalytics />
         <Hits hitComponent={ProductWithInsights} />
       </WrapWithHits>

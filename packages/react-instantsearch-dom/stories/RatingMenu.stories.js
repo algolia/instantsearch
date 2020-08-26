@@ -13,41 +13,41 @@ const stories = storiesOf('RatingMenu', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu.stories.js">
       <RatingMenu attribute="rating" />
     </WrapWithHits>
   ))
   .add('with min', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu.stories.js">
       <RatingMenu attribute="rating" min={3} />
     </WrapWithHits>
   ))
   .add('with max', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu.stories.js">
       <RatingMenu attribute="rating" max={3} />
     </WrapWithHits>
   ))
   .add('with min & max', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu.stories.js">
       <RatingMenu attribute="rating" min={2} max={4} />
     </WrapWithHits>
   ))
   .add('with only one value available', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu.stories.js">
       <Configure filters="rating>=4" />
 
       <RatingMenu attribute="rating" />
     </WrapWithHits>
   ))
   .add('with only one value available & min & max', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu.stories.js">
       <Configure filters="rating>=4" />
 
       <RatingMenu attribute="rating" min={1} max={5} />
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="RatingMenu.stories.js">
       <Panel header="Ratings">
         <RatingMenu attribute="rating" />
       </Panel>
@@ -57,7 +57,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="RatingMenu"
+      linkedStoryGroup="RatingMenu.stories.js"
     >
       <Panel header="Ratings">
         <RatingMenu attribute="rating" />
@@ -72,7 +72,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="RatingMenu"
+      linkedStoryGroup="RatingMenu.stories.js"
     >
       <Panel header="Ratings">
         <RatingMenu attribute="rating" min={1} max={5} />
@@ -84,7 +84,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="RatingMenu">
+    <WrapWithHits linkedStoryGroup="RatingMenu.stories.js">
       <RatingMenu
         attribute="rating"
         min={number('min', 1)}

@@ -44,7 +44,7 @@ const storyProps = {
   appId: 'latency',
   apiKey: 'af044fb0788d6bb15f807e4420592bc5',
   indexName: 'instant_search_movies',
-  linkedStoryGroup: 'QueryRuleCustomData',
+  linkedStoryGroup: 'QueryRuleCustomData.stories.tsx',
   hitsElement: <StoryHits />,
 };
 

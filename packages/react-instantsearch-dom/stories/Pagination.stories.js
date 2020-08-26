@@ -8,12 +8,12 @@ const stories = storiesOf('Pagination', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination.stories.js">
       <Pagination />
     </WrapWithHits>
   ))
   .add('with all props', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination.stories.js">
       <Pagination
         showFirst={true}
         showLast={true}
@@ -25,7 +25,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits linkedStoryGroup="Pagination">
+    <WrapWithHits linkedStoryGroup="Pagination.stories.js">
       <Pagination
         showFirst={boolean('show First', true)}
         showLast={boolean('show Last', true)}
@@ -37,7 +37,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination.stories.js">
       <Panel header="Pagination" footer="Footer">
         <Pagination />
       </Panel>
@@ -47,7 +47,7 @@ stories
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
-      linkedStoryGroup="Pagination"
+      linkedStoryGroup="Pagination.stories.js"
     >
       <Panel header="Pagination" footer="Footer">
         <Pagination header="Pagination" />

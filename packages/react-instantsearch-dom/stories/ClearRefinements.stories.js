@@ -11,7 +11,7 @@ const stories = storiesOf('ClearRefinements', module);
 
 stories
   .add('with refinements to clear', () => (
-    <WrapWithHits linkedStoryGroup="ClearRefinements">
+    <WrapWithHits linkedStoryGroup="ClearRefinements.stories.js">
       <div>
         <ClearRefinements />
         <div style={{ display: 'none' }}>
@@ -21,12 +21,12 @@ stories
     </WrapWithHits>
   ))
   .add('nothing to clear', () => (
-    <WrapWithHits linkedStoryGroup="ClearRefinements">
+    <WrapWithHits linkedStoryGroup="ClearRefinements.stories.js">
       <ClearRefinements />
     </WrapWithHits>
   ))
   .add('clear all refinements and the query', () => (
-    <WrapWithHits linkedStoryGroup="ClearRefinements">
+    <WrapWithHits linkedStoryGroup="ClearRefinements.stories.js">
       <ClearRefinements
         clearsQuery
         translations={{ reset: 'Clear refinements and query' }}
@@ -35,7 +35,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="ClearRefinements">
+    <WrapWithHits linkedStoryGroup="ClearRefinements.stories.js">
       <Panel header="Clear refinements" footer="Footer">
         <ClearRefinements />
       </Panel>
@@ -46,7 +46,7 @@ stories
     </WrapWithHits>
   ))
   .add('with Panel but no refinement', () => (
-    <WrapWithHits linkedStoryGroup="ClearRefinements">
+    <WrapWithHits linkedStoryGroup="ClearRefinements.stories.js">
       <Panel header="Clear refinements" footer="Footer">
         <ClearRefinements />
       </Panel>

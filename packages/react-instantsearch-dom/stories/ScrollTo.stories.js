@@ -6,7 +6,7 @@ import { WrapWithHits } from './util';
 const stories = storiesOf('ScrollTo', module);
 
 stories.add('default', () => (
-  <WrapWithHits linkedStoryGroup="ScrollTo">
+  <WrapWithHits linkedStoryGroup="ScrollTo.stories.js">
     <Configure hitsPerPage={5} />
     <ScrollTo>
       <Hits />

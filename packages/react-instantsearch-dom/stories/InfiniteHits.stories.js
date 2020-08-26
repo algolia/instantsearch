@@ -18,7 +18,7 @@ const stories = storiesOf('InfiniteHits', module);
 
 stories
   .add('default', () => (
-    <WrapWithHits linkedStoryGroup="InfiniteHits" pagination={false}>
+    <WrapWithHits linkedStoryGroup="InfiniteHits.stories.js" pagination={false}>
       <InfiniteHits />
     </WrapWithHits>
   ))
@@ -26,7 +26,7 @@ stories
     const urlLogger = action('Routing state');
     return (
       <WrapWithHits
-        linkedStoryGroup="InfiniteHits"
+        linkedStoryGroup="InfiniteHits.stories.js"
         pagination={false}
         initialSearchState={{ page: 3 }}
         onSearchStateChange={({ configure, ...searchState }) => {
@@ -74,7 +74,7 @@ stories
 
     return (
       <WrapWithHits
-        linkedStoryGroup="InfiniteHits"
+        linkedStoryGroup="InfiniteHits.stories.js"
         pagination={false}
         initialSearchState={{ page: 3 }}
         onSearchStateChange={({ configure, ...searchState }) => {
@@ -105,13 +105,13 @@ stories
     };
 
     return (
-      <WrapWithHits linkedStoryGroup="InfiniteHits">
+      <WrapWithHits linkedStoryGroup="InfiniteHits.stories.js">
         <InfiniteHits hitComponent={Product} />
       </WrapWithHits>
     );
   })
   .add('with Panel', () => (
-    <WrapWithHits linkedStoryGroup="InfiniteHits" pagination={false}>
+    <WrapWithHits linkedStoryGroup="InfiniteHits.stories.js" pagination={false}>
       <Panel header="Infinite hits" footer="Footer">
         <InfiniteHits />
       </Panel>
@@ -143,7 +143,7 @@ stories
       insights: PropTypes.func.isRequired,
     };
     return (
-      <WrapWithHits linkedStoryGroup="Hits">
+      <WrapWithHits linkedStoryGroup="Hits.stories.js">
         <Configure clickAnalytics />
         <InfiniteHits hitComponent={ProductWithInsights} />
       </WrapWithHits>
@@ -166,7 +166,7 @@ stories
     };
 
     return (
-      <WrapWithHits linkedStoryGroup="InfiniteHits">
+      <WrapWithHits linkedStoryGroup="InfiniteHits.stories.js">
         <Configure hitsPerPage={16} />
         <InfiniteHits
           hitComponent={Product}

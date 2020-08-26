@@ -48,25 +48,13 @@ Hits.propTypes = {
 
 export const CustomHits = connectHits(Hits);
 
-export const WrapWithHits = ({
-  searchParameters: askedSearchParameters = {},
-  children,
-  searchBox = true,
-  hasPlayground = false,
+export function Content({
+  hasPlayground,
   linkedStoryGroup,
-  pagination = true,
-  appId,
-  apiKey,
-  indexName,
-  hitsElement,
-  initialSearchState,
-  onSearchStateChange,
-}) => {
-  const searchClient = useMemo(() => {
-    return algoliasearch(appId, apiKey);
-  }, [appId, apiKey]);
-
-  const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}.stories.js`;
+  children,
+  resultsView,
+}) {
+  const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}`;
   const playgroundLink = hasPlayground ? (
     <button
       onClick={linkTo(linkedStoryGroup, 'playground')}
@@ -90,6 +78,49 @@ export const WrapWithHits = ({
     </div>
   ) : null;
 
+  const results = resultsView ? (
+    <div
+      style={linkedStoryGroup ? {} : { borderRadius: '0px 0px 5px 5px' }}
+      className="container hits-container"
+    >
+      {resultsView}
+    </div>
+  ) : null;
+
+  return (
+    <div>
+      <div className="container widget-container">{children}</div>
+      {results}
+      {footer}
+    </div>
+  );
+}
+
+Content.propTypes = {
+  linkedStoryGroup: PropTypes.string,
+  hasPlayground: PropTypes.bool,
+  children: PropTypes.node,
+  resultsView: PropTypes.node,
+};
+
+export function WrapWithHits({
+  searchParameters: askedSearchParameters = {},
+  children,
+  searchBox = true,
+  hasPlayground = false,
+  linkedStoryGroup,
+  pagination = true,
+  hitsElement,
+  appId,
+  apiKey,
+  indexName,
+  initialSearchState,
+  onSearchStateChange,
+}) {
+  const searchClient = useMemo(() => {
+    return algoliasearch(appId, apiKey);
+  }, [appId, apiKey]);
+
   const hits = hitsElement || <CustomHits />;
 
   const searchParameters = {
@@ -112,13 +143,11 @@ export const WrapWithHits = ({
       onSearchStateChange={setNextSearchState}
     >
       <Configure {...searchParameters} />
-      <div>
-        <div className="container widget-container">{children}</div>
-        <div>
-          <div
-            style={linkedStoryGroup ? {} : { borderRadius: '0px 0px 5px 5px' }}
-            className="container hits-container"
-          >
+      <Content
+        linkedStoryGroup={linkedStoryGroup}
+        hasPlayground={hasPlayground}
+        resultsView={
+          <div>
             <div className="hit-actions">
               {searchBox ? (
                 <SearchBox
@@ -134,12 +163,13 @@ export const WrapWithHits = ({
               {pagination ? <Pagination showLast={true} /> : null}
             </div>
           </div>
-          {footer}
-        </div>
-      </div>
+        }
+      >
+        {children}
+      </Content>
     </InstantSearch>
   );
-};
+}
 
 WrapWithHits.propTypes = {
   appId: PropTypes.string,
@@ -162,5 +192,5 @@ WrapWithHits.defaultProps = {
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
   initialSearchState: {},
-  onSearchStateChange: () => {},
+  onSearchStateChange: searchState => searchState,
 };
