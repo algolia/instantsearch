@@ -1347,4 +1347,119 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(searchParametersAfter.insideBoundingBox).toBeUndefined();
     });
   });
+
+  describe('sendEvent', () => {
+    let render;
+    let instantSearchInstance;
+    let hits;
+    beforeEach(() => {
+      hits = [
+        {
+          objectID: 123,
+          _geoloc: { lat: 10, lng: 12 },
+          __position: 0,
+          __queryID: 'test-query-id',
+        },
+        {
+          objectID: 456,
+          _geoloc: { lat: 12, lng: 14 },
+          __position: 1,
+          __queryID: 'test-query-id',
+        },
+        {
+          objectID: 789,
+          _geoloc: { lat: 14, lng: 16 },
+          __position: 2,
+          __queryID: 'test-query-id',
+        },
+      ];
+      render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      instantSearchInstance = createInstantSearch();
+      const { mainHelper: helper } = instantSearchInstance;
+
+      widget.init({
+        state: helper.state,
+        instantSearchInstance,
+        helper,
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits,
+          },
+        ]),
+        helper,
+        instantSearchInstance,
+      });
+    });
+
+    it('sends view event when hits are rendered', () => {
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'view',
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Hits Viewed',
+          index: 'indexName',
+          objectIDs: [123, 456, 789],
+        },
+        widgetType: 'ais.geoSearch',
+      });
+    });
+
+    it('sends click event', () => {
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // view event by render
+
+      const { sendEvent } = render.mock.calls[render.mock.calls.length - 1][0];
+      sendEvent('click', hits[0], 'Location Added');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Location Added',
+          index: 'indexName',
+          objectIDs: [123],
+          positions: [0],
+          queryID: 'test-query-id',
+        },
+        widgetType: 'ais.geoSearch',
+      });
+    });
+
+    it('sends conversion event', () => {
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // view event by render
+
+      const { sendEvent } = render.mock.calls[render.mock.calls.length - 1][0];
+      sendEvent('conversion', hits[0], 'Location Saved');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'conversion',
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Location Saved',
+          index: 'indexName',
+          objectIDs: [123],
+          queryID: 'test-query-id',
+        },
+        widgetType: 'ais.geoSearch',
+      });
+    });
+  });
 });

@@ -1091,4 +1091,82 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       });
     });
   });
+
+  describe('sendEvent', () => {
+    let rendering;
+    let helper;
+    let instantSearchInstance;
+    let widget;
+
+    beforeEach(() => {
+      rendering = jest.fn();
+      instantSearchInstance = createInstantSearch();
+      const makeWidget = connectToggleRefinement(rendering);
+
+      const attribute = 'isShippingFree';
+      widget = makeWidget({
+        attribute,
+      });
+
+      helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+    });
+
+    it('sends event when a facet is added', () => {
+      // first rendering
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { refine } = renderOptions;
+      refine({ isRefined: false });
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['isShippingFree:true'],
+          index: '',
+        },
+        widgetType: 'ais.toggleRefinement',
+      });
+    });
+
+    it('does not send event when a facet is removed', () => {
+      // first rendering
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { refine } = renderOptions;
+      refine({ isRefined: false });
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+
+      refine({ isRefined: true });
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // still the same
+    });
+  });
 });

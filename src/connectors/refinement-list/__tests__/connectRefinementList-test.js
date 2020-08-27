@@ -2400,4 +2400,71 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
     });
   });
+
+  describe('sendEvent', () => {
+    let makeWidget;
+    let rendering;
+    let instantSearchInstance;
+
+    beforeEach(() => {
+      const factoryResult = createWidgetFactory();
+      makeWidget = factoryResult.makeWidget;
+      rendering = factoryResult.rendering;
+      instantSearchInstance = createInstantSearch();
+      const widget = makeWidget({
+        attribute: 'category',
+      });
+
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+    });
+
+    it('sends event when a facet is added', () => {
+      const firstRenderingOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['category:"value"'],
+          index: '',
+        },
+        widgetType: 'ais.refinementList',
+      });
+    });
+
+    it('does not send event when a facet is removed', () => {
+      const firstRenderingOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // still the same
+    });
+  });
 });

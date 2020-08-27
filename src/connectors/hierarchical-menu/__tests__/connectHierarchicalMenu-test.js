@@ -1128,4 +1128,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
       );
     });
   });
+
+  describe('sendEvent', () => {
+    it('sends event when a facet is added', () => {
+      const rendering = jest.fn();
+      const instantSearchInstance = createInstantSearch();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+      });
+
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['category:"value"'],
+          index: '',
+        },
+        widgetType: 'ais.hierarchicalMenu',
+      });
+    });
+  });
 });
