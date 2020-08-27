@@ -19,6 +19,7 @@ import { withInsights, withInsightsListener } from '../../lib/insights';
 import {
   WidgetFactory,
   Template,
+  TemplateWithBindEvent,
   Hit,
   InsightsClientWrapper,
   Renderer,
@@ -93,7 +94,7 @@ export type InfiniteHitsTemplates = {
   /**
    * The template to use for each result.
    */
-  item?: Template<Hit>;
+  item?: TemplateWithBindEvent<Hit>;
 };
 
 export type InfiniteHitsWidgetParams = {

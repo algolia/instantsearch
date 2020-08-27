@@ -17,6 +17,7 @@ import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
 import {
   Template,
+  TemplateWithBindEvent,
   Hit,
   WidgetFactory,
   Renderer,
@@ -98,7 +99,7 @@ export type HitsTemplates = {
    *
    * @default ''
    */
-  item?: Template<
+  item?: TemplateWithBindEvent<
     Hit & {
       __hitIndex: number;
     }
