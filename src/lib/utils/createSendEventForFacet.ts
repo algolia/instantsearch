@@ -25,7 +25,12 @@ export function createSendEventForFacet({
 }): SendEventForFacet {
   const sendEventForFacet: SendEventForFacet = (...args) => {
     const [eventType, facetValue, eventName = 'Filter Applied'] = args;
-    if (eventType === 'click' && (args.length === 2 || args.length === 3)) {
+    if (args.length === 1 && typeof args[0] === 'object') {
+      instantSearchInstance.sendEventToInsights(args[0]);
+    } else if (
+      eventType === 'click' &&
+      (args.length === 2 || args.length === 3)
+    ) {
       if (!isFacetRefined(helper, attribute, facetValue)) {
         // send event only when the facet is being checked "ON"
         instantSearchInstance.sendEventToInsights({
@@ -39,12 +44,10 @@ export function createSendEventForFacet({
           },
         });
       }
-    } else if (args.length === 1) {
-      instantSearchInstance.sendEventToInsights(args[0]);
     } else if (__DEV__) {
       throw new Error(
         `You need to pass two arguments like:
-sendEvent('click', facetValue);
+  sendEvent('click', facetValue);
 
 If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
 `
