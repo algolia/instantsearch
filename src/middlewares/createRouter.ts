@@ -1,7 +1,14 @@
 import simpleStateMapping from '../lib/stateMappings/simple';
 import historyRouter from '../lib/routers/history';
 import { Index } from '../widgets/index/index';
-import { Router, StateMapping, UiState, Middleware } from '../types';
+import {
+  Router,
+  StateMapping,
+  UiState,
+  Middleware,
+  RouteState,
+} from '../types';
+import { isEqual } from '../lib/utils';
 
 const walk = (current: Index, callback: (index: Index) => void) => {
   callback(current);
@@ -49,11 +56,19 @@ export const createRouter: RoutingManager = (props = {}) => {
       ...stateMapping.routeToState(router.read()),
     };
 
+    let lastRouteState: RouteState | undefined = undefined;
+
     return {
       onStateChange({ uiState }) {
-        const route = stateMapping.stateToRoute(uiState);
+        const routeState = stateMapping.stateToRoute(uiState);
 
-        router.write(route);
+        if (
+          lastRouteState === undefined ||
+          !isEqual(lastRouteState, routeState)
+        ) {
+          router.write(routeState);
+          lastRouteState = routeState;
+        }
       },
 
       subscribe() {
