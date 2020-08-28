@@ -1093,22 +1093,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
   });
 
   describe('sendEvent', () => {
-    let rendering;
-    let helper;
-    let instantSearchInstance;
-    let widget;
-
-    beforeEach(() => {
-      rendering = jest.fn();
-      instantSearchInstance = createInstantSearch();
+    const createInitializedWidget = () => {
+      const rendering = jest.fn();
+      const instantSearchInstance = createInstantSearch();
       const makeWidget = connectToggleRefinement(rendering);
 
       const attribute = 'isShippingFree';
-      widget = makeWidget({
+      const widget = makeWidget({
         attribute,
       });
 
-      helper = jsHelper(
+      const helper = jsHelper(
         {},
         '',
         widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -1116,10 +1111,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         })
       );
       helper.search = jest.fn();
-    });
 
-    it('sends event when a facet is added', () => {
-      // first rendering
       widget.init({
         helper,
         state: helper.state,
@@ -1127,6 +1119,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         instantSearchInstance,
       });
 
+      return { rendering, helper, instantSearchInstance, widget };
+    };
+
+    it('sends event when a facet is added', () => {
+      const { rendering, instantSearchInstance } = createInitializedWidget();
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;
@@ -1147,14 +1144,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
 
     it('does not send event when a facet is removed', () => {
-      // first rendering
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-        instantSearchInstance,
-      });
-
+      const { rendering, instantSearchInstance } = createInitializedWidget();
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = renderOptions;

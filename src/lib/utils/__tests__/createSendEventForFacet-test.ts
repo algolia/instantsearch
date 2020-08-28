@@ -1,29 +1,34 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import { createSendEventForFacet } from '../createSendEventForFacet';
-import { InstantSearch, SearchClient } from '../../../types';
+import { SearchClient } from '../../../types';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('../isFacetRefined', () => jest.fn());
 
 import isFacetRefined from '../isFacetRefined';
 
-const instantSearchInstance = {} as InstantSearch;
-let sendEvent;
-let helper;
-beforeEach(() => {
-  instantSearchInstance.sendEventToInsights = jest.fn();
-  helper = algoliasearchHelper({} as SearchClient, '', {});
+const createTestEnvironment = () => {
+  const instantSearchInstance = createInstantSearch();
+  const helper = algoliasearchHelper({} as SearchClient, '', {});
   (isFacetRefined as jest.Mock).mockImplementation(() => false);
-  sendEvent = createSendEventForFacet({
+  const sendEvent = createSendEventForFacet({
     instantSearchInstance,
     helper,
     attribute: 'category',
     widgetType: 'ais.customWidget',
   });
-});
+
+  return {
+    instantSearchInstance,
+    helper,
+    sendEvent,
+  };
+};
 
 describe('createSendEventForFacet', () => {
   describe('Usage', () => {
     it('throws when facetValue is missing', () => {
+      const { sendEvent } = createTestEnvironment();
       expect(() => {
         sendEvent('click');
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -36,6 +41,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
     });
 
     it('throws with unknown eventType', () => {
+      const { sendEvent } = createTestEnvironment();
       expect(() => {
         sendEvent('my custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -48,6 +54,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
     });
 
     it('throws when eventType is not click', () => {
+      const { sendEvent } = createTestEnvironment();
       expect(() => {
         sendEvent('custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -60,6 +67,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
     });
 
     it('does not send event when a facet is removed', () => {
+      const { sendEvent, instantSearchInstance } = createTestEnvironment();
       (isFacetRefined as jest.Mock).mockImplementation(() => true);
       sendEvent('click', 'value');
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
@@ -68,6 +76,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
     });
 
     it('sends with default eventName', () => {
+      const { sendEvent, instantSearchInstance } = createTestEnvironment();
       sendEvent('click', 'value');
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
@@ -85,6 +94,7 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
     });
 
     it('sends with custom eventName', () => {
+      const { sendEvent, instantSearchInstance } = createTestEnvironment();
       sendEvent('click', 'value', 'Category Clicked');
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1

@@ -1349,11 +1349,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   describe('sendEvent', () => {
-    let render;
-    let instantSearchInstance;
-    let hits;
-    beforeEach(() => {
-      hits = [
+    const createRenderedWidget = () => {
+      const hits = [
         {
           objectID: 123,
           _geoloc: { lat: 10, lng: 12 },
@@ -1373,13 +1370,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           __queryID: 'test-query-id',
         },
       ];
-      render = jest.fn();
+      const render = jest.fn();
       const unmount = jest.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      instantSearchInstance = createInstantSearch();
+      const instantSearchInstance = createInstantSearch();
       const { mainHelper: helper } = instantSearchInstance;
 
       widget.init({
@@ -1397,9 +1394,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         helper,
         instantSearchInstance,
       });
-    });
+
+      return {
+        render,
+        instantSearchInstance,
+        hits,
+      };
+    };
 
     it('sends view event when hits are rendered', () => {
+      const { instantSearchInstance } = createRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       );
@@ -1416,6 +1420,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('sends click event', () => {
+      const { instantSearchInstance, render, hits } = createRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       ); // view event by render
@@ -1440,6 +1445,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     it('sends conversion event', () => {
+      const { instantSearchInstance, render, hits } = createRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         1
       ); // view event by render

@@ -552,11 +552,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   describe('insights', () => {
-    let instantSearchInstance;
-    let renderFn;
-    let hits;
-    beforeEach(() => {
-      renderFn = jest.fn();
+    const createRenderedWidget = () => {
+      const renderFn = jest.fn();
       const makeWidget = connectHits(renderFn);
       const widget = makeWidget({});
 
@@ -567,10 +564,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         helper,
         state: helper.state,
       });
-      instantSearchInstance = initOptions.instantSearchInstance;
+      const instantSearchInstance = initOptions.instantSearchInstance;
       widget.init!(initOptions);
 
-      hits = [
+      const hits = [
         {
           objectID: '1',
           fake: 'data',
@@ -595,10 +592,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
           helper,
         })
       );
-    });
+
+      return { instantSearchInstance, renderFn, hits };
+    };
 
     describe('sendEvent', () => {
       it('sends view event when hits are rendered', () => {
+        const { instantSearchInstance } = createRenderedWidget();
         expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
           1
         );
@@ -615,6 +615,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       });
 
       it('sends click event', () => {
+        const {
+          instantSearchInstance,
+          renderFn,
+          hits,
+        } = createRenderedWidget();
         expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
           1
         ); // view event by render
@@ -641,6 +646,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       });
 
       it('sends conversion event', () => {
+        const {
+          instantSearchInstance,
+          renderFn,
+          hits,
+        } = createRenderedWidget();
         expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
           1
         ); // view event by render
@@ -668,6 +678,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
     describe('bindEvent', () => {
       it('returns a payload for click event', () => {
+        const { renderFn, hits } = createRenderedWidget();
         const { bindEvent } = renderFn.mock.calls[
           renderFn.mock.calls.length - 1
         ][0];
@@ -690,6 +701,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       });
 
       it('returns a payload for conversion event', () => {
+        const { renderFn, hits } = createRenderedWidget();
         const { bindEvent } = renderFn.mock.calls[
           renderFn.mock.calls.length - 1
         ][0];

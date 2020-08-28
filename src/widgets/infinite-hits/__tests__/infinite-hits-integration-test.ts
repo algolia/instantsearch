@@ -18,23 +18,30 @@ function createSingleSearchResponse({ params: { hitsPerPage, page } }) {
 }
 
 describe('infiniteHits', () => {
-  let search;
-  let searchClient;
-  let container;
-
-  beforeEach(() => {
-    searchClient = {
+  const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
+    const searchClient = {
       search: jest.fn(requests =>
         Promise.resolve({
           results: requests.map(request => createSingleSearchResponse(request)),
         })
       ),
     };
-    search = instantsearch({
+    const search = instantsearch({
       indexName: 'instant_search',
       searchClient,
     });
+    search.addWidgets([
+      configure({
+        hitsPerPage,
+      }),
+    ]);
 
+    return { search, searchClient };
+  };
+
+  let container;
+
+  beforeEach(() => {
     container = document.createElement('div');
   });
 
@@ -65,10 +72,9 @@ describe('infiniteHits', () => {
     });
 
     it('calls read & write methods of custom cache', async () => {
+      const { search } = createInstantSearch();
+
       search.addWidgets([
-        configure({
-          hitsPerPage: 2,
-        }),
         infiniteHits({
           container,
           cache: customCache,
@@ -96,11 +102,10 @@ describe('infiniteHits', () => {
     });
 
     it('displays all the hits from cache', async () => {
+      const { search, searchClient } = createInstantSearch();
+
       // flow #1 - load page #0 & #1 to fill the cache
       search.addWidgets([
-        configure({
-          hitsPerPage: 2,
-        }),
         infiniteHits({
           container,
           cache: customCache,
@@ -149,23 +154,23 @@ describe('infiniteHits', () => {
   });
 
   describe('sendEvent', () => {
-    let onEvent;
-    beforeEach(() => {
-      onEvent = jest.fn();
+    const createInsightsMiddlewareWithOnEvent = () => {
+      const onEvent = jest.fn();
       const insights = createInsightsMiddleware({
         insightsClient: null,
         onEvent,
       });
-      search.EXPERIMENTAL_use(insights);
-
-      search.addWidgets([
-        configure({
-          hitsPerPage: 2,
-        }),
-      ]);
-    });
+      return {
+        onEvent,
+        insights,
+      };
+    };
 
     it('sends view event when hits are rendered', done => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.EXPERIMENTAL_use(insights);
+
       search.addWidgets([
         infiniteHits({
           container,
@@ -189,6 +194,10 @@ describe('infiniteHits', () => {
     });
 
     it('sends click event', done => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.EXPERIMENTAL_use(insights);
+
       search.addWidgets([
         infiniteHits({
           container,
@@ -222,6 +231,10 @@ describe('infiniteHits', () => {
     });
 
     it('sends conversion event', done => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.EXPERIMENTAL_use(insights);
+
       search.addWidgets([
         infiniteHits({
           container,

@@ -2402,15 +2402,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
   });
 
   describe('sendEvent', () => {
-    let makeWidget;
-    let rendering;
-    let instantSearchInstance;
-
-    beforeEach(() => {
+    const createInitializedWidget = () => {
       const factoryResult = createWidgetFactory();
-      makeWidget = factoryResult.makeWidget;
-      rendering = factoryResult.rendering;
-      instantSearchInstance = createInstantSearch();
+      const makeWidget = factoryResult.makeWidget;
+      const rendering = factoryResult.rendering;
+      const instantSearchInstance = createInstantSearch();
       const widget = makeWidget({
         attribute: 'category',
       });
@@ -2430,9 +2426,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         createURL: () => '#',
         instantSearchInstance,
       });
-    });
+
+      return {
+        rendering,
+        instantSearchInstance,
+      };
+    };
 
     it('sends event when a facet is added', () => {
+      const { rendering, instantSearchInstance } = createInitializedWidget();
       const firstRenderingOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = firstRenderingOptions;
@@ -2453,6 +2455,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     it('does not send event when a facet is removed', () => {
+      const { rendering, instantSearchInstance } = createInitializedWidget();
       const firstRenderingOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine } = firstRenderingOptions;

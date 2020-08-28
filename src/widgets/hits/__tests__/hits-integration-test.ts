@@ -5,56 +5,66 @@ import { hits, configure } from '../../';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
 
-describe('hits', () => {
-  let search;
-  let searchClient;
-  let container;
-  const hitsPerPage = 2;
+const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
   const page = 0;
 
-  beforeEach(() => {
-    searchClient = {
-      search: jest.fn(requests =>
-        Promise.resolve({
-          results: requests.map(() =>
-            createSingleSearchResponse({
-              hits: Array(hitsPerPage)
-                .fill(undefined)
-                .map((_, index) => ({
-                  title: `title ${page * hitsPerPage + index + 1}`,
-                  objectID: `object-id${index}`,
-                })),
-            })
-          ),
-        })
-      ),
-    };
-    search = instantsearch({
-      indexName: 'instant_search',
-      searchClient,
-    });
+  const searchClient = {
+    search: jest.fn(requests =>
+      Promise.resolve({
+        results: requests.map(() =>
+          createSingleSearchResponse({
+            hits: Array(hitsPerPage)
+              .fill(undefined)
+              .map((_, index) => ({
+                title: `title ${page * hitsPerPage + index + 1}`,
+                objectID: `object-id${index}`,
+              })),
+          })
+        ),
+      })
+    ),
+  };
+  const search = instantsearch({
+    indexName: 'instant_search',
+    searchClient,
+  });
 
+  search.addWidgets([
+    configure({
+      hitsPerPage,
+    }),
+  ]);
+
+  return {
+    search,
+  };
+};
+
+describe('hits', () => {
+  let container;
+
+  beforeEach(() => {
     container = document.createElement('div');
   });
 
   describe('sendEvent', () => {
-    let onEvent;
-    beforeEach(() => {
-      onEvent = jest.fn();
+    const createInsightsMiddlewareWithOnEvent = () => {
+      const onEvent = jest.fn();
       const insights = createInsightsMiddleware({
         insightsClient: null,
         onEvent,
       });
-      search.EXPERIMENTAL_use(insights);
-
-      search.addWidgets([
-        configure({
-          hitsPerPage,
-        }),
-      ]);
-    });
+      return {
+        onEvent,
+        insights,
+      };
+    };
 
     it('sends view event when hits are rendered', done => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.EXPERIMENTAL_use(insights);
+
       search.addWidgets([
         hits({
           container,
@@ -78,6 +88,10 @@ describe('hits', () => {
     });
 
     it('sends click event', done => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.EXPERIMENTAL_use(insights);
+
       search.addWidgets([
         hits({
           container,
@@ -111,6 +125,10 @@ describe('hits', () => {
     });
 
     it('sends conversion event', done => {
+      const { search } = createInstantSearch();
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+      search.EXPERIMENTAL_use(insights);
+
       search.addWidgets([
         hits({
           container,

@@ -2,41 +2,47 @@ import {
   createSendEventForHits,
   createBindEventForHits,
 } from '../createSendEventForHits';
-import { InstantSearch } from '../../../types';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
-const instantSearchInstance = {} as InstantSearch;
-const index = 'testIndex';
-const widgetType = 'ais.testWidget';
-const hits = [
-  {
-    objectID: 'obj0',
-    __position: 0,
-    __queryID: 'test-query-id',
-  },
-  {
-    objectID: 'obj1',
-    __position: 1,
-    __queryID: 'test-query-id',
-  },
-];
-
-beforeEach(() => {
-  instantSearchInstance.sendEventToInsights = jest.fn();
-});
+const createTestEnvironment = () => {
+  const instantSearchInstance = createInstantSearch();
+  const index = 'testIndex';
+  const widgetType = 'ais.testWidget';
+  const hits = [
+    {
+      objectID: 'obj0',
+      __position: 0,
+      __queryID: 'test-query-id',
+    },
+    {
+      objectID: 'obj1',
+      __position: 1,
+      __queryID: 'test-query-id',
+    },
+  ];
+  const sendEvent = createSendEventForHits({
+    instantSearchInstance,
+    index,
+    widgetType,
+  });
+  const bindEvent = createBindEventForHits({
+    index,
+    widgetType,
+  });
+  return {
+    instantSearchInstance,
+    index,
+    widgetType,
+    hits,
+    sendEvent,
+    bindEvent,
+  };
+};
 
 describe('createSendEventForHits', () => {
-  let sendEvent;
-
-  beforeEach(() => {
-    sendEvent = createSendEventForHits({
-      instantSearchInstance,
-      index,
-      widgetType,
-    });
-  });
-
   describe('Usage', () => {
     it('throws when hit is missing', () => {
+      const { sendEvent } = createTestEnvironment();
       expect(() => {
         sendEvent('click');
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -47,6 +53,7 @@ describe('createSendEventForHits', () => {
     });
 
     it('throws with unknown eventType', () => {
+      const { sendEvent } = createTestEnvironment();
       expect(() => {
         sendEvent('my custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -57,6 +64,7 @@ describe('createSendEventForHits', () => {
     });
 
     it('throw when eventName is missing for click or conversion event', () => {
+      const { sendEvent } = createTestEnvironment();
       expect(() => {
         sendEvent('click', {});
       }).toThrowErrorMatchingInlineSnapshot(`
@@ -80,6 +88,7 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends view event with default eventName', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
     sendEvent('view', hits[0]);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -95,6 +104,7 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends view event with custom eventName', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
     sendEvent('view', hits[0], 'Products Displayed');
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -110,6 +120,7 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends view event with multiple hits', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
     sendEvent('view', hits);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -125,6 +136,7 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends click event', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
     sendEvent('click', hits[0], 'Product Clicked');
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -142,6 +154,7 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends conversion event', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
     sendEvent('conversion', hits[0], 'Product Ordered');
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -158,6 +171,7 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends custom event', () => {
+    const { sendEvent, instantSearchInstance } = createTestEnvironment();
     sendEvent({
       hello: 'world',
       custom: 'event',
@@ -171,21 +185,13 @@ describe('createSendEventForHits', () => {
 });
 
 describe('createBindEventForHits', () => {
-  let bindEvent;
-
-  beforeEach(() => {
-    bindEvent = createBindEventForHits({
-      index,
-      widgetType,
-    });
-  });
-
   function parsePayload(payload) {
     expect(payload.startsWith('data-insights-event=')).toBe(true);
     return JSON.parse(atob(payload.substr('data-insights-event='.length)));
   }
 
   it('returns a payload for click event', () => {
+    const { bindEvent, hits } = createTestEnvironment();
     const parsedPayload = parsePayload(
       bindEvent('click', hits[0], 'Product Clicked')
     );
@@ -204,6 +210,7 @@ describe('createBindEventForHits', () => {
   });
 
   it('returns a payload for conversion event', () => {
+    const { bindEvent, hits } = createTestEnvironment();
     const parsedPayload = parsePayload(
       bindEvent('conversion', hits[0], 'Product Ordered')
     );

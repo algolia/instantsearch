@@ -1089,14 +1089,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
   });
 
   describe('sendEvent', () => {
-    let instantSearchInstance;
-    let helper;
-    beforeEach(() => {
+    const createInitializedWidget = () => {
       const widget = makeWidget({
         attribute: 'category',
       });
-      instantSearchInstance = createInstantSearch();
-      helper = jsHelper(
+      const instantSearchInstance = createInstantSearch();
+      const helper = jsHelper(
         {},
         '',
         widget.getWidgetSearchParameters(new SearchParameters(), {
@@ -1111,9 +1109,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
         createURL: () => '#',
         instantSearchInstance,
       });
-    });
+
+      return { instantSearchInstance, helper };
+    };
 
     it('sends event when a facet is refined', () => {
+      const { instantSearchInstance } = createInitializedWidget();
       const firstRenderingOptions = rendering.mock.calls[0][0];
       const { refine } = firstRenderingOptions;
       refine('value');
@@ -1133,6 +1134,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
 
     it('does not send event when a facet is removed', () => {
+      const { instantSearchInstance, helper } = createInitializedWidget();
       const firstRenderingOptions = rendering.mock.calls[0][0];
       const { refine } = firstRenderingOptions;
       refine('value');

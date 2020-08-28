@@ -568,13 +568,9 @@ search.addWidgets([
   });
 
   describe('sendEvent', () => {
-    let firstIndexHits;
-    let secondIndexHits;
-    let instantSearchInstance;
-    let render;
-    beforeEach(() => {
+    const createRenderedWidget = () => {
       const searchClient = createSearchClient();
-      render = jest.fn();
+      const render = jest.fn();
       const makeWidget = connectAutocomplete(render);
       const widget = makeWidget({ escapeHTML: false });
 
@@ -582,10 +578,10 @@ search.addWidgets([
       helper.search = jest.fn();
 
       const initOptions = createInitOptions({ helper });
-      instantSearchInstance = initOptions.instantSearchInstance;
+      const instantSearchInstance = initOptions.instantSearchInstance;
       widget.init!(initOptions);
 
-      firstIndexHits = [
+      const firstIndexHits = [
         {
           name: 'Hit 1-1',
           objectID: '1-1',
@@ -593,7 +589,7 @@ search.addWidgets([
           __position: 0,
         },
       ];
-      secondIndexHits = [
+      const secondIndexHits = [
         {
           name: 'Hit 2-1',
           objectID: '2-1',
@@ -634,9 +630,17 @@ search.addWidgets([
       widget.render!(
         createRenderOptions({ instantSearchInstance, helper, scopedResults })
       );
-    });
+
+      return {
+        instantSearchInstance,
+        render,
+        firstIndexHits,
+        secondIndexHits,
+      };
+    };
 
     it('sends view event when hits are rendered', () => {
+      const { instantSearchInstance } = createRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         2
       );
@@ -667,6 +671,11 @@ search.addWidgets([
     });
 
     it('sends click event', () => {
+      const {
+        instantSearchInstance,
+        render,
+        secondIndexHits,
+      } = createRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         2
       ); // two view events for each index by render
@@ -693,6 +702,11 @@ search.addWidgets([
     });
 
     it('sends conversion event', () => {
+      const {
+        instantSearchInstance,
+        render,
+        firstIndexHits,
+      } = createRenderedWidget();
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
         2
       ); // two view events for each index by render
