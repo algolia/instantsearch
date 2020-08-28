@@ -4,6 +4,7 @@ import instantsearch from '../../../index.es';
 import { hits, configure } from '../../';
 import { createInsightsMiddleware } from '../../../middlewares';
 import { createSingleSearchResponse } from '../../../../test/mock/createAPIResponse';
+import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 
 const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
   const page = 0;
@@ -60,7 +61,7 @@ describe('hits', () => {
       };
     };
 
-    it('sends view event when hits are rendered', done => {
+    it('sends view event when hits are rendered', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.EXPERIMENTAL_use(insights);
@@ -71,23 +72,22 @@ describe('hits', () => {
         }),
       ]);
       search.start();
-      process.nextTick(() => {
-        expect(onEvent).toHaveBeenCalledTimes(1);
-        expect(onEvent).toHaveBeenCalledWith({
-          eventType: 'view',
-          insightsMethod: 'viewedObjectIDs',
-          payload: {
-            eventName: 'Hits Viewed',
-            index: 'instant_search',
-            objectIDs: ['object-id0', 'object-id1'],
-          },
-          widgetType: 'ais.hits',
-        });
-        done();
+      await runAllMicroTasks();
+
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent).toHaveBeenCalledWith({
+        eventType: 'view',
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Hits Viewed',
+          index: 'instant_search',
+          objectIDs: ['object-id0', 'object-id1'],
+        },
+        widgetType: 'ais.hits',
       });
     });
 
-    it('sends click event', done => {
+    it('sends click event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.EXPERIMENTAL_use(insights);
@@ -105,26 +105,25 @@ describe('hits', () => {
         }),
       ]);
       search.start();
-      process.nextTick(() => {
-        expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
-        fireEvent.click(getByText(container, 'title 1'));
-        expect(onEvent).toHaveBeenCalledTimes(2);
-        expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
-          eventType: 'click',
-          insightsMethod: 'clickedObjectIDsAfterSearch',
-          payload: {
-            eventName: 'Item Clicked',
-            index: 'instant_search',
-            objectIDs: ['object-id0'],
-            positions: [1],
-          },
-          widgetType: 'ais.hits',
-        });
-        done();
+      await runAllMicroTasks();
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      fireEvent.click(getByText(container, 'title 1'));
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+        eventType: 'click',
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Item Clicked',
+          index: 'instant_search',
+          objectIDs: ['object-id0'],
+          positions: [1],
+        },
+        widgetType: 'ais.hits',
       });
     });
 
-    it('sends conversion event', done => {
+    it('sends conversion event', async () => {
       const { search } = createInstantSearch();
       const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
       search.EXPERIMENTAL_use(insights);
@@ -146,21 +145,20 @@ describe('hits', () => {
         }),
       ]);
       search.start();
-      process.nextTick(() => {
-        expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
-        fireEvent.click(getByText(container, 'title 2'));
-        expect(onEvent).toHaveBeenCalledTimes(2);
-        expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
-          eventType: 'conversion',
-          insightsMethod: 'convertedObjectIDsAfterSearch',
-          payload: {
-            eventName: 'Product Ordered',
-            index: 'instant_search',
-            objectIDs: ['object-id1'],
-          },
-          widgetType: 'ais.hits',
-        });
-        done();
+      await runAllMicroTasks();
+
+      expect(onEvent).toHaveBeenCalledTimes(1); // view event by render
+      fireEvent.click(getByText(container, 'title 2'));
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[onEvent.mock.calls.length - 1][0]).toEqual({
+        eventType: 'conversion',
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Ordered',
+          index: 'instant_search',
+          objectIDs: ['object-id1'],
+        },
+        widgetType: 'ais.hits',
       });
     });
   });
