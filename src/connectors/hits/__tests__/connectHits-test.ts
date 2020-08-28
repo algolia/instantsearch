@@ -551,7 +551,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     });
   });
 
-  describe('sendEvent & bindEvent', () => {
+  describe('insights', () => {
     let instantSearchInstance;
     let renderFn;
     let hits;
