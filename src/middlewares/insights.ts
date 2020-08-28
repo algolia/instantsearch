@@ -86,13 +86,10 @@ aa('setUserToken', 'your-user-token');
           // ['setUserToken', 'my-user-token'] gets stored in `aa.queue`.
           // Whenever `search-insights` is finally loaded, it will process the queue.
           //
-          // But the reason why we handle it here is
-          // (1) At this point, even though `search-insights` is not loaded yet,
+          // But here's the reason why we handle it here:
+          // At this point, even though `search-insights` is not loaded yet,
           // we still want to read the token from the queue.
           // Otherwise, the first search call will be fired without the token.
-          // (2) Or, user could use a customized client of `search-insights`,
-          // for example, by using `createInsightsClient` function.
-          // Then `processQueue` might not be called. But we still want to read the token from the queue.
           (insightsClient as any).queue.forEach(([method, firstArgument]) => {
             if (method === 'setUserToken') {
               setUserTokenToSearch(firstArgument);
