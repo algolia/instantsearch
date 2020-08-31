@@ -29,7 +29,7 @@ export type RouterProps = {
 
 export type RoutingManager = (props?: RouterProps) => Middleware;
 
-export const createRouter: RoutingManager = (props = {}) => {
+export const createRouterMiddleware: RoutingManager = (props = {}) => {
   const {
     router = historyRouter(),
     stateMapping = simpleStateMapping(),

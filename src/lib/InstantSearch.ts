@@ -21,8 +21,11 @@ import {
   MiddlewareDefinition,
 } from '../types';
 import hasDetectedInsightsClient from './utils/detect-insights-client';
-import { createRouter, RouterProps } from '../middlewares/createRouter';
-import { InsightsEvent } from '../middlewares/insights';
+import {
+  createRouterMiddleware,
+  RouterProps,
+} from '../middlewares/createRouterMiddleware';
+import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -246,7 +249,7 @@ See ${createDocumentationLink({
 
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
-      this.EXPERIMENTAL_use(createRouter(routerOptions));
+      this.EXPERIMENTAL_use(createRouterMiddleware(routerOptions));
     }
   }
 
