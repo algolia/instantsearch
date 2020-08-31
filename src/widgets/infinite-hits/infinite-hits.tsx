@@ -25,7 +25,7 @@ import {
   Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
-import { InsightsEvent } from '../../middlewares/insights';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',

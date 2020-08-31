@@ -23,7 +23,7 @@ import {
   Renderer,
   InsightsClientWrapper,
 } from '../../types';
-import { InsightsEvent } from '../../middlewares/insights';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');

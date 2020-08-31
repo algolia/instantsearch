@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import { readDataAttributes, hasDataAttributes } from '../../helpers/insights';
 import { InsightsClientWrapper } from '../../types';
-import { InsightsEvent } from '../../middlewares/insights';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type WithInsightsListenerProps = {
   [key: string]: unknown;
