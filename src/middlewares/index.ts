@@ -1,2 +1,2 @@
-export { createInsightsMiddleware } from './createInsightsMiddleware';
+export * from './createInsightsMiddleware';
 export * from './createRouterMiddleware';
