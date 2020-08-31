@@ -30,12 +30,12 @@ export type HitsRendererOptions = {
   results?: SearchResults<AlgoliaHit>;
 
   /**
-   * Send event to insights middleware
+   * Sends an event to the Insights middleware.
    */
   sendEvent: SendEventForHits;
 
   /**
-   * Returns a string of data-insights-event attribute for insights middleware
+   * Returns a string for the `data-insights-event` attribute for the Insights middleware
    */
   bindEvent: BindEventForHits;
 };
