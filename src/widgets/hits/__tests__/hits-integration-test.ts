@@ -9,7 +9,7 @@ import { runAllMicroTasks } from '../../../../test/utils/runAllMicroTasks';
 const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
   const page = 0;
 
-  const searchClient = {
+  const searchClient: any = {
     search: jest.fn(requests =>
       Promise.resolve({
         results: requests.map(() =>

@@ -20,7 +20,7 @@ function createSingleSearchResponse({ params: { hitsPerPage, page } }) {
 
 describe('infiniteHits', () => {
   const createInstantSearch = ({ hitsPerPage = 2 } = {}) => {
-    const searchClient = {
+    const searchClient: any = {
       search: jest.fn(requests =>
         Promise.resolve({
           results: requests.map(request => createSingleSearchResponse(request)),

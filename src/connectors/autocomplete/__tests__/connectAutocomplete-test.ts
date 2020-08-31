@@ -631,8 +631,11 @@ search.addWidgets([
         createRenderOptions({ instantSearchInstance, helper, scopedResults })
       );
 
+      const sendEventToInsights = instantSearchInstance.sendEventToInsights as jest.Mock;
+
       return {
         instantSearchInstance,
+        sendEventToInsights,
         render,
         firstIndexHits,
         secondIndexHits,
@@ -640,13 +643,9 @@ search.addWidgets([
     };
 
     it('sends view event when hits are rendered', () => {
-      const { instantSearchInstance } = createRenderedWidget();
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-        2
-      );
-      expect(
-        instantSearchInstance.sendEventToInsights.mock.calls[0][0]
-      ).toEqual({
+      const { sendEventToInsights } = createRenderedWidget();
+      expect(sendEventToInsights).toHaveBeenCalledTimes(2);
+      expect(sendEventToInsights.mock.calls[0][0]).toEqual({
         eventType: 'view',
         insightsMethod: 'viewedObjectIDs',
         payload: {
@@ -656,9 +655,7 @@ search.addWidgets([
         },
         widgetType: 'ais.autocomplete',
       });
-      expect(
-        instantSearchInstance.sendEventToInsights.mock.calls[1][0]
-      ).toEqual({
+      expect(sendEventToInsights.mock.calls[1][0]).toEqual({
         eventType: 'view',
         insightsMethod: 'viewedObjectIDs',
         payload: {
@@ -672,22 +669,16 @@ search.addWidgets([
 
     it('sends click event', () => {
       const {
-        instantSearchInstance,
+        sendEventToInsights,
         render,
         secondIndexHits,
       } = createRenderedWidget();
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-        2
-      ); // two view events for each index by render
+      expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
 
       const { indices } = render.mock.calls[render.mock.calls.length - 1][0];
       indices[1].sendEvent('click', secondIndexHits[0], 'Product Added');
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-        3
-      );
-      expect(
-        instantSearchInstance.sendEventToInsights.mock.calls[2][0]
-      ).toEqual({
+      expect(sendEventToInsights).toHaveBeenCalledTimes(3);
+      expect(sendEventToInsights.mock.calls[2][0]).toEqual({
         eventType: 'click',
         insightsMethod: 'clickedObjectIDsAfterSearch',
         payload: {
@@ -703,22 +694,16 @@ search.addWidgets([
 
     it('sends conversion event', () => {
       const {
-        instantSearchInstance,
+        sendEventToInsights,
         render,
         firstIndexHits,
       } = createRenderedWidget();
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-        2
-      ); // two view events for each index by render
+      expect(sendEventToInsights).toHaveBeenCalledTimes(2); // two view events for each index by render
 
       const { indices } = render.mock.calls[render.mock.calls.length - 1][0];
       indices[0].sendEvent('conversion', firstIndexHits[0], 'Product Ordered');
-      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
-        3
-      );
-      expect(
-        instantSearchInstance.sendEventToInsights.mock.calls[2][0]
-      ).toEqual({
+      expect(sendEventToInsights).toHaveBeenCalledTimes(3);
+      expect(sendEventToInsights.mock.calls[2][0]).toEqual({
         eventType: 'conversion',
         insightsMethod: 'convertedObjectIDsAfterSearch',
         payload: {

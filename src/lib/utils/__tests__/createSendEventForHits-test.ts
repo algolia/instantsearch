@@ -66,7 +66,7 @@ describe('createSendEventForHits', () => {
     it('throw when eventName is missing for click or conversion event', () => {
       const { sendEvent } = createTestEnvironment();
       expect(() => {
-        sendEvent('click', {});
+        sendEvent('click', {} as any);
       }).toThrowErrorMatchingInlineSnapshot(`
 "You need to pass eventName as the third argument for 'click' or 'conversion' events like:
   sendEvent('click', hit, 'Product Purchased');
@@ -76,7 +76,7 @@ describe('createSendEventForHits', () => {
 `);
 
       expect(() => {
-        sendEvent('conversion', {});
+        sendEvent('conversion', {} as any);
       }).toThrowErrorMatchingInlineSnapshot(`
 "You need to pass eventName as the third argument for 'click' or 'conversion' events like:
   sendEvent('click', hit, 'Product Purchased');
