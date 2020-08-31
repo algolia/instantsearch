@@ -47,19 +47,8 @@ const parseInsightsEvent = element => {
 const insightsListener = (BaseComponent: any) => {
   function WithInsightsListener(props: WithInsightsListenerProps) {
     const handleClick = (event: MouseEvent): void => {
-      // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
-      const insightsTarget = findInsightsTarget(
-        event.target as HTMLElement | null,
-        event.currentTarget as HTMLElement | null,
-        element => hasDataAttributes(element)
-      );
-      if (insightsTarget) {
-        const { method, payload } = readDataAttributes(insightsTarget);
-        props.insights(method, payload);
-      }
-
-      // new way with insights middleware
       if (props.sendEvent) {
+        // new way with insights middleware
         const targetWithEvent = findInsightsTarget(
           event.target as HTMLElement | null,
           event.currentTarget as HTMLElement | null,
@@ -68,6 +57,17 @@ const insightsListener = (BaseComponent: any) => {
         if (targetWithEvent) {
           const payload = parseInsightsEvent(targetWithEvent);
           props.sendEvent(payload);
+        }
+      } else {
+        // old way, e.g. instantsearch.insights("clickedObjectIDsAfterSearch", { .. })
+        const insightsTarget = findInsightsTarget(
+          event.target as HTMLElement | null,
+          event.currentTarget as HTMLElement | null,
+          element => hasDataAttributes(element)
+        );
+        if (insightsTarget) {
+          const { method, payload } = readDataAttributes(insightsTarget);
+          props.insights(method, payload);
         }
       }
     };
