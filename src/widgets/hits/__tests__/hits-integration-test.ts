@@ -75,16 +75,19 @@ describe('hits', () => {
       await runAllMicroTasks();
 
       expect(onEvent).toHaveBeenCalledTimes(1);
-      expect(onEvent).toHaveBeenCalledWith({
-        eventType: 'view',
-        insightsMethod: 'viewedObjectIDs',
-        payload: {
-          eventName: 'Hits Viewed',
-          index: 'instant_search',
-          objectIDs: ['object-id0', 'object-id1'],
+      expect(onEvent).toHaveBeenCalledWith(
+        {
+          eventType: 'view',
+          insightsMethod: 'viewedObjectIDs',
+          payload: {
+            eventName: 'Hits Viewed',
+            index: 'instant_search',
+            objectIDs: ['object-id0', 'object-id1'],
+          },
+          widgetType: 'ais.hits',
         },
-        widgetType: 'ais.hits',
-      });
+        null
+      );
     });
 
     it('sends click event', async () => {

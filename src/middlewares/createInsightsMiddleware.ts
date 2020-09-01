@@ -11,7 +11,10 @@ export type InsightsEvent = {
 
 export type InsightsProps = {
   insightsClient: null | InsightsClient;
-  onEvent?: (event: InsightsEvent) => void;
+  onEvent?: (
+    event: InsightsEvent,
+    insightsClient: null | InsightsClient
+  ) => void;
 };
 
 export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
@@ -104,7 +107,7 @@ aa('setUserToken', 'your-user-token');
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
-            onEvent(event);
+            onEvent(event, _insightsClient);
           } else if (event.insightsMethod) {
             insightsClient(event.insightsMethod, event.payload);
           } else {

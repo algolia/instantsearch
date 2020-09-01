@@ -8,7 +8,7 @@ import {
   createInsightsUmdVersion,
   ANONYMOUS_TOKEN,
 } from '../../../test/mock/createInsightsClient';
-import { warning } from '../../../src/lib/utils';
+import { warning } from '../../lib/utils';
 import { SearchClient } from '../../types';
 import { Index } from '../../widgets/index/index';
 
@@ -311,14 +311,17 @@ aa('setUserToken', 'your-user-token');`);
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
       expect(onEvent).toHaveBeenCalledTimes(1);
-      expect(onEvent).toHaveBeenCalledWith({
-        insightsMethod: 'viewedObjectIDs',
-        widgetType: 'ais.customWidget',
-        eventType: 'click',
-        payload: {
-          hello: 'world',
+      expect(onEvent).toHaveBeenCalledWith(
+        {
+          insightsMethod: 'viewedObjectIDs',
+          widgetType: 'ais.customWidget',
+          eventType: 'click',
+          payload: {
+            hello: 'world',
+          },
         },
-      });
+        insightsClient
+      );
     });
 
     it('warns dev when neither insightsMethod nor onEvent is given', () => {
