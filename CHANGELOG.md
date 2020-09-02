@@ -1,3 +1,14 @@
+## [4.7.2](https://github.com/algolia/instantsearch.js/compare/v4.7.1...v4.7.2) (2020-08-31)
+
+
+### Bug Fixes
+
+* **bundlesize:** remove prop-type imports ([#4491](https://github.com/algolia/instantsearch.js/issues/4491)) ([8361cd6](https://github.com/algolia/instantsearch.js/commit/8361cd63b3bac15eb6250e9f509fb15c1fc57f48))
+* **router:** skip router write on duplicate entries ([#4487](https://github.com/algolia/instantsearch.js/issues/4487)) ([9296022](https://github.com/algolia/instantsearch.js/commit/9296022fecadfbf82f15e837c215a1356eac4bc5))
+* **searchBox:** pass "spellcheck" property correctly to input ([#4483](https://github.com/algolia/instantsearch.js/issues/4483)) ([3cf43c7](https://github.com/algolia/instantsearch.js/commit/3cf43c7187841cf961a0280307af1a5f7a4e8da7))
+
+
+
 # [4.7.1](https://github.com/algolia/instantsearch.js/compare/v4.7.0...v4.7.1) (2020-08-19)
 
 
