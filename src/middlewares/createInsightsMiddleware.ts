@@ -11,13 +11,16 @@ export type InsightsEvent = {
 
 export type InsightsProps = {
   insightsClient: null | InsightsClient;
-  onEvent?: (event: InsightsEvent) => void;
+  onEvent?: (
+    event: InsightsEvent,
+    insightsClient: null | InsightsClient
+  ) => void;
 };
 
 export type CreateInsightsMiddleware = (props: InsightsProps) => Middleware;
 
 export const createInsightsMiddleware: CreateInsightsMiddleware = props => {
-  const { insightsClient: _insightsClient, onEvent } = props;
+  const { insightsClient: _insightsClient, onEvent } = props || {};
   if (_insightsClient !== null && !_insightsClient) {
     if (__DEV__) {
       throw new Error(
@@ -83,10 +86,13 @@ aa('setUserToken', 'your-user-token');
           // Context: The umd build of search-insights is asynchronously loaded by the snippet.
           //
           // When user calls `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
-          // it is stored in `aa.queue` and we are reading it to set userToken to search call.
-          // This queue is meant to be consumed whenever `search-insights` is loaded and when it runs `processQueue()`.
-          // But the reason why we handle it here is to prevent the first search API from being triggered
-          // without userToken because search-insights is not loaded yet.
+          // ['setUserToken', 'my-user-token'] gets stored in `aa.queue`.
+          // Whenever `search-insights` is finally loaded, it will process the queue.
+          //
+          // But here's the reason why we handle it here:
+          // At this point, even though `search-insights` is not loaded yet,
+          // we still want to read the token from the queue.
+          // Otherwise, the first search call will be fired without the token.
           (insightsClient as any).queue.forEach(([method, firstArgument]) => {
             if (method === 'setUserToken') {
               setUserTokenToSearch(firstArgument);
@@ -101,7 +107,7 @@ aa('setUserToken', 'your-user-token');
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
-            onEvent(event);
+            onEvent(event, _insightsClient);
           } else if (event.insightsMethod) {
             insightsClient(event.insightsMethod, event.payload);
           } else {

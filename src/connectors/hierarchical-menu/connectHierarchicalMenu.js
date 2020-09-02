@@ -2,6 +2,7 @@ import {
   checkRendering,
   warning,
   createDocumentationMessageGenerator,
+  createSendEventForFacet,
   isEqual,
   noop,
 } from '../../lib/utils';
@@ -89,6 +90,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
     // so that we can always map $hierarchicalFacetName => real attributes
     // we use the first attribute name
     const [hierarchicalFacetName] = attributes;
+    let sendEvent;
 
     return {
       $$type: 'ais.hierarchicalMenu',
@@ -114,8 +116,16 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
       },
 
       init({ helper, createURL, instantSearchInstance }) {
+        sendEvent = createSendEventForFacet({
+          instantSearchInstance,
+          helper,
+          attribute: hierarchicalFacetName,
+          widgetType: this.$$type,
+        });
+
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
         this._refine = function(facetValue) {
+          sendEvent('click', facetValue);
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
 
@@ -131,6 +141,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
             items: [],
             createURL: _createURL,
             refine: this._refine,
+            sendEvent,
             instantSearchInstance,
             widgetParams,
             isShowingMore: false,
@@ -193,6 +204,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn = noop) {
           {
             items,
             refine: this._refine,
+            sendEvent,
             createURL: _createURL,
             instantSearchInstance,
             widgetParams,

@@ -6,6 +6,7 @@ import {
   PlainSearchParameters,
 } from 'algoliasearch-helper';
 import { InstantSearch } from './instantsearch';
+import { BindEventForHits } from '../lib/utils';
 
 export type InitOptions = {
   instantSearchInstance: InstantSearch;
@@ -205,3 +206,7 @@ export type WidgetFactory<TConnectorParams, TWidgetParams> = (
 export type Template<TTemplateData = void> =
   | string
   | ((data: TTemplateData) => string);
+
+export type TemplateWithBindEvent<TTemplateData = void> =
+  | string
+  | ((data: TTemplateData, bindEvent: BindEventForHits) => string);

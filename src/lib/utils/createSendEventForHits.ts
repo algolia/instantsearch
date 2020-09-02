@@ -1,6 +1,5 @@
-import { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import { InstantSearch, Hit } from '../../types';
-import { InsightsEvent } from '../../middleware/insights';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type BuiltInSendEventForHits = (
   eventType: string,
@@ -20,18 +19,18 @@ export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
 type BuildPayload = (options: {
   widgetType: string;
-  helper: AlgoliaSearchHelper;
+  index: string;
   methodName: 'sendEvent' | 'bindEvent';
   args: any[];
 }) => InsightsEvent | null;
 
 const buildPayload: BuildPayload = ({
-  helper,
+  index,
   widgetType,
   methodName,
   args,
 }) => {
-  if (args.length === 1) {
+  if (args.length === 1 && typeof args[0] === 'object') {
     return args[0];
   }
   const eventType: string = args[0];
@@ -62,10 +61,12 @@ const buildPayload: BuildPayload = ({
     }
   }
   const hitsArray = Array.isArray(hits) ? hits : [hits];
+  if (hitsArray.length === 0) {
+    return null;
+  }
   const queryID = hitsArray[0].__queryID;
   const objectIDs = hitsArray.map(hit => hit.objectID);
   const positions = hitsArray.map(hit => hit.__position);
-  const index = helper.getIndex();
 
   if (eventType === 'view') {
     return {
@@ -114,17 +115,17 @@ const buildPayload: BuildPayload = ({
 
 export function createSendEventForHits({
   instantSearchInstance,
-  helper,
+  index,
   widgetType,
 }: {
   instantSearchInstance: InstantSearch;
-  helper: AlgoliaSearchHelper;
+  index: string;
   widgetType: string;
 }): SendEventForHits {
   const sendEventForHits: SendEventForHits = (...args) => {
     const payload = buildPayload({
       widgetType,
-      helper,
+      index,
       methodName: 'sendEvent',
       args,
     });
@@ -136,16 +137,16 @@ export function createSendEventForHits({
 }
 
 export function createBindEventForHits({
-  helper,
+  index,
   widgetType,
 }: {
-  helper: AlgoliaSearchHelper;
+  index: string;
   widgetType: string;
 }): BindEventForHits {
   const bindEventForHits: BindEventForHits = (...args) => {
     const payload = buildPayload({
       widgetType,
-      helper,
+      index,
       methodName: 'bindEvent',
       args,
     });

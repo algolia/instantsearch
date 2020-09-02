@@ -19,12 +19,13 @@ import { withInsights, withInsightsListener } from '../../lib/insights';
 import {
   WidgetFactory,
   Template,
+  TemplateWithBindEvent,
   Hit,
   InsightsClientWrapper,
   Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
-import { InsightsEvent } from '../../middleware/insights';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -93,7 +94,7 @@ export type InfiniteHitsTemplates = {
   /**
    * The template to use for each result.
    */
-  item?: Template<Hit>;
+  item?: TemplateWithBindEvent<Hit>;
 };
 
 export type InfiniteHitsWidgetParams = {

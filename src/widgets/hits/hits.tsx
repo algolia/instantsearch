@@ -17,12 +17,13 @@ import { component } from '../../lib/suit';
 import { withInsights, withInsightsListener } from '../../lib/insights';
 import {
   Template,
+  TemplateWithBindEvent,
   Hit,
   WidgetFactory,
   Renderer,
   InsightsClientWrapper,
 } from '../../types';
-import { InsightsEvent } from '../../middleware/insights';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
@@ -98,7 +99,7 @@ export type HitsTemplates = {
    *
    * @default ''
    */
-  item?: Template<
+  item?: TemplateWithBindEvent<
     Hit & {
       __hitIndex: number;
     }
