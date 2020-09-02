@@ -1092,7 +1092,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     const createInitializedWidget = () => {
       const rendering = jest.fn();
       const instantSearchInstance = createInstantSearch();

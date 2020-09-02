@@ -154,7 +154,7 @@ describe('infiniteHits', () => {
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     const createInsightsMiddlewareWithOnEvent = () => {
       const onEvent = jest.fn();
       const insights = createInsightsMiddleware({

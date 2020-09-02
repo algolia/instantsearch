@@ -48,7 +48,7 @@ describe('hits', () => {
     container = document.createElement('div');
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     const createInsightsMiddlewareWithOnEvent = () => {
       const onEvent = jest.fn();
       const insights = createInsightsMiddleware({

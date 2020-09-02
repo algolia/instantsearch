@@ -1129,7 +1129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     it('sends event when a facet is added', () => {
       const rendering = jest.fn();
       const instantSearchInstance = createInstantSearch();

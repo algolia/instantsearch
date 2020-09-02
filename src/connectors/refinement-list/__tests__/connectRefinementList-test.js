@@ -2401,7 +2401,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     const createInitializedWidget = () => {
       const factoryResult = createWidgetFactory();
       const makeWidget = factoryResult.makeWidget;

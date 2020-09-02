@@ -567,7 +567,7 @@ search.addWidgets([
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     const createRenderedWidget = () => {
       const searchClient = createSearchClient();
       const render = jest.fn();

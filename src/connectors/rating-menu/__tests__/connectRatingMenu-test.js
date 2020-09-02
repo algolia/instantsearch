@@ -535,7 +535,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     it('sends event when a facet is added', () => {
       const attribute = 'swag';
       const { refine, instantSearchInstance } = getInitializedWidget({

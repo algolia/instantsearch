@@ -1533,7 +1533,7 @@ describe('getWidgetSearchParameters', () => {
     expect(actual).toEqual(expectation);
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     it('sends event when a facet is added at each step', () => {
       rendering = jest.fn();
       const makeWidget = connectRange(rendering);

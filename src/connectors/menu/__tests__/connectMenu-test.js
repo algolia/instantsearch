@@ -1088,7 +1088,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     const createInitializedWidget = () => {
       const widget = makeWidget({
         attribute: 'category',

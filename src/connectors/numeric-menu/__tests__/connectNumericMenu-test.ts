@@ -1018,7 +1018,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     it('sends event when a facet is added', () => {
       const rendering = jest.fn();
       const makeWidget = connectNumericMenu(rendering);

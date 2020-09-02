@@ -1348,7 +1348,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
   });
 
-  describe('sendEvent', () => {
+  describe('insights', () => {
     const createRenderedWidget = () => {
       const hits = [
         {
