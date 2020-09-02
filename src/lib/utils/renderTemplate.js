@@ -27,6 +27,7 @@ function renderTemplate({
   compileOptions,
   helpers,
   data,
+  bindEvent,
 }) {
   const template = templates[templateKey];
   const templateType = typeof template;
@@ -40,7 +41,7 @@ function renderTemplate({
   }
 
   if (isTemplateFunction) {
-    return template(data);
+    return template(data, bindEvent);
   }
 
   const transformedHelpers = transformHelpersToHogan(

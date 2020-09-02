@@ -1,8 +1,13 @@
 import simpleStateMapping from '../lib/stateMappings/simple';
 import historyRouter from '../lib/routers/history';
 import { Index } from '../widgets/index/index';
-import { Middleware } from '.';
-import { Router, StateMapping, UiState, RouteState } from '../types';
+import {
+  Router,
+  StateMapping,
+  UiState,
+  Middleware,
+  RouteState,
+} from '../types';
 import { isEqual } from '../lib/utils';
 
 const walk = (current: Index, callback: (index: Index) => void) => {
@@ -24,7 +29,7 @@ export type RouterProps = {
 
 export type RoutingManager = (props?: RouterProps) => Middleware;
 
-export const createRouter: RoutingManager = (props = {}) => {
+export const createRouterMiddleware: RoutingManager = (props = {}) => {
   const {
     router = historyRouter(),
     stateMapping = simpleStateMapping(),

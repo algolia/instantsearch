@@ -19,11 +19,13 @@ import { withInsights, withInsightsListener } from '../../lib/insights';
 import {
   WidgetFactory,
   Template,
+  TemplateWithBindEvent,
   Hit,
   InsightsClientWrapper,
   Renderer,
 } from '../../types';
 import defaultTemplates from './defaultTemplates';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
@@ -92,7 +94,7 @@ export type InfiniteHitsTemplates = {
   /**
    * The template to use for each result.
    */
-  item?: Template<Hit>;
+  item?: TemplateWithBindEvent<Hit>;
 };
 
 export type InfiniteHitsWidgetParams = {
@@ -143,6 +145,7 @@ const renderer = ({
     isLastPage,
     instantSearchInstance,
     insights,
+    bindEvent,
   },
   isFirstRendering
 ) => {
@@ -167,6 +170,10 @@ const renderer = ({
       isFirstPage={isFirstPage}
       isLastPage={isLastPage}
       insights={insights as InsightsClientWrapper}
+      sendEvent={(event: InsightsEvent) => {
+        instantSearchInstance.sendEventToInsights(event);
+      }}
+      bindEvent={bindEvent}
     />,
     containerNode
   );

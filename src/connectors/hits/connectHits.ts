@@ -4,6 +4,10 @@ import {
   createDocumentationMessageGenerator,
   addAbsolutePosition,
   addQueryID,
+  createSendEventForHits,
+  SendEventForHits,
+  createBindEventForHits,
+  BindEventForHits,
   noop,
 } from '../../lib/utils';
 import { TransformItems, Connector, Hits, Hit, AlgoliaHit } from '../../types';
@@ -24,6 +28,16 @@ export type HitsRendererOptions = {
    * The response from the Algolia API.
    */
   results?: SearchResults<AlgoliaHit>;
+
+  /**
+   * Sends an event to the Insights middleware.
+   */
+  sendEvent: SendEventForHits;
+
+  /**
+   * Returns a string for the `data-insights-event` attribute for the Insights middleware
+   */
+  bindEvent: BindEventForHits;
 };
 
 export type HitsConnectorParams = {
@@ -51,15 +65,29 @@ const connectHits: HitsConnector = function connectHits(
   return widgetParams => {
     const { escapeHTML = true, transformItems = items => items } =
       widgetParams || ({} as typeof widgetParams);
+    let sendEvent;
+    let bindEvent;
 
     return {
       $$type: 'ais.hits',
 
-      init({ instantSearchInstance }) {
+      init({ instantSearchInstance, helper }) {
+        sendEvent = createSendEventForHits({
+          instantSearchInstance,
+          index: helper.getIndex(),
+          widgetType: this.$$type!,
+        });
+        bindEvent = createBindEventForHits({
+          index: helper.getIndex(),
+          widgetType: this.$$type!,
+        });
+
         renderFn(
           {
             hits: [],
             results: undefined,
+            sendEvent,
+            bindEvent,
             instantSearchInstance,
             widgetParams,
           },
@@ -92,10 +120,14 @@ const connectHits: HitsConnector = function connectHits(
           typeof escapeHits
         >).__escaped = initialEscaped;
 
+        sendEvent('view', results.hits);
+
         renderFn(
           {
             hits: results.hits,
             results,
+            sendEvent,
+            bindEvent,
             instantSearchInstance,
             widgetParams,
           },
