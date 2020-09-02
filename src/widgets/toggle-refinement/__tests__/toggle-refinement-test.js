@@ -2,6 +2,7 @@ import { render } from 'preact';
 import jsHelper, { SearchParameters } from 'algoliasearch-helper';
 import toggleRefinement from '../toggle-refinement';
 import RefinementList from '../../../components/RefinementList/RefinementList';
+import { createInstantSearch } from '../../../../test/mock/createInstantSearch';
 
 jest.mock('preact', () => {
   const module = require.requireActual('preact');
@@ -39,7 +40,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
         container: containerNode,
         attribute,
       });
-      instantSearchInstance = { templatesConfig: undefined };
+      instantSearchInstance = createInstantSearch({
+        templatesConfig: undefined,
+      });
     });
 
     describe('render', () => {
@@ -49,14 +52,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       let createURL;
 
       beforeEach(() => {
-        helper = {
-          state: {
-            isDisjunctiveFacetRefined: jest.fn().mockReturnValue(false),
-          },
-          removeDisjunctiveFacetRefinement: jest.fn(),
-          addDisjunctiveFacetRefinement: jest.fn(),
-          search: jest.fn(),
-        };
+        helper = jsHelper({}, '');
+        helper.state.isDisjunctiveFacetRefined = jest
+          .fn()
+          .mockReturnValue(false);
+        helper.removeDisjunctiveFacetRefinement = jest.fn();
+        helper.addDisjunctiveFacetRefinement = jest.fn();
+        helper.search = jest.fn();
         state = {
           removeDisjunctiveFacetRefinement: jest.fn(),
           addDisjunctiveFacetRefinement: jest.fn(),
@@ -307,11 +309,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refi
       }
 
       beforeEach(() => {
-        helper = {
-          removeDisjunctiveFacetRefinement: jest.fn(),
-          addDisjunctiveFacetRefinement: jest.fn(),
-          search: jest.fn(),
-        };
+        helper = jsHelper({}, '');
+        helper.removeDisjunctiveFacetRefinement = jest.fn();
+        helper.addDisjunctiveFacetRefinement = jest.fn();
+        helper.search = jest.fn();
       });
 
       describe('default values', () => {

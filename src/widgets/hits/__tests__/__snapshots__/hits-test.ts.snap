@@ -2,6 +2,7 @@
 
 exports[`hits() calls twice render(<Hits props />, container) 1`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "emptyRoot": "ais-Hits--empty",
     "item": "ais-Hits-item",
@@ -27,6 +28,7 @@ Object {
     "hitsPerPage": 4,
     "page": 2,
   },
+  "sendEvent": [Function],
   "templateProps": Object {
     "templates": Object {
       "empty": "No results",
@@ -43,6 +45,7 @@ Object {
 
 exports[`hits() calls twice render(<Hits props />, container) 2`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "emptyRoot": "ais-Hits--empty",
     "item": "ais-Hits-item",
@@ -68,6 +71,7 @@ Object {
     "hitsPerPage": 4,
     "page": 2,
   },
+  "sendEvent": [Function],
   "templateProps": Object {
     "templates": Object {
       "empty": "No results",
@@ -84,6 +88,7 @@ Object {
 
 exports[`hits() renders transformed items 1`] = `
 Object {
+  "bindEvent": [Function],
   "cssClasses": Object {
     "emptyRoot": "ais-Hits--empty",
     "item": "ais-Hits-item",
@@ -111,6 +116,7 @@ Object {
     "hitsPerPage": 4,
     "page": 2,
   },
+  "sendEvent": [Function],
   "templateProps": Object {
     "templates": Object {
       "empty": "No results",

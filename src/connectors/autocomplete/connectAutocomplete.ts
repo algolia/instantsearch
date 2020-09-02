@@ -3,6 +3,8 @@ import escapeHits, { TAG_PLACEHOLDER } from '../../lib/escape-highlight';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  createSendEventForHits,
+  SendEventForHits,
   noop,
   warning,
 } from '../../lib/utils';
@@ -46,6 +48,11 @@ export type AutocompleteRendererOptions = {
      * The full results object from the Algolia API.
      */
     results: SearchResults;
+
+    /**
+     * Send event to insights middleware
+     */
+    sendEvent: SendEventForHits;
   }>;
 
   /**
@@ -127,11 +134,20 @@ search.addWidgets([
             ? escapeHits(scopedResult.results.hits)
             : scopedResult.results.hits;
 
+          const sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            index: scopedResult.results.index,
+            widgetType: this.$$type!,
+          });
+
+          sendEvent('view', scopedResult.results.hits);
+
           return {
             indexId: scopedResult.indexId,
             indexName: scopedResult.results.index,
             hits: scopedResult.results.hits,
             results: scopedResult.results,
+            sendEvent,
           };
         });
 

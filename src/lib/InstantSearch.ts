@@ -25,6 +25,7 @@ import {
   createRouterMiddleware,
   RouterProps,
 } from '../middlewares/createRouterMiddleware';
+import { InsightsEvent } from '../middlewares/createInsightsMiddleware';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -145,6 +146,7 @@ class InstantSearch extends EventEmitter {
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: MiddlewareDefinition[] = [];
+  public sendEventToInsights: (event: InsightsEvent) => void;
 
   public constructor(options: InstantSearchOptions) {
     super();
@@ -243,6 +245,8 @@ See ${createDocumentationLink({
       this._searchFunction = searchFunction;
     }
 
+    this.sendEventToInsights = noop;
+
     if (routing) {
       const routerOptions = typeof routing === 'boolean' ? undefined : routing;
       this.EXPERIMENTAL_use(createRouterMiddleware(routerOptions));
@@ -259,7 +263,6 @@ See ${createDocumentationLink({
     const newMiddlewareList = middleware.map(fn => {
       const newMiddleware = fn({ instantSearchInstance: this });
       this.middleware.push(newMiddleware);
-
       return newMiddleware;
     });
 
