@@ -15,7 +15,7 @@ const $$type = 'ais.ratingMenu';
 const createSendEvent = ({
   instantSearchInstance,
   helper,
-  refinedStar,
+  getRefinedStar,
   attribute,
 }) => (...args) => {
   if (args.length === 1) {
@@ -26,7 +26,7 @@ const createSendEvent = ({
   if (eventType !== 'click') {
     return;
   }
-  const isRefined = refinedStar === Number(facetValue);
+  const isRefined = getRefinedStar() === Number(facetValue);
   if (!isRefined) {
     instantSearchInstance.sendEventToInsights({
       insightsMethod: 'clickedFilters',
@@ -148,7 +148,7 @@ export default function connectRatingMenu(renderFn, unmountFn = noop) {
         sendEvent = createSendEvent({
           instantSearchInstance,
           helper,
-          refinedStar: this._getRefinedStar(helper.state),
+          getRefinedStar: () => this._getRefinedStar(helper.state),
           attribute,
         });
 

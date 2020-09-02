@@ -9,6 +9,7 @@ describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount) => {
     const rendering = jest.fn();
     const makeWidget = connectRatingMenu(rendering, unmount);
+    const instantSearchInstance = createInstantSearch();
 
     const attribute = 'grade';
     const widget = makeWidget({
@@ -27,12 +28,12 @@ describe('connectRatingMenu', () => {
       helper,
       state: helper.state,
       createURL: () => '#',
-      instantSearchInstance: createInstantSearch(),
+      instantSearchInstance,
     });
 
     const { refine } = rendering.mock.calls[0][0];
 
-    return { widget, helper, refine, rendering };
+    return { widget, helper, refine, rendering, instantSearchInstance };
   };
 
   describe('Usage', () => {
@@ -531,6 +532,62 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           },
         })
       );
+    });
+  });
+
+  describe('insights', () => {
+    it('sends event when a facet is added', () => {
+      const attribute = 'swag';
+      const { refine, instantSearchInstance } = getInitializedWidget({
+        attribute,
+      });
+
+      refine('3');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['swag>=3'],
+          index: '',
+        },
+        widgetType: 'ais.ratingMenu',
+      });
+    });
+
+    it('does not send event when a facet is removed', () => {
+      const attribute = 'swag';
+      const { refine, instantSearchInstance } = getInitializedWidget({
+        attribute,
+      });
+
+      refine('3');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+
+      refine('3');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // still the same
+
+      refine('4');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        2
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['swag>=4'],
+          index: '',
+        },
+        widgetType: 'ais.ratingMenu',
+      });
     });
   });
 });

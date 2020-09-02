@@ -7,16 +7,15 @@ import defer from '../../src/lib/utils/defer';
 export const createInstantSearch = (
   args: Partial<InstantSearch> = {}
 ): InstantSearch => {
-  const searchClient = createSearchClient();
-  const { indexName = 'indexName' } = args;
-  const mainHelper = algoliasearchHelper(searchClient, indexName, {});
+  const { indexName = 'indexName', client = createSearchClient() } = args;
+  const mainHelper = algoliasearchHelper(client, indexName, {});
   const mainIndex = index({ indexName });
 
   return {
     indexName,
     mainIndex,
     mainHelper,
-    client: searchClient,
+    client,
     started: false,
     start() {
       this.started = true;

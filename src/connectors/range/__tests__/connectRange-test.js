@@ -1415,7 +1415,7 @@ describe('getWidgetSearchParameters', () => {
   });
 
   const attribute = 'price';
-  const rendering = () => {};
+  let rendering = () => {};
 
   it('expect to return default configuration', () => {
     const widget = connectRange(rendering)({
@@ -1531,5 +1531,100 @@ describe('getWidgetSearchParameters', () => {
     });
 
     expect(actual).toEqual(expectation);
+  });
+
+  describe('insights', () => {
+    it('sends event when a facet is added at each step', () => {
+      rendering = jest.fn();
+      const makeWidget = connectRange(rendering);
+      const widget = makeWidget({
+        attribute,
+      });
+
+      const instantSearchInstance = createInstantSearch();
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      {
+        // first rendering
+        const renderOptions =
+          rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        const { refine } = renderOptions;
+        refine([10, 30]);
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+          1
+        );
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+          eventType: 'click',
+          insightsMethod: 'clickedFilters',
+          payload: {
+            eventName: 'Filter Applied',
+            filters: ['price>=10', 'price<=30'],
+            index: '',
+          },
+          widgetType: 'ais.range',
+        });
+      }
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [{ test: 'oneTime' }],
+            facets: { price: { 10: 1, 20: 1, 30: 1 } },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            facets_stats: {
+              price: {
+                avg: 20,
+                max: 30,
+                min: 10,
+                sum: 60,
+              },
+            },
+            nbHits: 1,
+            nbPages: 1,
+            page: 0,
+          },
+          {},
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      {
+        // Second rendering
+        const renderOptions =
+          rendering.mock.calls[rendering.mock.calls.length - 1][0];
+        const { refine } = renderOptions;
+        refine([23, 27]);
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+          2
+        );
+        expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+          eventType: 'click',
+          insightsMethod: 'clickedFilters',
+          payload: {
+            eventName: 'Filter Applied',
+            filters: ['price>=23', 'price<=27'],
+            index: '',
+          },
+          widgetType: 'ais.range',
+        });
+      }
+    });
   });
 });

@@ -1087,4 +1087,66 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
       expect(newState).toEqual(new SearchParameters());
     });
   });
+
+  describe('insights', () => {
+    const createInitializedWidget = () => {
+      const widget = makeWidget({
+        attribute: 'category',
+      });
+      const instantSearchInstance = createInstantSearch();
+      const helper = jsHelper(
+        {},
+        '',
+        widget.getWidgetSearchParameters(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        instantSearchInstance,
+      });
+
+      return { instantSearchInstance, helper };
+    };
+
+    it('sends event when a facet is refined', () => {
+      const { instantSearchInstance } = createInitializedWidget();
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['category:"value"'],
+          index: '',
+        },
+        widgetType: 'ais.menu',
+      });
+    });
+
+    it('does not send event when a facet is removed', () => {
+      const { instantSearchInstance, helper } = createInitializedWidget();
+      const firstRenderingOptions = rendering.mock.calls[0][0];
+      const { refine } = firstRenderingOptions;
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(helper.hasRefinements('category')).toBe(true);
+
+      refine('value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      ); // still the same
+    });
+  });
 });

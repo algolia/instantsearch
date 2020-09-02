@@ -1,5 +1,5 @@
 import { InstantSearch, Hit } from '../../types';
-import { InsightsEvent } from '../../middleware/insights';
+import { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 
 type BuiltInSendEventForHits = (
   eventType: string,
@@ -30,7 +30,7 @@ const buildPayload: BuildPayload = ({
   methodName,
   args,
 }) => {
-  if (args.length === 1) {
+  if (args.length === 1 && typeof args[0] === 'object') {
     return args[0];
   }
   const eventType: string = args[0];
