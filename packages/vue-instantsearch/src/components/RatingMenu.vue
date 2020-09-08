@@ -45,7 +45,7 @@
                 width="24"
                 height="24"
                 :class="[suit('starIcon'), suit('starIcon--full')]"
-                :key="n"
+                :key="n + '-full'"
               >
                 <use xlink:href="#ais-RatingMenu-starSymbol" />
               </svg>
@@ -56,7 +56,7 @@
                 aria-hidden="true"
                 width="24"
                 height="24"
-                :key="n"
+                :key="n + '-empty'"
               >
                 <use xlink:href="#ais-RatingMenu-starEmptySymbol" />
               </svg>
