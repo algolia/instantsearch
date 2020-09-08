@@ -1,1 +1,1 @@
-export default '4.7.2';
+export default '4.8.0';
