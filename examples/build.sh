@@ -7,7 +7,9 @@ set -e
 # go into directory of script
 cd $(dirname `which $0`)
 
-for dir in ./* ; do
+
+function build_example {
+  dir=$1
   if [ -d "$dir" ]; then
     name=$(basename "$dir")
     echo "building example: $name"
@@ -22,6 +24,14 @@ for dir in ./* ; do
     fi
     cd ..
   fi
-done
+}
+
+if [ $# -eq 0 ];then
+  for dir in ./* ; do
+    build_example $dir
+  done
+else
+  build_example $1
+fi
 
 echo "done building examples 🙌"

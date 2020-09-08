@@ -302,7 +302,6 @@
               <div
                 slot-scope="{
                   currentRefinement,
-                  nbPages,
                   pages,
                   isFirstPage,
                   isLastPage,
@@ -515,8 +514,8 @@ export default {
     formatNumber,
     toValue(value, range) {
       return [
-        value.min !== null ? value.min : range.min,
-        value.max !== null ? value.max : range.max,
+        typeof value.min === 'number' ? value.min : range.min,
+        typeof value.max === 'number' ? value.max : range.max,
       ];
     },
     getSelectedHitsPerPageValue() {
