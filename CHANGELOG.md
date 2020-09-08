@@ -1,3 +1,12 @@
+# [4.8.0](https://github.com/algolia/instantsearch.js/compare/v4.7.2...v4.8.0) (2020-09-08)
+
+
+### Features
+
+* **insights:** introduce `insights` middleware ([#4446](https://github.com/algolia/instantsearch.js/issues/4446)) ([9bc6359](https://github.com/algolia/instantsearch.js/commit/9bc635986097736272aac8c5d3380a255488fdb7)), closes [#4456](https://github.com/algolia/instantsearch.js/issues/4456) [#4463](https://github.com/algolia/instantsearch.js/issues/4463) [#4464](https://github.com/algolia/instantsearch.js/issues/4464)
+
+
+
 ## [4.7.2](https://github.com/algolia/instantsearch.js/compare/v4.7.1...v4.7.2) (2020-08-31)
 
 
