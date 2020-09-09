@@ -87,8 +87,8 @@ storiesOf('ais-range-input', module)
             :max="maxRange"
             :lazy="true"
             :value="[
-              minValue !== null ? minValue : minRange,
-              maxValue !== null ? maxValue : maxRange,
+              typeof minValue === 'number' ? minValue : minRange,
+              typeof maxValue === 'number' ? maxValue : maxRange,
             ]"
             @change="refine({ min: $event[0], max: $event[1] })"
           />
@@ -113,8 +113,8 @@ storiesOf('ais-range-input', module)
               :min="minRange"
               :max="maxRange"
               :value="[
-                minValue !== null ? minValue : minRange,
-                maxValue !== null ? maxValue : maxRange,
+                typeof minValue === 'number' ? minValue : minRange,
+                typeof maxValue === 'number' ? maxValue : maxRange,
               ]"
               @input="refine({min: $event[0], max: $event[1]})"
               thumb-label="always"
