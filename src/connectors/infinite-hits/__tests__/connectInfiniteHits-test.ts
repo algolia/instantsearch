@@ -318,6 +318,92 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect(thirdRenderOptions.results).toEqual(otherResults);
   });
 
+  it('sets isLastPage to true when all pages are cached', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
+    const widget = makeWidget({});
+    const helper = algoliasearchHelper({} as SearchClient, '', {
+      hitsPerPage: 1,
+    });
+    helper.search = jest.fn();
+
+    widget.init!(
+      createInitOptions({
+        state: helper.state,
+        helper,
+      })
+    );
+
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }],
+            page: 0,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+
+    renderFn.mock.calls[1][0].showMore();
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }, { objectID: '2' }],
+            page: 1,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+    expect(helper.state.page).toEqual(1);
+
+    renderFn.mock.calls[2][0].showMore();
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            page: 2,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+    expect(helper.state.page).toEqual(2);
+
+    helper.setPage(0);
+    widget.render!(
+      createRenderOptions({
+        state: helper.state,
+        results: new SearchResults(helper.state, [
+          createSingleSearchResponse({
+            hits: [{ objectID: '1' }],
+            page: 0,
+            nbPages: 3,
+          }),
+        ]),
+        helper,
+      })
+    );
+    expect(helper.state.page).toEqual(0);
+
+    expect(renderFn).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        isLastPage: true,
+      }),
+      false
+    );
+  });
+
   it('escape highlight properties if requested', () => {
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);

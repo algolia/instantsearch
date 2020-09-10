@@ -291,7 +291,9 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         }
 
         const isFirstPage = getFirstReceivedPage() === 0;
-        const isLastPage = results.nbPages <= results.page + 1;
+        const isLastPage =
+          results.nbPages <= results.page + 1 ||
+          getLastReceivedPage() >= results.nbPages - 1;
 
         sendEvent('view', cachedHits[page]);
 
